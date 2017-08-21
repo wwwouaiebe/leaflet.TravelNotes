@@ -7,6 +7,7 @@
 		<title>lrm-extensions by wwwouaiebe</title>
 		<meta name="author" content="Christian Guyette" />
 		<link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+		<link rel="stylesheet" href="../dist/L.TravelRoutingEngine.css" />
 		<link rel="stylesheet" href="index.css" media="screen"/>
 	</head>
 	<body>
@@ -15,7 +16,7 @@
 		<div id="TravelRoutingEngine">
 		</div>
 		<script src="../node_modules/leaflet/dist/leaflet.js"></script>
-		<script src="../dist/L.TravelRoutingEngine.min.js"></script>
+		<script src="../dist/L.TravelRoutingEngine.js"></script>
 		<script>
 			(function( ) 
 			{
@@ -23,7 +24,7 @@
 				var Map = L.map ( 'Map' ).setView( [ 50.49680, 5.51116 ], 13 );
 				L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">Christian Guyette</a>' } ).addTo ( Map );
 				var myInterface = L.travelRoutingEngine.interface ( );
-				myInterface.addControl ( );
+				myInterface.addControl ( Map, "TravelRoutingEngine", { position: "bottomleft"} );
 			} ());		
 		</script>
 	</body>

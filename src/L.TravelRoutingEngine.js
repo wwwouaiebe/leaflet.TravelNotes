@@ -1,5 +1,5 @@
 /*
-Copyright - 2015 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -47,8 +47,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function (  ) {
-				console.log ( 'addControl' );
+			addControl : function ( Map, DivControlId, options ) {
+				if ( DivControlId )
+				{
+					document.getElementById ( DivControlId ).innerHTML = require ('./L.TravelRoutingEngine.ControlContains' ) ( Map ).outerHTML;
+				}
+				else
+				{
+					if ( typeof module !== 'undefined' && module.exports ) {
+						Map.addControl ( require ('./L.TravelRoutingEngine.Control' ) ( options ) );
+					}
+					else {
+						Map.addControl ( L.marker.pin.control ( options ) );
+					}
+				}
 			},
 			
 			addWayPoint : function ( WayPoint, WayPointPosition ) {

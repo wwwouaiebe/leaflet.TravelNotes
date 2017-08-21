@@ -9,6 +9,7 @@ html > body > div#Map
 	bottom: 0px; 
 	left: 0px;
 }
+
 html > body > div#TravelRoutingEngine	
 {
 	background-color: white;
