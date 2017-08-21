@@ -1,0 +1,36 @@
+{
+  "name": "leaflet.TravelRoutingEngine",
+  "version": "0.1.0",
+  "description": "Description coming soon",
+  "main": "src/L.TravelRoutingEngine.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "leaflet": "^1.2.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "browserify": "^13.0.0",
+    "grunt-browserify": "^4.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine.git"
+  },
+  "keywords": [
+    "Leaflet",
+    "Routing"
+  ],
+  "author": "Christian Guyette (wwwouaiebe)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine/issues"
+  },
+  "homepage": "https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine#readme"
+}

@@ -1,0 +1,22 @@
+html > body > div#Map	
+{
+	background-color : gray;
+	position: absolute;	
+	width: 70%; 
+	height: 100%; 
+	top: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	left: 0px;
+}
+html > body > div#TravelRoutingEngine	
+{
+	background-color: white;
+	position: absolute;	
+	width: 30%; 
+	height: 100%; 
+	top: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	left: 70%;
+}
