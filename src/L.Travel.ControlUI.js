@@ -36,13 +36,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.Travel.getControlUI = function ( Map ) {
 
-		_Map = Map;
-		var MainDiv = L.DomUtil.create ( 'div', 'TravelControl-MainDiv' );
-		MainDiv.id = 'TravelControl-MainDiv';
-		MainDiv.innerHTML = 'AAA';
-
+		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		
+		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
+		HTMLElementsFactory.create ( 'div', { className :'TravelControl-Frame', id : 'TravelControl-RouteDiv', innerHTML : 'B'}, MainDiv );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:' }, MainDiv );
+		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', innerHTML : 'C'}, MainDiv );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:' }, MainDiv );
+		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', innerHTML : 'D'}, MainDiv );
+		
 		return MainDiv;
-			
 	};
 
 	

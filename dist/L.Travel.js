@@ -21,6 +21,81 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
+	/* 
+	--- HTMLElementsFactory object -----------------------------------------------------------------------------
+	
+	Patterns : Closure
+	------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var getHTMLElementsFactory = function ( ) {
+
+		return {
+			create : function ( TagName, Properties, Parent ) {
+				var Element;
+				if ( 'text' === TagName.toLowerCase ( ) ) {
+					Element = document.createTextNode ( '' );
+				}
+				else {
+					Element = document.createElement ( TagName );
+				}
+				if ( Parent ) {
+					Parent.appendChild ( Element );
+				}
+				if ( Properties )
+				{
+					for ( var prop in Properties ) {
+						try {
+							Element [ prop ] = Properties [ prop ];
+						}
+						catch ( e ) {
+							console.log ( "Invalid property : " + prop );
+						}
+					}
+				}
+				return Element;
+			}
+			
+		};
+			
+	};
+
+	
+	/* --- End of L.Travel.ControlUI object --- */		
+
+	var HTMLElementsFactory = function ( ) {
+		return getHTMLElementsFactory ( );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = HTMLElementsFactory;
+	}
+
+}());
+
+},{}],2:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
 	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 	
@@ -50,7 +125,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.ControlUI":2}],2:[function(require,module,exports){
+},{"./L.Travel.ControlUI":3}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -89,13 +164,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.Travel.getControlUI = function ( Map ) {
 
-		_Map = Map;
-		var MainDiv = L.DomUtil.create ( 'div', 'TravelControl-MainDiv' );
-		MainDiv.id = 'TravelControl-MainDiv';
-		MainDiv.innerHTML = 'AAA';
-
+		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		
+		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
+		HTMLElementsFactory.create ( 'div', { className :'TravelControl-Frame', id : 'TravelControl-RouteDiv', innerHTML : 'B'}, MainDiv );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:' }, MainDiv );
+		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', innerHTML : 'C'}, MainDiv );
+		HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:' }, MainDiv );
+		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', innerHTML : 'D'}, MainDiv );
+		
 		return MainDiv;
-			
 	};
 
 	
@@ -111,7 +190,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{}],3:[function(require,module,exports){
+},{"./HTMLElementsFactory":1}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -196,4 +275,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.Control":1,"./L.Travel.ControlUI":2}]},{},[3]);
+},{"./L.Travel.Control":2,"./L.Travel.ControlUI":3}]},{},[4]);
