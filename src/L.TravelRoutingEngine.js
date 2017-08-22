@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addControl : function ( Map, DivControlId, options ) {
 				if ( DivControlId )
 				{
-					document.getElementById ( DivControlId ).innerHTML = require ('./L.TravelRoutingEngine.ControlContains' ) ( Map ).outerHTML;
+					document.getElementById ( DivControlId ).innerHTML = require ('./L.TravelRoutingEngine.ControlUI' ) ( Map ).outerHTML;
 				}
 				else
 				{
