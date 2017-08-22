@@ -1,8 +1,8 @@
 {
-  "name": "leaflet.TravelRoutingEngine",
+  "name": "leaflet.Travel",
   "version": "0.1.0",
   "description": "Description coming soon",
-  "main": "src/L.TravelRoutingEngine.js",
+  "main": "src/L.Travel.js",
   "directories": {
     "test": "tests"
   },
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine.git"
+    "url": "git+https://github.com/wwwouaiebe/leaflet.Travel.git"
   },
   "keywords": [
     "Leaflet",
@@ -30,7 +30,7 @@
   "author": "Christian Guyette (wwwouaiebe)",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine/issues"
+    "url": "https://github.com/wwwouaiebe/leaflet.Travel/issues"
   },
-  "homepage": "https://github.com/wwwouaiebe/leaflet.TravelRoutingEngine#readme"
+  "homepage": "https://github.com/wwwouaiebe/leaflet.Travel#readme"
 }

@@ -20,13 +20,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 
 	var _Map; // A reference to the map
 
 	/* 
-	--- L.TravelRoutingEngine.ControlUI object -----------------------------------------------------------------------------
+	--- L.Travel.ControlUI object -----------------------------------------------------------------------------
 	
 	This object build the control contains
 	
@@ -34,11 +34,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelRoutingEngine.getControlUI = function ( Map ) {
+	L.Travel.getControlUI = function ( Map ) {
 
 		_Map = Map;
-		var MainDiv = L.DomUtil.create ( 'div', 'TravelRoutingEngineControl-MainDiv' );
-		MainDiv.id = 'TravelRoutingEngineControl-MainDiv';
+		var MainDiv = L.DomUtil.create ( 'div', 'TravelControl-MainDiv' );
+		MainDiv.id = 'TravelControl-MainDiv';
 		MainDiv.innerHTML = 'AAA';
 
 		return MainDiv;
@@ -46,10 +46,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	
-	/* --- End of L.TravelRoutingEngine.ControlUI object --- */		
+	/* --- End of L.Travel.ControlUI object --- */		
 
 	L.travelRoutingEngine.ControlUI = function ( Map ) {
-		return L.TravelRoutingEngine.getControlUI ( Map );
+		return L.Travel.getControlUI ( Map );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {

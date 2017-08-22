@@ -21,10 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 	
-	L.TravelRoutingEngine.Control = L.Control.extend ( {
+	L.Travel.Control = L.Control.extend ( {
 		
 			options : {
 				position: 'topright'
@@ -35,13 +35,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			onAdd : function ( Map ) {
-				return require ('./L.TravelRoutingEngine.ControlUI' ) ( Map );
+				return require ('./L.Travel.ControlUI' ) ( Map );
 			}
 		}
 	);
 
 	L.travelRoutingEngine.control = function ( options ) {
-		return new L.TravelRoutingEngine.Control ( options );
+		return new L.Travel.Control ( options );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.TravelRoutingEngine.ControlUI":2}],2:[function(require,module,exports){
+},{"./L.Travel.ControlUI":2}],2:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -73,13 +73,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 
 	var _Map; // A reference to the map
 
 	/* 
-	--- L.TravelRoutingEngine.ControlUI object -----------------------------------------------------------------------------
+	--- L.Travel.ControlUI object -----------------------------------------------------------------------------
 	
 	This object build the control contains
 	
@@ -87,11 +87,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelRoutingEngine.getControlUI = function ( Map ) {
+	L.Travel.getControlUI = function ( Map ) {
 
 		_Map = Map;
-		var MainDiv = L.DomUtil.create ( 'div', 'TravelRoutingEngineControl-MainDiv' );
-		MainDiv.id = 'TravelRoutingEngineControl-MainDiv';
+		var MainDiv = L.DomUtil.create ( 'div', 'TravelControl-MainDiv' );
+		MainDiv.id = 'TravelControl-MainDiv';
 		MainDiv.innerHTML = 'AAA';
 
 		return MainDiv;
@@ -99,10 +99,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	
-	/* --- End of L.TravelRoutingEngine.ControlUI object --- */		
+	/* --- End of L.Travel.ControlUI object --- */		
 
 	L.travelRoutingEngine.ControlUI = function ( Map ) {
-		return L.TravelRoutingEngine.getControlUI ( Map );
+		return L.Travel.getControlUI ( Map );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -134,19 +134,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 	
 	/* 
-	--- L.TravelRoutingEngine.Interface object -----------------------------------------------------------------------------
+	--- L.Travel.Interface object -----------------------------------------------------------------------------
 	
-	This object contains all you need to use TravelRoutingEngine :-)
+	This object contains all you need to use Travel :-)
 	
 	Patterns : Closure
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelRoutingEngine.getInterface = function ( ) {
+	L.Travel.getInterface = function ( ) {
 
 	
 		return {
@@ -164,12 +164,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addControl : function ( Map, DivControlId, options ) {
 				if ( DivControlId )
 				{
-					document.getElementById ( DivControlId ).innerHTML = require ('./L.TravelRoutingEngine.ControlUI' ) ( Map ).outerHTML;
+					document.getElementById ( DivControlId ).innerHTML = require ('./L.Travel.ControlUI' ) ( Map ).outerHTML;
 				}
 				else
 				{
 					if ( typeof module !== 'undefined' && module.exports ) {
-						Map.addControl ( require ('./L.TravelRoutingEngine.Control' ) ( options ) );
+						Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 					}
 					else {
 						Map.addControl ( L.marker.pin.control ( options ) );
@@ -184,10 +184,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	/* --- End of L.TravelRoutingEngine.Interface object --- */		
+	/* --- End of L.Travel.Interface object --- */		
 
 	L.travelRoutingEngine.interface = function ( ) {
-		return L.TravelRoutingEngine.getInterface ( );
+		return L.Travel.getInterface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -196,4 +196,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.TravelRoutingEngine.Control":1,"./L.TravelRoutingEngine.ControlUI":2}]},{},[3]);
+},{"./L.Travel.Control":1,"./L.Travel.ControlUI":2}]},{},[3]);

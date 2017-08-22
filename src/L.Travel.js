@@ -20,19 +20,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 	
 	/* 
-	--- L.TravelRoutingEngine.Interface object -----------------------------------------------------------------------------
+	--- L.Travel.Interface object -----------------------------------------------------------------------------
 	
-	This object contains all you need to use TravelRoutingEngine :-)
+	This object contains all you need to use Travel :-)
 	
 	Patterns : Closure
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelRoutingEngine.getInterface = function ( ) {
+	L.Travel.getInterface = function ( ) {
 
 	
 		return {
@@ -50,12 +50,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addControl : function ( Map, DivControlId, options ) {
 				if ( DivControlId )
 				{
-					document.getElementById ( DivControlId ).innerHTML = require ('./L.TravelRoutingEngine.ControlUI' ) ( Map ).outerHTML;
+					document.getElementById ( DivControlId ).innerHTML = require ('./L.Travel.ControlUI' ) ( Map ).outerHTML;
 				}
 				else
 				{
 					if ( typeof module !== 'undefined' && module.exports ) {
-						Map.addControl ( require ('./L.TravelRoutingEngine.Control' ) ( options ) );
+						Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 					}
 					else {
 						Map.addControl ( L.marker.pin.control ( options ) );
@@ -70,10 +70,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	/* --- End of L.TravelRoutingEngine.Interface object --- */		
+	/* --- End of L.Travel.Interface object --- */		
 
 	L.travelRoutingEngine.interface = function ( ) {
-		return L.TravelRoutingEngine.getInterface ( );
+		return L.Travel.getInterface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {

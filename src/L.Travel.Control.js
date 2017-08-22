@@ -20,10 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.TravelRoutingEngine = L.TravelRoutingEngine || {};
+	L.Travel = L.Travel || {};
 	L.travelRoutingEngine = L.travelRoutingEngine || {};
 	
-	L.TravelRoutingEngine.Control = L.Control.extend ( {
+	L.Travel.Control = L.Control.extend ( {
 		
 			options : {
 				position: 'topright'
@@ -34,13 +34,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			onAdd : function ( Map ) {
-				return require ('./L.TravelRoutingEngine.ControlUI' ) ( Map );
+				return require ('./L.Travel.ControlUI' ) ( Map );
 			}
 		}
 	);
 
 	L.travelRoutingEngine.control = function ( options ) {
-		return new L.TravelRoutingEngine.Control ( options );
+		return new L.Travel.Control ( options );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
