@@ -1,3 +1,3 @@
-# leaflet.TravelRoutingEngine
+# leaflet.Travel
 
 Coming soon...
