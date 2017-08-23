@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 	
 	L.Travel.Control = L.Control.extend ( {
 		
@@ -39,12 +39,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 	);
 
-	L.travelRoutingEngine.control = function ( options ) {
+	L.travel.control = function ( options ) {
 		return new L.Travel.Control ( options );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.control;
+		module.exports = L.travel.control;
 	}
 
 }());

@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 
 	var _Map; // A reference to the map
 
@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+
 		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
 		
 		var sortableList = require ( './SortableList' );
@@ -58,12 +59,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	/* --- End of L.Travel.ControlUI object --- */		
 
-	L.travelRoutingEngine.ControlUI = function ( Map ) {
+	L.travel.ControlUI = function ( Map ) {
 		return L.Travel.getControlUI ( Map );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.ControlUI;
+		module.exports = L.travel.ControlUI;
 	}
 
 }());

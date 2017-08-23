@@ -97,7 +97,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 	
 	L.Travel.Control = L.Control.extend ( {
 		
@@ -115,12 +115,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 	);
 
-	L.travelRoutingEngine.control = function ( options ) {
+	L.travel.control = function ( options ) {
 		return new L.Travel.Control ( options );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.control;
+		module.exports = L.travel.control;
 	}
 
 }());
@@ -149,7 +149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 
 	var _Map; // A reference to the map
 
@@ -167,6 +167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+
 		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
 		
 		var sortableList = require ( './SortableList' );
@@ -186,12 +187,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	/* --- End of L.Travel.ControlUI object --- */		
 
-	L.travelRoutingEngine.ControlUI = function ( Map ) {
+	L.travel.ControlUI = function ( Map ) {
 		return L.Travel.getControlUI ( Map );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.ControlUI;
+		module.exports = L.travel.ControlUI;
 	}
 
 }());
@@ -220,7 +221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 	
 	/* 
 	--- L.Travel.Interface object -----------------------------------------------------------------------------
@@ -246,19 +247,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function ( Map, DivControlId, options ) {
-				if ( DivControlId )
-				{
-					document.getElementById ( DivControlId ).innerHTML = require ('./L.Travel.ControlUI' ) ( Map ).outerHTML;
+			addControl : function ( Map, options ) {
+				if ( typeof module !== 'undefined' && module.exports ) {
+					Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 				}
-				else
-				{
-					if ( typeof module !== 'undefined' && module.exports ) {
-						Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
-					}
-					else {
-						Map.addControl ( L.marker.pin.control ( options ) );
-					}
+				else {
+					Map.addControl ( L.marker.pin.control ( options ) );
 				}
 			},
 			
@@ -271,17 +265,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	/* --- End of L.Travel.Interface object --- */		
 
-	L.travelRoutingEngine.interface = function ( ) {
+	L.travel.interface = function ( ) {
 		return L.Travel.getInterface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.interface;
+		module.exports = L.travel.interface;
 	}
 
 }());
 
-},{"./L.Travel.Control":2,"./L.Travel.ControlUI":3}],5:[function(require,module,exports){
+},{"./L.Travel.Control":2}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -309,22 +303,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 	
+	var onDragStart = function  ( DragEvent ) {
+		DragEvent.stopPropagation(); // needed to avoid map movements
+		try {
+			DragEvent.dataTransfer.setData ( 'Text', '1' );
+		}
+		catch ( e ) {
+		}
+		console.log ( 'onDragStart' );
+	};
+	
+	var onDragOver = function ( DragEvent ) {
+		DragEvent.preventDefault();
+		console.log ( 'onDragOver' );
+	};
+	
+	var onDrop = function ( DragEvent ) { 
+		DragEvent.preventDefault();
+		var data = DragEvent.dataTransfer.getData("Text");
+		console.log ( 'onDrop' );
+	};
+
+	/*
+	var onDragEnd = function ( DragEvent ) { 
+		console.log ( 'onDragEnd' );
+	};
+	
+	var onDragEnter = function ( DragEvent ) { 
+		console.log ( 'onDragLeave' );
+	};
+	var onDragLeave = function ( DragEvent ) { 
+		console.log ( 'onDragEnter' );
+	};
+	*/
 
 	var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
-	var onDragStart = function  ( event ) {
-		console.log ( event.target );
-		event.stopPropagation ( );
-		event.dropEffect = "move";
-	};
 	
 	var SortableList = function ( options, Parent ) {
 
 		
 		this.addItem = function ( options ) {
 	
-			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : true, className : 'SortableListItem' + ( options.sortable ? ' MoveCursor': '')  }, this.Container );
+			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : options.sortable, className : 'SortableListItem' + ( options.sortable ? ' MoveCursor': '')  }, this.Container );
 			if ( options.sortable ) {
+				L.DomEvent.on ( ItemContainer, 'dragstart', onDragStart );
+				//L.DomEvent.on ( ItemContainer, 'dragenter', onDragEnter );
+				//L.DomEvent.on ( ItemContainer, 'dragleave', onDragLeave );
+				//L.DomEvent.on ( ItemContainer, 'dragend', onDragEnd );
+				
 				HTMLElementsFactory.create ( 'span', { className : 'SortableListTextArrow', innerHTML : String.fromCharCode( 8645 ) }, ItemContainer );
 			}
 			else {
@@ -336,7 +363,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				HTMLElementsFactory.create ( 'span', { className : 'SortableListDelButton', innerHTML : '&#x1f5d1;' }, ItemContainer );
 			}
 			
-			ItemContainer.addEventListener ( "dragstart", onDragStart, false);
 			
 			this.items [ this.size ] = ItemContainer;
 			this.size ++;
@@ -355,8 +381,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			this.items = [];
 			this.Container = HTMLElementsFactory.create ( 'div', { className : 'SortableListContainer' } );
 
+
+			
 			if ( Parent ) {
 				Parent.appendChild ( this.Container );
+				L.DomEvent.on ( Parent, 'dragover', onDragOver );
+				L.DomEvent.on ( Parent, 'drop', onDrop );
 			}
 			for ( var ItemCounter = 0; ItemCounter < this.options.minSize; ItemCounter++ )
 			{

@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	L.Travel = L.Travel || {};
-	L.travelRoutingEngine = L.travelRoutingEngine || {};
+	L.travel = L.travel || {};
 	
 	/* 
 	--- L.Travel.Interface object -----------------------------------------------------------------------------
@@ -47,19 +47,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function ( Map, DivControlId, options ) {
-				if ( DivControlId )
-				{
-					document.getElementById ( DivControlId ).innerHTML = require ('./L.Travel.ControlUI' ) ( Map ).outerHTML;
+			addControl : function ( Map, options ) {
+				if ( typeof module !== 'undefined' && module.exports ) {
+					Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 				}
-				else
-				{
-					if ( typeof module !== 'undefined' && module.exports ) {
-						Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
-					}
-					else {
-						Map.addControl ( L.marker.pin.control ( options ) );
-					}
+				else {
+					Map.addControl ( L.marker.pin.control ( options ) );
 				}
 			},
 			
@@ -72,12 +65,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	/* --- End of L.Travel.Interface object --- */		
 
-	L.travelRoutingEngine.interface = function ( ) {
+	L.travel.interface = function ( ) {
 		return L.Travel.getInterface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travelRoutingEngine.interface;
+		module.exports = L.travel.interface;
 	}
 
 }());
