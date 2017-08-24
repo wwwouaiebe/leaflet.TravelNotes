@@ -161,6 +161,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	Patterns : Closure
 	------------------------------------------------------------------------------------------------------------------------
 	*/
+	var RoutesList = null;
+	
+	var onClickDeleteRouteBtn = function ( clickEvent ) {
+		RoutesList.removeAllItems ( );
+	};
+	var onClickAddRouteBtn = function ( clickEvent ) {
+		RoutesList.addItem ( );
+	};
 
 	L.Travel.getControlUI = function ( Map ) {
 
@@ -171,15 +179,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var routesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv'}, MainDiv );
 		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Routes&nbsp;:'}, routesDiv );
-		var RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, routesDiv );
+		RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, routesDiv );
 		
 		var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
 		var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+		addRouteBtn.addEventListener ( 'click' , onClickAddRouteBtn, false );
+
 		var deleteRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteRoutesBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
+		deleteRouteBtn.addEventListener ( 'click' , onClickDeleteRouteBtn, false );
 				
 		var waypointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv'}, MainDiv );
 		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Points de passage&nbsp;:' }, waypointsDiv );
-		var waypointsList = sortableList ( { minSize : 2, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, waypointsDiv );
+		var waypointsList = sortableList ( { minSize : 5, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, waypointsDiv );
 
 		var waypointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-waypointsButtonsDiv'}, waypointsDiv );
 		var addWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWaypointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, waypointsButtonsDiv );
@@ -340,24 +351,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onDragLeave = function ( DragEvent ) { 
 		console.log ( 'onDragEnter' );
 	};
-	*/
-
-	/* 
-	--- SortableList object -----------------------------------------------------------------------------
+	*/	
 	
-	------------------------------------------------------------------------------------------------------------------------
+	
+	/* 
+	--- SortableList object --------------------------------------------------------------------------------------------------
+	
+	--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	var SortableList = function ( options, Parent ) {
+		
+		var onDeleteBtnClick = function ( ClickEvent ) {
+			console.log ( 'onDeleteBtnClick' );
+			console.log ( this );
+			ClickEvent.stopPropagation();
+		};
+		
+		var onUpArrowBtnClick = function ( ClickEvent ) {
+			console.log ( 'onUpArrowBtnClick' );
+			ClickEvent.stopPropagation();
+		};
+		
+		var onDownArrowBtnClick = function ( ClickEvent ) {
+			console.log ( 'onDownArrowBtnClick' );
+			ClickEvent.stopPropagation();
+		};
 		
 		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		this.items = [];
 		
+		/*
+		--- _setItemsClasses method --------------------------------------------------------------------------------------------
+
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+		
 		this._setItemsClasses = function ( )
 		{
 			for ( var itemPosition = 0; itemPosition < this.items.length; itemPosition ++ ){
+				
 				var item = this.items [ itemPosition ];
+
+				if ( item.classList.contains ( 'deleteBtn' ) ) {
+					item.childNodes [ 2 ].removeEventListener ( 'click', onDeleteBtnClick, false );
+				}
+				if ( item.classList.contains ( 'upArrowBtn' ) ) {
+					item.childNodes [ 3 ].removeEventListener ( 'click', onUpArrowBtnClick, false );
+				}
+				if ( item.classList.contains ( 'downArrowBtn' ) ) {
+					item.childNodes [ 4 ].removeEventListener ( 'click', onDownArrowBtnClick, false );
+				}
+
 				var draggable = true;
 				var deleteBtnClass = ' deleteBtn';
 				var upArrowBtnClass = ' upArrowBtn';
@@ -404,6 +452,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				var className = 'SortableListItem' ;
 				item.className = className + deleteBtnClass + upArrowBtnClass + downArrowBtnclass + cursorClass ;
+
+				if ( item.classList.contains ( 'deleteBtn' ) ) {
+					item.childNodes [ 2 ].addEventListener ( 'click', onDeleteBtnClick, false );
+				}
+				if ( item.classList.contains ( 'upArrowBtn' ) ) {
+					item.childNodes [ 3 ].addEventListener ( 'click', onUpArrowBtnClick, false );
+				}
+				if ( item.classList.contains ( 'downArrowBtn' ) ) {
+					item.childNodes [ 4 ].addEventListener ( 'click', onDownArrowBtnClick, false );
+				}
+
 				if ( item.draggable ) {
 					item.removeEventListener ( 'dragstart', onDragStart, false );	
 				}
@@ -415,15 +474,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				item.firstChild.nextSibling.placeholder = placeholder;
 			}
 		};
+		
+		/*
+		--- removeItem method --------------------------------------------------------------------------------------------------
 
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+		
 		this.removeItem = function ( ) {
+			
+			
 			this._setItemsClasses ( );
 		};
 		
+		/*
+		--- removeAllItems method ----------------------------------------------------------------------------------------------
+
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
+		this.removeAllItems = function ( ) {
+			for ( var ItemCounter = 0; ItemCounter < this.items.length; ItemCounter ++ ) {
+				this.Container.removeChild ( this.items [ ItemCounter ] );
+			}
+			this.items.splice ( 0 );
+			this.addItem ( );
+		};
+		
+		/*
+		--- moveItem method ----------------------------------------------------------------------------------------------------
+
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
 		this.moveItem = function ( ) {
 			this._setItemsClasses ( );
 		};
 		
+		/*
+		--- addItem method -----------------------------------------------------------------------------------------------------
+
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
 		this.addItem = function ( ) {
 	
 			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : false   }, this.Container );
@@ -439,6 +540,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			this._setItemsClasses ( );
 		};
 		
+		
+		/*
+		--- _create method -----------------------------------------------------------------------------------------------------
+
+		This method ...
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
 		this._create = function ( options, Parent ) {
 
 			// options
