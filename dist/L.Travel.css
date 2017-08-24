@@ -33,46 +33,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	border-style: solid;
 	border-width: 0.1em;
+	overflow: auto;
+	max-height: 20vh;
 }
 .SortableListItem
 {
-	width: calc ( 100% - 0.4em );
+	width: calc ( 100% - 1em );
 	background-color: lightgray;
 	border-style: solid;
 	border-width: 0.1em;
 	padding: 0.2em;
 	margin: 0.2em;
 	white-space: nowrap;
+	vertical-align: bottom;
 }
-.MoveCursor
+.moveCursor
 {
 	cursor: grab;
 }
-.MoveCursor:active
+.moveCursor:active
 {
 	cursor: move;
 }
-.SortableListTextArrow
+#TravelControl-RoutesDiv,
+#TravelControl-WayPointsDiv
 {
-	display: inline-block;
-	width: 5%;
-	text-align : center;
+}
+#TravelControl-routesButtonsDiv,
+#TravelControl-waypointsButtonsDiv
+{
+	text-align: right;
+	padding: 0.2em;
 }
 .SortableListTextIndex
 {
 	display: inline-block;
-	width: 5%;
+	width: 4em;
 	text-align : center;
 }
 .SortableListInput
 {
 	display: inline-block;
-	width: 70%;
+	width: calc(100% - 15.8em);
+	border-style:solid;
+	border-width: 0.1em;
+	border-color: black;
 }
-.SortableListDelButton
+.TravelControl-btn,
+.SortableListDeleteBtn,
+.SortableListUpArrowBtn,
+.SortableListDownArrowBtn
 {
 	display: inline-block;
 	width: 3em;
 	text-align : center;
-	cursor : default;
+	cursor: default;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+	border-style:solid;
+	border-width: 0.1em;
+	border-bottom-width: 0.3em;
+	border-right-width: 0.3em;
+	border-radius: 0.2em;
+	border-color: black;
+}
+.TravelControl-btn,
+div.deleteBtn > span.SortableListDeleteBtn,
+div.upArrowBtn > span.SortableListUpArrowBtn,
+div.downArrowBtn > span.SortableListDownArrowBtn
+{
+	color: white;
+	font-weight: bold;
+	background-color: gray;
+}
+div.noDeleteBtn > span.SortableListDeleteBtn,
+div.noUpArrowBtn > span.SortableListUpArrowBtn,
+div.noDownArrowBtn > span.SortableListDownArrowBtn
+{
+	visibility: hidden;
 }

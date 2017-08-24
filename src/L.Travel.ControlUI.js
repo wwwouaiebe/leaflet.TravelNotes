@@ -37,21 +37,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.Travel.getControlUI = function ( Map ) {
 
 		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		var sortableList = require ( './SortableList' );
 		
 		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
+		var routesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv'}, MainDiv );
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Routes&nbsp;:'}, routesDiv );
+		var RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, routesDiv );
 		
-		var sortableList = require ( './SortableList' );
-		var RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, MainDiv );
+		var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
+		var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+		var deleteRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteRoutesBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
 				
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:' }, MainDiv );
-		var WaypointsList = sortableList ( { minSize : 4, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, MainDiv );
+		var waypointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv'}, MainDiv );
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Points de passage&nbsp;:' }, waypointsDiv );
+		var waypointsList = sortableList ( { minSize : 2, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, waypointsDiv );
 
+		var waypointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-waypointsButtonsDiv'}, waypointsDiv );
+		var addWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWaypointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, waypointsButtonsDiv );
+		var reverseWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-reverseWaypointsBtn', className: 'TravelControl-btn', innerHTML : '&#x21C5;'}, waypointsButtonsDiv );
+		var deleteWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteWaypointsBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, waypointsButtonsDiv );
 
-		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', innerHTML : 'C'}, MainDiv );
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:' }, MainDiv );
-		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', innerHTML : 'D'}, MainDiv );
+		var itineraryDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, MainDiv );
+
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Itinéraire&nbsp;:' }, itineraryDiv );
+		var errorDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, MainDiv );
 		
 		return MainDiv;
 	};

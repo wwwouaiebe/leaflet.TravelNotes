@@ -165,21 +165,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.Travel.getControlUI = function ( Map ) {
 
 		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		var sortableList = require ( './SortableList' );
 		
 		var MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:'}, MainDiv );
+		var routesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv'}, MainDiv );
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Routes&nbsp;:'}, routesDiv );
+		var RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, routesDiv );
 		
-		var sortableList = require ( './SortableList' );
-		var RoutesList = sortableList ( { minSize : 1, placeholder : 'Route' }, MainDiv );
+		var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
+		var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+		var deleteRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteRoutesBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
 				
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:' }, MainDiv );
-		var WaypointsList = sortableList ( { minSize : 4, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, MainDiv );
+		var waypointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv'}, MainDiv );
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Points de passage&nbsp;:' }, waypointsDiv );
+		var waypointsList = sortableList ( { minSize : 2, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, waypointsDiv );
 
+		var waypointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-waypointsButtonsDiv'}, waypointsDiv );
+		var addWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWaypointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, waypointsButtonsDiv );
+		var reverseWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-reverseWaypointsBtn', className: 'TravelControl-btn', innerHTML : '&#x21C5;'}, waypointsButtonsDiv );
+		var deleteWaypointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteWaypointsBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, waypointsButtonsDiv );
 
-		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', innerHTML : 'C'}, MainDiv );
-		HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:' }, MainDiv );
-		HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', innerHTML : 'D'}, MainDiv );
+		var itineraryDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, MainDiv );
+
+		HTMLElementsFactory.create ( 'h3', { innerHTML : 'Itinéraire&nbsp;:' }, itineraryDiv );
+		var errorDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, MainDiv );
 		
 		return MainDiv;
 	};
@@ -297,11 +307,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	/* 
-	--- SortableList object -----------------------------------------------------------------------------
-	
-	------------------------------------------------------------------------------------------------------------------------
-	*/
 	
 	var onDragStart = function  ( DragEvent ) {
 		DragEvent.stopPropagation(); // needed to avoid map movements
@@ -337,79 +342,129 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	*/
 
-	var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-
+	/* 
+	--- SortableList object -----------------------------------------------------------------------------
 	
+	------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var SortableList = function ( options, Parent ) {
-
 		
-		this.addItem = function ( options ) {
-	
-			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : options.sortable, className : 'SortableListItem' + ( options.sortable ? ' MoveCursor': '')  }, this.Container );
-			if ( options.sortable ) {
-				L.DomEvent.on ( ItemContainer, 'dragstart', onDragStart );
-				//L.DomEvent.on ( ItemContainer, 'dragenter', onDragEnter );
-				//L.DomEvent.on ( ItemContainer, 'dragleave', onDragLeave );
-				//L.DomEvent.on ( ItemContainer, 'dragend', onDragEnd );
-				
-				HTMLElementsFactory.create ( 'span', { className : 'SortableListTextArrow', innerHTML : String.fromCharCode( 8645 ) }, ItemContainer );
+		var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		
+		this.items = [];
+		
+		this._setItemsClasses = function ( )
+		{
+			for ( var itemPosition = 0; itemPosition < this.items.length; itemPosition ++ ){
+				var item = this.items [ itemPosition ];
+				var draggable = true;
+				var deleteBtnClass = ' deleteBtn';
+				var upArrowBtnClass = ' upArrowBtn';
+				var downArrowBtnclass = ' downArrowBtn';
+				var cursorClass = ' moveCursor';
+				var placeholder = '';
+				var itemName = '';
+				if ( 0 === this.options.listType ) {
+					placeholder = this.options.placeholder;
+					if ( 0 === itemPosition ) {
+						upArrowBtnClass = ' noUpArrowBtn';
+					}
+					if ( this.items.length === itemPosition + 1 ) {
+						downArrowBtnclass = ' noDownArrowBtn';
+					}
+				}
+				else if ( 1 === this.options.listType ) {
+					placeholder = this.options.placeholders [ 1];
+					itemName = itemPosition;
+					if ( 0 === itemPosition ) {
+						draggable = false;
+						deleteBtnClass = ' noDeleteBtn';
+						upArrowBtnClass = ' noUpArrowBtn';
+						downArrowBtnclass = ' noDownArrowBtn';
+						cursorClass = '';
+						placeholder = this.options.placeholders [ 0];
+						itemName = this.options.texts [ 0 ];
+					}
+					if ( 1 === itemPosition ) {
+						upArrowBtnClass = ' noUpArrowBtn';
+					}
+					if ( this.items.length - 2 === itemPosition ) {
+						downArrowBtnclass = ' noDownArrowBtn';
+					}
+					if ( this.items.length - 1 === itemPosition ) {
+						draggable = false;
+						deleteBtnClass = ' noDeleteBtn';
+						upArrowBtnClass = ' noUpArrowBtn';
+						downArrowBtnclass = ' noDownArrowBtn';
+						cursorClass = '';
+						placeholder = this.options.placeholders [ 2];
+						itemName = this.options.texts [ 2 ];
+					}
+				}
+				var className = 'SortableListItem' ;
+				item.className = className + deleteBtnClass + upArrowBtnClass + downArrowBtnclass + cursorClass ;
+				if ( item.draggable ) {
+					item.removeEventListener ( 'dragstart', onDragStart, false );	
+				}
+				item.draggable = draggable;
+				if ( draggable ) {
+					item.addEventListener ( 'dragstart', onDragStart, false );	
+				}
+				item.firstChild.innerHTML = itemName;
+				item.firstChild.nextSibling.placeholder = placeholder;
 			}
-			else {
-				HTMLElementsFactory.create ( 'span', { className : 'SortableListTextArrow', innerHTML : '&nbsp;' }, ItemContainer );
-			}
-			HTMLElementsFactory.create ( 'span', { className : 'SortableListTextIndex', innerHTML : options.text }, ItemContainer );
-			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableListInput', placeholder : options.placeholder }, ItemContainer );
-			if ( options.sortable ) {
-				HTMLElementsFactory.create ( 'span', { className : 'SortableListDelButton', innerHTML : '&#x1f5d1;' }, ItemContainer );
-			}
-			
-			
-			this.items [ this.size ] = ItemContainer;
-			this.size ++;
+		};
+
+		this.removeItem = function ( ) {
+			this._setItemsClasses ( );
 		};
 		
-		this.setOptions = function ( options ) {
+		this.moveItem = function ( ) {
+			this._setItemsClasses ( );
+		};
+		
+		this.addItem = function ( ) {
+	
+			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : false   }, this.Container );
+
+			HTMLElementsFactory.create ( 'span', { className : 'SortableListTextIndex' }, ItemContainer );
+			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableListInput'}, ItemContainer );
+			HTMLElementsFactory.create ( 'span', { className : 'SortableListDeleteBtn', innerHTML : '&#x1f5d1;' }, ItemContainer );
+			HTMLElementsFactory.create ( 'span', { className : 'SortableListUpArrowBtn', innerHTML : String.fromCharCode( 8679 ) }, ItemContainer );
+			HTMLElementsFactory.create ( 'span', { className : 'SortableListDownArrowBtn', innerHTML : String.fromCharCode( 8681 ) }, ItemContainer );
+
+						
+			this.items.push ( ItemContainer );
+			this._setItemsClasses ( );
+		};
+		
+		this._create = function ( options, Parent ) {
+
+			// options
+			
+			// options.listType = 0 : all items can be sorted or deleted
+			// options.listType = 1 : all items except first and last can be sorted or deleted
+			
+			this.options = { minSize : 2, listType : 0, placeholder : '', placeholders : [] , texts : [] } ;
 			for ( var option in options ) {
 				this.options [ option ] = options [ option ];
 			}
-		};
-		
-		this.initialize = function ( options, Parent ) {
-			this.options = { minSize : 2, listType : 0, placeholder : '', placeholders : [] , texts : [] } ;
-			this.setOptions (options );
-			this.size = 0;
-			this.items = [];
 			this.Container = HTMLElementsFactory.create ( 'div', { className : 'SortableListContainer' } );
+			this.Container.addEventListener ( 'dragover', onDragOver, false );
+			this.Container.addEventListener ( 'drop', onDrop, false );
 
-
-			
 			if ( Parent ) {
 				Parent.appendChild ( this.Container );
-				L.DomEvent.on ( Parent, 'dragover', onDragOver );
-				L.DomEvent.on ( Parent, 'drop', onDrop );
 			}
+			
 			for ( var ItemCounter = 0; ItemCounter < this.options.minSize; ItemCounter++ )
 			{
-				var itemOptions = { sortable : true , placeholder : this.options.placeholder, text : ''};
-				itemOptions.sortable = true;
-				if ( 1 === this.options.listType ) {
-					if ( 0 === ItemCounter ) {
-						itemOptions = { sortable : false , placeholder : this.options.placeholders [ 0 ], text : this.options.texts [ 0 ]};
-					}
-					else if ( ItemCounter === this.options.minSize - 1 )
-					{
-						itemOptions = { sortable : false , placeholder : this.options.placeholders [ 2 ], text : this.options.texts [ 2 ]};
-					}
-					else
-					{
-						itemOptions = { sortable : true , placeholder : this.options.placeholders [ 1 ], text : ItemCounter };
-					}
-				}
-				this.addItem ( itemOptions );
+				this.addItem ( );
 			}
 		};
 		
-		this.initialize ( options, Parent );
+		this._create ( options, Parent );
 		
 	};
 
