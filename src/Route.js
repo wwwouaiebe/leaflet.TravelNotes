@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Geom = {};
 		
 		var _ObjId = -1;
+		var _UIObjId = -1;
 		
 		return {
 			get name ( ) { return _Name; },
@@ -38,6 +39,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
+			
+			get uiObjId ( ) { return _UIObjId; },
+			set uiObjId ( UIObjId) { _UIObjId = UIObjId; },
 			
 			get objId ( ) { return _ObjId; },
 			get objName ( ) { return _ObjName; },

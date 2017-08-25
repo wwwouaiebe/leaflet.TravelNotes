@@ -202,8 +202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			for ( var ItemCounter = 0; ItemCounter < this.items.length; ItemCounter ++ ) {
 				this.Container.removeChild ( this.items [ ItemCounter ] );
 			}
-			this.items.splice ( 0 );
-			this.addItem ( );
+			this.items.length = 0;
 		};
 		
 		/*
@@ -226,19 +225,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
-		this.addItem = function ( ) {
+		this.addItem = function ( name, objId ) {
 	
+			name = name || '';
+			objId = objId || -1;
+			
 			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : false   }, this.Container );
 
 			HTMLElementsFactory.create ( 'span', { className : 'SortableListTextIndex' }, ItemContainer );
-			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableListInput'}, ItemContainer );
+			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableListInput', value: name}, ItemContainer );
 			HTMLElementsFactory.create ( 'span', { className : 'SortableListDeleteBtn', innerHTML : '&#x1f5d1;' }, ItemContainer );
 			HTMLElementsFactory.create ( 'span', { className : 'SortableListUpArrowBtn', innerHTML : String.fromCharCode( 8679 ) }, ItemContainer );
 			HTMLElementsFactory.create ( 'span', { className : 'SortableListDownArrowBtn', innerHTML : String.fromCharCode( 8681 ) }, ItemContainer );
+			ItemContainer.dataObjId = objId; 
+			ItemContainer.UIObjId = require ( './ObjId' ) ( );
 
-						
 			this.items.push ( ItemContainer );
 			this._setItemsClasses ( );
+					
+			
+			return ItemContainer.UIObjId;
 		};
 		
 		

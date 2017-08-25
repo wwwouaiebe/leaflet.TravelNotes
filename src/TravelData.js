@@ -34,10 +34,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.object = 
 				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
 			},
-			getRoute : function( RouteObjId ) { return _Routes [ Indice ]; },
-			addRoute : function ( Route ) { _Routes.push ( Route ); },
-			removeRoute : function ( RouteObjId ) { return; },
 
+			get routes ( ) { return _Routes; },
 			get objId ( ) { return _ObjId; },
 			get objName ( ) { return _ObjName; },
 			get objVersion ( ) { return _ObjVersion; },
