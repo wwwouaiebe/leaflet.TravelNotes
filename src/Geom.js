@@ -18,34 +18,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjName = 'TravelData';
+	var _ObjName = 'Geom';
 	var _ObjVersion = '1.0.0';
-	
-	// one and only one object TravelData is possible
-	
-	var _Name = '';
-	var _Routes = [ ];
-	var _ObjId = require ( './ObjId' ) ( );
 
-	var getTravelData = function ( ) {
+	var getGeom = function ( ) {
+		
+		var _Pnts ="";
+		var _Precision = 6;
+		var _Color = "#000000";
+		var _Weight = 5;
+		
+		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
-			getRoute : function( RouteObjId ) { return _Routes [ Indice ]; },
-			addRoute : function ( Route ) { _Routes.push ( Route ); },
-			removeRoute : function ( RouteObjId ) { return; },
 
+			get pnts ( ) { return _Pnts; },
+			set pnts ( Pnts ) { _Pnts = Pnts; },
+			
+			get precision ( ) { return _Precision; },
+			set precision ( Precision ) { _Precision = Precision; },
+			
+			get color ( ) { return _Color; },
+			set color ( Color ) { _Color = Color; },
+			
+			get weight ( ) { return _Weight; },
+			set weight ( Weight ) { _Weight = Weight; },
+			
 			get objId ( ) { return _ObjId; },
 			get objName ( ) { return _ObjName; },
 			get objVersion ( ) { return _ObjVersion; },
-
+			
 			get object ( ) {
-				var Routes = [];
-				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
-					Routes.push ( _Routes [ RoutesCounter ].asObject );
-				}
 				return {
-					name : _Name,
-					routes : Routes,
+					pnts : _Pnts,
+					precision : _Precision,
+					color : _Color,
+					weight : _Weight,
 					objId : _ObjId,
 					objName : _ObjName,
 					objVersion : _ObjVersion
@@ -53,21 +61,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			set object ( Object ) {
 				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for TravelData';
+					throw 'No ObjVersion for Geom';
 				}
 				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for TravelData';
+					throw 'invalid objVersion for Geom';
 				}
 				if ( ! Object.objName ) {
-					throw 'No objName for TravelData';
+					throw 'No objName for Geom';
 				}
-				if ( 'TravelData' !== Object.objName ) {
-					throw 'Invalid objName for TravelData';
+				if ( 'Waypoint' !== Object.objName ) {
+					throw 'Invalid objName for Geom';
 				}
-				_Name = Object.name || '';
-				for ( var RoutesCounter = 0; RoutesCounter < Object.routes.length; RoutesCounter ++ ) {
-					_WayPoints.push ( require ( './Route' ) ( ).object = Object.wayPoints [ RoutesCounter ] );
-				}
+				_Pnts = Object.pnts || '';
+				_Precision = Object.precision || 6;
+				_Color = Object.color || '#000000';
+				_Weight = Object.weight || 5;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
@@ -80,7 +88,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelData ( );
+		module.exports = getGeom ( );
 	}
 
 } ) ( );
