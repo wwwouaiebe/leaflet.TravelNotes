@@ -18,16 +18,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjName = 'Waypoint';
+	var _ObjName = 'WayPoint';
 	var _ObjVersion = '1.0.0';
 
-	var getWaypoint = function ( ) {
+	var getWayPoint = function ( ) {
 		
 		var _Name = '';
 		var _Lat = 0;
-		var Lng = 0;
+		var _Lng = 0;
 		
-		var _ObjId = require ( './ObjId' ) ( );
+		var _ObjId = -1;
 		
 		return {
 			get name ( ) { return _Name; },
@@ -58,16 +58,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			set object ( Object ) {
 				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for Waypoint';
+					throw 'No ObjVersion for WayPoint';
 				}
 				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for Waypoint';
+					throw 'invalid objVersion for WayPoint';
 				}
 				if ( ! Object.objName ) {
-					throw 'No objName for Waypoint';
+					throw 'No objName for WayPoint';
 				}
-				if ( 'Waypoint' !== Object.objName ) {
-					throw 'Invalid objName for Waypoint';
+				if ( 'WayPoint' !== Object.objName ) {
+					throw 'Invalid objName for WayPoint';
 				}
 				_Name = Object.name || '';
 				_Lat = Object.lat || 0;
@@ -84,7 +84,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getWaypoint ( );
+		module.exports = getWayPoint;
 	}
 
 } ) ( );

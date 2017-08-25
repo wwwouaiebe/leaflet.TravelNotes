@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Color = "#000000";
 		var _Weight = 5;
 		
-		var _ObjId = require ( './ObjId' ) ( );
+		var _ObjId = -1;
 		
 		return {
 
@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( ! Object.objName ) {
 					throw 'No objName for Geom';
 				}
-				if ( 'Waypoint' !== Object.objName ) {
+				if ( 'Geom' !== Object.objName ) {
 					throw 'Invalid objName for Geom';
 				}
 				_Pnts = Object.pnts || '';
@@ -88,7 +88,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getGeom ( );
+		module.exports = getGeom;
 	}
 
 } ) ( );

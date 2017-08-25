@@ -34,7 +34,102 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.Travel.getInterface = function ( ) {
 
-	
+		var TravelData = require ( './TravelData' ) ( );
+		TravelData.object =
+		{
+			name : "TravelData sample",
+			routes : 
+			[
+				{
+					name : "Chemin du Sârtê",
+					wayPoints : 
+					[
+						{
+							name : "Chemin du Sârtê 1 - Anthisnes",
+							lat : 50.50881,
+							lng : 5.49314,
+							objId : -1,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						},
+						{
+							name : "Chemin du Sârtê 22 - Anthisnes",
+							lat : 50.50937,
+							lng : 5.49470,
+							objId : -2,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						}
+					],
+					geom :
+					{
+						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
+						precision :6,
+						color : "#0000ff",
+						weight : "5",
+						objId : -3,
+						objName : "Geom",
+						objVersion : "1.0.0"
+					},
+					objId : -4,
+					objName : "Route",
+					objVersion : "1.0.0"
+				}
+			],
+			objId : -5,
+			objName : "TravelData",
+			objVersion : "1.0.0"
+		};
+		
+		TravelData.clear ( );
+
+/*
+		TravelData.object = 
+		{
+			name : "A",
+			routes : 
+			[
+				{
+					name : "B",
+					wayPoints : 
+					[
+						{
+							name : "C",
+							lat : 0,
+							lng : 0,
+							objId : -1,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						},
+						{
+							name : "D",
+							lat : 0,
+							lng : 0,
+							objId : -2,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						}
+					],
+					geom :
+					{
+						pnts : "E",
+						precision :6,
+						color : "#000000",
+						weight : "5",
+						objId : -3,
+						objName : "Geom",
+						objVersion : "1.0.0"
+					},
+					objId : -4,
+					objName : "Route",
+					objVersion : "1.0.0"
+				}
+			],
+			objId : -5,
+			objName : "TravelData",
+			objVersion : "1.0.0"
+		};
+*/
 		return {
 
 			/* --- public methods --- */

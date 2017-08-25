@@ -25,11 +25,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Name = '';
 	var _Routes = [ ];
-	var _ObjId = require ( './ObjId' ) ( );
+	var _ObjId = -1;
 
 	var getTravelData = function ( ) {
 		
 		return {
+			clear : function ( ) {
+				this.object = 
+				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
+			},
 			getRoute : function( RouteObjId ) { return _Routes [ Indice ]; },
 			addRoute : function ( Route ) { _Routes.push ( Route ); },
 			removeRoute : function ( RouteObjId ) { return; },
@@ -45,7 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				return {
 					name : _Name,
-					routes : Routes,
+					routes : _Routes,
 					objId : _ObjId,
 					objName : _ObjName,
 					objVersion : _ObjVersion
@@ -65,8 +69,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for TravelData';
 				}
 				_Name = Object.name || '';
+				_Routes.length = 0;
 				for ( var RoutesCounter = 0; RoutesCounter < Object.routes.length; RoutesCounter ++ ) {
-					_WayPoints.push ( require ( './Route' ) ( ).object = Object.wayPoints [ RoutesCounter ] );
+					var tmpRoute = require ( './Route' ) ( );
+					tmpRoute.object = Object.routes [ RoutesCounter ];
+					_Routes.push ( tmpRoute.object );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}
@@ -80,7 +87,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelData ( );
+		module.exports = getTravelData;
 	}
 
 } ) ( );

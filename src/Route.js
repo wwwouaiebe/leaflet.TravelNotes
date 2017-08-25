@@ -24,17 +24,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRoute = function ( ) {
 		
 		var _Name = '';
-		var _Waypoints = [];
+		var _WayPoints = [];
 		var _Geom = {};
 		
-		var _ObjId = require ( './ObjId' ) ( );
+		var _ObjId = -1;
 		
 		return {
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
-			addWaypoint : function ( Waypoint ) { _Waypoints.push ( Waypoint ); },
-			removeWaypoint : function ( WaypointObjId ) { return; },
+			addWayPoint : function ( WayPoint ) { _WayPoints.push ( WayPoint ); },
+			removeWayPoint : function ( WayPointObjId ) { return; },
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -45,12 +45,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var WayPoints = [];
-				for ( var WaypointsCounter = 0; WaypointsCounter < _Waypoints.length ;WaypointsCounter ++ ) {
-					WayPoints.push ( _WayPoints [ WaypointsCounter ].asObject );
+				for ( var WayPointsCounter = 0; WayPointsCounter < _WayPoints.length ;WayPointsCounter ++ ) {
+					WayPoints.push ( _WayPoints [ WayPointsCounter ].asObject );
 				}
 				return {
 					name : _Name,
-					wayPoints : _Waypoints,
+					wayPoints : _WayPoints,
 					geom : _Geom,
 					objId : _ObjId,
 					objName : _ObjName,
@@ -71,10 +71,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for Route';
 				}
 				_Name = Object.name || '';
-				for ( var WaypointsCounter = 0; WaypointsCounter < Object.wayPoints.length; WaypointsCounter ++ ) {
-					_WayPoints.push ( require ( './Waypoint' ) ( ).object = Object.wayPoints [ WaypointsCounter ] );
+				for ( var WayPointsCounter = 0; WayPointsCounter < Object.wayPoints.length; WayPointsCounter ++ ) {
+					var tmpWayPoint = require ( './WayPoint' ) ( );
+					tmpWayPoint.object = Object.wayPoints [ WayPointsCounter ];
+					_WayPoints.push ( tmpWayPoint.object );
 				}
-				_Geom = Object.geom || {};
+				var tmpGeom = require ( './Geom' ) ( );
+				tmpGeom.object = Object.geom;
+				_Geom = tmpGeom.object;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
@@ -87,7 +91,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoute ( );
+		module.exports = getRoute;
 	}
 
 } ) ( );
