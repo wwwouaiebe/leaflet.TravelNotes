@@ -139,3 +139,7 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	font-weight: bold;
 	background-color: gray;	
 }
+.TravelControl-ExpandButton:hover
+{
+	cursor: default;
+}

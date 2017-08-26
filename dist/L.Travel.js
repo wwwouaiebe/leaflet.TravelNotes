@@ -276,6 +276,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+	};
+	var onSortableListDeleteElement = function ( event ) {
+		console.log ( event.listId );
+		console.log ( event.dataObjId );
 	};
 
 	L.Travel.getControlUI = function ( ) {
@@ -292,7 +297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			this.mainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
-
+			this.mainDiv.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
 			// Routes
 			var routesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv', className : 'TravelControl-Div'}, this.mainDiv );
 			
@@ -301,13 +306,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'] }, routesDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'], id : 'TravelControl-RouteList' }, routesDiv );
+			_RoutesList.container.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
 			
 			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, routesDiv );
-			var addRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddRoutesButton', className: 'TravelControl-Button', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+			var addRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddRoutesButton', className: 'TravelControl-Button', title : 'Nouvelle route', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
-			var deleteRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-DeleteRoutesButton', className: 'TravelControl-Button', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
+			var deleteRouteButton = htmlElementsFactory.create ( 
+				'span',
+				{ 
+					id : 'TravelControl-DeleteRoutesButton', 
+					className: 'TravelControl-Button', 
+					title : 'Supprimer toutes les routes', 
+					innerHTML : '&#x1f5d1;'
+				},
+				routesButtonsDiv
+			);
 			deleteRouteButton.addEventListener ( 'click' , onClickDeleteRouteButton, false );
 	
 			// WayPoints
@@ -318,12 +333,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 
-			_WayPointsList = require ( './SortableList' ) ( { minSize : 5, listStyle : 'LimitedSort', placeholders : [ 'Start', 'Via', 'End' ], indexNames : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
+			_WayPointsList = require ( './SortableList' ) ( 
+				{
+					minSize : 5,
+					listStyle : 'LimitedSort',
+					placeholders : [ 'Start', 'Via', 'End' ],
+					indexNames : [ 'A', 'index', 'B' ],
+					id : 'TravelControl-WaypointsList'
+				}, 
+				wayPointsDiv
+			);
+			_WayPointsList.container.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, wayPointsDiv );
-			var addWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddWayPointsButton', className: 'TravelControl-Button', innerHTML : '+'/*'&#x2719;'*/}, wayPointsButtonsDiv );
-			var reverseWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-ReverseWayPointsButton', className: 'TravelControl-Button', innerHTML : '&#x21C5;'}, wayPointsButtonsDiv );
-			var deleteWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-DeleteWayPointsButton', className: 'TravelControl-Button', innerHTML : '&#x1f5d1;'}, wayPointsButtonsDiv );
+			var addWayPointsButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					id : 'TravelControl-AddWayPointsButton',
+					className: 'TravelControl-Button', 
+					title : 'Ajouter un point de passage', 
+					innerHTML : '+'
+				},
+				wayPointsButtonsDiv 
+			);
+			var reverseWayPointsButton = htmlElementsFactory.create ( 
+				'span',
+				{ 
+					id : 'TravelControl-ReverseWayPointsButton', 
+					className: 'TravelControl-Button', 
+					title : 'Inverser les points de passage',  
+					innerHTML : '&#x21C5;'
+				},
+				wayPointsButtonsDiv
+			);
+			var deleteWayPointsButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					id : 'TravelControl-DeleteWayPointsButton', 
+					className: 'TravelControl-Button',
+					title: 'Supprimer tous les points de passage',
+					innerHTML : '&#x1f5d1;'
+				}, 
+				wayPointsButtonsDiv
+			);
 
 			// Itinerary
 			var itineraryDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, this.mainDiv );
@@ -729,8 +781,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/	
 	
 	var onDeleteButtonClick = function ( ClickEvent ) {
-		
-		console.log ( 'onDeleteButtonClick' );
+		var event = new Event ( 'SortableListDeleteElement' );
+		event.listId = ClickEvent.target.parentNode.parentNode.id;
+		event.dataObjId = ClickEvent.target.parentNode.dataObjId;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		ClickEvent.stopPropagation();
 	};
 	
@@ -856,14 +910,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
-			var deleteButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteButton', innerHTML : '&#x1f5d1;' }, item );
+			var deleteButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x1f5d1;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
-			var upArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowButton', innerHTML : String.fromCharCode( 8679 ) }, item );
+			var upArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
 			upArrowButton.addEventListener ( 'click', onUpArrowButtonClick, false );
-			var downArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDownArrowButton', innerHTML : String.fromCharCode( 8681 ) }, item );
+			var downArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
 			downArrowButton.addEventListener ( 'click', onDownArrowButtonClick, false );
 			if ( 'AllSort' === this.options.listStyle ) {
-				var rightArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemRightArrowButton', innerHTML : String.fromCharCode( 8688 ) }, item );
+				var rightArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
 				rightArrowButton.addEventListener ( 'click', onRightArrowButtonClick, false );
 			}
 			item.dataObjId = dataObjId; 
@@ -910,7 +964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			// options.listStyle = 'AllSort' : all items can be sorted or deleted
 			// options.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 			
-			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [] } ;
+			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [], id : 'SortableList-Container' } ;
 			for ( var option in options ) {
 				this.options [ option ] = options [ option ];
 			}
@@ -918,7 +972,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			{
 				this.options.minSize = 2;
 			}
-			this.container = htmlElementsFactory.create ( 'div', { className : 'SortableList-Container' } );
+			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
 			this.container.addEventListener ( 'dragover', onDragOver, false );
 			this.container.addEventListener ( 'drop', onDrop, false );
