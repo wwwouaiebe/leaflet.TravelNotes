@@ -74,15 +74,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .SortableListInput
 {
 	display: inline-block;
-	width: calc(100% - 15.8em);
+	width: calc(100% - 18em);
 	border-style:solid;
 	border-width: 0.1em;
 	border-color: black;
 }
+.TravelControl-ExpandButton
+{
+}
+.TravelControl-HeaderText
+{
+	font-weight: bold;
+	margin-left: 1em;
+}
+.TravelControl-HiddenList
+{
+	visibility: hidden;
+	height: 0;
+}
 .TravelControl-btn,
 .SortableListDeleteBtn,
 .SortableListUpArrowBtn,
-.SortableListDownArrowBtn
+.SortableListDownArrowBtn,
+.SortableListRightArrowBtn
 {
 	display: inline-block;
 	width: 3em;
@@ -100,7 +114,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .TravelControl-btn,
 div.deleteBtn > span.SortableListDeleteBtn,
 div.upArrowBtn > span.SortableListUpArrowBtn,
-div.downArrowBtn > span.SortableListDownArrowBtn
+div.downArrowBtn > span.SortableListDownArrowBtn,
+div.rightArrowBtn > span.SortableListRightArrowBtn
 {
 	color: white;
 	font-weight: bold;

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.travel = L.travel || {};
 
 	var _Map; // A reference to the map
+	var _TravelData = require ( './TravelData' ) ( );
 
 	/* 
 	--- L.Travel.ControlUI object -----------------------------------------------------------------------------
@@ -38,14 +39,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickDeleteRouteBtn = function ( clickEvent ) {
 		RoutesList.removeAllItems ( );
+		_TravelData.removeAllRoutes ( );	
 	};
+	
 	var onClickAddRouteBtn = function ( clickEvent ) {
-		RoutesList.addItem ( );
+		_TravelData.addRoute ( RoutesList.addItem ( ) );
+	};
+	
+	var onClickExpandBtn = function ( clickEvent ) {
+		
+		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
 	};
 
 	L.Travel.getControlUI = function ( ) {
-		this.setTravelData = function ( travelData ) {
-			var routes = travelData.routes;
+		this.setTravelData = function ( ) {
+			var routes = _TravelData.routes;
 			for ( var routesCounter = 0; routesCounter < routes.length; routesCounter ++ ) {
 				routes [ routesCounter ].uiObjId = RoutesList.addItem ( routes [ routesCounter ].name, routes [ routesCounter ].objId );
 			}
@@ -58,7 +68,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			this.MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 
 			var routesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv'}, this.MainDiv );
-			HTMLElementsFactory.create ( 'h3', { innerHTML : 'Routes&nbsp;:'}, routesDiv );
+			var headerRoutesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-HeaderRoutesDiv', className : 'TravelControl-HeaderDiv'}, routesDiv );
+			var expandRouteButton = HTMLElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
+			expandRouteButton.addEventListener ( 'click' , onClickExpandBtn, false );
+			HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
+			
 			RoutesList = sortableList ( { minSize : 0, placeholder : 'Route' }, routesDiv );
 			
 			var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
@@ -69,7 +83,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			deleteRouteBtn.addEventListener ( 'click' , onClickDeleteRouteBtn, false );
 					
 			var wayPointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv'}, this.MainDiv );
-			HTMLElementsFactory.create ( 'h3', { innerHTML : 'Points de passage&nbsp;:' }, wayPointsDiv );
+			var headerWayPointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-HeaderWaypointsDiv', className : 'TravelControl-HeaderDiv'}, wayPointsDiv );
+			var expandWayPointsButton = HTMLElementsFactory.create ( 'span', { innerHTML : '&#x25bc', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
+			expandWayPointsButton.addEventListener ( 'click' , onClickExpandBtn, false );
+			HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
+
 			wayPointsList = sortableList ( { minSize : 0, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
 
 			var wayPointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-wayPointsButtonsDiv'}, wayPointsDiv );
@@ -79,13 +97,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var itineraryDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, this.MainDiv );
 
-			HTMLElementsFactory.create ( 'h3', { innerHTML : 'Itinéraire&nbsp;:' }, itineraryDiv );
+			HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', className : 'TravelControl-HeaderText' }, itineraryDiv );
 			var errorDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, this.MainDiv );
 		};
 
 		this.createUI ( );
-		var travelData = require ( './TravelData' ) ( );
-		this.setTravelData ( travelData );
+		this.setTravelData ( );
 		
 		return this.MainDiv;
 

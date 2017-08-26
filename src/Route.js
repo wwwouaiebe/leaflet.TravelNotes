@@ -78,11 +78,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				for ( var WayPointsCounter = 0; WayPointsCounter < Object.wayPoints.length; WayPointsCounter ++ ) {
 					var tmpWayPoint = require ( './WayPoint' ) ( );
 					tmpWayPoint.object = Object.wayPoints [ WayPointsCounter ];
-					_WayPoints.push ( tmpWayPoint.object );
+					_WayPoints.push ( tmpWayPoint );
 				}
 				var tmpGeom = require ( './Geom' ) ( );
 				tmpGeom.object = Object.geom;
-				_Geom = tmpGeom.object;
+				_Geom = tmpGeom;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

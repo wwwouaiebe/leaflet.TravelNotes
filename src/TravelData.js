@@ -26,15 +26,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Name = '';
 	var _Routes = [ ];
 	var _ObjId = -1;
+	var _UndoList = [];
 
 	var getTravelData = function ( ) {
 		
 		return {
 			clear : function ( ) {
+				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
+					_UndoList.push ( _Routes [ routeCounter ] );
+				}
 				this.object = 
 				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
 			},
+			
+			removeAllRoutes : function ( ) {
+				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
+					_UndoList.push ( _Routes [ routeCounter ] );
+				}
+				_Routes.length = 0;
+				console.log ( _UndoList );
+			},
+			addRoute : function ( uiObjId ) {
+				var newRoute = require ( './Route' )( );
+				newRoute.uiObjId = uiObjId;
 
+				console.log ( uiObjId );
+				console.log ( newRoute.uiObjId );
+
+				_Routes.push ( newRoute );
+				console.log ( _Routes );
+			},
 			get routes ( ) { return _Routes; },
 			get objId ( ) { return _ObjId; },
 			get objName ( ) { return _ObjName; },
@@ -43,7 +64,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get object ( ) {
 				var Routes = [];
 				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
-					Routes.push ( _Routes [ RoutesCounter ].asObject );
+					Routes.push ( _Routes [ RoutesCounter ].object );
 				}
 				return {
 					name : _Name,
@@ -71,7 +92,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				for ( var RoutesCounter = 0; RoutesCounter < Object.routes.length; RoutesCounter ++ ) {
 					var tmpRoute = require ( './Route' ) ( );
 					tmpRoute.object = Object.routes [ RoutesCounter ];
-					_Routes.push ( tmpRoute.object );
+					_Routes.push ( tmpRoute );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}
