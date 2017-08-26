@@ -49,10 +49,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-width: 0.1em;
 	border-color: black;
 }
-.SortableList-ItemDeleteBtn,
-.SortableList-ItemUpArrowBtn,
-.SortableList-ItemDownArrowBtn,
-.SortableList-ItemRightArrowBtn
+.SortableList-ItemDeleteButton,
+.SortableList-ItemUpArrowButton,
+.SortableList-ItemDownArrowButton,
+.SortableList-ItemRightArrowButton
 {
 	display: inline-block;
 	width: 3em;
@@ -70,14 +70,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	font-weight: bold;
 	background-color: gray;
 }
-div.SortableList-Container > div.SortableList-Item:first-child > span.SortableList-ItemUpArrowBtn,
-div.SortableList-Container > div.SortableList-Item:last-child > span.SortableList-ItemDownArrowBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDownArrowBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemUpArrowBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-child(2) > span.SortableList-ItemUpArrowBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-last-child(2) > span.SortableList-ItemDownArrowBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDeleteBtn,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemDeleteBtn
+div.SortableList-Container > div.SortableList-Item:first-child > span.SortableList-ItemUpArrowButton,
+div.SortableList-Container > div.SortableList-Item:last-child > span.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemUpArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-child(2) > span.SortableList-ItemUpArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-last-child(2) > span.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDeleteButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemDeleteButton
 {
 	visibility:hidden;
 }
@@ -105,20 +105,12 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	border-width: 0.1em;
 }
 
-#TravelControl-RoutesDiv,
-#TravelControl-WayPointsDiv
-{
-}
-#TravelControl-routesButtonsDiv,
-#TravelControl-wayPointsButtonsDiv
+.TravelControl-ButtonsDiv
 {
 	text-align: right;
 	padding: 0.2em;
 }
 
-.TravelControl-ExpandButton
-{
-}
 .TravelControl-HeaderText
 {
 	font-weight: bold;
@@ -129,7 +121,7 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	visibility: hidden;
 	height: 0;
 }
-.TravelControl-btn,
+.TravelControl-Button
 {
 	display: inline-block;
 	width: 3em;
@@ -143,4 +135,7 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	border-right-width: 0.3em;
 	border-radius: 0.2em;
 	border-color: black;
+	color: white;
+	font-weight: bold;
+	background-color: gray;	
 }

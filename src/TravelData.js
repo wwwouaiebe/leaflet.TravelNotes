@@ -62,9 +62,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get objVersion ( ) { return _ObjVersion; },
 
 			get object ( ) {
-				var Routes = [];
+				var routes = [];
 				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
-					Routes.push ( _Routes [ RoutesCounter ].object );
+					routes.push ( _Routes [ RoutesCounter ].object );
 				}
 				return {
 					name : _Name,
@@ -89,9 +89,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				_Name = Object.name || '';
 				_Routes.length = 0;
-				for ( var RoutesCounter = 0; RoutesCounter < Object.routes.length; RoutesCounter ++ ) {
+				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
 					var tmpRoute = require ( './Route' ) ( );
-					tmpRoute.object = Object.routes [ RoutesCounter ];
+					tmpRoute.object = Object.routes [ routesCounter ];
 					_Routes.push ( tmpRoute );
 				}
 				_ObjId = require ( './ObjId' ) ( );

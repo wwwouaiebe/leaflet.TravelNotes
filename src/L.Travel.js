@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.Travel.getInterface = function ( ) {
 
-		var TravelData = require ( './TravelData' ) ( );
-		TravelData.object =
+		var _TravelData = require ( './TravelData' ) ( );
+		_TravelData.object =
 		{
 			name : "TravelData sample",
 			routes : 
@@ -81,10 +81,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			objVersion : "1.0.0"
 		};
 		
-		//TravelData.clear ( );
+		//_TravelData.clear ( );
 
 /*
-		TravelData.object = 
+		_TravelData.object = 
 		{
 			name : "A",
 			routes : 
@@ -142,12 +142,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function ( Map, options ) {
+			addControl : function ( map, options ) {
 				if ( typeof module !== 'undefined' && module.exports ) {
-					Map.addControl ( require ('./L.Travel.Control' ) ( options ) );
+					map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 				}
 				else {
-					Map.addControl ( L.marker.pin.control ( options ) );
+					map.addControl ( L.marker.pin.control ( options ) );
 				}
 			},
 			

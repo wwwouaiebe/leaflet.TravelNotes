@@ -30,29 +30,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getHTMLElementsFactory = function ( ) {
 
 		return {
-			create : function ( TagName, Properties, Parent ) {
-				var Element;
-				if ( 'text' === TagName.toLowerCase ( ) ) {
-					Element = document.createTextNode ( '' );
+			create : function ( tagName, properties, parentNode ) {
+				var element;
+				if ( 'text' === tagName.toLowerCase ( ) ) {
+					element = document.createTextNode ( '' );
 				}
 				else {
-					Element = document.createElement ( TagName );
+					element = document.createElement ( tagName );
 				}
-				if ( Parent ) {
-					Parent.appendChild ( Element );
+				if ( parentNode ) {
+					parentNode.appendChild ( element );
 				}
-				if ( Properties )
+				if ( properties )
 				{
-					for ( var prop in Properties ) {
+					for ( var property in properties ) {
 						try {
-							Element [ prop ] = Properties [ prop ];
+							element [ property ] = properties [ property ];
 						}
 						catch ( e ) {
-							console.log ( "Invalid property : " + prop );
+							console.log ( "Invalid property : " + property );
 						}
 					}
 				}
-				return Element;
+				return element;
 			}
 			
 		};

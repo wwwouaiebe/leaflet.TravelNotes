@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _Map; // A reference to the map
 	var _TravelData = require ( './TravelData' ) ( );
+	var _RoutesList = null;
+	var _WayPointsList = null;
 
 	/* 
 	--- L.Travel.ControlUI object -----------------------------------------------------------------------------
@@ -34,19 +36,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	Patterns : Closure
 	------------------------------------------------------------------------------------------------------------------------
 	*/
-	var RoutesList = null;
-	var wayPointsList = null;
 	
-	var onClickDeleteRouteBtn = function ( clickEvent ) {
-		RoutesList.removeAllItems ( );
+	var onClickDeleteRouteButton = function ( clickEvent ) {
+		_RoutesList.removeAllItems ( );
 		_TravelData.removeAllRoutes ( );	
 	};
 	
-	var onClickAddRouteBtn = function ( clickEvent ) {
-		_TravelData.addRoute ( RoutesList.addItem ( ) );
+	var onClickAddRouteButton = function ( clickEvent ) {
+		_TravelData.addRoute ( _RoutesList.addItem ( ) );
 	};
 	
-	var onClickExpandBtn = function ( clickEvent ) {
+	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
@@ -54,57 +54,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	L.Travel.getControlUI = function ( ) {
+
 		this.setTravelData = function ( ) {
 			var routes = _TravelData.routes;
 			for ( var routesCounter = 0; routesCounter < routes.length; routesCounter ++ ) {
-				routes [ routesCounter ].uiObjId = RoutesList.addItem ( routes [ routesCounter ].name, routes [ routesCounter ].objId );
+				routes [ routesCounter ].uiObjId = _RoutesList.addItem ( routes [ routesCounter ].name, routes [ routesCounter ].objId );
 			}
 		};
 		
 		this.createUI = function ( ){ 
-			var HTMLElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			var sortableList = require ( './SortableList' );
+
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			this.MainDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+			this.mainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 
-			var routesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv'}, this.MainDiv );
-			var headerRoutesDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-HeaderRoutesDiv', className : 'TravelControl-HeaderDiv'}, routesDiv );
-			var expandRouteButton = HTMLElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
-			expandRouteButton.addEventListener ( 'click' , onClickExpandBtn, false );
-			HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
+			// Routes
+			var routesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv', className : 'TravelControl-Div'}, this.mainDiv );
 			
-			RoutesList = sortableList ( { minSize : 0, placeholders : ['Route'] }, routesDiv );
+			var headerRoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, routesDiv );
+			var expandRouteButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
+			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			
-			var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
-			var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
-			addRouteBtn.addEventListener ( 'click' , onClickAddRouteBtn, false );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'] }, routesDiv );
+			
+			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, routesDiv );
+			var addRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddRoutesButton', className: 'TravelControl-Button', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
-			var deleteRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteRoutesBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
-			deleteRouteBtn.addEventListener ( 'click' , onClickDeleteRouteBtn, false );
-					
-			var wayPointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv'}, this.MainDiv );
-			var headerWayPointsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-HeaderWaypointsDiv', className : 'TravelControl-HeaderDiv'}, wayPointsDiv );
-			var expandWayPointsButton = HTMLElementsFactory.create ( 'span', { innerHTML : '&#x25bc', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
-			expandWayPointsButton.addEventListener ( 'click' , onClickExpandBtn, false );
-			HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
+			var deleteRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-DeleteRoutesButton', className: 'TravelControl-Button', innerHTML : '&#x1f5d1;'}, routesButtonsDiv );
+			deleteRouteButton.addEventListener ( 'click' , onClickDeleteRouteButton, false );
+	
+			// WayPoints
+			var wayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', className : 'TravelControl-Div'}, this.mainDiv );
+			
+			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, wayPointsDiv );
+			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
+			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 
-			wayPointsList = sortableList ( { minSize : 5, listStyle : 'LimitedSort', placeholders : [ 'Start', 'Via', 'End' ], indexNames : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
+			_WayPointsList = require ( './SortableList' ) ( { minSize : 5, listStyle : 'LimitedSort', placeholders : [ 'Start', 'Via', 'End' ], indexNames : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
 
-			var wayPointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-wayPointsButtonsDiv'}, wayPointsDiv );
-			var addWayPointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWayPointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, wayPointsButtonsDiv );
-			var reverseWayPointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-reverseWayPointsBtn', className: 'TravelControl-btn', innerHTML : '&#x21C5;'}, wayPointsButtonsDiv );
-			var deleteWayPointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-deleteWayPointsBtn', className: 'TravelControl-btn', innerHTML : '&#x1f5d1;'}, wayPointsButtonsDiv );
+			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, wayPointsDiv );
+			var addWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddWayPointsButton', className: 'TravelControl-Button', innerHTML : '+'/*'&#x2719;'*/}, wayPointsButtonsDiv );
+			var reverseWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-ReverseWayPointsButton', className: 'TravelControl-Button', innerHTML : '&#x21C5;'}, wayPointsButtonsDiv );
+			var deleteWayPointsButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-DeleteWayPointsButton', className: 'TravelControl-Button', innerHTML : '&#x1f5d1;'}, wayPointsButtonsDiv );
 
-			var itineraryDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, this.MainDiv );
+			// Itinerary
+			var itineraryDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, this.mainDiv );
 
-			HTMLElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', className : 'TravelControl-HeaderText' }, itineraryDiv );
-			var errorDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv'}, this.MainDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', id : 'TravelControl-ItineraryHeaderText',className : 'TravelControl-HeaderText' }, itineraryDiv );
+			
+			// Errors
+			var errorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, this.mainDiv );
 		};
 
 		this.createUI ( );
 		this.setTravelData ( );
 		
-		return this.MainDiv;
+		return this.mainDiv;
 
 	};
 
