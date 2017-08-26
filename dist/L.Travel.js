@@ -298,7 +298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandRouteButton.addEventListener ( 'click' , onClickExpandBtn, false );
 			HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			
-			RoutesList = sortableList ( { minSize : 0, placeholder : 'Route' }, routesDiv );
+			RoutesList = sortableList ( { minSize : 0, placeholders : ['Route'] }, routesDiv );
 			
 			var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
 			var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
@@ -313,7 +313,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandBtn, false );
 			HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 
-			wayPointsList = sortableList ( { minSize : 0, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
+			wayPointsList = sortableList ( { minSize : 5, listStyle : 'LimitedSort', placeholders : [ 'Start', 'Via', 'End' ], indexNames : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
 
 			var wayPointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-wayPointsButtonsDiv'}, wayPointsDiv );
 			var addWayPointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWayPointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, wayPointsButtonsDiv );
@@ -723,7 +723,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onDeleteBtnClick = function ( ClickEvent ) {
 		
 		console.log ( 'onDeleteBtnClick' );
-		console.log ( this );
 		ClickEvent.stopPropagation();
 	};
 	
@@ -756,107 +755,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		this.items = [];
 		
 		/*
-		--- _setItemsClasses method --------------------------------------------------------------------------------------------
-
-		This method ...
-
-		------------------------------------------------------------------------------------------------------------------------
-		*/
-		
-		this._setItemsClasses = function ( )
-		{
-			for ( var itemPosition = 0; itemPosition < this.items.length; itemPosition ++ ){
-				
-				var item = this.items [ itemPosition ];
-
-				if ( item.classList.contains ( 'deleteBtn' ) ) {
-					item.childNodes [ 2 ].removeEventListener ( 'click', onDeleteBtnClick, false );
-				}
-				if ( item.classList.contains ( 'upArrowBtn' ) ) {
-					item.childNodes [ 3 ].removeEventListener ( 'click', onUpArrowBtnClick, false );
-				}
-				if ( item.classList.contains ( 'downArrowBtn' ) ) {
-					item.childNodes [ 4 ].removeEventListener ( 'click', onDownArrowBtnClick, false );
-				}
-				if ( item.classList.contains ( 'rightArrowBtn' ) ) {
-					item.childNodes [ 5 ].removeEventListener ( 'click', onRightArrowBtnClick, false );
-				}
-
-				var draggable = true;
-				var deleteBtnClass = ' deleteBtn';
-				var upArrowBtnClass = ' upArrowBtn';
-				var downArrowBtnclass = ' downArrowBtn';
-				var rightArrowBtnclass = ' rightArrowBtn';
-				var cursorClass = ' moveCursor';
-				var placeholder = '';
-				var itemName = '';
-				if ( 0 === this.options.listType ) {
-					placeholder = this.options.placeholder;
-					if ( 0 === itemPosition ) {
-						upArrowBtnClass = ' noUpArrowBtn';
-					}
-					if ( this.items.length === itemPosition + 1 ) {
-						downArrowBtnclass = ' noDownArrowBtn';
-					}
-				}
-				else if ( 1 === this.options.listType ) {
-					placeholder = this.options.placeholders [ 1];
-					itemName = itemPosition;
-					if ( 0 === itemPosition ) {
-						draggable = false;
-						deleteBtnClass = ' noDeleteBtn';
-						upArrowBtnClass = ' noUpArrowBtn';
-						downArrowBtnclass = ' noDownArrowBtn';
-						cursorClass = '';
-						placeholder = this.options.placeholders [ 0];
-						itemName = this.options.texts [ 0 ];
-					}
-					if ( 1 === itemPosition ) {
-						upArrowBtnClass = ' noUpArrowBtn';
-					}
-					if ( this.items.length - 2 === itemPosition ) {
-						downArrowBtnclass = ' noDownArrowBtn';
-					}
-					if ( this.items.length - 1 === itemPosition ) {
-						draggable = false;
-						deleteBtnClass = ' noDeleteBtn';
-						upArrowBtnClass = ' noUpArrowBtn';
-						downArrowBtnclass = ' noDownArrowBtn';
-						cursorClass = '';
-						placeholder = this.options.placeholders [ 2];
-						itemName = this.options.texts [ 2 ];
-					}
-					rightArrowBtnclass = '';
-				}
-				var className = 'SortableListItem' ;
-				item.className = className + deleteBtnClass + upArrowBtnClass + downArrowBtnclass + rightArrowBtnclass + cursorClass ;
-
-				if ( item.classList.contains ( 'deleteBtn' ) ) {
-					item.childNodes [ 2 ].addEventListener ( 'click', onDeleteBtnClick, false );
-				}
-				if ( item.classList.contains ( 'upArrowBtn' ) ) {
-					item.childNodes [ 3 ].addEventListener ( 'click', onUpArrowBtnClick, false );
-				}
-				if ( item.classList.contains ( 'downArrowBtn' ) ) {
-					item.childNodes [ 4 ].addEventListener ( 'click', onDownArrowBtnClick, false );
-				}
-				if ( item.classList.contains ( 'rightArrowBtn' ) ) {
-					item.childNodes [ 5 ].addEventListener ( 'click', onRightArrowBtnClick, false );
-				}
-
-				if ( item.draggable ) {
-					item.removeEventListener ( 'dragstart', onDragStart, false );	
-				}
-				item.draggable = draggable;
-				if ( draggable ) {
-					item.addEventListener ( 'dragstart', onDragStart, false );	
-				}
-				item.firstChild.innerHTML = itemName;
-				item.firstChild.nextSibling.placeholder = placeholder;
-			}
-		};
-		
-		/*
 		--- removeItem method --------------------------------------------------------------------------------------------------
 
 		This method ...
@@ -865,9 +763,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 		
 		this.removeItem = function ( ) {
-			
-			
-			this._setItemsClasses ( );
 		};
 		
 		/*
@@ -894,7 +789,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 
 		this.moveItem = function ( ) {
-			this._setItemsClasses ( );
 		};
 		
 		/*
@@ -905,29 +799,91 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
-		this.addItem = function ( name, objId ) {
+		this.addItem = function ( name, dataObjId ) {
 	
 			name = name || '';
-			objId = objId || -1;
+			dataObjId = dataObjId || -1;
 			
-			var ItemContainer = HTMLElementsFactory.create ( 'div', { draggable : false   }, this.Container );
-
-			HTMLElementsFactory.create ( 'span', { className : 'SortableListTextIndex' }, ItemContainer );
-			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableListInput', value: name}, ItemContainer );
-			HTMLElementsFactory.create ( 'span', { className : 'SortableListDeleteBtn', innerHTML : '&#x1f5d1;' }, ItemContainer );
-			HTMLElementsFactory.create ( 'span', { className : 'SortableListUpArrowBtn', innerHTML : String.fromCharCode( 8679 ) }, ItemContainer );
-			HTMLElementsFactory.create ( 'span', { className : 'SortableListDownArrowBtn', innerHTML : String.fromCharCode( 8681 ) }, ItemContainer );
-			if ( 0 === this.options.listType ) {
-				HTMLElementsFactory.create ( 'span', { className : 'SortableListRightArrowBtn', innerHTML : String.fromCharCode( 8688 ) }, ItemContainer );
+			var placeholder = '';
+			if ( 1 === this.options.placeholders.length ) {
+				placeholder = this.options.placeholders [ 0 ];
 			}
-			ItemContainer.dataObjId = objId; 
-			ItemContainer.UIObjId = require ( './ObjId' ) ( );
-
-			this.items.push ( ItemContainer );
-			this._setItemsClasses ( );
-					
+			if ( 3 === this.options.placeholders.length ) {
+				switch ( this.items.length ) {
+					case 0:
+					placeholder = this.options.placeholders [ 0 ];
+					break;
+					case 1:
+					placeholder = this.options.placeholders [ 2 ];
+					break;
+					default:
+					placeholder = this.options.placeholders [ 1 ];
+					break;
+				}
+			}
 			
-			return ItemContainer.UIObjId;
+			var indexName = '';
+			if ( 1 === this.options.indexNames.length ) {
+				indexName = this.options.indexNames [ 0 ];
+			}
+			if ( 3 === this.options.indexNames.length ) {
+				switch ( this.items.length ) {
+					case 0:
+					indexName = this.options.indexNames [ 0 ];
+					break;
+					case 1:
+					indexName = this.options.indexNames [ 2 ];
+					break;
+					default:
+					indexName = this.options.indexNames [ 1 ];
+					break;
+				}
+			}
+			if ( 'index' === indexName )
+			{
+				indexName = this.items.length - 1;
+			}
+			
+			var Item = HTMLElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
+
+			HTMLElementsFactory.create ( 'span', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, Item );
+			HTMLElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, Item );
+			var deleteBtn = HTMLElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteBtn', innerHTML : '&#x1f5d1;' }, Item );
+			deleteBtn.addEventListener ( 'click', onDeleteBtnClick, false );
+			var upArrowBtn = HTMLElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowBtn', innerHTML : String.fromCharCode( 8679 ) }, Item );
+			upArrowBtn.addEventListener ( 'click', onUpArrowBtnClick, false );
+			var downArrowBtn = HTMLElementsFactory.create ( 'span', { className : 'SortableList-ItemDownArrowBtn', innerHTML : String.fromCharCode( 8681 ) }, Item );
+			downArrowBtn.addEventListener ( 'click', onDownArrowBtnClick, false );
+			if ( 'AllSort' === this.options.listStyle ) {
+				var rightArrowBtn = HTMLElementsFactory.create ( 'span', { className : 'SortableList-ItemRightArrowBtn', innerHTML : String.fromCharCode( 8688 ) }, Item );
+				rightArrowBtn.addEventListener ( 'click', onRightArrowBtnClick, false );
+			}
+			Item.dataObjId = dataObjId; 
+			Item.UIObjId = require ( './ObjId' ) ( );
+
+			this.items.push ( Item );
+			
+			var lastItem = null;
+			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 < this.items.length ) ){
+				lastItem = this.items [ this.items.length - 2 ];
+				this.items [ this.items.length - 2 ] = this.items [ this.items.length - 1 ];
+				this.items [ this.items.length - 1 ] = lastItem;
+			}
+			if ( ( 'LimitedSort' !== this.options.listStyle ) || ( 2 < this.items.length ) ){
+			{
+				Item.draggable = true;
+				Item.addEventListener ( 'dragstart', onDragStart, false );	
+				Item.classList.add ( 'SortableList-MoveCursor' );
+			}
+	
+			}
+			if ( lastItem ) {
+				this.Container.insertBefore ( Item, lastItem );
+			}
+			else
+			{
+				this.Container.appendChild ( Item );
+			}
 		};
 		
 		
@@ -943,14 +899,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			// options
 			
-			// options.listType = 0 : all items can be sorted or deleted
-			// options.listType = 1 : all items except first and last can be sorted or deleted
+			// options.listStyle = 'AllSort' : all items can be sorted or deleted
+			// options.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 			
-			this.options = { minSize : 2, listType : 0, placeholder : '', placeholders : [] , texts : [] } ;
+			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [] } ;
 			for ( var option in options ) {
 				this.options [ option ] = options [ option ];
 			}
-			this.Container = HTMLElementsFactory.create ( 'div', { className : 'SortableListContainer' } );
+			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 > this.options.minSize ) )
+			{
+				this.options.minSize = 2;
+			}
+			this.Container = HTMLElementsFactory.create ( 'div', { className : 'SortableList-Container' } );
+			this.Container.classList.add ( this.options.listStyle );
 			this.Container.addEventListener ( 'dragover', onDragOver, false );
 			this.Container.addEventListener ( 'drop', onDrop, false );
 

@@ -73,7 +73,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandRouteButton.addEventListener ( 'click' , onClickExpandBtn, false );
 			HTMLElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			
-			RoutesList = sortableList ( { minSize : 0, placeholder : 'Route' }, routesDiv );
+			RoutesList = sortableList ( { minSize : 0, placeholders : ['Route'] }, routesDiv );
 			
 			var routesButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-routesButtonsDiv'}, routesDiv );
 			var addRouteBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addRoutesBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
@@ -88,7 +88,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandBtn, false );
 			HTMLElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 
-			wayPointsList = sortableList ( { minSize : 0, listType : 1, placeholders : [ 'Start', 'Via', 'End' ], texts : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
+			wayPointsList = sortableList ( { minSize : 5, listStyle : 'LimitedSort', placeholders : [ 'Start', 'Via', 'End' ], indexNames : [ 'A', 'index', 'B' ]  }, wayPointsDiv );
 
 			var wayPointsButtonsDiv = HTMLElementsFactory.create ( 'div', { id : 'TravelControl-wayPointsButtonsDiv'}, wayPointsDiv );
 			var addWayPointsBtn = HTMLElementsFactory.create ( 'span', { id : 'TravelControl-addWayPointsBtn', className: 'TravelControl-btn', innerHTML : '+'/*'&#x2719;'*/}, wayPointsButtonsDiv );
