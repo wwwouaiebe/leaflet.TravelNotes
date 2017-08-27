@@ -37,13 +37,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var onClickDeleteRouteButton = function ( clickEvent ) {
+	// Events listeners for buttons under the routes list
+	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		_RoutesList.removeAllItems ( );
+
 		_TravelData.removeAllRoutes ( );	
+
+		clickEvent.stopPropagation();
 	};
 	
 	var onClickAddRouteButton = function ( clickEvent ) {
-		_TravelData.addRoute ( _RoutesList.addItem ( ) );
+		var newRoute = _TravelData.addRoute ( );
+		
+		_RoutesList.addItem ( newRoute.name, newRoute.objId );
+
+		clickEvent.stopPropagation();
 	};
 	
 	var onClickExpandButton = function ( clickEvent ) {
@@ -53,10 +61,72 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
 		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
 	};
-	var onSortableListDeleteElement = function ( event ) {
-		console.log ( event.listId );
-		console.log ( event.dataObjId );
+	
+	// Events for buttons and input on the routes list items
+	
+	var onRoutesListDelete = function ( event ) {
+		_TravelData.removeRoute ( event.itemNode.dataObjId );
+		
+		event.itemNode.parentNode.removeChild ( event.itemNode );
+		
+		event.stopPropagation();
 	};
+
+	var onRoutesListUpArrow = function ( event ) {
+		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
+		var tmpRoute = _TravelData.routes [ indexOfRoute ];
+		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute - 1 ];
+		_TravelData.routes [ indexOfRoute - 1 ] = tmpRoute;
+
+		event.itemNode.parentNode.insertBefore ( event.itemNode, event.itemNode.previousSibling );
+
+		event.stopPropagation();
+	};
+
+	var onRoutesListDownArrow = function ( event ) {
+
+		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
+		var tmpRoute = _TravelData.routes [ indexOfRoute ];
+		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute + 1 ];
+		_TravelData.routes [ indexOfRoute + 1 ] = tmpRoute;
+
+		event.itemNode.parentNode.insertBefore ( event.itemNode.nextSibling, event.itemNode );
+		
+		event.stopPropagation();
+	};
+
+	var onRoutesListRightArrow = function ( event ) {
+		event.stopPropagation();
+		console.log ( _TravelData.object );
+	};
+	var onRouteslistInput = function ( event ) {
+		_TravelData.routes [ _TravelData.indexOfRoute ( event.dataObjId ) ].name = event.inputValue;
+		
+		event.stopPropagation();
+	};
+	// Events for buttons and input on the waypoints list items
+	
+	var onWayPointsListDelete = function ( event ) {
+		event.stopPropagation();
+	};
+
+	var onWayPointsListUpArrow = function ( event ) {
+		event.stopPropagation();
+	};
+
+	var onWayPointsListDownArrow = function ( event ) {
+		event.stopPropagation();
+	};
+
+	var onWayPointsListRightArrow = function ( event ) {
+		event.stopPropagation();
+	};
+
+	var onWayPointslistInput = function ( event ) {
+		event.stopPropagation();
+	};
+	
+	// User interface
 
 	L.Travel.getControlUI = function ( ) {
 
@@ -72,7 +142,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			this.mainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
-			this.mainDiv.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
 			// Routes
 			var routesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv', className : 'TravelControl-Div'}, this.mainDiv );
 			
@@ -82,23 +151,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			
 			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'], id : 'TravelControl-RouteList' }, routesDiv );
-			_RoutesList.container.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
+			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
+			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
+			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
+			_RoutesList.container.addEventListener ( 'SortableListRightArrow', onRoutesListRightArrow, false );
+			_RoutesList.container.addEventListener ( 'SortableListInput', onRouteslistInput, false );
 			
 			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, routesDiv );
 			var addRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddRoutesButton', className: 'TravelControl-Button', title : 'Nouvelle route', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
-			var deleteRouteButton = htmlElementsFactory.create ( 
+			var deleteAllRoutesButton = htmlElementsFactory.create ( 
 				'span',
 				{ 
-					id : 'TravelControl-DeleteRoutesButton', 
+					id : 'TravelControl-DeleteAllRoutesButton', 
 					className: 'TravelControl-Button', 
 					title : 'Supprimer toutes les routes', 
 					innerHTML : '&#x1f5d1;'
 				},
 				routesButtonsDiv
 			);
-			deleteRouteButton.addEventListener ( 'click' , onClickDeleteRouteButton, false );
+			deleteAllRoutesButton.addEventListener ( 'click' , onClickDeleteAllRoutesButton, false );
 	
 			// WayPoints
 			var wayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', className : 'TravelControl-Div'}, this.mainDiv );
@@ -118,7 +191,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				wayPointsDiv
 			);
-			_WayPointsList.container.addEventListener ( 'SortableListDeleteElement', onSortableListDeleteElement, false );
+			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
+			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
+			_WayPointsList.container.addEventListener ( 'SortableListDownArrow', onWayPointsListDownArrow, false );
+			_WayPointsList.container.addEventListener ( 'SortableListRightArrow', onWayPointsListRightArrow, false );
+			_WayPointsList.container.addEventListener ( 'SortableListInput', onWayPointslistInput, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, wayPointsDiv );
 			var addWayPointsButton = htmlElementsFactory.create ( 

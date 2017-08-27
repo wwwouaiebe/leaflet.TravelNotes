@@ -55,26 +55,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/	
 	
 	var onDeleteButtonClick = function ( ClickEvent ) {
-		var event = new Event ( 'SortableListDeleteElement' );
-		event.listId = ClickEvent.target.parentNode.parentNode.id;
-		event.dataObjId = ClickEvent.target.parentNode.dataObjId;
+		var event = new Event ( 'SortableListDelete' );
+		event.itemNode = ClickEvent.target.parentNode;
 		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		ClickEvent.stopPropagation();
 	};
 	
 	var onUpArrowButtonClick = function ( ClickEvent ) {
-		console.log ( 'onUpArrowButtonClick' );
+		var event = new Event ( 'SortableListUpArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		ClickEvent.stopPropagation();
 	};
 	
 	var onDownArrowButtonClick = function ( ClickEvent ) {
-		console.log ( 'onDownArrowButtonClick' );
+		var event = new Event ( 'SortableListDownArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		ClickEvent.stopPropagation();
 	};
 	
 	var onRightArrowButtonClick = function ( ClickEvent ) {
-		console.log ( 'onRightArrowButtonClick' );
+		var event = new Event ( 'SortableListRightArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		ClickEvent.stopPropagation();
+	};
+	
+	var onInput = function ( inputEvent ) {
+		var event = new Event ( 'SortableListInput' );
+		event.dataObjId = inputEvent.target.parentNode.dataObjId;
+		event.inputValue = inputEvent.target.value;
+		inputEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		inputEvent.stopPropagation();
 	};
 
 	
@@ -183,7 +196,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
 
 			htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
-			htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
+			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
+			inputElement.addEventListener ( 'input' , onInput, false );
 			var deleteButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x1f5d1;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			var upArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );

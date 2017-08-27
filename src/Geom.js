@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Color = "#000000";
 		var _Weight = 5;
 		
-		var _ObjId = -1;
+		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
 

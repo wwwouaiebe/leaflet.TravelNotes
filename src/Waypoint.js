@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Lat = 0;
 		var _Lng = 0;
 		
-		var _ObjId = -1;
+		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
 			get name ( ) { return _Name; },

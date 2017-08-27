@@ -24,11 +24,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRoute = function ( ) {
 		
 		var _Name = '';
-		var _WayPoints = [];
-		var _Geom = {};
+		var _WayPoints = [ require ( './Waypoint' ) ( ), require ( './waypoint' ) ( )];
+		var _Geom = require ( './Geom' ) ( );
 		
-		var _ObjId = -1;
-		var _UIObjId = -1;
+		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
 			get name ( ) { return _Name; },
@@ -40,22 +39,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
 			
-			get uiObjId ( ) { return _UIObjId; },
-			set uiObjId ( UIObjId) { _UIObjId = UIObjId; },
-			
 			get objId ( ) { return _ObjId; },
 			get objName ( ) { return _ObjName; },
 			get objVersion ( ) { return _ObjVersion; },
 			
 			get object ( ) {
-				var WayPoints = [];
+				var wayPoints = [];
 				for ( var WayPointsCounter = 0; WayPointsCounter < _WayPoints.length ;WayPointsCounter ++ ) {
-					WayPoints.push ( _WayPoints [ WayPointsCounter ].asObject );
+					wayPoints.push ( _WayPoints [ WayPointsCounter ].object );
 				}
 				return {
 					name : _Name,
-					wayPoints : _WayPoints,
-					geom : _Geom,
+					wayPoints : wayPoints,
+					geom : _Geom.object,
 					objId : _ObjId,
 					objName : _ObjName,
 					objVersion : _ObjVersion
@@ -75,10 +71,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for Route';
 				}
 				_Name = Object.name || '';
-				for ( var WayPointsCounter = 0; WayPointsCounter < Object.wayPoints.length; WayPointsCounter ++ ) {
-					var tmpWayPoint = require ( './WayPoint' ) ( );
-					tmpWayPoint.object = Object.wayPoints [ WayPointsCounter ];
-					_WayPoints.push ( tmpWayPoint );
+				_WayPoints.length = 0;
+				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {
+					var newWayPoint = require ( './WayPoint' ) ( );
+					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
+					_WayPoints.push ( newWayPoint );
 				}
 				var tmpGeom = require ( './Geom' ) ( );
 				tmpGeom.object = Object.geom;

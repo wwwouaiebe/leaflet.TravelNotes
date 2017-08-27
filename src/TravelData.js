@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			clear : function ( ) {
 				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( _Routes [ routeCounter ] );
+					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
 				}
 				this.object = 
 				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
@@ -41,26 +41,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			removeAllRoutes : function ( ) {
 				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( _Routes [ routeCounter ] );
+					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
 				}
 				_Routes.length = 0;
-				console.log ( _UndoList );
 			},
-			addRoute : function ( uiObjId ) {
-				var newRoute = require ( './Route' )( );
-				newRoute.uiObjId = uiObjId;
-
-				console.log ( uiObjId );
-				console.log ( newRoute.uiObjId );
-
-				_Routes.push ( newRoute );
-				console.log ( _Routes );
+			
+			removeRoute : function ( routeObjId ) {
+				console.log ( new Date().toISOString ( ) );
+				_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes.splice ( this.indexOfRoute ( routeObjId ), 1 ) [0].object } );
+			},
+			
+			addRoute : function ( ) {
+				var newRoute = require ( './Route' ) ( );
+				_Routes.push ( newRoute ) ;
+				return newRoute;
+			},
+			
+			indexOfRoute : function ( routeObjId ) {
+				function haveObjId ( element ) {
+					return element.objId === routeObjId;
+				}
+				return _Routes.findIndex ( haveObjId );
 			},
 			get routes ( ) { return _Routes; },
+			
 			get objId ( ) { return _ObjId; },
+			
 			get objName ( ) { return _ObjName; },
+			
 			get objVersion ( ) { return _ObjVersion; },
-
+			
 			get object ( ) {
 				var routes = [];
 				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
@@ -68,12 +78,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				return {
 					name : _Name,
-					routes : _Routes,
+					routes : routes,
 					objId : _ObjId,
 					objName : _ObjName,
 					objVersion : _ObjVersion
 				};
 			},
+			
 			set object ( Object ) {
 				if ( ! Object.objVersion ) {
 					throw 'No ObjVersion for TravelData';
@@ -90,9 +101,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Name = Object.name || '';
 				_Routes.length = 0;
 				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
-					var tmpRoute = require ( './Route' ) ( );
-					tmpRoute.object = Object.routes [ routesCounter ];
-					_Routes.push ( tmpRoute );
+					var newRoute = require ( './Route' ) ( );
+					newRoute.object = Object.routes [ routesCounter ];
+					_Routes.push ( newRoute );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}
