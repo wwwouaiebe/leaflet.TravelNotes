@@ -221,7 +221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./userInterface":13}],4:[function(require,module,exports){
+},{"./userInterface":14}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -304,7 +304,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			objName : "TravelData",
 			objVersion : "1.0.0"
 		};
-		
 		//_TravelData.clear ( );
 
 /*
@@ -394,7 +393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.Control":3,"./TravelData":10}],5:[function(require,module,exports){
+},{"./L.Travel.Control":3,"./TravelData":11}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -470,8 +469,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
-			addWayPoint : function ( WayPoint ) { _WayPoints.push ( WayPoint ); },
-			removeWayPoint : function ( WayPointObjId ) { return; },
+			addWayPoint : function ( WayPoint ) { 
+				_WayPoints.push ( WayPoint );
+				if ( 2 < _WayPoints.length ) {
+					var tmpWayPoint = _WayPoints [ _WayPoints.length - 2 ];
+					_WayPoints [ _WayPoints.length - 2 ] = _WayPoints [ _WayPoints.length - 1 ];
+					_WayPoints [ _WayPoints.length - 1 ] = tmpWayPoint;
+					
+					return;
+				}
+			},
+			removeAllWayPoint : function ( WayPointObjId ) { 
+				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
+				return _WayPoints;
+			},
+			get wayPoints ( ) { return _WayPoints; },
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -535,7 +547,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Geom":1,"./ObjId":5,"./WayPoint":11,"./Waypoint":12,"./waypoint":14}],7:[function(require,module,exports){
+},{"./Geom":1,"./ObjId":5,"./WayPoint":12,"./Waypoint":13,"./waypoint":15}],7:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var _Route = require ( './Route' ) ( );
+	var _RouteInitialObjId = -1;
+	
+	var getRouteEditor = function ( ) {
+
+		return {
+			editRoute : function ( route ) { 
+				_RouteInitialObjId = route.objId;
+				// Route is cloned, so we can have a cancel button in the editor
+				_Route.object = route.object;
+				require ( './RouteEditorUI' ) ( ).setRouteData ( _Route );
+			},
+			addWayPoint : function ( newWayPoint ) {
+				_Route.addWayPoint ( newWayPoint );
+				return _Route.wayPoints;
+			},
+			reverseWayPoints : function ( ) {
+				var newWayPoints =  _Route.wayPoints.reverse ( );
+				return _Route.wayPoints;
+			},
+			removeAllWayPoints : function ( ) {
+				console.log ( 'e' );
+				return _Route.removeAllWayPoint (  );
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getRouteEditor;
+	}
+
+}());
+
+},{"./Route":6,"./RouteEditorUI":8}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -560,11 +629,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _TravelData = require ( './TravelData' ) ( );
 
-	var _RoutesList = null;
 	var _WayPointsList = null;
 
 	var _WayPointsDiv = null;
 
+	var redrawWayPointsList = function ( newWayPoints ) {
+		_WayPointsList.removeAllItems ( );
+		for ( var wayPointCounter = 0; wayPointCounter < newWayPoints.length; wayPointCounter ++ ) {
+			_WayPointsList.addItem ( newWayPoints [ wayPointCounter ].UIName, newWayPoints [ wayPointCounter ].objId , wayPointCounter ===  newWayPoints.length - 1 );
+		}
+	};
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
@@ -573,26 +648,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
 	};
 
+	var onAddWayPointButton = function ( event ) {
+		var newWayPoint = require ( './Waypoint.js' ) ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( newWayPoint );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
+	var onReverseWayPointsButton = function ( event )
+	{
+		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
+	var onRemoveAllWayPointsButton = function ( event )
+	{
+		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListRightArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointslistInput = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 	
 	// User interface
@@ -628,16 +721,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsList.container.addEventListener ( 'SortableListInput', onWayPointslistInput, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, _WayPointsDiv );
-			var addWayPointsButton = htmlElementsFactory.create ( 
+			var addWayPointButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					id : 'TravelControl-AddWayPointsButton',
+					id : 'TravelControl-AddWayPointButton',
 					className: 'TravelControl-Button', 
 					title : 'Ajouter un point de passage', 
 					innerHTML : '+'
 				},
 				wayPointsButtonsDiv 
 			);
+			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'span',
 				{ 
@@ -648,23 +742,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				wayPointsButtonsDiv
 			);
-			var deleteWayPointsButton = htmlElementsFactory.create ( 
+			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
+			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					id : 'TravelControl-DeleteWayPointsButton', 
+					id : 'TravelControl-RemoveAllWayPointsButton', 
 					className: 'TravelControl-Button',
 					title: 'Supprimer tous les points de passage',
 					innerHTML : '&#x1f5d1;'
 				}, 
 				wayPointsButtonsDiv
 			);
+			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
 		};
 		if ( ! _WayPointsDiv ) {
 			_CreateRouteEditorUI ( );
 		}
 		
 		return {
-			get UI ( ) { return _WayPointsDiv; }
+			get UI ( ) { return _WayPointsDiv; },
+			
+			setRouteData : function ( route ) {
+				redrawWayPointsList ( route.wayPoints );
+			}
 		};
 	};
 
@@ -675,7 +775,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./SortableList":9,"./TravelData":10}],8:[function(require,module,exports){
+},{"./HTMLElementsFactory":2,"./RouteEditor":7,"./SortableList":10,"./TravelData":11,"./Waypoint.js":13}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -764,8 +864,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation();
-		console.log ( _TravelData.object );
+		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes [ _TravelData.indexOfRoute ( event.itemNode.dataObjId ) ] );
 	};
+	
 	var onRouteslistInput = function ( event ) {
 		_TravelData.routes [ _TravelData.indexOfRoute ( event.dataObjId ) ].name = event.inputValue;
 		
@@ -834,7 +935,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./SortableList":9,"./TravelData":10}],9:[function(require,module,exports){
+},{"./HTMLElementsFactory":2,"./RouteEditor":7,"./SortableList":10,"./TravelData":11}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -941,17 +1042,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		this.items = [];
 		
 		/*
-		--- removeItem method --------------------------------------------------------------------------------------------------
-
-		This method ...
-
-		------------------------------------------------------------------------------------------------------------------------
-		*/
-		
-		this.removeItem = function ( ) {
-		};
-		
-		/*
 		--- removeAllItems method ----------------------------------------------------------------------------------------------
 
 		This method ...
@@ -967,17 +1057,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		/*
-		--- moveItem method ----------------------------------------------------------------------------------------------------
-
-		This method ...
-
-		------------------------------------------------------------------------------------------------------------------------
-		*/
-
-		this.moveItem = function ( ) {
-		};
-		
-		/*
 		--- addItem method -----------------------------------------------------------------------------------------------------
 
 		This method ...
@@ -985,7 +1064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
-		this.addItem = function ( name, dataObjId ) {
+		this.addItem = function ( name, dataObjId, isLastItem ) {
 	
 			name = name || '';
 			dataObjId = dataObjId || -1;
@@ -999,12 +1078,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					case 0:
 					placeholder = this.options.placeholders [ 0 ];
 					break;
-					case 1:
-					placeholder = this.options.placeholders [ 2 ];
-					break;
 					default:
 					placeholder = this.options.placeholders [ 1 ];
 					break;
+				}
+				if ( isLastItem ) {
+					placeholder = this.options.placeholders [ 2 ];
 				}
 			}
 			
@@ -1017,17 +1096,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					case 0:
 					indexName = this.options.indexNames [ 0 ];
 					break;
-					case 1:
-					indexName = this.options.indexNames [ 2 ];
-					break;
 					default:
 					indexName = this.options.indexNames [ 1 ];
 					break;
 				}
+				if ( isLastItem ) {
+					indexName = this.options.indexNames [ 2 ];
+				}
 			}
 			if ( 'index' === indexName )
 			{
-				indexName = this.items.length - 1;
+				indexName = this.items.length;
 			}
 			
 			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
@@ -1049,28 +1128,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			item.UIObjId = require ( './ObjId' ) ( );
 
 			this.items.push ( item );
-			
-			var lastItem = null;
-			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 < this.items.length ) ){
-				lastItem = this.items [ this.items.length - 2 ];
-				this.items [ this.items.length - 2 ] = this.items [ this.items.length - 1 ];
-				this.items [ this.items.length - 1 ] = lastItem;
-			}
-			if ( ( 'LimitedSort' !== this.options.listStyle ) || ( 2 < this.items.length ) ){
-			{
+
+			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'SortableList-MoveCursor' );
 			}
 	
-			}
-			if ( lastItem ) {
-				this.container.insertBefore ( item, lastItem );
-			}
-			else
-			{
-				this.container.appendChild ( item );
-			}
+			this.container.appendChild ( item );
 		};
 		
 		
@@ -1126,7 +1191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./ObjId":5}],10:[function(require,module,exports){
+},{"./HTMLElementsFactory":2,"./ObjId":5}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1252,7 +1317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":5,"./Route":6}],11:[function(require,module,exports){
+},{"./ObjId":5,"./Route":6}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1287,6 +1352,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
+			
+			get UIName ( ) {
+				if ( '' !== _Name ) {
+					return _Name;
+				}
+				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
+					return _Lat.toString() + ( 0 < _Lat ? ' N - ' : ' S - ' ) + Lng.toString()  + ( 0 < _Lat ? ' E - ' : ' W - ' );
+				}
+				return '';
+			},
 			
 			get lat ( ) { return _Lat;},
 			set lat ( Lat ) { _Lat = Lat; },
@@ -1345,9 +1420,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":5}],12:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"./ObjId":5,"dup":11}],13:[function(require,module,exports){
+},{"./ObjId":5}],13:[function(require,module,exports){
+arguments[4][12][0].apply(exports,arguments)
+},{"./ObjId":5,"dup":12}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1409,6 +1484,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./RouteEditorUI":7,"./RoutesUI":8}],14:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"./ObjId":5,"dup":11}]},{},[4]);
+},{"./HTMLElementsFactory":2,"./RouteEditorUI":8,"./RoutesUI":9}],15:[function(require,module,exports){
+arguments[4][12][0].apply(exports,arguments)
+},{"./ObjId":5,"dup":12}]},{},[4]);

@@ -33,6 +33,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
+			get UIName ( ) {
+				if ( '' !== _Name ) {
+					return _Name;
+				}
+				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
+					return _Lat.toString() + ( 0 < _Lat ? ' N - ' : ' S - ' ) + Lng.toString()  + ( 0 < _Lat ? ' E - ' : ' W - ' );
+				}
+				return '';
+			},
+			
 			get lat ( ) { return _Lat;},
 			set lat ( Lat ) { _Lat = Lat; },
 			

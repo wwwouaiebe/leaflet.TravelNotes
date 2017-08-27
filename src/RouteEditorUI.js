@@ -22,11 +22,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _TravelData = require ( './TravelData' ) ( );
 
-	var _RoutesList = null;
 	var _WayPointsList = null;
 
 	var _WayPointsDiv = null;
 
+	var redrawWayPointsList = function ( newWayPoints ) {
+		_WayPointsList.removeAllItems ( );
+		for ( var wayPointCounter = 0; wayPointCounter < newWayPoints.length; wayPointCounter ++ ) {
+			_WayPointsList.addItem ( newWayPoints [ wayPointCounter ].UIName, newWayPoints [ wayPointCounter ].objId , wayPointCounter ===  newWayPoints.length - 1 );
+		}
+	};
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
@@ -35,26 +41,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
 	};
 
+	var onAddWayPointButton = function ( event ) {
+		var newWayPoint = require ( './Waypoint.js' ) ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( newWayPoint );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
+	var onReverseWayPointsButton = function ( event )
+	{
+		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
+	var onRemoveAllWayPointsButton = function ( event )
+	{
+		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
+		redrawWayPointsList ( newWayPoints );
+	};
+	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointsListRightArrow = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onWayPointslistInput = function ( event ) {
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 	
 	// User interface
@@ -90,16 +114,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsList.container.addEventListener ( 'SortableListInput', onWayPointslistInput, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, _WayPointsDiv );
-			var addWayPointsButton = htmlElementsFactory.create ( 
+			var addWayPointButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					id : 'TravelControl-AddWayPointsButton',
+					id : 'TravelControl-AddWayPointButton',
 					className: 'TravelControl-Button', 
 					title : 'Ajouter un point de passage', 
 					innerHTML : '+'
 				},
 				wayPointsButtonsDiv 
 			);
+			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'span',
 				{ 
@@ -110,23 +135,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				wayPointsButtonsDiv
 			);
-			var deleteWayPointsButton = htmlElementsFactory.create ( 
+			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
+			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					id : 'TravelControl-DeleteWayPointsButton', 
+					id : 'TravelControl-RemoveAllWayPointsButton', 
 					className: 'TravelControl-Button',
 					title: 'Supprimer tous les points de passage',
 					innerHTML : '&#x1f5d1;'
 				}, 
 				wayPointsButtonsDiv
 			);
+			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
 		};
 		if ( ! _WayPointsDiv ) {
 			_CreateRouteEditorUI ( );
 		}
 		
 		return {
-			get UI ( ) { return _WayPointsDiv; }
+			get UI ( ) { return _WayPointsDiv; },
+			
+			setRouteData : function ( route ) {
+				redrawWayPointsList ( route.wayPoints );
+			}
 		};
 	};
 

@@ -104,17 +104,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		this.items = [];
 		
 		/*
-		--- removeItem method --------------------------------------------------------------------------------------------------
-
-		This method ...
-
-		------------------------------------------------------------------------------------------------------------------------
-		*/
-		
-		this.removeItem = function ( ) {
-		};
-		
-		/*
 		--- removeAllItems method ----------------------------------------------------------------------------------------------
 
 		This method ...
@@ -130,17 +119,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		/*
-		--- moveItem method ----------------------------------------------------------------------------------------------------
-
-		This method ...
-
-		------------------------------------------------------------------------------------------------------------------------
-		*/
-
-		this.moveItem = function ( ) {
-		};
-		
-		/*
 		--- addItem method -----------------------------------------------------------------------------------------------------
 
 		This method ...
@@ -148,7 +126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
-		this.addItem = function ( name, dataObjId ) {
+		this.addItem = function ( name, dataObjId, isLastItem ) {
 	
 			name = name || '';
 			dataObjId = dataObjId || -1;
@@ -162,12 +140,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					case 0:
 					placeholder = this.options.placeholders [ 0 ];
 					break;
-					case 1:
-					placeholder = this.options.placeholders [ 2 ];
-					break;
 					default:
 					placeholder = this.options.placeholders [ 1 ];
 					break;
+				}
+				if ( isLastItem ) {
+					placeholder = this.options.placeholders [ 2 ];
 				}
 			}
 			
@@ -180,17 +158,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					case 0:
 					indexName = this.options.indexNames [ 0 ];
 					break;
-					case 1:
-					indexName = this.options.indexNames [ 2 ];
-					break;
 					default:
 					indexName = this.options.indexNames [ 1 ];
 					break;
 				}
+				if ( isLastItem ) {
+					indexName = this.options.indexNames [ 2 ];
+				}
 			}
 			if ( 'index' === indexName )
 			{
-				indexName = this.items.length - 1;
+				indexName = this.items.length;
 			}
 			
 			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
@@ -212,28 +190,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			item.UIObjId = require ( './ObjId' ) ( );
 
 			this.items.push ( item );
-			
-			var lastItem = null;
-			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 < this.items.length ) ){
-				lastItem = this.items [ this.items.length - 2 ];
-				this.items [ this.items.length - 2 ] = this.items [ this.items.length - 1 ];
-				this.items [ this.items.length - 1 ] = lastItem;
-			}
-			if ( ( 'LimitedSort' !== this.options.listStyle ) || ( 2 < this.items.length ) ){
-			{
+
+			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'SortableList-MoveCursor' );
 			}
 	
-			}
-			if ( lastItem ) {
-				this.container.insertBefore ( item, lastItem );
-			}
-			else
-			{
-				this.container.appendChild ( item );
-			}
+			this.container.appendChild ( item );
 		};
 		
 		

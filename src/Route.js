@@ -33,8 +33,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
-			addWayPoint : function ( WayPoint ) { _WayPoints.push ( WayPoint ); },
-			removeWayPoint : function ( WayPointObjId ) { return; },
+			addWayPoint : function ( WayPoint ) { 
+				_WayPoints.push ( WayPoint );
+				if ( 2 < _WayPoints.length ) {
+					var tmpWayPoint = _WayPoints [ _WayPoints.length - 2 ];
+					_WayPoints [ _WayPoints.length - 2 ] = _WayPoints [ _WayPoints.length - 1 ];
+					_WayPoints [ _WayPoints.length - 1 ] = tmpWayPoint;
+					
+					return;
+				}
+			},
+			removeAllWayPoint : function ( WayPointObjId ) { 
+				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
+				return _WayPoints;
+			},
+			get wayPoints ( ) { return _WayPoints; },
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
