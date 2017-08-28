@@ -47,7 +47,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			removeRoute : function ( routeObjId ) {
-				console.log ( new Date().toISOString ( ) );
 				_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes.splice ( this.indexOfRoute ( routeObjId ), 1 ) [0].object } );
 			},
 			
@@ -63,6 +62,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				return _Routes.findIndex ( haveObjId );
 			},
+			
 			get routes ( ) { return _Routes; },
 			
 			get objId ( ) { return _ObjId; },

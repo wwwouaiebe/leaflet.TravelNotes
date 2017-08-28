@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _WayPointsList = null;
 
 	var _WayPointsDiv = null;
+	
+	var _RouteEditor = require ( './RouteEditor' ) ( );
 
 	var redrawWayPointsList = function ( newWayPoints ) {
 		_WayPointsList.removeAllItems ( );
@@ -39,37 +41,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
 		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+
+		clickEvent.stopPropagation ( );
 	};
 
 	var onAddWayPointButton = function ( event ) {
-		var newWayPoint = require ( './Waypoint.js' ) ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( newWayPoint );
+		var newWayPoints = _RouteEditor.addWayPoint ( );
 		redrawWayPointsList ( newWayPoints );
+
+		event.stopPropagation ( );
 	};
 	
 	var onReverseWayPointsButton = function ( event )
 	{
-		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
+		var newWayPoints = _RouteEditor.reverseWayPoints ( );
 		redrawWayPointsList ( newWayPoints );
+
+		event.stopPropagation ( );
 	};
 	
 	var onRemoveAllWayPointsButton = function ( event )
 	{
-		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
+		var newWayPoints = _RouteEditor.removeAllWayPoints ( );
 		redrawWayPointsList ( newWayPoints );
+
+		event.stopPropagation ( );
 	};
 	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
+		var newWayPoints = _RouteEditor.removeWayPoint ( event.itemNode.dataObjId );
+		redrawWayPointsList ( newWayPoints );
+
 		event.stopPropagation ( );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
+		var newWayPoints = _RouteEditor.swapWayPoints ( event.itemNode.dataObjId, true );
+		redrawWayPointsList ( newWayPoints );
 		event.stopPropagation ( );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
+		var newWayPoints = _RouteEditor.swapWayPoints ( event.itemNode.dataObjId, false );
+		redrawWayPointsList ( newWayPoints );
 		event.stopPropagation ( );
 	};
 
@@ -77,10 +93,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		event.stopPropagation ( );
 	};
 
-	var onWayPointslistInput = function ( event ) {
+	var onWayPointslistChange = function ( event ) {
+		_RouteEditor.renameWayPoint ( event.dataObjId, event.changeValue );
+
 		event.stopPropagation ( );
 	};
-	
+
 	// User interface
 	
 	var getRouteEditorUI = function ( ) {
@@ -110,8 +128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
 			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
 			_WayPointsList.container.addEventListener ( 'SortableListDownArrow', onWayPointsListDownArrow, false );
-			_WayPointsList.container.addEventListener ( 'SortableListRightArrow', onWayPointsListRightArrow, false );
-			_WayPointsList.container.addEventListener ( 'SortableListInput', onWayPointslistInput, false );
+			_WayPointsList.container.addEventListener ( 'SortableListChange', onWayPointslistChange, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, _WayPointsDiv );
 			var addWayPointButton = htmlElementsFactory.create ( 

@@ -43,11 +43,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					return;
 				}
 			},
-			removeAllWayPoint : function ( WayPointObjId ) { 
-				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
-				return _WayPoints;
+			
+			removeWayPoint : function ( wayPointObjId ) {
+				_WayPoints.splice ( this.indexOfWayPoint ( wayPointObjId ), 1 );
 			},
+			
+			removeAllWayPoints : function ( ) { 
+				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
+			},
+			
+			swapWayPoints : function ( wayPointObjId, MoveUp ) { 
+				var index = this.indexOfWayPoint ( wayPointObjId );
+				var tmpWayPoint = _WayPoints [ this.indexOfWayPoint ( wayPointObjId ) ];
+				_WayPoints [ index ] = _WayPoints [ index + ( MoveUp ? -1 : 1  ) ];
+				_WayPoints [ index + ( MoveUp ? -1 : 1  ) ] = tmpWayPoint;	
+			},
+			
 			get wayPoints ( ) { return _WayPoints; },
+
+			indexOfWayPoint : function ( wayPointObjId ) {
+				function haveObjId ( element ) {
+					return element.objId === wayPointObjId;
+				}
+				return _WayPoints.findIndex ( haveObjId );
+			},
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },

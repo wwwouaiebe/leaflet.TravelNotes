@@ -82,14 +82,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		ClickEvent.stopPropagation();
 	};
 	
-	var onInput = function ( inputEvent ) {
-		var event = new Event ( 'SortableListInput' );
-		event.dataObjId = inputEvent.target.parentNode.dataObjId;
-		event.inputValue = inputEvent.target.value;
-		inputEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		inputEvent.stopPropagation();
+	var onChange = function ( changeEvent ) {
+		console.log ( 'onChange' );
+		var event = new Event ( 'SortableListChange' );
+		event.dataObjId = changeEvent.target.parentNode.dataObjId;
+		event.changeValue = changeEvent.target.value;
+		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		changeEvent.stopPropagation();
 	};
-
 	
 	/* 
 	--- SortableList object --------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
-			inputElement.addEventListener ( 'input' , onInput, false );
+			inputElement.addEventListener ( 'change' , onChange, false );
 			var deleteButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x1f5d1;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			var upArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
