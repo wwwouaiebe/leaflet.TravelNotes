@@ -24,45 +24,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// one and only one object TravelData is possible
 	
 	var _Name = '';
-	var _Routes = [ ];
+	var _Routes = require ( './Collection' ) ( 'Route' );
 	var _ObjId = -1;
-	var _UndoList = [];
 
 	var getTravelData = function ( ) {
 		
 		return {
-			clear : function ( ) {
-				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
-				}
-				this.object = 
-				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
-			},
-			
-			removeAllRoutes : function ( ) {
-				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
-				}
-				_Routes.length = 0;
-			},
-			
-			removeRoute : function ( routeObjId ) {
-				_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes.splice ( this.indexOfRoute ( routeObjId ), 1 ) [0].object } );
-			},
-			
-			addRoute : function ( ) {
-				var newRoute = require ( './Route' ) ( );
-				_Routes.push ( newRoute ) ;
-				return newRoute;
-			},
-			
-			indexOfRoute : function ( routeObjId ) {
-				function haveObjId ( element ) {
-					return element.objId === routeObjId;
-				}
-				return _Routes.findIndex ( haveObjId );
-			},
-			
 			get routes ( ) { return _Routes; },
 			
 			get objId ( ) { return _ObjId; },
@@ -73,8 +40,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var routes = [];
-				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
-					routes.push ( _Routes [ RoutesCounter ].object );
+				var iterator = this.routes.iterator;
+				while ( ! iterator.done ) {
+					routes.push ( iterator.value.object );
 				}
 				return {
 					name : _Name,
@@ -99,11 +67,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for TravelData';
 				}
 				_Name = Object.name || '';
-				_Routes.length = 0;
+				_Routes.removeAll ( );
 				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
 					var newRoute = require ( './Route' ) ( );
 					newRoute.object = Object.routes [ routesCounter ];
-					_Routes.push ( newRoute );
+					_Routes.add ( newRoute );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}

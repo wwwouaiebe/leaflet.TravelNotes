@@ -30,13 +30,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		_RoutesList.removeAllItems ( );
 
-		_TravelData.removeAllRoutes ( );	
+		_TravelData.routes.removeAll ( );	
 
 		clickEvent.stopPropagation();
 	};
 	
 	var onClickAddRouteButton = function ( clickEvent ) {
-		var newRoute = _TravelData.addRoute ( );
+		var newRoute = require ( './Route' ) ( );
+		
+		_TravelData.routes.add ( newRoute );
 		
 		_RoutesList.addItem ( newRoute.name, newRoute.objId );
 
@@ -56,45 +58,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Events for buttons and input on the routes list items
 	
 	var onRoutesListDelete = function ( event ) {
-		_TravelData.removeRoute ( event.itemNode.dataObjId );
+		_TravelData.routes.remove ( event.itemNode.dataObjId );
 		
 		event.itemNode.parentNode.removeChild ( event.itemNode );
 		
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
-		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
-		var tmpRoute = _TravelData.routes [ indexOfRoute ];
-		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute - 1 ];
-		_TravelData.routes [ indexOfRoute - 1 ] = tmpRoute;
-
+		_TravelData.routes.swap ( event.itemNode.dataObjId, true );
 		event.itemNode.parentNode.insertBefore ( event.itemNode, event.itemNode.previousSibling );
 
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
-
-		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
-		var tmpRoute = _TravelData.routes [ indexOfRoute ];
-		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute + 1 ];
-		_TravelData.routes [ indexOfRoute + 1 ] = tmpRoute;
-
+		_TravelData.routes.swap ( event.itemNode.dataObjId, false );
 		event.itemNode.parentNode.insertBefore ( event.itemNode.nextSibling, event.itemNode );
 		
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation();
-		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes [ _TravelData.indexOfRoute ( event.itemNode.dataObjId ) ] );
+		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes.getAt ( event.itemNode.dataObjId ) );
 
 		event.stopPropagation ( );
 	};
 	
 	var onRouteslistChange = function ( event ) {
-		_TravelData.routes [ _TravelData.indexOfRoute ( event.dataObjId ) ].name = event.changeValue;
+		_TravelData.routes.getAt ( event.dataObjId ).name = event.changeValue;
 		
 		event.stopPropagation();
 	};
@@ -103,8 +96,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _SetTravelData = function ( ) {
 			var routes = _TravelData.routes;
-			for ( var routesCounter = 0; routesCounter < routes.length; routesCounter ++ ) {
-				routes [ routesCounter ].uiObjId = _RoutesList.addItem ( routes [ routesCounter ].name, routes [ routesCounter ].objId );
+			console.log ( _TravelData.object );
+			var iterator = _TravelData.routes.iterator;
+			while ( ! iterator.done ) {
+				iterator.value.uiObjId = _RoutesList.addItem ( iterator.value.name, iterator.value.objId );
 			}
 		};
 		

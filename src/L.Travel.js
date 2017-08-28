@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.Travel.getInterface = function ( ) {
 
 		var _TravelData = require ( './TravelData' ) ( );
-		_TravelData.object =
+/*		_TravelData.object =
 		{
 			name : "TravelData sample",
 			routes : 
@@ -66,54 +66,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
 						precision :6,
 						color : "#0000ff",
-						weight : "5",
-						objId : -3,
-						objName : "Geom",
-						objVersion : "1.0.0"
-					},
-					objId : -4,
-					objName : "Route",
-					objVersion : "1.0.0"
-				}
-			],
-			objId : -5,
-			objName : "TravelData",
-			objVersion : "1.0.0"
-		};
-		//_TravelData.clear ( );
-
-/*
-		_TravelData.object = 
-		{
-			name : "A",
-			routes : 
-			[
-				{
-					name : "B",
-					wayPoints : 
-					[
-						{
-							name : "C",
-							lat : 0,
-							lng : 0,
-							objId : -1,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						},
-						{
-							name : "D",
-							lat : 0,
-							lng : 0,
-							objId : -2,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						}
-					],
-					geom :
-					{
-						pnts : "E",
-						precision :6,
-						color : "#000000",
 						weight : "5",
 						objId : -3,
 						objName : "Geom",

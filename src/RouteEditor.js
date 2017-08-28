@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			
 			editRoute : function ( route ) { 
+				console.log ( 'editRoute' );
 				_RouteChanged = false;
 				_RouteInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
@@ -39,7 +40,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addWayPoint : function ( ) {
 				_RouteChanged = true;
 				var newWayPoint = require ( './Waypoint.js' ) ( );
-				_Route.addWayPoint ( newWayPoint );
+				_Route.wayPoints.add ( newWayPoint );
+				_Route.wayPoints.swap ( newWayPoint.objId, true );
 				return _Route.wayPoints;
 			},
 			
@@ -51,24 +53,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			removeAllWayPoints : function ( ) {
 				_RouteChanged = true;
-				_Route.removeAllWayPoints (  );
+				_Route.wayPoints.removeAll ( true );
 				return _Route.wayPoints;
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				_RouteChanged = true;
-				_Route.removeWayPoint ( wayPointObjId );
+				_Route.wayPoints.remove ( wayPointObjId );
 				return _Route.wayPoints;
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
 				_RouteChanged = true;
-				_Route.wayPoints [ _Route.indexOfWayPoint ( wayPointObjId ) ].name = wayPointName;
+				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 			},
 			
-			swapWayPoints : function ( wayPointObjId, MoveUp ) {
+			swapWayPoints : function ( wayPointObjId, swapUp ) {
 				_RouteChanged = true;
-				_Route.swapWayPoints ( wayPointObjId, MoveUp );
+				_Route.wayPoints.swap ( wayPointObjId, swapUp );
 				return _Route.wayPoints;
 			}
 		};

@@ -222,7 +222,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 > this.options.minSize ) )
 			{
-				this.options.minSize = 2;
+				this.options.minSize = 0;
 			}
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );

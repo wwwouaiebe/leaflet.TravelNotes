@@ -18,6 +18,137 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 (function() {
 	
 	'use strict';
+
+	
+	var getCollection = function ( objName ) {
+		
+		var _Array = [];
+		var _ObjName = objName;
+		
+		var _IndexOfObjId = function ( objId ) {
+			function haveObjId ( element ) {
+				return element.objId === objId;
+			}
+			return _Array.findIndex ( haveObjId );
+		};
+		
+		var _Add = function ( object ) {
+			if ( ( ! object.objName ) || ( object.objName !== _ObjName ) ) {
+				throw 'invalid object name for add function';
+			}
+			_Array.push ( object );
+
+			return;
+		};
+		
+		var _GetAt = function ( objId ) {
+			var index = _IndexOfObjId ( objId );
+			if ( -1 === index ) {
+				throw 'invalid objId for remove function';
+			}
+			return _Array [ index ];
+		};
+		
+		var _Reverse = function ( ) {
+			_Array.reverse ( );
+		};
+		
+		var _Remove = function ( objId ) {
+			var index = _IndexOfObjId ( objId );
+			if ( -1 === index ) {
+				throw 'invalid objId for remove function';
+			}
+			_Array.splice ( _IndexOfObjId ( objId ), 1 );
+		};
+		
+		var _RemoveAll = function ( ExceptFirstLast ) {
+			if ( ExceptFirstLast ) {
+				_Array.splice ( 1, _Array.length - 2 );
+			}
+			else {
+				_Array.length = 0;
+			}
+		};
+		
+		var _Swap = function ( objId, swapUp ) {
+			var index = _IndexOfObjId ( objId );
+			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
+				throw 'invalid objId for swap function';
+			}
+			var tmp = _Array [ index ];
+			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
+			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;	
+		};
+		
+		var _Iterator = function ( ) {
+			var nextIndex = -1;   
+			return {
+			   get value ( ) { return nextIndex < _Array.length ?  _Array [ nextIndex ] : null; },
+			   get done ( ) { return ++ nextIndex  >= _Array.length; },
+			   get first ( ) { return 0 === nextIndex; },
+			   get last ( ) { return nextIndex  >= _Array.length; }
+			};
+		};
+
+		return {
+			add : function ( object ) { 
+				_Add ( object );
+			},
+			getAt : function ( objId ) {
+				return _GetAt ( objId );
+			},
+			reverse : function ( ) {
+				_Reverse ( );
+			},
+			remove : function ( objId ) {
+				_Remove ( objId );
+			},
+			removeAll : function ( ExceptFirstLast ) {
+				_RemoveAll ( ExceptFirstLast );
+			},
+			swap : function ( objId, swapUp ) {
+				_Swap ( objId, swapUp );
+			},
+			get iterator ( ) { 
+				return _Iterator ( ); 
+			}
+			
+		};
+	};
+	
+	/* --- End of getTravelData function --- */
+	
+	/* 
+	--- Exports ------------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getCollection;
+	}
+
+} ) ( );
+
+
+},{}],2:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+
+(function() {
+	
+	'use strict';
 	
 	var _ObjName = 'Geom';
 	var _ObjVersion = '1.0.0';
@@ -95,7 +226,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":5}],2:[function(require,module,exports){
+},{"./ObjId":6}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -169,7 +300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -221,7 +352,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./userInterface":14}],4:[function(require,module,exports){
+},{"./userInterface":15}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -259,7 +390,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.Travel.getInterface = function ( ) {
 
 		var _TravelData = require ( './TravelData' ) ( );
-		_TravelData.object =
+/*		_TravelData.object =
 		{
 			name : "TravelData sample",
 			routes : 
@@ -290,54 +421,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
 						precision :6,
 						color : "#0000ff",
-						weight : "5",
-						objId : -3,
-						objName : "Geom",
-						objVersion : "1.0.0"
-					},
-					objId : -4,
-					objName : "Route",
-					objVersion : "1.0.0"
-				}
-			],
-			objId : -5,
-			objName : "TravelData",
-			objVersion : "1.0.0"
-		};
-		//_TravelData.clear ( );
-
-/*
-		_TravelData.object = 
-		{
-			name : "A",
-			routes : 
-			[
-				{
-					name : "B",
-					wayPoints : 
-					[
-						{
-							name : "C",
-							lat : 0,
-							lng : 0,
-							objId : -1,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						},
-						{
-							name : "D",
-							lat : 0,
-							lng : 0,
-							objId : -2,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						}
-					],
-					geom :
-					{
-						pnts : "E",
-						precision :6,
-						color : "#000000",
 						weight : "5",
 						objId : -3,
 						objName : "Geom",
@@ -393,7 +476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.Control":3,"./TravelData":11}],5:[function(require,module,exports){
+},{"./L.Travel.Control":4,"./TravelData":12}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -433,7 +516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -460,7 +543,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRoute = function ( ) {
 		
 		var _Name = '';
-		var _WayPoints = [ require ( './Waypoint' ) ( ), require ( './waypoint' ) ( )];
+		var _WayPoints = require ( './Collection' ) ( 'WayPoint' );
+		_WayPoints.add ( require ( './Waypoint' ) ( ) );
+		_WayPoints.add ( require ( './Waypoint' ) ( ) );
+
 		var _Geom = require ( './Geom' ) ( );
 		
 		var _ObjId = require ( './ObjId' ) ( );
@@ -469,40 +555,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
-			addWayPoint : function ( WayPoint ) { 
-				_WayPoints.push ( WayPoint );
-				if ( 2 < _WayPoints.length ) {
-					var tmpWayPoint = _WayPoints [ _WayPoints.length - 2 ];
-					_WayPoints [ _WayPoints.length - 2 ] = _WayPoints [ _WayPoints.length - 1 ];
-					_WayPoints [ _WayPoints.length - 1 ] = tmpWayPoint;
-					
-					return;
-				}
-			},
-			
-			removeWayPoint : function ( wayPointObjId ) {
-				_WayPoints.splice ( this.indexOfWayPoint ( wayPointObjId ), 1 );
-			},
-			
-			removeAllWayPoints : function ( ) { 
-				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
-			},
-			
-			swapWayPoints : function ( wayPointObjId, MoveUp ) { 
-				var index = this.indexOfWayPoint ( wayPointObjId );
-				var tmpWayPoint = _WayPoints [ this.indexOfWayPoint ( wayPointObjId ) ];
-				_WayPoints [ index ] = _WayPoints [ index + ( MoveUp ? -1 : 1  ) ];
-				_WayPoints [ index + ( MoveUp ? -1 : 1  ) ] = tmpWayPoint;	
-			},
-			
 			get wayPoints ( ) { return _WayPoints; },
-
-			indexOfWayPoint : function ( wayPointObjId ) {
-				function haveObjId ( element ) {
-					return element.objId === wayPointObjId;
-				}
-				return _WayPoints.findIndex ( haveObjId );
-			},
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -513,9 +566,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var wayPoints = [];
-				for ( var WayPointsCounter = 0; WayPointsCounter < _WayPoints.length ;WayPointsCounter ++ ) {
-					wayPoints.push ( _WayPoints [ WayPointsCounter ].object );
+				var iterator = this.wayPoints.iterator;
+				while ( ! iterator.done ) {
+					wayPoints.push ( iterator.value.object );
 				}
+
 				return {
 					name : _Name,
 					wayPoints : wayPoints,
@@ -539,11 +594,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for Route';
 				}
 				_Name = Object.name || '';
-				_WayPoints.length = 0;
+				_WayPoints.removeAll ( );
 				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {
 					var newWayPoint = require ( './WayPoint' ) ( );
 					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
-					_WayPoints.push ( newWayPoint );
+					_WayPoints.add ( newWayPoint );
 				}
 				var tmpGeom = require ( './Geom' ) ( );
 				tmpGeom.object = Object.geom;
@@ -566,7 +621,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Geom":1,"./ObjId":5,"./WayPoint":12,"./Waypoint":13,"./waypoint":15}],7:[function(require,module,exports){
+},{"./Collection":1,"./Geom":2,"./ObjId":6,"./WayPoint":13,"./Waypoint":14}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -598,6 +653,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			
 			editRoute : function ( route ) { 
+				console.log ( 'editRoute' );
 				_RouteChanged = false;
 				_RouteInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
@@ -608,7 +664,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addWayPoint : function ( ) {
 				_RouteChanged = true;
 				var newWayPoint = require ( './Waypoint.js' ) ( );
-				_Route.addWayPoint ( newWayPoint );
+				_Route.wayPoints.add ( newWayPoint );
+				_Route.wayPoints.swap ( newWayPoint.objId, true );
 				return _Route.wayPoints;
 			},
 			
@@ -620,24 +677,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			removeAllWayPoints : function ( ) {
 				_RouteChanged = true;
-				_Route.removeAllWayPoints (  );
+				_Route.wayPoints.removeAll ( true );
 				return _Route.wayPoints;
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				_RouteChanged = true;
-				_Route.removeWayPoint ( wayPointObjId );
+				_Route.wayPoints.remove ( wayPointObjId );
 				return _Route.wayPoints;
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
 				_RouteChanged = true;
-				_Route.wayPoints [ _Route.indexOfWayPoint ( wayPointObjId ) ].name = wayPointName;
+				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 			},
 			
-			swapWayPoints : function ( wayPointObjId, MoveUp ) {
+			swapWayPoints : function ( wayPointObjId, swapUp ) {
 				_RouteChanged = true;
-				_Route.swapWayPoints ( wayPointObjId, MoveUp );
+				_Route.wayPoints.swap ( wayPointObjId, swapUp );
 				return _Route.wayPoints;
 			}
 		};
@@ -650,7 +707,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./Route":6,"./RouteEditorUI":8,"./Waypoint.js":13}],8:[function(require,module,exports){
+},{"./Route":7,"./RouteEditorUI":9,"./Waypoint.js":14}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -683,8 +740,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var redrawWayPointsList = function ( newWayPoints ) {
 		_WayPointsList.removeAllItems ( );
-		for ( var wayPointCounter = 0; wayPointCounter < newWayPoints.length; wayPointCounter ++ ) {
-			_WayPointsList.addItem ( newWayPoints [ wayPointCounter ].UIName, newWayPoints [ wayPointCounter ].objId , wayPointCounter ===  newWayPoints.length - 1 );
+		
+		var iterator = newWayPoints.iterator;
+		while ( ! iterator.done ) {
+			_WayPointsList.addItem ( iterator.value.UIName, iterator.value.objId, iterator.last );
 		}
 	};
 	
@@ -830,7 +889,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 	};
-
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getRouteEditorUI;
@@ -838,7 +896,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./RouteEditor":7,"./SortableList":10,"./TravelData":11}],9:[function(require,module,exports){
+},{"./HTMLElementsFactory":3,"./RouteEditor":8,"./SortableList":11,"./TravelData":12}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -871,13 +929,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		_RoutesList.removeAllItems ( );
 
-		_TravelData.removeAllRoutes ( );	
+		_TravelData.routes.removeAll ( );	
 
 		clickEvent.stopPropagation();
 	};
 	
 	var onClickAddRouteButton = function ( clickEvent ) {
-		var newRoute = _TravelData.addRoute ( );
+		var newRoute = require ( './Route' ) ( );
+		
+		_TravelData.routes.add ( newRoute );
 		
 		_RoutesList.addItem ( newRoute.name, newRoute.objId );
 
@@ -897,45 +957,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Events for buttons and input on the routes list items
 	
 	var onRoutesListDelete = function ( event ) {
-		_TravelData.removeRoute ( event.itemNode.dataObjId );
+		_TravelData.routes.remove ( event.itemNode.dataObjId );
 		
 		event.itemNode.parentNode.removeChild ( event.itemNode );
 		
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
-		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
-		var tmpRoute = _TravelData.routes [ indexOfRoute ];
-		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute - 1 ];
-		_TravelData.routes [ indexOfRoute - 1 ] = tmpRoute;
-
+		_TravelData.routes.swap ( event.itemNode.dataObjId, true );
 		event.itemNode.parentNode.insertBefore ( event.itemNode, event.itemNode.previousSibling );
 
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
-
-		var indexOfRoute = _TravelData.indexOfRoute ( event.itemNode.dataObjId );
-		var tmpRoute = _TravelData.routes [ indexOfRoute ];
-		_TravelData.routes [ indexOfRoute ] = _TravelData.routes [ indexOfRoute + 1 ];
-		_TravelData.routes [ indexOfRoute + 1 ] = tmpRoute;
-
+		_TravelData.routes.swap ( event.itemNode.dataObjId, false );
 		event.itemNode.parentNode.insertBefore ( event.itemNode.nextSibling, event.itemNode );
 		
-		event.stopPropagation();
+		event.stopPropagation ( );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation();
-		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes [ _TravelData.indexOfRoute ( event.itemNode.dataObjId ) ] );
+		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes.getAt ( event.itemNode.dataObjId ) );
 
 		event.stopPropagation ( );
 	};
 	
 	var onRouteslistChange = function ( event ) {
-		_TravelData.routes [ _TravelData.indexOfRoute ( event.dataObjId ) ].name = event.changeValue;
+		_TravelData.routes.getAt ( event.dataObjId ).name = event.changeValue;
 		
 		event.stopPropagation();
 	};
@@ -944,8 +995,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _SetTravelData = function ( ) {
 			var routes = _TravelData.routes;
-			for ( var routesCounter = 0; routesCounter < routes.length; routesCounter ++ ) {
-				routes [ routesCounter ].uiObjId = _RoutesList.addItem ( routes [ routesCounter ].name, routes [ routesCounter ].objId );
+			console.log ( _TravelData.object );
+			var iterator = _TravelData.routes.iterator;
+			while ( ! iterator.done ) {
+				iterator.value.uiObjId = _RoutesList.addItem ( iterator.value.name, iterator.value.objId );
 			}
 		};
 		
@@ -1002,7 +1055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./RouteEditor":7,"./SortableList":10,"./TravelData":11}],10:[function(require,module,exports){
+},{"./HTMLElementsFactory":3,"./Route":7,"./RouteEditor":8,"./SortableList":11,"./TravelData":12}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1227,7 +1280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			if ( ( 'LimitedSort' === this.options.listStyle ) && ( 2 > this.options.minSize ) )
 			{
-				this.options.minSize = 2;
+				this.options.minSize = 0;
 			}
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
@@ -1258,7 +1311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./ObjId":5}],11:[function(require,module,exports){
+},{"./HTMLElementsFactory":3,"./ObjId":6}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1285,45 +1338,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// one and only one object TravelData is possible
 	
 	var _Name = '';
-	var _Routes = [ ];
+	var _Routes = require ( './Collection' ) ( 'Route' );
 	var _ObjId = -1;
-	var _UndoList = [];
 
 	var getTravelData = function ( ) {
 		
 		return {
-			clear : function ( ) {
-				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
-				}
-				this.object = 
-				{name : "",routes : [{name : "",wayPoints : [{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"},{name : "",lat : 0,lng : 0,objId : -1,objName : "WayPoint",objVersion : "1.0.0"}],geom :{pnts : "",precision :6,color : "#000000",weight : "5",objId : -1,objName : "Geom",objVersion : "1.0.0"},objId : -1,objName : "Route",objVersion : "1.0.0"}],objId : -1,objName : "TravelData",objVersion : "1.0.0"};
-			},
-			
-			removeAllRoutes : function ( ) {
-				for ( var routeCounter = 0; routeCounter < _Routes.length; routeCounter ++ ) {
-					_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes [ routeCounter ].object } );
-				}
-				_Routes.length = 0;
-			},
-			
-			removeRoute : function ( routeObjId ) {
-				_UndoList.push ( { timeStamp : new Date().toISOString ( ), route : _Routes.splice ( this.indexOfRoute ( routeObjId ), 1 ) [0].object } );
-			},
-			
-			addRoute : function ( ) {
-				var newRoute = require ( './Route' ) ( );
-				_Routes.push ( newRoute ) ;
-				return newRoute;
-			},
-			
-			indexOfRoute : function ( routeObjId ) {
-				function haveObjId ( element ) {
-					return element.objId === routeObjId;
-				}
-				return _Routes.findIndex ( haveObjId );
-			},
-			
 			get routes ( ) { return _Routes; },
 			
 			get objId ( ) { return _ObjId; },
@@ -1334,8 +1354,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var routes = [];
-				for ( var RoutesCounter = 0; RoutesCounter < _Routes.length ;RoutesCounter ++ ) {
-					routes.push ( _Routes [ RoutesCounter ].object );
+				var iterator = this.routes.iterator;
+				while ( ! iterator.done ) {
+					routes.push ( iterator.value.object );
 				}
 				return {
 					name : _Name,
@@ -1360,11 +1381,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for TravelData';
 				}
 				_Name = Object.name || '';
-				_Routes.length = 0;
+				_Routes.removeAll ( );
 				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
 					var newRoute = require ( './Route' ) ( );
 					newRoute.object = Object.routes [ routesCounter ];
-					_Routes.push ( newRoute );
+					_Routes.add ( newRoute );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}
@@ -1384,7 +1405,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":5,"./Route":6}],12:[function(require,module,exports){
+},{"./Collection":1,"./ObjId":6,"./Route":7}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1487,9 +1508,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":5}],13:[function(require,module,exports){
-arguments[4][12][0].apply(exports,arguments)
-},{"./ObjId":5,"dup":12}],14:[function(require,module,exports){
+},{"./ObjId":6}],14:[function(require,module,exports){
+arguments[4][13][0].apply(exports,arguments)
+},{"./ObjId":6,"dup":13}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1551,6 +1572,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":2,"./RouteEditorUI":8,"./RoutesUI":9}],15:[function(require,module,exports){
-arguments[4][12][0].apply(exports,arguments)
-},{"./ObjId":5,"dup":12}]},{},[4]);
+},{"./HTMLElementsFactory":3,"./RouteEditorUI":9,"./RoutesUI":10}]},{},[5]);

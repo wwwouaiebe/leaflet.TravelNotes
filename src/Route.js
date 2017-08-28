@@ -24,7 +24,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRoute = function ( ) {
 		
 		var _Name = '';
-		var _WayPoints = [ require ( './Waypoint' ) ( ), require ( './waypoint' ) ( )];
+		var _WayPoints = require ( './Collection' ) ( 'WayPoint' );
+		_WayPoints.add ( require ( './Waypoint' ) ( ) );
+		_WayPoints.add ( require ( './Waypoint' ) ( ) );
+
 		var _Geom = require ( './Geom' ) ( );
 		
 		var _ObjId = require ( './ObjId' ) ( );
@@ -33,40 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 			
-			addWayPoint : function ( WayPoint ) { 
-				_WayPoints.push ( WayPoint );
-				if ( 2 < _WayPoints.length ) {
-					var tmpWayPoint = _WayPoints [ _WayPoints.length - 2 ];
-					_WayPoints [ _WayPoints.length - 2 ] = _WayPoints [ _WayPoints.length - 1 ];
-					_WayPoints [ _WayPoints.length - 1 ] = tmpWayPoint;
-					
-					return;
-				}
-			},
-			
-			removeWayPoint : function ( wayPointObjId ) {
-				_WayPoints.splice ( this.indexOfWayPoint ( wayPointObjId ), 1 );
-			},
-			
-			removeAllWayPoints : function ( ) { 
-				_WayPoints =  [ _WayPoints [ 0 ], _WayPoints [ _WayPoints.length - 1 ] ];
-			},
-			
-			swapWayPoints : function ( wayPointObjId, MoveUp ) { 
-				var index = this.indexOfWayPoint ( wayPointObjId );
-				var tmpWayPoint = _WayPoints [ this.indexOfWayPoint ( wayPointObjId ) ];
-				_WayPoints [ index ] = _WayPoints [ index + ( MoveUp ? -1 : 1  ) ];
-				_WayPoints [ index + ( MoveUp ? -1 : 1  ) ] = tmpWayPoint;	
-			},
-			
 			get wayPoints ( ) { return _WayPoints; },
-
-			indexOfWayPoint : function ( wayPointObjId ) {
-				function haveObjId ( element ) {
-					return element.objId === wayPointObjId;
-				}
-				return _WayPoints.findIndex ( haveObjId );
-			},
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -77,9 +47,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var wayPoints = [];
-				for ( var WayPointsCounter = 0; WayPointsCounter < _WayPoints.length ;WayPointsCounter ++ ) {
-					wayPoints.push ( _WayPoints [ WayPointsCounter ].object );
+				var iterator = this.wayPoints.iterator;
+				while ( ! iterator.done ) {
+					wayPoints.push ( iterator.value.object );
 				}
+
 				return {
 					name : _Name,
 					wayPoints : wayPoints,
@@ -103,11 +75,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					throw 'Invalid objName for Route';
 				}
 				_Name = Object.name || '';
-				_WayPoints.length = 0;
+				_WayPoints.removeAll ( );
 				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {
 					var newWayPoint = require ( './WayPoint' ) ( );
 					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
-					_WayPoints.push ( newWayPoint );
+					_WayPoints.add ( newWayPoint );
 				}
 				var tmpGeom = require ( './Geom' ) ( );
 				tmpGeom.object = Object.geom;

@@ -30,8 +30,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var redrawWayPointsList = function ( newWayPoints ) {
 		_WayPointsList.removeAllItems ( );
-		for ( var wayPointCounter = 0; wayPointCounter < newWayPoints.length; wayPointCounter ++ ) {
-			_WayPointsList.addItem ( newWayPoints [ wayPointCounter ].UIName, newWayPoints [ wayPointCounter ].objId , wayPointCounter ===  newWayPoints.length - 1 );
+		
+		var iterator = newWayPoints.iterator;
+		while ( ! iterator.done ) {
+			_WayPointsList.addItem ( iterator.value.UIName, iterator.value.objId, iterator.last );
 		}
 	};
 	
@@ -177,7 +179,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 	};
-
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getRouteEditorUI;
