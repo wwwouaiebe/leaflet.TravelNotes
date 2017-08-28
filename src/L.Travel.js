@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	L.Travel.getInterface = function ( ) {
 
 		var _TravelData = require ( './TravelData' ) ( );
-/*		_TravelData.object =
+		_TravelData.object =
 		{
 			name : "TravelData sample",
 			routes : 
@@ -80,7 +80,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			objName : "TravelData",
 			objVersion : "1.0.0"
 		};
-*/
+
 		return {
 
 			/* --- public methods --- */

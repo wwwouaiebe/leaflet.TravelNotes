@@ -26,15 +26,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getRouteEditor = function ( ) {
 
+		var _RouteEditorUI = require ( './RouteEditorUI' ) ( );
+	
 		return {
 			
-			editRoute : function ( route ) { 
-				console.log ( 'editRoute' );
+			editRoute : function ( routeObjId ) { 
+				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
 				_RouteChanged = false;
 				_RouteInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
 				_Route.object = route.object;
-				require ( './RouteEditorUI' ) ( ).setRouteData ( _Route );
+				_RouteEditorUI .expand ( );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			addWayPoint : function ( ) {
@@ -42,36 +45,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var newWayPoint = require ( './Waypoint.js' ) ( );
 				_Route.wayPoints.add ( newWayPoint );
 				_Route.wayPoints.swap ( newWayPoint.objId, true );
-				return _Route.wayPoints;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			reverseWayPoints : function ( ) {
 				_RouteChanged = true;
 				_Route.wayPoints.reverse ( );
-				return _Route.wayPoints;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			removeAllWayPoints : function ( ) {
 				_RouteChanged = true;
 				_Route.wayPoints.removeAll ( true );
-				return _Route.wayPoints;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				_RouteChanged = true;
 				_Route.wayPoints.remove ( wayPointObjId );
-				return _Route.wayPoints;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
 				_RouteChanged = true;
 				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
 				_RouteChanged = true;
 				_Route.wayPoints.swap ( wayPointObjId, swapUp );
-				return _Route.wayPoints;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			}
 		};
 	};

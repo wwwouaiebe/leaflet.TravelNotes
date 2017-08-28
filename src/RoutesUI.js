@@ -81,7 +81,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation();
-		require ( './RouteEditor' ) ( ).editRoute ( _TravelData.routes.getAt ( event.itemNode.dataObjId ) );
+		require ( './RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 
 		event.stopPropagation ( );
 	};
@@ -96,7 +96,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _SetTravelData = function ( ) {
 			var routes = _TravelData.routes;
-			console.log ( _TravelData.object );
 			var iterator = _TravelData.routes.iterator;
 			while ( ! iterator.done ) {
 				iterator.value.uiObjId = _RoutesList.addItem ( iterator.value.name, iterator.value.objId );

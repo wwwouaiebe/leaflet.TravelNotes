@@ -20,75 +20,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _TravelData = require ( './TravelData' ) ( );
-
 	var _WayPointsList = null;
 
 	var _WayPointsDiv = null;
-	
-	var _RouteEditor = require ( './RouteEditor' ) ( );
 
-	var redrawWayPointsList = function ( newWayPoints ) {
-		_WayPointsList.removeAllItems ( );
-		
-		var iterator = newWayPoints.iterator;
-		while ( ! iterator.done ) {
-			_WayPointsList.addItem ( iterator.value.UIName, iterator.value.objId, iterator.last );
-		}
-	};
 	
-	var onClickExpandButton = function ( clickEvent ) {
-		
-		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
-
-		clickEvent.stopPropagation ( );
-	};
+	//var _RouteEditor = require ( './RouteEditor' ) ( );
 
 	var onAddWayPointButton = function ( event ) {
-		var newWayPoints = _RouteEditor.addWayPoint ( );
-		redrawWayPointsList ( newWayPoints );
-
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( );
 	};
 	
 	var onReverseWayPointsButton = function ( event )
 	{
-		var newWayPoints = _RouteEditor.reverseWayPoints ( );
-		redrawWayPointsList ( newWayPoints );
-
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
 	};
 	
 	var onRemoveAllWayPointsButton = function ( event )
 	{
-		var newWayPoints = _RouteEditor.removeAllWayPoints ( );
-		redrawWayPointsList ( newWayPoints );
-
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
 	};
 	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
-		var newWayPoints = _RouteEditor.removeWayPoint ( event.itemNode.dataObjId );
-		redrawWayPointsList ( newWayPoints );
-
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
-		var newWayPoints = _RouteEditor.swapWayPoints ( event.itemNode.dataObjId, true );
-		redrawWayPointsList ( newWayPoints );
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
-		var newWayPoints = _RouteEditor.swapWayPoints ( event.itemNode.dataObjId, false );
-		redrawWayPointsList ( newWayPoints );
 		event.stopPropagation ( );
+		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
 	};
 
 	var onWayPointsListRightArrow = function ( event ) {
@@ -96,15 +66,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	var onWayPointslistChange = function ( event ) {
-		_RouteEditor.renameWayPoint ( event.dataObjId, event.changeValue );
-
 		event.stopPropagation ( );
+		require ( './RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 	};
 
+	var onClickExpandButton = function ( clickEvent ) {
+		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+
+		clickEvent.stopPropagation ( );
+	};
+	
 	// User interface
 	
 	var getRouteEditorUI = function ( ) {
-
+				
 		var _CreateRouteEditorUI = function ( ){ 
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -166,16 +144,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				wayPointsButtonsDiv
 			);
 			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
+
 		};
+	
+		var _ExpandEditorUI = function ( ) {
+			_WayPointsDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25bc;';
+			_WayPointsDiv.childNodes[ 0 ].firstChild.title = 'Masquer';
+			_WayPointsDiv.childNodes[ 1 ].classList.remove ( 'TravelControl-HiddenList' );
+			_WayPointsDiv.childNodes[ 2 ].classList.remove ( 'TravelControl-HiddenList' );
+		};
+		
+		var _ReduceEditorUI = function ( ) {
+			_WayPointsDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25b6;';
+			_WayPointsDiv.childNodes[ 0 ].firstChild.title = 'Afficher';
+			_WayPointsDiv.childNodes[ 1 ].classList.add ( 'TravelControl-HiddenList' );
+			_WayPointsDiv.childNodes[ 2 ].classList.add ( 'TravelControl-HiddenList' );
+		};
+
 		if ( ! _WayPointsDiv ) {
 			_CreateRouteEditorUI ( );
+			_ReduceEditorUI ( );
 		}
 		
 		return {
 			get UI ( ) { return _WayPointsDiv; },
-			
-			setRouteData : function ( route ) {
-				redrawWayPointsList ( route.wayPoints );
+	
+			expand : function ( ) {
+				_ExpandEditorUI ( );
+			},
+			reduce : function ( ) {
+				_ReduceEditorUI ( );
+			},
+
+			writeWayPointsList : function ( newWayPoints ) {
+				_WayPointsList.removeAllItems ( );
+				
+				var iterator = newWayPoints.iterator;
+				while ( ! iterator.done ) {
+					_WayPointsList.addItem ( iterator.value.UIName, iterator.value.objId, iterator.last );
+				}
 			}
 		};
 	};
