@@ -45,9 +45,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			editRoute : function ( routeObjId ) { 
+				console.log ( 'a' );
 				if ( _RouteChanged ) {
+				console.log ( 'b' );
+					require ( './ErrorEditor' ) ( ).showError ( "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications" );
 					return;
 				}
+				console.log ( 'C' );
 				_Route = require ( './Route' ) ( );
 				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
 				_RouteInitialObjId = route.objId;

@@ -148,3 +148,23 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	color: red;
 	margin-right: 2em;
 }
+#TravelControl-ErrorDiv
+{
+	position: absolute;
+	bottom: 5vh;
+	max-height: 10vh;
+	overflow: auto;
+
+
+}
+#TravelControl-ErrorPannel
+{
+	border-style: solid;
+	border-width: 0.1em;
+	padding: 0.5em;
+}
+.TravelControl-Error
+{
+	color: red;
+	font-weight: bold;
+}
