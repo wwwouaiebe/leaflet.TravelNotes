@@ -92,7 +92,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		event.stopPropagation();
 	};
 	
-	var getRoutesUI = function ( ) {
+	var getRoutesListUI = function ( ) {
 
 		var _SetTravelData = function ( ) {
 			var routes = _TravelData.routes;
@@ -102,7 +102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _CreateRoutesUI = function ( ){ 
+		var _CreateRoutesListUI = function ( ){ 
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
@@ -139,7 +139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		if ( ! _RoutesDiv ) {
-			_CreateRoutesUI ( );
+			_CreateRoutesListUI ( );
 			_SetTravelData ( );
 		}
 		
@@ -150,7 +150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutesUI;
+		module.exports = getRoutesListUI;
 	}
 
 }());
