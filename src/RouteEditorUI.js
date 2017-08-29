@@ -63,6 +63,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( './RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 	};
 
+	var onSaveRouteButton = function ( event ) {
+		event.stopPropagation ( );
+		require ( './RouteEditor' ) ( ).saveEdition ( );
+	};
+	
+	var onCancelRouteButton = function ( event ) {
+		event.stopPropagation ( );
+		require ( './RouteEditor' ) ( ).cancelEdition ( );
+	};
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
@@ -89,7 +99,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', className : 'TravelControl-Div'} );
 			
 			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, _WayPointsDiv );
-			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
+			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 
@@ -109,6 +119,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsList.container.addEventListener ( 'SortableListChange', onWayPointslistChange, false );
 
 			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, _WayPointsDiv );
+			
+			var saveRouteButton = htmlElementsFactory.create (
+				'span', 
+				{ 
+					id : 'TravelControl-SaveRouteButton',
+					className: 'TravelControl-Button', 
+					title : 'Sauver les modifications', 
+					innerHTML : '&#x1f4be;'
+				},
+				wayPointsButtonsDiv 
+			);
+			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
+			var cancelRouteButton = htmlElementsFactory.create (
+				'span', 
+				{ 
+					id : 'TravelControl-CancelRouteButton',
+					className: 'TravelControl-Button', 
+					title : 'Abandonner les modifications', 
+					innerHTML : '&#x274c'
+				},
+				wayPointsButtonsDiv 
+			);
+			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
 			var addWayPointButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 

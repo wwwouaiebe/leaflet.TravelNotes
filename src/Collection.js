@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _GetAt = function ( objId ) {
 			var index = _IndexOfObjId ( objId );
 			if ( -1 === index ) {
-				throw 'invalid objId for remove function';
+				throw 'invalid objId for getAt function';
 			}
 			return _Array [ index ];
 		};
@@ -58,6 +58,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				throw 'invalid objId for remove function';
 			}
 			_Array.splice ( _IndexOfObjId ( objId ), 1 );
+		};
+		
+		var _Replace = function ( oldObjId, object ) {
+			var index = _IndexOfObjId ( oldObjId );
+			if ( -1 === index ) {
+				throw 'invalid objId for replace function';
+			}
+			_Array [ index ] = object;
 		};
 		
 		var _RemoveAll = function ( ExceptFirstLast ) {
@@ -101,6 +109,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			remove : function ( objId ) {
 				_Remove ( objId );
+			},
+			replace : function ( oldObjId, object ) {
+				_Replace ( oldObjId, object ); 
 			},
 			removeAll : function ( ExceptFirstLast ) {
 				_RemoveAll ( ExceptFirstLast );

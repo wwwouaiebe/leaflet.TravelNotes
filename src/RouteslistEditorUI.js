@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+		require ( './RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 	};
 	
 	var onRouteslistChange = function ( event ) {
@@ -121,13 +121,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			writeRoutesList : function ( newRoutes ) {
 				_RoutesList.removeAllItems ( );
-				
 				var iterator = newRoutes.iterator;
 				while ( ! iterator.done ) {
 					_RoutesList.addItem ( iterator.value.name, iterator.value.objId, false );
 				}
 			}
-			
 		};
 	};
 

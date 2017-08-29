@@ -30,9 +30,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 		return {
 			
-			editRoute : function ( routeObjId ) { 
-				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
+			saveEdition : function ( ) {
+				var travelData = require ( './TravelData' ) ( );
+				travelData.routes.replace ( _RouteInitialObjId, _Route );
 				_RouteChanged = false;
+				// It's needed to rewrite the route list due to objId's changes
+				require ( './RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
+				this.editRoute ( _Route.objId );
+			},
+			
+			cancelEdition : function ( ) {
+				_RouteChanged = false;
+				this.editRoute ( _RouteInitialObjId );
+			},
+			
+			editRoute : function ( routeObjId ) { 
+				if ( _RouteChanged ) {
+					return;
+				}
+				_Route = require ( './Route' ) ( );
+				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
 				_RouteInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
 				_Route.object = route.object;

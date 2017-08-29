@@ -143,3 +143,8 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 {
 	cursor: default;
 }
+#TravelControl-CancelRouteButton
+{
+	color: red;
+	margin-right: 2em;
+}
