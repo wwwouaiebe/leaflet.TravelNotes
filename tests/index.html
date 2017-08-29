@@ -23,6 +23,7 @@
 				L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">Christian Guyette</a>' } ).addTo ( Map );
 				var myInterface = L.travel.interface ( );
 				myInterface.addControl ( Map, { position: "topright"} );
+				myInterface.addMapContextMenu ( false, true );
 			} ());		
 		</script>
 	</body>

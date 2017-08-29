@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	L.Travel = L.Travel || {};
 	L.travel = L.travel || {};
+
 	
 	/* 
 	--- L.Travel.Interface object -----------------------------------------------------------------------------
@@ -81,6 +82,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			objVersion : "1.0.0"
 		};
 
+		var onMapClick = function ( event ) {
+			require ('./ContextMenu' ) ( event );
+		};
+		
+		var _Map;
 		return {
 
 			/* --- public methods --- */
@@ -100,12 +106,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				else {
 					map.addControl ( L.marker.pin.control ( options ) );
 				}
+				_Map = map;
 			},
 			
-			addWayPoint : function ( WayPoint, WayPointPosition ) {
-				console.log ( 'addWayPoint' );
-			},
-			
+			addMapContextMenu : function ( leftButton, rightButton ) {
+				if ( leftButton ) {
+					_Map.on ( 'click', onMapClick );
+				}
+				if ( rightButton ) {
+					_Map.on ( 'contextmenu', onMapClick );
+				}
+			}
 		};
 	};
 	
