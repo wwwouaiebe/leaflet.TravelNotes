@@ -151,17 +151,15 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 #TravelControl-ErrorDiv
 {
 	position: absolute;
-	bottom: 5vh;
+	bottom: 3em;
 	max-height: 10vh;
 	overflow: auto;
-
-
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	width: 50em;
 }
 #TravelControl-ErrorPannel
 {
-	border-style: solid;
-	border-width: 0.1em;
-	padding: 0.5em;
 }
 .TravelControl-Error
 {

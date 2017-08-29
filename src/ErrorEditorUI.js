@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		if ( ! _ErrorDiv.childNodes[ 1 ].innerHTML.length ) {
+		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
 			return;
 		}	
-		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
 	};
 
 	// User interface
@@ -42,22 +42,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
-			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
-			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
 			_ErrorPanel = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorPannel', className : 'TravelControl-Panel'}, _ErrorDiv );
+			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
+			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
+			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerErrorDiv );
 		};
 
 		var _ExpandEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25bc;';
-			_ErrorDiv.childNodes[ 0 ].firstChild.title = 'Masquer';
-			_ErrorDiv.childNodes[ 1 ].classList.remove ( 'TravelControl-HiddenList' );
+			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Masquer';
+			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
 		var _ReduceEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 0 ].firstChild.title = 'Afficher';
-			_ErrorDiv.childNodes[ 1 ].classList.add ( 'TravelControl-HiddenList' );
+			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Afficher';
+			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
 		};
 
 		if ( ! _ErrorDiv ) {
