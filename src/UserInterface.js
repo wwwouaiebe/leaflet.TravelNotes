@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 			
-			_MainDiv.appendChild ( require ( './RoutesListUI' ) ( ).UI ); 
+			_MainDiv.appendChild ( require ( './RoutesListEditorUI' ) ( ).UI ); 
 
 			_MainDiv.appendChild ( require ( './RouteEditorUI' ) ( ).UI ); 
 			// Itinerary

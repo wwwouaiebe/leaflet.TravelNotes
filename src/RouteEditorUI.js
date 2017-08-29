@@ -19,13 +19,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
-	
-	var _WayPointsList = null;
-
-	var _WayPointsDiv = null;
-
-	
-	//var _RouteEditor = require ( './RouteEditor' ) ( );
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
@@ -80,6 +73,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	// User interface
+	
+	var _WayPointsList = null;
+
+	var _WayPointsDiv = null;
+
 	
 	var getRouteEditorUI = function ( ) {
 				
@@ -172,6 +170,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expand : function ( ) {
 				_ExpandEditorUI ( );
 			},
+			
 			reduce : function ( ) {
 				_ReduceEditorUI ( );
 			},

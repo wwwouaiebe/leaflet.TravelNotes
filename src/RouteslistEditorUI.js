@@ -20,31 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _TravelData = require ( './TravelData' ) ( );
-
-	var _RoutesList = null;
-
-	var _RoutesDiv = null;
-
-	// Events listeners for buttons under the routes list
-	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
-		_RoutesList.removeAllItems ( );
-
-		_TravelData.routes.removeAll ( );	
-
-		clickEvent.stopPropagation();
-	};
-	
-	var onClickAddRouteButton = function ( clickEvent ) {
-		var newRoute = require ( './Route' ) ( );
-		
-		_TravelData.routes.add ( newRoute );
-		
-		_RoutesList.addItem ( newRoute.name, newRoute.objId );
-
-		clickEvent.stopPropagation();
-	};
-	
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
@@ -55,54 +30,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.stopPropagation ( );
 	};
 	
-	// Events for buttons and input on the routes list items
 	
+	// Events listeners for buttons under the routes list
+	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
+		clickEvent.stopPropagation();
+		require ( './RoutesListEditor' ) ( ).removeAllRoutes ( );
+	};
+
+	var onClickAddRouteButton = function ( event ) {
+		event.stopPropagation();
+		require ( './RoutesListEditor' ) ( ).addRoute ( );
+	};
+	
+	// Events for buttons and input on the routes list items
 	var onRoutesListDelete = function ( event ) {
-		_TravelData.routes.remove ( event.itemNode.dataObjId );
-		
-		event.itemNode.parentNode.removeChild ( event.itemNode );
-		
 		event.stopPropagation ( );
+		require ( './RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
-		_TravelData.routes.swap ( event.itemNode.dataObjId, true );
-		event.itemNode.parentNode.insertBefore ( event.itemNode, event.itemNode.previousSibling );
-
 		event.stopPropagation ( );
+		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
-		_TravelData.routes.swap ( event.itemNode.dataObjId, false );
-		event.itemNode.parentNode.insertBefore ( event.itemNode.nextSibling, event.itemNode );
-		
 		event.stopPropagation ( );
+		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
-		event.stopPropagation();
-		require ( './RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
-
 		event.stopPropagation ( );
+		require ( './RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 	};
 	
 	var onRouteslistChange = function ( event ) {
-		_TravelData.routes.getAt ( event.dataObjId ).name = event.changeValue;
-		
 		event.stopPropagation();
+		require ( './RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
-	var getRoutesListUI = function ( ) {
+	// User interface
 
-		var _SetTravelData = function ( ) {
-			var routes = _TravelData.routes;
-			var iterator = _TravelData.routes.iterator;
-			while ( ! iterator.done ) {
-				iterator.value.uiObjId = _RoutesList.addItem ( iterator.value.name, iterator.value.objId );
-			}
-		};
+	var _RoutesDiv = null;
+	var _RoutesList = null;
+	
+	var getRoutesListEditorUI = function ( ) {
+
 		
-		var _CreateRoutesListUI = function ( ){ 
+		var _CreateRoutesListEditorUI = function ( ){ 
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
@@ -139,18 +113,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		if ( ! _RoutesDiv ) {
-			_CreateRoutesListUI ( );
-			_SetTravelData ( );
+			_CreateRoutesListEditorUI ( );
 		}
 		
 		return {
-			get UI ( ) { return _RoutesDiv; }
+			get UI ( ) { return _RoutesDiv; },
+			
+			writeRoutesList : function ( newRoutes ) {
+				_RoutesList.removeAllItems ( );
+				
+				var iterator = newRoutes.iterator;
+				while ( ! iterator.done ) {
+					_RoutesList.addItem ( iterator.value.name, iterator.value.objId, false );
+				}
+			}
+			
 		};
 	};
 
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutesListUI;
+		module.exports = getRoutesListEditorUI;
 	}
 
 }());
