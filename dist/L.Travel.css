@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/* Context menu */
 
 /* Don't change ContextMenu-Panel. It's used to find the screen height!*/
 .ContextMenu-Panel
@@ -28,7 +29,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	background-color: transparent;
 	z-index: 0;
 }
-
 .ContextMenu-Container
 {
 	position: absolute;
@@ -55,18 +55,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	border-bottom-style: none;
 }
-
 .ContextMenu-Item
 {
 	margin: 0em;
 	padding: 0em;
 	border-style: none;
-	margin: 0.5em;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
 	width: calc(100% - 1em);
 	text-align: left;
 	background-color: white;
 }
-
 .ContextMenu-Item:hover
 {
 	width: calc(100% + 1em);
@@ -85,8 +86,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-style: none;
 	cursor: default;
 }
-
-
 .ContextMenu-ItemDisabled
 {
 	color: gray;
@@ -98,6 +97,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	cursor: auto;
 }
 
+/* Lists */
 
 .SortableList-Container
 {
