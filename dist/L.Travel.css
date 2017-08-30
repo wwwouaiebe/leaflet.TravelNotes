@@ -103,6 +103,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	display: table;
 	width: 100%;
 	margin-bottom: 1em;
+    border-collapse: separate;
+    border-spacing: 0.2em 0.2em;
 }
 .SortableList-Item
 {
@@ -119,12 +121,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	display: table-cell;
 	width: 2em;
 }
-
 .SortableList-ItemInput
 {
 	width: 100%;
+	margin-right: 1em;
 	min-width: 5em;
 	display: table-cell;
+	height: 1.8em;
 }
 .SortableList-ItemDeleteButton,
 .SortableList-ItemUpArrowButton,
@@ -136,19 +139,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	text-align : center;
 	cursor: default;
 	font-weight: bold;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
 }
-div#TravelControl-WaypointsDataDiv div.SortableList-ItemDeleteButton
+.SortableList-ItemDeleteButton:hover,
+.SortableList-ItemUpArrowButton:hover,
+.SortableList-ItemDownArrowButton:hover,
+.SortableList-ItemRightArrowButton:hover
 {
-	padding-left: 2em;
+	border-color: black;
 }
-div.SortableList-Container > div.SortableList-Item:first-child > span.SortableList-ItemUpArrowButton,
-div.SortableList-Container > div.SortableList-Item:last-child > span.SortableList-ItemDownArrowButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDownArrowButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemUpArrowButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-child(2) > span.SortableList-ItemUpArrowButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-last-child(2) > span.SortableList-ItemDownArrowButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > span.SortableList-ItemDeleteButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span.SortableList-ItemDeleteButton
+.SortableList-ItemDeleteButton:hover
+{
+	color:red;
+}
+
+div.SortableList-Container > div.SortableList-Item:first-child > div.SortableList-ItemUpArrowButton,
+div.SortableList-Container > div.SortableList-Item:last-child > div.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > div.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > div.SortableList-ItemUpArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-child(2) > div.SortableList-ItemUpArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-last-child(2) > div.SortableList-ItemDownArrowButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > div.SortableList-ItemDeleteButton,
+div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > div.SortableList-ItemDeleteButton
+div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableList-ItemRightArrowButton
 {
 	visibility:hidden;
 }
@@ -183,6 +198,9 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	padding-top: 1em;
 	margin-left: 1em;
 	margin-right: 1em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
 }
 .TravelControl-HeaderDiv
 {
@@ -195,7 +213,7 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 }
 .TravelControl-DataDiv
 {
-	max-height: 15vh;
+	max-height: 17vh;
 	overflow: auto;
 }
 .TravelControl-ButtonsDiv
@@ -203,11 +221,17 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	margin-bottom: 1em;
 	text-align: right;
 }
-
 .TravelControl-HiddenList
 {
+	padding-top:0;
+	margin-bottom: 0;
 	visibility: hidden;
 	height: 0;
+}
+.TravelControl-SmallHeader
+{
+	padding-top:0;
+	margin-bottom: 0;
 }
 .TravelControl-Button
 {
@@ -216,15 +240,33 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 	width: 2em;
 	text-align : center;
 	cursor: default;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+}
+.TravelControl-Button:hover
+{
+	border-color: black;
+}
+.TravelControl-ExpandButton
+{
+	padding-right: 0.5em;
+	color: lightgray;
 }
 .TravelControl-ExpandButton:hover
 {
 	cursor: default;
+	color:red;
 }
 #TravelControl-CancelRouteButton
 {
-	color: red;
 	margin-right: 2em;
+}
+#TravelControl-RemoveAllWayPointsButton:hover,
+#TravelControl-DeleteAllRoutesButton:hover,
+#TravelControl-CancelRouteButton:hover
+{
+	color: red;
 }
 #TravelControl-ErrorDiv
 {
