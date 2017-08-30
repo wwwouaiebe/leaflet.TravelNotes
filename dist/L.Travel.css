@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-style: solid;
 	border-width: 0.1em;
 	font-family : sans-serif;
-	font-size: 80%;
+	font-size: 1em;;
 	padding: 0.2em;
 }
 .ContextMenu-ItemContainer
@@ -98,59 +98,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 /* Lists */
-
 .SortableList-Container
 {
-	border-style: solid;
-	border-width: 0.1em;
-	overflow: auto;
-	max-height: 20vh;
+	display: table;
+	width: 100%;
+	margin-bottom: 1em;
 }
 .SortableList-Item
 {
-	width: calc ( 100% - 1em );
-	background-color: lightgray;
-	border-style: solid;
-	border-width: 0.1em;
-	padding: 0.2em;
-	margin: 0.2em;
+	display:table-row;
+	width: 100%;
 	white-space: nowrap;
-	vertical-align: bottom;
+	margin-left:0;
+	padding-left:0;
+	text-align: center;
 }
+
 .SortableList-ItemTextIndex
 {
-	display: inline-block;
-	width: 4em;
-	text-align : center;
+	display: table-cell;
+	width: 2em;
 }
+
 .SortableList-ItemInput
 {
-	display: inline-block;
-	width: calc(100% - 18em);
-	border-style:solid;
-	border-width: 0.1em;
-	border-color: black;
+	width: 100%;
+	min-width: 5em;
+	display: table-cell;
 }
 .SortableList-ItemDeleteButton,
 .SortableList-ItemUpArrowButton,
 .SortableList-ItemDownArrowButton,
 .SortableList-ItemRightArrowButton
 {
-	display: inline-block;
-	width: 3em;
+	display: table-cell;
+	width: 2em;
 	text-align : center;
 	cursor: default;
-	margin-left: 0.2em;
-	margin-right: 0.2em;
-	border-style:solid;
-	border-width: 0.1em;
-	border-bottom-width: 0.3em;
-	border-right-width: 0.3em;
-	border-radius: 0.2em;
-	border-color: black;
-	color: white;
 	font-weight: bold;
-	background-color: gray;
+}
+div#TravelControl-WaypointsDataDiv div.SortableList-ItemDeleteButton
+{
+	padding-left: 2em;
 }
 div.SortableList-Container > div.SortableList-Item:first-child > span.SortableList-ItemUpArrowButton,
 div.SortableList-Container > div.SortableList-Item:last-child > span.SortableList-ItemDownArrowButton,
@@ -176,28 +165,45 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 #TravelControl-MainDiv
 {
 	background-color: white;
-	margin: 0%;
-	padding: 1em;
-	width: 50em;
 	height: 100vh;
+	font-family : sans-serif;
+	font-size: 1em;
+	margin: 0;
+}
+
+#TravelControl-MainDiv.leaflet-control
+{
+	min-width: 30em;
 }
 .TravelControl-Frame
 {
-	border-style: solid;
-	border-width: 0.1em;
 }
-
-.TravelControl-ButtonsDiv
+.TravelControl-Div
 {
-	text-align: right;
-	padding: 0.2em;
+	padding-top: 1em;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+.TravelControl-HeaderDiv
+{
+	margin-bottom: 1em;
 }
 
 .TravelControl-HeaderText
 {
 	font-weight: bold;
-	margin-left: 1em;
 }
+.TravelControl-DataDiv
+{
+	max-height: 15vh;
+	overflow: auto;
+}
+.TravelControl-ButtonsDiv
+{
+	margin-bottom: 1em;
+	text-align: right;
+}
+
 .TravelControl-HiddenList
 {
 	visibility: hidden;
@@ -205,21 +211,11 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 }
 .TravelControl-Button
 {
+	font-weight: bold;
 	display: inline-block;
-	width: 3em;
+	width: 2em;
 	text-align : center;
 	cursor: default;
-	margin-left: 0.2em;
-	margin-right: 0.2em;
-	border-style:solid;
-	border-width: 0.1em;
-	border-bottom-width: 0.3em;
-	border-right-width: 0.3em;
-	border-radius: 0.2em;
-	border-color: black;
-	color: white;
-	font-weight: bold;
-	background-color: gray;	
 }
 .TravelControl-ExpandButton:hover
 {
@@ -233,15 +229,16 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > span
 #TravelControl-ErrorDiv
 {
 	position: absolute;
-	bottom: 3em;
+	bottom: 0em;
+}
+#TravelControl-ErrorDataDiv
+{
 	max-height: 10vh;
 	overflow: auto;
-	border-top-style: solid;
+	border-top: solid;
 	border-top-width: 0.1em;
-	width: 50em;
-}
-#TravelControl-ErrorPannel
-{
+	padding-top: 1em;
+	padding-bottom: 1em;
 }
 .TravelControl-Error
 {

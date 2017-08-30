@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// User interface
 
 	var _ErrorDiv = null;
-	var _ErrorPanel = null;
+	var _ErrorDataDiv = null;
 	
 	var getErrorEditorUI = function ( ) {
 				
@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			_ErrorPanel = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorPannel', className : 'TravelControl-Panel'}, _ErrorDiv );
+			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
 			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
 			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
 			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
@@ -77,8 +77,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			reduce : function ( ) {
 				_ReduceEditorUI ( );
 			},
-			set message ( Message ) { _ErrorPanel.innerHTML = Message; },
-			get message (  ) { return _ErrorPanel.innerHTML; }
+			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
+			get message (  ) { return _ErrorDataDiv.innerHTML; }
 		};
 	};
 	

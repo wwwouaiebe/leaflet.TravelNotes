@@ -11,9 +11,9 @@
 		<link rel="stylesheet" href="index.css" media="screen"/>
 	</head>
 	<body>
-		<div id="LeafletTravelControl">
-		</div>
 		<div id="Map">
+		</div>
+		<div id="LeafletTravelControl">
 		</div>
 		<script src="../node_modules/leaflet/dist/leaflet.js"></script>
 		<script src="../dist/L.Travel.js"></script>
@@ -24,7 +24,7 @@
 				var Map = L.map ( 'Map' ).setView( [ 50.49680, 5.51116 ], 13 );
 				L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">Christian Guyette</a>' } ).addTo ( Map );
 				var myInterface = L.travel.interface ( );
-				myInterface.addControl ( Map, 'LeafletTravelControl', { position: "topright"} );
+				myInterface.addControl ( Map, null, { position: "topright"} );
 				myInterface.addMapContextMenu ( true, false );
 			} ());		
 		</script>

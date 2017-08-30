@@ -101,7 +101,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
-
+			var dataWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, _WayPointsDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
@@ -110,7 +110,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					indexNames : [ 'A', 'index', 'B' ],
 					id : 'TravelControl-WaypointsList'
 				}, 
-				_WayPointsDiv
+				dataWayPointsDiv
 			);
 			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
 			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
@@ -141,17 +141,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				wayPointsButtonsDiv 
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
-			var addWayPointButton = htmlElementsFactory.create ( 
-				'span', 
-				{ 
-					id : 'TravelControl-AddWayPointButton',
-					className: 'TravelControl-Button', 
-					title : 'Ajouter un point de passage', 
-					innerHTML : '+'
-				},
-				wayPointsButtonsDiv 
-			);
-			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'span',
 				{ 
@@ -163,6 +152,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				wayPointsButtonsDiv
 			);
 			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
+			var addWayPointButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					id : 'TravelControl-AddWayPointButton',
+					className: 'TravelControl-Button', 
+					title : 'Ajouter un point de passage', 
+					innerHTML : '+'
+				},
+				wayPointsButtonsDiv 
+			);
+			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 

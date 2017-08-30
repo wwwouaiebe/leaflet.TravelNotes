@@ -377,7 +377,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// User interface
 
 	var _ErrorDiv = null;
-	var _ErrorPanel = null;
+	var _ErrorDataDiv = null;
 	
 	var getErrorEditorUI = function ( ) {
 				
@@ -386,7 +386,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			_ErrorPanel = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorPannel', className : 'TravelControl-Panel'}, _ErrorDiv );
+			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
 			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
 			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
 			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
@@ -421,8 +421,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			reduce : function ( ) {
 				_ReduceEditorUI ( );
 			},
-			set message ( Message ) { _ErrorPanel.innerHTML = Message; },
-			get message (  ) { return _ErrorPanel.innerHTML; }
+			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
+			get message (  ) { return _ErrorDataDiv.innerHTML; }
 		};
 	};
 	
@@ -761,12 +761,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function ( map, options ) {
-				if ( typeof module !== 'undefined' && module.exports ) {
-					map.addControl ( require ('./L.Travel.Control' ) ( options ) );
-				}
+			addControl : function ( map, divControlId, options ) {
+				if ( divControlId )	{
+					document.getElementById ( divControlId ).appendChild ( require ( './userInterface' ) ( ).UI );
+					var initialRoutes = require ( './TravelData' ) ( ).routes;
+					require ( './RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+				}	
 				else {
-					map.addControl ( L.marker.pin.control ( options ) );
+					if ( typeof module !== 'undefined' && module.exports ) {
+						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
+					}
 				}
 				_Map = map;
 			},
@@ -794,7 +798,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ContextMenu":2,"./L.Travel.Control":7,"./TravelData":16}],9:[function(require,module,exports){
+},{"./ContextMenu":2,"./L.Travel.Control":7,"./RoutesListEditorUI":14,"./TravelData":16,"./userInterface":19}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1154,7 +1158,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
-
+			var dataWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, _WayPointsDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
@@ -1163,7 +1167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					indexNames : [ 'A', 'index', 'B' ],
 					id : 'TravelControl-WaypointsList'
 				}, 
-				_WayPointsDiv
+				dataWayPointsDiv
 			);
 			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
 			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
@@ -1194,17 +1198,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				wayPointsButtonsDiv 
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
-			var addWayPointButton = htmlElementsFactory.create ( 
-				'span', 
-				{ 
-					id : 'TravelControl-AddWayPointButton',
-					className: 'TravelControl-Button', 
-					title : 'Ajouter un point de passage', 
-					innerHTML : '+'
-				},
-				wayPointsButtonsDiv 
-			);
-			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'span',
 				{ 
@@ -1216,6 +1209,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				wayPointsButtonsDiv
 			);
 			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
+			var addWayPointButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					id : 'TravelControl-AddWayPointButton',
+					className: 'TravelControl-Button', 
+					title : 'Ajouter un point de passage', 
+					innerHTML : '+'
+				},
+				wayPointsButtonsDiv 
+			);
+			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
@@ -1444,8 +1448,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var expandRouteButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
 			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
+			var routesDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, _RoutesDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'], id : 'TravelControl-RouteList' }, _RoutesDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'], id : 'TravelControl-RouteList' }, routesDataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
@@ -1669,19 +1674,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
 
-			htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
+			htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
 			inputElement.addEventListener ( 'change' , onChange, false );
-			var deleteButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x1f5d1;' }, item );
-			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
-			var upArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
+			var upArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
 			upArrowButton.addEventListener ( 'click', onUpArrowButtonClick, false );
-			var downArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
+			var downArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
 			downArrowButton.addEventListener ( 'click', onDownArrowButtonClick, false );
 			if ( 'AllSort' === this.options.listStyle ) {
-				var rightArrowButton = htmlElementsFactory.create ( 'span', { className : 'SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
+				var rightArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
 				rightArrowButton.addEventListener ( 'click', onRightArrowButtonClick, false );
 			}
+			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x1f5d1;' }, item );
+			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 			item.UIObjId = require ( './ObjId' ) ( );
 
@@ -1987,9 +1992,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			_MainDiv.appendChild ( require ( './RouteEditorUI' ) ( ).UI ); 
 			// Itinerary
-			var itineraryDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, _MainDiv );
+			//var itineraryDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, _MainDiv );
 
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', id : 'TravelControl-ItineraryHeaderText',className : 'TravelControl-HeaderText' }, itineraryDiv );
+			//htmlElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', id : 'TravelControl-ItineraryHeaderText',className : 'TravelControl-HeaderText' }, itineraryDiv );
 			
 			// Errors
 			_MainDiv.appendChild ( require ( './ErrorEditorUI' ) ( ).UI ); 

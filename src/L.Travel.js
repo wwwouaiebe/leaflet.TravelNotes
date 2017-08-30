@@ -99,12 +99,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			*/
 
-			addControl : function ( map, options ) {
-				if ( typeof module !== 'undefined' && module.exports ) {
-					map.addControl ( require ('./L.Travel.Control' ) ( options ) );
-				}
+			addControl : function ( map, divControlId, options ) {
+				if ( divControlId )	{
+					document.getElementById ( divControlId ).appendChild ( require ( './userInterface' ) ( ).UI );
+					var initialRoutes = require ( './TravelData' ) ( ).routes;
+					require ( './RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+				}	
 				else {
-					map.addControl ( L.marker.pin.control ( options ) );
+					if ( typeof module !== 'undefined' && module.exports ) {
+						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
+					}
 				}
 				_Map = map;
 			},
