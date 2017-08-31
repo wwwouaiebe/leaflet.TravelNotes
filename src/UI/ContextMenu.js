@@ -106,7 +106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		_MenuItems.length = 0;
 		
-		_MenuItems = require ( './RouteEditor' ) ( ).contextMenu.concat ( userMenu );
+		_MenuItems = require ( '../core/RouteEditor' ) ( ).contextMenu.concat ( userMenu );
 		
 		//ContextMenu-Container
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;

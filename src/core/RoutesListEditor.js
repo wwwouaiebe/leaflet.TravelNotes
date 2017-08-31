@@ -20,18 +20,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _TravelData = require ( './TravelData' ) ( );
+	var _TravelData = require ( '../Data/TravelData' ) ( );
 	var _RoutesListChanged = false;
 	
 	var getRoutesListEditor = function ( ) {
 
-		var _RoutesListEditorUI = require ( './RoutesListEditorUI' ) ( );
+		var _RoutesListEditorUI = require ( '../UI/RoutesListEditorUI' ) ( );
 
 		return {
 			
 			addRoute : function ( ) {
 				_RoutesListChanged = true;
-				var newRoute = require ( './Route' ) ( );
+				var newRoute = require ( '../Data/Route' ) ( );
 				_TravelData.routes.add ( newRoute );
 				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
 			},

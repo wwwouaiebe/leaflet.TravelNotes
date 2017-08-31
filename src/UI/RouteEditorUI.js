@@ -24,36 +24,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
 	};
 	
 	var onReverseWayPointsButton = function ( event )
 	{
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
 	};
 	
 	var onRemoveAllWayPointsButton = function ( event )
 	{
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
 	};
 	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
 	};
 
 	var onWayPointsListRightArrow = function ( event ) {
@@ -62,17 +62,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onWayPointslistChange = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
+		require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 	};
 
 	var onSaveRouteButton = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).saveEdition ( );
+		require ( '../core/RouteEditor' ) ( ).saveEdition ( );
 	};
 	
 	var onCancelRouteButton = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).cancelEdition ( );
+		require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 	};
 	
 	var onClickExpandButton = function ( clickEvent ) {

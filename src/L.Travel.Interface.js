@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.Travel.getInterface = function ( ) {
 
-		var _TravelData = require ( './TravelData' ) ( );
+		var _TravelData = require ( './Data/TravelData' ) ( );
 		_TravelData.object =
 		{
 			name : "TravelData sample",
@@ -90,10 +90,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var onMapClick = function ( event ) {
-			require ('./ContextMenu' ) ( event, _LeftUserContextMenu );
+			require ('./UI/ContextMenu' ) ( event, _LeftUserContextMenu );
 		};
 		var onMapContextMenu = function ( event ) {
-			require ('./ContextMenu' ) ( event, _RightUserContextMenu );
+			require ('./UI/ContextMenu' ) ( event, _RightUserContextMenu );
 		};
 
 		var _Map;
@@ -111,9 +111,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			addControl : function ( map, divControlId, options ) {
 				if ( divControlId )	{
-					document.getElementById ( divControlId ).appendChild ( require ( './userInterface' ) ( ).UI );
-					var initialRoutes = require ( './TravelData' ) ( ).routes;
-					require ( './RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+					var initialRoutes = require ( './Data/TravelData' ) ( ).routes;
+					require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
 				}	
 				else {
 					if ( typeof module !== 'undefined' && module.exports ) {

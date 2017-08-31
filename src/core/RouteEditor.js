@@ -20,23 +20,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _Route = require ( './Route' ) ( );
+	var _Route = require ( '../Data/Route' ) ( );
 	var _RouteInitialObjId = -1;
 	var _RouteChanged = false;
-	var _Translator = require ( './Translator' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
-		var _RouteEditorUI = require ( './RouteEditorUI' ) ( );
+		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 	
 		return {
 			
 			saveEdition : function ( ) {
-				var travelData = require ( './TravelData' ) ( );
+				var travelData = require ( '../Data/TravelData' ) ( );
 				travelData.routes.replace ( _RouteInitialObjId, _Route );
 				_RouteChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
-				require ( './RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
+				require ( '../UI/RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
 				this.editRoute ( _Route.objId );
 			},
 			
@@ -50,8 +50,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				_Route = require ( './Route' ) ( );
-				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
+				_Route = require ( '../Data/Route' ) ( );
+				var route = require ( '../Data/TravelData' ) ( ).routes.getAt ( routeObjId );
 				_RouteInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
 				_Route.object = route.object;
@@ -61,7 +61,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			addWayPoint : function ( latLng ) {
 				_RouteChanged = true;
-				var newWayPoint = require ( './Waypoint.js' ) ( );
+				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
 				}

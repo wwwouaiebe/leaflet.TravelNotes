@@ -38,38 +38,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Events listeners for buttons under the routes list
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).removeAllRoutes ( );
+		require ( '../core/RoutesListEditor' ) ( ).removeAllRoutes ( );
 	};
 
 	var onClickAddRouteButton = function ( event ) {
 		event.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).addRoute ( );
+		require ( '../core/RoutesListEditor' ) ( ).addRoute ( );
 	};
 	
 	// Events for buttons and input on the routes list items
 	var onRoutesListDelete = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
+		require ( '../core/RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
+		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
+		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+		require ( '../core/RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 	};
 	
 	var onRouteslistChange = function ( event ) {
 		event.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
+		require ( '../core/RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
 	// User interface

@@ -27,12 +27,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			showError : function ( error ) {
 				var header = '<span class="TravelControl-Error">';
 				var footer = '</span>';
-				require ( './ErrorEditorUI' ) ( ).message = header + error + footer;
-				require ( './ErrorEditorUI' ) ( ).expand ( );
+				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
+				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
 			},
 
 			clear : function ( routeObjId ) {
-				require ( './ErrorEditorUI' ) ( ).message = '';
+				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
 			}
 		};
 	};

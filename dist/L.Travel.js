@@ -157,310 +157,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 },{}],2:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	var _Translator = require ( './Translator' ) ( );
-	var _MenuItems = [];
-	var _ContextMenuContainer = null;
-	var _OriginalEvent = null;
-	var _FocusIsOnItem = 0;
-	
-	var onCloseMenu = function ( ) {
-		document.removeEventListener ( 'keydown', onKeyDown, true );
-		document.removeEventListener ( 'keypress', onKeyPress, true );
-		document.removeEventListener ( 'keyup', onKeyUp, true );
-		var childNodes = _ContextMenuContainer.childNodes;
-		childNodes [ 0 ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
-		for ( var childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
-		}
-		
-		document.getElementsByTagName('body') [0].removeChild ( _ContextMenuContainer );
-		_ContextMenuContainer = null;
-	};
-	
-	var onKeyDown = function ( keyBoardEvent ) {
-		if ( _ContextMenuContainer ) {
-			keyBoardEvent.preventDefault ( );
-			keyBoardEvent.stopPropagation ( );
-		}
-		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			onCloseMenu ( );
-		}
-		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
-			_FocusIsOnItem ++;
-			if ( _FocusIsOnItem > _MenuItems.length ) {
-				_FocusIsOnItem = 1;
-			}
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
-		}
-		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
-			_FocusIsOnItem --;
-			if ( _FocusIsOnItem < 1 ) {
-				_FocusIsOnItem = _MenuItems.length;
-			}
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
-		}
-		if ( 'Home' === keyBoardEvent.key ) {
-			_FocusIsOnItem = 1;
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
-		}
-		if ( 'End' === keyBoardEvent.key ) {
-			_FocusIsOnItem = _MenuItems.length;
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
-		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem - 1 ].action ) ) {
-			_MenuItems[ _FocusIsOnItem - 1 ].action ( );
-			onCloseMenu ( );
-		}
-			
-	};
-	
-	var onKeyPress = function ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
-	};
-	
-	var onKeyUp = function ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
-	};
-
-	var onClickItem = function ( event ) {
-		event.stopPropagation ( );
-		_MenuItems[ event.target.menuItem ].action.call ( 
-			_MenuItems[ event.target.menuItem ].context,
-			_OriginalEvent
-		);
-		onCloseMenu ( );
-	};
-	
-	var getContextMenu = function ( event, userMenu ) {
-
-		_OriginalEvent = event; 
-		
-		if ( _ContextMenuContainer ) {
-			onCloseMenu ( );
-			return;
-		}
-		_MenuItems.length = 0;
-		
-		_MenuItems = require ( './RouteEditor' ) ( ).contextMenu.concat ( userMenu );
-		
-		//ContextMenu-Container
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-		
-		var body = document.getElementsByTagName('body') [0];
-		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-Panel'} , body );
-		var screenWidth = tmpDiv.clientWidth;
-		var screenHeight = tmpDiv.clientHeight;
-		body.removeChild ( tmpDiv );
-		
-		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'ContextMenu-Container',className : 'ContextMenu-Container'}, body );
-		
-		var closeButton = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				innerHTML: '&#x274c', 
-				className : 'ContextMenu-CloseButton',
-				title : _Translator.getText ( "ContextMenu - close" )
-			},
-			_ContextMenuContainer
-		);
-		closeButton.addEventListener ( 'click', onCloseMenu, false );
-		
-		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {
-			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-ItemContainer'},_ContextMenuContainer);
-			var item = htmlElementsFactory.create ( 
-				'button', 
-				{ 
-					innerHTML : _MenuItems [ menuItemCounter ].name,
-					id : 'ContextMenu-Item' + menuItemCounter,
-					className : _MenuItems [ menuItemCounter ].action ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
-				},
-				itemContainer
-			);
-			if ( _MenuItems [ menuItemCounter ].action ) {
-				item.addEventListener ( 'click', onClickItem, false );
-			}
-			item.menuItem = menuItemCounter;
-		}
-		
-		var menuTop = Math.min ( event.originalEvent.clientY, screenHeight - _ContextMenuContainer.clientHeight - 20 );
-		var menuLeft = Math.min ( event.originalEvent.clientX, screenWidth - _ContextMenuContainer.clientWidth - 20 );
-		_ContextMenuContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
-		document.addEventListener ( 'keydown', onKeyDown, true );
-		document.addEventListener ( 'keypress', onKeyPress, true );
-		document.addEventListener ( 'keyup', onKeyUp, true );
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getContextMenu;
-	}
-
-}());
-
-},{"./HTMLElementsFactory":6,"./RouteEditor":12,"./Translator":17}],3:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var getErrorEditor = function ( ) {
-
-		return {
-			
-			showError : function ( error ) {
-				var header = '<span class="TravelControl-Error">';
-				var footer = '</span>';
-				require ( './ErrorEditorUI' ) ( ).message = header + error + footer;
-				require ( './ErrorEditorUI' ) ( ).expand ( );
-			},
-
-			clear : function ( routeObjId ) {
-				require ( './ErrorEditorUI' ) ( ).message = '';
-			}
-		};
-	};
-
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getErrorEditor;
-	}
-
-}());
-
-},{"./ErrorEditorUI":4}],4:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var _Translator = require ( './Translator' ) ( );
-	
-	var onClickExpandButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
-			return;
-		}	
-		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
-	};
-
-	// User interface
-
-	var _ErrorDiv = null;
-	var _ErrorDataDiv = null;
-	
-	var getErrorEditorUI = function ( ) {
-				
-		var _CreateErrorUI = function ( ){ 
-
-			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			
-			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
-			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
-			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
-			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerErrorDiv );
-		};
-
-		var _ExpandEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
-			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
-		};
-		
-		var _ReduceEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
-			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
-		};
-
-		if ( ! _ErrorDiv ) {
-			_CreateErrorUI ( );
-			_ReduceEditorUI ( );
-		}
-		
-		
-		return {
-			get UI ( ) { return _ErrorDiv; },
-	
-			expand : function ( ) {
-				_ExpandEditorUI ( );
-			},
-			
-			reduce : function ( ) {
-				_ReduceEditorUI ( );
-			},
-			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
-			get message (  ) { return _ErrorDataDiv.innerHTML; }
-		};
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getErrorEditorUI;
-	}
-
-}());
-
-},{"./HTMLElementsFactory":6,"./Translator":17}],5:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;
@@ -555,321 +251,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":10}],6:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	/* 
-	--- HTMLElementsFactory object -----------------------------------------------------------------------------
-	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var getHTMLElementsFactory = function ( ) {
-
-		return {
-			create : function ( tagName, properties, parentNode ) {
-				var element;
-				if ( 'text' === tagName.toLowerCase ( ) ) {
-					element = document.createTextNode ( '' );
-				}
-				else {
-					element = document.createElement ( tagName );
-				}
-				if ( parentNode ) {
-					parentNode.appendChild ( element );
-				}
-				if ( properties )
-				{
-					for ( var property in properties ) {
-						try {
-							element [ property ] = properties [ property ];
-						}
-						catch ( e ) {
-							console.log ( "Invalid property : " + property );
-						}
-					}
-				}
-				return element;
-			}
-			
-		};
-			
-	};
-
-	/* --- End of L.Travel.ControlUI object --- */		
-
-	var HTMLElementsFactory = function ( ) {
-		return getHTMLElementsFactory ( );
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = HTMLElementsFactory;
-	}
-
-}());
-
-},{}],7:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	L.Travel = L.Travel || {};
-	L.travel = L.travel || {};
-	
-	L.Travel.Control = L.Control.extend ( {
-		
-			options : {
-				position: 'topright'
-			},
-			
-			initialize: function ( options ) {
-					L.Util.setOptions( this, options );
-			},
-			
-			onAdd : function ( Map ) {
-				var controlElement = require ( './userInterface' ) ( ).UI;
-				var initialRoutes = require ( './TravelData' ) ( ).routes;
-				require ( './RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
-				
-				return controlElement; 
-			}
-		}
-	);
-
-	L.travel.control = function ( options ) {
-		return new L.Travel.Control ( options );
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travel.control;
-	}
-
-}());
-
-},{"./RoutesListEditorUI":15,"./TravelData":18,"./userInterface":21}],8:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	L.Travel = L.Travel || {};
-	L.travel = L.travel || {};
-	
-	var _LeftUserContextMenu = [];
-	var _RightUserContextMenu = [];
-	var _RightContextMenu = false;
-	var _LeftContextMenu = false;
-
-	
-	/* 
-	--- L.Travel.Interface object -----------------------------------------------------------------------------
-	
-	This object contains all you need to use Travel :-)
-	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	L.Travel.getInterface = function ( ) {
-
-		var _TravelData = require ( './TravelData' ) ( );
-		_TravelData.object =
-		{
-			name : "TravelData sample",
-			routes : 
-			[
-				{
-					name : "Chemin du Sârtê",
-					wayPoints : 
-					[
-						{
-							name : "Chemin du Sârtê 1 - Anthisnes",
-							lat : 50.50881,
-							lng : 5.49314,
-							objId : -1,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						},
-						{
-							name : "Chemin du Sârtê 22 - Anthisnes",
-							lat : 50.50937,
-							lng : 5.49470,
-							objId : -2,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
-						}
-					],
-					notes : [],
-					geom :
-					{
-						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
-						precision :6,
-						color : "#0000ff",
-						weight : "5",
-						objId : -3,
-						objName : "Geom",
-						objVersion : "1.0.0"
-					},
-					objId : -4,
-					objName : "Route",
-					objVersion : "1.0.0"
-				}
-			],
-			notes : [],
-			objId : -5,
-			objName : "TravelData",
-			objVersion : "1.0.0"
-		};
-
-		var onMapClick = function ( event ) {
-			require ('./ContextMenu' ) ( event, _LeftUserContextMenu );
-		};
-		var onMapContextMenu = function ( event ) {
-			require ('./ContextMenu' ) ( event, _RightUserContextMenu );
-		};
-
-		var _Map;
-		return {
-
-			/* --- public methods --- */
-			
-			/* addControl ( ) method --- 
-			
-			This method add the control 
-			
-			Parameters :
-			
-			*/
-
-			addControl : function ( map, divControlId, options ) {
-				if ( divControlId )	{
-					document.getElementById ( divControlId ).appendChild ( require ( './userInterface' ) ( ).UI );
-					var initialRoutes = require ( './TravelData' ) ( ).routes;
-					require ( './RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
-				}	
-				else {
-					if ( typeof module !== 'undefined' && module.exports ) {
-						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
-					}
-				}
-				_Map = map;
-			},
-			
-			addMapContextMenu : function ( leftButton, rightButton ) {
-				if ( leftButton ) {
-					_Map.on ( 'click', onMapClick );
-				}
-				if ( rightButton ) {
-					_Map.on ( 'contextmenu', onMapClick );
-				}
-			},
-			get rightContextMenu ( ) { return _RightContextMenu; },
-			
-			set rightContextMenu ( RightContextMenu ) { 
-				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
-					_Map.on ( 'contextmenu', onMapContextMenu );
-					_RightContextMenu = true;
-				}
-				else if ( ( ! RightContextMenu ) && ( _RightContextMenu ) ) {
-					_Map.off ( 'contextmenu', onMapContextMenu );
-					_RightContextMenu = false;
-				}
-			},
-			
-			get leftContextMenu ( ) { return _LeftContextMenu; },
-			
-			set leftContextMenu ( LeftContextMenu ) { 
-				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
-					_Map.on ( 'click', onMapClick );
-					_LeftContextMenu = true;
-				}
-				else if ( ( ! LeftContextMenu ) && ( _LeftContextMenu ) ) {
-					_Map.off ( 'click', onMapClick );
-					_LeftContextMenu = false;
-				}
-			},
-			
-			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
-			
-			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
-			
-			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
-			
-			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
-			
-			get version ( ) { return '1.0.0'; }
-		};
-	};
-	
-	/* --- End of L.Travel.Interface object --- */		
-
-	L.travel.interface = function ( ) {
-		return L.Travel.getInterface ( );
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travel.interface;
-	}
-
-}());
-
-},{"./ContextMenu":2,"./L.Travel.Control":7,"./RoutesListEditorUI":15,"./TravelData":18,"./userInterface":21}],9:[function(require,module,exports){
+},{"./ObjId":4}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -999,7 +381,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"./ObjId":10}],10:[function(require,module,exports){
+},{"./ObjId":4}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1039,7 +421,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{}],11:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1158,7 +540,625 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Collection":1,"./Geom":5,"./Note":9,"./ObjId":10,"./WayPoint":19,"./Waypoint":20}],12:[function(require,module,exports){
+},{"./Collection":1,"./Geom":2,"./Note":3,"./ObjId":4,"./WayPoint":7,"./Waypoint":8}],6:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+
+(function() {
+	
+	'use strict';
+	
+	var _ObjName = 'TravelData';
+	var _ObjVersion = '1.0.0';
+	
+	// one and only one object TravelData is possible
+	
+	var _Name = '';
+	var _Routes = require ( './Collection' ) ( 'Route' );
+	var _Notes = require ( './Collection' ) ( 'Note' );
+	var _ObjId = -1;
+
+	var getTravelData = function ( ) {
+		
+		return {
+			get routes ( ) { return _Routes; },
+			
+			get notes ( ) { return _Notes; },
+			
+			get objId ( ) { return _ObjId; },
+			
+			get objName ( ) { return _ObjName; },
+			
+			get objVersion ( ) { return _ObjVersion; },
+			
+			get object ( ) {
+				var routes = [ ];
+				var routeIterator = this.routes.iterator;
+				while ( ! routeIterator.done ) {
+					routes.push ( routeIterator.value.object );
+				}
+				var notes = [ ];
+				var notesIterator = this.notes.iterator;
+				while ( ! notesIterator.done ) {
+					notes.push ( notesIterator.value.object );
+				}
+				return {
+					name : _Name,
+					routes : routes,
+					notes : notes,
+					objId : _ObjId,
+					objName : _ObjName,
+					objVersion : _ObjVersion
+				};
+			},
+			
+			set object ( Object ) {
+				if ( ! Object.objVersion ) {
+					throw 'No ObjVersion for TravelData';
+				}
+				if ( '1.0.0' !== Object.objVersion ) {
+					throw 'invalid objVersion for TravelData';
+				}
+				if ( ! Object.objName ) {
+					throw 'No objName for TravelData';
+				}
+				if ( 'TravelData' !== Object.objName ) {
+					throw 'Invalid objName for TravelData';
+				}
+				_Name = Object.name || '';
+				_Routes.removeAll ( );
+				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
+					var newRoute = require ( './Route' ) ( );
+					newRoute.object = Object.routes [ routesCounter ];
+					_Routes.add ( newRoute );
+				}
+				_Notes.removeAll ( );
+				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
+					var newNote = require ( './Note' ) ( );
+					newNote.object = Object.notes [ notesCounter ];
+					_Notes.add ( newNote );
+				}
+				_ObjId = require ( './ObjId' ) ( );
+			}
+		};
+	};
+	
+	/* --- End of getTravelData function --- */
+	
+	/* 
+	--- Exports ------------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getTravelData;
+	}
+
+} ) ( );
+
+/* --- End of MapData.js file --- */
+},{"./Collection":1,"./Note":3,"./ObjId":4,"./Route":5}],7:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+
+(function() {
+	
+	'use strict';
+	
+	var _ObjName = 'WayPoint';
+	var _ObjVersion = '1.0.0';
+
+	var getWayPoint = function ( ) {
+		
+		var _Name = '';
+		var _Lat = 0;
+		var _Lng = 0;
+		
+		var _ObjId = require ( './ObjId' ) ( );
+		
+		return {
+			get name ( ) { return _Name; },
+			set name ( Name ) { _Name = Name;},
+			
+			get UIName ( ) {
+				if ( '' !== _Name ) {
+					return _Name;
+				}
+				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
+					return _Lat.toFixed ( 5 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 5 )  + ( 0 < _Lng ? ' E' : ' W' );
+				}
+				return '';
+			},
+			
+			get lat ( ) { return _Lat;},
+			set lat ( Lat ) { _Lat = Lat; },
+			
+			get lng ( ) { return _Lng;},
+			set lng ( Lng ) { _Lng = Lng; },
+			
+			get latLng ( ) { return [ _Lat, _Lng ];},
+			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
+
+			get objId ( ) { return _ObjId; },
+			get objName ( ) { return _ObjName; },
+			get objVersion ( ) { return _ObjVersion; },
+			
+			get object ( ) {
+				return {
+					name : _Name,
+					lat : _Lat,
+					lng : _Lng,
+					objId : _ObjId,
+					objName : _ObjName,
+					objVersion : _ObjVersion
+				};
+			},
+			set object ( Object ) {
+				if ( ! Object.objVersion ) {
+					throw 'No ObjVersion for WayPoint';
+				}
+				if ( '1.0.0' !== Object.objVersion ) {
+					throw 'invalid objVersion for WayPoint';
+				}
+				if ( ! Object.objName ) {
+					throw 'No objName for WayPoint';
+				}
+				if ( 'WayPoint' !== Object.objName ) {
+					throw 'Invalid objName for WayPoint';
+				}
+				_Name = Object.name || '';
+				_Lat = Object.lat || 0;
+				_Lng = Object.lng || 0;
+				_ObjId = require ( './ObjId' ) ( );
+			}
+		};
+	};
+	
+	/* --- End of getTravelData function --- */
+	
+	/* 
+	--- Exports ------------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getWayPoint;
+	}
+
+} ) ( );
+
+/* --- End of MapData.js file --- */
+},{"./ObjId":4}],8:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"./ObjId":4,"dup":7}],9:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	L.Travel = L.Travel || {};
+	L.travel = L.travel || {};
+	
+	L.Travel.Control = L.Control.extend ( {
+		
+			options : {
+				position: 'topright'
+			},
+			
+			initialize: function ( options ) {
+					L.Util.setOptions( this, options );
+			},
+			
+			onAdd : function ( Map ) {
+				var controlElement = require ( './UI/UserInterface' ) ( ).UI;
+				var initialRoutes = require ( './Data/TravelData' ) ( ).routes;
+				require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+				
+				return controlElement; 
+			}
+		}
+	);
+
+	L.travel.control = function ( options ) {
+		return new L.Travel.Control ( options );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = L.travel.control;
+	}
+
+}());
+
+},{"./Data/TravelData":6,"./UI/RoutesListEditorUI":15,"./UI/UserInterface":18}],10:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	L.Travel = L.Travel || {};
+	L.travel = L.travel || {};
+	
+	var _LeftUserContextMenu = [];
+	var _RightUserContextMenu = [];
+	var _RightContextMenu = false;
+	var _LeftContextMenu = false;
+
+	
+	/* 
+	--- L.Travel.Interface object -----------------------------------------------------------------------------
+	
+	This object contains all you need to use Travel :-)
+	
+	Patterns : Closure
+	------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	L.Travel.getInterface = function ( ) {
+
+		var _TravelData = require ( './Data/TravelData' ) ( );
+		_TravelData.object =
+		{
+			name : "TravelData sample",
+			routes : 
+			[
+				{
+					name : "Chemin du Sârtê",
+					wayPoints : 
+					[
+						{
+							name : "Chemin du Sârtê 1 - Anthisnes",
+							lat : 50.50881,
+							lng : 5.49314,
+							objId : -1,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						},
+						{
+							name : "Chemin du Sârtê 22 - Anthisnes",
+							lat : 50.50937,
+							lng : 5.49470,
+							objId : -2,
+							objName : "WayPoint",
+							objVersion : "1.0.0"
+						}
+					],
+					notes : [],
+					geom :
+					{
+						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
+						precision :6,
+						color : "#0000ff",
+						weight : "5",
+						objId : -3,
+						objName : "Geom",
+						objVersion : "1.0.0"
+					},
+					objId : -4,
+					objName : "Route",
+					objVersion : "1.0.0"
+				}
+			],
+			notes : [],
+			objId : -5,
+			objName : "TravelData",
+			objVersion : "1.0.0"
+		};
+
+		var onMapClick = function ( event ) {
+			require ('./UI/ContextMenu' ) ( event, _LeftUserContextMenu );
+		};
+		var onMapContextMenu = function ( event ) {
+			require ('./UI/ContextMenu' ) ( event, _RightUserContextMenu );
+		};
+
+		var _Map;
+		return {
+
+			/* --- public methods --- */
+			
+			/* addControl ( ) method --- 
+			
+			This method add the control 
+			
+			Parameters :
+			
+			*/
+
+			addControl : function ( map, divControlId, options ) {
+				if ( divControlId )	{
+					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+					var initialRoutes = require ( './Data/TravelData' ) ( ).routes;
+					require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+				}	
+				else {
+					if ( typeof module !== 'undefined' && module.exports ) {
+						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
+					}
+				}
+				_Map = map;
+			},
+			
+			addMapContextMenu : function ( leftButton, rightButton ) {
+				if ( leftButton ) {
+					_Map.on ( 'click', onMapClick );
+				}
+				if ( rightButton ) {
+					_Map.on ( 'contextmenu', onMapClick );
+				}
+			},
+			get rightContextMenu ( ) { return _RightContextMenu; },
+			
+			set rightContextMenu ( RightContextMenu ) { 
+				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
+					_Map.on ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = true;
+				}
+				else if ( ( ! RightContextMenu ) && ( _RightContextMenu ) ) {
+					_Map.off ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = false;
+				}
+			},
+			
+			get leftContextMenu ( ) { return _LeftContextMenu; },
+			
+			set leftContextMenu ( LeftContextMenu ) { 
+				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
+					_Map.on ( 'click', onMapClick );
+					_LeftContextMenu = true;
+				}
+				else if ( ( ! LeftContextMenu ) && ( _LeftContextMenu ) ) {
+					_Map.off ( 'click', onMapClick );
+					_LeftContextMenu = false;
+				}
+			},
+			
+			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
+			
+			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
+			
+			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
+			
+			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
+			
+			get version ( ) { return '1.0.0'; }
+		};
+	};
+	
+	/* --- End of L.Travel.Interface object --- */		
+
+	L.travel.interface = function ( ) {
+		return L.Travel.getInterface ( );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = L.travel.interface;
+	}
+
+}());
+
+},{"./Data/TravelData":6,"./L.Travel.Control":9,"./UI/ContextMenu":11,"./UI/RoutesListEditorUI":15,"./UI/UserInterface":18}],11:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	var _Translator = require ( './Translator' ) ( );
+	var _MenuItems = [];
+	var _ContextMenuContainer = null;
+	var _OriginalEvent = null;
+	var _FocusIsOnItem = 0;
+	
+	var onCloseMenu = function ( ) {
+		document.removeEventListener ( 'keydown', onKeyDown, true );
+		document.removeEventListener ( 'keypress', onKeyPress, true );
+		document.removeEventListener ( 'keyup', onKeyUp, true );
+		var childNodes = _ContextMenuContainer.childNodes;
+		childNodes [ 0 ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
+		for ( var childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
+		}
+		
+		document.getElementsByTagName('body') [0].removeChild ( _ContextMenuContainer );
+		_ContextMenuContainer = null;
+	};
+	
+	var onKeyDown = function ( keyBoardEvent ) {
+		if ( _ContextMenuContainer ) {
+			keyBoardEvent.preventDefault ( );
+			keyBoardEvent.stopPropagation ( );
+		}
+		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+			onCloseMenu ( );
+		}
+		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
+			_FocusIsOnItem ++;
+			if ( _FocusIsOnItem > _MenuItems.length ) {
+				_FocusIsOnItem = 1;
+			}
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+		}
+		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
+			_FocusIsOnItem --;
+			if ( _FocusIsOnItem < 1 ) {
+				_FocusIsOnItem = _MenuItems.length;
+			}
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+		}
+		if ( 'Home' === keyBoardEvent.key ) {
+			_FocusIsOnItem = 1;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+		}
+		if ( 'End' === keyBoardEvent.key ) {
+			_FocusIsOnItem = _MenuItems.length;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+		}
+		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem - 1 ].action ) ) {
+			_MenuItems[ _FocusIsOnItem - 1 ].action ( );
+			onCloseMenu ( );
+		}
+			
+	};
+	
+	var onKeyPress = function ( keyBoardEvent ) {
+		keyBoardEvent.preventDefault ( );
+		keyBoardEvent.stopPropagation ( );
+	};
+	
+	var onKeyUp = function ( keyBoardEvent ) {
+		keyBoardEvent.preventDefault ( );
+		keyBoardEvent.stopPropagation ( );
+	};
+
+	var onClickItem = function ( event ) {
+		event.stopPropagation ( );
+		_MenuItems[ event.target.menuItem ].action.call ( 
+			_MenuItems[ event.target.menuItem ].context,
+			_OriginalEvent
+		);
+		onCloseMenu ( );
+	};
+	
+	var getContextMenu = function ( event, userMenu ) {
+
+		_OriginalEvent = event; 
+		
+		if ( _ContextMenuContainer ) {
+			onCloseMenu ( );
+			return;
+		}
+		_MenuItems.length = 0;
+		
+		_MenuItems = require ( '../core/RouteEditor' ) ( ).contextMenu.concat ( userMenu );
+		
+		//ContextMenu-Container
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		
+		var body = document.getElementsByTagName('body') [0];
+		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-Panel'} , body );
+		var screenWidth = tmpDiv.clientWidth;
+		var screenHeight = tmpDiv.clientHeight;
+		body.removeChild ( tmpDiv );
+		
+		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'ContextMenu-Container',className : 'ContextMenu-Container'}, body );
+		
+		var closeButton = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				innerHTML: '&#x274c', 
+				className : 'ContextMenu-CloseButton',
+				title : _Translator.getText ( "ContextMenu - close" )
+			},
+			_ContextMenuContainer
+		);
+		closeButton.addEventListener ( 'click', onCloseMenu, false );
+		
+		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {
+			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-ItemContainer'},_ContextMenuContainer);
+			var item = htmlElementsFactory.create ( 
+				'button', 
+				{ 
+					innerHTML : _MenuItems [ menuItemCounter ].name,
+					id : 'ContextMenu-Item' + menuItemCounter,
+					className : _MenuItems [ menuItemCounter ].action ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
+				},
+				itemContainer
+			);
+			if ( _MenuItems [ menuItemCounter ].action ) {
+				item.addEventListener ( 'click', onClickItem, false );
+			}
+			item.menuItem = menuItemCounter;
+		}
+		
+		var menuTop = Math.min ( event.originalEvent.clientY, screenHeight - _ContextMenuContainer.clientHeight - 20 );
+		var menuLeft = Math.min ( event.originalEvent.clientX, screenWidth - _ContextMenuContainer.clientWidth - 20 );
+		_ContextMenuContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
+		document.addEventListener ( 'keydown', onKeyDown, true );
+		document.addEventListener ( 'keypress', onKeyPress, true );
+		document.addEventListener ( 'keyup', onKeyUp, true );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getContextMenu;
+	}
+
+}());
+
+},{"../core/RouteEditor":20,"./HTMLElementsFactory":13,"./Translator":17}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1181,143 +1181,151 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _Route = require ( './Route' ) ( );
-	var _RouteInitialObjId = -1;
-	var _RouteChanged = false;
 	var _Translator = require ( './Translator' ) ( );
 	
-	var getRouteEditor = function ( ) {
-
-		var _RouteEditorUI = require ( './RouteEditorUI' ) ( );
-	
-		return {
-			
-			saveEdition : function ( ) {
-				var travelData = require ( './TravelData' ) ( );
-				travelData.routes.replace ( _RouteInitialObjId, _Route );
-				_RouteChanged = false;
-				// It's needed to rewrite the route list due to objId's changes
-				require ( './RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
-				this.editRoute ( _Route.objId );
-			},
-			
-			cancelEdition : function ( ) {
-				_RouteChanged = false;
-				this.editRoute ( _RouteInitialObjId );
-			},
-			
-			editRoute : function ( routeObjId ) { 
-				if ( _RouteChanged ) {
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
-					return;
-				}
-				_Route = require ( './Route' ) ( );
-				var route = require ( './TravelData' ) ( ).routes.getAt ( routeObjId );
-				_RouteInitialObjId = route.objId;
-				// Route is cloned, so we can have a cancel button in the editor
-				_Route.object = route.object;
-				_RouteEditorUI .expand ( );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			addWayPoint : function ( latLng ) {
-				_RouteChanged = true;
-				var newWayPoint = require ( './Waypoint.js' ) ( );
-				if ( latLng ) {
-					newWayPoint.latLng = latLng;
-				}
-				_Route.wayPoints.add ( newWayPoint );
-				_Route.wayPoints.swap ( newWayPoint.objId, true );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			reverseWayPoints : function ( ) {
-				_RouteChanged = true;
-				_Route.wayPoints.reverse ( );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			removeAllWayPoints : function ( ) {
-				_RouteChanged = true;
-				_Route.wayPoints.removeAll ( true );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			removeWayPoint : function ( wayPointObjId ) {
-				_RouteChanged = true;
-				_Route.wayPoints.remove ( wayPointObjId );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			renameWayPoint : function ( wayPointObjId, wayPointName ) {
-				_RouteChanged = true;
-				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			swapWayPoints : function ( wayPointObjId, swapUp ) {
-				_RouteChanged = true;
-				_Route.wayPoints.swap ( wayPointObjId, swapUp );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			get contextMenu ( ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
-					} 
-				);
-				contextMenu.push ( 
-					{
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
-					}
-				);
-				contextMenu.push (
-					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
-					}
-				);
-				return contextMenu;
-			},
-			
-			setStartPoint : function ( latLng ) {
-				_RouteChanged = true;
-				_Route.wayPoints.first.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			setEndPoint : function ( latLng ) {
-				_RouteChanged = true;
-				_Route.wayPoints.last.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
-			},
-			
-			setStartPointFromContextMenu : function ( mapClickEvent ) {
-				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			setEndPointFromContextMenu : function ( mapClickEvent ) {
-				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			addPointFromContextMenu : function ( mapClickEvent ) {
-				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			}
-		};
+	var onClickExpandButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
+			return;
+		}	
+		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
+		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
+	// User interface
+
+	var _ErrorDiv = null;
+	var _ErrorDataDiv = null;
+	
+	var getErrorEditorUI = function ( ) {
+				
+		var _CreateErrorUI = function ( ){ 
+
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+			
+			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
+			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
+			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
+			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
+			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerErrorDiv );
+		};
+
+		var _ExpandEditorUI = function ( ) {
+			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
+			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
+		};
+		
+		var _ReduceEditorUI = function ( ) {
+			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
+			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
+		};
+
+		if ( ! _ErrorDiv ) {
+			_CreateErrorUI ( );
+			_ReduceEditorUI ( );
+		}
+		
+		
+		return {
+			get UI ( ) { return _ErrorDiv; },
+	
+			expand : function ( ) {
+				_ExpandEditorUI ( );
+			},
+			
+			reduce : function ( ) {
+				_ReduceEditorUI ( );
+			},
+			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
+			get message (  ) { return _ErrorDataDiv.innerHTML; }
+		};
+	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRouteEditor;
+		module.exports = getErrorEditorUI;
 	}
 
 }());
 
-},{"./ErrorEditor":3,"./Route":11,"./RouteEditorUI":13,"./RoutesListEditorUI":15,"./Translator":17,"./TravelData":18,"./Waypoint.js":20}],13:[function(require,module,exports){
+},{"./HTMLElementsFactory":13,"./Translator":17}],13:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	/* 
+	--- HTMLElementsFactory object -----------------------------------------------------------------------------
+	
+	Patterns : Closure
+	------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var getHTMLElementsFactory = function ( ) {
+
+		return {
+			create : function ( tagName, properties, parentNode ) {
+				var element;
+				if ( 'text' === tagName.toLowerCase ( ) ) {
+					element = document.createTextNode ( '' );
+				}
+				else {
+					element = document.createElement ( tagName );
+				}
+				if ( parentNode ) {
+					parentNode.appendChild ( element );
+				}
+				if ( properties )
+				{
+					for ( var property in properties ) {
+						try {
+							element [ property ] = properties [ property ];
+						}
+						catch ( e ) {
+							console.log ( "Invalid property : " + property );
+						}
+					}
+				}
+				return element;
+			}
+			
+		};
+			
+	};
+
+	/* --- End of L.Travel.ControlUI object --- */		
+
+	var HTMLElementsFactory = function ( ) {
+		return getHTMLElementsFactory ( );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = HTMLElementsFactory;
+	}
+
+}());
+
+},{}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1344,36 +1352,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).addWayPoint ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
 	};
 	
 	var onReverseWayPointsButton = function ( event )
 	{
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).reverseWayPoints ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
 	};
 	
 	var onRemoveAllWayPointsButton = function ( event )
 	{
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).removeAllWayPoints ( );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
 	};
 	
 	// Events for buttons and input on the waypoints list items
 	
 	var onWayPointsListDelete = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
 	};
 
 	var onWayPointsListUpArrow = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
 	};
 
 	var onWayPointsListDownArrow = function ( event ) {
 		event.stopPropagation ( );
-		var newWayPoints = require ( './RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
+		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
 	};
 
 	var onWayPointsListRightArrow = function ( event ) {
@@ -1382,17 +1390,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onWayPointslistChange = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
+		require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 	};
 
 	var onSaveRouteButton = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).saveEdition ( );
+		require ( '../core/RouteEditor' ) ( ).saveEdition ( );
 	};
 	
 	var onCancelRouteButton = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RouteEditor' ) ( ).cancelEdition ( );
+		require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 	};
 	
 	var onClickExpandButton = function ( clickEvent ) {
@@ -1548,84 +1556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./RouteEditor":12,"./SortableList":16,"./Translator":17}],14:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var _TravelData = require ( './TravelData' ) ( );
-	var _RoutesListChanged = false;
-	
-	var getRoutesListEditor = function ( ) {
-
-		var _RoutesListEditorUI = require ( './RoutesListEditorUI' ) ( );
-
-		return {
-			
-			addRoute : function ( ) {
-				_RoutesListChanged = true;
-				var newRoute = require ( './Route' ) ( );
-				_TravelData.routes.add ( newRoute );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
-			},
-
-			editRoute : function ( routeObjId ) {
-				_RoutesListChanged = true;
-				require ( './RouteEditor' ) ( ).editRoute ( routeObjId );
-			},
-
-			removeRoute : function ( routeObjId ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.remove ( routeObjId );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
-			},
-
-			removeAllRoutes : function ( routeObjId ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.removeAll ( );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
-			},
-
-			renameRoute : function ( routeObjId, routeName ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.getAt ( routeObjId ).name = routeName;
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
-			},
-
-			swapRoute : function ( routeObjId, swapUp ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.swap ( routeObjId, swapUp );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
-			}
-		};
-	};
-
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutesListEditor;
-	}
-
-}());
-
-},{"./Route":11,"./RouteEditor":12,"./RoutesListEditorUI":15,"./TravelData":18}],15:[function(require,module,exports){
+},{"../core/RouteEditor":20,"./HTMLElementsFactory":13,"./SortableList":16,"./Translator":17}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1666,38 +1597,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Events listeners for buttons under the routes list
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).removeAllRoutes ( );
+		require ( '../core/RoutesListEditor' ) ( ).removeAllRoutes ( );
 	};
 
 	var onClickAddRouteButton = function ( event ) {
 		event.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).addRoute ( );
+		require ( '../core/RoutesListEditor' ) ( ).addRoute ( );
 	};
 	
 	// Events for buttons and input on the routes list items
 	var onRoutesListDelete = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
+		require ( '../core/RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
+		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
+		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( './RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+		require ( '../core/RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 	};
 	
 	var onRouteslistChange = function ( event ) {
 		event.stopPropagation();
-		require ( './RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
+		require ( '../core/RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
 	// User interface
@@ -1777,7 +1708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./RoutesListEditor":14,"./SortableList":16,"./Translator":17}],16:[function(require,module,exports){
+},{"../core/RoutesListEditor":21,"./HTMLElementsFactory":13,"./SortableList":16,"./Translator":17}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1967,7 +1898,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
-			item.UIObjId = require ( './ObjId' ) ( );
+			item.UIObjId = require ( '../Data/ObjId' ) ( );
 
 			this.items.push ( item );
 
@@ -2033,7 +1964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./ObjId":10}],17:[function(require,module,exports){
+},{"../Data/ObjId":4,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -2350,220 +2281,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 },{}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-
-(function() {
-	
-	'use strict';
-	
-	var _ObjName = 'TravelData';
-	var _ObjVersion = '1.0.0';
-	
-	// one and only one object TravelData is possible
-	
-	var _Name = '';
-	var _Routes = require ( './Collection' ) ( 'Route' );
-	var _Notes = require ( './Collection' ) ( 'Note' );
-	var _ObjId = -1;
-
-	var getTravelData = function ( ) {
-		
-		return {
-			get routes ( ) { return _Routes; },
-			
-			get notes ( ) { return _Notes; },
-			
-			get objId ( ) { return _ObjId; },
-			
-			get objName ( ) { return _ObjName; },
-			
-			get objVersion ( ) { return _ObjVersion; },
-			
-			get object ( ) {
-				var routes = [ ];
-				var routeIterator = this.routes.iterator;
-				while ( ! routeIterator.done ) {
-					routes.push ( routeIterator.value.object );
-				}
-				var notes = [ ];
-				var notesIterator = this.notes.iterator;
-				while ( ! notesIterator.done ) {
-					notes.push ( notesIterator.value.object );
-				}
-				return {
-					name : _Name,
-					routes : routes,
-					notes : notes,
-					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
-				};
-			},
-			
-			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for TravelData';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for TravelData';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for TravelData';
-				}
-				if ( 'TravelData' !== Object.objName ) {
-					throw 'Invalid objName for TravelData';
-				}
-				_Name = Object.name || '';
-				_Routes.removeAll ( );
-				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
-					var newRoute = require ( './Route' ) ( );
-					newRoute.object = Object.routes [ routesCounter ];
-					_Routes.add ( newRoute );
-				}
-				_Notes.removeAll ( );
-				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
-					var newNote = require ( './Note' ) ( );
-					newNote.object = Object.notes [ notesCounter ];
-					_Notes.add ( newNote );
-				}
-				_ObjId = require ( './ObjId' ) ( );
-			}
-		};
-	};
-	
-	/* --- End of getTravelData function --- */
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelData;
-	}
-
-} ) ( );
-
-/* --- End of MapData.js file --- */
-},{"./Collection":1,"./Note":9,"./ObjId":10,"./Route":11}],19:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-
-(function() {
-	
-	'use strict';
-	
-	var _ObjName = 'WayPoint';
-	var _ObjVersion = '1.0.0';
-
-	var getWayPoint = function ( ) {
-		
-		var _Name = '';
-		var _Lat = 0;
-		var _Lng = 0;
-		
-		var _ObjId = require ( './ObjId' ) ( );
-		
-		return {
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-			
-			get UIName ( ) {
-				if ( '' !== _Name ) {
-					return _Name;
-				}
-				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
-					return _Lat.toFixed ( 5 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 5 )  + ( 0 < _Lng ? ' E' : ' W' );
-				}
-				return '';
-			},
-			
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-			
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-			
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get objId ( ) { return _ObjId; },
-			get objName ( ) { return _ObjName; },
-			get objVersion ( ) { return _ObjVersion; },
-			
-			get object ( ) {
-				return {
-					name : _Name,
-					lat : _Lat,
-					lng : _Lng,
-					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
-				};
-			},
-			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for WayPoint';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for WayPoint';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for WayPoint';
-				}
-				if ( 'WayPoint' !== Object.objName ) {
-					throw 'Invalid objName for WayPoint';
-				}
-				_Name = Object.name || '';
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_ObjId = require ( './ObjId' ) ( );
-			}
-		};
-	};
-	
-	/* --- End of getTravelData function --- */
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getWayPoint;
-	}
-
-} ) ( );
-
-/* --- End of MapData.js file --- */
-},{"./ObjId":10}],20:[function(require,module,exports){
-arguments[4][19][0].apply(exports,arguments)
-},{"./ObjId":10,"dup":19}],21:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -2623,4 +2340,287 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ErrorEditorUI":4,"./HTMLElementsFactory":6,"./RouteEditorUI":13,"./RoutesListEditorUI":15}]},{},[8]);
+},{"./ErrorEditorUI":12,"./HTMLElementsFactory":13,"./RouteEditorUI":14,"./RoutesListEditorUI":15}],19:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var getErrorEditor = function ( ) {
+
+		return {
+			
+			showError : function ( error ) {
+				var header = '<span class="TravelControl-Error">';
+				var footer = '</span>';
+				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
+				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
+			},
+
+			clear : function ( routeObjId ) {
+				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getErrorEditor;
+	}
+
+}());
+
+},{"../UI/ErrorEditorUI":12}],20:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var _Route = require ( '../Data/Route' ) ( );
+	var _RouteInitialObjId = -1;
+	var _RouteChanged = false;
+	var _Translator = require ( '../UI/Translator' ) ( );
+	
+	var getRouteEditor = function ( ) {
+
+		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+	
+		return {
+			
+			saveEdition : function ( ) {
+				var travelData = require ( '../Data/TravelData' ) ( );
+				travelData.routes.replace ( _RouteInitialObjId, _Route );
+				_RouteChanged = false;
+				// It's needed to rewrite the route list due to objId's changes
+				require ( '../UI/RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
+				this.editRoute ( _Route.objId );
+			},
+			
+			cancelEdition : function ( ) {
+				_RouteChanged = false;
+				this.editRoute ( _RouteInitialObjId );
+			},
+			
+			editRoute : function ( routeObjId ) { 
+				if ( _RouteChanged ) {
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
+					return;
+				}
+				_Route = require ( '../Data/Route' ) ( );
+				var route = require ( '../Data/TravelData' ) ( ).routes.getAt ( routeObjId );
+				_RouteInitialObjId = route.objId;
+				// Route is cloned, so we can have a cancel button in the editor
+				_Route.object = route.object;
+				_RouteEditorUI .expand ( );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			addWayPoint : function ( latLng ) {
+				_RouteChanged = true;
+				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
+				if ( latLng ) {
+					newWayPoint.latLng = latLng;
+				}
+				_Route.wayPoints.add ( newWayPoint );
+				_Route.wayPoints.swap ( newWayPoint.objId, true );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			reverseWayPoints : function ( ) {
+				_RouteChanged = true;
+				_Route.wayPoints.reverse ( );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			removeAllWayPoints : function ( ) {
+				_RouteChanged = true;
+				_Route.wayPoints.removeAll ( true );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			removeWayPoint : function ( wayPointObjId ) {
+				_RouteChanged = true;
+				_Route.wayPoints.remove ( wayPointObjId );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			renameWayPoint : function ( wayPointObjId, wayPointName ) {
+				_RouteChanged = true;
+				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			swapWayPoints : function ( wayPointObjId, swapUp ) {
+				_RouteChanged = true;
+				_Route.wayPoints.swap ( wayPointObjId, swapUp );
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			get contextMenu ( ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
+					} 
+				);
+				contextMenu.push ( 
+					{
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
+						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
+					}
+				);
+				contextMenu.push (
+					{ 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
+					}
+				);
+				return contextMenu;
+			},
+			
+			setStartPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.first.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setEndPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.last.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setStartPointFromContextMenu : function ( mapClickEvent ) {
+				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			setEndPointFromContextMenu : function ( mapClickEvent ) {
+				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			addPointFromContextMenu : function ( mapClickEvent ) {
+				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getRouteEditor;
+	}
+
+}());
+
+},{"../Data/Route":5,"../Data/TravelData":6,"../Data/Waypoint.js":8,"../UI/RouteEditorUI":14,"../UI/RoutesListEditorUI":15,"../UI/Translator":17,"./ErrorEditor":19}],21:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var _TravelData = require ( '../Data/TravelData' ) ( );
+	var _RoutesListChanged = false;
+	
+	var getRoutesListEditor = function ( ) {
+
+		var _RoutesListEditorUI = require ( '../UI/RoutesListEditorUI' ) ( );
+
+		return {
+			
+			addRoute : function ( ) {
+				_RoutesListChanged = true;
+				var newRoute = require ( '../Data/Route' ) ( );
+				_TravelData.routes.add ( newRoute );
+				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+			},
+
+			editRoute : function ( routeObjId ) {
+				_RoutesListChanged = true;
+				require ( './RouteEditor' ) ( ).editRoute ( routeObjId );
+			},
+
+			removeRoute : function ( routeObjId ) {
+				_RoutesListChanged = true;
+				_TravelData.routes.remove ( routeObjId );
+				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+			},
+
+			removeAllRoutes : function ( routeObjId ) {
+				_RoutesListChanged = true;
+				_TravelData.routes.removeAll ( );
+				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+			},
+
+			renameRoute : function ( routeObjId, routeName ) {
+				_RoutesListChanged = true;
+				_TravelData.routes.getAt ( routeObjId ).name = routeName;
+				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+			},
+
+			swapRoute : function ( routeObjId, swapUp ) {
+				_RoutesListChanged = true;
+				_TravelData.routes.swap ( routeObjId, swapUp );
+				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getRoutesListEditor;
+	}
+
+}());
+
+},{"../Data/Route":5,"../Data/TravelData":6,"../UI/RoutesListEditorUI":15,"./RouteEditor":20}]},{},[10]);
