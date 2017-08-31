@@ -1426,7 +1426,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			// WayPoints
 			_WayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', className : 'TravelControl-Div'} );
 			
 			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, _WayPointsDiv );
@@ -1898,7 +1897,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
-			item.UIObjId = require ( '../Data/ObjId' ) ( );
 
 			this.items.push ( item );
 
@@ -1964,7 +1962,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/ObjId":4,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
+},{"./HTMLElementsFactory":13}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

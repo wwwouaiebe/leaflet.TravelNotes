@@ -187,7 +187,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
-			item.UIObjId = require ( '../Data/ObjId' ) ( );
 
 			this.items.push ( item );
 
