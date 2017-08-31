@@ -22,12 +22,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _MenuItems = [];
 	var _ContextMenuContainer = null;
-	var focusIsOnItem = 0;
+	var _OriginalEvent = null;
+	var _FocusIsOnItem = 0;
 	
-	var function1 = function ( ) { console.log ( 'function1' ); };
-	var function2 = function ( ) { console.log ( 'function2' ); };
-	var function3 = function ( ) { console.log ( 'function3' ); };
-
 	var onCloseMenu = function ( ) {
 		document.removeEventListener ( 'keydown', onKeyDown, true );
 		document.removeEventListener ( 'keypress', onKeyPress, true );
@@ -51,29 +48,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			onCloseMenu ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
-			focusIsOnItem ++;
-			if ( focusIsOnItem > _MenuItems.length ) {
-				focusIsOnItem = 1;
+			_FocusIsOnItem ++;
+			if ( _FocusIsOnItem > _MenuItems.length ) {
+				_FocusIsOnItem = 1;
 			}
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
-			focusIsOnItem --;
-			if ( focusIsOnItem < 1 ) {
-				focusIsOnItem = _MenuItems.length;
+			_FocusIsOnItem --;
+			if ( _FocusIsOnItem < 1 ) {
+				_FocusIsOnItem = _MenuItems.length;
 			}
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			focusIsOnItem = 1;
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = 1;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
-			focusIsOnItem = _MenuItems.length;
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = _MenuItems.length;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( focusIsOnItem > 0 ) && ( _MenuItems[ focusIsOnItem - 1 ].enabled ) ) {
-			_MenuItems[ focusIsOnItem - 1 ].action ( );
+		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem - 1 ].action ) ) {
+			_MenuItems[ _FocusIsOnItem - 1 ].action ( );
 			onCloseMenu ( );
 		}
 			
@@ -83,6 +80,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	};
+	
 	var onKeyUp = function ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
@@ -90,21 +88,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickItem = function ( event ) {
 		event.stopPropagation ( );
-		_MenuItems[ event.target.menuItem ].action ( );
+		_MenuItems[ event.target.menuItem ].action.call ( 
+			_MenuItems[ event.target.menuItem ].context,
+			_OriginalEvent
+		);
 		onCloseMenu ( );
 	};
 	
-	var getContextMenu = function ( event ) {
+	var getContextMenu = function ( event, userMenu ) {
 
+		_OriginalEvent = event; 
+		
 		if ( _ContextMenuContainer ) {
 			onCloseMenu ( );
 			return;
 		}
 		_MenuItems.length = 0;
 		
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point de départ", action : function1, enabled : true} );
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point intermédiaire", action : function2, enabled : false} );
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point de fin", action : function3, enabled : true} );
+		_MenuItems = require ( './RouteEditor' ) ( ).contextMenu.concat ( userMenu );
 		
 		//ContextMenu-Container
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -127,11 +128,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					innerHTML : _MenuItems [ menuItemCounter ].name,
 					id : 'ContextMenu-Item' + menuItemCounter,
-					className : _MenuItems [ menuItemCounter ].enabled ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
+					className : _MenuItems [ menuItemCounter ].action ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
 				},
 				itemContainer
 			);
-			if ( _MenuItems [ menuItemCounter ].enabled ) {
+			if ( _MenuItems [ menuItemCounter ].action ) {
 				item.addEventListener ( 'click', onClickItem, false );
 			}
 			item.menuItem = menuItemCounter;

@@ -97,6 +97,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			   get last ( ) { return nextIndex  >= _Array.length - 1; }
 			};
 		};
+		
+		var _First = function ( ) {
+			return _Array [ 0 ];
+		};
+
+		var _Last = function ( ) {
+			return _Array [ _Array.length - 1 ];
+		};
 
 		return {
 			add : function ( object ) { 
@@ -122,6 +130,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			get iterator ( ) { 
 				return _Iterator ( ); 
+			},
+			get first ( ) {
+				return _First ( );
+			},
+			get last ( ) {
+				return _Last ( );
 			}
 			
 		};
@@ -165,12 +179,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _MenuItems = [];
 	var _ContextMenuContainer = null;
-	var focusIsOnItem = 0;
+	var _OriginalEvent = null;
+	var _FocusIsOnItem = 0;
 	
-	var function1 = function ( ) { console.log ( 'function1' ); };
-	var function2 = function ( ) { console.log ( 'function2' ); };
-	var function3 = function ( ) { console.log ( 'function3' ); };
-
 	var onCloseMenu = function ( ) {
 		document.removeEventListener ( 'keydown', onKeyDown, true );
 		document.removeEventListener ( 'keypress', onKeyPress, true );
@@ -194,29 +205,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			onCloseMenu ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
-			focusIsOnItem ++;
-			if ( focusIsOnItem > _MenuItems.length ) {
-				focusIsOnItem = 1;
+			_FocusIsOnItem ++;
+			if ( _FocusIsOnItem > _MenuItems.length ) {
+				_FocusIsOnItem = 1;
 			}
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
-			focusIsOnItem --;
-			if ( focusIsOnItem < 1 ) {
-				focusIsOnItem = _MenuItems.length;
+			_FocusIsOnItem --;
+			if ( _FocusIsOnItem < 1 ) {
+				_FocusIsOnItem = _MenuItems.length;
 			}
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			focusIsOnItem = 1;
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = 1;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
-			focusIsOnItem = _MenuItems.length;
-			_ContextMenuContainer.childNodes [ focusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = _MenuItems.length;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
 		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( focusIsOnItem > 0 ) && ( _MenuItems[ focusIsOnItem - 1 ].enabled ) ) {
-			_MenuItems[ focusIsOnItem - 1 ].action ( );
+		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem - 1 ].action ) ) {
+			_MenuItems[ _FocusIsOnItem - 1 ].action ( );
 			onCloseMenu ( );
 		}
 			
@@ -226,6 +237,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	};
+	
 	var onKeyUp = function ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
@@ -233,21 +245,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickItem = function ( event ) {
 		event.stopPropagation ( );
-		_MenuItems[ event.target.menuItem ].action ( );
+		_MenuItems[ event.target.menuItem ].action.call ( 
+			_MenuItems[ event.target.menuItem ].context,
+			_OriginalEvent
+		);
 		onCloseMenu ( );
 	};
 	
-	var getContextMenu = function ( event ) {
+	var getContextMenu = function ( event, userMenu ) {
 
+		_OriginalEvent = event; 
+		
 		if ( _ContextMenuContainer ) {
 			onCloseMenu ( );
 			return;
 		}
 		_MenuItems.length = 0;
 		
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point de départ", action : function1, enabled : true} );
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point intermédiaire", action : function2, enabled : false} );
-		_MenuItems.push ( { name : "Sélectionner cet endroit comme point de fin", action : function3, enabled : true} );
+		_MenuItems = require ( './RouteEditor' ) ( ).contextMenu.concat ( userMenu );
 		
 		//ContextMenu-Container
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -270,11 +285,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					innerHTML : _MenuItems [ menuItemCounter ].name,
 					id : 'ContextMenu-Item' + menuItemCounter,
-					className : _MenuItems [ menuItemCounter ].enabled ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
+					className : _MenuItems [ menuItemCounter ].action ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
 				},
 				itemContainer
 			);
-			if ( _MenuItems [ menuItemCounter ].enabled ) {
+			if ( _MenuItems [ menuItemCounter ].action ) {
 				item.addEventListener ( 'click', onClickItem, false );
 			}
 			item.menuItem = menuItemCounter;
@@ -294,7 +309,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6}],3:[function(require,module,exports){
+},{"./HTMLElementsFactory":6,"./RouteEditor":11}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -684,6 +699,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	L.Travel = L.Travel || {};
 	L.travel = L.travel || {};
+	
+	var _LeftUserContextMenu = [];
+	var _RightUserContextMenu = [];
+	var _RightContextMenu = false;
+	var _LeftContextMenu = false;
 
 	
 	/* 
@@ -745,9 +765,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var onMapClick = function ( event ) {
-			require ('./ContextMenu' ) ( event );
+			require ('./ContextMenu' ) ( event, _LeftUserContextMenu );
 		};
-		
+		var onMapContextMenu = function ( event ) {
+			require ('./ContextMenu' ) ( event, _RightUserContextMenu );
+		};
+
 		var _Map;
 		return {
 
@@ -782,7 +805,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( rightButton ) {
 					_Map.on ( 'contextmenu', onMapClick );
 				}
-			}
+			},
+			get rightContextMenu ( ) { return _RightContextMenu; },
+			
+			set rightContextMenu ( RightContextMenu ) { 
+				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
+					_Map.on ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = true;
+				}
+				else if ( ( ! RightContextMenu ) && ( _RightContextMenu ) ) {
+					_Map.off ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = false;
+				}
+			},
+			
+			get leftContextMenu ( ) { return _LeftContextMenu; },
+			
+			set leftContextMenu ( LeftContextMenu ) { 
+				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
+					_Map.on ( 'click', onMapClick );
+					_LeftContextMenu = true;
+				}
+				else if ( ( ! LeftContextMenu ) && ( _LeftContextMenu ) ) {
+					_Map.off ( 'click', onMapClick );
+					_LeftContextMenu = false;
+				}
+			},
+			
+			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
+			
+			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
+			
+			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
+			
+			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; }
 		};
 	};
 	
@@ -1007,9 +1063,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
-			addWayPoint : function ( ) {
+			addWayPoint : function ( latLng ) {
 				_RouteChanged = true;
 				var newWayPoint = require ( './Waypoint.js' ) ( );
+				if ( latLng ) {
+					newWayPoint.latLng = latLng;
+				}
 				_Route.wayPoints.add ( newWayPoint );
 				_Route.wayPoints.swap ( newWayPoint.objId, true );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
@@ -1043,6 +1102,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteChanged = true;
 				_Route.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			get contextMenu ( ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, name : "Sélectionner cet endroit comme point de départ", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
+					} 
+				);
+				contextMenu.push ( 
+					{
+						context : this, name : "Sélectionner cet endroit comme point intermédiaire", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
+					}
+				);
+				contextMenu.push (
+					{ 
+						context : this, name : "Sélectionner cet endroit comme point de fin", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
+					}
+				);
+				return contextMenu;
+			},
+			
+			setStartPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.first.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setEndPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.last.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setStartPointFromContextMenu : function ( mapClickEvent ) {
+				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			setEndPointFromContextMenu : function ( mapClickEvent ) {
+				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			addPointFromContextMenu : function ( mapClickEvent ) {
+				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
 			}
 		};
 	};
@@ -1892,8 +1998,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( '' !== _Name ) {
 					return _Name;
 				}
+				console.log ( _Lat );
 				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
-					return _Lat.toString() + ( 0 < _Lat ? ' N - ' : ' S - ' ) + Lng.toString()  + ( 0 < _Lat ? ' E - ' : ' W - ' );
+					return _Lat.toFixed ( 5 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 5 )  + ( 0 < _Lng ? ' E' : ' W' );
 				}
 				return '';
 			},

@@ -22,6 +22,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	L.Travel = L.Travel || {};
 	L.travel = L.travel || {};
+	
+	var _LeftUserContextMenu = [];
+	var _RightUserContextMenu = [];
+	var _RightContextMenu = false;
+	var _LeftContextMenu = false;
 
 	
 	/* 
@@ -83,9 +88,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var onMapClick = function ( event ) {
-			require ('./ContextMenu' ) ( event );
+			require ('./ContextMenu' ) ( event, _LeftUserContextMenu );
 		};
-		
+		var onMapContextMenu = function ( event ) {
+			require ('./ContextMenu' ) ( event, _RightUserContextMenu );
+		};
+
 		var _Map;
 		return {
 
@@ -120,7 +128,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( rightButton ) {
 					_Map.on ( 'contextmenu', onMapClick );
 				}
-			}
+			},
+			get rightContextMenu ( ) { return _RightContextMenu; },
+			
+			set rightContextMenu ( RightContextMenu ) { 
+				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
+					_Map.on ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = true;
+				}
+				else if ( ( ! RightContextMenu ) && ( _RightContextMenu ) ) {
+					_Map.off ( 'contextmenu', onMapContextMenu );
+					_RightContextMenu = false;
+				}
+			},
+			
+			get leftContextMenu ( ) { return _LeftContextMenu; },
+			
+			set leftContextMenu ( LeftContextMenu ) { 
+				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
+					_Map.on ( 'click', onMapClick );
+					_LeftContextMenu = true;
+				}
+				else if ( ( ! LeftContextMenu ) && ( _LeftContextMenu ) ) {
+					_Map.off ( 'click', onMapClick );
+					_LeftContextMenu = false;
+				}
+			},
+			
+			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
+			
+			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
+			
+			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
+			
+			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; }
 		};
 	};
 	

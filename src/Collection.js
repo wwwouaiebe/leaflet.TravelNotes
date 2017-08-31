@@ -96,6 +96,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			   get last ( ) { return nextIndex  >= _Array.length - 1; }
 			};
 		};
+		
+		var _First = function ( ) {
+			return _Array [ 0 ];
+		};
+
+		var _Last = function ( ) {
+			return _Array [ _Array.length - 1 ];
+		};
 
 		return {
 			add : function ( object ) { 
@@ -121,6 +129,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			get iterator ( ) { 
 				return _Iterator ( ); 
+			},
+			get first ( ) {
+				return _First ( );
+			},
+			get last ( ) {
+				return _Last ( );
 			}
 			
 		};

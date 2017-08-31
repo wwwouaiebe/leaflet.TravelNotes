@@ -61,9 +61,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
 			},
 			
-			addWayPoint : function ( ) {
+			addWayPoint : function ( latLng ) {
 				_RouteChanged = true;
 				var newWayPoint = require ( './Waypoint.js' ) ( );
+				if ( latLng ) {
+					newWayPoint.latLng = latLng;
+				}
 				_Route.wayPoints.add ( newWayPoint );
 				_Route.wayPoints.swap ( newWayPoint.objId, true );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
@@ -97,6 +100,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteChanged = true;
 				_Route.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			get contextMenu ( ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, name : "Sélectionner cet endroit comme point de départ", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
+					} 
+				);
+				contextMenu.push ( 
+					{
+						context : this, name : "Sélectionner cet endroit comme point intermédiaire", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
+					}
+				);
+				contextMenu.push (
+					{ 
+						context : this, name : "Sélectionner cet endroit comme point de fin", 
+						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
+					}
+				);
+				return contextMenu;
+			},
+			
+			setStartPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.first.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setEndPoint : function ( latLng ) {
+				_RouteChanged = true;
+				_Route.wayPoints.last.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+			},
+			
+			setStartPointFromContextMenu : function ( mapClickEvent ) {
+				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			setEndPointFromContextMenu : function ( mapClickEvent ) {
+				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			
+			addPointFromContextMenu : function ( mapClickEvent ) {
+				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
 			}
 		};
 	};

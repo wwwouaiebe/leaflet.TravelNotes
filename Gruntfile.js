@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 		},
 		browserify: {
 			control: {
-				src: ['src/L.Travel.js'],
+				src: ['src/L.Travel.Interface.js'],
 				dest: 'dist/L.Travel.js'
 			}
 		},
