@@ -27,7 +27,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _WayPoints = require ( './Collection' ) ( 'WayPoint' );
 		_WayPoints.add ( require ( './Waypoint' ) ( ) );
 		_WayPoints.add ( require ( './Waypoint' ) ( ) );
-
+		var _Notes = require ( './Collection' ) ( 'Note' );
+		
 		var _Geom = require ( './Geom' ) ( );
 		
 		var _ObjId = require ( './ObjId' ) ( );
@@ -37,6 +38,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set name ( Name ) { _Name = Name;},
 			
 			get wayPoints ( ) { return _WayPoints; },
+			
+			get notes ( ) { return _Notes; },
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -47,14 +50,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				var wayPoints = [];
-				var iterator = this.wayPoints.iterator;
-				while ( ! iterator.done ) {
-					wayPoints.push ( iterator.value.object );
+				var wayPointsIterator = this.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+					wayPoints.push ( wayPointsIterator.value.object );
 				}
-
+				var notes = [ ];
+				var notesIterator = this.notes.iterator;
+				while ( ! notesIterator.done ) {
+					notes.push ( notesIterator.value.object );
+				}
 				return {
 					name : _Name,
 					wayPoints : wayPoints,
+					notes : notes,
 					geom : _Geom.object,
 					objId : _ObjId,
 					objName : _ObjName,
@@ -80,6 +88,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					var newWayPoint = require ( './WayPoint' ) ( );
 					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
 					_WayPoints.add ( newWayPoint );
+				}
+				_Notes.removeAll ( );
+				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
+					var newNote = require ( './Note' ) ( );
+					newNote.object = Object.notes [ notesCounter ];
+					_Notes.add ( newNote );
 				}
 				var tmpGeom = require ( './Geom' ) ( );
 				tmpGeom.object = Object.geom;

@@ -135,9 +135,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			writeRoutesList : function ( newRoutes ) {
 				_RoutesList.removeAllItems ( );
-				var iterator = newRoutes.iterator;
-				while ( ! iterator.done ) {
-					_RoutesList.addItem ( iterator.value.name, iterator.value.objId, false );
+				var routesIterator = newRoutes.iterator;
+				while ( ! routesIterator.done ) {
+					_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.objId, false );
 				}
 			}
 		};

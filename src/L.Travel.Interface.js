@@ -67,6 +67,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							objVersion : "1.0.0"
 						}
 					],
+					notes : [],
 					geom :
 					{
 						pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
@@ -82,6 +83,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					objVersion : "1.0.0"
 				}
 			],
+			notes : [],
 			objId : -5,
 			objName : "TravelData",
 			objVersion : "1.0.0"

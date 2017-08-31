@@ -25,12 +25,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Name = '';
 	var _Routes = require ( './Collection' ) ( 'Route' );
+	var _Notes = require ( './Collection' ) ( 'Note' );
 	var _ObjId = -1;
 
 	var getTravelData = function ( ) {
 		
 		return {
 			get routes ( ) { return _Routes; },
+			
+			get notes ( ) { return _Notes; },
 			
 			get objId ( ) { return _ObjId; },
 			
@@ -39,14 +42,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get objVersion ( ) { return _ObjVersion; },
 			
 			get object ( ) {
-				var routes = [];
-				var iterator = this.routes.iterator;
-				while ( ! iterator.done ) {
-					routes.push ( iterator.value.object );
+				var routes = [ ];
+				var routeIterator = this.routes.iterator;
+				while ( ! routeIterator.done ) {
+					routes.push ( routeIterator.value.object );
+				}
+				var notes = [ ];
+				var notesIterator = this.notes.iterator;
+				while ( ! notesIterator.done ) {
+					notes.push ( notesIterator.value.object );
 				}
 				return {
 					name : _Name,
 					routes : routes,
+					notes : notes,
 					objId : _ObjId,
 					objName : _ObjName,
 					objVersion : _ObjVersion
@@ -72,6 +81,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					var newRoute = require ( './Route' ) ( );
 					newRoute.object = Object.routes [ routesCounter ];
 					_Routes.add ( newRoute );
+				}
+				_Notes.removeAll ( );
+				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
+					var newNote = require ( './Note' ) ( );
+					newNote.object = Object.notes [ notesCounter ];
+					_Notes.add ( newNote );
 				}
 				_ObjId = require ( './ObjId' ) ( );
 			}
