@@ -162,7 +162,7 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > div.
 div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-child(2) > div.SortableList-ItemUpArrowButton,
 div.SortableList-Container.LimitedSort > div.SortableList-Item:nth-last-child(2) > div.SortableList-ItemDownArrowButton,
 div.SortableList-Container.LimitedSort > div.SortableList-Item:first-child > div.SortableList-ItemDeleteButton,
-div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > div.SortableList-ItemDeleteButton
+div.SortableList-Container.LimitedSort > div.SortableList-Item:last-child > div.SortableList-ItemDeleteButton,
 div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableList-ItemRightArrowButton
 {
 	visibility:hidden;

@@ -161,7 +161,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
 			
-			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; }
+			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
+			
+			get version ( ) { return '1.0.0'; }
 		};
 	};
 	

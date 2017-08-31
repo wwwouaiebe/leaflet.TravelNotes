@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
+	
+	var _Translator = require ( './Translator' ) ( );
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
@@ -80,7 +82,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
 	};
 	
 	// User interface
@@ -102,13 +104,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, _WayPointsDiv );
 			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 			var dataWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, _WayPointsDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
 					listStyle : 'LimitedSort',
-					placeholders : [ 'Start', 'Via', 'End' ],
+					placeholders : [ _Translator.getText ( 'RouteEditorUI - Start' ), _Translator.getText ( 'RouteEditorUI - Via' ), _Translator.getText ( 'RouteEditorUI - End' ) ],
 					indexNames : [ 'A', 'index', 'B' ],
 					id : 'TravelControl-WaypointsList'
 				}, 
@@ -126,7 +128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-SaveRouteButton',
 					className: 'TravelControl-Button', 
-					title : 'Sauver les modifications', 
+					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
 					innerHTML : '&#x1f4be;'
 				},
 				wayPointsButtonsDiv 
@@ -137,7 +139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-CancelRouteButton',
 					className: 'TravelControl-Button', 
-					title : 'Abandonner les modifications', 
+					title : _Translator.getText ( 'RouteEditorUI - Cancel' ), 
 					innerHTML : '&#x274c'
 				},
 				wayPointsButtonsDiv 
@@ -148,7 +150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-ReverseWayPointsButton', 
 					className: 'TravelControl-Button', 
-					title : 'Inverser les points de passage',  
+					title : _Translator.getText ( 'RouteEditorUI - Invert waypoints' ),  
 					innerHTML : '&#x21C5;'
 				},
 				wayPointsButtonsDiv
@@ -159,7 +161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-AddWayPointButton',
 					className: 'TravelControl-Button', 
-					title : 'Ajouter un point de passage', 
+					title : _Translator.getText ( 'RouteEditorUI - Add waypoint' ), 
 					innerHTML : '+'
 				},
 				wayPointsButtonsDiv 
@@ -170,7 +172,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-RemoveAllWayPointsButton', 
 					className: 'TravelControl-Button',
-					title: 'Supprimer tous les points de passage',
+					title: _Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
 					innerHTML : '&#x267b;'
 				}, 
 				wayPointsButtonsDiv

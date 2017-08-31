@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Route = require ( './Route' ) ( );
 	var _RouteInitialObjId = -1;
 	var _RouteChanged = false;
+	var _Translator = require ( './Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
@@ -48,7 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				console.log ( 'a' );
 				if ( _RouteChanged ) {
 				console.log ( 'b' );
-					require ( './ErrorEditor' ) ( ).showError ( "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications" );
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
 				console.log ( 'C' );
@@ -106,19 +107,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : "Sélectionner cet endroit comme point de départ", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : "Sélectionner cet endroit comme point intermédiaire", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : "Sélectionner cet endroit comme point de fin", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
 					}
 				);

@@ -177,6 +177,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
+	var _Translator = require ( './Translator' ) ( );
 	var _MenuItems = [];
 	var _ContextMenuContainer = null;
 	var _OriginalEvent = null;
@@ -275,7 +276,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'ContextMenu-Container',className : 'ContextMenu-Container'}, body );
 		
-		var closeButton = htmlElementsFactory.create ( 'div', { innerHTML: '&#x274c', className : 'ContextMenu-CloseButton'},_ContextMenuContainer);
+		var closeButton = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				innerHTML: '&#x274c', 
+				className : 'ContextMenu-CloseButton',
+				title : _Translator.getText ( "ContextMenu - close" )
+			},
+			_ContextMenuContainer
+		);
 		closeButton.addEventListener ( 'click', onCloseMenu, false );
 		
 		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {
@@ -309,7 +318,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./RouteEditor":11}],3:[function(require,module,exports){
+},{"./HTMLElementsFactory":6,"./RouteEditor":11,"./Translator":16}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -379,6 +388,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
+	var _Translator = require ( './Translator' ) ( );
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
@@ -386,7 +397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}	
 		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
 	// User interface
@@ -410,13 +421,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _ExpandEditorUI = function ( ) {
 			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Masquer';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
 			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
 		var _ReduceEditorUI = function ( ) {
 			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Afficher';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
 			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
 		};
 
@@ -447,7 +458,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6}],5:[function(require,module,exports){
+},{"./HTMLElementsFactory":6,"./Translator":16}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -674,7 +685,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./RoutesListEditorUI":14,"./TravelData":16,"./userInterface":19}],8:[function(require,module,exports){
+},{"./RoutesListEditorUI":14,"./TravelData":17,"./userInterface":20}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -838,7 +849,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
 			
-			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; }
+			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
+			
+			get version ( ) { return '1.0.0'; }
 		};
 	};
 	
@@ -854,7 +867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ContextMenu":2,"./L.Travel.Control":7,"./RoutesListEditorUI":14,"./TravelData":16,"./userInterface":19}],9:[function(require,module,exports){
+},{"./ContextMenu":2,"./L.Travel.Control":7,"./RoutesListEditorUI":14,"./TravelData":17,"./userInterface":20}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -999,7 +1012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Collection":1,"./Geom":5,"./ObjId":9,"./WayPoint":17,"./Waypoint":18}],11:[function(require,module,exports){
+},{"./Collection":1,"./Geom":5,"./ObjId":9,"./WayPoint":18,"./Waypoint":19}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1025,6 +1038,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Route = require ( './Route' ) ( );
 	var _RouteInitialObjId = -1;
 	var _RouteChanged = false;
+	var _Translator = require ( './Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
@@ -1050,7 +1064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				console.log ( 'a' );
 				if ( _RouteChanged ) {
 				console.log ( 'b' );
-					require ( './ErrorEditor' ) ( ).showError ( "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications" );
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
 				console.log ( 'C' );
@@ -1108,19 +1122,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : "Sélectionner cet endroit comme point de départ", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : "Sélectionner cet endroit comme point intermédiaire", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : "Sélectionner cet endroit comme point de fin", 
+						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
 						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
 					}
 				);
@@ -1160,7 +1174,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ErrorEditor":3,"./Route":10,"./RouteEditorUI":12,"./RoutesListEditorUI":14,"./TravelData":16,"./Waypoint.js":18}],12:[function(require,module,exports){
+},{"./ErrorEditor":3,"./Route":10,"./RouteEditorUI":12,"./RoutesListEditorUI":14,"./Translator":16,"./TravelData":17,"./Waypoint.js":19}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1182,6 +1196,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
+	
+	var _Translator = require ( './Translator' ) ( );
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
@@ -1243,7 +1259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
 	};
 	
 	// User interface
@@ -1265,13 +1281,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, _WayPointsDiv );
 			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
 			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Points de passage&nbsp;:', id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
 			var dataWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, _WayPointsDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
 					listStyle : 'LimitedSort',
-					placeholders : [ 'Start', 'Via', 'End' ],
+					placeholders : [ _Translator.getText ( 'RouteEditorUI - Start' ), _Translator.getText ( 'RouteEditorUI - Via' ), _Translator.getText ( 'RouteEditorUI - End' ) ],
 					indexNames : [ 'A', 'index', 'B' ],
 					id : 'TravelControl-WaypointsList'
 				}, 
@@ -1289,7 +1305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-SaveRouteButton',
 					className: 'TravelControl-Button', 
-					title : 'Sauver les modifications', 
+					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
 					innerHTML : '&#x1f4be;'
 				},
 				wayPointsButtonsDiv 
@@ -1300,7 +1316,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-CancelRouteButton',
 					className: 'TravelControl-Button', 
-					title : 'Abandonner les modifications', 
+					title : _Translator.getText ( 'RouteEditorUI - Cancel' ), 
 					innerHTML : '&#x274c'
 				},
 				wayPointsButtonsDiv 
@@ -1311,7 +1327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-ReverseWayPointsButton', 
 					className: 'TravelControl-Button', 
-					title : 'Inverser les points de passage',  
+					title : _Translator.getText ( 'RouteEditorUI - Invert waypoints' ),  
 					innerHTML : '&#x21C5;'
 				},
 				wayPointsButtonsDiv
@@ -1322,7 +1338,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-AddWayPointButton',
 					className: 'TravelControl-Button', 
-					title : 'Ajouter un point de passage', 
+					title : _Translator.getText ( 'RouteEditorUI - Add waypoint' ), 
 					innerHTML : '+'
 				},
 				wayPointsButtonsDiv 
@@ -1333,7 +1349,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-RemoveAllWayPointsButton', 
 					className: 'TravelControl-Button',
-					title: 'Supprimer tous les points de passage',
+					title: _Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
 					innerHTML : '&#x267b;'
 				}, 
 				wayPointsButtonsDiv
@@ -1389,7 +1405,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./RouteEditor":11,"./SortableList":15}],13:[function(require,module,exports){
+},{"./HTMLElementsFactory":6,"./RouteEditor":11,"./SortableList":15,"./Translator":16}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1466,7 +1482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./Route":10,"./RouteEditor":11,"./RoutesListEditorUI":14,"./TravelData":16}],14:[function(require,module,exports){
+},{"./Route":10,"./RouteEditor":11,"./RoutesListEditorUI":14,"./TravelData":17}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1489,6 +1505,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
+	var _Translator = require ( './Translator' ) ( );
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.target.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
@@ -1496,7 +1514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
 
 		clickEvent.stopPropagation ( );
 	};
@@ -1557,10 +1575,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var headerRoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, _RoutesDiv );
 			var expandRouteButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
 			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Routes&nbsp;:', id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
 			var routesDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, _RoutesDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : ['Route'], id : 'TravelControl-RouteList' }, routesDataDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, routesDataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
@@ -1568,7 +1586,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_RoutesList.container.addEventListener ( 'SortableListChange', onRouteslistChange, false );
 			
 			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, _RoutesDiv );
-			var addRouteButton = htmlElementsFactory.create ( 'span', { id : 'TravelControl-AddRoutesButton', className: 'TravelControl-Button', title : 'Nouvelle route', innerHTML : '+'/*'&#x2719;'*/}, routesButtonsDiv );
+			var addRouteButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					id : 'TravelControl-AddRoutesButton', 
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'RoutesListEditorUI - New route' ), 
+					innerHTML : '+'
+				}, 
+				routesButtonsDiv 
+			);
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
 			var deleteAllRoutesButton = htmlElementsFactory.create ( 
@@ -1576,7 +1603,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-DeleteAllRoutesButton', 
 					className: 'TravelControl-Button', 
-					title : 'Supprimer toutes les routes', 
+					title : _Translator.getText ( 'RoutesListEditorUI - Delete all routes' ), 
 					innerHTML : '&#x267b;'
 				},
 				routesButtonsDiv
@@ -1600,7 +1627,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 	};
-
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getRoutesListEditorUI;
@@ -1608,7 +1634,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":6,"./RoutesListEditor":13,"./SortableList":15}],15:[function(require,module,exports){
+},{"./HTMLElementsFactory":6,"./RoutesListEditor":13,"./SortableList":15,"./Translator":16}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1880,6 +1906,320 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+(function() {
+	
+	'use strict';
+
+	var _Fr =
+	[
+		{
+			msgid : "ContextMenu - close",
+			msgstr : "Fermer"
+		},
+		{
+			msgid : "ErrorEditorUI - Show",
+			msgstr : "Afficher"
+		},
+		{
+			msgid : "ErrorEditorUI - Hide",
+			msgstr : "Masquer"
+		},
+		{
+			msgid : "NoteCategory-Id01",
+			msgstr : "A&#xe9;roport"
+		},
+		{
+			msgid : "NoteCategory-Id02",
+			msgstr : "Mont&#xe9;e"
+		},
+		{
+			msgid : "NoteCategory-Id03",
+			msgstr : "Distributeur de billets"
+		},
+		{
+			msgid : "NoteCategory-Id04",
+			msgstr : "Attention requise"
+		},
+		{
+			msgid : "NoteCategory-Id05",
+			msgstr : "V&#xe9;los admis"
+		},
+		{
+			msgid : "NoteCategory-Id06",
+			msgstr : "Autobus"
+		},
+		{
+			msgid : "NoteCategory-Id07",
+			msgstr : "Photo"
+		},
+		{
+			msgid : "NoteCategory-Id08",
+			msgstr : "Camping"
+		},
+		{
+			msgid : "NoteCategory-Id09",
+			msgstr : "Ferry"
+		},
+		{
+			msgid : "NoteCategory-Id10",
+			msgstr : "Auberge de jeunesse"
+		},
+		{
+			msgid : "NoteCategory-Id11",
+			msgstr : "Point d\'information"
+		},
+		{
+			msgid : "NoteCategory-Id12",
+			msgstr : "Parc national"
+		},
+		{
+			msgid : "NoteCategory-Id13",
+			msgstr : "V&#xe9;los mal vus"
+		},
+		{
+			msgid : "NoteCategory-Id14",
+			msgstr : "Parc r&#xe9;gional"
+		},
+		{
+			msgid : "NoteCategory-Id15",
+			msgstr : "Entretien v&#xe9;lo"
+		},
+		{
+			msgid : "NoteCategory-Id16",
+			msgstr : "Magasin"
+		},
+		{
+			msgid : "NoteCategory-Id17",
+			msgstr : "Aide"
+		},
+		{
+			msgid : "NoteCategory-Id18",
+			msgstr : "Stop"
+		},
+		{
+			msgid : "NoteCategory-Id19",
+			msgstr : "Table"
+		},
+		{
+			msgid : "NoteCategory-Id20",
+			msgstr : "Toilettes"
+		},
+		{
+			msgid : "NoteCategory-Id21",
+			msgstr : "Gare"
+		},
+		{
+			msgid : "NoteCategory-Id22",
+			msgstr : "Tunnel"
+		},
+		{
+			msgid : "NoteCategory-Id23",
+			msgstr : "Point d\'eau"
+		},
+		{
+			msgid : "NoteCategory-Id24",
+			msgstr : "Chambre d\'hotes"
+		},
+		{
+			msgid : "NoteCategory-Id25",
+			msgstr : "Cafetaria"
+		},
+		{
+			msgid : "NoteCategory-Id26",
+			msgstr : "Restaurant"
+		},
+		{
+			msgid : "NoteCategory-Id27",
+			msgstr : "H&#xf4;tel"
+		},
+		{
+			msgid : "NoteCategory-Id28",
+			msgstr : "D&#xe9;part"
+		},
+		{
+			msgid : "NoteCategory-Id29",
+			msgstr : "Entr&#xe9;e du ferry"
+		},
+		{
+			msgid : "NoteCategory-Id30",
+			msgstr : "Sortie du ferry"
+		},
+		{
+			msgid : "NoteCategory-Id31",
+			msgstr : "Continuer"
+		},
+		{
+			msgid : "NoteCategory-Id32",
+			msgstr : "Tourner l&#xe9;g&#xe8;rement &#xe0; gauche"
+		},
+		{
+			msgid : "NoteCategory-Id33",
+			msgstr : "Tourner &#xe0; gauche"
+		},
+		{
+			msgid : "NoteCategory-Id34",
+			msgstr : "Tourner fort &#xe0; gauche"
+		},
+		{
+			msgid : "NoteCategory-Id35",
+			msgstr : "Tourner l&#xe9;g&#xe8;rement &#xe0; droite"
+		},
+		{
+			msgid : "NoteCategory-Id36",
+			msgstr : "Tourner &#xe0; droite"
+		},
+		{
+			msgid : "NoteCategory-Id37",
+			msgstr : "Tourner fort &#xe0; droite"
+		},
+		{
+			msgid : "NoteCategory-Id38",
+			msgstr : "Point noeud v&#xe9;lo"
+		},
+		{
+			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
+			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
+		},
+		{
+			msgid : "RouteEditor - Select this point as start point",
+			msgstr : "Sélectionner cet endroit comme point de départ"
+		},
+		{
+			msgid : "RouteEditor - Select this point as way point",
+			msgstr : "Sélectionner cet endroit comme point intermédiaire"
+		},
+		{
+			msgid : "RouteEditor - Select this point as end point",
+			msgstr : "Sélectionner cet endroit comme point de fin"
+		},
+		{
+			msgid : "RouteEditorUI - Show",
+			msgstr : "Afficher"
+		},
+		{
+			msgid : "RouteEditorUI - Hide",
+			msgstr : "Masquer"
+		},
+		{
+			msgid : "RouteEditorUI - Waypoints",
+			msgstr : "Points de passage&nbsp;:"
+		},
+		{
+			msgid : "RouteEditorUI - Start",
+			msgstr : "Départ"
+		},
+		{
+			msgid : "RouteEditorUI - Via",
+			msgstr : "Point de passage"
+		},
+		{
+			msgid : "RouteEditorUI - End",
+			msgstr : "Fin"
+		},
+		{
+			msgid : "RouteEditorUI - Save",
+			msgstr : "Sauver les modifications"
+		},
+		{
+			msgid : "RouteEditorUI - Cancel",
+			msgstr : "Abandonner les modifications"
+		},
+		{
+			msgid : "RouteEditorUI - Invert waypoints",
+			msgstr : "Inverser les points de passage"
+		},
+		{
+			msgid : "RouteEditorUI - Add waypoint",
+			msgstr : "Ajouter un point de passage"
+		},
+		{
+			msgid : "RouteEditorUI - Delete all waypoints",
+			msgstr : "Supprimer tous les points de passage"
+		},
+		{
+			msgid : "RoutesListEditorUI - Show",
+			msgstr : "Afficher"
+		},
+		{
+			msgid : "RoutesListEditorUI - Hide",
+			msgstr : "Masquer"
+		},
+		{
+			msgid : "RoutesListEditorUI - Routes",
+			msgstr : "Routes&nbsp;:"
+		},
+		{
+			msgid : "RoutesListEditorUI - Route",
+			msgstr : "Route"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
+		},
+		{
+			msgid : "RoutesListEditorUI - New route",
+			msgstr : "Nouvelle route"
+		},
+		{
+			msgid : "RoutesListEditorUI - Delete all routes",
+			msgstr : "Supprimer toutes les routes"
+		},
+
+	];
+	
+	var _Translations = null;
+	
+	var getTranslator = function ( textId ) {
+		if ( ! _Translations ) {
+			_Translations = new Map ( );
+			for ( var messageCounter = 0; messageCounter < _Fr.length; messageCounter ++ ) {
+				_Translations.set ( _Fr [ messageCounter ].msgid, _Fr [ messageCounter ].msgstr );
+			}
+		}
+		return {
+			getText : function ( textId ) { 
+				var translation = _Translations.get ( textId );
+				return translation === undefined ? textId : translation;
+			}
+		};
+	};
+	
+	/* --- End of getNote function --- */
+	
+	/* 
+	--- Exports ------------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getTranslator;
+	}
+
+} ) ( );
+
+},{}],17:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 
 (function() {
 	
@@ -1958,7 +2298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Collection":1,"./ObjId":9,"./Route":10}],17:[function(require,module,exports){
+},{"./Collection":1,"./ObjId":9,"./Route":10}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -2062,9 +2402,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":9}],18:[function(require,module,exports){
-arguments[4][17][0].apply(exports,arguments)
-},{"./ObjId":9,"dup":17}],19:[function(require,module,exports){
+},{"./ObjId":9}],19:[function(require,module,exports){
+arguments[4][18][0].apply(exports,arguments)
+},{"./ObjId":9,"dup":18}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 

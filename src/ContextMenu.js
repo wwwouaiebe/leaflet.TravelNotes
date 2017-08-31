@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
+	var _Translator = require ( './Translator' ) ( );
 	var _MenuItems = [];
 	var _ContextMenuContainer = null;
 	var _OriginalEvent = null;
@@ -118,7 +119,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'ContextMenu-Container',className : 'ContextMenu-Container'}, body );
 		
-		var closeButton = htmlElementsFactory.create ( 'div', { innerHTML: '&#x274c', className : 'ContextMenu-CloseButton'},_ContextMenuContainer);
+		var closeButton = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				innerHTML: '&#x274c', 
+				className : 'ContextMenu-CloseButton',
+				title : _Translator.getText ( "ContextMenu - close" )
+			},
+			_ContextMenuContainer
+		);
 		closeButton.addEventListener ( 'click', onCloseMenu, false );
 		
 		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {

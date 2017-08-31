@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
+	var _Translator = require ( './Translator' ) ( );
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
@@ -27,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}	
 		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
 		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? 'Afficher' : 'Masquer';
+		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
 	// User interface
@@ -51,13 +53,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _ExpandEditorUI = function ( ) {
 			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Masquer';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
 			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
 		var _ReduceEditorUI = function ( ) {
 			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = 'Afficher';
+			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
 			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
 		};
 
