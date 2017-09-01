@@ -55,16 +55,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							lat : 50.50881,
 							lng : 5.49314,
 							objId : -1,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
+							objType : 
+							{
+								name : "WayPoint",
+								version : "1.0.0"
+							}
 						},
 						{
 							name : "Chemin du Sârtê 22 - Anthisnes",
 							lat : 50.50937,
 							lng : 5.49470,
 							objId : -2,
-							objName : "WayPoint",
-							objVersion : "1.0.0"
+							objType :
+							{
+								name : "WayPoint",
+								version : "1.0.0"
+							}
 						}
 					],
 					notes : [],
@@ -75,18 +81,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						color : "#0000ff",
 						weight : "5",
 						objId : -3,
-						objName : "Geom",
-						objVersion : "1.0.0"
+						objType :
+						{
+							name : "Geom",
+							version : "1.0.0"
+						}
 					},
 					objId : -4,
-					objName : "Route",
-					objVersion : "1.0.0"
+					objType :
+					{
+						name : "Route",
+						version : "1.0.0"
+					}
 				}
 			],
 			notes : [],
 			objId : -5,
-			objName : "TravelData",
-			objVersion : "1.0.0"
+			objType : 
+			{
+				name : "TravelData",
+				version : "1.0.0"
+			}
 		};
 
 		var onMapClick = function ( event ) {

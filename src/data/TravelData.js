@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjName = 'TravelData';
-	var _ObjVersion = '1.0.0';
+	var _ObjType = require ( './ObjType' ) ( 'TravelData', '1.0.0' );
 	
 	// one and only one object TravelData is possible
 	
@@ -36,10 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get notes ( ) { return _Notes; },
 			
 			get objId ( ) { return _ObjId; },
-			
-			get objName ( ) { return _ObjName; },
-			
-			get objVersion ( ) { return _ObjVersion; },
+			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				var routes = [ ];
@@ -57,24 +53,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					routes : routes,
 					notes : notes,
 					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
+					objType : _ObjType
 				};
 			},
 			
 			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for TravelData';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for TravelData';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for TravelData';
-				}
-				if ( 'TravelData' !== Object.objName ) {
-					throw 'Invalid objName for TravelData';
-				}
+				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
 				_Routes.removeAll ( );
 				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {

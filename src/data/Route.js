@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _ObjName = 'Route';
-	var _ObjVersion = '1.0.0';
+	var _ObjType = require ( './ObjType' ) ( 'Route', '1.0.0' );
 
 	var getRoute = function ( ) {
 		
@@ -45,8 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set geom ( Geom ) { _Geom = Geom; },
 			
 			get objId ( ) { return _ObjId; },
-			get objName ( ) { return _ObjName; },
-			get objVersion ( ) { return _ObjVersion; },
+			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				var wayPoints = [];
@@ -65,23 +63,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					notes : notes,
 					geom : _Geom.object,
 					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
+					objType : _ObjType
 				};
 			},
 			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for Route';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for Route';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for Route';
-				}
-				if ( 'Route' !== Object.objName ) {
-					throw 'Invalid objName for Route';
-				}
+				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
 				_WayPoints.removeAll ( );
 				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {

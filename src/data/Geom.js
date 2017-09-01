@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjName = 'Geom';
-	var _ObjVersion = '1.0.0';
+	var _ObjType = require ( './ObjType' ) ( 'Geom', '1.0.0' );
 
 	var getGeom = function ( ) {
 		
@@ -45,8 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set weight ( Weight ) { _Weight = Weight; },
 			
 			get objId ( ) { return _ObjId; },
-			get objName ( ) { return _ObjName; },
-			get objVersion ( ) { return _ObjVersion; },
+			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				return {
@@ -55,23 +53,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					color : _Color,
 					weight : _Weight,
 					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
+					objType : _ObjType
 				};
 			},
 			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for Geom';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for Geom';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for Geom';
-				}
-				if ( 'Geom' !== Object.objName ) {
-					throw 'Invalid objName for Geom';
-				}
+				Object = _ObjType.validate ( Object );
 				_Pnts = Object.pnts || '';
 				_Precision = Object.precision || 6;
 				_Color = Object.color || '#000000';

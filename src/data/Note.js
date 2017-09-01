@@ -17,8 +17,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjName = 'Note';
-	var _ObjVersion = '1.0.0';
+	var _ObjType = require ( './ObjType' ) ( 'Note', '1.0.0' );
 
 	var getNote = function ( ) {
 		
@@ -69,8 +68,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 			
 			get objId ( ) { return _ObjId; },
-			get objName ( ) { return _ObjName; },
-			get objVersion ( ) { return _ObjVersion; },
+			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				return {
@@ -84,23 +82,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					objId : _ObjId,
-					objName : _ObjName,
-					objVersion : _ObjVersion
+					objType : _ObjType
 				};
 			},
 			set object ( Object ) {
-				if ( ! Object.objVersion ) {
-					throw 'No ObjVersion for Note';
-				}
-				if ( '1.0.0' !== Object.objVersion ) {
-					throw 'invalid objVersion for Note';
-				}
-				if ( ! Object.objName ) {
-					throw 'No objName for Note';
-				}
-				if ( 'Note' !== Object.objName ) {
-					throw 'Invalid objName for Note';
-				}
+				Object = _ObjType.validate ( Object );
 				_Text = Object.text || '';
 				_Phone = Object.phone || '';
 				_Url = Object.url || '';

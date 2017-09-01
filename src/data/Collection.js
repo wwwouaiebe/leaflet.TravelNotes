@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		var _Add = function ( object ) {
-			if ( ( ! object.objName ) || ( object.objName !== _ObjName ) ) {
+			if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== _ObjName ) ) {
 				throw 'invalid object name for add function';
 			}
 			_Array.push ( object );
