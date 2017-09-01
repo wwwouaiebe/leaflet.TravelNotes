@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'Note', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getNote = function ( ) {
 		
@@ -35,39 +35,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 
 			get text ( ) { return _Text;},
+			
 			set text ( Text ) { _Text = Text; },
 			
 			get phone ( ) { return _Phone;},
+			
 			set phone ( Phone ) { _Phone = Phone; },
 			
 			get url ( ) { return _Url;},
+			
 			set url ( Url ) { _Url = Url; },
 			
 			get address ( ) { return _Address;},
+			
 			set address ( Address ) { _Address = Address; },
 			
 			get categoryId ( ) { return _CategoryId;},
+			
 			set categoryId ( CategoryId ) { _CategoryId = CategoryId; },
 			
 			get iconLat ( ) { return _IconLat;},
+			
 			set iconLat ( IconLat ) { _IconLat = IconLat; },
 			
 			get iconLng ( ) { return _IconLng;},
+			
 			set iconLng ( IconLng ) { _IconLng = IconLng; },
 			
 			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
+			
 			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
 
 			get lat ( ) { return _Lat;},
+			
 			set lat ( Lat ) { _Lat = Lat; },
 			
 			get lng ( ) { return _Lng;},
+			
 			set lng ( Lng ) { _Lng = Lng; },
 			
 			get latLng ( ) { return [ _Lat, _Lng ];},
+			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 			
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
@@ -82,9 +94,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
+			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Text = Object.text || '';

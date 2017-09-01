@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _ObjType = require ( './ObjType' ) ( 'Route', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'Route', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getRoute = function ( ) {
 		
@@ -47,43 +47,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
-				var wayPoints = [];
-				var wayPointsIterator = this.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					wayPoints.push ( wayPointsIterator.value.object );
-				}
-				var notes = [ ];
-				var notesIterator = this.notes.iterator;
-				while ( ! notesIterator.done ) {
-					notes.push ( notesIterator.value.object );
-				}
 				return {
 					name : _Name,
-					wayPoints : wayPoints,
-					notes : notes,
+					wayPoints : _WayPoints.object,
+					notes : _Notes.object,
 					geom : _Geom.object,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_WayPoints.removeAll ( );
-				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {
-					var newWayPoint = require ( './WayPoint' ) ( );
-					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
-					_WayPoints.add ( newWayPoint );
-				}
-				_Notes.removeAll ( );
-				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
-					var newNote = require ( './Note' ) ( );
-					newNote.object = Object.notes [ notesCounter ];
-					_Notes.add ( newNote );
-				}
-				var tmpGeom = require ( './Geom' ) ( );
-				tmpGeom.object = Object.geom;
-				_Geom = tmpGeom;
+				_WayPoints.object = Object.wayPoints;
+				_Notes.object = Object.notes;
+				_Geom.object = Object.geom;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

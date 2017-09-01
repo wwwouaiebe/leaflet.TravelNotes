@@ -13,12 +13,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 (function() {
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'WayPoint', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'WayPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getWayPoint = function ( ) {
 		
@@ -29,7 +28,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
+			
 			get name ( ) { return _Name; },
+			
 			set name ( Name ) { _Name = Name;},
 			
 			get UIName ( ) {
@@ -43,15 +44,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get lat ( ) { return _Lat;},
+			
 			set lat ( Lat ) { _Lat = Lat; },
 			
 			get lng ( ) { return _Lng;},
+			
 			set lng ( Lng ) { _Lng = Lng; },
 			
 			get latLng ( ) { return [ _Lat, _Lng ];},
+			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
@@ -60,9 +65,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
+			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';

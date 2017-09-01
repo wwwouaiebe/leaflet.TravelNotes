@@ -17,7 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 (function() {
 	
 	'use strict';
-
 	
 	var getCollection = function ( objName ) {
 		
@@ -104,37 +103,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Last = function ( ) {
 			return _Array [ _Array.length - 1 ];
 		};
+		
+		var _GetObject = function ( ) {
+			var array = [ ];
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+				array.push ( iterator.value.object );
+			}
+			
+			return array;
+		};
+		
+		var _SetObject = function ( Objects ) {
+			var constructor;
+			switch ( _ObjName ) {
+				case 'Route' :
+				constructor = require ( './Route' );
+				break;
+				case 'Note' :
+				constructor = require ( './Note' );
+				break;
+				case 'WayPoint' :
+				constructor = require ( './WayPoint' );
+				break;
+			}
+			_Array.length = 0;
+			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
+				var newObject = constructor ( );
+				newObject.object = Objects [ objectCounter ];
+				_Add ( newObject );
+			}
+		};
 
 		return {
+			
 			add : function ( object ) { 
 				_Add ( object );
 			},
 			getAt : function ( objId ) {
 				return _GetAt ( objId );
 			},
+			
 			reverse : function ( ) {
 				_Reverse ( );
 			},
+			
 			remove : function ( objId ) {
 				_Remove ( objId );
 			},
+			
 			replace : function ( oldObjId, object ) {
 				_Replace ( oldObjId, object ); 
 			},
+			
 			removeAll : function ( ExceptFirstLast ) {
 				_RemoveAll ( ExceptFirstLast );
 			},
+			
 			swap : function ( objId, swapUp ) {
 				_Swap ( objId, swapUp );
 			},
+			
 			get iterator ( ) { 
 				return _Iterator ( ); 
 			},
+			
 			get first ( ) {
 				return _First ( );
 			},
+			
 			get last ( ) {
 				return _Last ( );
+			},
+			
+			get object ( ) { 
+				return _GetObject ( );
+			},
+			
+			set object ( Object ) {
+				_SetObject ( Object );
 			}
 			
 		};

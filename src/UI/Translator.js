@@ -290,6 +290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			for ( var messageCounter = 0; messageCounter < _Fr.length; messageCounter ++ ) {
 				_Translations.set ( _Fr [ messageCounter ].msgid, _Fr [ messageCounter ].msgstr );
 			}
+			_Translations.set ( 'Version', '1.0.0' );
 		}
 		return {
 			getText : function ( textId ) { 

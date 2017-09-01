@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 (function() {
 	
 	'use strict';
-
 	
 	var getCollection = function ( objName ) {
 		
@@ -105,37 +104,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Last = function ( ) {
 			return _Array [ _Array.length - 1 ];
 		};
+		
+		var _GetObject = function ( ) {
+			var array = [ ];
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+				array.push ( iterator.value.object );
+			}
+			
+			return array;
+		};
+		
+		var _SetObject = function ( Objects ) {
+			var constructor;
+			switch ( _ObjName ) {
+				case 'Route' :
+				constructor = require ( './Route' );
+				break;
+				case 'Note' :
+				constructor = require ( './Note' );
+				break;
+				case 'WayPoint' :
+				constructor = require ( './WayPoint' );
+				break;
+			}
+			_Array.length = 0;
+			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
+				var newObject = constructor ( );
+				newObject.object = Objects [ objectCounter ];
+				_Add ( newObject );
+			}
+		};
 
 		return {
+			
 			add : function ( object ) { 
 				_Add ( object );
 			},
 			getAt : function ( objId ) {
 				return _GetAt ( objId );
 			},
+			
 			reverse : function ( ) {
 				_Reverse ( );
 			},
+			
 			remove : function ( objId ) {
 				_Remove ( objId );
 			},
+			
 			replace : function ( oldObjId, object ) {
 				_Replace ( oldObjId, object ); 
 			},
+			
 			removeAll : function ( ExceptFirstLast ) {
 				_RemoveAll ( ExceptFirstLast );
 			},
+			
 			swap : function ( objId, swapUp ) {
 				_Swap ( objId, swapUp );
 			},
+			
 			get iterator ( ) { 
 				return _Iterator ( ); 
 			},
+			
 			get first ( ) {
 				return _First ( );
 			},
+			
 			get last ( ) {
 				return _Last ( );
+			},
+			
+			get object ( ) { 
+				return _GetObject ( );
+			},
+			
+			set object ( Object ) {
+				_SetObject ( Object );
 			}
 			
 		};
@@ -154,7 +201,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 
-},{}],2:[function(require,module,exports){
+},{"./Note":3,"./Route":6,"./WayPoint":8}],2:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -175,7 +222,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'Geom', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'Geom', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getGeom = function ( ) {
 		
@@ -189,18 +236,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 
 			get pnts ( ) { return _Pnts; },
+			
 			set pnts ( Pnts ) { _Pnts = Pnts; },
 			
 			get precision ( ) { return _Precision; },
+			
 			set precision ( Precision ) { _Precision = Precision; },
 			
 			get color ( ) { return _Color; },
+			
 			set color ( Color ) { _Color = Color; },
 			
 			get weight ( ) { return _Weight; },
+			
 			set weight ( Weight ) { _Weight = Weight; },
 			
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
@@ -210,9 +262,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					color : _Color,
 					weight : _Weight,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
+			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Pnts = Object.pnts || '';
@@ -237,7 +290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":4,"./ObjType":5}],3:[function(require,module,exports){
+},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -257,7 +310,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'Note', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getNote = function ( ) {
 		
@@ -275,39 +328,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 
 			get text ( ) { return _Text;},
+			
 			set text ( Text ) { _Text = Text; },
 			
 			get phone ( ) { return _Phone;},
+			
 			set phone ( Phone ) { _Phone = Phone; },
 			
 			get url ( ) { return _Url;},
+			
 			set url ( Url ) { _Url = Url; },
 			
 			get address ( ) { return _Address;},
+			
 			set address ( Address ) { _Address = Address; },
 			
 			get categoryId ( ) { return _CategoryId;},
+			
 			set categoryId ( CategoryId ) { _CategoryId = CategoryId; },
 			
 			get iconLat ( ) { return _IconLat;},
+			
 			set iconLat ( IconLat ) { _IconLat = IconLat; },
 			
 			get iconLng ( ) { return _IconLng;},
+			
 			set iconLng ( IconLng ) { _IconLng = IconLng; },
 			
 			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
+			
 			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
 
 			get lat ( ) { return _Lat;},
+			
 			set lat ( Lat ) { _Lat = Lat; },
 			
 			get lng ( ) { return _Lng;},
+			
 			set lng ( Lng ) { _Lng = Lng; },
 			
 			get latLng ( ) { return [ _Lat, _Lng ];},
+			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 			
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
@@ -322,9 +387,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
+			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Text = Object.text || '';
@@ -353,7 +419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"./ObjId":4,"./ObjType":5}],4:[function(require,module,exports){
+},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -487,7 +553,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _ObjType = require ( './ObjType' ) ( 'Route', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'Route', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getRoute = function ( ) {
 		
@@ -516,43 +582,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
-				var wayPoints = [];
-				var wayPointsIterator = this.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					wayPoints.push ( wayPointsIterator.value.object );
-				}
-				var notes = [ ];
-				var notesIterator = this.notes.iterator;
-				while ( ! notesIterator.done ) {
-					notes.push ( notesIterator.value.object );
-				}
 				return {
 					name : _Name,
-					wayPoints : wayPoints,
-					notes : notes,
+					wayPoints : _WayPoints.object,
+					notes : _Notes.object,
 					geom : _Geom.object,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_WayPoints.removeAll ( );
-				for ( var wayPointsCounter = 0; wayPointsCounter < Object.wayPoints.length; wayPointsCounter ++ ) {
-					var newWayPoint = require ( './WayPoint' ) ( );
-					newWayPoint.object = Object.wayPoints [ wayPointsCounter ];
-					_WayPoints.add ( newWayPoint );
-				}
-				_Notes.removeAll ( );
-				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
-					var newNote = require ( './Note' ) ( );
-					newNote.object = Object.notes [ notesCounter ];
-					_Notes.add ( newNote );
-				}
-				var tmpGeom = require ( './Geom' ) ( );
-				tmpGeom.object = Object.geom;
-				_Geom = tmpGeom;
+				_WayPoints.object = Object.wayPoints;
+				_Notes.object = Object.notes;
+				_Geom.object = Object.geom;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
@@ -571,7 +615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Collection":1,"./Geom":2,"./Note":3,"./ObjId":4,"./ObjType":5,"./WayPoint":8,"./Waypoint":9}],7:[function(require,module,exports){
+},{"../UI/Translator":18,"./Collection":1,"./Geom":2,"./ObjId":4,"./ObjType":5,"./Waypoint":9}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -592,7 +636,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'TravelData', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'TravelData', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 	
 	// one and only one object TravelData is possible
 	
@@ -604,50 +648,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravelData = function ( ) {
 		
 		return {
+			
 			get routes ( ) { return _Routes; },
 			
 			get notes ( ) { return _Notes; },
 			
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
-				var routes = [ ];
-				var routeIterator = this.routes.iterator;
-				while ( ! routeIterator.done ) {
-					routes.push ( routeIterator.value.object );
-				}
-				var notes = [ ];
-				var notesIterator = this.notes.iterator;
-				while ( ! notesIterator.done ) {
-					notes.push ( notesIterator.value.object );
-				}
 				return {
 					name : _Name,
-					routes : routes,
-					notes : notes,
+					routes : _Routes.object,
+					notes : _Notes.object,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_Routes.removeAll ( );
-				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
-					var newRoute = require ( './Route' ) ( );
-					newRoute.object = Object.routes [ routesCounter ];
-					_Routes.add ( newRoute );
-				}
-				_Notes.removeAll ( );
-				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
-					var newNote = require ( './Note' ) ( );
-					newNote.object = Object.notes [ notesCounter ];
-					_Notes.add ( newNote );
-				}
+				_Routes.object = Object.routes;
+				_Notes.object = Object.notes;
 				_ObjId = require ( './ObjId' ) ( );
-			}
+			},
+			toString : function ( ) { return this.object; }
 		};
 	};
 	
@@ -664,7 +691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./Collection":1,"./Note":3,"./ObjId":4,"./ObjType":5,"./Route":6}],8:[function(require,module,exports){
+},{"../UI/Translator":18,"./Collection":1,"./ObjId":4,"./ObjType":5}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -680,12 +707,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 (function() {
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'WayPoint', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'WayPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
 	var getWayPoint = function ( ) {
 		
@@ -696,7 +722,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
+			
 			get name ( ) { return _Name; },
+			
 			set name ( Name ) { _Name = Name;},
 			
 			get UIName ( ) {
@@ -710,15 +738,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get lat ( ) { return _Lat;},
+			
 			set lat ( Lat ) { _Lat = Lat; },
 			
 			get lng ( ) { return _Lng;},
+			
 			set lng ( Lng ) { _Lng = Lng; },
 			
 			get latLng ( ) { return [ _Lat, _Lng ];},
+			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
@@ -727,9 +759,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
+			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
@@ -753,9 +786,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"./ObjId":4,"./ObjType":5}],9:[function(require,module,exports){
+},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],9:[function(require,module,exports){
 arguments[4][8][0].apply(exports,arguments)
-},{"./ObjId":4,"./ObjType":5,"dup":8}],10:[function(require,module,exports){
+},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5,"dup":8}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -905,7 +938,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					objType :
 					{
 						name : "Route",
-						version : "1.0.0"
+						version : require ( './UI/Translator' ) ( ).getText ( 'Version' )
 					}
 				}
 			],
@@ -917,6 +950,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				version : "1.0.0"
 			}
 		};
+		console.log ( _TravelData.object );
 
 		var onMapClick = function ( event ) {
 			require ('./UI/ContextMenu' ) ( event, _LeftUserContextMenu );
@@ -1010,7 +1044,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./Data/TravelData":7,"./L.Travel.Control":10,"./UI/ContextMenu":12,"./UI/RoutesListEditorUI":16,"./UI/UserInterface":19}],12:[function(require,module,exports){
+},{"./Data/TravelData":7,"./L.Travel.Control":10,"./UI/ContextMenu":12,"./UI/RoutesListEditorUI":16,"./UI/Translator":18,"./UI/UserInterface":19}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2271,6 +2305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			for ( var messageCounter = 0; messageCounter < _Fr.length; messageCounter ++ ) {
 				_Translations.set ( _Fr [ messageCounter ].msgid, _Fr [ messageCounter ].msgstr );
 			}
+			_Translations.set ( 'Version', '1.0.0' );
 		}
 		return {
 			getText : function ( textId ) { 

@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'TravelData', '1.0.0' );
+	var _ObjType = require ( './ObjType' ) ( 'TravelData', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 	
 	// one and only one object TravelData is possible
 	
@@ -30,50 +30,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravelData = function ( ) {
 		
 		return {
+			
 			get routes ( ) { return _Routes; },
 			
 			get notes ( ) { return _Notes; },
 			
 			get objId ( ) { return _ObjId; },
+			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
-				var routes = [ ];
-				var routeIterator = this.routes.iterator;
-				while ( ! routeIterator.done ) {
-					routes.push ( routeIterator.value.object );
-				}
-				var notes = [ ];
-				var notesIterator = this.notes.iterator;
-				while ( ! notesIterator.done ) {
-					notes.push ( notesIterator.value.object );
-				}
 				return {
 					name : _Name,
-					routes : routes,
-					notes : notes,
+					routes : _Routes.object,
+					notes : _Notes.object,
 					objId : _ObjId,
-					objType : _ObjType
+					objType : _ObjType.object
 				};
 			},
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_Routes.removeAll ( );
-				for ( var routesCounter = 0; routesCounter < Object.routes.length; routesCounter ++ ) {
-					var newRoute = require ( './Route' ) ( );
-					newRoute.object = Object.routes [ routesCounter ];
-					_Routes.add ( newRoute );
-				}
-				_Notes.removeAll ( );
-				for ( var notesCounter = 0; notesCounter < Object.notes.length; notesCounter ++ ) {
-					var newNote = require ( './Note' ) ( );
-					newNote.object = Object.notes [ notesCounter ];
-					_Notes.add ( newNote );
-				}
+				_Routes.object = Object.routes;
+				_Notes.object = Object.notes;
 				_ObjId = require ( './ObjId' ) ( );
-			}
+			},
+			toString : function ( ) { return this.object; }
 		};
 	};
 	
