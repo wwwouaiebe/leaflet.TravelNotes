@@ -290,7 +290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],3:[function(require,module,exports){
+},{"../UI/Translator":19,"./ObjId":4,"./ObjType":5}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -419,7 +419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],4:[function(require,module,exports){
+},{"../UI/Translator":19,"./ObjId":4,"./ObjType":5}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -615,7 +615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":18,"./Collection":1,"./Geom":2,"./ObjId":4,"./ObjType":5,"./Waypoint":9}],7:[function(require,module,exports){
+},{"../UI/Translator":19,"./Collection":1,"./Geom":2,"./ObjId":4,"./ObjType":5,"./Waypoint":9}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -691,7 +691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":18,"./Collection":1,"./ObjId":4,"./ObjType":5}],8:[function(require,module,exports){
+},{"../UI/Translator":19,"./Collection":1,"./ObjId":4,"./ObjType":5}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -786,9 +786,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5}],9:[function(require,module,exports){
+},{"../UI/Translator":19,"./ObjId":4,"./ObjType":5}],9:[function(require,module,exports){
 arguments[4][8][0].apply(exports,arguments)
-},{"../UI/Translator":18,"./ObjId":4,"./ObjType":5,"dup":8}],10:[function(require,module,exports){
+},{"../UI/Translator":19,"./ObjId":4,"./ObjType":5,"dup":8}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -844,7 +844,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./Data/TravelData":7,"./UI/RoutesListEditorUI":16,"./UI/UserInterface":19}],11:[function(require,module,exports){
+},{"./Data/TravelData":7,"./UI/RoutesListEditorUI":17,"./UI/UserInterface":20}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1044,7 +1044,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./Data/TravelData":7,"./L.Travel.Control":10,"./UI/ContextMenu":12,"./UI/RoutesListEditorUI":16,"./UI/Translator":18,"./UI/UserInterface":19}],12:[function(require,module,exports){
+},{"./Data/TravelData":7,"./L.Travel.Control":10,"./UI/ContextMenu":12,"./UI/RoutesListEditorUI":17,"./UI/Translator":19,"./UI/UserInterface":20}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1208,7 +1208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RouteEditor":21,"./HTMLElementsFactory":14,"./Translator":18}],13:[function(require,module,exports){
+},{"../core/RouteEditor":22,"./HTMLElementsFactory":14,"./Translator":19}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1235,63 +1235,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
+		if ( ! document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML.length ) {
 			return;
 		}	
-		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
+		document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
+		document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = hiddenList ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
 	// User interface
 
-	var _ErrorDiv = null;
-	var _ErrorDataDiv = null;
-	
+	var _UICreated = false;
+
 	var getErrorEditorUI = function ( ) {
 				
-		var _CreateErrorUI = function ( ){ 
+		var _CreateUI = function ( controlDiv ){ 
+		
+			if ( _UICreated ) {
+				return;
+			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
-			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
-			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
-			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerErrorDiv );
+			htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv TravelControl-HiddenList'}, controlDiv );
+			
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create (
+				'span',
+				{ 
+					innerHTML : '&#x25b6;',
+					title : _Translator.getText ( 'ErrorEditorUI - Show' ),
+					id : 'TravelControl-ErrorExpandButton',
+					className : 'TravelControl-ExpandButton'
+				},
+				headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			
+			_UICreated = true;
 		};
 
-		var _ExpandEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
-			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
+		var _ExpandUI = function ( ) {
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b2;';
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Hide' );
+			document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
-		var _ReduceEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
-			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
+		var _ReduceUI = function ( ) {
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b6;';
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Show' );
+			document.getElementById ( 'TravelControl-ErrorDataDiv' ).add ( 'TravelControl-HiddenList' );
 		};
 
-		if ( ! _ErrorDiv ) {
-			_CreateErrorUI ( );
-			_ReduceEditorUI ( );
-		}
-		
-		
 		return {
-			get UI ( ) { return _ErrorDiv; },
+			
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			},
 	
 			expand : function ( ) {
-				_ExpandEditorUI ( );
+				_ExpandUI ( );
 			},
 			
 			reduce : function ( ) {
-				_ReduceEditorUI ( );
+				_ReduceUI ( );
 			},
-			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
-			get message (  ) { return _ErrorDataDiv.innerHTML; }
+			
+			set message ( Message ) { document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML = Message; },
+			
+			get message (  ) { return document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML; }
+			
 		};
 	};
 	
@@ -1301,7 +1315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":14,"./Translator":18}],14:[function(require,module,exports){
+},{"./HTMLElementsFactory":14,"./Translator":19}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1400,6 +1414,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Translator = require ( './Translator' ) ( );
 
+	var onClickExpandButton = function ( clickEvent ) {
+		
+		document.getElementById ( 'TravelControl-ItineraryNotesHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
+		document.getElementById ( 'TravelControlItineraryNotesDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControlItineraryNotesDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-ItineraryNotesExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelControl-ItineraryNotesExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryNotesEditorUI - Show' ) : _Translator.getText ( 'ItineraryNotesEditorUI - Hide' );
+
+		clickEvent.stopPropagation ( );
+	};
+
+	var _UICreated = false;
+	
+	var getItineraryNotesUI = function ( ) {
+		
+		var _CreateUI = function ( controlDiv ) {
+			
+			if ( _UICreated ) {
+				return;
+			}
+
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryNotesHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-ItineraryNotesExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					innerHTML : _Translator.getText ( 'ItineraryNotesEditorUI - Itinerary and notes' ), 
+					id : 'TravelControl-ItineraryNotesHeaderText', 
+					className : 'TravelControl-HeaderText'
+				},
+				headerDiv 
+			);
+			var DataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlItineraryNotesDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
+			DataDiv.innerHTML= "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.Ut velit mauris, egestas sed, gravida nec, ornare ut, mi. Aenean ut orci vel massa suscipit pulvinar. Nulla sollicitudin. Fusce varius, ligula non tempus aliquam, nunc turpis ullamcorper nibh, in tempus sapien eros vitae ligula. Pellentesque rhoncus nunc et augue. Integer id felis. Curabitur aliquet pellentesque diam. Integer quis metus vitae elit lobortis egestas. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi vel erat non mauris convallis vehicula. Nulla et sapien. Integer tortor tellus, aliquam faucibus, convallis id, congue eu, quam. Mauris ullamcorper felis vitae erat. Proin feugiat, augue non elementum posuere, metus purus iaculis lectus, et tristique ligula justo vitae magna.Aliquam convallis sollicitudin purus. Praesent aliquam, enim at fermentum mollis, ligula massa adipiscing nisl, ac euismod nibh nisl eu lectus. Fusce vulputate sem at sapien. Vivamus leo. Aliquam euismod libero eu enim. Nulla nec felis sed leo placerat imperdiet. Aenean suscipit nulla in justo. Suspendisse cursus rutrum augue. Nulla tincidunt tincidunt mi. Curabitur iaculis, lorem vel rhoncus faucibus, felis magna fermentum augue, et ultricies lacus lorem varius purus. Curabitur eu ametLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.Ut velit mauris, egestas sed, gravida nec, ornare ut, mi. Aenean ut orci vel massa suscipit pulvinar. Nulla sollicitudin. Fusce varius, ligula non tempus aliquam, nunc turpis ullamcorper nibh, in tempus sapien eros vitae ligula. Pellentesque rhoncus nunc et augue. Integer id felis. Curabitur aliquet pellentesque diam. Integer quis metus vitae elit lobortis egestas. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi vel erat non mauris convallis vehicula. Nulla et sapien. Integer tortor tellus, aliquam faucibus, convallis id, congue eu, quam. Mauris ullamcorper felis vitae erat. Proin feugiat, augue non elementum posuere, metus purus iaculis lectus, et tristique ligula justo vitae magna.Aliquam convallis sollicitudin purus. Praesent aliquam, enim at fermentum mollis, ligula massa adipiscing nisl, ac euismod nibh nisl eu lectus. Fusce vulputate sem at sapien. Vivamus leo. Aliquam euismod libero eu enim. Nulla nec felis sed leo placerat imperdiet. Aenean suscipit nulla in justo. Suspendisse cursus rutrum augue. Nulla tincidunt tincidunt mi. Curabitur iaculis, lorem vel rhoncus faucibus, felis magna fermentum augue, et ultricies lacus lorem varius purus. Curabitur eu amet";
+			//DataDiv.innerHTML= "Lorem ipsum";
+		};
+
+
+		return {
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			}
+		};
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getItineraryNotesUI;
+	}
+
+}());
+	
+},{"./HTMLElementsFactory":14,"./Translator":19}],16:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	var _Translator = require ( './Translator' ) ( );
+
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
 		var newWayPoints = require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
@@ -1455,34 +1548,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		clickEvent.target.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
+		document.getElementById ( 'TravelControl-WaypointsHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
+		document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-WayPointsButtonsDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-WayPointsExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelControl-WayPointsExpandButton' ).title = hiddenList ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
 	};
 	
 	// User interface
 	
 	var _WayPointsList = null;
 
-	var _WayPointsDiv = null;
+	var _UICreated = false;
 
-	
 	var getRouteEditorUI = function ( ) {
 				
-		var _CreateRouteEditorUI = function ( ){ 
+		var _CreateUI = function ( controlDiv ){ 
 
+			if ( _UICreated ) {
+				return;
+			}
+			
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			_WayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsDiv', className : 'TravelControl-Div'} );
-			
-			var headerWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, _WayPointsDiv );
-			var expandWayPointsButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerWayPointsDiv );
-			expandWayPointsButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerWayPointsDiv );
-			var dataWayPointsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, _WayPointsDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-WayPointsExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelControl-WayPointsHeaderText',className : 'TravelControl-HeaderText'}, headerDiv );
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WaypointsDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
@@ -1491,14 +1585,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					indexNames : [ 'A', 'index', 'B' ],
 					id : 'TravelControl-WaypointsList'
 				}, 
-				dataWayPointsDiv
+				dataDiv
 			);
 			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
 			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
 			_WayPointsList.container.addEventListener ( 'SortableListDownArrow', onWayPointsListDownArrow, false );
 			_WayPointsList.container.addEventListener ( 'SortableListChange', onWayPointslistChange, false );
 
-			var wayPointsButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, _WayPointsDiv );
+			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, controlDiv );
 			
 			var saveRouteButton = htmlElementsFactory.create (
 				'span', 
@@ -1508,7 +1602,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
 					innerHTML : '&#x1f4be;'
 				},
-				wayPointsButtonsDiv 
+				buttonsDiv 
 			);
 			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var cancelRouteButton = htmlElementsFactory.create (
@@ -1519,7 +1613,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RouteEditorUI - Cancel' ), 
 					innerHTML : '&#x274c'
 				},
-				wayPointsButtonsDiv 
+				buttonsDiv 
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
@@ -1530,7 +1624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RouteEditorUI - Invert waypoints' ),  
 					innerHTML : '&#x21C5;'
 				},
-				wayPointsButtonsDiv
+				buttonsDiv
 			);
 			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
 			var addWayPointButton = htmlElementsFactory.create ( 
@@ -1541,7 +1635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RouteEditorUI - Add waypoint' ), 
 					innerHTML : '+'
 				},
-				wayPointsButtonsDiv 
+				buttonsDiv 
 			);
 			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
@@ -1552,40 +1646,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title: _Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
 					innerHTML : '&#x267b;'
 				}, 
-				wayPointsButtonsDiv
+				buttonsDiv
 			);
 			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
 
 		};
 	
-		var _ExpandEditorUI = function ( ) {
-			_WayPointsDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25bc;';
-			_WayPointsDiv.childNodes[ 0 ].firstChild.title = 'Masquer';
-			_WayPointsDiv.childNodes[ 1 ].classList.remove ( 'TravelControl-HiddenList' );
-			_WayPointsDiv.childNodes[ 2 ].classList.remove ( 'TravelControl-HiddenList' );
+		var _ExpandUI = function ( ) {
+			document.getElementById ( 'TravelControl-WayPointsExpandButton' ).innerHTML = '&#x25bc;';
+			document.getElementById ( 'TravelControl-WayPointsExpandButton' ).title = 'Masquer';
+			document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.remove ( 'TravelControl-HiddenList' );
+			document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
-		var _ReduceEditorUI = function ( ) {
-			_WayPointsDiv.childNodes[ 0 ].firstChild.innerHTML = '&#x25b6;';
-			_WayPointsDiv.childNodes[ 0 ].firstChild.title = 'Afficher';
-			_WayPointsDiv.childNodes[ 1 ].classList.add ( 'TravelControl-HiddenList' );
-			_WayPointsDiv.childNodes[ 2 ].classList.add ( 'TravelControl-HiddenList' );
+		var _ReduceUI = function ( ) {
+			document.getElementById ( 'TravelControl-WayPointsExpandButton' ).innerHTML = '&#x25b6;';
+			document.getElementById ( 'TravelControl-WayPointsExpandButton' ).title = 'Afficher';
+			document.getElementById ( 'TravelControl-WaypointsButtonsDiv' ).classList.add ( 'TravelControl-HiddenList' );
+			document.getElementById ( 'TravelControl-WaypointsButtonsDiv' ).classList.add ( 'TravelControl-HiddenList' );
 		};
 
-		if ( ! _WayPointsDiv ) {
-			_CreateRouteEditorUI ( );
-			//_ReduceEditorUI ( );
-		}
 		
 		return {
-			get UI ( ) { return _WayPointsDiv; },
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			},
 	
 			expand : function ( ) {
-				_ExpandEditorUI ( );
+				_ExpandUI ( );
 			},
 			
 			reduce : function ( ) {
-				_ReduceEditorUI ( );
+				_ReduceUI ( );
 			},
 
 			writeWayPointsList : function ( newWayPoints ) {
@@ -1605,7 +1697,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RouteEditor":21,"./HTMLElementsFactory":14,"./SortableList":17,"./Translator":18}],16:[function(require,module,exports){
+},{"../core/RouteEditor":22,"./HTMLElementsFactory":14,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1629,19 +1721,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	
-	var onClickExpandButton = function ( clickEvent ) {
-		
-		clickEvent.target.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
-
-		clickEvent.stopPropagation ( );
-	};
-	
 	
 	// Events listeners for buttons under the routes list
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
@@ -1680,35 +1759,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( '../core/RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
+	var onClickExpandButton = function ( clickEvent ) {
+		
+		document.getElementById ( 'TravelControl-RoutesHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
+		document.getElementById ( 'TravelControlRoutesDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-RoutesButtonsDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControlRoutesDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-RoutesExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelControl-RoutesExpandButton' ).title = hiddenList ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
+
+		clickEvent.stopPropagation ( );
+	};
+
 	// User interface
 
-	var _RoutesDiv = null;
 	var _RoutesList = null;
+
+	var _UICreated = false;
 	
 	var getRoutesListEditorUI = function ( ) {
-
 		
-		var _CreateRoutesListEditorUI = function ( ){ 
+		var _CreateUI = function ( controlDiv ){ 
+		
+			if ( _UICreated ) {
+				return;
+			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			// Routes
-			_RoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv', className : 'TravelControl-Div'} );
 			
-			var headerRoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, _RoutesDiv );
-			var expandRouteButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
-			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
-			var routesDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, _RoutesDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, routesDataDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, dataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListRightArrow', onRoutesListRightArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListChange', onRouteslistChange, false );
 			
-			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, _RoutesDiv );
+			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, controlDiv );
 			var addRouteButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
@@ -1717,7 +1811,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RoutesListEditorUI - New route' ), 
 					innerHTML : '+'
 				}, 
-				routesButtonsDiv 
+				buttonsDiv 
 			);
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
@@ -1729,17 +1823,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RoutesListEditorUI - Delete all routes' ), 
 					innerHTML : '&#x267b;'
 				},
-				routesButtonsDiv
+				buttonsDiv
 			);
 			deleteAllRoutesButton.addEventListener ( 'click' , onClickDeleteAllRoutesButton, false );	
 		};
 		
-		if ( ! _RoutesDiv ) {
-			_CreateRoutesListEditorUI ( );
-		}
 		
 		return {
-			get UI ( ) { return _RoutesDiv; },
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			},
 			
 			writeRoutesList : function ( newRoutes ) {
 				_RoutesList.removeAllItems ( );
@@ -1757,7 +1850,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RoutesListEditor":22,"./HTMLElementsFactory":14,"./SortableList":17,"./Translator":18}],17:[function(require,module,exports){
+},{"../core/RoutesListEditor":23,"./HTMLElementsFactory":14,"./SortableList":18,"./Translator":19}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2012,7 +2105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":14}],18:[function(require,module,exports){
+},{"./HTMLElementsFactory":14}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -2044,6 +2137,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "ErrorEditorUI - Hide",
+			msgstr : "Masquer"
+		},
+		{
+			msgid : "ItineraryNotesEditorUI - Itinerary and notes",
+			msgstr : "Itinéraire et notes"
+		},
+		{
+			msgid : "ItineraryNotesEditorUI - Show",
+			msgstr : "Afficher"
+		},
+		{
+			msgid : "ItineraryNotesEditorUI - Hide",
 			msgstr : "Masquer"
 		},
 		{
@@ -2327,7 +2432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2362,16 +2467,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
 			
-			_MainDiv.appendChild ( require ( './RoutesListEditorUI' ) ( ).UI ); 
+			require ( './RoutesListEditorUI' ) ( ).createUI ( _MainDiv ); 
 
-			_MainDiv.appendChild ( require ( './RouteEditorUI' ) ( ).UI ); 
-			// Itinerary
-			//var itineraryDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDiv', className : 'TravelControl-Div'}, _MainDiv );
+			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
 
-			//htmlElementsFactory.create ( 'span', { innerHTML : 'Itinéraire&nbsp;:', id : 'TravelControl-ItineraryHeaderText',className : 'TravelControl-HeaderText' }, itineraryDiv );
-			
-			// Errors
-			_MainDiv.appendChild ( require ( './ErrorEditorUI' ) ( ).UI ); 
+			require ( './ItineraryNotesUI' ) ( ).createUI ( _MainDiv ); 
+
+			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
 		};
 		if ( ! _MainDiv ) {
 			_CreateUI ( );
@@ -2389,7 +2491,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ErrorEditorUI":13,"./HTMLElementsFactory":14,"./RouteEditorUI":15,"./RoutesListEditorUI":16}],20:[function(require,module,exports){
+},{"./ErrorEditorUI":13,"./HTMLElementsFactory":14,"./ItineraryNotesUI":15,"./RouteEditorUI":16,"./RoutesListEditorUI":17}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2436,7 +2538,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/ErrorEditorUI":13}],21:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":13}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2595,7 +2697,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/Route":6,"../Data/TravelData":7,"../Data/Waypoint.js":9,"../UI/RouteEditorUI":15,"../UI/RoutesListEditorUI":16,"../UI/Translator":18,"./ErrorEditor":20}],22:[function(require,module,exports){
+},{"../Data/Route":6,"../Data/TravelData":7,"../Data/Waypoint.js":9,"../UI/RouteEditorUI":16,"../UI/RoutesListEditorUI":17,"../UI/Translator":19,"./ErrorEditor":21}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2672,4 +2774,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/Route":6,"../Data/TravelData":7,"../UI/RoutesListEditorUI":16,"./RouteEditor":21}]},{},[11]);
+},{"../Data/Route":6,"../Data/TravelData":7,"../UI/RoutesListEditorUI":17,"./RouteEditor":22}]},{},[11]);

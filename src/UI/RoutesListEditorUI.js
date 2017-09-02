@@ -22,19 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Translator = require ( './Translator' ) ( );
 	
-	var onClickExpandButton = function ( clickEvent ) {
-		
-		clickEvent.target.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.classList.toggle ( 'TravelControl-SmallHeader' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.parentNode.parentNode.childNodes[ 2 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25bc;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 1 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
-
-		clickEvent.stopPropagation ( );
-	};
-	
-	
 	// Events listeners for buttons under the routes list
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
@@ -72,35 +59,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( '../core/RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
+	var onClickExpandButton = function ( clickEvent ) {
+		
+		document.getElementById ( 'TravelControl-RoutesHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
+		document.getElementById ( 'TravelControlRoutesDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-RoutesButtonsDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControlRoutesDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-RoutesExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelControl-RoutesExpandButton' ).title = hiddenList ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
+
+		clickEvent.stopPropagation ( );
+	};
+
 	// User interface
 
-	var _RoutesDiv = null;
 	var _RoutesList = null;
+
+	var _UICreated = false;
 	
 	var getRoutesListEditorUI = function ( ) {
-
 		
-		var _CreateRoutesListEditorUI = function ( ){ 
+		var _CreateUI = function ( controlDiv ){ 
+		
+			if ( _UICreated ) {
+				return;
+			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
 			// Routes
-			_RoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDiv', className : 'TravelControl-Div'} );
 			
-			var headerRoutesDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, _RoutesDiv );
-			var expandRouteButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerRoutesDiv );
-			expandRouteButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerRoutesDiv );
-			var routesDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, _RoutesDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControlRoutesDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, routesDataDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, dataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListRightArrow', onRoutesListRightArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListChange', onRouteslistChange, false );
 			
-			var routesButtonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, _RoutesDiv );
+			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesButtonsDiv', className : 'TravelControl-ButtonsDiv' }, controlDiv );
 			var addRouteButton = htmlElementsFactory.create ( 
 				'span', 
 				{ 
@@ -109,7 +111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RoutesListEditorUI - New route' ), 
 					innerHTML : '+'
 				}, 
-				routesButtonsDiv 
+				buttonsDiv 
 			);
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
 
@@ -121,17 +123,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'RoutesListEditorUI - Delete all routes' ), 
 					innerHTML : '&#x267b;'
 				},
-				routesButtonsDiv
+				buttonsDiv
 			);
 			deleteAllRoutesButton.addEventListener ( 'click' , onClickDeleteAllRoutesButton, false );	
 		};
 		
-		if ( ! _RoutesDiv ) {
-			_CreateRoutesListEditorUI ( );
-		}
 		
 		return {
-			get UI ( ) { return _RoutesDiv; },
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			},
 			
 			writeRoutesList : function ( newRoutes ) {
 				_RoutesList.removeAllItems ( );

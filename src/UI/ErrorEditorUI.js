@@ -24,63 +24,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		if ( ! _ErrorDiv.childNodes[ 0 ].innerHTML.length ) {
+		if ( ! document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML.length ) {
 			return;
 		}	
-		clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.toggle ( 'TravelControl-HiddenList' );
-		clickEvent.target.innerHTML = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? '&#x25b6;' : '&#x25b2;';
-		clickEvent.target.title = clickEvent.target.parentNode.parentNode.childNodes[ 0 ].classList.contains ( 'TravelControl-HiddenList' ) ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
+		document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
+		document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = hiddenList ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
 	// User interface
 
-	var _ErrorDiv = null;
-	var _ErrorDataDiv = null;
-	
+	var _UICreated = false;
+
 	var getErrorEditorUI = function ( ) {
 				
-		var _CreateErrorUI = function ( ){ 
+		var _CreateUI = function ( controlDiv ){ 
+		
+			if ( _UICreated ) {
+				return;
+			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			_ErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDiv', className : 'TravelControl-Div'} );
-			_ErrorDataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv'}, _ErrorDiv );
-			var headerErrorDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, _ErrorDiv );
-			var expandErrorButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25b2;', id : 'TravelControl-ErrorExpandButton', className : 'TravelControl-ExpandButton'}, headerErrorDiv );
-			expandErrorButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerErrorDiv );
+			htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv TravelControl-HiddenList'}, controlDiv );
+			
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create (
+				'span',
+				{ 
+					innerHTML : '&#x25b6;',
+					title : _Translator.getText ( 'ErrorEditorUI - Show' ),
+					id : 'TravelControl-ErrorExpandButton',
+					className : 'TravelControl-ExpandButton'
+				},
+				headerDiv );
+			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			
+			_UICreated = true;
 		};
 
-		var _ExpandEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b2;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Hide' );
-			_ErrorDiv.childNodes[ 0 ].classList.remove ( 'TravelControl-HiddenList' );
+		var _ExpandUI = function ( ) {
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b2;';
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Hide' );
+			document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.remove ( 'TravelControl-HiddenList' );
 		};
 		
-		var _ReduceEditorUI = function ( ) {
-			_ErrorDiv.childNodes[ 1 ].firstChild.innerHTML = '&#x25b6;';
-			_ErrorDiv.childNodes[ 1 ].firstChild.title = _Translator.getText ( 'ErrorEditorUI - Show' );
-			_ErrorDiv.childNodes[ 0 ].classList.add ( 'TravelControl-HiddenList' );
+		var _ReduceUI = function ( ) {
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b6;';
+			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Show' );
+			document.getElementById ( 'TravelControl-ErrorDataDiv' ).add ( 'TravelControl-HiddenList' );
 		};
 
-		if ( ! _ErrorDiv ) {
-			_CreateErrorUI ( );
-			_ReduceEditorUI ( );
-		}
-		
-		
 		return {
-			get UI ( ) { return _ErrorDiv; },
+			
+			createUI : function ( controlDiv ) { 
+				_CreateUI ( controlDiv ); 
+			},
 	
 			expand : function ( ) {
-				_ExpandEditorUI ( );
+				_ExpandUI ( );
 			},
 			
 			reduce : function ( ) {
-				_ReduceEditorUI ( );
+				_ReduceUI ( );
 			},
-			set message ( Message ) { _ErrorDataDiv.innerHTML = Message; },
-			get message (  ) { return _ErrorDataDiv.innerHTML; }
+			
+			set message ( Message ) { document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML = Message; },
+			
+			get message (  ) { return document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML; }
+			
 		};
 	};
 	
