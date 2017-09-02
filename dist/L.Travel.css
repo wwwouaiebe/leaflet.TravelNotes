@@ -213,15 +213,19 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	padding-top: 0.5em;
 }
-
 #TravelControl-WaypointsDataDiv,
-#TravelControlRoutesDataDiv
+#TravelControl-RoutesDataDiv
 {
 	flex-shrink: 0;
 	max-height: 7em;
 	overflow: auto;
 }
-
+#TravelControl-WaypointsDataDiv.TravelControl-ExpandedList,
+#TravelControl-RoutesDataDiv.TravelControl-ExpandedList
+{
+	max-height: none;
+	overflow: none;
+}
 .TravelControl-ButtonsDiv
 {
 	padding-bottom: 0.5em;
@@ -229,6 +233,8 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-color: lightgray;
+	display: flex;
+	flex-direction: row;
 }
 .TravelControl-HiddenList
 {
@@ -241,11 +247,6 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	padding-top: 0;
 	padding-bottom: 0;
-	/*
-	border-style: solid;
-	border-width: 0.1em;
-	border-color: lightgray;
-	*/
 }
 .TravelControl-Button
 {
@@ -271,6 +272,11 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	cursor: default;
 	color:red;
+}
+#TravelControl-ReverseWayPointsButton,
+#TravelControl-AddRoutesButton
+{
+	margin-left: auto;
 }
 #TravelControl-ItineraryNotesDiv
 {

@@ -85,6 +85,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		document.getElementById ( 'TravelControl-WayPointsExpandButton' ).title = hiddenList ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
 	};
 	
+	var onClickExpandListButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		
+		document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.toggle ( 'TravelControl-ExpandedList' );
+		var expandedList = document.getElementById ( 'TravelControl-WaypointsDataDiv' ).classList.contains ( 'TravelControl-ExpandedList' );
+		document.getElementById ( 'TravelControl-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
+		document.getElementById ( 'TravelControl-ExpandWayPointsListButton' ).title = expandedList ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );		
+	};
+
 	// User interface
 	
 	var _WayPointsList = null;
@@ -123,8 +132,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-WayPointsButtonsDiv', className : 'TravelControl-ButtonsDiv'}, controlDiv );
 			
+			var expandListButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelControl-ExpandWayPointsListButton', 
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'RouteEditorUI - Expand the list' ), 
+					innerHTML : '&#x25bd;'
+				}, 
+				buttonsDiv 
+			);
+			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
+
 			var saveRouteButton = htmlElementsFactory.create (
-				'span', 
+				'div', 
 				{ 
 					id : 'TravelControl-SaveRouteButton',
 					className: 'TravelControl-Button', 
@@ -135,7 +156,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var cancelRouteButton = htmlElementsFactory.create (
-				'span', 
+				'div', 
 				{ 
 					id : 'TravelControl-CancelRouteButton',
 					className: 'TravelControl-Button', 
@@ -146,7 +167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
-				'span',
+				'div',
 				{ 
 					id : 'TravelControl-ReverseWayPointsButton', 
 					className: 'TravelControl-Button', 
@@ -157,7 +178,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
 			var addWayPointButton = htmlElementsFactory.create ( 
-				'span', 
+				'div', 
 				{ 
 					id : 'TravelControl-AddWayPointButton',
 					className: 'TravelControl-Button', 
@@ -168,7 +189,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
-				'span', 
+				'div', 
 				{ 
 					id : 'TravelControl-RemoveAllWayPointsButton', 
 					className: 'TravelControl-Button',
