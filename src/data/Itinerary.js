@@ -17,53 +17,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'WayPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( './ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getWayPoint = function ( ) {
-		
-		var _Name = '';
-		var _Lat = 0;
-		var _Lng = 0;
+	var _ItineraryPoints = require ( './Collection' ) ( 'ItineraryPoint' );
+
+	var getItinerary = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
 			
-			get name ( ) { return _Name; },
+			get itineraryPoints ( ) { return _ItineraryPoints; },
 			
-			set name ( Name ) { _Name = Name;},
-			
-			get UIName ( ) {
-				if ( '' !== _Name ) {
-					return _Name;
-				}
-				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
-					return _Lat.toFixed ( 6 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 6 )  + ( 0 < _Lng ? ' E' : ' W' );
-				}
-				return '';
-			},
-			
-			get lat ( ) { return _Lat;},
-			
-			set lat ( Lat ) { _Lat = Lat; },
-			
-			get lng ( ) { return _Lng;},
-			
-			set lng ( Lng ) { _Lng = Lng; },
-			
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
 			get objId ( ) { return _ObjId; },
 			
 			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				return {
-					name : _Name,
-					lat : _Lat,
-					lng : _Lng,
+					itineraryPoints : _ItineraryPoints.object,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -71,22 +43,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
+				_ItineraryPoints.object = Object.itineraryPoints;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
 	};
-	
-	/* --- End of getTravelData function --- */
 	
 	/* 
 	--- Exports ------------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getWayPoint;
+		module.exports = getItinerary;
 	}
 
 } ) ( );

@@ -23,11 +23,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Route = require ( '../Data/Route' ) ( );
 	var _RouteInitialObjId = -1;
 	var _RouteChanged = false;
+	var _AutoRouting = true;
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+		
+		var _StartRouting = function ( ) {
+			
+			if ( ! _AutoRouting ) {
+				return;
+			}
+			
+			require ( './Router' ) ( ).startRouting ( _Route );
+		};
 	
 		return {
 			
@@ -68,24 +78,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Route.wayPoints.add ( newWayPoint );
 				_Route.wayPoints.swap ( newWayPoint.objId, true );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			reverseWayPoints : function ( ) {
 				_RouteChanged = true;
 				_Route.wayPoints.reverse ( );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			removeAllWayPoints : function ( ) {
 				_RouteChanged = true;
 				_Route.wayPoints.removeAll ( true );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				_RouteChanged = true;
 				_Route.wayPoints.remove ( wayPointObjId );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
@@ -98,6 +112,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteChanged = true;
 				_Route.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			get contextMenu ( ) {
@@ -127,12 +142,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteChanged = true;
 				_Route.wayPoints.first.latLng = latLng;
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			setEndPoint : function ( latLng ) {
 				_RouteChanged = true;
 				_Route.wayPoints.last.latLng = latLng;
 				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_StartRouting ( );
 			},
 			
 			setStartPointFromContextMenu : function ( mapClickEvent ) {

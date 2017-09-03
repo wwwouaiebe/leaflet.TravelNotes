@@ -256,6 +256,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Supprimer tous les points de passage"
 		},
 		{
+			msgid : "RouteEditorUI - Reduce the list",
+			msgstr : "Réduire"
+		},
+		{
+			msgid : "RouteEditorUI - Expand the list",
+			msgstr : "Étendre"
+		},
+		{
 			msgid : "RoutesListEditorUI - Show",
 			msgstr : "Afficher"
 		},
@@ -272,16 +280,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Route"
 		},
 		{
-			msgid : "RoutesListEditorUI - ",
-			msgstr : "xxx"
+			msgid : "RoutesListEditorUI - Reduce the list",
+			msgstr : "Réduire"
 		},
 		{
-			msgid : "RoutesListEditorUI - ",
-			msgstr : "xxx"
-		},
-		{
-			msgid : "RoutesListEditorUI - ",
-			msgstr : "xxx"
+			msgid : "RoutesListEditorUI - Expand the list",
+			msgstr : "Étendre"
 		},
 		{
 			msgid : "RoutesListEditorUI - New route",
@@ -290,6 +294,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "RoutesListEditorUI - Delete all routes",
 			msgstr : "Supprimer toutes les routes"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
+		},
+		{
+			msgid : "RoutesListEditorUI - ",
+			msgstr : "xxx"
 		},
 
 	];

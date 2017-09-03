@@ -104,6 +104,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return _Array [ _Array.length - 1 ];
 		};
 		
+		var _ForEach = function ( funct ) {
+			var result = null;
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+					result = funct ( iterator.value, result );
+			}
+			return result;
+		};
+		
 		var _GetObject = function ( ) {
 			var array = [ ];
 			var iterator = _Iterator ( );
@@ -162,6 +171,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			swap : function ( objId, swapUp ) {
 				_Swap ( objId, swapUp );
+			},
+			
+			forEach : function ( funct ) {
+				return _ForEach ( funct );
 			},
 			
 			get iterator ( ) { 

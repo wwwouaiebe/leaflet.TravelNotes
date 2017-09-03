@@ -79,7 +79,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		document.getElementById ( 'TravelControl-RoutesDataDiv' ).classList.toggle ( 'TravelControl-ExpandedList' );
 		var expandedList = document.getElementById ( 'TravelControl-RoutesDataDiv' ).classList.contains ( 'TravelControl-ExpandedList' );
 		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );		
+		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'RoutesListEditorUI - Reduce the list' ) : _Translator.getText ( 'RoutesListEditorUI - Expand the list' );		
 	};
 
 	// User interface
