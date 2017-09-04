@@ -26,7 +26,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _WayPoints = require ( './Collection' ) ( 'WayPoint' );
 		_WayPoints.add ( require ( './Waypoint' ) ( ) );
 		_WayPoints.add ( require ( './Waypoint' ) ( ) );
+		
 		var _Notes = require ( './Collection' ) ( 'Note' );
+		
+		var _Itinerary = require ( './Itinerary' ) ( );
 		
 		var _Geom = require ( './Geom' ) ( );
 		
@@ -39,6 +42,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get wayPoints ( ) { return _WayPoints; },
 			
 			get notes ( ) { return _Notes; },
+			
+			get itinerary ( ) { return _Itinerary; },
 
 			get geom ( ) { return _Geom; },
 			set geom ( Geom ) { _Geom = Geom; },
@@ -51,6 +56,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					name : _Name,
 					wayPoints : _WayPoints.object,
 					notes : _Notes.object,
+					itinerary : _Itinerary.object,
 					geom : _Geom.object,
 					objId : _ObjId,
 					objType : _ObjType.object
@@ -59,9 +65,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_WayPoints.object = Object.wayPoints;
-				_Notes.object = Object.notes;
-				_Geom.object = Object.geom;
+				_WayPoints.object = Object.wayPoints || [];
+				_Notes.object = Object.notes || [];
+				_Itinerary.object = Object.itinerary || require ( './Itinerary' ) ( ).object;
+				_Geom.object = Object.geom || require ( './Geom' ) ( ).object;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

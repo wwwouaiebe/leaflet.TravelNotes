@@ -162,7 +162,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			url : 'https://router.project-osrm.org/',
 		};
 		
-		var _ParseResponse = function ( requestResponse, itinerary ) {
+		var _ParseResponse = function ( requestResponse, route ) {
 			
 			var response = JSON.parse( requestResponse );
 			console.log ( response );
@@ -177,42 +177,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return {};
 			}
 
+			route.itinerary.itineraryPoints.removeAll ( );
+			route.itinerary.maneuvers.removeAll ( );
+			
 			response.routes [ 0 ].geometry = require ( 'polyline' ).decode ( response.routes [ 0 ].geometry, 6 );
 
-			response.routes [ 0 ].legs.forEach ( 
-				function ( leg ) {
-					var decodeStepGeometry = function ( step ) {
-						step.geometry = require ( 'polyline' ).decode ( step.geometry, 6 );
-					};
-					leg.steps.forEach ( decodeStepGeometry );
-				} 
-			);
-
-			
 			var osrmTextInstructions = require('osrm-text-instructions')('v5');
 			var language = 'fr';
 			var lastPointWithDistance = 0;
-			var addItineraryInfo = 
 			
 			response.routes [ 0 ].legs.forEach ( 
 				function ( leg ) {
-					var geometryCounter = 0;
 					leg.steps.forEach ( 
 						function ( step ) {
-							step.instruction = osrmTextInstructions.compile ( language, step );
-							step.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
+							step.geometry = require ( 'polyline' ).decode ( step.geometry, 6 );
 
-							for ( ; geometryCounter < step.geometry.length ; geometryCounter ++ ) {
+							var maneuver = require ( '../data/Maneuver' ) ( );
+							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
+							maneuver.instruction = osrmTextInstructions.compile ( language, step );
+							maneuver.streetName = step.name;
+							maneuver.direction = osrmTextInstructions.directionFromDegree ( language, step.maneuver.bearing_after );
+							var distance = 0;
+							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {
 								var itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
 								itineraryPoint.latLng = [ step.geometry [ geometryCounter ] [ 0 ], step.geometry [ geometryCounter ] [ 1 ] ];
 								itineraryPoint.distance = leg.annotation.distance [ lastPointWithDistance ] ? leg.annotation.distance [ lastPointWithDistance ] : 0;
-								lastPointWithDistance++;
-								itinerary.itineraryPoints.add ( itineraryPoint );
+								route.itinerary.itineraryPoints.add ( itineraryPoint );
+								if (geometryCounter !== step.geometry.length - 1 ) {
+									distance += itineraryPoint.distance;
+									lastPointWithDistance++;
+								}
+								if ( 0 === geometryCounter ) {
+									maneuver.itineraryPointObjId = itineraryPoint.objId;
+									itineraryPoint.maneuverObjId = maneuver.objId;
+								}
 							}
-							geometryCounter = 1;
-							
+							maneuver.distance = distance;
+							route.itinerary.maneuvers.add ( maneuver );
 						}
 					);
+				}
+			);
+			
+			var wayPointsIterator = route.wayPoints.iterator;
+			response.waypoints.forEach ( 
+				function ( wayPoint ) {
+					if ( ! wayPointsIterator.done ) {
+						wayPointsIterator.value.latLng = [ wayPoint.location [ 1 ] , wayPoint.location [ 0 ] ];
+					}
 				}
 			);
 

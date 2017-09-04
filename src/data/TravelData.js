@@ -52,8 +52,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
-				_Routes.object = Object.routes;
-				_Notes.object = Object.notes;
+				_Routes.object = Object.routes || [];
+				_Notes.object = Object.notes || [];
 				_ObjId = require ( './ObjId' ) ( );
 			},
 			toString : function ( ) { return this.object; }

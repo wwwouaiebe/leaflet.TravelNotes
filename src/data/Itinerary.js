@@ -19,16 +19,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _ObjType = require ( './ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var _ItineraryPoints = require ( './Collection' ) ( 'ItineraryPoint' );
 
 	var getItinerary = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
+
+		var _ItineraryPoints = require ( './Collection' ) ( 'ItineraryPoint' );
+
+		var _Maneuvers = require ( './Collection' ) ( 'Maneuver' );
 		
 		return {
 			
 			get itineraryPoints ( ) { return _ItineraryPoints; },
-			
+
+			get maneuvers ( ) { return _Maneuvers; },
+	 
 			get objId ( ) { return _ObjId; },
 			
 			get objType ( ) { return _ObjType; },
@@ -36,6 +41,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get object ( ) {
 				return {
 					itineraryPoints : _ItineraryPoints.object,
+					maneuvers : _Maneuvers.object,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -43,7 +49,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
-				_ItineraryPoints.object = Object.itineraryPoints;
+				_ItineraryPoints.object = Object.itineraryPoints || [];
+				_Maneuvers.object = Object.maneuvers || [];
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
@@ -58,5 +65,3 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 } ) ( );
-
-/* --- End of MapData.js file --- */
