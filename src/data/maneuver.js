@@ -25,11 +25,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _IconName = '';
 		var _Instruction = '';
+		var _SimplifiedInstruction = '';
 		var _StreetName = '';
 		var _Direction = '';
 		var _ItineraryPointObjId = -1;
 		var _Distance = 0;
-		
+		var _Duration = 0;
 		
 		return {
 
@@ -40,6 +41,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get instruction ( ) { return _Instruction;},
 			
 			set instruction ( Instruction ) { _Instruction = Instruction; },
+						
+			get simplifiedInstruction ( ) { return _SimplifiedInstruction;},
+			
+			set simplifiedInstruction ( SimplifiedInstruction ) { _SimplifiedInstruction = SimplifiedInstruction; },
 						
 			get streetName ( ) { return _StreetName;},
 			
@@ -56,6 +61,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get distance ( ) { return _Distance;},
 			
 			set distance ( Distance ) { _Distance = Distance; },
+			
+			get duration ( ) { return _Duration;},
+			
+			set duration ( Duration ) { _Duration = Duration; },
 						
 			get objId ( ) { return _ObjId; },
 			
@@ -65,9 +74,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return {
 					iconName : _IconName,
 					instruction : _Instruction,
+					simplifiedInstruction : _SimplifiedInstruction,
 					streetName :_StreetName,
 					direction :_Direction,
 					distance : _Distance,
+					duration : _Duration,
 					itineraryPointObjId : _ItineraryPointObjId,
 					objId : _ObjId,
 					objType : _ObjType.object
@@ -78,9 +89,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				Object = _ObjType.validate ( Object );
 				_IconName = Object.iconName || '';
 				_Instruction = Object.instruction || '';
+				_SimplifiedInstruction = Object.simplifiedInstruction || '';
 				_StreetName = Object.streetName || '';
 				_Direction = Object.direction || '';
 				_Distance = Object.distance || 0;
+				_Duration = Object.duration || 0;
 				_ItineraryPointObjId = Object.itineraryPointObjId || -1;
 				_ObjId = require ( './ObjId' ) ( );
 			}

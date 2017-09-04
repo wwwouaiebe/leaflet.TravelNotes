@@ -41,11 +41,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _ParseResponse = function ( requestResponse ) {
 
-			console.log ( _Route.object );
-
 			_RouteProvider.parseResponse ( requestResponse, _Route );
-
-			console.log ( _Route.object );
 
 			_RequestStarted = false;
 		};

@@ -31,8 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			addRoute : function ( ) {
 				_RoutesListChanged = true;
-				var newRoute = require ( '../Data/Route' ) ( );
-				_TravelData.routes.add ( newRoute );
+				_TravelData.routes.add ( require ( '../Data/Route' ) ( ) );
 				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
 			},
 
@@ -50,6 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			removeAllRoutes : function ( routeObjId ) {
 				_RoutesListChanged = true;
 				_TravelData.routes.removeAll ( );
+				_TravelData.routes.add ( require ( '../Data/Route' ) ( ) );
 				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
 			},
 

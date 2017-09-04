@@ -156,6 +156,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				"default" : "kUndefined"
 			}
 		};
+		
+		var _DegreeToCompass = function ( degree ) {
+			if ( null === degree ) {
+				return '';
+			} 
+			else if ( degree >= 0 && degree <= 22 ) {
+				return 'N.';
+			} 
+			else if ( degree > 22 && degree < 68 ) {
+				return 'N.E.';
+			} 
+			else if ( degree >= 68 && degree <= 112 ) {
+				return 'E.';
+			} 
+			else if ( degree > 112 && degree < 158 ) {
+				return 'S.E.';
+			} 
+			else if ( degree >= 158 && degree <= 202 ) {
+				return 'S.';
+			} 
+			else if ( degree > 202 && degree < 248 ) {
+				return 'S.W.';
+			} 
+			else if ( degree >= 248 && degree <= 292 ) {
+				return 'W.';
+			} 
+			else if ( degree > 292 && degree < 338 ) {
+				return 'N.W.';
+			} 
+			else if ( degree >= 338 && degree <= 360 ) {
+				return 'N.';
+			} 
+			else {
+				return '';
+			}
+		};
 
 		var _ProviderOptions = 
 		{
@@ -182,9 +218,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			response.routes [ 0 ].geometry = require ( 'polyline' ).decode ( response.routes [ 0 ].geometry, 6 );
 
-			var osrmTextInstructions = require('osrm-text-instructions')('v5');
+			var options = {};
+			options.hooks= {};
+			options.hooks.tokenizedInstruction = function ( instruction ) {
+				if ( 'Rouler vers {direction}' === instruction ) {
+					instruction = 'Départ';
+				}
+				return instruction;
+			};
+
+			var osrmTextInstructions = require('osrm-text-instructions')('v5', options );
 			var language = 'fr';
 			var lastPointWithDistance = 0;
+			
 			
 			response.routes [ 0 ].legs.forEach ( 
 				function ( leg ) {
@@ -196,7 +242,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
 							maneuver.instruction = osrmTextInstructions.compile ( language, step );
 							maneuver.streetName = step.name;
-							maneuver.direction = osrmTextInstructions.directionFromDegree ( language, step.maneuver.bearing_after );
+							maneuver.direction = _DegreeToCompass ( step.maneuver.bearing_after );
+							step.name = '';
+							maneuver.simplifiedInstruction = osrmTextInstructions.compile ( language, step );
+							maneuver.duration = step.duration;
 							var distance = 0;
 							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {
 								var itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
