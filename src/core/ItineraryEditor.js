@@ -19,22 +19,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
-	
-	var _Translator = require ( './Translator' ) ( );
 
-	var _TabBoxDiv = null;
-
-	var getTabBox = function ( ) {
+	var getItineraryEditor = function ( ) {
+		
+		var _Itinerary = function ( itinerary ) {
+			require ( '../UI/ItineraryEditorUI' ) ( ).itinerary = itinerary;
+			console.log ( 'b' );
+		};
+		
 
 		return {
-			get UI ( ) { return _TabBoxDiv; }
-
+			set itinerary ( itinerary ) { _Itinerary ( itinerary );},
+			get itinerary ( ) {return null;}
 		};
 	};
+
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTabBox;
+		module.exports = getItineraryEditor;
 	}
 
 }());
-			

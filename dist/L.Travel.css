@@ -278,11 +278,11 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	margin-left: auto;
 }
-#TravelControl-ItineraryNotesDiv
+#TravelControl-ItineraryDiv
 {
 	overflow: auto;
 }
-#TravelControlItineraryNotesDataDiv
+#TravelControl-ItineraryDataDiv
 {
 	max-height: none;
 	overflow: auto;
@@ -297,6 +297,38 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 #TravelControl-CancelRouteButton:hover
 {
 	color: red;
+}
+.TravelControl-TableDataDiv
+{
+	display: table;
+	border-spacing: 0.4em 0.2em;
+}
+.TravelControl-RowDataDiv
+{
+	display: table-row;
+}
+.TravelControl-CellDataDiv
+{
+	display: table-cell;
+}
+.TravelControl-iconCellDataDiv
+{
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+}
+.TravelControl-kDepartLeft
+{
+	background-image: url('icons/kDepartLeftSmall.png');
+}
+.TravelControl-ItineraryStreetName,
+.TravelControl-ItineraryDistance
+{
+	background-color: lightgray;
+}
+.TravelControl-ItineraryDistance
+{
+	text-align : right;
 }
 #TravelControl-ErrorDiv
 {
