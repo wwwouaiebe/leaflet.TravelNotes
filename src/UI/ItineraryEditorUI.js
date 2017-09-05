@@ -21,14 +21,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.stopPropagation ( );
 
 		document.getElementById ( 'TravelControl-ItineraryHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
-		document.getElementById ( 'TravelControlItineraryDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelControlItineraryDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
+		document.getElementById ( 'TravelControl-ItineraryDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelControl-ItineraryDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
 		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
 
@@ -77,43 +78,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				headerDiv 
 			);
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
-		};
-		
-		var formatTime = function ( time ) {
-			time = Math.floor ( time );
-			if ( 0 === time ) {
-				return '';
-			}
-			var days = Math.floor ( time / 86400 );
-			var hours = Math.floor ( time % 86400 / 3600 );
-			var minutes = Math.floor ( time % 3600 / 60 );
-			var seconds = Math.floor ( time % 60 );
-			if ( 0 < days ) {
-				return days + '&nbsp;jours&nbsp;' + hours + '&nbsp;h';
-			}
-			else if ( 0 < hours ) {
-				return hours + '&nbsp;h&nbsp;' + minutes + '&nbsp;m';
-			}
-			else if ( 0 < minutes ) {
-				return minutes + '&nbsp;m';
-			}
-			else {
-				return seconds + '&nbsp;s';
-			}
-			return '';
-		};
-		
-		var formatDistance = function ( distance ) {
-			distance = Math.floor ( distance );
-			if ( 0 === distance ) {
-				return '';
-			} 
-			else if ( 1000 > distance ) {
-				return distance + '&nbsp;m';
-			}
-			else {
-				return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
-			}
 		};
 		
 		var _AddEventListeners = function ( element )
@@ -204,7 +168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					'div',
 					{ 
 						className : 'TravelControl-CellDataDiv TravelControl-ItineraryDistance',
-						innerHTML : formatDistance ( maneuverIterator.value.distance )
+						innerHTML : _Utilities.formatDistance ( maneuverIterator.value.distance )
 					}, 
 					rowDataDiv
 				);
@@ -212,7 +176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					'div',
 					{ 
 						className : 'TravelControl-CellDataDiv',
-						innerHTML : formatTime ( maneuverIterator.value.duration )
+						innerHTML : _Utilities.formatTime ( maneuverIterator.value.duration )
 					}, 
 					rowDataDiv
 				);

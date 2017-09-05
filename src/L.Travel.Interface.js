@@ -138,13 +138,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 				if ( divControlId )	{
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-					require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( global.travelData.routes );
 				}	
 				else {
 					if ( typeof module !== 'undefined' && module.exports ) {
 						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
 					}
 				}
+				
+				require ( './UI/RoutesListEditorUI' ) ( ).setRoutesList ( global.travelData.routes );
+				
 				_Map = map;
 
 				if ( 1 === global.travelData.routes.length ) {

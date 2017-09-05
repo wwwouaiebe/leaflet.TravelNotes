@@ -296,8 +296,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Supprimer toutes les routes"
 		},
 		{
-			msgid : "RoutesListEditorUI - ",
-			msgstr : "xxx"
+			msgid : "Utilities - day",
+			msgstr : "jours"
+		},
+		{
+			msgid : "Utilities - hour",
+			msgstr : "h"
+		},
+		{
+			msgid : "Utilities - minute",
+			msgstr : "m"
+		},
+		{
+			msgid : "Utilities - second",
+			msgstr : "s"
 		},
 		{
 			msgid : "RoutesListEditorUI - ",

@@ -35,8 +35,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			onAdd : function ( Map ) {
 				var controlElement = require ( './UI/UserInterface' ) ( ).UI;
-				var initialRoutes = global.travelData.routes;
-				require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
 				
 				return controlElement; 
 			}

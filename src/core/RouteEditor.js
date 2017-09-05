@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getRouteEditor = function ( ) {
 
-		var _Config = require ( '../config' ) ( );
+		var _Config = require ( '../util/Config' ) ( );
 		
 		var _Translator = require ( '../UI/Translator' ) ( );
 
@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
 				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
-				require ( '../UI/RoutesListEditorUI') ( ).writeRoutesList ( );
+				require ( '../UI/RoutesListEditorUI') ( ).setRoutesList ( );
 				this.editRoute ( global.editedRoute.objId );
 			},
 			
@@ -64,7 +64,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				// Route is cloned, so we can have a cancel button in the editor
 				global.editedRoute.object = route.object;
 				_RouteEditorUI .expand ( );
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 			},
 			
 			addWayPoint : function ( latLng ) {
@@ -75,41 +75,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				global.editedRoute.wayPoints.add ( newWayPoint );
 				global.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			reverseWayPoints : function ( ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.reverse ( );
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			removeAllWayPoints : function ( ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.removeAll ( true );
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.remove ( wayPointObjId );
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 			},
 			
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
-				_RouteEditorUI.writeWayPointsList ( global.editedRoute.wayPoints );
+				_RouteEditorUI.setWayPointsList (  );
 				_StartRouting ( );
 			},
 			
@@ -139,14 +139,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			setStartPoint : function ( latLng ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.first.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			setEndPoint : function ( latLng ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.last.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( );
+				_RouteEditorUI.setWayPointsList ( );
 				_StartRouting ( );
 			},
 			
