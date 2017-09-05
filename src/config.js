@@ -17,10 +17,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 (function() {
 	
 	'use strict';
-
 	
-	var getObjId = function ( ) {
-		return ++ global.travelObjId;
+	var getConfig = function ( ) {
+		
+		return {
+			routing : {
+				auto : true
+			},
+			language : 'fr'
+
+		};
 	};
 	
 	/* --- End of getTravelData function --- */
@@ -30,10 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getObjId;
-		
+		module.exports = getConfig;
 	}
 
 } ) ( );
-
-/* --- End of MapData.js file --- */

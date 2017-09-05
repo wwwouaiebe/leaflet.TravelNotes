@@ -25,27 +25,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getRouter = function ( ) {
 
-		var _Route = null;
-
 		var _HaveValidWayPoints = function ( ) {
-			var haveLatLng = function ( wayPoint, result ) {
-				if ( null === result ) { 
-					result = true;
+			return global.editedRoute.wayPoints.forEach ( 
+				function ( wayPoint, result ) {
+					if ( null === result ) { 
+						result = true;
+					}
+					result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
+					return result;
 				}
-				result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
-				return result;
-			};
-			
-			return _Route.wayPoints.forEach ( haveLatLng );
+			);
 		};
 		
 		var _ParseResponse = function ( requestResponse ) {
 
-			_RouteProvider.parseResponse ( requestResponse, _Route );
-
-			_RequestStarted = false;
-			
-			require ( './ItineraryEditor' ) ( ).itinerary = _Route.itinerary;
+			_RouteProvider.parseResponse ( requestResponse, global.editedRoute );
+			_RequestStarted = false;			
+			require ( './ItineraryEditor' ) ( ).itinerary = global.editedRoute.itinerary;
 		};
 		
 		var _ParseError = function ( status, statusText ) {
@@ -57,7 +53,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			_RequestStarted = true;
 /*
-			_RouteProvider.getUrl ( _Route.wayPoints );
+			_RouteProvider.getUrl ( global.editedRoute.wayPoints );
 			var xmlHttpRequest = new XMLHttpRequest ( );
 			
 			xmlHttpRequest.onreadystatechange = function ( event ) {
@@ -73,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			xmlHttpRequest.open ( 
 				'GET',
-				_RouteProvider.getUrl ( _Route.wayPoints ),
+				_RouteProvider.getUrl ( global.editedRoute.wayPoints ),
 				true
 			);
 			xmlHttpRequest.send ( null );
@@ -82,13 +78,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 		};
 		
-		var _StartRouting = function ( route ) {
+		var _StartRouting = function ( ) {
 
 			if ( _RequestStarted ) {
 				return;
 			}
 			
-			_Route = route;
 			if ( ! _HaveValidWayPoints ( ) ) {
 				return;
 			}
@@ -96,12 +91,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	
 		return {
-			startRouting : function ( route ) {
-				_StartRouting ( route );
+			startRouting : function ( ) {
+				_StartRouting ( );
 			}
-			
-			
-			
 		};
 	};
 	

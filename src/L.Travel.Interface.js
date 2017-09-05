@@ -65,10 +65,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			*/
 
 			addControl : function ( map, divControlId, options ) {
-				global.LeafletTravelObjId = 0;
-				
-				var _TravelData = require ( './Data/TravelData' ) ( );
-				_TravelData.object =
+				global.travelObjId = 0;
+				global.editedRoute = require ( './Data/Route') ( );
+				global.editedRoute.routeChanged = false;
+				global.editedRoute.routeInitialObjId = -1;
+				global.travelData = require ( './Data/TravelData' ) ( );
+				global.travelData.object =
 				{
 					name : "TravelData sample",
 					routes : 
@@ -131,13 +133,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				};
 
-				console.log ( _TravelData.object );
+				console.log ( global.travelData.object );
 
 
 				if ( divControlId )	{
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-					var initialRoutes = require ( './Data/TravelData' ) ( ).routes;
-					require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( initialRoutes );
+					require ( './UI/RoutesListEditorUI' ) ( ).writeRoutesList ( global.travelData.routes );
 				}	
 				else {
 					if ( typeof module !== 'undefined' && module.exports ) {
@@ -146,8 +147,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				_Map = map;
 
-				if ( 1 === _TravelData.routes.length ) {
-					require ( './core/RouteEditor' ) ( ).editRoute ( _TravelData.routes.first.objId );
+				if ( 1 === global.travelData.routes.length ) {
+					require ( './core/RouteEditor' ) ( ).editRoute ( global.travelData.routes.first.objId );
 				}
 
 			},

@@ -20,9 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _TravelData = require ( '../Data/TravelData' ) ( );
-	var _RoutesListChanged = false;
-	
 	var getRoutesListEditor = function ( ) {
 
 		var _RoutesListEditorUI = require ( '../UI/RoutesListEditorUI' ) ( );
@@ -30,39 +27,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			
 			addRoute : function ( ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
+				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
 			},
 
 			editRoute : function ( routeObjId ) {
-				_RoutesListChanged = true;
 				require ( './RouteEditor' ) ( ).editRoute ( routeObjId );
 			},
 
 			removeRoute : function ( routeObjId ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.remove ( routeObjId );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+				global.travelData.routes.remove ( routeObjId );
+				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
 			},
 
 			removeAllRoutes : function ( routeObjId ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.removeAll ( );
-				_TravelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+				global.travelData.routes.removeAll ( );
+				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
+				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.getAt ( routeObjId ).name = routeName;
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+				global.travelData.routes.getAt ( routeObjId ).name = routeName;
+				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
 			},
 
 			swapRoute : function ( routeObjId, swapUp ) {
-				_RoutesListChanged = true;
-				_TravelData.routes.swap ( routeObjId, swapUp );
-				_RoutesListEditorUI.writeRoutesList ( _TravelData.routes );
+				global.travelData.routes.swap ( routeObjId, swapUp );
+				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
 			}
 		};
 	};

@@ -20,98 +20,96 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _Route = require ( '../Data/Route' ) ( );
-	var _RouteInitialObjId = -1;
-	var _RouteChanged = false;
-	var _AutoRouting = true;
-	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
+
+		var _Config = require ( '../config' ) ( );
+		
+		var _Translator = require ( '../UI/Translator' ) ( );
 
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
 		var _StartRouting = function ( ) {
 			
-			if ( ! _AutoRouting ) {
+			if ( ! _Config.routing.auto ) {
 				return;
 			}
 			
-			require ( './Router' ) ( ).startRouting ( _Route );
+			require ( './Router' ) ( ).startRouting ( global.editedRoute );
 		};
 	
 		return {
 			
 			saveEdition : function ( ) {
-				var travelData = require ( '../Data/TravelData' ) ( );
-				travelData.routes.replace ( _RouteInitialObjId, _Route );
-				_RouteChanged = false;
+				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
+				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
-				require ( '../UI/RoutesListEditorUI') ( ).writeRoutesList ( travelData.routes );
-				this.editRoute ( _Route.objId );
+				require ( '../UI/RoutesListEditorUI') ( ).writeRoutesList ( );
+				this.editRoute ( global.editedRoute.objId );
 			},
 			
 			cancelEdition : function ( ) {
-				_RouteChanged = false;
-				this.editRoute ( _RouteInitialObjId );
+				global.editedRoute.routeChanged = false;
+				this.editRoute ( global.editedRoute.routeInitialObjId );
 			},
 			
 			editRoute : function ( routeObjId ) { 
-				if ( _RouteChanged ) {
+				if ( global.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				_Route = require ( '../Data/Route' ) ( );
-				var route = require ( '../Data/TravelData' ) ( ).routes.getAt ( routeObjId );
-				_RouteInitialObjId = route.objId;
+				global.editedRoute = require ( '../Data/Route' ) ( );
+				var route = global.travelData.routes.getAt ( routeObjId );
+				global.editedRoute.routeInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
-				_Route.object = route.object;
+				global.editedRoute.object = route.object;
 				_RouteEditorUI .expand ( );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				_RouteEditorUI.writeWayPointsList ( );
 			},
 			
 			addWayPoint : function ( latLng ) {
-				_RouteChanged = true;
+				global.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
 				}
-				_Route.wayPoints.add ( newWayPoint );
-				_Route.wayPoints.swap ( newWayPoint.objId, true );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.wayPoints.add ( newWayPoint );
+				global.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			reverseWayPoints : function ( ) {
-				_RouteChanged = true;
-				_Route.wayPoints.reverse ( );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.reverse ( );
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			removeAllWayPoints : function ( ) {
-				_RouteChanged = true;
-				_Route.wayPoints.removeAll ( true );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.removeAll ( true );
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
-				_RouteChanged = true;
-				_Route.wayPoints.remove ( wayPointObjId );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.remove ( wayPointObjId );
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
-				_RouteChanged = true;
-				_Route.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+				_RouteEditorUI.writeWayPointsList ( );
 			},
 			
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
-				_RouteChanged = true;
-				_Route.wayPoints.swap ( wayPointObjId, swapUp );
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+				_RouteEditorUI.writeWayPointsList ( global.editedRoute.wayPoints );
 				_StartRouting ( );
 			},
 			
@@ -120,35 +118,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				contextMenu.push ( 
 					{ 
 						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.setStartPointFromContextMenu : null
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPointFromContextMenu : null
 					} 
 				);
 				contextMenu.push ( 
 					{
 						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.addPointFromContextMenu : null
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addPointFromContextMenu : null
 					}
 				);
 				contextMenu.push (
 					{ 
 						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== _RouteInitialObjId ) ? this.setEndPointFromContextMenu : null
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPointFromContextMenu : null
 					}
 				);
 				return contextMenu;
 			},
 			
 			setStartPoint : function ( latLng ) {
-				_RouteChanged = true;
-				_Route.wayPoints.first.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.first.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
 			setEndPoint : function ( latLng ) {
-				_RouteChanged = true;
-				_Route.wayPoints.last.latLng = latLng;
-				_RouteEditorUI.writeWayPointsList ( _Route.wayPoints );
+				global.editedRoute.routeChanged = true;
+				global.editedRoute.wayPoints.last.latLng = latLng;
+				_RouteEditorUI.writeWayPointsList ( );
 				_StartRouting ( );
 			},
 			
