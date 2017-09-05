@@ -317,10 +317,211 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	height: 20px;
 	background-repeat: no-repeat;
 }
-.TravelControl-kDepartLeft
+.TravelControl-kArriveDefaultSmall                                            
+{
+	background-image: url('icons/kArriveDefaultSmall.png');
+}
+.TravelControl-kArriveLeftSmall                                                 
+{
+	background-image: url('icons/kArriveLeftSmall.png');
+}
+.TravelControl-kArriveRightSmall                                                 
+{
+	background-image: url('icons/kArriveRightSmall.png');
+}
+.TravelControl-kContinueLeftSmall                                                
+{
+	background-image: url('icons/kContinueLeftSmall.png');
+}
+.TravelControl-kContinueRightSmall                                               
+{
+	background-image: url('icons/kContinueRightSmall.png');
+}
+.TravelControl-kContinueSharpLeftSmall                                           
+{
+	background-image: url('icons/kContinueSharpLeftSmall.png');
+}
+.TravelControl-kContinueSharpRightSmall                                          
+{
+	background-image: url('icons/kContinueSharpRightSmall.png');
+}
+.TravelControl-kContinueSlightLeftSmall                                          
+{
+	background-image: url('icons/kContinueSlightLeftSmall.png');
+}
+.TravelControl-kContinueSlightRightSmall                                         
+{
+	background-image: url('icons/kContinueSlightRightSmall.png');
+}
+.TravelControl-kContinueStraightSmall                                            
+{
+	background-image: url('icons/kContinueStraightSmall.png');
+}
+.TravelControl-kDepartDefaultSmall                                               
+{
+	background-image: url('icons/kDepartDefaultSmall.png');
+}
+.TravelControl-kDepartLeftSmall                                                  
 {
 	background-image: url('icons/kDepartLeftSmall.png');
 }
+.TravelControl-kDepartRightSmall                                                 
+{
+	background-image: url('icons/kDepartRightSmall.png');
+}
+.TravelControl-kEndOfRoadLeftSmall                                               
+{
+	background-image: url('icons/kEndOfRoadLeftSmall.png');
+}
+.TravelControl-kEndOfRoadRightSmall                                              
+{
+	background-image: url('icons/kEndOfRoadRightSmall.png');
+}
+.TravelControl-kForkLeftSmall                                                    
+{
+	background-image: url('icons/kForkLeftSmall.png');
+}
+.TravelControl-kForkRightSmall                                                   
+{
+	background-image: url('icons/kForkRightSmall.png');
+}
+.TravelControl-kMergeDefaultSmall                                                
+{
+	background-image: url('icons/kMergeDefaultSmall.png');
+}
+.TravelControl-kMergeLeftSmall                                                   
+{
+	background-image: url('icons/kMergeLeftSmall.png');
+}
+.TravelControl-kMergeRightSmall                                                  
+{
+	background-image: url('icons/kMergeRightSmall.png');
+}
+.TravelControl-kNewNameLeftSmall                                                 
+{
+	background-image: url('icons/kNewNameLeftSmall.png');
+}
+.TravelControl-kNewNameRightSmall                                                
+{
+	background-image: url('icons/kNewNameRightSmall.png');
+}
+.TravelControl-kNewNameSharpLeftSmall                                            
+{
+	background-image: url('icons/kNewNameSharpLeftSmall.png');
+}
+.TravelControl-kNewNameSharpRightSmall                                           
+{
+	background-image: url('icons/kNewNameSharpRightSmall.png');
+}
+.TravelControl-kNewNameSlightLeftSmall                                           
+{
+	background-image: url('icons/kNewNameSlightLeftSmall.png');
+}
+.TravelControl-kNewNameSlightRightSmall                                          
+{
+	background-image: url('icons/kNewNameSlightRightSmall.png');
+}
+.TravelControl-kNewNameStraightSmall                                             
+{
+	background-image: url('icons/kNewNameStraightSmall.png');
+}
+.TravelControl-kOffRampLeftSmall                                                 
+{
+	background-image: url('icons/kOffRampLeftSmall.png');
+}
+.TravelControl-kOffRampRightSmall                                                
+{
+	background-image: url('icons/kOffRampRightSmall.png');
+}
+.TravelControl-kOnRampLeftSmall                                                  
+{
+	background-image: url('icons/kOnRampLeftSmall.png');
+}
+.TravelControl-kOnRampRightSmall                                                 
+{
+	background-image: url('icons/kOnRampRightSmall.png');
+}
+.TravelControl-kRotaryLeftSmall                                                  
+{
+	background-image: url('icons/kRotaryLeftSmall.png');
+}
+.TravelControl-kRotaryRightSmall                                                 
+{
+	background-image: url('icons/kRotaryRightSmall.png');
+}
+.TravelControl-kRoundaboutLeftSmall                                              
+{
+	background-image: url('icons/kRoundaboutLeftSmall.png');
+}
+.TravelControl-kRoundaboutRightSmall                                             
+{
+	background-image: url('icons/kRoundaboutRightSmall.png');
+}
+.TravelControl-kRoundaboutTurnLeftSmall                                          
+{
+	background-image: url('icons/kRoundaboutTurnLeftSmall.png');
+}
+.TravelControl-kRoundaboutTurnRightSmall                                         
+{
+	background-image: url('icons/kRoundaboutTurnRightSmall.png');
+}
+.TravelControl-kRoundaboutTurnSharpLeftSmall                                     
+{
+	background-image: url('icons/kRoundaboutTurnSharpLeftSmall.png');
+}
+.TravelControl-kRoundaboutTurnSharpRightSmall                                    
+{
+	background-image: url('icons/kRoundaboutTurnSharpRightSmall.png');
+}
+.TravelControl-kRoundaboutTurnSlightLeftSmall                                    
+{
+	background-image: url('icons/kRoundaboutTurnSlightLeftSmall.png');
+}
+.TravelControl-kRoundaboutTurnSlightRightSmall                                   
+{
+	background-image: url('icons/kRoundaboutTurnSlightRightSmall.png');
+}
+.TravelControl-kRoundaboutTurnStraightSmall                                      
+{
+	background-image: url('icons/kRoundaboutTurnStraightSmall.png');
+}
+.TravelControl-kTurnLeftSmall                                                    
+{
+	background-image: url('icons/kTurnLeftSmall.png');
+}
+.TravelControl-kTurnRightSmall                                                   
+{
+	background-image: url('icons/kTurnRightSmall.png');
+}
+.TravelControl-kTurnSharpLeftSmall                                               
+{
+	background-image: url('icons/kTurnSharpLeftSmall.png');
+}
+.TravelControl-kTurnSharpRightSmall                                              
+{
+	background-image: url('icons/kTurnSharpRightSmall.png');
+}
+.TravelControl-kTurnSlightLeftSmall                                              
+{
+	background-image: url('icons/kTurnSlightLeftSmall.png');
+}
+.TravelControl-kTurnSlightRightSmall                                             
+{
+	background-image: url('icons/kTurnSlightRightSmall.png');
+}
+.TravelControl-kTurnStraightSmall                                                
+{
+	background-image: url('icons/kTurnStraightSmall.png');
+}
+.TravelControl-kTurnUturnSmall                                                   
+{
+	background-image: url('icons/kTurnUturnSmall.png');
+}
+.TravelControl-kUndefinedSmall                                                   
+{
+	background-image: url('icons/kUndefinedSmall.png');
+}
+
 .TravelControl-ItineraryStreetName,
 .TravelControl-ItineraryDistance
 {

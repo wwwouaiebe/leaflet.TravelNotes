@@ -35,13 +35,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	// User interface
 
-	var _UICreated = false;
-
 	var getErrorEditorUI = function ( ) {
 				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( _UICreated ) {
+			if ( document.getElementById ( 'TravelControl-ErrorDataDiv' ) ) {
 				return;
 			}
 
@@ -62,7 +60,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
 			
-			_UICreated = true;
 		};
 
 		var _ExpandUI = function ( ) {

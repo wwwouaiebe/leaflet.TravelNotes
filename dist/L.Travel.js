@@ -6850,9 +6850,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Name = '';
 	var _Routes = require ( './Collection' ) ( 'Route' );
+	_Routes.add ( require ( './Route' ) ( ) );
+
 	var _Notes = require ( './Collection' ) ( 'Note' );
 	var _ObjId = -1;
-	_Routes.add ( require ( './Route' ) ( ) );
 
 	var getTravelData = function ( ) {
 		
@@ -7470,13 +7471,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	// User interface
 
-	var _UICreated = false;
-
 	var getErrorEditorUI = function ( ) {
 				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( _UICreated ) {
+			if ( document.getElementById ( 'TravelControl-ErrorDataDiv' ) ) {
 				return;
 			}
 
@@ -7497,7 +7496,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
 			
-			_UICreated = true;
 		};
 
 		var _ExpandUI = function ( ) {
@@ -7640,13 +7638,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickExpandButton = function ( clickEvent ) {
 		
+		clickEvent.stopPropagation ( );
+
 		document.getElementById ( 'TravelControl-ItineraryHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
 		document.getElementById ( 'TravelControlItineraryDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelControlItineraryDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
 		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
 
+	};
+	
+	var onInstructionClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+		console.log ( 'onInstructionClick pntObjId : ' + clickEvent.target.itineraryPointObjId );
+	};
+
+	var onInstructionContextMenu = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		console.log ( 'onInstructionContextMenu pntObjId : ' + clickEvent.target.itineraryPointObjId );
+	};
+
+	var onMouseEnter = function ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		console.log ( 'onMouseEnter pntObjId : ' + mouseEvent.target.itineraryPointObjId );
+	};
+
+	var onMouseLeave = function ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		console.log ( 'onMouseLeave pntObjId : ' + mouseEvent.target.itineraryPointObjId );
 	};
 
 	var getItineraryEditorUI = function ( ) {
@@ -7672,8 +7691,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				headerDiv 
 			);
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
-			dataDiv.innerHTML= "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.Ut velit mauris, egestas sed, gravida nec, ornare ut, mi. Aenean ut orci vel massa suscipit pulvinar. Nulla sollicitudin. Fusce varius, ligula non tempus aliquam, nunc turpis ullamcorper nibh, in tempus sapien eros vitae ligula. Pellentesque rhoncus nunc et augue. Integer id felis. Curabitur aliquet pellentesque diam. Integer quis metus vitae elit lobortis egestas. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi vel erat non mauris convallis vehicula. Nulla et sapien. Integer tortor tellus, aliquam faucibus, convallis id, congue eu, quam. Mauris ullamcorper felis vitae erat. Proin feugiat, augue non elementum posuere, metus purus iaculis lectus, et tristique ligula justo vitae magna.Aliquam convallis sollicitudin purus. Praesent aliquam, enim at fermentum mollis, ligula massa adipiscing nisl, ac euismod nibh nisl eu lectus. Fusce vulputate sem at sapien. Vivamus leo. Aliquam euismod libero eu enim. Nulla nec felis sed leo placerat imperdiet. Aenean suscipit nulla in justo. Suspendisse cursus rutrum augue. Nulla tincidunt tincidunt mi. Curabitur iaculis, lorem vel rhoncus faucibus, felis magna fermentum augue, et ultricies lacus lorem varius purus. Curabitur eu ametLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.Ut velit mauris, egestas sed, gravida nec, ornare ut, mi. Aenean ut orci vel massa suscipit pulvinar. Nulla sollicitudin. Fusce varius, ligula non tempus aliquam, nunc turpis ullamcorper nibh, in tempus sapien eros vitae ligula. Pellentesque rhoncus nunc et augue. Integer id felis. Curabitur aliquet pellentesque diam. Integer quis metus vitae elit lobortis egestas. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi vel erat non mauris convallis vehicula. Nulla et sapien. Integer tortor tellus, aliquam faucibus, convallis id, congue eu, quam. Mauris ullamcorper felis vitae erat. Proin feugiat, augue non elementum posuere, metus purus iaculis lectus, et tristique ligula justo vitae magna.Aliquam convallis sollicitudin purus. Praesent aliquam, enim at fermentum mollis, ligula massa adipiscing nisl, ac euismod nibh nisl eu lectus. Fusce vulputate sem at sapien. Vivamus leo. Aliquam euismod libero eu enim. Nulla nec felis sed leo placerat imperdiet. Aenean suscipit nulla in justo. Suspendisse cursus rutrum augue. Nulla tincidunt tincidunt mi. Curabitur iaculis, lorem vel rhoncus faucibus, felis magna fermentum augue, et ultricies lacus lorem varius purus. Curabitur eu amet";
-			//dataDiv.innerHTML= "Lorem ipsum";
 		};
 		
 		var formatTime = function ( time ) {
@@ -7713,6 +7730,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
+		var _AddEventListeners = function ( element )
+		{
+			element.addEventListener ( 'click' , onInstructionClick, false );
+			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.addEventListener ( 'mouseenter' , onMouseEnter, false );
+			element.addEventListener ( 'mouseleave' , onMouseLeave, false );
+		};
+		
+		var _RemoveEventListeners = function ( element )
+		{
+			element.removeEventListener ( 'click' , onInstructionClick, false );
+			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.removeEventListener ( 'mouseenter' , onMouseEnter, false );
+			element.removeEventListener ( 'mouseleave' , onMouseLeave, false );
+		};
+		
 		var _Itinerary = function ( itinerary ) {
 
 			console.log ( itinerary.object );
@@ -7722,12 +7755,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return;
 			}
 			
-			dataDiv.innerHTML = '';
-			
+			var maneuverList = document.getElementById ( 'TravelControl-ManeuverList' );
+			if ( maneuverList ) {
+				for ( var childCounter = 0; childCounter < maneuverList.childNodes.length; childCounter ++ ) {
+					_RemoveEventListeners ( maneuverList.childNodes [ childCounter ] );
+				}
+				dataDiv.removeChild ( maneuverList );
+			}
+
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			var itineraryDiv = htmlElementsFactory.create (
+			maneuverList = htmlElementsFactory.create (
 				'div',
-					{ className : 'TravelControl-TableDataDiv'}, 
+					{
+						id : 'TravelControl-ManeuverList',
+						className : 'TravelControl-TableDataDiv'
+					}, 
 				dataDiv
 			);
 			var maneuverIterator = itinerary.maneuvers.iterator;
@@ -7735,17 +7777,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var rowDataDiv = htmlElementsFactory.create ( 
 					'div', 
 					{ className : 'TravelControl-RowDataDiv'}, 
-					itineraryDiv
+					maneuverList
 				);
 				
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv TravelControl-iconCellDataDiv TravelControl-' + maneuverIterator.value.iconName,
+						className : 'TravelControl-CellDataDiv TravelControl-iconCellDataDiv TravelControl-' + maneuverIterator.value.iconName + 'Small',
 					}, 
 					rowDataDiv
 				);
-				htmlElementsFactory.create (
+				
+				var instructionElement = htmlElementsFactory.create (
 					'div',
 					{ 
 						className : 'TravelControl-CellDataDiv',
@@ -7753,6 +7796,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}, 
 					rowDataDiv
 				);
+				instructionElement.itineraryPointObjId = maneuverIterator.value.itineraryPointObjId;
+				_AddEventListeners ( instructionElement );
 				htmlElementsFactory.create (
 					'div',
 					{ 
@@ -7905,13 +7950,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _WayPointsList = null;
 
-	var _UICreated = false;
-
 	var getRouteEditorUI = function ( ) {
 				
 		var _CreateUI = function ( controlDiv ){ 
 
-			if ( _UICreated ) {
+			if ( document.getElementById ( 'TravelControl-WaypointsDataDiv' ) ) {
 				return;
 			}
 			
@@ -8006,7 +8049,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv
 			);
 			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
-
 		};
 	
 		var _ExpandUI = function ( ) {
@@ -8022,7 +8064,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			document.getElementById ( 'TravelControl-WaypointsButtonsDiv' ).classList.add ( 'TravelControl-HiddenList' );
 			document.getElementById ( 'TravelControl-WaypointsButtonsDiv' ).classList.add ( 'TravelControl-HiddenList' );
 		};
-
 		
 		return {
 			createUI : function ( controlDiv ) { 
@@ -8143,13 +8184,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _RoutesList = null;
 
-	var _UICreated = false;
-	
 	var getRoutesListEditorUI = function ( ) {
-		
+				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( _UICreated ) {
+			if ( document.getElementById ( 'TravelControl-RoutesDataDiv' ) ) {
 				return;
 			}
 
@@ -8852,11 +8891,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _MainDiv = null;
-
 	// User interface
 	
 	var getControlUI = function ( ) {
+
+		var _MainDiv = document.getElementById ( 'TravelControl-MainDiv' );
 
 		var _CreateUI = function ( ){ 
 
@@ -8872,6 +8911,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
 		};
+		
 		if ( ! _MainDiv ) {
 			_CreateUI ( );
 		}

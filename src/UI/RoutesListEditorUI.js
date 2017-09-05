@@ -86,13 +86,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _RoutesList = null;
 
-	var _UICreated = false;
-	
 	var getRoutesListEditorUI = function ( ) {
-		
+				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( _UICreated ) {
+			if ( document.getElementById ( 'TravelControl-RoutesDataDiv' ) ) {
 				return;
 			}
 

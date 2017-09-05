@@ -20,11 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _MainDiv = null;
-
 	// User interface
 	
 	var getControlUI = function ( ) {
+
+		var _MainDiv = document.getElementById ( 'TravelControl-MainDiv' );
 
 		var _CreateUI = function ( ){ 
 
@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
 		};
+		
 		if ( ! _MainDiv ) {
 			_CreateUI ( );
 		}

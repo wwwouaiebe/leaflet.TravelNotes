@@ -24,9 +24,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Name = '';
 	var _Routes = require ( './Collection' ) ( 'Route' );
+	_Routes.add ( require ( './Route' ) ( ) );
+
 	var _Notes = require ( './Collection' ) ( 'Note' );
 	var _ObjId = -1;
-	_Routes.add ( require ( './Route' ) ( ) );
 
 	var getTravelData = function ( ) {
 		
