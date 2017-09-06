@@ -70,6 +70,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.editedRoute.object = route.object;
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
+				require ( './ItineraryEditor' ) ( ).setItinerary ( );
 			},
 			
 			addWayPoint : function ( latLng ) {

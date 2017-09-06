@@ -59,6 +59,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( '../core/TravelEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
+	var onClickSaveTravelButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+	};	
+		
+	var onClickUndoButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+	};	
+		
 	var onClickExpandButton = function ( clickEvent ) {
 
 		clickEvent.stopPropagation ( );
@@ -125,6 +133,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 			
+			var saveTravelButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelControl-SaveTravelButton', 
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Save travel' ), 
+					innerHTML : '&#x1f4be;'
+				}, 
+				buttonsDiv 
+			);
+			saveTravelButton.addEventListener ( 'click' , onClickSaveTravelButton, false );
+
+			var openTravelButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelControl-OpenTravelButton', 
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
+					innerHTML : '&#x23CD;'
+				}, 
+				buttonsDiv 
+			);
+			
+			var undoButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelControl-SaveTravelButton', 
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Undo' ), 
+					innerHTML : '&#x21ba;'
+				}, 
+				buttonsDiv 
+			);
+			undoButton.addEventListener ( 'click' , onClickUndoButton, false );
+
 			var addRouteButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 

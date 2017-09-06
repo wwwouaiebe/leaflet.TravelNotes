@@ -125,20 +125,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _SetObject = function ( Objects ) {
 			var constructor;
-			switch ( _ObjName ) {
-				case 'Route' :
-				constructor = require ( './Route' );
-				break;
-				case 'Note' :
-				constructor = require ( './Note' );
-				break;
-				case 'WayPoint' :
-				constructor = require ( './WayPoint' );
-				break;
-			}
 			_Array.length = 0;
+			var newObject;
 			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
-				var newObject = constructor ( );
+				switch ( _ObjName ) {
+					case 'Route' :
+					newObject = require ( './Route' ) ( );
+					break;
+					case 'Note' :
+					newObject = require ( './Note' ) ( );
+					break;
+					case 'WayPoint' :
+					newObject = require ( './WayPoint' ) ( );
+					break;
+					case 'Maneuver' :
+					newObject = require ( './Maneuver' ) ( );
+					break;
+					case 'ItineraryPoint' :
+					newObject = require ( './ItineraryPoint' ) ( );
+					break;
+					default: 
+					throw ( 'invalid ObjName ( ' + _ObjName +' ) in Collection._SetObject' );
+				}
 				newObject.object = Objects [ objectCounter ];
 				_Add ( newObject );
 			}

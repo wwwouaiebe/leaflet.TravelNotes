@@ -229,7 +229,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "RouteEditorUI - Waypoints",
-			msgstr : "Points de passage&nbsp;:"
+			msgstr : "Points de passage&nbsp;de la route:"
 		},
 		{
 			msgid : "RouteEditorUI - Start",
@@ -281,7 +281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "TravelEditorUI - Routes",
-			msgstr : "Routes&nbsp;:"
+			msgstr : "Routes du voyage&nbsp;:"
 		},
 		{
 			msgid : "TravelEditorUI - Route",
@@ -302,6 +302,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "TravelEditorUI - Delete all routes",
 			msgstr : "Supprimer toutes les routes"
+		},
+		{
+			msgid : "TravelEditorUI - Save travel",
+			msgstr : "Sauver dans un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Open travel",
+			msgstr : "Ouvrir un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Undo",
+			msgstr : "Réouvrir une route supprimée"
 		},
 		{
 			msgid : "Utilities - day",
