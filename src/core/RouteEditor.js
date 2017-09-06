@@ -49,7 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
 				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
-				require ( '../UI/RoutesListEditorUI') ( ).setRoutesList ( );
+				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
 				this.editRoute ( global.editedRoute.objId );
 			},
 			

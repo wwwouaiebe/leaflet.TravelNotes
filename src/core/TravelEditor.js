@@ -20,15 +20,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var getRoutesListEditor = function ( ) {
+	var getTravelEditor = function ( ) {
 
-		var _RoutesListEditorUI = require ( '../UI/RoutesListEditorUI' ) ( );
+		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 
 		return {
 			
 			addRoute : function ( ) {
 				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.setRoutesList ( );
+				_TravelEditorUI.setRoutesList ( );
 			},
 
 			editRoute : function ( routeObjId ) {
@@ -37,18 +37,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			removeRoute : function ( routeObjId ) {
 				global.travelData.routes.remove ( routeObjId );
-				_RoutesListEditorUI.setRoutesList ( );
+				_TravelEditorUI.setRoutesList ( );
 			},
 
 			removeAllRoutes : function ( routeObjId ) {
 				global.travelData.routes.removeAll ( );
 				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.setRoutesList (  );
+				_TravelEditorUI.setRoutesList (  );
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
 				global.travelData.routes.getAt ( routeObjId ).name = routeName;
-				_RoutesListEditorUI.setRoutesList ( );
+				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === global.editedRoute.routeInitialObjId ) {
 					global.editedRoute.name = routeName;
 				}
@@ -56,14 +56,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			swapRoute : function ( routeObjId, swapUp ) {
 				global.travelData.routes.swap ( routeObjId, swapUp );
-				_RoutesListEditorUI.setRoutesList ( );
+				_TravelEditorUI.setRoutesList ( );
 			}
 		};
 	};
 
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutesListEditor;
+		module.exports = getTravelEditor;
 	}
 
 }());

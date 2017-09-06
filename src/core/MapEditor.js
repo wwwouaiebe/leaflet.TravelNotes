@@ -111,7 +111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
 				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
-c			},
+			},
 			removeObject : function ( objId ) {
 				_RemoveFrom ( objId );
 			},

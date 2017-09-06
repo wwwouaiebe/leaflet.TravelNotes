@@ -25,38 +25,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Events listeners for buttons under the routes list
 	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
-		require ( '../core/RoutesListEditor' ) ( ).removeAllRoutes ( );
+		require ( '../core/TravelEditor' ) ( ).removeAllRoutes ( );
 	};
 
 	var onClickAddRouteButton = function ( event ) {
 		event.stopPropagation();
-		require ( '../core/RoutesListEditor' ) ( ).addRoute ( );
+		require ( '../core/TravelEditor' ) ( ).addRoute ( );
 	};
 	
 	// Events for buttons and input on the routes list items
 	var onRoutesListDelete = function ( event ) {
 		event.stopPropagation ( );
-		require ( '../core/RoutesListEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
+		require ( '../core/TravelEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
 	};
 
 	var onRoutesListUpArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
+		require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
 	};
 
 	var onRoutesListDownArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( '../core/RoutesListEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
+		require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
 	};
 
 	var onRoutesListRightArrow = function ( event ) {
 		event.stopPropagation ( );
-		require ( '../core/RoutesListEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+		require ( '../core/TravelEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 	};
 	
 	var onRouteslistChange = function ( event ) {
 		event.stopPropagation();
-		require ( '../core/RoutesListEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
+		require ( '../core/TravelEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
 	};
 	
 	var onClickExpandButton = function ( clickEvent ) {
@@ -68,7 +68,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		document.getElementById ( 'TravelControl-RoutesButtonsDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelControl-RoutesDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
 		document.getElementById ( 'TravelControl-RoutesExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-		document.getElementById ( 'TravelControl-RoutesExpandButton' ).title = hiddenList ? _Translator.getText ( 'RoutesListEditorUI - Show' ) : _Translator.getText ( 'RoutesListEditorUI - Hide' );
+		document.getElementById ( 'TravelControl-RoutesExpandButton' ).title = hiddenList ? _Translator.getText ( 'TravelEditorUI - Show' ) : _Translator.getText ( 'TravelEditorUI - Hide' );
 
 		clickEvent.stopPropagation ( );
 	};
@@ -79,14 +79,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		document.getElementById ( 'TravelControl-RoutesDataDiv' ).classList.toggle ( 'TravelControl-ExpandedList' );
 		var expandedList = document.getElementById ( 'TravelControl-RoutesDataDiv' ).classList.contains ( 'TravelControl-ExpandedList' );
 		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'RoutesListEditorUI - Reduce the list' ) : _Translator.getText ( 'RoutesListEditorUI - Expand the list' );		
+		document.getElementById ( 'TravelControl-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
 
 	// User interface
 
 	var _RoutesList = null;
 
-	var getRoutesListEditorUI = function ( ) {
+	var getTravelEditorUI = function ( ) {
 				
 		var _CreateUI = function ( controlDiv ){ 
 		
@@ -101,10 +101,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
 			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-RoutesExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RoutesListEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), id : 'TravelControl-RoutesHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-RoutesDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'RoutesListEditorUI - Route' )], id : 'TravelControl-RouteList' }, dataDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'TravelEditorUI - Route' )], id : 'TravelControl-RouteList' }, dataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
@@ -118,7 +118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-ExpandRoutesListButton', 
 					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'RoutesListEditorUI - Expand the list' ), 
+					title : _Translator.getText ( 'TravelEditorUI - Expand the list' ), 
 					innerHTML : '&#x25bd;'
 				}, 
 				buttonsDiv 
@@ -130,7 +130,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-AddRoutesButton', 
 					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'RoutesListEditorUI - New route' ), 
+					title : _Translator.getText ( 'TravelEditorUI - New route' ), 
 					innerHTML : '+'
 				}, 
 				buttonsDiv 
@@ -142,7 +142,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				{ 
 					id : 'TravelControl-DeleteAllRoutesButton', 
 					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'RoutesListEditorUI - Delete all routes' ), 
+					title : _Translator.getText ( 'TravelEditorUI - Delete all routes' ), 
 					innerHTML : '&#x267b;'
 				},
 				buttonsDiv
@@ -167,7 +167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutesListEditorUI;
+		module.exports = getTravelEditorUI;
 	}
 
 }());
