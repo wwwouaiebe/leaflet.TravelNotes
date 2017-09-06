@@ -37,22 +37,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onInstructionClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		console.log ( 'onInstructionClick pntObjId : ' + clickEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).zoomToItineraryPoint ( clickEvent.target.itineraryPointObjId );
 	};
 
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
 		console.log ( 'onInstructionContextMenu pntObjId : ' + clickEvent.target.itineraryPointObjId );
 	};
 
-	var onMouseEnter = function ( mouseEvent ) {
+	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		console.log ( 'onMouseEnter pntObjId : ' + mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).showItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
-	var onMouseLeave = function ( mouseEvent ) {
+	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		console.log ( 'onMouseLeave pntObjId : ' + mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).hideItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var getItineraryEditorUI = function ( ) {
@@ -84,20 +85,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			element.addEventListener ( 'click' , onInstructionClick, false );
 			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.addEventListener ( 'mouseenter' , onMouseEnter, false );
-			element.addEventListener ( 'mouseleave' , onMouseLeave, false );
+			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
 		
 		var _RemoveEventListeners = function ( element )
 		{
 			element.removeEventListener ( 'click' , onInstructionClick, false );
 			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.removeEventListener ( 'mouseenter' , onMouseEnter, false );
-			element.removeEventListener ( 'mouseleave' , onMouseLeave, false );
+			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
 		
-		var _Itinerary = function ( itinerary ) {
+		var _SetItinerary = function ( ) {
 
+			var itinerary = global.editedRoute.itinerary;
+			
 			console.log ( itinerary.object );
 		
 			var dataDiv = document.getElementById ( 'TravelControl-ItineraryDataDiv' );
@@ -188,8 +191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
 			},
-			set itinerary ( itinerary ) { _Itinerary ( itinerary ); },
-			get itinerary ( ) { return null; }
+			setItinerary : function ( ) { _SetItinerary ( ); }
 		};
 	};
 	

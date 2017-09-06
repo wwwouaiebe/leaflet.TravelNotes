@@ -44,13 +44,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 		var onMapClick = function ( event ) {
-			require ('./UI/ContextMenu' ) ( event, _LeftUserContextMenu );
+			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).mapContextMenu.concat ( _LeftUserContextMenu ) );
 		};
 		var onMapContextMenu = function ( event ) {
-			require ('./UI/ContextMenu' ) ( event, _RightUserContextMenu );
+			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).mapContextMenu.concat ( _RightUserContextMenu ) );
 		};
-
-		var _Map;
 
 		return {
 
@@ -147,7 +145,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 				require ( './UI/RoutesListEditorUI' ) ( ).setRoutesList ( global.travelData.routes );
 				
-				_Map = map;
+				global.map = map;
+				global.map.travelObjects = new Map ( );
 
 				if ( 1 === global.travelData.routes.length ) {
 					require ( './core/RouteEditor' ) ( ).editRoute ( global.travelData.routes.first.objId );
@@ -157,21 +156,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			addMapContextMenu : function ( leftButton, rightButton ) {
 				if ( leftButton ) {
-					_Map.on ( 'click', onMapClick );
+					global.map.on ( 'click', onMapClick );
 				}
 				if ( rightButton ) {
-					_Map.on ( 'contextmenu', onMapClick );
+					global.map.on ( 'contextmenu', onMapClick );
 				}
 			},
 			get rightContextMenu ( ) { return _RightContextMenu; },
 			
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
-					_Map.on ( 'contextmenu', onMapContextMenu );
+					global.map.on ( 'contextmenu', onMapContextMenu );
 					_RightContextMenu = true;
 				}
 				else if ( ( ! RightContextMenu ) && ( _RightContextMenu ) ) {
-					_Map.off ( 'contextmenu', onMapContextMenu );
+					global.map.off ( 'contextmenu', onMapContextMenu );
 					_RightContextMenu = false;
 				}
 			},
@@ -180,11 +179,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set leftContextMenu ( LeftContextMenu ) { 
 				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
-					_Map.on ( 'click', onMapClick );
+					global.map.on ( 'click', onMapClick );
 					_LeftContextMenu = true;
 				}
 				else if ( ( ! LeftContextMenu ) && ( _LeftContextMenu ) ) {
-					_Map.off ( 'click', onMapClick );
+					global.map.off ( 'click', onMapClick );
 					_LeftContextMenu = false;
 				}
 			},

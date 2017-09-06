@@ -29,16 +29,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
-		var _StartRouting = function ( ) {
+		return {
 			
+			startRouting : function ( ) {
 			if ( ! _Config.routing.auto ) {
 				return;
 			}
 			
 			require ( './Router' ) ( ).startRouting ( global.editedRoute );
-		};
-	
-		return {
+			},
+			
+			endRouting : function ( ) {
+				require ( './ItineraryEditor' ) ( ).setItinerary ( );
+				require ( './MapEditor' ) ( ).addRoute ( global.editedRoute );
+			},
 			
 			saveEdition : function ( ) {
 				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
@@ -76,28 +80,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.editedRoute.wayPoints.add ( newWayPoint );
 				global.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			reverseWayPoints : function ( ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.reverse ( );
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			removeAllWayPoints : function ( ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.removeAll ( true );
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.remove ( wayPointObjId );
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
@@ -110,10 +114,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.setWayPointsList (  );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
-			get contextMenu ( ) {
+			get mapContextMenu ( ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
@@ -136,18 +140,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return contextMenu;
 			},
 			
+			get routeContextMenu ( ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, name : _Translator.getText ( "RouteEditor - Edit this route" ), 
+						action : null
+					} 
+				);
+				contextMenu.push ( 
+					{
+						context : this, name : _Translator.getText ( "RouteEditor - Delete this route" ), 
+						action : null
+					}
+				);
+				contextMenu.push (
+					{ 
+						context : this, name : _Translator.getText ( "RouteEditor - Save this route" ), 
+						action : null
+					}
+				);
+				contextMenu.push (
+					{ 
+						context : this, name : _Translator.getText ( "RouteEditor - Cancel this route" ), 
+						action : null
+					}
+				);
+				return contextMenu;
+			},
+			
 			setStartPoint : function ( latLng ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.first.latLng = latLng;
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			setEndPoint : function ( latLng ) {
 				global.editedRoute.routeChanged = true;
 				global.editedRoute.wayPoints.last.latLng = latLng;
 				_RouteEditorUI.setWayPointsList ( );
-				_StartRouting ( );
+				this.startRouting ( );
 			},
 			
 			setStartPointFromContextMenu : function ( mapClickEvent ) {

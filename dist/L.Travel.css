@@ -555,3 +555,18 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	color: red;
 	font-weight: bold;
 }
+.RoutePopup-Header
+{
+	font-weight : bold;
+}
+.RoutePopup-Distance
+{
+}
+.RoutePopup-Duration
+{
+}
+.RoutePopup-Distance > span,
+.RoutePopup-Duration > span
+{
+	text-decoration: underline;
+}

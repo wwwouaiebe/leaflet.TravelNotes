@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _ContextMenuContainer = null;
 	var _OriginalEvent = null;
 	var _FocusIsOnItem = 0;
+	var _Lat = 0;
+	var _Lng = 0;
 	
 	var onCloseMenu = function ( ) {
 		document.removeEventListener ( 'keydown', onKeyDown, true );
@@ -98,16 +100,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getContextMenu = function ( event, userMenu ) {
 
+	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue...
+	// to avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
+	// and we stop the procedure if equals.
+		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
+			return;
+		}
+		else
+		{
+			_Lat = event.latlng.lat;
+			_Lng = event.latlng.lng;
+		}
+		
 		_OriginalEvent = event; 
 		
 		if ( _ContextMenuContainer ) {
 			onCloseMenu ( );
 			return;
 		}
-		_MenuItems.length = 0;
-		
-		_MenuItems = require ( '../core/RouteEditor' ) ( ).contextMenu.concat ( userMenu );
-		
+		_MenuItems = userMenu;
+			
 		//ContextMenu-Container
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		

@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			addRoute : function ( ) {
 				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
+				_RoutesListEditorUI.setRoutesList ( );
 			},
 
 			editRoute : function ( routeObjId ) {
@@ -37,23 +37,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			removeRoute : function ( routeObjId ) {
 				global.travelData.routes.remove ( routeObjId );
-				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
+				_RoutesListEditorUI.setRoutesList ( );
 			},
 
 			removeAllRoutes : function ( routeObjId ) {
 				global.travelData.routes.removeAll ( );
 				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
+				_RoutesListEditorUI.setRoutesList (  );
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
 				global.travelData.routes.getAt ( routeObjId ).name = routeName;
-				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
+				_RoutesListEditorUI.setRoutesList ( );
+				if ( routeObjId === global.editedRoute.routeInitialObjId ) {
+					global.editedRoute.name = routeName;
+				}
 			},
 
 			swapRoute : function ( routeObjId, swapUp ) {
 				global.travelData.routes.swap ( routeObjId, swapUp );
-				_RoutesListEditorUI.writeRoutesList ( global.travelData.routes );
+				_RoutesListEditorUI.setRoutesList ( );
 			}
 		};
 	};

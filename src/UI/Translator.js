@@ -196,6 +196,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Point noeud v&#xe9;lo"
 		},
 		{
+			msgid : "MapEditor - Distance",
+			msgstr : "<span>Distance</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - Duration",
+			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
+		},
+		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
 		},
