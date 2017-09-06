@@ -7617,7 +7617,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).removeItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var getItineraryEditorUI = function ( ) {
@@ -9044,8 +9044,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			global.map.travelObjects.set ( objId, object );
 		};
 		var _RemoveFrom = function ( objId ) {
-			global.map.removeLayer ( global.map.travelObjects.get ( objId ) );
-			global.map.travelObjects.delete ( objId );
+			var layer = global.map.travelObjects.get ( objId );
+console.log ( 'object' + objId );
+			if ( layer ) {
+console.log ( 'a');
+				L.DomEvent.off ( layer );
+				global.map.removeLayer ( layer );
+				global.map.travelObjects.delete ( objId );
+			}
 		};
 		
 		return {
@@ -9068,6 +9074,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
 				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+console.log ( 'polyline' + polyline.objId );
+			},
+			removeObject : function ( objId ) {
+				_RemoveFrom ( objId );
 			},
 			zoomToItineraryPoint : function ( itineraryPointObjId ) {
 				map.setView ( 
@@ -9080,9 +9090,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					itineraryPointObjId,
 					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
 				);
-			},
-			removeItineraryPointMarker : function ( itineraryPointObjId ) {
-				_RemoveFrom ( itineraryPointObjId );
 			}
 		};
 	};
@@ -9446,6 +9453,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return;
 			}
 			
+			require ( './MapEditor' ) ( ).removeObject ( global.editedRoute.objId );
 			require ( './Router' ) ( ).startRouting ( global.editedRoute );
 			},
 			
