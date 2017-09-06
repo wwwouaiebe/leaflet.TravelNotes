@@ -48,12 +48,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).showItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).hideItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).removeItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var getItineraryEditorUI = function ( ) {

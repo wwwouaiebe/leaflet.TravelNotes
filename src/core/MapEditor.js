@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Config = require ( '../util/Config' ) ( );
 
 	var getRouteTooltipText = function ( layer ) {
-		console.log ( layer );
 		var route = null;
 		try {
 			route = global.travelData.routes.getAt ( layer.objId );
@@ -115,13 +114,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					_Config.itineraryPointZoom 
 				);
 			},
-			showItineraryPointMarker : function ( itineraryPointObjId ) {
+			addItineraryPointMarker : function ( itineraryPointObjId ) {
 				_AddTo ( 
 					itineraryPointObjId,
 					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
 				);
 			},
-			hideItineraryPointMarker : function ( itineraryPointObjId ) {
+			removeItineraryPointMarker : function ( itineraryPointObjId ) {
 				_RemoveFrom ( itineraryPointObjId );
 			}
 		};

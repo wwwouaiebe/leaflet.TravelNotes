@@ -22,6 +22,93 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getUtilities = function ( ) {
 		return {
+			/* 
+			--- storageAvailable function ------------------------------------------------------------------------------------------
+			
+			This function test if the storage API is available ( the API can be deactived by user....)
+			Adapted from MDN :-)
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+			
+			storageAvailable: function ( type ) {
+				try {
+					var storage = window [ type ];
+					var	x = '__storage_test__';
+					storage.setItem ( x, x );
+					storage.removeItem ( x );
+					return true;
+				}
+				catch ( e ) {
+					return false;
+				}				
+			},
+			/* --- End of storageAvailable function --- */		
+
+			/* 
+			--- fileAPIAvailable function ------------------------------------------------------------------------------------------
+			
+			This function test if the File API is available 
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+
+			fileAPIAvailable : function ( ) {
+				try {
+					// FF...
+					var testFileData = new File ( [ 'testdata' ], { type: 'text/plain' } );
+					return true;
+				}
+				catch ( Error ) {
+					if (window.navigator.msSaveOrOpenBlob ) {
+					//edge IE 11...
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+			},
+			/* 
+			--- saveFile function --------------------------------------------------------------------------------------------------
+			
+			This function data to a local file
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+
+			saveFile : function ( filename, text, type ) {
+				if ( ! type ) {
+					type = 'text/plain';
+				}
+				if ( window.navigator.msSaveOrOpenBlob ) {
+					//https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
+					//edge IE 11...
+					try {
+						window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename ); 
+					}
+					catch ( Error ) {
+					}
+				}
+				else {
+					// FF...
+					// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
+					try {
+						var mapFile = window.URL.createObjectURL ( new File ( [ text ], { type: type } ) );
+						var element = document.createElement ( 'a' );
+						element.setAttribute( 'href', mapFile );
+						element.setAttribute( 'download', filename );
+						element.style.display = 'none';
+						document.body.appendChild ( element );
+						element.click ( );
+						document.body.removeChild ( element );
+						window.URL.revokeObjectURL ( mapFile );
+					}
+					catch ( Error ) {
+					}				
+				}
+			},
+			
 			formatTime : function ( time ) {
 				time = Math.floor ( time );
 				if ( 0 === time ) {
@@ -57,6 +144,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				else {
 					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
 				}
+			},
+			
+			readURL : function ( ) {
+				var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
+				var newUrlSearch = '?' ;
+				for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
+					var param = urlSearch [ urlCounter ].split ( '=' );
+					if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
+						if ( this.storageAvailable ( 'sessionStorage' ) ) {
+							sessionStorage.setItem ( 
+								param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
+								btoa ( param [ 1 ] )
+							);
+						}
+					}
+					else {
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += urlSearch [ urlCounter ];
+					}
+					
+				}
+				var stateObj = { index: "bar" };
+				history.pushState(stateObj, "page", newUrlSearch );
 			}
 		};
 	};

@@ -63,77 +63,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			*/
 
 			addControl : function ( map, divControlId, options ) {
+				
 				global.travelObjId = 0;
 				global.editedRoute = require ( './Data/Route') ( );
 				global.editedRoute.routeChanged = false;
 				global.editedRoute.routeInitialObjId = -1;
 				global.travelData = require ( './Data/TravelData' ) ( );
-				global.travelData.object =
-				{
-					name : "TravelData sample",
-					routes : 
-					[
-						{
-							name : "Chemin du Sârtê",
-							wayPoints : 
-							[
-								{
-									name : "Chemin du Sârtê 1 - Anthisnes",
-									lat : 50.50881,
-									lng : 5.49314,
-									objId : -1,
-									objType : 
-									{
-										name : "WayPoint",
-										version : "1.0.0"
-									}
-								},
-								{
-									name : "Chemin du Sârtê 22 - Anthisnes",
-									lat : 50.50937,
-									lng : 5.49470,
-									objId : -2,
-									objType :
-									{
-										name : "WayPoint",
-										version : "1.0.0"
-									}
-								}
-							],
-							notes : [],
-							geom :
-							{
-								pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
-								precision :6,
-								color : "#0000ff",
-								weight : "5",
-								objId : -3,
-								objType :
-								{
-									name : "Geom",
-									version : "1.0.0"
-								}
-							},
-							objId : -4,
-							objType :
-							{
-								name : "Route",
-								version : require ( './UI/Translator' ) ( ).getText ( 'Version' )
-							}
-						}
-					],
-					notes : [],
-					objId : -5,
-					objType : 
-					{
-						name : "TravelData",
-						version : "1.0.0"
-					}
-				};
-
-				console.log ( global.travelData.object );
-
-
+				
+				require ( './util/Utilities' ) ( ).readURL ( );
+				
 				if ( divControlId )	{
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 				}	

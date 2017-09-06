@@ -7118,77 +7118,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			*/
 
 			addControl : function ( map, divControlId, options ) {
+				
 				global.travelObjId = 0;
 				global.editedRoute = require ( './Data/Route') ( );
 				global.editedRoute.routeChanged = false;
 				global.editedRoute.routeInitialObjId = -1;
 				global.travelData = require ( './Data/TravelData' ) ( );
-				global.travelData.object =
-				{
-					name : "TravelData sample",
-					routes : 
-					[
-						{
-							name : "Chemin du Sârtê",
-							wayPoints : 
-							[
-								{
-									name : "Chemin du Sârtê 1 - Anthisnes",
-									lat : 50.50881,
-									lng : 5.49314,
-									objId : -1,
-									objType : 
-									{
-										name : "WayPoint",
-										version : "1.0.0"
-									}
-								},
-								{
-									name : "Chemin du Sârtê 22 - Anthisnes",
-									lat : 50.50937,
-									lng : 5.49470,
-									objId : -2,
-									objType :
-									{
-										name : "WayPoint",
-										version : "1.0.0"
-									}
-								}
-							],
-							notes : [],
-							geom :
-							{
-								pnts : "w~xi_BwwgnIaHkLgIkUmEyTcLie@",
-								precision :6,
-								color : "#0000ff",
-								weight : "5",
-								objId : -3,
-								objType :
-								{
-									name : "Geom",
-									version : "1.0.0"
-								}
-							},
-							objId : -4,
-							objType :
-							{
-								name : "Route",
-								version : require ( './UI/Translator' ) ( ).getText ( 'Version' )
-							}
-						}
-					],
-					notes : [],
-					objId : -5,
-					objType : 
-					{
-						name : "TravelData",
-						version : "1.0.0"
-					}
-				};
-
-				console.log ( global.travelData.object );
-
-
+				
+				require ( './util/Utilities' ) ( ).readURL ( );
+				
 				if ( divControlId )	{
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 				}	
@@ -7268,7 +7206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Data/Route":24,"./Data/TravelData":25,"./L.Travel.Control":28,"./UI/ContextMenu":30,"./UI/RoutesListEditorUI":35,"./UI/Translator":37,"./UI/UserInterface":38,"./core/RouteEditor":43}],30:[function(require,module,exports){
+},{"./Data/Route":24,"./Data/TravelData":25,"./L.Travel.Control":28,"./UI/ContextMenu":30,"./UI/RoutesListEditorUI":35,"./UI/UserInterface":38,"./core/RouteEditor":43,"./util/Utilities":51}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7674,12 +7612,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).showItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).hideItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).removeItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
 	};
 
 	var getItineraryEditorUI = function ( ) {
@@ -7828,7 +7766,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 	
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../core/MapEditor":42,"../util/Utilities":51,"./HTMLElementsFactory":32,"./Translator":37}],34:[function(require,module,exports){
+},{"../core/MapEditor":41,"../util/Utilities":51,"./HTMLElementsFactory":32,"./Translator":37}],34:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -8954,7 +8892,233 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var getDefaultRouteProvider = function ( ) {
+	var getErrorEditor = function ( ) {
+
+		return {
+			
+			showError : function ( error ) {
+				var header = '<span class="TravelControl-Error">';
+				var footer = '</span>';
+				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
+				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
+			},
+
+			clear : function ( routeObjId ) {
+				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getErrorEditor;
+	}
+
+}());
+
+},{"../UI/ErrorEditorUI":31}],40:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var getItineraryEditor = function ( ) {
+		
+		var _SetItinerary = function (  ) {
+			require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+		};
+
+		return {
+			setItinerary : function( ) { _SetItinerary (  );},
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getItineraryEditor;
+	}
+
+}());
+
+},{"../UI/ItineraryEditorUI":33}],41:[function(require,module,exports){
+(function (global){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	var _Translator = require ( '../UI/Translator' ) ( );
+	var _Config = require ( '../util/Config' ) ( );
+
+	var getRouteTooltipText = function ( layer ) {
+		var route = null;
+		try {
+			route = global.travelData.routes.getAt ( layer.objId );
+		}
+		catch ( e ) {
+			if ( layer.objId === global.editedRoute.objId ) {
+				route = global.editedRoute;
+			}
+		}
+		return ( route ? route.name : '');
+	};
+	
+	var getRoutePopupText = function ( layer ) {
+		var route = null;
+		try {
+			route = global.travelData.routes.getAt ( layer.objId );
+		}
+		catch ( e ) {
+			if ( layer.objId === global.editedRoute.objId ) {
+				route = global.editedRoute;
+			}
+		}
+		var distance = 0;
+		var duration = 0;
+		if ( route ) {
+			var maneuverIterator = route.itinerary.maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				distance += maneuverIterator.value.distance;
+				duration += maneuverIterator.value.duration;
+			}
+			distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
+			duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
+		}
+		var returnValue = '';
+		if ( route ) {
+			returnValue = '<div class="RoutePopup-Header">' +
+			route.name + '</div><div class="RoutePopup-Distance">' +
+			_Translator.getText ( 'MapEditor - Distance' ) + distance + '</div><div class="RoutePopup-Duration">' +
+			_Translator.getText ( 'MapEditor - Duration' ) + duration + '</div>';
+		}
+		return returnValue;
+	};
+	
+	var onRouteClick = function ( event ) {
+		event.target.openPopup ( event.latlng );		
+	};
+	
+	var onRouteContextMenu = function ( event ) {
+		require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).routeContextMenu );
+	};
+	
+	var getMapEditor = function ( ) {
+		
+		var _AddTo = function ( objId, object ) {
+			object.objId = objId;
+			global.map.addLayer ( object );
+			global.map.travelObjects.set ( objId, object );
+		};
+		var _RemoveFrom = function ( objId ) {
+			global.map.removeLayer ( global.map.travelObjects.get ( objId ) );
+			global.map.travelObjects.delete ( objId );
+		};
+		
+		return {
+			addRoute : function ( route ) {
+				var latLng = [];
+				var pointsIterator = route.itinerary.itineraryPoints.iterator;
+				while ( ! pointsIterator.done ) {
+					latLng.push ( pointsIterator.value.latLng );
+				}
+				var polyline = L.polyline ( 
+					latLng,
+					{
+						color : route.geom.color,
+						weight : route.geom.weight
+					}
+				);
+				_AddTo ( route.objId, polyline );
+				polyline.addTo ( global.map );
+				polyline.bindTooltip ( getRouteTooltipText );
+				polyline.bindPopup ( getRoutePopupText );
+				L.DomEvent.on ( polyline, 'click', onRouteClick );
+				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+			},
+			zoomToItineraryPoint : function ( itineraryPointObjId ) {
+				map.setView ( 
+					global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
+					_Config.itineraryPointZoom 
+				);
+			},
+			addItineraryPointMarker : function ( itineraryPointObjId ) {
+				_AddTo ( 
+					itineraryPointObjId,
+					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
+				);
+			},
+			removeItineraryPointMarker : function ( itineraryPointObjId ) {
+				_RemoveFrom ( itineraryPointObjId );
+			}
+		};
+	};
+
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getMapEditor;
+	}
+
+}());
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../UI/ContextMenu":30,"../UI/Translator":37,"../util/Config":50,"../util/Utilities":51,"./RouteEditor":43}],42:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var getMapboxRouteProvider = function ( ) {
 	
 		var _IconList = 
 		{
@@ -9127,11 +9291,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 
-		var _ProviderOptions = 
-		{
-			url : 'https://router.project-osrm.org/',
-		};
-		
 		var _ParseResponse = function ( requestResponse, route ) {
 			
 			var response = JSON.parse( requestResponse );
@@ -9210,11 +9369,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			);
-
 			return ;
 		};
 		
-		var _GetUrl = function ( wayPoints) {
+		var _GetUrl = function ( wayPoints, providerKey ) {
 			
 			var wayPointsToString = function ( wayPoint, result )  {
 				if ( null === result ) {
@@ -9224,257 +9382,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return result;
 			};
 			var wayPointsString = wayPoints.forEach ( wayPointsToString );
-
-			return _ProviderOptions.url +
-				'route/v1/driving/' +
+			
+			return 'https://api.mapbox.com/directions/v5/mapbox/driving/' +
 				 wayPointsString.substr ( 0, wayPointsString.length - 1 ) +
-				'?geometries=polyline6&overview=full&steps=true&annotations=distance';
+				'?geometries=polyline6&overview=full&steps=true&annotations=distance&access_token=' +
+				providerKey;
 		};
 		
 		return {
-			getUrl : function ( wayPoints ) {
-				return _GetUrl ( wayPoints );
+			getUrl : function ( wayPoints, providerKey ) {
+				return _GetUrl ( wayPoints, providerKey );
 			},
 			parseResponse : function ( requestResponse, itinerary ) {
 				_ParseResponse ( requestResponse, itinerary );
-			}
+			},
+			get name ( ) { return 'mapbox';}
 		};
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getDefaultRouteProvider;
+		module.exports = getMapboxRouteProvider;
 	}
 
 }());
 
-},{"../data/ItineraryPoint":46,"../data/Maneuver":47,"osrm-text-instructions":1,"polyline":17}],40:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var getErrorEditor = function ( ) {
-
-		return {
-			
-			showError : function ( error ) {
-				var header = '<span class="TravelControl-Error">';
-				var footer = '</span>';
-				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
-				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
-			},
-
-			clear : function ( routeObjId ) {
-				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
-			}
-		};
-	};
-
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getErrorEditor;
-	}
-
-}());
-
-},{"../UI/ErrorEditorUI":31}],41:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var getItineraryEditor = function ( ) {
-		
-		var _SetItinerary = function (  ) {
-			require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
-		};
-
-		return {
-			setItinerary : function( ) { _SetItinerary (  );},
-		};
-	};
-
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryEditor;
-	}
-
-}());
-
-},{"../UI/ItineraryEditorUI":33}],42:[function(require,module,exports){
-(function (global){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _Config = require ( '../util/Config' ) ( );
-
-	var getRouteTooltipText = function ( layer ) {
-		console.log ( layer );
-		var route = null;
-		try {
-			route = global.travelData.routes.getAt ( layer.objId );
-		}
-		catch ( e ) {
-			if ( layer.objId === global.editedRoute.objId ) {
-				route = global.editedRoute;
-			}
-		}
-		return ( route ? route.name : '');
-	};
-	
-	var getRoutePopupText = function ( layer ) {
-		var route = null;
-		try {
-			route = global.travelData.routes.getAt ( layer.objId );
-		}
-		catch ( e ) {
-			if ( layer.objId === global.editedRoute.objId ) {
-				route = global.editedRoute;
-			}
-		}
-		var distance = 0;
-		var duration = 0;
-		if ( route ) {
-			var maneuverIterator = route.itinerary.maneuvers.iterator;
-			while ( ! maneuverIterator.done ) {
-				distance += maneuverIterator.value.distance;
-				duration += maneuverIterator.value.duration;
-			}
-			distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
-			duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
-		}
-		var returnValue = '';
-		if ( route ) {
-			returnValue = '<div class="RoutePopup-Header">' +
-			route.name + '</div><div class="RoutePopup-Distance">' +
-			_Translator.getText ( 'MapEditor - Distance' ) + distance + '</div><div class="RoutePopup-Duration">' +
-			_Translator.getText ( 'MapEditor - Duration' ) + duration + '</div>';
-		}
-		return returnValue;
-	};
-	
-	var onRouteClick = function ( event ) {
-		event.target.openPopup ( event.latlng );		
-	};
-	
-	var onRouteContextMenu = function ( event ) {
-		require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).routeContextMenu );
-	};
-	
-	var getMapEditor = function ( ) {
-		
-		var _AddTo = function ( objId, object ) {
-			object.objId = objId;
-			global.map.addLayer ( object );
-			global.map.travelObjects.set ( objId, object );
-		};
-		var _RemoveFrom = function ( objId ) {
-			global.map.removeLayer ( global.map.travelObjects.get ( objId ) );
-			global.map.travelObjects.delete ( objId );
-		};
-		
-		return {
-			addRoute : function ( route ) {
-				var latLng = [];
-				var pointsIterator = route.itinerary.itineraryPoints.iterator;
-				while ( ! pointsIterator.done ) {
-					latLng.push ( pointsIterator.value.latLng );
-				}
-				var polyline = L.polyline ( 
-					latLng,
-					{
-						color : route.geom.color,
-						weight : route.geom.weight
-					}
-				);
-				_AddTo ( route.objId, polyline );
-				polyline.addTo ( global.map );
-				polyline.bindTooltip ( getRouteTooltipText );
-				polyline.bindPopup ( getRoutePopupText );
-				L.DomEvent.on ( polyline, 'click', onRouteClick );
-				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
-			},
-			zoomToItineraryPoint : function ( itineraryPointObjId ) {
-				map.setView ( 
-					global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
-					_Config.itineraryPointZoom 
-				);
-			},
-			showItineraryPointMarker : function ( itineraryPointObjId ) {
-				_AddTo ( 
-					itineraryPointObjId,
-					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
-				);
-			},
-			hideItineraryPointMarker : function ( itineraryPointObjId ) {
-				_RemoveFrom ( itineraryPointObjId );
-			}
-		};
-	};
-
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getMapEditor;
-	}
-
-}());
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../UI/ContextMenu":30,"../UI/Translator":37,"../util/Config":50,"../util/Utilities":51,"./RouteEditor":43}],43:[function(require,module,exports){
+},{"../data/ItineraryPoint":46,"../data/Maneuver":47,"osrm-text-instructions":1,"polyline":17}],43:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -9683,7 +9615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Data/Route":24,"../Data/Waypoint.js":27,"../UI/RouteEditorUI":34,"../UI/RoutesListEditorUI":35,"../UI/Translator":37,"../util/Config":50,"./ErrorEditor":40,"./ItineraryEditor":41,"./MapEditor":42,"./Router":44}],44:[function(require,module,exports){
+},{"../Data/Route":24,"../Data/Waypoint.js":27,"../UI/RouteEditorUI":34,"../UI/RoutesListEditorUI":35,"../UI/Translator":37,"../util/Config":50,"./ErrorEditor":39,"./ItineraryEditor":40,"./MapEditor":41,"./Router":44}],44:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -9707,7 +9639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _RouteProvider = require ( './DefaultRouteProvider' ) ( );
+	var _RouteProvider = require ( './MapboxRouteProvider' ) ( );
 	var _RequestStarted = false;
 	
 	var getRouter = function ( ) {
@@ -9729,7 +9661,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_RouteProvider.parseResponse ( requestResponse, global.editedRoute );
 			_RequestStarted = false;			
 			require ( './RouteEditor' ) ( ).endRouting ( );
-		};
+
+			};
 		
 		var _ParseError = function ( status, statusText ) {
 			_RequestStarted = false;
@@ -9739,10 +9672,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _StartRequest = function ( ) {
 
 			_RequestStarted = true;
-/*
-			_RouteProvider.getUrl ( global.editedRoute.wayPoints );
-			var xmlHttpRequest = new XMLHttpRequest ( );
 			
+			var providerKey = '';
+			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'sessionStorage' ) ) {
+				providerKey = atob ( sessionStorage.getItem ( _RouteProvider.name ) );
+			}
+			
+			var xmlHttpRequest = new XMLHttpRequest ( );
 			xmlHttpRequest.onreadystatechange = function ( event ) {
 				if ( this.readyState === XMLHttpRequest.DONE ) {
 					if ( this.status === 200 ) {
@@ -9753,24 +9689,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			};
-			
 			xmlHttpRequest.open ( 
 				'GET',
-				_RouteProvider.getUrl ( global.editedRoute.wayPoints ),
+				_RouteProvider.getUrl ( global.editedRoute.wayPoints, providerKey ),
 				true
 			);
 			xmlHttpRequest.send ( null );
-*/
-			_ParseResponse ( '{"code":"Ok","waypoints":[{"hint":"cdo8ho3aPIYrAAAAAQAAAEkAAAAAAAAAKwAAAAEAAABJAAAAAAAAAF_bAAB911MAZ7YCA6DXUwA-tgIDAwDfA3NqiII=","location":[5.494653,50.509415],"name":"Chemin du Sârtê"},{"hint":"Ug4fhmbaPIYDAAAAOgAAAAAAAAAAAAAAAwAAADoAAAAAAAAAAAAAAF_bAAAS01MAJq4CAxnTUwAqrgIDAACvCHNqiII=","location":[5.493522,50.507302],"name":"Chemin des Patars"}],"routes":[{"legs":[{"steps":[{"intersections":[{"out":0,"entry":[true],"location":[5.494653,50.509415],"bearings":[242]}],"geometry":"mezi_ByvjnIxKjd@rExTdInU|GjL","duration":17.5,"distance":128.6,"name":"Chemin du Sârtê","weight":17.5,"mode":"driving","maneuver":{"bearing_after":242,"location":[5.494653,50.509415],"type":"depart","bearing_before":0,"modifier":"left"}},{"intersections":[{"out":1,"in":0,"entry":[false,true,true],"location":[5.493132,50.508798],"bearings":[45,135,315]}],"geometry":"{~xi_BwwgnIdFgMjUc`@vHoNpEyOzAoOlCuI","duration":27.9,"distance":156.1,"name":"Basse Voie","weight":27.9,"mode":"driving","maneuver":{"bearing_after":127,"location":[5.493132,50.508798],"type":"turn","bearing_before":222,"modifier":"left"}},{"intersections":[{"out":1,"in":2,"entry":[true,true,false],"location":[5.494842,50.507947],"bearings":[60,240,300]}],"geometry":"uiwi_BsbknIr@rA~ClI~^xfA","duration":16.6,"distance":118.2,"name":"Chemin des Patars","weight":16.6,"mode":"driving","maneuver":{"bearing_after":233,"location":[5.494842,50.507947],"type":"turn","bearing_before":122,"modifier":"right"}},{"intersections":[{"out":1,"in":0,"entry":[false,true,true],"location":[5.493484,50.507329],"bearings":[60,135,240]}],"geometry":"acvi_BwmhnIt@kA","duration":0.3,"distance":4,"name":"Chemin des Patars","weight":0.3,"mode":"driving","maneuver":{"bearing_after":137,"location":[5.493484,50.507329],"type":"continue","bearing_before":234,"modifier":"left"}},{"intersections":[{"in":0,"entry":[true],"location":[5.493522,50.507302],"bearings":[318]}],"geometry":"kavi_BcphnI","duration":0,"distance":0,"name":"Chemin des Patars","weight":0,"mode":"driving","maneuver":{"bearing_after":0,"bearing_before":138,"type":"arrive","location":[5.493522,50.507302]}}],"weight":62.3,"distance":406.9,"annotation":{"distance":[48.053484,27.357381,31.25925,21.957237,20.584292,54.690544,24.674083,22.326272,19.362671,14.445628,4.146022,14.789333,99.242275,4.030407]},"summary":"Chemin du Sârtê, Basse Voie","duration":62.3}],"weight_name":"routability","geometry":"mezi_ByvjnIxKjd@rExTdInU|GjLdFgMjUc`@vHoNpEyOzAoOlCuIr@rA~ClI~^xfAt@kA","weight":62.3,"distance":406.9,"duration":62.3}]}' );
-			
 		};
 		
 		var _StartRouting = function ( ) {
-
 			if ( _RequestStarted ) {
 				return;
 			}
-			
 			if ( ! _HaveValidWayPoints ( ) ) {
 				return;
 			}
@@ -9791,7 +9721,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./DefaultRouteProvider":39,"./RouteEditor":43}],45:[function(require,module,exports){
+},{"../util/Utilities":51,"./MapboxRouteProvider":42,"./RouteEditor":43}],45:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -10160,6 +10090,93 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getUtilities = function ( ) {
 		return {
+			/* 
+			--- storageAvailable function ------------------------------------------------------------------------------------------
+			
+			This function test if the storage API is available ( the API can be deactived by user....)
+			Adapted from MDN :-)
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+			
+			storageAvailable: function ( type ) {
+				try {
+					var storage = window [ type ];
+					var	x = '__storage_test__';
+					storage.setItem ( x, x );
+					storage.removeItem ( x );
+					return true;
+				}
+				catch ( e ) {
+					return false;
+				}				
+			},
+			/* --- End of storageAvailable function --- */		
+
+			/* 
+			--- fileAPIAvailable function ------------------------------------------------------------------------------------------
+			
+			This function test if the File API is available 
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+
+			fileAPIAvailable : function ( ) {
+				try {
+					// FF...
+					var testFileData = new File ( [ 'testdata' ], { type: 'text/plain' } );
+					return true;
+				}
+				catch ( Error ) {
+					if (window.navigator.msSaveOrOpenBlob ) {
+					//edge IE 11...
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+			},
+			/* 
+			--- saveFile function --------------------------------------------------------------------------------------------------
+			
+			This function data to a local file
+
+			------------------------------------------------------------------------------------------------------------------------
+			*/
+
+			saveFile : function ( filename, text, type ) {
+				if ( ! type ) {
+					type = 'text/plain';
+				}
+				if ( window.navigator.msSaveOrOpenBlob ) {
+					//https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
+					//edge IE 11...
+					try {
+						window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename ); 
+					}
+					catch ( Error ) {
+					}
+				}
+				else {
+					// FF...
+					// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
+					try {
+						var mapFile = window.URL.createObjectURL ( new File ( [ text ], { type: type } ) );
+						var element = document.createElement ( 'a' );
+						element.setAttribute( 'href', mapFile );
+						element.setAttribute( 'download', filename );
+						element.style.display = 'none';
+						document.body.appendChild ( element );
+						element.click ( );
+						document.body.removeChild ( element );
+						window.URL.revokeObjectURL ( mapFile );
+					}
+					catch ( Error ) {
+					}				
+				}
+			},
+			
 			formatTime : function ( time ) {
 				time = Math.floor ( time );
 				if ( 0 === time ) {
@@ -10195,6 +10212,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				else {
 					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
 				}
+			},
+			
+			readURL : function ( ) {
+				var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
+				var newUrlSearch = '?' ;
+				for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
+					var param = urlSearch [ urlCounter ].split ( '=' );
+					if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
+						if ( this.storageAvailable ( 'sessionStorage' ) ) {
+							sessionStorage.setItem ( 
+								param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
+								btoa ( param [ 1 ] )
+							);
+						}
+					}
+					else {
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += urlSearch [ urlCounter ];
+					}
+					
+				}
+				var stateObj = { index: "bar" };
+				history.pushState(stateObj, "page", newUrlSearch );
 			}
 		};
 	};
