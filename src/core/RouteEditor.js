@@ -50,12 +50,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
-				this.editRoute ( global.editedRoute.objId );
+				if ( _Config.routeEditor.clearAfterSave ) {
+					this.clear ( );
+				}
+				else {
+					this.editRoute ( global.editedRoute.objId );
+				}
 			},
 			
 			cancelEdition : function ( ) {
 				global.editedRoute.routeChanged = false;
-				this.editRoute ( global.editedRoute.routeInitialObjId );
+				if ( _Config.routeEditor.clearAfterCancel ) {
+					this.clear ( );
+				}
+				else {
+					this.editRoute ( global.editedRoute.routeInitialObjId );
+				}
 			},
 			
 			editRoute : function ( routeObjId ) { 
@@ -195,6 +205,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			addPointFromContextMenu : function ( mapClickEvent ) {
 				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
+			},
+			clear : function ( ) {
+					global.editedRoute = require ( '../data/Route' ) ( );
+					global.editedRoute.routeChanged = false;
+					global.editedRoute.routeInitialObjId = -1;
+					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 			}
 		};
 	};

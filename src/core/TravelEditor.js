@@ -19,10 +19,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
+	
+	var _Config = require ( '../util/Config' ) ( );
 
 	var getTravelEditor = function ( ) {
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
+		var _Translator = require ( '../UI/Translator' ) ( );
 
 		return {
 			
@@ -57,6 +60,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			swapRoute : function ( routeObjId, swapUp ) {
 				global.travelData.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
+			},
+			saveTravel : function ( ) {
+				if ( global.editedRoute.routeChanged ) {
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
+				}
+				else {
+					require ( '../util/Utilities' ) ( ).saveFile ( 'TravelData.trv', JSON.stringify ( global.travelData.object ) );
+					if ( _Config.travelEditor.clearAfterSave ) {
+						this.clear ( );
+					}
+				}
+			},
+			openTravel : function ( event ) {
+				var fileReader = new FileReader( );
+				fileReader.onload = function ( event ) {
+					global.travelData.object = JSON.parse ( fileReader.result ) ;
+					require ( '../core/RouteEditor' ) ( ).clear ( );
+					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+					require ( '../core/MapEditor' ) ( ).addRoutes ( );
+				};
+				fileReader.readAsText ( event.target.files [ 0 ] );
+			},
+			clear : function ( ) {
+				global.editedRoute = require ( '../Data/Route') ( );
+				global.editedRoute.routeChanged = false;
+				global.editedRoute.routeInitialObjId = -1;
+				global.travelData = require ( '../Data/TravelData' ) ( );
+				require ( '../core/RouteEditor' ) ( ).clear ( );
+				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
 			}
 		};
 	};

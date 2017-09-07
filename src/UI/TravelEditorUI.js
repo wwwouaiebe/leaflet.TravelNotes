@@ -61,6 +61,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickSaveTravelButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+		require ( '../core/TravelEditor' ) ( ).saveTravel ( );
+	};	
+	
+	var onClickOpenTravelButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		require ( '../core/TravelEditor' ) ( ).openTravel ( clickEvent );
 	};	
 		
 	var onClickUndoButton = function ( clickEvent ) {
@@ -145,6 +151,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			saveTravelButton.addEventListener ( 'click' , onClickSaveTravelButton, false );
 
+			var openTravelDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelControl-OpenTravelDiv'
+				}, 
+				buttonsDiv 
+			);
+			
+			var openTravelInput = htmlElementsFactory.create ( 
+				'input',
+				{
+					id : 'TravelControl-OpenTravelInput', 
+					type : 'file',
+					accept : '.trv'
+				},
+				openTravelDiv
+			);
+			openTravelInput.addEventListener ( 'change', onClickOpenTravelButton, false );
+
+			var openTravelFakeDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelControl-OpenTravelFakeDiv'
+				}, 
+				openTravelDiv 
+			);
+
 			var openTravelButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -153,13 +186,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
 					innerHTML : '&#x23CD;'
 				}, 
-				buttonsDiv 
+				openTravelFakeDiv 
 			);
+			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
+
+			
+			
 			
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
-					id : 'TravelControl-SaveTravelButton', 
+					id : 'TravelControl-UndoButton', 
 					className: 'TravelControl-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Undo' ), 
 					innerHTML : '&#x21ba;'

@@ -570,3 +570,17 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	text-decoration: underline;
 }
+#TravelControl-OpenTravelDiv
+{
+}
+#TravelControl-OpenTravelInput
+{
+	opacity: 0;
+	position: relative;
+	width: 0em;
+}
+
+#TravelControl-OpenTravelFakeDiv
+{
+	display: inline;
+}

@@ -316,6 +316,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Réouvrir une route supprimée"
 		},
 		{
+			msgid : "TravelEditor - Not possible to save a travel without a save or cancel",
+			msgstr : "Des données non sauvées sont présentes dans l'éditeur de route. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
+		},
+		{
 			msgid : "Utilities - day",
 			msgstr : "jours"
 		},
@@ -330,6 +334,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "Utilities - second",
 			msgstr : "s"
+		},
+		{
+			msgid : "TravelEditorUI - ",
+			msgstr : "xxx"
 		},
 		{
 			msgid : "TravelEditorUI - ",

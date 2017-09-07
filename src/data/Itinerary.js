@@ -58,7 +58,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var targetIterator = _ItineraryPoints.iterator;
 				while ( ! targetIterator.done ) {
 					itineraryPointObjIdMap.set ( Object.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
-					console.log ( Object.itineraryPoints [ sourceCounter ].objId + ' -> ' + targetIterator.value.objId);
 					sourceCounter ++;
 				}
 				var maneuverIterator = _Maneuvers.iterator;

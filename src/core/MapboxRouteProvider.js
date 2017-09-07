@@ -196,7 +196,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _ParseResponse = function ( requestResponse, route ) {
 			
 			var response = JSON.parse( requestResponse );
-			console.log ( response );
 
 			if ( "Ok" !== response.code )
 			{

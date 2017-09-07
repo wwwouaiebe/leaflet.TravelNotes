@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
-		console.log ( 'onInstructionContextMenu pntObjId : ' + clickEvent.target.itineraryPointObjId );
 	};
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
@@ -101,8 +100,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var itinerary = global.editedRoute.itinerary;
 			
-			console.log ( itinerary.object );
-		
 			var dataDiv = document.getElementById ( 'TravelControl-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
