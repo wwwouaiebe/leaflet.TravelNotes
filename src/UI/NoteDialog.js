@@ -30,12 +30,11 @@ To do: translations
 		
 		var dialogBase = require ( '../UI/DialogBase' ) ( );
 		dialogBase.title = _Translator.getText ( 'NoteDialog - Title' );
-		dialogBase.content.innerHTML = 'Lorem Ipsum';
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var form = htmlElementsFactory.create ( 
-			'form',
+			'div',
 			{ 
 				className : 'TravelNotes-NoteDialogForm',
 			},

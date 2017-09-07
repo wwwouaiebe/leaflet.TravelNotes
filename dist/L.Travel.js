@@ -7657,55 +7657,98 @@ To do: translations
 
 	var getDialogBase = function ( ) {
 		
-		var _DialogObjId = require ( '../data/ObjId' ) ( );
+		var dialogObjId = require ( '../data/ObjId' ) ( );
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var body = document.getElementsByTagName('body') [0];
-		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-Panel'} , body );
-		var _ScreenWidth = tmpDiv.clientWidth;
-		var _ScreenHeight = tmpDiv.clientHeight;
-		body.removeChild ( tmpDiv );
+		var backgroundDiv = htmlElementsFactory.create ( 'div', { id: 'TravelNotes-BackgroundDiv', className : 'TravelNotes-BackgroundDiv'} , body );
+		backgroundDiv.addEventListener ( 
+			'dragover', 
+			function ( event ) {
+				return;
+			},
+			false
+		);	
+		backgroundDiv.addEventListener ( 
+			'drop', 
+			function ( event ) {
+				return;
+			},
+			false
+		);	
+
+		var screenWidth = backgroundDiv.clientWidth;
+		var screenHeight = backgroundDiv.clientHeight;
 		
-		var _DialogContainer = htmlElementsFactory.create ( 
+		var startDragX = 0;
+		var startDragY = 0;
+		
+		var dialogTop = 0;
+		var dialogLeft = 0;
+
+		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-DialogContainer-' + _DialogObjId,
-				className : 'TravelNotes-BaseDialogContainer'
+				id : 'TravelNotes-DialogContainer-' + dialogObjId,
+				className : 'TravelNotes-BaseDialogContainer',
+				draggable : true
 			},
-			body 
+			backgroundDiv
 		);
-
+		dialogContainer.addEventListener ( 
+			'dragstart', 
+			function ( event ) {
+				try {
+					event.dataTransfer.setData ( 'Text', '1' );
+				}
+				catch ( e ) {
+				}
+				startDragX = event.screenX;
+				startDragY = event.screenY;
+			},
+			false
+		);	
+		dialogContainer.addEventListener ( 
+			'dragend', 
+			function ( event ) {
+				dialogLeft -= startDragX - event.screenX;
+				dialogTop -= startDragY - event.screenY;
+				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+			},
+			false 
+		);
 		var cancelButton = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				innerHTML: '&#x274c', 
-				className : 'TravelNotes-DialogCancelButton',
+				id : 'TravelNotes-DialogCancelButton',
+				className : 'TravelNotes-DialogButton',
 				title : _Translator.getText ( "DialogBase - close" )
 			},
-			_DialogContainer
+			dialogContainer
 		);
 		cancelButton.addEventListener ( 
 			'click',
 			function ( ) {
-				document.getElementsByTagName('body') [0].removeChild ( _DialogContainer );
-				_DialogContainer = null;
+				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);
-		var _DialogHeader = htmlElementsFactory.create ( 
+		var dialogHeader = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-DialogHeaderDiv',
 			},
-			_DialogContainer
+			dialogContainer
 		);		
-		var _ContentDiv = htmlElementsFactory.create ( 
+		
+		var contentDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-DialogContentDiv',
 			},
-			_DialogContainer
+			dialogContainer
 		);
 		
 		var buttonsDiv = htmlElementsFactory.create ( 
@@ -7713,36 +7756,36 @@ To do: translations
 			{ 
 				className : 'TravelNotes-DialogButtonsDiv',
 			},
-			_DialogContainer
+			dialogContainer
 		);
 		var okButton = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				innerHTML: '&#x274c', 
-				className : 'TravelNotes-DialogOkButton',
+				innerHTML: '&#x1f4be;', 
+				id : 'TravelNotes-DialogOkButton',
+				className : 'TravelNotes-DialogButton'
 			},
 			buttonsDiv
 		);
 		okButton.addEventListener ( 
 			'click',
 			function ( ) {
-				document.getElementsByTagName('body') [0].removeChild ( _DialogContainer );
-				_DialogContainer = null;
+				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);				
 		
 		return {
 			
-			get title ( ) { return _DialogHeader.innerHTML; },
-			set title ( Title ) { _DialogHeader.innerHTML = Title; },
+			get title ( ) { return dialogHeader.innerHTML; },
+			set title ( Title ) { dialogHeader.innerHTML = Title; },
 			center : function ( ) {
-				var dialogTop = ( _ScreenHeight - _DialogContainer.clientHeight ) / 2;
-				var dialogLeft = ( _ScreenWidth - _DialogContainer.clientWidth ) / 2;
-				_DialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+				dialogTop = ( screenHeight - dialogContainer.clientHeight ) / 2;
+				dialogLeft = ( screenWidth - dialogContainer.clientWidth ) / 2;
+				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
 			},
-			get content ( ) { return _ContentDiv;},
-			set content ( Content ) { _ContentDiv = Content; },
+			get content ( ) { return contentDiv;},
+			set content ( Content ) { contentDiv = Content; },
 
 		};
 	};
@@ -8167,12 +8210,11 @@ To do: translations
 		
 		var dialogBase = require ( '../UI/DialogBase' ) ( );
 		dialogBase.title = _Translator.getText ( 'NoteDialog - Title' );
-		dialogBase.content.innerHTML = 'Lorem Ipsum';
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var form = htmlElementsFactory.create ( 
-			'form',
+			'div',
 			{ 
 				className : 'TravelNotes-NoteDialogForm',
 			},

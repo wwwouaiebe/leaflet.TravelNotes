@@ -23,11 +23,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	position: absolute;
 	top: 0;
 	left: 0;
-	opacity : 0;
+	/*opacity : 0;*/
 	width: 100vw;
 	height: 100vh;
 	background-color: transparent;
-	z-index: 0;
+	z-index: 1100;
 }
 .ContextMenu-Container
 {
@@ -176,22 +176,52 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	cursor: move;
 }
-
-.TravelNotes-BaseDialogContainer
+.TravelNotes-BackgroundDiv
 {
 	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: transparent;
 	z-index: 1200;
+}
+.TravelNotes-BackgroundDiv:hover{
+	cursor: not-allowed;
+}
+.TravelNotes-BaseDialogContainer
+{
+	z-index: 1200;
+	position: absolute;
 	background-color: white;
 	border-style: solid;
 	border-width: 0.1em;
 	font-family : sans-serif;
-	font-size: 1em;;
+	font-size: 1em;
 	padding: 0.2em;
+	cursor:default;
 }
-
-
-
-
+.TravelNotes-BaseDialogContainer:active
+{
+	cursor: grab;
+}
+#TravelNotes-DialogCancelButton:hover
+{
+	color:red;
+}
+.TravelNotes-DialogButton
+{
+	width: 2em;
+}
+.TravelNotes-DialogHeaderDiv
+{
+	text-align: center;
+}
+.TravelNotes-NoteTextInput
+{
+	width: 50em;
+	height: 15em;
+}
 
 
 
