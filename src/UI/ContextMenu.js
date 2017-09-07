@@ -104,6 +104,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// to avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
 	// and we stop the procedure if equals.
 		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
+			_Lat = 0;
+			_Lng = 0;
 			return;
 		}
 		else

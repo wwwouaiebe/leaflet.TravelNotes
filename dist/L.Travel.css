@@ -177,6 +177,24 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	cursor: move;
 }
 
+.TravelNotes-BaseDialogContainer
+{
+	position: absolute;
+	z-index: 1200;
+	background-color: white;
+	border-style: solid;
+	border-width: 0.1em;
+	font-family : sans-serif;
+	font-size: 1em;;
+	padding: 0.2em;
+}
+
+
+
+
+
+
+
 #TravelControl-MainDiv
 {
 	background-color: white;
