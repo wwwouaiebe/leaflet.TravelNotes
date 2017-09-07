@@ -288,12 +288,8 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	overflow: auto;
 	margin-bottom: auto;
 }
-#TravelControl-CancelRouteButton
-{
-	margin-right: 2em;
-}
+#TravelControl-CancelTravelButton:hover,
 #TravelControl-RemoveAllWayPointsButton:hover,
-#TravelControl-DeleteAllRoutesButton:hover,
 #TravelControl-CancelRouteButton:hover
 {
 	color: red;
@@ -319,207 +315,207 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 }
 .TravelControl-kArriveDefaultSmall                                            
 {
-	background-image: url('icons/kArriveDefaultSmall.png');
+	background-image: url('icons/RoutingIcons/kArriveDefaultSmall.png');
 }
 .TravelControl-kArriveLeftSmall                                                 
 {
-	background-image: url('icons/kArriveLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kArriveLeftSmall.png');
 }
 .TravelControl-kArriveRightSmall                                                 
 {
-	background-image: url('icons/kArriveRightSmall.png');
+	background-image: url('icons/RoutingIcons/kArriveRightSmall.png');
 }
 .TravelControl-kContinueLeftSmall                                                
 {
-	background-image: url('icons/kContinueLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueLeftSmall.png');
 }
 .TravelControl-kContinueRightSmall                                               
 {
-	background-image: url('icons/kContinueRightSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueRightSmall.png');
 }
 .TravelControl-kContinueSharpLeftSmall                                           
 {
-	background-image: url('icons/kContinueSharpLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueSharpLeftSmall.png');
 }
 .TravelControl-kContinueSharpRightSmall                                          
 {
-	background-image: url('icons/kContinueSharpRightSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueSharpRightSmall.png');
 }
 .TravelControl-kContinueSlightLeftSmall                                          
 {
-	background-image: url('icons/kContinueSlightLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueSlightLeftSmall.png');
 }
 .TravelControl-kContinueSlightRightSmall                                         
 {
-	background-image: url('icons/kContinueSlightRightSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueSlightRightSmall.png');
 }
 .TravelControl-kContinueStraightSmall                                            
 {
-	background-image: url('icons/kContinueStraightSmall.png');
+	background-image: url('icons/RoutingIcons/kContinueStraightSmall.png');
 }
 .TravelControl-kDepartDefaultSmall                                               
 {
-	background-image: url('icons/kDepartDefaultSmall.png');
+	background-image: url('icons/RoutingIcons/kDepartDefaultSmall.png');
 }
 .TravelControl-kDepartLeftSmall                                                  
 {
-	background-image: url('icons/kDepartLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kDepartLeftSmall.png');
 }
 .TravelControl-kDepartRightSmall                                                 
 {
-	background-image: url('icons/kDepartRightSmall.png');
+	background-image: url('icons/RoutingIcons/kDepartRightSmall.png');
 }
 .TravelControl-kEndOfRoadLeftSmall                                               
 {
-	background-image: url('icons/kEndOfRoadLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kEndOfRoadLeftSmall.png');
 }
 .TravelControl-kEndOfRoadRightSmall                                              
 {
-	background-image: url('icons/kEndOfRoadRightSmall.png');
+	background-image: url('icons/RoutingIcons/kEndOfRoadRightSmall.png');
 }
 .TravelControl-kForkLeftSmall                                                    
 {
-	background-image: url('icons/kForkLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kForkLeftSmall.png');
 }
 .TravelControl-kForkRightSmall                                                   
 {
-	background-image: url('icons/kForkRightSmall.png');
+	background-image: url('icons/RoutingIcons/kForkRightSmall.png');
 }
 .TravelControl-kMergeDefaultSmall                                                
 {
-	background-image: url('icons/kMergeDefaultSmall.png');
+	background-image: url('icons/RoutingIcons/kMergeDefaultSmall.png');
 }
 .TravelControl-kMergeLeftSmall                                                   
 {
-	background-image: url('icons/kMergeLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kMergeLeftSmall.png');
 }
 .TravelControl-kMergeRightSmall                                                  
 {
-	background-image: url('icons/kMergeRightSmall.png');
+	background-image: url('icons/RoutingIcons/kMergeRightSmall.png');
 }
 .TravelControl-kNewNameLeftSmall                                                 
 {
-	background-image: url('icons/kNewNameLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameLeftSmall.png');
 }
 .TravelControl-kNewNameRightSmall                                                
 {
-	background-image: url('icons/kNewNameRightSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameRightSmall.png');
 }
 .TravelControl-kNewNameSharpLeftSmall                                            
 {
-	background-image: url('icons/kNewNameSharpLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameSharpLeftSmall.png');
 }
 .TravelControl-kNewNameSharpRightSmall                                           
 {
-	background-image: url('icons/kNewNameSharpRightSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameSharpRightSmall.png');
 }
 .TravelControl-kNewNameSlightLeftSmall                                           
 {
-	background-image: url('icons/kNewNameSlightLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameSlightLeftSmall.png');
 }
 .TravelControl-kNewNameSlightRightSmall                                          
 {
-	background-image: url('icons/kNewNameSlightRightSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameSlightRightSmall.png');
 }
 .TravelControl-kNewNameStraightSmall                                             
 {
-	background-image: url('icons/kNewNameStraightSmall.png');
+	background-image: url('icons/RoutingIcons/kNewNameStraightSmall.png');
 }
 .TravelControl-kOffRampLeftSmall                                                 
 {
-	background-image: url('icons/kOffRampLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kOffRampLeftSmall.png');
 }
 .TravelControl-kOffRampRightSmall                                                
 {
-	background-image: url('icons/kOffRampRightSmall.png');
+	background-image: url('icons/RoutingIcons/kOffRampRightSmall.png');
 }
 .TravelControl-kOnRampLeftSmall                                                  
 {
-	background-image: url('icons/kOnRampLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kOnRampLeftSmall.png');
 }
 .TravelControl-kOnRampRightSmall                                                 
 {
-	background-image: url('icons/kOnRampRightSmall.png');
+	background-image: url('icons/RoutingIcons/kOnRampRightSmall.png');
 }
 .TravelControl-kRotaryLeftSmall                                                  
 {
-	background-image: url('icons/kRotaryLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kRotaryLeftSmall.png');
 }
 .TravelControl-kRotaryRightSmall                                                 
 {
-	background-image: url('icons/kRotaryRightSmall.png');
+	background-image: url('icons/RoutingIcons/kRotaryRightSmall.png');
 }
 .TravelControl-kRoundaboutLeftSmall                                              
 {
-	background-image: url('icons/kRoundaboutLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutLeftSmall.png');
 }
 .TravelControl-kRoundaboutRightSmall                                             
 {
-	background-image: url('icons/kRoundaboutRightSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutRightSmall.png');
 }
 .TravelControl-kRoundaboutTurnLeftSmall                                          
 {
-	background-image: url('icons/kRoundaboutTurnLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnLeftSmall.png');
 }
 .TravelControl-kRoundaboutTurnRightSmall                                         
 {
-	background-image: url('icons/kRoundaboutTurnRightSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnRightSmall.png');
 }
 .TravelControl-kRoundaboutTurnSharpLeftSmall                                     
 {
-	background-image: url('icons/kRoundaboutTurnSharpLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnSharpLeftSmall.png');
 }
 .TravelControl-kRoundaboutTurnSharpRightSmall                                    
 {
-	background-image: url('icons/kRoundaboutTurnSharpRightSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnSharpRightSmall.png');
 }
 .TravelControl-kRoundaboutTurnSlightLeftSmall                                    
 {
-	background-image: url('icons/kRoundaboutTurnSlightLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnSlightLeftSmall.png');
 }
 .TravelControl-kRoundaboutTurnSlightRightSmall                                   
 {
-	background-image: url('icons/kRoundaboutTurnSlightRightSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnSlightRightSmall.png');
 }
 .TravelControl-kRoundaboutTurnStraightSmall                                      
 {
-	background-image: url('icons/kRoundaboutTurnStraightSmall.png');
+	background-image: url('icons/RoutingIcons/kRoundaboutTurnStraightSmall.png');
 }
 .TravelControl-kTurnLeftSmall                                                    
 {
-	background-image: url('icons/kTurnLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnLeftSmall.png');
 }
 .TravelControl-kTurnRightSmall                                                   
 {
-	background-image: url('icons/kTurnRightSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnRightSmall.png');
 }
 .TravelControl-kTurnSharpLeftSmall                                               
 {
-	background-image: url('icons/kTurnSharpLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnSharpLeftSmall.png');
 }
 .TravelControl-kTurnSharpRightSmall                                              
 {
-	background-image: url('icons/kTurnSharpRightSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnSharpRightSmall.png');
 }
 .TravelControl-kTurnSlightLeftSmall                                              
 {
-	background-image: url('icons/kTurnSlightLeftSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnSlightLeftSmall.png');
 }
 .TravelControl-kTurnSlightRightSmall                                             
 {
-	background-image: url('icons/kTurnSlightRightSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnSlightRightSmall.png');
 }
 .TravelControl-kTurnStraightSmall                                                
 {
-	background-image: url('icons/kTurnStraightSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnStraightSmall.png');
 }
 .TravelControl-kTurnUturnSmall                                                   
 {
-	background-image: url('icons/kTurnUturnSmall.png');
+	background-image: url('icons/RoutingIcons/kTurnUturnSmall.png');
 }
 .TravelControl-kUndefinedSmall                                                   
 {
-	background-image: url('icons/kUndefinedSmall.png');
+	background-image: url('icons/RoutingIcons/kUndefinedSmall.png');
 }
 
 .TravelControl-ItineraryStreetName,

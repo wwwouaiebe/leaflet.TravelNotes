@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
 		return {
-			
 			startRouting : function ( ) {
 			if ( ! _Config.routing.auto ) {
 				return;
@@ -46,26 +45,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			saveEdition : function ( ) {
-				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
+				var newRouteObjId = global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
 				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
-				if ( _Config.routeEditor.clearAfterSave ) {
-					this.clear ( );
-				}
-				else {
-					this.editRoute ( global.editedRoute.objId );
-				}
+				this.clear ( );
 			},
 			
 			cancelEdition : function ( ) {
+				require ( './MapEditor' ) ( ).removeObject ( global.editedRoute.objId );
+				require ( './MapEditor' ) ( ).addRoute ( global.travelData.routes.getAt ( global.editedRoute.routeInitialObjId ) );
 				global.editedRoute.routeChanged = false;
-				if ( _Config.routeEditor.clearAfterCancel ) {
-					this.clear ( );
-				}
-				else {
-					this.editRoute ( global.editedRoute.routeInitialObjId );
-				}
+				this.clear ( );
 			},
 			
 			editRoute : function ( routeObjId ) { 
@@ -81,6 +72,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
 				require ( './ItineraryEditor' ) ( ).setItinerary ( );
+				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+				require ( './MapEditor' ) ( ).addRoute ( global.editedRoute );
+			},
+			
+			removeRoute : function ( routeObjId ) { 
+				require ( './TravelEditor' ) ( ).removeRoute ( routeObjId );
 			},
 			
 			addWayPoint : function ( latLng ) {
@@ -129,53 +126,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
-			get mapContextMenu ( ) {
+			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPoint : null,
+						param : latLng
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addWayPoint : null,
+						param : latLng
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPoint : null,
+						param : latLng
 					}
 				);
 				return contextMenu;
 			},
 			
-			get routeContextMenu ( ) {
+			getRouteContextMenu : function ( routeObjId ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Edit this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Edit this route" ), 
+						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.editRoute : null,
+						param: routeObjId
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
+						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						param: routeObjId
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Save this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
+						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Cancel this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
+						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;
@@ -195,17 +204,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
-			setStartPointFromContextMenu : function ( mapClickEvent ) {
-				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			setEndPointFromContextMenu : function ( mapClickEvent ) {
-				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			addPointFromContextMenu : function ( mapClickEvent ) {
-				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
 			clear : function ( ) {
 					global.editedRoute = require ( '../data/Route' ) ( );
 					global.editedRoute.routeChanged = false;

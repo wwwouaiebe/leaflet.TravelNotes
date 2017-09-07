@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Config = require ( '../util/Config' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 
 	var getTravelEditor = function ( ) {
 
@@ -39,14 +40,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			removeRoute : function ( routeObjId ) {
-				global.travelData.routes.remove ( routeObjId );
-				_TravelEditorUI.setRoutesList ( );
-			},
-
-			removeAllRoutes : function ( routeObjId ) {
-				global.travelData.routes.removeAll ( );
-				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_TravelEditorUI.setRoutesList (  );
+				if ( routeObjId === global.editedRoute.routeInitialObjId && global.editedRoute.routeChanged ) {
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
+				}
+				else {
+					require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+					global.travelData.routes.remove ( routeObjId );
+					_TravelEditorUI.setRoutesList ( );
+					if ( routeObjId === global.editedRoute.routeInitialObjId  ) {
+						require ( './RouteEditor') ( ).clear ( );
+					}
+				}
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
@@ -61,17 +65,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travelData.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 			},
+			
 			saveTravel : function ( ) {
 				if ( global.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
 					require ( '../util/Utilities' ) ( ).saveFile ( 'TravelData.trv', JSON.stringify ( global.travelData.object ) );
-					if ( _Config.travelEditor.clearAfterSave ) {
-						this.clear ( );
-					}
 				}
 			},
+			
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
@@ -83,6 +86,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				};
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
+			
 			clear : function ( ) {
 				global.editedRoute = require ( '../Data/Route') ( );
 				global.editedRoute.routeChanged = false;

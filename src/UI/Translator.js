@@ -220,6 +220,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Sélectionner cet endroit comme point de fin"
 		},
 		{
+			msgid : "RouteEditor - Edit this route",
+			msgstr : "Éditer cette route"
+		},
+		{
+			msgid : "RouteEditor - Delete this route",
+			msgstr : "Supprimer cette route"
+		},
+		{
+			msgid : "RouteEditor - Save modifications on this route",
+			msgstr : "Sauver les modifications"
+		},
+		{
+			msgid : "RouteEditor - Cancel modifications on this route",
+			msgstr : "Abandonner les modifications"
+		},
+		{
 			msgid : "RouteEditorUI - Show",
 			msgstr : "Afficher"
 		},
@@ -316,8 +332,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Réouvrir une route supprimée"
 		},
 		{
+			msgid : "TravelEditor - cannot remove an edited route",
+			msgstr : "Il n'est pas possible de supprimer une route quand celle-ci est en cours d'édition"
+		},
+		{
 			msgid : "TravelEditor - Not possible to save a travel without a save or cancel",
 			msgstr : "Des données non sauvées sont présentes dans l'éditeur de route. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Cancel travel",
+			msgstr : "Abandonner ce voyage"
 		},
 		{
 			msgid : "Utilities - day",

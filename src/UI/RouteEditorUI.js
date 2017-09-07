@@ -142,17 +142,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 
-			var saveRouteButton = htmlElementsFactory.create (
-				'div', 
-				{ 
-					id : 'TravelControl-SaveRouteButton',
-					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
-					innerHTML : '&#x1f4be;'
-				},
-				buttonsDiv 
-			);
-			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var cancelRouteButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -164,6 +153,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
+			var saveRouteButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelControl-SaveRouteButton',
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
+					innerHTML : '&#x1f4be;'
+				},
+				buttonsDiv 
+			);
+			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'div',
 				{ 

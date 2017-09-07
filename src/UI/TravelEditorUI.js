@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( './Translator' ) ( );
 	
 	// Events listeners for buttons under the routes list
-	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
+	var onCancelTravelButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
-		require ( '../core/TravelEditor' ) ( ).removeAllRoutes ( );
+		require ( '../core/TravelEditor' ) ( ).clear ( );
 	};
 
 	var onClickAddRouteButton = function ( event ) {
@@ -139,6 +139,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 			
+			var cancelTravelButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelControl-CancelTravelButton',
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Cancel travel' ), 
+					innerHTML : '&#x274c'
+				},
+				buttonsDiv 
+			);
+			cancelTravelButton.addEventListener ( 'click', onCancelTravelButton, false );
+
 			var saveTravelButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -189,9 +201,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				openTravelFakeDiv 
 			);
 			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
-
-			
-			
 			
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
@@ -216,20 +225,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
-
-			var deleteAllRoutesButton = htmlElementsFactory.create ( 
-				'div',
-				{ 
-					id : 'TravelControl-DeleteAllRoutesButton', 
-					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'TravelEditorUI - Delete all routes' ), 
-					innerHTML : '&#x267b;'
-				},
-				buttonsDiv
-			);
-			deleteAllRoutesButton.addEventListener ( 'click' , onClickDeleteAllRoutesButton, false );	
-		};
-		
+		};	
 		
 		return {
 			createUI : function ( controlDiv ) { 

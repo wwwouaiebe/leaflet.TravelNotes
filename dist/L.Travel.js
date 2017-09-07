@@ -7336,10 +7336,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 		var onMapClick = function ( event ) {
-			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).mapContextMenu.concat ( _LeftUserContextMenu ) );
+			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ).concat ( _LeftUserContextMenu ) );
 		};
 		var onMapContextMenu = function ( event ) {
-			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).mapContextMenu.concat ( _RightUserContextMenu ) );
+			require ('./UI/ContextMenu' ) ( event, require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ).concat ( _RightUserContextMenu ) );
 		};
 
 		return {
@@ -7534,7 +7534,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		event.stopPropagation ( );
 		_MenuItems[ event.target.menuItem ].action.call ( 
 			_MenuItems[ event.target.menuItem ].context,
-			_OriginalEvent
+			_MenuItems[ event.target.menuItem ].param ? _MenuItems[ event.target.menuItem ].param : _OriginalEvent
 		);
 		onCloseMenu ( );
 	};
@@ -8141,17 +8141,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 
-			var saveRouteButton = htmlElementsFactory.create (
-				'div', 
-				{ 
-					id : 'TravelControl-SaveRouteButton',
-					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
-					innerHTML : '&#x1f4be;'
-				},
-				buttonsDiv 
-			);
-			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var cancelRouteButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -8163,6 +8152,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
+			var saveRouteButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelControl-SaveRouteButton',
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'RouteEditorUI - Save' ), 
+					innerHTML : '&#x1f4be;'
+				},
+				buttonsDiv 
+			);
+			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'div',
 				{ 
@@ -8725,6 +8725,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Sélectionner cet endroit comme point de fin"
 		},
 		{
+			msgid : "RouteEditor - Edit this route",
+			msgstr : "Éditer cette route"
+		},
+		{
+			msgid : "RouteEditor - Delete this route",
+			msgstr : "Supprimer cette route"
+		},
+		{
+			msgid : "RouteEditor - Save modifications on this route",
+			msgstr : "Sauver les modifications"
+		},
+		{
+			msgid : "RouteEditor - Cancel modifications on this route",
+			msgstr : "Abandonner les modifications"
+		},
+		{
 			msgid : "RouteEditorUI - Show",
 			msgstr : "Afficher"
 		},
@@ -8821,8 +8837,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Réouvrir une route supprimée"
 		},
 		{
+			msgid : "TravelEditor - cannot remove an edited route",
+			msgstr : "Il n'est pas possible de supprimer une route quand celle-ci est en cours d'édition"
+		},
+		{
 			msgid : "TravelEditor - Not possible to save a travel without a save or cancel",
 			msgstr : "Des données non sauvées sont présentes dans l'éditeur de route. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Cancel travel",
+			msgstr : "Abandonner ce voyage"
 		},
 		{
 			msgid : "Utilities - day",
@@ -8912,9 +8936,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( './Translator' ) ( );
 	
 	// Events listeners for buttons under the routes list
-	var onClickDeleteAllRoutesButton = function ( clickEvent ) {
+	var onCancelTravelButton = function ( clickEvent ) {
 		clickEvent.stopPropagation();
-		require ( '../core/TravelEditor' ) ( ).removeAllRoutes ( );
+		require ( '../core/TravelEditor' ) ( ).clear ( );
 	};
 
 	var onClickAddRouteButton = function ( event ) {
@@ -9028,6 +9052,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 			
+			var cancelTravelButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelControl-CancelTravelButton',
+					className: 'TravelControl-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Cancel travel' ), 
+					innerHTML : '&#x274c'
+				},
+				buttonsDiv 
+			);
+			cancelTravelButton.addEventListener ( 'click', onCancelTravelButton, false );
+
 			var saveTravelButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -9078,9 +9114,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				openTravelFakeDiv 
 			);
 			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
-
-			
-			
 			
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
@@ -9105,20 +9138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
-
-			var deleteAllRoutesButton = htmlElementsFactory.create ( 
-				'div',
-				{ 
-					id : 'TravelControl-DeleteAllRoutesButton', 
-					className: 'TravelControl-Button', 
-					title : _Translator.getText ( 'TravelEditorUI - Delete all routes' ), 
-					innerHTML : '&#x267b;'
-				},
-				buttonsDiv
-			);
-			deleteAllRoutesButton.addEventListener ( 'click' , onClickDeleteAllRoutesButton, false );	
-		};
-		
+		};	
 		
 		return {
 			createUI : function ( controlDiv ) { 
@@ -9366,7 +9386,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	var onRouteContextMenu = function ( event ) {
-		require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).routeContextMenu );
+		require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getRouteContextMenu ( event.target.objId ) );
 	};
 	
 	var getMapEditor = function ( ) {
@@ -9383,6 +9403,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.map.removeLayer ( layer );
 				global.map.travelObjects.delete ( objId );
 			}
+			else {
+				console.log ( 'Object not found for deletion : ' + objId );
+			}
+				
 		};
 		
 		return {
@@ -9791,7 +9815,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
 		return {
-			
 			startRouting : function ( ) {
 			if ( ! _Config.routing.auto ) {
 				return;
@@ -9807,26 +9830,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			saveEdition : function ( ) {
-				global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
+				var newRouteObjId = global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
 				global.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
-				if ( _Config.routeEditor.clearAfterSave ) {
-					this.clear ( );
-				}
-				else {
-					this.editRoute ( global.editedRoute.objId );
-				}
+				this.clear ( );
 			},
 			
 			cancelEdition : function ( ) {
+				require ( './MapEditor' ) ( ).removeObject ( global.editedRoute.objId );
+				require ( './MapEditor' ) ( ).addRoute ( global.travelData.routes.getAt ( global.editedRoute.routeInitialObjId ) );
 				global.editedRoute.routeChanged = false;
-				if ( _Config.routeEditor.clearAfterCancel ) {
-					this.clear ( );
-				}
-				else {
-					this.editRoute ( global.editedRoute.routeInitialObjId );
-				}
+				this.clear ( );
 			},
 			
 			editRoute : function ( routeObjId ) { 
@@ -9842,6 +9857,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
 				require ( './ItineraryEditor' ) ( ).setItinerary ( );
+				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+				require ( './MapEditor' ) ( ).addRoute ( global.editedRoute );
+			},
+			
+			removeRoute : function ( routeObjId ) { 
+				require ( './TravelEditor' ) ( ).removeRoute ( routeObjId );
 			},
 			
 			addWayPoint : function ( latLng ) {
@@ -9890,53 +9911,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
-			get mapContextMenu ( ) {
+			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPoint : null,
+						param : latLng
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addWayPoint : null,
+						param : latLng
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPointFromContextMenu : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
+						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPoint : null,
+						param : latLng
 					}
 				);
 				return contextMenu;
 			},
 			
-			get routeContextMenu ( ) {
+			getRouteContextMenu : function ( routeObjId ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Edit this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Edit this route" ), 
+						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.editRoute : null,
+						param: routeObjId
 					} 
 				);
 				contextMenu.push ( 
 					{
-						context : this, name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
+						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						param: routeObjId
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Save this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
+						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
-						context : this, name : _Translator.getText ( "RouteEditor - Cancel this route" ), 
-						action : null
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
+						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;
@@ -9956,17 +9989,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
-			setStartPointFromContextMenu : function ( mapClickEvent ) {
-				this.setStartPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			setEndPointFromContextMenu : function ( mapClickEvent ) {
-				this.setEndPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
-			
-			addPointFromContextMenu : function ( mapClickEvent ) {
-				this.addWayPoint ( [ mapClickEvent.latlng.lat, mapClickEvent.latlng.lng ] );
-			},
 			clear : function ( ) {
 					global.editedRoute = require ( '../data/Route' ) ( );
 					global.editedRoute.routeChanged = false;
@@ -9985,7 +10007,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Data/Route":26,"../Data/Waypoint.js":29,"../UI/ItineraryEditorUI":35,"../UI/RouteEditorUI":36,"../UI/Translator":38,"../UI/TravelEditorUI":39,"../data/Route":56,"../util/Config":59,"./ErrorEditor":41,"./ItineraryEditor":42,"./MapEditor":43,"./Router":46}],46:[function(require,module,exports){
+},{"../Data/Route":26,"../Data/Waypoint.js":29,"../UI/ItineraryEditorUI":35,"../UI/RouteEditorUI":36,"../UI/Translator":38,"../UI/TravelEditorUI":39,"../data/Route":56,"../util/Config":59,"./ErrorEditor":41,"./ItineraryEditor":42,"./MapEditor":43,"./Router":46,"./TravelEditor":47}],46:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -10040,7 +10062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _StartRequest = function ( ) {
 
 			_RequestStarted = true;
-/*			
+		
 			var providerKey = '';
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'sessionStorage' ) ) {
 				providerKey = atob ( sessionStorage.getItem ( _RouteProvider.name ) );
@@ -10063,8 +10085,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				true
 			);
 			xmlHttpRequest.send ( null );
-*/			
-			_ParseResponse ('{"waypoints":[{"name":"Rue dèl Creû","location":[5.491895,50.508507]},{"name":"Basse Voie","location":[5.493796,50.508389]}],"routes":[{"legs":[{"steps":[{"intersections":[{"out":0,"entry":[true],"location":[5.491895,50.508507],"bearings":[57]}],"geometry":"ulxi_BmjenImRum@{CkQ","duration":24.8,"distance":85.7,"name":"Rue dèl Creû","weight":50.7,"mode":"driving","maneuver":{"bearing_after":57,"bearing_before":0,"type":"depart","location":[5.491895,50.508507],"instruction":"Head northeast on Rue dèl Creû"}},{"intersections":[{"out":0,"in":1,"entry":[true,false,true],"location":[5.492936,50.508896],"bearings":[135,225,315]},{"out":1,"in":2,"entry":[true,true,false],"location":[5.493132,50.508798],"bearings":[45,135,315]}],"geometry":"_eyi_BokgnIbEgKdFgMjQgZ","duration":18.1,"distance":83.2,"name":"Basse Voie","weight":33.5,"mode":"driving","maneuver":{"bearing_after":127,"location":[5.492936,50.508896],"type":"turn","bearing_before":49,"modifier":"right","instruction":"Turn right onto Basse Voie"}},{"intersections":[{"in":0,"entry":[true],"location":[5.493796,50.508389],"bearings":[317]}],"geometry":"iexi_BgainI","duration":0,"distance":0,"name":"Basse Voie","weight":0,"mode":"driving","maneuver":{"bearing_after":0,"location":[5.493796,50.508389],"type":"arrive","bearing_before":137,"modifier":"right","instruction":"You have arrived at your destination, on the right"}}],"weight":84.2,"distance":168.9,"annotation":{"distance":[63.15520198369543,22.533279297721318,17.6359876189832,20.584291773535234,44.94976490861426]},"summary":"Rue dèl Creû, Basse Voie","duration":42.9}],"weight_name":"routability","geometry":"ulxi_BmjenImRum@{CkQbEgKdFgMjQgZ","weight":84.2,"distance":168.9,"duration":42.9}],"code":"Ok","uuid":"cj79efog600szv1nnqg7kb0ki"}');
+			
+			//_ParseResponse ('{"waypoints":[{"name":"Rue dèl Creû","location":[5.491895,50.508507]},{"name":"Basse Voie","location":[5.493796,50.508389]}],"routes":[{"legs":[{"steps":[{"intersections":[{"out":0,"entry":[true],"location":[5.491895,50.508507],"bearings":[57]}],"geometry":"ulxi_BmjenImRum@{CkQ","duration":24.8,"distance":85.7,"name":"Rue dèl Creû","weight":50.7,"mode":"driving","maneuver":{"bearing_after":57,"bearing_before":0,"type":"depart","location":[5.491895,50.508507],"instruction":"Head northeast on Rue dèl Creû"}},{"intersections":[{"out":0,"in":1,"entry":[true,false,true],"location":[5.492936,50.508896],"bearings":[135,225,315]},{"out":1,"in":2,"entry":[true,true,false],"location":[5.493132,50.508798],"bearings":[45,135,315]}],"geometry":"_eyi_BokgnIbEgKdFgMjQgZ","duration":18.1,"distance":83.2,"name":"Basse Voie","weight":33.5,"mode":"driving","maneuver":{"bearing_after":127,"location":[5.492936,50.508896],"type":"turn","bearing_before":49,"modifier":"right","instruction":"Turn right onto Basse Voie"}},{"intersections":[{"in":0,"entry":[true],"location":[5.493796,50.508389],"bearings":[317]}],"geometry":"iexi_BgainI","duration":0,"distance":0,"name":"Basse Voie","weight":0,"mode":"driving","maneuver":{"bearing_after":0,"location":[5.493796,50.508389],"type":"arrive","bearing_before":137,"modifier":"right","instruction":"You have arrived at your destination, on the right"}}],"weight":84.2,"distance":168.9,"annotation":{"distance":[63.15520198369543,22.533279297721318,17.6359876189832,20.584291773535234,44.94976490861426]},"summary":"Rue dèl Creû, Basse Voie","duration":42.9}],"weight_name":"routability","geometry":"ulxi_BmjenImRum@{CkQbEgKdFgMjQgZ","weight":84.2,"distance":168.9,"duration":42.9}],"code":"Ok","uuid":"cj79efog600szv1nnqg7kb0ki"}');
 		};
 		
 		var _StartRouting = function ( ) {
@@ -10091,7 +10113,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./MapboxRouteProvider":44,"./RouteEditor":45}],47:[function(require,module,exports){
+},{"../util/Utilities":60,"./MapboxRouteProvider":44,"./RouteEditor":45}],47:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -10116,6 +10138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Config = require ( '../util/Config' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 
 	var getTravelEditor = function ( ) {
 
@@ -10134,14 +10157,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			removeRoute : function ( routeObjId ) {
-				global.travelData.routes.remove ( routeObjId );
-				_TravelEditorUI.setRoutesList ( );
-			},
-
-			removeAllRoutes : function ( routeObjId ) {
-				global.travelData.routes.removeAll ( );
-				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
-				_TravelEditorUI.setRoutesList (  );
+				if ( routeObjId === global.editedRoute.routeInitialObjId && global.editedRoute.routeChanged ) {
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
+				}
+				else {
+					require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+					global.travelData.routes.remove ( routeObjId );
+					_TravelEditorUI.setRoutesList ( );
+					if ( routeObjId === global.editedRoute.routeInitialObjId  ) {
+						require ( './RouteEditor') ( ).clear ( );
+					}
+				}
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
@@ -10156,17 +10182,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travelData.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 			},
+			
 			saveTravel : function ( ) {
 				if ( global.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
 					require ( '../util/Utilities' ) ( ).saveFile ( 'TravelData.trv', JSON.stringify ( global.travelData.object ) );
-					if ( _Config.travelEditor.clearAfterSave ) {
-						this.clear ( );
-					}
 				}
 			},
+			
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
@@ -10178,6 +10203,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				};
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
+			
 			clear : function ( ) {
 				global.editedRoute = require ( '../Data/Route') ( );
 				global.editedRoute.routeChanged = false;
@@ -10198,7 +10224,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Data/Route":26,"../Data/TravelData":27,"../UI/Translator":38,"../UI/TravelEditorUI":39,"../core/MapEditor":43,"../core/RouteEditor":45,"../util/Config":59,"../util/Utilities":60,"./ErrorEditor":41,"./RouteEditor":45}],48:[function(require,module,exports){
+},{"../Data/Route":26,"../Data/TravelData":27,"../UI/Translator":38,"../UI/TravelEditorUI":39,"../core/MapEditor":43,"../core/RouteEditor":45,"../util/Config":59,"../util/Utilities":60,"./ErrorEditor":41,"./MapEditor":43,"./RouteEditor":45}],48:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
 },{"./ItineraryPoint":51,"./Maneuver":52,"./Note":53,"./Route":56,"./WayPoint":57,"dup":18}],49:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
