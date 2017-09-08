@@ -22,11 +22,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getNote = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
-		var _Text = '';
+
+		var _IconHeight = 40;
+		var _IconWidth = 40;
+		var _IconContent = '';
+		var _PopupContent = '';
+		var _TooltipContent = '';
+
 		var _Phone = '';
 		var _Url = '';
 		var _Address = '';
+
 		var _CategoryId = '';
+
 		var _IconLat = 0;
 		var _IconLng = 0;
 		var _Lat = 0;
@@ -34,10 +42,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		return {
 
-			get text ( ) { return _Text;},
+			get iconHeight ( ) { return _IconHeight;},
 			
-			set text ( Text ) { _Text = Text; },
+			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
+
+			get iconWidth ( ) { return _IconWidth;},
 			
+			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
+
+			get iconContent ( ) { return _IconContent;},
+			
+			set iconContent ( IconContent ) { _IconContent = IconContent; },
+
+			get popupContent ( ) { return _PopupContent;},
+			
+			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
+
+			get tooltipContent ( ) { return _TooltipContent;},
+			
+			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
+
 			get phone ( ) { return _Phone;},
 			
 			set phone ( Phone ) { _Phone = Phone; },
@@ -84,7 +108,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				return {
-					text : _Text,
+					iconHeight : _IconHeight,
+                    iconWidth : _IconWidth,
+                    iconContent : _IconContent, 
+                    popupContent : _PopupContent,
+                    tooltipContent : _TooltipContent,
 					phone : _Phone,
 					url : _Url,
 					address : _Address,
@@ -100,7 +128,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
-				_Text = Object.text || '';
+				_IconHeight = Object.iconHeight || 40;
+				_IconWidth = Object.iconWidth || 40;
+				_IconContent = Object.iconContent || '';
+				_PopupContent = Object.popupContent || '';
+				_TooltipContent = Object.tooltipContent || '';
 				_Phone = Object.phone || '';
 				_Url = Object.url || '';
 				_Address = Object.address || '';

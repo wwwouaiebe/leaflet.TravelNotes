@@ -94,7 +94,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 				
 		};
-		
+		var _GetNotePopUpText = function ( note ) {
+			var notePopupText = '';
+			if ( 0 !== note.tooltipContent.length ) {
+				notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
+			}
+			if ( 0 !== note.popupContent.length ) {
+				notePopupText += '<div class="TravelNotes-PopupContent">' + note.popupContent + '</div>';
+			}
+			if ( 0 !== note.address.length ) {
+				notePopupText += '<div class="TravelNotes-PopupAddress">' + _Translator.getText ( 'MapEditor - popup address' )  + note.address + '</div>';
+			}
+			if ( 0 !== note.phone.length ) {
+				notePopupText += '<div class="TravelNotes-PopupPhone">' + _Translator.getText ( 'MapEditor - popup phone' )  + note.phone + '</div>';
+			}
+			if ( 0 !== note.url.length ) {
+				notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
+			}
+			notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
+				'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + '</div>';
+				
+			return notePopupText;
+		};
 		return {
 			addRoute : function ( route ) {
 				var latLng = [];
@@ -145,6 +166,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					itineraryPointObjId,
 					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
 				);
+			},
+			addTravelNote : function ( note ) {
+				var icon = L.divIcon (
+					{ 
+						iconSize: [ note.iconWidth, note.iconHeight ], 
+						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+						popupAnchor: [ 0, -note.iconHeight / 2 ], 
+						html : note.iconContent
+					}
+				);
+				var marker = L.marker ( 
+					note.latLng,
+					{
+						icon : icon,
+						draggable : true,
+						title : note.tooltipContent
+					}
+				);	
+				marker.bindPopup ( _GetNotePopUpText ( note ) );
+				_AddTo ( note.ObjId, marker );
 			}
 		};
 	};

@@ -25,22 +25,34 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
+	
+	var styles = [];
+	
+	var _Note;
+	
+	var onOkButtonClick = function ( ) {
+		console.log ( 'onOkButtonClick' );
+		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
+		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
+		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
+		_Note.popupContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-PopupContent' ).value;
+		_Note.tooltipContent = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value;
+		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
+		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
+		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
+		require ( '../core/NoteEditor') ( ).addNote ( _Note );
+	};
 
-	var getNoteDialog = function ( ) {
+	var getNoteDialog = function ( note ) {
+		
+		_Note = note;
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
+		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
-		
-		// content
-		var content = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-ContentDiv',
-			},
-			baseDialog.content
-		);
+		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
 		// Toolbar
 		var toolbarDiv = htmlElementsFactory.create ( 
@@ -49,10 +61,82 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			},
-			content
+			baseDialog.content
 		);
-		var focusControl = null;
 
+		// function to add buttons on the toolbar from a object
+		var addEditorButtons = function ( buttons ) {
+			buttons.forEach ( 
+				function ( button ) {
+					var newButton = htmlElementsFactory.create ( 
+						'button',
+						{
+							type : 'button',
+							innerHTML : button.title || '?',
+							htmlBefore : button.htmlBefore || '',
+							htmlAfter : button.htmlAfter || '',
+							className : 'TravelNotes-NoteDialog-EditorButton'
+						},
+						toolbarDiv
+					);
+					newButton.addEventListener ( 'click', onInsertStyle, false );
+				}
+			);
+		};
+
+		// open style button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
+		var openStyleDiv = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id: 'TravelNotes-NoteDialog-OpenStyleDiv'
+			}, 
+			toolbarDiv 
+		);
+		var openStyleInput = htmlElementsFactory.create ( 
+			'input',
+			{
+				id : 'TravelNotes-NoteDialog-OpenStyleInput', 
+				type : 'file',
+				accept : '.json'
+			},
+			openStyleDiv
+		);
+		openStyleInput.addEventListener ( 
+			'change', 
+			function ( event ) {
+				var fileReader = new FileReader( );
+				fileReader.onload = function ( event ) {
+					var newStyles = JSON.parse ( fileReader.result ) ;
+					addEditorButtons ( newStyles );
+					styles = styles.concat ( newStyles );
+					console.log ( styles );
+				};
+				var fileName = event.target.files [ 0 ].name;
+				fileReader.readAsText ( event.target.files [ 0 ] );
+			},
+			false
+		);
+		var openStyleFakeDiv = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
+			}, 
+			openStyleDiv 
+		);
+		var openStyleButton = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-NoteDialog-OpenStyleButton', 
+				className: 'TravelNotes-BaseDialog-Button', 
+				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
+				innerHTML : '&#x23CD;'
+			}, 
+			openStyleFakeDiv 
+		);
+		openStyleButton.addEventListener ( 'click' , function ( ) { openStyleInput.click ( ); }, false );
+	
+		// event handler for edition with the styles buttons
+		var focusControl = null;
 		var onInsertStyle = function ( event ) {
 			if ( ! focusControl ) {
 				return;
@@ -70,24 +154,7 @@ To do: translations
 			focusControl.focus ( );
 		};	
 		
-		var addEditorButtons = function ( buttons ) {
-			buttons.forEach ( 
-				function ( button ) {
-					var newButton = htmlElementsFactory.create ( 
-						'div',
-						{
-							innerHTML : button.title || '?',
-							htmlBefore : button.htmlBefore || '',
-							htmlAfter : button.htmlAfter || '',
-							className : 'TravelNotes-NoteDialog-EditorButton'
-						},
-						toolbarDiv
-					);
-					newButton.addEventListener ( 'click', onInsertStyle, false );
-				}
-			);
-		};
-		
+		// standard buttons for div, p, span and a
 		addEditorButtons (
 			[
 				{
@@ -113,14 +180,162 @@ To do: translations
 			]
 		);
 		
-		// IconHtmlContent
+		// personnalised buttons are restored
+		addEditorButtons ( styles );
+
+		// radio buttons for the icon type...
+		var iconRadioButtonDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-IconTypeDataDiv'
+			},
+			baseDialog.content
+		);
+		
+		// ...for the standard icons
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Standard icon'),
+			},
+			iconRadioButtonDiv
+		);
+		var iconRadioStandardInput = htmlElementsFactory.create (
+			'input',
+			{
+				type : 'radio',
+				className : 'TravelNotes-NoteDialog-RadioInput',
+				id : 'TravelNotes-NoteDialog-RadioStandardInput'
+			},
+			iconRadioButtonDiv
+		);
+		// event handler for the radio button 
+		iconRadioStandardInput.addEventListener (
+			'click',
+			function ( event ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-RadioPersonnelInput' ).checked = false;
+			},
+			false
+		);
+			
+		// ...and for the personnalzed icons
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Personnel icon' ),
+			},
+			iconRadioButtonDiv
+		);
+		var iconRadioPersonnalisedButton = htmlElementsFactory.create (
+			'input',
+			{
+				type : 'radio',
+				className : 'TravelNotes-NoteDialog-RadioInput',
+				id : 'TravelNotes-NoteDialog-RadioPersonnelInput'
+			},
+			iconRadioButtonDiv
+		);
+		// event handler for the radio button 
+		iconRadioPersonnalisedButton.addEventListener (
+			'click',
+			function ( event ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = false;
+			},
+			false
+		);
+		
+		// standard icons list
+		var iconListDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-IconsListDataDiv'
+			},
+			baseDialog.content
+		);
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Choose an icon'),
+			},
+			iconListDiv
+		);
+		var styleSelect = htmlElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-NoteDialog-Select',
+				id : 'TravelNotes-NoteDialog-IconSelect'
+			},
+			iconListDiv
+		);
+		
+		// icon dimensions...
+		var iconDimensionsDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
+			},
+			baseDialog.content
+		);
+		
+		// ... width ...
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Icon width'),
+			},
+			iconDimensionsDiv
+		);
+		var widthInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				id : 'TravelNotes-NoteDialog-WidthNumberInput'
+				
+			},
+			iconDimensionsDiv
+		);
+		widthInput.value = note.iconWidth;
+		
+		// ... and height
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Icon height'),
+			},
+			iconDimensionsDiv
+		);
+		var heightInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				id : 'TravelNotes-NoteDialog-HeightNumberInput'
+			},
+			iconDimensionsDiv
+		);
+		heightInput.value = note.iconHeight;
+		
+		// icon content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
+				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var iconHtmlContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -128,7 +343,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
-			content
+			baseDialog.content
 		);
 		iconHtmlContent.addEventListener (
 			'focus',
@@ -137,15 +352,15 @@ To do: translations
 			},
 			false
 		);
-			
-		// PopupContent
+		iconHtmlContent.value = note.iconContent;
+		// Popup content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var popUpContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -153,7 +368,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
-			content
+			baseDialog.content
 		);
 		popUpContent.addEventListener (
 			'focus',
@@ -162,15 +377,16 @@ To do: translations
 			},
 			false
 		);
+		popUpContent.value = note.popupContent;
 		
-		// tooltip
+		// tooltip content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var tooltip = htmlElementsFactory.create ( 
 			'input',
@@ -179,7 +395,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
 			},
-			content
+			baseDialog.content
 		);
 		tooltip.addEventListener (
 			'focus',
@@ -188,32 +404,35 @@ To do: translations
 			},
 			false
 		);
+		tooltip.value = note.tooltipContent;
 		
-		// Adress
+		// Address
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
 			},
-			content
+			baseDialog.content
 		);
-		var adress = htmlElementsFactory.create ( 
+		var address = htmlElementsFactory.create ( 
 			'input',
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Adress'
 			},
-			content
+			baseDialog.content
 		);
-		adress.addEventListener (
+		address.addEventListener (
 			'focus',
 			function ( event ) {
-				focusControl = adress;
+				focusControl = address;
 			},
 			false
 		);
+		address.value = note.address;
+		
 		// link
 		htmlElementsFactory.create ( 
 			'div',
@@ -221,7 +440,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var link = htmlElementsFactory.create ( 
 			'input',
@@ -230,7 +449,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Link'
 			},
-			content
+			baseDialog.content
 		);
 		link.addEventListener (
 			'focus',
@@ -239,6 +458,8 @@ To do: translations
 			},
 			false
 		);
+		link.value = note.url;
+		
 		// phone
 		htmlElementsFactory.create ( 
 			'div',
@@ -246,7 +467,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var phone = htmlElementsFactory.create ( 
 			'input',
@@ -255,7 +476,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Phone'
 			},
-			content
+			baseDialog.content
 		);
 		phone.addEventListener (
 			'focus',
@@ -264,9 +485,16 @@ To do: translations
 			},
 			false
 		);
+		phone.value = note.phone;
 		
+		document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = true;
+
+		// and the dialog is centered on the screen
 		baseDialog.center ( );
-		return;
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {

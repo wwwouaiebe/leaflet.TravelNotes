@@ -204,6 +204,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
 		},
 		{
+			msgid : "MapEditor - popup address",
+			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup phone",
+			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup url",
+			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup lng",
+			msgstr : "<span>&nbsp;-&nbsp;Longitude</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup lat",
+			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
+		},
+		{
 			msgid : "NoteDialog - Title",
 			msgstr : "Note"
 		},
@@ -230,6 +250,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "NoteDialog - TooltipTitle",
 			msgstr : "Contenu du tooltip&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - Standard icon",
+			msgstr : "Icône standard"
+		},
+		{
+			msgid : "NoteDialog - Personnel icon",
+			msgstr : "Icône personnalisée"
+		},
+		{
+			msgid : "NoteDialog - Choose an icon",
+			msgstr : "Icône : "
+		},
+		{
+			msgid : "NoteDialog - Icon width",
+			msgstr : "Largeur : "
+		},
+		{
+			msgid : "NoteDialog - Icon height",
+			msgstr : "Hauteur : "
 		},
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",

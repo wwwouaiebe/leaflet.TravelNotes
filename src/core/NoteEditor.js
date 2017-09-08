@@ -29,17 +29,27 @@ To do: translations
 	var getNoteEditor = function ( ) {
 		
 		return {
-			addNote :function ( ) {
-				console.log ( 'addNote' );
-				require ( '../UI/NoteDialog' ) ( );
+			newNote :function ( latLng ) {
+				console.log ( '----' );
+				var note = require ( '../data/Note' ) ( );
+				//note.object = JSON.parse ( '{"iconHeight":"42","iconWidth":"42","iconContent":"iconContent","popupContent":"popupContent","tooltipContent":"tooltipContent","phone":"phone","url":"link","address":"address","categoryId":"","iconLat":0,"iconLng":0,"lat":0,"lng":0,"objId":13,"objType":{"name":"Note","version":"1.0.0"}}' );
+				note.latLng = latLng;
+				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
+				console.log ( note.object );
+				require ( '../UI/NoteDialog' ) ( note );
 			},
+			addNote : function ( note ) {
+				console.log ( note.object );
+				global.travelData.notes.add ( note );
+				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
+			},				
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - Add a note" ), 
-						action : this.addNote,
+						name : _Translator.getText ( "NoteEditor - new note" ), 
+						action : this.newNote,
 						param : latLng
 					} 
 				);

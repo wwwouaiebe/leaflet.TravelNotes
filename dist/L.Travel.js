@@ -6750,11 +6750,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getNote = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
-		var _Text = '';
+
+		var _IconHeight = 40;
+		var _IconWidth = 40;
+		var _IconContent = '';
+		var _PopupContent = '';
+		var _TooltipContent = '';
+
 		var _Phone = '';
 		var _Url = '';
 		var _Address = '';
+
 		var _CategoryId = '';
+
 		var _IconLat = 0;
 		var _IconLng = 0;
 		var _Lat = 0;
@@ -6762,10 +6770,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		return {
 
-			get text ( ) { return _Text;},
+			get iconHeight ( ) { return _IconHeight;},
 			
-			set text ( Text ) { _Text = Text; },
+			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
+
+			get iconWidth ( ) { return _IconWidth;},
 			
+			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
+
+			get iconContent ( ) { return _IconContent;},
+			
+			set iconContent ( IconContent ) { _IconContent = IconContent; },
+
+			get popupContent ( ) { return _PopupContent;},
+			
+			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
+
+			get tooltipContent ( ) { return _TooltipContent;},
+			
+			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
+
 			get phone ( ) { return _Phone;},
 			
 			set phone ( Phone ) { _Phone = Phone; },
@@ -6812,7 +6836,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get object ( ) {
 				return {
-					text : _Text,
+					iconHeight : _IconHeight,
+                    iconWidth : _IconWidth,
+                    iconContent : _IconContent, 
+                    popupContent : _PopupContent,
+                    tooltipContent : _TooltipContent,
 					phone : _Phone,
 					url : _Url,
 					address : _Address,
@@ -6828,7 +6856,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
-				_Text = Object.text || '';
+				_IconHeight = Object.iconHeight || 40;
+				_IconWidth = Object.iconWidth || 40;
+				_IconContent = Object.iconContent || '';
+				_PopupContent = Object.popupContent || '';
+				_TooltipContent = Object.tooltipContent || '';
 				_Phone = Object.phone || '';
 				_Url = Object.url || '';
 				_Address = Object.address || '';
@@ -7476,8 +7508,11 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
-
+	var _OkButtonListener = null;
+	
 	var getBaseDialog = function ( ) {
+		
+		_OkButtonListener = null;
 		
 		var dialogObjId = require ( '../data/ObjId' ) ( );
 
@@ -7506,19 +7541,36 @@ To do: translations
 		var startDragX = 0;
 		var startDragY = 0;
 		
-		var dialogTop = 0;
-		var dialogLeft = 0;
+		var dialogX = 0;
+		var dialogY = 0;
 
 		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-BaseDialog-Container-' + dialogObjId,
 				className : 'TravelNotes-BaseDialog-Container',
-				draggable : true
 			},
 			backgroundDiv
 		);
-		dialogContainer.addEventListener ( 
+		var topBar = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				id : 'TravelNotes-BaseDialog-TopBar',
+				className : 'TravelNotes-BaseDialog-TopBar',
+				draggable : true
+			},
+			dialogContainer
+		);
+		var cancelButton = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				innerHTML: '&#x274c', 
+				id : 'TravelNotes-BaseDialog-CancelButton',
+				title : _Translator.getText ( "DialogBase - close" )
+			},
+			topBar
+		);
+		topBar.addEventListener ( 
 			'dragstart', 
 			function ( event ) {
 				try {
@@ -7531,24 +7583,14 @@ To do: translations
 			},
 			false
 		);	
-		dialogContainer.addEventListener ( 
+		topBar.addEventListener ( 
 			'dragend', 
 			function ( event ) {
-				dialogLeft -= startDragX - event.screenX;
-				dialogTop -= startDragY - event.screenY;
-				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+				dialogX += event.screenX - startDragX;
+				dialogY += event.screenY - startDragY;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
 			},
 			false 
-		);
-		var cancelButton = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				innerHTML: '&#x274c', 
-				id : 'TravelNotes-BaseDialog-CancelButton',
-				className : 'TravelNotes-BaseDialog-Button',
-				title : _Translator.getText ( "DialogBase - close" )
-			},
-			dialogContainer
 		);
 		cancelButton.addEventListener ( 
 			'click',
@@ -7557,7 +7599,7 @@ To do: translations
 			},
 			false
 		);
-		var dialogHeader = htmlElementsFactory.create ( 
+		var headerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-HeaderDiv',
@@ -7568,15 +7610,15 @@ To do: translations
 		var contentDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-DialogContentDiv',
+				className : 'TravelNotes-BaseDialog-ContentDiv',
 			},
 			dialogContainer
 		);
 		
-		var buttonsDiv = htmlElementsFactory.create ( 
+		var footerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-DialogButtonsDiv',
+				className : 'TravelNotes-BaseDialog-FooterDiv',
 			},
 			dialogContainer
 		);
@@ -7584,31 +7626,43 @@ To do: translations
 			'div',
 			{ 
 				innerHTML: '&#x1f4be;', 
-				id : 'TravelNotes-DialogOkButton',
-				className : 'TravelNotes-DialogButton'
+				id : 'TravelNotes-BaseDialog-OkButton',
+				className : 'TravelNotes-BaseDialog-Button'
 			},
-			buttonsDiv
+			footerDiv
 		);
 		okButton.addEventListener ( 
 			'click',
 			function ( ) {
+				if ( _OkButtonListener ) {
+					_OkButtonListener ( );
+				}
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);				
 		
 		return {
-			
-			get title ( ) { return dialogHeader.innerHTML; },
-			set title ( Title ) { dialogHeader.innerHTML = Title; },
-			center : function ( ) {
-				dialogTop = ( screenHeight - dialogContainer.clientHeight ) / 2;
-				dialogLeft = ( screenWidth - dialogContainer.clientWidth ) / 2;
-				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+			addClickOkButtonEventListener : function ( listener ) {
+				_OkButtonListener = listener;
 			},
+			
+			get title ( ) { return headerDiv.innerHTML; },
+			set title ( Title ) { headerDiv.innerHTML = Title; },
+			center : function ( ) {
+				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
+				dialogX = ( screenWidth - dialogContainer.clientWidth ) / 2;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
+			},
+
+			get header ( ) { return headerDiv;},
+			set header ( Header ) { headerDiv = Header; },
+			
 			get content ( ) { return contentDiv;},
 			set content ( Content ) { contentDiv = Content; },
 
+			get footer ( ) { return footerDiv;},
+			set footer ( Footer ) { footerDiv = Footer; }
 		};
 	};
 	
@@ -8205,22 +8259,34 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
+	
+	var styles = [];
+	
+	var _Note;
+	
+	var onOkButtonClick = function ( ) {
+		console.log ( 'onOkButtonClick' );
+		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
+		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
+		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
+		_Note.popupContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-PopupContent' ).value;
+		_Note.tooltipContent = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value;
+		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
+		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
+		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
+		require ( '../core/NoteEditor') ( ).addNote ( _Note );
+	};
 
-	var getNoteDialog = function ( ) {
+	var getNoteDialog = function ( note ) {
+		
+		_Note = note;
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
+		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
-		
-		// content
-		var content = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-ContentDiv',
-			},
-			baseDialog.content
-		);
+		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
 		// Toolbar
 		var toolbarDiv = htmlElementsFactory.create ( 
@@ -8229,10 +8295,82 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			},
-			content
+			baseDialog.content
 		);
-		var focusControl = null;
 
+		// function to add buttons on the toolbar from a object
+		var addEditorButtons = function ( buttons ) {
+			buttons.forEach ( 
+				function ( button ) {
+					var newButton = htmlElementsFactory.create ( 
+						'button',
+						{
+							type : 'button',
+							innerHTML : button.title || '?',
+							htmlBefore : button.htmlBefore || '',
+							htmlAfter : button.htmlAfter || '',
+							className : 'TravelNotes-NoteDialog-EditorButton'
+						},
+						toolbarDiv
+					);
+					newButton.addEventListener ( 'click', onInsertStyle, false );
+				}
+			);
+		};
+
+		// open style button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
+		var openStyleDiv = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id: 'TravelNotes-NoteDialog-OpenStyleDiv'
+			}, 
+			toolbarDiv 
+		);
+		var openStyleInput = htmlElementsFactory.create ( 
+			'input',
+			{
+				id : 'TravelNotes-NoteDialog-OpenStyleInput', 
+				type : 'file',
+				accept : '.json'
+			},
+			openStyleDiv
+		);
+		openStyleInput.addEventListener ( 
+			'change', 
+			function ( event ) {
+				var fileReader = new FileReader( );
+				fileReader.onload = function ( event ) {
+					var newStyles = JSON.parse ( fileReader.result ) ;
+					addEditorButtons ( newStyles );
+					styles = styles.concat ( newStyles );
+					console.log ( styles );
+				};
+				var fileName = event.target.files [ 0 ].name;
+				fileReader.readAsText ( event.target.files [ 0 ] );
+			},
+			false
+		);
+		var openStyleFakeDiv = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
+			}, 
+			openStyleDiv 
+		);
+		var openStyleButton = htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-NoteDialog-OpenStyleButton', 
+				className: 'TravelNotes-BaseDialog-Button', 
+				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
+				innerHTML : '&#x23CD;'
+			}, 
+			openStyleFakeDiv 
+		);
+		openStyleButton.addEventListener ( 'click' , function ( ) { openStyleInput.click ( ); }, false );
+	
+		// event handler for edition with the styles buttons
+		var focusControl = null;
 		var onInsertStyle = function ( event ) {
 			if ( ! focusControl ) {
 				return;
@@ -8250,24 +8388,7 @@ To do: translations
 			focusControl.focus ( );
 		};	
 		
-		var addEditorButtons = function ( buttons ) {
-			buttons.forEach ( 
-				function ( button ) {
-					var newButton = htmlElementsFactory.create ( 
-						'div',
-						{
-							innerHTML : button.title || '?',
-							htmlBefore : button.htmlBefore || '',
-							htmlAfter : button.htmlAfter || '',
-							className : 'TravelNotes-NoteDialog-EditorButton'
-						},
-						toolbarDiv
-					);
-					newButton.addEventListener ( 'click', onInsertStyle, false );
-				}
-			);
-		};
-		
+		// standard buttons for div, p, span and a
 		addEditorButtons (
 			[
 				{
@@ -8293,14 +8414,162 @@ To do: translations
 			]
 		);
 		
-		// IconHtmlContent
+		// personnalised buttons are restored
+		addEditorButtons ( styles );
+
+		// radio buttons for the icon type...
+		var iconRadioButtonDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-IconTypeDataDiv'
+			},
+			baseDialog.content
+		);
+		
+		// ...for the standard icons
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Standard icon'),
+			},
+			iconRadioButtonDiv
+		);
+		var iconRadioStandardInput = htmlElementsFactory.create (
+			'input',
+			{
+				type : 'radio',
+				className : 'TravelNotes-NoteDialog-RadioInput',
+				id : 'TravelNotes-NoteDialog-RadioStandardInput'
+			},
+			iconRadioButtonDiv
+		);
+		// event handler for the radio button 
+		iconRadioStandardInput.addEventListener (
+			'click',
+			function ( event ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-RadioPersonnelInput' ).checked = false;
+			},
+			false
+		);
+			
+		// ...and for the personnalzed icons
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Personnel icon' ),
+			},
+			iconRadioButtonDiv
+		);
+		var iconRadioPersonnalisedButton = htmlElementsFactory.create (
+			'input',
+			{
+				type : 'radio',
+				className : 'TravelNotes-NoteDialog-RadioInput',
+				id : 'TravelNotes-NoteDialog-RadioPersonnelInput'
+			},
+			iconRadioButtonDiv
+		);
+		// event handler for the radio button 
+		iconRadioPersonnalisedButton.addEventListener (
+			'click',
+			function ( event ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+				document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = false;
+			},
+			false
+		);
+		
+		// standard icons list
+		var iconListDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-IconsListDataDiv'
+			},
+			baseDialog.content
+		);
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Choose an icon'),
+			},
+			iconListDiv
+		);
+		var styleSelect = htmlElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-NoteDialog-Select',
+				id : 'TravelNotes-NoteDialog-IconSelect'
+			},
+			iconListDiv
+		);
+		
+		// icon dimensions...
+		var iconDimensionsDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
+			},
+			baseDialog.content
+		);
+		
+		// ... width ...
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Icon width'),
+			},
+			iconDimensionsDiv
+		);
+		var widthInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				id : 'TravelNotes-NoteDialog-WidthNumberInput'
+				
+			},
+			iconDimensionsDiv
+		);
+		widthInput.value = note.iconWidth;
+		
+		// ... and height
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - Icon height'),
+			},
+			iconDimensionsDiv
+		);
+		var heightInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				id : 'TravelNotes-NoteDialog-HeightNumberInput'
+			},
+			iconDimensionsDiv
+		);
+		heightInput.value = note.iconHeight;
+		
+		// icon content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
+				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var iconHtmlContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -8308,7 +8577,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
-			content
+			baseDialog.content
 		);
 		iconHtmlContent.addEventListener (
 			'focus',
@@ -8317,15 +8586,15 @@ To do: translations
 			},
 			false
 		);
-			
-		// PopupContent
+		iconHtmlContent.value = note.iconContent;
+		// Popup content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var popUpContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -8333,7 +8602,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
-			content
+			baseDialog.content
 		);
 		popUpContent.addEventListener (
 			'focus',
@@ -8342,15 +8611,16 @@ To do: translations
 			},
 			false
 		);
+		popUpContent.value = note.popupContent;
 		
-		// tooltip
+		// tooltip content
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var tooltip = htmlElementsFactory.create ( 
 			'input',
@@ -8359,7 +8629,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
 			},
-			content
+			baseDialog.content
 		);
 		tooltip.addEventListener (
 			'focus',
@@ -8368,32 +8638,35 @@ To do: translations
 			},
 			false
 		);
+		tooltip.value = note.tooltipContent;
 		
-		// Adress
+		// Address
 		htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
 			},
-			content
+			baseDialog.content
 		);
-		var adress = htmlElementsFactory.create ( 
+		var address = htmlElementsFactory.create ( 
 			'input',
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Adress'
 			},
-			content
+			baseDialog.content
 		);
-		adress.addEventListener (
+		address.addEventListener (
 			'focus',
 			function ( event ) {
-				focusControl = adress;
+				focusControl = address;
 			},
 			false
 		);
+		address.value = note.address;
+		
 		// link
 		htmlElementsFactory.create ( 
 			'div',
@@ -8401,7 +8674,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var link = htmlElementsFactory.create ( 
 			'input',
@@ -8410,7 +8683,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Link'
 			},
-			content
+			baseDialog.content
 		);
 		link.addEventListener (
 			'focus',
@@ -8419,6 +8692,8 @@ To do: translations
 			},
 			false
 		);
+		link.value = note.url;
+		
 		// phone
 		htmlElementsFactory.create ( 
 			'div',
@@ -8426,7 +8701,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
 			},
-			content
+			baseDialog.content
 		);
 		var phone = htmlElementsFactory.create ( 
 			'input',
@@ -8435,7 +8710,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Phone'
 			},
-			content
+			baseDialog.content
 		);
 		phone.addEventListener (
 			'focus',
@@ -8444,9 +8719,16 @@ To do: translations
 			},
 			false
 		);
+		phone.value = note.phone;
 		
+		document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
+		document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = true;
+
+		// and the dialog is centered on the screen
 		baseDialog.center ( );
-		return;
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -8455,7 +8737,7 @@ To do: translations
 
 }());
 
-},{"../UI/BaseDialog":32,"../UI/Translator":40,"./HTMLElementsFactory":35}],38:[function(require,module,exports){
+},{"../UI/BaseDialog":32,"../UI/Translator":40,"../core/NoteEditor":47,"./HTMLElementsFactory":35}],38:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -9169,6 +9451,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
 		},
 		{
+			msgid : "MapEditor - popup address",
+			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup phone",
+			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup url",
+			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup lng",
+			msgstr : "<span>&nbsp;-&nbsp;Longitude</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "MapEditor - popup lat",
+			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
+		},
+		{
 			msgid : "NoteDialog - Title",
 			msgstr : "Note"
 		},
@@ -9195,6 +9497,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "NoteDialog - TooltipTitle",
 			msgstr : "Contenu du tooltip&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - Standard icon",
+			msgstr : "Icône standard"
+		},
+		{
+			msgid : "NoteDialog - Personnel icon",
+			msgstr : "Icône personnalisée"
+		},
+		{
+			msgid : "NoteDialog - Choose an icon",
+			msgstr : "Icône : "
+		},
+		{
+			msgid : "NoteDialog - Icon width",
+			msgstr : "Largeur : "
+		},
+		{
+			msgid : "NoteDialog - Icon height",
+			msgstr : "Hauteur : "
 		},
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
@@ -9896,7 +10218,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 				
 		};
-		
+		var _GetNotePopUpText = function ( note ) {
+			var notePopupText = '';
+			if ( 0 !== note.tooltipContent.length ) {
+				notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
+			}
+			if ( 0 !== note.popupContent.length ) {
+				notePopupText += '<div class="TravelNotes-PopupContent">' + note.popupContent + '</div>';
+			}
+			if ( 0 !== note.address.length ) {
+				notePopupText += '<div class="TravelNotes-PopupAddress">' + _Translator.getText ( 'MapEditor - popup address' )  + note.address + '</div>';
+			}
+			if ( 0 !== note.phone.length ) {
+				notePopupText += '<div class="TravelNotes-PopupPhone">' + _Translator.getText ( 'MapEditor - popup phone' )  + note.phone + '</div>';
+			}
+			if ( 0 !== note.url.length ) {
+				notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
+			}
+			notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
+				'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + '</div>';
+				
+			return notePopupText;
+		};
 		return {
 			addRoute : function ( route ) {
 				var latLng = [];
@@ -9947,6 +10290,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					itineraryPointObjId,
 					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
 				);
+			},
+			addTravelNote : function ( note ) {
+				var icon = L.divIcon (
+					{ 
+						iconSize: [ note.iconWidth, note.iconHeight ], 
+						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+						popupAnchor: [ 0, -note.iconHeight / 2 ], 
+						html : note.iconContent
+					}
+				);
+				var marker = L.marker ( 
+					note.latLng,
+					{
+						icon : icon,
+						draggable : true,
+						title : note.tooltipContent
+					}
+				);	
+				marker.bindPopup ( _GetNotePopUpText ( note ) );
+				_AddTo ( note.ObjId, marker );
 			}
 		};
 	};
@@ -10270,6 +10633,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 },{"../data/ItineraryPoint":54,"../data/Maneuver":55,"osrm-text-instructions":1,"polyline":17}],47:[function(require,module,exports){
+(function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10301,17 +10665,27 @@ To do: translations
 	var getNoteEditor = function ( ) {
 		
 		return {
-			addNote :function ( ) {
-				console.log ( 'addNote' );
-				require ( '../UI/NoteDialog' ) ( );
+			newNote :function ( latLng ) {
+				console.log ( '----' );
+				var note = require ( '../data/Note' ) ( );
+				//note.object = JSON.parse ( '{"iconHeight":"42","iconWidth":"42","iconContent":"iconContent","popupContent":"popupContent","tooltipContent":"tooltipContent","phone":"phone","url":"link","address":"address","categoryId":"","iconLat":0,"iconLng":0,"lat":0,"lng":0,"objId":13,"objType":{"name":"Note","version":"1.0.0"}}' );
+				note.latLng = latLng;
+				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
+				console.log ( note.object );
+				require ( '../UI/NoteDialog' ) ( note );
 			},
+			addNote : function ( note ) {
+				console.log ( note.object );
+				global.travelData.notes.add ( note );
+				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
+			},				
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - Add a note" ), 
-						action : this.addNote,
+						name : _Translator.getText ( "NoteEditor - new note" ), 
+						action : this.newNote,
 						param : latLng
 					} 
 				);
@@ -10328,7 +10702,8 @@ To do: translations
 
 }());
 
-},{"../UI/NoteDialog":37,"../UI/Translator":40}],48:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../UI/NoteDialog":37,"../UI/Translator":40,"../core/MapEditor":45,"../data/Note":56}],48:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/

@@ -25,8 +25,11 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
-
+	var _OkButtonListener = null;
+	
 	var getBaseDialog = function ( ) {
+		
+		_OkButtonListener = null;
 		
 		var dialogObjId = require ( '../data/ObjId' ) ( );
 
@@ -55,19 +58,36 @@ To do: translations
 		var startDragX = 0;
 		var startDragY = 0;
 		
-		var dialogTop = 0;
-		var dialogLeft = 0;
+		var dialogX = 0;
+		var dialogY = 0;
 
 		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-BaseDialog-Container-' + dialogObjId,
 				className : 'TravelNotes-BaseDialog-Container',
-				draggable : true
 			},
 			backgroundDiv
 		);
-		dialogContainer.addEventListener ( 
+		var topBar = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				id : 'TravelNotes-BaseDialog-TopBar',
+				className : 'TravelNotes-BaseDialog-TopBar',
+				draggable : true
+			},
+			dialogContainer
+		);
+		var cancelButton = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				innerHTML: '&#x274c', 
+				id : 'TravelNotes-BaseDialog-CancelButton',
+				title : _Translator.getText ( "DialogBase - close" )
+			},
+			topBar
+		);
+		topBar.addEventListener ( 
 			'dragstart', 
 			function ( event ) {
 				try {
@@ -80,24 +100,14 @@ To do: translations
 			},
 			false
 		);	
-		dialogContainer.addEventListener ( 
+		topBar.addEventListener ( 
 			'dragend', 
 			function ( event ) {
-				dialogLeft -= startDragX - event.screenX;
-				dialogTop -= startDragY - event.screenY;
-				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+				dialogX += event.screenX - startDragX;
+				dialogY += event.screenY - startDragY;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
 			},
 			false 
-		);
-		var cancelButton = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				innerHTML: '&#x274c', 
-				id : 'TravelNotes-BaseDialog-CancelButton',
-				className : 'TravelNotes-BaseDialog-Button',
-				title : _Translator.getText ( "DialogBase - close" )
-			},
-			dialogContainer
 		);
 		cancelButton.addEventListener ( 
 			'click',
@@ -106,7 +116,7 @@ To do: translations
 			},
 			false
 		);
-		var dialogHeader = htmlElementsFactory.create ( 
+		var headerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-HeaderDiv',
@@ -117,15 +127,15 @@ To do: translations
 		var contentDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-DialogContentDiv',
+				className : 'TravelNotes-BaseDialog-ContentDiv',
 			},
 			dialogContainer
 		);
 		
-		var buttonsDiv = htmlElementsFactory.create ( 
+		var footerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-DialogButtonsDiv',
+				className : 'TravelNotes-BaseDialog-FooterDiv',
 			},
 			dialogContainer
 		);
@@ -133,31 +143,43 @@ To do: translations
 			'div',
 			{ 
 				innerHTML: '&#x1f4be;', 
-				id : 'TravelNotes-DialogOkButton',
-				className : 'TravelNotes-DialogButton'
+				id : 'TravelNotes-BaseDialog-OkButton',
+				className : 'TravelNotes-BaseDialog-Button'
 			},
-			buttonsDiv
+			footerDiv
 		);
 		okButton.addEventListener ( 
 			'click',
 			function ( ) {
+				if ( _OkButtonListener ) {
+					_OkButtonListener ( );
+				}
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);				
 		
 		return {
-			
-			get title ( ) { return dialogHeader.innerHTML; },
-			set title ( Title ) { dialogHeader.innerHTML = Title; },
-			center : function ( ) {
-				dialogTop = ( screenHeight - dialogContainer.clientHeight ) / 2;
-				dialogLeft = ( screenWidth - dialogContainer.clientWidth ) / 2;
-				dialogContainer.setAttribute ( "style", "top:" + dialogTop + "px;left:" + dialogLeft +"px;" );
+			addClickOkButtonEventListener : function ( listener ) {
+				_OkButtonListener = listener;
 			},
+			
+			get title ( ) { return headerDiv.innerHTML; },
+			set title ( Title ) { headerDiv.innerHTML = Title; },
+			center : function ( ) {
+				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
+				dialogX = ( screenWidth - dialogContainer.clientWidth ) / 2;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
+			},
+
+			get header ( ) { return headerDiv;},
+			set header ( Header ) { headerDiv = Header; },
+			
 			get content ( ) { return contentDiv;},
 			set content ( Content ) { contentDiv = Content; },
 
+			get footer ( ) { return footerDiv;},
+			set footer ( Footer ) { footerDiv = Footer; }
 		};
 	};
 	

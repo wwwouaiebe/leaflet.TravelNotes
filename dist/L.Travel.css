@@ -177,7 +177,6 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	cursor: move;
 }
 /* BaseDialog */
-
 .TravelNotes-BaseDialog-BackgroundDiv
 {
 	position: absolute;
@@ -185,10 +184,11 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.8);
 	z-index: 1200;
 }
-.TravelNotes-BaseDialog-BackgroundDiv:hover{
+.TravelNotes-BaseDialog-BackgroundDiv:hover
+{
 	cursor: not-allowed;
 }
 
@@ -201,53 +201,103 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	border-width: 0.1em;
 	font-family : sans-serif;
 	font-size: 1em;
-	padding: 0.2em;
 	cursor:default;
-	padding: 0.5em;
 }
-.TravelNotes-BaseDialog-Container:active
+
+.TravelNotes-BaseDialog-TopBar
+{
+	background-color : lightgray;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+}
+.TravelNotes-BaseDialog-TopBar:hover,
+.TravelNotes-BaseDialog-TopBar:active
 {
 	cursor: grab;
+}
+#TravelNotes-BaseDialog-CancelButton
+{
+	background-color : white;
+	width: 1em;
 }
 #TravelNotes-BaseDialog-CancelButton:hover
 {
 	color:red;
 }
-.TravelNotes-BaseDialogButton
-{
-	width: 2em;
-}
 .TravelNotes-BaseDialog-HeaderDiv
 {
 	text-align: center;
 	font-weight: bold;
+	padding: 0.5em;
 }
-/* NoteDialog */
-.TravelNotes-NoteDialog-ContentDiv
+.TravelNotes-BaseDialog-ContentDiv
 {
 	border-top-style : solid;
 	border-bottom-style : solid;
 	border-color: lightgray;
 	border-width : 0.1em;
-	margin-top: 1em;
-	margin-bottom: 1em;
-	padding-top: 1em;
-	padding-bottom:1em;
-	
+	padding: 0.5em;	
+}
+.TravelNotes-BaseDialog-FooterDiv
+{
+	padding: 0.5em;
+}
+.TravelNotes-BaseDialog-Button
+{
+	width: 2em;
+	border-style : solid;
+	border-width : 0.1em;
+	border-color : white;
+	text-align: center;	
+}
+.TravelNotes-BaseDialog-Button:hover
+{
+	border-color: black;
+}
+
+
+#TravelNotes-NoteDialog-ToolbarDiv
+{
+	max-width: 30em;
+}
+#TravelNotes-NoteDialog-OpenStyleDiv
+{
+	margin: 0;
+	margin-bottom: 0.5em;
+	padding: 0;
+}
+#TravelNotes-NoteDialog-OpenStyleInput
+{
+	opacity: 0;
+	position: relative;
+	width: 0em;
+	height:0em;
+}
+#TravelNotes-NoteDialog-OpenStyleFakeDiv
+{
+	display: inline;
+}
+#TravelNotes-NoteDialog-OpenStyleButton
+{
+	border-color: black;
+}
+#TravelNotes-NoteDialog-OpenStyleButton:hover
+{
+	color: red;
 }
 .TravelNotes-NoteDialog-EditorButton
 {
 	border-style : solid;
 	border-width : 0.1em;
-	display: inline-block;
 	background-color: lightgray;
 	margin-right: 0.2em;
+	display: inline;
 }
+.TravelNotes-NoteDialog-DataDiv,
 .TravelNotes-NoteDialog-TitleDiv
 {
 	margin-top: 0.5em;
 }
-
 .TravelNotes-NoteDialog-TextArea
 {
 	width: 39em;
@@ -255,6 +305,15 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 .TravelNotes-NoteDialog-InputText
 {
 	width: 38em;
+}
+.TravelNotes-NoteDialog-Hidden
+{
+	visibility : hidden;
+	height : 0;
+}
+.TravelNotes-NoteDialog-NumberInput
+{
+	margin-right: 0.5em;
 }
 
 #TravelControl-MainDiv
@@ -659,4 +718,16 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 #TravelControl-OpenTravelFakeDiv
 {
 	display: inline;
+}
+.TravelNotes-MapNote
+{
+	background-repeat : no-repeat;
+	height: 40px;
+	width: 40px;
+    display: inline-block;
+	vertical-align: top;
+}
+.TravelNotes-MapNoteCategory-0001
+{
+	background-image : url('icons/NotesIcons/0001.png');
 }
