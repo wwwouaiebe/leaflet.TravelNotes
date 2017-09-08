@@ -26,14 +26,14 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 
-	var getDialogBase = function ( ) {
+	var getBaseDialog = function ( ) {
 		
 		var dialogObjId = require ( '../data/ObjId' ) ( );
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var body = document.getElementsByTagName('body') [0];
-		var backgroundDiv = htmlElementsFactory.create ( 'div', { id: 'TravelNotes-BackgroundDiv', className : 'TravelNotes-BackgroundDiv'} , body );
+		var backgroundDiv = htmlElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} , body );
 		backgroundDiv.addEventListener ( 
 			'dragover', 
 			function ( event ) {
@@ -61,8 +61,8 @@ To do: translations
 		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-DialogContainer-' + dialogObjId,
-				className : 'TravelNotes-BaseDialogContainer',
+				id : 'TravelNotes-BaseDialog-Container-' + dialogObjId,
+				className : 'TravelNotes-BaseDialog-Container',
 				draggable : true
 			},
 			backgroundDiv
@@ -93,8 +93,8 @@ To do: translations
 			'div',
 			{ 
 				innerHTML: '&#x274c', 
-				id : 'TravelNotes-DialogCancelButton',
-				className : 'TravelNotes-DialogButton',
+				id : 'TravelNotes-BaseDialog-CancelButton',
+				className : 'TravelNotes-BaseDialog-Button',
 				title : _Translator.getText ( "DialogBase - close" )
 			},
 			dialogContainer
@@ -109,7 +109,7 @@ To do: translations
 		var dialogHeader = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-DialogHeaderDiv',
+				className : 'TravelNotes-BaseDialog-HeaderDiv',
 			},
 			dialogContainer
 		);		
@@ -162,7 +162,7 @@ To do: translations
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getDialogBase;
+		module.exports = getBaseDialog;
 	}
 
 }());

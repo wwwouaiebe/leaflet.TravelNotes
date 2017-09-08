@@ -204,6 +204,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
 		},
 		{
+			msgid : "NoteDialog - Title",
+			msgstr : "Note"
+		},
+		{
+			msgid : "NoteDialog - IconHtmlContentTitle",
+			msgstr : "Contenu de l'icône&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - PopupContentTitle",
+			msgstr : "Contenu du popup&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - AdressTitle",
+			msgstr : "Addresse&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - LinkTitle",
+			msgstr : "Lien&nbsp;:"
+		},
+		{
+			msgid : "NoteDialog - PhoneTitle",
+			msgstr : "Téléphone&nbsp:"
+		},
+		{
+			msgid : "NoteDialog - TooltipTitle",
+			msgstr : "Contenu du tooltip&nbsp;:"
+		},
+		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
 		},

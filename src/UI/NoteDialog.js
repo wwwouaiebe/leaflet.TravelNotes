@@ -27,29 +27,245 @@ To do: translations
 	var _Translator = require ( '../UI/Translator' ) ( );
 
 	var getNoteDialog = function ( ) {
-		
-		var dialogBase = require ( '../UI/DialogBase' ) ( );
-		dialogBase.title = _Translator.getText ( 'NoteDialog - Title' );
-		
+
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
+		var baseDialog = require ( '../UI/BaseDialog' ) ( );
+		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		
-		var form = htmlElementsFactory.create ( 
+		// content
+		var content = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-NoteDialogForm',
+				className : 'TravelNotes-NoteDialog-ContentDiv',
 			},
-			dialogBase.content
-		);
-		var noteText = htmlElementsFactory.create ( 
-			'input',
-			{ 
-				type : 'textarea',
-				className : 'TravelNotes-NoteTextInput',
-			},
-			form
+			baseDialog.content
 		);
 		
-		dialogBase.center ( );
+		// Toolbar
+		var toolbarDiv = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-ToolbarDiv',
+				id : 'TravelNotes-NoteDialog-ToolbarDiv'
+			},
+			content
+		);
+		var focusControl = null;
+
+		var onInsertStyle = function ( event ) {
+			if ( ! focusControl ) {
+				return;
+			}
+			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
+			var selectionStart = focusControl.selectionStart;
+			var selectionEnd = focusControl.selectionEnd;
+			var oldText = focusControl.value;
+			focusControl.value = oldText.substring ( 0, selectionStart ) + 
+				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
+				oldText.substring ( selectionEnd );
+			focusControl.setSelectionRange ( 
+				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
+				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
+			focusControl.focus ( );
+		};	
+		
+		var addEditorButtons = function ( buttons ) {
+			buttons.forEach ( 
+				function ( button ) {
+					var newButton = htmlElementsFactory.create ( 
+						'div',
+						{
+							innerHTML : button.title || '?',
+							htmlBefore : button.htmlBefore || '',
+							htmlAfter : button.htmlAfter || '',
+							className : 'TravelNotes-NoteDialog-EditorButton'
+						},
+						toolbarDiv
+					);
+					newButton.addEventListener ( 'click', onInsertStyle, false );
+				}
+			);
+		};
+		
+		addEditorButtons (
+			[
+				{
+					title : 'div',
+					htmlBefore : '<div>',
+					htmlAfter :  '</div>'
+				},
+				{
+					title : 'p',
+					htmlBefore : '<p>',
+					htmlAfter : '</p>'
+				},
+				{
+					title : 'span',
+					htmlBefore : '<span>',
+					htmlAfter : '</span>'
+				},
+				{
+					title : 'a',
+					htmlBefore : '<a target="_blank" href="">',
+					htmlAfter : '</a>'
+				},
+			]
+		);
+		
+		// IconHtmlContent
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
+			},
+			content
+		);
+		var iconHtmlContent = htmlElementsFactory.create ( 
+			'textarea',
+			{ 
+				className : 'TravelNotes-NoteDialog-TextArea',
+				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
+			},
+			content
+		);
+		iconHtmlContent.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = iconHtmlContent;
+			},
+			false
+		);
+			
+		// PopupContent
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
+			},
+			content
+		);
+		var popUpContent = htmlElementsFactory.create ( 
+			'textarea',
+			{ 
+				className : 'TravelNotes-NoteDialog-TextArea',
+				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
+			},
+			content
+		);
+		popUpContent.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = popUpContent;
+			},
+			false
+		);
+		
+		// tooltip
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
+			},
+			content
+		);
+		var tooltip = htmlElementsFactory.create ( 
+			'input',
+			{ 
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
+			},
+			content
+		);
+		tooltip.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = tooltip;
+			},
+			false
+		);
+		
+		// Adress
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
+			},
+			content
+		);
+		var adress = htmlElementsFactory.create ( 
+			'input',
+			{ 
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				id: 'TravelNotes-NoteDialog-InputText-Adress'
+			},
+			content
+		);
+		adress.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = adress;
+			},
+			false
+		);
+		// link
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
+			},
+			content
+		);
+		var link = htmlElementsFactory.create ( 
+			'input',
+			{ 
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				id: 'TravelNotes-NoteDialog-InputText-Link'
+			},
+			content
+		);
+		link.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = null;
+			},
+			false
+		);
+		// phone
+		htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-NoteDialog-TitleDiv',
+				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
+			},
+			content
+		);
+		var phone = htmlElementsFactory.create ( 
+			'input',
+			{ 
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				id: 'TravelNotes-NoteDialog-InputText-Phone'
+			},
+			content
+		);
+		phone.addEventListener (
+			'focus',
+			function ( event ) {
+				focusControl = phone;
+			},
+			false
+		);
+		
+		baseDialog.center ( );
 		return;
 	};
 	

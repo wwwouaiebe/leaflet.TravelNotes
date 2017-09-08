@@ -176,7 +176,9 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	cursor: move;
 }
-.TravelNotes-BackgroundDiv
+/* BaseDialog */
+
+.TravelNotes-BaseDialog-BackgroundDiv
 {
 	position: absolute;
 	top: 0;
@@ -186,10 +188,11 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	background-color: transparent;
 	z-index: 1200;
 }
-.TravelNotes-BackgroundDiv:hover{
+.TravelNotes-BaseDialog-BackgroundDiv:hover{
 	cursor: not-allowed;
 }
-.TravelNotes-BaseDialogContainer
+
+.TravelNotes-BaseDialog-Container
 {
 	z-index: 1200;
 	position: absolute;
@@ -200,30 +203,59 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 	font-size: 1em;
 	padding: 0.2em;
 	cursor:default;
+	padding: 0.5em;
 }
-.TravelNotes-BaseDialogContainer:active
+.TravelNotes-BaseDialog-Container:active
 {
 	cursor: grab;
 }
-#TravelNotes-DialogCancelButton:hover
+#TravelNotes-BaseDialog-CancelButton:hover
 {
 	color:red;
 }
-.TravelNotes-DialogButton
+.TravelNotes-BaseDialogButton
 {
 	width: 2em;
 }
-.TravelNotes-DialogHeaderDiv
+.TravelNotes-BaseDialog-HeaderDiv
 {
 	text-align: center;
+	font-weight: bold;
 }
-.TravelNotes-NoteTextInput
+/* NoteDialog */
+.TravelNotes-NoteDialog-ContentDiv
 {
-	width: 50em;
-	height: 15em;
+	border-top-style : solid;
+	border-bottom-style : solid;
+	border-color: lightgray;
+	border-width : 0.1em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	padding-top: 1em;
+	padding-bottom:1em;
+	
+}
+.TravelNotes-NoteDialog-EditorButton
+{
+	border-style : solid;
+	border-width : 0.1em;
+	display: inline-block;
+	background-color: lightgray;
+	margin-right: 0.2em;
+}
+.TravelNotes-NoteDialog-TitleDiv
+{
+	margin-top: 0.5em;
 }
 
-
+.TravelNotes-NoteDialog-TextArea
+{
+	width: 39em;
+}
+.TravelNotes-NoteDialog-InputText
+{
+	width: 38em;
+}
 
 #TravelControl-MainDiv
 {
