@@ -33,6 +33,7 @@ To do: translations
 			newTravelNote :function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
+				note.iconLatLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
 				require ( '../UI/NoteDialog' ) ( note );
 			},

@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	// one and only one object Travel is possible
 	
-	var _Name = '';
+	var _Name = 'TravelNotes.trv';
 	var _Routes = require ( './Collection' ) ( 'Route' );
 	_Routes.add ( require ( './Route' ) ( ) );
 
@@ -32,6 +32,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravel = function ( ) {
 		
 		return {
+			
+			get name ( ) { return _Name; },
+			
+			set name ( Name ) { _Name = Name;},
 			
 			get routes ( ) { return _Routes; },
 			

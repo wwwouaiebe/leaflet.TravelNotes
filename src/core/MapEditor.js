@@ -96,7 +96,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	var onTravelNoteDragEnd = function ( event ) {
-		_DataManager.getNoteAndRoute ( event.target.objId ).note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+	};
+	
+	var onTravelNoteDrag = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+	};
+	
+	var onBulletTravelNoteDragEnd = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+	};
+	
+	var onBulletTravelNoteDrag = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 	};
 	
 	var getMapEditor = function ( ) {
@@ -169,27 +191,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addTravelNote : function ( note ) {
+				var bullet = L.marker ( 
+					note.latLng,
+					{ 
+						icon : L.divIcon ( { iconSize: [ _Config.note.grip.size , _Config.note.grip.size ], iconAnchor: [ _Config.note.grip.size / 2, _Config.note.grip.size / 2 ], html : '<div></div>'} ),
+						zIndexOffset : -1000 ,
+						opacity : _Config.note.grip.opacity,
+						draggable : true
+					} 
+				);	
+				bullet.objId = note.objId;
+				L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
+				L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
-						iconAnchor: [ note.iconWidth / 2, note.iconHeight / 2 ],
-						popupAnchor: [ 0, -note.iconHeight / 2 ], 
+						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+						popupAnchor: [ 0, - note.iconHeight / 2 ], 
 						html : note.iconContent
 					}
 				);
 				var marker = L.marker ( 
-					note.latLng,
+					note.iconLatLng,
 					{
 						icon : icon,
-						draggable : true,
+						draggable : true
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
 				marker.bindTooltip ( getNoteTooltipText );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
-				_AddTo ( note.objId, marker );
+				marker.objId = note.objId;
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _Config.note.polyline );
+				polyline.objId = note.objId;
+				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
+				layerGroup.markerId = L.Util.stamp ( marker );
+				layerGroup.polylineId = L.Util.stamp ( polyline );
+				layerGroup.bulletId = L.Util.stamp ( bullet );
+				_AddTo ( note.objId, layerGroup );
+				//_AddTo ( note.objId, marker );
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
 				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
+				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
 			},
 			
 			editNote : function ( note ) {

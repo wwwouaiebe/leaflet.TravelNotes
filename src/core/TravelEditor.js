@@ -72,7 +72,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( 'Travel.trv', JSON.stringify ( _DataManager.travel.object ) );
+					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name, JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
 			
@@ -80,6 +80,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
+					_DataManager.travel.name = fileName;
 					require ( '../core/RouteEditor' ) ( ).clear ( );
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
@@ -92,6 +93,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						require ( '../core/MapEditor' ) ( ).addTravelNote ( notesIterator.value );
 					}
 				};
+				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			

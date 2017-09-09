@@ -6957,8 +6957,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Url = Object.url || '';
 				_Address = Object.address || '';
 				_CategoryId = Object.categoryId || '';
-				_IconLat = Object._IconLat || 0;
-				_IconLng = Object._IconLng || 0;
+				_IconLat = Object.iconLat || 0;
+				_IconLng = Object.iconLng || 0;
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_ObjId = require ( './ObjId' ) ( );
@@ -7202,7 +7202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	// one and only one object Travel is possible
 	
-	var _Name = '';
+	var _Name = 'TravelNotes.trv';
 	var _Routes = require ( './Collection' ) ( 'Route' );
 	_Routes.add ( require ( './Route' ) ( ) );
 
@@ -7212,6 +7212,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravel = function ( ) {
 		
 		return {
+			
+			get name ( ) { return _Name; },
+			
+			set name ( Name ) { _Name = Name;},
 			
 			get routes ( ) { return _Routes; },
 			
@@ -10298,7 +10302,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	var onTravelNoteDragEnd = function ( event ) {
-		_DataManager.getNoteAndRoute ( event.target.objId ).note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+	};
+	
+	var onTravelNoteDrag = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+	};
+	
+	var onBulletTravelNoteDragEnd = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+	};
+	
+	var onBulletTravelNoteDrag = function ( event ) {
+		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 	};
 	
 	var getMapEditor = function ( ) {
@@ -10371,27 +10397,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addTravelNote : function ( note ) {
+				var bullet = L.marker ( 
+					note.latLng,
+					{ 
+						icon : L.divIcon ( { iconSize: [ _Config.note.grip.size , _Config.note.grip.size ], iconAnchor: [ _Config.note.grip.size / 2, _Config.note.grip.size / 2 ], html : '<div></div>'} ),
+						zIndexOffset : -1000 ,
+						opacity : _Config.note.grip.opacity,
+						draggable : true
+					} 
+				);	
+				bullet.objId = note.objId;
+				L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
+				L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
-						iconAnchor: [ note.iconWidth / 2, note.iconHeight / 2 ],
-						popupAnchor: [ 0, -note.iconHeight / 2 ], 
+						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+						popupAnchor: [ 0, - note.iconHeight / 2 ], 
 						html : note.iconContent
 					}
 				);
 				var marker = L.marker ( 
-					note.latLng,
+					note.iconLatLng,
 					{
 						icon : icon,
-						draggable : true,
+						draggable : true
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
 				marker.bindTooltip ( getNoteTooltipText );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
-				_AddTo ( note.objId, marker );
+				marker.objId = note.objId;
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _Config.note.polyline );
+				polyline.objId = note.objId;
+				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
+				layerGroup.markerId = L.Util.stamp ( marker );
+				layerGroup.polylineId = L.Util.stamp ( polyline );
+				layerGroup.bulletId = L.Util.stamp ( bullet );
+				_AddTo ( note.objId, layerGroup );
+				//_AddTo ( note.objId, marker );
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
 				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
+				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
 			},
 			
 			editNote : function ( note ) {
@@ -10763,6 +10810,7 @@ To do: translations
 			newTravelNote :function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
+				note.iconLatLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
 				require ( '../UI/NoteDialog' ) ( note );
 			},
@@ -11243,7 +11291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( 'Travel.trv', JSON.stringify ( _DataManager.travel.object ) );
+					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name, JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
 			
@@ -11251,6 +11299,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
+					_DataManager.travel.name = fileName;
 					require ( '../core/RouteEditor' ) ( ).clear ( );
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
@@ -11263,6 +11312,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						require ( '../core/MapEditor' ) ( ).addTravelNote ( notesIterator.value );
 					}
 				};
+				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			
@@ -11342,6 +11392,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				weight : 2,
 				radius : 7,
 				fill : false
+			},
+			note : {
+				grip : { 
+					size : 10,
+					opacity: 0 
+				},
+				polyline : {
+					color : 'gray',
+					weight : 1
+				}
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {
