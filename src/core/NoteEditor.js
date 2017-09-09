@@ -28,21 +28,38 @@ To do: translations
 	
 	var getNoteEditor = function ( ) {
 		
-		return {
+		return {			
 			newNote :function ( latLng ) {
-				console.log ( '----' );
 				var note = require ( '../data/Note' ) ( );
 				//note.object = JSON.parse ( '{"iconHeight":"42","iconWidth":"42","iconContent":"iconContent","popupContent":"popupContent","tooltipContent":"tooltipContent","phone":"phone","url":"link","address":"address","categoryId":"","iconLat":0,"iconLng":0,"lat":0,"lng":0,"objId":13,"objType":{"name":"Note","version":"1.0.0"}}' );
 				note.latLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
-				console.log ( note.object );
 				require ( '../UI/NoteDialog' ) ( note );
 			},
+			
+			endNoteDialog : function ( note ) {
+				try {
+					global.travelData.notes.getAt ( note.objId );
+					require ( '../core/MapEditor' ) ( ).editNote ( note );
+				}
+				catch ( e ) {
+					this.addNote ( note );
+				}
+			},	
+			
 			addNote : function ( note ) {
-				console.log ( note.object );
 				global.travelData.notes.add ( note );
 				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
-			},				
+			},
+			
+			editNote : function ( noteObjId ) {
+				require ( '../UI/NoteDialog' ) ( global.travelData.notes.getAt ( noteObjId ) );
+			},
+			
+			removeNote : function ( noteObjId ) {
+				console.log ( noteObjId );
+			},
+			
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -53,12 +70,33 @@ To do: translations
 						param : latLng
 					} 
 				);
+				
 				return contextMenu;
 			},
-
+			
+			getNoteContextMenu :function ( noteObjId ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - edit note" ), 
+						action : this.editNote,
+						param : noteObjId
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - delete note" ), 
+						action : this.removeNote,
+						param : noteObjId
+					} 
+				);
+				
+				return contextMenu;
+			}
 		};
 	};
-
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getNoteEditor;

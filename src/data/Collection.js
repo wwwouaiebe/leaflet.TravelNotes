@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _GetAt = function ( objId ) {
 			var index = _IndexOfObjId ( objId );
 			if ( -1 === index ) {
-				throw 'invalid objId for getAt function';
+				return null;
 			}
 			return _Array [ index ];
 		};

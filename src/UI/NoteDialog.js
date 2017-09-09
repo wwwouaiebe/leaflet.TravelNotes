@@ -40,7 +40,7 @@ To do: translations
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor') ( ).addNote ( _Note );
+		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note );
 	};
 
 	var getNoteDialog = function ( note ) {
