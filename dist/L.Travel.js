@@ -6407,9 +6407,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			getRoute : function ( routeObjId ) {
 				var route = null;
-				route = this.travel.routes.getAt ( layer.objId );
+				route = this.travel.routes.getAt ( routeObjId );
 				if ( ! route ) {
-					if ( layer.objId === this.editedRoute.objId ) {
+					if ( routeObjId === this.editedRoute.objId ) {
 						route = this.editedRoute;
 					}
 				}
@@ -10234,6 +10234,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getNotePopUpText = function ( layer ) {
 		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
+		if ( ! note ) {
+			return '';
+		}
 		var notePopupText = '';
 		if ( 0 !== note.tooltipContent.length ) {
 			notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
@@ -10292,6 +10295,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onTravelNoteContextMenu = function ( event ) {
 		require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );
+	};
+
+	var onTravelNoteDragEnd = function ( event ) {
+		_DataManager.getNoteAndRoute ( event.target.objId ).note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 	};
 	
 	var getMapEditor = function ( ) {
@@ -10384,6 +10391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				_AddTo ( note.objId, marker );
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
+				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
 			},
 			
 			editNote : function ( note ) {

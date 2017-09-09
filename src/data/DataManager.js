@@ -66,9 +66,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			getRoute : function ( routeObjId ) {
 				var route = null;
-				route = this.travel.routes.getAt ( layer.objId );
+				route = this.travel.routes.getAt ( routeObjId );
 				if ( ! route ) {
-					if ( layer.objId === this.editedRoute.objId ) {
+					if ( routeObjId === this.editedRoute.objId ) {
 						route = this.editedRoute;
 					}
 				}
