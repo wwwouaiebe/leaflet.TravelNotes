@@ -31,7 +31,6 @@ To do: translations
 	var _Note;
 	
 	var onOkButtonClick = function ( ) {
-		console.log ( 'onOkButtonClick' );
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
 		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
 		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;

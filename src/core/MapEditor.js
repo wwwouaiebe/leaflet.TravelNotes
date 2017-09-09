@@ -24,15 +24,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Config = require ( '../util/Config' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 
-
 	var getNoteTooltipText = function ( layer ) {
-		var note = _DataManager.getNote ( layer.objId ).note;
+		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
 		
 		return ( note ? note.tooltipContent : '');
 	};
 	
 	var getNotePopUpText = function ( layer ) {
-		var note = _DataManager.getNote ( layer.objId ).note;
+		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
 		var notePopupText = '';
 		if ( 0 !== note.tooltipContent.length ) {
 			notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
@@ -97,16 +96,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _AddTo = function ( objId, object ) {
 			object.objId = objId;
-			object.addTo ( global.map );
-			//global.map.addLayer ( object );
-			global.map.travelObjects.set ( objId, object );
+			object.addTo ( _DataManager.map );
+			_DataManager.mapObjects.set ( objId, object );
 		};
 		var _RemoveFrom = function ( objId ) {
-			var layer = global.map.travelObjects.get ( objId );
+			var layer = _DataManager.mapObjects.get ( objId );
 			if ( layer ) {
 				L.DomEvent.off ( layer );
-				global.map.removeLayer ( layer );
-				global.map.travelObjects.delete ( objId );
+				_DataManager.map.removeLayer ( layer );
+				_DataManager.mapObjects.delete ( objId );
 			}
 			else {
 				console.log ( 'Object not found for deletion : ' + objId );
@@ -128,7 +126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				);
 				_AddTo ( route.objId, polyline );
-				polyline.addTo ( global.map );
+				polyline.addTo ( _DataManager.map );
 				polyline.bindTooltip ( getRouteTooltipText );
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
@@ -140,25 +138,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			removeAllObjects : function ( ) {
-				global.map.travelObjects.forEach ( 
+				_DataManager.mapObjects.forEach ( 
 					function ( travelObjectValue, travelObjectKey, travelObjects ) {
 						L.DomEvent.off ( travelObjectValue );
-						global.map.removeLayer ( travelObjectValue );
+						_DataManager.map.removeLayer ( travelObjectValue );
 					}
 				);
-				global.map.travelObjects.clear ( );
-			},
-			
-			addRoutes : function ( ) {
-				var routesIterator = global.travelData.routes.iterator;
-				while ( ! routesIterator.done ) {
-					this.addRoute ( routesIterator.value );
-				}
+				_DataManager.mapObjects.clear ( );
 			},
 			
 			zoomToItineraryPoint : function ( itineraryPointObjId ) {
 				map.setView ( 
-					global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
+					_DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
 					_Config.itineraryPointZoom 
 				);
 			},
@@ -166,12 +157,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addItineraryPointMarker : function ( itineraryPointObjId ) {
 				_AddTo ( 
 					itineraryPointObjId,
-					L.circle ( global.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
+					L.circle ( _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
 				);
 			},
 			
 			addTravelNote : function ( note ) {
-				console.log ( 'addTravelNote' );
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -203,7 +193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						html : note.iconContent
 					}
 				);
-				var marker = global.map.travelObjects.get ( note.objId );
+				var marker = _DataManager.mapObjects.get ( note.objId );
 				marker.setIcon ( icon );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 			}

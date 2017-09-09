@@ -20,12 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
+	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _Config = require ( '../util/Config' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getRouteEditor = function ( ) {
-
-		var _Config = require ( '../util/Config' ) ( );
-		
-		var _Translator = require ( '../UI/Translator' ) ( );
 
 		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
@@ -35,45 +34,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return;
 			}
 			
-			require ( './MapEditor' ) ( ).removeObject ( global.editedRoute.objId );
-			require ( './Router' ) ( ).startRouting ( global.editedRoute );
+			require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
+			require ( './Router' ) ( ).startRouting ( _DataManager.editedRoute );
 			},
 			
 			endRouting : function ( ) {
 				require ( './ItineraryEditor' ) ( ).setItinerary ( );
-				require ( './MapEditor' ) ( ).addRoute ( global.editedRoute );
+				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
 			},
 			
 			saveEdition : function ( ) {
-				var newRouteObjId = global.travelData.routes.replace ( global.editedRoute.routeInitialObjId, global.editedRoute );
-				global.editedRoute.routeChanged = false;
+				var newRouteObjId = _DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, _DataManager.editedRoute );
+				_DataManager.editedRoute.routeChanged = false;
 				// It's needed to rewrite the route list due to objId's changes
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
 				this.clear ( );
 			},
 			
 			cancelEdition : function ( ) {
-				require ( './MapEditor' ) ( ).removeObject ( global.editedRoute.objId );
-				require ( './MapEditor' ) ( ).addRoute ( global.travelData.routes.getAt ( global.editedRoute.routeInitialObjId ) );
-				global.editedRoute.routeChanged = false;
+				require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
+				require ( './MapEditor' ) ( ).addRoute ( _DataManager.travel.routes.getAt ( _DataManager.editedRoute.routeInitialObjId ) );
+				_DataManager.editedRoute.routeChanged = false;
 				this.clear ( );
 			},
 			
 			editRoute : function ( routeObjId ) { 
-				if ( global.editedRoute.routeChanged ) {
+				if ( _DataManager.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				global.editedRoute = require ( '../Data/Route' ) ( );
-				var route = global.travelData.routes.getAt ( routeObjId );
-				global.editedRoute.routeInitialObjId = route.objId;
+				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
+				var route = _DataManager.travel.routes.getAt ( routeObjId );
+				_DataManager.editedRoute.routeInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
-				global.editedRoute.object = route.object;
+				_DataManager.editedRoute.object = route.object;
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
 				require ( './ItineraryEditor' ) ( ).setItinerary ( );
 				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
-				require ( './MapEditor' ) ( ).addRoute ( global.editedRoute );
+				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
 			},
 			
 			removeRoute : function ( routeObjId ) { 
@@ -81,47 +80,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addWayPoint : function ( latLng ) {
-				global.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
 				}
-				global.editedRoute.wayPoints.add ( newWayPoint );
-				global.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				_DataManager.editedRoute.wayPoints.add ( newWayPoint );
+				_DataManager.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			reverseWayPoints : function ( ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.reverse ( );
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.reverse ( );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			removeAllWayPoints : function ( ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.removeAll ( true );
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.removeAll ( true );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			removeWayPoint : function ( wayPointObjId ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.remove ( wayPointObjId );
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.remove ( wayPointObjId );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 				_RouteEditorUI.setWayPointsList ( );
 			},
 			
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.setWayPointsList (  );
 				this.startRouting ( );
 			},
@@ -132,7 +131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setStartPoint : null,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.setStartPoint : null,
 						param : latLng
 					} 
 				);
@@ -140,7 +139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.addWayPoint : null,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.addWayPoint : null,
 						param : latLng
 					}
 				);
@@ -148,7 +147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== global.editedRoute.routeInitialObjId ) ? this.setEndPoint : null,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.setEndPoint : null,
 						param : latLng
 					}
 				);
@@ -161,7 +160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Edit this route" ), 
-						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.editRoute : null,
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.editRoute : null,
 						param: routeObjId
 					} 
 				);
@@ -169,7 +168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( global.editedRoute.routeInitialObjId !== routeObjId ) && ( ! global.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.removeRoute :null,
 						param: routeObjId
 					}
 				);
@@ -177,37 +176,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
-						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
+						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
-						action : ( global.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
+						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;
 			},
 			
 			setStartPoint : function ( latLng ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.first.latLng = latLng;
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.first.latLng = latLng;
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			setEndPoint : function ( latLng ) {
-				global.editedRoute.routeChanged = true;
-				global.editedRoute.wayPoints.last.latLng = latLng;
+				_DataManager.editedRoute.routeChanged = true;
+				_DataManager.editedRoute.wayPoints.last.latLng = latLng;
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
 			clear : function ( ) {
-					global.editedRoute = require ( '../data/Route' ) ( );
-					global.editedRoute.routeChanged = false;
-					global.editedRoute.routeInitialObjId = -1;
+					_DataManager.editedRoute = require ( '../data/Route' ) ( );
+					_DataManager.editedRoute.routeChanged = false;
+					_DataManager.editedRoute.routeInitialObjId = -1;
 					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 			}

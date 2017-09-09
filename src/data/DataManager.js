@@ -21,33 +21,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getDataManager = function ( ) {
 
 		return {
-			getNote : function ( noteObjId ) {
+			init : function ( map ) {
+				global.map = map;
+				global.travelObjId = 0;
+				global.editedRoute = require ( '../Data/Route' ) ( );
+				global.editedRoute.routeChanged = false;
+				global.editedRoute.routeInitialObjId = -1;
+				global.travel = require ( '../Data/Travel' ) ( );
+				global.mapObjects = new Map ( );
+			},
+			
+			get editedRoute ( ) { return global.editedRoute; },
+			
+			set editedRoute ( editedRoute ) { global.editedRoute = editedRoute; },
+			
+			get travel ( ) { return global.travel; },
+			
+			set travel ( travel ) { global.travel = travel; },
+			
+			get mapObjects ( ) { return global.mapObjects; },
+			
+			get map ( ) { return global.map; },
+			
+			getNoteAndRoute : function ( noteObjId ) {
 				var note = null;
-				note = global.travelData.notes.getAt ( noteObjId );
+				note = this.travel.notes.getAt ( noteObjId );
 				if ( note ) {
 					return { note : note, route : null };
 				}
-				var routeIterator = global.travelData.routes.iterator;
+				var routeIterator = this.travel.routes.iterator;
 				while ( ! routeIterator.done ) {
 					note = routeIterator.value.notes.getAt ( noteObjId );
 					if ( note ) {
 						return { note : note, route : routeIterator.value };
 					}
 				}
-				note = global.editedRoute.notes.getAt (noteObjId );
+				note = this.editedRoute.notes.getAt (noteObjId );
 				if ( ! note ) {
 					console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataManager.getNote ( )' );
 				}
 				
-				return { note : note, route : global.editedRoute };
+				return { note : note, route : this.editedRoute };
 			},
 			
 			getRoute : function ( routeObjId ) {
 				var route = null;
-				route = global.travelData.routes.getAt ( layer.objId );
+				route = this.travel.routes.getAt ( layer.objId );
 				if ( ! route ) {
-					if ( layer.objId === global.editedRoute.objId ) {
-						route = global.editedRoute;
+					if ( layer.objId === this.editedRoute.objId ) {
+						route = this.editedRoute;
 					}
 				}
 				if ( ! route ) {
@@ -55,12 +77,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				
 				return route;
-			}
-			
+			}			
 		};
 	};
-	
-	/* --- End of getTravelData function --- */
 	
 	/* 
 	--- Exports ------------------------------------------------------------------------------------------------------------

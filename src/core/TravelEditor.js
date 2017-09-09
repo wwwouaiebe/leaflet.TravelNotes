@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
+	var _DataManager = require ( '../Data/DataManager' ) ( );
 
 	var getTravelEditor = function ( ) {
 
@@ -31,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			
 			addRoute : function ( ) {
-				global.travelData.routes.add ( require ( '../Data/Route' ) ( ) );
+				_DataManager.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				_TravelEditorUI.setRoutesList ( );
 			},
 
@@ -40,58 +41,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			removeRoute : function ( routeObjId ) {
-				if ( routeObjId === global.editedRoute.routeInitialObjId && global.editedRoute.routeChanged ) {
+				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId && _DataManager.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
 				}
 				else {
 					require ( './MapEditor' ) ( ).removeObject ( routeObjId );
-					global.travelData.routes.remove ( routeObjId );
+					_DataManager.travel.routes.remove ( routeObjId );
 					_TravelEditorUI.setRoutesList ( );
-					if ( routeObjId === global.editedRoute.routeInitialObjId  ) {
+					if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
 						require ( './RouteEditor') ( ).clear ( );
 					}
 				}
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
-				global.travelData.routes.getAt ( routeObjId ).name = routeName;
+				_DataManager.travel.routes.getAt ( routeObjId ).name = routeName;
 				_TravelEditorUI.setRoutesList ( );
-				if ( routeObjId === global.editedRoute.routeInitialObjId ) {
-					global.editedRoute.name = routeName;
+				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId ) {
+					_DataManager.editedRoute.name = routeName;
 				}
 			},
 
 			swapRoute : function ( routeObjId, swapUp ) {
-				global.travelData.routes.swap ( routeObjId, swapUp );
+				_DataManager.travel.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 			},
 			
 			saveTravel : function ( ) {
-				if ( global.editedRoute.routeChanged ) {
+				if ( _DataManager.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( 'TravelData.trv', JSON.stringify ( global.travelData.object ) );
+					require ( '../util/Utilities' ) ( ).saveFile ( 'Travel.trv', JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
 			
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					global.travelData.object = JSON.parse ( fileReader.result ) ;
+					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
 					require ( '../core/RouteEditor' ) ( ).clear ( );
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
-					require ( '../core/MapEditor' ) ( ).addRoutes ( );
+					var routesIterator = _DataManager.travel.routes.iterator;
+					while ( ! routesIterator.done ) {
+						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value );
+					}
+					var notesIterator = _DataManager.travel.notes.iterator;
+					while ( ! notesIterator.done ) {
+						require ( '../core/MapEditor' ) ( ).addTravelNote ( notesIterator.value );
+					}
 				};
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			
 			clear : function ( ) {
-				global.editedRoute = require ( '../Data/Route') ( );
-				global.editedRoute.routeChanged = false;
-				global.editedRoute.routeInitialObjId = -1;
-				global.travelData = require ( '../Data/TravelData' ) ( );
+				_DataManager.editedRoute = require ( '../Data/Route') ( );
+				_DataManager.editedRoute.routeChanged = false;
+				_DataManager.editedRoute.routeInitialObjId = -1;
+				_DataManager.travel = require ( '../Data/Travel' ) ( );
 				require ( '../core/RouteEditor' ) ( ).clear ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../core/MapEditor' ) ( ).removeAllObjects ( );

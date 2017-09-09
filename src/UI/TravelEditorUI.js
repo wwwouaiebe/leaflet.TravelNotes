@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
+	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	// Events listeners for buttons under the routes list
 	var onCancelTravelButton = function ( clickEvent ) {
@@ -234,7 +235,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			setRoutesList : function (  ) {
 				_RoutesList.removeAllItems ( );
-				var routesIterator = global.travelData.routes.iterator;
+				var routesIterator = _DataManager.travel.routes.iterator;
 				while ( ! routesIterator.done ) {
 					_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.objId, false );
 				}

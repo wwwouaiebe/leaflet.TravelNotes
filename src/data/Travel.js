@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'TravelData', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( './ObjType' ) ( 'Travel', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 	
-	// one and only one object TravelData is possible
+	// one and only one object Travel is possible
 	
 	var _Name = '';
 	var _Routes = require ( './Collection' ) ( 'Route' );
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Notes = require ( './Collection' ) ( 'Note' );
 	var _ObjId = -1;
 
-	var getTravelData = function ( ) {
+	var getTravel = function ( ) {
 		
 		return {
 			
@@ -62,16 +62,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	/* --- End of getTravelData function --- */
+	/* --- End of getTravel function --- */
 	
 	/* 
 	--- Exports ------------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelData;
+		module.exports = getTravel;
 	}
 
 } ) ( );
 
-/* --- End of MapData.js file --- */
+/* --- End of Travel.js file --- */

@@ -25,13 +25,13 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
+	var _DataManager = require ( '../Data/DataManager' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
 		return {			
-			newNote :function ( latLng ) {
+			newTravelNote :function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
-				//note.object = JSON.parse ( '{"iconHeight":"42","iconWidth":"42","iconContent":"iconContent","popupContent":"popupContent","tooltipContent":"tooltipContent","phone":"phone","url":"link","address":"address","categoryId":"","iconLat":0,"iconLng":0,"lat":0,"lng":0,"objId":13,"objType":{"name":"Note","version":"1.0.0"}}' );
 				note.latLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
 				require ( '../UI/NoteDialog' ) ( note );
@@ -39,25 +39,30 @@ To do: translations
 			
 			endNoteDialog : function ( note ) {
 				try {
-					global.travelData.notes.getAt ( note.objId );
+					_DataManager.travel.notes.getAt ( note.objId );
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
 				catch ( e ) {
-					this.addNote ( note );
+					this.addTravelNote ( note );
 				}
 			},	
 			
-			addNote : function ( note ) {
-				global.travelData.notes.add ( note );
+			addTravelNote : function ( note ) {
+				_DataManager.travel.notes.add ( note );
 				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
 			},
 			
 			editNote : function ( noteObjId ) {
-				require ( '../UI/NoteDialog' ) ( global.travelData.notes.getAt ( noteObjId ) );
+				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				require ( '../UI/NoteDialog' ) ( noteAndRoute.note );
 			},
-			
+
 			removeNote : function ( noteObjId ) {
-				console.log ( noteObjId );
+				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				if ( ! noteAndRoute.route ) {
+					require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
+					_DataManager.travel.notes.remove ( noteObjId );
+				}
 			},
 			
 			getMapContextMenu :function ( latLng ) {
@@ -65,8 +70,8 @@ To do: translations
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - new note" ), 
-						action : this.newNote,
+						name : _Translator.getText ( "NoteEditor - new travel note" ), 
+						action : this.newTravelNote,
 						param : latLng
 					} 
 				);
@@ -76,6 +81,7 @@ To do: translations
 			
 			getNoteContextMenu :function ( noteObjId ) {
 				var contextMenu = [];
+				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
 				contextMenu.push ( 
 					{ 
 						context : this, 
@@ -88,7 +94,7 @@ To do: translations
 					{ 
 						context : this, 
 						name : _Translator.getText ( "NoteEditor - delete note" ), 
-						action : this.removeNote,
+						action : ! noteAndRoute.route ? this.removeNote : null,
 						param : noteObjId
 					} 
 				);

@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
+	var _DataManager = require ( '../data/DataManager' ) ( );
 
 	var onAddWayPointButton = function ( event ) {
 		event.stopPropagation ( );
@@ -229,11 +230,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			setWayPointsList : function ( ) {
 				_WayPointsList.removeAllItems ( );
 
-				if ( -1 === global.editedRoute.routeInitialObjId ) {
+				if ( -1 === _DataManager.editedRoute.routeInitialObjId ) {
 					return;
 				}
 				
-				var wayPointsIterator = global.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					_WayPointsList.addItem ( wayPointsIterator.value.UIName, wayPointsIterator.value.objId, wayPointsIterator.last );
 				}

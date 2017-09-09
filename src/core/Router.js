@@ -22,11 +22,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _RouteProvider = require ( './MapboxRouteProvider' ) ( );
 	var _RequestStarted = false;
+	var _DataManager = require ( '../Data/DataManager' ) ( );
 	
 	var getRouter = function ( ) {
 
 		var _HaveValidWayPoints = function ( ) {
-			return global.editedRoute.wayPoints.forEach ( 
+			return _DataManager.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -38,7 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		var _ParseResponse = function ( requestResponse ) {
-			_RouteProvider.parseResponse ( requestResponse, global.editedRoute );
+			_RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute );
 			_RequestStarted = false;			
 			require ( './RouteEditor' ) ( ).endRouting ( );
 		};
@@ -70,7 +71,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 			xmlHttpRequest.open ( 
 				'GET',
-				_RouteProvider.getUrl ( global.editedRoute.wayPoints, providerKey ),
+				_RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, providerKey ),
 				true
 			);
 			xmlHttpRequest.send ( null );

@@ -22,7 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _Translator = require ( './Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
-
+	var _DataManager = require ( '../data/DataManager' ) ( );
+	
 	var onClickExpandButton = function ( clickEvent ) {
 		
 		clickEvent.stopPropagation ( );
@@ -98,7 +99,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _SetItinerary = function ( ) {
 
-			var itinerary = global.editedRoute.itinerary;
+			var itinerary = _DataManager.editedRoute.itinerary;
 			
 			var dataDiv = document.getElementById ( 'TravelControl-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
