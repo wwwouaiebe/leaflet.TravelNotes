@@ -104,6 +104,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
 	
+	var onWayPointDragEnd = function ( event ) {
+		var wayPoint = _DataManager.editedRoute.wayPoints.getAt ( event.target.objId );
+		wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		require ( '../core/RouteEditor' ) ( ).wayPointDragEnd ( event.target.objId );
+	};
+
+
 	var onTravelNoteDrag = function ( event ) {
 		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
 		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
@@ -126,6 +133,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
+	
+	
 	
 	var onBulletTravelNoteDrag = function ( event ) {
 		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
@@ -202,6 +211,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);
 			},
 			
+			addWayPoint : function ( wayPoint, letter ) {
+				var iconHtml = '<div class="TravelNotes-MapWayPoint TravelNotes-MapWayPoint' + 
+				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) )+ 
+				'"></div><div class="TravelNotes-MapWayPointText">' + letter + '</div>';
+				
+				var marker = L.marker ( 
+					wayPoint.latLng,
+					{ 
+						icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointsStyle' } ),
+						draggable : true
+					} 
+				);	
+				marker.objId = wayPoint.objId;
+				_AddTo ( wayPoint.objId, marker );
+				L.DomEvent.on ( marker, 'dragend', onWayPointDragEnd );
+			},
+			
 			addNote : function ( note ) {
 				var bullet = L.marker ( 
 					note.latLng,
@@ -220,7 +246,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						iconSize: [ note.iconWidth, note.iconHeight ], 
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, - note.iconHeight / 2 ], 
-						html : note.iconContent
+						html : note.iconContent,
+						className : _Config.note.style
 					}
 				);
 				var marker = L.marker ( 
@@ -241,10 +268,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				layerGroup.polylineId = L.Util.stamp ( polyline );
 				layerGroup.bulletId = L.Util.stamp ( bullet );
 				_AddTo ( note.objId, layerGroup );
-				//_AddTo ( note.objId, marker );
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
 				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
 				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+			},
+			
+			moveWayPoint : function ( wayPoint ) {
+				 _DataManager.mapObjects.get ( wayPoint.objId ).setLatLng ( wayPoint.latLng );
 			},
 			
 			editNote : function ( note ) {
@@ -253,7 +283,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						iconSize: [ note.iconWidth, note.iconHeight ], 
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, -note.iconHeight / 2 ], 
-						html : note.iconContent
+						html : note.iconContent,
+						className : _Config.note.style
 					}
 				);
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );
@@ -263,7 +294,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 	};
-
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getMapEditor;

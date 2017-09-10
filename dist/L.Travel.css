@@ -735,3 +735,41 @@ div.SortableList-Container.LimitedSort > div.SortableList-Item > div.SortableLis
 {
 	background-image : url('icons/NotesIcons/0002.png');
 }
+
+.TravelNotes-NotesStyle
+{
+	background : transparent;
+	height: auto;
+}
+.TravelNotes-WayPointsStyle
+{
+	background : transparent;
+	height: auto;
+}
+.TravelNotes-MapWayPoint
+{
+	background-repeat : no-repeat;
+	height: 40px;
+	width: 40px;
+    display: inline-block;
+	vertical-align: top;
+}
+.TravelNotes-MapWayPointStart
+{
+	background-image : url('icons/WayPointsIcons/kStart.png');
+}
+.TravelNotes-MapWayPointVia
+{
+	background-image : url('icons/WayPointsIcons/kVia.png');
+}
+.TravelNotes-MapWayPointEnd
+{
+	background-image : url('icons/WayPointsIcons/kEnd.png');
+}
+.TravelNotes-MapWayPointText
+{
+	width: 40px;
+	text-align:center;
+	font-size:1em;
+	font-weight:bold;
+}
