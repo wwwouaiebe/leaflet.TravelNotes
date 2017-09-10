@@ -26,43 +26,64 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
-		return {			
-			newTravelNote :function ( latLng ) {
+		return {	
+			newNote : function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
 				note.iconLatLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
-				require ( '../UI/NoteDialog' ) ( note );
+				
+				return note;
 			},
 			
-			endNoteDialog : function ( note ) {
-				try {
-					_DataManager.travel.notes.getAt ( note.objId );
+			newRouteNote : function ( routeObjId, event ) {
+				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( routeObjId , [ event.latlng.lat, event.latlng.lng ] );
+				var note = this.newNote ( latLngDistance.latLng );
+				note.distance = latLngDistance.distance;
+				require ( '../UI/NoteDialog' ) ( note, routeObjId );
+			},
+			
+			newTravelNote : function ( latLng ) {
+				var note = this.newNote ( latLng );
+				require ( '../UI/NoteDialog' ) ( note, -1 );
+			},
+			
+			endNoteDialog : function ( note, routeObjId ) {
+				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
-				catch ( e ) {
-					this.addTravelNote ( note );
+				else {
+					this.addNote ( note, routeObjId );
 				}
 			},	
-			
-			addTravelNote : function ( note ) {
-				_DataManager.travel.notes.add ( note );
-				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
+
+			addNote : function ( note, routeObjId ) {
+				if ( -1 === note.distance ) {
+					_DataManager.travel.notes.add ( note );
+				}
+				else {
+					_DataManager.travel.routes.getAt ( routeObjId ).notes.add ( note );
+				}
+				require ( '../core/MapEditor' ) ( ).addNote ( note );
 			},
-			
+
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				require ( '../UI/NoteDialog' ) ( noteAndRoute.note );
+				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
 			},
 
 			removeNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
 				if ( ! noteAndRoute.route ) {
-					require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
 					_DataManager.travel.notes.remove ( noteObjId );
+				}
+				else {
+					_DataManager.notes.remove ( noteObjId );
 				}
 			},
 			

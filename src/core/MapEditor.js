@@ -52,7 +52,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
 		}
 		notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
-			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + '</div>';
+			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + 
+			( -1 === note.distance ? '' : _Translator.getText ( 'MapEditor - popup distance' ) + note.distance.toFixed ( 0 ) ) +
+			'</div>';
 			
 		return notePopupText;
 	};
@@ -109,9 +111,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	var onBulletTravelNoteDragEnd = function ( event ) {
-		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-		note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
+		var note = noteAndRoute.note;
+		var route = noteAndRoute.route;
 		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		if ( null != route ) {
+			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route.objId, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+			note.latLng = latLngDistance.latLng;
+			note.distance = latLngDistance.distance;
+			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+		}
+		else {
+			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
 	
@@ -190,7 +202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);
 			},
 			
-			addTravelNote : function ( note ) {
+			addNote : function ( note ) {
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -244,7 +256,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						html : note.iconContent
 					}
 				);
-				var marker = _DataManager.mapObjects.get ( note.objId );
+				var layerGroup = _DataManager.mapObjects.get ( note.objId );
+				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 			}

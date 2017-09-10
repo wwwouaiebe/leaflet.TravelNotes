@@ -85,12 +85,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
 					var routesIterator = _DataManager.travel.routes.iterator;
+					var notesIterator;
 					while ( ! routesIterator.done ) {
 						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value );
+						notesIterator = routesIterator.value.notes.iterator;
+						while ( ! notesIterator.done ) {
+							require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+						}
 					}
-					var notesIterator = _DataManager.travel.notes.iterator;
+					notesIterator = _DataManager.travel.notes.iterator;
 					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addTravelNote ( notesIterator.value );
+						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
 					}
 				};
 				var fileName = event.target.files [ 0 ].name;

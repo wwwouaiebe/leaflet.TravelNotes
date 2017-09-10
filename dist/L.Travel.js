@@ -6400,6 +6400,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				note = this.editedRoute.notes.getAt (noteObjId );
 				if ( ! note ) {
 					console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataManager.getNote ( )' );
+					return { note : null, route : null };
 				}
 				
 				return { note : note, route : this.editedRoute };
@@ -6859,8 +6860,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _IconLng = 0;
 		var _Lat = 0;
 		var _Lng = 0;
+		var _Distance = -1;
 		
 		return {
+			
+			get isRouteNote ( ) { return _Distance !== -1; },
 
 			get iconHeight ( ) { return _IconHeight;},
 			
@@ -6922,6 +6926,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 			
+			get distance ( ) { return _Distance; },
+			
+			set distance ( Distance ) { _Distance = Distance; },
+
 			get objId ( ) { return _ObjId; },
 			
 			get objType ( ) { return _ObjType; },
@@ -6941,6 +6949,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					iconLng : _IconLng,
 					lat : _Lat,
 					lng : _Lng,
+					distance : _Distance,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -6961,6 +6970,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_IconLng = Object.iconLng || 0;
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
+				_Distance = Object.distance || -1;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};
@@ -7562,7 +7572,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.Control":31,"./UI/ContextMenu":34,"./UI/TravelEditorUI":42,"./UI/UserInterface":43,"./core/NoteEditor":48,"./core/RouteEditor":49,"./data/DataManager":53,"./util/Utilities":65}],33:[function(require,module,exports){
+},{"./L.Travel.Control":31,"./UI/ContextMenu":34,"./UI/TravelEditorUI":42,"./UI/UserInterface":43,"./core/NoteEditor":48,"./core/RouteEditor":49,"./data/DataManager":53,"./util/Utilities":66}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7848,10 +7858,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickItem = function ( event ) {
 		event.stopPropagation ( );
-		_MenuItems[ event.target.menuItem ].action.call ( 
-			_MenuItems[ event.target.menuItem ].context,
-			_MenuItems[ event.target.menuItem ].param ? _MenuItems[ event.target.menuItem ].param : _OriginalEvent
-		);
+		if ( _MenuItems[ event.target.menuItem ].param ) {
+			_MenuItems[ event.target.menuItem ].action.call ( 
+				_MenuItems[ event.target.menuItem ].context,
+				_MenuItems[ event.target.menuItem ].param,
+				_OriginalEvent
+			);
+		}
+		else {
+			_MenuItems[ event.target.menuItem ].action.call ( 
+				_MenuItems[ event.target.menuItem ].context,
+				_OriginalEvent
+			);
+		}
 		_Lat = 0;
 		_Lng = 0;
 		onCloseMenu ( );
@@ -8314,7 +8333,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 	
-},{"../core/MapEditor":46,"../data/DataManager":53,"../util/Utilities":65,"./HTMLElementsFactory":36,"./Translator":41}],38:[function(require,module,exports){
+},{"../core/MapEditor":46,"../data/DataManager":53,"../util/Utilities":66,"./HTMLElementsFactory":36,"./Translator":41}],38:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8346,6 +8365,7 @@ To do: translations
 	var styles = [];
 	
 	var _Note;
+	var _RouteObjId;
 	
 	var onOkButtonClick = function ( ) {
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
@@ -8356,13 +8376,14 @@ To do: translations
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note );
+		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note, _RouteObjId );
 	};
 
-	var getNoteDialog = function ( note ) {
+	var getNoteDialog = function ( note, routeObjId ) {
 		
 		_Note = note;
-
+		_RouteObjId = routeObjId;
+		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
@@ -8425,7 +8446,6 @@ To do: translations
 					var newStyles = JSON.parse ( fileReader.result ) ;
 					addEditorButtons ( newStyles );
 					styles = styles.concat ( newStyles );
-					console.log ( styles );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -9552,6 +9572,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
 		},
 		{
+			msgid : "MapEditor - popup distance",
+			msgstr : "&nbsp;-&nbsp;<span>Distance</span>&nbsp;:&nbsp;"
+		},
+		{
 			msgid : "NoteDialog - Title",
 			msgstr : "Note"
 		},
@@ -9614,6 +9638,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
+		},
+
+		{
+			msgid : "RouteEditor - Add a note on the route",
+			msgstr : "Ajouter une note à ce trajet"
 		},
 		{
 			msgid : "RouteEditor - Select this point as start point",
@@ -10258,7 +10287,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
 		}
 		notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
-			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + '</div>';
+			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + 
+			( -1 === note.distance ? '' : _Translator.getText ( 'MapEditor - popup distance' ) + note.distance.toFixed ( 0 ) ) +
+			'</div>';
 			
 		return notePopupText;
 	};
@@ -10315,9 +10346,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	var onBulletTravelNoteDragEnd = function ( event ) {
-		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-		note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
+		var note = noteAndRoute.note;
+		var route = noteAndRoute.route;
 		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+		if ( null != route ) {
+			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route.objId, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+			note.latLng = latLngDistance.latLng;
+			note.distance = latLngDistance.distance;
+			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+		}
+		else {
+			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
 	
@@ -10396,7 +10437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);
 			},
 			
-			addTravelNote : function ( note ) {
+			addNote : function ( note ) {
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -10450,7 +10491,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						html : note.iconContent
 					}
 				);
-				var marker = _DataManager.mapObjects.get ( note.objId );
+				var layerGroup = _DataManager.mapObjects.get ( note.objId );
+				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 			}
@@ -10464,7 +10506,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../UI/ContextMenu":34,"../UI/Translator":41,"../util/Config":64,"../util/Utilities":65,"./NoteEditor":48,"./RouteEditor":49}],47:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/ContextMenu":34,"../UI/Translator":41,"../util/Config":64,"../util/TravelUtilities":65,"../util/Utilities":66,"./NoteEditor":48,"./RouteEditor":49}],47:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10803,43 +10845,64 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
-		return {			
-			newTravelNote :function ( latLng ) {
+		return {	
+			newNote : function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
 				note.iconLatLng = latLng;
 				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
-				require ( '../UI/NoteDialog' ) ( note );
+				
+				return note;
 			},
 			
-			endNoteDialog : function ( note ) {
-				try {
-					_DataManager.travel.notes.getAt ( note.objId );
+			newRouteNote : function ( routeObjId, event ) {
+				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( routeObjId , [ event.latlng.lat, event.latlng.lng ] );
+				var note = this.newNote ( latLngDistance.latLng );
+				note.distance = latLngDistance.distance;
+				require ( '../UI/NoteDialog' ) ( note, routeObjId );
+			},
+			
+			newTravelNote : function ( latLng ) {
+				var note = this.newNote ( latLng );
+				require ( '../UI/NoteDialog' ) ( note, -1 );
+			},
+			
+			endNoteDialog : function ( note, routeObjId ) {
+				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
-				catch ( e ) {
-					this.addTravelNote ( note );
+				else {
+					this.addNote ( note, routeObjId );
 				}
 			},	
-			
-			addTravelNote : function ( note ) {
-				_DataManager.travel.notes.add ( note );
-				require ( '../core/MapEditor' ) ( ).addTravelNote ( note );
+
+			addNote : function ( note, routeObjId ) {
+				if ( -1 === note.distance ) {
+					_DataManager.travel.notes.add ( note );
+				}
+				else {
+					_DataManager.travel.routes.getAt ( routeObjId ).notes.add ( note );
+				}
+				require ( '../core/MapEditor' ) ( ).addNote ( note );
 			},
-			
+
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				require ( '../UI/NoteDialog' ) ( noteAndRoute.note );
+				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
 			},
 
 			removeNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
 				if ( ! noteAndRoute.route ) {
-					require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
 					_DataManager.travel.notes.remove ( noteObjId );
+				}
+				else {
+					_DataManager.notes.remove ( noteObjId );
 				}
 			},
 			
@@ -10888,7 +10951,7 @@ To do: translations
 
 }());
 
-},{"../Data/DataManager":19,"../UI/NoteDialog":38,"../UI/Translator":41,"../core/MapEditor":46,"../data/Note":58}],49:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/NoteDialog":38,"../UI/Translator":41,"../core/MapEditor":46,"../data/Note":58,"../util/TravelUtilities":65}],49:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10914,6 +10977,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
+	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
@@ -11015,7 +11079,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.setWayPointsList (  );
 				this.startRouting ( );
 			},
-			
+			addRouteNote : function ( routeObjId, event )
+			{
+			},
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -11060,6 +11126,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
 						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						param: routeObjId
+					}
+				);
+				contextMenu.push ( 
+					{
+						context : _NoteEditor, 
+						name : _Translator.getText ( "RouteEditor - Add a note on the route" ), 
+						action : _NoteEditor.newRouteNote,
 						param: routeObjId
 					}
 				);
@@ -11111,7 +11185,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Waypoint.js":30,"../UI/ItineraryEditorUI":37,"../UI/RouteEditorUI":39,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../data/Route":61,"../util/Config":64,"./ErrorEditor":44,"./ItineraryEditor":45,"./MapEditor":46,"./Router":50,"./TravelEditor":51}],50:[function(require,module,exports){
+},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Waypoint.js":30,"../UI/ItineraryEditorUI":37,"../UI/RouteEditorUI":39,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/NoteEditor":48,"../data/Route":61,"../util/Config":64,"./ErrorEditor":44,"./ItineraryEditor":45,"./MapEditor":46,"./Router":50,"./TravelEditor":51}],50:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11216,7 +11290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../util/Utilities":65,"./MapboxRouteProvider":47,"./RouteEditor":49}],51:[function(require,module,exports){
+},{"../Data/DataManager":19,"../util/Utilities":66,"./MapboxRouteProvider":47,"./RouteEditor":49}],51:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11304,12 +11378,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
 					var routesIterator = _DataManager.travel.routes.iterator;
+					var notesIterator;
 					while ( ! routesIterator.done ) {
 						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value );
+						notesIterator = routesIterator.value.notes.iterator;
+						while ( ! notesIterator.done ) {
+							require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+						}
 					}
-					var notesIterator = _DataManager.travel.notes.iterator;
+					notesIterator = _DataManager.travel.notes.iterator;
 					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addTravelNote ( notesIterator.value );
+						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
 					}
 				};
 				var fileName = event.target.files [ 0 ].name;
@@ -11335,7 +11414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Travel":28,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/MapEditor":46,"../core/RouteEditor":49,"../util/Config":64,"../util/Utilities":65,"./ErrorEditor":44,"./MapEditor":46,"./RouteEditor":49}],52:[function(require,module,exports){
+},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Travel":28,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/MapEditor":46,"../core/RouteEditor":49,"../util/Config":64,"../util/Utilities":66,"./ErrorEditor":44,"./MapEditor":46,"./RouteEditor":49}],52:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
 },{"./ItineraryPoint":56,"./Maneuver":57,"./Note":58,"./Route":61,"./WayPoint":62,"dup":18}],53:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
@@ -11425,6 +11504,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 },{}],65:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+( function ( ){
+	
+	'use strict';
+	
+	var _DataManager = require ( '../Data/DataManager' ) ( );
+
+	var getTravelUtilities = function ( ) {
+
+		return {
+			getClosestLatLngDistance : function ( routeObjId, latLng ) {
+				
+				var itineraryPointIterator = _DataManager.getRoute ( routeObjId ).itinerary.itineraryPoints.iterator;
+				var dummy = itineraryPointIterator.done;
+				var minDistance = Number.MAX_VALUE;
+				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				var closestLatLng = null;
+				var closestDistance = 0;
+				var endSegmentDistance = itineraryPointIterator.value.distance;
+				while ( ! itineraryPointIterator.done ) {
+					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+					if ( distance < minDistance )
+					{
+						minDistance = distance;
+						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					}
+					endSegmentDistance += itineraryPointIterator.value.distance;
+					point1 = point2;
+				}
+				
+				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
+			}
+		};
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getTravelUtilities;
+	}
+
+}());
+
+},{"../Data/DataManager":19}],66:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

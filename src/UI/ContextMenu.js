@@ -91,10 +91,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onClickItem = function ( event ) {
 		event.stopPropagation ( );
-		_MenuItems[ event.target.menuItem ].action.call ( 
-			_MenuItems[ event.target.menuItem ].context,
-			_MenuItems[ event.target.menuItem ].param ? _MenuItems[ event.target.menuItem ].param : _OriginalEvent
-		);
+		if ( _MenuItems[ event.target.menuItem ].param ) {
+			_MenuItems[ event.target.menuItem ].action.call ( 
+				_MenuItems[ event.target.menuItem ].context,
+				_MenuItems[ event.target.menuItem ].param,
+				_OriginalEvent
+			);
+		}
+		else {
+			_MenuItems[ event.target.menuItem ].action.call ( 
+				_MenuItems[ event.target.menuItem ].context,
+				_OriginalEvent
+			);
+		}
 		_Lat = 0;
 		_Lng = 0;
 		onCloseMenu ( );

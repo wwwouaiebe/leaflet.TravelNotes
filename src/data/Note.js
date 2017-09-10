@@ -39,8 +39,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _IconLng = 0;
 		var _Lat = 0;
 		var _Lng = 0;
+		var _Distance = -1;
 		
 		return {
+			
+			get isRouteNote ( ) { return _Distance !== -1; },
 
 			get iconHeight ( ) { return _IconHeight;},
 			
@@ -102,6 +105,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 			
+			get distance ( ) { return _Distance; },
+			
+			set distance ( Distance ) { _Distance = Distance; },
+
 			get objId ( ) { return _ObjId; },
 			
 			get objType ( ) { return _ObjType; },
@@ -121,6 +128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					iconLng : _IconLng,
 					lat : _Lat,
 					lng : _Lng,
+					distance : _Distance,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -141,6 +149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_IconLng = Object.iconLng || 0;
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
+				_Distance = Object.distance || -1;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

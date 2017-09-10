@@ -224,6 +224,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
 		},
 		{
+			msgid : "MapEditor - popup distance",
+			msgstr : "&nbsp;-&nbsp;<span>Distance</span>&nbsp;:&nbsp;"
+		},
+		{
 			msgid : "NoteDialog - Title",
 			msgstr : "Note"
 		},
@@ -286,6 +290,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
+		},
+
+		{
+			msgid : "RouteEditor - Add a note on the route",
+			msgstr : "Ajouter une note à ce trajet"
 		},
 		{
 			msgid : "RouteEditor - Select this point as start point",

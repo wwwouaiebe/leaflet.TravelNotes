@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
+	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
@@ -124,7 +125,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.setWayPointsList (  );
 				this.startRouting ( );
 			},
-			
+			addRouteNote : function ( routeObjId, event )
+			{
+			},
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -169,6 +172,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
 						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						param: routeObjId
+					}
+				);
+				contextMenu.push ( 
+					{
+						context : _NoteEditor, 
+						name : _Translator.getText ( "RouteEditor - Add a note on the route" ), 
+						action : _NoteEditor.newRouteNote,
 						param: routeObjId
 					}
 				);

@@ -29,6 +29,7 @@ To do: translations
 	var styles = [];
 	
 	var _Note;
+	var _RouteObjId;
 	
 	var onOkButtonClick = function ( ) {
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
@@ -39,13 +40,14 @@ To do: translations
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note );
+		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note, _RouteObjId );
 	};
 
-	var getNoteDialog = function ( note ) {
+	var getNoteDialog = function ( note, routeObjId ) {
 		
 		_Note = note;
-
+		_RouteObjId = routeObjId;
+		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
@@ -108,7 +110,6 @@ To do: translations
 					var newStyles = JSON.parse ( fileReader.result ) ;
 					addEditorButtons ( newStyles );
 					styles = styles.concat ( newStyles );
-					console.log ( styles );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );

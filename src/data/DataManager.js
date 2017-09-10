@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				note = this.editedRoute.notes.getAt (noteObjId );
 				if ( ! note ) {
 					console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataManager.getNote ( )' );
+					return { note : null, route : null };
 				}
 				
 				return { note : note, route : this.editedRoute };
