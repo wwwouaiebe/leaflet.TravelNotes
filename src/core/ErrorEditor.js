@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			
 			showError : function ( error ) {
-				var header = '<span class="TravelControl-Error">';
+				var header = '<span class="TravelNotes-Control-Error">';
 				var footer = '</span>';
 				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
 				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );

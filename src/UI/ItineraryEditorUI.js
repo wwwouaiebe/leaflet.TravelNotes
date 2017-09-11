@@ -28,11 +28,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		clickEvent.stopPropagation ( );
 
-		document.getElementById ( 'TravelControl-ItineraryHeaderDiv' ).classList.toggle ( 'TravelControl-SmallHeader' );
-		document.getElementById ( 'TravelControl-ItineraryDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelControl-ItineraryDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
-		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-		document.getElementById ( 'TravelControl-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
 
 	};
 	
@@ -60,25 +60,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _CreateUI = function ( controlDiv ) {
 			
-			if ( document.getElementById ( 'TravelControl-ItineraryDataDiv' ) ) {
+			if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
 				return;
 			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
-			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelControl-ItineraryExpandButton', className : 'TravelControl-ExpandButton'}, headerDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-ItineraryExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 
 				'span', 
 				{ 
 					innerHTML : _Translator.getText ( 'ItineraryEditorUI - Itinerary and notes' ), 
-					id : 'TravelControl-ItineraryHeaderText', 
-					className : 'TravelControl-HeaderText'
+					id : 'TravelNotes-Control-ItineraryHeaderText', 
+					className : 'TravelNotes-Control-HeaderText'
 				},
 				headerDiv 
 			);
-			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ItineraryDataDiv', className : 'TravelControl-DataDiv'}, controlDiv );
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
 		};
 		
 		var _AddEventListeners = function ( element )
@@ -101,12 +101,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var itinerary = _DataManager.editedRoute.itinerary;
 			
-			var dataDiv = document.getElementById ( 'TravelControl-ItineraryDataDiv' );
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
 			
-			var maneuverList = document.getElementById ( 'TravelControl-ManeuverList' );
+			var maneuverList = document.getElementById ( 'TravelNotes-Control-ManeuverList' );
 			if ( maneuverList ) {
 				for ( var childCounter = 0; childCounter < maneuverList.childNodes.length; childCounter ++ ) {
 					_RemoveEventListeners ( maneuverList.childNodes [ childCounter ] );
@@ -118,8 +118,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			maneuverList = htmlElementsFactory.create (
 				'div',
 					{
-						id : 'TravelControl-ManeuverList',
-						className : 'TravelControl-TableDataDiv'
+						id : 'TravelNotes-Control-ManeuverList',
+						className : 'TravelNotes-Control-TableDataDiv'
 					}, 
 				dataDiv
 			);
@@ -127,14 +127,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! maneuverIterator.done ) {
 				var rowDataDiv = htmlElementsFactory.create ( 
 					'div', 
-					{ className : 'TravelControl-RowDataDiv'}, 
+					{ className : 'TravelNotes-Control-RowDataDiv'}, 
 					maneuverList
 				);
 				
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv TravelControl-iconCellDataDiv TravelControl-' + maneuverIterator.value.iconName + 'Small',
+						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-iconCellDataDiv TravelNotes-Control-' + maneuverIterator.value.iconName + 'Small',
 					}, 
 					rowDataDiv
 				);
@@ -142,7 +142,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var instructionElement = htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv',
+						className : 'TravelNotes-Control-CellDataDiv',
 						innerHTML : maneuverIterator.value.simplifiedInstruction
 					}, 
 					rowDataDiv
@@ -152,7 +152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv TravelControl-ItineraryStreetName',
+						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-ItineraryStreetName',
 						innerHTML : maneuverIterator.value.streetName
 					}, 
 					rowDataDiv
@@ -160,7 +160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv',
+						className : 'TravelNotes-Control-CellDataDiv',
 						innerHTML : maneuverIterator.value.direction
 					}, 
 					rowDataDiv
@@ -168,7 +168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv TravelControl-ItineraryDistance',
+						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-ItineraryDistance',
 						innerHTML : _Utilities.formatDistance ( maneuverIterator.value.distance )
 					}, 
 					rowDataDiv
@@ -176,7 +176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				htmlElementsFactory.create (
 					'div',
 					{ 
-						className : 'TravelControl-CellDataDiv',
+						className : 'TravelNotes-Control-CellDataDiv',
 						innerHTML : _Utilities.formatTime ( maneuverIterator.value.duration )
 					}, 
 					rowDataDiv

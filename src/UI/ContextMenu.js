@@ -133,22 +133,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		_MenuItems = userMenu;
 			
-		//ContextMenu-Container
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
 		var body = document.getElementsByTagName('body') [0];
-		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-Panel'} , body );
+		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , body );
 		var screenWidth = tmpDiv.clientWidth;
 		var screenHeight = tmpDiv.clientHeight;
 		body.removeChild ( tmpDiv );
 		
-		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'ContextMenu-Container',className : 'ContextMenu-Container'}, body );
+		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
 		
 		var closeButton = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				innerHTML: '&#x274c', 
-				className : 'ContextMenu-CloseButton',
+				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : _Translator.getText ( "ContextMenu - close" )
 			},
 			_ContextMenuContainer
@@ -156,13 +155,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		closeButton.addEventListener ( 'click', onCloseMenu, false );
 		
 		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {
-			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'ContextMenu-ItemContainer'},_ContextMenuContainer);
+			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'},_ContextMenuContainer);
 			var item = htmlElementsFactory.create ( 
 				'button', 
 				{ 
 					innerHTML : _MenuItems [ menuItemCounter ].name,
-					id : 'ContextMenu-Item' + menuItemCounter,
-					className : _MenuItems [ menuItemCounter ].action ? 'ContextMenu-Item' : 'ContextMenu-Item ContextMenu-ItemDisabled'
+					id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
+					className : _MenuItems [ menuItemCounter ].action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
 				},
 				itemContainer
 			);

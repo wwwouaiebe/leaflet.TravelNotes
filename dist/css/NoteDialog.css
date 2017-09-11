@@ -1,0 +1,77 @@
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+#TravelNotes-NoteDialog-ToolbarDiv
+{
+	max-width: 30em;
+}
+#TravelNotes-NoteDialog-OpenStyleDiv
+{
+	margin: 0;
+	margin-bottom: 0.5em;
+	padding: 0;
+}
+#TravelNotes-NoteDialog-OpenStyleInput
+{
+	opacity: 0;
+	position: relative;
+	width: 0em;
+	height:0em;
+}
+#TravelNotes-NoteDialog-OpenStyleFakeDiv
+{
+	display: inline;
+}
+#TravelNotes-NoteDialog-OpenStyleButton
+{
+	border-color: black;
+}
+#TravelNotes-NoteDialog-OpenStyleButton:hover
+{
+	color: red;
+}
+.TravelNotes-NoteDialog-EditorButton
+{
+	border-style : solid;
+	border-width : 0.1em;
+	background-color: lightgray;
+	margin-right: 0.2em;
+	display: inline;
+}
+.TravelNotes-NoteDialog-DataDiv,
+.TravelNotes-NoteDialog-TitleDiv
+{
+	margin-top: 0.5em;
+}
+.TravelNotes-NoteDialog-TextArea
+{
+	width: 39em;
+}
+.TravelNotes-NoteDialog-InputText
+{
+	width: 38em;
+}
+.TravelNotes-NoteDialog-Hidden
+{
+	visibility : hidden;
+	height : 0;
+}
+.TravelNotes-NoteDialog-NumberInput
+{
+	margin-right: 0.5em;
+}

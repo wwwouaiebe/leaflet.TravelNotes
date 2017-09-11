@@ -79,9 +79,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
 		duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
 
-		return '<div class="RoutePopup-Header">' +
-			route.name + '</div><div class="RoutePopup-Distance">' +
-			_Translator.getText ( 'MapEditor - Distance' ) + distance + '</div><div class="RoutePopup-Duration">' +
+		return '<div class="TravelNotes-Popup-Route-Header">' +
+			route.name + '</div><div class="TravelNotes-Popup-Route-Distance">' +
+			_Translator.getText ( 'MapEditor - Distance' ) + distance + '</div><div class="TravelNotes-Popup-Route-Duration">' +
 			_Translator.getText ( 'MapEditor - Duration' ) + duration + '</div>';
 	};
 	
@@ -212,14 +212,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addWayPoint : function ( wayPoint, letter ) {
-				var iconHtml = '<div class="TravelNotes-MapWayPoint TravelNotes-MapWayPoint' + 
+				var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
 				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) )+ 
-				'"></div><div class="TravelNotes-MapWayPointText">' + letter + '</div>';
+				'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
 				
 				var marker = L.marker ( 
 					wayPoint.latLng,
 					{ 
-						icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointsStyle' } ),
+						icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
 						draggable : true
 					} 
 				);	

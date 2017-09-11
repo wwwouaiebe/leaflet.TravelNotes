@@ -1,0 +1,405 @@
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+#TravelNotes-Control-MainDiv
+{
+	background-color: white;
+	height: 100vh;
+	max-height : 100vh;
+	font-family : sans-serif;
+	font-size: 1em;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#TravelNotes-Control-MainDiv.leaflet-control
+{
+	min-width: 30em;
+	width: 30em;
+}
+.TravelNotes-Control-HeaderDiv,
+.TravelNotes-Control-DataDiv,
+.TravelNotes-Control-ButtonsDiv
+{
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+.TravelNotes-Control-HeaderDiv
+{
+	padding-top: 0.5em;
+}
+.TravelNotes-Control-HeaderText
+{
+	font-weight: bold;
+}
+.TravelNotes-Control-DataDiv
+{
+	padding-top: 0.5em;
+}
+#TravelNotes-Control-WaypointsDataDiv,
+#TravelNotes-Control-RoutesDataDiv
+{
+	flex-shrink: 0;
+	max-height: 7em;
+	overflow: auto;
+}
+#TravelNotes-Control-WaypointsDataDiv.TravelNotes-Control-ExpandedList,
+#TravelNotes-Control-RoutesDataDiv.TravelNotes-Control-ExpandedList
+{
+	max-height: none;
+	overflow: none;
+}
+.TravelNotes-Control-ButtonsDiv
+{
+	padding-bottom: 0.5em;
+	text-align: right;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-color: lightgray;
+	display: flex;
+	flex-direction: row;
+}
+.TravelNotes-Control-HiddenList
+{
+	padding-top:0;
+	padding-bottom: 0;
+	visibility: hidden;
+	height: 0;
+}
+.TravelNotes-Control-SmallHeader
+{
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.TravelNotes-Control-Button
+{
+	font-weight: bold;
+	display: inline-block;
+	width: 2em;
+	text-align : center;
+	cursor: default;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+}
+.TravelNotes-Control-Button:hover
+{
+	border-color: black;
+}
+.TravelNotes-Control-ExpandButton
+{
+	padding-right: 0.5em;
+	color: lightgray;
+}
+.TravelNotes-Control-ExpandButton:hover
+{
+	cursor: default;
+	color:red;
+}
+#TravelNotes-Control-ReverseWayPointsButton,
+#TravelNotes-Control-AddRoutesButton
+{
+	margin-left: auto;
+}
+#TravelNotes-Control-ItineraryDiv
+{
+	overflow: auto;
+}
+#TravelNotes-Control-ItineraryDataDiv
+{
+	max-height: none;
+	overflow: auto;
+	margin-bottom: auto;
+}
+#TravelNotes-Control-CancelTravelButton:hover,
+#TravelNotes-Control-RemoveAllWayPointsButton:hover,
+#TravelNotes-Control-CancelRouteButton:hover
+{
+	color: red;
+}
+.TravelNotes-Control-TableDataDiv
+{
+	display: table;
+	border-spacing: 0.4em 0.2em;
+}
+.TravelNotes-Control-RowDataDiv
+{
+	display: table-row;
+}
+.TravelNotes-Control-CellDataDiv
+{
+	display: table-cell;
+}
+.TravelNotes-Control-iconCellDataDiv
+{
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+}
+.TravelNotes-Control-kArriveDefaultSmall                                            
+{
+	background-image: url('../icons/RoutingIcons/kArriveDefaultSmall.png');
+}
+.TravelNotes-Control-kArriveLeftSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kArriveLeftSmall.png');
+}
+.TravelNotes-Control-kArriveRightSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kArriveRightSmall.png');
+}
+.TravelNotes-Control-kContinueLeftSmall                                                
+{
+	background-image: url('../icons/RoutingIcons/kContinueLeftSmall.png');
+}
+.TravelNotes-Control-kContinueRightSmall                                               
+{
+	background-image: url('../icons/RoutingIcons/kContinueRightSmall.png');
+}
+.TravelNotes-Control-kContinueSharpLeftSmall                                           
+{
+	background-image: url('../icons/RoutingIcons/kContinueSharpLeftSmall.png');
+}
+.TravelNotes-Control-kContinueSharpRightSmall                                          
+{
+	background-image: url('../icons/RoutingIcons/kContinueSharpRightSmall.png');
+}
+.TravelNotes-Control-kContinueSlightLeftSmall                                          
+{
+	background-image: url('../icons/RoutingIcons/kContinueSlightLeftSmall.png');
+}
+.TravelNotes-Control-kContinueSlightRightSmall                                         
+{
+	background-image: url('../icons/RoutingIcons/kContinueSlightRightSmall.png');
+}
+.TravelNotes-Control-kContinueStraightSmall                                            
+{
+	background-image: url('../icons/RoutingIcons/kContinueStraightSmall.png');
+}
+.TravelNotes-Control-kDepartDefaultSmall                                               
+{
+	background-image: url('../icons/RoutingIcons/kDepartDefaultSmall.png');
+}
+.TravelNotes-Control-kDepartLeftSmall                                                  
+{
+	background-image: url('../icons/RoutingIcons/kDepartLeftSmall.png');
+}
+.TravelNotes-Control-kDepartRightSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kDepartRightSmall.png');
+}
+.TravelNotes-Control-kEndOfRoadLeftSmall                                               
+{
+	background-image: url('../icons/RoutingIcons/kEndOfRoadLeftSmall.png');
+}
+.TravelNotes-Control-kEndOfRoadRightSmall                                              
+{
+	background-image: url('../icons/RoutingIcons/kEndOfRoadRightSmall.png');
+}
+.TravelNotes-Control-kForkLeftSmall                                                    
+{
+	background-image: url('../icons/RoutingIcons/kForkLeftSmall.png');
+}
+.TravelNotes-Control-kForkRightSmall                                                   
+{
+	background-image: url('../icons/RoutingIcons/kForkRightSmall.png');
+}
+.TravelNotes-Control-kMergeDefaultSmall                                                
+{
+	background-image: url('../icons/RoutingIcons/kMergeDefaultSmall.png');
+}
+.TravelNotes-Control-kMergeLeftSmall                                                   
+{
+	background-image: url('../icons/RoutingIcons/kMergeLeftSmall.png');
+}
+.TravelNotes-Control-kMergeRightSmall                                                  
+{
+	background-image: url('../icons/RoutingIcons/kMergeRightSmall.png');
+}
+.TravelNotes-Control-kNewNameLeftSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kNewNameLeftSmall.png');
+}
+.TravelNotes-Control-kNewNameRightSmall                                                
+{
+	background-image: url('../icons/RoutingIcons/kNewNameRightSmall.png');
+}
+.TravelNotes-Control-kNewNameSharpLeftSmall                                            
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSharpLeftSmall.png');
+}
+.TravelNotes-Control-kNewNameSharpRightSmall                                           
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSharpRightSmall.png');
+}
+.TravelNotes-Control-kNewNameSlightLeftSmall                                           
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSlightLeftSmall.png');
+}
+.TravelNotes-Control-kNewNameSlightRightSmall                                          
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSlightRightSmall.png');
+}
+.TravelNotes-Control-kNewNameStraightSmall                                             
+{
+	background-image: url('../icons/RoutingIcons/kNewNameStraightSmall.png');
+}
+.TravelNotes-Control-kOffRampLeftSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kOffRampLeftSmall.png');
+}
+.TravelNotes-Control-kOffRampRightSmall                                                
+{
+	background-image: url('../icons/RoutingIcons/kOffRampRightSmall.png');
+}
+.TravelNotes-Control-kOnRampLeftSmall                                                  
+{
+	background-image: url('../icons/RoutingIcons/kOnRampLeftSmall.png');
+}
+.TravelNotes-Control-kOnRampRightSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kOnRampRightSmall.png');
+}
+.TravelNotes-Control-kRotaryLeftSmall                                                  
+{
+	background-image: url('../icons/RoutingIcons/kRotaryLeftSmall.png');
+}
+.TravelNotes-Control-kRotaryRightSmall                                                 
+{
+	background-image: url('../icons/RoutingIcons/kRotaryRightSmall.png');
+}
+.TravelNotes-Control-kRoundaboutLeftSmall                                              
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutLeftSmall.png');
+}
+.TravelNotes-Control-kRoundaboutRightSmall                                             
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutRightSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnLeftSmall                                          
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnLeftSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnRightSmall                                         
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnRightSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSharpLeftSmall                                     
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSharpLeftSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSharpRightSmall                                    
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSharpRightSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSlightLeftSmall                                    
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSlightLeftSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSlightRightSmall                                   
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSlightRightSmall.png');
+}
+.TravelNotes-Control-kRoundaboutTurnStraightSmall                                      
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnStraightSmall.png');
+}
+.TravelNotes-Control-kTurnLeftSmall                                                    
+{
+	background-image: url('../icons/RoutingIcons/kTurnLeftSmall.png');
+}
+.TravelNotes-Control-kTurnRightSmall                                                   
+{
+	background-image: url('../icons/RoutingIcons/kTurnRightSmall.png');
+}
+.TravelNotes-Control-kTurnSharpLeftSmall                                               
+{
+	background-image: url('../icons/RoutingIcons/kTurnSharpLeftSmall.png');
+}
+.TravelNotes-Control-kTurnSharpRightSmall                                              
+{
+	background-image: url('../icons/RoutingIcons/kTurnSharpRightSmall.png');
+}
+.TravelNotes-Control-kTurnSlightLeftSmall                                              
+{
+	background-image: url('../icons/RoutingIcons/kTurnSlightLeftSmall.png');
+}
+.TravelNotes-Control-kTurnSlightRightSmall                                             
+{
+	background-image: url('../icons/RoutingIcons/kTurnSlightRightSmall.png');
+}
+.TravelNotes-Control-kTurnStraightSmall                                                
+{
+	background-image: url('../icons/RoutingIcons/kTurnStraightSmall.png');
+}
+.TravelNotes-Control-kTurnUturnSmall                                                   
+{
+	background-image: url('../icons/RoutingIcons/kTurnUturnSmall.png');
+}
+.TravelNotes-Control-kUndefinedSmall                                                   
+{
+	background-image: url('../icons/RoutingIcons/kUndefinedSmall.png');
+}
+
+.TravelNotes-Control-ItineraryStreetName,
+.TravelNotes-Control-ItineraryDistance
+{
+	background-color: lightgray;
+}
+.TravelNotes-Control-ItineraryDistance
+{
+	text-align : right;
+}
+#TravelNotes-Control-ErrorDiv
+{
+	margin-top: 0.5em;
+}
+#TravelNotes-Control-ErrorDataDiv
+{
+	flex-shrink: 0;
+	max-height: 5em;
+	overflow: auto;
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	border-top-color: lightgray;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+#TravelNotes-Control-ErrorHeaderDiv
+{
+	padding-bottom: 0.5em;
+}
+.TravelNotes-Control-Error
+{
+	color: red;
+	font-weight: bold;
+}
+#TravelNotes-Control-OpenTravelDiv
+{
+}
+#TravelNotes-Control-OpenTravelInput
+{
+	opacity: 0;
+	position: relative;
+	width: 0em;
+}
+#TravelNotes-Control-OpenTravelFakeDiv
+{
+	display: inline;
+}

@@ -24,13 +24,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getControlUI = function ( ) {
 
-		var _MainDiv = document.getElementById ( 'TravelControl-MainDiv' );
+		var _MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 
 		var _CreateUI = function ( ){ 
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-MainDiv' } );
+			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
 
 			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
 

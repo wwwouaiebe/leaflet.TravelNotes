@@ -24,13 +24,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		if ( ! document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML.length ) {
+		if ( ! document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML.length ) {
 			return;
 		}	
-		document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.toggle ( 'TravelControl-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.contains ( 'TravelControl-HiddenList' );
-		document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
-		document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = hiddenList ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
+		document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
+		document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = hiddenList ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
 	};
 
 	// User interface
@@ -39,39 +39,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( document.getElementById ( 'TravelControl-ErrorDataDiv' ) ) {
+			if ( document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ) ) {
 				return;
 			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorDataDiv', className : 'TravelControl-DataDiv TravelControl-HiddenList'}, controlDiv );
+			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
 			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelControl-ErrorHeaderDiv', className : 'TravelControl-HeaderDiv'}, controlDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
 			var expandButton = htmlElementsFactory.create (
 				'span',
 				{ 
 					innerHTML : '&#x25b6;',
 					title : _Translator.getText ( 'ErrorEditorUI - Show' ),
-					id : 'TravelControl-ErrorExpandButton',
-					className : 'TravelControl-ExpandButton'
+					id : 'TravelNotes-Control-ErrorExpandButton',
+					className : 'TravelNotes-Control-ExpandButton'
 				},
 				headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelControl-ErrorHeaderText', className : 'TravelControl-HeaderText'}, headerDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelNotes-Control-ErrorHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
 			
 		};
 
 		var _ExpandUI = function ( ) {
-			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b2;';
-			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Hide' );
-			document.getElementById ( 'TravelControl-ErrorDataDiv' ).classList.remove ( 'TravelControl-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b2;';
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Hide' );
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 		};
 		
 		var _ReduceUI = function ( ) {
-			document.getElementById ( 'TravelControl-ErrorExpandButton' ).innerHTML = '&#x25b6;';
-			document.getElementById ( 'TravelControl-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Show' );
-			document.getElementById ( 'TravelControl-ErrorDataDiv' ).add ( 'TravelControl-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b6;';
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Show' );
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).add ( 'TravelNotes-Control-HiddenList' );
 		};
 
 		return {
@@ -88,9 +88,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_ReduceUI ( );
 			},
 			
-			set message ( Message ) { document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML = Message; },
+			set message ( Message ) { document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = Message; },
 			
-			get message (  ) { return document.getElementById ( 'TravelControl-ErrorDataDiv' ).innerHTML; }
+			get message (  ) { return document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML; }
 			
 		};
 	};

@@ -171,20 +171,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				indexName = this.items.length;
 			}
 			
-			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'SortableList-Item' } );
+			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'TravelNotes-SortableList-Item' } );
 
-			htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemTextIndex' , innerHTML : indexName }, item );
-			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'SortableList-ItemInput', placeholder : placeholder, value: name}, item );
+			htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
+			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
 			inputElement.addEventListener ( 'change' , onChange, false );
-			var upArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
+			var upArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
 			upArrowButton.addEventListener ( 'click', onUpArrowButtonClick, false );
-			var downArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
+			var downArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
 			downArrowButton.addEventListener ( 'click', onDownArrowButtonClick, false );
-			var rightArrowButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
+			var rightArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
 			if ( 'AllSort' === this.options.listStyle ) {
 				rightArrowButton.addEventListener ( 'click', onRightArrowButtonClick, false );
 			}
-			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
+			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 
@@ -193,7 +193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
-				item.classList.add ( 'SortableList-MoveCursor' );
+				item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
 			}
 	
 			this.container.appendChild ( item );
@@ -215,7 +215,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			// options.listStyle = 'AllSort' : all items can be sorted or deleted
 			// options.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 			
-			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [], id : 'SortableList-Container' } ;
+			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [], id : 'TravelNotes-SortableList-Container' } ;
 			for ( var option in options ) {
 				this.options [ option ] = options [ option ];
 			}
@@ -223,7 +223,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			{
 				this.options.minSize = 0;
 			}
-			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'SortableList-Container' } );
+			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
 			this.container.addEventListener ( 'dragover', onDragOver, false );
 			this.container.addEventListener ( 'drop', onDrop, false );
