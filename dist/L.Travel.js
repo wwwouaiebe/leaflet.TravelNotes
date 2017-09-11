@@ -8379,7 +8379,12 @@ To do: translations
 	};
 
 	var getNoteDialog = function ( note, routeObjId ) {
-		
+
+
+
+
+
+	
 		_Note = note;
 		_RouteObjId = routeObjId;
 		
@@ -8827,6 +8832,31 @@ To do: translations
 		document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
 		document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
 		document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = true;
+
+		var xmlHttpRequest = new XMLHttpRequest ( );
+		xmlHttpRequest.onreadystatechange = function ( event ) {
+			if ( this.readyState === XMLHttpRequest.DONE ) {
+				if ( this.status === 200 ) {
+					try {
+						var  userButtons = JSON.parse ( this.responseText );
+						addEditorButtons ( userButtons.buttons );
+					}
+					catch ( e )
+					{
+						console.log ( 'Error reading userNoteDialog.json' );
+					}
+				} 
+				else {
+					console.log ( 'Error sending request for userNoteDialog.json' );
+				}
+			}
+		};
+		xmlHttpRequest.open ( 
+			'GET',
+			window.location.href.substr (0, window.location.href.lastIndexOf( '/') +1 ) +'userNoteDialog.json',
+			true
+		);
+		xmlHttpRequest.send ( null );
 
 		// and the dialog is centered on the screen
 		baseDialog.center ( );

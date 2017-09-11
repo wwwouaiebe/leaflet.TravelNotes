@@ -1,0 +1,243 @@
+{
+	"buttons" : 
+	[
+		{
+			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:red'>Red</span>",
+			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:black;background-color:yellow'>Yellow</span>",
+			"htmlBefore" : "<span style='color:black;background-color:yellow'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "Å",
+			"htmlBefore" : "Å"
+		}, 
+		{
+			"title" : "å",
+			"htmlBefore" : "å"
+		}, 
+		{
+			"title" : "Æ",
+			"htmlBefore" : "Æ"
+		}, 
+		{
+			"title" : "æ",
+			"htmlBefore" : "æ"
+		}, 
+		{
+			"title" : "Ø",
+			"htmlBefore" : "Ø"
+		}, 
+		{
+			"title" : "&amp;nbsp;",
+			"htmlBefore" : "&nbsp;"
+		}
+	],
+	"list" :
+	[
+		{
+			"Name" : "Aéroport",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0001'></div>",
+			"Tooltip" : "Aéroport",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Montée",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0002'></div>",
+			"Tooltip" : "Montée",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Distributeur de billets",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0003'></div>",
+			"Tooltip" : "Distributeur de billets",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Attention requise",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0004'></div>",
+			"Tooltip" : "Attention requise",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Vélos admis",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0005'></div>",
+			"Tooltip" : "Vélos admis",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Autobus",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0006'></div>",
+			"Tooltip" : "Autobus",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Photo",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0007'></div>",
+			"Tooltip" : "Photo",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Camping",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0008'></div>",
+			"Tooltip" : "Camping",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Ferry",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0009'></div>",
+			"Tooltip" : "Ferry",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Auberge de jeunesse",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0010'></div>",
+			"Tooltip" : "Auberge de jeunesse",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Point d'information",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0011'></div>",
+			"Tooltip" : "Point d'information",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Parc national",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0012'></div>",
+			"Tooltip" : "Parc national",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Vélos mal vus",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0013'></div>",
+			"Tooltip" : "Vélos mal vus",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Parc régional",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0014'></div>",
+			"Tooltip" : "Parc régional",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Entretien vélo",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0015'></div>",
+			"Tooltip" : "Entretien vélo",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Magasin",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0016'></div>",
+			"Tooltip" : "Magasin",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Aide",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0017'></div>",
+			"Tooltip" : "Aide",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Stop",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0018'></div>",
+			"Tooltip" : "Stop",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Table",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0019'></div>",
+			"Tooltip" : "Table",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Toilettes",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0020'></div>",
+			"Tooltip" : "Toilettes",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Gare",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0021'></div>",
+			"Tooltip" : "Gare",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Tunnel",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0022'></div>",
+			"Tooltip" : "Tunnel",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Point d'eau",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0023'></div>",
+			"Tooltip" : "Point d'eau",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Chambre d'hotes",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0024'></div>",
+			"Tooltip" : "Chambre d'hotes",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Cafetaria",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0025'></div>",
+			"Tooltip" : "Cafetaria",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Restaurant",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0026'></div>",
+			"Tooltip" : "Restaurant",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Hôtel",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0027'></div>",
+			"Tooltip" : "Hôtel",
+			"Width" : "40",
+			"Height" : "40"
+		},
+		{
+			"Name" : "Départ",
+			"Icon" : "<div class='Pin-Icon Pin-Category-0028'></div>",
+			"Tooltip" : "Départ",
+			"Width" : "40",
+			"Height" : "40"
+		}
+	]
+}

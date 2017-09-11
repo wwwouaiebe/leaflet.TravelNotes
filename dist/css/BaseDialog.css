@@ -41,6 +41,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	font-family : sans-serif;
 	font-size: 1em;
 	cursor:default;
+	display : flex;
+	flex-direction : column;
+	flex-wrap: nowrap;
+	max-height : 90vh;
 }
 
 .TravelNotes-BaseDialog-TopBar
@@ -76,6 +80,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-color: lightgray;
 	border-width : 0.1em;
 	padding: 0.5em;	
+	flex-grow: 1;
+	overflow: auto;
 }
 .TravelNotes-BaseDialog-FooterDiv
 {
