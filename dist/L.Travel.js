@@ -7601,6 +7601,13 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _OkButtonListener = null;
+
+	var onKeyDown = function ( keyBoardEvent ) {
+		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+			document.removeEventListener ( 'keydown', onKeyDown, true );
+			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
+		}
+	};
 	
 	var getBaseDialog = function ( ) {
 		
@@ -7662,6 +7669,14 @@ To do: translations
 			},
 			topBar
 		);
+		cancelButton.addEventListener ( 
+			'click',
+			function ( ) {
+				document.removeEventListener ( 'keydown', onKeyDown, true );
+				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
+			},
+			false
+		);
 		topBar.addEventListener ( 
 			'dragstart', 
 			function ( event ) {
@@ -7683,13 +7698,6 @@ To do: translations
 				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
 			},
 			false 
-		);
-		cancelButton.addEventListener ( 
-			'click',
-			function ( ) {
-				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
-			},
-			false
 		);
 		var headerDiv = htmlElementsFactory.create ( 
 			'div',
@@ -7729,10 +7737,12 @@ To do: translations
 				if ( _OkButtonListener ) {
 					_OkButtonListener ( );
 				}
+				document.removeEventListener ( 'keydown', onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);				
+		document.addEventListener ( 'keydown', onKeyDown, true );
 		
 		return {
 			addClickOkButtonEventListener : function ( listener ) {
@@ -8361,8 +8371,7 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
-	var styles = [];
-	
+	var _LocalEditorData = { buttons : [], list : [] };
 	var _Note;
 	var _RouteObjId;
 	
@@ -8380,13 +8389,11 @@ To do: translations
 
 	var getNoteDialog = function ( note, routeObjId ) {
 
-
-
-
-
-	
 		_Note = note;
 		_RouteObjId = routeObjId;
+		
+		var serverEditorList = [];
+		var globalEditorList = [];
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
@@ -8404,6 +8411,41 @@ To do: translations
 			},
 			baseDialog.content
 		);
+		
+		var editorSelect = htmlElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-NoteDialog-Select',
+				id : 'TravelNotes-NoteDialog-IconSelect'
+			},
+			toolbarDiv
+		);
+		editorSelect.addEventListener ( 
+			'change', 
+			function ( changeEvent ) {
+				var index = editorSelect.selectedIndex ;
+				widthInput.value = globalEditorList [ index ].width ;
+				heightInput.value = globalEditorList [ index ].height ;
+				iconHtmlContent.value = globalEditorList [ index ].icon ;
+				tooltip.value = globalEditorList [ index ].tooltip ;
+			},
+			false 
+		);
+		
+		
+		var addEditorList = function ( ) {
+			globalEditorList = serverEditorList.concat ( _LocalEditorData.list );
+			console.log ( globalEditorList );
+			globalEditorList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
+			var elementCounter = 0;
+			for ( elementCounter = editorSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
+				editorSelect.remove ( counter );
+			}
+			for ( elementCounter = 0; elementCounter < globalEditorList.length; elementCounter ++ ) {
+				var option = htmlElementsFactory.create ( 'option', { text :  globalEditorList [ elementCounter ].name } );
+				editorSelect.add ( option );
+			}
+		};
 
 		// function to add buttons on the toolbar from a object
 		var addEditorButtons = function ( buttons ) {
@@ -8426,54 +8468,57 @@ To do: translations
 		};
 
 		// open style button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		var openStyleDiv = htmlElementsFactory.create ( 
+		var openEditorFileDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-NoteDialog-OpenStyleDiv'
+				id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
 			}, 
 			toolbarDiv 
 		);
-		var openStyleInput = htmlElementsFactory.create ( 
+		var openEditorFileInput = htmlElementsFactory.create ( 
 			'input',
 			{
-				id : 'TravelNotes-NoteDialog-OpenStyleInput', 
+				id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
 				type : 'file',
 				accept : '.json'
 			},
-			openStyleDiv
+			openEditorFileDiv
 		);
-		openStyleInput.addEventListener ( 
+		openEditorFileInput.addEventListener ( 
 			'change', 
 			function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					var newStyles = JSON.parse ( fileReader.result ) ;
-					addEditorButtons ( newStyles );
-					styles = styles.concat ( newStyles );
+					var newEditorData = JSON.parse ( fileReader.result ) ;
+					_LocalEditorData.buttons = _LocalEditorData.buttons.concat ( newEditorData.buttons );
+					_LocalEditorData.list = _LocalEditorData.list.concat ( newEditorData.list );
+					addEditorButtons ( newEditorData.buttons );
+					addEditorList ( );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			false
 		);
-		var openStyleFakeDiv = htmlElementsFactory.create ( 
+		var openEditorFileFakeDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
 			}, 
-			openStyleDiv 
+			openEditorFileDiv 
 		);
-		var openStyleButton = htmlElementsFactory.create ( 
-			'div', 
+		var openEditorFileButton = htmlElementsFactory.create ( 
+			'button', 
 			{ 
-				id : 'TravelNotes-NoteDialog-OpenStyleButton', 
-				className: 'TravelNotes-BaseDialog-Button', 
+				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
+				className: 'TravelNotes-NoteDialog-EditorButton', 
 				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
 				innerHTML : '&#x23CD;'
 			}, 
-			openStyleFakeDiv 
+			openEditorFileFakeDiv 
 		);
-		openStyleButton.addEventListener ( 'click' , function ( ) { openStyleInput.click ( ); }, false );
+		
+		openEditorFileButton.addEventListener ( 'click' , function ( ) { openEditorFileInput.click ( ); }, false );
 	
 		// event handler for edition with the styles buttons
 		var focusControl = null;
@@ -8520,104 +8565,9 @@ To do: translations
 			]
 		);
 		
-		// personnalised buttons are restored
-		addEditorButtons ( styles );
+		// personnalised buttons from local file are restored
+		addEditorButtons ( _LocalEditorData.buttons );
 
-		// radio buttons for the icon type...
-		var iconRadioButtonDiv = htmlElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv',
-				id : 'TravelNotes-NoteDialog-IconTypeDataDiv'
-			},
-			baseDialog.content
-		);
-		
-		// ...for the standard icons
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - Standard icon'),
-			},
-			iconRadioButtonDiv
-		);
-		var iconRadioStandardInput = htmlElementsFactory.create (
-			'input',
-			{
-				type : 'radio',
-				className : 'TravelNotes-NoteDialog-RadioInput',
-				id : 'TravelNotes-NoteDialog-RadioStandardInput'
-			},
-			iconRadioButtonDiv
-		);
-		// event handler for the radio button 
-		iconRadioStandardInput.addEventListener (
-			'click',
-			function ( event ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-RadioPersonnelInput' ).checked = false;
-			},
-			false
-		);
-			
-		// ...and for the personnalzed icons
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - Personnel icon' ),
-			},
-			iconRadioButtonDiv
-		);
-		var iconRadioPersonnalisedButton = htmlElementsFactory.create (
-			'input',
-			{
-				type : 'radio',
-				className : 'TravelNotes-NoteDialog-RadioInput',
-				id : 'TravelNotes-NoteDialog-RadioPersonnelInput'
-			},
-			iconRadioButtonDiv
-		);
-		// event handler for the radio button 
-		iconRadioPersonnalisedButton.addEventListener (
-			'click',
-			function ( event ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-				document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = false;
-			},
-			false
-		);
-		
-		// standard icons list
-		var iconListDiv = htmlElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv',
-				id : 'TravelNotes-NoteDialog-IconsListDataDiv'
-			},
-			baseDialog.content
-		);
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - Choose an icon'),
-			},
-			iconListDiv
-		);
-		var styleSelect = htmlElementsFactory.create (
-			'select',
-			{
-				className : 'TravelNotes-NoteDialog-Select',
-				id : 'TravelNotes-NoteDialog-IconSelect'
-			},
-			iconListDiv
-		);
-		
 		// icon dimensions...
 		var iconDimensionsDiv = htmlElementsFactory.create (
 			'div',
@@ -8827,24 +8777,22 @@ To do: translations
 		);
 		phone.value = note.phone;
 		
-		document.getElementById ( 'TravelNotes-NoteDialog-DimensionsDataDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-		document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-		document.getElementById ( 'TravelNotes-NoteDialog-IconContentTitleDiv' ).classList.add ( 'TravelNotes-NoteDialog-Hidden' );
-		document.getElementById ( 'TravelNotes-NoteDialog-IconsListDataDiv' ).classList.remove ( 'TravelNotes-NoteDialog-Hidden' );
-		document.getElementById ( 'TravelNotes-NoteDialog-RadioStandardInput' ).checked = true;
-
 		var xmlHttpRequest = new XMLHttpRequest ( );
 		xmlHttpRequest.onreadystatechange = function ( event ) {
 			if ( this.readyState === XMLHttpRequest.DONE ) {
 				if ( this.status === 200 ) {
+					var serverEditorData;
 					try {
-						var  userButtons = JSON.parse ( this.responseText );
-						addEditorButtons ( userButtons.buttons );
+						serverEditorData = JSON.parse ( this.responseText );
 					}
 					catch ( e )
 					{
 						console.log ( 'Error reading userNoteDialog.json' );
 					}
+					addEditorButtons ( serverEditorData.buttons );
+					serverEditorList = serverEditorData.list;
+					serverEditorList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+					addEditorList ( );
 				} 
 				else {
 					console.log ( 'Error sending request for userNoteDialog.json' );
@@ -8853,7 +8801,7 @@ To do: translations
 		};
 		xmlHttpRequest.open ( 
 			'GET',
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') +1 ) +'userNoteDialog.json',
+			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
 			true
 		);
 		xmlHttpRequest.send ( null );
@@ -10522,8 +10470,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
-				marker.bindTooltip ( getNoteTooltipText );
-				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				if ( 0 !== note.tooltipContent.length ) {
+					marker.bindTooltip ( getNoteTooltipText );
+					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				}
 				marker.objId = note.objId;
 				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _Config.note.polyline );
 				polyline.objId = note.objId;
@@ -10554,7 +10504,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );
 				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
-				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				marker.unbindTooltip ( );
+				if ( 0 !== note.tooltipContent.length ) {
+					marker.bindTooltip ( getNoteTooltipText );
+					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				}
 			}
 		};
 	};
@@ -10913,7 +10867,6 @@ To do: translations
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
 				note.iconLatLng = latLng;
-				note.iconContent = '<div class="TravelNotes-MapNote TravelNotes-MapNoteCategory-0001"></div>';
 				
 				return note;
 			},

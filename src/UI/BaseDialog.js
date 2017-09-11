@@ -26,6 +26,13 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _OkButtonListener = null;
+
+	var onKeyDown = function ( keyBoardEvent ) {
+		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+			document.removeEventListener ( 'keydown', onKeyDown, true );
+			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
+		}
+	};
 	
 	var getBaseDialog = function ( ) {
 		
@@ -87,6 +94,14 @@ To do: translations
 			},
 			topBar
 		);
+		cancelButton.addEventListener ( 
+			'click',
+			function ( ) {
+				document.removeEventListener ( 'keydown', onKeyDown, true );
+				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
+			},
+			false
+		);
 		topBar.addEventListener ( 
 			'dragstart', 
 			function ( event ) {
@@ -108,13 +123,6 @@ To do: translations
 				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
 			},
 			false 
-		);
-		cancelButton.addEventListener ( 
-			'click',
-			function ( ) {
-				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
-			},
-			false
 		);
 		var headerDiv = htmlElementsFactory.create ( 
 			'div',
@@ -154,10 +162,12 @@ To do: translations
 				if ( _OkButtonListener ) {
 					_OkButtonListener ( );
 				}
+				document.removeEventListener ( 'keydown', onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
 			false
 		);				
+		document.addEventListener ( 'keydown', onKeyDown, true );
 		
 		return {
 			addClickOkButtonEventListener : function ( listener ) {

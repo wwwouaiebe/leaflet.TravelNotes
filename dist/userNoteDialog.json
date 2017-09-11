@@ -1,5 +1,4 @@
-{
-	"buttons" : 
+{ "buttons" : 
 	[
 		{
 			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
@@ -44,200 +43,200 @@
 	"list" :
 	[
 		{
-			"Name" : "Aéroport",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0001'></div>",
-			"Tooltip" : "Aéroport",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Aéroport",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0001'></div>",
+			"tooltip" : "Aéroport",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Montée",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0002'></div>",
-			"Tooltip" : "Montée",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Montée",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0002'></div>",
+			"tooltip" : "Montée",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Distributeur de billets",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0003'></div>",
-			"Tooltip" : "Distributeur de billets",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Distributeur de billets",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0003'></div>",
+			"tooltip" : "Distributeur de billets",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Attention requise",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0004'></div>",
-			"Tooltip" : "Attention requise",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Attention requise",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0004'></div>",
+			"tooltip" : "Attention requise",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Vélos admis",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0005'></div>",
-			"Tooltip" : "Vélos admis",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Vélos admis",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0005'></div>",
+			"tooltip" : "Vélos admis",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Autobus",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0006'></div>",
-			"Tooltip" : "Autobus",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Autobus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0006'></div>",
+			"tooltip" : "Autobus",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Photo",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0007'></div>",
-			"Tooltip" : "Photo",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Photo",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0007'></div>",
+			"tooltip" : "Photo",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Camping",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0008'></div>",
-			"Tooltip" : "Camping",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Camping",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0008'></div>",
+			"tooltip" : "Camping",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Ferry",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0009'></div>",
-			"Tooltip" : "Ferry",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Ferry",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0009'></div>",
+			"tooltip" : "Ferry",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Auberge de jeunesse",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0010'></div>",
-			"Tooltip" : "Auberge de jeunesse",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Auberge de jeunesse",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0010'></div>",
+			"tooltip" : "Auberge de jeunesse",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Point d'information",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0011'></div>",
-			"Tooltip" : "Point d'information",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Point d'information",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0011'></div>",
+			"tooltip" : "Point d'information",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Parc national",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0012'></div>",
-			"Tooltip" : "Parc national",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Parc national",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0012'></div>",
+			"tooltip" : "Parc national",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Vélos mal vus",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0013'></div>",
-			"Tooltip" : "Vélos mal vus",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Vélos mal vus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0013'></div>",
+			"tooltip" : "Vélos mal vus",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Parc régional",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0014'></div>",
-			"Tooltip" : "Parc régional",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Parc régional",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0014'></div>",
+			"tooltip" : "Parc régional",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Entretien vélo",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0015'></div>",
-			"Tooltip" : "Entretien vélo",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Entretien vélo",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0015'></div>",
+			"tooltip" : "Entretien vélo",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Magasin",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0016'></div>",
-			"Tooltip" : "Magasin",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Magasin",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0016'></div>",
+			"tooltip" : "Magasin",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Aide",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0017'></div>",
-			"Tooltip" : "Aide",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Aide",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0017'></div>",
+			"tooltip" : "Aide",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Stop",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0018'></div>",
-			"Tooltip" : "Stop",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Stop",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0018'></div>",
+			"tooltip" : "Stop",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Table",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0019'></div>",
-			"Tooltip" : "Table",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Table",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0019'></div>",
+			"tooltip" : "Table",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Toilettes",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0020'></div>",
-			"Tooltip" : "Toilettes",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Toilettes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0020'></div>",
+			"tooltip" : "Toilettes",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Gare",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0021'></div>",
-			"Tooltip" : "Gare",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Gare",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0021'></div>",
+			"tooltip" : "Gare",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Tunnel",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0022'></div>",
-			"Tooltip" : "Tunnel",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Tunnel",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0022'></div>",
+			"tooltip" : "Tunnel",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Point d'eau",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0023'></div>",
-			"Tooltip" : "Point d'eau",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Point d'eau",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0023'></div>",
+			"tooltip" : "Point d'eau",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Chambre d'hotes",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0024'></div>",
-			"Tooltip" : "Chambre d'hotes",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Chambre d'hotes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0024'></div>",
+			"tooltip" : "Chambre d'hotes",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Cafetaria",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0025'></div>",
-			"Tooltip" : "Cafetaria",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Cafetaria",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0025'></div>",
+			"tooltip" : "Cafetaria",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Restaurant",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0026'></div>",
-			"Tooltip" : "Restaurant",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Restaurant",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0026'></div>",
+			"tooltip" : "Restaurant",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Hôtel",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0027'></div>",
-			"Tooltip" : "Hôtel",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Hôtel",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0027'></div>",
+			"tooltip" : "Hôtel",
+			"width" : "40",
+			"height" : "40"
 		},
 		{
-			"Name" : "Départ",
-			"Icon" : "<div class='Pin-Icon Pin-Category-0028'></div>",
-			"Tooltip" : "Départ",
-			"Width" : "40",
-			"Height" : "40"
+			"name" : "Départ",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0028'></div>",
+			"tooltip" : "Départ",
+			"width" : "40",
+			"height" : "40"
 		}
 	]
 }

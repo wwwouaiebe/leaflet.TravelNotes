@@ -258,8 +258,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
-				marker.bindTooltip ( getNoteTooltipText );
-				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				if ( 0 !== note.tooltipContent.length ) {
+					marker.bindTooltip ( getNoteTooltipText );
+					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				}
 				marker.objId = note.objId;
 				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _Config.note.polyline );
 				polyline.objId = note.objId;
@@ -290,7 +292,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );
 				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
-				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				marker.unbindTooltip ( );
+				if ( 0 !== note.tooltipContent.length ) {
+					marker.bindTooltip ( getNoteTooltipText );
+					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+				}
 			}
 		};
 	};
