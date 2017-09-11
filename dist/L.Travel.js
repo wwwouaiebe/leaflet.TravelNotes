@@ -7695,7 +7695,10 @@ To do: translations
 			function ( event ) {
 				dialogX += event.screenX - startDragX;
 				dialogY += event.screenY - startDragY;
-				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
+				dialogX = Math.min ( Math.max ( dialogX, 20 ),screenWidth - dialogContainer.clientWidth -20 );
+				dialogY = Math.max ( dialogY, 20 );
+				var dialogMaxHeight = screenHeight - Math.max ( dialogY, 0 ) - 20;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;max-height:" + dialogMaxHeight +"px;" );
 			},
 			false 
 		);
@@ -7752,9 +7755,12 @@ To do: translations
 			get title ( ) { return headerDiv.innerHTML; },
 			set title ( Title ) { headerDiv.innerHTML = Title; },
 			center : function ( ) {
-				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
 				dialogX = ( screenWidth - dialogContainer.clientWidth ) / 2;
-				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;" );
+				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
+				dialogX = Math.min ( Math.max ( dialogX, 20 ),screenWidth - dialogContainer.clientWidth -20 );
+				dialogY = Math.max ( dialogY, 20 );
+				var dialogMaxHeight = screenHeight - Math.max ( dialogY, 0 ) - 20;
+				dialogContainer.setAttribute ( "style", "top:" + dialogY + "px;left:" + dialogX +"px;max-height:" + dialogMaxHeight +"px;" );
 			},
 
 			get header ( ) { return headerDiv;},
