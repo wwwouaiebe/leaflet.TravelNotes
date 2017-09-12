@@ -40,7 +40,10 @@ To do: translations
 			},
 			
 			newRouteNote : function ( routeObjId, event ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( routeObjId , [ event.latlng.lat, event.latlng.lng ] );
+				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+					_DataManager.getRoute ( routeObjId ),
+					[ event.latlng.lat, event.latlng.lng ] 
+				);
 				var note = this.newNote ( latLngDistance.latLng );
 				note.distance = latLngDistance.distance;
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
@@ -65,7 +68,7 @@ To do: translations
 					_DataManager.travel.notes.add ( note );
 				}
 				else {
-					_DataManager.travel.routes.getAt ( routeObjId ).notes.add ( note );
+					_DataManager.getRoute ( routeObjId ).notes.add ( note );
 				}
 				require ( '../core/MapEditor' ) ( ).addNote ( note );
 			},

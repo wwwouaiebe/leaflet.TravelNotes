@@ -123,7 +123,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var route = noteAndRoute.route;
 		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
 		if ( null != route ) {
-			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route.objId, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
 			note.latLng = latLngDistance.latLng;
 			note.distance = latLngDistance.distance;
 			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
@@ -162,7 +162,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 		};
 		return {
-			addRoute : function ( route ) {
+			
+			removeRoute : function ( route, removeNotes, removeWayPoints ) {
+				this.removeObject ( route.objId );
+				if ( removeNotes ) {
+					var notesIterator = route.notes.iterator;
+					while ( ! notesIterator.done ) {
+						this.removeObject ( notesIterator.value.objId );
+					}
+				}
+				if ( removeWayPoints ) {
+					var wayPointsIterator = route.wayPoints.iterator;
+					while ( ! wayPointsIterator.done ) {
+						this.removeObject ( wayPointsIterator.value.objId );
+					}
+				}
+			},
+			
+			addRoute : function ( route, addNotes, addWayPoints ) {
 				var latLng = [];
 				var pointsIterator = route.itinerary.itineraryPoints.iterator;
 				while ( ! pointsIterator.done ) {
@@ -181,6 +198,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
 				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				
+				if ( addNotes ) {
+					var notesIterator = route.notes.iterator;
+					while ( ! notesIterator.done ) {
+						this.addNote ( notesIterator.value );
+					}
+				}
+
+				if ( addWayPoints ) {
+					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+					var wayPointsCounter = 0;
+					while ( ! wayPointsIterator.done ) {
+						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : ( ++ wayPointsCounter ).toFixed ( 0 ) ) );
+					}
+				}
+								
 			},
 			
 			removeObject : function ( objId ) {
@@ -212,6 +245,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addWayPoint : function ( wayPoint, letter ) {
+				if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
+					return;
+				}
 				var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
 				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) )+ 
 				'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
@@ -273,10 +309,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
 				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
 				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
-			},
-			
-			moveWayPoint : function ( wayPoint ) {
-				 _DataManager.mapObjects.get ( wayPoint.objId ).setLatLng ( wayPoint.latLng );
 			},
 			
 			editNote : function ( note ) {

@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravelUtilities = function ( ) {
 
 		return {
-			getClosestLatLngDistance : function ( routeObjId, latLng ) {
+			getClosestLatLngDistance : function ( route, latLng ) {
 				
-				var itineraryPointIterator = _DataManager.getRoute ( routeObjId ).itinerary.itineraryPoints.iterator;
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
 				var dummy = itineraryPointIterator.done;
 				var minDistance = Number.MAX_VALUE;
 				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );

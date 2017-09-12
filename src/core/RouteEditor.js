@@ -26,70 +26,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
+	var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
-		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
 		return {
 			startRouting : function ( ) {
-			if ( ! _Config.routing.auto ) {
-				return;
-			}
-			
-			require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
-			require ( './Router' ) ( ).startRouting ( _DataManager.editedRoute );
+				if ( ! _Config.routing.auto ) {
+					return;
+				}
+				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );
 			},
 			
 			endRouting : function ( ) {
-				require ( './ItineraryEditor' ) ( ).setItinerary ( );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
-				_RouteEditorUI.setWayPointsList ( );
-				var wayPointIterator = _DataManager.editedRoute.wayPoints.iterator;
-				while ( ! wayPointIterator.done ) {
-					require ( './MapEditor' ) ( ).moveWayPoint ( wayPointIterator.value );
+				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				var notesIterator = _DataManager.editedRoute.notes.iterator;
+				while ( ! notesIterator.done ) {
+					var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
+					notesIterator.value.latLng = latLngDistance.latLng;
+					notesIterator.value.distance = latLngDistance.distance;
 				}
+				
+				_ItineraryEditor.setItinerary ( );
+				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
+				_RouteEditorUI.setWayPointsList ( );
 			},
 			
 			saveEdition : function ( ) {
-				var newRouteObjId = _DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, _DataManager.editedRoute );
-				_DataManager.editedRoute.routeChanged = false;
-				// It's needed to rewrite the route list due to objId's changes
-				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				// the edited route is cloned
+				var clonedRoute = require ( '../data/Route' ) ( );
+				clonedRoute.object = _DataManager.editedRoute.object;
+				// and the initial route replaced with the clone
+				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
+				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
 			},
 			
 			cancelEdition : function ( ) {
-				require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.travel.routes.getAt ( _DataManager.editedRoute.routeInitialObjId ) );
-				_DataManager.editedRoute.routeChanged = false;
 				this.clear ( );
+			},
+			
+			clear : function ( ) {
+				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				_MapEditor.addRoute ( _DataManager.getRoute ( _DataManager.editedRoute.routeInitialObjId ), true, false );
+
+				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				_DataManager.editedRoute.routeChanged = false;
+				_DataManager.editedRoute.routeInitialObjId = -1;
+				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				_RouteEditorUI.setWayPointsList (  );
+				_ItineraryEditor.setItinerary ( );
 			},
 			
 			editRoute : function ( routeObjId ) { 
 				if ( _DataManager.editedRoute.routeChanged ) {
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
+					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
-				var route = _DataManager.travel.routes.getAt ( routeObjId );
-				_DataManager.editedRoute.routeInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
-				_DataManager.editedRoute.object = route.object;
+				var initialRoute = _DataManager.getRoute ( routeObjId );
+				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				_DataManager.editedRoute.object = initialRoute.object;
+				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
+				_MapEditor.removeRoute ( initialRoute, true, false );
+				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
-				require ( './ItineraryEditor' ) ( ).setItinerary ( );
-				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
+				_ItineraryEditor.setItinerary ( );
 			},
 			
 			removeRoute : function ( routeObjId ) { 
-				require ( './TravelEditor' ) ( ).removeRoute ( routeObjId );
+				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
 			},
 			
 			addWayPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
-				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
+				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
 				}
@@ -169,6 +183,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
+			
 			wayPointDragEnd : function ( wayPointObjId ) {
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -244,14 +259,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				);
 				return contextMenu;
-			},
-			
-			clear : function ( ) {
-					_DataManager.editedRoute = require ( '../data/Route' ) ( );
-					_DataManager.editedRoute.routeChanged = false;
-					_DataManager.editedRoute.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 			}
 		};
 	};

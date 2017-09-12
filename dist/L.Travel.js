@@ -10341,7 +10341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var route = noteAndRoute.route;
 		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
 		if ( null != route ) {
-			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route.objId, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
 			note.latLng = latLngDistance.latLng;
 			note.distance = latLngDistance.distance;
 			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
@@ -10380,7 +10380,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 		};
 		return {
-			addRoute : function ( route ) {
+			
+			removeRoute : function ( route, removeNotes, removeWayPoints ) {
+				this.removeObject ( route.objId );
+				if ( removeNotes ) {
+					var notesIterator = route.notes.iterator;
+					while ( ! notesIterator.done ) {
+						this.removeObject ( notesIterator.value.objId );
+					}
+				}
+				if ( removeWayPoints ) {
+					var wayPointsIterator = route.wayPoints.iterator;
+					while ( ! wayPointsIterator.done ) {
+						this.removeObject ( wayPointsIterator.value.objId );
+					}
+				}
+			},
+			
+			addRoute : function ( route, addNotes, addWayPoints ) {
 				var latLng = [];
 				var pointsIterator = route.itinerary.itineraryPoints.iterator;
 				while ( ! pointsIterator.done ) {
@@ -10399,6 +10416,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
 				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				
+				if ( addNotes ) {
+					var notesIterator = route.notes.iterator;
+					while ( ! notesIterator.done ) {
+						this.addNote ( notesIterator.value );
+					}
+				}
+
+				if ( addWayPoints ) {
+					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+					var wayPointsCounter = 0;
+					while ( ! wayPointsIterator.done ) {
+						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : ( ++ wayPointsCounter ).toFixed ( 0 ) ) );
+					}
+				}
+								
 			},
 			
 			removeObject : function ( objId ) {
@@ -10430,6 +10463,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			addWayPoint : function ( wayPoint, letter ) {
+				if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
+					return;
+				}
 				var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
 				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) )+ 
 				'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
@@ -10491,10 +10527,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
 				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
 				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
-			},
-			
-			moveWayPoint : function ( wayPoint ) {
-				 _DataManager.mapObjects.get ( wayPoint.objId ).setLatLng ( wayPoint.latLng );
 			},
 			
 			editNote : function ( note ) {
@@ -10878,7 +10910,10 @@ To do: translations
 			},
 			
 			newRouteNote : function ( routeObjId, event ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( routeObjId , [ event.latlng.lat, event.latlng.lng ] );
+				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+					_DataManager.getRoute ( routeObjId ),
+					[ event.latlng.lat, event.latlng.lng ] 
+				);
 				var note = this.newNote ( latLngDistance.latLng );
 				note.distance = latLngDistance.distance;
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
@@ -10903,7 +10938,7 @@ To do: translations
 					_DataManager.travel.notes.add ( note );
 				}
 				else {
-					_DataManager.travel.routes.getAt ( routeObjId ).notes.add ( note );
+					_DataManager.getRoute ( routeObjId ).notes.add ( note );
 				}
 				require ( '../core/MapEditor' ) ( ).addNote ( note );
 			},
@@ -10998,70 +11033,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
+	var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
-		var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 		
 		return {
 			startRouting : function ( ) {
-			if ( ! _Config.routing.auto ) {
-				return;
-			}
-			
-			require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
-			require ( './Router' ) ( ).startRouting ( _DataManager.editedRoute );
+				if ( ! _Config.routing.auto ) {
+					return;
+				}
+				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );
 			},
 			
 			endRouting : function ( ) {
-				require ( './ItineraryEditor' ) ( ).setItinerary ( );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
-				_RouteEditorUI.setWayPointsList ( );
-				var wayPointIterator = _DataManager.editedRoute.wayPoints.iterator;
-				while ( ! wayPointIterator.done ) {
-					require ( './MapEditor' ) ( ).moveWayPoint ( wayPointIterator.value );
+				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				var notesIterator = _DataManager.editedRoute.notes.iterator;
+				while ( ! notesIterator.done ) {
+					var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
+					notesIterator.value.latLng = latLngDistance.latLng;
+					notesIterator.value.distance = latLngDistance.distance;
 				}
+				
+				_ItineraryEditor.setItinerary ( );
+				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
+				_RouteEditorUI.setWayPointsList ( );
 			},
 			
 			saveEdition : function ( ) {
-				var newRouteObjId = _DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, _DataManager.editedRoute );
-				_DataManager.editedRoute.routeChanged = false;
-				// It's needed to rewrite the route list due to objId's changes
-				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				// the edited route is cloned
+				var clonedRoute = require ( '../data/Route' ) ( );
+				clonedRoute.object = _DataManager.editedRoute.object;
+				// and the initial route replaced with the clone
+				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
+				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
 			},
 			
 			cancelEdition : function ( ) {
-				require ( './MapEditor' ) ( ).removeObject ( _DataManager.editedRoute.objId );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.travel.routes.getAt ( _DataManager.editedRoute.routeInitialObjId ) );
-				_DataManager.editedRoute.routeChanged = false;
 				this.clear ( );
+			},
+			
+			clear : function ( ) {
+				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				_MapEditor.addRoute ( _DataManager.getRoute ( _DataManager.editedRoute.routeInitialObjId ), true, false );
+
+				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				_DataManager.editedRoute.routeChanged = false;
+				_DataManager.editedRoute.routeInitialObjId = -1;
+				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				_RouteEditorUI.setWayPointsList (  );
+				_ItineraryEditor.setItinerary ( );
 			},
 			
 			editRoute : function ( routeObjId ) { 
 				if ( _DataManager.editedRoute.routeChanged ) {
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
+					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
-				var route = _DataManager.travel.routes.getAt ( routeObjId );
-				_DataManager.editedRoute.routeInitialObjId = route.objId;
 				// Route is cloned, so we can have a cancel button in the editor
-				_DataManager.editedRoute.object = route.object;
+				var initialRoute = _DataManager.getRoute ( routeObjId );
+				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				_DataManager.editedRoute.object = initialRoute.object;
+				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
+				_MapEditor.removeRoute ( initialRoute, true, false );
+				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
-				require ( './ItineraryEditor' ) ( ).setItinerary ( );
-				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
-				require ( './MapEditor' ) ( ).addRoute ( _DataManager.editedRoute );
+				_ItineraryEditor.setItinerary ( );
 			},
 			
 			removeRoute : function ( routeObjId ) { 
-				require ( './TravelEditor' ) ( ).removeRoute ( routeObjId );
+				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
 			},
 			
 			addWayPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
-				var newWayPoint = require ( '../Data/Waypoint.js' ) ( );
+				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
 				}
@@ -11141,6 +11190,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
+			
 			wayPointDragEnd : function ( wayPointObjId ) {
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -11216,14 +11266,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				);
 				return contextMenu;
-			},
-			
-			clear : function ( ) {
-					_DataManager.editedRoute = require ( '../data/Route' ) ( );
-					_DataManager.editedRoute.routeChanged = false;
-					_DataManager.editedRoute.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 			}
 		};
 	};
@@ -11235,7 +11277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Waypoint.js":30,"../UI/ItineraryEditorUI":37,"../UI/RouteEditorUI":39,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/MapEditor":46,"../core/NoteEditor":48,"../data/Route":61,"../util/Config":64,"./ErrorEditor":44,"./ItineraryEditor":45,"./MapEditor":46,"./Router":50,"./TravelEditor":51}],50:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/RouteEditorUI":39,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/ErrorEditor":44,"../core/ItineraryEditor":45,"../core/MapEditor":46,"../core/NoteEditor":48,"../core/Router":50,"../core/TravelEditor":51,"../data/Route":61,"../data/Waypoint.js":63,"../util/Config":64,"../util/TravelUtilities":65}],50:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11319,12 +11361,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _StartRouting = function ( ) {
 			if ( _RequestStarted ) {
-				return;
+				return false;
 			}
 			if ( ! _HaveValidWayPoints ( ) ) {
-				return;
+				return false;
 			}
 			_StartRequest ( );
+			
+			return true;
 		};
 	
 		return {
@@ -11398,7 +11442,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
-				_DataManager.travel.routes.getAt ( routeObjId ).name = routeName;
+				_DataManager.getRoute ( routeObjId ).name = routeName;
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId ) {
 					_DataManager.editedRoute.name = routeName;
@@ -11424,19 +11468,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
 					_DataManager.travel.name = fileName;
-					require ( '../core/RouteEditor' ) ( ).clear ( );
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
 					var routesIterator = _DataManager.travel.routes.iterator;
-					var notesIterator;
 					while ( ! routesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value );
-						notesIterator = routesIterator.value.notes.iterator;
-						while ( ! notesIterator.done ) {
-							require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
-						}
+						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
 					}
-					notesIterator = _DataManager.travel.notes.iterator;
+					var notesIterator = _DataManager.travel.notes.iterator;
 					while ( ! notesIterator.done ) {
 						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
 					}
@@ -11582,9 +11620,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getTravelUtilities = function ( ) {
 
 		return {
-			getClosestLatLngDistance : function ( routeObjId, latLng ) {
+			getClosestLatLngDistance : function ( route, latLng ) {
 				
-				var itineraryPointIterator = _DataManager.getRoute ( routeObjId ).itinerary.itineraryPoints.iterator;
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
 				var dummy = itineraryPointIterator.done;
 				var minDistance = Number.MAX_VALUE;
 				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );

@@ -55,7 +55,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			renameRoute : function ( routeObjId, routeName ) {
-				_DataManager.travel.routes.getAt ( routeObjId ).name = routeName;
+				_DataManager.getRoute ( routeObjId ).name = routeName;
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId ) {
 					_DataManager.editedRoute.name = routeName;
@@ -81,19 +81,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
 					_DataManager.travel.name = fileName;
-					require ( '../core/RouteEditor' ) ( ).clear ( );
 					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
 					var routesIterator = _DataManager.travel.routes.iterator;
-					var notesIterator;
 					while ( ! routesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value );
-						notesIterator = routesIterator.value.notes.iterator;
-						while ( ! notesIterator.done ) {
-							require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
-						}
+						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
 					}
-					notesIterator = _DataManager.travel.notes.iterator;
+					var notesIterator = _DataManager.travel.notes.iterator;
 					while ( ! notesIterator.done ) {
 						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
 					}
