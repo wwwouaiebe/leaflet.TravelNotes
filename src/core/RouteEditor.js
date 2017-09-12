@@ -248,14 +248,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
-						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
+						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
-						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
+						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;

@@ -288,6 +288,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Effacer cette note"
 		},
 		{
+			msgid : "Notedialog - empty icon content",
+			msgstr : "Le contenu de l'icône doit être complété."
+		},
+		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
 		},

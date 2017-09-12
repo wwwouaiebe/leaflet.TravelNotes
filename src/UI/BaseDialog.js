@@ -142,7 +142,14 @@ To do: translations
 			},
 			dialogContainer
 		);
-		
+		var errorDiv = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden',
+				id : 'TravelNotes-BaseDialog-ErrorDiv',
+			},
+			dialogContainer
+		);
 		var footerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
@@ -163,7 +170,9 @@ To do: translations
 			'click',
 			function ( ) {
 				if ( _OkButtonListener ) {
-					_OkButtonListener ( );
+					if ( ! _OkButtonListener ( ) ) {
+						return;
+					}
 				}
 				document.removeEventListener ( 'keydown', onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );

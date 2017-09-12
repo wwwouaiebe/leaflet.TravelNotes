@@ -7717,7 +7717,14 @@ To do: translations
 			},
 			dialogContainer
 		);
-		
+		var errorDiv = htmlElementsFactory.create ( 
+			'div',
+			{ 
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden',
+				id : 'TravelNotes-BaseDialog-ErrorDiv',
+			},
+			dialogContainer
+		);
 		var footerDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
@@ -7738,7 +7745,9 @@ To do: translations
 			'click',
 			function ( ) {
 				if ( _OkButtonListener ) {
-					_OkButtonListener ( );
+					if ( ! _OkButtonListener ( ) ) {
+						return;
+					}
 				}
 				document.removeEventListener ( 'keydown', onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
@@ -8382,6 +8391,11 @@ To do: translations
 	var _RouteObjId;
 	
 	var onOkButtonClick = function ( ) {
+		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - empty icon content' );
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
+			return false;
+		}
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
 		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
 		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
@@ -8391,6 +8405,7 @@ To do: translations
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
 		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note, _RouteObjId );
+		return true;
 	};
 
 	var getNoteDialog = function ( note, routeObjId ) {
@@ -9617,6 +9632,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "NoteEditor - delete note",
 			msgstr : "Effacer cette note"
+		},
+		{
+			msgid : "Notedialog - empty icon content",
+			msgstr : "Le contenu de l'icône doit être complété."
 		},
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
@@ -11255,14 +11274,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
-						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.saveEdition : null,
+						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
-						action : ( _DataManager.editedRoute.routeInitialObjId === routeObjId ) ? this.cancelEdition : null
+						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;
