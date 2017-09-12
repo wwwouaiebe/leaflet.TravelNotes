@@ -6520,7 +6520,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26}],21:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6601,7 +6601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":41,"./Collection":18,"./ObjId":25,"./ObjType":26}],22:[function(require,module,exports){
+},{"../UI/Translator":42,"./Collection":18,"./ObjId":25,"./ObjType":26}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6705,7 +6705,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26}],23:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6818,7 +6818,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26}],24:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6988,7 +6988,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26}],25:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26}],25:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -7187,7 +7187,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":41,"./Collection":18,"./Geom":20,"./Itinerary":21,"./ObjId":25,"./ObjType":26,"./Waypoint":30}],28:[function(require,module,exports){
+},{"../UI/Translator":42,"./Collection":18,"./Geom":20,"./Itinerary":21,"./ObjId":25,"./ObjType":26,"./Waypoint":30}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -7269,7 +7269,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of Travel.js file --- */
-},{"../UI/Translator":41,"./Collection":18,"./ObjId":25,"./ObjType":26,"./Route":27}],29:[function(require,module,exports){
+},{"../UI/Translator":42,"./Collection":18,"./ObjId":25,"./ObjType":26,"./Route":27}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -7363,9 +7363,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26}],30:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26}],30:[function(require,module,exports){
 arguments[4][29][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":25,"./ObjType":26,"dup":29}],31:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":25,"./ObjType":26,"dup":29}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7419,7 +7419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./UI/UserInterface":43}],32:[function(require,module,exports){
+},{"./UI/UserInterface":44}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7572,7 +7572,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./L.Travel.Control":31,"./UI/ContextMenu":34,"./UI/TravelEditorUI":42,"./UI/UserInterface":43,"./core/NoteEditor":48,"./core/RouteEditor":49,"./data/DataManager":53,"./util/Utilities":66}],33:[function(require,module,exports){
+},{"./L.Travel.Control":31,"./UI/ContextMenu":35,"./UI/TravelEditorUI":43,"./UI/UserInterface":44,"./core/NoteEditor":49,"./core/RouteEditor":50,"./data/DataManager":54,"./util/Utilities":67}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7789,7 +7789,224 @@ To do: translations
 
 }());
 
-},{"../UI/Translator":41,"../data/ObjId":59,"./HTMLElementsFactory":36}],34:[function(require,module,exports){
+},{"../UI/Translator":42,"../data/ObjId":60,"./HTMLElementsFactory":37}],34:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+To do: translations
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var _Translator = require ( '../UI/Translator' ) ( );
+	
+	var _LocalEditorData = { buttons : [], list : [] };
+	var _Note;
+	var _RouteObjId;
+	
+	var onOkButtonClick = function ( ) {
+		return true;
+	};
+
+	var getColorDialog = function ( color ) {
+
+		var red = parseInt ( color.substr ( 1, 2 ), 16 ); 
+		var green = parseInt ( color.substr ( 3, 2 ), 16 ); 
+		var blue = parseInt ( color.substr ( 5, 2 ), 16 ); 
+		var newColor = color;
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
+		// the dialog base is created
+		var baseDialog = require ( '../UI/BaseDialog' ) ( );
+		baseDialog.title = _Translator.getText ( 'ColorDialog - Title' );
+		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+
+		var rowCounter = 0;
+		var colorButtons = [
+			[ '#000000', '#333333', '#666666', '#999999', '#cccccc', '#ffffff' ], 
+			[ '#000033', '#000066', '#000099', '#0000cc', '#0000ff', '#ffffff' ], 
+			[ '#003300', '#006600', '#009900', '#00cc00', '#00ff00', '#ffffff' ],
+			[ '#330000', '#660000', '#990000', '#cc0000', '#ff0000', '#ffffff' ], 
+			[ '#333300', '#666600', '#999900', '#cccc00', '#ffff00', '#ffffff' ], 
+			[ '#330033', '#660066', '#990099', '#cc00cc', '#ff00ff', '#ffffff' ], 
+			[ '#003333', '#006666', '#009999', '#00cccc', '#00ffff', '#ffffff' ], 
+		];
+		
+		var setColor = function ( event ) {
+			redInput.value = parseInt ( event.target.colorValue.substr ( 1, 2 ), 16 );
+			greenInput.value = parseInt ( event.target.colorValue.substr ( 3, 2 ), 16 );
+			blueInput.value = parseInt ( event.target.colorValue.substr ( 5, 2 ), 16 );
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		};
+		var buttonsDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-ButtonsDiv',
+				id : 'TravelNotes-ColorDialog-ButtonsDiv'
+			},
+			baseDialog.content
+		);
+
+		var colorButtonsDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-ColorButtonsDiv',
+				id : 'TravelNotes-ColorDialog-ColorButtonsDiv'
+			},
+			buttonsDiv
+		);
+		while ( ++ rowCounter < 8 ) {
+			var colorButtonsRowDiv = htmlElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-ColorDialog-RowColorDiv',
+					id : 'TravelNotes-ColorDialog-RowColorDiv' +rowCounter
+				},
+				colorButtonsDiv
+			);
+			var cellCounter = 0;
+
+
+			while ( ++ cellCounter < 7 ) {
+				var colorButtonCellDiv = htmlElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-ColorDialog-CellColorDiv',
+						id : ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter
+					},
+					colorButtonsRowDiv
+				);
+				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + colorButtons [ rowCounter - 1] [ cellCounter - 1 ] );
+				colorButtonCellDiv.colorValue = colorButtons [ rowCounter - 1] [ cellCounter - 1 ];
+				colorButtonCellDiv.addEventListener ( 'click', setColor, false );
+			}
+		}
+		
+		var rvbDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-DataDiv',
+				id : 'TravelNotes-ColorDialog-DataDiv'
+			},
+			baseDialog.content
+		);
+		
+		var changeSampleColor = function ( )  {
+			console.log ( 'changeSampleColor');
+			newColor = '#' + parseInt ( redInput.value ).toString(16).padStart ( 2, '0' ) + parseInt ( greenInput.value ).toString(16).padStart ( 2, '0' )  + parseInt ( blueInput.value ).toString(16).padStart ( 2, '0' ) ;
+			console.log ( newColor );
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+newColor+';' );
+		};
+		
+		// ... red ...
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'ColorDialog - red'),
+			},
+			rvbDiv
+		);
+		var redInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-RedInput'
+				
+			},
+			rvbDiv
+		);
+		redInput.value = red;
+		redInput.min = 0;
+		redInput.max = 255;
+		
+		redInput.addEventListener ( 'input', changeSampleColor, false );
+		
+		// ... and green...
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'ColorDialog - green'),
+			},
+			rvbDiv
+		);
+		var greenInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-GreenInput'
+			},
+			rvbDiv
+		);
+		greenInput.value = green;
+		greenInput.min = 0;
+		greenInput.max = 255;
+		greenInput.addEventListener ( 'input', changeSampleColor, false );
+
+		// ... and green
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'ColorDialog - blue'),
+			},
+			rvbDiv
+		);
+		var blueInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-BlueInput'
+			},
+			rvbDiv
+		);
+		blueInput.value = blue;
+		blueInput.min = 0;
+		blueInput.max = 255;
+		blueInput.addEventListener ( 'input', changeSampleColor, false );
+		
+		var colorSampleDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-DataDiv',
+				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
+			},
+			baseDialog.content
+		);
+		colorSampleDiv.setAttribute ( 'style', 'background-color:'+ color +';' );
+
+		
+		// and the dialog is centered on the screen
+		baseDialog.center ( );
+	};
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getColorDialog;
+	}
+
+}());
+
+		
+},{"../UI/BaseDialog":33,"../UI/Translator":42,"./HTMLElementsFactory":37}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7977,7 +8194,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":36,"./Translator":41}],35:[function(require,module,exports){
+},{"./HTMLElementsFactory":37,"./Translator":42}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8081,7 +8298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":36,"./Translator":41}],36:[function(require,module,exports){
+},{"./HTMLElementsFactory":37,"./Translator":42}],37:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8155,7 +8372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8357,7 +8574,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 	
-},{"../core/MapEditor":46,"../data/DataManager":53,"../util/Utilities":66,"./HTMLElementsFactory":36,"./Translator":41}],38:[function(require,module,exports){
+},{"../core/MapEditor":47,"../data/DataManager":54,"../util/Utilities":67,"./HTMLElementsFactory":37,"./Translator":42}],39:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8837,7 +9054,7 @@ To do: translations
 
 }());
 
-},{"../UI/BaseDialog":33,"../UI/Translator":41,"../core/NoteEditor":48,"./HTMLElementsFactory":36}],39:[function(require,module,exports){
+},{"../UI/BaseDialog":33,"../UI/Translator":42,"../core/NoteEditor":49,"./HTMLElementsFactory":37}],40:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9088,7 +9305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RouteEditor":49,"../data/DataManager":53,"./HTMLElementsFactory":36,"./SortableList":40,"./Translator":41}],40:[function(require,module,exports){
+},{"../core/RouteEditor":50,"../data/DataManager":54,"./HTMLElementsFactory":37,"./SortableList":41,"./Translator":42}],41:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9343,7 +9560,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":36}],41:[function(require,module,exports){
+},{"./HTMLElementsFactory":37}],42:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9365,6 +9582,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _Fr =
 	[
+		{
+			msgid : "ColorDialog - Title",
+			msgstr : "Couleurs"
+		},
+		{
+			msgid : "ColorDialog - red",
+			msgstr : "Rouge"
+		},
+		{
+			msgid : "ColorDialog - green",
+			msgstr : "Vert"
+		},
+		{
+			msgid : "ColorDialog - blue",
+			msgstr : "Bleu"
+		},
 		{
 			msgid : "ContextMenu - close",
 			msgstr : "Fermer"
@@ -9388,158 +9621,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "ItineraryEditorUI - Hide",
 			msgstr : "Masquer"
-		},
-		{
-			msgid : "NoteCategory-Id01",
-			msgstr : "A&#xe9;roport"
-		},
-		{
-			msgid : "NoteCategory-Id02",
-			msgstr : "Mont&#xe9;e"
-		},
-		{
-			msgid : "NoteCategory-Id03",
-			msgstr : "Distributeur de billets"
-		},
-		{
-			msgid : "NoteCategory-Id04",
-			msgstr : "Attention requise"
-		},
-		{
-			msgid : "NoteCategory-Id05",
-			msgstr : "V&#xe9;los admis"
-		},
-		{
-			msgid : "NoteCategory-Id06",
-			msgstr : "Autobus"
-		},
-		{
-			msgid : "NoteCategory-Id07",
-			msgstr : "Photo"
-		},
-		{
-			msgid : "NoteCategory-Id08",
-			msgstr : "Camping"
-		},
-		{
-			msgid : "NoteCategory-Id09",
-			msgstr : "Ferry"
-		},
-		{
-			msgid : "NoteCategory-Id10",
-			msgstr : "Auberge de jeunesse"
-		},
-		{
-			msgid : "NoteCategory-Id11",
-			msgstr : "Point d\'information"
-		},
-		{
-			msgid : "NoteCategory-Id12",
-			msgstr : "Parc national"
-		},
-		{
-			msgid : "NoteCategory-Id13",
-			msgstr : "V&#xe9;los mal vus"
-		},
-		{
-			msgid : "NoteCategory-Id14",
-			msgstr : "Parc r&#xe9;gional"
-		},
-		{
-			msgid : "NoteCategory-Id15",
-			msgstr : "Entretien v&#xe9;lo"
-		},
-		{
-			msgid : "NoteCategory-Id16",
-			msgstr : "Magasin"
-		},
-		{
-			msgid : "NoteCategory-Id17",
-			msgstr : "Aide"
-		},
-		{
-			msgid : "NoteCategory-Id18",
-			msgstr : "Stop"
-		},
-		{
-			msgid : "NoteCategory-Id19",
-			msgstr : "Table"
-		},
-		{
-			msgid : "NoteCategory-Id20",
-			msgstr : "Toilettes"
-		},
-		{
-			msgid : "NoteCategory-Id21",
-			msgstr : "Gare"
-		},
-		{
-			msgid : "NoteCategory-Id22",
-			msgstr : "Tunnel"
-		},
-		{
-			msgid : "NoteCategory-Id23",
-			msgstr : "Point d\'eau"
-		},
-		{
-			msgid : "NoteCategory-Id24",
-			msgstr : "Chambre d\'hotes"
-		},
-		{
-			msgid : "NoteCategory-Id25",
-			msgstr : "Cafetaria"
-		},
-		{
-			msgid : "NoteCategory-Id26",
-			msgstr : "Restaurant"
-		},
-		{
-			msgid : "NoteCategory-Id27",
-			msgstr : "H&#xf4;tel"
-		},
-		{
-			msgid : "NoteCategory-Id28",
-			msgstr : "D&#xe9;part"
-		},
-		{
-			msgid : "NoteCategory-Id29",
-			msgstr : "Entr&#xe9;e du ferry"
-		},
-		{
-			msgid : "NoteCategory-Id30",
-			msgstr : "Sortie du ferry"
-		},
-		{
-			msgid : "NoteCategory-Id31",
-			msgstr : "Continuer"
-		},
-		{
-			msgid : "NoteCategory-Id32",
-			msgstr : "Tourner l&#xe9;g&#xe8;rement &#xe0; gauche"
-		},
-		{
-			msgid : "NoteCategory-Id33",
-			msgstr : "Tourner &#xe0; gauche"
-		},
-		{
-			msgid : "NoteCategory-Id34",
-			msgstr : "Tourner fort &#xe0; gauche"
-		},
-		{
-			msgid : "NoteCategory-Id35",
-			msgstr : "Tourner l&#xe9;g&#xe8;rement &#xe0; droite"
-		},
-		{
-			msgid : "NoteCategory-Id36",
-			msgstr : "Tourner &#xe0; droite"
-		},
-		{
-			msgid : "NoteCategory-Id37",
-			msgstr : "Tourner fort &#xe0; droite"
-		},
-		{
-			msgid : "NoteCategory-Id38",
-			msgstr : "Point noeud v&#xe9;lo"
 		},
 		{
 			msgid : "MapEditor - Distance",
@@ -9834,7 +9915,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10086,7 +10167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/TravelEditor":51,"../data/DataManager":53,"./HTMLElementsFactory":36,"./SortableList":40,"./Translator":41}],43:[function(require,module,exports){
+},{"../core/TravelEditor":52,"../data/DataManager":54,"./HTMLElementsFactory":37,"./SortableList":41,"./Translator":42}],44:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10146,7 +10227,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ErrorEditorUI":35,"./HTMLElementsFactory":36,"./ItineraryEditorUI":37,"./RouteEditorUI":39,"./TravelEditorUI":42}],44:[function(require,module,exports){
+},{"./ErrorEditorUI":36,"./HTMLElementsFactory":37,"./ItineraryEditorUI":38,"./RouteEditorUI":40,"./TravelEditorUI":43}],45:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10193,7 +10274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/ErrorEditorUI":35}],45:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":36}],46:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10234,7 +10315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/ItineraryEditorUI":37}],46:[function(require,module,exports){
+},{"../UI/ItineraryEditorUI":38}],47:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10576,7 +10657,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../UI/ContextMenu":34,"../UI/Translator":41,"../core/RouteEditor":49,"../util/Config":64,"../util/TravelUtilities":65,"../util/Utilities":66,"./NoteEditor":48,"./RouteEditor":49}],47:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/ContextMenu":35,"../UI/Translator":42,"../core/RouteEditor":50,"../util/Config":65,"../util/TravelUtilities":66,"../util/Utilities":67,"./NoteEditor":49,"./RouteEditor":50}],48:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10886,7 +10967,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../data/ItineraryPoint":56,"../data/Maneuver":57,"osrm-text-instructions":1,"polyline":17}],48:[function(require,module,exports){
+},{"../data/ItineraryPoint":57,"../data/Maneuver":58,"osrm-text-instructions":1,"polyline":17}],49:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11023,7 +11104,7 @@ To do: translations
 
 }());
 
-},{"../Data/DataManager":19,"../UI/NoteDialog":38,"../UI/Translator":41,"../core/MapEditor":46,"../data/Note":58,"../util/TravelUtilities":65}],49:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/NoteDialog":39,"../UI/Translator":42,"../core/MapEditor":47,"../data/Note":59,"../util/TravelUtilities":66}],50:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11125,6 +11206,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			removeRoute : function ( routeObjId ) { 
 				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
+			},
+			routeProperties : function ( routeObjId ) {
+				require ( '../UI/ColorDialog' ) ( '#FF00FF' );
 			},
 			
 			addWayPoint : function ( latLng ) {
@@ -11270,6 +11354,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						param: routeObjId
 					}
 				);
+				contextMenu.push ( 
+					{
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Properties" ), 
+						action : this.routeProperties,
+						param: routeObjId
+					}
+				);
 				contextMenu.push (
 					{ 
 						context : this, 
@@ -11296,7 +11388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../UI/RouteEditorUI":39,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/ErrorEditor":44,"../core/ItineraryEditor":45,"../core/MapEditor":46,"../core/NoteEditor":48,"../core/Router":50,"../core/TravelEditor":51,"../data/Route":61,"../data/Waypoint.js":63,"../util/Config":64,"../util/TravelUtilities":65}],50:[function(require,module,exports){
+},{"../Data/DataManager":19,"../UI/ColorDialog":34,"../UI/RouteEditorUI":40,"../UI/Translator":42,"../UI/TravelEditorUI":43,"../core/ErrorEditor":45,"../core/ItineraryEditor":46,"../core/MapEditor":47,"../core/NoteEditor":49,"../core/Router":51,"../core/TravelEditor":52,"../data/Route":62,"../data/Waypoint.js":64,"../util/Config":65,"../util/TravelUtilities":66}],51:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11403,7 +11495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../util/Utilities":66,"./MapboxRouteProvider":47,"./RouteEditor":49}],51:[function(require,module,exports){
+},{"../Data/DataManager":19,"../util/Utilities":67,"./MapboxRouteProvider":48,"./RouteEditor":50}],52:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11521,31 +11613,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Travel":28,"../UI/Translator":41,"../UI/TravelEditorUI":42,"../core/MapEditor":46,"../core/RouteEditor":49,"../util/Config":64,"../util/Utilities":66,"./ErrorEditor":44,"./MapEditor":46,"./RouteEditor":49}],52:[function(require,module,exports){
+},{"../Data/DataManager":19,"../Data/Route":27,"../Data/Travel":28,"../UI/Translator":42,"../UI/TravelEditorUI":43,"../core/MapEditor":47,"../core/RouteEditor":50,"../util/Config":65,"../util/Utilities":67,"./ErrorEditor":45,"./MapEditor":47,"./RouteEditor":50}],53:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
-},{"./ItineraryPoint":56,"./Maneuver":57,"./Note":58,"./Route":61,"./WayPoint":62,"dup":18}],53:[function(require,module,exports){
+},{"./ItineraryPoint":57,"./Maneuver":58,"./Note":59,"./Route":62,"./WayPoint":63,"dup":18}],54:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"../Data/Route":27,"../Data/Travel":28,"dup":19}],54:[function(require,module,exports){
+},{"../Data/Route":27,"../Data/Travel":28,"dup":19}],55:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":20}],55:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":20}],56:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./Collection":52,"./ObjId":59,"./ObjType":60,"dup":21}],56:[function(require,module,exports){
+},{"../UI/Translator":42,"./Collection":53,"./ObjId":60,"./ObjType":61,"dup":21}],57:[function(require,module,exports){
 arguments[4][22][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":22}],57:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":22}],58:[function(require,module,exports){
 arguments[4][23][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":23}],58:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":23}],59:[function(require,module,exports){
 arguments[4][24][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":24}],59:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":24}],60:[function(require,module,exports){
 arguments[4][25][0].apply(exports,arguments)
-},{"dup":25}],60:[function(require,module,exports){
+},{"dup":25}],61:[function(require,module,exports){
 arguments[4][26][0].apply(exports,arguments)
-},{"dup":26}],61:[function(require,module,exports){
+},{"dup":26}],62:[function(require,module,exports){
 arguments[4][27][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./Collection":52,"./Geom":54,"./Itinerary":55,"./ObjId":59,"./ObjType":60,"./Waypoint":63,"dup":27}],62:[function(require,module,exports){
+},{"../UI/Translator":42,"./Collection":53,"./Geom":55,"./Itinerary":56,"./ObjId":60,"./ObjType":61,"./Waypoint":64,"dup":27}],63:[function(require,module,exports){
 arguments[4][29][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":29}],63:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":29}],64:[function(require,module,exports){
 arguments[4][29][0].apply(exports,arguments)
-},{"../UI/Translator":41,"./ObjId":59,"./ObjType":60,"dup":29}],64:[function(require,module,exports){
+},{"../UI/Translator":42,"./ObjId":60,"./ObjType":61,"dup":29}],65:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11611,7 +11703,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11673,7 +11765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":19}],66:[function(require,module,exports){
+},{"../Data/DataManager":19}],67:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11857,4 +11949,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":41}]},{},[32]);
+},{"../UI/Translator":42}]},{},[32]);

@@ -1,0 +1,43 @@
+.TravelNotes-BaseDialog-ContentDiv
+{
+	text-align: center;
+	width : 22.5em;
+}
+.TravelNotes-ColorDialog-ButtonsDiv
+{
+	display: inline-block;
+}
+.TravelNotes-ColorDialog-ColorButtonsDiv
+{
+	text-align: center;
+	display: table;
+	width : 100%
+	border-collapse: separate;
+	border-spacing: 0.5em;
+	table-layout: fixed;
+}
+.TravelNotes-ColorDialog-RowColorDiv
+{
+	display: table-row;
+}
+.TravelNotes-ColorDialog-CellColorDiv
+{
+	display: table-cell;
+	height: 1em;
+	width: 1em;
+	border-style: solid;
+	border-width: 0.1em;
+	
+}
+#TravelNotes-ColorDialog-ColorSampleDiv
+{
+	width: 5em;
+	height: 3em;
+	display: inline-block;
+	border-style: solid;
+	border-width: 0.1em;	
+}
+.TravelNotes-ColorDialog-NumberInput
+{
+	width: 3em;margin: 0.5em
+}
