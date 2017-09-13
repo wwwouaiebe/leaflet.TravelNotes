@@ -188,8 +188,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var polyline = L.polyline ( 
 					latLng,
 					{
-						color : route.geom.color,
-						weight : route.geom.weight
+						color : route.color,
+						weight : route.width
 					}
 				);
 				_AddTo ( route.objId, polyline );
@@ -214,6 +214,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 								
+			},
+			
+			editRoute : function ( route ) {
+				var polyline = _DataManager.mapObjects.get ( route.objId );
+				polyline.setStyle( { color : route.color, weight : route.width } );
 			},
 			
 			removeObject : function ( objId ) {

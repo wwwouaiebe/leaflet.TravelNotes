@@ -100,13 +100,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			removeRoute : function ( routeObjId ) { 
 				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
 			},
-			startRouteProperties : function ( routeObjId ) {
-				require ( '../UI/RoutePropertiesDialog' ) ( { routeObjId : routeObjId, color : '#ff00ff', width : 5, chain : true} );
+			routeProperties : function ( routeObjId ) {
+				var route = _DataManager.getRoute ( routeObjId );
+				require ( '../UI/RoutePropertiesDialog' ) ( route );
 			},
-			endRouteProperties : function ( routeProperties ) {
-				console.log ( routeProperties );
-			},
-			
 			addWayPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
@@ -254,7 +251,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Properties" ), 
-						action : this.startRouteProperties,
+						action : this.routeProperties,
 						param: routeObjId
 					}
 				);

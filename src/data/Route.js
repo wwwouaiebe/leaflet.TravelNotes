@@ -31,7 +31,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _Itinerary = require ( './Itinerary' ) ( );
 		
-		var _Geom = require ( './Geom' ) ( );
+		var _Width = require ( '../util/Config' ) ( ).route.width || 5;
+		
+		var _Color = require ( '../util/Config' ) ( ).route.color || '#ff0000';
+		
+		var _Chain = false;
 		
 		var _ObjId = require ( './ObjId' ) ( );
 		
@@ -45,8 +49,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get itinerary ( ) { return _Itinerary; },
 
-			get geom ( ) { return _Geom; },
-			set geom ( Geom ) { _Geom = Geom; },
+			get width ( ) { return _Width; },
+			set width ( Width ) { _Width = Width; },
+			
+			get color ( ) { return _Color; },
+			set color ( Color ) { _Color = Color; },
+			
+			get chain ( ) { return _Chain; },
+			set chain ( Chain ) { _Chain = Chain; },
 			
 			get objId ( ) { return _ObjId; },
 			get objType ( ) { return _ObjType; },
@@ -57,7 +67,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					wayPoints : _WayPoints.object,
 					notes : _Notes.object,
 					itinerary : _Itinerary.object,
-					geom : _Geom.object,
+					width : _Width,
+					color : _Color,
+					chain :_Chain,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -68,7 +80,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_WayPoints.object = Object.wayPoints || [];
 				_Notes.object = Object.notes || [];
 				_Itinerary.object = Object.itinerary || require ( './Itinerary' ) ( ).object;
-				_Geom.object = Object.geom || require ( './Geom' ) ( ).object;
+				_Width = Object.width || 5;
+				_Color = Object.color || '#000000';
+				_Chain = Object.chain || false;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

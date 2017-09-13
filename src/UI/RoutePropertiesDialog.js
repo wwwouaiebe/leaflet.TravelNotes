@@ -26,23 +26,19 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 
-	var getRoutePropertiesDialog = function ( routeProperties ) {
+	var getRoutePropertiesDialog = function ( route ) {
 		
 		var onOkButtonClick = function ( ) {
-			require ( '../core/RouteEditor' ) ( ).endRouteProperties (
-				{ 
-					routeObjId : routeProperties.routeObjId, 
-					color: colorDialog.getNewColor ( ), 
-					width : parseInt ( widthInput.value ),
-					chain : chainInput.checked
-				}
-			);
+			route.color = colorDialog.getNewColor ( );
+			route.width = parseInt ( widthInput.value );
+			route.chain = chainInput.checked;
+			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			return true;
 		};
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
-		var colorDialog = require ( '../UI/ColorDialog' ) ( routeProperties.color );
+		var colorDialog = require ( '../UI/ColorDialog' ) ( route.color );
 		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Title' );
 		colorDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
@@ -78,7 +74,7 @@ To do: translations
 			},
 			widthDiv
 		);
-		widthInput.value = routeProperties.width;
+		widthInput.value = route.width;
 		widthInput.min = 1;
 		widthInput.max = 40;
 
@@ -99,7 +95,7 @@ To do: translations
 			},
 			chainDiv
 		);
-		chainInput.checked = routeProperties.chain;
+		chainInput.checked = route.chain;
 		htmlElementsFactory.create ( 
 			'label',
 			{
