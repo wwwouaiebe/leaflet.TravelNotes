@@ -26,19 +26,27 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
-	var _LocalEditorData = { buttons : [], list : [] };
-	var _Note;
-	var _RouteObjId;
-	
 	var onOkButtonClick = function ( ) {
 		return true;
 	};
 
 	var getColorDialog = function ( color ) {
-
-		var red = parseInt ( color.substr ( 1, 2 ), 16 ); 
-		var green = parseInt ( color.substr ( 3, 2 ), 16 ); 
-		var blue = parseInt ( color.substr ( 5, 2 ), 16 ); 
+		
+		var colorToNumbers = function ( color ) {
+			return {
+				r : parseInt ( color.substr ( 1, 2 ), 16 ),
+				g : parseInt ( color.substr ( 3, 2 ), 16 ), 
+				b : parseInt ( color.substr ( 5, 2 ), 16 ), 
+			};
+		};
+		
+		var numbersToColor = function ( r, g, b ) {
+			return '#' + 
+				parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
+				parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
+				parseInt ( b ).toString(16).padStart ( 2, '0' ) ;
+		};
+		
 		var newColor = color;
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
@@ -46,24 +54,7 @@ To do: translations
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'ColorDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
-
-		var rowCounter = 0;
-		var colorButtons = [
-			[ '#000000', '#333333', '#666666', '#999999', '#cccccc', '#ffffff' ], 
-			[ '#000033', '#000066', '#000099', '#0000cc', '#0000ff', '#ffffff' ], 
-			[ '#003300', '#006600', '#009900', '#00cc00', '#00ff00', '#ffffff' ],
-			[ '#330000', '#660000', '#990000', '#cc0000', '#ff0000', '#ffffff' ], 
-			[ '#333300', '#666600', '#999900', '#cccc00', '#ffff00', '#ffffff' ], 
-			[ '#330033', '#660066', '#990099', '#cc00cc', '#ff00ff', '#ffffff' ], 
-			[ '#003333', '#006666', '#009999', '#00cccc', '#00ffff', '#ffffff' ], 
-		];
 		
-		var setColor = function ( event ) {
-			redInput.value = parseInt ( event.target.colorValue.substr ( 1, 2 ), 16 );
-			greenInput.value = parseInt ( event.target.colorValue.substr ( 3, 2 ), 16 );
-			blueInput.value = parseInt ( event.target.colorValue.substr ( 5, 2 ), 16 );
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
-		};
 		var buttonsDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -73,27 +64,56 @@ To do: translations
 			baseDialog.content
 		);
 
-		var colorButtonsDiv = htmlElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-ColorDialog-ColorButtonsDiv',
-				id : 'TravelNotes-ColorDialog-ColorButtonsDiv'
-			},
-			buttonsDiv
-		);
+		var setColor = function ( event ) {
+			var numbers = colorToNumbers ( event.target.colorValue );
+			redInput.value = numbers.r;
+			greenInput.value = numbers.g;
+			blueInput.value = numbers.b;
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		};
+		
+		var changeColor = function ( event ) {
+			var r = event.target.redValue;
+			var g = 255;
+			var b = 255;
+			var rowCounter = 0;
+			while ( ++ rowCounter < 7 ) {
+				var cellCounter = 0;
+				g = 255;
+				while ( ++ cellCounter < 7 ) {
+					var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
+					button.colorValue = numbersToColor ( r, g, b );
+					button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
+					g -= 51;
+				}
+				b -= 51;
+			}
+		};
+		
+		var r = 255;
+		var g = 255;
+		var b = 255;
+		
+		var rowCounter = 0;
+		
 		while ( ++ rowCounter < 8 ) {
+			
 			var colorButtonsRowDiv = htmlElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-ColorDialog-RowColorDiv',
 					id : 'TravelNotes-ColorDialog-RowColorDiv' +rowCounter
 				},
-				colorButtonsDiv
+				buttonsDiv
 			);
+			
 			var cellCounter = 0;
-
-
+			g = 255;
 			while ( ++ cellCounter < 7 ) {
+				var className = 'TravelNotes-ColorDialog-CellColorDiv';
+				if ( rowCounter < 7 ) {
+					className = 'TravelNotes-ColorDialog-CellColorDiv TravelNotes-ColorDialog-RedDiv';
+				}
 				var colorButtonCellDiv = htmlElementsFactory.create (
 					'div',
 					{
@@ -102,10 +122,22 @@ To do: translations
 					},
 					colorButtonsRowDiv
 				);
-				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + colorButtons [ rowCounter - 1] [ cellCounter - 1 ] );
-				colorButtonCellDiv.colorValue = colorButtons [ rowCounter - 1] [ cellCounter - 1 ];
-				colorButtonCellDiv.addEventListener ( 'click', setColor, false );
+				if ( rowCounter < 7 ) {
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
+					colorButtonCellDiv.colorValue = numbersToColor ( r, g, b );
+					colorButtonCellDiv.addEventListener ( 'click', setColor, false );
+					g -= 51;
+				}
+				else
+				{
+					r = ( cellCounter - 1 ) * 51;
+					var buttonColor = numbersToColor ( 255, r, r );
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
+					colorButtonCellDiv.redValue = 255 - r;
+					colorButtonCellDiv.addEventListener ( 'click', changeColor, false );
+				}
 			}
+			b -= 51;
 		}
 		
 		var rvbDiv = htmlElementsFactory.create (
@@ -118,10 +150,8 @@ To do: translations
 		);
 		
 		var changeSampleColor = function ( )  {
-			console.log ( 'changeSampleColor');
-			newColor = '#' + parseInt ( redInput.value ).toString(16).padStart ( 2, '0' ) + parseInt ( greenInput.value ).toString(16).padStart ( 2, '0' )  + parseInt ( blueInput.value ).toString(16).padStart ( 2, '0' ) ;
-			console.log ( newColor );
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+newColor+';' );
+			newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
 		};
 		
 		// ... red ...
@@ -142,7 +172,7 @@ To do: translations
 			},
 			rvbDiv
 		);
-		redInput.value = red;
+		redInput.value = colorToNumbers ( color ).r;
 		redInput.min = 0;
 		redInput.max = 255;
 		
@@ -165,7 +195,7 @@ To do: translations
 			},
 			rvbDiv
 		);
-		greenInput.value = green;
+		greenInput.value = colorToNumbers ( color ).g;
 		greenInput.min = 0;
 		greenInput.max = 255;
 		greenInput.addEventListener ( 'input', changeSampleColor, false );
@@ -187,7 +217,7 @@ To do: translations
 			},
 			rvbDiv
 		);
-		blueInput.value = blue;
+		blueInput.value = colorToNumbers ( color ).b;
 		blueInput.min = 0;
 		blueInput.max = 255;
 		blueInput.addEventListener ( 'input', changeSampleColor, false );

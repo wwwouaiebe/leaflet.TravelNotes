@@ -1,33 +1,31 @@
 .TravelNotes-BaseDialog-ContentDiv
 {
-	text-align: center;
 	width : 22.5em;
+	text-align: center;
 }
 .TravelNotes-ColorDialog-ButtonsDiv
 {
-	display: inline-block;
 }
-.TravelNotes-ColorDialog-ColorButtonsDiv
+.TravelNotes-ColorDialog-RowColorDiv:last-child 
 {
-	text-align: center;
-	display: table;
-	width : 100%
-	border-collapse: separate;
-	border-spacing: 0.5em;
-	table-layout: fixed;
-}
-.TravelNotes-ColorDialog-RowColorDiv
-{
-	display: table-row;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 .TravelNotes-ColorDialog-CellColorDiv
 {
-	display: table-cell;
+	display: inline-block;
 	height: 1em;
 	width: 1em;
 	border-style: solid;
 	border-width: 0.1em;
-	
+	margin-top: 0em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	margin-bottom: 0;
+}
+.TravelNotes-ColorDialog-NumberInput
+{
+	width: 3em;margin: 0.5em
 }
 #TravelNotes-ColorDialog-ColorSampleDiv
 {
@@ -36,8 +34,4 @@
 	display: inline-block;
 	border-style: solid;
 	border-width: 0.1em;	
-}
-.TravelNotes-ColorDialog-NumberInput
-{
-	width: 3em;margin: 0.5em
 }
