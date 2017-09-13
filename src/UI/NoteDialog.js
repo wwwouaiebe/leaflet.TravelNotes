@@ -62,6 +62,14 @@ To do: translations
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+
+		var NoteDataDiv = htmlElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-NoteDialog-MainDataDiv'
+			},
+			baseDialog.content
+		);
 		
 		// Toolbar
 		var toolbarDiv = htmlElementsFactory.create ( 
@@ -70,7 +78,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		
 		var editorSelect = htmlElementsFactory.create (
@@ -236,7 +244,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-DataDiv',
 				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		
 		// ... width ...
@@ -286,7 +294,7 @@ To do: translations
 				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var iconHtmlContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -294,7 +302,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		iconHtmlContent.addEventListener (
 			'focus',
@@ -311,7 +319,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var popUpContent = htmlElementsFactory.create ( 
 			'textarea',
@@ -319,7 +327,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		popUpContent.addEventListener (
 			'focus',
@@ -337,7 +345,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var tooltip = htmlElementsFactory.create ( 
 			'input',
@@ -346,7 +354,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		tooltip.addEventListener (
 			'focus',
@@ -364,7 +372,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var address = htmlElementsFactory.create ( 
 			'input',
@@ -373,7 +381,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Adress'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		address.addEventListener (
 			'focus',
@@ -391,7 +399,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var link = htmlElementsFactory.create ( 
 			'input',
@@ -400,7 +408,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Link'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		link.addEventListener (
 			'focus',
@@ -418,7 +426,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		var phone = htmlElementsFactory.create ( 
 			'input',
@@ -427,7 +435,7 @@ To do: translations
 				className : 'TravelNotes-NoteDialog-InputText',
 				id: 'TravelNotes-NoteDialog-InputText-Phone'
 			},
-			baseDialog.content
+			NoteDataDiv
 		);
 		phone.addEventListener (
 			'focus',

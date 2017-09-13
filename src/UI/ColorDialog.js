@@ -27,6 +27,7 @@ To do: translations
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var onOkButtonClick = function ( ) {
+		console.log ( 'onOkButtonClick - colorDialog' );
 		return true;
 	};
 
@@ -54,18 +55,30 @@ To do: translations
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'ColorDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+		baseDialog.getNewColor = function ( ) {
+			return newColor;
+		};
 		
+		var colorDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-ColorDiv',
+				id : 'TravelNotes-ColorDialog-ColorDiv'
+			},
+			baseDialog.content
+		);
 		var buttonsDiv = htmlElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-ButtonsDiv',
 				id : 'TravelNotes-ColorDialog-ButtonsDiv'
 			},
-			baseDialog.content
+			colorDiv
 		);
 
 		var setColor = function ( event ) {
-			var numbers = colorToNumbers ( event.target.colorValue );
+			newColor = event.target.colorValue;
+			var numbers = colorToNumbers ( newColor );
 			redInput.value = numbers.r;
 			greenInput.value = numbers.g;
 			blueInput.value = numbers.b;
@@ -146,7 +159,7 @@ To do: translations
 				className : 'TravelNotes-ColorDialog-DataDiv',
 				id : 'TravelNotes-ColorDialog-DataDiv'
 			},
-			baseDialog.content
+			colorDiv
 		);
 		
 		var changeSampleColor = function ( )  {
@@ -228,13 +241,15 @@ To do: translations
 				className : 'TravelNotes-ColorDialog-DataDiv',
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
 			},
-			baseDialog.content
+			colorDiv
 		);
 		colorSampleDiv.setAttribute ( 'style', 'background-color:'+ color +';' );
 
 		
 		// and the dialog is centered on the screen
 		baseDialog.center ( );
+		
+		return baseDialog;
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {

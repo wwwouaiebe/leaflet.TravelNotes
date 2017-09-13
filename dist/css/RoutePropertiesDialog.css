@@ -15,17 +15,19 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-/* Context menu */
-
-/* Don't change ContextMenu-Panel. It's used to find the screen height!*/
-
-@import 'css/ContextMenu.css';
-@import 'css/SortableList.css';
-@import 'css/BaseDialog.css';
-@import 'css/ColorDialog.css';
-@import 'css/RoutePropertiesDialog.css';
-@import 'css/NoteDialog.css';
-@import 'css/Control.css';
-@import 'css/Popup.css';
-@import 'css/Notes.css';
-@import 'css/WayPoints.css';
+#TravelNotes-RoutePropertiesDialog-MainDataDiv
+{
+	text-align: center;
+}
+#TravelNotes-RoutePropertiesDialog-WithDiv
+{
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	border-top-color: lightgray;
+	margin-top: 1em;
+	padding-top: 1em;
+}
+#TravelNotes-RoutePropertiesDialog-WidthInput
+{
+	width: 3em;
+}
