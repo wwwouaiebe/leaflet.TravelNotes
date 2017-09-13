@@ -5118,7 +5118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var _RouteProvider = global.providers.get ( 'mapbox' );
+	var _RouteProvider = global.providers.get ( 'osrm' );
 	var _RequestStarted = false;
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	
