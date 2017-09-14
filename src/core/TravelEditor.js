@@ -28,7 +28,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 		var _Translator = require ( '../UI/Translator' ) ( );
-
+		
+		var _ReadFile = function ( textFile ) {
+			_DataManager.travel.object = JSON.parse ( textFile ) ;
+			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+			var routesIterator = _DataManager.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
+			}
+			var notesIterator = _DataManager.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+			}
+		};
+		
 		return {
 			
 			addRoute : function ( ) {
@@ -79,23 +93,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
 					_DataManager.travel.name = fileName;
-					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
-					var routesIterator = _DataManager.travel.routes.iterator;
-					while ( ! routesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
-					}
-					var notesIterator = _DataManager.travel.notes.iterator;
-					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
-					}
+					_ReadFile ( fileReader.result );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			
+			openServerTravel : function ( ) {
+				var urlSearch = decodeURI ( window.location.search );
+				var serverUrl = null;
+				if ( 'fil=' === urlSearch.substr ( 1, 4 ) ) {
+					serverUrl = atob ( urlSearch.substr ( 5 ) );
+					var xmlHttpRequest = new XMLHttpRequest ( );
+					xmlHttpRequest.onreadystatechange = function ( event ) {
+						if ( this.readyState === XMLHttpRequest.DONE ) {
+							if ( this.status === 200 ) {
+								_ReadFile ( this.responseText );
+							} 
+						}
+					};
+					xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
+					xmlHttpRequest.send ( null );
+				}
+			},
 			clear : function ( ) {
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;

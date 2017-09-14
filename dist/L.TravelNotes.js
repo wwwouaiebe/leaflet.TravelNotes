@@ -1330,6 +1330,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				
 				require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+				require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 			},
 			
 			addMapContextMenu : function ( leftButton, rightButton ) {
@@ -1403,7 +1404,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":13,"./UI/ContextMenu":17,"./UI/TravelEditorUI":26,"./UI/UserInterface":27,"./core/NoteEditor":31,"./core/RouteEditor":32,"./data/DataManager":36,"./data/ItineraryPoint":38,"./data/Maneuver":39,"./util/Utilities":48}],15:[function(require,module,exports){
+},{"./L.TravelNotes.Control":13,"./UI/ContextMenu":17,"./UI/TravelEditorUI":26,"./UI/UserInterface":27,"./core/NoteEditor":31,"./core/RouteEditor":32,"./core/TravelEditor":34,"./data/DataManager":36,"./data/ItineraryPoint":38,"./data/Maneuver":39,"./util/Utilities":48}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4705,6 +4706,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);
 			},
 			
+			zoomToRoute : function ( routeObjId ) {
+				_DataManager.map.fitBounds ( _DataManager.mapObjects.get ( routeObjId ).getBounds ( ) );
+			},
+			
 			addItineraryPointMarker : function ( itineraryPointObjId ) {
 				_AddTo ( 
 					itineraryPointObjId,
@@ -4998,6 +5003,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 				_ItineraryEditor.setItinerary ( );
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
+				_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
 				_RouteEditorUI.setWayPointsList ( );
 			},
 			
@@ -5310,9 +5316,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			
 			xmlHttpRequest.send ( null );
-			// https://graphhopper.com/api/1/route?point=50.50945,5.49483&point=50.506849237235635,5.49241304397583&instructions=true&type=json&key=2276c75e-5513-4595-a871-82172b583b01&locale=fr&vehicle=car
-			// GraphHopper:
-			//_ParseResponse ( '{"hints":{"visited_nodes.average":"18.0","visited_nodes.sum":"18"},"paths":[{"instructions":[{"distance":141.78,"sign":0,"interval":[0,4],"text":"Continuez sur Chemin du Sârtê","time":19318,"street_name":"Chemin du Sârtê"},{"distance":156.064,"sign":-2,"interval":[4,9],"text":"Tournez à gauche sur Basse Voie","time":31212,"street_name":"Basse Voie"},{"distance":210.755,"sign":2,"interval":[9,11],"text":"Tournez à droite sur Chemin des Patars","time":27096,"street_name":"Chemin des Patars"},{"distance":0.0,"sign":4,"interval":[11,11],"text":"Arrivée","time":0,"street_name":""}],"descend":4.802001953125,"ascend":2.4025039672851562,"distance":508.599,"bbox":[5.49239,50.506872,5.494842,50.509458],"weight":77.628153,"points_encoded":true,"points":"achsHsep`@F^|@~D^fA\h@Tm@fByCRu@Hu@La@zBnGxAzE","transfers":0,"legs":[],"details":{},"time":77626,"snapped_waypoints":"achsHsep`@bOfN"}],"info":{"took":2,"copyrights":["GraphHopper","OpenStreetMap contributors"]}}');
 		};
 		
 		var _StartRouting = function ( ) {
@@ -5371,7 +5374,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 		var _Translator = require ( '../UI/Translator' ) ( );
-
+		
+		var _ReadFile = function ( textFile ) {
+			_DataManager.travel.object = JSON.parse ( textFile ) ;
+			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+			var routesIterator = _DataManager.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
+			}
+			var notesIterator = _DataManager.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+			}
+		};
+		
 		return {
 			
 			addRoute : function ( ) {
@@ -5422,23 +5439,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_DataManager.travel.object = JSON.parse ( fileReader.result ) ;
 					_DataManager.travel.name = fileName;
-					require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-					require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
-					var routesIterator = _DataManager.travel.routes.iterator;
-					while ( ! routesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
-					}
-					var notesIterator = _DataManager.travel.notes.iterator;
-					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
-					}
+					_ReadFile ( fileReader.result );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			
+			openServerTravel : function ( ) {
+				var urlSearch = decodeURI ( window.location.search );
+				var serverUrl = null;
+				if ( 'fil=' === urlSearch.substr ( 1, 4 ) ) {
+					serverUrl = atob ( urlSearch.substr ( 5 ) );
+					var xmlHttpRequest = new XMLHttpRequest ( );
+					xmlHttpRequest.onreadystatechange = function ( event ) {
+						if ( this.readyState === XMLHttpRequest.DONE ) {
+							if ( this.status === 200 ) {
+								_ReadFile ( this.responseText );
+							} 
+						}
+					};
+					xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
+					xmlHttpRequest.send ( null );
+				}
+			},
 			clear : function ( ) {
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;
@@ -5779,7 +5803,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 						newUrlSearch += urlSearch [ urlCounter ];
 					}
-					
 				}
 				var stateObj = { index: "bar" };
 				history.pushState(stateObj, "page", newUrlSearch );

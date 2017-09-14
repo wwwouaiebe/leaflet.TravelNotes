@@ -90,6 +90,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				
 				require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+				require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 			},
 			
 			addMapContextMenu : function ( leftButton, rightButton ) {
