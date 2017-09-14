@@ -277,7 +277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					leg.shape = require ( 'polyline' ).decode ( leg.shape , 6 );
 					var itineraryPoints = [];
 					for ( var shapePointCounter = 0; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
-						var itineraryPoint = L.travel.interface ( ).itineraryPoint;
+						var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
 						itineraryPoint.latLng = leg.shape [ shapePointCounter ];
 						if ( shapePointCounter !== leg.shape.length - 1 ) {
 							itineraryPoint.distance = L.latLng ( leg.shape [ shapePointCounter ] ).distanceTo ( L.latLng ( leg.shape [ shapePointCounter + 1 ] ) );
@@ -288,7 +288,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 					leg.maneuvers.forEach (
 						function ( mapzenManeuver ) {
-							var travelNotesManeuver = L.travel.interface ( ).maneuver;
+							var travelNotesManeuver = L.travelNotes.interface ( ).maneuver;
 							travelNotesManeuver.iconName = _IconList [ mapzenManeuver.type || 0 ];
 							travelNotesManeuver.instruction = mapzenManeuver.instruction || '';
 							travelNotesManeuver.streetName = '';
@@ -327,7 +327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	L.travel.interface ( ).addProvider ( getMapzenRouteProvider ( ) );
+	L.travelNotes.interface ( ).addProvider ( getMapzenRouteProvider ( ) );
 
 }());
 

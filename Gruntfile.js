@@ -8,8 +8,8 @@ module.exports = function(grunt) {
 		},
 		browserify: {
 			control: {
-				src: ['src/L.Travel.Interface.js'],
-				dest: 'dist/L.Travel.js'
+				src: ['src/L.TravelNotes.Interface.js'],
+				dest: 'dist/L.TravelNotes.js'
 			}
 		},
 		uglify: {
@@ -18,8 +18,8 @@ module.exports = function(grunt) {
 				'<%= grunt.template.today("yyyy-mm-dd") %> - Copyright 2015 2017 Christian Guyette - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
 			},
 			build: {
-				src: 'dist/L.Travel.js',
-				dest: 'dist/L.Travel.min.js'
+				src: 'dist/L.TravelNotes.js',
+				dest: 'dist/L.TravelNotes.min.js'
 			}
 		}
 	});

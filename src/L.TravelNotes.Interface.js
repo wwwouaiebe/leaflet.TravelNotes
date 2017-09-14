@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	
 	
-	L.Travel = L.Travel || {};
-	L.travel = L.travel || {};
+	L.TravelNotes = L.TravelNotes || {};
+	L.travelNotes = L.travelNotes || {};
 	
 	var _LeftUserContextMenu = [];
 	var _RightUserContextMenu = [];
@@ -34,15 +34,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	
 	/* 
-	--- L.Travel.Interface object -----------------------------------------------------------------------------
+	--- L.TravelNotes.Interface object -----------------------------------------------------------------------------
 	
-	This object contains all you need to use Travel :-)
+	This object contains all you need to use TravelNotes :-)
 	
 	Patterns : Closure
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.Travel.getInterface = function ( ) {
+	L.TravelNotes.getInterface = function ( ) {
 
 
 		var onMapClick = function ( event ) {
@@ -85,7 +85,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}	
 				else {
 					if ( typeof module !== 'undefined' && module.exports ) {
-						map.addControl ( require ('./L.Travel.Control' ) ( options ) );
+						map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
 					}
 				}
 				
@@ -151,14 +151,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	/* --- End of L.Travel.Interface object --- */		
+	/* --- End of L.TravelNotes.Interface object --- */		
 
-	L.travel.interface = function ( ) {
-		return L.Travel.getInterface ( );
+	L.travelNotes.interface = function ( ) {
+		return L.TravelNotes.getInterface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travel.interface;
+		module.exports = L.travelNotes.interface;
 	}
 
 }());

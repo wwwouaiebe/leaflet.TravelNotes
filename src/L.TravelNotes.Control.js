@@ -20,10 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	L.Travel = L.Travel || {};
-	L.travel = L.travel || {};
+	L.TravelNotes = L.TravelNotes || {};
+	L.travelNotes = L.travelNotes || {};
 	
-	L.Travel.Control = L.Control.extend ( {
+	L.TravelNotes.Control = L.Control.extend ( {
 		
 			options : {
 				position: 'topright'
@@ -41,12 +41,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 	);
 
-	L.travel.control = function ( options ) {
-		return new L.Travel.Control ( options );
+	L.travelNotes.control = function ( options ) {
+		return new L.TravelNotes.Control ( options );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = L.travel.control;
+		module.exports = L.travelNotes.control;
 	}
 
 }());

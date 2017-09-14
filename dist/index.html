@@ -7,16 +7,16 @@
 		<title>leaflet.Travel by wwwouaiebe</title>
 		<meta name="author" content="Christian Guyette" />
 		<link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
-		<link rel="stylesheet" href="../dist/L.Travel.css" />
+		<link rel="stylesheet" href="../dist/L.Travelnotes.css" />
 		<link rel="stylesheet" href="index.css" media="screen"/>
 	</head>
 	<body>
-		<div id="LeafletTravelControl">
+		<div id="LeafletTravelNotesControl">
 		</div>
 		<div id="Map">
 		</div>
 		<script src="../node_modules/leaflet/dist/leaflet.js"></script>
-		<script src="../dist/L.Travel.js"></script>
+		<script src="../dist/L.TravelNotes.js"></script>
 		<script src="../dist/providers/MapboxRouteProvider.min.js"></script>
 		<script src="../dist/providers/OSRMRouteProvider.min.js"></script>
 		<script src="../dist/providers/MapzenRouteProvider.js"></script>
@@ -28,8 +28,8 @@
 				var sayCoucou = function ( ) { console.log ( 'Coucou' ); };
 				var Map = L.map ( 'Map' ).setView( [ 50.50923,5.49542 ], 17 );
 				L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">Christian Guyette</a>' } ).addTo ( Map );
-				var myInterface = L.travel.interface ( );
-				myInterface.addControl ( Map, 'LeafletTravelControl', { position: "topright"} );
+				var myInterface = L.travelNotes.interface ( );
+				myInterface.addControl ( Map, 'LeafletTravelNotesControl', { position: "topright"} );
 				myInterface.leftContextMenu = false;
 				myInterface.leftUserContextMenu = [ { name : 'Dit "Hello" à la console', action : sayHello, context : null }];
 				myInterface.rightContextMenu = true;

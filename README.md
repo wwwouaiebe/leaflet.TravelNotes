@@ -1,3 +1,3 @@
-# leaflet.Travel
+# Travel & Notes with Leaflet
 
 Coming soon...

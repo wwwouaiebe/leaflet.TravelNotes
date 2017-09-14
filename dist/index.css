@@ -16,7 +16,7 @@ html > body > div#Map1
 	top: 0px; 
 	left: 0px;
 }
-html > body > div#LeafletTravelControl	
+html > body > div#LeafletTravelNotesControl	
 {
 	position: absolute;	
 	width: 30%; 

@@ -2,7 +2,7 @@
   "name": "leaflet.Travel",
   "version": "0.1.0",
   "description": "Description coming soon",
-  "main": "src/L.Travel.js",
+  "main": "src/L.TravelNotes.js",
   "directories": {
     "test": "tests"
   },
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wwwouaiebe/leaflet.Travel.git"
+    "url": "git+https://github.com/wwwouaiebe/leaflet.TravelNotes.git"
   },
   "keywords": [
     "Leaflet",
@@ -30,7 +30,7 @@
   "author": "Christian Guyette (wwwouaiebe)",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/wwwouaiebe/leaflet.Travel/issues"
+    "url": "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
   },
-  "homepage": "https://github.com/wwwouaiebe/leaflet.Travel#readme"
+  "homepage": "https://github.com/wwwouaiebe/leaflet.TravelNotes#readme"
 }
