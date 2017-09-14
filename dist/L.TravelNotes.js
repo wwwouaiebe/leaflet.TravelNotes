@@ -5283,9 +5283,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _StartRequest = function ( ) {
 			
-console.log ( _DataManager.routing.provider );
-console.log ( _DataManager.routing.transitMode );
-			
 			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
 
 			_RequestStarted = true;
@@ -5313,9 +5310,9 @@ console.log ( _DataManager.routing.transitMode );
 			);
 			
 			xmlHttpRequest.send ( null );
-
+			// https://graphhopper.com/api/1/route?point=50.50945,5.49483&point=50.506849237235635,5.49241304397583&instructions=true&type=json&key=2276c75e-5513-4595-a871-82172b583b01&locale=fr&vehicle=car
 			// GraphHopper:
-			//_ParseResponse ('{"hints":{"visited_nodes.average":"16.0","visited_nodes.sum":"16"},"paths":[{"instructions":[{"distance":125.967,"sign":0,"interval":[0,3],"text":"Continuez sur Chemin du Sârtê","time":17441,"street_name":"Chemin du Sârtê"},{"distance":156.064,"sign":-2,"interval":[3,8],"text":"Tournez à gauche sur Basse Voie","time":31212,"street_name":"Basse Voie"},{"distance":255.674,"sign":2,"interval":[8,10],"text":"Tournez à droite sur Chemin des Patars","time":32394,"street_name":"Chemin des Patars"},{"distance":0.0,"sign":4,"interval":[10,10],"text":"Arrivée","time":0,"street_name":""}],"descend":7.1020050048828125,"ascend":2.402008056640625,"distance":537.705,"bbox":[5.491862,50.506651,5.494842,50.509404],"weight":81.048982,"points_encoded":true,"points":"wbhsHidp`@z@tD^fA\\h@Tm@fByCRu@Hu@La@zBnGdCbI","transfers":0,"legs":[],"details":{},"time":81047,"snapped_waypoints":"wbhsHidp`@dPdP"}],"info":{"took":2,"copyrights":["GraphHopper","OpenStreetMap contributors"]}}' );
+			//_ParseResponse ( '{"hints":{"visited_nodes.average":"18.0","visited_nodes.sum":"18"},"paths":[{"instructions":[{"distance":141.78,"sign":0,"interval":[0,4],"text":"Continuez sur Chemin du Sârtê","time":19318,"street_name":"Chemin du Sârtê"},{"distance":156.064,"sign":-2,"interval":[4,9],"text":"Tournez à gauche sur Basse Voie","time":31212,"street_name":"Basse Voie"},{"distance":210.755,"sign":2,"interval":[9,11],"text":"Tournez à droite sur Chemin des Patars","time":27096,"street_name":"Chemin des Patars"},{"distance":0.0,"sign":4,"interval":[11,11],"text":"Arrivée","time":0,"street_name":""}],"descend":4.802001953125,"ascend":2.4025039672851562,"distance":508.599,"bbox":[5.49239,50.506872,5.494842,50.509458],"weight":77.628153,"points_encoded":true,"points":"achsHsep`@F^|@~D^fA\h@Tm@fByCRu@Hu@La@zBnGxAzE","transfers":0,"legs":[],"details":{},"time":77626,"snapped_waypoints":"achsHsep`@bOfN"}],"info":{"took":2,"copyrights":["GraphHopper","OpenStreetMap contributors"]}}');
 		};
 		
 		var _StartRouting = function ( ) {
