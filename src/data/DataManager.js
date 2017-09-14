@@ -29,8 +29,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.editedRoute.routeInitialObjId = -1;
 				global.travel = require ( '../Data/Travel' ) ( );
 				global.mapObjects = new Map ( );
+				global.routing = {};
 			},
 			
+			get routing ( ) { return global.routing; },
+			set routing ( Routing ) { global.routing = Routing; },
+			get providers ( ) { return global.providers; },
 			get editedRoute ( ) { return global.editedRoute; },
 			
 			set editedRoute ( editedRoute ) { global.editedRoute = editedRoute; },

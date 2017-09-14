@@ -6451,7 +6451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'OSRM';},
-			get transitModes ( ) { return [ 'car' ] ; }
+			get transitModes ( ) { return { car : true, bike : false, pedestrian : false}; }
 		};
 	};
 	

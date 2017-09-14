@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
+			
 		};
 		
 		if ( ! _MainDiv ) {

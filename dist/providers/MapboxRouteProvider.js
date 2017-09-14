@@ -6438,7 +6438,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 			var wayPointsString = wayPoints.forEach ( wayPointsToString );
 			
-			return 'https://api.mapbox.com/directions/v5/mapbox/driving/' +
+			var profile = '';
+			switch ( transitMode ) {
+				case 'bike':
+				{
+					profile = 'mapbox/cycling/';
+					break;
+				}
+				case 'pedestrian':
+				{
+					profile = 'mapbox/walking/';
+					break;
+				}
+				case 'car':
+				{
+					profile = 'mapbox/driving/';
+					break;
+				}
+			}
+			
+			return 'https://api.mapbox.com/directions/v5/' + profile +
 				 wayPointsString.substr ( 0, wayPointsString.length - 1 ) +
 				'?geometries=polyline6&overview=full&steps=true&annotations=distance&access_token=' +
 				providerKey;
@@ -6455,7 +6474,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'mapbox';},
-			get transitModes ( ) { return [ 'car', 'bike', 'pedestrian' ] ; }
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true} ; }
 			
 		};
 	};

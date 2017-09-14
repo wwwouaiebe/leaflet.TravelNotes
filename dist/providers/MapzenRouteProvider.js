@@ -297,13 +297,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				"", //kPostTransitConnectionDestination = 36;
 			]
 		};
-		
-
 
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
 			var response = JSON.parse ( requestResponse );	
-console.log ( response );			
+
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
 			
@@ -403,7 +401,7 @@ console.log ( response );
 			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {	return _GetUrl( wayPoints, transitMode, providerKey, userLanguage, options );},
 			parseResponse : function ( requestResponse, route, userLanguage ) { _ParseResponse ( requestResponse, route, userLanguage );},
 			get name ( ) { return 'Mapzen';},
-			get transitModes ( ) { return [ 'car', 'bike', 'pedestrian' ]; }
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true}; }
 		};
 	};
 	
