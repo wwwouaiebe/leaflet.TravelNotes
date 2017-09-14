@@ -6347,7 +6347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 
-		var _ParseResponse = function ( requestResponse, route ) {
+		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
 			var response = JSON.parse( requestResponse );
 
@@ -6376,7 +6376,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 
 			var osrmTextInstructions = require('osrm-text-instructions')('v5', options );
-			var language = 'fr';
 			var lastPointWithDistance = 0;
 			
 			
@@ -6388,11 +6387,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 							var maneuver = L.travelNotes.interface ( ).maneuver;
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
-							maneuver.instruction = osrmTextInstructions.compile ( language, step );
+							maneuver.instruction = osrmTextInstructions.compile ( userLanguage, step );
 							maneuver.streetName = step.name;
 							maneuver.direction = _DegreeToCompass ( step.maneuver.bearing_after );
 							step.name = '';
-							maneuver.simplifiedInstruction = osrmTextInstructions.compile ( language, step );
+							maneuver.simplifiedInstruction = osrmTextInstructions.compile ( userLanguage, step );
 							maneuver.duration = step.duration;
 							var distance = 0;
 							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {
@@ -6428,7 +6427,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return ;
 		};
 		
-		var _GetUrl = function ( wayPoints) {
+		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
 			
 			var wayPointsToString = function ( wayPoint, result )  {
 				if ( null === result ) {
@@ -6445,11 +6444,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		return {
-			getUrl : function ( wayPoints ) {
-				return _GetUrl ( wayPoints );
+			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
 			},
-			parseResponse : function ( requestResponse, route ) {
-				_ParseResponse ( requestResponse, route );
+			parseResponse : function ( requestResponse, route, userLanguage ) {
+				_ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'OSRM';},
 			get transitModes ( ) { return [ 'car' ] ; }
