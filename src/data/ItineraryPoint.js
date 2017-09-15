@@ -24,8 +24,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Lat = 0;
 		var _Lng = 0;
 		var _Distance = 0;
-		var _WayPointObjId = -1;
-		var _NoteObjId = -1;
 		var _ManeuverObjId = -1;
 		
 		var _ObjId = require ( './ObjId' ) ( );
@@ -48,14 +46,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set distance ( Distance ) { _Distance = Distance; },
 						
-			get wayPointObjId ( ) { return _WayPointObjId;},
-			
-			set wayPointObjId ( WayPointObjId ) { _WayPointObjId = WayPointObjId; },
-			
-			get noteObjId ( ) { return _NoteObjId;},
-			
-			set noteObjId ( NoteObjId ) { _NoteObjId = NoteObjId; },
-			
 			get maneuverObjId ( ) { return _ManeuverObjId;},
 			
 			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
@@ -69,8 +59,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					distance : _Distance,
-					wayPointObjId : _WayPointObjId,
-					noteObjId : _NoteObjId,
 					maneuverObjId : _ManeuverObjId,
 					objId : _ObjId,
 					objType : _ObjType.object
@@ -82,8 +70,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_Distance = Object.distance || 0;
-				_WayPointObjId = Object.wayPointObjId || -1;
-				_NoteObjId = Object.noteObjId || -1;
 				_ManeuverObjId = Object.maneuverObjId || -1;
 				_ObjId = require ( './ObjId' ) ( );
 			}

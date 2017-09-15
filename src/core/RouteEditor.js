@@ -33,6 +33,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		
 		return {
+			getRouteDistanceDuration : function ( routeObjId ) {
+				var route = _DataManager.getRoute ( routeObjId );
+			
+				var distance = 0;
+				var duration = 0;
+
+				var maneuverIterator = route.itinerary.maneuvers.iterator;
+				while ( ! maneuverIterator.done ) {
+					distance += maneuverIterator.value.distance;
+					duration += maneuverIterator.value.duration;
+				}
+				distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
+				duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
+				
+				return { distance : distance, duration : duration };
+			
+			},
+			
+			
 			startRouting : function ( ) {
 				if ( ! _Config.routing.auto ) {
 					return;

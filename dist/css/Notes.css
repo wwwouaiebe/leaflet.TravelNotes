@@ -24,6 +24,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     display: inline-block;
 	vertical-align: top;
 }
+.TravelNotes-ManeuverNote
+{
+	background-repeat : no-repeat;
+	height: 40px;
+	width: 40px;
+    display: inline-block;
+	vertical-align: top;
+	background-color : white;
+	border-color: black;
+	border-width: 1px;
+	border-style: solid;
+}
 .TravelNotes-MapNoteCategory-0001
 {
 	background-image : url('../icons/NotesIcons/0001.png');
@@ -136,7 +148,238 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	background-image : url('../icons/NotesIcons/0028.png');
 }
-
+.TravelNotes-ManeuverNote-kArriveDefault
+{
+	background-image : url('../icons/NotesIcons/kArriveDefaultBig.png');
+}
+.TravelNotes-ManeuverNote-kArriveLeft
+{
+	background-image : url('../icons/NotesIcons/kArriveLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kArriveRight
+{
+	background-image : url('../icons/NotesIcons/kArriveRightBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueLeft
+{
+	background-image : url('../icons/NotesIcons/kContinueLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueRight
+{
+	background-image : url('../icons/NotesIcons/kContinueRightBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueSharpLeft
+{
+	background-image : url('../icons/NotesIcons/kContinueSharpLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueSharpRight
+{
+	background-image : url('../icons/NotesIcons/kContinueSharpRightBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueSlightLeft
+{
+	background-image : url('../icons/NotesIcons/kContinueSlightLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueSlightRight
+{
+	background-image : url('../icons/NotesIcons/kContinueSlightRightBig.png');
+}
+.TravelNotes-ManeuverNote-kContinueStraight
+{
+	background-image : url('../icons/NotesIcons/kContinueStraightBig.png');
+}
+.TravelNotes-ManeuverNote-kDepartDefault
+{
+	background-image : url('../icons/NotesIcons/kDepartDefaultBig.png');
+}
+.TravelNotes-ManeuverNote-kDepartLeft
+{
+	background-image : url('../icons/NotesIcons/kDepartLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kDepartRight
+{
+	background-image : url('../icons/NotesIcons/kDepartRightBig.png');
+}
+.TravelNotes-ManeuverNote-kEndOfRoadLeft
+{
+	background-image : url('../icons/NotesIcons/kEndOfRoadLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kEndOfRoadRight
+{
+	background-image : url('../icons/NotesIcons/kEndOfRoadRightBig.png');
+}
+.TravelNotes-ManeuverNote-kFerryEnter
+{
+	background-image : url('../icons/NotesIcons/kFerryEnterBig.png');
+}
+.TravelNotes-ManeuverNote-kFerryExit
+{
+	background-image : url('../icons/NotesIcons/kFerryExitBig.png');
+}
+.TravelNotes-ManeuverNote-kForkLeft
+{
+	background-image : url('../icons/NotesIcons/kForkLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kForkRight
+{
+	background-image : url('../icons/NotesIcons/kForkRightBig.png');
+}
+.TravelNotes-ManeuverNote-kMergeDefault
+{
+	background-image : url('../icons/NotesIcons/kMergeDefaultBig.png');
+}
+.TravelNotes-ManeuverNote-kMergeLeft
+{
+	background-image : url('../icons/NotesIcons/kMergeLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kMergeRight
+{
+	background-image : url('../icons/NotesIcons/kMergeRightBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameLeft
+{
+	background-image : url('../icons/NotesIcons/kNewNameLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameRight
+{
+	background-image : url('../icons/NotesIcons/kNewNameRightBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameSharpLeft
+{
+	background-image : url('../icons/NotesIcons/kNewNameSharpLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameSharpRight
+{
+	background-image : url('../icons/NotesIcons/kNewNameSharpRightBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameSlightLeft
+{
+	background-image : url('../icons/NotesIcons/kNewNameSlightLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameSlightRight
+{
+	background-image : url('../icons/NotesIcons/kNewNameSlightRightBig.png');
+}
+.TravelNotes-ManeuverNote-kNewNameStraight
+{
+	background-image : url('../icons/NotesIcons/kNewNameStraightBig.png');
+}
+.TravelNotes-ManeuverNote-kOffRampLeft
+{
+	background-image : url('../icons/NotesIcons/kOffRampLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kOffRampRight
+{
+	background-image : url('../icons/NotesIcons/kOffRampRightBig.png');
+}
+.TravelNotes-ManeuverNote-kOnRampLeft
+{
+	background-image : url('../icons/NotesIcons/kOnRampLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kOnRampRight
+{
+	background-image : url('../icons/NotesIcons/kOnRampRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRotaryLeft
+{
+	background-image : url('../icons/NotesIcons/kRotaryLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kRotaryRight
+{
+	background-image : url('../icons/NotesIcons/kRotaryRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutLeft
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutRight
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnLeft
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnRight
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnSharpLeft
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnSharpLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnSharpRight
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnSharpRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnSlightLeft
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnSlightLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnSlightRight
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnSlightRightBig.png');
+}
+.TravelNotes-ManeuverNote-kRoundaboutTurnStraight
+{
+	background-image : url('../icons/NotesIcons/kRoundaboutTurnStraightBig.png');
+}
+.TravelNotes-ManeuverNote-kStayLeft
+{
+	background-image : url('../icons/NotesIcons/kStayLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kStayRight
+{
+	background-image : url('../icons/NotesIcons/kStayRightBig.png');
+}
+.TravelNotes-ManeuverNote-kStayStraight
+{
+	background-image : url('../icons/NotesIcons/kStayStraightBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnLeft
+{
+	background-image : url('../icons/NotesIcons/kTurnLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnRight
+{
+	background-image : url('../icons/NotesIcons/kTurnRightBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnSharpLeft
+{
+	background-image : url('../icons/NotesIcons/kTurnSharpLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnSharpRight
+{
+	background-image : url('../icons/NotesIcons/kTurnSharpRightBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnSlightLeft
+{
+	background-image : url('../icons/NotesIcons/kTurnSlightLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnSlightRight
+{
+	background-image : url('../icons/NotesIcons/kTurnSlightRightBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnStraight
+{
+	background-image : url('../icons/NotesIcons/kTurnStraightBig.png');
+}
+.TravelNotes-ManeuverNote-kTurnUturn
+{
+	background-image : url('../icons/NotesIcons/kTurnUturnBig.png');
+}
+.TravelNotes-ManeuverNote-kUndefined
+{
+	background-image : url('../icons/NotesIcons/kUndefinedBig.png');
+}
+.TravelNotes-ManeuverNote-kUturnLeft
+{
+	background-image : url('../icons/NotesIcons/kUturnLeftBig.png');
+}
+.TravelNotes-ManeuverNote-kUturnRight
+{
+	background-image : url('../icons/NotesIcons/kUturnRightBig.png');
+}
 .TravelNotes-NotesStyle
 {
 	background : transparent;

@@ -50,6 +50,22 @@ To do: translations
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
 			},
 			
+			newManeuverNote : function ( maneuverObjId, itineraryPointObjId ) {
+				var latLng = _DataManager.editedRoute.itinerary.itineraryPoints.getAt (  itineraryPointObjId ).latLng;
+				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+					_DataManager.editedRoute,
+					latLng
+				);
+				var maneuver = _DataManager.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+				var note = this.newNote ( latLng );
+				note.distance = latLngDistance.distance;
+				note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
+				note.popupContent = maneuver.instruction;
+				note.width = 40;
+				note.height = 40;
+				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId );
+			},
+			
 			newTravelNote : function ( latLng ) {
 				var note = this.newNote ( latLng );
 				require ( '../UI/NoteDialog' ) ( note, -1 );
@@ -62,6 +78,7 @@ To do: translations
 				else {
 					this.addNote ( note, routeObjId );
 				}
+console.log ( _DataManager.editedRoute.object );
 			},	
 
 			addNote : function ( note, routeObjId ) {

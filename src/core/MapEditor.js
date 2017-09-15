@@ -66,23 +66,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 
 	var getRoutePopupText = function ( layer ) {
-		var route = _DataManager.getRoute ( layer.objId );
-	
-		var distance = 0;
-		var duration = 0;
 
-		var maneuverIterator = route.itinerary.maneuvers.iterator;
-		while ( ! maneuverIterator.done ) {
-			distance += maneuverIterator.value.distance;
-			duration += maneuverIterator.value.duration;
-		}
-		distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
-		duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
+		var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( layer.objId );
 
 		return '<div class="TravelNotes-Popup-Route-Header">' +
 			route.name + '</div><div class="TravelNotes-Popup-Route-Distance">' +
-			_Translator.getText ( 'MapEditor - Distance' ) + distance + '</div><div class="TravelNotes-Popup-Route-Duration">' +
-			_Translator.getText ( 'MapEditor - Duration' ) + duration + '</div>';
+			_Translator.getText ( 'MapEditor - Distance' ) + distanceDuration.distance + '</div><div class="TravelNotes-Popup-Route-Duration">' +
+			_Translator.getText ( 'MapEditor - Duration' ) + distanceDuration.duration + '</div>';
 	};
 	
 	var onRouteClick = function ( event ) {
@@ -161,6 +151,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 				
 		};
+		var _GetNotesBounds = function ( notes ) {
+			var notesBounds = null;
+			notes.forEach ( 
+				function ( note ) {
+					var layerGroup = _DataManager.mapObjects.get ( note.objId );
+					if ( layerGroup ) {
+						if ( ! notesBounds ) {
+							notesBounds = layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( );
+						}
+						else
+						{
+							notesBounds.extend ( layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( ) );
+						}
+					}
+				}
+			);
+
+			return notesBounds;
+		};
+
+		var _GetRouteBounds = function ( routeObjId )
+		{
+			var routeBounds = null;
+			var polyline = _DataManager.mapObjects.get ( routeObjId );
+			if ( polyline ) {
+				routeBounds = polyline.getBounds ( );
+				var notesBounds = _GetNotesBounds ( _DataManager.getRoute ( routeObjId ).notes );
+				if ( notesBounds && notesBounds.isValid ( ) ) {
+					routeBounds.extend ( notesBounds );
+				}					
+			}
+
+			return routeBounds;
+		};
+
 		return {
 			
 			removeRoute : function ( route, removeNotes, removeWayPoints ) {
@@ -243,32 +268,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			zoomToRoute : function ( routeObjId ) {
-				_DataManager.map.fitBounds ( _DataManager.mapObjects.get ( routeObjId ).getBounds ( ) );
+				var routeBounds =  _GetRouteBounds ( routeObjId );
+				if ( routeBounds && routeBounds.isValid ( ) ) {
+					_DataManager.map.fitBounds ( routeBounds );
+				}
 			},
 			
 			zoomToTravel : function ( ) {
-				var travelBounds = L.latLngBounds ( );
-				var addNotesBounds = function ( notes ) {
-					notes.forEach ( 
-						function ( note ) {
-							var layerGroup = _DataManager.mapObjects.get ( note.objId );
-							if ( layerGroup ) {
-								travelBounds.extend ( layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( ) );
-							}
-						}
-					);
-				};
-				_DataManager.travel.routes.forEach (
+				var travelBounds = null;
+				_DataManager.travel.routes.forEach ( 
 					function ( route ) {
-						var polyline = _DataManager.mapObjects.get ( route.objId );
-						if ( polyline ) {
-							travelBounds.extend ( polyline.getBounds ( ) );
+						var routeBounds =  _GetRouteBounds ( route.objId );
+						if ( routeBounds && routeBounds.isValid ( ) ) {
+							if ( ! travelBounds )
+							{
+								travelBounds = routeBounds ;
+							}
+							else {
+								travelBounds.extend ( routeBounds );
+							}	
 						}
-						addNotesBounds ( route.notes );
 					}
 				);
-				addNotesBounds ( travel.notes );
-				_DataManager.map.fitBounds ( travelBounds );
+				var travelNotesBounds =  _GetNotesBounds ( travel.notes );
+				if ( travelNotesBounds && travelNotesBounds.isValid ( ) ) {
+					if ( ! travelBounds ){
+						travelBounds = travelNotesBounds;
+					}
+					else {
+						travelBounds.extend ( travelNotesBounds );
+					}
+				}
+				if ( travelBounds && travelBounds.isValid ( ) ) {
+					_DataManager.map.fitBounds ( travelBounds );
+				}
 			},
 			
 			addItineraryPointMarker : function ( itineraryPointObjId ) {

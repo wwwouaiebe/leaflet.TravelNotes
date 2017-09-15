@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
+		require ( '../core/NoteEditor' ) ( ).newManeuverNote ( clickEvent.target.maneuverObjId, clickEvent.target.itineraryPointObjId );
 	};
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
@@ -230,11 +231,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _SetItinerary = function ( ) {
 
 			var itinerary = _DataManager.editedRoute.itinerary;
-			
+
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
+			
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+			var briefItineraryDiv = document.getElementById ( 'TravelNotes-Control-BriefItineraryDiv' );
+			if ( briefItineraryDiv ) {
+				dataDiv.removeChild ( briefItineraryDiv );
+			}
+			
+			if ( 0 !== itinerary.maneuvers.length ) { 
+				var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( _DataManager.editedRoute.objId );
+				briefItineraryDiv = htmlElementsFactory.create ( 
+					'div',
+					{
+						id : 'TravelNotes-Control-BriefItineraryDiv',
+						innerHTML : 'Distance&nbsp;:&nbsp;' + distanceDuration.distance + '&nbsp;-&nbsp;Temps&nbsp;:&nbsp;' + distanceDuration.duration
+					},
+					dataDiv
+				);
+			}
+			
 			
 			var maneuverList = document.getElementById ( 'TravelNotes-Control-ManeuverList' );
 			if ( maneuverList ) {
@@ -244,7 +264,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				dataDiv.removeChild ( maneuverList );
 			}
 
-			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			maneuverList = htmlElementsFactory.create (
 				'div',
 					{
@@ -278,6 +297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					rowDataDiv
 				);
 				instructionElement.itineraryPointObjId = maneuverIterator.value.itineraryPointObjId;
+				instructionElement.maneuverObjId = maneuverIterator.value.objId;
 				_AddEventListeners ( instructionElement );
 				htmlElementsFactory.create (
 					'div',
