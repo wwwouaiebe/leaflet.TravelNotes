@@ -256,6 +256,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						param: routeObjId
 					}
 				);
+				contextMenu.push ( 
+					{
+						context : _MapEditor, 
+						name : _Translator.getText ( "RouteEditor - Zoom to route" ), 
+						action : _MapEditor.zoomToRoute,
+						param: routeObjId
+					}
+				);
 				contextMenu.push (
 					{ 
 						context : this, 

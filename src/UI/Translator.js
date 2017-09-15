@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Fr =
 	[
 		{
+			msgid : "AboutDialog - Title",
+			msgstr : "À propos de Travel & Notes"
+		},
+		{
 			msgid : "ColorDialog - Title",
 			msgstr : "Couleurs"
 		},
@@ -152,6 +156,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Effacer cette note"
 		},
 		{
+			msgid : "NoteEditor - zoom to travel",
+			msgstr : "Zoom sur le voyage"
+		},
+		{
+			msgid : "NoteEditor - About",
+			msgstr : "À propos de Travel & Notes"
+		},
+		{
 			msgid : "Notedialog - empty icon content",
 			msgstr : "Le contenu de l'icône doit être complété."
 		},
@@ -183,6 +195,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "RouteEditor - Delete this route",
 			msgstr : "Supprimer cette route"
+		},
+		{
+			msgid : "RouteEditor - Properties",
+			msgstr : "Propriétés"
+		},
+		{
+			msgid : "RouteEditor - Zoom to route",
+			msgstr : "Zoom sur le trajet"
 		},
 		{
 			msgid : "RouteEditor - Save modifications on this route",

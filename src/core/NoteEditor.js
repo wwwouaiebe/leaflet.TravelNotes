@@ -27,6 +27,7 @@ To do: translations
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
+	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
@@ -56,7 +57,7 @@ To do: translations
 			
 			endNoteDialog : function ( note, routeObjId ) {
 				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
-					require ( '../core/MapEditor' ) ( ).editNote ( note );
+					_MapEditor.editNote ( note );
 				}
 				else {
 					this.addNote ( note, routeObjId );
@@ -70,7 +71,7 @@ To do: translations
 				else {
 					_DataManager.getRoute ( routeObjId ).notes.add ( note );
 				}
-				require ( '../core/MapEditor' ) ( ).addNote ( note );
+				_MapEditor.addNote ( note );
 			},
 
 			editNote : function ( noteObjId ) {
@@ -80,7 +81,7 @@ To do: translations
 
 			removeNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
+				_MapEditor.removeObject ( noteObjId );
 				if ( ! noteAndRoute.route ) {
 					_DataManager.travel.notes.remove ( noteObjId );
 				}
@@ -97,6 +98,20 @@ To do: translations
 						name : _Translator.getText ( "NoteEditor - new travel note" ), 
 						action : this.newTravelNote,
 						param : latLng
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : _MapEditor, 
+						name : _Translator.getText ( "NoteEditor - zoom to travel" ), 
+						action : _MapEditor.zoomToTravel
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : null,
+						name : _Translator.getText ( "NoteEditor - About" ), 
+						action : require ( '../UI/AboutDialog' )
 					} 
 				);
 				

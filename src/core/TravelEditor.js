@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _MapEditor = require ( '../core/MapEditor' ) ( );
 
 	var getTravelEditor = function ( ) {
 
@@ -32,15 +33,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _ReadFile = function ( textFile ) {
 			_DataManager.travel.object = JSON.parse ( textFile ) ;
 			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+			_MapEditor.removeAllObjects ( );
 			var routesIterator = _DataManager.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				require ( '../core/MapEditor' ) ( ).addRoute ( routesIterator.value, true, false );
+				_MapEditor.addRoute ( routesIterator.value, true, false );
 			}
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+				_MapEditor.addNote ( notesIterator.value );
 			}
+			_MapEditor.zoomToTravel ( );
 		};
 		
 		return {
@@ -124,7 +126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.travel = require ( '../Data/Travel' ) ( );
 				require ( '../core/RouteEditor' ) ( ).clear ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+				_MapEditor.removeAllObjects ( );
 			}
 		};
 	};
