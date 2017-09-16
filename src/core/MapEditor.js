@@ -117,6 +117,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			note.latLng = latLngDistance.latLng;
 			note.distance = latLngDistance.distance;
 			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+			route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 		}
 		else {
 			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
@@ -151,41 +152,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 				
 		};
-		var _GetNotesBounds = function ( notes ) {
-			var notesBounds = null;
-			notes.forEach ( 
-				function ( note ) {
-					var layerGroup = _DataManager.mapObjects.get ( note.objId );
-					if ( layerGroup ) {
-						if ( ! notesBounds ) {
-							notesBounds = layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( );
-						}
-						else
-						{
-							notesBounds.extend ( layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( ) );
-						}
-					}
+		
+		var _GetLatLngBounds = function ( latLngs ) {
+			var sw = L.latLng ( [ 90, 180] );
+			var ne = L.latLng ( [ -90, -180 ] );
+			latLngs.forEach ( 
+				function ( latLng ) {
+					sw.lat = Math.min ( sw.lat, latLng [ 0 ] );
+					sw.lng = Math.min ( sw.lng, latLng [ 1 ] );
+					ne.lat = Math.max ( ne.lat, latLng [ 0 ] );
+					ne.lng = Math.max ( ne.lng, latLng [ 1 ] );
 				}
 			);
-
-			return notesBounds;
+			return L.latLngBounds( sw, ne );
 		};
-
-		var _GetRouteBounds = function ( routeObjId )
-		{
-			var routeBounds = null;
-			var polyline = _DataManager.mapObjects.get ( routeObjId );
-			if ( polyline ) {
-				routeBounds = polyline.getBounds ( );
-				var notesBounds = _GetNotesBounds ( _DataManager.getRoute ( routeObjId ).notes );
-				if ( notesBounds && notesBounds.isValid ( ) ) {
-					routeBounds.extend ( notesBounds );
-				}					
-			}
-
-			return routeBounds;
+		
+		var _GetRouteLatLng = function ( route ) {
+			var latLngs = [];
+			route.itinerary.itineraryPoints.forEach ( 
+				function ( itineraryPoint ) {
+					latLngs.push ( itineraryPoint.latLng );
+				}
+			);
+			route.notes.forEach ( 
+				function ( note ) {
+					latLngs.push ( note.latLng );
+					latLngs.push ( note.iconLatLng );
+				}
+			);
+			return latLngs;
 		};
-
+		
 		return {
 			
 			removeRoute : function ( route, removeNotes, removeWayPoints ) {
@@ -260,54 +257,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.mapObjects.clear ( );
 			},
 			
-			zoomToItineraryPoint : function ( itineraryPointObjId ) {
-				map.setView ( 
-					_DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
-					_Config.itineraryPointZoom 
-				);
+			zoomToPoint : function ( latLng ) {
+				map.setView ( latLng, _Config.itineraryPointZoom );
 			},
 			
 			zoomToRoute : function ( routeObjId ) {
-				var routeBounds =  _GetRouteBounds ( routeObjId );
-				if ( routeBounds && routeBounds.isValid ( ) ) {
-					_DataManager.map.fitBounds ( routeBounds );
+				var latLngs = _GetRouteLatLng (  _DataManager.getRoute ( routeObjId ) );
+				if ( 0 !== latLngs.length ) {
+					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
-			zoomToTravel : function ( ) {
-				var travelBounds = null;
-				_DataManager.travel.routes.forEach ( 
+			zoomToTravel : function ( ) {				
+				var latLngs = [];
+				_DataManager.travel.routes.forEach (
 					function ( route ) {
-						var routeBounds =  _GetRouteBounds ( route.objId );
-						if ( routeBounds && routeBounds.isValid ( ) ) {
-							if ( ! travelBounds )
-							{
-								travelBounds = routeBounds ;
-							}
-							else {
-								travelBounds.extend ( routeBounds );
-							}	
-						}
+						latLngs = latLngs.concat ( _GetRouteLatLng ( route ) );
 					}
 				);
-				var travelNotesBounds =  _GetNotesBounds ( travel.notes );
-				if ( travelNotesBounds && travelNotesBounds.isValid ( ) ) {
-					if ( ! travelBounds ){
-						travelBounds = travelNotesBounds;
+				travel.notes.forEach (
+					function ( note ) {
+						latLngs.push ( note.latLng );
+						latLngs.push ( note.iconLatLng );
 					}
-					else {
-						travelBounds.extend ( travelNotesBounds );
-					}
-				}
-				if ( travelBounds && travelBounds.isValid ( ) ) {
-					_DataManager.map.fitBounds ( travelBounds );
+				);
+				if ( 0 !== latLngs.length ) {
+					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
-			addItineraryPointMarker : function ( itineraryPointObjId ) {
+			addItineraryPointMarker : function ( objId, latLng ) {
 				_AddTo ( 
-					itineraryPointObjId,
-					L.circleMarker ( _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
+					objId,
+					L.circleMarker ( latLng, _Config.itineraryPointMarker )
 				);
 			},
 			

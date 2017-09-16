@@ -24,6 +24,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Array = [];
 		var _ObjName = objName;
 		
+		var _Sort = function ( compareFunction ) {
+			_Array.sort ( compareFunction );
+		};
+		
 		var _IndexOfObjId = function ( objId ) {
 			function haveObjId ( element ) {
 				return element.objId === objId;
@@ -155,9 +159,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 			
+			sort : function ( compareFunction ) {
+				_Sort ( compareFunction );
+			},
+			
 			add : function ( object ) { 
 				_Add ( object );
 			},
+			
 			getAt : function ( objId ) {
 				return _GetAt ( objId );
 			},
@@ -2342,7 +2351,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onInstructionClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).zoomToItineraryPoint ( clickEvent.target.itineraryPointObjId );
+		var element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		require ( '../core/MapEditor' ) ( ).zoomToPoint ( element.latLng );
 	};
 
 	var onInstructionContextMenu = function ( clickEvent ) {
@@ -2353,12 +2366,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
 	};
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.itineraryPointObjId );
+		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
 	};
 	var onClicktransitModeButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -2515,10 +2528,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _AddEventListeners = function ( element )
+		var _AddInstructionEventListeners = function ( element )
 		{
 			element.addEventListener ( 'click' , onInstructionClick, false );
-			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			//element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
@@ -2526,7 +2539,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _RemoveEventListeners = function ( element )
 		{
 			element.removeEventListener ( 'click' , onInstructionClick, false );
-			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			//element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
@@ -2541,7 +2554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			var briefItineraryDiv = document.getElementById ( 'TravelNotes-Control-BriefItineraryDiv' );
+			var briefItineraryDiv = document.getElementById ( 'TravelNotes-Control-ItineraryBriefDiv' );
 			if ( briefItineraryDiv ) {
 				dataDiv.removeChild ( briefItineraryDiv );
 			}
@@ -2551,15 +2564,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				briefItineraryDiv = htmlElementsFactory.create ( 
 					'div',
 					{
-						id : 'TravelNotes-Control-BriefItineraryDiv',
+						id : 'TravelNotes-Control-ItineraryBriefDiv',
 						innerHTML : 'Distance&nbsp;:&nbsp;' + distanceDuration.distance + '&nbsp;-&nbsp;Temps&nbsp;:&nbsp;' + distanceDuration.duration
 					},
 					dataDiv
 				);
 			}
 			
-			
-			var maneuverList = document.getElementById ( 'TravelNotes-Control-ManeuverList' );
+			var maneuverList = document.getElementById ( 'TravelNotes-Control-ItineraryManeuverList' );
 			if ( maneuverList ) {
 				for ( var childCounter = 0; childCounter < maneuverList.childNodes.length; childCounter ++ ) {
 					_RemoveEventListeners ( maneuverList.childNodes [ childCounter ] );
@@ -2570,70 +2582,111 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			maneuverList = htmlElementsFactory.create (
 				'div',
 					{
-						id : 'TravelNotes-Control-ManeuverList',
+						id : 'TravelNotes-Control-ItineraryManeuverList',
 						className : 'TravelNotes-Control-TableDataDiv'
 					}, 
 				dataDiv
 			);
+
+			var noteIterator = _DataManager.editedRoute.notes.iterator;
+			var noteDone =  noteIterator.done;
+			var noteDistance = ! noteDone ? noteIterator.value.distance : 999999999;
+			
 			var maneuverIterator = itinerary.maneuvers.iterator;
-			while ( ! maneuverIterator.done ) {
-				var rowDataDiv = htmlElementsFactory.create ( 
-					'div', 
-					{ className : 'TravelNotes-Control-RowDataDiv'}, 
-					maneuverList
-				);
-				
-				htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-iconCellDataDiv TravelNotes-Control-' + maneuverIterator.value.iconName + 'Small',
-					}, 
-					rowDataDiv
-				);
-				
-				var instructionElement = htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv',
-						innerHTML : maneuverIterator.value.simplifiedInstruction
-					}, 
-					rowDataDiv
-				);
-				instructionElement.itineraryPointObjId = maneuverIterator.value.itineraryPointObjId;
-				instructionElement.maneuverObjId = maneuverIterator.value.objId;
-				_AddEventListeners ( instructionElement );
-				htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-ItineraryStreetName',
-						innerHTML : maneuverIterator.value.streetName
-					}, 
-					rowDataDiv
-				);
-				htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv',
-						innerHTML : maneuverIterator.value.direction
-					}, 
-					rowDataDiv
-				);
-				htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv TravelNotes-Control-ItineraryDistance',
-						innerHTML : _Utilities.formatDistance ( maneuverIterator.value.distance )
-					}, 
-					rowDataDiv
-				);
-				htmlElementsFactory.create (
-					'div',
-					{ 
-						className : 'TravelNotes-Control-CellDataDiv',
-						innerHTML : _Utilities.formatTime ( maneuverIterator.value.duration )
-					}, 
-					rowDataDiv
-				);
+			var maneuverDone = maneuverIterator.done;
+			var maneuverDistance = 0;
+			var rowDataDiv;
+			while ( ! ( maneuverDone && noteDone ) ) {
+				if ( maneuverDistance <= noteDistance ) {
+					if ( ! maneuverDone ) {
+						rowDataDiv = htmlElementsFactory.create ( 
+							'div', 
+							{ className : 'TravelNotes-Control-ItineraryRowDataDiv'}, 
+							maneuverList
+						);
+						
+						htmlElementsFactory.create (
+							'div',
+							{ 
+								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-iconCellDataDiv TravelNotes-Control-' + maneuverIterator.value.iconName,
+							}, 
+							rowDataDiv
+						);
+						
+						var instructionText = '<div>' +  maneuverIterator.value.simplifiedInstruction + '</div>' +
+							'<div>' + _Translator.getText ( 'ItineraryEditorUI - ToNextInstruction' ) + '&nbsp;:&nbsp;<span>' +
+							_Translator.getText ( 'ItineraryEditorUI - Distance' ) + '</span>' + 
+							_Utilities.formatDistance ( maneuverIterator.value.distance ) +
+							'&nbsp;-&nbsp;<span>' + _Translator.getText ( 'ItineraryEditorUI - Time' ) + '</span>'+ _Utilities.formatTime ( maneuverIterator.value.duration ) +'</div>';
+
+						var instructionElement = htmlElementsFactory.create (
+							'div',
+							{ 
+								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv',
+								innerHTML : instructionText
+							}, 
+							rowDataDiv
+						);
+						
+						//instructionElement.itineraryPointObjId = maneuverIterator.value.itineraryPointObjId;
+						//instructionElement.maneuverObjId = maneuverIterator.value.objId;
+						instructionElement.objId= require ( '../data/ObjId' ) ( );
+						instructionElement.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+						_AddInstructionEventListeners ( instructionElement );
+						
+						maneuverDistance +=  maneuverIterator.value.distance;
+						
+						maneuverDone = maneuverIterator.done;
+						if ( maneuverDone ) {
+							maneuverDistance = 999999999;
+						}
+					}
+				}
+				else {
+					if ( ! noteDone ) {
+						rowDataDiv = htmlElementsFactory.create ( 
+							'div', 
+							{ className : 'TravelNotes-Control-ItineraryRowDataDiv'}, 
+							maneuverList
+						);
+						
+						htmlElementsFactory.create (
+							'div',
+							{ 
+								className : 'TravelNotes-Control-ItineraryCellDataDiv',
+								innerHTML : noteIterator.value.iconContent
+							}, 
+							rowDataDiv
+						);
+						var noteText = '';
+						if ( 0 !== noteIterator.value.popupContent.length ) {
+							noteText += '<div>' + noteIterator.value.popupContent + '</div>';
+						}
+						if ( 0 !== noteIterator.value.address.length ) {
+							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - address' )  + noteIterator.value.address + '</div>';
+						}
+						if ( 0 !== noteIterator.value.phone.length ) {
+							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - phone' )  + noteIterator.value.phone + '</div>';
+						}
+						if ( 0 !== noteIterator.value.url.length ) {
+							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - url' ) + '<a href="' + noteIterator.value.url + '" target="_blank">' + noteIterator.value.url +'</a></div>';
+						}
+						var noteElement = htmlElementsFactory.create (
+							'div',
+							{ 
+								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv',
+								innerHTML : noteText
+							}, 
+							rowDataDiv
+						);
+						noteElement.latLng = noteIterator.value.latLng;
+						noteElement.objId= require ( '../data/ObjId' ) ( );
+						_AddInstructionEventListeners ( noteElement );
+						
+						noteDone = noteIterator.done;
+						noteDistance = noteDone ? 999999999 :  noteIterator.value.distance;
+					}
+				}	
 			}
 
 		};
@@ -2652,7 +2705,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 	
-},{"../core/MapEditor":31,"../core/NoteEditor":32,"../core/RouteEditor":33,"../data/DataManager":37,"../util/Utilities":49,"./HTMLElementsFactory":20,"./Translator":26}],22:[function(require,module,exports){
+},{"../core/MapEditor":31,"../core/NoteEditor":32,"../core/RouteEditor":33,"../data/DataManager":37,"../data/ObjId":42,"../util/Utilities":49,"./HTMLElementsFactory":20,"./Translator":26}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3221,19 +3274,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		document.getElementById ( 'TravelNotes-Control-WaypointsHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-		document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-Control-WayPointsButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-		document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).title = hiddenList ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
+		document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = hiddenList ? _Translator.getText ( 'RouteEditorUI - Show' ) : _Translator.getText ( 'RouteEditorUI - Hide' );
 	};
 	
 	var onClickExpandListButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		
-		document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-		var expandedList = document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
+		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+		var expandedList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
 		document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
 		document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = expandedList ? _Translator.getText ( 'RouteEditorUI - Reduce the list' ) : _Translator.getText ( 'RouteEditorUI - Expand the list' );		
 	};
@@ -3246,24 +3299,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 		var _CreateUI = function ( controlDiv ){ 
 
-			if ( document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ) ) {
+			if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
 				return;
 			}
 			
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-WaypointsHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
-			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-WayPointsExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-RouteExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelNotes-Control-WayPointsHeaderText',className : 'TravelNotes-Control-HeaderText'}, headerDiv );
-			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-WaypointsDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelNotes-Control-RouteHeaderText',className : 'TravelNotes-Control-HeaderText'}, headerDiv );
+
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
 					listStyle : 'LimitedSort',
 					placeholders : [ _Translator.getText ( 'RouteEditorUI - Start' ), _Translator.getText ( 'RouteEditorUI - Via' ), _Translator.getText ( 'RouteEditorUI - End' ) ],
 					indexNames : [ 'A', 'index', 'B' ],
-					id : 'TravelNotes-Control-WaypointsList'
+					id : 'TravelNotes-Control-RouteWaypointsList'
 				}, 
 				dataDiv
 			);
@@ -3272,7 +3327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_WayPointsList.container.addEventListener ( 'SortableListDownArrow', onWayPointsListDownArrow, false );
 			_WayPointsList.container.addEventListener ( 'SortableListChange', onWayPointslistChange, false );
 
-			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-WayPointsButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv'}, controlDiv );
+			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv'}, controlDiv );
 			
 			var expandListButton = htmlElementsFactory.create ( 
 				'div', 
@@ -3344,17 +3399,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	
 		var _ExpandUI = function ( ) {
-			document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).innerHTML = '&#x25bc;';
-			document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).title = 'Masquer';
-			document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-WaypointsDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = '&#x25bc;';
+			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 'Masquer';
+			document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 		};
 		
 		var _ReduceUI = function ( ) {
-			document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).innerHTML = '&#x25b6;';
-			document.getElementById ( 'TravelNotes-Control-WayPointsExpandButton' ).title = 'Afficher';
-			document.getElementById ( 'TravelNotes-Control-WaypointsButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-WaypointsButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = '&#x25b6;';
+			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 'Afficher';
+			document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 		};
 		
 		return {
@@ -3830,6 +3885,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgid : "ItineraryEditorUI - Hide",
 			msgstr : "Masquer"
 		},
+
+
+
+
+		
+		{
+			msgid : "ItineraryEditorUI - address",
+			msgstr : "Adresse : "
+		},
+		{
+			msgid : "ItineraryEditorUI - phone",
+			msgstr : "Téléphone : "
+		},
+		{
+			msgid : "ItineraryEditorUI - url",
+			msgstr : "Url : "
+		},
+		{
+			msgid : "ItineraryEditorUI - ToNextInstruction",
+			msgstr : "Jusqu'à la prochaine instruction"
+		},
+		{
+			msgid : "ItineraryEditorUI - Distance",
+			msgstr : ":"
+		},
+		{
+			msgid : "ItineraryEditorUI - Time",
+			msgstr : "-"
+		},
 		{
 			msgid : "MapEditor - Distance",
 			msgstr : "<span>Distance</span>&nbsp;:&nbsp;"
@@ -3848,7 +3932,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "MapEditor - popup url",
-			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;"
+			msgstr : "<span>Lien</span>&nbsp;:&nbsp;"
 		},
 		{
 			msgid : "MapEditor - popup lng",
@@ -4232,12 +4316,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		clickEvent.stopPropagation ( );
 		
-		document.getElementById ( 'TravelNotes-Control-RoutesHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-		document.getElementById ( 'TravelNotes-Control-RoutesDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-Control-RoutesButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelNotes-Control-RoutesDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-Control-RoutesExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-		document.getElementById ( 'TravelNotes-Control-RoutesExpandButton' ).title = hiddenList ? _Translator.getText ( 'TravelEditorUI - Show' ) : _Translator.getText ( 'TravelEditorUI - Hide' );
+		document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		var hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = hiddenList ? _Translator.getText ( 'TravelEditorUI - Show' ) : _Translator.getText ( 'TravelEditorUI - Hide' );
 
 		clickEvent.stopPropagation ( );
 	};
@@ -4245,8 +4329,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onClickExpandListButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		
-		document.getElementById ( 'TravelNotes-Control-RoutesDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-		var expandedList = document.getElementById ( 'TravelNotes-Control-RoutesDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
+		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+		var expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
@@ -4259,7 +4343,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				
 		var _CreateUI = function ( controlDiv ){ 
 		
-			if ( document.getElementById ( 'TravelNotes-Control-RoutesDataDiv' ) ) {
+			if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
 				return;
 			}
 
@@ -4267,20 +4351,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			// Routes
 			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RoutesHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
-			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-RoutesExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-TravelHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+
+			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-ControlTravelExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), id : 'TravelNotes-Control-RoutesHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
-			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RoutesDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), id : 'TravelNotes-Control-TravelHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
+		
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-TravelDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
 			
-			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'TravelEditorUI - Route' )], id : 'TravelNotes-Control-RouteList' }, dataDiv );
+			_RoutesList = require ( './SortableList' ) ( { minSize : 0, placeholders : [ _Translator.getText ( 'TravelEditorUI - Route' )], id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
 			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
 			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListRightArrow', onRoutesListRightArrow, false );
 			_RoutesList.container.addEventListener ( 'SortableListChange', onRouteslistChange, false );
 			
-			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RoutesButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ControlTravelButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 
 			var expandListButton = htmlElementsFactory.create ( 
 				'div', 
@@ -4672,6 +4758,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			note.latLng = latLngDistance.latLng;
 			note.distance = latLngDistance.distance;
 			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+			route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 		}
 		else {
 			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
@@ -4706,41 +4793,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 				
 		};
-		var _GetNotesBounds = function ( notes ) {
-			var notesBounds = null;
-			notes.forEach ( 
-				function ( note ) {
-					var layerGroup = _DataManager.mapObjects.get ( note.objId );
-					if ( layerGroup ) {
-						if ( ! notesBounds ) {
-							notesBounds = layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( );
-						}
-						else
-						{
-							notesBounds.extend ( layerGroup.getLayer ( layerGroup.polylineId ).getBounds ( ) );
-						}
-					}
+		
+		var _GetLatLngBounds = function ( latLngs ) {
+			var sw = L.latLng ( [ 90, 180] );
+			var ne = L.latLng ( [ -90, -180 ] );
+			latLngs.forEach ( 
+				function ( latLng ) {
+					sw.lat = Math.min ( sw.lat, latLng [ 0 ] );
+					sw.lng = Math.min ( sw.lng, latLng [ 1 ] );
+					ne.lat = Math.max ( ne.lat, latLng [ 0 ] );
+					ne.lng = Math.max ( ne.lng, latLng [ 1 ] );
 				}
 			);
-
-			return notesBounds;
+			return L.latLngBounds( sw, ne );
 		};
-
-		var _GetRouteBounds = function ( routeObjId )
-		{
-			var routeBounds = null;
-			var polyline = _DataManager.mapObjects.get ( routeObjId );
-			if ( polyline ) {
-				routeBounds = polyline.getBounds ( );
-				var notesBounds = _GetNotesBounds ( _DataManager.getRoute ( routeObjId ).notes );
-				if ( notesBounds && notesBounds.isValid ( ) ) {
-					routeBounds.extend ( notesBounds );
-				}					
-			}
-
-			return routeBounds;
+		
+		var _GetRouteLatLng = function ( route ) {
+			var latLngs = [];
+			route.itinerary.itineraryPoints.forEach ( 
+				function ( itineraryPoint ) {
+					latLngs.push ( itineraryPoint.latLng );
+				}
+			);
+			route.notes.forEach ( 
+				function ( note ) {
+					latLngs.push ( note.latLng );
+					latLngs.push ( note.iconLatLng );
+				}
+			);
+			return latLngs;
 		};
-
+		
 		return {
 			
 			removeRoute : function ( route, removeNotes, removeWayPoints ) {
@@ -4815,54 +4898,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.mapObjects.clear ( );
 			},
 			
-			zoomToItineraryPoint : function ( itineraryPointObjId ) {
-				map.setView ( 
-					_DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng,
-					_Config.itineraryPointZoom 
-				);
+			zoomToPoint : function ( latLng ) {
+				map.setView ( latLng, _Config.itineraryPointZoom );
 			},
 			
 			zoomToRoute : function ( routeObjId ) {
-				var routeBounds =  _GetRouteBounds ( routeObjId );
-				if ( routeBounds && routeBounds.isValid ( ) ) {
-					_DataManager.map.fitBounds ( routeBounds );
+				var latLngs = _GetRouteLatLng (  _DataManager.getRoute ( routeObjId ) );
+				if ( 0 !== latLngs.length ) {
+					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
-			zoomToTravel : function ( ) {
-				var travelBounds = null;
-				_DataManager.travel.routes.forEach ( 
+			zoomToTravel : function ( ) {				
+				var latLngs = [];
+				_DataManager.travel.routes.forEach (
 					function ( route ) {
-						var routeBounds =  _GetRouteBounds ( route.objId );
-						if ( routeBounds && routeBounds.isValid ( ) ) {
-							if ( ! travelBounds )
-							{
-								travelBounds = routeBounds ;
-							}
-							else {
-								travelBounds.extend ( routeBounds );
-							}	
-						}
+						latLngs = latLngs.concat ( _GetRouteLatLng ( route ) );
 					}
 				);
-				var travelNotesBounds =  _GetNotesBounds ( travel.notes );
-				if ( travelNotesBounds && travelNotesBounds.isValid ( ) ) {
-					if ( ! travelBounds ){
-						travelBounds = travelNotesBounds;
+				travel.notes.forEach (
+					function ( note ) {
+						latLngs.push ( note.latLng );
+						latLngs.push ( note.iconLatLng );
 					}
-					else {
-						travelBounds.extend ( travelNotesBounds );
-					}
-				}
-				if ( travelBounds && travelBounds.isValid ( ) ) {
-					_DataManager.map.fitBounds ( travelBounds );
+				);
+				if ( 0 !== latLngs.length ) {
+					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
-			addItineraryPointMarker : function ( itineraryPointObjId ) {
+			addItineraryPointMarker : function ( objId, latLng ) {
 				_AddTo ( 
-					itineraryPointObjId,
-					L.circleMarker ( _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng, _Config.itineraryPointMarker )
+					objId,
+					L.circleMarker ( latLng, _Config.itineraryPointMarker )
 				);
 			},
 			
@@ -5038,11 +5106,11 @@ To do: translations
 			endNoteDialog : function ( note, routeObjId ) {
 				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
 					_MapEditor.editNote ( note );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				else {
 					this.addNote ( note, routeObjId );
 				}
-console.log ( _DataManager.editedRoute.object );
 			},	
 
 			addNote : function ( note, routeObjId ) {
@@ -5050,7 +5118,10 @@ console.log ( _DataManager.editedRoute.object );
 					_DataManager.travel.notes.add ( note );
 				}
 				else {
-					_DataManager.getRoute ( routeObjId ).notes.add ( note );
+					var notes = _DataManager.getRoute ( routeObjId ).notes;
+					notes.add ( note );
+					notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				_MapEditor.addNote ( note );
 			},
@@ -5067,7 +5138,8 @@ console.log ( _DataManager.editedRoute.object );
 					_DataManager.travel.notes.remove ( noteObjId );
 				}
 				else {
-					_DataManager.notes.remove ( noteObjId );
+					noteAndRoute.route.notes.remove ( noteObjId );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 			},
 			
@@ -5101,7 +5173,6 @@ console.log ( _DataManager.editedRoute.object );
 			
 			getNoteContextMenu :function ( noteObjId ) {
 				var contextMenu = [];
-				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
 				contextMenu.push ( 
 					{ 
 						context : this, 
@@ -5114,7 +5185,7 @@ console.log ( _DataManager.editedRoute.object );
 					{ 
 						context : this, 
 						name : _Translator.getText ( "NoteEditor - delete note" ), 
-						action : ! noteAndRoute.route ? this.removeNote : null,
+						action : this.removeNote,
 						param : noteObjId
 					} 
 				);
@@ -5130,7 +5201,7 @@ console.log ( _DataManager.editedRoute.object );
 
 }());
 
-},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/NoteDialog":22,"../UI/Translator":26,"../core/MapEditor":31,"../data/Note":41,"../util/TravelUtilities":48}],33:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":21,"../UI/NoteDialog":22,"../UI/Translator":26,"../core/MapEditor":31,"../data/Note":41,"../util/TravelUtilities":48}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5596,6 +5667,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! notesIterator.done ) {
 				_MapEditor.addNote ( notesIterator.value );
 			}
+console.log ( _DataManager.travel.object );
 			_MapEditor.zoomToTravel ( );
 		};
 		

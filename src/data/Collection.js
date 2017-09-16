@@ -23,6 +23,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Array = [];
 		var _ObjName = objName;
 		
+		var _Sort = function ( compareFunction ) {
+			_Array.sort ( compareFunction );
+		};
+		
 		var _IndexOfObjId = function ( objId ) {
 			function haveObjId ( element ) {
 				return element.objId === objId;
@@ -154,9 +158,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 			
+			sort : function ( compareFunction ) {
+				_Sort ( compareFunction );
+			},
+			
 			add : function ( object ) { 
 				_Add ( object );
 			},
+			
 			getAt : function ( objId ) {
 				return _GetAt ( objId );
 			},

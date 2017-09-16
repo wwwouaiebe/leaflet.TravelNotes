@@ -74,11 +74,11 @@ To do: translations
 			endNoteDialog : function ( note, routeObjId ) {
 				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
 					_MapEditor.editNote ( note );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				else {
 					this.addNote ( note, routeObjId );
 				}
-console.log ( _DataManager.editedRoute.object );
 			},	
 
 			addNote : function ( note, routeObjId ) {
@@ -86,7 +86,10 @@ console.log ( _DataManager.editedRoute.object );
 					_DataManager.travel.notes.add ( note );
 				}
 				else {
-					_DataManager.getRoute ( routeObjId ).notes.add ( note );
+					var notes = _DataManager.getRoute ( routeObjId ).notes;
+					notes.add ( note );
+					notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				_MapEditor.addNote ( note );
 			},
@@ -103,7 +106,8 @@ console.log ( _DataManager.editedRoute.object );
 					_DataManager.travel.notes.remove ( noteObjId );
 				}
 				else {
-					_DataManager.notes.remove ( noteObjId );
+					noteAndRoute.route.notes.remove ( noteObjId );
+					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 			},
 			
@@ -137,7 +141,6 @@ console.log ( _DataManager.editedRoute.object );
 			
 			getNoteContextMenu :function ( noteObjId ) {
 				var contextMenu = [];
-				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
 				contextMenu.push ( 
 					{ 
 						context : this, 
@@ -150,7 +153,7 @@ console.log ( _DataManager.editedRoute.object );
 					{ 
 						context : this, 
 						name : _Translator.getText ( "NoteEditor - delete note" ), 
-						action : ! noteAndRoute.route ? this.removeNote : null,
+						action : this.removeNote,
 						param : noteObjId
 					} 
 				);
