@@ -216,7 +216,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _AddInstructionEventListeners = function ( element )
+		var _AddEventListeners = function ( element )
 		{
 			element.addEventListener ( 'click' , onInstructionClick, false );
 			//element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
@@ -234,149 +234,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _SetItinerary = function ( ) {
 
-			var itinerary = _DataManager.editedRoute.itinerary;
-
+			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
-			
-			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			var briefItineraryDiv = document.getElementById ( 'TravelNotes-Control-ItineraryBriefDiv' );
-			if ( briefItineraryDiv ) {
-				dataDiv.removeChild ( briefItineraryDiv );
+			var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-RouteHeader' ) [ 0 ];
+			if ( routeHeader ) {
+				dataDiv.removeChild ( routeHeader );
 			}
+			dataDiv.appendChild ( htmlViewsFactory.routeHeader );
 			
-			if ( 0 !== itinerary.maneuvers.length ) { 
-				var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( _DataManager.editedRoute.objId );
-				briefItineraryDiv = htmlElementsFactory.create ( 
-					'div',
-					{
-						id : 'TravelNotes-Control-ItineraryBriefDiv',
-						innerHTML : 'Distance&nbsp;:&nbsp;' + distanceDuration.distance + '&nbsp;-&nbsp;Temps&nbsp;:&nbsp;' + distanceDuration.duration
-					},
-					dataDiv
-				);
-			}
+			var childCounter;
+			var childNodes;
 			
-			var maneuverList = document.getElementById ( 'TravelNotes-Control-ItineraryManeuverList' );
-			if ( maneuverList ) {
-				for ( var childCounter = 0; childCounter < maneuverList.childNodes.length; childCounter ++ ) {
-					_RemoveEventListeners ( maneuverList.childNodes [ childCounter ] );
+			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
+			if ( routeManeuversNotesList ) {
+				childNodes = routeManeuversNotesList.childNodes;
+				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+					_RemoveEventListeners ( childNodes [ childCounter ] );
 				}
-				dataDiv.removeChild ( maneuverList );
+				dataDiv.removeChild ( routeManeuversNotesList );
 			}
-
-			maneuverList = htmlElementsFactory.create (
-				'div',
-					{
-						id : 'TravelNotes-Control-ItineraryManeuverList',
-						className : 'TravelNotes-Control-TableDataDiv'
-					}, 
-				dataDiv
-			);
-
-			var noteIterator = _DataManager.editedRoute.notes.iterator;
-			var noteDone =  noteIterator.done;
-			var noteDistance = ! noteDone ? noteIterator.value.distance : 999999999;
 			
-			var maneuverIterator = itinerary.maneuvers.iterator;
-			var maneuverDone = maneuverIterator.done;
-			var maneuverDistance = 0;
-			var rowDataDiv;
-			while ( ! ( maneuverDone && noteDone ) ) {
-				if ( maneuverDistance <= noteDistance ) {
-					if ( ! maneuverDone ) {
-						rowDataDiv = htmlElementsFactory.create ( 
-							'div', 
-							{ className : 'TravelNotes-Control-ItineraryRowDataDiv'}, 
-							maneuverList
-						);
-						
-						htmlElementsFactory.create (
-							'div',
-							{ 
-								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-iconCellDataDiv TravelNotes-Control-' + maneuverIterator.value.iconName,
-							}, 
-							rowDataDiv
-						);
-						
-						var instructionText = '<div>' +  maneuverIterator.value.simplifiedInstruction + '</div>' +
-							'<div>' + _Translator.getText ( 'ItineraryEditorUI - ToNextInstruction' ) + '&nbsp;:&nbsp;<span>' +
-							_Translator.getText ( 'ItineraryEditorUI - Distance' ) + '</span>' + 
-							_Utilities.formatDistance ( maneuverIterator.value.distance ) +
-							'&nbsp;-&nbsp;<span>' + _Translator.getText ( 'ItineraryEditorUI - Time' ) + '</span>'+ _Utilities.formatTime ( maneuverIterator.value.duration ) +'</div>';
-
-						var instructionElement = htmlElementsFactory.create (
-							'div',
-							{ 
-								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv',
-								innerHTML : instructionText
-							}, 
-							rowDataDiv
-						);
-						
-						//instructionElement.itineraryPointObjId = maneuverIterator.value.itineraryPointObjId;
-						//instructionElement.maneuverObjId = maneuverIterator.value.objId;
-						instructionElement.objId= require ( '../data/ObjId' ) ( );
-						instructionElement.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-						_AddInstructionEventListeners ( instructionElement );
-						
-						maneuverDistance +=  maneuverIterator.value.distance;
-						
-						maneuverDone = maneuverIterator.done;
-						if ( maneuverDone ) {
-							maneuverDistance = 999999999;
-						}
-					}
+			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotes );
+			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
+			if ( routeManeuversNotesList ) {
+				childNodes = routeManeuversNotesList.childNodes;
+				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+					_AddEventListeners ( childNodes [ childCounter ] );
 				}
-				else {
-					if ( ! noteDone ) {
-						rowDataDiv = htmlElementsFactory.create ( 
-							'div', 
-							{ className : 'TravelNotes-Control-ItineraryRowDataDiv'}, 
-							maneuverList
-						);
-						
-						htmlElementsFactory.create (
-							'div',
-							{ 
-								className : 'TravelNotes-Control-ItineraryCellDataDiv',
-								innerHTML : noteIterator.value.iconContent
-							}, 
-							rowDataDiv
-						);
-						var noteText = '';
-						if ( 0 !== noteIterator.value.popupContent.length ) {
-							noteText += '<div>' + noteIterator.value.popupContent + '</div>';
-						}
-						if ( 0 !== noteIterator.value.address.length ) {
-							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - address' )  + noteIterator.value.address + '</div>';
-						}
-						if ( 0 !== noteIterator.value.phone.length ) {
-							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - phone' )  + noteIterator.value.phone + '</div>';
-						}
-						if ( 0 !== noteIterator.value.url.length ) {
-							noteText += '<div>' + _Translator.getText ( 'ItineraryEditorUI - url' ) + '<a href="' + noteIterator.value.url + '" target="_blank">' + noteIterator.value.url +'</a></div>';
-						}
-						var noteElement = htmlElementsFactory.create (
-							'div',
-							{ 
-								className : 'TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv',
-								innerHTML : noteText
-							}, 
-							rowDataDiv
-						);
-						noteElement.latLng = noteIterator.value.latLng;
-						noteElement.objId= require ( '../data/ObjId' ) ( );
-						_AddInstructionEventListeners ( noteElement );
-						
-						noteDone = noteIterator.done;
-						noteDistance = noteDone ? 999999999 :  noteIterator.value.distance;
-					}
-				}	
 			}
-
 		};
 
 		return {

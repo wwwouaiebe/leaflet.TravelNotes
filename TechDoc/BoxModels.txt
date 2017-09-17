@@ -85,31 +85,33 @@ Control
 |                                                                                                                                           |
 | +--- div #TravelNotes-Control-ItineraryDataDiv .TravelNotes-Control-DataDiv ------------------------------------------------------------+ |
 | |                                                                                                                                       | |
-| | +--- div #TravelNotes-Control-ItineraryBriefDiv ------------------------------------------------------------------------------------+ | |
+| | +--- div .TravelNotes-Control-RouteHeader ------------------------------------------------------------------------------------------+ | |
 | | |                                                                                                                                   | | |
 | | +-----------------------------------------------------------------------------------------------------------------------------------+ | |
 | |                                                                                                                                       | |
-| | +--- div #TravelNotes-Control-ItineraryManeuverList .TravelNotes-Control-TableDataDiv ----------------------------------------------+ | |
+| | +--- div .TravelNotes-Control-RouteManeuversNotesList ------------------------------------------------------------------------------+ | |
 | | |                                                                                                                                   | | |
-| | | +--- div .TravelNotes-Control-ItineraryRowDataDiv ------------------------------------------------------------------------------+ | | |
+| | | +--- div .TravelNotes-Control-ItineraryRowDiv .TravelNotes-Control-ManeuverRowDiv ----------------------------------------------+ | | |
 | | | |                                                                                                                               | | | |
-| | | | +--- div .TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-iconCellDataDiv TravelNotes-Control-kXXXXXX ---------+ | | | |
+| | | | +--- div .TravelNotes-Control-ItineraryCellDiv TravelNotes-Control-iconCellDiv TravelNotes-Control-kXXXXXX -----------------+ | | | |
 | | | | |                                                                                                                           | | | | |
 | | | | +---------------------------------------------------------------------------------------------------------------------------+ | | | |
 | | | |                                                                                                                               | | | |
-| | | | +--- div .TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv -----------------------------+ | | | |
+| | | | +--- div .TravelNotes-Control-ItineraryCellDiv TravelNotes-Control-ItineraryManeuverDiv ------------------------------------+ | | | |
 | | | | |                                                                                                                           | | | | |
 | | | | +---------------------------------------------------------------------------------------------------------------------------+ | | | |
-| | | |                                                                                                                               | | | |
+| | |                                                                                                                                   | | |
 | | | +-------------------------------------------------------------------------------------------------------------------------------+ | | |
 | | |                                                                                                                                   | | |
-| | | +--- div .TravelNotes-Control-ItineraryRowDataDiv ------------------------------------------------------------------------------+ | | |
+| | |  or                                                                                                                               | | |
+| | |                                                                                                                                   | | |
+| | | +--- div .TravelNotes-Control-ItineraryRowDiv .TravelNotes-Control-NoteRowDiv --------------------------------------------------+ | | |
 | | | |                                                                                                                               | | | |
 | | | | +--- div .TravelNotes-Control-ItineraryCellDataDiv -------------------------------------------------------------------------+ | | | |
 | | | | |                                                                                                                           | | | | |
 | | | | +---------------------------------------------------------------------------------------------------------------------------+ | | | |
 | | | |                                                                                                                               | | | |
-| | | | +--- div .TravelNotes-Control-ItineraryCellDataDiv TravelNotes-Control-ItineraryInstructionDiv -----------------------------+ | | | |
+| | | | +--- div .TravelNotes-Control-ItineraryCellDiv TravelNotes-Control-ItineraryNoteDiv ----------------------------------------+ | | | |
 | | | | |                                                                                                                           | | | | |
 | | | | +---------------------------------------------------------------------------------------------------------------------------+ | | | |
 | | | |                                                                                                                               | | | |
