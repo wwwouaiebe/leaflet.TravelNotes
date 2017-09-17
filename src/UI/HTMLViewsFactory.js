@@ -31,6 +31,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
+	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
+	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 	
@@ -49,32 +51,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetRouteHeader = function ( route ) {
-			var routeHeader = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteHeader'} ); 
-
-			if ( 0 !== route.name.length ) {
-				_HTMLElementsFactory.create ( 
-					'div',
-					{
-						className : _ClassNamePrefix + 'RouteName',
-						innerHTML : route.name
-					},
-					routeHeader
-				);
-			}
-			
-			if ( 0 !== route.itinerary.maneuvers.length ) { 
-				var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( route.objId );
-				_HTMLElementsFactory.create ( 
-					'div',
-					{
-						className : _ClassNamePrefix + 'RouteBrief',
-						innerHTML : 'Distance&nbsp;:&nbsp;' + distanceDuration.distance + '&nbsp;-&nbsp;Temps&nbsp;:&nbsp;' + distanceDuration.duration
-					},
-					routeHeader
-				);
-			}
-			
-			return routeHeader;
+			return _HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'RouteHeader',
+					innerHTML: _RouteEditor.getRouteHTML ( route, _ClassNamePrefix )
+				}
+			); 
 		};
 
 		var _GetRouteManeuversAndNotes = function ( route ) {
@@ -107,14 +90,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						
 						var maneuverText = 
-							'<div>' +  maneuverIterator.value.instruction + '</div>' +
-							'<div>' + _Translator.getText ( 'HTMLViewsFactory - ToNextInstruction' ) +
-							'<span>' + _Translator.getText ( 'HTMLViewsFactory - Distance' ) + '</span>' + 
-							_Utilities.formatDistance ( maneuverIterator.value.distance ) +
-							'<span>' + _Translator.getText ( 'HTMLViewsFactory - Time' ) + '</span>' + 
-							_Utilities.formatTime ( maneuverIterator.value.duration ) +
-							'</div>';
-
+							'<div>' +  maneuverIterator.value.instruction + '</div>';
+						
+						if ( 0 < maneuverIterator.value.distance ) {
+							maneuverText +=	'<div>' + 
+								_Translator.getText ( 
+									'HTMLViewsFactory - ToNextInstruction', 
+									{
+										distance : _Utilities.formatDistance ( maneuverIterator.value.distance ),
+										duration : _Utilities.formatTime ( maneuverIterator.value.duration )
+									}
+								) + '</div>';
+						}
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
@@ -145,24 +132,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							}, 
 							rowDiv
 						);
-						var noteText = '';
-						if ( 0 !== noteIterator.value.popupContent.length ) {
-							noteText += '<div>' + noteIterator.value.popupContent + '</div>';
-						}
-						if ( 0 !== noteIterator.value.address.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - address' )  + noteIterator.value.address + '</div>';
-						}
-						if ( 0 !== noteIterator.value.phone.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - phone' )  + noteIterator.value.phone + '</div>';
-						}
-						if ( 0 !== noteIterator.value.url.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - url' ) + '<a href="' + noteIterator.value.url + '" target="_blank">' + noteIterator.value.url +'</a></div>';
-						}
 						var noteElement = _HTMLElementsFactory.create (
 							'div',
 							{ 
 								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
-								innerHTML : noteText
+								innerHTML : _NoteEditor.getNoteHTML ( noteIterator.value, _ClassNamePrefix )
 							}, 
 							rowDiv
 						);

@@ -16,6 +16,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/* notes popup*/
+.TravelNotes-NoteHtml-TooltipContent
+{
+	font-weight: bold;
+}
+.TravelNotes-NoteHtml-Address > span,
+.TravelNotes-NoteHtml-Phone > span,
+.TravelNotes-NoteHtml-Url > span,
+.TravelNotes-NoteHtml-LatLng > span,
+.TravelNotes-NoteHtml-Distance > span
+{
+	text-decoration : underline;
+}
 .TravelNotes-MapNote
 {
 	background-repeat : no-repeat;

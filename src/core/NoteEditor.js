@@ -28,6 +28,7 @@ To do: translations
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
@@ -137,6 +138,46 @@ To do: translations
 				);
 				
 				return contextMenu;
+			},
+			
+			getNoteHTML : function ( note, classNamePrefix ) {
+
+			var noteText = '';
+				if ( 0 !== note.tooltipContent.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
+				}
+					if ( 0 !== note.popupContent.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
+				}
+				if ( 0 !== note.address.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - address' )  + note.address + '</div>';
+				}
+				if ( 0 !== note.phone.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - phone' )  + note.phone + '</div>';
+				}
+				if ( 0 !== note.url.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
+				}
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
+					_Translator.getText ( 
+						'NoteEditor - latlng',
+						{ 
+							lat : _Utilities.formatLat ( note.lat ),
+							lng : _Utilities.formatLng ( note.lng )
+						}
+					) + '</div>';
+					
+				if ( -1 !== note.distance ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
+						_Translator.getText ( 
+							'NoteEditor - distance', 
+							{ 
+								distance: _Utilities.formatDistance ( note.distance )
+							}
+						) + '</div>';
+				}
+				
+				return noteText;
 			},
 			
 			getNoteContextMenu :function ( noteObjId ) {

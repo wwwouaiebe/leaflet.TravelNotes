@@ -2343,6 +2343,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
+	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
+	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 	
@@ -2361,32 +2363,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetRouteHeader = function ( route ) {
-			var routeHeader = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteHeader'} ); 
-
-			if ( 0 !== route.name.length ) {
-				_HTMLElementsFactory.create ( 
-					'div',
-					{
-						className : _ClassNamePrefix + 'RouteName',
-						innerHTML : route.name
-					},
-					routeHeader
-				);
-			}
-			
-			if ( 0 !== route.itinerary.maneuvers.length ) { 
-				var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( route.objId );
-				_HTMLElementsFactory.create ( 
-					'div',
-					{
-						className : _ClassNamePrefix + 'RouteBrief',
-						innerHTML : 'Distance&nbsp;:&nbsp;' + distanceDuration.distance + '&nbsp;-&nbsp;Temps&nbsp;:&nbsp;' + distanceDuration.duration
-					},
-					routeHeader
-				);
-			}
-			
-			return routeHeader;
+			return _HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'RouteHeader',
+					innerHTML: _RouteEditor.getRouteHTML ( route, _ClassNamePrefix )
+				}
+			); 
 		};
 
 		var _GetRouteManeuversAndNotes = function ( route ) {
@@ -2419,15 +2402,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						
 						var maneuverText = 
-							'<div>' +  maneuverIterator.value.instruction + '</div>' +
-							'<div>' + _Translator.getText ( 'HTMLViewsFactory - ToNextInstruction' ) +
-							'<span>' + _Translator.getText ( 'HTMLViewsFactory - Distance' ) + '</span>' + 
-							_Utilities.formatDistance ( maneuverIterator.value.distance ) +
-							'<span>' + _Translator.getText ( 'HTMLViewsFactory - Time' ) + '</span>' + 
-							_Utilities.formatTime ( maneuverIterator.value.duration ) +
-							'</div>';
-
-						var maneuverElement = _HTMLElementsFactory.create (
+							'<div>' +  maneuverIterator.value.instruction + '</div>';
+						
+						if ( 0 < maneuverIterator.value.distance ) {
+							maneuverText +=	'<div>' + 
+								_Translator.getText ( 
+									'HTMLViewsFactory - ToNextInstruction', 
+									{
+										distance : _Utilities.formatDistance ( maneuverIterator.value.distance ),
+										duration : _Utilities.formatTime ( maneuverIterator.value.duration )
+									}
+								) + '</div>';
+						}
+						_HTMLElementsFactory.create (
 							'div',
 							{ 
 								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryManeuverDiv',
@@ -2457,24 +2444,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							}, 
 							rowDiv
 						);
-						var noteText = '';
-						if ( 0 !== noteIterator.value.popupContent.length ) {
-							noteText += '<div>' + noteIterator.value.popupContent + '</div>';
-						}
-						if ( 0 !== noteIterator.value.address.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - address' )  + noteIterator.value.address + '</div>';
-						}
-						if ( 0 !== noteIterator.value.phone.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - phone' )  + noteIterator.value.phone + '</div>';
-						}
-						if ( 0 !== noteIterator.value.url.length ) {
-							noteText += '<div>' + _Translator.getText ( 'HTMLViewsFactory - url' ) + '<a href="' + noteIterator.value.url + '" target="_blank">' + noteIterator.value.url +'</a></div>';
-						}
 						var noteElement = _HTMLElementsFactory.create (
 							'div',
 							{ 
 								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
-								innerHTML : noteText
+								innerHTML : _NoteEditor.getNoteHTML ( noteIterator.value, _ClassNamePrefix )
 							}, 
 							rowDiv
 						);
@@ -2542,7 +2516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/HTMLElementsFactory":20,"../UI/Translator":27,"../core/RouteEditor":34,"../data/DataManager":38,"../data/ObjId":43,"../util/Utilities":50}],22:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":20,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../data/DataManager":38,"../data/ObjId":43,"../util/Utilities":50}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3997,7 +3971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "HTMLViewsFactory - ToNextInstruction",
-			msgstr : "Jusqu'à la prochaine instruction"
+			msgstr : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
 		},
 		{
 			msgid : "HTMLViewsFactory - Distance",
@@ -4006,18 +3980,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "HTMLViewsFactory - Time",
 			msgstr : "-"
-		},
-		{
-			msgid : "HTMLViewsFactory - address",
-			msgstr : "Adresse : "
-		},
-		{
-			msgid : "HTMLViewsFactory - phone",
-			msgstr : "Téléphone : "
-		},
-		{
-			msgid : "HTMLViewsFactory - url",
-			msgstr : "Url : "
 		},
 		{
 			msgid : "ItineraryEditorUI - Itinerary and notes",
@@ -4030,38 +3992,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "ItineraryEditorUI - Hide",
 			msgstr : "Masquer"
-		},
-		{
-			msgid : "MapEditor - Distance",
-			msgstr : "<span>Distance</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - Duration",
-			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup address",
-			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup phone",
-			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup url",
-			msgstr : "<span>Lien</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup lng",
-			msgstr : "<span>&nbsp;-&nbsp;Longitude</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup lat",
-			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup distance",
-			msgstr : "&nbsp;-&nbsp;<span>Distance</span>&nbsp;:&nbsp;"
 		},
 		{
 			msgid : "NoteDialog - Title",
@@ -4132,14 +4062,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "À propos de Travel & Notes"
 		},
 		{
+			msgid : "NoteEditor - address",
+			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - phone",
+			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - url",
+			msgstr : "<span>Url</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - latlng",
+			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+		},
+		{
+			msgid : "NoteEditor - distance",
+			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		},
+		{
 			msgid : "Notedialog - empty icon content",
 			msgstr : "Le contenu de l'icône doit être complété."
+		},
+		{
+			msgid : "RouteEditor - Distance",
+			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		},
+		{
+			msgid : "RouteEditor - Duration",
+			msgstr : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 		},
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
 		},
-
 		{
 			msgid : "RouteEditor - Add a note on the route",
 			msgstr : "Ajouter une note à ce trajet"
@@ -4310,11 +4267,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "Utilities - minute",
-			msgstr : "m"
+			msgstr : "min"
 		},
 		{
 			msgid : "Utilities - second",
-			msgstr : "s"
+			msgstr : "sec"
 		},
 		{
 			msgid : "TravelEditorUI - ",
@@ -4333,8 +4290,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_Translations.set ( 'Version', '1.0.0' );
 		}
 		return {
-			getText : function ( textId ) { 
+			getText : function ( textId , params ) { 
 				var translation = _Translations.get ( textId );
+				if ( params && translation ) {
+					Object.getOwnPropertyNames ( params ).forEach (
+						function ( propertyName ) {
+							translation = translation.replace ( '{' + propertyName + '}' , params [ propertyName ] ); 
+						}
+					);
+				}
+				
 				return translation === undefined ? textId : translation;
 			}
 		};
@@ -4781,56 +4746,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Config = require ( '../util/Config' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 
 	var getNoteTooltipText = function ( layer ) {
 		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		
 		return ( note ? note.tooltipContent : '');
 	};
 	
 	var getNotePopUpText = function ( layer ) {
 		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		if ( ! note ) {
-			return '';
-		}
-		var notePopupText = '';
-		if ( 0 !== note.tooltipContent.length ) {
-			notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
-		}
-		if ( 0 !== note.popupContent.length ) {
-			notePopupText += '<div class="TravelNotes-PopupContent">' + note.popupContent + '</div>';
-		}
-		if ( 0 !== note.address.length ) {
-			notePopupText += '<div class="TravelNotes-PopupAddress">' + _Translator.getText ( 'MapEditor - popup address' )  + note.address + '</div>';
-		}
-		if ( 0 !== note.phone.length ) {
-			notePopupText += '<div class="TravelNotes-PopupPhone">' + _Translator.getText ( 'MapEditor - popup phone' )  + note.phone + '</div>';
-		}
-		if ( 0 !== note.url.length ) {
-			notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
-		}
-		notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
-			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + 
-			( -1 === note.distance ? '' : _Translator.getText ( 'MapEditor - popup distance' ) + note.distance.toFixed ( 0 ) ) +
-			'</div>';
-			
-		return notePopupText;
+		return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
 	};
 	
 	var getRouteTooltipText = function ( layer ) {
 		var route = _DataManager.getRoute ( layer.objId );
-
 		return ( route ? route.name : '');
 	};
 
 	var getRoutePopupText = function ( layer ) {
-
-		var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( layer.objId );
-
-		return '<div class="TravelNotes-Popup-Route-Header">' +
-			route.name + '</div><div class="TravelNotes-Popup-Route-Distance">' +
-			_Translator.getText ( 'MapEditor - Distance' ) + distanceDuration.distance + '</div><div class="TravelNotes-Popup-Route-Duration">' +
-			_Translator.getText ( 'MapEditor - Duration' ) + distanceDuration.duration + '</div>';
+		var route = _DataManager.getRoute ( layer.objId );
+		return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
 	};
 	
 	var onRouteClick = function ( event ) {
@@ -4882,8 +4817,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
-	
-	
 	
 	var onBulletTravelNoteDrag = function ( event ) {
 		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
@@ -5146,7 +5079,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2,"../UI/ContextMenu":18,"../UI/Translator":27,"../core/RouteEditor":34,"../util/Config":48,"../util/TravelUtilities":49,"./NoteEditor":33,"./RouteEditor":34}],33:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":18,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../util/Config":48,"../util/TravelUtilities":49,"../util/Utilities":50,"./NoteEditor":33,"./RouteEditor":34}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5177,6 +5110,7 @@ To do: translations
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var getNoteEditor = function ( ) {
 		
@@ -5288,6 +5222,46 @@ To do: translations
 				return contextMenu;
 			},
 			
+			getNoteHTML : function ( note, classNamePrefix ) {
+
+			var noteText = '';
+				if ( 0 !== note.tooltipContent.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
+				}
+					if ( 0 !== note.popupContent.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
+				}
+				if ( 0 !== note.address.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - address' )  + note.address + '</div>';
+				}
+				if ( 0 !== note.phone.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - phone' )  + note.phone + '</div>';
+				}
+				if ( 0 !== note.url.length ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
+				}
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
+					_Translator.getText ( 
+						'NoteEditor - latlng',
+						{ 
+							lat : _Utilities.formatLat ( note.lat ),
+							lng : _Utilities.formatLng ( note.lng )
+						}
+					) + '</div>';
+					
+				if ( -1 !== note.distance ) {
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
+						_Translator.getText ( 
+							'NoteEditor - distance', 
+							{ 
+								distance: _Utilities.formatDistance ( note.distance )
+							}
+						) + '</div>';
+				}
+				
+				return noteText;
+			},
+			
 			getNoteContextMenu :function ( noteObjId ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -5318,7 +5292,7 @@ To do: translations
 
 }());
 
-},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":22,"../UI/NoteDialog":23,"../UI/Translator":27,"../core/MapEditor":32,"../data/Note":42,"../util/TravelUtilities":49}],34:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":22,"../UI/NoteDialog":23,"../UI/Translator":27,"../core/MapEditor":32,"../data/Note":42,"../util/TravelUtilities":49,"../util/Utilities":50}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5349,14 +5323,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var getRouteEditor = function ( ) {
 
 		
 		return {
-			getRouteDistanceDuration : function ( routeObjId ) {
-				var route = _DataManager.getRoute ( routeObjId );
-			
+			getRouteHTML : function ( route, classNamePrefix ) {
 				var distance = 0;
 				var duration = 0;
 
@@ -5365,13 +5338,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					distance += maneuverIterator.value.distance;
 					duration += maneuverIterator.value.duration;
 				}
-				distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
-				duration = require ( '../util/Utilities' ) ( ).formatTime ( duration );
+				distance = _Utilities.formatDistance ( distance );
+				duration = _Utilities.formatTime ( duration );
 				
-				return { distance : distance, duration : duration };
-			
+				return '<div class="' + classNamePrefix + 'RouteHtml-Header">' +
+					route.name + 
+					'</div><div class="' + classNamePrefix + 'RouteHtml-Distance">' +
+					_Translator.getText ( 'RouteEditor - Distance', { distance : distance } ) + '</div>' +
+					'<div class="' + classNamePrefix + 'RouteHtml-Duration">' +
+					_Translator.getText ( 'RouteEditor - Duration', { duration : duration } ) + '</div>';
 			},
-			
 			
 			startRouting : function ( ) {
 				if ( ! _Config.routing.auto ) {
@@ -6178,11 +6154,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					return '';
 				} 
 				else if ( 1000 > distance ) {
-					return distance + '&nbsp;m';
+					return distance.toFixed ( 0 ) + '&nbsp;m';
 				}
 				else {
 					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
 				}
+			},
+			
+			formatLat : function ( lat ) {
+				return ( lat > 0 ? lat.toFixed ( 6 ) + '&nbsp;N' : ( -lat ).toFixed ( 6 ) + '&nbsp;S' );
+			},
+			
+			formatLng : function ( lng ) {
+				return ( lng > 0 ? lng.toFixed ( 6 ) + '&nbsp;E' : ( -lng ).toFixed ( 6 ) + '&nbsp;W' );
 			},
 			
 			readURL : function ( ) {

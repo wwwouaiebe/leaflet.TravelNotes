@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "HTMLViewsFactory - ToNextInstruction",
-			msgstr : "Jusqu'à la prochaine instruction"
+			msgstr : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
 		},
 		{
 			msgid : "HTMLViewsFactory - Distance",
@@ -62,18 +62,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "HTMLViewsFactory - Time",
 			msgstr : "-"
-		},
-		{
-			msgid : "HTMLViewsFactory - address",
-			msgstr : "Adresse : "
-		},
-		{
-			msgid : "HTMLViewsFactory - phone",
-			msgstr : "Téléphone : "
-		},
-		{
-			msgid : "HTMLViewsFactory - url",
-			msgstr : "Url : "
 		},
 		{
 			msgid : "ItineraryEditorUI - Itinerary and notes",
@@ -86,38 +74,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "ItineraryEditorUI - Hide",
 			msgstr : "Masquer"
-		},
-		{
-			msgid : "MapEditor - Distance",
-			msgstr : "<span>Distance</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - Duration",
-			msgstr : "<span>Temps</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup address",
-			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup phone",
-			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup url",
-			msgstr : "<span>Lien</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup lng",
-			msgstr : "<span>&nbsp;-&nbsp;Longitude</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup lat",
-			msgstr : "<span>Lattitude</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "MapEditor - popup distance",
-			msgstr : "&nbsp;-&nbsp;<span>Distance</span>&nbsp;:&nbsp;"
 		},
 		{
 			msgid : "NoteDialog - Title",
@@ -188,14 +144,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "À propos de Travel & Notes"
 		},
 		{
+			msgid : "NoteEditor - address",
+			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - phone",
+			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - url",
+			msgstr : "<span>Url</span>&nbsp;:&nbsp;"
+		},
+		{
+			msgid : "NoteEditor - latlng",
+			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+		},
+		{
+			msgid : "NoteEditor - distance",
+			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		},
+		{
 			msgid : "Notedialog - empty icon content",
 			msgstr : "Le contenu de l'icône doit être complété."
+		},
+		{
+			msgid : "RouteEditor - Distance",
+			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		},
+		{
+			msgid : "RouteEditor - Duration",
+			msgstr : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 		},
 		{
 			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
 			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
 		},
-
 		{
 			msgid : "RouteEditor - Add a note on the route",
 			msgstr : "Ajouter une note à ce trajet"
@@ -366,11 +349,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		},
 		{
 			msgid : "Utilities - minute",
-			msgstr : "m"
+			msgstr : "min"
 		},
 		{
 			msgid : "Utilities - second",
-			msgstr : "s"
+			msgstr : "sec"
 		},
 		{
 			msgid : "TravelEditorUI - ",
@@ -389,8 +372,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_Translations.set ( 'Version', '1.0.0' );
 		}
 		return {
-			getText : function ( textId ) { 
+			getText : function ( textId , params ) { 
 				var translation = _Translations.get ( textId );
+				if ( params && translation ) {
+					Object.getOwnPropertyNames ( params ).forEach (
+						function ( propertyName ) {
+							translation = translation.replace ( '{' + propertyName + '}' , params [ propertyName ] ); 
+						}
+					);
+				}
+				
 				return translation === undefined ? textId : translation;
 			}
 		};

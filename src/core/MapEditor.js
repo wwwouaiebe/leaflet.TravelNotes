@@ -23,56 +23,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Config = require ( '../util/Config' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _Utilities = require ( '../util/Utilities' ) ( );
 
 	var getNoteTooltipText = function ( layer ) {
 		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		
 		return ( note ? note.tooltipContent : '');
 	};
 	
 	var getNotePopUpText = function ( layer ) {
 		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		if ( ! note ) {
-			return '';
-		}
-		var notePopupText = '';
-		if ( 0 !== note.tooltipContent.length ) {
-			notePopupText += '<div class="TravelNotes-PopupMapTooltipContent">' + note.tooltipContent + '</div>';
-		}
-		if ( 0 !== note.popupContent.length ) {
-			notePopupText += '<div class="TravelNotes-PopupContent">' + note.popupContent + '</div>';
-		}
-		if ( 0 !== note.address.length ) {
-			notePopupText += '<div class="TravelNotes-PopupAddress">' + _Translator.getText ( 'MapEditor - popup address' )  + note.address + '</div>';
-		}
-		if ( 0 !== note.phone.length ) {
-			notePopupText += '<div class="TravelNotes-PopupPhone">' + _Translator.getText ( 'MapEditor - popup phone' )  + note.phone + '</div>';
-		}
-		if ( 0 !== note.url.length ) {
-			notePopupText += '<div class="TravelNotes-PopupUrl">' + _Translator.getText ( 'MapEditor - popup url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
-		}
-		notePopupText += '<div class="TravelNotes-PopupLatLng"><span>' + _Translator.getText ( 'MapEditor - popup lat' ) + '</span>' + note.lat.toFixed ( 6 ) + 
-			'<span>' + _Translator.getText ( 'MapEditor - popup lng' ) + '</span>' + note.lng.toFixed ( 6 ) + 
-			( -1 === note.distance ? '' : _Translator.getText ( 'MapEditor - popup distance' ) + note.distance.toFixed ( 0 ) ) +
-			'</div>';
-			
-		return notePopupText;
+		return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
 	};
 	
 	var getRouteTooltipText = function ( layer ) {
 		var route = _DataManager.getRoute ( layer.objId );
-
 		return ( route ? route.name : '');
 	};
 
 	var getRoutePopupText = function ( layer ) {
-
-		var distanceDuration = require ( '../core/RouteEditor' ) ( ).getRouteDistanceDuration ( layer.objId );
-
-		return '<div class="TravelNotes-Popup-Route-Header">' +
-			route.name + '</div><div class="TravelNotes-Popup-Route-Distance">' +
-			_Translator.getText ( 'MapEditor - Distance' ) + distanceDuration.distance + '</div><div class="TravelNotes-Popup-Route-Duration">' +
-			_Translator.getText ( 'MapEditor - Duration' ) + distanceDuration.duration + '</div>';
+		var route = _DataManager.getRoute ( layer.objId );
+		return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
 	};
 	
 	var onRouteClick = function ( event ) {
@@ -124,8 +94,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 	};
-	
-	
 	
 	var onBulletTravelNoteDrag = function ( event ) {
 		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;

@@ -139,11 +139,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					return '';
 				} 
 				else if ( 1000 > distance ) {
-					return distance + '&nbsp;m';
+					return distance.toFixed ( 0 ) + '&nbsp;m';
 				}
 				else {
 					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
 				}
+			},
+			
+			formatLat : function ( lat ) {
+				return ( lat > 0 ? lat.toFixed ( 6 ) + '&nbsp;N' : ( -lat ).toFixed ( 6 ) + '&nbsp;S' );
+			},
+			
+			formatLng : function ( lng ) {
+				return ( lng > 0 ? lng.toFixed ( 6 ) + '&nbsp;E' : ( -lng ).toFixed ( 6 ) + '&nbsp;W' );
 			},
 			
 			readURL : function ( ) {

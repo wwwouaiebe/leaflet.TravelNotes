@@ -16,18 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-.TravelNotes-Popup-Route-Header
+.TravelNotes-RouteHtml-Header
 {
 	font-weight : bold;
 }
-.TravelNotes-Popup-Route-Distance
+.TravelNotes-RouteHtml-Distance
 {
 }
-.TravelNotes-Popup-Route-Duration
+.TravelNotes-RouteHtml-Duration
 {
 }
-.TravelNotes-Popup-Route-Distance > span,
-.TravelNotes-Popup-Route-Duration > span
+.TravelNotes-RouteHtml-Distance > span,
+.TravelNotes-RouteHtml-Duration > span
 {
 	text-decoration: underline;
 }
