@@ -39,11 +39,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getHTMLViewsFactory = function ( ) {
 				
 		var _AddNoteHTML = function ( note, rowDiv ) {
-			rowDiv.classList.add ( _ClassNamePrefix + 'NoteRowDiv' );
 			_HTMLElementsFactory.create (
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'ItineraryCellDiv',
+					className : _ClassNamePrefix + 'Travel-Notes-IconCellDiv',
 					innerHTML : note.iconContent
 				}, 
 				rowDiv
@@ -51,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var noteElement = _HTMLElementsFactory.create (
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
+					className : _ClassNamePrefix + 'Travel-Notes-CellDiv',
 					innerHTML : _NoteEditor.getNoteHTML ( note, _ClassNamePrefix )
 				}, 
 				rowDiv
@@ -59,11 +58,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetTravelHeaderHTML = function ( ) {
-			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelHTML-Header' } ); 
+			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Header' } ); 
 			_HTMLElementsFactory.create ( 
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'TravelHTML--Name',
+					className : _ClassNamePrefix + 'Travel-Header-Name',
 					innerHTML: _DataManager.travel.name
 				},
 				travelHeaderHTML
@@ -74,8 +73,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_HTMLElementsFactory.create ( 
 					'div',
 					{ 
-						className : _ClassNamePrefix + 'TravelHTML-RouteName',
-						innerHTML: travelRoutesIterator.name
+						className : _ClassNamePrefix + 'Travel-Header-RouteName',
+						innerHTML: travelRoutesIterator.value.name
 					},
 					travelHeaderHTML
 				); 
@@ -85,10 +84,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetTravelNotesHTML = function ( ) {
-			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelNotes'} ); 
+			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
 			var travelNotesIterator = _DataManager.travel.notes.iterator;
 			while ( ! travelNotesIterator.done ) {
-				_AddNoteHTML ( travelNotesIterator.value, travelNotesHTML );
+				var rowDiv = _HTMLElementsFactory.create ( 
+					'div', 
+					{ className : _ClassNamePrefix + 'Travel-Notes-RowDiv'}, 
+					travelNotesHTML
+				);
+				 _AddNoteHTML ( travelNotesIterator.value, rowDiv ) ;
 			}
 			
 			return travelNotesHTML;
@@ -98,7 +102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return _HTMLElementsFactory.create ( 
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'RouteHeader',
+					className : _ClassNamePrefix + 'Route-Header',
 					innerHTML: _RouteEditor.getRouteHTML ( route, _ClassNamePrefix )
 				}
 			); 

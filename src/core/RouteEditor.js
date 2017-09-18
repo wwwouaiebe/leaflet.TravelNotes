@@ -46,11 +46,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				distance = _Utilities.formatDistance ( distance );
 				duration = _Utilities.formatTime ( duration );
 				
-				return '<div class="' + classNamePrefix + 'RouteHtml-Name">' +
+				return '<div class="' + classNamePrefix + 'Route-Header-Name">' +
 					route.name + 
-					'</div><div class="' + classNamePrefix + 'RouteHtml-Distance">' +
+					'</div><div class="' + classNamePrefix + 'Route-Header-Distance">' +
 					_Translator.getText ( 'RouteEditor - Distance', { distance : distance } ) + '</div>' +
-					'<div class="' + classNamePrefix + 'RouteHtml-Duration">' +
+					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
 					_Translator.getText ( 'RouteEditor - Duration', { duration : duration } ) + '</div>';
 			},
 			

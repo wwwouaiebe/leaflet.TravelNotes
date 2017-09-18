@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
+	var _HTMLViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+	
 	var getTravelEditor = function ( ) {
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
@@ -32,6 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _ChangeTravelHTML = function ( ) {
 			if ( _Utilities.storageAvailable ( 'localStorage' ) ) {
+				_HTMLViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
 				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", require ( '../UI/HTMLViewsFactory' ) ( ).travelHTML.outerHTML );
 			}
 		};

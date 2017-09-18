@@ -1,0 +1,93 @@
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+@import 'css/Notes.css';
+@import 'css/NotesIcons.css';
+
+.TravelNotes-Roadbook-Travel
+{
+	margin-top: 0.5em;
+	margin-left: 1em;
+	margin-right: 1em;
+	font-family: sans-serif;
+	line-height: 1.5em;
+}
+.TravelNotes-Roadbook-Travel-Header
+{
+	margin-bottom: 1em;
+}
+.TravelNotes-Roadbook-Travel-Header-Name
+{
+	font-size: 156%;
+	font-weight: bold;
+	margin-bottom: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-RouteName
+{
+	margin-left: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Notes
+{
+	display: table;
+	margin-left: 1em;
+	margin-bottom: 2em;
+	border-spacing: 0.5em 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Notes-RowDiv
+{
+	display: table-row;
+}
+.TravelNotes-Roadbook-Travel-Notes-IconCellDiv
+{
+	display: table-cell;
+}
+.TravelNotes-Roadbook-Travel-Notes-CellDiv
+{
+	display: table-cell;
+}
+.TravelNotes-Roadbook-Route-Header-Name
+{
+	font-size: 125%;
+	font-weight: bold;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+.TravelNotes-Roadbook-Route-Header-Distance
+{
+	margin-left: 1.5em;
+}
+.TravelNotes-Roadbook-Route-Header-Duration
+{
+	margin-left: 1.5em;
+	margin-bottom: 1em;
+}
+
+
+
+@media screen and (min-width: 1025px)
+{
+	.TravelNotes-Roadbook-Travel
+	{
+		width: 50em;
+		margin-left: calc(50% - 50em / 2);
+		margin-right: calc(50% - 50em / 2);
+	}
+}
