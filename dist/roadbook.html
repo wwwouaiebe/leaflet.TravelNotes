@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+		<title>Travel & notes by wwwouaiebe</title>
+		<meta name="author" content="Christian Guyette" />
+		<link rel="stylesheet" href="myStyles.css" />
+	</head>
+	<body id='TravelNotes'>
+		<div>Pour des raisons de sécurité liées à la configuration de votre navigateur, cette page ne peut pas être affichée (cookies désactivés).</div>
+		<script>
+			function getPageId ( ) {
+				var UrlSearch = decodeURI ( window.location.search );
+				if ( 0 == UrlSearch.length )
+				{
+					return '';
+				}
+				if ( 0 <= UrlSearch.indexOf ( 'page=' ) )
+				{
+					return UrlSearch.substr ( UrlSearch.indexOf ( 'page=' ) + 5 );
+				}
+				return '';
+			}
+
+			var pageId = getPageId ( );
+			if ( 0 < pageId.length ) {
+				document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( getPageId ( ) + "-TravelNotesHTML" ); 
+				window.addEventListener(
+					'storage', 
+					function ( event ) { 
+						document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( getPageId ( ) + "-TravelNotesHTML" );
+					}
+				);
+			}
+		</script>
+	</body>
+</html>

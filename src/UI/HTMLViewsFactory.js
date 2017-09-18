@@ -38,19 +38,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getHTMLViewsFactory = function ( ) {
 				
-		var _GetTravelHeader = function ( ) {
-			var travelHeader = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return travelHeader;
+		var _AddNoteHTML = function ( note, rowDiv ) {
+			rowDiv.classList.add ( _ClassNamePrefix + 'NoteRowDiv' );
+			_HTMLElementsFactory.create (
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'ItineraryCellDiv',
+					innerHTML : note.iconContent
+				}, 
+				rowDiv
+			);
+			var noteElement = _HTMLElementsFactory.create (
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
+					innerHTML : _NoteEditor.getNoteHTML ( note, _ClassNamePrefix )
+				}, 
+				rowDiv
+			);
 		};
 
-		var _GetTravelNotes = function ( ) {
-			var travelNotes = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
+		var _GetTravelHeaderHTML = function ( ) {
+			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelHTML-Header' } ); 
+			_HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'TravelHTML--Name',
+					innerHTML: _DataManager.travel.name
+				},
+				travelHeaderHTML
+			); 
 			
-			return travelNotes;
+			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			while ( ! travelRoutesIterator.done ) {
+				_HTMLElementsFactory.create ( 
+					'div',
+					{ 
+						className : _ClassNamePrefix + 'TravelHTML-RouteName',
+						innerHTML: travelRoutesIterator.name
+					},
+					travelHeaderHTML
+				); 
+			}
+			
+			return travelHeaderHTML;
 		};
 
-		var _GetRouteHeader = function ( route ) {
+		var _GetTravelNotesHTML = function ( ) {
+			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelNotes'} ); 
+			var travelNotesIterator = _DataManager.travel.notes.iterator;
+			while ( ! travelNotesIterator.done ) {
+				_AddNoteHTML ( travelNotesIterator.value, travelNotesHTML );
+			}
+			
+			return travelNotesHTML;
+		};
+
+		var _GetRouteHeaderHTML = function ( route ) {
 			return _HTMLElementsFactory.create ( 
 				'div',
 				{ 
@@ -60,45 +104,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			); 
 		};
 
-		var _GetRouteManeuversAndNotes = function ( route ) {
-			var routeManeuversAndNotes = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteManeuversNotesList' } ); 
+		var _GetRouteManeuversAndNotesHTML = function ( route ) {
+			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'routeManeuversAndNotes' } ); 
 			
-			var noteIterator = route.notes.iterator;
-			var noteDone =  noteIterator.done;
-			var noteDistance = ! noteDone ? noteIterator.value.distance : 999999999;
+			var notesIterator = route.notes.iterator;
+			var notesDone =  notesIterator.done;
+			var notesDistance = ! notesDone ? notesIterator.value.distance : 999999999;
 			
-			var maneuverIterator = route.itinerary.maneuvers.iterator;
-			var maneuverDone = maneuverIterator.done;
-			var maneuverDistance = 0;
+			var maneuversIterator = route.itinerary.maneuvers.iterator;
+			var maneuversDone = maneuversIterator.done;
+			var maneuversDistance = 0;
 			
-			while ( ! ( maneuverDone && noteDone ) ) {
+			while ( ! ( maneuversDone && notesDone ) ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
 					{ className : _ClassNamePrefix + 'ItineraryRowDiv'}, 
-					routeManeuversAndNotes
+					routeManeuversAndNotesHTML
 				);
 
-				if ( maneuverDistance <= noteDistance ) {
-					if ( ! maneuverDone ) {
+				if ( maneuversDistance <= notesDistance ) {
+					if ( ! maneuversDone ) {
 						rowDiv.classList.add ( _ClassNamePrefix + 'ManeuverRowDiv' );
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'iconCellDiv ' + _ClassNamePrefix + maneuverIterator.value.iconName,
+								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'iconCellDiv ' + _ClassNamePrefix + maneuversIterator.value.iconName,
 							}, 
 							rowDiv
 						);
 						
 						var maneuverText = 
-							'<div>' +  maneuverIterator.value.instruction + '</div>';
+							'<div>' +  maneuversIterator.value.instruction + '</div>';
 						
-						if ( 0 < maneuverIterator.value.distance ) {
+						if ( 0 < maneuversIterator.value.distance ) {
 							maneuverText +=	'<div>' + 
 								_Translator.getText ( 
 									'HTMLViewsFactory - ToNextInstruction', 
 									{
-										distance : _Utilities.formatDistance ( maneuverIterator.value.distance ),
-										duration : _Utilities.formatTime ( maneuverIterator.value.duration )
+										distance : _Utilities.formatDistance ( maneuversIterator.value.distance ),
+										duration : _Utilities.formatTime (maneuversIterator)
 									}
 								) + '</div>';
 						}
@@ -112,91 +156,99 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
-						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 						
-						maneuverDistance +=  maneuverIterator.value.distance;
-						maneuverDone = maneuverIterator.done;
-						if ( maneuverDone ) {
-							maneuverDistance = 999999999;
+						maneuversDistance +=  maneuversIterator.value.distance;
+						maneuversDone = maneuversIterator.done;
+						if ( maneuversDone ) {
+							maneuversDistance = 999999999;
 						}
 					}
 				}
 				else {
-					if ( ! noteDone ) {
-						rowDiv.classList.add ( _ClassNamePrefix + 'NoteRowDiv' );
-						_HTMLElementsFactory.create (
-							'div',
-							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv',
-								innerHTML : noteIterator.value.iconContent
-							}, 
-							rowDiv
-						);
-						var noteElement = _HTMLElementsFactory.create (
-							'div',
-							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
-								innerHTML : _NoteEditor.getNoteHTML ( noteIterator.value, _ClassNamePrefix )
-							}, 
-							rowDiv
-						);
-						
+					if ( ! notesDone ) {
+
+						_AddNoteHTML ( notesIterator.value, rowDiv );
+
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
-						rowDiv.latLng = noteIterator.value.latLng;
+						rowDiv.latLng = notesIterator.value.latLng;
 						
-						noteDone = noteIterator.done;
-						noteDistance = noteDone ? 999999999 :  noteIterator.value.distance;
+						notesDone = notesIterator.done;
+						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;
 					}
 				}	
 			}
 			
-			return routeManeuversAndNotes;
+			return routeManeuversAndNotesHTML;
 		};
 
-		var _GetRouteFooter = function ( ) {
-			var routeFooter = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return routeFooter;
+		var _GetRouteFooterHTML = function ( route ) {
+			return _HTMLElementsFactory.create ( 
+				'div', 
+				{ 
+					className : _ClassNamePrefix + 'RouteFooter',
+					innerHTML : _Translator.getText ( 
+						'HTMLViewsFactory - Route footer', 
+						{
+							provider: route.itinerary.provider, 
+							transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
+						} 
+					)
+				}
+			); 
 		};
 
-		var _GetTravelFooter = function ( ) {
-			var travelFooter = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return travelFooter;
+		var _GetTravelFooterHTML = function ( ) {
+			return _HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'TravelFooter',
+					innerHTML : _Translator.getText ( 'HTMLViewsFactory - Travel footer' )
+				} 
+			); 
 		};
 
-		var _GetTravelView = function ( ) {
-			var travelView = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
+		var _GetTravelHTML = function ( ) {
+			var travelHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Travel'} ); 
 			
-			return travelView;
+			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
+			travelHTML.appendChild ( _GetTravelNotesHTML ( ) );
+			
+			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			while ( ! travelRoutesIterator.done ) {
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( travelRoutesIterator.value ) );
+			}
+			
+			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
+
+			return travelHTML;
 		};
 
 		return {
 			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
+			
 			get classNamePrefix ( ) { return _ClassNamePrefix; },
 			
-			get travelHeader ( )  { return _GetTravelHeader ( ); }, 
+			get travelHeaderHTML ( )  { return _GetTravelHeaderHTML ( ); }, 
 			
-			get travelNotes ( )  { return _GetTravelNotes ( ); }, 
+			get travelNotesHTML ( )  { return _GetTravelNotesHTML ( ); }, 
 			
-			get routeHeader ( )  { return _GetRouteHeader ( _DataManager.editedRoute ); }, 
+			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _DataManager.editedRoute ); }, 
 			
-			get routeManeuversAndNotes ( )  { return _GetRouteManeuversAndNotes ( _DataManager.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _DataManager.editedRoute ); }, 
 			
-			get routeFooter ( )  { return _GetRouteFooter ( ); }, 
+			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _DataManager.editedRoute ); }, 
 			
-			get travelFooter ( )  { return _GetTravelFooter ( ); }, 
+			get travelFooterHTML ( )  { return _GetTravelFooterHTML ( ); }, 
 			
-			get travelView ( ) { return  _GetTravelView ( ); }
+			get travelHTML ( ) { return  _GetTravelHTML ( ); }
 		};
 			
 	};
 
 	/* --- End of L.Travel.ControlUI object --- */		
-
-	var HTMLElementsFactory = function ( ) {
-		return getHTMLElementsFactory ( );
-	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getHTMLViewsFactory;

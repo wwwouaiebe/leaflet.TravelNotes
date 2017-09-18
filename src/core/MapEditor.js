@@ -93,6 +93,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+		require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 	};
 	
 	var onBulletTravelNoteDrag = function ( event ) {

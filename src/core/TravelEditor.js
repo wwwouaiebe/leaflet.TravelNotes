@@ -24,11 +24,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
-
+	var _Utilities = require ( '../util/Utilities' ) ( );
 	var getTravelEditor = function ( ) {
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 		var _Translator = require ( '../UI/Translator' ) ( );
+
+		var _ChangeTravelHTML = function ( ) {
+			if ( _Utilities.storageAvailable ( 'localStorage' ) ) {
+				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", require ( '../UI/HTMLViewsFactory' ) ( ).travelHTML.outerHTML );
+			}
+		};
 		
 		var _ReadFile = function ( textFile ) {
 			_DataManager.travel.object = JSON.parse ( textFile ) ;
@@ -42,11 +48,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! notesIterator.done ) {
 				_MapEditor.addNote ( notesIterator.value );
 			}
-console.log ( _DataManager.travel.object );
 			_MapEditor.zoomToTravel ( );
+			_ChangeTravelHTML ( );
 		};
 		
+		
 		return {
+			
+			changeTravelHTML : function ( ) { _ChangeTravelHTML ( ); },
 			
 			addRoute : function ( ) {
 				_DataManager.travel.routes.add ( require ( '../Data/Route' ) ( ) );

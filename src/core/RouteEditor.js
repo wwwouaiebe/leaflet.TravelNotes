@@ -46,7 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				distance = _Utilities.formatDistance ( distance );
 				duration = _Utilities.formatTime ( duration );
 				
-				return '<div class="' + classNamePrefix + 'RouteHtml-Header">' +
+				return '<div class="' + classNamePrefix + 'RouteHtml-Name">' +
 					route.name + 
 					'</div><div class="' + classNamePrefix + 'RouteHtml-Distance">' +
 					_Translator.getText ( 'RouteEditor - Distance', { distance : distance } ) + '</div>' +
@@ -84,6 +84,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
 				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
 			cancelEdition : function ( ) {

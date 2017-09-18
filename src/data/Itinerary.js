@@ -28,6 +28,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _Maneuvers = require ( './Collection' ) ( 'Maneuver' );
 		
+		var _Provider = '';
+		
+		var _TransitMode = '';
+		
 		return {
 			
 			get itineraryPoints ( ) { return _ItineraryPoints; },
@@ -38,10 +42,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get objType ( ) { return _ObjType; },
 			
+			get provider ( ) { return _Provider; },
+			
+			set provider ( Provider ) { _Provider = Provider; },
+
+			get transitMode ( ) { return _TransitMode; },
+			
+			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
+			
 			get object ( ) {
 				return {
 					itineraryPoints : _ItineraryPoints.object,
 					maneuvers : _Maneuvers.object,
+					provider : _Provider,
+					transitMode : _TransitMode,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -51,6 +65,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				Object = _ObjType.validate ( Object );
 				_ItineraryPoints.object = Object.itineraryPoints || [];
 				_Maneuvers.object = Object.maneuvers || [];
+				_Provider = Object.provider || '';
+				_TransitMode = Object.transitMode || '';
 				_ObjId = require ( './ObjId' ) ( );
 				// rebuilding links between maneuvers and itineraryPoints
 				var itineraryPointObjIdMap = new Map ( );

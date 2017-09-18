@@ -265,7 +265,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travel = require ( '../Data/Travel' ) ( );
 				global.mapObjects = new Map ( );
 				global.routing = {};
+				global.UUID = require ( '../util/Utilities' ) ( ).UUID;
 			},
+			get UUID ( ) { return global.UUID; },
 			
 			get routing ( ) { return global.routing; },
 			set routing ( Routing ) { global.routing = Routing; },
@@ -332,7 +334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Data/Route":9,"../Data/Travel":10}],3:[function(require,module,exports){
+},{"../Data/Route":9,"../Data/Travel":10,"../util/Utilities":50}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -363,6 +365,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _Maneuvers = require ( './Collection' ) ( 'Maneuver' );
 		
+		var _Provider = '';
+		
+		var _TransitMode = '';
+		
 		return {
 			
 			get itineraryPoints ( ) { return _ItineraryPoints; },
@@ -373,10 +379,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get objType ( ) { return _ObjType; },
 			
+			get provider ( ) { return _Provider; },
+			
+			set provider ( Provider ) { _Provider = Provider; },
+
+			get transitMode ( ) { return _TransitMode; },
+			
+			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
+			
 			get object ( ) {
 				return {
 					itineraryPoints : _ItineraryPoints.object,
 					maneuvers : _Maneuvers.object,
+					provider : _Provider,
+					transitMode : _TransitMode,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -386,6 +402,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				Object = _ObjType.validate ( Object );
 				_ItineraryPoints.object = Object.itineraryPoints || [];
 				_Maneuvers.object = Object.maneuvers || [];
+				_Provider = Object.provider || '';
+				_TransitMode = Object.transitMode || '';
 				_ObjId = require ( './ObjId' ) ( );
 				// rebuilding links between maneuvers and itineraryPoints
 				var itineraryPointObjIdMap = new Map ( );
@@ -2350,19 +2368,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var getHTMLViewsFactory = function ( ) {
 				
-		var _GetTravelHeader = function ( ) {
-			var travelHeader = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return travelHeader;
+		var _AddNoteHTML = function ( note, rowDiv ) {
+			rowDiv.classList.add ( _ClassNamePrefix + 'NoteRowDiv' );
+			_HTMLElementsFactory.create (
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'ItineraryCellDiv',
+					innerHTML : note.iconContent
+				}, 
+				rowDiv
+			);
+			var noteElement = _HTMLElementsFactory.create (
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
+					innerHTML : _NoteEditor.getNoteHTML ( note, _ClassNamePrefix )
+				}, 
+				rowDiv
+			);
 		};
 
-		var _GetTravelNotes = function ( ) {
-			var travelNotes = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
+		var _GetTravelHeaderHTML = function ( ) {
+			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelHTML-Header' } ); 
+			_HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'TravelHTML--Name',
+					innerHTML: _DataManager.travel.name
+				},
+				travelHeaderHTML
+			); 
 			
-			return travelNotes;
+			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			while ( ! travelRoutesIterator.done ) {
+				_HTMLElementsFactory.create ( 
+					'div',
+					{ 
+						className : _ClassNamePrefix + 'TravelHTML-RouteName',
+						innerHTML: travelRoutesIterator.name
+					},
+					travelHeaderHTML
+				); 
+			}
+			
+			return travelHeaderHTML;
 		};
 
-		var _GetRouteHeader = function ( route ) {
+		var _GetTravelNotesHTML = function ( ) {
+			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'TravelNotes'} ); 
+			var travelNotesIterator = _DataManager.travel.notes.iterator;
+			while ( ! travelNotesIterator.done ) {
+				_AddNoteHTML ( travelNotesIterator.value, travelNotesHTML );
+			}
+			
+			return travelNotesHTML;
+		};
+
+		var _GetRouteHeaderHTML = function ( route ) {
 			return _HTMLElementsFactory.create ( 
 				'div',
 				{ 
@@ -2372,45 +2434,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			); 
 		};
 
-		var _GetRouteManeuversAndNotes = function ( route ) {
-			var routeManeuversAndNotes = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteManeuversNotesList' } ); 
+		var _GetRouteManeuversAndNotesHTML = function ( route ) {
+			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'routeManeuversAndNotes' } ); 
 			
-			var noteIterator = route.notes.iterator;
-			var noteDone =  noteIterator.done;
-			var noteDistance = ! noteDone ? noteIterator.value.distance : 999999999;
+			var notesIterator = route.notes.iterator;
+			var notesDone =  notesIterator.done;
+			var notesDistance = ! notesDone ? notesIterator.value.distance : 999999999;
 			
-			var maneuverIterator = route.itinerary.maneuvers.iterator;
-			var maneuverDone = maneuverIterator.done;
-			var maneuverDistance = 0;
+			var maneuversIterator = route.itinerary.maneuvers.iterator;
+			var maneuversDone = maneuversIterator.done;
+			var maneuversDistance = 0;
 			
-			while ( ! ( maneuverDone && noteDone ) ) {
+			while ( ! ( maneuversDone && notesDone ) ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
 					{ className : _ClassNamePrefix + 'ItineraryRowDiv'}, 
-					routeManeuversAndNotes
+					routeManeuversAndNotesHTML
 				);
 
-				if ( maneuverDistance <= noteDistance ) {
-					if ( ! maneuverDone ) {
+				if ( maneuversDistance <= notesDistance ) {
+					if ( ! maneuversDone ) {
 						rowDiv.classList.add ( _ClassNamePrefix + 'ManeuverRowDiv' );
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'iconCellDiv ' + _ClassNamePrefix + maneuverIterator.value.iconName,
+								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'iconCellDiv ' + _ClassNamePrefix + maneuversIterator.value.iconName,
 							}, 
 							rowDiv
 						);
 						
 						var maneuverText = 
-							'<div>' +  maneuverIterator.value.instruction + '</div>';
+							'<div>' +  maneuversIterator.value.instruction + '</div>';
 						
-						if ( 0 < maneuverIterator.value.distance ) {
+						if ( 0 < maneuversIterator.value.distance ) {
 							maneuverText +=	'<div>' + 
 								_Translator.getText ( 
 									'HTMLViewsFactory - ToNextInstruction', 
 									{
-										distance : _Utilities.formatDistance ( maneuverIterator.value.distance ),
-										duration : _Utilities.formatTime ( maneuverIterator.value.duration )
+										distance : _Utilities.formatDistance ( maneuversIterator.value.distance ),
+										duration : _Utilities.formatTime (maneuversIterator)
 									}
 								) + '</div>';
 						}
@@ -2424,91 +2486,99 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
-						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 						
-						maneuverDistance +=  maneuverIterator.value.distance;
-						maneuverDone = maneuverIterator.done;
-						if ( maneuverDone ) {
-							maneuverDistance = 999999999;
+						maneuversDistance +=  maneuversIterator.value.distance;
+						maneuversDone = maneuversIterator.done;
+						if ( maneuversDone ) {
+							maneuversDistance = 999999999;
 						}
 					}
 				}
 				else {
-					if ( ! noteDone ) {
-						rowDiv.classList.add ( _ClassNamePrefix + 'NoteRowDiv' );
-						_HTMLElementsFactory.create (
-							'div',
-							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv',
-								innerHTML : noteIterator.value.iconContent
-							}, 
-							rowDiv
-						);
-						var noteElement = _HTMLElementsFactory.create (
-							'div',
-							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryNoteDiv',
-								innerHTML : _NoteEditor.getNoteHTML ( noteIterator.value, _ClassNamePrefix )
-							}, 
-							rowDiv
-						);
-						
+					if ( ! notesDone ) {
+
+						_AddNoteHTML ( notesIterator.value, rowDiv );
+
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
-						rowDiv.latLng = noteIterator.value.latLng;
+						rowDiv.latLng = notesIterator.value.latLng;
 						
-						noteDone = noteIterator.done;
-						noteDistance = noteDone ? 999999999 :  noteIterator.value.distance;
+						notesDone = notesIterator.done;
+						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;
 					}
 				}	
 			}
 			
-			return routeManeuversAndNotes;
+			return routeManeuversAndNotesHTML;
 		};
 
-		var _GetRouteFooter = function ( ) {
-			var routeFooter = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return routeFooter;
+		var _GetRouteFooterHTML = function ( route ) {
+			return _HTMLElementsFactory.create ( 
+				'div', 
+				{ 
+					className : _ClassNamePrefix + 'RouteFooter',
+					innerHTML : _Translator.getText ( 
+						'HTMLViewsFactory - Route footer', 
+						{
+							provider: route.itinerary.provider, 
+							transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
+						} 
+					)
+				}
+			); 
 		};
 
-		var _GetTravelFooter = function ( ) {
-			var travelFooter = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
-			
-			return travelFooter;
+		var _GetTravelFooterHTML = function ( ) {
+			return _HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'TravelFooter',
+					innerHTML : _Translator.getText ( 'HTMLViewsFactory - Travel footer' )
+				} 
+			); 
 		};
 
-		var _GetTravelView = function ( ) {
-			var travelView = _HTMLElementsFactory.create ( 'div', { id : '', className : ''} ); 
+		var _GetTravelHTML = function ( ) {
+			var travelHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Travel'} ); 
 			
-			return travelView;
+			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
+			travelHTML.appendChild ( _GetTravelNotesHTML ( ) );
+			
+			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			while ( ! travelRoutesIterator.done ) {
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( travelRoutesIterator.value ) );
+			}
+			
+			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
+
+			return travelHTML;
 		};
 
 		return {
 			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
+			
 			get classNamePrefix ( ) { return _ClassNamePrefix; },
 			
-			get travelHeader ( )  { return _GetTravelHeader ( ); }, 
+			get travelHeaderHTML ( )  { return _GetTravelHeaderHTML ( ); }, 
 			
-			get travelNotes ( )  { return _GetTravelNotes ( ); }, 
+			get travelNotesHTML ( )  { return _GetTravelNotesHTML ( ); }, 
 			
-			get routeHeader ( )  { return _GetRouteHeader ( _DataManager.editedRoute ); }, 
+			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _DataManager.editedRoute ); }, 
 			
-			get routeManeuversAndNotes ( )  { return _GetRouteManeuversAndNotes ( _DataManager.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _DataManager.editedRoute ); }, 
 			
-			get routeFooter ( )  { return _GetRouteFooter ( ); }, 
+			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _DataManager.editedRoute ); }, 
 			
-			get travelFooter ( )  { return _GetTravelFooter ( ); }, 
+			get travelFooterHTML ( )  { return _GetTravelFooterHTML ( ); }, 
 			
-			get travelView ( ) { return  _GetTravelView ( ); }
+			get travelHTML ( ) { return  _GetTravelHTML ( ); }
 		};
 			
 	};
 
 	/* --- End of L.Travel.ControlUI object --- */		
-
-	var HTMLElementsFactory = function ( ) {
-		return getHTMLElementsFactory ( );
-	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = getHTMLViewsFactory;
@@ -2763,7 +2833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
-			dataDiv.appendChild ( htmlViewsFactory.routeHeader );
+			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 			
 			var childCounter;
 			var childNodes;
@@ -2777,7 +2847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				dataDiv.removeChild ( routeManeuversNotesList );
 			}
 			
-			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotes );
+			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
@@ -3974,12 +4044,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
 		},
 		{
-			msgid : "HTMLViewsFactory - Distance",
-			msgstr : ":"
+			msgid : "HTMLViewsFactory - TransitMode bike",
+			msgstr : "un vélo"
 		},
 		{
-			msgid : "HTMLViewsFactory - Time",
-			msgstr : "-"
+			msgid : "HTMLViewsFactory - TransitMode car",
+			msgstr : "une voiture"
+		},
+		{
+			msgid : "HTMLViewsFactory - TransitMode pedestrian",
+			msgstr : "un piéton"
+		},
+		{
+			msgid : "HTMLViewsFactory - Route footer",
+			msgstr : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
+		},
+		{
+			msgid : "HTMLViewsFactory - Travel footer",
+			msgstr : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a> <a href='http://www.ouaie.be/' target='_Blank'>© Christian Guyette 2017</a>"
 		},
 		{
 			msgid : "ItineraryEditorUI - Itinerary and notes",
@@ -4240,6 +4322,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "TravelEditorUI - Open travel",
 			msgstr : "Ouvrir un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Open travel roadbook",
+			msgstr : "Ouvrir le livre de voyage"
 		},
 		{
 			msgid : "TravelEditorUI - Undo",
@@ -4519,12 +4605,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					id : 'TravelNotes-Control-OpenTravelButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
-					innerHTML : '&#x23CD;'
+					innerHTML : '&#x1F4C2;'
 				}, 
 				openTravelFakeDiv 
 			);
 			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
 			
+			var openTravelRoadbookButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
+					innerHTML : '<a href="roadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+				}, 
+				buttonsDiv
+			);
+
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4816,6 +4913,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 		}
 		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+		require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 	};
 	
 	var onBulletTravelNoteDrag = function ( event ) {
@@ -5079,7 +5177,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2,"../UI/ContextMenu":18,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../util/Config":48,"../util/TravelUtilities":49,"../util/Utilities":50,"./NoteEditor":33,"./RouteEditor":34}],33:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":18,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../core/TravelEditor":36,"../util/Config":48,"../util/TravelUtilities":49,"../util/Utilities":50,"./NoteEditor":33,"./RouteEditor":34}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5162,6 +5260,7 @@ To do: translations
 				else {
 					this.addNote ( note, routeObjId );
 				}
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
 
 			addNote : function ( note, routeObjId ) {
@@ -5175,6 +5274,7 @@ To do: translations
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				_MapEditor.addNote ( note );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 
 			editNote : function ( noteObjId ) {
@@ -5192,6 +5292,7 @@ To do: translations
 					noteAndRoute.route.notes.remove ( noteObjId );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
 			getMapContextMenu :function ( latLng ) {
@@ -5292,7 +5393,7 @@ To do: translations
 
 }());
 
-},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":22,"../UI/NoteDialog":23,"../UI/Translator":27,"../core/MapEditor":32,"../data/Note":42,"../util/TravelUtilities":49,"../util/Utilities":50}],34:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":22,"../UI/NoteDialog":23,"../UI/Translator":27,"../core/MapEditor":32,"../core/TravelEditor":36,"../data/Note":42,"../util/TravelUtilities":49,"../util/Utilities":50}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5341,7 +5442,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				distance = _Utilities.formatDistance ( distance );
 				duration = _Utilities.formatTime ( duration );
 				
-				return '<div class="' + classNamePrefix + 'RouteHtml-Header">' +
+				return '<div class="' + classNamePrefix + 'RouteHtml-Name">' +
 					route.name + 
 					'</div><div class="' + classNamePrefix + 'RouteHtml-Distance">' +
 					_Translator.getText ( 'RouteEditor - Distance', { distance : distance } ) + '</div>' +
@@ -5379,6 +5480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
 				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
 			cancelEdition : function ( ) {
@@ -5742,11 +5844,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
-
+	var _Utilities = require ( '../util/Utilities' ) ( );
 	var getTravelEditor = function ( ) {
 
 		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 		var _Translator = require ( '../UI/Translator' ) ( );
+
+		var _ChangeTravelHTML = function ( ) {
+			if ( _Utilities.storageAvailable ( 'localStorage' ) ) {
+				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", require ( '../UI/HTMLViewsFactory' ) ( ).travelHTML.outerHTML );
+			}
+		};
 		
 		var _ReadFile = function ( textFile ) {
 			_DataManager.travel.object = JSON.parse ( textFile ) ;
@@ -5760,11 +5868,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! notesIterator.done ) {
 				_MapEditor.addNote ( notesIterator.value );
 			}
-console.log ( _DataManager.travel.object );
 			_MapEditor.zoomToTravel ( );
+			_ChangeTravelHTML ( );
 		};
 		
+		
 		return {
+			
+			changeTravelHTML : function ( ) { _ChangeTravelHTML ( ); },
 			
 			addRoute : function ( ) {
 				_DataManager.travel.routes.add ( require ( '../Data/Route' ) ( ) );
@@ -5857,11 +5968,11 @@ console.log ( _DataManager.travel.object );
 
 }());
 
-},{"../Data/DataManager":2,"../Data/Route":9,"../Data/Travel":10,"../UI/Translator":27,"../UI/TravelEditorUI":28,"../core/MapEditor":32,"../core/RouteEditor":34,"../util/Config":48,"../util/Utilities":50,"./ErrorEditor":30,"./MapEditor":32,"./RouteEditor":34}],37:[function(require,module,exports){
+},{"../Data/DataManager":2,"../Data/Route":9,"../Data/Travel":10,"../UI/HTMLViewsFactory":21,"../UI/Translator":27,"../UI/TravelEditorUI":28,"../core/MapEditor":32,"../core/RouteEditor":34,"../util/Config":48,"../util/Utilities":50,"./ErrorEditor":30,"./MapEditor":32,"./RouteEditor":34}],37:[function(require,module,exports){
 arguments[4][1][0].apply(exports,arguments)
 },{"./ItineraryPoint":40,"./Maneuver":41,"./Note":42,"./Route":45,"./WayPoint":46,"dup":1}],38:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../Data/Route":9,"../Data/Travel":10,"dup":2}],39:[function(require,module,exports){
+},{"../Data/Route":9,"../Data/Travel":10,"../util/Utilities":50,"dup":2}],39:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
 },{"../UI/Translator":27,"./Collection":37,"./ObjId":43,"./ObjType":44,"dup":3}],40:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
@@ -6036,7 +6147,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getUtilities = function ( ) {
+
+		/*
+		--- getUUID function --------------------------------------------------------------------------------------------------
+		
+		This function returns an unique identifier like UUID
+		Adapted from stackoverflow.com :-)
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
+		var getUUID = function ( ) {
+			function Random4 ( ) {
+				return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 ).substring ( 1 );
+			}
+			return Random4 ( ) + Random4 ( ) + '-' + Random4 ( ) + '-' + Random4 ( ) + '-' +Random4 ( ) + '-' + Random4 ( ) + Random4 ( ) + Random4 ( ) ;
+		};
+
 		return {
+			
+			/*
+			--- UUID getter --------------------------------------------------------------------------------------------------------
+			*/
+
+			get UUID ( ) { return getUUID ( ); },
+						
 			/* 
 			--- storageAvailable function ------------------------------------------------------------------------------------------
 			

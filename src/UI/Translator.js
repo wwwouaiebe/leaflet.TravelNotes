@@ -56,12 +56,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			msgstr : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
 		},
 		{
-			msgid : "HTMLViewsFactory - Distance",
-			msgstr : ":"
+			msgid : "HTMLViewsFactory - TransitMode bike",
+			msgstr : "un vélo"
 		},
 		{
-			msgid : "HTMLViewsFactory - Time",
-			msgstr : "-"
+			msgid : "HTMLViewsFactory - TransitMode car",
+			msgstr : "une voiture"
+		},
+		{
+			msgid : "HTMLViewsFactory - TransitMode pedestrian",
+			msgstr : "un piéton"
+		},
+		{
+			msgid : "HTMLViewsFactory - Route footer",
+			msgstr : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
+		},
+		{
+			msgid : "HTMLViewsFactory - Travel footer",
+			msgstr : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a> <a href='http://www.ouaie.be/' target='_Blank'>© Christian Guyette 2017</a>"
 		},
 		{
 			msgid : "ItineraryEditorUI - Itinerary and notes",
@@ -322,6 +334,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		{
 			msgid : "TravelEditorUI - Open travel",
 			msgstr : "Ouvrir un fichier"
+		},
+		{
+			msgid : "TravelEditorUI - Open travel roadbook",
+			msgstr : "Ouvrir le livre de voyage"
 		},
 		{
 			msgid : "TravelEditorUI - Undo",

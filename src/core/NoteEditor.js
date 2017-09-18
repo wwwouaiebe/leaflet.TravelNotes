@@ -80,6 +80,7 @@ To do: translations
 				else {
 					this.addNote ( note, routeObjId );
 				}
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
 
 			addNote : function ( note, routeObjId ) {
@@ -93,6 +94,7 @@ To do: translations
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				_MapEditor.addNote ( note );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 
 			editNote : function ( noteObjId ) {
@@ -110,6 +112,7 @@ To do: translations
 					noteAndRoute.route.notes.remove ( noteObjId );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
 			getMapContextMenu :function ( latLng ) {

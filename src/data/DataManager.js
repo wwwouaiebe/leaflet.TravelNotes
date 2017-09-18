@@ -30,7 +30,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				global.travel = require ( '../Data/Travel' ) ( );
 				global.mapObjects = new Map ( );
 				global.routing = {};
+				global.UUID = require ( '../util/Utilities' ) ( ).UUID;
 			},
+			get UUID ( ) { return global.UUID; },
 			
 			get routing ( ) { return global.routing; },
 			set routing ( Routing ) { global.routing = Routing; },

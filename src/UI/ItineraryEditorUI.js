@@ -244,7 +244,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
-			dataDiv.appendChild ( htmlViewsFactory.routeHeader );
+			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 			
 			var childCounter;
 			var childNodes;
@@ -258,7 +258,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				dataDiv.removeChild ( routeManeuversNotesList );
 			}
 			
-			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotes );
+			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;

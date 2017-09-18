@@ -133,7 +133,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	color: red;
 }
-.TravelNotes-Control-RouteManeuversNotesList
+.TravelNotes-Control-routeManeuversAndNotes
 {
 	display: table;
 	border-spacing: 0.4em 0.2em;

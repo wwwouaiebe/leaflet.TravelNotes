@@ -199,12 +199,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					id : 'TravelNotes-Control-OpenTravelButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
-					innerHTML : '&#x23CD;'
+					innerHTML : '&#x1F4C2;'
 				}, 
 				openTravelFakeDiv 
 			);
 			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
 			
+			var openTravelRoadbookButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
+					innerHTML : '<a href="roadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+				}, 
+				buttonsDiv
+			);
+
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 

@@ -21,7 +21,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var getUtilities = function ( ) {
+
+		/*
+		--- getUUID function --------------------------------------------------------------------------------------------------
+		
+		This function returns an unique identifier like UUID
+		Adapted from stackoverflow.com :-)
+
+		------------------------------------------------------------------------------------------------------------------------
+		*/
+
+		var getUUID = function ( ) {
+			function Random4 ( ) {
+				return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 ).substring ( 1 );
+			}
+			return Random4 ( ) + Random4 ( ) + '-' + Random4 ( ) + '-' + Random4 ( ) + '-' +Random4 ( ) + '-' + Random4 ( ) + Random4 ( ) + Random4 ( ) ;
+		};
+
 		return {
+			
+			/*
+			--- UUID getter --------------------------------------------------------------------------------------------------------
+			*/
+
+			get UUID ( ) { return getUUID ( ); },
+						
 			/* 
 			--- storageAvailable function ------------------------------------------------------------------------------------------
 			
