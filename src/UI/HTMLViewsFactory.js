@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_HTMLElementsFactory.create (
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'Travel-Notes-IconCellDiv',
+					className : _ClassNamePrefix + 'Travel-Notes-IconCell',
 					innerHTML : note.iconContent
 				}, 
 				rowDiv
@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var noteElement = _HTMLElementsFactory.create (
 				'div',
 				{ 
-					className : _ClassNamePrefix + 'Travel-Notes-CellDiv',
+					className : _ClassNamePrefix + 'Travel-Notes-Cell',
 					innerHTML : _NoteEditor.getNoteHTML ( note, _ClassNamePrefix )
 				}, 
 				rowDiv
@@ -89,7 +89,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! travelNotesIterator.done ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
-					{ className : _ClassNamePrefix + 'Travel-Notes-RowDiv'}, 
+					{ className : _ClassNamePrefix + 'Travel-Notes-Row'}, 
 					travelNotesHTML
 				);
 				 _AddNoteHTML ( travelNotesIterator.value, rowDiv ) ;
@@ -109,7 +109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetRouteManeuversAndNotesHTML = function ( route ) {
-			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'routeManeuversAndNotes' } ); 
+			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Route-ManeuversAndNotes' } ); 
 			
 			var notesIterator = route.notes.iterator;
 			var notesDone =  notesIterator.done;
@@ -122,17 +122,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			while ( ! ( maneuversDone && notesDone ) ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
-					{ className : _ClassNamePrefix + 'ItineraryRowDiv'}, 
+					{ className : _ClassNamePrefix + 'Route-ManeuversAndNotes-Row' }, 
 					routeManeuversAndNotesHTML
 				);
 
 				if ( maneuversDistance <= notesDistance ) {
 					if ( ! maneuversDone ) {
-						rowDiv.classList.add ( _ClassNamePrefix + 'ManeuverRowDiv' );
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'iconCellDiv ' + _ClassNamePrefix + maneuversIterator.value.iconName,
+								className : _ClassNamePrefix + 'Route-ManeuversAndNotes-IconCell ' + 'TravelNotes-ManeuverNote-' + maneuversIterator.value.iconName,
 							}, 
 							rowDiv
 						);
@@ -146,14 +145,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 									'HTMLViewsFactory - ToNextInstruction', 
 									{
 										distance : _Utilities.formatDistance ( maneuversIterator.value.distance ),
-										duration : _Utilities.formatTime (maneuversIterator)
+										duration : _Utilities.formatTime (maneuversIterator.value.duration )
 									}
 								) + '</div>';
 						}
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
-								className : _ClassNamePrefix + 'ItineraryCellDiv ' + _ClassNamePrefix + 'ItineraryManeuverDiv',
+								className : _ClassNamePrefix + 'Route-ManeuversAndNotes-Cell',
 								innerHTML : maneuverText
 							}, 
 							rowDiv

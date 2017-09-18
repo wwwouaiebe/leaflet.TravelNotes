@@ -41,7 +41,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _ParseResponse = function ( requestResponse ) {
 			_RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _Config.language );
-			_RequestStarted = false;			
+			_RequestStarted = false;
+			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
+			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
+			
 			require ( './RouteEditor' ) ( ).endRouting ( );
 		};
 		

@@ -342,3 +342,207 @@
 {
 	background-image : url('../icons/NotesIcons/kUturnRightBig.png');
 }
+.TravelNotes-Control-kArriveDefault                                            
+{
+	background-image: url('../icons/RoutingIcons/kArriveDefaultBig.png');
+}
+.TravelNotes-Control-kArriveLeft                                                 
+{
+	background-image: url('../icons/RoutingIcons/kArriveLeftBig.png');
+}
+.TravelNotes-Control-kArriveRight                                                 
+{
+	background-image: url('../icons/RoutingIcons/kArriveRightBig.png');
+}
+.TravelNotes-Control-kContinueLeft                                                
+{
+	background-image: url('../icons/RoutingIcons/kContinueLeftBig.png');
+}
+.TravelNotes-Control-kContinueRight                                               
+{
+	background-image: url('../icons/RoutingIcons/kContinueRightBig.png');
+}
+.TravelNotes-Control-kContinueSharpLeft                                           
+{
+	background-image: url('../icons/RoutingIcons/kContinueSharpLeftBig.png');
+}
+.TravelNotes-Control-kContinueSharpRight                                          
+{
+	background-image: url('../icons/RoutingIcons/kContinueSharpRightBig.png');
+}
+.TravelNotes-Control-kContinueSlightLeft                                          
+{
+	background-image: url('../icons/RoutingIcons/kContinueSlightLeftBig.png');
+}
+.TravelNotes-Control-kContinueSlightRight                                         
+{
+	background-image: url('../icons/RoutingIcons/kContinueSlightRightBig.png');
+}
+.TravelNotes-Control-kContinueStraight                                            
+{
+	background-image: url('../icons/RoutingIcons/kContinueStraightBig.png');
+}
+.TravelNotes-Control-kDepartDefault                                               
+{
+	background-image: url('../icons/RoutingIcons/kDepartDefaultBig.png');
+}
+.TravelNotes-Control-kDepartLeft                                                  
+{
+	background-image: url('../icons/RoutingIcons/kDepartLeftBig.png');
+}
+.TravelNotes-Control-kDepartRight                                                 
+{
+	background-image: url('../icons/RoutingIcons/kDepartRightBig.png');
+}
+.TravelNotes-Control-kEndOfRoadLeft                                               
+{
+	background-image: url('../icons/RoutingIcons/kEndOfRoadLeftBig.png');
+}
+.TravelNotes-Control-kEndOfRoadRight                                              
+{
+	background-image: url('../icons/RoutingIcons/kEndOfRoadRightBig.png');
+}
+.TravelNotes-Control-kForkLeft                                                    
+{
+	background-image: url('../icons/RoutingIcons/kForkLeftBig.png');
+}
+.TravelNotes-Control-kForkRight                                                   
+{
+	background-image: url('../icons/RoutingIcons/kForkRightBig.png');
+}
+.TravelNotes-Control-kMergeDefault                                                
+{
+	background-image: url('../icons/RoutingIcons/kMergeDefaultBig.png');
+}
+.TravelNotes-Control-kMergeLeft                                                   
+{
+	background-image: url('../icons/RoutingIcons/kMergeLeftBig.png');
+}
+.TravelNotes-Control-kMergeRight                                                  
+{
+	background-image: url('../icons/RoutingIcons/kMergeRightBig.png');
+}
+.TravelNotes-Control-kNewNameLeft                                                 
+{
+	background-image: url('../icons/RoutingIcons/kNewNameLeftBig.png');
+}
+.TravelNotes-Control-kNewNameRight                                                
+{
+	background-image: url('../icons/RoutingIcons/kNewNameRightBig.png');
+}
+.TravelNotes-Control-kNewNameSharpLeft                                            
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSharpLeftBig.png');
+}
+.TravelNotes-Control-kNewNameSharpRight                                           
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSharpRightBig.png');
+}
+.TravelNotes-Control-kNewNameSlightLeft                                           
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSlightLeftBig.png');
+}
+.TravelNotes-Control-kNewNameSlightRight                                          
+{
+	background-image: url('../icons/RoutingIcons/kNewNameSlightRightBig.png');
+}
+.TravelNotes-Control-kNewNameStraight                                             
+{
+	background-image: url('../icons/RoutingIcons/kNewNameStraightBig.png');
+}
+.TravelNotes-Control-kOffRampLeft                                                 
+{
+	background-image: url('../icons/RoutingIcons/kOffRampLeftBig.png');
+}
+.TravelNotes-Control-kOffRampRight                                                
+{
+	background-image: url('../icons/RoutingIcons/kOffRampRightBig.png');
+}
+.TravelNotes-Control-kOnRampLeft                                                  
+{
+	background-image: url('../icons/RoutingIcons/kOnRampLeftBig.png');
+}
+.TravelNotes-Control-kOnRampRight                                                 
+{
+	background-image: url('../icons/RoutingIcons/kOnRampRightBig.png');
+}
+.TravelNotes-Control-kRotaryLeft                                                  
+{
+	background-image: url('../icons/RoutingIcons/kRotaryLeftBig.png');
+}
+.TravelNotes-Control-kRotaryRight                                                 
+{
+	background-image: url('../icons/RoutingIcons/kRotaryRightBig.png');
+}
+.TravelNotes-Control-kRoundaboutLeft                                              
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutLeftBig.png');
+}
+.TravelNotes-Control-kRoundaboutRight                                             
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutRightBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnLeft                                          
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnLeftBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnRight                                         
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnRightBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSharpLeft                                     
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSharpLeftBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSharpRight                                    
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSharpRightBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSlightLeft                                    
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSlightLeftBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnSlightRight                                   
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnSlightRightBig.png');
+}
+.TravelNotes-Control-kRoundaboutTurnStraight                                      
+{
+	background-image: url('../icons/RoutingIcons/kRoundaboutTurnStraightBig.png');
+}
+.TravelNotes-Control-kTurnLeft                                                    
+{
+	background-image: url('../icons/RoutingIcons/kTurnLeftBig.png');
+}
+.TravelNotes-Control-kTurnRight                                                   
+{
+	background-image: url('../icons/RoutingIcons/kTurnRightBig.png');
+}
+.TravelNotes-Control-kTurnSharpLeft                                               
+{
+	background-image: url('../icons/RoutingIcons/kTurnSharpLeftBig.png');
+}
+.TravelNotes-Control-kTurnSharpRight                                              
+{
+	background-image: url('../icons/RoutingIcons/kTurnSharpRightBig.png');
+}
+.TravelNotes-Control-kTurnSlightLeft                                              
+{
+	background-image: url('../icons/RoutingIcons/kTurnSlightLeftBig.png');
+}
+.TravelNotes-Control-kTurnSlightRight                                             
+{
+	background-image: url('../icons/RoutingIcons/kTurnSlightRightBig.png');
+}
+.TravelNotes-Control-kTurnStraight                                                
+{
+	background-image: url('../icons/RoutingIcons/kTurnStraightBig.png');
+}
+.TravelNotes-Control-kTurnUturn                                                   
+{
+	background-image: url('../icons/RoutingIcons/kTurnUturnBig.png');
+}
+.TravelNotes-Control-kUndefined                                                   
+{
+	background-image: url('../icons/RoutingIcons/kUndefinedBig.png');
+}
