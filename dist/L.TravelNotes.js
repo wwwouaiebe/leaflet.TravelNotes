@@ -543,7 +543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _ObjType = require ( './ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getItinerary = function ( ) {
+	var getManeuver = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
 
@@ -629,7 +629,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItinerary;
+		module.exports = getManeuver;
 	}
 
 } ) ( );
@@ -3436,6 +3436,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( '../core/RouteEditor' ) ( ).saveEdition ( );
 	};
 	
+	var onGpxButton = function ( event ) {
+		event.stopPropagation ( );
+		require ( '../core/RouteEditor' ) ( ).saveGpx ( );
+	};
+	
 	var onCancelRouteButton = function ( event ) {
 		event.stopPropagation ( );
 		require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
@@ -3532,6 +3537,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
+			var gpxButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-gpxButton',
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'RouteEditorUI - gpx' ), 
+					innerHTML : 'gpx'
+				},
+				buttonsDiv 
+			);
+			gpxButton.addEventListener ( 'click', onGpxButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'div',
 				{ 
@@ -5433,6 +5449,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		
 		return {
+			saveGpx : function ( ) {
+				var tab0 = "\n";
+				var tab1 = "\n\t";
+				var tab2 = "\n\t\t";
+				var tab3 = "\n\t\t\t";
+				var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
+				var gpxString = "<?xml version='1.0'?>" + tab0;
+				gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
+
+				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				while ( ! wayPointsIterator.done )
+				{
+					gpxString += 
+						tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
+						timeStamp + "/>";
+					
+				}
+				gpxString += tab1 + "<rte>";
+				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
+				while ( ! maneuverIterator.done ) {
+					var wayPoint = _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+					var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
+					gpxString +=
+						tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
+				}
+				gpxString += tab1 + "</rte>";
+				gpxString += tab1 + "<trk>";
+				gpxString += tab2 + "<trkseg>";
+				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+				while ( ! itineraryPointsIterator.done ) {
+					gpxString +=
+						tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
+				}
+				gpxString += tab2 + "</trkseg>";				
+				gpxString += tab1 + "</trk>";
+				gpxString += tab0 + "</gpx>";
+				
+				var fileName = _DataManager.editedRoute.name;
+				if ( '' === fileName ) {
+					fileName = 'TravelNote';
+				}
+				fileName += '.gpx';
+				require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
+			},
 			getRouteHTML : function ( route, classNamePrefix ) {
 				var distance = 0;
 				var duration = 0;

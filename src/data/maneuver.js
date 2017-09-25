@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _ObjType = require ( './ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getItinerary = function ( ) {
+	var getManeuver = function ( ) {
 		
 		var _ObjId = require ( './ObjId' ) ( );
 
@@ -105,7 +105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItinerary;
+		module.exports = getManeuver;
 	}
 
 } ) ( );

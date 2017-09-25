@@ -71,6 +71,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		require ( '../core/RouteEditor' ) ( ).saveEdition ( );
 	};
 	
+	var onGpxButton = function ( event ) {
+		event.stopPropagation ( );
+		require ( '../core/RouteEditor' ) ( ).saveGpx ( );
+	};
+	
 	var onCancelRouteButton = function ( event ) {
 		event.stopPropagation ( );
 		require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
@@ -167,6 +172,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv 
 			);
 			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
+			var gpxButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-gpxButton',
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'RouteEditorUI - gpx' ), 
+					innerHTML : 'gpx'
+				},
+				buttonsDiv 
+			);
+			gpxButton.addEventListener ( 'click', onGpxButton, false );
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'div',
 				{ 
