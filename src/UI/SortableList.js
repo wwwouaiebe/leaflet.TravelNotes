@@ -126,50 +126,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
-		this.addItem = function ( name, dataObjId, isLastItem ) {
+		this.addItem = function ( name, indexName, placeholder, dataObjId, isLastItem  ) {
 	
 			name = name || '';
+			indexName = indexName || '';
+			placeholder = placeholder || '';
 			dataObjId = dataObjId || -1;
-			
-			var placeholder = '';
-			if ( 1 === this.options.placeholders.length ) {
-				placeholder = this.options.placeholders [ 0 ];
-			}
-			if ( 3 === this.options.placeholders.length ) {
-				switch ( this.items.length ) {
-					case 0:
-					placeholder = this.options.placeholders [ 0 ];
-					break;
-					default:
-					placeholder = this.options.placeholders [ 1 ];
-					break;
-				}
-				if ( isLastItem ) {
-					placeholder = this.options.placeholders [ 2 ];
-				}
-			}
-			
-			var indexName = '';
-			if ( 1 === this.options.indexNames.length ) {
-				indexName = this.options.indexNames [ 0 ];
-			}
-			if ( 3 === this.options.indexNames.length ) {
-				switch ( this.items.length ) {
-					case 0:
-					indexName = this.options.indexNames [ 0 ];
-					break;
-					default:
-					indexName = this.options.indexNames [ 1 ];
-					break;
-				}
-				if ( isLastItem ) {
-					indexName = this.options.indexNames [ 2 ];
-				}
-			}
-			if ( 'index' === indexName )
-			{
-				indexName = this.items.length;
-			}
 			
 			var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'TravelNotes-SortableList-Item' } );
 
@@ -215,7 +177,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			// options.listStyle = 'AllSort' : all items can be sorted or deleted
 			// options.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 			
-			this.options = { minSize : 2, listStyle : 'AllSort', placeholders : [] , indexNames : [], id : 'TravelNotes-SortableList-Container' } ;
+			this.options = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' } ;
 			for ( var option in options ) {
 				this.options [ option ] = options [ option ];
 			}

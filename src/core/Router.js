@@ -44,6 +44,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_RequestStarted = false;
 			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
+			_DataManager.editedRoute.distance = 0;
+			_DataManager.editedRoute.duration = 0;
+			
+			var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				_DataManager.editedRoute.distance += maneuverIterator.value.distance;
+				_DataManager.editedRoute.duration += maneuverIterator.value.duration;
+			}
+
 			
 			require ( './RouteEditor' ) ( ).endRouting ( );
 		};

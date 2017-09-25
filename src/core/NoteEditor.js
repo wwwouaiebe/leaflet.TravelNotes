@@ -88,9 +88,10 @@ To do: translations
 					_DataManager.travel.notes.add ( note );
 				}
 				else {
-					var notes = _DataManager.getRoute ( routeObjId ).notes;
-					notes.add ( note );
-					notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					var route = _DataManager.getRoute ( routeObjId );
+					note.chainedDistance = route.chainedDistance;
+					route.notes.add ( note );
+					route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
 				_MapEditor.addNote ( note );
@@ -144,7 +145,7 @@ To do: translations
 			},
 			
 			getNoteHTML : function ( note, classNamePrefix ) {
-
+			
 			var noteText = '';
 				if ( 0 !== note.tooltipContent.length ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
@@ -175,7 +176,7 @@ To do: translations
 						_Translator.getText ( 
 							'NoteEditor - distance', 
 							{ 
-								distance: _Utilities.formatDistance ( note.distance )
+								distance: _Utilities.formatDistance ( note.chainedDistance + note.distance )
 							}
 						) + '</div>';
 				}

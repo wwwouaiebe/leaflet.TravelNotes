@@ -37,6 +37,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _Chain = false;
 		
+		var _ChainedDistance = 0;
+		
+		var _Distance = 0;
+		
+		var _Duration = 0;
+		
 		var _ObjId = require ( './ObjId' ) ( );
 		
 		return {
@@ -58,6 +64,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get chain ( ) { return _Chain; },
 			set chain ( Chain ) { _Chain = Chain; },
 			
+			get chainedDistance ( ) { return _ChainedDistance; },
+			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
+			
+			get distance ( ) { return _Distance; },
+			set distance ( Distance ) { _Distance = Distance; },
+			
+			get duration ( ) { return _Duration; },
+			set duration ( Duration ) { _Duration = Duration; },
+			
 			get objId ( ) { return _ObjId; },
 			get objType ( ) { return _ObjType; },
 			
@@ -70,6 +85,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					width : _Width,
 					color : _Color,
 					chain :_Chain,
+					distance : _Distance,
+					duration : _Duration,
+					chainedDistance : _ChainedDistance,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -83,6 +101,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Width = Object.width || 5;
 				_Color = Object.color || '#000000';
 				_Chain = Object.chain || false;
+				_Distance = Object.distance;
+				_Duration = Object.duration;
+				_ChainedDistance = Object.chainedDistance;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

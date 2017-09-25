@@ -96,7 +96,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			   get value ( ) { return nextIndex < _Array.length ?  _Array [ nextIndex ] : null; },
 			   get done ( ) { return ++ nextIndex  >= _Array.length; },
 			   get first ( ) { return 0 === nextIndex; },
-			   get last ( ) { return nextIndex  >= _Array.length - 1; }
+			   get last ( ) { return nextIndex  >= _Array.length - 1; },
+			   get index ( ) { return nextIndex; }
 			};
 		};
 		

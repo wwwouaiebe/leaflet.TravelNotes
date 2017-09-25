@@ -33,6 +33,8 @@ To do: translations
 			route.width = parseInt ( widthInput.value );
 			route.chain = chainInput.checked;
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 			return true;
 		};
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;

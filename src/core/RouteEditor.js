@@ -23,15 +23,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
-	
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
-	
+		
 	var getRouteEditor = function ( ) {
-
 		
 		return {
 			saveGpx : function ( ) {
@@ -78,24 +76,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				fileName += '.gpx';
 				require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
 			},
+			
 			getRouteHTML : function ( route, classNamePrefix ) {
-				var distance = 0;
-				var duration = 0;
-
-				var maneuverIterator = route.itinerary.maneuvers.iterator;
-				while ( ! maneuverIterator.done ) {
-					distance += maneuverIterator.value.distance;
-					duration += maneuverIterator.value.duration;
-				}
-				distance = _Utilities.formatDistance ( distance );
-				duration = _Utilities.formatTime ( duration );
-				
 				return '<div class="' + classNamePrefix + 'Route-Header-Name">' +
 					route.name + 
 					'</div><div class="' + classNamePrefix + 'Route-Header-Distance">' +
-					_Translator.getText ( 'RouteEditor - Distance', { distance : distance } ) + '</div>' +
+					_Translator.getText ( 'RouteEditor - Distance', { distance : _Utilities.formatDistance ( route.distance ) } ) + '</div>' +
 					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
-					_Translator.getText ( 'RouteEditor - Duration', { duration : duration } ) + '</div>';
+					_Translator.getText ( 'RouteEditor - Duration', { duration : _Utilities.formatTime ( route.duration ) } ) + '</div>';
+			},
+			
+			chainRoutes : function ( ) {
+				var routesIterator = _DataManager.travel.routes.iterator;
+				var chainedDistance = 0;
+				while ( ! routesIterator.done ) {
+					if ( routesIterator.value.chain ) {
+						routesIterator.value.chainedDistance = chainedDistance;
+						chainedDistance += routesIterator.value.distance;
+					}
+					else {
+						routesIterator.value.chainedDistance = 0;
+					}
+					var notesIterator = routesIterator.value.notes.iterator;
+					while (! notesIterator.done ) {
+						notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
+					}
+				}
 			},
 			
 			startRouting : function ( ) {
@@ -128,6 +134,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
 				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
+				this.chainRoutes ( );
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
@@ -159,6 +166,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
 				_MapEditor.removeRoute ( initialRoute, true, false );
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
+				this.chainRoutes ( );
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
 				_ItineraryEditor.setItinerary ( );
@@ -166,11 +174,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			removeRoute : function ( routeObjId ) { 
 				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
+				this.chainRoutes ( );
 			},
+			
 			routeProperties : function ( routeObjId ) {
 				var route = _DataManager.getRoute ( routeObjId );
 				require ( '../UI/RoutePropertiesDialog' ) ( route );
 			},
+			
 			addWayPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );

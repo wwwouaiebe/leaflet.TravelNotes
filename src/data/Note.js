@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _Lat = 0;
 		var _Lng = 0;
 		var _Distance = -1;
+		var _ChainedDistance = 0;
 		
 		return {
 			
@@ -109,6 +110,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			set distance ( Distance ) { _Distance = Distance; },
 
+			get chainedDistance ( ) { return _ChainedDistance; },
+			
+			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
+
 			get objId ( ) { return _ObjId; },
 			
 			get objType ( ) { return _ObjType; },
@@ -129,6 +134,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					lat : _Lat,
 					lng : _Lng,
 					distance : _Distance,
+					chainedDistance : _ChainedDistance,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -150,6 +156,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_Distance = Object.distance || -1;
+				_ChainedDistance = Object.chainedDistance;
 				_ObjId = require ( './ObjId' ) ( );
 			}
 		};

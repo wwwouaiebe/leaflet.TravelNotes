@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
-	
+
 	var getHTMLViewsFactory = function ( ) {
 				
 		var _AddNoteHTML = function ( note, rowDiv ) {
@@ -212,6 +212,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetTravelHTML = function ( ) {
+			
 			var travelHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Travel'} ); 
 			
 			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
