@@ -216,87 +216,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			"kUndefined",//kTransitConnectionDestination = 35;
 			"kUndefined",//kPostTransitConnectionDestination = 36;
 		];
-		var _SimplifiedInstructions = 
-		{
-			fr : [
-				"", //kNone = 0;
-				"Départ", //kStart = 1;
-				"Départ à votre droite", //kStartRight = 2;
-				"Départ à votre gauche", //kStartLeft = 3;
-				"Arrivée", //kDestination = 4;
-				"Arrivée à droite", //kDestinationRight = 5;
-				"Arrvée à gauche", //kDestinationLeft = 6;
-				"Continuer", //kBecomes = 7;
-				"Continuer", //kContinue = 8;
-				"Tourner légèrement à droite", //kSlightRight = 9;
-				"Tourner  à droite", //kRight = 10;
-				"Tourner franchement à droite", //kSharpRight = 11;
-				"Demi-tour vers la droite", //kUturnRight = 12;
-				"Demi-tour vers la gauche", //kUturnLeft = 13;
-				"Tourner franchement à gauche", //kSharpLeft = 14;
-				"Tourner à gauche", //kLeft = 15;
-				"Tourner légèrement à gauche", //kSlightLeft = 16;
-				"Prendre l'entrée en face", //kRampStraight = 17;
-				"Prendre l'entrée à droite", //kRampRight = 18;
-				"Prendre l'entrée à gauche", //kRampLeft = 19;
-				"Prendre la sortie à droite", //kExitRight = 20;
-				"Prendre la sortie à gauche", //kExitLeft = 21;
-				"Rester au centre", //kStayStraight = 22;
-				"Rester à droite", //kStayRight = 23;
-				"Rester à gauche", //kStayLeft = 24;
-				"Fusionner", //kMerge = 25;
-				"Entrer dans le rond-point", //kRoundaboutEnter = 26;
-				"Sortir du rond-point", //kRoundaboutExit = 27;
-				"Entrer dans le ferry", //kFerryEnter = 28;
-				"Sortir du ferry", //kFerryExit = 29;
-				"", //kTransit = 30;
-				"", //kTransitTransfer = 31;
-				"", //kTransitRemainOn = 32;
-				"", //kTransitConnectionStart = 33;
-				"", //kTransitConnectionTransfer = 34;
-				"", //kTransitConnectionDestination = 35;
-				"", //kPostTransitConnectionDestination = 36;
-			],
-			en : [
-				"", //kNone = 0;
-				"Départ", //kStart = 1;
-				"Départ à votre droite", //kStartRight = 2;
-				"Départ à votre gauche", //kStartLeft = 3;
-				"Arrivée", //kDestination = 4;
-				"Arrivée à droite", //kDestinationRight = 5;
-				"Arrvée à gauche", //kDestinationLeft = 6;
-				"Continuer", //kBecomes = 7;
-				"Continuer", //kContinue = 8;
-				"Tourner légèrement à droite", //kSlightRight = 9;
-				"Tourner à droite", //kRight = 10;
-				"Tourner franchement à droite", //kSharpRight = 11;
-				"Demi-tour vers la droite", //kUturnRight = 12;
-				"Demi-tour vers la gauche", //kUturnLeft = 13;
-				"Tourner franchement à gauche", //kSharpLeft = 14;
-				"Tourner à gauche", //kLeft = 15;
-				"Tourner légèrement à gauche", //kSlightLeft = 16;
-				"Prendre l'entrée en face", //kRampStraight = 17;
-				"Prendre l'entrée à droite", //kRampRight = 18;
-				"Prendre l'entrée à gauche", //kRampLeft = 19;
-				"Prendre la sortie à droite", //kExitRight = 20;
-				"Prendre la sortie à gauche", //kExitLeft = 21;
-				"Rester au centre", //kStayStraight = 22;
-				"Rester à droite", //kStayRight = 23;
-				"Rester à gauche", //kStayLeft = 24;
-				"Fusionner", //kMerge = 25;
-				"Entrer dans le rond-point", //kRoundaboutEnter = 26;
-				"Sortir du rond-point", //kRoundaboutExit = 27;
-				"Entrer dans le ferry", //kFerryEnter = 28;
-				"Sortir du ferry", //kFerryExit = 29;
-				"", //kTransit = 30;
-				"", //kTransitTransfer = 31;
-				"", //kTransitRemainOn = 32;
-				"", //kTransitConnectionStart = 33;
-				"", //kTransitConnectionTransfer = 34;
-				"", //kTransitConnectionDestination = 35;
-				"", //kPostTransitConnectionDestination = 36;
-			]
-		};
 
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
@@ -305,7 +224,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
 			
-			var simplifiedInstructions = _SimplifiedInstructions [ userLanguage ] || _SimplifiedInstructions.en;
 			var itineraryPointsDistance = 0;
 			var maneuversDistance = 0;
 			response.trip.legs.forEach ( 
@@ -335,8 +253,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 									}
 								);
 							}
-							travelNotesManeuver.direction = '---';
-							travelNotesManeuver.simplifiedInstruction = simplifiedInstructions [ mapzenManeuver.type || 0 ]; 
 							travelNotesManeuver.distance = ( mapzenManeuver.length || 0 ) * 1000;
 							maneuversDistance += travelNotesManeuver.distance;
 							travelNotesManeuver.duration = mapzenManeuver.time || 0;

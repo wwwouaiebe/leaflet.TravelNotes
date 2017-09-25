@@ -195,40 +195,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			"kRoundaboutRight", //USE_ROUNDABOUT = 6
 		];
 
-		var _SimplifiedInstructions = 
-		{
-			fr : [
-				"",
-				"Tourner franchement à gauche", //TURN_SHARP_LEFT = -3
-				"Tourner à gauche", //TURN_LEFT = -2
-				"Tourner légèrement à gauche", //TURN_SLIGHT_LEFT = -1
-				"Continuer", //CONTINUE_ON_STREET = 0
-				"Tourner légèrement à droite", //TURN_SLIGHT_RIGHT = 1
-				"Tourner à droite", //TURN_RIGHT = 2
-				"Tourner franchement à droite", //TURN_SHARP_RIGHT = 3
-				"Arrivée", //FINISH = 4
-				"", //VIA_REACHED = 5
-				"Entrer dans le rond-point", //USE_ROUNDABOUT = 6
-			],
-			en : [
-				"",
-				"Tourner franchement à gauche", //TURN_SHARP_LEFT = -3
-				"Tourner à gauche", //TURN_LEFT = -2
-				"Tourner légèrement à gauche", //TURN_SLIGHT_LEFT = -1
-				"Continuer", //CONTINUE_ON_STREET = 0
-				"Tourner légèrement à droite", //TURN_SLIGHT_RIGHT = 1
-				"Tourner à droite", //TURN_RIGHT = 2
-				"Tourner franchement à droite", //TURN_SHARP_RIGHT = 3
-				"Arrivée", //FINISH = 4
-				"", //VIA_REACHED = 5
-				"Entrer dans le rond-point", //USE_ROUNDABOUT = 6
-			]
-		};
-		
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
 			var response = JSON.parse( requestResponse );
-console.log ( response );
 
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
@@ -259,9 +228,6 @@ console.log ( response );
 							var maneuver = L.travelNotes.interface ( ).maneuver;
 							maneuver.iconName = _IconList [ instruction.sign + 4 || 0]  ;
 							maneuver.instruction = instruction.text || '';
-							maneuver.streetName = instruction.street_name || '';
-							maneuver.direction = '---' ;
-							maneuver.simplifiedInstruction = simplifiedInstructions [ instruction.sign + 4 || 0 ];
 							maneuver.duration = instruction.time / 1000;
 							maneuver.distance = instruction.distance;
 							maneuversDistance += maneuver.distance;

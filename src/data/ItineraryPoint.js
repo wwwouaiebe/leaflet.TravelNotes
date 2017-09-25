@@ -13,41 +13,65 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ItineraryPoint.js file --------------------------------------------------------------------------------------------
+This file contains:
+	- the ItineraryPoint object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 (function() {
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getItineraryPoint = function ( ) {
+	/* 
+	--- ItineraryPoint object -----------------------------------------------------------------------------------------
+	
+	Patterns : Closure
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var ItineraryPoint = function ( ) {
 		
+		// Private variables
+
 		var _Lat = 0;
+
 		var _Lng = 0;
+
 		var _Distance = 0;
+
 		var _ManeuverObjId = -1;
 		
-		var _ObjId = require ( './ObjId' ) ( );
+		var _ObjId = require ( '../data/ObjId' ) ( );
 		
 		return {
 			
+			// getters and setters...
+
 			get lat ( ) { return _Lat;},
-			
 			set lat ( Lat ) { _Lat = Lat; },
 			
 			get lng ( ) { return _Lng;},
-			
 			set lng ( Lng ) { _Lng = Lng; },
 			
 			get latLng ( ) { return [ _Lat, _Lng ];},
-			
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 
 			get distance ( ) { return _Distance;},
-			
 			set distance ( Distance ) { _Distance = Distance; },
 						
 			get maneuverObjId ( ) { return _ManeuverObjId;},
-			
 			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
 			
 			get objId ( ) { return _ObjId; },
@@ -64,26 +88,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					objType : _ObjType.object
 				};
 			},
-			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_Distance = Object.distance || 0;
 				_ManeuverObjId = Object.maneuverObjId || -1;
-				_ObjId = require ( './ObjId' ) ( );
+				_ObjId = require ( '../data/ObjId' ) ( );
 			}
 		};
 	};
 	
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryPoint;
+		module.exports = ItineraryPoint;
 	}
 
 } ) ( );
 
-/* --- End of MapData.js file --- */
+/*
+--- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
+*/

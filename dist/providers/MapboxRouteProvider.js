@@ -6312,42 +6312,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _DegreeToCompass = function ( degree ) {
-			if ( null === degree ) {
-				return '';
-			} 
-			else if ( degree >= 0 && degree <= 22 ) {
-				return 'N.';
-			} 
-			else if ( degree > 22 && degree < 68 ) {
-				return 'N.E.';
-			} 
-			else if ( degree >= 68 && degree <= 112 ) {
-				return 'E.';
-			} 
-			else if ( degree > 112 && degree < 158 ) {
-				return 'S.E.';
-			} 
-			else if ( degree >= 158 && degree <= 202 ) {
-				return 'S.';
-			} 
-			else if ( degree > 202 && degree < 248 ) {
-				return 'S.W.';
-			} 
-			else if ( degree >= 248 && degree <= 292 ) {
-				return 'W.';
-			} 
-			else if ( degree > 292 && degree < 338 ) {
-				return 'N.W.';
-			} 
-			else if ( degree >= 338 && degree <= 360 ) {
-				return 'N.';
-			} 
-			else {
-				return '';
-			}
-		};
-
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
 			var response = JSON.parse( requestResponse );
@@ -6389,10 +6353,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							var maneuver = L.travelNotes.interface ( ).maneuver;
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
 							maneuver.instruction = osrmTextInstructions.compile ( userLanguage, step );
-							maneuver.streetName = step.name;
-							maneuver.direction = _DegreeToCompass ( step.maneuver.bearing_after );
-							step.name = '';
-							maneuver.simplifiedInstruction = osrmTextInstructions.compile ( userLanguage, step );
 							maneuver.duration = step.duration;
 							var distance = 0;
 							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {

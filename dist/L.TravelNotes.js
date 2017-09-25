@@ -14,26 +14,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Collection.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the Collection object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 (function() {
 	
 	'use strict';
 	
-	var getCollection = function ( objName ) {
+	/* 
+	--- Collection object ---------------------------------------------------------------------------------------------
+	
+	Patterns : Closure
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var Collection = function ( objName ) {
+		
+		// Private variables and functions
 		
 		var _Array = [];
+
 		var _ObjName = objName;
-		
-		var _Sort = function ( compareFunction ) {
-			_Array.sort ( compareFunction );
-		};
-		
-		var _IndexOfObjId = function ( objId ) {
-			function haveObjId ( element ) {
-				return element.objId === objId;
-			}
-			return _Array.findIndex ( haveObjId );
-		};
 		
 		var _Add = function ( object ) {
 			if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== _ObjName ) ) {
@@ -44,6 +57,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return;
 		};
 		
+		var _First = function ( ) {
+			return _Array [ 0 ];
+		};
+
+		var _ForEach = function ( funct ) {
+			var result = null;
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+					result = funct ( iterator.value, result );
+			}
+			return result;
+		};
+		
 		var _GetAt = function ( objId ) {
 			var index = _IndexOfObjId ( objId );
 			if ( -1 === index ) {
@@ -52,43 +78,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return _Array [ index ];
 		};
 		
-		var _Reverse = function ( ) {
-			_Array.reverse ( );
+		var _GetObject = function ( ) {
+			var array = [ ];
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+				array.push ( iterator.value.object );
+			}
+			
+			return array;
 		};
 		
-		var _Remove = function ( objId ) {
-			var index = _IndexOfObjId ( objId );
-			if ( -1 === index ) {
-				throw 'invalid objId for remove function';
+		var _IndexOfObjId = function ( objId ) {
+			function haveObjId ( element ) {
+				return element.objId === objId;
 			}
-			_Array.splice ( _IndexOfObjId ( objId ), 1 );
-		};
-		
-		var _Replace = function ( oldObjId, object ) {
-			var index = _IndexOfObjId ( oldObjId );
-			if ( -1 === index ) {
-				throw 'invalid objId for replace function';
-			}
-			_Array [ index ] = object;
-		};
-		
-		var _RemoveAll = function ( ExceptFirstLast ) {
-			if ( ExceptFirstLast ) {
-				_Array.splice ( 1, _Array.length - 2 );
-			}
-			else {
-				_Array.length = 0;
-			}
-		};
-		
-		var _Swap = function ( objId, swapUp ) {
-			var index = _IndexOfObjId ( objId );
-			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
-				throw 'invalid objId for swap function';
-			}
-			var tmp = _Array [ index ];
-			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
-			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;	
+			return _Array.findIndex ( haveObjId );
 		};
 		
 		var _Iterator = function ( ) {
@@ -102,53 +106,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 		};
 		
-		var _First = function ( ) {
-			return _Array [ 0 ];
-		};
-
 		var _Last = function ( ) {
 			return _Array [ _Array.length - 1 ];
 		};
 		
-		var _ForEach = function ( funct ) {
-			var result = null;
-			var iterator = _Iterator ( );
-			while ( ! iterator.done ) {
-					result = funct ( iterator.value, result );
+		var _Remove = function ( objId ) {
+			var index = _IndexOfObjId ( objId );
+			if ( -1 === index ) {
+				throw 'invalid objId for remove function';
 			}
-			return result;
+			_Array.splice ( _IndexOfObjId ( objId ), 1 );
 		};
 		
-		var _GetObject = function ( ) {
-			var array = [ ];
-			var iterator = _Iterator ( );
-			while ( ! iterator.done ) {
-				array.push ( iterator.value.object );
+		var _RemoveAll = function ( ExceptFirstLast ) {
+			if ( ExceptFirstLast ) {
+				_Array.splice ( 1, _Array.length - 2 );
 			}
-			
-			return array;
+			else {
+				_Array.length = 0;
+			}
+		};
+		
+		var _Replace = function ( oldObjId, object ) {
+			var index = _IndexOfObjId ( oldObjId );
+			if ( -1 === index ) {
+				throw 'invalid objId for replace function';
+			}
+			_Array [ index ] = object;
+		};
+		
+		var _Reverse = function ( ) {
+			_Array.reverse ( );
 		};
 		
 		var _SetObject = function ( Objects ) {
-			var constructor;
 			_Array.length = 0;
 			var newObject;
 			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
 				switch ( _ObjName ) {
 					case 'Route' :
-					newObject = require ( './Route' ) ( );
+					newObject = require ( '../data/Route' ) ( );
 					break;
 					case 'Note' :
-					newObject = require ( './Note' ) ( );
+					newObject = require ( '../data/Note' ) ( );
 					break;
 					case 'WayPoint' :
-					newObject = require ( './WayPoint' ) ( );
+					newObject = require ( '../data/WayPoint' ) ( );
 					break;
 					case 'Maneuver' :
-					newObject = require ( './Maneuver' ) ( );
+					newObject = require ( '../data/Maneuver' ) ( );
 					break;
 					case 'ItineraryPoint' :
-					newObject = require ( './ItineraryPoint' ) ( );
+					newObject = require ( '../data/ItineraryPoint' ) ( );
 					break;
 					default: 
 					throw ( 'invalid ObjName ( ' + _ObjName +' ) in Collection._SetObject' );
@@ -157,82 +166,233 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Add ( newObject );
 			}
 		};
+		
+		var _Sort = function ( compareFunction ) {
+			_Array.sort ( compareFunction );
+		};
+		
+		var _Swap = function ( objId, swapUp ) {
+			var index = _IndexOfObjId ( objId );
+			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
+				throw 'invalid objId for swap function';
+			}
+			var tmp = _Array [ index ];
+			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
+			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;	
+		};
 
+		// Collection object
+		
 		return {
 			
-			sort : function ( compareFunction ) {
-				_Sort ( compareFunction );
-			},
+			/*
+			--- add function ------------------------------------------------------------------------------------------
+			
+			This function add an object to the collection
+			throw when the object type is invalid
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			
 			add : function ( object ) { 
 				_Add ( object );
 			},
 			
-			getAt : function ( objId ) {
-				return _GetAt ( objId );
-			},
+			/*
+			--- forEach function --------------------------------------------------------------------------------------
 			
-			reverse : function ( ) {
-				_Reverse ( );
-			},
-			
-			remove : function ( objId ) {
-				_Remove ( objId );
-			},
-			
-			replace : function ( oldObjId, object ) {
-				_Replace ( oldObjId, object ); 
-			},
-			
-			removeAll : function ( ExceptFirstLast ) {
-				_RemoveAll ( ExceptFirstLast );
-			},
-			
-			swap : function ( objId, swapUp ) {
-				_Swap ( objId, swapUp );
-			},
-			
+			This function executes a function on each object of the collection and returns the final result
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			forEach : function ( funct ) {
 				return _ForEach ( funct );
 			},
 			
-			get iterator ( ) { 
-				return _Iterator ( ); 
+			/*
+			--- getAt function ----------------------------------------------------------------------------------------
+			
+			This function returns the object with the given objId or null when the object is not found
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getAt : function ( objId ) {
+				return _GetAt ( objId );
 			},
 			
+			/*
+			--- remove function ---------------------------------------------------------------------------------------
+			
+			This function remove the object with the given objId 
+			throw when the object is not found
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			remove : function ( objId ) {
+				_Remove ( objId );
+			},
+			
+			/*
+			--- removeAll function ------------------------------------------------------------------------------------
+			
+			This function remove all objects in the collection 
+			when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			removeAll : function ( exceptFirstLast ) {
+				_RemoveAll ( exceptFirstLast );
+			},
+			
+			/*
+			--- replace function --------------------------------------------------------------------------------------
+			
+			This function replace the object identified by oldObjId with a new object 
+			throw when the object type is invalid
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			replace : function ( oldObjId, object ) {
+				_Replace ( oldObjId, object ); 
+			},
+			
+			/*
+			--- reverse function --------------------------------------------------------------------------------------
+			
+			This function reverse the objects in the collection 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			reverse : function ( ) {
+				_Reverse ( );
+			},
+			
+			/*
+			--- sort function -----------------------------------------------------------------------------------------
+			
+			This function sort the collection, using the compare function 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			sort : function ( compareFunction ) {
+				_Sort ( compareFunction );
+			},
+			
+			/*
+			--- swap function -----------------------------------------------------------------------------------------
+			
+			This function move up ( when sapUp is true ) or move down an object in the collection 
+			throw when the swap is not possible
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			swap : function ( objId, swapUp ) {
+				_Swap ( objId, swapUp );
+			},
+			
+			/*
+			--- first getter ------------------------------------------------------------------------------------------
+			
+			The first object in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get first ( ) {
 				return _First ( );
 			},
 			
+			/*
+			--- iterator getter ---------------------------------------------------------------------------------------
+			
+			Returns an iterator on the collection.
+			The iterator have the following properties:
+			value : the object pointed by the iterator
+			done : true when the iterator is at the end of the collection. Each time this property is called, the iterator move to the next object
+			first : true when the iterator is on the first object
+			last : true when the iterator is on the last object
+			index : the current position of the iterator in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			get iterator ( ) { 
+				return _Iterator ( ); 
+			},
+			
+			/*
+			--- last getter -------------------------------------------------------------------------------------------
+			
+			The last object in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get last ( ) {
 				return _Last ( );
 			},
+			
+			/*
+			--- length getter -----------------------------------------------------------------------------------------
+			
+			The length of the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			get length ( ) { 
+				return _Array.length; 
+			},
+			
+			/*
+			--- object getter -----------------------------------------------------------------------------------------
+			
+			Transform the collection into an array that can be used with JSON
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			
 			get object ( ) { 
 				return _GetObject ( );
 			},
 			
+			/*
+			--- object setter -----------------------------------------------------------------------------------------
+			
+			Transform an array to a collection
+			throw when an object in the array have an invalid type
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
 			set object ( Object ) {
 				_SetObject ( Object );
-			},
-			
-			get length ( ) { return _Array.length; }
+			}
 			
 		};
 	};
 	
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getCollection;
+		module.exports = Collection;
 	}
 
 } ) ( );
 
-
-},{"./ItineraryPoint":4,"./Maneuver":5,"./Note":6,"./Route":9,"./WayPoint":11}],2:[function(require,module,exports){
+/*
+--- End of Collection.js file -----------------------------------------------------------------------------------------
+*/
+},{"../data/ItineraryPoint":36,"../data/Maneuver":37,"../data/Note":38,"../data/Route":41,"../data/WayPoint":42}],2:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -335,7 +495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Data/Route":9,"../Data/Travel":10,"../util/Utilities":50}],3:[function(require,module,exports){
+},{"../Data/Route":6,"../Data/Travel":7,"../util/Utilities":46}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -351,42 +511,65 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Itinerary.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the Itinerary object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 (function() {
 	
 	'use strict';
 	
-	var _ObjType = require ( './ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
+	/* 
+	--- Itinerary object ----------------------------------------------------------------------------------------------
+	
+	Patterns : Closure
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-	var getItinerary = function ( ) {
+	var Itinerary = function ( ) {
 		
-		var _ObjId = require ( './ObjId' ) ( );
+		// Private variables
 
-		var _ItineraryPoints = require ( './Collection' ) ( 'ItineraryPoint' );
-
-		var _Maneuvers = require ( './Collection' ) ( 'Maneuver' );
-		
 		var _Provider = '';
 		
 		var _TransitMode = '';
 		
+		var _ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
+
+		var _Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
+		
+		var _ObjId = require ( '../data/ObjId' ) ( );
+
 		return {
+
+			// getters and setters...
 			
 			get itineraryPoints ( ) { return _ItineraryPoints; },
 
 			get maneuvers ( ) { return _Maneuvers; },
 	 
-			get objId ( ) { return _ObjId; },
-			
-			get objType ( ) { return _ObjType; },
-			
 			get provider ( ) { return _Provider; },
-			
 			set provider ( Provider ) { _Provider = Provider; },
 
 			get transitMode ( ) { return _TransitMode; },
-			
 			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
+			
+			get objId ( ) { return _ObjId; },
+			
+			get objType ( ) { return _ObjType; },
 			
 			get object ( ) {
 				return {
@@ -398,14 +581,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					objType : _ObjType.object
 				};
 			},
-			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_ItineraryPoints.object = Object.itineraryPoints || [];
 				_Maneuvers.object = Object.maneuvers || [];
 				_Provider = Object.provider || '';
 				_TransitMode = Object.transitMode || '';
-				_ObjId = require ( './ObjId' ) ( );
+				_ObjId = require ( '../data/ObjId' ) ( );
 				// rebuilding links between maneuvers and itineraryPoints
 				var itineraryPointObjIdMap = new Map ( );
 				var sourceCounter = 0;
@@ -423,396 +605,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItinerary;
+		module.exports = Itinerary;
 	}
 
 } ) ( );
 
-},{"../UI/Translator":27,"./Collection":1,"./ObjId":7,"./ObjType":8}],4:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+--- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-
-(function() {
-	
-	'use strict';
-	
-	var _ObjType = require ( './ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
-
-	var getItineraryPoint = function ( ) {
-		
-		var _Lat = 0;
-		var _Lng = 0;
-		var _Distance = 0;
-		var _ManeuverObjId = -1;
-		
-		var _ObjId = require ( './ObjId' ) ( );
-		
-		return {
-			
-			get lat ( ) { return _Lat;},
-			
-			set lat ( Lat ) { _Lat = Lat; },
-			
-			get lng ( ) { return _Lng;},
-			
-			set lng ( Lng ) { _Lng = Lng; },
-			
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get distance ( ) { return _Distance;},
-			
-			set distance ( Distance ) { _Distance = Distance; },
-						
-			get maneuverObjId ( ) { return _ManeuverObjId;},
-			
-			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
-			
-			get objId ( ) { return _ObjId; },
-			
-			get objType ( ) { return _ObjType; },
-			
-			get object ( ) {
-				return {
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					maneuverObjId : _ManeuverObjId,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || 0;
-				_ManeuverObjId = Object.maneuverObjId || -1;
-				_ObjId = require ( './ObjId' ) ( );
-			}
-		};
-	};
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryPoint;
-	}
-
-} ) ( );
-
-/* --- End of MapData.js file --- */
-},{"../UI/Translator":27,"./ObjId":7,"./ObjType":8}],5:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-(function() {
-	
-	'use strict';
-	
-	var _ObjType = require ( './ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
-
-	var getManeuver = function ( ) {
-		
-		var _ObjId = require ( './ObjId' ) ( );
-
-		var _IconName = '';
-		var _Instruction = '';
-		var _SimplifiedInstruction = '';
-		var _StreetName = '';
-		var _Direction = '';
-		var _ItineraryPointObjId = -1;
-		var _Distance = 0;
-		var _Duration = 0;
-		
-		return {
-
-			get iconName ( ) { return _IconName;},
-			
-			set iconName ( IconName ) { _IconName = IconName; },
-						
-			get instruction ( ) { return _Instruction;},
-			
-			set instruction ( Instruction ) { _Instruction = Instruction; },
-						
-			get simplifiedInstruction ( ) { return _SimplifiedInstruction;},
-			
-			set simplifiedInstruction ( SimplifiedInstruction ) { _SimplifiedInstruction = SimplifiedInstruction; },
-						
-			get streetName ( ) { return _StreetName;},
-			
-			set streetName ( StreetName ) { _StreetName = StreetName; },
-						
-			get direction ( ) { return _Direction;},
-			
-			set direction ( Direction ) { _Direction = Direction; },
-						
-			get itineraryPointObjId ( ) { return _ItineraryPointObjId;},
-			
-			set itineraryPointObjId ( ItineraryPointObjId ) { _ItineraryPointObjId = ItineraryPointObjId; },
-						
-			get distance ( ) { return _Distance;},
-			
-			set distance ( Distance ) { _Distance = Distance; },
-			
-			get duration ( ) { return _Duration;},
-			
-			set duration ( Duration ) { _Duration = Duration; },
-						
-			get objId ( ) { return _ObjId; },
-			
-			get objType ( ) { return _ObjType; },
-			
-			get object ( ) {
-				return {
-					iconName : _IconName,
-					instruction : _Instruction,
-					simplifiedInstruction : _SimplifiedInstruction,
-					streetName :_StreetName,
-					direction :_Direction,
-					distance : _Distance,
-					duration : _Duration,
-					itineraryPointObjId : _ItineraryPointObjId,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconName = Object.iconName || '';
-				_Instruction = Object.instruction || '';
-				_SimplifiedInstruction = Object.simplifiedInstruction || '';
-				_StreetName = Object.streetName || '';
-				_Direction = Object.direction || '';
-				_Distance = Object.distance || 0;
-				_Duration = Object.duration || 0;
-				_ItineraryPointObjId = Object.itineraryPointObjId || -1;
-				_ObjId = require ( './ObjId' ) ( );
-			}
-		};
-	};
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getManeuver;
-	}
-
-} ) ( );
-
-},{"../UI/Translator":27,"./ObjId":7,"./ObjType":8}],6:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-(function() {
-	
-	'use strict';
-	
-	var _ObjType = require ( './ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
-
-	var getNote = function ( ) {
-		
-		var _ObjId = require ( './ObjId' ) ( );
-
-		var _IconHeight = 40;
-		var _IconWidth = 40;
-		var _IconContent = '';
-		var _PopupContent = '';
-		var _TooltipContent = '';
-
-		var _Phone = '';
-		var _Url = '';
-		var _Address = '';
-
-		var _CategoryId = '';
-
-		var _IconLat = 0;
-		var _IconLng = 0;
-		var _Lat = 0;
-		var _Lng = 0;
-		var _Distance = -1;
-		var _ChainedDistance = 0;
-		
-		return {
-			
-			get isRouteNote ( ) { return _Distance !== -1; },
-
-			get iconHeight ( ) { return _IconHeight;},
-			
-			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
-
-			get iconWidth ( ) { return _IconWidth;},
-			
-			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
-
-			get iconContent ( ) { return _IconContent;},
-			
-			set iconContent ( IconContent ) { _IconContent = IconContent; },
-
-			get popupContent ( ) { return _PopupContent;},
-			
-			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
-
-			get tooltipContent ( ) { return _TooltipContent;},
-			
-			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
-
-			get phone ( ) { return _Phone;},
-			
-			set phone ( Phone ) { _Phone = Phone; },
-			
-			get url ( ) { return _Url;},
-			
-			set url ( Url ) { _Url = Url; },
-			
-			get address ( ) { return _Address;},
-			
-			set address ( Address ) { _Address = Address; },
-			
-			get categoryId ( ) { return _CategoryId;},
-			
-			set categoryId ( CategoryId ) { _CategoryId = CategoryId; },
-			
-			get iconLat ( ) { return _IconLat;},
-			
-			set iconLat ( IconLat ) { _IconLat = IconLat; },
-			
-			get iconLng ( ) { return _IconLng;},
-			
-			set iconLng ( IconLng ) { _IconLng = IconLng; },
-			
-			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
-			
-			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
-
-			get lat ( ) { return _Lat;},
-			
-			set lat ( Lat ) { _Lat = Lat; },
-			
-			get lng ( ) { return _Lng;},
-			
-			set lng ( Lng ) { _Lng = Lng; },
-			
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-			
-			get distance ( ) { return _Distance; },
-			
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get chainedDistance ( ) { return _ChainedDistance; },
-			
-			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
-
-			get objId ( ) { return _ObjId; },
-			
-			get objType ( ) { return _ObjType; },
-			
-			get object ( ) {
-				return {
-					iconHeight : _IconHeight,
-                    iconWidth : _IconWidth,
-                    iconContent : _IconContent, 
-                    popupContent : _PopupContent,
-                    tooltipContent : _TooltipContent,
-					phone : _Phone,
-					url : _Url,
-					address : _Address,
-					categoryId : _CategoryId,
-					iconLat : _IconLat,
-					iconLng : _IconLng,
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					chainedDistance : _ChainedDistance,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconHeight = Object.iconHeight || 40;
-				_IconWidth = Object.iconWidth || 40;
-				_IconContent = Object.iconContent || '';
-				_PopupContent = Object.popupContent || '';
-				_TooltipContent = Object.tooltipContent || '';
-				_Phone = Object.phone || '';
-				_Url = Object.url || '';
-				_Address = Object.address || '';
-				_CategoryId = Object.categoryId || '';
-				_IconLat = Object.iconLat || 0;
-				_IconLng = Object.iconLng || 0;
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || -1;
-				_ChainedDistance = Object.chainedDistance;
-				_ObjId = require ( './ObjId' ) ( );
-			}
-		};
-	};
-	
-	/* --- End of getNote function --- */
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getNote;
-	}
-
-} ) ( );
-
-},{"../UI/Translator":27,"./ObjId":7,"./ObjType":8}],7:[function(require,module,exports){
+},{"../UI/Translator":23,"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40}],4:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -852,7 +657,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /* --- End of MapData.js file --- */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],8:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -923,7 +728,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 } ) ( );
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1046,7 +851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of MapData.js file --- */
-},{"../UI/Translator":27,"../util/Config":48,"./Collection":1,"./Itinerary":3,"./ObjId":7,"./ObjType":8,"./Waypoint":12}],10:[function(require,module,exports){
+},{"../UI/Translator":23,"../util/Config":44,"./Collection":1,"./Itinerary":3,"./ObjId":4,"./ObjType":5,"./Waypoint":8}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1128,7 +933,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 /* --- End of Travel.js file --- */
-},{"../UI/Translator":27,"./Collection":1,"./ObjId":7,"./ObjType":8,"./Route":9}],11:[function(require,module,exports){
+},{"../UI/Translator":23,"./Collection":1,"./ObjId":4,"./ObjType":5,"./Route":6}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1222,9 +1027,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 } ) ( );
 
 
-},{"../UI/Translator":27,"./ObjId":7,"./ObjType":8}],12:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":7,"./ObjType":8,"dup":11}],13:[function(require,module,exports){
+},{"../UI/Translator":23,"./ObjId":4,"./ObjType":5}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1278,7 +1081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./UI/UserInterface":29}],14:[function(require,module,exports){
+},{"./UI/UserInterface":25}],10:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -1446,7 +1249,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":13,"./UI/ContextMenu":18,"./UI/TravelEditorUI":28,"./UI/UserInterface":29,"./core/NoteEditor":33,"./core/RouteEditor":34,"./core/TravelEditor":36,"./data/DataManager":38,"./data/ItineraryPoint":40,"./data/Maneuver":41,"./util/Utilities":50}],15:[function(require,module,exports){
+},{"./L.TravelNotes.Control":9,"./UI/ContextMenu":14,"./UI/TravelEditorUI":24,"./UI/UserInterface":25,"./core/NoteEditor":29,"./core/RouteEditor":30,"./core/TravelEditor":32,"./data/DataManager":34,"./data/ItineraryPoint":36,"./data/Maneuver":37,"./util/Utilities":46}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1511,7 +1314,7 @@ To do: translations
 }());
 
 				
-},{"../UI/BaseDialog":16,"../UI/Translator":27,"./HTMLElementsFactory":20}],16:[function(require,module,exports){
+},{"../UI/BaseDialog":12,"../UI/Translator":23,"./HTMLElementsFactory":16}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1728,7 +1531,7 @@ To do: translations
 
 }());
 
-},{"../UI/Translator":27,"../data/ObjId":43,"./HTMLElementsFactory":20}],17:[function(require,module,exports){
+},{"../UI/Translator":23,"../data/ObjId":39,"./HTMLElementsFactory":16}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1990,7 +1793,7 @@ To do: translations
 }());
 
 		
-},{"../UI/BaseDialog":16,"../UI/Translator":27,"./HTMLElementsFactory":20}],18:[function(require,module,exports){
+},{"../UI/BaseDialog":12,"../UI/Translator":23,"./HTMLElementsFactory":16}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2178,7 +1981,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":20,"./Translator":27}],19:[function(require,module,exports){
+},{"./HTMLElementsFactory":16,"./Translator":23}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2282,7 +2085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":20,"./Translator":27}],20:[function(require,module,exports){
+},{"./HTMLElementsFactory":16,"./Translator":23}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2356,7 +2159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{}],21:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2619,7 +2422,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/HTMLElementsFactory":20,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../data/DataManager":38,"../data/ObjId":43,"../util/Utilities":50}],22:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":16,"../UI/Translator":23,"../core/NoteEditor":29,"../core/RouteEditor":30,"../data/DataManager":34,"../data/ObjId":39,"../util/Utilities":46}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2904,7 +2707,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 	
-},{"../UI/HTMLViewsFactory":21,"../core/MapEditor":32,"../core/NoteEditor":33,"../core/RouteEditor":34,"../data/DataManager":38,"../util/Utilities":50,"./HTMLElementsFactory":20,"./Translator":27}],23:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":17,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/RouteEditor":30,"../data/DataManager":34,"../util/Utilities":46,"./HTMLElementsFactory":16,"./Translator":23}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3392,7 +3195,7 @@ To do: translations
 
 }());
 
-},{"../UI/BaseDialog":16,"../UI/Translator":27,"../core/NoteEditor":33,"./HTMLElementsFactory":20}],24:[function(require,module,exports){
+},{"../UI/BaseDialog":12,"../UI/Translator":23,"../core/NoteEditor":29,"./HTMLElementsFactory":16}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3663,7 +3466,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RouteEditor":34,"../data/DataManager":38,"../util/Utilities":50,"./HTMLElementsFactory":20,"./SortableList":26,"./Translator":27}],25:[function(require,module,exports){
+},{"../core/RouteEditor":30,"../data/DataManager":34,"../util/Utilities":46,"./HTMLElementsFactory":16,"./SortableList":22,"./Translator":23}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3783,7 +3586,7 @@ To do: translations
 }());
 
 		
-},{"../UI/ColorDialog":17,"../UI/Translator":27,"../UI/TravelEditorUI":28,"../core/MapEditor":32,"../core/RouteEditor":34,"./HTMLElementsFactory":20}],26:[function(require,module,exports){
+},{"../UI/ColorDialog":13,"../UI/Translator":23,"../UI/TravelEditorUI":24,"../core/MapEditor":28,"../core/RouteEditor":30,"./HTMLElementsFactory":16}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4000,7 +3803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./HTMLElementsFactory":20}],27:[function(require,module,exports){
+},{"./HTMLElementsFactory":16}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -4418,7 +4221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{}],28:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4683,7 +4486,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/TravelEditor":36,"../data/DataManager":38,"./HTMLElementsFactory":20,"./SortableList":26,"./Translator":27}],29:[function(require,module,exports){
+},{"../core/TravelEditor":32,"../data/DataManager":34,"./HTMLElementsFactory":16,"./SortableList":22,"./Translator":23}],25:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4744,7 +4547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"./ErrorEditorUI":19,"./HTMLElementsFactory":20,"./ItineraryEditorUI":22,"./RouteEditorUI":24,"./TravelEditorUI":28}],30:[function(require,module,exports){
+},{"./ErrorEditorUI":15,"./HTMLElementsFactory":16,"./ItineraryEditorUI":18,"./RouteEditorUI":20,"./TravelEditorUI":24}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4791,7 +4594,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/ErrorEditorUI":19}],31:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":15}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4832,7 +4635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/ItineraryEditorUI":22}],32:[function(require,module,exports){
+},{"../UI/ItineraryEditorUI":18}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5192,7 +4995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2,"../UI/ContextMenu":18,"../UI/Translator":27,"../core/NoteEditor":33,"../core/RouteEditor":34,"../core/TravelEditor":36,"../util/Config":48,"../util/TravelUtilities":49,"../util/Utilities":50,"./NoteEditor":33,"./RouteEditor":34}],33:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":14,"../UI/Translator":23,"../core/NoteEditor":29,"../core/RouteEditor":30,"../core/TravelEditor":32,"../util/Config":44,"../util/TravelUtilities":45,"../util/Utilities":46,"./NoteEditor":29,"./RouteEditor":30}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5409,7 +5212,7 @@ To do: translations
 
 }());
 
-},{"../Data/DataManager":2,"../UI/AboutDialog":15,"../UI/ItineraryEditorUI":22,"../UI/NoteDialog":23,"../UI/Translator":27,"../core/MapEditor":32,"../core/TravelEditor":36,"../data/Note":42,"../util/TravelUtilities":49,"../util/Utilities":50}],34:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/AboutDialog":11,"../UI/ItineraryEditorUI":18,"../UI/NoteDialog":19,"../UI/Translator":23,"../core/MapEditor":28,"../core/TravelEditor":32,"../data/Note":38,"../util/TravelUtilities":45,"../util/Utilities":46}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5779,7 +5582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2,"../UI/RouteEditorUI":24,"../UI/RoutePropertiesDialog":25,"../UI/Translator":27,"../UI/TravelEditorUI":28,"../core/ErrorEditor":30,"../core/ItineraryEditor":31,"../core/MapEditor":32,"../core/NoteEditor":33,"../core/Router":35,"../core/TravelEditor":36,"../data/Route":45,"../data/Waypoint.js":47,"../util/Config":48,"../util/TravelUtilities":49,"../util/Utilities":50}],35:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/RouteEditorUI":20,"../UI/RoutePropertiesDialog":21,"../UI/Translator":23,"../UI/TravelEditorUI":24,"../core/ErrorEditor":26,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/Router":31,"../core/TravelEditor":32,"../data/Route":41,"../data/Waypoint.js":43,"../util/Config":44,"../util/TravelUtilities":45,"../util/Utilities":46}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5900,7 +5703,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2,"../util/Config":48,"../util/Utilities":50,"./RouteEditor":34}],36:[function(require,module,exports){
+},{"../Data/DataManager":2,"../util/Config":44,"../util/Utilities":46,"./RouteEditor":30}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6055,29 +5858,427 @@ console.log (  _DataManager.travel.object );
 
 }());
 
-},{"../Data/DataManager":2,"../Data/Route":9,"../Data/Travel":10,"../UI/HTMLViewsFactory":21,"../UI/Translator":27,"../UI/TravelEditorUI":28,"../core/MapEditor":32,"../core/RouteEditor":34,"../util/Config":48,"../util/Utilities":50,"./ErrorEditor":30,"./MapEditor":32,"./RouteEditor":34}],37:[function(require,module,exports){
+},{"../Data/DataManager":2,"../Data/Route":6,"../Data/Travel":7,"../UI/HTMLViewsFactory":17,"../UI/Translator":23,"../UI/TravelEditorUI":24,"../core/MapEditor":28,"../core/RouteEditor":30,"../util/Config":44,"../util/Utilities":46,"./ErrorEditor":26,"./MapEditor":28,"./RouteEditor":30}],33:[function(require,module,exports){
 arguments[4][1][0].apply(exports,arguments)
-},{"./ItineraryPoint":40,"./Maneuver":41,"./Note":42,"./Route":45,"./WayPoint":46,"dup":1}],38:[function(require,module,exports){
+},{"../data/ItineraryPoint":36,"../data/Maneuver":37,"../data/Note":38,"../data/Route":41,"../data/WayPoint":42,"dup":1}],34:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../Data/Route":9,"../Data/Travel":10,"../util/Utilities":50,"dup":2}],39:[function(require,module,exports){
+},{"../Data/Route":6,"../Data/Travel":7,"../util/Utilities":46,"dup":2}],35:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./Collection":37,"./ObjId":43,"./ObjType":44,"dup":3}],40:[function(require,module,exports){
+},{"../UI/Translator":23,"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40,"dup":3}],36:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- ItineraryPoint.js file --------------------------------------------------------------------------------------------
+This file contains:
+	- the ItineraryPoint object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+(function() {
+	
+	'use strict';
+	
+	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+
+	/* 
+	--- ItineraryPoint object -----------------------------------------------------------------------------------------
+	
+	Patterns : Closure
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var ItineraryPoint = function ( ) {
+		
+		// Private variables
+
+		var _Lat = 0;
+
+		var _Lng = 0;
+
+		var _Distance = 0;
+
+		var _ManeuverObjId = -1;
+		
+		var _ObjId = require ( '../data/ObjId' ) ( );
+		
+		return {
+			
+			// getters and setters...
+
+			get lat ( ) { return _Lat;},
+			set lat ( Lat ) { _Lat = Lat; },
+			
+			get lng ( ) { return _Lng;},
+			set lng ( Lng ) { _Lng = Lng; },
+			
+			get latLng ( ) { return [ _Lat, _Lng ];},
+			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
+
+			get distance ( ) { return _Distance;},
+			set distance ( Distance ) { _Distance = Distance; },
+						
+			get maneuverObjId ( ) { return _ManeuverObjId;},
+			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
+			
+			get objId ( ) { return _ObjId; },
+			
+			get objType ( ) { return _ObjType; },
+			
+			get object ( ) {
+				return {
+					lat : _Lat,
+					lng : _Lng,
+					distance : _Distance,
+					maneuverObjId : _ManeuverObjId,
+					objId : _ObjId,
+					objType : _ObjType.object
+				};
+			},
+			set object ( Object ) {
+				Object = _ObjType.validate ( Object );
+				_Lat = Object.lat || 0;
+				_Lng = Object.lng || 0;
+				_Distance = Object.distance || 0;
+				_ManeuverObjId = Object.maneuverObjId || -1;
+				_ObjId = require ( '../data/ObjId' ) ( );
+			}
+		};
+	};
+	
+	/* 
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = ItineraryPoint;
+	}
+
+} ) ( );
+
+/*
+--- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
+*/
+},{"../UI/Translator":23,"../data/ObjId":39,"../data/ObjType":40}],37:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+
+/*
+--- Maneuver.js file --------------------------------------------------------------------------------------------------
+This file contains:
+	- the Maneuver object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+(function() {
+	
+	'use strict';
+	
+	var _ObjType = require ( './ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+
+	var Maneuver = function ( ) {
+		
+		// Private variables
+		
+		var _ObjId = require ( './ObjId' ) ( );
+
+		var _IconName = '';
+
+		var _Instruction = '';
+
+		var _ItineraryPointObjId = -1;
+
+		var _Distance = 0;
+
+		var _Duration = 0;
+		
+		return {
+
+			// getters and setters...
+
+			get iconName ( ) { return _IconName;},
+			set iconName ( IconName ) { _IconName = IconName; },
+						
+			get instruction ( ) { return _Instruction;},
+			set instruction ( Instruction ) { _Instruction = Instruction; },
+						
+			get itineraryPointObjId ( ) { return _ItineraryPointObjId;},
+			set itineraryPointObjId ( ItineraryPointObjId ) { _ItineraryPointObjId = ItineraryPointObjId; },
+						
+			get distance ( ) { return _Distance;},
+			set distance ( Distance ) { _Distance = Distance; },
+			
+			get duration ( ) { return _Duration;},
+			set duration ( Duration ) { _Duration = Duration; },
+						
+			get objId ( ) { return _ObjId; },
+			
+			get objType ( ) { return _ObjType; },
+			
+			get object ( ) {
+				return {
+					iconName : _IconName,
+					instruction : _Instruction,
+					distance : _Distance,
+					duration : _Duration,
+					itineraryPointObjId : _ItineraryPointObjId,
+					objId : _ObjId,
+					objType : _ObjType.object
+				};
+			},
+			set object ( Object ) {
+				Object = _ObjType.validate ( Object );
+				_IconName = Object.iconName || '';
+				_Instruction = Object.instruction || '';
+				_Distance = Object.distance || 0;
+				_Duration = Object.duration || 0;
+				_ItineraryPointObjId = Object.itineraryPointObjId || -1;
+				_ObjId = require ( './ObjId' ) ( );
+			}
+		};
+	};
+	
+	/* 
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = Maneuver;
+	}
+
+} ) ( );
+
+/*
+--- End of Maneuver.js file -------------------------------------------------------------------------------------------
+*/
+},{"../UI/Translator":23,"./ObjId":39,"./ObjType":40}],38:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+(function() {
+	
+	'use strict';
+	
+	var _ObjType = require ( './ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+
+	var getNote = function ( ) {
+		
+		var _ObjId = require ( './ObjId' ) ( );
+
+		var _IconHeight = 40;
+		var _IconWidth = 40;
+		var _IconContent = '';
+		var _PopupContent = '';
+		var _TooltipContent = '';
+
+		var _Phone = '';
+		var _Url = '';
+		var _Address = '';
+
+		var _CategoryId = '';
+
+		var _IconLat = 0;
+		var _IconLng = 0;
+		var _Lat = 0;
+		var _Lng = 0;
+		var _Distance = -1;
+		var _ChainedDistance = 0;
+		
+		return {
+			
+			get isRouteNote ( ) { return _Distance !== -1; },
+
+			get iconHeight ( ) { return _IconHeight;},
+			
+			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
+
+			get iconWidth ( ) { return _IconWidth;},
+			
+			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
+
+			get iconContent ( ) { return _IconContent;},
+			
+			set iconContent ( IconContent ) { _IconContent = IconContent; },
+
+			get popupContent ( ) { return _PopupContent;},
+			
+			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
+
+			get tooltipContent ( ) { return _TooltipContent;},
+			
+			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
+
+			get phone ( ) { return _Phone;},
+			
+			set phone ( Phone ) { _Phone = Phone; },
+			
+			get url ( ) { return _Url;},
+			
+			set url ( Url ) { _Url = Url; },
+			
+			get address ( ) { return _Address;},
+			
+			set address ( Address ) { _Address = Address; },
+			
+			get categoryId ( ) { return _CategoryId;},
+			
+			set categoryId ( CategoryId ) { _CategoryId = CategoryId; },
+			
+			get iconLat ( ) { return _IconLat;},
+			
+			set iconLat ( IconLat ) { _IconLat = IconLat; },
+			
+			get iconLng ( ) { return _IconLng;},
+			
+			set iconLng ( IconLng ) { _IconLng = IconLng; },
+			
+			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
+			
+			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
+
+			get lat ( ) { return _Lat;},
+			
+			set lat ( Lat ) { _Lat = Lat; },
+			
+			get lng ( ) { return _Lng;},
+			
+			set lng ( Lng ) { _Lng = Lng; },
+			
+			get latLng ( ) { return [ _Lat, _Lng ];},
+			
+			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
+			
+			get distance ( ) { return _Distance; },
+			
+			set distance ( Distance ) { _Distance = Distance; },
+
+			get chainedDistance ( ) { return _ChainedDistance; },
+			
+			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
+
+			get objId ( ) { return _ObjId; },
+			
+			get objType ( ) { return _ObjType; },
+			
+			get object ( ) {
+				return {
+					iconHeight : _IconHeight,
+                    iconWidth : _IconWidth,
+                    iconContent : _IconContent, 
+                    popupContent : _PopupContent,
+                    tooltipContent : _TooltipContent,
+					phone : _Phone,
+					url : _Url,
+					address : _Address,
+					categoryId : _CategoryId,
+					iconLat : _IconLat,
+					iconLng : _IconLng,
+					lat : _Lat,
+					lng : _Lng,
+					distance : _Distance,
+					chainedDistance : _ChainedDistance,
+					objId : _ObjId,
+					objType : _ObjType.object
+				};
+			},
+			
+			set object ( Object ) {
+				Object = _ObjType.validate ( Object );
+				_IconHeight = Object.iconHeight || 40;
+				_IconWidth = Object.iconWidth || 40;
+				_IconContent = Object.iconContent || '';
+				_PopupContent = Object.popupContent || '';
+				_TooltipContent = Object.tooltipContent || '';
+				_Phone = Object.phone || '';
+				_Url = Object.url || '';
+				_Address = Object.address || '';
+				_CategoryId = Object.categoryId || '';
+				_IconLat = Object.iconLat || 0;
+				_IconLng = Object.iconLng || 0;
+				_Lat = Object.lat || 0;
+				_Lng = Object.lng || 0;
+				_Distance = Object.distance || -1;
+				_ChainedDistance = Object.chainedDistance;
+				_ObjId = require ( './ObjId' ) ( );
+			}
+		};
+	};
+	
+	/* --- End of getNote function --- */
+	
+	/* 
+	--- Exports ------------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = getNote;
+	}
+
+} ) ( );
+
+},{"../UI/Translator":23,"./ObjId":39,"./ObjType":40}],39:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":43,"./ObjType":44,"dup":4}],41:[function(require,module,exports){
+},{"dup":4}],40:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":43,"./ObjType":44,"dup":5}],42:[function(require,module,exports){
+},{"dup":5}],41:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":43,"./ObjType":44,"dup":6}],43:[function(require,module,exports){
-arguments[4][7][0].apply(exports,arguments)
-},{"dup":7}],44:[function(require,module,exports){
+},{"../UI/Translator":23,"../util/Config":44,"./Collection":33,"./Itinerary":35,"./ObjId":39,"./ObjType":40,"./Waypoint":43,"dup":6}],42:[function(require,module,exports){
 arguments[4][8][0].apply(exports,arguments)
-},{"dup":8}],45:[function(require,module,exports){
-arguments[4][9][0].apply(exports,arguments)
-},{"../UI/Translator":27,"../util/Config":48,"./Collection":37,"./Itinerary":39,"./ObjId":43,"./ObjType":44,"./Waypoint":47,"dup":9}],46:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":43,"./ObjType":44,"dup":11}],47:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"../UI/Translator":27,"./ObjId":43,"./ObjType":44,"dup":11}],48:[function(require,module,exports){
+},{"../UI/Translator":23,"./ObjId":39,"./ObjType":40,"dup":8}],43:[function(require,module,exports){
+arguments[4][8][0].apply(exports,arguments)
+},{"../UI/Translator":23,"./ObjId":39,"./ObjType":40,"dup":8}],44:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6148,7 +6349,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{}],49:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6210,7 +6411,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":2}],50:[function(require,module,exports){
+},{"../Data/DataManager":2}],46:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6429,4 +6630,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":27}]},{},[14]);
+},{"../UI/Translator":23}]},{},[10]);

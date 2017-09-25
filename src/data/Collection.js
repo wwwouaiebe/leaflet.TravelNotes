@@ -13,26 +13,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Collection.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the Collection object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170925
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 (function() {
 	
 	'use strict';
 	
-	var getCollection = function ( objName ) {
+	/* 
+	--- Collection object ---------------------------------------------------------------------------------------------
+	
+	Patterns : Closure
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var Collection = function ( objName ) {
+		
+		// Private variables and functions
 		
 		var _Array = [];
+
 		var _ObjName = objName;
-		
-		var _Sort = function ( compareFunction ) {
-			_Array.sort ( compareFunction );
-		};
-		
-		var _IndexOfObjId = function ( objId ) {
-			function haveObjId ( element ) {
-				return element.objId === objId;
-			}
-			return _Array.findIndex ( haveObjId );
-		};
 		
 		var _Add = function ( object ) {
 			if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== _ObjName ) ) {
@@ -43,6 +56,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return;
 		};
 		
+		var _First = function ( ) {
+			return _Array [ 0 ];
+		};
+
+		var _ForEach = function ( funct ) {
+			var result = null;
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+					result = funct ( iterator.value, result );
+			}
+			return result;
+		};
+		
 		var _GetAt = function ( objId ) {
 			var index = _IndexOfObjId ( objId );
 			if ( -1 === index ) {
@@ -51,43 +77,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return _Array [ index ];
 		};
 		
-		var _Reverse = function ( ) {
-			_Array.reverse ( );
+		var _GetObject = function ( ) {
+			var array = [ ];
+			var iterator = _Iterator ( );
+			while ( ! iterator.done ) {
+				array.push ( iterator.value.object );
+			}
+			
+			return array;
 		};
 		
-		var _Remove = function ( objId ) {
-			var index = _IndexOfObjId ( objId );
-			if ( -1 === index ) {
-				throw 'invalid objId for remove function';
+		var _IndexOfObjId = function ( objId ) {
+			function haveObjId ( element ) {
+				return element.objId === objId;
 			}
-			_Array.splice ( _IndexOfObjId ( objId ), 1 );
-		};
-		
-		var _Replace = function ( oldObjId, object ) {
-			var index = _IndexOfObjId ( oldObjId );
-			if ( -1 === index ) {
-				throw 'invalid objId for replace function';
-			}
-			_Array [ index ] = object;
-		};
-		
-		var _RemoveAll = function ( ExceptFirstLast ) {
-			if ( ExceptFirstLast ) {
-				_Array.splice ( 1, _Array.length - 2 );
-			}
-			else {
-				_Array.length = 0;
-			}
-		};
-		
-		var _Swap = function ( objId, swapUp ) {
-			var index = _IndexOfObjId ( objId );
-			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
-				throw 'invalid objId for swap function';
-			}
-			var tmp = _Array [ index ];
-			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
-			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;	
+			return _Array.findIndex ( haveObjId );
 		};
 		
 		var _Iterator = function ( ) {
@@ -101,53 +105,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 		};
 		
-		var _First = function ( ) {
-			return _Array [ 0 ];
-		};
-
 		var _Last = function ( ) {
 			return _Array [ _Array.length - 1 ];
 		};
 		
-		var _ForEach = function ( funct ) {
-			var result = null;
-			var iterator = _Iterator ( );
-			while ( ! iterator.done ) {
-					result = funct ( iterator.value, result );
+		var _Remove = function ( objId ) {
+			var index = _IndexOfObjId ( objId );
+			if ( -1 === index ) {
+				throw 'invalid objId for remove function';
 			}
-			return result;
+			_Array.splice ( _IndexOfObjId ( objId ), 1 );
 		};
 		
-		var _GetObject = function ( ) {
-			var array = [ ];
-			var iterator = _Iterator ( );
-			while ( ! iterator.done ) {
-				array.push ( iterator.value.object );
+		var _RemoveAll = function ( ExceptFirstLast ) {
+			if ( ExceptFirstLast ) {
+				_Array.splice ( 1, _Array.length - 2 );
 			}
-			
-			return array;
+			else {
+				_Array.length = 0;
+			}
+		};
+		
+		var _Replace = function ( oldObjId, object ) {
+			var index = _IndexOfObjId ( oldObjId );
+			if ( -1 === index ) {
+				throw 'invalid objId for replace function';
+			}
+			_Array [ index ] = object;
+		};
+		
+		var _Reverse = function ( ) {
+			_Array.reverse ( );
 		};
 		
 		var _SetObject = function ( Objects ) {
-			var constructor;
 			_Array.length = 0;
 			var newObject;
 			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
 				switch ( _ObjName ) {
 					case 'Route' :
-					newObject = require ( './Route' ) ( );
+					newObject = require ( '../data/Route' ) ( );
 					break;
 					case 'Note' :
-					newObject = require ( './Note' ) ( );
+					newObject = require ( '../data/Note' ) ( );
 					break;
 					case 'WayPoint' :
-					newObject = require ( './WayPoint' ) ( );
+					newObject = require ( '../data/WayPoint' ) ( );
 					break;
 					case 'Maneuver' :
-					newObject = require ( './Maneuver' ) ( );
+					newObject = require ( '../data/Maneuver' ) ( );
 					break;
 					case 'ItineraryPoint' :
-					newObject = require ( './ItineraryPoint' ) ( );
+					newObject = require ( '../data/ItineraryPoint' ) ( );
 					break;
 					default: 
 					throw ( 'invalid ObjName ( ' + _ObjName +' ) in Collection._SetObject' );
@@ -156,77 +165,229 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Add ( newObject );
 			}
 		};
+		
+		var _Sort = function ( compareFunction ) {
+			_Array.sort ( compareFunction );
+		};
+		
+		var _Swap = function ( objId, swapUp ) {
+			var index = _IndexOfObjId ( objId );
+			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
+				throw 'invalid objId for swap function';
+			}
+			var tmp = _Array [ index ];
+			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
+			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;	
+		};
 
+		// Collection object
+		
 		return {
 			
-			sort : function ( compareFunction ) {
-				_Sort ( compareFunction );
-			},
+			/*
+			--- add function ------------------------------------------------------------------------------------------
+			
+			This function add an object to the collection
+			throw when the object type is invalid
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			
 			add : function ( object ) { 
 				_Add ( object );
 			},
 			
-			getAt : function ( objId ) {
-				return _GetAt ( objId );
-			},
+			/*
+			--- forEach function --------------------------------------------------------------------------------------
 			
-			reverse : function ( ) {
-				_Reverse ( );
-			},
-			
-			remove : function ( objId ) {
-				_Remove ( objId );
-			},
-			
-			replace : function ( oldObjId, object ) {
-				_Replace ( oldObjId, object ); 
-			},
-			
-			removeAll : function ( ExceptFirstLast ) {
-				_RemoveAll ( ExceptFirstLast );
-			},
-			
-			swap : function ( objId, swapUp ) {
-				_Swap ( objId, swapUp );
-			},
-			
+			This function executes a function on each object of the collection and returns the final result
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			forEach : function ( funct ) {
 				return _ForEach ( funct );
 			},
 			
-			get iterator ( ) { 
-				return _Iterator ( ); 
+			/*
+			--- getAt function ----------------------------------------------------------------------------------------
+			
+			This function returns the object with the given objId or null when the object is not found
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getAt : function ( objId ) {
+				return _GetAt ( objId );
 			},
 			
+			/*
+			--- remove function ---------------------------------------------------------------------------------------
+			
+			This function remove the object with the given objId 
+			throw when the object is not found
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			remove : function ( objId ) {
+				_Remove ( objId );
+			},
+			
+			/*
+			--- removeAll function ------------------------------------------------------------------------------------
+			
+			This function remove all objects in the collection 
+			when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			removeAll : function ( exceptFirstLast ) {
+				_RemoveAll ( exceptFirstLast );
+			},
+			
+			/*
+			--- replace function --------------------------------------------------------------------------------------
+			
+			This function replace the object identified by oldObjId with a new object 
+			throw when the object type is invalid
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			replace : function ( oldObjId, object ) {
+				_Replace ( oldObjId, object ); 
+			},
+			
+			/*
+			--- reverse function --------------------------------------------------------------------------------------
+			
+			This function reverse the objects in the collection 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			reverse : function ( ) {
+				_Reverse ( );
+			},
+			
+			/*
+			--- sort function -----------------------------------------------------------------------------------------
+			
+			This function sort the collection, using the compare function 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			sort : function ( compareFunction ) {
+				_Sort ( compareFunction );
+			},
+			
+			/*
+			--- swap function -----------------------------------------------------------------------------------------
+			
+			This function move up ( when sapUp is true ) or move down an object in the collection 
+			throw when the swap is not possible
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			swap : function ( objId, swapUp ) {
+				_Swap ( objId, swapUp );
+			},
+			
+			/*
+			--- first getter ------------------------------------------------------------------------------------------
+			
+			The first object in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get first ( ) {
 				return _First ( );
 			},
 			
+			/*
+			--- iterator getter ---------------------------------------------------------------------------------------
+			
+			Returns an iterator on the collection.
+			The iterator have the following properties:
+			value : the object pointed by the iterator
+			done : true when the iterator is at the end of the collection. Each time this property is called, the iterator move to the next object
+			first : true when the iterator is on the first object
+			last : true when the iterator is on the last object
+			index : the current position of the iterator in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			get iterator ( ) { 
+				return _Iterator ( ); 
+			},
+			
+			/*
+			--- last getter -------------------------------------------------------------------------------------------
+			
+			The last object in the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get last ( ) {
 				return _Last ( );
 			},
+			
+			/*
+			--- length getter -----------------------------------------------------------------------------------------
+			
+			The length of the collection
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			get length ( ) { 
+				return _Array.length; 
+			},
+			
+			/*
+			--- object getter -----------------------------------------------------------------------------------------
+			
+			Transform the collection into an array that can be used with JSON
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			
 			get object ( ) { 
 				return _GetObject ( );
 			},
 			
+			/*
+			--- object setter -----------------------------------------------------------------------------------------
+			
+			Transform an array to a collection
+			throw when an object in the array have an invalid type
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
 			set object ( Object ) {
 				_SetObject ( Object );
-			},
-			
-			get length ( ) { return _Array.length; }
+			}
 			
 		};
 	};
 	
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getCollection;
+		module.exports = Collection;
 	}
 
 } ) ( );
 
+/*
+--- End of Collection.js file -----------------------------------------------------------------------------------------
+*/
