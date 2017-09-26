@@ -36,6 +36,42 @@ Tests ...
 		return {
 
 			init : function ( map ) {
+				global.config = {
+					routing : {
+						auto : true
+					},
+					language : 'fr',
+					itineraryPointMarker : {
+						color : 'red',
+						weight : 2,
+						radius : 7,
+						fill : false
+					},
+					route : 
+					{
+						color : '#ff0000',
+						width : 3
+					},
+					note : {
+						grip : { 
+							size : 10,
+							opacity: 0 
+						},
+						polyline : {
+							color : 'gray',
+							weight : 1
+						},
+						style : 'TravelNotes-NotesStyle'
+					},
+					itineraryPointZoom: 17,
+					routeEditor : {
+						clearAfterCancel : true,
+						clearAfterSave : false,
+					},
+					travelEditor : {
+						clearAfterSave : true
+					}
+				};
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
@@ -58,7 +94,10 @@ Tests ...
 			set editedRoute ( editedRoute ) { global.editedRoute = editedRoute; },
 
 			get travel ( ) { return global.travel; },
-			set travel ( travel ) { global.travel = travel; },
+			set travel ( Travel ) { global.travel = Travel; },
+
+			get config ( ) { return global.config; },
+			set config ( Config ) { global.config = Config; },
 
 			get mapObjects ( ) { return global.mapObjects; },
 

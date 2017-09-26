@@ -180,28 +180,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			formatLatLng : function ( latLng ) {
 				return this.formatLat ( latLng [ 0 ] ) + '&nbsp;-&nbsp;' + this.formatLng ( latLng [ 1 ] );
-			},
-			
-			readURL : function ( ) {
-				var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
-				var newUrlSearch = '?' ;
-				for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
-					var param = urlSearch [ urlCounter ].split ( '=' );
-					if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
-						if ( this.storageAvailable ( 'sessionStorage' ) ) {
-							sessionStorage.setItem ( 
-								param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
-								btoa ( param [ 1 ] )
-							);
-						}
-					}
-					else {
-						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-						newUrlSearch += urlSearch [ urlCounter ];
-					}
-				}
-				var stateObj = { index: "bar" };
-				history.pushState(stateObj, "page", newUrlSearch );
 			}
 		};
 	};

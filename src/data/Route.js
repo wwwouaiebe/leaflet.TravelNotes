@@ -47,9 +47,9 @@ Tests ...
 
 		var _Itinerary = require ( '../data/Itinerary' ) ( );
 
-		var _Width = require ( '../util/Config' ) ( ).route.width || 5;
+		var _Width = require ( '../data/DataManager' ) ( ).config.route.width || 5;
 
-		var _Color = require ( '../util/Config' ) ( ).route.color || '#ff0000';
+		var _Color = require ( '../data/DataManager' ) ( ).config.route.color || '#ff0000';
 
 		var _Chain = false;
 

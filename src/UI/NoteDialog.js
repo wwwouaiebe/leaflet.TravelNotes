@@ -104,7 +104,6 @@ To do: translations
 		
 		var addEditorList = function ( ) {
 			globalEditorList = serverEditorList.concat ( _LocalEditorData.list );
-			console.log ( globalEditorList );
 			globalEditorList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
 			var elementCounter = 0;
 			for ( elementCounter = editorSelect.length - 1; elementCounter>= 0; elementCounter -- ) {

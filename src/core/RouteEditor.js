@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _Config = require ( '../util/Config' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
@@ -105,7 +104,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			startRouting : function ( ) {
-				if ( ! _Config.routing.auto ) {
+				if ( ! _DataManager.config.routing.auto ) {
 					return;
 				}
 				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );

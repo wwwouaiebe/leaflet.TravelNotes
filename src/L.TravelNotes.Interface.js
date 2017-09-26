@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	
-	
+	L = L || {};
 	L.TravelNotes = L.TravelNotes || {};
 	L.travelNotes = L.travelNotes || {};
 	
@@ -30,7 +30,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _RightContextMenu = false;
 	var _LeftContextMenu = false;
 	
+	var _Langage = '';
 	var _DataManager = require ( './data/DataManager' ) ( );
+	var _Utilities = require ( './util/Utilities' ) ( );
 
 	
 	/* 
@@ -44,6 +46,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	L.TravelNotes.getInterface = function ( ) {
 
+		
+		var _ReadURL = function ( ) {
+			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
+			var newUrlSearch = '?' ;
+			for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
+				var param = urlSearch [ urlCounter ].split ( '=' );
+				if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
+					if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
+						sessionStorage.setItem ( 
+							param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
+							btoa ( param [ 1 ] )
+						);
+					}
+				}
+				else if ( ( 2 === param.length ) && 'lng' === param [ 0 ].toLowerCase ( ) ) {
+					_Langage = param [ 1 ].toLowerCase ( );
+				}
+				else {
+					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+					newUrlSearch += urlSearch [ urlCounter ];
+				}
+			}
+			var stateObj = { index: "bar" };
+			history.pushState(stateObj, "page", newUrlSearch );
+		};
 
 		var onMapClick = function ( event ) {
 			require ('./UI/ContextMenu' ) ( 
@@ -64,33 +91,67 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 
-			/* --- public methods --- */
-			
-			/* addControl ( ) method --- 
-			
-			This method add the control 
-			
-			Parameters :
-			
-			*/
-
 			addControl : function ( map, divControlId, options ) {
 				
 				_DataManager.init ( map );
-				
-				require ( './util/Utilities' ) ( ).readURL ( );
-				
-				if ( divControlId )	{
-					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-				}	
-				else {
-					if ( typeof module !== 'undefined' && module.exports ) {
-						map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+				_ReadURL ( );
+
+				var xmlHttpRequest = new XMLHttpRequest ( );
+				xmlHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === XMLHttpRequest.DONE ) {
+						if ( this.status === 200 ) {
+							try {
+								_DataManager.config = JSON.parse ( this.responseText );
+								
+								console.log ( _DataManager.config );
+								
+								if ( '' !== _Langage ) {
+									_DataManager.config.language = _Langage;
+								}
+								_DataManager.travel = require ( './data/Travel' ) ( );
+
+
+
+
+
+
+
+								
+								if ( divControlId )	{
+									document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+								}	
+								else {
+									if ( typeof module !== 'undefined' && module.exports ) {
+										map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+									}
+								}
+								
+								require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+								require ( './core/TravelEditor' ) ( ).openServerTravel ( );
+								
+
+								
+								
+								
+
+							}
+							catch ( e )
+							{
+								console.log ( 'Not possible to parse config.json' );
+							}
+						} 
+						else {
+							console.log ( 'Not possible to load config.json' );
+						}
 					}
-				}
-				
-				require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-				require ( './core/TravelEditor' ) ( ).openServerTravel ( );
+				};
+				xmlHttpRequest.open ( 
+					'GET',
+					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'config.json',
+					true
+				);
+				xmlHttpRequest.send ( null );
+
 			},
 			
 			addMapContextMenu : function ( leftButton, rightButton ) {

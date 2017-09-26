@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	'use strict';
 	
 	var _Translator = require ( '../UI/Translator' ) ( );
-	var _Config = require ( '../util/Config' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 
@@ -227,7 +226,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			zoomToPoint : function ( latLng ) {
-				map.setView ( latLng, _Config.itineraryPointZoom );
+				map.setView ( latLng, _DataManager.config.itineraryPointZoom );
 			},
 			
 			zoomToRoute : function ( routeObjId ) {
@@ -258,7 +257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			addItineraryPointMarker : function ( objId, latLng ) {
 				_AddTo ( 
 					objId,
-					L.circleMarker ( latLng, _Config.itineraryPointMarker )
+					L.circleMarker ( latLng, _DataManager.config.itineraryPointMarker )
 				);
 			},
 			
@@ -286,9 +285,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
-						icon : L.divIcon ( { iconSize: [ _Config.note.grip.size , _Config.note.grip.size ], iconAnchor: [ _Config.note.grip.size / 2, _Config.note.grip.size / 2 ], html : '<div></div>'} ),
+						icon : L.divIcon ( 
+							{ 
+								iconSize: [ 
+									_DataManager.config.note.grip.size , 
+									_DataManager.config.note.grip.size
+								], 
+								iconAnchor: [ 
+									_DataManager.config.note.grip.size / 2,
+									_DataManager.config.note.grip.size / 2 
+								],
+								html : '<div></div>'
+							}
+						),
 						zIndexOffset : -1000 ,
-						opacity : _Config.note.grip.opacity,
+						opacity : _DataManager.config.note.grip.opacity,
 						draggable : true
 					} 
 				);	
@@ -301,7 +312,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, - note.iconHeight / 2 ], 
 						html : note.iconContent,
-						className : _Config.note.style
+						className : __DataManager.config.note.style
 					}
 				);
 				var marker = L.marker ( 
@@ -317,7 +328,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
 				marker.objId = note.objId;
-				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _Config.note.polyline );
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
 				polyline.objId = note.objId;
 				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
 				layerGroup.markerId = L.Util.stamp ( marker );
@@ -336,7 +347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, -note.iconHeight / 2 ], 
 						html : note.iconContent,
-						className : _Config.note.style
+						className : _DataManager.config.note.style
 					}
 				);
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );

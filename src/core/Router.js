@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var _RequestStarted = false;
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _Config = require ( '../util/Config' ) ( );
 	var _RouteProvider = _DataManager.providers.get ( 'mapzen' );
 	
 	var getRouter = function ( ) {
@@ -40,7 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		var _ParseResponse = function ( requestResponse ) {
-			_RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _Config.language );
+			_RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _DataManager.config.language );
 			_RequestStarted = false;
 			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
@@ -86,7 +85,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			xmlHttpRequest.open ( 
 				'GET',
-				_RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _Config.language, null ),
+				_RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _DataManager.config.language, null ),
 				true
 			);
 			
