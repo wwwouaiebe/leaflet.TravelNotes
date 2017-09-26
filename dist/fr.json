@@ -276,6 +276,14 @@
 		"msgstr" : "Trajet&nbsp;chaîné"
 	},
 	{
+		"msgid" : "Router - An error occurs when parsing the response",
+		"msgstr" : "Une erreur s'est produite lors de l'analyse de la réponse"
+	},
+	{
+		"msgid" : "Router - An error occurs when sending the request",
+		"msgstr" : "Une erreur s'est produite lors de l'envoi de la requête (Statut: {status} - {statusText})"
+	},
+	{
 		"msgid" : "TravelEditorUI - Show",
 		"msgstr" : "Afficher"
 	},

@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _RequestStarted = false;
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _RouteProvider = _DataManager.providers.get ( 'mapzen' );
+	var _ErrorEditor = require ( '../core/ErrorEditor' ) ( );
+	var _Translator = require( '../UI/Translator' ) ( );
 	
 	var getRouter = function ( ) {
 
@@ -39,26 +41,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		var _ParseResponse = function ( requestResponse ) {
-			_RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _DataManager.config.language );
+
 			_RequestStarted = false;
+			if ( ! _RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _DataManager.config.language ) ) {
+				_ErrorEditor.showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
+				return;
+			}
+			
+			
 			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
+			
+			var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+			var routeDistance = 0;
+			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
+			var dummy = itineraryPointsIterator.done;
+			var previousPoint = itineraryPointsIterator.value;
+			while ( ! itineraryPointsIterator.done ) {
+				if ( 0 === previousPoint.distance ) {
+					previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				}
+				routeDistance += previousPoint.distance;
+				previousPoint = itineraryPointsIterator.value;
+			}
+			
+			// Computing the complete route distance ad duration based on the values given by the providers
 			_DataManager.editedRoute.distance = 0;
 			_DataManager.editedRoute.duration = 0;
-			
 			var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
 				_DataManager.editedRoute.distance += maneuverIterator.value.distance;
 				_DataManager.editedRoute.duration += maneuverIterator.value.duration;
 			}
 
-			
+			// Computing a correction factor for distance betwwen itinerayPoints
+			var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
+			routeDistance = 0;
+			itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+			while ( ! itineraryPointsIterator.done ) {
+				itineraryPointsIterator.value.distance *= correctionFactor;
+				routeDistance += itineraryPointsIterator.value.distance;
+			}
+
 			require ( './RouteEditor' ) ( ).endRouting ( );
 		};
 		
 		var _ParseError = function ( status, statusText ) {
 			_RequestStarted = false;
-			console.log ( "Response status: %d (%s)", status, statusText);
+			_ErrorEditor.showError ( _Translator.getText ( 'Router - An error occurs when sending the request', {status : status, statusText : statusText} ) );
 		};
 		
 		var _StartRequest = function ( ) {

@@ -6314,16 +6314,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
-			var response = JSON.parse( requestResponse );
+			var response = null;
+			try {
+				response = JSON.parse( requestResponse );
+			}
+			catch ( e ) {
+				return false;
+			}
 
 			if ( "Ok" !== response.code )
 			{
-				return {};
+				return false;
 			}
 			
 			if ( 0 === response.routes.length )
 			{
-				return {};
+				return false;
 			}
 
 			route.itinerary.itineraryPoints.removeAll ( );
@@ -6342,8 +6348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var osrmTextInstructions = require('osrm-text-instructions')('v5', options );
 			var lastPointWithDistance = 0;
-			
-			
+
 			response.routes [ 0 ].legs.forEach ( 
 				function ( leg ) {
 					leg.steps.forEach ( 
@@ -6384,7 +6389,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			);
-			return ;
+
+			return true;
 		};
 		
 		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
@@ -6431,9 +6437,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
 			},
 			parseResponse : function ( requestResponse, route, userLanguage ) {
-				_ParseResponse ( requestResponse, route, userLanguage );
+				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
-			get name ( ) { return 'mapbox';},
+			get name ( ) { return 'Mapbox';},
 			get transitModes ( ) { return { car : true, bike : true, pedestrian : true} ; }
 			
 		};

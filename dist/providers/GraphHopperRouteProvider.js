@@ -197,13 +197,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
-			var response = JSON.parse( requestResponse );
+			var response = null;
+			try {
+				response = JSON.parse( requestResponse );
+			}
+			catch ( e ) {
+				return false;
+			}
+			
+			if ( 0 === response.paths.length ) {
+				return false;
+			}
 
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
 			
-			var itineraryPointsDistance = 0;
-			var maneuversDistance = 0;
 			response.paths.forEach ( 
 				function ( path ) {
 					path.points = require ( 'polyline' ).decode ( path.points );
@@ -213,10 +221,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					for ( var pointsCounter = 0; pointsCounter < path.points.length; pointsCounter ++ ) {
 						var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
 						itineraryPoint.latLng = path.points [ pointsCounter ];
-						if ( pointsCounter !== path.points.length - 1 ) {
-							itineraryPoint.distance = L.latLng ( path.points [ pointsCounter ] ).distanceTo ( L.latLng ( path.points [ pointsCounter + 1 ] ) );
-							itineraryPointsDistance += itineraryPoint.distance;
-						}
 						itineraryPoints.push ( itineraryPoint );
 						route.itinerary.itineraryPoints.add ( itineraryPoint );
 					}
@@ -228,7 +232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							maneuver.instruction = instruction.text || '';
 							maneuver.duration = instruction.time / 1000;
 							maneuver.distance = instruction.distance;
-							maneuversDistance += maneuver.distance;
+							/*maneuversDistance += maneuver.distance;*/
 							maneuver.itineraryPointObjId = itineraryPoints [ instruction.interval [ 0 ] ].objId;
 							itineraryPoints [ instruction.interval [ 0 ] ].maneuverObjId = maneuver.objId;
 							route.itinerary.maneuvers.add ( maneuver );							
@@ -246,14 +250,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			);
 			
-			var distanceCorrection = maneuversDistance / itineraryPointsDistance;
-			var itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
-			while ( ! itineraryPointsIterator.done ) {
-				itineraryPointsIterator.value.distance = itineraryPointsIterator.value.distance * distanceCorrection; 
-			}
-			
-
-			return ;
+			return true;
 		};
 		
 		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
@@ -302,7 +299,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
 			},
 			parseResponse : function ( requestResponse, route, userLanguage ) {
-				_ParseResponse ( requestResponse, route, userLanguage );
+				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'GraphHopper';},
 			get transitModes ( ) { return { car : true, bike : true, pedestrian : true } ; }

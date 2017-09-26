@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 
-	var getErrorEditor = function ( ) {
+	var ErrorEditor = function ( ) {
 
 		return {
 			
@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getErrorEditor;
+		module.exports = ErrorEditor;
 	}
 
 }());

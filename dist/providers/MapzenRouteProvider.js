@@ -219,13 +219,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
 			
-			var response = JSON.parse ( requestResponse );	
+			var response = null;
+			try {
+				response = JSON.parse( requestResponse );
+			}
+			catch ( e ) {
+				return false;
+			}
+			
+			if ( 0 === response.trip.legs.length ) {
+				return false;
+			}
 
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
 			
-			var itineraryPointsDistance = 0;
-			var maneuversDistance = 0;
 			response.trip.legs.forEach ( 
 				function ( leg ) {
 					leg.shape = require ( 'polyline' ).decode ( leg.shape , 6 );
@@ -233,10 +241,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					for ( var shapePointCounter = 0; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
 						var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
 						itineraryPoint.latLng = leg.shape [ shapePointCounter ];
-						if ( shapePointCounter !== leg.shape.length - 1 ) {
-							itineraryPoint.distance = L.latLng ( leg.shape [ shapePointCounter ] ).distanceTo ( L.latLng ( leg.shape [ shapePointCounter + 1 ] ) );
-							itineraryPointsDistance += itineraryPoint.distance;
-						}
 						itineraryPoints.push ( itineraryPoint );
 						route.itinerary.itineraryPoints.add ( itineraryPoint );
 					}
@@ -254,7 +258,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								);
 							}
 							travelNotesManeuver.distance = ( mapzenManeuver.length || 0 ) * 1000;
-							maneuversDistance += travelNotesManeuver.distance;
 							travelNotesManeuver.duration = mapzenManeuver.time || 0;
 							travelNotesManeuver.itineraryPointObjId = itineraryPoints [ mapzenManeuver.begin_shape_index ].objId;
 							itineraryPoints [ mapzenManeuver.begin_shape_index ].maneuverObjId = travelNotesManeuver.objId;
@@ -263,11 +266,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					);
 				}
 			);
-			var distanceCorrection = maneuversDistance /itineraryPointsDistance;
-			var itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
-			while ( ! itineraryPointsIterator.done ) {
-				itineraryPointsIterator.value.distance = itineraryPointsIterator.value.distance * distanceCorrection; 
-			}
 			
 			var wayPointsIterator = route.wayPoints.iterator;
 			response.trip.locations.forEach ( 
@@ -277,6 +275,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			);
+			
+			return true;
 		};
 
 		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
@@ -315,7 +315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		return {
 			get icon ( ) { return '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'; },
 			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {	return _GetUrl( wayPoints, transitMode, providerKey, userLanguage, options );},
-			parseResponse : function ( requestResponse, route, userLanguage ) { _ParseResponse ( requestResponse, route, userLanguage );},
+			parseResponse : function ( requestResponse, route, userLanguage ) { return _ParseResponse ( requestResponse, route, userLanguage );},
 			get name ( ) { return 'Mapzen';},
 			get transitModes ( ) { return { car : true, bike : true, pedestrian : true}; }
 		};
