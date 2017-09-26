@@ -202,8 +202,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			route.itinerary.itineraryPoints.removeAll ( );
 			route.itinerary.maneuvers.removeAll ( );
 			
-			var simplifiedInstructions = _SimplifiedInstructions [ userLanguage ] || _SimplifiedInstructions.en;
-
 			var itineraryPointsDistance = 0;
 			var maneuversDistance = 0;
 			response.paths.forEach ( 

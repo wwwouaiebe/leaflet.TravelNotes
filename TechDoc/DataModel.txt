@@ -1,0 +1,126 @@
+dataManager {} +-> travel {} +-> routes [] +-> notes [] ----------+-> iconHeight
+               |             |             |                      |
+               |             |             |                      +-> iconWidth
+               |             |             |                      |
+               |             |             |                      +-> iconLat
+               |             |             |                      |
+               |             |             |                      +-> iconLng
+               |             |             |                      |
+               |             |             |                      +-> iconContent
+               |             |             |                      |
+               |             |             |                      +-> popupContent
+               |             |             |                      |
+               |             |             |                      +-> tooltipContent
+               |             |             |                      |
+               |             |             |                      +-> phone
+               |             |             |                      |
+               |             |             |                      +-> url
+               |             |             |                      |
+               |             |             |                      +-> address
+               |             |             |                      |
+               |             |             |                      +-> lat
+               |             |             |                      |
+               |             |             |                      +-> lng
+               |             |             |                      |
+               |             |             |                      +-> chainedDistance
+               |             |             |                      |
+               |             |             |                      +-> distance
+               |             |             |
+               |             |             |
+               |             |             |
+               |             |             +-> wayPoints [] ------+-> name
+               |             |             |                      |
+               |             |             |                      +-> lat
+               |             |             |                      |
+               |             |             |                      +-> lng
+               |             |             | 
+               |             |             | 
+               |             |             | 
+               |             |             |
+               |             |             +-> itinerary {} ------+-> itineraryPoints [] +-> lat
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> lng
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> distance
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> maneuverObjId
+               |             |             |                      |
+               |             |             |                      |
+               |             |             |                      |
+               |             |             |                      +-> maneuvers [] ------+-> iconName
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> instruction
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> distance
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> duration
+               |             |             |                      |                      |
+               |             |             |                      |                      +-> itineraryPointObjId
+               |             |             |                      |
+               |             |             |                      |
+               |             |             |                      |
+               |             |             |                      +-> provider
+               |             |             |                      |
+               |             |             |                      +-> transitMode
+               |             |             | 
+               |             |             | 
+               |             |             | 
+               |             |             +-> width
+               |             |             |
+               |             |             +-> color
+               |             |             |
+               |             |             +-> chain
+               |             |             |
+               |             |             +-> chainedDistance
+               |             |             |
+               |             |             +-> distance
+               |             |             |
+               |             |             +-> duration
+               |             |             |
+               |             |             +-> name
+               |             |             
+               |             |             
+               |             |             
+               |             +-> notes [] -+-> iconHeight
+               |             |             |
+               |             |             +-> iconWidth
+               |             |             |
+               |             |             +-> iconLat
+               |             |             |
+               |             |             +-> iconLng
+               |             |             |
+               |             |             +-> iconContent
+               |             |             |
+               |             |             +-> popupContent
+               |             |             |
+               |             |             +-> tooltipContent
+               |             |             |
+               |             |             +-> phone
+               |             |             |
+               |             |             +-> url
+               |             |             |
+               |             |             +-> address
+               |             |             |
+               |             |             +-> lat
+               |             |             |
+               |             |             +-> lng
+               |             |             |
+               |             |             +-> chainedDistance
+               |             |             |
+               |             |             +-> distance
+               |             |
+               |             |
+               |             |
+               |             +-> name
+               |           
+               +-> editedRoute {}
+               |
+               +-> map {}
+               |
+               +-> travelObjId
+               |
+               +-> mapObjects []
+               |
+               +-> routing
+               |
+               +-> UUID

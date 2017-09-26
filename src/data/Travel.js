@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -13,38 +13,54 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Travel.js file ----------------------------------------------------------------------------------------------------
+This file contains:
+	- the Travel object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170926
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 (function() {
-	
+
 	'use strict';
-	
-	var _ObjType = require ( './ObjType' ) ( 'Travel', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
-	
-	// one and only one object Travel is possible
-	
-	var _Name = 'TravelNotes.trv';
-	var _Routes = require ( './Collection' ) ( 'Route' );
-	_Routes.add ( require ( './Route' ) ( ) );
 
-	var _Notes = require ( './Collection' ) ( 'Note' );
-	var _ObjId = -1;
+	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getTravel = function ( ) {
-		
+	var Travel = function ( ) {
+
+		// Private variables
+
+		var _Name = 'TravelNotes.trv';
+
+		var _Routes = require ( '../data/Collection' ) ( 'Route' );
+		_Routes.add ( require ( '../data/Route' ) ( ) );
+
+		var _Notes = require ( '../data/Collection' ) ( 'Note' );
+
+		var _ObjId = require ( '../data/ObjId' ) ( );
+
 		return {
-			
-			get name ( ) { return _Name; },
-			
-			set name ( Name ) { _Name = Name;},
-			
+
+			// getters and setters...
+
 			get routes ( ) { return _Routes; },
-			
+
 			get notes ( ) { return _Notes; },
-			
+
+			get name ( ) { return _Name; },
+			set name ( Name ) { _Name = Name;},
+
 			get objId ( ) { return _ObjId; },
-			
+
 			get objType ( ) { return _ObjType; },
-			
+
 			get object ( ) {
 				return {
 					name : _Name,
@@ -54,28 +70,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					objType : _ObjType.object
 				};
 			},
-			
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
 				_Routes.object = Object.routes || [];
 				_Notes.object = Object.notes || [];
-				_ObjId = require ( './ObjId' ) ( );
-			},
-			toString : function ( ) { return this.object; }
+				_ObjId = require ( '../data/ObjId' ) ( );
+			}
 		};
 	};
-	
-	/* --- End of getTravel function --- */
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravel;
+		module.exports = Travel;
 	}
 
 } ) ( );
 
-/* --- End of Travel.js file --- */
+/*
+--- End of Travel.js file ---------------------------------------------------------------------------------------------
+*/

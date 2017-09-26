@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -13,69 +13,89 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Route.js file -----------------------------------------------------------------------------------------------------
+This file contains:
+	- the Route object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170926
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 (function() {
-	
+
 	'use strict';
 
-	var _ObjType = require ( './ObjType' ) ( 'Route', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	var getRoute = function ( ) {
-		
+	var Route = function ( ) {
+
+		// Private variables
+
 		var _Name = '';
-		var _WayPoints = require ( './Collection' ) ( 'WayPoint' );
-		_WayPoints.add ( require ( './Waypoint' ) ( ) );
-		_WayPoints.add ( require ( './Waypoint' ) ( ) );
-		
-		var _Notes = require ( './Collection' ) ( 'Note' );
-		
-		var _Itinerary = require ( './Itinerary' ) ( );
-		
+
+		var _WayPoints = require ( '../data/Collection' ) ( 'WayPoint' );
+		_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
+		_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
+
+		var _Notes = require ( '../data/Collection' ) ( 'Note' );
+
+		var _Itinerary = require ( '../data/Itinerary' ) ( );
+
 		var _Width = require ( '../util/Config' ) ( ).route.width || 5;
-		
+
 		var _Color = require ( '../util/Config' ) ( ).route.color || '#ff0000';
-		
+
 		var _Chain = false;
-		
+
 		var _ChainedDistance = 0;
-		
+
 		var _Distance = 0;
-		
+
 		var _Duration = 0;
-		
-		var _ObjId = require ( './ObjId' ) ( );
-		
+
+		var _ObjId = require ( '../data/ObjId' ) ( );
+
 		return {
+
+			// getters and setters...
+
+			get wayPoints ( ) { return _WayPoints; },
+
+			get itinerary ( ) { return _Itinerary; },
+
+			get notes ( ) { return _Notes; },
+
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
-			
-			get wayPoints ( ) { return _WayPoints; },
-			
-			get notes ( ) { return _Notes; },
-			
-			get itinerary ( ) { return _Itinerary; },
 
 			get width ( ) { return _Width; },
 			set width ( Width ) { _Width = Width; },
-			
+
 			get color ( ) { return _Color; },
 			set color ( Color ) { _Color = Color; },
-			
+
 			get chain ( ) { return _Chain; },
 			set chain ( Chain ) { _Chain = Chain; },
-			
+
 			get chainedDistance ( ) { return _ChainedDistance; },
 			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
-			
+
 			get distance ( ) { return _Distance; },
 			set distance ( Distance ) { _Distance = Distance; },
-			
+
 			get duration ( ) { return _Duration; },
 			set duration ( Duration ) { _Duration = Duration; },
-			
+
 			get objId ( ) { return _ObjId; },
+
 			get objType ( ) { return _ObjType; },
-			
+
 			get object ( ) {
 				return {
 					name : _Name,
@@ -104,19 +124,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_Distance = Object.distance;
 				_Duration = Object.duration;
 				_ChainedDistance = Object.chainedDistance;
-				_ObjId = require ( './ObjId' ) ( );
+				_ObjId = require ( '../data/ObjId' ) ( );
 			}
 		};
 	};
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoute;
+		module.exports = Route;
 	}
 
 } ) ( );
 
-/* --- End of MapData.js file --- */
+/*
+--- End of Route.js file ----------------------------------------------------------------------------------------------
+*/

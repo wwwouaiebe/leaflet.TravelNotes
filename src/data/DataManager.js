@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -13,42 +13,57 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- DataManager.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the DataManager object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170926
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 (function() {
-	
+
 	'use strict';
-	
-	var getDataManager = function ( ) {
+
+	var DataManager = function ( ) {
 
 		return {
+
 			init : function ( map ) {
 				global.map = map;
 				global.travelObjId = 0;
-				global.editedRoute = require ( '../Data/Route' ) ( );
+				global.editedRoute = require ( '../data/Route' ) ( );
 				global.editedRoute.routeChanged = false;
 				global.editedRoute.routeInitialObjId = -1;
-				global.travel = require ( '../Data/Travel' ) ( );
+				global.travel = require ( '../data/Travel' ) ( );
 				global.mapObjects = new Map ( );
 				global.routing = {};
 				global.UUID = require ( '../util/Utilities' ) ( ).UUID;
 			},
+
 			get UUID ( ) { return global.UUID; },
-			
+
 			get routing ( ) { return global.routing; },
 			set routing ( Routing ) { global.routing = Routing; },
+
 			get providers ( ) { return global.providers; },
+
 			get editedRoute ( ) { return global.editedRoute; },
-			
 			set editedRoute ( editedRoute ) { global.editedRoute = editedRoute; },
-			
+
 			get travel ( ) { return global.travel; },
-			
 			set travel ( travel ) { global.travel = travel; },
-			
+
 			get mapObjects ( ) { return global.mapObjects; },
-			
+
 			get map ( ) { return global.map; },
-			
+
 			getNoteAndRoute : function ( noteObjId ) {
 				var note = null;
 				note = this.travel.notes.getAt ( noteObjId );
@@ -67,10 +82,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataManager.getNote ( )' );
 					return { note : null, route : null };
 				}
-				
+
 				return { note : note, route : this.editedRoute };
 			},
-			
+
 			getRoute : function ( routeObjId ) {
 				var route = null;
 				route = this.travel.routes.getAt ( routeObjId );
@@ -82,18 +97,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( ! route ) {
 					console.log ( 'Invalid noteObjId ' + routeObjId + ' for function DataManager.getRoute ( )' );
 				}
-				
+
 				return route;
-			}			
+			}
 		};
 	};
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getDataManager;
+		module.exports = DataManager;
 	}
 
 } ) ( );
+
+/*
+--- End of DataManager.js file ----------------------------------------------------------------------------------------
+*/

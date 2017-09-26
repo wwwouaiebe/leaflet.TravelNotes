@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -28,51 +28,51 @@ Tests ...
 */
 
 (function() {
-	
+
 	'use strict';
-	
+
 	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	/* 
+	/*
 	--- Itinerary object ----------------------------------------------------------------------------------------------
-	
+
 	Patterns : Closure
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	var Itinerary = function ( ) {
-		
+
 		// Private variables
 
 		var _Provider = '';
-		
+
 		var _TransitMode = '';
-		
+
 		var _ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
 
 		var _Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
-		
+
 		var _ObjId = require ( '../data/ObjId' ) ( );
 
 		return {
 
 			// getters and setters...
-			
+
 			get itineraryPoints ( ) { return _ItineraryPoints; },
 
 			get maneuvers ( ) { return _Maneuvers; },
-	 
+
 			get provider ( ) { return _Provider; },
 			set provider ( Provider ) { _Provider = Provider; },
 
 			get transitMode ( ) { return _TransitMode; },
 			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
-			
+
 			get objId ( ) { return _ObjId; },
-			
+
 			get objType ( ) { return _ObjType; },
-			
+
 			get object ( ) {
 				return {
 					itineraryPoints : _ItineraryPoints.object,
@@ -105,11 +105,11 @@ Tests ...
 			}
 		};
 	};
-	
-	/* 
+
+	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = Itinerary;
 	}

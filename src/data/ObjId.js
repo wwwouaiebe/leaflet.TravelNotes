@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -14,24 +14,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
+/*
+--- ObjId.js file -----------------------------------------------------------------------------------------------------
+
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170926
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 (function() {
-	
+
 	'use strict';
 
-	
-	var getObjId = function ( ) {
+
+	var ObjId = function ( ) {
 		return ++ global.travelObjId;
 	};
-	
-	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getObjId;
-		
+		module.exports = ObjId;
+
 	}
 
 } ) ( );
 
-/* --- End of MapData.js file --- */
+/*
+--- End of ObjId.js file ----------------------------------------------------------------------------------------------
+*/

@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -28,21 +28,21 @@ Tests ...
 */
 
 (function() {
-	
+
 	'use strict';
-	
+
 	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
 
-	/* 
+	/*
 	--- ItineraryPoint object -----------------------------------------------------------------------------------------
-	
+
 	Patterns : Closure
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	var ItineraryPoint = function ( ) {
-		
+
 		// Private variables
 
 		var _Lat = 0;
@@ -52,32 +52,32 @@ Tests ...
 		var _Distance = 0;
 
 		var _ManeuverObjId = -1;
-		
+
 		var _ObjId = require ( '../data/ObjId' ) ( );
-		
+
 		return {
-			
+
 			// getters and setters...
 
 			get lat ( ) { return _Lat;},
 			set lat ( Lat ) { _Lat = Lat; },
-			
+
 			get lng ( ) { return _Lng;},
 			set lng ( Lng ) { _Lng = Lng; },
-			
+
 			get latLng ( ) { return [ _Lat, _Lng ];},
 			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
 
 			get distance ( ) { return _Distance;},
 			set distance ( Distance ) { _Distance = Distance; },
-						
+
 			get maneuverObjId ( ) { return _ManeuverObjId;},
 			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
-			
+
 			get objId ( ) { return _ObjId; },
-			
+
 			get objType ( ) { return _ObjType; },
-			
+
 			get object ( ) {
 				return {
 					lat : _Lat,
@@ -98,11 +98,11 @@ Tests ...
 			}
 		};
 	};
-	
-	/* 
+
+	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = ItineraryPoint;
 	}
