@@ -31,7 +31,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( '../data/DataManager' ) ( ).version );
 
 	var Note = function ( ) {
 

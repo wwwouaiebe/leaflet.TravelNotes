@@ -31,7 +31,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( '../data/DataManager' ) ( ).version );
 
 	var Maneuver = function ( ) {
 

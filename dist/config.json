@@ -18,6 +18,7 @@
 	},
 	"note":
 	{
+		"geocoding":true,
 		"grip":
 		{
 			"size":10,

@@ -55,6 +55,7 @@ Tests ...
 						width : 3
 					},
 					note : {
+						geocoding : false,
 						grip : { 
 							size : 10,
 							opacity: 0 
@@ -74,6 +75,7 @@ Tests ...
 						clearAfterSave : true
 					}
 				};
+				global.version = '1.0.0';
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
@@ -86,6 +88,8 @@ Tests ...
 			},
 
 			get UUID ( ) { return global.UUID; },
+
+			get version ( ) { return global.version; },
 
 			get routing ( ) { return global.routing; },
 			set routing ( Routing ) { global.routing = Routing; },
@@ -192,7 +196,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../data/DataManager' ) ( ).version );
 
 	/*
 	--- Itinerary object ----------------------------------------------------------------------------------------------
@@ -280,7 +284,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/Collection":29,"../data/ObjId":35,"../data/ObjType":36}],3:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -314,7 +318,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( '../data/DataManager' ) ( ).version );
 
 	var Route = function ( ) {
 
@@ -425,7 +429,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/Collection":29,"../data/DataManager":30,"../data/Itinerary":31,"../data/ObjId":35,"../data/ObjType":36,"../data/Waypoint":40,"./Itinerary":2}],4:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/Itinerary":31,"../data/ObjId":35,"../data/ObjType":36,"../data/Waypoint":40,"./Itinerary":2}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -459,7 +463,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( '../data/DataManager' ) ( ).version );
 
 	var Travel = function ( ) {
 
@@ -520,7 +524,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/Collection":29,"../data/ObjId":35,"../data/ObjType":36,"../data/Route":37}],5:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36,"../data/Route":37}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -674,9 +678,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.init ( map );
 				_ReadURL ( );
 
-				var xmlHttpRequest = new XMLHttpRequest ( );
-				xmlHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === XMLHttpRequest.DONE ) {
+				var configHttpRequest = new XMLHttpRequest ( );
+				configHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === configHttpRequest.DONE ) {
 						if ( this.status === 200 ) {
 							try {
 								_DataManager.config = JSON.parse ( this.responseText );
@@ -688,33 +692,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								}
 								_DataManager.travel = require ( './data/Travel' ) ( );
 
-
-
-
-
-
-
-								
-								if ( divControlId )	{
-									document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-								}	
-								else {
-									if ( typeof module !== 'undefined' && module.exports ) {
-										map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+								var translationsHttpRequest = new XMLHttpRequest ( );
+								translationsHttpRequest.onreadystatechange = function ( event ) {
+									if ( this.readyState === translationsHttpRequest.DONE ) {
+										if ( this.status === 200 ) {
+											try {
+												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
+											}
+											catch ( e ) {
+												console.log ( 'Not possible to parse ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+											}
+										}
+										else {
+											console.log ( 'Not possible to load ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+										}
+										if ( divControlId )	{
+											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+										}	
+										else {
+											if ( typeof module !== 'undefined' && module.exports ) {
+												map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+											}
+										}
+										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 									}
-								}
-								
-								require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-								require ( './core/TravelEditor' ) ( ).openServerTravel ( );
-								
-
-								
-								
-								
-
+								};
+								translationsHttpRequest.open ( 
+									'GET',
+									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + _DataManager.config.language.toLowerCase ( ) + '.json',
+									true
+								);
+								translationsHttpRequest.send ( null );
 							}
-							catch ( e )
-							{
+							catch ( e ) {
 								console.log ( 'Not possible to parse config.json' );
 							}
 						} 
@@ -723,12 +734,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						}
 					}
 				};
-				xmlHttpRequest.open ( 
+				configHttpRequest.open ( 
 					'GET',
 					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'config.json',
 					true
 				);
-				xmlHttpRequest.send ( null );
+				configHttpRequest.send ( null );
 
 			},
 			
@@ -803,7 +814,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":25,"./core/RouteEditor":26,"./core/TravelEditor":28,"./data/DataManager":30,"./data/ItineraryPoint":32,"./data/Maneuver":33,"./data/Travel":38,"./util/Utilities":42}],7:[function(require,module,exports){
+},{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/Translator":19,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":25,"./core/RouteEditor":26,"./core/TravelEditor":28,"./data/DataManager":30,"./data/ItineraryPoint":32,"./data/Maneuver":33,"./data/Travel":38,"./util/Utilities":42}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2293,6 +2304,7 @@ To do: translations
 	var _LocalEditorData = { buttons : [], list : [] };
 	var _Note;
 	var _RouteObjId;
+	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	var onOkButtonClick = function ( ) {
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
@@ -2709,9 +2721,9 @@ To do: translations
 		);
 		phone.value = note.phone;
 		
-		var xmlHttpRequest = new XMLHttpRequest ( );
-		xmlHttpRequest.onreadystatechange = function ( event ) {
-			if ( this.readyState === XMLHttpRequest.DONE ) {
+		var buttonsHttpRequest = new XMLHttpRequest ( );
+		buttonsHttpRequest.onreadystatechange = function ( event ) {
+			if ( this.readyState === buttonsHttpRequest.DONE ) {
 				if ( this.status === 200 ) {
 					var serverEditorData;
 					try {
@@ -2731,12 +2743,12 @@ To do: translations
 				}
 			}
 		};
-		xmlHttpRequest.open ( 
+		buttonsHttpRequest.open ( 
 			'GET',
 			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
 			true
 		);
-		xmlHttpRequest.send ( null );
+		buttonsHttpRequest.send ( null );
 
 		// and the dialog is centered on the screen
 		baseDialog.center ( );
@@ -2748,7 +2760,7 @@ To do: translations
 
 }());
 
-},{"../UI/BaseDialog":8,"../UI/Translator":19,"../core/NoteEditor":25,"./HTMLElementsFactory":12}],16:[function(require,module,exports){
+},{"../UI/BaseDialog":8,"../UI/Translator":19,"../core/NoteEditor":25,"../data/DataManager":30,"./HTMLElementsFactory":12}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3357,6 +3369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 },{"./HTMLElementsFactory":12}],19:[function(require,module,exports){
+(function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -3375,380 +3388,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 (function() {
 	
 	'use strict';
-
-	var _Fr =
-	[
-		{
-			msgid : "AboutDialog - Title",
-			msgstr : "À propos de Travel & Notes"
-		},
-		{
-			msgid : "ColorDialog - Title",
-			msgstr : "Couleurs"
-		},
-		{
-			msgid : "ColorDialog - red",
-			msgstr : "Rouge"
-		},
-		{
-			msgid : "ColorDialog - green",
-			msgstr : "Vert"
-		},
-		{
-			msgid : "ColorDialog - blue",
-			msgstr : "Bleu"
-		},
-		{
-			msgid : "ContextMenu - close",
-			msgstr : "Fermer"
-		},
-		{
-			msgid : "ErrorEditorUI - Show",
-			msgstr : "Afficher"
-		},
-		{
-			msgid : "ErrorEditorUI - Hide",
-			msgstr : "Masquer"
-		},
-		{
-			msgid : "HTMLViewsFactory - ToNextInstruction",
-			msgstr : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
-		},
-		{
-			msgid : "HTMLViewsFactory - TransitMode bike",
-			msgstr : "un vélo"
-		},
-		{
-			msgid : "HTMLViewsFactory - TransitMode car",
-			msgstr : "une voiture"
-		},
-		{
-			msgid : "HTMLViewsFactory - TransitMode pedestrian",
-			msgstr : "un piéton"
-		},
-		{
-			msgid : "HTMLViewsFactory - Route footer",
-			msgstr : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
-		},
-		{
-			msgid : "HTMLViewsFactory - Travel footer",
-			msgstr : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a> <a href='http://www.ouaie.be/' target='_Blank'>© Christian Guyette 2017</a>"
-		},
-		{
-			msgid : "ItineraryEditorUI - Itinerary and notes",
-			msgstr : "Itinéraire et notes"
-		},
-		{
-			msgid : "ItineraryEditorUI - Show",
-			msgstr : "Afficher"
-		},
-		{
-			msgid : "ItineraryEditorUI - Hide",
-			msgstr : "Masquer"
-		},
-		{
-			msgid : "NoteDialog - Title",
-			msgstr : "Note"
-		},
-		{
-			msgid : "NoteDialog - IconHtmlContentTitle",
-			msgstr : "Contenu de l'icône&nbsp;:"
-		},
-		{
-			msgid : "NoteDialog - PopupContentTitle",
-			msgstr : "Contenu du popup&nbsp;:"
-		},
-		{
-			msgid : "NoteDialog - AdressTitle",
-			msgstr : "Adresse&nbsp;:"
-		},
-		{
-			msgid : "NoteDialog - LinkTitle",
-			msgstr : "Lien&nbsp;:"
-		},
-		{
-			msgid : "NoteDialog - PhoneTitle",
-			msgstr : "Téléphone&nbsp:"
-		},
-		{
-			msgid : "NoteDialog - TooltipTitle",
-			msgstr : "Contenu du tooltip&nbsp;:"
-		},
-		{
-			msgid : "NoteDialog - Standard icon",
-			msgstr : "Icône standard"
-		},
-		{
-			msgid : "NoteDialog - Personnel icon",
-			msgstr : "Icône personnalisée"
-		},
-		{
-			msgid : "NoteDialog - Choose an icon",
-			msgstr : "Icône : "
-		},
-		{
-			msgid : "NoteDialog - Icon width",
-			msgstr : "Largeur : "
-		},
-		{
-			msgid : "NoteDialog - Icon height",
-			msgstr : "Hauteur : "
-		},
-		{
-			msgid : "NoteEditor - new travel note",
-			msgstr : "Ajouter une note"
-		},
-		{
-			msgid : "NoteEditor - edit note",
-			msgstr : "Éditer cette note"
-		},
-		{
-			msgid : "NoteEditor - delete note",
-			msgstr : "Effacer cette note"
-		},
-		{
-			msgid : "NoteEditor - zoom to travel",
-			msgstr : "Zoom sur le voyage"
-		},
-		{
-			msgid : "NoteEditor - About",
-			msgstr : "À propos de Travel & Notes"
-		},
-		{
-			msgid : "NoteEditor - address",
-			msgstr : "<span>Adresse</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "NoteEditor - phone",
-			msgstr : "<span>Téléphone</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "NoteEditor - url",
-			msgstr : "<span>Url</span>&nbsp;:&nbsp;"
-		},
-		{
-			msgid : "NoteEditor - latlng",
-			msgstr : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
-		},
-		{
-			msgid : "NoteEditor - distance",
-			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-		},
-		{
-			msgid : "Notedialog - empty icon content",
-			msgstr : "Le contenu de l'icône doit être complété."
-		},
-		{
-			msgid : "RouteEditor - Distance",
-			msgstr : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-		},
-		{
-			msgid : "RouteEditor - Duration",
-			msgstr : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
-		},
-		{
-			msgid : "RouteEditor-Not possible to edit a route without a save or cancel",
-			msgstr : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
-		},
-		{
-			msgid : "RouteEditor - Add a note on the route",
-			msgstr : "Ajouter une note à ce trajet"
-		},
-		{
-			msgid : "RouteEditor - Select this point as start point",
-			msgstr : "Sélectionner cet endroit comme point de départ"
-		},
-		{
-			msgid : "RouteEditor - Select this point as way point",
-			msgstr : "Sélectionner cet endroit comme point intermédiaire"
-		},
-		{
-			msgid : "RouteEditor - Select this point as end point",
-			msgstr : "Sélectionner cet endroit comme point de fin"
-		},
-		{
-			msgid : "RouteEditor - Edit this route",
-			msgstr : "Éditer cette route"
-		},
-		{
-			msgid : "RouteEditor - Delete this route",
-			msgstr : "Supprimer cette route"
-		},
-		{
-			msgid : "RouteEditor - Properties",
-			msgstr : "Propriétés"
-		},
-		{
-			msgid : "RouteEditor - Zoom to route",
-			msgstr : "Zoom sur le trajet"
-		},
-		{
-			msgid : "RouteEditor - Save modifications on this route",
-			msgstr : "Sauver les modifications"
-		},
-		{
-			msgid : "RouteEditor - Cancel modifications on this route",
-			msgstr : "Abandonner les modifications"
-		},
-		{
-			msgid : "RouteEditorUI - Show",
-			msgstr : "Afficher"
-		},
-		{
-			msgid : "RouteEditorUI - Hide",
-			msgstr : "Masquer"
-		},
-		{
-			msgid : "RouteEditorUI - Waypoints",
-			msgstr : "Points de passage&nbsp;de la route:"
-		},
-		{
-			msgid : "RouteEditorUI - Start",
-			msgstr : "Départ"
-		},
-		{
-			msgid : "RouteEditorUI - Via",
-			msgstr : "Point de passage"
-		},
-		{
-			msgid : "RouteEditorUI - End",
-			msgstr : "Fin"
-		},
-		{
-			msgid : "RouteEditorUI - Save",
-			msgstr : "Sauver les modifications"
-		},
-		{
-			msgid : "RouteEditorUI - Cancel",
-			msgstr : "Abandonner les modifications"
-		},
-		{
-			msgid : "RouteEditorUI - Invert waypoints",
-			msgstr : "Inverser les points de passage"
-		},
-		{
-			msgid : "RouteEditorUI - Add waypoint",
-			msgstr : "Ajouter un point de passage"
-		},
-		{
-			msgid : "RouteEditorUI - Delete all waypoints",
-			msgstr : "Supprimer tous les points de passage"
-		},
-		{
-			msgid : "RouteEditorUI - Reduce the list",
-			msgstr : "Réduire"
-		},
-		{
-			msgid : "RouteEditorUI - Expand the list",
-			msgstr : "Étendre"
-		},
-		{
-			msgid : "RoutePropertiesDialog - Title",
-			msgstr : "Propriétés du trajet"
-		},
-		{
-			msgid : "RoutePropertiesDialog - Width",
-			msgstr : "Largeur : "
-		},
-		{
-			msgid : "RoutePropertiesDialog - Chain",
-			msgstr : "Trajet&nbsp;chaîné"
-		},
-		{
-			msgid : "TravelEditorUI - Show",
-			msgstr : "Afficher"
-		},
-		{
-			msgid : "TravelEditorUI - Hide",
-			msgstr : "Masquer"
-		},
-		{
-			msgid : "TravelEditorUI - Routes",
-			msgstr : "Routes du voyage&nbsp;:"
-		},
-		{
-			msgid : "TravelEditorUI - Route",
-			msgstr : "Route"
-		},
-		{
-			msgid : "TravelEditorUI - Reduce the list",
-			msgstr : "Réduire"
-		},
-		{
-			msgid : "TravelEditorUI - Expand the list",
-			msgstr : "Étendre"
-		},
-		{
-			msgid : "TravelEditorUI - New route",
-			msgstr : "Nouvelle route"
-		},
-		{
-			msgid : "TravelEditorUI - Delete all routes",
-			msgstr : "Supprimer toutes les routes"
-		},
-		{
-			msgid : "TravelEditorUI - Save travel",
-			msgstr : "Sauver dans un fichier"
-		},
-		{
-			msgid : "TravelEditorUI - Open travel",
-			msgstr : "Ouvrir un fichier"
-		},
-		{
-			msgid : "TravelEditorUI - Open travel roadbook",
-			msgstr : "Ouvrir le livre de voyage"
-		},
-		{
-			msgid : "TravelEditorUI - Undo",
-			msgstr : "Réouvrir une route supprimée"
-		},
-		{
-			msgid : "TravelEditor - cannot remove an edited route",
-			msgstr : "Il n'est pas possible de supprimer une route quand celle-ci est en cours d'édition"
-		},
-		{
-			msgid : "TravelEditor - Not possible to save a travel without a save or cancel",
-			msgstr : "Des données non sauvées sont présentes dans l'éditeur de route. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
-		},
-		{
-			msgid : "TravelEditorUI - Cancel travel",
-			msgstr : "Abandonner ce voyage"
-		},
-		{
-			msgid : "Utilities - day",
-			msgstr : "jours"
-		},
-		{
-			msgid : "Utilities - hour",
-			msgstr : "h"
-		},
-		{
-			msgid : "Utilities - minute",
-			msgstr : "min"
-		},
-		{
-			msgid : "Utilities - second",
-			msgstr : "sec"
-		},
-		{
-			msgid : "TravelEditorUI - ",
-			msgstr : "xxx"
-		},
-	];
-	
-	var _Translations = null;
-	
-	var getTranslator = function ( textId ) {
-		if ( ! _Translations ) {
-			_Translations = new Map ( );
-			for ( var messageCounter = 0; messageCounter < _Fr.length; messageCounter ++ ) {
-				_Translations.set ( _Fr [ messageCounter ].msgid, _Fr [ messageCounter ].msgstr );
-			}
-			_Translations.set ( 'Version', '1.0.0' );
+	var Translator = function ( ) {
+		
+		if ( ! global.translations ) {
+			global.translations = new Map ( );
 		}
+
 		return {
-			getText : function ( textId , params ) { 
-				var translation = _Translations.get ( textId );
+			setTranslations : function ( translations ) {
+				for ( var translationsCounter = 0; translationsCounter < translations.length; translationsCounter ++ ) {
+					global.translations.set ( translations [ translationsCounter ].msgid, translations [ translationsCounter ].msgstr );
+				}
+			},
+			getText : function ( msgid , params ) { 
+				var translation = global.translations.get ( msgid );
 				if ( params && translation ) {
 					Object.getOwnPropertyNames ( params ).forEach (
 						function ( propertyName ) {
@@ -3757,23 +3410,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					);
 				}
 				
-				return translation === undefined ? textId : translation;
+				return translation === undefined ? msgid : translation;
 			}
 		};
 	};
-	
-	/* --- End of getNote function --- */
-	
 	/* 
 	--- Exports ------------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTranslator;
+		module.exports = Translator;
 	}
 
 } ) ( );
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4503,7 +4154,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, - note.iconHeight / 2 ], 
 						html : note.iconContent,
-						className : __DataManager.config.note.style
+						className : _DataManager.config.note.style
 					}
 				);
 				var marker = L.marker ( 
@@ -5817,7 +5468,7 @@ Tests ...
 arguments[4][1][0].apply(exports,arguments)
 },{"../data/Route":37,"../data/Travel":38,"../util/Utilities":42,"dup":1}],31:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../UI/Translator":19,"../data/Collection":29,"../data/ObjId":35,"../data/ObjType":36,"dup":2}],32:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36,"dup":2}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5851,7 +5502,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( '../data/DataManager' ) ( ).version );
 
 	/*
 	--- ItineraryPoint object -----------------------------------------------------------------------------------------
@@ -5932,7 +5583,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/ObjId":35,"../data/ObjType":36}],33:[function(require,module,exports){
+},{"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5966,7 +5617,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( '../data/DataManager' ) ( ).version );
 
 	var Maneuver = function ( ) {
 
@@ -6043,7 +5694,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/ObjId":35,"../data/ObjType":36}],34:[function(require,module,exports){
+},{"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6077,7 +5728,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( '../data/DataManager' ) ( ).version );
 
 	var Note = function ( ) {
 
@@ -6225,7 +5876,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/ObjId":35,"../data/ObjType":36}],35:[function(require,module,exports){
+},{"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36}],35:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -6375,9 +6026,9 @@ Tests ...
 */
 },{}],37:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../UI/Translator":19,"../data/Collection":29,"../data/DataManager":30,"../data/Itinerary":31,"../data/ObjId":35,"../data/ObjType":36,"../data/Waypoint":40,"./Itinerary":31,"dup":3}],38:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/Itinerary":31,"../data/ObjId":35,"../data/ObjType":36,"../data/Waypoint":40,"./Itinerary":31,"dup":3}],38:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../UI/Translator":19,"../data/Collection":29,"../data/ObjId":35,"../data/ObjType":36,"../data/Route":37,"dup":4}],39:[function(require,module,exports){
+},{"../data/Collection":29,"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36,"../data/Route":37,"dup":4}],39:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6411,7 +6062,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( '../data/DataManager' ) ( ).version );
 
 	var WayPoint = function ( ) {
 
@@ -6489,9 +6140,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"../data/ObjId":35,"../data/ObjType":36}],40:[function(require,module,exports){
+},{"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36}],40:[function(require,module,exports){
 arguments[4][39][0].apply(exports,arguments)
-},{"../UI/Translator":19,"../data/ObjId":35,"../data/ObjType":36,"dup":39}],41:[function(require,module,exports){
+},{"../data/DataManager":30,"../data/ObjId":35,"../data/ObjType":36,"dup":39}],41:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 

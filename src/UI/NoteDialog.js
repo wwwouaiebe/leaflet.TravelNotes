@@ -29,6 +29,7 @@ To do: translations
 	var _LocalEditorData = { buttons : [], list : [] };
 	var _Note;
 	var _RouteObjId;
+	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	var onOkButtonClick = function ( ) {
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
@@ -445,9 +446,9 @@ To do: translations
 		);
 		phone.value = note.phone;
 		
-		var xmlHttpRequest = new XMLHttpRequest ( );
-		xmlHttpRequest.onreadystatechange = function ( event ) {
-			if ( this.readyState === XMLHttpRequest.DONE ) {
+		var buttonsHttpRequest = new XMLHttpRequest ( );
+		buttonsHttpRequest.onreadystatechange = function ( event ) {
+			if ( this.readyState === buttonsHttpRequest.DONE ) {
 				if ( this.status === 200 ) {
 					var serverEditorData;
 					try {
@@ -467,12 +468,12 @@ To do: translations
 				}
 			}
 		};
-		xmlHttpRequest.open ( 
+		buttonsHttpRequest.open ( 
 			'GET',
 			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
 			true
 		);
-		xmlHttpRequest.send ( null );
+		buttonsHttpRequest.send ( null );
 
 		// and the dialog is centered on the screen
 		baseDialog.center ( );

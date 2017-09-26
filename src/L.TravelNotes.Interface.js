@@ -96,9 +96,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.init ( map );
 				_ReadURL ( );
 
-				var xmlHttpRequest = new XMLHttpRequest ( );
-				xmlHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === XMLHttpRequest.DONE ) {
+				var configHttpRequest = new XMLHttpRequest ( );
+				configHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === configHttpRequest.DONE ) {
 						if ( this.status === 200 ) {
 							try {
 								_DataManager.config = JSON.parse ( this.responseText );
@@ -110,33 +110,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								}
 								_DataManager.travel = require ( './data/Travel' ) ( );
 
-
-
-
-
-
-
-								
-								if ( divControlId )	{
-									document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-								}	
-								else {
-									if ( typeof module !== 'undefined' && module.exports ) {
-										map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+								var translationsHttpRequest = new XMLHttpRequest ( );
+								translationsHttpRequest.onreadystatechange = function ( event ) {
+									if ( this.readyState === translationsHttpRequest.DONE ) {
+										if ( this.status === 200 ) {
+											try {
+												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
+											}
+											catch ( e ) {
+												console.log ( 'Not possible to parse ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+											}
+										}
+										else {
+											console.log ( 'Not possible to load ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+										}
+										if ( divControlId )	{
+											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+										}	
+										else {
+											if ( typeof module !== 'undefined' && module.exports ) {
+												map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+											}
+										}
+										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 									}
-								}
-								
-								require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-								require ( './core/TravelEditor' ) ( ).openServerTravel ( );
-								
-
-								
-								
-								
-
+								};
+								translationsHttpRequest.open ( 
+									'GET',
+									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + _DataManager.config.language.toLowerCase ( ) + '.json',
+									true
+								);
+								translationsHttpRequest.send ( null );
 							}
-							catch ( e )
-							{
+							catch ( e ) {
 								console.log ( 'Not possible to parse config.json' );
 							}
 						} 
@@ -145,12 +152,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						}
 					}
 				};
-				xmlHttpRequest.open ( 
+				configHttpRequest.open ( 
 					'GET',
 					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'config.json',
 					true
 				);
-				xmlHttpRequest.send ( null );
+				configHttpRequest.send ( null );
 
 			},
 			

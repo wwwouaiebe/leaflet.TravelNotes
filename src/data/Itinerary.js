@@ -31,7 +31,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../UI/Translator' ) ( ).getText ( 'Version' ) );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( '../data/DataManager' ) ( ).version );
 
 	/*
 	--- Itinerary object ----------------------------------------------------------------------------------------------

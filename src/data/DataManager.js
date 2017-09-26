@@ -53,6 +53,7 @@ Tests ...
 						width : 3
 					},
 					note : {
+						geocoding : false,
 						grip : { 
 							size : 10,
 							opacity: 0 
@@ -72,6 +73,7 @@ Tests ...
 						clearAfterSave : true
 					}
 				};
+				global.version = '1.0.0';
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
@@ -84,6 +86,8 @@ Tests ...
 			},
 
 			get UUID ( ) { return global.UUID; },
+
+			get version ( ) { return global.version; },
 
 			get routing ( ) { return global.routing; },
 			set routing ( Routing ) { global.routing = Routing; },
