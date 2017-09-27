@@ -6440,8 +6440,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'Mapbox';},
-			get transitModes ( ) { return { car : true, bike : true, pedestrian : true} ; }
-			
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true} ; },
+			get providerKeyNeeded ( ) { return true; }
 		};
 	};
 	
