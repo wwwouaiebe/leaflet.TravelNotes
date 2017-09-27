@@ -16,12 +16,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- GeoCoder.js file --------------------------------------------------------------------------------------------------
+This file contains:
+	- the GeoCoder object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 
 	var _RequestStarted = false;
-	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	var GeoCoder = function ( ) {
 
@@ -33,34 +46,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				_RequestStarted = true;
 				var NominatimUrl = 
-					'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + _DataManager.config.language;
+					'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../data/DataManager' ) ( ).config.language;
 				var XmlHttpRequest = new XMLHttpRequest ( );
 				XmlHttpRequest.onreadystatechange = function ( ) { 
 					if ( XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200 ) {
 						_RequestStarted = false;
-						var address = '';
-						// The Nominatim response is parsed
 						var response;
 						try {
 							response = JSON.parse( this.responseText );
-console.log ( response );
 						}
 						catch ( e ) {
 							return;
 						}
-						// House number is added
+						var address = '';
 						if ( undefined !== response.address.house_number ) {
 							address += response.address.house_number + ' ';
 						}
-						// Street name...
 						if ( undefined !== response.address.road ) {
 							address += response.address.road + ' ';
 						}
-						// or pedestrian name is added
 						else if ( undefined !== response.address.pedestrian ) {
 							address += response.address.pedestrian + ' ';
 						}
-						// City name. This can be 'village' or 'town' or 'city' in the Nomination response!
 						if ( undefined !== response.address.village ) {
 							address += response.address.village;
 						}
@@ -70,7 +77,6 @@ console.log ( response );
 						else if ( undefined !== response.address.city ) {
 							address += response.address.city;
 						}
-						// If nothing found previously, the country is added
 						if ( 0 === address.length ) {
 							address += response.address.country;
 						}
@@ -83,9 +89,16 @@ console.log ( response );
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = GeoCoder;
 	}
 
 }());
+
+/*
+--- End of GeoCoder.js file -------------------------------------------------------------------------------------------
+*/

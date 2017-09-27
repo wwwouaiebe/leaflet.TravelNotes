@@ -3122,6 +3122,7 @@ To do: translations
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
+			require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			return true;
 		};
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -3204,7 +3205,7 @@ To do: translations
 }());
 
 		
-},{"../UI/ColorDialog":9,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"./HTMLElementsFactory":12}],18:[function(require,module,exports){
+},{"../UI/ColorDialog":9,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"./HTMLElementsFactory":12}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3823,6 +3824,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ErrorEditor.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the ErrorEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -3844,13 +3859,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = ErrorEditor;
 	}
 
 }());
 
+/*
+--- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
+*/
 },{"../UI/ErrorEditorUI":11}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -3870,12 +3891,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- GeoCoder.js file --------------------------------------------------------------------------------------------------
+This file contains:
+	- the GeoCoder object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 
 	var _RequestStarted = false;
-	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	var GeoCoder = function ( ) {
 
@@ -3887,34 +3921,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				_RequestStarted = true;
 				var NominatimUrl = 
-					'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + _DataManager.config.language;
+					'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../data/DataManager' ) ( ).config.language;
 				var XmlHttpRequest = new XMLHttpRequest ( );
 				XmlHttpRequest.onreadystatechange = function ( ) { 
 					if ( XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200 ) {
 						_RequestStarted = false;
-						var address = '';
-						// The Nominatim response is parsed
 						var response;
 						try {
 							response = JSON.parse( this.responseText );
-console.log ( response );
 						}
 						catch ( e ) {
 							return;
 						}
-						// House number is added
+						var address = '';
 						if ( undefined !== response.address.house_number ) {
 							address += response.address.house_number + ' ';
 						}
-						// Street name...
 						if ( undefined !== response.address.road ) {
 							address += response.address.road + ' ';
 						}
-						// or pedestrian name is added
 						else if ( undefined !== response.address.pedestrian ) {
 							address += response.address.pedestrian + ' ';
 						}
-						// City name. This can be 'village' or 'town' or 'city' in the Nomination response!
 						if ( undefined !== response.address.village ) {
 							address += response.address.village;
 						}
@@ -3924,7 +3952,6 @@ console.log ( response );
 						else if ( undefined !== response.address.city ) {
 							address += response.address.city;
 						}
-						// If nothing found previously, the country is added
 						if ( 0 === address.length ) {
 							address += response.address.country;
 						}
@@ -3937,13 +3964,19 @@ console.log ( response );
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = GeoCoder;
 	}
 
 }());
 
+/*
+--- End of GeoCoder.js file -------------------------------------------------------------------------------------------
+*/
 },{"../data/DataManager":31}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -3962,12 +3995,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+--- ItineraryEditor.js file -------------------------------------------------------------------------------------------
+This file contains:
+	- the ItineraryEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 ( function ( ){
 	
 	'use strict';
 
-	var getItineraryEditor = function ( ) {
+	var ItineraryEditor = function ( ) {
 		
 		return {
 			setItinerary : function ( ) {
@@ -3982,13 +4028,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryEditor;
+		module.exports = ItineraryEditor;
 	}
 
 }());
 
+/*
+--- End of ItineraryEditor.js file ------------------------------------------------------------------------------------
+*/
 },{"../UI/ItineraryEditorUI":14}],25:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4008,98 +4060,49 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- GeoCoder.js file --------------------------------------------------------------------------------------------------
+This file contains:
+	- the MapEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 ( function ( ){
 	
 	'use strict';
 	
-	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
 
-	var getNoteTooltipText = function ( layer ) {
-		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		return ( note ? note.tooltipContent : '');
-	};
-	
-	var getNotePopUpText = function ( layer ) {
-		var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
-		return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
-	};
-	
-	var getRouteTooltipText = function ( layer ) {
-		var route = _DataManager.getRoute ( layer.objId );
-		return ( route ? route.name : '');
-	};
-
-	var getRoutePopupText = function ( layer ) {
-		var route = _DataManager.getRoute ( layer.objId );
-		return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
-	};
-	
-	var onRouteClick = function ( event ) {
-		event.target.openPopup ( event.latlng );		
-	};
-	
-	var onRouteContextMenu = function ( event ) {
-		require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getRouteContextMenu ( event.target.objId ) );
-	};
-
-	var onTravelNoteContextMenu = function ( event ) {
-		require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );
-	};
-
-	var onTravelNoteDragEnd = function ( event ) {
-		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-		note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
-		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
-	};
-	
-	var onWayPointDragEnd = function ( event ) {
-		var wayPoint = _DataManager.editedRoute.wayPoints.getAt ( event.target.objId );
-		wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-		require ( '../core/RouteEditor' ) ( ).wayPointDragEnd ( event.target.objId );
-	};
-
-
-	var onTravelNoteDrag = function ( event ) {
-		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
-		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
-	};
-	
-	var onBulletTravelNoteDragEnd = function ( event ) {
-		var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
-		var note = noteAndRoute.note;
-		var route = noteAndRoute.route;
-		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
-		if ( null != route ) {
-			var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
-			note.latLng = latLngDistance.latLng;
-			note.distance = latLngDistance.distance;
-			layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
-			route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-		}
-		else {
-			note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-		}
-		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
-		require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
-	};
-	
-	var onBulletTravelNoteDrag = function ( event ) {
-		var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-		var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
-		layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
-	};
-	
-	var getMapEditor = function ( ) {
+	var MapEditor = function ( ) {
 		
+		/*
+		--- _AddTo function -------------------------------------------------------------------------------------------
+
+		This function add a leaflet object to the leaflet map and to the JavaScript map
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _AddTo = function ( objId, object ) {
 			object.objId = objId;
 			object.addTo ( _DataManager.map );
 			_DataManager.mapObjects.set ( objId, object );
 		};
+		
+		/*
+		--- _RemoveFrom function --------------------------------------------------------------------------------------
+
+		This function remove a leaflet object from the leaflet map and from the JavaScript map
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _RemoveFrom = function ( objId ) {
 			var layer = _DataManager.mapObjects.get ( objId );
 			if ( layer ) {
@@ -4107,12 +4110,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.map.removeLayer ( layer );
 				_DataManager.mapObjects.delete ( objId );
 			}
-			else {
-				console.log ( 'Object not found for deletion : ' + objId );
-			}
-				
 		};
 		
+		/*
+		--- _GetLatLngBounds function ---------------------------------------------------------------------------------
+
+		This function build a L.latLngBounds object from an array of points
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _GetLatLngBounds = function ( latLngs ) {
 			var sw = L.latLng ( [ 90, 180] );
 			var ne = L.latLng ( [ -90, -180 ] );
@@ -4127,6 +4134,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return L.latLngBounds( sw, ne );
 		};
 		
+		/*
+		--- _GetRouteLatLng function ----------------------------------------------------------------------------------
+
+		This function returns an array of points from a route and the notes linked to the route
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _GetRouteLatLng = function ( route ) {
 			var latLngs = [];
 			route.itinerary.itineraryPoints.forEach ( 
@@ -4143,7 +4158,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return latLngs;
 		};
 		
+		/*
+		--- MapEditor object ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+			
+			/*
+			--- removeRoute method ------------------------------------------------------------------------------------
+
+			This method remove a route and eventually the attached notes and waypoints 
+			from the leaflet map and the JavaScript map
+			
+			parameters:
+			- route : a TravelNotes route object.
+			- removeNotes : a boolean. Linked notes are removed when true
+			- removeWayPoints : a boolean. Linked waypoints are removed when true
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			
 			removeRoute : function ( route, removeNotes, removeWayPoints ) {
 				this.removeObject ( route.objId );
@@ -4161,29 +4196,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
+			/*
+			--- addRoute method ---------------------------------------------------------------------------------------
+
+			This method add a route and eventually the attached notes and waypoints 
+			to the leaflet map and the JavaScript map
+
+			parameters:
+			- route : a TravelNotes route object.
+			- addNotes : a boolean. Attached notes are added when true
+			- addWayPoints : a boolean. Attached waypoints are added when true
+			- readOnly : a boolean. Created objects cannot be edited when true.
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addRoute : function ( route, addNotes, addWayPoints, readOnly ) {
 				readOnly = readOnly || false;
+				
+				// an array of points is created
 				var latLng = [];
 				var pointsIterator = route.itinerary.itineraryPoints.iterator;
 				while ( ! pointsIterator.done ) {
 					latLng.push ( pointsIterator.value.latLng );
 				}
-				var polyline = L.polyline ( 
-					latLng,
-					{
-						color : route.color,
-						weight : route.width
+				
+				// the leaflet polyline is created and added to the map
+				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width } );
+				_AddTo ( route.objId, polyline );
+				
+				// tooltip and popup are created
+				polyline.bindTooltip ( function ( layer ) { return _DataManager.getRoute ( layer.objId ).name; } );
+				polyline.bindPopup ( 
+					function ( layer ) {
+						var route = _DataManager.getRoute ( layer.objId );
+						return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
 					}
 				);
-				_AddTo ( route.objId, polyline );
-				polyline.addTo ( _DataManager.map );
-				polyline.bindTooltip ( getRouteTooltipText );
-				polyline.bindPopup ( getRoutePopupText );
-				L.DomEvent.on ( polyline, 'click', onRouteClick );
+				
+				// left click event
+				L.DomEvent.on ( polyline, 'click', function ( event ) { event.target.openPopup ( event.latlng ); } );
+				// right click event
 				if ( ! readOnly ) {
-					L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+					L.DomEvent.on ( 
+						polyline, 
+						'contextmenu', 
+						function ( event ) {
+							require ('../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
+						}
+					);
 				}
 				
+				// notes are added
 				if ( addNotes ) {
 					var notesIterator = route.notes.iterator;
 					while ( ! notesIterator.done ) {
@@ -4191,25 +4255,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 
+				// waypoints are added
 				if ( addWayPoints ) {
 					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
-					var wayPointsCounter = 0;
 					while ( ! wayPointsIterator.done ) {
-						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : ( ++ wayPointsCounter ).toFixed ( 0 ) ) );
+						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
 					}
 				}
-								
 			},
 			
+			/*
+			--- editRoute method --------------------------------------------------------------------------------------
+
+			This method changes the color and width of a route
+
+			parameters:
+			- route : a TravelNotes route object.
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			editRoute : function ( route ) {
 				var polyline = _DataManager.mapObjects.get ( route.objId );
 				polyline.setStyle( { color : route.color, weight : route.width } );
 			},
 			
+			/*
+			--- removeObject method -----------------------------------------------------------------------------------
+
+			This method remove an object from the leaflet map and from the JavaScript map
+
+			parameters:
+			- objId : the TravelNotes objId of the object to remove
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			removeObject : function ( objId ) {
 				_RemoveFrom ( objId );
 			},
 			
+			
+			/*
+			--- removeAllObjects method -------------------------------------------------------------------------------
+
+			This method remove all the objects from the leaflet map and from the JavaScript map
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			removeAllObjects : function ( ) {
 				_DataManager.mapObjects.forEach ( 
 					function ( travelObjectValue, travelObjectKey, travelObjects ) {
@@ -4220,10 +4314,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.mapObjects.clear ( );
 			},
 			
+			
+			/*
+			--- zoomToPoint method ------------------------------------------------------------------------------------
+
+			This method zoom on a given point
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			zoomToPoint : function ( latLng ) {
 				map.setView ( latLng, _DataManager.config.itineraryPointZoom );
 			},
 			
+			
+			/*
+			--- zoomToRoute method ------------------------------------------------------------------------------------
+
+			This method zoom on a route
+
+			parameters:
+			- routeObjId : the TravelNotes objId of the desired route
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			zoomToRoute : function ( routeObjId ) {
 				var latLngs = _GetRouteLatLng (  _DataManager.getRoute ( routeObjId ) );
 				if ( 0 !== latLngs.length ) {
@@ -4231,6 +4346,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
+			/*
+			--- zoomToTravel method -----------------------------------------------------------------------------------
+
+			This method zoom on the entire travel
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			zoomToTravel : function ( ) {				
 				var latLngs = [];
 				_DataManager.travel.routes.forEach (
@@ -4249,6 +4372,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
+			
+			/*
+			--- addItineraryPointMarker method ------------------------------------------------------------------------
+
+			This method add a leaflet circleMarker at a given point
+			
+			parameters:
+			- objId : a unique identifier to attach to the circleMarker
+			- latLng : the center of the circleMarker
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addItineraryPointMarker : function ( objId, latLng ) {
 				_AddTo ( 
 					objId,
@@ -4256,14 +4392,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);
 			},
 			
+			
+			/*
+			--- addWayPoint method ------------------------------------------------------------------------------------
+
+			This method ...
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addWayPoint : function ( wayPoint, letter ) {
 				if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
 					return;
 				}
+				
+				// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
 				var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
-				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) )+ 
+				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) + 
 				'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
 				
+				// a leaflet marker is created...
 				var marker = L.marker ( 
 					wayPoint.latLng,
 					{ 
@@ -4271,11 +4419,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						draggable : true
 					} 
 				);	
+				
+				// ... and added to the map...
 				marker.objId = wayPoint.objId;
 				_AddTo ( wayPoint.objId, marker );
-				L.DomEvent.on ( marker, 'dragend', onWayPointDragEnd );
+				
+				// ... and a dragend event listener is created
+				L.DomEvent.on (
+					marker,
+					'dragend', 
+					function ( event ) {
+						var wayPoint = _DataManager.editedRoute.wayPoints.getAt ( event.target.objId );
+						wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+						require ( '../core/RouteEditor' )( ).wayPointDragEnd ( event.target.objId );
+					}
+				);
 			},
 			
+			
+			/*
+			--- addNote method ----------------------------------------------------------------------------------------
+
+			This method ...
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addNote : function ( note, readOnly ) {
 				readOnly = readOnly || false;
 				var bullet = L.marker ( 
@@ -4301,8 +4470,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				);	
 				bullet.objId = note.objId;
 				if ( ! readOnly ) {
-					L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
-					L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
+					L.DomEvent.on ( 
+						bullet, 
+						'dragend', 
+						function ( event ) {
+							var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
+							var note = noteAndRoute.note;
+							var route = noteAndRoute.route;
+							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							if ( null != route ) {
+								var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+								note.latLng = latLngDistance.latLng;
+								note.distance = latLngDistance.distance;
+								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+								route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+							}
+							else {
+								note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+							}
+							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+							require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+						}
+ 					);
+					L.DomEvent.on ( 
+						bullet, 
+						'drag', 
+						function ( event ) {
+							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
+						}
+					);
 				}
 				var icon = L.divIcon (
 					{ 
@@ -4320,9 +4518,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						draggable : ! readOnly
 					}
 				);	
-				marker.bindPopup ( getNotePopUpText );
+				marker.bindPopup (
+					function ( layer ) {
+						var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
+						return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
+					}			
+				);
 				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( getNoteTooltipText );
+					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
 				marker.objId = note.objId;
@@ -4334,12 +4537,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				layerGroup.bulletId = L.Util.stamp ( bullet );
 				_AddTo ( note.objId, layerGroup );
 				if ( ! readOnly ) {
-					L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
-					L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
-					L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+					L.DomEvent.on ( 
+						marker, 
+						'contextmenu', 
+						function ( event ) { 
+							require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
+						}
+					);
+					L.DomEvent.on ( 
+						marker, 
+						'dragend',
+						function ( event ) {
+							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+						}
+					);
+					L.DomEvent.on ( 
+						marker, 
+						'drag',
+						function ( event ) {
+							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+						}
+					);
 				}
-			},
+			},			
 			
+			/*
+			--- editNote method ---------------------------------------------------------------------------------------
+
+			This method ...
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			editNote : function ( note ) {
 				var icon = L.divIcon (
 					{ 
@@ -4355,20 +4589,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				marker.setIcon ( icon );
 				marker.unbindTooltip ( );
 				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( getNoteTooltipText );
+					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
 			}
 		};
 	};
-	
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getMapEditor;
+		module.exports = MapEditor;
 	}
 
 }());
 
-},{"../Data/DataManager":1,"../UI/ContextMenu":10,"../UI/Translator":19,"../core/NoteEditor":26,"../core/RouteEditor":27,"../core/TravelEditor":29,"../util/TravelUtilities":42,"../util/Utilities":43,"./NoteEditor":26,"./RouteEditor":27}],26:[function(require,module,exports){
+/*
+--- End of MapEditor.js file ------------------------------------------------------------------------------------------
+*/
+},{"../Data/DataManager":1,"../UI/ContextMenu":10,"../core/NoteEditor":26,"../core/RouteEditor":27,"../core/TravelEditor":29,"../util/TravelUtilities":42,"./NoteEditor":26}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4745,6 +4986,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
+				if ( -1 !== _DataManager.editedRoute.routeInitialObjId ) {
+					this.clear ( );
+				}
 				var initialRoute = _DataManager.getRoute ( routeObjId );
 				var providerName = initialRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! _DataManager.providers.get ( providerName.toLowerCase ( ) ) ) )
@@ -4863,6 +5107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			wayPointDragEnd : function ( wayPointObjId ) {
+				_DataManager.editedRoute.routeChanged = true;
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},

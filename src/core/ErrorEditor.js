@@ -16,6 +16,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ErrorEditor.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the ErrorEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -37,9 +51,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = ErrorEditor;
 	}
 
 }());
+
+/*
+--- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
+*/

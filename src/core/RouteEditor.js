@@ -158,6 +158,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
+				if ( -1 !== _DataManager.editedRoute.routeInitialObjId ) {
+					this.clear ( );
+				}
 				var initialRoute = _DataManager.getRoute ( routeObjId );
 				var providerName = initialRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! _DataManager.providers.get ( providerName.toLowerCase ( ) ) ) )
@@ -276,6 +279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			wayPointDragEnd : function ( wayPointObjId ) {
+				_DataManager.editedRoute.routeChanged = true;
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
