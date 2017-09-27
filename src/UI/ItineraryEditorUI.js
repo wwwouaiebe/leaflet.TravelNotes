@@ -240,7 +240,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			if ( ! dataDiv ) {
 				return;
 			}
-			var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-RouteHeader' ) [ 0 ];
+			var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
@@ -249,7 +249,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			var childCounter;
 			var childNodes;
 			
-			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
+			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
@@ -259,7 +259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			
 			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
-			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-RouteManeuversNotesList' ) [ 0 ];
+			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
