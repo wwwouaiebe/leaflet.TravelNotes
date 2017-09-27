@@ -87,6 +87,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var onMapClick = function ( event ) {
+			if ( _DataManager.travel.readOnly ) {
+				return;
+			}
 			require ('./UI/ContextMenu' ) ( 
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
@@ -95,6 +98,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 		};
 		var onMapContextMenu = function ( event ) {
+			if ( _DataManager.travel.readOnly ) {
+				return;
+			}
 			require ('./UI/ContextMenu' ) (
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )

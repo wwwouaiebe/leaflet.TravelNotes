@@ -38,23 +38,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _ReadFile = function ( textFile ) {
+		var _ReadFile = function ( textFile, readOnly ) {
 			_DataManager.travel.object = JSON.parse ( textFile ) ;
-			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			_DataManager.travel.readOnly = readOnly;
 			_MapEditor.removeAllObjects ( );
 			var routesIterator = _DataManager.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				_MapEditor.addRoute ( routesIterator.value, true, false );
+				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
 			}
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				_MapEditor.addNote ( notesIterator.value );
+				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
 			_MapEditor.zoomToTravel ( );
-console.log (  _DataManager.travel.object );
-			_ChangeTravelHTML ( );
+			if ( ! readOnly ) {
+				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				_ChangeTravelHTML ( );
+			}
+			else
+			{
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-HiddenControl' );
+			}
 		};
-		
 		
 		return {
 			
@@ -109,7 +114,7 @@ console.log (  _DataManager.travel.object );
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.name = fileName;
-					_ReadFile ( fileReader.result );
+					_ReadFile ( fileReader.result, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -124,7 +129,7 @@ console.log (  _DataManager.travel.object );
 					xmlHttpRequest.onreadystatechange = function ( event ) {
 						if ( this.readyState === XMLHttpRequest.DONE ) {
 							if ( this.status === 200 ) {
-								_ReadFile ( this.responseText );
+								_ReadFile ( this.responseText, true );
 							} 
 						}
 					};

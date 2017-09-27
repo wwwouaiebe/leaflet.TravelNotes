@@ -169,7 +169,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
-			addRoute : function ( route, addNotes, addWayPoints ) {
+			addRoute : function ( route, addNotes, addWayPoints, readOnly ) {
+				readOnly = readOnly || false;
 				var latLng = [];
 				var pointsIterator = route.itinerary.itineraryPoints.iterator;
 				while ( ! pointsIterator.done ) {
@@ -187,12 +188,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindTooltip ( getRouteTooltipText );
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
-				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				}
 				
 				if ( addNotes ) {
 					var notesIterator = route.notes.iterator;
 					while ( ! notesIterator.done ) {
-						this.addNote ( notesIterator.value );
+						this.addNote ( notesIterator.value, readOnly );
 					}
 				}
 
@@ -281,7 +284,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				L.DomEvent.on ( marker, 'dragend', onWayPointDragEnd );
 			},
 			
-			addNote : function ( note ) {
+			addNote : function ( note, readOnly ) {
+				readOnly = readOnly || false;
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -300,12 +304,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						),
 						zIndexOffset : -1000 ,
 						opacity : _DataManager.config.note.grip.opacity,
-						draggable : true
+						draggable : ! readOnly
 					} 
 				);	
 				bullet.objId = note.objId;
-				L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
-				L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
+					L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
+				}
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -319,7 +325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					note.iconLatLng,
 					{
 						icon : icon,
-						draggable : true
+						draggable : ! readOnly
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
@@ -335,9 +341,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				layerGroup.polylineId = L.Util.stamp ( polyline );
 				layerGroup.bulletId = L.Util.stamp ( bullet );
 				_AddTo ( note.objId, layerGroup );
-				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
-				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
-				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
+					L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
+					L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+				}
 			},
 			
 			editNote : function ( note ) {

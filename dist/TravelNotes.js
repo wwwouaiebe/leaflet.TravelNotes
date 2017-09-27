@@ -669,6 +669,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var onMapClick = function ( event ) {
+			if ( _DataManager.travel.readOnly ) {
+				return;
+			}
 			require ('./UI/ContextMenu' ) ( 
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
@@ -677,6 +680,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 		};
 		var onMapContextMenu = function ( event ) {
+			if ( _DataManager.travel.readOnly ) {
+				return;
+			}
 			require ('./UI/ContextMenu' ) (
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
@@ -4155,7 +4161,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
-			addRoute : function ( route, addNotes, addWayPoints ) {
+			addRoute : function ( route, addNotes, addWayPoints, readOnly ) {
+				readOnly = readOnly || false;
 				var latLng = [];
 				var pointsIterator = route.itinerary.itineraryPoints.iterator;
 				while ( ! pointsIterator.done ) {
@@ -4173,12 +4180,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				polyline.bindTooltip ( getRouteTooltipText );
 				polyline.bindPopup ( getRoutePopupText );
 				L.DomEvent.on ( polyline, 'click', onRouteClick );
-				L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( polyline, 'contextmenu', onRouteContextMenu );
+				}
 				
 				if ( addNotes ) {
 					var notesIterator = route.notes.iterator;
 					while ( ! notesIterator.done ) {
-						this.addNote ( notesIterator.value );
+						this.addNote ( notesIterator.value, readOnly );
 					}
 				}
 
@@ -4267,7 +4276,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				L.DomEvent.on ( marker, 'dragend', onWayPointDragEnd );
 			},
 			
-			addNote : function ( note ) {
+			addNote : function ( note, readOnly ) {
+				readOnly = readOnly || false;
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -4286,12 +4296,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						),
 						zIndexOffset : -1000 ,
 						opacity : _DataManager.config.note.grip.opacity,
-						draggable : true
+						draggable : ! readOnly
 					} 
 				);	
 				bullet.objId = note.objId;
-				L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
-				L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( bullet, 'dragend', onBulletTravelNoteDragEnd );
+					L.DomEvent.on ( bullet, 'drag', onBulletTravelNoteDrag );
+				}
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -4305,7 +4317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					note.iconLatLng,
 					{
 						icon : icon,
-						draggable : true
+						draggable : ! readOnly
 					}
 				);	
 				marker.bindPopup ( getNotePopUpText );
@@ -4321,9 +4333,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				layerGroup.polylineId = L.Util.stamp ( polyline );
 				layerGroup.bulletId = L.Util.stamp ( bullet );
 				_AddTo ( note.objId, layerGroup );
-				L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
-				L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
-				L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+				if ( ! readOnly ) {
+					L.DomEvent.on ( marker, 'contextmenu', onTravelNoteContextMenu );
+					L.DomEvent.on ( marker, 'dragend', onTravelNoteDragEnd );
+					L.DomEvent.on ( marker, 'drag', onTravelNoteDrag );
+				}
 			},
 			
 			editNote : function ( note ) {
@@ -5141,23 +5155,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _ReadFile = function ( textFile ) {
+		var _ReadFile = function ( textFile, readOnly ) {
 			_DataManager.travel.object = JSON.parse ( textFile ) ;
-			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			_DataManager.travel.readOnly = readOnly;
 			_MapEditor.removeAllObjects ( );
 			var routesIterator = _DataManager.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				_MapEditor.addRoute ( routesIterator.value, true, false );
+				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
 			}
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				_MapEditor.addNote ( notesIterator.value );
+				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
 			_MapEditor.zoomToTravel ( );
-console.log (  _DataManager.travel.object );
-			_ChangeTravelHTML ( );
+			if ( ! readOnly ) {
+				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				_ChangeTravelHTML ( );
+			}
+			else
+			{
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-HiddenControl' );
+			}
 		};
-		
 		
 		return {
 			
@@ -5212,7 +5231,7 @@ console.log (  _DataManager.travel.object );
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.name = fileName;
-					_ReadFile ( fileReader.result );
+					_ReadFile ( fileReader.result, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -5227,7 +5246,7 @@ console.log (  _DataManager.travel.object );
 					xmlHttpRequest.onreadystatechange = function ( event ) {
 						if ( this.readyState === XMLHttpRequest.DONE ) {
 							if ( this.status === 200 ) {
-								_ReadFile ( this.responseText );
+								_ReadFile ( this.responseText, true );
 							} 
 						}
 					};
