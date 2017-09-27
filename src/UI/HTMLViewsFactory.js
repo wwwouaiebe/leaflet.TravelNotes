@@ -160,6 +160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
 						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
+						rowDiv.maneuverObjId = maneuversIterator.value.objId;
 						
 						maneuversDistance +=  maneuversIterator.value.distance;
 						maneuversDone = maneuversIterator.done;
@@ -175,6 +176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
 						rowDiv.latLng = notesIterator.value.latLng;
+						rowDiv.noteObjId = notesIterator.value.objId;
 						
 						notesDone = notesIterator.done;
 						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;

@@ -51,8 +51,7 @@ To do: translations
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
 			},
 			
-			newManeuverNote : function ( maneuverObjId, itineraryPointObjId ) {
-				var latLng = _DataManager.editedRoute.itinerary.itineraryPoints.getAt (  itineraryPointObjId ).latLng;
+			newManeuverNote : function ( maneuverObjId, latLng ) {
 				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
 					_DataManager.editedRoute,
 					latLng

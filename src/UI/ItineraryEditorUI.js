@@ -49,7 +49,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
-		require ( '../core/NoteEditor' ) ( ).newManeuverNote ( clickEvent.target.maneuverObjId, clickEvent.target.itineraryPointObjId );
+		var element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		if ( element.maneuverObjId ) {
+			require ( '../core/NoteEditor' ) ( ).newManeuverNote ( element.maneuverObjId, element.latLng );
+		} 
+		else if ( element.noteObjId ) {
+			require ( '../core/NoteEditor' ) ( ).editNote ( element.noteObjId );
+		}
 	};
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
@@ -219,7 +228,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _AddEventListeners = function ( element )
 		{
 			element.addEventListener ( 'click' , onInstructionClick, false );
-			//element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
@@ -227,7 +236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _RemoveEventListeners = function ( element )
 		{
 			element.removeEventListener ( 'click' , onInstructionClick, false );
-			//element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};

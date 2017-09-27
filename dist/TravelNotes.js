@@ -1887,6 +1887,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
 						rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
+						rowDiv.maneuverObjId = maneuversIterator.value.objId;
 						
 						maneuversDistance +=  maneuversIterator.value.distance;
 						maneuversDone = maneuversIterator.done;
@@ -1902,6 +1903,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
 						rowDiv.latLng = notesIterator.value.latLng;
+						rowDiv.noteObjId = notesIterator.value.objId;
 						
 						notesDone = notesIterator.done;
 						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;
@@ -2039,7 +2041,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
-		require ( '../core/NoteEditor' ) ( ).newManeuverNote ( clickEvent.target.maneuverObjId, clickEvent.target.itineraryPointObjId );
+		var element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		if ( element.maneuverObjId ) {
+			require ( '../core/NoteEditor' ) ( ).newManeuverNote ( element.maneuverObjId, element.latLng );
+		} 
+		else if ( element.noteObjId ) {
+			require ( '../core/NoteEditor' ) ( ).editNote ( element.noteObjId );
+		}
 	};
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
@@ -2209,7 +2220,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _AddEventListeners = function ( element )
 		{
 			element.addEventListener ( 'click' , onInstructionClick, false );
-			//element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
@@ -2217,7 +2228,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		var _RemoveEventListeners = function ( element )
 		{
 			element.removeEventListener ( 'click' , onInstructionClick, false );
-			//element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
 			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
 			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 		};
@@ -4264,8 +4275,7 @@ To do: translations
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
 			},
 			
-			newManeuverNote : function ( maneuverObjId, itineraryPointObjId ) {
-				var latLng = _DataManager.editedRoute.itinerary.itineraryPoints.getAt (  itineraryPointObjId ).latLng;
+			newManeuverNote : function ( maneuverObjId, latLng ) {
 				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
 					_DataManager.editedRoute,
 					latLng
