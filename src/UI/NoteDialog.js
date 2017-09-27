@@ -475,6 +475,15 @@ To do: translations
 		);
 		buttonsHttpRequest.send ( null );
 
+		
+		address.value = note.address;
+
+		if ( '' === note.address ) {
+			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+		}
+		
+		
+		
 		// and the dialog is centered on the screen
 		baseDialog.center ( );
 	};

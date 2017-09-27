@@ -168,8 +168,12 @@
 		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
-		"msgid" : "RouteEditor-Not possible to edit a route without a save or cancel",
+		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
 		"msgstr" : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
+	},
+	{
+		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
+		"msgstr" : "Il n'est pas possible d'éditer une route créée avec ce fournisseur ({provider})."
 	},
 	{
 		"msgid" : "RouteEditor - Add a note on the route",

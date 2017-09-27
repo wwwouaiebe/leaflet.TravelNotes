@@ -155,12 +155,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			editRoute : function ( routeObjId ) { 
 				if ( _DataManager.editedRoute.routeChanged ) {
-					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor-Not possible to edit a route without a save or cancel" ) );
+					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				// Route is cloned, so we can have a cancel button in the editor
 				var initialRoute = _DataManager.getRoute ( routeObjId );
+				var providerName = initialRoute.itinerary.provider;
+				if ( providerName && ( '' !== providerName ) && ( ! _DataManager.providers.get ( providerName.toLowerCase ( ) ) ) )
+				{
+					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
+					return;
+				}
+				_ItineraryEditor.setProvider ( providerName );
+				var transitMode = initialRoute.itinerary.transitMode;
+				if ( transitMode && '' !== transitMode ) {
+					_ItineraryEditor.setTransitMode ( transitMode );
+				}
 				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				// Route is cloned, so we can have a cancel button in the editor
 				_DataManager.editedRoute.object = initialRoute.object;
 				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
 				_MapEditor.removeRoute ( initialRoute, true, false );

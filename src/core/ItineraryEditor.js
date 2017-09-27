@@ -22,12 +22,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getItineraryEditor = function ( ) {
 		
-		var _SetItinerary = function (  ) {
-			require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
-		};
-
 		return {
-			setItinerary : function( ) { _SetItinerary (  );},
+			setItinerary : function ( ) {
+				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );
+			},
+			setProvider : function ( providerName ) {
+				require ( '../UI/ItineraryEditorUI' ) ( ).setProvider ( providerName );
+			},
+			setTransitMode : function ( transitMode ) {
+				require ( '../UI/ItineraryEditorUI' ) ( ).setTransitMode ( transitMode );
+			}
 		};
 	};
 
