@@ -17,24 +17,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- AboutDialog.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the AboutDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
+ ( function ( ){
 	
 	'use strict';
 
-	var _Translator = require ( '../UI/Translator' ) ( );
-	
-	var getAboutDialog = function ( color ) {
+	var AboutDialog = function ( color ) {
 		
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-
-		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'AboutDialog - Title' );
+		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'AboutDialog - Title' );
 		
-		var aboutDiv = htmlElementsFactory.create (
+		var aboutDiv = require ( './HTMLElementsFactory' ) ( ).create (
 			'div',
 			{
 				id : 'TravelNotes-AboutDialog-AboutDiv'
@@ -47,18 +52,25 @@ To do: translations
 			"<p>Copyright - 2017 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-			"<p>Version : " + require ( '../UI/Translator' ) ( ).getText ( 'Version' ) +'.';
+			"<p>Version : " + require ( '../data/DataManager' ) ( ).version +'.';
 		
-		// and the dialog is centered on the screen
 		baseDialog.center ( );
 		
 		return baseDialog;
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getAboutDialog;
+		module.exports = AboutDialog;
 	}
 
 }());
+
+/*
+--- End of AboutDialog.js file ----------------------------------------------------------------------------------------
+*/
 
 				

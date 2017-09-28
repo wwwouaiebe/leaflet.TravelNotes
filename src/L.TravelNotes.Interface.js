@@ -237,7 +237,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			get itineraryPoint ( ) { return require ( './data/ItineraryPoint' ) ( );},
 			
-			get version ( ) { return '1.0.0'; }
+			get version ( ) { return require ( './data/DataManager' ) ( ).version; }
 		};
 	};
 	
