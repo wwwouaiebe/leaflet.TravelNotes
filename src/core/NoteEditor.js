@@ -177,7 +177,7 @@ Tests ...
 					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
 				// and in the itinerary is adapted...
-				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
@@ -217,7 +217,7 @@ Tests ...
 				if ( noteAndRoute.route ) {
 					// it's a route note
 					noteAndRoute.route.notes.remove ( noteObjId );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				}
 				else {
 					// it's a travel note

@@ -66,8 +66,7 @@ Tests ...
 					},
 					itineraryPointZoom: 17,
 					routeEditor : {
-						clearAfterCancel : true,
-						clearAfterSave : false,
+						displayEditionInHTMLPage : true
 					},
 					travelEditor : {
 						clearAfterSave : true

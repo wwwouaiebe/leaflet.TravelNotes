@@ -68,8 +68,7 @@ Tests ...
 					},
 					itineraryPointZoom: 17,
 					routeEditor : {
-						clearAfterCancel : true,
-						clearAfterSave : false,
+						displayEditionInHTMLPage : true
 					},
 					travelEditor : {
 						clearAfterSave : true
@@ -737,6 +736,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 										}
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
+										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( );
 									}
 								};
 								translationsHttpRequest.open ( 
@@ -1936,19 +1936,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetRouteFooterHTML = function ( route ) {
-			return _HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					className : _ClassNamePrefix + 'RouteFooter',
-					innerHTML : _Translator.getText ( 
-						'HTMLViewsFactory - Route footer', 
-						{
-							provider: route.itinerary.provider, 
-							transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
-						} 
-					)
-				}
-			); 
+			var innerHTML = '';
+			if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
+				innerHTML = _Translator.getText ( 
+					'HTMLViewsFactory - Route footer', 
+					{
+						provider: route.itinerary.provider, 
+						transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
+					} 
+				);
+			}
+			
+			return _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteFooter',	innerHTML : innerHTML } ); 
 		};
 
 		var _GetTravelFooterHTML = function ( ) {
@@ -1970,9 +1969,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			var travelRoutesIterator = _DataManager.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
-				travelHTML.appendChild ( _GetRouteHeaderHTML ( travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteFooterHTML ( travelRoutesIterator.value ) );
+				var useEditedRoute = _DataManager.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _DataManager.editedRoute.routeInitialObjId;
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _DataManager.editedRoute :travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
 			}
 			
 			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
@@ -4845,7 +4845,7 @@ Tests ...
 					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
 				// and in the itinerary is adapted...
-				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
@@ -4885,7 +4885,7 @@ Tests ...
 				if ( noteAndRoute.route ) {
 					// it's a route note
 					noteAndRoute.route.notes.remove ( noteObjId );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				}
 				else {
 					// it's a travel note
@@ -5022,7 +5022,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/ItineraryEditorUI":14,"../UI/NoteDialog":15,"../UI/Translator":19,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"../data/Note":35,"../util/Utilities":42}],27:[function(require,module,exports){
+},{"../Data/DataManager":1,"../UI/NoteDialog":15,"../UI/Translator":19,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"../data/Note":35,"../util/Utilities":42}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5041,6 +5041,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- RouteEditor.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the RouteEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -5053,44 +5067,88 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 		
-	var getRouteEditor = function ( ) {
+	var RouteEditor = function ( ) {
 		
+		/*
+		--- RouteEditor object ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+
+			/*
+			--- getClosestLatLngDistance method -----------------------------------------------------------------------
+
+			This method search the nearest point on a route from a given point and compute the distance
+			between the beginning of the route and the nearest point
+			
+			parameters:
+			- route : the TravelNotes route object to be used
+			- latLng : the coordinates of the point
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getClosestLatLngDistance : function ( route, latLng ) {
 				
+				// an iterator on the route points is created...
 				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+				// ... and placed on the first point
 				var dummy = itineraryPointIterator.done;
+				// the smallest distance is initialized ...
 				var minDistance = Number.MAX_VALUE;
+				// projections of points are made
 				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
 				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				// variables initialization
 				var closestLatLng = null;
 				var closestDistance = 0;
 				var endSegmentDistance = itineraryPointIterator.value.distance;
+				// iteration on the route points
 				while ( ! itineraryPointIterator.done ) {
+					// projection of the second point...
 					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					// and distance is computed
 					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
 					if ( distance < minDistance )
 					{
+						// we have found the smallest distance ... till now :-)
 						minDistance = distance;
+						// the nearest point is computed
 						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+						// and the distance also
 						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
 					}
+					// we prepare the iteration for the next point...
 					endSegmentDistance += itineraryPointIterator.value.distance;
 					point1 = point2;
 				}
 				
 				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
 			},
+
+			/*
+			--- saveGpx method ----------------------------------------------------------------------------------------
+
+			This method save the currently edited route to a GPX file
 			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			saveGpx : function ( ) {
+				// initializations...
 				var tab0 = "\n";
 				var tab1 = "\n\t";
 				var tab2 = "\n\t\t";
 				var tab3 = "\n\t\t\t";
 				var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
+				
+				// header
 				var gpxString = "<?xml version='1.0'?>" + tab0;
 				gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
 
+				// waypoints
 				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done )
 				{
@@ -5099,6 +5157,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						timeStamp + "/>";
 					
 				}
+				
+				// route
 				gpxString += tab1 + "<rte>";
 				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
 				while ( ! maneuverIterator.done ) {
@@ -5108,6 +5168,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
 				}
 				gpxString += tab1 + "</rte>";
+				
+				// track
 				gpxString += tab1 + "<trk>";
 				gpxString += tab2 + "<trkseg>";
 				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
@@ -5117,8 +5179,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				gpxString += tab2 + "</trkseg>";				
 				gpxString += tab1 + "</trk>";
+				
+				// eof
 				gpxString += tab0 + "</gpx>";
 				
+				// file is saved
 				var fileName = _DataManager.editedRoute.name;
 				if ( '' === fileName ) {
 					fileName = 'TravelNote';
@@ -5127,6 +5192,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
 			},
 			
+			/*
+			--- getRouteHTML method -----------------------------------------------------------------------------------
+
+			This method returns an HTML string with the route contents. This string will be used in the
+			route popup and on the HTML page
+			
+			parameters:
+			- route : the TravelNotes route object
+			- classNamePrefix : a string that will be added to all the HTML classes
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getRouteHTML : function ( route, classNamePrefix ) {
 				return '<div class="' + classNamePrefix + 'Route-Header-Name">' +
 					route.name + 
@@ -5136,6 +5214,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					_Translator.getText ( 'RouteEditor - Duration', { duration : _Utilities.formatTime ( route.duration ) } ) + '</div>';
 			},
 			
+			/*
+			--- chainRoutes method ------------------------------------------------------------------------------------
+
+			This method recompute the distances when routes are chained
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			chainRoutes : function ( ) {
 				var routesIterator = _DataManager.travel.routes.iterator;
 				var chainedDistance = 0;
@@ -5154,6 +5240,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			},
 			
+			/*
+			--- startRouting method -----------------------------------------------------------------------------------
+
+			This method start the router
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			startRouting : function ( ) {
 				if ( ! _DataManager.config.routing.auto ) {
 					return;
@@ -5161,8 +5255,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );
 			},
 			
+			/*
+			--- endRouting method -------------------------------------------------------------------------------------
+
+			This method is called by the router when a routing operation is successfully finished
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			endRouting : function ( ) {
+				// the previous route is removed from the leaflet map
 				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				
+				// the position of the notes linked to the route is recomputed
 				var notesIterator = _DataManager.editedRoute.notes.iterator;
 				while ( ! notesIterator.done ) {
 					var latLngDistance = this.getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
@@ -5170,12 +5275,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					notesIterator.value.distance = latLngDistance.distance;
 				}
 				
-				_ItineraryEditor.setItinerary ( );
+				// the new route is added to the map
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
+				
+				// and the itinerary and waypoints are displayed
+				_ItineraryEditor.setItinerary ( );
 				_RouteEditorUI.setWayPointsList ( );
+				
+				// the HTML page is adapted ( depending of the config.... )
+				this.chainRoutes ( );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
+			/*
+			--- saveEdition method ------------------------------------------------------------------------------------
+
+			This method save the current edited route
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			saveEdition : function ( ) {
 				// the edited route is cloned
 				var clonedRoute = require ( '../data/Route' ) ( );
@@ -5184,14 +5304,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
 				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
-				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
+			/*
+			--- cancelEdition method ----------------------------------------------------------------------------------
+
+			This method cancel the current edited route
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			cancelEdition : function ( ) {
 				this.clear ( );
 			},
 			
+			/*
+			--- clear method ------------------------------------------------------------------------------------------
+
+			This method clean the editors and the HTML page after a save or cancel
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			clear : function ( ) {
 				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
 				_MapEditor.addRoute ( _DataManager.getRoute ( _DataManager.editedRoute.routeInitialObjId ), true, false );
@@ -5202,16 +5336,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
 				_RouteEditorUI.setWayPointsList (  );
 				_ItineraryEditor.setItinerary ( );
+				// the HTML page is adapted ( depending of the config.... )
+				this.chainRoutes ( );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
+			/*
+			--- editRoute method --------------------------------------------------------------------------------------
+
+			This method start the edition of a route
+			
+			parameters:
+			- routeObjId : the TravelNotes route objId to edit
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			editRoute : function ( routeObjId ) { 
 				if ( _DataManager.editedRoute.routeChanged ) {
+					// not possible to edit - the current edited route is not saved or cancelled
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
 				if ( -1 !== _DataManager.editedRoute.routeInitialObjId ) {
+					// the current edited route is not changed. Cleaning the editors
 					this.clear ( );
 				}
+				
+				// We verify that the provider  for this route is available
 				var initialRoute = _DataManager.getRoute ( routeObjId );
 				var providerName = initialRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! _DataManager.providers.get ( providerName.toLowerCase ( ) ) ) )
@@ -5219,11 +5371,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
 					return;
 				}
+				// Provider and transit mode are changed in the itinerary editor
 				_ItineraryEditor.setProvider ( providerName );
 				var transitMode = initialRoute.itinerary.transitMode;
 				if ( transitMode && '' !== transitMode ) {
 					_ItineraryEditor.setTransitMode ( transitMode );
 				}
+				// The edited route is pushed in the editors
 				_DataManager.editedRoute = require ( '../data/Route' ) ( );
 				// Route is cloned, so we can have a cancel button in the editor
 				_DataManager.editedRoute.object = initialRoute.object;
@@ -5236,16 +5390,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_ItineraryEditor.setItinerary ( );
 			},
 			
+			/*
+			--- removeRoute method ------------------------------------------------------------------------------------
+
+			This method removes a route
+			
+			parameters:
+			- routeObjId : the TravelNotes route objId to remove
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			removeRoute : function ( routeObjId ) { 
 				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
 				this.chainRoutes ( );
+				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
 			
+			/*
+			--- routeProperties method --------------------------------------------------------------------------------
+
+			This method opens the RouteProperties dialog
+			
+			parameters:
+			- routeObjId : 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			routeProperties : function ( routeObjId ) {
 				var route = _DataManager.getRoute ( routeObjId );
 				require ( '../UI/RoutePropertiesDialog' ) ( route );
 			},
 			
+			/*
+			--- addWayPoint method ------------------------------------------------------------------------------------
+
+			This method add a waypoint to the edited route
+			
+			parameters:
+			- latLng : 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addWayPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
@@ -5259,6 +5447,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- reverseWayPoints method -------------------------------------------------------------------------------
+
+			This method reverse the waypoints order
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			reverseWayPoints : function ( ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
@@ -5267,14 +5463,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				_DataManager.editedRoute.wayPoints.reverse ( );
 				wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
-				var wayPointsCounter = 0;
 				while ( ! wayPointsIterator.done ) {
-					_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : ( ++ wayPointsCounter ).toFixed ( 0 ) ) );
+					_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
 				}
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
+			/*
+			--- removeAllWayPoints method -----------------------------------------------------------------------------
+
+			This method remove all waypoints except the first and last ( see Collection to understand...)
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			removeAllWayPoints : function ( ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
@@ -5286,6 +5489,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- removeWayPoint method ---------------------------------------------------------------------------------
+
+			This method remove a waypoint
+			
+			parameters:
+			- wayPointObjId : the waypoint objId to remove
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			removeWayPoint : function ( wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_MapEditor.removeObject ( wayPointObjId );
@@ -5294,12 +5508,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- renameWayPoint method ---------------------------------------------------------------------------------
+
+			This method rename a wayPoint
+			
+			parameters:
+			- wayPointObjId : the waypoint objId to rename
+			- wayPointName : the new name
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			renameWayPoint : function ( wayPointObjId, wayPointName ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 				_RouteEditorUI.setWayPointsList ( );
 			},
 			
+			/*
+			--- swapWayPoints method ----------------------------------------------------------------------------------
+
+			This method change the order of two waypoints
+			
+			parameters:
+			- wayPointObjId : the waypoint objId to swap
+			- swapUp : when true the waypoint is swapped with the previous one, otherwise with the next
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_DataManager.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
@@ -5307,6 +5545,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- setStartPoint method ----------------------------------------------------------------------------------
+
+			This method set the start waypoint
+			
+			parameters:
+			- latLng : the coordinates of the start waypoint
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			setStartPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
 				if ( 0 !== _DataManager.editedRoute.wayPoints.first.lat ) {
@@ -5318,6 +5567,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- setEndPoint method ------------------------------------------------------------------------------------
+
+			This method set the end waypoint
+			
+			parameters:
+			- latLng : the coordinates of the end waypoint
+
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			setEndPoint : function ( latLng ) {
 				_DataManager.editedRoute.routeChanged = true;
 				if ( 0 !== _DataManager.editedRoute.wayPoints.last.lat ) {
@@ -5329,12 +5590,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				this.startRouting ( );
 			},
 			
+			/*
+			--- wayPointDragEnd method --------------------------------------------------------------------------------
+
+			This method is called when the dragend event is fired on a waypoint
+			
+			parameters:
+			- wayPointObjId : the TravelNotes waypoint objId
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			wayPointDragEnd : function ( wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
 			
+			/*
+			--- getMapContextMenu method ------------------------------------------------------------------------------
+
+			This method gives the route part of the map context menu
+			
+			parameters:
+			- latLng : the coordinates where the map was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getMapContextMenu :function ( latLng ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -5364,6 +5647,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return contextMenu;
 			},
 			
+			/*
+			--- getRouteContextMenu method ----------------------------------------------------------------------------
+
+			This method gives the route context menu
+			
+			parameters:
+			- routeObjId : the route objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getRouteContextMenu : function ( routeObjId ) {
 				var contextMenu = [];
 				contextMenu.push ( 
@@ -5425,13 +5719,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRouteEditor;
+		module.exports = RouteEditor;
 	}
 
 }());
 
+/*
+--- End of RouteEditor.js file ----------------------------------------------------------------------------------------
+*/
 },{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/Utilities":42}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -5451,17 +5751,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Router.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the Router object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+
 ( function ( ){
 	
 	'use strict';
 
 	var _RequestStarted = false;
+	var _RouteProvider = null;
+
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _RouteProvider = _DataManager.providers.get ( 'mapzen' );
-	var _ErrorEditor = require ( '../core/ErrorEditor' ) ( );
 	var _Translator = require( '../UI/Translator' ) ( );
 	
-	var getRouter = function ( ) {
+	var Router = function ( ) {
+		
+		/*
+		--- _HaveValidWayPoints function ------------------------------------------------------------------------------
+
+		This function verify that the waypoints have coordinates
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _HaveValidWayPoints = function ( ) {
 			return _DataManager.editedRoute.wayPoints.forEach ( 
@@ -5475,21 +5798,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 		};
 		
+		/*
+		--- _ParseResponse function -----------------------------------------------------------------------------------
+
+		This function parse the provider response
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ParseResponse = function ( requestResponse ) {
 
 			_RequestStarted = false;
+			// the response is passed to the routeProvider object for parsing. 
 			if ( ! _RouteProvider.parseResponse ( requestResponse, _DataManager.editedRoute, _DataManager.config.language ) ) {
-				_ErrorEditor.showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
+				require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
 				return;
 			}
 			
-			
+			// provider name and transit mode are added to the road
 			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
-			
+
+			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
 			var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
 			var routeDistance = 0;
-			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
 			var dummy = itineraryPointsIterator.done;
 			var previousPoint = itineraryPointsIterator.value;
 			while ( ! itineraryPointsIterator.done ) {
@@ -5500,7 +5832,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				previousPoint = itineraryPointsIterator.value;
 			}
 			
-			// Computing the complete route distance ad duration based on the values given by the providers
+			// Computing the complete route distance ad duration based on the values given by the providers in the maneuvers
 			_DataManager.editedRoute.distance = 0;
 			_DataManager.editedRoute.duration = 0;
 			var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
@@ -5511,31 +5843,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			// Computing a correction factor for distance betwwen itinerayPoints
 			var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
-			routeDistance = 0;
 			itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
 			while ( ! itineraryPointsIterator.done ) {
 				itineraryPointsIterator.value.distance *= correctionFactor;
-				routeDistance += itineraryPointsIterator.value.distance;
 			}
 
+			// and calling the route editor for displaying the results
 			require ( './RouteEditor' ) ( ).endRouting ( );
 		};
 		
+		/*
+		--- _ParseError function --------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ParseError = function ( status, statusText ) {
 			_RequestStarted = false;
-			_ErrorEditor.showError ( _Translator.getText ( 'Router - An error occurs when sending the request', {status : status, statusText : statusText} ) );
+			require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when sending the request', {status : status, statusText : statusText} ) );
 		};
 		
+		/*
+		--- _StartRequest function ------------------------------------------------------------------------------------
+
+		This function launch the http request
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _StartRequest = function ( ) {
 			
-			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
-
 			_RequestStarted = true;
 
+			// Choosing the correct route provider
+			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
+
+			// Searching the provider key
 			var providerKey = '';
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'sessionStorage' ) ) {
 				providerKey = atob ( sessionStorage.getItem ( _RouteProvider.name.toLowerCase ( ) ) );
 			}
+			
+			// creating the http request
 			var xmlHttpRequest = new XMLHttpRequest ( );
 			xmlHttpRequest.onreadystatechange = function ( event ) {
 				if ( this.readyState === XMLHttpRequest.DONE ) {
@@ -5547,41 +5898,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			};
-
 			xmlHttpRequest.open ( 
 				'GET',
 				_RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _DataManager.config.language, null ),
 				true
 			);
-			
 			xmlHttpRequest.send ( null );
 		};
 		
+		/*
+		--- _StartRouting function ------------------------------------------------------------------------------------
+
+			This function start the routing :-)
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _StartRouting = function ( ) {
+			// We verify that another request is not loaded
 			if ( _RequestStarted ) {
 				return false;
 			}
+			
+			
+			// Controle of the wayPoints
 			if ( ! _HaveValidWayPoints ( ) ) {
 				return false;
 			}
-			_StartRequest ( );
 			
+			_StartRequest ( );
+
 			return true;
 		};
 	
+		/*
+		--- Router object ---------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+
+			/*
+			--- startRouting method -----------------------------------------------------------------------------------
+
+			This method start the routing :-)
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			startRouting : function ( ) {
-				_StartRouting ( );
+				return _StartRouting ( );
 			}
 		};
 	};
-	
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRouter;
+		module.exports = Router;
 	}
 
 }());
 
+/*
+--- End of Router.js file ---------------------------------------------------------------------------------------------
+*/
 },{"../Data/DataManager":1,"../UI/Translator":19,"../core/ErrorEditor":22,"../util/Utilities":42,"./RouteEditor":27}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -5601,6 +5985,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- TravelEditor.js file ----------------------------------------------------------------------------------------------
+This file contains:
+	- the TravelEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -5608,70 +6006,164 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
-	var _HTMLViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 	
-	var getTravelEditor = function ( ) {
+	var TravelEditor = function ( ) {
+		
+		/*
+		--- _ChangeTravelHTML method ----------------------------------------------------------------------------------
 
-		var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
-		var _Translator = require ( '../UI/Translator' ) ( );
+		This function changes the HTML page content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _ChangeTravelHTML = function ( ) {
-			if ( _Utilities.storageAvailable ( 'localStorage' ) ) {
-				_HTMLViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
-				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", require ( '../UI/HTMLViewsFactory' ) ( ).travelHTML.outerHTML );
+			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
+				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
+				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
 			}
 		};
-		
-		var _ReadFile = function ( textFile, readOnly ) {
-			_DataManager.travel.object = JSON.parse ( textFile ) ;
+
+		/*
+		--- _LoadFile function ----------------------------------------------------------------------------------------
+
+		This function load a file content 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _LoadFile = function ( textFile, readOnly ) {
+			
+			try {
+				_DataManager.travel.object = JSON.parse ( textFile ) ;
+			}
+			catch ( e ) {
+				return;
+			}
+			
 			_DataManager.travel.readOnly = readOnly;
+			
+			// the map is cleaned
 			_MapEditor.removeAllObjects ( );
+			
+			// routes are added with their notes
 			var routesIterator = _DataManager.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
 			}
+			
+			// travel notes are added
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
 				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
+			
+			// zoom on the travel
 			_MapEditor.zoomToTravel ( );
+			
+			// Editors and HTML pages are filled
 			if ( ! readOnly ) {
+			// Editors and HTML pages are filled
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				_ChangeTravelHTML ( );
 			}
 			else
 			{
+				// control is hidden
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-HiddenControl' );
 			}
 		};
 		
+		/*
+		--- TravelEditor object ---------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+
+			/*
+			--- changeTravelHTML method -------------------------------------------------------------------------------
+
+			This method changes the HTML page content
 			
-			changeTravelHTML : function ( ) { _ChangeTravelHTML ( ); },
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			changeTravelHTML : function ( ) {
+				_ChangeTravelHTML ( );
+			},
+
+			/*
+			--- addRoute method ---------------------------------------------------------------------------------------
+
+			This method add a new route
 			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addRoute : function ( ) {
 				_DataManager.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				_TravelEditorUI.setRoutesList ( );
+				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+				this.changeTravelHTML ( );
 			},
 
+			/*
+			--- editRoute method --------------------------------------------------------------------------------------
+
+			This method edit a route
+			
+			parameters :
+			- routeObjId : the TravelNotes route objId to edit
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			editRoute : function ( routeObjId ) {
-				require ( './RouteEditor' ) ( ).editRoute ( routeObjId );
+				require ( '../core/RouteEditor' ) ( ).editRoute ( routeObjId );
 			},
+
+			/*
+			--- removeRoute method ------------------------------------------------------------------------------------
+
+			This method remove a route
+
+			parameters :
+			- routeObjId : the TravelNotes route objId to remove
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			removeRoute : function ( routeObjId ) {
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId && _DataManager.editedRoute.routeChanged ) {
+					// cannot remove the route currently edited
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
+					return;
 				}
-				else {
-					require ( './MapEditor' ) ( ).removeObject ( routeObjId );
-					_DataManager.travel.routes.remove ( routeObjId );
-					_TravelEditorUI.setRoutesList ( );
-					if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
-						require ( './RouteEditor') ( ).clear ( );
-					}
+
+				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+				_DataManager.travel.routes.remove ( routeObjId );
+				_TravelEditorUI.setRoutesList ( );
+				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
+					require ( './RouteEditor') ( ).clear ( );
 				}
+				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+				this.changeTravelHTML ( );
 			},
+
+			/*
+			--- renameRoute method ------------------------------------------------------------------------------------
+
+			This method rename a route
+			parameters :
+			- routeObjId : the TravelNotes route objId to remove
+			- routeName: the new name
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			renameRoute : function ( routeObjId, routeName ) {
 				_DataManager.getRoute ( routeObjId ).name = routeName;
@@ -5679,13 +6171,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId ) {
 					_DataManager.editedRoute.name = routeName;
 				}
+				this.changeTravelHTML ( );
 			},
+
+			/*
+			--- swapRoute method --------------------------------------------------------------------------------------
+
+			This method changes the position of a route
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			swapRoute : function ( routeObjId, swapUp ) {
 				_DataManager.travel.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
+				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+				this.changeTravelHTML ( );
 			},
+
+			/*
+			--- saveTravel method -------------------------------------------------------------------------------------
+
+			This method save the travel to a local file
 			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			saveTravel : function ( ) {
 				if ( _DataManager.editedRoute.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
@@ -5694,17 +6205,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name, JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
+
+			/*
+			--- openTravel method -------------------------------------------------------------------------------------
+
+			This method open a travel from a local file
 			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_DataManager.travel.name = fileName;
-					_ReadFile ( fileReader.result, false );
+					_LoadFile ( fileReader.result, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
+
+			/*
+			--- openServerTravel method -------------------------------------------------------------------------------
+
+			This method open a travel from a distant file
 			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			openServerTravel : function ( ) {
 				var urlSearch = decodeURI ( window.location.search );
 				var serverUrl = null;
@@ -5714,7 +6241,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					xmlHttpRequest.onreadystatechange = function ( event ) {
 						if ( this.readyState === XMLHttpRequest.DONE ) {
 							if ( this.status === 200 ) {
-								_ReadFile ( this.responseText, true );
+								_LoadFile ( this.responseText, true );
 							} 
 						}
 					};
@@ -5722,16 +6249,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					xmlHttpRequest.send ( null );
 				}
 			},
+
+			/*
+			--- clear method ------------------------------------------------------------------------------------------
+
+			This method remove completely the current travel
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			clear : function ( ) {
+				_MapEditor.removeAllObjects ( );
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
 				_DataManager.travel = require ( '../Data/Travel' ) ( );
-				require ( '../core/RouteEditor' ) ( ).clear ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				_MapEditor.removeAllObjects ( );
+				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
+				this.changeTravelHTML ( );
 			},
+
+			/*
+			--- getMapContextMenu method ------------------------------------------------------------------------------
+
+			This method gives the travel part of the map context menu
 			
+			parameters:
+			- latLng : the coordinates where the map was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getMapContextMenu :function ( latLng ) {
 				var mapEditor = require ( '../core/MapEditor' ) ( );
 				var contextMenu = [];
@@ -5755,14 +6304,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 
-	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelEditor;
+		module.exports = TravelEditor;
 	}
 
 }());
 
-},{"../Data/DataManager":1,"../Data/Route":3,"../Data/Travel":4,"../UI/AboutDialog":7,"../UI/HTMLViewsFactory":13,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../util/Utilities":42,"./ErrorEditor":22,"./MapEditor":25,"./RouteEditor":27}],30:[function(require,module,exports){
+/*
+--- End of TravelEditor.js file ---------------------------------------------------------------------------------------
+*/
+},{"../Data/DataManager":1,"../Data/Route":3,"../Data/Travel":4,"../UI/AboutDialog":7,"../UI/HTMLViewsFactory":13,"../UI/RouteEditorUI":16,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/RouteEditor":27,"../util/Utilities":42,"./ErrorEditor":22,"./MapEditor":25,"./RouteEditor":27}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

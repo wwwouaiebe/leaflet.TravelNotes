@@ -188,19 +188,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 
 		var _GetRouteFooterHTML = function ( route ) {
-			return _HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					className : _ClassNamePrefix + 'RouteFooter',
-					innerHTML : _Translator.getText ( 
-						'HTMLViewsFactory - Route footer', 
-						{
-							provider: route.itinerary.provider, 
-							transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
-						} 
-					)
-				}
-			); 
+			var innerHTML = '';
+			if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
+				innerHTML = _Translator.getText ( 
+					'HTMLViewsFactory - Route footer', 
+					{
+						provider: route.itinerary.provider, 
+						transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
+					} 
+				);
+			}
+			
+			return _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteFooter',	innerHTML : innerHTML } ); 
 		};
 
 		var _GetTravelFooterHTML = function ( ) {
@@ -222,9 +221,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			var travelRoutesIterator = _DataManager.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
-				travelHTML.appendChild ( _GetRouteHeaderHTML ( travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteFooterHTML ( travelRoutesIterator.value ) );
+				var useEditedRoute = _DataManager.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _DataManager.editedRoute.routeInitialObjId;
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _DataManager.editedRoute :travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
 			}
 			
 			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
