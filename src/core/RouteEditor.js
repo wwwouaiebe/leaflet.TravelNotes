@@ -31,6 +31,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRouteEditor = function ( ) {
 		
 		return {
+			getClosestLatLngDistance : function ( route, latLng ) {
+				
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+				var dummy = itineraryPointIterator.done;
+				var minDistance = Number.MAX_VALUE;
+				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				var closestLatLng = null;
+				var closestDistance = 0;
+				var endSegmentDistance = itineraryPointIterator.value.distance;
+				while ( ! itineraryPointIterator.done ) {
+					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+					if ( distance < minDistance )
+					{
+						minDistance = distance;
+						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					}
+					endSegmentDistance += itineraryPointIterator.value.distance;
+					point1 = point2;
+				}
+				
+				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
+			},
+			
 			saveGpx : function ( ) {
 				var tab0 = "\n";
 				var tab1 = "\n\t";
@@ -114,7 +140,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
 				var notesIterator = _DataManager.editedRoute.notes.iterator;
 				while ( ! notesIterator.done ) {
-					var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
+					var latLngDistance = this.getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
 					notesIterator.value.latLng = latLngDistance.latLng;
 					notesIterator.value.distance = latLngDistance.distance;
 				}

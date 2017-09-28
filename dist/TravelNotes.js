@@ -162,7 +162,7 @@ Tests ...
 --- End of DataManager.js file ----------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":43}],2:[function(require,module,exports){
+},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":42}],2:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -687,6 +687,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
+				.concat ( require ( './core/TravelEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
 				.concat ( _RightUserContextMenu )
 			);
 		};
@@ -834,7 +835,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/Translator":19,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":26,"./core/RouteEditor":27,"./core/TravelEditor":29,"./data/DataManager":31,"./data/ItineraryPoint":33,"./data/Maneuver":34,"./data/Travel":39,"./util/Utilities":43}],7:[function(require,module,exports){
+},{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/Translator":19,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":26,"./core/RouteEditor":27,"./core/TravelEditor":29,"./data/DataManager":31,"./data/ItineraryPoint":33,"./data/Maneuver":34,"./data/Travel":39,"./util/Utilities":42}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2009,7 +2010,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../UI/HTMLElementsFactory":12,"../UI/Translator":19,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../data/ObjId":36,"../util/Utilities":43}],14:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":12,"../UI/Translator":19,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../data/ObjId":36,"../util/Utilities":42}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2316,7 +2317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 	
-},{"../UI/HTMLViewsFactory":13,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":43,"./HTMLElementsFactory":12,"./Translator":19}],15:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":13,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":42,"./HTMLElementsFactory":12,"./Translator":19}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3084,7 +3085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":43,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
+},{"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":42,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4061,7 +4062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- GeoCoder.js file --------------------------------------------------------------------------------------------------
+--- MapEditor.js file -------------------------------------------------------------------------------------------------
 This file contains:
 	- the MapEditor object
 	- the module.exports implementation
@@ -4073,6 +4074,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
 ( function ( ){
 	
 	'use strict';
@@ -4396,7 +4398,11 @@ Tests ...
 			/*
 			--- addWayPoint method ------------------------------------------------------------------------------------
 
-			This method ...
+			This method add a TravelNotes waypoint object to the leaflet map
+
+			parameters:
+			- wayPoint : a TravelNotes waypoint object
+			- letter : the letter to be displayed under the waypoint
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
@@ -4440,13 +4446,21 @@ Tests ...
 			/*
 			--- addNote method ----------------------------------------------------------------------------------------
 
-			This method ...
+			This method add a TravelNotes note object to the leaflet map
+
+			parameters:
+			- note : a TravelNotes note object
+			- readOnly : a boolean. Created objects cannot be edited when true
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			addNote : function ( note, readOnly ) {
+				
 				readOnly = readOnly || false;
+				
+				// first a marker is created at the note position. This marker is empty and transparent, so 
+				// not visible on the map but the marker can be dragged
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -4469,29 +4483,41 @@ Tests ...
 					} 
 				);	
 				bullet.objId = note.objId;
+				
 				if ( ! readOnly ) {
+					// event listener for the dragend event
 					L.DomEvent.on ( 
 						bullet, 
 						'dragend', 
 						function ( event ) {
+							// the TravelNotes note and route are searched...
 							var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
 							var note = noteAndRoute.note;
 							var route = noteAndRoute.route;
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
 							if ( null != route ) {
-								var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+								// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
+								var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+								// coordinates and distance are changed in the note
 								note.latLng = latLngDistance.latLng;
 								note.distance = latLngDistance.distance;
-								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+								// notes are sorted on the distance
 								route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+								// the coordinates of the bullet are adapted
+								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
 							}
 							else {
+								// the note is not attached to a route, so the coordinates of the note can be directly changed
 								note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 							}
+							// in all cases, the polyline is updated
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+							// and the HTML page is adapted
 							require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 						}
  					);
+					// event listener for the drag event
 					L.DomEvent.on ( 
 						bullet, 
 						'drag', 
@@ -4502,6 +4528,8 @@ Tests ...
 						}
 					);
 				}
+				
+				// a second marker is now created. The icon created by the user is used for this marker
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -4518,25 +4546,23 @@ Tests ...
 						draggable : ! readOnly
 					}
 				);	
+				marker.objId = note.objId;
+				
+				// a popup is binded to the the marker...
 				marker.bindPopup (
 					function ( layer ) {
 						var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
 						return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
 					}			
 				);
+				
+				// ... and also a tooltip
 				if ( 0 !== note.tooltipContent.length ) {
 					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
-				marker.objId = note.objId;
-				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
-				polyline.objId = note.objId;
-				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
-				layerGroup.markerId = L.Util.stamp ( marker );
-				layerGroup.polylineId = L.Util.stamp ( polyline );
-				layerGroup.bulletId = L.Util.stamp ( bullet );
-				_AddTo ( note.objId, layerGroup );
 				if ( ! readOnly ) {
+					// event listener for the contextmenu event
 					L.DomEvent.on ( 
 						marker, 
 						'contextmenu', 
@@ -4544,37 +4570,64 @@ Tests ...
 							require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
 						}
 					);
+					// event listener for the dragend event
 					L.DomEvent.on ( 
 						marker, 
 						'dragend',
 						function ( event ) {
+							// The TravelNotes note linked to the marker is searched...
 							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							// ... new coordinates are saved in the TravelNotes note...
 							note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 						}
 					);
+					// event listener for the drag event
 					L.DomEvent.on ( 
 						marker, 
 						'drag',
 						function ( event ) {
+							// The TravelNotes note linked to the marker is searched...
 							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
 						}
 					);
 				}
+				
+				// Finally a polyline is created between the 2 markers
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
+				polyline.objId = note.objId;
+				
+				// The 3 objects are added to a layerGroup
+				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
+				layerGroup.markerId = L.Util.stamp ( marker );
+				layerGroup.polylineId = L.Util.stamp ( polyline );
+				layerGroup.bulletId = L.Util.stamp ( bullet );
+				
+				// and the layerGroup added to the leaflet map and JavaScript map
+				_AddTo ( note.objId, layerGroup );
 			},			
 			
 			/*
 			--- editNote method ---------------------------------------------------------------------------------------
 
-			This method ...
+			This method changes a note after edition by the user
 
+			parameters:
+			- note : the TravelNotes note object modified by the user
+			
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			editNote : function ( note ) {
+				
+				// a new icon is created
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -4584,9 +4637,12 @@ Tests ...
 						className : _DataManager.config.note.style
 					}
 				);
+				// and the marker icon replaced by the new one
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );
 				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
+				
+				// then, the tooltip is changed
 				marker.unbindTooltip ( );
 				if ( 0 !== note.tooltipContent.length ) {
 					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
@@ -4609,7 +4665,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/ContextMenu":10,"../core/NoteEditor":26,"../core/RouteEditor":27,"../core/TravelEditor":29,"../util/TravelUtilities":42,"./NoteEditor":26}],26:[function(require,module,exports){
+},{"../Data/DataManager":1,"../UI/ContextMenu":10,"../core/NoteEditor":26,"../core/RouteEditor":27,"../core/TravelEditor":29,"./NoteEditor":26}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4629,7 +4685,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- NoteEditor.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the NoteEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
@@ -4638,13 +4704,23 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
-	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	
-	var getNoteEditor = function ( ) {
+	var NoteEditor = function ( ) {
 		
 		return {	
+		
+			/*
+			--- newNote method ----------------------------------------------------------------------------------------
+
+			This method create a new TravelNotes note object
+			
+			parameters:
+			- latLng : the coordinates of the new note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newNote : function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
@@ -4652,82 +4728,186 @@ To do: translations
 				
 				return note;
 			},
+		
+			/*
+			--- newRouteNote method -----------------------------------------------------------------------------------
+
+			This method start the creation of a TravelNotes note object linked with a route
 			
+			parameters:
+			- routeObjId : the objId of the route to witch the note will be linked
+			- event : the event that have triggered the method ( a right click on the 
+			route polyline and then a choice in a context menu)
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newRouteNote : function ( routeObjId, event ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+				// the nearest point and distance on the route is searched
+				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
 					_DataManager.getRoute ( routeObjId ),
 					[ event.latlng.lat, event.latlng.lng ] 
 				);
+				
+				// the note is created
 				var note = this.newNote ( latLngDistance.latLng );
 				note.distance = latLngDistance.distance;
+				
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
 			},
+		
+			/*
+			--- newManeuverNote method --------------------------------------------------------------------------------
+
+			This method start the creation f a TravelNotes note object linked to a maneuver
 			
+			parameters:
+			- maneuverObjId : the objId of the maneuver
+			- latLng : the coordinates of the maneuver
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newManeuverNote : function ( maneuverObjId, latLng ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+				// the nearest point and distance on the route is searched
+				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
 					_DataManager.editedRoute,
 					latLng
 				);
+				// the maneuver is searched
 				var maneuver = _DataManager.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+
+				// the note is created
 				var note = this.newNote ( latLng );
 				note.distance = latLngDistance.distance;
 				note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
 				note.popupContent = maneuver.instruction;
 				note.width = 40;
 				note.height = 40;
+
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId );
 			},
+		
+			/*
+			--- newTravelNote method ----------------------------------------------------------------------------------
+
+			This method start the creation f a TravelNotes note object
 			
+			parameters:
+			- latLng : the coordinates of the new note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newTravelNote : function ( latLng ) {
+				// the note is created
 				var note = this.newNote ( latLng );
+
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, -1 );
 			},
+		
+			/*
+			--- endNoteDialog method ----------------------------------------------------------------------------------
+
+			This method is called when the user push on the ok button of the note dialog
 			
+			parameters:
+			- note : the note modified in the dialog box
+			- routeObjId : the TravelNotes route objId passed to the note dialog box
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			endNoteDialog : function ( note, routeObjId ) {
 				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
-					_MapEditor.editNote ( note );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+					// it's an existing note. The note is changed on the map
+					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
 				else {
-					this.addNote ( note, routeObjId );
+					// it's a new note
+					if ( -1 === routeObjId ) {
+						// it's a global note
+						_DataManager.travel.notes.add ( note );
+					}
+					else {
+						// the note is linked with a route, so...
+						var route = _DataManager.getRoute ( routeObjId );
+						route.notes.add ( note );
+						// ... the chainedDistance is adapted...
+						note.chainedDistance = route.chainedDistance;
+						// and the notes sorted
+						route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					}
+					// the note is added to the leaflet map
+					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
+				// and in the itinerary is adapted...
+				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
+		
+			/*
+			--- editNote method ---------------------------------------------------------------------------------------
 
-			addNote : function ( note, routeObjId ) {
-				if ( -1 === note.distance ) {
-					_DataManager.travel.notes.add ( note );
-				}
-				else {
-					var route = _DataManager.getRoute ( routeObjId );
-					note.chainedDistance = route.chainedDistance;
-					route.notes.add ( note );
-					route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
-				}
-				_MapEditor.addNote ( note );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
-			},
+			This method start the modification of a note
+			
+			parameters:
+			- noteObjId : the objId of the edited note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
 				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
 			},
+		
+			/*
+			--- removeNote method -------------------------------------------------------------------------------------
+
+			This method removes a note
+			
+			parameters:
+			- noteObjId : the objId of the note to remove
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			removeNote : function ( noteObjId ) {
+				// the note is removed from the leaflet map
+				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
+				// the note and the route are searched
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				_MapEditor.removeObject ( noteObjId );
-				if ( ! noteAndRoute.route ) {
-					_DataManager.travel.notes.remove ( noteObjId );
-				}
-				else {
+				if ( noteAndRoute.route ) {
+					// it's a route note
 					noteAndRoute.route.notes.remove ( noteObjId );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
+				else {
+					// it's a travel note
+					_DataManager.travel.notes.remove ( noteObjId );
+				}
+				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
+		
+			/*
+			--- getMapContextMenu method ------------------------------------------------------------------------------
+
+			This method gives the note part of the map context menu
 			
+			parameters:
+			- latLng : the coordinates where the map was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getMapContextMenu :function ( latLng ) {
+				
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
@@ -4737,31 +4917,63 @@ To do: translations
 						param : latLng
 					} 
 				);
+				
+				return contextMenu;
+			},
+		
+			/*
+			--- getNoteContextMenu method -----------------------------------------------------------------------------
+
+			This method gives the note context menu
+			
+			parameters:
+			- noteObjId : the note objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getNoteContextMenu :function ( noteObjId ) {
+				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : _MapEditor, 
-						name : _Translator.getText ( "NoteEditor - zoom to travel" ), 
-						action : _MapEditor.zoomToTravel
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - edit note" ), 
+						action : this.editNote,
+						param : noteObjId
 					} 
 				);
 				contextMenu.push ( 
 					{ 
-						context : null,
-						name : _Translator.getText ( "NoteEditor - About" ), 
-						action : require ( '../UI/AboutDialog' )
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - delete note" ), 
+						action : this.removeNote,
+						param : noteObjId
 					} 
 				);
 				
 				return contextMenu;
 			},
 			
+			/*
+			--- getNoteHTML method ------------------------------------------------------------------------------------
+
+			This method returns an HTML string with the note contents. This string will be used in the
+			note popup and on the HTML page
+			
+			parameters:
+			- note : the TravelNotes object
+			- classNamePrefix : a string that will be added to all the HTML classes
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getNoteHTML : function ( note, classNamePrefix ) {
 			
 			var noteText = '';
 				if ( 0 !== note.tooltipContent.length ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
 				}
-					if ( 0 !== note.popupContent.length ) {
+				if ( 0 !== note.popupContent.length ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
 				}
 				if ( 0 !== note.address.length ) {
@@ -4793,39 +5005,24 @@ To do: translations
 				}
 				
 				return noteText;
-			},
-			
-			getNoteContextMenu :function ( noteObjId ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - edit note" ), 
-						action : this.editNote,
-						param : noteObjId
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - delete note" ), 
-						action : this.removeNote,
-						param : noteObjId
-					} 
-				);
-				
-				return contextMenu;
-			}
+			}		
 		};
 	};
-	
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getNoteEditor;
+		module.exports = NoteEditor;
 	}
 
 }());
 
-},{"../Data/DataManager":1,"../UI/AboutDialog":7,"../UI/ItineraryEditorUI":14,"../UI/NoteDialog":15,"../UI/Translator":19,"../core/MapEditor":25,"../core/TravelEditor":29,"../data/Note":35,"../util/TravelUtilities":42,"../util/Utilities":43}],27:[function(require,module,exports){
+/*
+--- End of NoteEditor.js file -----------------------------------------------------------------------------------------
+*/
+},{"../Data/DataManager":1,"../UI/ItineraryEditorUI":14,"../UI/NoteDialog":15,"../UI/Translator":19,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"../data/Note":35,"../util/Utilities":42}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4859,6 +5056,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var getRouteEditor = function ( ) {
 		
 		return {
+			getClosestLatLngDistance : function ( route, latLng ) {
+				
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+				var dummy = itineraryPointIterator.done;
+				var minDistance = Number.MAX_VALUE;
+				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				var closestLatLng = null;
+				var closestDistance = 0;
+				var endSegmentDistance = itineraryPointIterator.value.distance;
+				while ( ! itineraryPointIterator.done ) {
+					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+					if ( distance < minDistance )
+					{
+						minDistance = distance;
+						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+					}
+					endSegmentDistance += itineraryPointIterator.value.distance;
+					point1 = point2;
+				}
+				
+				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
+			},
+			
 			saveGpx : function ( ) {
 				var tab0 = "\n";
 				var tab1 = "\n\t";
@@ -4942,7 +5165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
 				var notesIterator = _DataManager.editedRoute.notes.iterator;
 				while ( ! notesIterator.done ) {
-					var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
+					var latLngDistance = this.getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
 					notesIterator.value.latLng = latLngDistance.latLng;
 					notesIterator.value.distance = latLngDistance.distance;
 				}
@@ -5209,7 +5432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/TravelUtilities":42,"../util/Utilities":43}],28:[function(require,module,exports){
+},{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/Utilities":42}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5359,7 +5582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":1,"../UI/Translator":19,"../core/ErrorEditor":22,"../util/Utilities":43,"./RouteEditor":27}],29:[function(require,module,exports){
+},{"../Data/DataManager":1,"../UI/Translator":19,"../core/ErrorEditor":22,"../util/Utilities":42,"./RouteEditor":27}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5507,6 +5730,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				require ( '../core/RouteEditor' ) ( ).clear ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				_MapEditor.removeAllObjects ( );
+			},
+			
+			getMapContextMenu :function ( latLng ) {
+				var mapEditor = require ( '../core/MapEditor' ) ( );
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : mapEditor, 
+						name : _Translator.getText ( "TravelEditor - Zoom to travel" ), 
+						action : mapEditor.zoomToTravel
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : null,
+						name : _Translator.getText ( "TravelEditor - About" ), 
+						action : require ( '../UI/AboutDialog' )
+					} 
+				);
+				
+				return contextMenu;
 			}
 		};
 	};
@@ -5518,7 +5762,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
-},{"../Data/DataManager":1,"../Data/Route":3,"../Data/Travel":4,"../UI/HTMLViewsFactory":13,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../util/Utilities":43,"./ErrorEditor":22,"./MapEditor":25,"./RouteEditor":27}],30:[function(require,module,exports){
+},{"../Data/DataManager":1,"../Data/Route":3,"../Data/Travel":4,"../UI/AboutDialog":7,"../UI/HTMLViewsFactory":13,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../util/Utilities":42,"./ErrorEditor":22,"./MapEditor":25,"./RouteEditor":27}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5914,7 +6158,7 @@ Tests ...
 */
 },{"../data/ItineraryPoint":33,"../data/Maneuver":34,"../data/Note":35,"../data/Route":38,"../data/WayPoint":40}],31:[function(require,module,exports){
 arguments[4][1][0].apply(exports,arguments)
-},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":43,"dup":1}],32:[function(require,module,exports){
+},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":42,"dup":1}],32:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
 },{"../data/Collection":30,"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"dup":2}],33:[function(require,module,exports){
 /*
@@ -6591,68 +6835,6 @@ Tests ...
 },{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],41:[function(require,module,exports){
 arguments[4][40][0].apply(exports,arguments)
 },{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"dup":40}],42:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-( function ( ){
-	
-	'use strict';
-	
-	var _DataManager = require ( '../Data/DataManager' ) ( );
-
-	var getTravelUtilities = function ( ) {
-
-		return {
-			getClosestLatLngDistance : function ( route, latLng ) {
-				
-				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-				var dummy = itineraryPointIterator.done;
-				var minDistance = Number.MAX_VALUE;
-				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
-				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-				var closestLatLng = null;
-				var closestDistance = 0;
-				var endSegmentDistance = itineraryPointIterator.value.distance;
-				while ( ! itineraryPointIterator.done ) {
-					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-					if ( distance < minDistance )
-					{
-						minDistance = distance;
-						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
-						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-					}
-					endSegmentDistance += itineraryPointIterator.value.distance;
-					point1 = point2;
-				}
-				
-				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
-			}
-		};
-	};
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelUtilities;
-	}
-
-}());
-
-},{"../Data/DataManager":1}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

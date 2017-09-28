@@ -128,14 +128,6 @@
 		"msgstr" : "Effacer cette note"
 	},
 	{
-		"msgid" : "NoteEditor - zoom to travel",
-		"msgstr" : "Zoom sur le voyage"
-	},
-	{
-		"msgid" : "NoteEditor - About",
-		"msgstr" : "À propos de Travel & Notes"
-	},
-	{
 		"msgid" : "NoteEditor - address",
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
 	},
@@ -286,6 +278,14 @@
 	{
 		"msgid" : "Router - An error occurs when sending the request",
 		"msgstr" : "Une erreur s'est produite lors de l'envoi de la requête (Statut: {status} - {statusText})"
+	},
+	{
+		"msgid" : "TravelEditor - Zoom to travel",
+		"msgstr" : "Zoom sur le voyage"
+	},
+	{
+		"msgid" : "TravelEditor - About",
+		"msgstr" : "À propos de Travel & Notes"
 	},
 	{
 		"msgid" : "TravelEditorUI - Show",

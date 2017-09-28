@@ -145,6 +145,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				require ( '../core/RouteEditor' ) ( ).clear ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				_MapEditor.removeAllObjects ( );
+			},
+			
+			getMapContextMenu :function ( latLng ) {
+				var mapEditor = require ( '../core/MapEditor' ) ( );
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : mapEditor, 
+						name : _Translator.getText ( "TravelEditor - Zoom to travel" ), 
+						action : mapEditor.zoomToTravel
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : null,
+						name : _Translator.getText ( "TravelEditor - About" ), 
+						action : require ( '../UI/AboutDialog' )
+					} 
+				);
+				
+				return contextMenu;
 			}
 		};
 	};

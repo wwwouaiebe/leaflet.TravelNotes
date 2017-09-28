@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- GeoCoder.js file --------------------------------------------------------------------------------------------------
+--- MapEditor.js file -------------------------------------------------------------------------------------------------
 This file contains:
 	- the MapEditor object
 	- the module.exports implementation
@@ -29,6 +29,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
 ( function ( ){
 	
 	'use strict';
@@ -352,7 +353,11 @@ Tests ...
 			/*
 			--- addWayPoint method ------------------------------------------------------------------------------------
 
-			This method ...
+			This method add a TravelNotes waypoint object to the leaflet map
+
+			parameters:
+			- wayPoint : a TravelNotes waypoint object
+			- letter : the letter to be displayed under the waypoint
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
@@ -396,13 +401,21 @@ Tests ...
 			/*
 			--- addNote method ----------------------------------------------------------------------------------------
 
-			This method ...
+			This method add a TravelNotes note object to the leaflet map
+
+			parameters:
+			- note : a TravelNotes note object
+			- readOnly : a boolean. Created objects cannot be edited when true
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			addNote : function ( note, readOnly ) {
+				
 				readOnly = readOnly || false;
+				
+				// first a marker is created at the note position. This marker is empty and transparent, so 
+				// not visible on the map but the marker can be dragged
 				var bullet = L.marker ( 
 					note.latLng,
 					{ 
@@ -425,29 +438,41 @@ Tests ...
 					} 
 				);	
 				bullet.objId = note.objId;
+				
 				if ( ! readOnly ) {
+					// event listener for the dragend event
 					L.DomEvent.on ( 
 						bullet, 
 						'dragend', 
 						function ( event ) {
+							// the TravelNotes note and route are searched...
 							var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
 							var note = noteAndRoute.note;
 							var route = noteAndRoute.route;
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
 							if ( null != route ) {
-								var latLngDistance = require ( '../util/TravelUtilities' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+								// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
+								var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+								// coordinates and distance are changed in the note
 								note.latLng = latLngDistance.latLng;
 								note.distance = latLngDistance.distance;
-								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+								// notes are sorted on the distance
 								route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+								// the coordinates of the bullet are adapted
+								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
 							}
 							else {
+								// the note is not attached to a route, so the coordinates of the note can be directly changed
 								note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 							}
+							// in all cases, the polyline is updated
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+							// and the HTML page is adapted
 							require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 						}
  					);
+					// event listener for the drag event
 					L.DomEvent.on ( 
 						bullet, 
 						'drag', 
@@ -458,6 +483,8 @@ Tests ...
 						}
 					);
 				}
+				
+				// a second marker is now created. The icon created by the user is used for this marker
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -474,25 +501,23 @@ Tests ...
 						draggable : ! readOnly
 					}
 				);	
+				marker.objId = note.objId;
+				
+				// a popup is binded to the the marker...
 				marker.bindPopup (
 					function ( layer ) {
 						var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
 						return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
 					}			
 				);
+				
+				// ... and also a tooltip
 				if ( 0 !== note.tooltipContent.length ) {
 					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
-				marker.objId = note.objId;
-				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
-				polyline.objId = note.objId;
-				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
-				layerGroup.markerId = L.Util.stamp ( marker );
-				layerGroup.polylineId = L.Util.stamp ( polyline );
-				layerGroup.bulletId = L.Util.stamp ( bullet );
-				_AddTo ( note.objId, layerGroup );
 				if ( ! readOnly ) {
+					// event listener for the contextmenu event
 					L.DomEvent.on ( 
 						marker, 
 						'contextmenu', 
@@ -500,37 +525,64 @@ Tests ...
 							require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
 						}
 					);
+					// event listener for the dragend event
 					L.DomEvent.on ( 
 						marker, 
 						'dragend',
 						function ( event ) {
+							// The TravelNotes note linked to the marker is searched...
 							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							// ... new coordinates are saved in the TravelNotes note...
 							note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 						}
 					);
+					// event listener for the drag event
 					L.DomEvent.on ( 
 						marker, 
 						'drag',
 						function ( event ) {
+							// The TravelNotes note linked to the marker is searched...
 							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							// ... then the layerGroup is searched...
 							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
 						}
 					);
 				}
+				
+				// Finally a polyline is created between the 2 markers
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
+				polyline.objId = note.objId;
+				
+				// The 3 objects are added to a layerGroup
+				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
+				layerGroup.markerId = L.Util.stamp ( marker );
+				layerGroup.polylineId = L.Util.stamp ( polyline );
+				layerGroup.bulletId = L.Util.stamp ( bullet );
+				
+				// and the layerGroup added to the leaflet map and JavaScript map
+				_AddTo ( note.objId, layerGroup );
 			},			
 			
 			/*
 			--- editNote method ---------------------------------------------------------------------------------------
 
-			This method ...
+			This method changes a note after edition by the user
 
+			parameters:
+			- note : the TravelNotes note object modified by the user
+			
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			editNote : function ( note ) {
+				
+				// a new icon is created
 				var icon = L.divIcon (
 					{ 
 						iconSize: [ note.iconWidth, note.iconHeight ], 
@@ -540,9 +592,12 @@ Tests ...
 						className : _DataManager.config.note.style
 					}
 				);
+				// and the marker icon replaced by the new one
 				var layerGroup = _DataManager.mapObjects.get ( note.objId );
 				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
+				
+				// then, the tooltip is changed
 				marker.unbindTooltip ( );
 				if ( 0 !== note.tooltipContent.length ) {
 					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );

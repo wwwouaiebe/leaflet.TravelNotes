@@ -17,7 +17,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- NoteEditor.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the NoteEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170927
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
@@ -26,13 +36,23 @@ To do: translations
 
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _TravelUtilities = require ( '../util/TravelUtilities' ) ( );
-	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	
-	var getNoteEditor = function ( ) {
+	var NoteEditor = function ( ) {
 		
 		return {	
+		
+			/*
+			--- newNote method ----------------------------------------------------------------------------------------
+
+			This method create a new TravelNotes note object
+			
+			parameters:
+			- latLng : the coordinates of the new note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newNote : function ( latLng ) {
 				var note = require ( '../data/Note' ) ( );
 				note.latLng = latLng;
@@ -40,82 +60,186 @@ To do: translations
 				
 				return note;
 			},
+		
+			/*
+			--- newRouteNote method -----------------------------------------------------------------------------------
+
+			This method start the creation of a TravelNotes note object linked with a route
 			
+			parameters:
+			- routeObjId : the objId of the route to witch the note will be linked
+			- event : the event that have triggered the method ( a right click on the 
+			route polyline and then a choice in a context menu)
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newRouteNote : function ( routeObjId, event ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+				// the nearest point and distance on the route is searched
+				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
 					_DataManager.getRoute ( routeObjId ),
 					[ event.latlng.lat, event.latlng.lng ] 
 				);
+				
+				// the note is created
 				var note = this.newNote ( latLngDistance.latLng );
 				note.distance = latLngDistance.distance;
+				
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, routeObjId );
 			},
+		
+			/*
+			--- newManeuverNote method --------------------------------------------------------------------------------
+
+			This method start the creation f a TravelNotes note object linked to a maneuver
 			
+			parameters:
+			- maneuverObjId : the objId of the maneuver
+			- latLng : the coordinates of the maneuver
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newManeuverNote : function ( maneuverObjId, latLng ) {
-				var latLngDistance = _TravelUtilities.getClosestLatLngDistance ( 
+				// the nearest point and distance on the route is searched
+				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
 					_DataManager.editedRoute,
 					latLng
 				);
+				// the maneuver is searched
 				var maneuver = _DataManager.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+
+				// the note is created
 				var note = this.newNote ( latLng );
 				note.distance = latLngDistance.distance;
 				note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
 				note.popupContent = maneuver.instruction;
 				note.width = 40;
 				note.height = 40;
+
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId );
 			},
+		
+			/*
+			--- newTravelNote method ----------------------------------------------------------------------------------
+
+			This method start the creation f a TravelNotes note object
 			
+			parameters:
+			- latLng : the coordinates of the new note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			newTravelNote : function ( latLng ) {
+				// the note is created
 				var note = this.newNote ( latLng );
+
+				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, -1 );
 			},
+		
+			/*
+			--- endNoteDialog method ----------------------------------------------------------------------------------
+
+			This method is called when the user push on the ok button of the note dialog
 			
+			parameters:
+			- note : the note modified in the dialog box
+			- routeObjId : the TravelNotes route objId passed to the note dialog box
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			endNoteDialog : function ( note, routeObjId ) {
 				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
-					_MapEditor.editNote ( note );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+					// it's an existing note. The note is changed on the map
+					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
 				else {
-					this.addNote ( note, routeObjId );
+					// it's a new note
+					if ( -1 === routeObjId ) {
+						// it's a global note
+						_DataManager.travel.notes.add ( note );
+					}
+					else {
+						// the note is linked with a route, so...
+						var route = _DataManager.getRoute ( routeObjId );
+						route.notes.add ( note );
+						// ... the chainedDistance is adapted...
+						note.chainedDistance = route.chainedDistance;
+						// and the notes sorted
+						route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					}
+					// the note is added to the leaflet map
+					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
+				// and in the itinerary is adapted...
+				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
+				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},	
+		
+			/*
+			--- editNote method ---------------------------------------------------------------------------------------
 
-			addNote : function ( note, routeObjId ) {
-				if ( -1 === note.distance ) {
-					_DataManager.travel.notes.add ( note );
-				}
-				else {
-					var route = _DataManager.getRoute ( routeObjId );
-					note.chainedDistance = route.chainedDistance;
-					route.notes.add ( note );
-					route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
-				}
-				_MapEditor.addNote ( note );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
-			},
+			This method start the modification of a note
+			
+			parameters:
+			- noteObjId : the objId of the edited note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
 				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
 			},
+		
+			/*
+			--- removeNote method -------------------------------------------------------------------------------------
+
+			This method removes a note
+			
+			parameters:
+			- noteObjId : the objId of the note to remove
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			removeNote : function ( noteObjId ) {
+				// the note is removed from the leaflet map
+				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
+				// the note and the route are searched
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				_MapEditor.removeObject ( noteObjId );
-				if ( ! noteAndRoute.route ) {
-					_DataManager.travel.notes.remove ( noteObjId );
-				}
-				else {
+				if ( noteAndRoute.route ) {
+					// it's a route note
 					noteAndRoute.route.notes.remove ( noteObjId );
 					require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary ( );
 				}
+				else {
+					// it's a travel note
+					_DataManager.travel.notes.remove ( noteObjId );
+				}
+				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			},
+		
+			/*
+			--- getMapContextMenu method ------------------------------------------------------------------------------
+
+			This method gives the note part of the map context menu
 			
+			parameters:
+			- latLng : the coordinates where the map was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getMapContextMenu :function ( latLng ) {
+				
 				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
@@ -125,31 +249,63 @@ To do: translations
 						param : latLng
 					} 
 				);
+				
+				return contextMenu;
+			},
+		
+			/*
+			--- getNoteContextMenu method -----------------------------------------------------------------------------
+
+			This method gives the note context menu
+			
+			parameters:
+			- noteObjId : the note objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getNoteContextMenu :function ( noteObjId ) {
+				var contextMenu = [];
 				contextMenu.push ( 
 					{ 
-						context : _MapEditor, 
-						name : _Translator.getText ( "NoteEditor - zoom to travel" ), 
-						action : _MapEditor.zoomToTravel
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - edit note" ), 
+						action : this.editNote,
+						param : noteObjId
 					} 
 				);
 				contextMenu.push ( 
 					{ 
-						context : null,
-						name : _Translator.getText ( "NoteEditor - About" ), 
-						action : require ( '../UI/AboutDialog' )
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - delete note" ), 
+						action : this.removeNote,
+						param : noteObjId
 					} 
 				);
 				
 				return contextMenu;
 			},
 			
+			/*
+			--- getNoteHTML method ------------------------------------------------------------------------------------
+
+			This method returns an HTML string with the note contents. This string will be used in the
+			note popup and on the HTML page
+			
+			parameters:
+			- note : the TravelNotes object
+			- classNamePrefix : a string that will be added to all the HTML classes
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getNoteHTML : function ( note, classNamePrefix ) {
 			
 			var noteText = '';
 				if ( 0 !== note.tooltipContent.length ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
 				}
-					if ( 0 !== note.popupContent.length ) {
+				if ( 0 !== note.popupContent.length ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
 				}
 				if ( 0 !== note.address.length ) {
@@ -181,34 +337,20 @@ To do: translations
 				}
 				
 				return noteText;
-			},
-			
-			getNoteContextMenu :function ( noteObjId ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - edit note" ), 
-						action : this.editNote,
-						param : noteObjId
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - delete note" ), 
-						action : this.removeNote,
-						param : noteObjId
-					} 
-				);
-				
-				return contextMenu;
-			}
+			}		
 		};
 	};
-	
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getNoteEditor;
+		module.exports = NoteEditor;
 	}
 
 }());
+
+/*
+--- End of NoteEditor.js file -----------------------------------------------------------------------------------------
+*/
