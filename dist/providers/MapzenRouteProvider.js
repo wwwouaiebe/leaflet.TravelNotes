@@ -296,7 +296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				break;
 				case 'bike':
 				request.costing = "bicycle";
-				request.costing_options = { bicycle : { bicycle_type : "Mountain", cycling_speed : "20.0", use_roads :"0", use_hills :"1" } };
+				request.costing_options = { bicycle : { bicycle_type : "Cross", cycling_speed : "20.0", use_roads :"0.25", use_hills :"0.25" } };
 				break;
 				case 'pedestrian': 
 				request.costing = "pedestrian";

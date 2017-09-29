@@ -17,22 +17,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- ColorDialog.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the ColorDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
 	
 	'use strict';
 
-	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var onOkButtonClick = function ( ) {
-		console.log ( 'onOkButtonClick - colorDialog' );
 		return true;
 	};
 
-	var getColorDialog = function ( color ) {
+	var ColorDialog = function ( color ) {
 		
+		/*
+		--- colorToNumbers function -------------------------------------------------------------------------------------------
+
+		This function transforms a css color into an object { r : xx, g : xx, b : xx}
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var colorToNumbers = function ( color ) {
 			return {
 				r : parseInt ( color.substr ( 1, 2 ), 16 ),
@@ -41,24 +57,69 @@ To do: translations
 			};
 		};
 		
+		/*
+		--- colorToNumbers function -------------------------------------------------------------------------------------------
+
+		This function transforms 3 numbers into a css color
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 		var numbersToColor = function ( r, g, b ) {
 			return '#' + 
 				parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
 				parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
 				parseInt ( b ).toString(16).padStart ( 2, '0' ) ;
 		};
+
+		// Click event handler on a color button
+		var onColorClick = function ( event ) {
+			newColor = event.target.colorValue;
+			var numbers = colorToNumbers ( newColor );
+			redInput.value = numbers.r;
+			greenInput.value = numbers.g;
+			blueInput.value = numbers.b;
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		};
 		
+		// Click event handler on a red color button
+		var onRedColorClick = function ( event ) {
+			var r = event.target.redValue;
+			var g = 255;
+			var b = 255;
+			var rowCounter = 0;
+			while ( ++ rowCounter < 7 ) {
+				var cellCounter = 0;
+				g = 255;
+				while ( ++ cellCounter < 7 ) {
+					var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
+					button.colorValue = numbersToColor ( r, g, b );
+					button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
+					g -= 51;
+				}
+				b -= 51;
+			}
+		};
+	
+		// Red, green or blue input event handler 
+		var onColorInput = function ( )  {
+			newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
+		};
+		
+
 		var newColor = color;
+		var translator = require ( '../UI/Translator' ) ( );		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'ColorDialog - Title' );
+		baseDialog.title = translator.getText ( 'ColorDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		baseDialog.getNewColor = function ( ) {
 			return newColor;
 		};
 		
+		// elements are added to the base dialog content
 		var colorDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -76,41 +137,13 @@ To do: translations
 			colorDiv
 		);
 
-		var setColor = function ( event ) {
-			newColor = event.target.colorValue;
-			var numbers = colorToNumbers ( newColor );
-			redInput.value = numbers.r;
-			greenInput.value = numbers.g;
-			blueInput.value = numbers.b;
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
-		};
-		
-		var changeColor = function ( event ) {
-			var r = event.target.redValue;
-			var g = 255;
-			var b = 255;
-			var rowCounter = 0;
-			while ( ++ rowCounter < 7 ) {
-				var cellCounter = 0;
-				g = 255;
-				while ( ++ cellCounter < 7 ) {
-					var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-					button.colorValue = numbersToColor ( r, g, b );
-					button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
-					g -= 51;
-				}
-				b -= 51;
-			}
-		};
-		
 		var r = 255;
 		var g = 255;
-		var b = 255;
-		
+		var b = 255;		
 		var rowCounter = 0;
 		
-		while ( ++ rowCounter < 8 ) {
-			
+		// loop on the 7 rows
+		while ( ++ rowCounter < 8 ) {			
 			var colorButtonsRowDiv = htmlElementsFactory.create (
 				'div',
 				{
@@ -122,6 +155,8 @@ To do: translations
 			
 			var cellCounter = 0;
 			g = 255;
+			
+			// loop on the 6 cells
 			while ( ++ cellCounter < 7 ) {
 				var className = 'TravelNotes-ColorDialog-CellColorDiv';
 				if ( rowCounter < 7 ) {
@@ -138,7 +173,7 @@ To do: translations
 				if ( rowCounter < 7 ) {
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
 					colorButtonCellDiv.colorValue = numbersToColor ( r, g, b );
-					colorButtonCellDiv.addEventListener ( 'click', setColor, false );
+					colorButtonCellDiv.addEventListener ( 'click', onColorClick, false );
 					g -= 51;
 				}
 				else
@@ -147,7 +182,7 @@ To do: translations
 					var buttonColor = numbersToColor ( 255, r, r );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
 					colorButtonCellDiv.redValue = 255 - r;
-					colorButtonCellDiv.addEventListener ( 'click', changeColor, false );
+					colorButtonCellDiv.addEventListener ( 'click', onRedColorClick, false );
 				}
 			}
 			b -= 51;
@@ -162,16 +197,11 @@ To do: translations
 			colorDiv
 		);
 		
-		var changeSampleColor = function ( )  {
-			newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
-		};
-		
 		// ... red ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - red'),
+				data : translator.getText ( 'ColorDialog - red'),
 			},
 			rvbDiv
 		);
@@ -189,13 +219,13 @@ To do: translations
 		redInput.min = 0;
 		redInput.max = 255;
 		
-		redInput.addEventListener ( 'input', changeSampleColor, false );
+		redInput.addEventListener ( 'input', onColorInput, false );
 		
 		// ... and green...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - green'),
+				data : translator.getText ( 'ColorDialog - green'),
 			},
 			rvbDiv
 		);
@@ -211,13 +241,13 @@ To do: translations
 		greenInput.value = colorToNumbers ( color ).g;
 		greenInput.min = 0;
 		greenInput.max = 255;
-		greenInput.addEventListener ( 'input', changeSampleColor, false );
+		greenInput.addEventListener ( 'input', onColorInput, false );
 
-		// ... and green
+		// ... and blue
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - blue'),
+				data : translator.getText ( 'ColorDialog - blue'),
 			},
 			rvbDiv
 		);
@@ -233,12 +263,13 @@ To do: translations
 		blueInput.value = colorToNumbers ( color ).b;
 		blueInput.min = 0;
 		blueInput.max = 255;
-		blueInput.addEventListener ( 'input', changeSampleColor, false );
+		blueInput.addEventListener ( 'input', onColorInput, false );
 		
+		// Sample color
 		var colorSampleDiv = htmlElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-DataDiv',
+				className : 'TravelNotes-ColorDialog-ColorSampleDiv',
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
 			},
 			colorDiv
@@ -252,10 +283,16 @@ To do: translations
 		return baseDialog;
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getColorDialog;
+		module.exports = ColorDialog;
 	}
 
 }());
 
-		
+/*
+--- End of ColorDialog.js file ----------------------------------------------------------------------------------------
+*/	

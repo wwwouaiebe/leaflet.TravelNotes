@@ -862,7 +862,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170928
+Doc reviewed 20170929
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -909,9 +909,7 @@ Tests ...
 
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
-*/
-
-				
+*/	
 },{"../UI/BaseDialog":8,"../UI/Translator":19,"../data/DataManager":31,"./HTMLElementsFactory":12}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -931,16 +929,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+
 /*
-To do: translations
+--- BaseDialog.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the BaseDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
 	
 	'use strict';
-
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _OkButtonListener = null;
 
 	var onKeyDown = function ( keyBoardEvent ) {
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
@@ -949,14 +955,12 @@ To do: translations
 		}
 	};
 	
-	var getBaseDialog = function ( ) {
+	var BaseDialog = function ( ) {
 		
-		_OkButtonListener = null;
-		
-		var dialogObjId = require ( '../data/ObjId' ) ( );
-
+		var okButtonListener = null;
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
+		// A new element covering the entire screen is created, with drag and drop event listeners
 		var body = document.getElementsByTagName('body') [0];
 		var backgroundDiv = htmlElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} , body );
 		backgroundDiv.addEventListener ( 
@@ -974,6 +978,7 @@ To do: translations
 			false
 		);	
 
+		// variables initialization for drag and drop
 		var screenWidth = backgroundDiv.clientWidth;
 		var screenHeight = backgroundDiv.clientHeight;
 		
@@ -983,10 +988,11 @@ To do: translations
 		var dialogX = 0;
 		var dialogY = 0;
 
+		// the dialog is created
 		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-BaseDialog-Container-' + dialogObjId,
+				id : 'TravelNotes-BaseDialog-Container',
 				className : 'TravelNotes-BaseDialog-Container',
 			},
 			backgroundDiv
@@ -1005,7 +1011,7 @@ To do: translations
 			{ 
 				innerHTML: '&#x274c', 
 				id : 'TravelNotes-BaseDialog-CancelButton',
-				title : _Translator.getText ( "DialogBase - close" )
+				title : require ( '../UI/Translator' ) ( ).getText ( "DialogBase - close" )
 			},
 			topBar
 		);
@@ -1046,14 +1052,15 @@ To do: translations
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-HeaderDiv',
+				id : 'TravelNotes-BaseDialog-HeaderDiv'
 			},
 			dialogContainer
 		);		
-		
 		var contentDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-ContentDiv',
+				id : 'TravelNotes-BaseDialog-ContentDiv'
 			},
 			dialogContainer
 		);
@@ -1069,6 +1076,7 @@ To do: translations
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-FooterDiv',
+				id : 'TravelNotes-BaseDialog-FooterDiv',
 			},
 			dialogContainer
 		);
@@ -1084,8 +1092,8 @@ To do: translations
 		okButton.addEventListener ( 
 			'click',
 			function ( ) {
-				if ( _OkButtonListener ) {
-					if ( ! _OkButtonListener ( ) ) {
+				if ( okButtonListener ) {
+					if ( ! okButtonListener ( ) ) {
 						return;
 					}
 				}
@@ -1096,13 +1104,21 @@ To do: translations
 		);				
 		document.addEventListener ( 'keydown', onKeyDown, true );
 		
+		/*
+		--- BaseDialog object -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+			
 			addClickOkButtonEventListener : function ( listener ) {
-				_OkButtonListener = listener;
+				okButtonListener = listener;
 			},
 			
 			get title ( ) { return headerDiv.innerHTML; },
 			set title ( Title ) { headerDiv.innerHTML = Title; },
+			
 			center : function ( ) {
 				dialogX = ( screenWidth - dialogContainer.clientWidth ) / 2;
 				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
@@ -1120,16 +1136,24 @@ To do: translations
 
 			get footer ( ) { return footerDiv;},
 			set footer ( Footer ) { footerDiv = Footer; }
+			
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getBaseDialog;
+		module.exports = BaseDialog;
 	}
 
 }());
 
-},{"../UI/Translator":19,"../data/ObjId":36,"./HTMLElementsFactory":12}],9:[function(require,module,exports){
+/*
+--- End of AboutDialog.js file ----------------------------------------------------------------------------------------
+*/
+},{"../UI/Translator":19,"./HTMLElementsFactory":12}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1149,22 +1173,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- ColorDialog.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the ColorDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
 	
 	'use strict';
 
-	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var onOkButtonClick = function ( ) {
-		console.log ( 'onOkButtonClick - colorDialog' );
 		return true;
 	};
 
-	var getColorDialog = function ( color ) {
+	var ColorDialog = function ( color ) {
 		
+		/*
+		--- colorToNumbers function -------------------------------------------------------------------------------------------
+
+		This function transforms a css color into an object { r : xx, g : xx, b : xx}
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var colorToNumbers = function ( color ) {
 			return {
 				r : parseInt ( color.substr ( 1, 2 ), 16 ),
@@ -1173,24 +1213,69 @@ To do: translations
 			};
 		};
 		
+		/*
+		--- colorToNumbers function -------------------------------------------------------------------------------------------
+
+		This function transforms 3 numbers into a css color
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 		var numbersToColor = function ( r, g, b ) {
 			return '#' + 
 				parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
 				parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
 				parseInt ( b ).toString(16).padStart ( 2, '0' ) ;
 		};
+
+		// Click event handler on a color button
+		var onColorClick = function ( event ) {
+			newColor = event.target.colorValue;
+			var numbers = colorToNumbers ( newColor );
+			redInput.value = numbers.r;
+			greenInput.value = numbers.g;
+			blueInput.value = numbers.b;
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		};
 		
+		// Click event handler on a red color button
+		var onRedColorClick = function ( event ) {
+			var r = event.target.redValue;
+			var g = 255;
+			var b = 255;
+			var rowCounter = 0;
+			while ( ++ rowCounter < 7 ) {
+				var cellCounter = 0;
+				g = 255;
+				while ( ++ cellCounter < 7 ) {
+					var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
+					button.colorValue = numbersToColor ( r, g, b );
+					button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
+					g -= 51;
+				}
+				b -= 51;
+			}
+		};
+	
+		// Red, green or blue input event handler 
+		var onColorInput = function ( )  {
+			newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
+			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
+		};
+		
+
 		var newColor = color;
+		var translator = require ( '../UI/Translator' ) ( );		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'ColorDialog - Title' );
+		baseDialog.title = translator.getText ( 'ColorDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		baseDialog.getNewColor = function ( ) {
 			return newColor;
 		};
 		
+		// elements are added to the base dialog content
 		var colorDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -1208,41 +1293,13 @@ To do: translations
 			colorDiv
 		);
 
-		var setColor = function ( event ) {
-			newColor = event.target.colorValue;
-			var numbers = colorToNumbers ( newColor );
-			redInput.value = numbers.r;
-			greenInput.value = numbers.g;
-			blueInput.value = numbers.b;
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
-		};
-		
-		var changeColor = function ( event ) {
-			var r = event.target.redValue;
-			var g = 255;
-			var b = 255;
-			var rowCounter = 0;
-			while ( ++ rowCounter < 7 ) {
-				var cellCounter = 0;
-				g = 255;
-				while ( ++ cellCounter < 7 ) {
-					var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-					button.colorValue = numbersToColor ( r, g, b );
-					button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
-					g -= 51;
-				}
-				b -= 51;
-			}
-		};
-		
 		var r = 255;
 		var g = 255;
-		var b = 255;
-		
+		var b = 255;		
 		var rowCounter = 0;
 		
-		while ( ++ rowCounter < 8 ) {
-			
+		// loop on the 7 rows
+		while ( ++ rowCounter < 8 ) {			
 			var colorButtonsRowDiv = htmlElementsFactory.create (
 				'div',
 				{
@@ -1254,6 +1311,8 @@ To do: translations
 			
 			var cellCounter = 0;
 			g = 255;
+			
+			// loop on the 6 cells
 			while ( ++ cellCounter < 7 ) {
 				var className = 'TravelNotes-ColorDialog-CellColorDiv';
 				if ( rowCounter < 7 ) {
@@ -1270,7 +1329,7 @@ To do: translations
 				if ( rowCounter < 7 ) {
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
 					colorButtonCellDiv.colorValue = numbersToColor ( r, g, b );
-					colorButtonCellDiv.addEventListener ( 'click', setColor, false );
+					colorButtonCellDiv.addEventListener ( 'click', onColorClick, false );
 					g -= 51;
 				}
 				else
@@ -1279,7 +1338,7 @@ To do: translations
 					var buttonColor = numbersToColor ( 255, r, r );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
 					colorButtonCellDiv.redValue = 255 - r;
-					colorButtonCellDiv.addEventListener ( 'click', changeColor, false );
+					colorButtonCellDiv.addEventListener ( 'click', onRedColorClick, false );
 				}
 			}
 			b -= 51;
@@ -1294,16 +1353,11 @@ To do: translations
 			colorDiv
 		);
 		
-		var changeSampleColor = function ( )  {
-			newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
-			document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
-		};
-		
 		// ... red ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - red'),
+				data : translator.getText ( 'ColorDialog - red'),
 			},
 			rvbDiv
 		);
@@ -1321,13 +1375,13 @@ To do: translations
 		redInput.min = 0;
 		redInput.max = 255;
 		
-		redInput.addEventListener ( 'input', changeSampleColor, false );
+		redInput.addEventListener ( 'input', onColorInput, false );
 		
 		// ... and green...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - green'),
+				data : translator.getText ( 'ColorDialog - green'),
 			},
 			rvbDiv
 		);
@@ -1343,13 +1397,13 @@ To do: translations
 		greenInput.value = colorToNumbers ( color ).g;
 		greenInput.min = 0;
 		greenInput.max = 255;
-		greenInput.addEventListener ( 'input', changeSampleColor, false );
+		greenInput.addEventListener ( 'input', onColorInput, false );
 
-		// ... and green
+		// ... and blue
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : _Translator.getText ( 'ColorDialog - blue'),
+				data : translator.getText ( 'ColorDialog - blue'),
 			},
 			rvbDiv
 		);
@@ -1365,12 +1419,13 @@ To do: translations
 		blueInput.value = colorToNumbers ( color ).b;
 		blueInput.min = 0;
 		blueInput.max = 255;
-		blueInput.addEventListener ( 'input', changeSampleColor, false );
+		blueInput.addEventListener ( 'input', onColorInput, false );
 		
+		// Sample color
 		var colorSampleDiv = htmlElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-DataDiv',
+				className : 'TravelNotes-ColorDialog-ColorSampleDiv',
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
 			},
 			colorDiv
@@ -1384,13 +1439,19 @@ To do: translations
 		return baseDialog;
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getColorDialog;
+		module.exports = ColorDialog;
 	}
 
 }());
 
-		
+/*
+--- End of ColorDialog.js file ----------------------------------------------------------------------------------------
+*/	
 },{"../UI/BaseDialog":8,"../UI/Translator":19,"./HTMLElementsFactory":12}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -1410,11 +1471,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ContextMenu.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the ContextMenu object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
-	var _Translator = require ( './Translator' ) ( );
 	var _MenuItems = [];
 	var _ContextMenuContainer = null;
 	var _OriginalEvent = null;
@@ -1422,21 +1496,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	var _Lat = 0;
 	var _Lng = 0;
 	
+	/*
+	--- onCloseMenu function ------------------------------------------------------------------------------------------
+
+	event listener for the close button. Alson called from others events
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+		
 	var onCloseMenu = function ( ) {
+		// removing event listeners
 		document.removeEventListener ( 'keydown', onKeyDown, true );
 		document.removeEventListener ( 'keypress', onKeyPress, true );
 		document.removeEventListener ( 'keyup', onKeyUp, true );
+		
+		// removing menu items
 		var childNodes = _ContextMenuContainer.childNodes;
 		childNodes [ 0 ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
 		for ( var childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', onCloseMenu, false );
 		}
 		
+		// removing the menu container
 		document.getElementsByTagName('body') [0].removeChild ( _ContextMenuContainer );
 		_ContextMenuContainer = null;
+		_FocusIsOnItem = 0;
 	};
 	
+	/*
+	--- onKeyDown function --------------------------------------------------------------------------------------------
+
+	Keyboard event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onKeyDown = function ( keyBoardEvent ) {
+		
 		if ( _ContextMenuContainer ) {
 			keyBoardEvent.preventDefault ( );
 			keyBoardEvent.stopPropagation ( );
@@ -1445,43 +1541,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			onCloseMenu ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
-			_FocusIsOnItem ++;
-			if ( _FocusIsOnItem > _MenuItems.length ) {
-				_FocusIsOnItem = 1;
-			}
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = _FocusIsOnItem >= _MenuItems.length ? 1 : ++ _FocusIsOnItem;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
-			_FocusIsOnItem --;
-			if ( _FocusIsOnItem < 1 ) {
-				_FocusIsOnItem = _MenuItems.length;
-			}
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+			_FocusIsOnItem = _FocusIsOnItem <= 1 ? _MenuItems.length : -- _FocusIsOnItem;
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
 			_FocusIsOnItem = 1;
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
 			_FocusIsOnItem = _MenuItems.length;
-			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus( );
+			_ContextMenuContainer.childNodes [ _FocusIsOnItem ].firstChild.focus ( );
 		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem - 1 ].action ) ) {
-			_MenuItems[ _FocusIsOnItem - 1 ].action ( );
-			onCloseMenu ( );
+		if ( ( 'Enter' === keyBoardEvent.key )  && ( _FocusIsOnItem > 0 ) && ( _MenuItems[ _FocusIsOnItem -1 ].action ) ) {
+			_ContextMenuContainer.childNodes[ _FocusIsOnItem ].firstChild.click ( );
 		}
-			
 	};
 	
+	/*
+	--- onKeyPress function -------------------------------------------------------------------------------------------
+
+	Keyboard event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onKeyPress = function ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	};
 	
+	/*
+	--- onKeyUp function ----------------------------------------------------------------------------------------------
+
+	Keyboard event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onKeyUp = function ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	};
+
+	/*
+	--- onClickItem function ------------------------------------------------------------------------------------------
+
+	Mouse click event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onClickItem = function ( event ) {
 		event.stopPropagation ( );
@@ -1503,10 +1615,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		onCloseMenu ( );
 	};
 	
-	var getContextMenu = function ( event, userMenu ) {
+	/*
+	--- ContextMenu object --------------------------------------------------------------------------------------------
 
-	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue...
-	// to avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var ContextMenu = function ( event, userMenu ) {
+
+	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
+	// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
 	// and we stop the procedure if equals.
 		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
 			_Lat = 0;
@@ -1521,63 +1639,83 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		_OriginalEvent = event; 
 		
+		// the menu is already opened, so we suppose the user will close the menu by clicking outside...
 		if ( _ContextMenuContainer ) {
 			onCloseMenu ( );
 			return;
 		}
+		
 		_MenuItems = userMenu;
-			
+		var body = document.getElementsByTagName('body') [0];
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
-		var body = document.getElementsByTagName('body') [0];
-		var tmpDiv = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , body );
-		var screenWidth = tmpDiv.clientWidth;
-		var screenHeight = tmpDiv.clientHeight;
-		body.removeChild ( tmpDiv );
+		// a dummy div is created to find the screen width and height
+		var dummyDiv = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , body );
+		var screenWidth = dummyDiv.clientWidth;
+		var screenHeight = dummyDiv.clientHeight;
+		body.removeChild ( dummyDiv );
 		
+		// and then the menu is created
 		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
 		
+		// close button
 		var closeButton = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				innerHTML: '&#x274c', 
 				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : _Translator.getText ( "ContextMenu - close" )
+				title : require ( './Translator' ) ( ).getText ( "ContextMenu - close" )
 			},
 			_ContextMenuContainer
 		);
 		closeButton.addEventListener ( 'click', onCloseMenu, false );
-		
-		for ( var menuItemCounter = 0; menuItemCounter < _MenuItems.length; menuItemCounter ++ ) {
-			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'},_ContextMenuContainer);
-			var item = htmlElementsFactory.create ( 
-				'button', 
-				{ 
-					innerHTML : _MenuItems [ menuItemCounter ].name,
-					id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-					className : _MenuItems [ menuItemCounter ].action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
-				},
-				itemContainer
-			);
-			if ( _MenuItems [ menuItemCounter ].action ) {
-				item.addEventListener ( 'click', onClickItem, false );
+
+		// items
+		var menuItemCounter = 0;
+		_MenuItems.forEach ( 
+			function ( menuItem ) {
+				var itemContainer = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'},_ContextMenuContainer);
+				var item = htmlElementsFactory.create ( 
+					'button', 
+					{ 
+						innerHTML : menuItem.name,
+						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
+						className : menuItem.action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
+					},
+					itemContainer
+				);
+				if ( menuItem.action ) {
+					item.addEventListener ( 'click', onClickItem, false );
+				}
+				item.menuItem = menuItemCounter;
+				++ menuItemCounter;
 			}
-			item.menuItem = menuItemCounter;
-		}
+		);
 		
+		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		var menuTop = Math.min ( event.originalEvent.clientY, screenHeight - _ContextMenuContainer.clientHeight - 20 );
 		var menuLeft = Math.min ( event.originalEvent.clientX, screenWidth - _ContextMenuContainer.clientWidth - 20 );
 		_ContextMenuContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
+		
+		// keyboard event listeners
 		document.addEventListener ( 'keydown', onKeyDown, true );
 		document.addEventListener ( 'keypress', onKeyPress, true );
 		document.addEventListener ( 'keyup', onKeyUp, true );
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getContextMenu;
+		module.exports = ContextMenu;
 	}
 
 }());
+
+/*
+--- End of ContextMenu.js file ----------------------------------------------------------------------------------------
+*/	
 
 },{"./HTMLElementsFactory":12,"./Translator":19}],11:[function(require,module,exports){
 /*

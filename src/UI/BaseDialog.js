@@ -16,16 +16,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+
 /*
-To do: translations
+--- BaseDialog.js file -----------------------------------------------------------------------------------------------
+This file contains:
+	- the BaseDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170928
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
 	
 	'use strict';
-
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _OkButtonListener = null;
 
 	var onKeyDown = function ( keyBoardEvent ) {
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
@@ -34,14 +42,12 @@ To do: translations
 		}
 	};
 	
-	var getBaseDialog = function ( ) {
+	var BaseDialog = function ( ) {
 		
-		_OkButtonListener = null;
-		
-		var dialogObjId = require ( '../data/ObjId' ) ( );
-
+		var okButtonListener = null;
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
+		// A new element covering the entire screen is created, with drag and drop event listeners
 		var body = document.getElementsByTagName('body') [0];
 		var backgroundDiv = htmlElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} , body );
 		backgroundDiv.addEventListener ( 
@@ -59,6 +65,7 @@ To do: translations
 			false
 		);	
 
+		// variables initialization for drag and drop
 		var screenWidth = backgroundDiv.clientWidth;
 		var screenHeight = backgroundDiv.clientHeight;
 		
@@ -68,10 +75,11 @@ To do: translations
 		var dialogX = 0;
 		var dialogY = 0;
 
+		// the dialog is created
 		var dialogContainer = htmlElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-BaseDialog-Container-' + dialogObjId,
+				id : 'TravelNotes-BaseDialog-Container',
 				className : 'TravelNotes-BaseDialog-Container',
 			},
 			backgroundDiv
@@ -90,7 +98,7 @@ To do: translations
 			{ 
 				innerHTML: '&#x274c', 
 				id : 'TravelNotes-BaseDialog-CancelButton',
-				title : _Translator.getText ( "DialogBase - close" )
+				title : require ( '../UI/Translator' ) ( ).getText ( "DialogBase - close" )
 			},
 			topBar
 		);
@@ -131,14 +139,15 @@ To do: translations
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-HeaderDiv',
+				id : 'TravelNotes-BaseDialog-HeaderDiv'
 			},
 			dialogContainer
 		);		
-		
 		var contentDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-ContentDiv',
+				id : 'TravelNotes-BaseDialog-ContentDiv'
 			},
 			dialogContainer
 		);
@@ -154,6 +163,7 @@ To do: translations
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-FooterDiv',
+				id : 'TravelNotes-BaseDialog-FooterDiv',
 			},
 			dialogContainer
 		);
@@ -169,8 +179,8 @@ To do: translations
 		okButton.addEventListener ( 
 			'click',
 			function ( ) {
-				if ( _OkButtonListener ) {
-					if ( ! _OkButtonListener ( ) ) {
+				if ( okButtonListener ) {
+					if ( ! okButtonListener ( ) ) {
 						return;
 					}
 				}
@@ -181,13 +191,21 @@ To do: translations
 		);				
 		document.addEventListener ( 'keydown', onKeyDown, true );
 		
+		/*
+		--- BaseDialog object -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
+			
 			addClickOkButtonEventListener : function ( listener ) {
-				_OkButtonListener = listener;
+				okButtonListener = listener;
 			},
 			
 			get title ( ) { return headerDiv.innerHTML; },
 			set title ( Title ) { headerDiv.innerHTML = Title; },
+			
 			center : function ( ) {
 				dialogX = ( screenWidth - dialogContainer.clientWidth ) / 2;
 				dialogY = ( screenHeight - dialogContainer.clientHeight ) / 2;
@@ -205,11 +223,20 @@ To do: translations
 
 			get footer ( ) { return footerDiv;},
 			set footer ( Footer ) { footerDiv = Footer; }
+			
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getBaseDialog;
+		module.exports = BaseDialog;
 	}
 
 }());
+
+/*
+--- End of AboutDialog.js file ----------------------------------------------------------------------------------------
+*/
