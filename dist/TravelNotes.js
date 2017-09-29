@@ -871,7 +871,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
- ( function ( ){
+( function ( ){
 	
 	'use strict';
 
@@ -1921,18 +1921,37 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- HTMLElementsFactory.js file ---------------------------------------------------------------------------------------
+This file contains:
+	- the HTMLElementsFactory object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	/* 
-	--- HTMLElementsFactory object -----------------------------------------------------------------------------
+	--- HTMLElementsFactory object ------------------------------------------------------------------------------------
 	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var getHTMLElementsFactory = function ( ) {
+	var HTMLElementsFactory = function ( ) {
+
+		/* 
+		--- HTMLElementsFactory object --------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		return {
 			create : function ( tagName, properties, parentNode ) {
@@ -1963,18 +1982,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 			
 	};
-
-	/* --- End of L.Travel.ControlUI object --- */		
-
-	var HTMLElementsFactory = function ( ) {
-		return getHTMLElementsFactory ( );
-	};
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = HTMLElementsFactory;
 	}
 
 }());
+
+/*
+--- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
+*/	
 
 },{}],13:[function(require,module,exports){
 /*
@@ -1995,17 +2016,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- HTMLViewsFactory.js file ------------------------------------------------------------------------------------------
+This file contains:
+	- the HTMLViewsFactory object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
-	/* 
-	--- HTMLViewsFactory object -----------------------------------------------------------------------------
-	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
-	*/
-
 	var _HTMLElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( );
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
@@ -2015,8 +2043,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 
-	var getHTMLViewsFactory = function ( ) {
+	var HTMLViewsFactory = function ( ) {
 				
+		/*
+		--- _AddNoteHTML function -------------------------------------------------------------------------------------
+
+		This function add to the rowDiv parameter two div with the note icon ant the note content
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _AddNoteHTML = function ( note, rowDiv ) {
 			_HTMLElementsFactory.create (
 				'div',
@@ -2035,6 +2071,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				rowDiv
 			);
 		};
+				
+		/*
+		--- _GetTravelHeaderHTML function -----------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's header
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelHeaderHTML = function ( ) {
 			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Header' } ); 
@@ -2062,6 +2106,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return travelHeaderHTML;
 		};
 
+				
+		/*
+		--- _GetTravelNotesHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's notes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _GetTravelNotesHTML = function ( ) {
 			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
 			var travelNotesIterator = _DataManager.travel.notes.iterator;
@@ -2076,6 +2129,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return travelNotesHTML;
 		};
+				
+		/*
+		--- _GetRouteHeaderHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the route header
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteHeaderHTML = function ( route ) {
 			return _HTMLElementsFactory.create ( 
@@ -2086,6 +2147,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			); 
 		};
+				
+		/*
+		--- _GetRouteManeuversAndNotesHTML function -------------------------------------------------------------------
+
+		This function returns an HTML element with the route maneuvers and notes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteManeuversAndNotesHTML = function ( route ) {
 			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Route-ManeuversAndNotes' } ); 
@@ -2165,6 +2234,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return routeManeuversAndNotesHTML;
 		};
+				
+		/*
+		--- _GetRouteFooterHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the route footer
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteFooterHTML = function ( route ) {
 			var innerHTML = '';
@@ -2180,6 +2257,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteFooter',	innerHTML : innerHTML } ); 
 		};
+				
+		/*
+		--- _GetTravelFooterHTML function -----------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's footer
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelFooterHTML = function ( ) {
 			return _HTMLElementsFactory.create ( 
@@ -2190,6 +2275,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				} 
 			); 
 		};
+				
+		/*
+		--- _GetTravelHTML function -----------------------------------------------------------------------------------
+
+		This function returns an HTML element with the complete travel
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelHTML = function ( ) {
 			
@@ -2211,9 +2304,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return travelHTML;
 		};
 
+		/* 
+		--- HTMLViewsFactory object -----------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
-			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
 			
+			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
 			get classNamePrefix ( ) { return _ClassNamePrefix; },
 			
 			get travelHeaderHTML ( )  { return _GetTravelHeaderHTML ( ); }, 
@@ -2232,15 +2331,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 			
 	};
-
-	/* --- End of L.Travel.ControlUI object --- */		
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getHTMLViewsFactory;
+		module.exports = HTMLViewsFactory;
 	}
 
 }());
 
+/*
+--- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
+*/	
 },{"../UI/HTMLElementsFactory":12,"../UI/Translator":19,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../data/ObjId":36,"../util/Utilities":42}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -2260,27 +2364,52 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ItineraryEditorUI.js file -----------------------------------------------------------------------------------------
+This file contains:
+	- the ItineraryEditorUI object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
 	var _DataManager = require ( '../data/DataManager' ) ( );
-	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
-	var onClickExpandButton = function ( clickEvent ) {
-		
-		clickEvent.stopPropagation ( );
+	/*
+	--- onClickExpandButton function ----------------------------------------------------------------------------------
 
+	click event listener for the expand button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onClickExpandButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
 		document.getElementById ( 'TravelNotes-Control-ItineraryHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
-
 	};
 	
+	/*
+	--- onInstructionClick function -----------------------------------------------------------------------------------
+
+	click event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onInstructionClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		var element = clickEvent.target;
@@ -2289,6 +2418,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		require ( '../core/MapEditor' ) ( ).zoomToPoint ( element.latLng );
 	};
+	
+	/*
+	--- onInstructionContextMenu function -----------------------------------------------------------------------------
+
+	contextmenu event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -2304,31 +2441,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			require ( '../core/NoteEditor' ) ( ).editNote ( element.noteObjId );
 		}
 	};
+	
+	/*
+	--- onInstructionMouseEnter function ------------------------------------------------------------------------------
+
+	mouseenter event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
 	};
+	
+	/*
+	--- onInstructionMouseLeave function ------------------------------------------------------------------------------
+
+	mouseleave event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
 	};
+	
+	/*
+	--- onClicktransitModeButton function -----------------------------------------------------------------------------
+
+	click event listener  for the car, bike and pedestrian buttons
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onClicktransitModeButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
 		_DataManager.routing.transitMode = clickEvent.target.transitMode;
-		document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		_RouteEditor.startRouting ( );
+
+		require ( '../core/RouteEditor' ) ( ).startRouting ( );
 	};
 	
+	/*
+	--- onProviderButtonClick function --------------------------------------------------------------------------------
+
+	click event listener for the providers button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onProviderButtonClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
 		_DataManager.routing.provider = clickEvent.target.provider;
+
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+
+		// activating the transit mode buttons, depending of the capabilities of the provider
 		var provider = _DataManager.providers.get ( clickEvent.target.provider );
 		if ( provider.transitModes.car ) {
 			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
@@ -2348,8 +2523,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		else {
 			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
-		if ( ! _DataManager.providers.get ( clickEvent.target.provider ).transitModes [ _DataManager.routing.transitMode ] )
-		{
+		
+		// verfying that the current transit mode is supported by the provider, otherwise changes the transit mode
+		if ( ! _DataManager.providers.get ( clickEvent.target.provider ).transitModes [ _DataManager.routing.transitMode ] ) { // you understand?
 			if ( provider.transitModes.bike ) {
 				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).click ( );
 			}
@@ -2360,19 +2536,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				document.getElementById ( 'TravelNotes-Control-carImgButton' ).click ( );
 			}
 		}
-		_RouteEditor.startRouting ( );
+		
+		require ( '../core/RouteEditor' ) ( ).startRouting ( );
 	};
 
-	var getItineraryEditorUI = function ( ) {
+
+	var ItineraryEditorUI = function ( ) {
+
+		/*
+		--- _CreateUI function ----------------------------------------------------------------------------------------
+
+		This function creates the UI
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _CreateUI = function ( controlDiv ) {
 			
 			if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
+				// UI already created
 				return;
 			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
+			// header div: expand button and title
 			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
 			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-ItineraryExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
@@ -2385,8 +2573,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				headerDiv 
 			);
+			
+			// data div: currently empty. Will be completed later. See _SetItinerary ( )
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			
+			// buttons div ...
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+			
+			// ... bike
 			var bikeButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -2399,6 +2593,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			bikeButton.transitMode = 'bike';
 			bikeButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// ... pedestrian
 			var pedestrianButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -2411,6 +2606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			pedestrianButton.transitMode = 'pedestrian';
 			pedestrianButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// ... car
 			var carButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -2423,6 +2619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			carButton.transitMode = 'car';
 			carButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// providers
 			if ( _DataManager.providers ) {
 				var activeButton = false;
 				_DataManager.providers.forEach (
@@ -2439,11 +2636,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						providerButton.provider = provider.name.toLowerCase ( );
 						providerButton.addEventListener ( 'click', onProviderButtonClick, false );
+						// when loading the control, the first provider will be the active provider
 						if ( ! activeButton ) {
 							providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 							_DataManager.routing.provider = providerButton.provider;
 							activeButton = true;
 							
+							// ... and the first possible transit mode will be the active transit mode
 							if ( provider.transitModes.bike ) {
 								bikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 								_DataManager.routing.transitMode = 'bike';
@@ -2454,6 +2653,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								carButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 								_DataManager.routing.transitMode = 'car';
 							} 
+							
+							// deactivating transit mode buttons if not supported by the provider
 							if ( ! provider.transitModes.car ) {
 								carButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 							}
@@ -2469,58 +2670,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _AddEventListeners = function ( element )
-		{
-			element.addEventListener ( 'click' , onInstructionClick, false );
-			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
-		};
-		
-		var _RemoveEventListeners = function ( element )
-		{
-			element.removeEventListener ( 'click' , onInstructionClick, false );
-			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
-		};
-		
+		/*
+		--- _SetItinerary function ------------------------------------------------------------------------------------
+
+		This function add the itinerary to the UI
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _SetItinerary = function ( ) {
 
 			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+			
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
+			
+			// removing previous header 
 			var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
+			// and adding the new one
 			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 			
+			// removing previous itinerary
 			var childCounter;
 			var childNodes;
-			
+			var childNode;			
 			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-					_RemoveEventListeners ( childNodes [ childCounter ] );
+					childNode = childNodes [ childCounter ];
+					childNode.removeEventListener ( 'click' , onInstructionClick, false );
+					childNode.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+					childNode.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+					childNode.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 				}
 				dataDiv.removeChild ( routeManeuversNotesList );
 			}
 			
+			// and adding the new one
 			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
+			
+			// adding event listeners 
 			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-					_AddEventListeners ( childNodes [ childCounter ] );
+					childNode = childNodes [ childCounter ];
+					childNode.addEventListener ( 'click' , onInstructionClick, false );
+					childNode.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+					childNode.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+					childNode.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 				}
 			}
 		};
-
+		/* 
+		--- ItineraryEditorUI object ----------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 		return {
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
@@ -2542,13 +2755,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryEditorUI;
+		module.exports = ItineraryEditorUI;
 	}
 
 }());
-	
-},{"../UI/HTMLViewsFactory":13,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":42,"./HTMLElementsFactory":12,"./Translator":19}],15:[function(require,module,exports){
+
+/*
+--- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
+*/	
+},{"../UI/HTMLViewsFactory":13,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"./HTMLElementsFactory":12,"./Translator":19}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2568,7 +2788,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- NoteDialog.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the NoteDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
@@ -2576,18 +2806,30 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
-	
-	var _LocalEditorData = { buttons : [], list : [] };
+	var _UserData = { editionButtons : [], preDefinedIconsList : [] };
+	var _ServerData = { editionButtons : [], preDefinedIconsList : [] };
+	var _GlobalData = { editionButtons : [], preDefinedIconsList : [] };
 	var _Note;
 	var _RouteObjId;
-	var _DataManager = require ( '../data/DataManager' ) ( );
 	
+	
+	/*
+	--- onOkButtonClick function ----------------------------------------------------------------------------------
+
+	click event listener for the ok button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onOkButtonClick = function ( ) {
+		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
+		// and then, cannot be edited or removed!
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - empty icon content' );
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
 			return false;
 		}
+		// saving values in the note.
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
 		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
 		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
@@ -2600,13 +2842,68 @@ To do: translations
 		return true;
 	};
 
-	var getNoteDialog = function ( note, routeObjId ) {
+	/*
+	--- NoteDialog function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var NoteDialog = function ( note, routeObjId, newNote ) {
+
+		// function to add the predefined icons to the select
+		var addPreDefinedIconsList = function ( ) {
+			_GlobalData.preDefinedIconsList = _ServerData.preDefinedIconsList.concat ( _UserData.preDefinedIconsList );
+			_GlobalData.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
+			var elementCounter = 0;
+			for ( elementCounter = preDefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
+				preDefinedIconsSelect.remove ( counter );
+			}
+			for ( elementCounter = 0; elementCounter < _GlobalData.preDefinedIconsList.length; elementCounter ++ ) {
+				var option = htmlElementsFactory.create ( 'option', { text :  _GlobalData.preDefinedIconsList [ elementCounter ].name } );
+				preDefinedIconsSelect.add ( option );
+			}
+		};
+
+		// function to add buttons on the toolbar
+		var addEditionButtons = function ( editionButtons ) {
+			editionButtons.forEach ( 
+				function ( editionButton ) {
+					var newButton = htmlElementsFactory.create ( 
+						'button',
+						{
+							type : 'button',
+							innerHTML : editionButton.title || '?',
+							htmlBefore : editionButton.htmlBefore || '',
+							htmlAfter : editionButton.htmlAfter || '',
+							className : 'TravelNotes-NoteDialog-EditorButton'
+						},
+						toolbarDiv
+					);
+					newButton.addEventListener ( 'click', onClickEditionButton, false );
+				}
+			);
+		};
+
+		// event handler for edition with the styles buttons
+		var onClickEditionButton = function ( event ) {
+			if ( ! focusControl ) {
+				return;
+			}
+			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
+			var selectionStart = focusControl.selectionStart;
+			var selectionEnd = focusControl.selectionEnd;
+			var oldText = focusControl.value;
+			focusControl.value = oldText.substring ( 0, selectionStart ) + 
+				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
+				oldText.substring ( selectionEnd );
+			focusControl.setSelectionRange ( 
+				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
+				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
+			focusControl.focus ( );
+		};	
 
 		_Note = note;
 		_RouteObjId = routeObjId;
-		
-		var serverEditorList = [];
-		var globalEditorList = [];
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
@@ -2615,6 +2912,7 @@ To do: translations
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
+		
 		var NoteDataDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -2633,7 +2931,8 @@ To do: translations
 			NoteDataDiv
 		);
 		
-		var editorSelect = htmlElementsFactory.create (
+		// a select is added for the predefined icons
+		var preDefinedIconsSelect = htmlElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-NoteDialog-Select',
@@ -2641,93 +2940,69 @@ To do: translations
 			},
 			toolbarDiv
 		);
-		editorSelect.addEventListener ( 
+		
+		// change event listener on the select
+		preDefinedIconsSelect.addEventListener ( 
 			'change', 
 			function ( changeEvent ) {
-				var index = editorSelect.selectedIndex ;
-				widthInput.value = globalEditorList [ index ].width ;
-				heightInput.value = globalEditorList [ index ].height ;
-				iconHtmlContent.value = globalEditorList [ index ].icon ;
-				tooltip.value = globalEditorList [ index ].tooltip ;
+				var index = preDefinedIconsSelect.selectedIndex ;
+				var preDefinedIcon = _GlobalData.preDefinedIconsList [ preDefinedIconsSelect.selectedIndex ];
+				widthInput.value = preDefinedIcon.width ;
+				heightInput.value = preDefinedIcon.height ;
+				iconHtmlContent.value = preDefinedIcon.icon ;
+				tooltip.value = preDefinedIcon.tooltip ;
 			},
 			false 
 		);
 		
-		
-		var addEditorList = function ( ) {
-			globalEditorList = serverEditorList.concat ( _LocalEditorData.list );
-			globalEditorList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
-			var elementCounter = 0;
-			for ( elementCounter = editorSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
-				editorSelect.remove ( counter );
-			}
-			for ( elementCounter = 0; elementCounter < globalEditorList.length; elementCounter ++ ) {
-				var option = htmlElementsFactory.create ( 'option', { text :  globalEditorList [ elementCounter ].name } );
-				editorSelect.add ( option );
-			}
-		};
+		var focusControl = null;
 
-		// function to add buttons on the toolbar from a object
-		var addEditorButtons = function ( buttons ) {
-			buttons.forEach ( 
-				function ( button ) {
-					var newButton = htmlElementsFactory.create ( 
-						'button',
-						{
-							type : 'button',
-							innerHTML : button.title || '?',
-							htmlBefore : button.htmlBefore || '',
-							htmlAfter : button.htmlAfter || '',
-							className : 'TravelNotes-NoteDialog-EditorButton'
-						},
-						toolbarDiv
-					);
-					newButton.addEventListener ( 'click', onInsertStyle, false );
-				}
-			);
-		};
-
-		// open style button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		var openEditorFileDiv = htmlElementsFactory.create ( 
+		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
+		var openUserDataFileDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
 			}, 
 			toolbarDiv 
 		);
-		var openEditorFileInput = htmlElementsFactory.create ( 
+		var openUserDataFileInput = htmlElementsFactory.create ( 
 			'input',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
 				type : 'file',
 				accept : '.json'
 			},
-			openEditorFileDiv
+			openUserDataFileDiv
 		);
-		openEditorFileInput.addEventListener ( 
+		openUserDataFileInput.addEventListener ( 
 			'change', 
 			function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					var newEditorData = JSON.parse ( fileReader.result ) ;
-					_LocalEditorData.buttons = _LocalEditorData.buttons.concat ( newEditorData.buttons );
-					_LocalEditorData.list = _LocalEditorData.list.concat ( newEditorData.list );
-					addEditorButtons ( newEditorData.buttons );
-					addEditorList ( );
+					try {
+						var newEditorData = JSON.parse ( fileReader.result ) ;
+						_UserData.editionButtons = _UserData.editionButtons.concat ( newEditorData.editionButtons );
+						_UserData.preDefinedIconsList = _UserData.preDefinedIconsList.concat ( newEditorData.preDefinedIconsList );
+						addEditionButtons ( newEditorData.editionButtons );
+						addPreDefinedIconsList ( );
+					}
+					catch ( e )
+					{
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			false
 		);
-		var openEditorFileFakeDiv = htmlElementsFactory.create ( 
+		var openUserDataFileFakeDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
 			}, 
-			openEditorFileDiv 
+			openUserDataFileDiv 
 		);
-		var openEditorFileButton = htmlElementsFactory.create ( 
+		var openUserDataFileButton = htmlElementsFactory.create ( 
 			'button', 
 			{ 
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
@@ -2735,32 +3010,14 @@ To do: translations
 				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
 				innerHTML : '&#x23CD;'
 			}, 
-			openEditorFileFakeDiv 
+			openUserDataFileFakeDiv 
 		);
 		
-		openEditorFileButton.addEventListener ( 'click' , function ( ) { openEditorFileInput.click ( ); }, false );
+		openUserDataFileButton.addEventListener ( 'click' , function ( ) { openUserDataFileInput.click ( ); }, false );
 	
-		// event handler for edition with the styles buttons
-		var focusControl = null;
-		var onInsertStyle = function ( event ) {
-			if ( ! focusControl ) {
-				return;
-			}
-			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
-			var selectionStart = focusControl.selectionStart;
-			var selectionEnd = focusControl.selectionEnd;
-			var oldText = focusControl.value;
-			focusControl.value = oldText.substring ( 0, selectionStart ) + 
-				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
-				oldText.substring ( selectionEnd );
-			focusControl.setSelectionRange ( 
-				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
-				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
-			focusControl.focus ( );
-		};	
 		
 		// standard buttons for div, p, span and a
-		addEditorButtons (
+		addEditionButtons (
 			[
 				{
 					title : 'div',
@@ -2785,9 +3042,12 @@ To do: translations
 			]
 		);
 		
+		// personnalised buttons from server file are restored
+		addEditionButtons ( _ServerData.editionButtons );
 		// personnalised buttons from local file are restored
-		addEditorButtons ( _LocalEditorData.buttons );
-
+		addEditionButtons ( _UserData.editionButtons );
+		addPreDefinedIconsList ( );
+		
 		// icon dimensions...
 		var iconDimensionsDiv = htmlElementsFactory.create (
 			'div',
@@ -2863,6 +3123,7 @@ To do: translations
 			false
 		);
 		iconHtmlContent.value = note.iconContent;
+		
 		// Popup content
 		htmlElementsFactory.create ( 
 			'div',
@@ -2996,55 +3257,59 @@ To do: translations
 			false
 		);
 		phone.value = note.phone;
-		
-		var buttonsHttpRequest = new XMLHttpRequest ( );
-		buttonsHttpRequest.onreadystatechange = function ( event ) {
-			if ( this.readyState === buttonsHttpRequest.DONE ) {
-				if ( this.status === 200 ) {
-					var serverEditorData;
-					try {
-						serverEditorData = JSON.parse ( this.responseText );
+
+		// predefined icons and editionButtons are loaded if not already done previously
+		if ( 0 === _ServerData.preDefinedIconsList.length ) {
+			var buttonsHttpRequest = new XMLHttpRequest ( );
+			buttonsHttpRequest.onreadystatechange = function ( event ) {
+				if ( this.readyState === buttonsHttpRequest.DONE ) {
+					if ( this.status === 200 ) {
+						try {
+							_ServerData = JSON.parse ( this.responseText );
+							addEditionButtons ( _ServerData.editionButtons );
+							_ServerData.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+							addPreDefinedIconsList ( );
+						}
+						catch ( e )
+						{
+							console.log ( 'Error reading userNoteDialog.json' );
+						}
+					} 
+					else {
+						console.log ( 'Error sending request for userNoteDialog.json' );
 					}
-					catch ( e )
-					{
-						console.log ( 'Error reading userNoteDialog.json' );
-					}
-					addEditorButtons ( serverEditorData.buttons );
-					serverEditorList = serverEditorData.list;
-					serverEditorList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
-					addEditorList ( );
-				} 
-				else {
-					console.log ( 'Error sending request for userNoteDialog.json' );
 				}
-			}
-		};
-		buttonsHttpRequest.open ( 
-			'GET',
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
-			true
-		);
-		buttonsHttpRequest.send ( null );
+			};
+			buttonsHttpRequest.open ( 
+				'GET',
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
+				true
+			);
+			buttonsHttpRequest.send ( null );
+		}
 
-		
-		address.value = note.address;
-
-		if ( '' === note.address ) {
+		// geolocalization
+		if ( ( require ( '../data/DataManager' ) ( ).config.note.geocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
 		}
-		
-		
 		
 		// and the dialog is centered on the screen
 		baseDialog.center ( );
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getNoteDialog;
+		module.exports = NoteDialog;
 	}
 
 }());
 
+/*
+--- End of NoteDialog.js file -----------------------------------------------------------------------------------------
+*/	
 },{"../UI/BaseDialog":8,"../UI/Translator":19,"../core/GeoCoder":23,"../core/NoteEditor":26,"../data/DataManager":31,"./HTMLElementsFactory":12}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4985,7 +5250,7 @@ Tests ...
 				note.distance = latLngDistance.distance;
 				
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, routeObjId );
+				require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
 			},
 		
 			/*
@@ -5018,7 +5283,7 @@ Tests ...
 				note.height = 40;
 
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId );
+				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId, true );
 			},
 		
 			/*
@@ -5037,7 +5302,7 @@ Tests ...
 				var note = this.newNote ( latLng );
 
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, -1 );
+				require ( '../UI/NoteDialog' ) ( note, -1, true );
 			},
 		
 			/*
@@ -5094,7 +5359,7 @@ Tests ...
 
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
+				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
 			},
 		
 			/*
@@ -6265,7 +6530,7 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _LoadFile = function ( textFile, readOnly ) {
+		var _LoadFile = function ( textFile, fileName, readOnly ) {
 			
 			try {
 				_DataManager.travel.object = JSON.parse ( textFile ) ;
@@ -6273,7 +6538,9 @@ Tests ...
 			catch ( e ) {
 				return;
 			}
-			
+			if ( '' !== fileName ) {
+				_DataManager.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
+			}
 			_DataManager.travel.readOnly = readOnly;
 			
 			// the map is cleaned
@@ -6433,7 +6700,7 @@ Tests ...
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name, JSON.stringify ( _DataManager.travel.object ) );
+					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name + '.trv', JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
 
@@ -6448,8 +6715,7 @@ Tests ...
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_DataManager.travel.name = fileName;
-					_LoadFile ( fileReader.result, false );
+					_LoadFile ( fileReader.result, fileName, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -6472,7 +6738,7 @@ Tests ...
 					xmlHttpRequest.onreadystatechange = function ( event ) {
 						if ( this.readyState === XMLHttpRequest.DONE ) {
 							if ( this.status === 200 ) {
-								_LoadFile ( this.responseText, true );
+								_LoadFile ( this.responseText,'', true );
 							} 
 						}
 					};

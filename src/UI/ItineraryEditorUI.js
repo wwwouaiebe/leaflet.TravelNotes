@@ -16,27 +16,52 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ItineraryEditorUI.js file -----------------------------------------------------------------------------------------
+This file contains:
+	- the ItineraryEditorUI object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
 	var _DataManager = require ( '../data/DataManager' ) ( );
-	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
-	var onClickExpandButton = function ( clickEvent ) {
-		
-		clickEvent.stopPropagation ( );
+	/*
+	--- onClickExpandButton function ----------------------------------------------------------------------------------
 
+	click event listener for the expand button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onClickExpandButton = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
 		document.getElementById ( 'TravelNotes-Control-ItineraryHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
-
 	};
 	
+	/*
+	--- onInstructionClick function -----------------------------------------------------------------------------------
+
+	click event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onInstructionClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		var element = clickEvent.target;
@@ -45,6 +70,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 		require ( '../core/MapEditor' ) ( ).zoomToPoint ( element.latLng );
 	};
+	
+	/*
+	--- onInstructionContextMenu function -----------------------------------------------------------------------------
+
+	contextmenu event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -60,31 +93,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			require ( '../core/NoteEditor' ) ( ).editNote ( element.noteObjId );
 		}
 	};
+	
+	/*
+	--- onInstructionMouseEnter function ------------------------------------------------------------------------------
+
+	mouseenter event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
 	};
+	
+	/*
+	--- onInstructionMouseLeave function ------------------------------------------------------------------------------
+
+	mouseleave event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var onInstructionMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
 	};
+	
+	/*
+	--- onClicktransitModeButton function -----------------------------------------------------------------------------
+
+	click event listener  for the car, bike and pedestrian buttons
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onClicktransitModeButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
 		_DataManager.routing.transitMode = clickEvent.target.transitMode;
-		document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		_RouteEditor.startRouting ( );
+
+		require ( '../core/RouteEditor' ) ( ).startRouting ( );
 	};
 	
+	/*
+	--- onProviderButtonClick function --------------------------------------------------------------------------------
+
+	click event listener for the providers button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onProviderButtonClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
 		_DataManager.routing.provider = clickEvent.target.provider;
+
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+
+		// activating the transit mode buttons, depending of the capabilities of the provider
 		var provider = _DataManager.providers.get ( clickEvent.target.provider );
 		if ( provider.transitModes.car ) {
 			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
@@ -104,8 +175,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		else {
 			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
-		if ( ! _DataManager.providers.get ( clickEvent.target.provider ).transitModes [ _DataManager.routing.transitMode ] )
-		{
+		
+		// verfying that the current transit mode is supported by the provider, otherwise changes the transit mode
+		if ( ! _DataManager.providers.get ( clickEvent.target.provider ).transitModes [ _DataManager.routing.transitMode ] ) { // you understand?
 			if ( provider.transitModes.bike ) {
 				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).click ( );
 			}
@@ -116,19 +188,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				document.getElementById ( 'TravelNotes-Control-carImgButton' ).click ( );
 			}
 		}
-		_RouteEditor.startRouting ( );
+		
+		require ( '../core/RouteEditor' ) ( ).startRouting ( );
 	};
 
-	var getItineraryEditorUI = function ( ) {
+
+	var ItineraryEditorUI = function ( ) {
+
+		/*
+		--- _CreateUI function ----------------------------------------------------------------------------------------
+
+		This function creates the UI
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _CreateUI = function ( controlDiv ) {
 			
 			if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
+				// UI already created
 				return;
 			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
+			// header div: expand button and title
 			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
 			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-ItineraryExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
@@ -141,8 +225,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				headerDiv 
 			);
+			
+			// data div: currently empty. Will be completed later. See _SetItinerary ( )
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			
+			// buttons div ...
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+			
+			// ... bike
 			var bikeButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -155,6 +245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			bikeButton.transitMode = 'bike';
 			bikeButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// ... pedestrian
 			var pedestrianButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -167,6 +258,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			pedestrianButton.transitMode = 'pedestrian';
 			pedestrianButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// ... car
 			var carButton = htmlElementsFactory.create (
 				'img',
 					{ 
@@ -179,6 +271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			carButton.transitMode = 'car';
 			carButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
+			// providers
 			if ( _DataManager.providers ) {
 				var activeButton = false;
 				_DataManager.providers.forEach (
@@ -195,11 +288,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						);
 						providerButton.provider = provider.name.toLowerCase ( );
 						providerButton.addEventListener ( 'click', onProviderButtonClick, false );
+						// when loading the control, the first provider will be the active provider
 						if ( ! activeButton ) {
 							providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 							_DataManager.routing.provider = providerButton.provider;
 							activeButton = true;
 							
+							// ... and the first possible transit mode will be the active transit mode
 							if ( provider.transitModes.bike ) {
 								bikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 								_DataManager.routing.transitMode = 'bike';
@@ -210,6 +305,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								carButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 								_DataManager.routing.transitMode = 'car';
 							} 
+							
+							// deactivating transit mode buttons if not supported by the provider
 							if ( ! provider.transitModes.car ) {
 								carButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 							}
@@ -225,58 +322,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _AddEventListeners = function ( element )
-		{
-			element.addEventListener ( 'click' , onInstructionClick, false );
-			element.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-			element.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
-		};
-		
-		var _RemoveEventListeners = function ( element )
-		{
-			element.removeEventListener ( 'click' , onInstructionClick, false );
-			element.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-			element.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-			element.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
-		};
-		
+		/*
+		--- _SetItinerary function ------------------------------------------------------------------------------------
+
+		This function add the itinerary to the UI
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _SetItinerary = function ( ) {
 
 			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+			
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
+			
+			// removing previous header 
 			var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
+			// and adding the new one
 			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 			
+			// removing previous itinerary
 			var childCounter;
 			var childNodes;
-			
+			var childNode;			
 			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-					_RemoveEventListeners ( childNodes [ childCounter ] );
+					childNode = childNodes [ childCounter ];
+					childNode.removeEventListener ( 'click' , onInstructionClick, false );
+					childNode.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+					childNode.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+					childNode.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 				}
 				dataDiv.removeChild ( routeManeuversNotesList );
 			}
 			
+			// and adding the new one
 			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
+			
+			// adding event listeners 
 			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-					_AddEventListeners ( childNodes [ childCounter ] );
+					childNode = childNodes [ childCounter ];
+					childNode.addEventListener ( 'click' , onInstructionClick, false );
+					childNode.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
+					childNode.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
+					childNode.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
 				}
 			}
 		};
-
+		/* 
+		--- ItineraryEditorUI object ----------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 		return {
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
@@ -298,9 +407,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getItineraryEditorUI;
+		module.exports = ItineraryEditorUI;
 	}
 
 }());
-	
+
+/*
+--- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
+*/	

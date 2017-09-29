@@ -16,17 +16,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- HTMLViewsFactory.js file ------------------------------------------------------------------------------------------
+This file contains:
+	- the HTMLViewsFactory object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
-	/* 
-	--- HTMLViewsFactory object -----------------------------------------------------------------------------
-	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
-	*/
-
 	var _HTMLElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( );
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
@@ -36,8 +43,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 
-	var getHTMLViewsFactory = function ( ) {
+	var HTMLViewsFactory = function ( ) {
 				
+		/*
+		--- _AddNoteHTML function -------------------------------------------------------------------------------------
+
+		This function add to the rowDiv parameter two div with the note icon ant the note content
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _AddNoteHTML = function ( note, rowDiv ) {
 			_HTMLElementsFactory.create (
 				'div',
@@ -56,6 +71,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				rowDiv
 			);
 		};
+				
+		/*
+		--- _GetTravelHeaderHTML function -----------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's header
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelHeaderHTML = function ( ) {
 			var travelHeaderHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Header' } ); 
@@ -83,6 +106,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return travelHeaderHTML;
 		};
 
+				
+		/*
+		--- _GetTravelNotesHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's notes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _GetTravelNotesHTML = function ( ) {
 			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
 			var travelNotesIterator = _DataManager.travel.notes.iterator;
@@ -97,6 +129,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return travelNotesHTML;
 		};
+				
+		/*
+		--- _GetRouteHeaderHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the route header
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteHeaderHTML = function ( route ) {
 			return _HTMLElementsFactory.create ( 
@@ -107,6 +147,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			); 
 		};
+				
+		/*
+		--- _GetRouteManeuversAndNotesHTML function -------------------------------------------------------------------
+
+		This function returns an HTML element with the route maneuvers and notes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteManeuversAndNotesHTML = function ( route ) {
 			var routeManeuversAndNotesHTML = _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'Route-ManeuversAndNotes' } ); 
@@ -186,6 +234,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return routeManeuversAndNotesHTML;
 		};
+				
+		/*
+		--- _GetRouteFooterHTML function ------------------------------------------------------------------------------
+
+		This function returns an HTML element with the route footer
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetRouteFooterHTML = function ( route ) {
 			var innerHTML = '';
@@ -201,6 +257,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			return _HTMLElementsFactory.create ( 'div', { className : _ClassNamePrefix + 'RouteFooter',	innerHTML : innerHTML } ); 
 		};
+				
+		/*
+		--- _GetTravelFooterHTML function -----------------------------------------------------------------------------
+
+		This function returns an HTML element with the travel's footer
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelFooterHTML = function ( ) {
 			return _HTMLElementsFactory.create ( 
@@ -211,6 +275,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				} 
 			); 
 		};
+				
+		/*
+		--- _GetTravelHTML function -----------------------------------------------------------------------------------
+
+		This function returns an HTML element with the complete travel
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _GetTravelHTML = function ( ) {
 			
@@ -232,9 +304,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return travelHTML;
 		};
 
+		/* 
+		--- HTMLViewsFactory object -----------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
-			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
 			
+			set classNamePrefix ( ClassNamePrefix ) { _ClassNamePrefix = ClassNamePrefix; },
 			get classNamePrefix ( ) { return _ClassNamePrefix; },
 			
 			get travelHeaderHTML ( )  { return _GetTravelHeaderHTML ( ); }, 
@@ -253,11 +331,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 			
 	};
-
-	/* --- End of L.Travel.ControlUI object --- */		
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getHTMLViewsFactory;
+		module.exports = HTMLViewsFactory;
 	}
 
 }());
+
+/*
+--- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
+*/	

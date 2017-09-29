@@ -86,7 +86,7 @@ Tests ...
 				note.distance = latLngDistance.distance;
 				
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, routeObjId );
+				require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
 			},
 		
 			/*
@@ -119,7 +119,7 @@ Tests ...
 				note.height = 40;
 
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId );
+				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId, true );
 			},
 		
 			/*
@@ -138,7 +138,7 @@ Tests ...
 				var note = this.newNote ( latLng );
 
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, -1 );
+				require ( '../UI/NoteDialog' ) ( note, -1, true );
 			},
 		
 			/*
@@ -195,7 +195,7 @@ Tests ...
 
 			editNote : function ( noteObjId ) {
 				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
-				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId );
+				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
 			},
 		
 			/*

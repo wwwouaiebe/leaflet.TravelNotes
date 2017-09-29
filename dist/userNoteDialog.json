@@ -1,4 +1,4 @@
-{ "buttons" : 
+{ "editionButtons" : 
 	[
 		{
 			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
@@ -40,7 +40,7 @@
 			"htmlBefore" : "&nbsp;"
 		}
 	],
-	"list" :
+	"preDefinedIconsList" :
 	[
 		{
 			"name" : "Aéroport",

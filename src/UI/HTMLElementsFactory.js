@@ -16,18 +16,37 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- HTMLElementsFactory.js file ---------------------------------------------------------------------------------------
+This file contains:
+	- the HTMLElementsFactory object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	/* 
-	--- HTMLElementsFactory object -----------------------------------------------------------------------------
+	--- HTMLElementsFactory object ------------------------------------------------------------------------------------
 	
-	Patterns : Closure
-	------------------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var getHTMLElementsFactory = function ( ) {
+	var HTMLElementsFactory = function ( ) {
+
+		/* 
+		--- HTMLElementsFactory object --------------------------------------------------------------------------------
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		return {
 			create : function ( tagName, properties, parentNode ) {
@@ -58,15 +77,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 			
 	};
-
-	/* --- End of L.Travel.ControlUI object --- */		
-
-	var HTMLElementsFactory = function ( ) {
-		return getHTMLElementsFactory ( );
-	};
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
 		module.exports = HTMLElementsFactory;
 	}
 
 }());
+
+/*
+--- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
+*/	

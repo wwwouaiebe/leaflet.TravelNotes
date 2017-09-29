@@ -65,7 +65,7 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _LoadFile = function ( textFile, readOnly ) {
+		var _LoadFile = function ( textFile, fileName, readOnly ) {
 			
 			try {
 				_DataManager.travel.object = JSON.parse ( textFile ) ;
@@ -73,7 +73,9 @@ Tests ...
 			catch ( e ) {
 				return;
 			}
-			
+			if ( '' !== fileName ) {
+				_DataManager.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
+			}
 			_DataManager.travel.readOnly = readOnly;
 			
 			// the map is cleaned
@@ -233,7 +235,7 @@ Tests ...
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name, JSON.stringify ( _DataManager.travel.object ) );
+					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name + '.trv', JSON.stringify ( _DataManager.travel.object ) );
 				}
 			},
 
@@ -248,8 +250,7 @@ Tests ...
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_DataManager.travel.name = fileName;
-					_LoadFile ( fileReader.result, false );
+					_LoadFile ( fileReader.result, fileName, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -272,7 +273,7 @@ Tests ...
 					xmlHttpRequest.onreadystatechange = function ( event ) {
 						if ( this.readyState === XMLHttpRequest.DONE ) {
 							if ( this.status === 200 ) {
-								_LoadFile ( this.responseText, true );
+								_LoadFile ( this.responseText,'', true );
 							} 
 						}
 					};

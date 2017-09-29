@@ -17,7 +17,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
-To do: translations
+--- NoteDialog.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the NoteDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
@@ -25,18 +35,30 @@ To do: translations
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
-	
-	var _LocalEditorData = { buttons : [], list : [] };
+	var _UserData = { editionButtons : [], preDefinedIconsList : [] };
+	var _ServerData = { editionButtons : [], preDefinedIconsList : [] };
+	var _GlobalData = { editionButtons : [], preDefinedIconsList : [] };
 	var _Note;
 	var _RouteObjId;
-	var _DataManager = require ( '../data/DataManager' ) ( );
 	
+	
+	/*
+	--- onOkButtonClick function ----------------------------------------------------------------------------------
+
+	click event listener for the ok button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onOkButtonClick = function ( ) {
+		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
+		// and then, cannot be edited or removed!
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - empty icon content' );
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
 			return false;
 		}
+		// saving values in the note.
 		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
 		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
 		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
@@ -49,13 +71,68 @@ To do: translations
 		return true;
 	};
 
-	var getNoteDialog = function ( note, routeObjId ) {
+	/*
+	--- NoteDialog function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var NoteDialog = function ( note, routeObjId, newNote ) {
+
+		// function to add the predefined icons to the select
+		var addPreDefinedIconsList = function ( ) {
+			_GlobalData.preDefinedIconsList = _ServerData.preDefinedIconsList.concat ( _UserData.preDefinedIconsList );
+			_GlobalData.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
+			var elementCounter = 0;
+			for ( elementCounter = preDefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
+				preDefinedIconsSelect.remove ( counter );
+			}
+			for ( elementCounter = 0; elementCounter < _GlobalData.preDefinedIconsList.length; elementCounter ++ ) {
+				var option = htmlElementsFactory.create ( 'option', { text :  _GlobalData.preDefinedIconsList [ elementCounter ].name } );
+				preDefinedIconsSelect.add ( option );
+			}
+		};
+
+		// function to add buttons on the toolbar
+		var addEditionButtons = function ( editionButtons ) {
+			editionButtons.forEach ( 
+				function ( editionButton ) {
+					var newButton = htmlElementsFactory.create ( 
+						'button',
+						{
+							type : 'button',
+							innerHTML : editionButton.title || '?',
+							htmlBefore : editionButton.htmlBefore || '',
+							htmlAfter : editionButton.htmlAfter || '',
+							className : 'TravelNotes-NoteDialog-EditorButton'
+						},
+						toolbarDiv
+					);
+					newButton.addEventListener ( 'click', onClickEditionButton, false );
+				}
+			);
+		};
+
+		// event handler for edition with the styles buttons
+		var onClickEditionButton = function ( event ) {
+			if ( ! focusControl ) {
+				return;
+			}
+			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
+			var selectionStart = focusControl.selectionStart;
+			var selectionEnd = focusControl.selectionEnd;
+			var oldText = focusControl.value;
+			focusControl.value = oldText.substring ( 0, selectionStart ) + 
+				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
+				oldText.substring ( selectionEnd );
+			focusControl.setSelectionRange ( 
+				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
+				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
+			focusControl.focus ( );
+		};	
 
 		_Note = note;
 		_RouteObjId = routeObjId;
-		
-		var serverEditorList = [];
-		var globalEditorList = [];
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
@@ -64,6 +141,7 @@ To do: translations
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
+		
 		var NoteDataDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -82,7 +160,8 @@ To do: translations
 			NoteDataDiv
 		);
 		
-		var editorSelect = htmlElementsFactory.create (
+		// a select is added for the predefined icons
+		var preDefinedIconsSelect = htmlElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-NoteDialog-Select',
@@ -90,93 +169,69 @@ To do: translations
 			},
 			toolbarDiv
 		);
-		editorSelect.addEventListener ( 
+		
+		// change event listener on the select
+		preDefinedIconsSelect.addEventListener ( 
 			'change', 
 			function ( changeEvent ) {
-				var index = editorSelect.selectedIndex ;
-				widthInput.value = globalEditorList [ index ].width ;
-				heightInput.value = globalEditorList [ index ].height ;
-				iconHtmlContent.value = globalEditorList [ index ].icon ;
-				tooltip.value = globalEditorList [ index ].tooltip ;
+				var index = preDefinedIconsSelect.selectedIndex ;
+				var preDefinedIcon = _GlobalData.preDefinedIconsList [ preDefinedIconsSelect.selectedIndex ];
+				widthInput.value = preDefinedIcon.width ;
+				heightInput.value = preDefinedIcon.height ;
+				iconHtmlContent.value = preDefinedIcon.icon ;
+				tooltip.value = preDefinedIcon.tooltip ;
 			},
 			false 
 		);
 		
-		
-		var addEditorList = function ( ) {
-			globalEditorList = serverEditorList.concat ( _LocalEditorData.list );
-			globalEditorList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
-			var elementCounter = 0;
-			for ( elementCounter = editorSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
-				editorSelect.remove ( counter );
-			}
-			for ( elementCounter = 0; elementCounter < globalEditorList.length; elementCounter ++ ) {
-				var option = htmlElementsFactory.create ( 'option', { text :  globalEditorList [ elementCounter ].name } );
-				editorSelect.add ( option );
-			}
-		};
+		var focusControl = null;
 
-		// function to add buttons on the toolbar from a object
-		var addEditorButtons = function ( buttons ) {
-			buttons.forEach ( 
-				function ( button ) {
-					var newButton = htmlElementsFactory.create ( 
-						'button',
-						{
-							type : 'button',
-							innerHTML : button.title || '?',
-							htmlBefore : button.htmlBefore || '',
-							htmlAfter : button.htmlAfter || '',
-							className : 'TravelNotes-NoteDialog-EditorButton'
-						},
-						toolbarDiv
-					);
-					newButton.addEventListener ( 'click', onInsertStyle, false );
-				}
-			);
-		};
-
-		// open style button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		var openEditorFileDiv = htmlElementsFactory.create ( 
+		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
+		var openUserDataFileDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
 			}, 
 			toolbarDiv 
 		);
-		var openEditorFileInput = htmlElementsFactory.create ( 
+		var openUserDataFileInput = htmlElementsFactory.create ( 
 			'input',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
 				type : 'file',
 				accept : '.json'
 			},
-			openEditorFileDiv
+			openUserDataFileDiv
 		);
-		openEditorFileInput.addEventListener ( 
+		openUserDataFileInput.addEventListener ( 
 			'change', 
 			function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					var newEditorData = JSON.parse ( fileReader.result ) ;
-					_LocalEditorData.buttons = _LocalEditorData.buttons.concat ( newEditorData.buttons );
-					_LocalEditorData.list = _LocalEditorData.list.concat ( newEditorData.list );
-					addEditorButtons ( newEditorData.buttons );
-					addEditorList ( );
+					try {
+						var newEditorData = JSON.parse ( fileReader.result ) ;
+						_UserData.editionButtons = _UserData.editionButtons.concat ( newEditorData.editionButtons );
+						_UserData.preDefinedIconsList = _UserData.preDefinedIconsList.concat ( newEditorData.preDefinedIconsList );
+						addEditionButtons ( newEditorData.editionButtons );
+						addPreDefinedIconsList ( );
+					}
+					catch ( e )
+					{
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
 			},
 			false
 		);
-		var openEditorFileFakeDiv = htmlElementsFactory.create ( 
+		var openUserDataFileFakeDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
 			}, 
-			openEditorFileDiv 
+			openUserDataFileDiv 
 		);
-		var openEditorFileButton = htmlElementsFactory.create ( 
+		var openUserDataFileButton = htmlElementsFactory.create ( 
 			'button', 
 			{ 
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
@@ -184,32 +239,14 @@ To do: translations
 				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
 				innerHTML : '&#x23CD;'
 			}, 
-			openEditorFileFakeDiv 
+			openUserDataFileFakeDiv 
 		);
 		
-		openEditorFileButton.addEventListener ( 'click' , function ( ) { openEditorFileInput.click ( ); }, false );
+		openUserDataFileButton.addEventListener ( 'click' , function ( ) { openUserDataFileInput.click ( ); }, false );
 	
-		// event handler for edition with the styles buttons
-		var focusControl = null;
-		var onInsertStyle = function ( event ) {
-			if ( ! focusControl ) {
-				return;
-			}
-			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
-			var selectionStart = focusControl.selectionStart;
-			var selectionEnd = focusControl.selectionEnd;
-			var oldText = focusControl.value;
-			focusControl.value = oldText.substring ( 0, selectionStart ) + 
-				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
-				oldText.substring ( selectionEnd );
-			focusControl.setSelectionRange ( 
-				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
-				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
-			focusControl.focus ( );
-		};	
 		
 		// standard buttons for div, p, span and a
-		addEditorButtons (
+		addEditionButtons (
 			[
 				{
 					title : 'div',
@@ -234,9 +271,12 @@ To do: translations
 			]
 		);
 		
+		// personnalised buttons from server file are restored
+		addEditionButtons ( _ServerData.editionButtons );
 		// personnalised buttons from local file are restored
-		addEditorButtons ( _LocalEditorData.buttons );
-
+		addEditionButtons ( _UserData.editionButtons );
+		addPreDefinedIconsList ( );
+		
 		// icon dimensions...
 		var iconDimensionsDiv = htmlElementsFactory.create (
 			'div',
@@ -312,6 +352,7 @@ To do: translations
 			false
 		);
 		iconHtmlContent.value = note.iconContent;
+		
 		// Popup content
 		htmlElementsFactory.create ( 
 			'div',
@@ -445,51 +486,56 @@ To do: translations
 			false
 		);
 		phone.value = note.phone;
-		
-		var buttonsHttpRequest = new XMLHttpRequest ( );
-		buttonsHttpRequest.onreadystatechange = function ( event ) {
-			if ( this.readyState === buttonsHttpRequest.DONE ) {
-				if ( this.status === 200 ) {
-					var serverEditorData;
-					try {
-						serverEditorData = JSON.parse ( this.responseText );
+
+		// predefined icons and editionButtons are loaded if not already done previously
+		if ( 0 === _ServerData.preDefinedIconsList.length ) {
+			var buttonsHttpRequest = new XMLHttpRequest ( );
+			buttonsHttpRequest.onreadystatechange = function ( event ) {
+				if ( this.readyState === buttonsHttpRequest.DONE ) {
+					if ( this.status === 200 ) {
+						try {
+							_ServerData = JSON.parse ( this.responseText );
+							addEditionButtons ( _ServerData.editionButtons );
+							_ServerData.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+							addPreDefinedIconsList ( );
+						}
+						catch ( e )
+						{
+							console.log ( 'Error reading userNoteDialog.json' );
+						}
+					} 
+					else {
+						console.log ( 'Error sending request for userNoteDialog.json' );
 					}
-					catch ( e )
-					{
-						console.log ( 'Error reading userNoteDialog.json' );
-					}
-					addEditorButtons ( serverEditorData.buttons );
-					serverEditorList = serverEditorData.list;
-					serverEditorList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
-					addEditorList ( );
-				} 
-				else {
-					console.log ( 'Error sending request for userNoteDialog.json' );
 				}
-			}
-		};
-		buttonsHttpRequest.open ( 
-			'GET',
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
-			true
-		);
-		buttonsHttpRequest.send ( null );
+			};
+			buttonsHttpRequest.open ( 
+				'GET',
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
+				true
+			);
+			buttonsHttpRequest.send ( null );
+		}
 
-		
-		address.value = note.address;
-
-		if ( '' === note.address ) {
+		// geolocalization
+		if ( ( require ( '../data/DataManager' ) ( ).config.note.geocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
 		}
-		
-		
 		
 		// and the dialog is centered on the screen
 		baseDialog.center ( );
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getNoteDialog;
+		module.exports = NoteDialog;
 	}
 
 }());
+
+/*
+--- End of NoteDialog.js file -----------------------------------------------------------------------------------------
+*/	
