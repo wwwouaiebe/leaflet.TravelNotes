@@ -32,6 +32,10 @@
 		"msgstr" : "Masquer"
 	},
 	{
+		"msgid" : "ErrorEditorUI - Errors",
+		"msgstr" : "Erreurs"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - ToNextInstruction",
 		"msgstr" : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
 	},

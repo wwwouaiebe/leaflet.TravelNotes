@@ -40,6 +40,7 @@ Tests ...
 	var _FocusIsOnItem = 0;
 	var _Lat = 0;
 	var _Lng = 0;
+	var _TimerId = null;
 	
 	/*
 	--- onCloseMenu function ------------------------------------------------------------------------------------------
@@ -50,6 +51,15 @@ Tests ...
 	*/
 		
 	var onCloseMenu = function ( ) {
+		
+		if ( _TimerId ) {
+			clearTimeout ( _TimerId );
+			_TimerId = null;
+		}
+		
+		_Lat = 0;
+		_Lng = 0;
+		
 		// removing event listeners
 		document.removeEventListener ( 'keydown', onKeyDown, true );
 		document.removeEventListener ( 'keypress', onKeyPress, true );
@@ -155,8 +165,6 @@ Tests ...
 				_OriginalEvent
 			);
 		}
-		_Lat = 0;
-		_Lng = 0;
 		onCloseMenu ( );
 	};
 	
@@ -167,10 +175,9 @@ Tests ...
 	*/
 
 	var ContextMenu = function ( event, userMenu ) {
-
-	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
-	// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
-	// and we stop the procedure if equals.
+		// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
+		// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
+		// and we stop the procedure if equals.
 		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
 			_Lat = 0;
 			_Lng = 0;
@@ -202,7 +209,17 @@ Tests ...
 		
 		// and then the menu is created
 		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
-		
+		_ContextMenuContainer.addEventListener ( 
+			'mouseenter',
+			function ( ) { 
+				if ( _TimerId ) {
+					clearTimeout ( _TimerId );
+					_TimerId = null;
+				}
+			},
+			false
+		);
+		_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, require ( '../data/DataManager' ) ( ).config.contextMenu.timeout ); }, false );
 		// close button
 		var closeButton = htmlElementsFactory.create ( 
 			'div',

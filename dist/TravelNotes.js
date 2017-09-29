@@ -39,6 +39,9 @@ Tests ...
 
 			init : function ( map ) {
 				global.config = {
+					contextMenu : {
+						timeout : 1500
+					},
 					routing : {
 						auto : true
 					},
@@ -1495,6 +1498,7 @@ Tests ...
 	var _FocusIsOnItem = 0;
 	var _Lat = 0;
 	var _Lng = 0;
+	var _TimerId = null;
 	
 	/*
 	--- onCloseMenu function ------------------------------------------------------------------------------------------
@@ -1505,6 +1509,15 @@ Tests ...
 	*/
 		
 	var onCloseMenu = function ( ) {
+		
+		if ( _TimerId ) {
+			clearTimeout ( _TimerId );
+			_TimerId = null;
+		}
+		
+		_Lat = 0;
+		_Lng = 0;
+		
 		// removing event listeners
 		document.removeEventListener ( 'keydown', onKeyDown, true );
 		document.removeEventListener ( 'keypress', onKeyPress, true );
@@ -1610,8 +1623,6 @@ Tests ...
 				_OriginalEvent
 			);
 		}
-		_Lat = 0;
-		_Lng = 0;
 		onCloseMenu ( );
 	};
 	
@@ -1622,10 +1633,9 @@ Tests ...
 	*/
 
 	var ContextMenu = function ( event, userMenu ) {
-
-	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
-	// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
-	// and we stop the procedure if equals.
+		// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
+		// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
+		// and we stop the procedure if equals.
 		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
 			_Lat = 0;
 			_Lng = 0;
@@ -1657,7 +1667,17 @@ Tests ...
 		
 		// and then the menu is created
 		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
-		
+		_ContextMenuContainer.addEventListener ( 
+			'mouseenter',
+			function ( ) { 
+				if ( _TimerId ) {
+					clearTimeout ( _TimerId );
+					_TimerId = null;
+				}
+			},
+			false
+		);
+		_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, require ( '../data/DataManager' ) ( ).config.contextMenu.timeout ); }, false );
 		// close button
 		var closeButton = htmlElementsFactory.create ( 
 			'div',
@@ -1717,7 +1737,7 @@ Tests ...
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------
 */	
 
-},{"./HTMLElementsFactory":12,"./Translator":19}],11:[function(require,module,exports){
+},{"../data/DataManager":31,"./HTMLElementsFactory":12,"./Translator":19}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1736,27 +1756,42 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- ErrorEditorUI.js file ---------------------------------------------------------------------------------------------
+This file contains:
+	- the ErrorEditorUI object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 
-	var _Translator = require ( './Translator' ) ( );
-	
-	var onClickExpandButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( ! document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML.length ) {
-			return;
-		}	
-		document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
-		document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = hiddenList ? _Translator.getText ( 'ErrorEditorUI - Show' ) : _Translator.getText ( 'ErrorEditorUI - Hide' );
-	};
+	/*
+	--- ContextMenu object --------------------------------------------------------------------------------------------
 
-	// User interface
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-	var getErrorEditorUI = function ( ) {
+	var ErrorEditorUI = function ( ) {
 				
+		var translator = require ( './Translator' ) ( );
+
+		/*
+		--- _CreateUI function ----------------------------------------------------------------------------------------
+
+		This function creates the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _CreateUI = function ( controlDiv ){ 
 		
 			if ( document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ) ) {
@@ -1772,27 +1807,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				'span',
 				{ 
 					innerHTML : '&#x25b6;',
-					title : _Translator.getText ( 'ErrorEditorUI - Show' ),
+					title : translator.getText ( 'ErrorEditorUI - Show' ),
 					id : 'TravelNotes-Control-ErrorExpandButton',
 					className : 'TravelNotes-Control-ExpandButton'
 				},
-				headerDiv );
-			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : 'Erreurs&nbsp;:', id : 'TravelNotes-Control-ErrorHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
+				headerDiv 
+			);
+			expandButton.addEventListener ( 
+				'click' ,
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+					if ( ! document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML.length ) {
+						return;
+					}	
+					document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					var hiddenList = document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
+					document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = hiddenList ? translator.getText ( 'ErrorEditorUI - Show' ) : translator.getText ( 'ErrorEditorUI - Hide' );
+					if ( hiddenList ) {
+						document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = '';
+					}
+				},
+				false 
+			);
+			htmlElementsFactory.create ( 'span', { innerHTML : translator.getText ( 'ErrorEditorUI - Errors' ), id : 'TravelNotes-Control-ErrorHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
 			
 		};
+				
+		/*
+		--- _ExpandUI function ----------------------------------------------------------------------------------------
+
+		This function expands the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		var _ExpandUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b2;';
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Hide' );
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = translator.getText ( 'ErrorEditorUI - Hide' );
 			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 		};
+				
+		/*
+		--- _ReduceUI function ----------------------------------------------------------------------------------------
+
+		This function reduces the UI
 		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ReduceUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b6;';
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = _Translator.getText ( 'ErrorEditorUI - Show' );
+			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = translator.getText ( 'ErrorEditorUI - Show' );
 			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).add ( 'TravelNotes-Control-HiddenList' );
 		};
+
+		/*
+		--- ErrorEditorUI object --------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
 		return {
 			
@@ -1815,12 +1889,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getErrorEditorUI;
+		module.exports = ErrorEditorUI;
 	}
 
 }());
 
+/*
+--- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
+*/	
 },{"./HTMLElementsFactory":12,"./Translator":19}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -6161,7 +6242,7 @@ Tests ...
 	var TravelEditor = function ( ) {
 		
 		/*
-		--- _ChangeTravelHTML method ----------------------------------------------------------------------------------
+		--- _ChangeTravelHTML function --------------------------------------------------------------------------------
 
 		This function changes the HTML page content
 		

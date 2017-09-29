@@ -42,7 +42,7 @@ Tests ...
 	var TravelEditor = function ( ) {
 		
 		/*
-		--- _ChangeTravelHTML method ----------------------------------------------------------------------------------
+		--- _ChangeTravelHTML function --------------------------------------------------------------------------------
 
 		This function changes the HTML page content
 		

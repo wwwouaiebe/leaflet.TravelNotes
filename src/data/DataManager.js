@@ -37,6 +37,9 @@ Tests ...
 
 			init : function ( map ) {
 				global.config = {
+					contextMenu : {
+						timeout : 1500
+					},
 					routing : {
 						auto : true
 					},
