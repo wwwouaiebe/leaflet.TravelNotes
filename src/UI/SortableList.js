@@ -100,8 +100,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
-		this.items = [];
-		
 		/*
 		--- removeAllItems method ----------------------------------------------------------------------------------------------
 
@@ -111,10 +109,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 
 		this.removeAllItems = function ( ) {
-			for ( var ItemCounter = 0; ItemCounter < this.items.length; ItemCounter ++ ) {
-				this.container.removeChild ( this.items [ ItemCounter ] );
+			var childNodes = this.container.childNodes ( );
+			for ( var childNodesCounter = 0; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+				this.container.removeChild ( childNodes [ childNodesCounter ] )
 			}
-			this.items.length = 0;
 		};
 		
 		/*
@@ -149,9 +147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 
-			this.items.push ( item );
-
-			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
+			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.container.childNodes ( ).length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
