@@ -13,6 +13,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Translator.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the Translator object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170930
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 (function() {
 	
 	'use strict';
@@ -23,11 +36,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 
 		return {
+			
 			setTranslations : function ( translations ) {
-				for ( var translationsCounter = 0; translationsCounter < translations.length; translationsCounter ++ ) {
-					global.translations.set ( translations [ translationsCounter ].msgid, translations [ translationsCounter ].msgstr );
-				}
+				translations.forEach (
+					function ( translation ) {
+						global.translations.set ( translation.msgid, translation.msgstr );
+					}
+				);
 			},
+			
 			getText : function ( msgid , params ) { 
 				var translation = global.translations.get ( msgid );
 				if ( params && translation ) {
@@ -38,12 +55,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					);
 				}
 				
-				return translation === undefined ? msgid : translation;
+				return ! translation ? msgid : translation;
 			}
 		};
 	};
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -51,3 +68,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 } ) ( );
+
+/*
+--- End of Translator.js file -----------------------------------------------------------------------------------------
+*/	

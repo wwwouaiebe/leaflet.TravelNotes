@@ -134,14 +134,13 @@ Tests ...
 		_Note = note;
 		_RouteObjId = routeObjId;
 		
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
-		
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
 		var NoteDataDiv = htmlElementsFactory.create (
 			'div',
 			{

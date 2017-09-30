@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	
 	var onDragStart = function  ( DragEvent ) {
 		DragEvent.stopPropagation(); // needed to avoid map movements
 		try {

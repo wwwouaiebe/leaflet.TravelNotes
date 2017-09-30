@@ -2903,14 +2903,13 @@ Tests ...
 		_Note = note;
 		_RouteObjId = routeObjId;
 		
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
 		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
-		
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
 		var NoteDataDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -3675,7 +3674,7 @@ Tests ...
 		};
 		
 		/*
-		--- ErrorEditorUI object --------------------------------------------------------------------------------------
+		--- RouteEditorUI object --------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
@@ -3731,18 +3730,43 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
-To do: translations
-*/
-
 ( function ( ){
 	
 	'use strict';
 
+/*
+--- RoutePropertiesDialog.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the RoutePropertiesDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170930
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 	var _Translator = require ( '../UI/Translator' ) ( );
 
-	var getRoutePropertiesDialog = function ( route ) {
+
+	/*
+	--- RoutePropertiesDialog function --------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var RoutePropertiesDialog = function ( route ) {
 		
+		/*
+		--- onOkButtonClick function --------------------------------------------------------------------------------------
+
+		click event listener for the ok button
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onOkButtonClick = function ( ) {
 			route.color = colorDialog.getNewColor ( );
 			route.width = parseInt ( widthInput.value );
@@ -3753,13 +3777,14 @@ To do: translations
 			require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			return true;
 		};
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
 		var colorDialog = require ( '../UI/ColorDialog' ) ( route.color );
 		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Title' );
 		colorDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
 		var routePropertiesDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -3767,6 +3792,7 @@ To do: translations
 			},
 			colorDialog.content
 		);
+		
 		// ... width ...
 		var widthDiv = htmlElementsFactory.create (
 			'div',
@@ -3826,13 +3852,19 @@ To do: translations
 		return colorDialog;
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutePropertiesDialog;
+		module.exports = RoutePropertiesDialog;
 	}
 
 }());
 
-		
+/*
+--- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
+*/	
 },{"../UI/ColorDialog":9,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"./HTMLElementsFactory":12}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -3854,7 +3886,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ( function ( ){
 	
 	'use strict';
-	
 	
 	var onDragStart = function  ( DragEvent ) {
 		DragEvent.stopPropagation(); // needed to avoid map movements
@@ -4067,6 +4098,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Translator.js file ------------------------------------------------------------------------------------------------
+This file contains:
+	- the Translator object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170930
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 (function() {
 	
 	'use strict';
@@ -4077,11 +4121,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 
 		return {
+			
 			setTranslations : function ( translations ) {
-				for ( var translationsCounter = 0; translationsCounter < translations.length; translationsCounter ++ ) {
-					global.translations.set ( translations [ translationsCounter ].msgid, translations [ translationsCounter ].msgstr );
-				}
+				translations.forEach (
+					function ( translation ) {
+						global.translations.set ( translation.msgid, translation.msgstr );
+					}
+				);
 			},
+			
 			getText : function ( msgid , params ) { 
 				var translation = global.translations.get ( msgid );
 				if ( params && translation ) {
@@ -4092,12 +4140,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					);
 				}
 				
-				return translation === undefined ? msgid : translation;
+				return ! translation ? msgid : translation;
 			}
 		};
 	};
 	/* 
-	--- Exports ------------------------------------------------------------------------------------------------------------
+	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -4105,6 +4153,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 } ) ( );
+
+/*
+--- End of Translator.js file -----------------------------------------------------------------------------------------
+*/	
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],20:[function(require,module,exports){
@@ -4126,93 +4178,59 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- TravelEditorUI.js file --------------------------------------------------------------------------------------------
+This file contains:
+	- the TravelEditorUI object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170930
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
 	var _DataManager = require ( '../data/DataManager' ) ( );
+	var _RoutesList = null;
 	
-	// Events listeners for buttons under the routes list
-	var onCancelTravelButton = function ( clickEvent ) {
-		clickEvent.stopPropagation();
-		require ( '../core/TravelEditor' ) ( ).clear ( );
-	};
+	// Events handler for expand and expand list buttons
 
-	var onClickAddRouteButton = function ( event ) {
-		event.stopPropagation();
-		require ( '../core/TravelEditor' ) ( ).addRoute ( );
-	};
-	
-	// Events for buttons and input on the routes list items
-	var onRoutesListDelete = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
-	};
-
-	var onRoutesListUpArrow = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
-	};
-
-	var onRoutesListDownArrow = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
-	};
-
-	var onRoutesListRightArrow = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
-	};
-	
-	var onRouteslistChange = function ( event ) {
-		event.stopPropagation();
-		require ( '../core/TravelEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
-	};
-	
-	var onClickSaveTravelButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).saveTravel ( );
-	};	
-	
-	var onClickOpenTravelButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		require ( '../core/TravelEditor' ) ( ).openTravel ( clickEvent );
-	};	
-		
-	var onClickUndoButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-	};	
-		
 	var onClickExpandButton = function ( clickEvent ) {
-
 		clickEvent.stopPropagation ( );
-		
 		document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = hiddenList ? _Translator.getText ( 'TravelEditorUI - Show' ) : _Translator.getText ( 'TravelEditorUI - Hide' );
-
 		clickEvent.stopPropagation ( );
 	};
 	
 	var onClickExpandListButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		
 		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
 		var expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
 
-	// User interface
-
-	var _RoutesList = null;
-
-	var getTravelEditorUI = function ( ) {
+	var TravelEditorUI = function ( ) {
 				
+		/*
+		--- _CreateUI function ----------------------------------------------------------------------------------------
+
+		This function creates the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _CreateUI = function ( controlDiv ){ 
 		
 			if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
@@ -4221,25 +4239,103 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			// Routes
-			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-TravelHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+			// header
+			var headerDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-TravelHeaderDiv', 
+					className : 'TravelNotes-Control-HeaderDiv'
+				},
+				controlDiv
+			);
 
-			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-ControlTravelExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
+			// expand button
+			var expandButton = htmlElementsFactory.create (
+				'span',
+				{ 
+					innerHTML : '&#x25bc;', 
+					id : 'TravelNotes-ControlTravelExpandButton', 
+					className : 'TravelNotes-Control-ExpandButton'
+				},
+				headerDiv
+			);
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), id : 'TravelNotes-Control-TravelHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
+			
+			// title
+			htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), 
+					id : 'TravelNotes-Control-TravelHeaderText', 
+					className : 'TravelNotes-Control-HeaderText'
+				},
+				headerDiv 
+			);
 		
-			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-TravelDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			// data div
+			var dataDiv = htmlElementsFactory.create ( 
+				'div',
+				{ 
+					id : 'TravelNotes-Control-TravelDataDiv', 
+					className : 'TravelNotes-Control-DataDiv'
+				},
+				controlDiv 
+			);
 			
+			// Routes list
 			_RoutesList = require ( './SortableList' ) ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
-			_RoutesList.container.addEventListener ( 'SortableListDelete', onRoutesListDelete, false );
-			_RoutesList.container.addEventListener ( 'SortableListUpArrow', onRoutesListUpArrow, false );
-			_RoutesList.container.addEventListener ( 'SortableListDownArrow', onRoutesListDownArrow, false );
-			_RoutesList.container.addEventListener ( 'SortableListRightArrow', onRoutesListRightArrow, false );
-			_RoutesList.container.addEventListener ( 'SortableListChange', onRouteslistChange, false );
+			_RoutesList.container.addEventListener ( 
+				'SortableListDelete',
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).removeRoute ( event.itemNode.dataObjId );
+				}, 
+				false
+			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListUpArrow', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, true );
+				},
+				false 
+			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListDownArrow', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).swapRoute ( event.itemNode.dataObjId, false );
+				}, 
+				false 
+			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListRightArrow', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+				}, 
+				false 
+			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListChange', 
+				function ( event ) {
+					event.stopPropagation();
+					require ( '../core/TravelEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
+				}, 
+				false 
+			);
 			
-			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ControlTravelButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+			// buttons div
+			var buttonsDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-ControlTravelButtonsDiv', 
+					className : 'TravelNotes-Control-ButtonsDiv'
+				}, 
+				controlDiv
+			);
 
+			// expand list button
 			var expandListButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4252,6 +4348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 			
+			// cancel travel button
 			var cancelTravelButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -4262,8 +4359,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv 
 			);
-			cancelTravelButton.addEventListener ( 'click', onCancelTravelButton, false );
+			cancelTravelButton.addEventListener ( 
+				'click', 
+				function ( clickEvent ) {
+					clickEvent.stopPropagation();
+					require ( '../core/TravelEditor' ) ( ).clear ( );
+				}, 
+				false
+			);
 
+			// save travel button
 			var saveTravelButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4274,8 +4379,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				buttonsDiv 
 			);
-			saveTravelButton.addEventListener ( 'click' , onClickSaveTravelButton, false );
+			saveTravelButton.addEventListener ( 
+				'click' , 
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).saveTravel ( );
+				},
+				false 
+			);
 
+			// open travel button with the well know hack....
 			var openTravelDiv = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4283,7 +4396,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				buttonsDiv 
 			);
-			
 			var openTravelInput = htmlElementsFactory.create ( 
 				'input',
 				{
@@ -4293,8 +4405,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				openTravelDiv
 			);
-			openTravelInput.addEventListener ( 'change', onClickOpenTravelButton, false );
-
+			openTravelInput.addEventListener ( 
+				'change', 
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).openTravel ( clickEvent );
+				},
+				false 
+			);
 			var openTravelFakeDiv = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4302,7 +4420,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				openTravelDiv 
 			);
-
 			var openTravelButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4315,6 +4432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
 			
+			// roadbook button
 			var openTravelRoadbookButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4326,6 +4444,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				buttonsDiv
 			);
 
+			/*
+			// Todo...
 			var undoButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4336,8 +4456,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				buttonsDiv 
 			);
-			undoButton.addEventListener ( 'click' , onClickUndoButton, false );
+			undoButton.addEventListener ( 
+				'click' ,
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+				},
+				false 
+			);
+			*/
 
+			// add route button
 			var addRouteButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4348,30 +4476,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				buttonsDiv 
 			);
-			addRouteButton.addEventListener ( 'click' , onClickAddRouteButton, false );
+			addRouteButton.addEventListener ( 
+				'click' , 
+				function ( event ) {
+					event.stopPropagation();
+					require ( '../core/TravelEditor' ) ( ).addRoute ( );
+				},
+				false
+			);
 		};	
 		
+		/*
+		--- _SetRoutesList function -----------------------------------------------------------------------------------
+
+		This function fill the routes list
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _SetRoutesList = function (  ) {
+			_RoutesList.removeAllItems ( );
+			var routesIterator = _DataManager.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', _Translator.getText ( 'TravelEditorUI - Route' ) ,routesIterator.value.objId, false );
+			}
+		};
+
+		/*
+		--- TravelEditorUI object -------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
 			},
 			
 			setRoutesList : function (  ) {
-				_RoutesList.removeAllItems ( );
-				var routesIterator = _DataManager.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', _Translator.getText ( 'TravelEditorUI - Route' ) ,routesIterator.value.objId, false );
-				}
+				_SetRoutesList ( );
 			}
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getTravelEditorUI;
+		module.exports = TravelEditorUI;
 	}
 
 }());
 
+/*
+--- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
+*/
 },{"../core/TravelEditor":29,"../data/DataManager":31,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4391,30 +4551,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- UserInterface.js file ---------------------------------------------------------------------------------------------
+This file contains:
+	- the UserInterface object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
-	// User interface
-	
-	var getControlUI = function ( ) {
+	var UserInterface = function ( ) {
 
 		var _MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 
 		var _CreateUI = function ( ){ 
-
-			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			
-			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
-
+			_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
 			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
-			
 		};
 		
 		if ( ! _MainDiv ) {
@@ -4425,14 +4589,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get UI ( ) { return _MainDiv; }
 		};
 	};
-
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getControlUI;
+		module.exports = UserInterface;
 	}
 
 }());
 
+/*
+--- End of UserInterface.js file --------------------------------------------------------------------------------------
+*/	
 },{"./ErrorEditorUI":11,"./HTMLElementsFactory":12,"./ItineraryEditorUI":14,"./RouteEditorUI":16,"./TravelEditorUI":20}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/

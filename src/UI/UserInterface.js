@@ -16,30 +16,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- UserInterface.js file ---------------------------------------------------------------------------------------------
+This file contains:
+	- the UserInterface object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
-	// User interface
-	
-	var getControlUI = function ( ) {
+	var UserInterface = function ( ) {
 
 		var _MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 
 		var _CreateUI = function ( ){ 
-
-			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			
-			_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
-
+			_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
 			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
-
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
-			
 		};
 		
 		if ( ! _MainDiv ) {
@@ -50,10 +54,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get UI ( ) { return _MainDiv; }
 		};
 	};
-
+	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getControlUI;
+		module.exports = UserInterface;
 	}
 
 }());
+
+/*
+--- End of UserInterface.js file --------------------------------------------------------------------------------------
+*/	

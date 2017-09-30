@@ -16,18 +16,43 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
-To do: translations
-*/
-
 ( function ( ){
 	
 	'use strict';
 
+/*
+--- RoutePropertiesDialog.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the RoutePropertiesDialog object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170930
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 	var _Translator = require ( '../UI/Translator' ) ( );
 
-	var getRoutePropertiesDialog = function ( route ) {
+
+	/*
+	--- RoutePropertiesDialog function --------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var RoutePropertiesDialog = function ( route ) {
 		
+		/*
+		--- onOkButtonClick function --------------------------------------------------------------------------------------
+
+		click event listener for the ok button
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onOkButtonClick = function ( ) {
 			route.color = colorDialog.getNewColor ( );
 			route.width = parseInt ( widthInput.value );
@@ -38,13 +63,14 @@ To do: translations
 			require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
 			return true;
 		};
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
 		// the dialog base is created
 		var colorDialog = require ( '../UI/ColorDialog' ) ( route.color );
 		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Title' );
 		colorDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+
 		var routePropertiesDiv = htmlElementsFactory.create (
 			'div',
 			{
@@ -52,6 +78,7 @@ To do: translations
 			},
 			colorDialog.content
 		);
+		
 		// ... width ...
 		var widthDiv = htmlElementsFactory.create (
 			'div',
@@ -111,10 +138,16 @@ To do: translations
 		return colorDialog;
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRoutePropertiesDialog;
+		module.exports = RoutePropertiesDialog;
 	}
 
 }());
 
-		
+/*
+--- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
+*/	
