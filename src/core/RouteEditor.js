@@ -414,6 +414,9 @@ Tests ...
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
+					if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+						require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, newWayPoint.objId );
+					}
 				}
 				_DataManager.editedRoute.wayPoints.add ( newWayPoint );
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, _DataManager.editedRoute.wayPoints.length - 2 );
@@ -495,7 +498,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			renameWayPoint : function ( wayPointObjId, wayPointName ) {
+			renameWayPoint : function ( wayPointName, wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 				_RouteEditorUI.setWayPointsList ( );
@@ -537,6 +540,9 @@ Tests ...
 					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.first.objId );
 				}
 				_DataManager.editedRoute.wayPoints.first.latLng = latLng;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.first.objId );
+				}
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.first, 'A' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -560,6 +566,9 @@ Tests ...
 					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.last.objId );
 				}
 				_DataManager.editedRoute.wayPoints.last.latLng = latLng;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.last.objId );
+				}
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, 'B' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -578,6 +587,10 @@ Tests ...
 
 			wayPointDragEnd : function ( wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					var latLng = _DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, wayPointObjId );
+				}
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},

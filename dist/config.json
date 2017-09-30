@@ -15,6 +15,10 @@
 		"radius":7,
 		"fill":false
 	},
+	"wayPoint":
+	{
+		"reverseGeocoding":true
+	},
 	"route":
 	{
 		"color":"#ff0000",
@@ -22,7 +26,7 @@
 	},
 	"note":
 	{
-		"geocoding":true,
+		"reverseGeocoding":true,
 		"grip":
 		{
 			"size":10,

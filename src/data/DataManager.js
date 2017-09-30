@@ -50,13 +50,17 @@ Tests ...
 						radius : 7,
 						fill : false
 					},
+					wayPoint :
+					{
+						reverseGeocoding : false
+					},
 					route : 
 					{
 						color : '#ff0000',
 						width : 3
 					},
 					note : {
-						geocoding : false,
+						reverseGeocoding : false,
 						grip : { 
 							size : 10,
 							opacity: 0 

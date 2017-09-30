@@ -52,13 +52,17 @@ Tests ...
 						radius : 7,
 						fill : false
 					},
+					wayPoint :
+					{
+						reverseGeocoding : false
+					},
 					route : 
 					{
 						color : '#ff0000',
 						width : 3
 					},
 					note : {
-						geocoding : false,
+						reverseGeocoding : false,
 						grip : { 
 							size : 10,
 							opacity: 0 
@@ -1774,12 +1778,6 @@ Tests ...
 	
 	'use strict';
 
-	/*
-	--- ContextMenu object --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	var ErrorEditorUI = function ( ) {
 				
 		var translator = require ( './Translator' ) ( );
@@ -3289,7 +3287,7 @@ Tests ...
 		}
 
 		// geolocalization
-		if ( ( require ( '../data/DataManager' ) ( ).config.note.geocoding )  && ( '' === note.address ) && newNote ) {
+		if ( ( require ( '../data/DataManager' ) ( ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
 		}
 		
@@ -3329,71 +3327,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- RouteEditorUI.js file ---------------------------------------------------------------------------------------------
+This file contains:
+	- the RouteEditorUI object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20170929
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	var _DataManager = require ( '../data/DataManager' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
+	var _WayPointsList = null;
 
-	var onAddWayPointButton = function ( event ) {
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
-	};
-	
-	var onReverseWayPointsButton = function ( event )
-	{
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
-	};
-	
-	var onRemoveAllWayPointsButton = function ( event )
-	{
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
-	};
-	
-	// Events for buttons and input on the waypoints list items
-	
-	var onWayPointsListDelete = function ( event ) {
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
-	};
-
-	var onWayPointsListUpArrow = function ( event ) {
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
-	};
-
-	var onWayPointsListDownArrow = function ( event ) {
-		event.stopPropagation ( );
-		var newWayPoints = require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
-	};
-
-	var onWayPointsListRightArrow = function ( event ) {
-		event.stopPropagation ( );
-	};
-
-	var onWayPointslistChange = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
-	};
-
-	var onSaveRouteButton = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/RouteEditor' ) ( ).saveEdition ( );
-	};
-	
-	var onGpxButton = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/RouteEditor' ) ( ).saveGpx ( );
-	};
-	
-	var onCancelRouteButton = function ( event ) {
-		event.stopPropagation ( );
-		require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
-	};
+	// Events handler for expand and expand list buttons
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -3407,19 +3362,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	var onClickExpandListButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		
 		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
 		var expandedList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
 		document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
 		document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = expandedList ? _Translator.getText ( 'RouteEditorUI - Reduce the list' ) : _Translator.getText ( 'RouteEditorUI - Expand the list' );		
 	};
 
-	// User interface
-	
-	var _WayPointsList = null;
-
-	var getRouteEditorUI = function ( ) {
+	var RouteEditorUI = function ( ) {
 				
+		/*
+		--- _CreateUI function ----------------------------------------------------------------------------------------
+
+		This function creates the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _CreateUI = function ( controlDiv ){ 
 
 			if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
@@ -3428,13 +3386,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+			// header div
+			var headerDiv = htmlElementsFactory.create (
+				'div',
+				{ 
+					id : 'TravelNotes-Control-RouteHeaderDiv',
+					className : 'TravelNotes-Control-HeaderDiv'
+				},
+				controlDiv
+			);
 
-			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-RouteExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
+			// expand button
+			var expandButton = htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					innerHTML : '&#x25bc;',
+					id : 'TravelNotes-Control-RouteExpandButton',
+					className : 'TravelNotes-Control-ExpandButton'
+				},
+				headerDiv 
+			);
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			htmlElementsFactory.create ( 'span', { innerHTML : _Translator.getText ( 'RouteEditorUI - Waypoints' ), id : 'TravelNotes-Control-RouteHeaderText',className : 'TravelNotes-Control-HeaderText'}, headerDiv );
+			
+			// title
+			htmlElementsFactory.create ( 
+				'span', 
+				{ 
+					innerHTML : 
+					_Translator.getText ( 'RouteEditorUI - Waypoints' ), 
+					id : 'TravelNotes-Control-RouteHeaderText',
+					className : 'TravelNotes-Control-HeaderText'
+				},
+				headerDiv 
+			);
 
-			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
+			// data div
+			var dataDiv = htmlElementsFactory.create ( 
+				'div',
+				{ 
+					id : 'TravelNotes-Control-RouteDataDiv', 
+					className : 'TravelNotes-Control-DataDiv'
+				},
+				controlDiv
+			);
+			
+			// wayPoints list
 			_WayPointsList = require ( './SortableList' ) ( 
 				{
 					minSize : 0,
@@ -3443,13 +3439,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				dataDiv
 			);
-			_WayPointsList.container.addEventListener ( 'SortableListDelete', onWayPointsListDelete, false );
-			_WayPointsList.container.addEventListener ( 'SortableListUpArrow', onWayPointsListUpArrow, false );
-			_WayPointsList.container.addEventListener ( 'SortableListDownArrow', onWayPointsListDownArrow, false );
-			_WayPointsList.container.addEventListener ( 'SortableListChange', onWayPointslistChange, false );
+			_WayPointsList.container.addEventListener ( 
+				'SortableListDelete', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
+				},
+				false
+			);
+			_WayPointsList.container.addEventListener ( 
+				'SortableListUpArrow', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
+				},
+				false
+			);
+			_WayPointsList.container.addEventListener ( 
+				'SortableListDownArrow', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
+				}, 
+				false
+			);
+			_WayPointsList.container.addEventListener ( 
+				'SortableListChange', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
+				}, 
+				false 
+			);
 
-			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-RouteButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv'}, controlDiv );
+			// buttons div
+			var buttonsDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-RouteButtonsDiv', 
+					className : 'TravelNotes-Control-ButtonsDiv'
+				},
+				controlDiv
+			);
 			
+			// expand list button
 			var expandListButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -3462,6 +3495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 			expandListButton.addEventListener ( 'click' , onClickExpandListButton, false );
 
+			// cancel route button
 			var cancelRouteButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -3472,7 +3506,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv 
 			);
-			cancelRouteButton.addEventListener ( 'click', onCancelRouteButton, false );
+			cancelRouteButton.addEventListener ( 
+				'click', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
+				},
+				false 
+			);
+			
+			// save route button
 			var saveRouteButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -3483,7 +3526,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv 
 			);
-			saveRouteButton.addEventListener ( 'click', onSaveRouteButton, false );
+			saveRouteButton.addEventListener ( 
+				'click', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).saveEdition ( );
+				}, 
+				false 
+			);
+			
+			// gpx button
 			var gpxButton = htmlElementsFactory.create (
 				'div', 
 				{ 
@@ -3494,7 +3546,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv 
 			);
-			gpxButton.addEventListener ( 'click', onGpxButton, false );
+			gpxButton.addEventListener ( 
+				'click', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).saveGpx ( );
+				}, 
+				false 
+			);
+			
+			// reverse wayPoints button
 			var reverseWayPointsButton = htmlElementsFactory.create ( 
 				'div',
 				{ 
@@ -3505,7 +3566,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv
 			);
-			reverseWayPointsButton.addEventListener ( 'click' , onReverseWayPointsButton, false );
+			reverseWayPointsButton.addEventListener ( 
+				'click' , 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
+				},
+				false 
+			);
+			
+			// add wayPoint button
+			// Todo... not usefull without geocoding...
+			/*
 			var addWayPointButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -3516,7 +3588,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				},
 				buttonsDiv 
 			);
-			addWayPointButton.addEventListener ( 'click', onAddWayPointButton, false );
+			
+			addWayPointButton.addEventListener ( 
+				'click', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
+				},
+				false 
+			);
+			*/
+			
+			// remove all wayPoints button
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -3527,23 +3610,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}, 
 				buttonsDiv
 			);
-			removeAllWayPointsButton.addEventListener ( 'click' , onRemoveAllWayPointsButton, false );
+			removeAllWayPointsButton.addEventListener ( 
+				'click' , 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
+				},
+				false
+			);
 		};
 	
+		/*
+		--- _ExpandUI function ----------------------------------------------------------------------------------------
+
+		This function expands the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ExpandUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = '&#x25bc;';
 			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 'Masquer';
 			document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 		};
 		
+		/*
+		--- _ReduceUI function ----------------------------------------------------------------------------------------
+
+		This function reduces the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ReduceUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = '&#x25b6;';
 			document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 'Afficher';
-			document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 			document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 		};
 		
+		/*
+		--- _SetWayPointsList function --------------------------------------------------------------------------------
+
+		This function fill the wayPoints list
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _SetWayPointsList = function ( ) {
+			_WayPointsList.removeAllItems ( );
+
+			if ( -1 === require ( '../data/DataManager' ) ( ).editedRoute.routeInitialObjId ) {
+				return;
+			}
+			
+			var wayPointsIterator = require ( '../data/DataManager' ) ( ).editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+				var indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
+				var placeholder = 
+					wayPointsIterator.first ? _Translator.getText ( 'RouteEditorUI - Start' ) : ( wayPointsIterator.last ? _Translator.getText ( 'RouteEditorUI - End' ) : _Translator.getText ( 'RouteEditorUI - Via' ) );
+				_WayPointsList.addItem ( wayPointsIterator.value.UIName, indexName, placeholder, wayPointsIterator.value.objId, wayPointsIterator.last );
+			}
+		};
+		
+		/*
+		--- ErrorEditorUI object --------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		return {
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
@@ -3558,30 +3694,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 
 			setWayPointsList : function ( ) {
-				_WayPointsList.removeAllItems ( );
-
-				if ( -1 === _DataManager.editedRoute.routeInitialObjId ) {
-					return;
-				}
-				
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					var indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
-					var placeholder = 
-						wayPointsIterator.first ? _Translator.getText ( 'RouteEditorUI - Start' ) : ( wayPointsIterator.last ? _Translator.getText ( 'RouteEditorUI - End' ) : _Translator.getText ( 'RouteEditorUI - Via' ) );
-					_WayPointsList.addItem ( wayPointsIterator.value.UIName, indexName, placeholder, wayPointsIterator.value.objId, wayPointsIterator.last );
-				}
+				_SetWayPointsList ( );
 			}
 		};
 	};
 	
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = getRouteEditorUI;
+		module.exports = RouteEditorUI;
 	}
 
 }());
 
-},{"../core/RouteEditor":27,"../data/DataManager":31,"../util/Utilities":42,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
+/*
+--- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
+*/
+},{"../core/RouteEditor":27,"../data/DataManager":31,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4412,7 +4543,7 @@ Tests ...
 
 		return {
 			
-			getAddress : function ( lat, lng, callback, context ) {
+			getAddress : function ( lat, lng, callback, context, parameter ) {
 				if ( _RequestStarted ) {
 					return;
 				}
@@ -4452,7 +4583,7 @@ Tests ...
 						if ( 0 === address.length ) {
 							address += response.address.country;
 						}
-						callback.call ( context, address );
+						callback.call ( context, address, parameter );
 					}
 				};  
 				XmlHttpRequest.open ( "GET", NominatimUrl, true );
@@ -5935,6 +6066,9 @@ Tests ...
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
+					if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+						require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, newWayPoint.objId );
+					}
 				}
 				_DataManager.editedRoute.wayPoints.add ( newWayPoint );
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, _DataManager.editedRoute.wayPoints.length - 2 );
@@ -6016,7 +6150,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			renameWayPoint : function ( wayPointObjId, wayPointName ) {
+			renameWayPoint : function ( wayPointName, wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
 				_DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 				_RouteEditorUI.setWayPointsList ( );
@@ -6058,6 +6192,9 @@ Tests ...
 					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.first.objId );
 				}
 				_DataManager.editedRoute.wayPoints.first.latLng = latLng;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.first.objId );
+				}
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.first, 'A' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -6081,6 +6218,9 @@ Tests ...
 					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.last.objId );
 				}
 				_DataManager.editedRoute.wayPoints.last.latLng = latLng;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.last.objId );
+				}
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, 'B' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -6099,6 +6239,10 @@ Tests ...
 
 			wayPointDragEnd : function ( wayPointObjId ) {
 				_DataManager.editedRoute.routeChanged = true;
+				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					var latLng = _DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, wayPointObjId );
+				}
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
@@ -6228,7 +6372,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/Utilities":42}],28:[function(require,module,exports){
+},{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/GeoCoder":23,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/Utilities":42}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 

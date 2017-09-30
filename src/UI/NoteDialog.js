@@ -518,7 +518,7 @@ Tests ...
 		}
 
 		// geolocalization
-		if ( ( require ( '../data/DataManager' ) ( ).config.note.geocoding )  && ( '' === note.address ) && newNote ) {
+		if ( ( require ( '../data/DataManager' ) ( ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
 		}
 		
