@@ -162,6 +162,14 @@ Tests ...
 				}, 
 				false 
 			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListDrop', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+				}, 
+				false 
+			);
 			
 			// buttons div
 			var buttonsDiv = htmlElementsFactory.create ( 

@@ -86,6 +86,20 @@ Tests ...
 
 			return array;
 		};
+		
+		var _MoveTo = function ( objId, targetObjId, moveBefore ) {
+			var oldPosition = _IndexOfObjId ( objId );
+			var newPosition = _IndexOfObjId ( targetObjId );
+			if ( ! moveBefore ) {
+				newPosition ++;
+			}
+			_Array.splice ( newPosition, 0, _Array [ oldPosition ] );
+			if ( newPosition < oldPosition )
+			{
+				oldPosition ++ ;
+			}
+			_Array.splice ( oldPosition, 1 );
+		};
 
 		var _IndexOfObjId = function ( objId ) {
 			function haveObjId ( element ) {
@@ -221,6 +235,17 @@ Tests ...
 				return _GetAt ( objId );
 			},
 
+			/*
+			--- moveTo function ----------------------------------------------------------------------------------------
+
+			This function move the object identified by objId to the position ocuped by the object
+			identified by targetObjId 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			moveTo : function ( objId, targetObjId, moveBefore ) {
+				_MoveTo ( objId, targetObjId, moveBefore );
+			},
 			/*
 			--- remove function ---------------------------------------------------------------------------------------
 

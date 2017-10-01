@@ -3470,6 +3470,14 @@ Tests ...
 				}, 
 				false 
 			);
+			_WayPointsList.container.addEventListener ( 
+				'SortableListDrop', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+				}, 
+				false 
+			);
 
 			// buttons div
 			var buttonsDiv = htmlElementsFactory.create ( 
@@ -3868,17 +3876,14 @@ Tests ...
 },{"../UI/ColorDialog":9,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"./HTMLElementsFactory":12}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -3887,40 +3892,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var onDragStart = function  ( DragEvent ) {
-		DragEvent.stopPropagation(); // needed to avoid map movements
+	var onDragStart = function  ( dragEvent ) {
+		dragEvent.stopPropagation ( ); 
 		try {
-			DragEvent.dataTransfer.setData ( 'Text', '1' );
+			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
+			dragEvent.dataTransfer.dropEffect = "move";
 		}
 		catch ( e ) {
 		}
-		console.log ( 'onDragStart' );
 	};
 	
-	var onDragOver = function ( DragEvent ) {
-		DragEvent.preventDefault();
-		console.log ( 'onDragOver' );
-	};
-	
-	var onDrop = function ( DragEvent ) { 
-		DragEvent.preventDefault();
-		var data = DragEvent.dataTransfer.getData("Text");
-		console.log ( 'onDrop' );
+	var onDrop = function ( dragEvent ) { 
+		dragEvent.preventDefault ( );
+		var element = dragEvent.target;
+		while ( ! element.dataObjId ) {
+			element = element.parentElement;
+		}
+		var clientRect = element.getBoundingClientRect ( );
+		var event = new Event ( 'SortableListDrop' );
+		event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		event.targetObjId = element.dataObjId;
+		event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
+		element.parentNode.dispatchEvent ( event );
 	};
 
-	/*
-	var onDragEnd = function ( DragEvent ) { 
-		console.log ( 'onDragEnd' );
-	};
-	
-	var onDragEnter = function ( DragEvent ) { 
-		console.log ( 'onDragLeave' );
-	};
-	var onDragLeave = function ( DragEvent ) { 
-		console.log ( 'onDragEnter' );
-	};
-	*/	
-	
 	var onDeleteButtonClick = function ( ClickEvent ) {
 		var event = new Event ( 'SortableListDelete' );
 		event.itemNode = ClickEvent.target.parentNode;
@@ -3972,9 +3967,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		/*
 		--- removeAllItems method ----------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
@@ -3987,9 +3980,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		/*
 		--- addItem method -----------------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
@@ -4028,12 +4019,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			this.container.appendChild ( item );
 		};
 		
-		
 		/*
 		--- _create method -----------------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
@@ -4054,7 +4042,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
-			this.container.addEventListener ( 'dragover', onDragOver, false );
 			this.container.addEventListener ( 'drop', onDrop, false );
 
 			if ( parentNode ) {
@@ -4080,7 +4067,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 }());
-
 },{"./HTMLElementsFactory":12}],19:[function(require,module,exports){
 (function (global){
 /*
@@ -4321,6 +4307,14 @@ Tests ...
 				function ( event ) {
 					event.stopPropagation();
 					require ( '../core/TravelEditor' ) ( ).renameRoute ( event.dataObjId, event.changeValue );
+				}, 
+				false 
+			);
+			_RoutesList.container.addEventListener ( 
+				'SortableListDrop', 
+				function ( event ) {
+					event.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
 				}, 
 				false 
 			);
@@ -6418,6 +6412,32 @@ Tests ...
 			},
 			
 			/*
+			--- wayPointDropped method --------------------------------------------------------------------------------
+
+			This method is called when the drop event is fired on a waypoint
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			wayPointDropped : function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
+				_DataManager.editedRoute.routeChanged = true;
+				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.first.objId && draggedBefore ) {
+					return;
+				}
+				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+					return;
+				}
+				_DataManager.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+				_RouteEditorUI.setWayPointsList ( );
+				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+						_MapEditor.removeObject ( wayPointsIterator.value.objId );
+						_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
+				}
+				this.startRouting ( );
+			},
+			
+			/*
 			--- getMapContextMenu method ------------------------------------------------------------------------------
 
 			This method gives the route part of the map context menu
@@ -7002,6 +7022,21 @@ Tests ...
 			},
 
 			/*
+			--- routeDropped method --------------------------------------------------------------------------------------
+
+			This method changes the position of a route after a drag and drop
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			routeDropped : function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
+				_DataManager.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+				_TravelEditorUI.setRoutesList ( );
+				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+				this.changeTravelHTML ( );
+			},
+			
+			/*
 			--- saveTravel method -------------------------------------------------------------------------------------
 
 			This method save the travel to a local file
@@ -7217,6 +7252,20 @@ Tests ...
 
 			return array;
 		};
+		
+		var _MoveTo = function ( objId, targetObjId, moveBefore ) {
+			var oldPosition = _IndexOfObjId ( objId );
+			var newPosition = _IndexOfObjId ( targetObjId );
+			if ( ! moveBefore ) {
+				newPosition ++;
+			}
+			_Array.splice ( newPosition, 0, _Array [ oldPosition ] );
+			if ( newPosition < oldPosition )
+			{
+				oldPosition ++ ;
+			}
+			_Array.splice ( oldPosition, 1 );
+		};
 
 		var _IndexOfObjId = function ( objId ) {
 			function haveObjId ( element ) {
@@ -7352,6 +7401,17 @@ Tests ...
 				return _GetAt ( objId );
 			},
 
+			/*
+			--- moveTo function ----------------------------------------------------------------------------------------
+
+			This function move the object identified by objId to the position ocuped by the object
+			identified by targetObjId 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			moveTo : function ( objId, targetObjId, moveBefore ) {
+				_MoveTo ( objId, targetObjId, moveBefore );
+			},
 			/*
 			--- remove function ---------------------------------------------------------------------------------------
 

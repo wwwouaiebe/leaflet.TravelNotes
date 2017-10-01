@@ -223,6 +223,21 @@ Tests ...
 			},
 
 			/*
+			--- routeDropped method --------------------------------------------------------------------------------------
+
+			This method changes the position of a route after a drag and drop
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			routeDropped : function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
+				_DataManager.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+				_TravelEditorUI.setRoutesList ( );
+				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+				this.changeTravelHTML ( );
+			},
+			
+			/*
 			--- saveTravel method -------------------------------------------------------------------------------------
 
 			This method save the travel to a local file

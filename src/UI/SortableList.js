@@ -1,16 +1,13 @@
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -19,40 +16,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 	'use strict';
 	
-	var onDragStart = function  ( DragEvent ) {
-		DragEvent.stopPropagation(); // needed to avoid map movements
+	var onDragStart = function  ( dragEvent ) {
+		dragEvent.stopPropagation ( ); 
 		try {
-			DragEvent.dataTransfer.setData ( 'Text', '1' );
+			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
+			dragEvent.dataTransfer.dropEffect = "move";
 		}
 		catch ( e ) {
 		}
-		console.log ( 'onDragStart' );
 	};
 	
-	var onDragOver = function ( DragEvent ) {
-		DragEvent.preventDefault();
-		console.log ( 'onDragOver' );
-	};
-	
-	var onDrop = function ( DragEvent ) { 
-		DragEvent.preventDefault();
-		var data = DragEvent.dataTransfer.getData("Text");
-		console.log ( 'onDrop' );
+	var onDrop = function ( dragEvent ) { 
+		dragEvent.preventDefault ( );
+		var element = dragEvent.target;
+		while ( ! element.dataObjId ) {
+			element = element.parentElement;
+		}
+		var clientRect = element.getBoundingClientRect ( );
+		var event = new Event ( 'SortableListDrop' );
+		event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		event.targetObjId = element.dataObjId;
+		event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
+		element.parentNode.dispatchEvent ( event );
 	};
 
-	/*
-	var onDragEnd = function ( DragEvent ) { 
-		console.log ( 'onDragEnd' );
-	};
-	
-	var onDragEnter = function ( DragEvent ) { 
-		console.log ( 'onDragLeave' );
-	};
-	var onDragLeave = function ( DragEvent ) { 
-		console.log ( 'onDragEnter' );
-	};
-	*/	
-	
 	var onDeleteButtonClick = function ( ClickEvent ) {
 		var event = new Event ( 'SortableListDelete' );
 		event.itemNode = ClickEvent.target.parentNode;
@@ -100,26 +87,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		
+		this.items = [];
+		
 		/*
 		--- removeAllItems method ----------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
 		this.removeAllItems = function ( ) {
-			var childNodes = this.container.childNodes ( );
-			for ( var childNodesCounter = 0; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-				this.container.removeChild ( childNodes [ childNodesCounter ] )
+			for ( var ItemCounter = 0; ItemCounter < this.items.length; ItemCounter ++ ) {
+				this.container.removeChild ( this.items [ ItemCounter ] );
 			}
+			this.items.length = 0;
 		};
 		
 		/*
 		--- addItem method -----------------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
@@ -147,7 +132,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 
-			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.container.childNodes ( ).length ) ) && ( ! isLastItem  ) ){
+			this.items.push ( item );
+
+			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
@@ -156,12 +143,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			this.container.appendChild ( item );
 		};
 		
-		
 		/*
 		--- _create method -----------------------------------------------------------------------------------------------------
-
 		This method ...
-
 		------------------------------------------------------------------------------------------------------------------------
 		*/
 
@@ -182,7 +166,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
-			this.container.addEventListener ( 'dragover', onDragOver, false );
 			this.container.addEventListener ( 'drop', onDrop, false );
 
 			if ( parentNode ) {

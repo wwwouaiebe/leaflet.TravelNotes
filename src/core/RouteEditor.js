@@ -596,6 +596,32 @@ Tests ...
 			},
 			
 			/*
+			--- wayPointDropped method --------------------------------------------------------------------------------
+
+			This method is called when the drop event is fired on a waypoint
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			wayPointDropped : function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
+				_DataManager.editedRoute.routeChanged = true;
+				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.first.objId && draggedBefore ) {
+					return;
+				}
+				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+					return;
+				}
+				_DataManager.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+				_RouteEditorUI.setWayPointsList ( );
+				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+						_MapEditor.removeObject ( wayPointsIterator.value.objId );
+						_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
+				}
+				this.startRouting ( );
+			},
+			
+			/*
 			--- getMapContextMenu method ------------------------------------------------------------------------------
 
 			This method gives the route part of the map context menu
