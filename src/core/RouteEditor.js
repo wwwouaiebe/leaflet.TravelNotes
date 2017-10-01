@@ -252,7 +252,9 @@ Tests ...
 				
 				// the new route is added to the map
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
-				_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
+				if ( 2 === _DataManager.editedRoute.wayPoints.length ) {
+					_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
+				}
 				
 				// and the itinerary and waypoints are displayed
 				_ItineraryEditor.setItinerary ( );
