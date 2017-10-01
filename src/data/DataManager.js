@@ -35,6 +35,14 @@ Tests ...
 
 		return {
 
+			/*
+			--- init method -------------------------------------------------------------------------------------------
+
+			This method ...
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			init : function ( map ) {
 				global.config = {
 					contextMenu : {
@@ -91,6 +99,13 @@ Tests ...
 				global.UUID = require ( '../util/Utilities' ) ( ).UUID;
 			},
 
+
+			/*
+			--- getters and setters  ----------------------------------------------------------------------------------
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get UUID ( ) { return global.UUID; },
 
 			get version ( ) { return global.version; },
@@ -113,6 +128,15 @@ Tests ...
 
 			get map ( ) { return global.map; },
 
+
+			/*
+			--- getNoteAndRoute method --------------------------------------------------------------------------------
+
+			This method returns a note and a route ( when the note is linked to a route ) from the noteObjId
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getNoteAndRoute : function ( noteObjId ) {
 				var note = null;
 				note = this.travel.notes.getAt ( noteObjId );
@@ -134,6 +158,15 @@ Tests ...
 
 				return { note : note, route : this.editedRoute };
 			},
+
+
+			/*
+			--- getRoute method ---------------------------------------------------------------------------------------
+
+			This method returns a route when giving the routeObjId
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			getRoute : function ( routeObjId ) {
 				var route = null;

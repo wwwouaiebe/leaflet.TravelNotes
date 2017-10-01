@@ -16,6 +16,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- L.TravelNotes.Interface.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the L.TravelNotes.Interface object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20171001
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -44,9 +58,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelNotes.getInterface = function ( ) {
+	L.TravelNotes.Interface = function ( ) {
+	
+		/*
+		--- _ReadURL function -------------------------------------------------------------------------------------------
 
-		
+		This function extract the route providers API key from the url
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ReadURL = function ( ) {
 			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
 			var newUrlSearch = '?' ;
@@ -86,6 +107,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 		};
 
+		/*
+		--- onMapClick function ---------------------------------------------------------------------------------------
+
+		Map click event handler
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onMapClick = function ( event ) {
 			if ( _DataManager.travel.readOnly ) {
 				return;
@@ -97,6 +126,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				.concat ( _LeftUserContextMenu ) 
 			);
 		};
+		
+		/*
+		--- onMapContextMenu function ---------------------------------------------------------------------------------
+
+		Map context menu event handler
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onMapContextMenu = function ( event ) {
 			if ( _DataManager.travel.readOnly ) {
 				return;
@@ -112,11 +150,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 
+			/*
+			--- addControl method --------------------------------------------------------------------------------------
+
+			This method add the control in the page
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addControl : function ( map, divControlId, options ) {
-				
 				_DataManager.init ( map );
 				_ReadURL ( );
-
 				var configHttpRequest = new XMLHttpRequest ( );
 				configHttpRequest.onreadystatechange = function ( event ) {
 					if ( this.readyState === configHttpRequest.DONE ) {
@@ -180,9 +224,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					true
 				);
 				configHttpRequest.send ( null );
-
 			},
 			
+			/*
+			--- addProvider method ------------------------------------------------------------------------------------
+
+			This method add a provider to the providers map
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			addProvider : function ( provider ) { 
+				if ( ! global.providers ) {
+					global.providers = new Map ( );
+				}
+				global.providers.set ( provider.name.toLowerCase( ), provider );
+			},
+			
+			/*
+			--- addMapContextMenu method ------------------------------------------------------------------------------
+
+			This method add the map context menus
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addMapContextMenu : function ( leftButton, rightButton ) {
 				if ( leftButton ) {
 					_DataManager.map.on ( 'click', onMapClick );
@@ -191,8 +257,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					_DataManager.map.on ( 'contextmenu', onMapClick );
 				}
 			},
+
+			/*
+			--- getters and setters -----------------------------------------------------------------------------------
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get rightContextMenu ( ) { return _RightContextMenu; },
-			
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
 					_DataManager.map.on ( 'contextmenu', onMapContextMenu );
@@ -205,7 +277,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get leftContextMenu ( ) { return _LeftContextMenu; },
-			
 			set leftContextMenu ( LeftContextMenu ) { 
 				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
 					_DataManager.map.on ( 'click', onMapClick );
@@ -218,20 +289,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
-			
 			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
 			
 			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
-			
 			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
-			
-			addProvider : function ( provider ) { 
-			
-				if ( ! global.providers ) {
-					global.providers = new Map ( );
-				}
-				global.providers.set ( provider.name.toLowerCase( ), provider );
-			},
 			
 			get maneuver ( ) { return require ( './data/Maneuver' ) ( ); },
 			
@@ -240,11 +301,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get version ( ) { return require ( './data/DataManager' ) ( ).version; }
 		};
 	};
-	
-	/* --- End of L.TravelNotes.Interface object --- */		
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 
 	L.travelNotes.interface = function ( ) {
-		return L.TravelNotes.getInterface ( );
+		return L.TravelNotes.Interface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -252,3 +315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 }());
+
+/*
+--- End of L.TravelNotes.Interface.js file ------------------------------------------------------------------------------
+*/

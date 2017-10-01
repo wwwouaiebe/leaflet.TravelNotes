@@ -37,6 +37,14 @@ Tests ...
 
 		return {
 
+			/*
+			--- init method -------------------------------------------------------------------------------------------
+
+			This method ...
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			init : function ( map ) {
 				global.config = {
 					contextMenu : {
@@ -93,6 +101,13 @@ Tests ...
 				global.UUID = require ( '../util/Utilities' ) ( ).UUID;
 			},
 
+
+			/*
+			--- getters and setters  ----------------------------------------------------------------------------------
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get UUID ( ) { return global.UUID; },
 
 			get version ( ) { return global.version; },
@@ -115,6 +130,15 @@ Tests ...
 
 			get map ( ) { return global.map; },
 
+
+			/*
+			--- getNoteAndRoute method --------------------------------------------------------------------------------
+
+			This method returns a note and a route ( when the note is linked to a route ) from the noteObjId
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			getNoteAndRoute : function ( noteObjId ) {
 				var note = null;
 				note = this.travel.notes.getAt ( noteObjId );
@@ -136,6 +160,15 @@ Tests ...
 
 				return { note : note, route : this.editedRoute };
 			},
+
+
+			/*
+			--- getRoute method ---------------------------------------------------------------------------------------
+
+			This method returns a route when giving the routeObjId
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 
 			getRoute : function ( routeObjId ) {
 				var route = null;
@@ -549,6 +582,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- L.TravelNotes.Control.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the L.TravelNotes.Control object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20171001
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -574,6 +621,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 	);
 
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	L.travelNotes.control = function ( options ) {
 		return new L.TravelNotes.Control ( options );
 	};
@@ -584,6 +635,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 }());
 
+/*
+--- End of L.TravelNotes.Control.js file ------------------------------------------------------------------------------
+*/
 },{"./UI/UserInterface":21}],6:[function(require,module,exports){
 (function (global){
 /*
@@ -602,6 +656,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- L.TravelNotes.Interface.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the L.TravelNotes.Interface object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20171001
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 ( function ( ){
@@ -632,9 +700,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	L.TravelNotes.getInterface = function ( ) {
+	L.TravelNotes.Interface = function ( ) {
+	
+		/*
+		--- _ReadURL function -------------------------------------------------------------------------------------------
 
-		
+		This function extract the route providers API key from the url
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _ReadURL = function ( ) {
 			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
 			var newUrlSearch = '?' ;
@@ -674,6 +749,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			);
 		};
 
+		/*
+		--- onMapClick function ---------------------------------------------------------------------------------------
+
+		Map click event handler
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onMapClick = function ( event ) {
 			if ( _DataManager.travel.readOnly ) {
 				return;
@@ -685,6 +768,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				.concat ( _LeftUserContextMenu ) 
 			);
 		};
+		
+		/*
+		--- onMapContextMenu function ---------------------------------------------------------------------------------
+
+		Map context menu event handler
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var onMapContextMenu = function ( event ) {
 			if ( _DataManager.travel.readOnly ) {
 				return;
@@ -700,11 +792,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 
+			/*
+			--- addControl method --------------------------------------------------------------------------------------
+
+			This method add the control in the page
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addControl : function ( map, divControlId, options ) {
-				
 				_DataManager.init ( map );
 				_ReadURL ( );
-
 				var configHttpRequest = new XMLHttpRequest ( );
 				configHttpRequest.onreadystatechange = function ( event ) {
 					if ( this.readyState === configHttpRequest.DONE ) {
@@ -768,9 +866,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					true
 				);
 				configHttpRequest.send ( null );
-
 			},
 			
+			/*
+			--- addProvider method ------------------------------------------------------------------------------------
+
+			This method add a provider to the providers map
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			addProvider : function ( provider ) { 
+				if ( ! global.providers ) {
+					global.providers = new Map ( );
+				}
+				global.providers.set ( provider.name.toLowerCase( ), provider );
+			},
+			
+			/*
+			--- addMapContextMenu method ------------------------------------------------------------------------------
+
+			This method add the map context menus
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addMapContextMenu : function ( leftButton, rightButton ) {
 				if ( leftButton ) {
 					_DataManager.map.on ( 'click', onMapClick );
@@ -779,8 +899,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					_DataManager.map.on ( 'contextmenu', onMapClick );
 				}
 			},
+
+			/*
+			--- getters and setters -----------------------------------------------------------------------------------
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			get rightContextMenu ( ) { return _RightContextMenu; },
-			
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
 					_DataManager.map.on ( 'contextmenu', onMapContextMenu );
@@ -793,7 +919,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get leftContextMenu ( ) { return _LeftContextMenu; },
-			
 			set leftContextMenu ( LeftContextMenu ) { 
 				if  ( ( LeftContextMenu ) && ( ! _LeftContextMenu ) ) {
 					_DataManager.map.on ( 'click', onMapClick );
@@ -806,20 +931,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			},
 			
 			get leftUserContextMenu ( ) { return _LeftUserContextMenu; },
-			
 			set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenu = LeftUserContextMenu; },
 			
 			get rightUserContextMenu ( ) { return _RightUserContextMenu; },
-			
 			set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenu = RightUserContextMenu; },
-			
-			addProvider : function ( provider ) { 
-			
-				if ( ! global.providers ) {
-					global.providers = new Map ( );
-				}
-				global.providers.set ( provider.name.toLowerCase( ), provider );
-			},
 			
 			get maneuver ( ) { return require ( './data/Maneuver' ) ( ); },
 			
@@ -828,11 +943,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			get version ( ) { return require ( './data/DataManager' ) ( ).version; }
 		};
 	};
-	
-	/* --- End of L.TravelNotes.Interface object --- */		
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
 
 	L.travelNotes.interface = function ( ) {
-		return L.TravelNotes.getInterface ( );
+		return L.TravelNotes.Interface ( );
 	};
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -840,6 +957,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 }());
+
+/*
+--- End of L.TravelNotes.Interface.js file ------------------------------------------------------------------------------
+*/
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/Translator":19,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":26,"./core/RouteEditor":27,"./core/TravelEditor":29,"./data/DataManager":31,"./data/ItineraryPoint":33,"./data/Maneuver":34,"./data/Travel":39,"./util/Utilities":42}],7:[function(require,module,exports){
@@ -3888,6 +4009,21 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+/*
+--- SortableList.js file ----------------------------------------------------------------------------------------------
+This file contains:
+	- the SortableList object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20171001
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -3954,9 +4090,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	};
 	
 	/* 
-	--- SortableList object --------------------------------------------------------------------------------------------------
+	--- SortableList object -------------------------------------------------------------------------------------------
 	
-	--------------------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	var SortableList = function ( options, parentNode ) {
@@ -3966,9 +4102,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		this.items = [];
 		
 		/*
-		--- removeAllItems method ----------------------------------------------------------------------------------------------
+		--- removeAllItems method -------------------------------------------------------------------------------------
 		This method ...
-		------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
 		this.removeAllItems = function ( ) {
@@ -3979,9 +4115,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		/*
-		--- addItem method -----------------------------------------------------------------------------------------------------
+		--- addItem method --------------------------------------------------------------------------------------------
 		This method ...
-		------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
 		this.addItem = function ( name, indexName, placeholder, dataObjId, isLastItem  ) {
@@ -4020,9 +4156,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 		
 		/*
-		--- _create method -----------------------------------------------------------------------------------------------------
+		--- _create method --------------------------------------------------------------------------------------------
 		This method ...
-		------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
 		this._create = function ( options, parentNode ) {
@@ -4057,7 +4193,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		this._create ( options, parentNode );
 		
 	};
-
+	
+	/* 
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
 	var sortableList = function ( options, parentNode ) {
 		return new SortableList ( options, parentNode );
 	};
@@ -4067,6 +4207,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 }());
+
+/*
+--- End of SortableList.js file ---------------------------------------------------------------------------------------
+*/	
+
 },{"./HTMLElementsFactory":12}],19:[function(require,module,exports){
 (function (global){
 /*
@@ -4097,6 +4242,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
 (function() {
 	
 	'use strict';
@@ -4130,6 +4276,7 @@ Tests ...
 			}
 		};
 	};
+	
 	/* 
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/

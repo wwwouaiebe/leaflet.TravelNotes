@@ -16,6 +16,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- L.TravelNotes.Control.js file -------------------------------------------------------------------------------------
+This file contains:
+	- the L.TravelNotes.Control object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+Doc reviewed 20171001
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 ( function ( ){
 	
 	'use strict';
@@ -41,6 +55,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		}
 	);
 
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
 	L.travelNotes.control = function ( options ) {
 		return new L.TravelNotes.Control ( options );
 	};
@@ -50,3 +68,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	}
 
 }());
+
+/*
+--- End of L.TravelNotes.Control.js file ------------------------------------------------------------------------------
+*/
