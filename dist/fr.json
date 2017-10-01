@@ -172,6 +172,10 @@
 		"msgstr" : "Il n'est pas possible d'éditer une route créée avec ce fournisseur ({provider})."
 	},
 	{
+		"msgid" : "RouteEditor - Add a waypoint on the route",
+		"msgstr" : "Ajouter une point de passage à ce trajet"
+	},
+	{
 		"msgid" : "RouteEditor - Add a note on the route",
 		"msgstr" : "Ajouter une note à ce trajet"
 	},

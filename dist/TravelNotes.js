@@ -6364,7 +6364,7 @@ Tests ...
 			/*
 			--- addWayPoint method ------------------------------------------------------------------------------------
 
-			This method add a waypoint to the edited route
+			This method add a waypoint
 			
 			parameters:
 			- latLng : 
@@ -6372,7 +6372,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			addWayPoint : function ( latLng ) {
+			addWayPoint : function ( latLng, distance ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
@@ -6383,9 +6383,44 @@ Tests ...
 				}
 				_DataManager.editedRoute.wayPoints.add ( newWayPoint );
 				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, _DataManager.editedRoute.wayPoints.length - 2 );
-				_DataManager.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				if ( distance ) {
+					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+					while ( ! wayPointsIterator.done ) {
+						var latLngDistance = this.getClosestLatLngDistance ( 
+							_DataManager.editedRoute,
+							wayPointsIterator.value.latLng 
+						);
+						if ( distance < latLngDistance.distance ) {
+							_DataManager.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
+							break;
+						}
+					}
+				}
+				else {
+					_DataManager.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				}
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
+			},
+			
+			/*
+			--- addWayPoint method ------------------------------------------------------------------------------------
+
+			This method add a waypoint at a given position on the edited route
+			
+			parameters:
+			- latLng : 
+			- event :
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			addWayPointOnRoute : function ( routeObjId, event ) {
+				var latLngDistance = this.getClosestLatLngDistance ( 
+					_DataManager.getRoute ( routeObjId ),
+					[ event.latlng.lat, event.latlng.lng ] 
+				);
+				this.addWayPoint ( latLngDistance.latLng, latLngDistance.distance );
 			},
 			
 			/*
@@ -6650,6 +6685,14 @@ Tests ...
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
 						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						param: routeObjId
+					}
+				);
+				contextMenu.push ( 
+					{
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
+						action : this.addWayPointOnRoute,
 						param: routeObjId
 					}
 				);
