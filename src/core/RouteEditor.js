@@ -731,7 +731,7 @@ Tests ...
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
-						action : this.addWayPointOnRoute,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.addWayPointOnRoute : null,
 						param: routeObjId
 					}
 				);

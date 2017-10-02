@@ -825,11 +825,11 @@ Tests ...
 												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
 											}
 											catch ( e ) {
-												console.log ( 'Not possible to parse ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
 											}
 										}
 										else {
-											console.log ( 'Not possible to load ' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
 										}
 										if ( divControlId )	{
 											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
@@ -846,23 +846,23 @@ Tests ...
 								};
 								translationsHttpRequest.open ( 
 									'GET',
-									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + _DataManager.config.language.toLowerCase ( ) + '.json',
+									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json',
 									true
 								);
 								translationsHttpRequest.send ( null );
 							}
 							catch ( e ) {
-								console.log ( 'Not possible to parse config.json' );
+								console.log ( 'Not possible to parse TravelNotesConfig.json' );
 							}
 						} 
 						else {
-							console.log ( 'Not possible to load config.json' );
+							console.log ( 'Not possible to load TravelNotesConfig.json' );
 						}
 					}
 				};
 				configHttpRequest.open ( 
 					'GET',
-					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'config.json',
+					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json',
 					true
 				);
 				configHttpRequest.send ( null );
@@ -3390,17 +3390,17 @@ Tests ...
 						}
 						catch ( e )
 						{
-							console.log ( 'Error reading userNoteDialog.json' );
+							console.log ( 'Error reading TravelNotesNoteDialog.json' );
 						}
 					} 
 					else {
-						console.log ( 'Error sending request for userNoteDialog.json' );
+						console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
 					}
 				}
 			};
 			buttonsHttpRequest.open ( 
 				'GET',
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog.json',
 				true
 			);
 			buttonsHttpRequest.send ( null );
@@ -4580,7 +4580,7 @@ Tests ...
 					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-					innerHTML : '<a href="roadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+					innerHTML : '<a href="TravelNotesRoadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 				}, 
 				buttonsDiv
 			);
@@ -6694,7 +6694,7 @@ Tests ...
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
-						action : this.addWayPointOnRoute,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.addWayPointOnRoute : null,
 						param: routeObjId
 					}
 				);

@@ -500,17 +500,17 @@ Tests ...
 						}
 						catch ( e )
 						{
-							console.log ( 'Error reading userNoteDialog.json' );
+							console.log ( 'Error reading TravelNotesNoteDialog.json' );
 						}
 					} 
 					else {
-						console.log ( 'Error sending request for userNoteDialog.json' );
+						console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
 					}
 				}
 			};
 			buttonsHttpRequest.open ( 
 				'GET',
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'userNoteDialog.json',
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog.json',
 				true
 			);
 			buttonsHttpRequest.send ( null );

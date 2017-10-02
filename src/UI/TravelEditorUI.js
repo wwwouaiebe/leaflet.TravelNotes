@@ -285,7 +285,7 @@ Tests ...
 					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-					innerHTML : '<a href="roadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+					innerHTML : '<a href="TravelNotesRoadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 				}, 
 				buttonsDiv
 			);
