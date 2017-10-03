@@ -4079,7 +4079,9 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
-	var _ContainerId = '';
+
+	var _Translator = require ( '../UI/Translator' ) ( );
+
 	var onDragStart = function  ( dragEvent ) {
 		dragEvent.stopPropagation ( ); 
 		try {
@@ -4191,15 +4193,46 @@ Tests ...
 			htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
 			inputElement.addEventListener ( 'change' , onChange, false );
-			var upArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemUpArrowButton', title : 'Déplacer vers le haut', innerHTML : String.fromCharCode( 8679 ) }, item );
+			var upArrowButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					className : 'TravelNotes-SortableList-ItemUpArrowButton', 
+					title : _Translator.getText ('SortableList - Move up' ),
+					innerHTML : String.fromCharCode( 8679 )
+				}, 
+				item
+			);
 			upArrowButton.addEventListener ( 'click', onUpArrowButtonClick, false );
-			var downArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemDownArrowButton', title : 'Déplacer vers le bas', innerHTML : String.fromCharCode( 8681 ) }, item );
+			var downArrowButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					className : 'TravelNotes-SortableList-ItemDownArrowButton', 
+					title : _Translator.getText ('SortableList - Move down' ), 
+					innerHTML : String.fromCharCode( 8681 ) 
+				},
+				item 
+			);
 			downArrowButton.addEventListener ( 'click', onDownArrowButtonClick, false );
-			var rightArrowButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemRightArrowButton', title : 'Éditer', innerHTML : String.fromCharCode( 8688 ) }, item );
+			var rightArrowButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					className : 'TravelNotes-SortableList-ItemRightArrowButton', 
+					title : _Translator.getText ('SortableList - Edit' ), 
+					innerHTML : String.fromCharCode( 8688 ) 
+				},
+			item );
 			if ( 'AllSort' === this.options.listStyle ) {
 				rightArrowButton.addEventListener ( 'click', onRightArrowButtonClick, false );
 			}
-			var deleteButton = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemDeleteButton', title : 'Supprimer', innerHTML : '&#x267b;' }, item );
+			var deleteButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					className : 'TravelNotes-SortableList-ItemDeleteButton', 
+					title : _Translator.getText ('SortableList - Delete' ),
+					innerHTML : '&#x267b;' 
+				},
+				item 
+			);
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 
@@ -4272,7 +4305,7 @@ Tests ...
 --- End of SortableList.js file ---------------------------------------------------------------------------------------
 */	
 
-},{"./HTMLElementsFactory":12}],19:[function(require,module,exports){
+},{"../UI/Translator":19,"./HTMLElementsFactory":12}],19:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/

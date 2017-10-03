@@ -288,6 +288,22 @@
 		"msgstr" : "Une erreur s'est produite lors de l'envoi de la requête (Statut: {status} - {statusText})"
 	},
 	{
+		"msgid" : "SortableList - Move up",
+		"msgstr" : "Déplacer vers le haut"
+	},
+	{
+		"msgid" : "SortableList - Move down",
+		"msgstr" : "Déplacer vers le bas"
+	},
+	{
+		"msgid" : "SortableList - Delete",
+		"msgstr" : "Supprimer"
+	},
+	{
+		"msgid" : "SortableList - Edit",
+		"msgstr" : "Éditer"
+	},
+	{
 		"msgid" : "TravelEditor - Zoom to travel",
 		"msgstr" : "Zoom sur le voyage"
 	},
