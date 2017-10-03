@@ -30,7 +30,7 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
-	
+	var _ContainerId = '';
 	var onDragStart = function  ( dragEvent ) {
 		dragEvent.stopPropagation ( ); 
 		try {
@@ -90,6 +90,13 @@ Tests ...
 		event.changeValue = changeEvent.target.value;
 		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		changeEvent.stopPropagation();
+	};
+	
+	var onWheel = function ( wheelEvent ) { 
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+		}
+		wheelEvent.stopPropagation ( );
 	};
 	
 	/* 
@@ -182,6 +189,7 @@ Tests ...
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
 			this.container.addEventListener ( 'drop', onDrop, false );
+			this.container.addEventListener ( 'wheel', onWheel, false );
 
 			if ( parentNode ) {
 				parentNode.appendChild ( this.container );

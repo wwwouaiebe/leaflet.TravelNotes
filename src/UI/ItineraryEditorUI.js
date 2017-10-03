@@ -38,6 +38,21 @@ Tests ...
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	/*
+	--- onWheel function ----------------------------------------------------------------------------------
+
+	wheel event listener for the data div
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onWheel = function ( wheelEvent ) { 
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+		}
+		wheelEvent.stopPropagation ( );
+	};
+
+	/*
 	--- onClickExpandButton function ----------------------------------------------------------------------------------
 
 	click event listener for the expand button
@@ -228,7 +243,7 @@ Tests ...
 			
 			// data div: currently empty. Will be completed later. See _SetItinerary ( )
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
-			
+			dataDiv.addEventListener ( 'wheel', onWheel, false );
 			// buttons div ...
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 			

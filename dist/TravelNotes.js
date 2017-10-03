@@ -2542,6 +2542,21 @@ Tests ...
 	var _DataManager = require ( '../data/DataManager' ) ( );
 	
 	/*
+	--- onWheel function ----------------------------------------------------------------------------------
+
+	wheel event listener for the data div
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onWheel = function ( wheelEvent ) { 
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+		}
+		wheelEvent.stopPropagation ( );
+	};
+
+	/*
 	--- onClickExpandButton function ----------------------------------------------------------------------------------
 
 	click event listener for the expand button
@@ -2732,7 +2747,7 @@ Tests ...
 			
 			// data div: currently empty. Will be completed later. See _SetItinerary ( )
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
-			
+			dataDiv.addEventListener ( 'wheel', onWheel, false );
 			// buttons div ...
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 			
@@ -4064,7 +4079,7 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
-	
+	var _ContainerId = '';
 	var onDragStart = function  ( dragEvent ) {
 		dragEvent.stopPropagation ( ); 
 		try {
@@ -4124,6 +4139,13 @@ Tests ...
 		event.changeValue = changeEvent.target.value;
 		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
 		changeEvent.stopPropagation();
+	};
+	
+	var onWheel = function ( wheelEvent ) { 
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+		}
+		wheelEvent.stopPropagation ( );
 	};
 	
 	/* 
@@ -4216,6 +4238,7 @@ Tests ...
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
 			this.container.addEventListener ( 'drop', onDrop, false );
+			this.container.addEventListener ( 'wheel', onWheel, false );
 
 			if ( parentNode ) {
 				parentNode.appendChild ( this.container );
