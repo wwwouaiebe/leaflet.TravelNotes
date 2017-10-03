@@ -516,6 +516,8 @@ Tests ...
 		var _Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var _ObjId = require ( '../data/ObjId' ) ( );
+		
+		var _UserData = {};
 
 		return {
 
@@ -528,6 +530,9 @@ Tests ...
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 
+			get userData ( ) { return _UserData; },
+			set userData ( UserData ) { _UserData = UserData;},
+
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
@@ -537,6 +542,7 @@ Tests ...
 					name : _Name,
 					routes : _Routes.object,
 					notes : _Notes.object,
+					userData : _UserData,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -544,6 +550,7 @@ Tests ...
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
+				_UserData = Object.userData || {};
 				_Routes.object = Object.routes || [];
 				_Notes.object = Object.notes || [];
 				_ObjId = require ( '../data/ObjId' ) ( );
@@ -803,7 +810,6 @@ Tests ...
 			addControl : function ( map, divControlId, options ) {
 				_DataManager.init ( map );
 				_ReadURL ( );
-				map.fire ( ' TravelNotesProviderKeysLoaded' );
 				var configHttpRequest = new XMLHttpRequest ( );
 				configHttpRequest.onreadystatechange = function ( event ) {
 					if ( this.readyState === configHttpRequest.DONE ) {
@@ -928,6 +934,15 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
+			get userData ( ) { 
+				if ( _DataManager.travel.userData ) { 
+					return _DataManager.travel.userData;
+				}
+				return {};
+			},
+			set userData ( userData ) {
+				 _DataManager.travel.userData = userData;
+			},
 			get rightContextMenu ( ) { return _RightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
@@ -7115,11 +7130,11 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				_ChangeTravelHTML ( );
 			}
-			else
-			{
+			else {
 				// control is hidden
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-HiddenControl' );
 			}
+			_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly } );
 		};
 		
 		/*

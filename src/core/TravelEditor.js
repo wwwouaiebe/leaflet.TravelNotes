@@ -102,11 +102,11 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				_ChangeTravelHTML ( );
 			}
-			else
-			{
+			else {
 				// control is hidden
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-HiddenControl' );
 			}
+			_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly } );
 		};
 		
 		/*

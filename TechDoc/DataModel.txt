@@ -112,7 +112,9 @@ dataManager {} +-> travel {} +-> routes [] +-> notes [] ----------+-> iconHeight
                |             |
                |             |
                |             +-> name
-               |           
+               |             |
+               |             +-> userData
+               |
                +-> editedRoute {}
                |
                +-> map {}

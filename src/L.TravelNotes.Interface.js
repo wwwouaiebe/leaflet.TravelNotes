@@ -161,7 +161,6 @@ Tests ...
 			addControl : function ( map, divControlId, options ) {
 				_DataManager.init ( map );
 				_ReadURL ( );
-				map.fire ( ' TravelNotesProviderKeysLoaded' );
 				var configHttpRequest = new XMLHttpRequest ( );
 				configHttpRequest.onreadystatechange = function ( event ) {
 					if ( this.readyState === configHttpRequest.DONE ) {
@@ -286,6 +285,15 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
+			get userData ( ) { 
+				if ( _DataManager.travel.userData ) { 
+					return _DataManager.travel.userData;
+				}
+				return {};
+			},
+			set userData ( userData ) {
+				 _DataManager.travel.userData = userData;
+			},
 			get rightContextMenu ( ) { return _RightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {

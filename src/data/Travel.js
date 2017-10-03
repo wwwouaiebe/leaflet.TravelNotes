@@ -45,6 +45,8 @@ Tests ...
 		var _Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var _ObjId = require ( '../data/ObjId' ) ( );
+		
+		var _UserData = {};
 
 		return {
 
@@ -57,6 +59,9 @@ Tests ...
 			get name ( ) { return _Name; },
 			set name ( Name ) { _Name = Name;},
 
+			get userData ( ) { return _UserData; },
+			set userData ( UserData ) { _UserData = UserData;},
+
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
@@ -66,6 +71,7 @@ Tests ...
 					name : _Name,
 					routes : _Routes.object,
 					notes : _Notes.object,
+					userData : _UserData,
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -73,6 +79,7 @@ Tests ...
 			set object ( Object ) {
 				Object = _ObjType.validate ( Object );
 				_Name = Object.name || '';
+				_UserData = Object.userData || {};
 				_Routes.object = Object.routes || [];
 				_Notes.object = Object.notes || [];
 				_ObjId = require ( '../data/ObjId' ) ( );
