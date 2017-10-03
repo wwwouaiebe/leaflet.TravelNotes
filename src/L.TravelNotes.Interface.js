@@ -161,6 +161,7 @@ Tests ...
 			addControl : function ( map, divControlId, options ) {
 				_DataManager.init ( map );
 				_ReadURL ( );
+				map.fire ( ' TravelNotesProviderKeysLoaded' );
 				var configHttpRequest = new XMLHttpRequest ( );
 				configHttpRequest.onreadystatechange = function ( event ) {
 					if ( this.readyState === configHttpRequest.DONE ) {
@@ -256,6 +257,27 @@ Tests ...
 				if ( rightButton ) {
 					_DataManager.map.on ( 'contextmenu', onMapClick );
 				}
+			},
+
+			/*
+			--- getProviderKey method ---------------------------------------------------------------------------------
+
+			This method returns a provider key
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			
+			getProviderKey : function ( providerName ) {
+				var providerKey = '';
+				if ( require ( './util/Utilities' ) ( ).storageAvailable ( 'sessionStorage' ) ) {
+					var encodedProviderKey = sessionStorage.getItem ( providerName.toLowerCase ( ) );
+					if ( encodedProviderKey ) {
+						providerKey = atob ( encodedProviderKey );
+					}
+				}
+				
+				return providerKey;
 			},
 
 			/*
