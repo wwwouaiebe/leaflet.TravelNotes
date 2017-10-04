@@ -40,10 +40,12 @@ Tests ...
 
 		var _CreateUI = function ( ){ 
 			_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
+			require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, _MainDiv);
 			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
+
 		};
 		
 		if ( ! _MainDiv ) {

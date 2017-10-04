@@ -59,6 +59,29 @@ Tests ...
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
 
+	var onMouseEnterControl = function ( event ) {
+		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+	};
+	
+	var onMouseLeaveControl =function ( event ) {
+		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+	};
+	
+	var onClickPinButton = function ( event ) {
+		var control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+		if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
+			event.target.innerHTML = '&#x1f4cc;';
+			control.addEventListener ( 'mouseenter', onMouseEnterControl, false );
+			control.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
+		}
+		else
+		{
+			event.target.innerHTML = '&#x274c;';
+			control.removeEventListener ( 'mouseenter', onMouseEnterControl, false );
+			control.removeEventListener ( 'mouseleave', onMouseLeaveControl, false );
+		}
+	};
+
 	var TravelEditorUI = function ( ) {
 				
 		/*
@@ -98,7 +121,7 @@ Tests ...
 				headerDiv
 			);
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			
+
 			// title
 			htmlElementsFactory.create ( 
 				'span', 
@@ -110,6 +133,17 @@ Tests ...
 				headerDiv 
 			);
 		
+			// pin button
+			var pinButton = htmlElementsFactory.create (
+				'span',
+				{ 
+					innerHTML : '&#x274c;', 
+					id : 'TravelNotes-Control-PinButton', 
+				},
+				headerDiv
+			);
+			pinButton.addEventListener ( 'click', onClickPinButton, false );
+
 			// data div
 			var dataDiv = htmlElementsFactory.create ( 
 				'div',

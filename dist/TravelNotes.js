@@ -2584,6 +2584,7 @@ Tests ...
 		clickEvent.stopPropagation ( );
 		document.getElementById ( 'TravelNotes-Control-ItineraryHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		var hiddenList = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
@@ -4463,6 +4464,29 @@ Tests ...
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
 
+	var onMouseEnterControl = function ( event ) {
+		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+	};
+	
+	var onMouseLeaveControl =function ( event ) {
+		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+	};
+	
+	var onClickPinButton = function ( event ) {
+		var control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+		if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
+			event.target.innerHTML = '&#x1f4cc;';
+			control.addEventListener ( 'mouseenter', onMouseEnterControl, false );
+			control.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
+		}
+		else
+		{
+			event.target.innerHTML = '&#x274c;';
+			control.removeEventListener ( 'mouseenter', onMouseEnterControl, false );
+			control.removeEventListener ( 'mouseleave', onMouseLeaveControl, false );
+		}
+	};
+
 	var TravelEditorUI = function ( ) {
 				
 		/*
@@ -4502,7 +4526,7 @@ Tests ...
 				headerDiv
 			);
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
-			
+
 			// title
 			htmlElementsFactory.create ( 
 				'span', 
@@ -4514,6 +4538,17 @@ Tests ...
 				headerDiv 
 			);
 		
+			// pin button
+			var pinButton = htmlElementsFactory.create (
+				'span',
+				{ 
+					innerHTML : '&#x274c;', 
+					id : 'TravelNotes-Control-PinButton', 
+				},
+				headerDiv
+			);
+			pinButton.addEventListener ( 'click', onClickPinButton, false );
+
 			// data div
 			var dataDiv = htmlElementsFactory.create ( 
 				'div',
@@ -4825,10 +4860,12 @@ Tests ...
 
 		var _CreateUI = function ( ){ 
 			_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
+			require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, _MainDiv);
 			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
+
 		};
 		
 		if ( ! _MainDiv ) {

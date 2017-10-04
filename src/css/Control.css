@@ -28,17 +28,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	flex-direction: column;
 }
 
-#TravelNotes-Control-MainDiv.leaflet-control
+#TravelNotes-Control-MainDiv
 {
-	min-width: 30em;
-	width: 30em;
+	/*min-width: 30em;
+	width: 30em;*/
 }
-.TravelNotes-Control-HiddenControl
+.TravelNotes-Control-HiddenControl,
+#TravelNotes-Control-MainDiv-Title
 {
 	visibility: hidden;
 	width: 0;
 	height: 0;
 }
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize
+{
+	width: 8em;
+	height: 3em;
+	background-color: transparent;
+}
+.TravelNotes-Control-MainDiv-Minimize > div
+{
+	visibility:hidden;
+	height:0;
+	width:0;
+}
+.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title
+{
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateY(-1em) translateX(3em);
+	text-align:center;
+	width: 8em;
+	height: 3em;
+	font-size: 1em;
+	background-color: red;
+	padding: 0.5em;
+	visibility: visible;
+	margin:0;
+}
+
 .TravelNotes-Control-HeaderDiv,
 .TravelNotes-Control-DataDiv,
 .TravelNotes-Control-ButtonsDiv
@@ -49,6 +76,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .TravelNotes-Control-HeaderDiv
 {
 	padding-top: 0.5em;
+	display: flex;
+	flex-direction: row;
 }
 .TravelNotes-Control-HeaderText
 {
@@ -118,6 +147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	cursor: default;
 	color:red;
 }
+#TravelNotes-Control-PinButton,
 #TravelNotes-Control-ReverseWayPointsButton,
 #TravelNotes-Control-AddRoutesButton
 {
@@ -135,7 +165,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }
 #TravelNotes-Control-CancelTravelButton:hover,
 #TravelNotes-Control-RemoveAllWayPointsButton:hover,
-#TravelNotes-Control-CancelRouteButton:hover
+#TravelNotes-Control-CancelRouteButton:hover,
+#TravelNotes-Control-PinButton:hover
 {
 	color: red;
 }
