@@ -15,12 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#TravelNotes-Menu
-{
-	position: fixed;
-	top: 1em;
-	left: 1em;
-}
+
 #TravelNotes-GoTop > a
 {
 	color: black;
@@ -93,6 +88,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	height: 0;
 	padding: 0;
 	margin: 0;
+	border-bottom-style: none;
+	border-bottom-width: 0;
 }
 .TravelNotes-Roadbook-Travel-Notes-IconCell,
 .TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell
@@ -136,12 +133,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	padding-top: 2em;
 	padding-bottom: 2em
 }
-@media screen and (min-width: 1025px)
+#TravelNotes-Menu
+{
+	position: fixed;
+	top: 1em;
+	left: 1em;
+	background-color: white;
+}
+
+@media screen and (max-width: 70em)
+{
+	.TravelNotes-Roadbook-Travel
+	{
+		padding-top: 3.5em;
+	}
+	#TravelNotes-Menu
+	{
+		padding:0.5em;
+		border-style:solid;
+		border-width: 1px;
+		margin-left:0.5em;
+	}
+	#TravelNotes-Menu > div
+	{
+		display: inline-block;
+	}
+}
+@media screen and (min-width: 70em)
 {
 	.TravelNotes-Roadbook-Travel
 	{
 		width: 50em;
 		margin-left: calc(50% - 50em / 2);
 		margin-right: calc(50% - 50em / 2);
+	}
+}
+@media print
+{
+	#TravelNotes-Menu,
+	.TravelNotes-Roadbook-NoteHtml-Url
+	{
+		visibility: hidden;
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		border-width: 0;
+		border-style: none;
+	}
+	.TravelNotes-Roadbook-Route-Header
+	{
+		page-break-before: always;
+	}
+	.TravelNotes-Roadbook-Travel-Notes-Row,
+	.TravelNotes-Roadbook-Route-Maneuvers-Row,
+	.TravelNotes-Roadbook-Route-Notes-Row
+	{
+		page-break-inside: avoid;
 	}
 }
