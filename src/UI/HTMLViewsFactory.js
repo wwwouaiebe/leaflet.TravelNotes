@@ -54,7 +54,7 @@ Tests ...
 		*/
 
 		var _AddNoteHTML = function ( note, rowDiv ) {
-			_HTMLElementsFactory.create (
+			var iconCell = _HTMLElementsFactory.create (
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Notes-IconCell',
@@ -62,6 +62,8 @@ Tests ...
 				}, 
 				rowDiv
 			);
+			iconCell.setAttribute ( "style", "width:" + note.iconWidth + "px;" );
+			
 			var noteElement = _HTMLElementsFactory.create (
 				'div',
 				{ 

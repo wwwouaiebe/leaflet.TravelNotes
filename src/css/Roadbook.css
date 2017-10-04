@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .TravelNotes-MapNote
 {
 	background-repeat : no-repeat;
-	height: 40px;
-	width: 40px;
+	min-height: 40px;
+	min-width: 40px;
     display: inline-block;
 	vertical-align: top;
 }
@@ -71,40 +71,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }
 .TravelNotes-Roadbook-Travel-Notes-Row,
 .TravelNotes-Roadbook-Route-Maneuvers-Row,
-.TravelNotes-Roadbook-Route-Notes-Row,
+.TravelNotes-Roadbook-Route-Notes-Row
 {
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	padding-top: 1em;
 	padding-bottom: 1em;
+	display: flex;
+	flex-direction: row;
 }
-.TravelNotes-Roadbook-Hidden-Row
+.TravelNotes-Roadbook-Hidden-Row,
+.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-IconCell,
+.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell,
+.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-Cell,
+.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell
 {
 	visibility: hidden;
-	height: 0;
+	min-width: 0;
+	min-height: 0;
 	width: 0;
-}
-.TravelNotes-Roadbook-Travel-Notes-IconCell,
-.TravelNotes-Roadbook-Travel-Notes-Cell,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell
-
-{
-	display: inline-block;
+	height: 0;
+	padding: 0;
+	margin: 0;
 }
 .TravelNotes-Roadbook-Travel-Notes-IconCell,
 .TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell
 {
 	background-repeat : no-repeat;
-	height: 40px;
-	width: 40px;
-    display: inline-block;
-	vertical-align: top;	
+	min-width: 40px;
+	min-height: 40px;
+ 	vertical-align: top;	
 }
 .TravelNotes-Roadbook-Travel-Notes-Cell,
 .TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell
 {
-	width: calc(100% - 40px - 0.5em);
 	padding-left: 0.5em;
 }
 .TravelNotes-Roadbook-Route-Header
