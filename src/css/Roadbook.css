@@ -15,6 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#TravelNotes-Menu
+{
+	position: fixed;
+	top: 1em;
+	left: 1em;
+}
+#TravelNotes-GoTop > a
+{
+	color: black;
+	text-decoration: none;
+}
 
 .TravelNotes-MapNote
 {
@@ -48,18 +59,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .TravelNotes-Roadbook-Travel-Header-RouteName
 {
 }
+.TravelNotes-Roadbook-Travel-Header-TravelDistance
+{
+	margin-top:1em;
+}
 .TravelNotes-Roadbook-Travel-Notes,
 .TravelNotes-Roadbook-Route-ManeuversAndNotes
 {
+	margin-top: 1em;
 	margin-bottom: 2em;
 }
 .TravelNotes-Roadbook-Travel-Notes-Row,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes-Row
+.TravelNotes-Roadbook-Route-Maneuvers-Row,
+.TravelNotes-Roadbook-Route-Notes-Row,
 {
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	padding-top: 1em;
 	padding-bottom: 1em;
+}
+.TravelNotes-Roadbook-Hidden-Row
+{
+	visibility: hidden;
+	height: 0;
+	width: 0;
 }
 .TravelNotes-Roadbook-Travel-Notes-IconCell,
 .TravelNotes-Roadbook-Travel-Notes-Cell,

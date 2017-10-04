@@ -60,6 +60,10 @@
 		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a> <a href='http://www.ouaie.be/' target='_Blank'>© Christian Guyette 2017</a>"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Travel distance",
+		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}."
+	},
+	{
 		"msgid" : "ItineraryEditorUI - Itinerary and notes",
 		"msgstr" : "Itinéraire et notes"
 	},

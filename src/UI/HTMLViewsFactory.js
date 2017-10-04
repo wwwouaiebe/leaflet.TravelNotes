@@ -91,18 +91,31 @@ Tests ...
 				travelHeaderHTML
 			); 
 			
+			var travelDistance = 0;
 			var travelRoutesIterator = _DataManager.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
 				_HTMLElementsFactory.create ( 
 					'div',
 					{ 
 						className : _ClassNamePrefix + 'Travel-Header-RouteName',
-						innerHTML: travelRoutesIterator.value.name
+						innerHTML: '<a href="#route' +  travelRoutesIterator.value.objId + '">' + travelRoutesIterator.value.name + '</a>' + '&nbsp;:&nbsp;' + _Utilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
 					},
 					travelHeaderHTML
 				); 
+				if ( travelRoutesIterator.value.chain ) {
+					travelDistance += travelRoutesIterator.value.distance;
+				}
 			}
-			
+
+			_HTMLElementsFactory.create ( 
+				'div',
+				{ 
+					className : _ClassNamePrefix + 'Travel-Header-TravelDistance',
+					innerHTML:  _Translator.getText ( 'HTMLViewsFactory - Travel distance', { distance : _Utilities.formatDistance ( travelDistance ) } )
+				},
+				travelHeaderHTML
+			); 
+
 			return travelHeaderHTML;
 		};
 
@@ -143,6 +156,7 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Route-Header',
+					id : 'route' + route.objId,
 					innerHTML: _RouteEditor.getRouteHTML ( route, _ClassNamePrefix )
 				}
 			); 
@@ -176,6 +190,7 @@ Tests ...
 
 				if ( maneuversDistance <= notesDistance ) {
 					if ( ! maneuversDone ) {
+						rowDiv.className = _ClassNamePrefix + 'Route-Maneuvers-Row';
 						_HTMLElementsFactory.create (
 							'div',
 							{ 
@@ -219,6 +234,7 @@ Tests ...
 				}
 				else {
 					if ( ! notesDone ) {
+						rowDiv.className = _ClassNamePrefix + 'Route-Notes-Row';
 
 						_AddNoteHTML ( notesIterator.value, rowDiv );
 

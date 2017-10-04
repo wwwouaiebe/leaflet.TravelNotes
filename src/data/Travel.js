@@ -37,7 +37,7 @@ Tests ...
 
 		// Private variables
 
-		var _Name = 'TravelNotes.trv';
+		var _Name = 'TravelNotes';
 
 		var _Routes = require ( '../data/Collection' ) ( 'Route' );
 		_Routes.add ( require ( '../data/Route' ) ( ) );
