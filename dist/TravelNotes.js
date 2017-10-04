@@ -6300,12 +6300,17 @@ Tests ...
 			*/
 
 			getRouteHTML : function ( route, classNamePrefix ) {
-				return '<div class="' + classNamePrefix + 'Route-Header-Name">' +
+				var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
 					route.name + 
-					'</div><div class="' + classNamePrefix + 'Route-Header-Distance">' +
-					_Translator.getText ( 'RouteEditor - Distance', { distance : _Utilities.formatDistance ( route.distance ) } ) + '</div>' +
-					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
-					_Translator.getText ( 'RouteEditor - Duration', { duration : _Utilities.formatTime ( route.duration ) } ) + '</div>';
+					'</div>';
+				if (0 !== route.distance ) {
+					returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
+						_Translator.getText ( 'RouteEditor - Distance', { distance : _Utilities.formatDistance ( route.distance ) } ) + '</div>' +
+						'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
+						_Translator.getText ( 'RouteEditor - Duration', { duration : _Utilities.formatTime ( route.duration ) } ) + '</div>';
+				}
+				
+				return returnValue;
 			},
 			
 			/*
