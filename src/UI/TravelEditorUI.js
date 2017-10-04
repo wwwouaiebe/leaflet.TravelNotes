@@ -59,12 +59,22 @@ Tests ...
 		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? _Translator.getText ( 'TravelEditorUI - Reduce the list' ) : _Translator.getText ( 'TravelEditorUI - Expand the list' );		
 	};
 
+	var _TimerId = null;
+	
 	var onMouseEnterControl = function ( event ) {
+		if ( _TimerId ) {
+			clearTimeout ( _TimerId );
+			_TimerId = null;
+		}
 		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 	};
 	
-	var onMouseLeaveControl =function ( event ) {
+	var onTimeOut = function ( ) {
 		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+	};
+	
+	var onMouseLeaveControl =function ( event ) {
+		_TimerId = setTimeout(onTimeOut, 1000);
 	};
 	
 	var onClickPinButton = function ( event ) {
