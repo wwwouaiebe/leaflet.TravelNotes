@@ -6537,7 +6537,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			addWayPoint : function ( latLng, distance ) {
+			addWayPoint : function ( latLng, event, distance ) {
 				_DataManager.editedRoute.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
@@ -6585,7 +6585,7 @@ Tests ...
 					_DataManager.getRoute ( routeObjId ),
 					[ event.latlng.lat, event.latlng.lng ] 
 				);
-				this.addWayPoint ( latLngDistance.latLng, latLngDistance.distance );
+				this.addWayPoint ( latLngDistance.latLng, null, latLngDistance.distance );
 			},
 			
 			/*
