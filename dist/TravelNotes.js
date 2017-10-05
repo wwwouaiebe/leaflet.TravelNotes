@@ -5992,6 +5992,51 @@ Tests ...
 			},
 		
 			/*
+			--- hideNotes method -------------------------------------------------------------------------------------
+
+			This method hide the notes on the map
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			hideNotes : function ( ) {
+				var notesIterator = _DataManager.travel.notes.iterator;
+				while ( ! notesIterator.done ) {
+					require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );
+				}
+				var routesIterator = _DataManager.travel.routes.iterator;
+				while ( ! routesIterator.done ) {
+					notesIterator = routesIterator.value.notes.iterator;
+					while ( ! notesIterator.done ) {
+						require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );					
+					}
+				}
+			},
+			
+			/*
+			--- showNotes method -------------------------------------------------------------------------------------
+
+			This method show the notes on the map
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			showNotes : function ( ) {
+				this.hideNotes ( );
+				var notesIterator = _DataManager.travel.notes.iterator;
+				while ( ! notesIterator.done ) {
+					require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+				}
+				var routesIterator = _DataManager.travel.routes.iterator;
+				while ( ! routesIterator.done ) {
+					notesIterator = routesIterator.value.notes.iterator;
+					while ( ! notesIterator.done ) {
+						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );					
+					}
+				}
+			},
+			
+			/*
 			--- getMapContextMenu method ------------------------------------------------------------------------------
 
 			This method gives the note part of the map context menu
@@ -6011,6 +6056,20 @@ Tests ...
 						name : _Translator.getText ( "NoteEditor - new travel note" ), 
 						action : this.newTravelNote,
 						param : latLng
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - Hide notes" ), 
+						action : this.hideNotes
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - Show notes" ), 
+						action : this.showNotes
 					} 
 				);
 				

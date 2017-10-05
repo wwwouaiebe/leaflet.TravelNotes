@@ -156,6 +156,14 @@
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
+		"msgid" : "NoteEditor - Hide notes",
+		"msgstr" : "Masquer les notes"
+	},
+	{
+		"msgid" : "NoteEditor - Show notes",
+		"msgstr" : "Afficher les notes"
+	},
+	{
 		"msgid" : "Notedialog - empty icon content",
 		"msgstr" : "Le contenu de l'icône doit être complété."
 	},
