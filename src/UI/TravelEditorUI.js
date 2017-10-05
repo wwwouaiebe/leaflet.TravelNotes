@@ -374,6 +374,12 @@ Tests ...
 				},
 				false
 			);
+			if ( _DataManager.config.travelEditor.startMinimized ) {
+				pinButton.innerHTML = '&#x1f4cc;';
+				controlDiv.addEventListener ( 'mouseenter', onMouseEnterControl, false );
+				controlDiv.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
+				controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+			}
 		};	
 		
 		/*

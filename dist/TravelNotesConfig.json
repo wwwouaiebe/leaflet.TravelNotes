@@ -46,6 +46,7 @@
 	},
 	"travelEditor":
 	{
-		"clearAfterSave":true
+		"clearAfterSave":true,
+		"startMinimized":true
 	}
 }

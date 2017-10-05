@@ -84,7 +84,8 @@ Tests ...
 						displayEditionInHTMLPage : true
 					},
 					travelEditor : {
-						clearAfterSave : true
+						clearAfterSave : true,
+						startMinimized : true
 					}
 				};
 				global.version = '1.0.0';
