@@ -74,7 +74,7 @@ Tests ...
 	};
 	
 	var onMouseLeaveControl =function ( event ) {
-		_TimerId = setTimeout(onTimeOut, 1000);
+		_TimerId = setTimeout(onTimeOut, _DataManager.config.travelEditor.timeout );
 	};
 	
 	var onClickPinButton = function ( event ) {

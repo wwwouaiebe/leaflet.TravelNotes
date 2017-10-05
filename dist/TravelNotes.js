@@ -87,7 +87,8 @@ Tests ...
 					},
 					travelEditor : {
 						clearAfterSave : true,
-						startMinimized : true
+						startMinimized : true,
+						timeout : 1000
 					}
 				};
 				global.version = '1.0.0';
@@ -4482,7 +4483,7 @@ Tests ...
 	};
 	
 	var onMouseLeaveControl =function ( event ) {
-		_TimerId = setTimeout(onTimeOut, 1000);
+		_TimerId = setTimeout(onTimeOut, _DataManager.config.travelEditor.timeout );
 	};
 	
 	var onClickPinButton = function ( event ) {

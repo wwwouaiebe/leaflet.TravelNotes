@@ -47,6 +47,7 @@
 	"travelEditor":
 	{
 		"clearAfterSave":true,
-		"startMinimized":true
+		"startMinimized":true,
+		"timeout": 1000
 	}
 }

@@ -85,7 +85,8 @@ Tests ...
 					},
 					travelEditor : {
 						clearAfterSave : true,
-						startMinimized : true
+						startMinimized : true,
+						timeout : 1000
 					}
 				};
 				global.version = '1.0.0';
