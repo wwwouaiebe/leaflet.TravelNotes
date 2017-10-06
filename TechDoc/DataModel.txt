@@ -42,8 +42,6 @@ dataManager {} +-> travel {} +-> routes [] +-> notes [] ----------+-> iconHeight
                |             |             |                      |                      +-> lng
                |             |             |                      |                      |
                |             |             |                      |                      +-> distance
-               |             |             |                      |                      |
-               |             |             |                      |                      +-> maneuverObjId
                |             |             |                      |
                |             |             |                      |
                |             |             |                      |

@@ -51,8 +51,6 @@ Tests ...
 
 		var _Distance = 0;
 
-		var _ManeuverObjId = -1;
-
 		var _ObjId = require ( '../data/ObjId' ) ( );
 
 		return {
