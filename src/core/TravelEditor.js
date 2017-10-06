@@ -66,7 +66,18 @@ Tests ...
 		*/
 
 		var _LoadFile = function ( textFile, fileName, readOnly ) {
-			
+
+			// an old map file is opened... converting the file...
+			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
+				// ... if the convert object is loaded
+				if ( ! window.convertMapsData ) {
+					return;
+				}
+				else {
+					textFile = convertMapsData.mapsDataToTravelNotes ( textFile );
+				}
+			}
+		
 			var compressedTravel = null;
 			try {
 				compressedTravel = JSON.parse ( textFile ) ;

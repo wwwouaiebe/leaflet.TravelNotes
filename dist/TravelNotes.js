@@ -4855,7 +4855,7 @@ Tests ...
 				{
 					id : 'TravelNotes-Control-OpenTravelInput', 
 					type : 'file',
-					accept : '.trv'
+					accept : '.trv,.map'
 				},
 				openTravelDiv
 			);
@@ -7442,7 +7442,16 @@ Tests ...
 		*/
 
 		var _LoadFile = function ( textFile, fileName, readOnly ) {
-			
+
+			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
+				if ( ! window.convertMapsData ) {
+					return;
+				}
+				else {
+					textFile = convertMapsData.mapsDataToTravelNotes ( textFile );
+				}
+			}
+		
 			var compressedTravel = null;
 			try {
 				compressedTravel = JSON.parse ( textFile ) ;
@@ -7495,6 +7504,7 @@ Tests ...
 			// travel notes are added
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
+console.log ( notesIterator.value.object );
 				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
 			

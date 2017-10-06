@@ -291,7 +291,7 @@ Tests ...
 				{
 					id : 'TravelNotes-Control-OpenTravelInput', 
 					type : 'file',
-					accept : '.trv'
+					accept : '.trv,.map'
 				},
 				openTravelDiv
 			);
