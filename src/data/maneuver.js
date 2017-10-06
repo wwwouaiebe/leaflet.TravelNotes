@@ -76,7 +76,7 @@ Tests ...
 				return {
 					iconName : _IconName,
 					instruction : _Instruction,
-					distance : _Distance,
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
 					itineraryPointObjId : _ItineraryPointObjId,
 					objId : _ObjId,

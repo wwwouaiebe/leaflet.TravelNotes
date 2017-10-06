@@ -135,12 +135,12 @@ Tests ...
 					phone : _Phone,
 					url : _Url,
 					address : _Address,
-					iconLat : _IconLat,
-					iconLng : _IconLng,
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					chainedDistance : _ChainedDistance,
+					iconLat : parseFloat ( _IconLat.toFixed ( 6 ) ),
+					iconLng : parseFloat ( _IconLng.toFixed ( 6 ) ),
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
+					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};

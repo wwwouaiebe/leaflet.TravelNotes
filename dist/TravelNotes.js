@@ -1,4 +1,159 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+/**
+ * Based off of [the offical Google document](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+ *
+ * Some parts from [this implementation](http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/PolylineEncoder.js)
+ * by [Mark McClure](http://facstaff.unca.edu/mcmcclur/)
+ *
+ * @module polyline
+ */
+
+var polyline = {};
+
+function encode(coordinate, factor) {
+    coordinate = Math.round(coordinate * factor);
+    coordinate <<= 1;
+    if (coordinate < 0) {
+        coordinate = ~coordinate;
+    }
+    var output = '';
+    while (coordinate >= 0x20) {
+        output += String.fromCharCode((0x20 | (coordinate & 0x1f)) + 63);
+        coordinate >>= 5;
+    }
+    output += String.fromCharCode(coordinate + 63);
+    return output;
+}
+
+/**
+ * Decodes to a [latitude, longitude] coordinates array.
+ *
+ * This is adapted from the implementation in Project-OSRM.
+ *
+ * @param {String} str
+ * @param {Number} precision
+ * @returns {Array}
+ *
+ * @see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
+ */
+polyline.decode = function(str, precision) {
+    var index = 0,
+        lat = 0,
+        lng = 0,
+        coordinates = [],
+        shift = 0,
+        result = 0,
+        byte = null,
+        latitude_change,
+        longitude_change,
+        factor = Math.pow(10, precision || 5);
+
+    // Coordinates have variable length when encoded, so just keep
+    // track of whether we've hit the end of the string. In each
+    // loop iteration, a single coordinate is decoded.
+    while (index < str.length) {
+
+        // Reset shift, result, and byte
+        byte = null;
+        shift = 0;
+        result = 0;
+
+        do {
+            byte = str.charCodeAt(index++) - 63;
+            result |= (byte & 0x1f) << shift;
+            shift += 5;
+        } while (byte >= 0x20);
+
+        latitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+
+        shift = result = 0;
+
+        do {
+            byte = str.charCodeAt(index++) - 63;
+            result |= (byte & 0x1f) << shift;
+            shift += 5;
+        } while (byte >= 0x20);
+
+        longitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+
+        lat += latitude_change;
+        lng += longitude_change;
+
+        coordinates.push([lat / factor, lng / factor]);
+    }
+
+    return coordinates;
+};
+
+/**
+ * Encodes the given [latitude, longitude] coordinates array.
+ *
+ * @param {Array.<Array.<Number>>} coordinates
+ * @param {Number} precision
+ * @returns {String}
+ */
+polyline.encode = function(coordinates, precision) {
+    if (!coordinates.length) { return ''; }
+
+    var factor = Math.pow(10, precision || 5),
+        output = encode(coordinates[0][0], factor) + encode(coordinates[0][1], factor);
+
+    for (var i = 1; i < coordinates.length; i++) {
+        var a = coordinates[i], b = coordinates[i - 1];
+        output += encode(a[0] - b[0], factor);
+        output += encode(a[1] - b[1], factor);
+    }
+
+    return output;
+};
+
+function flipped(coords) {
+    var flipped = [];
+    for (var i = 0; i < coords.length; i++) {
+        flipped.push(coords[i].slice().reverse());
+    }
+    return flipped;
+}
+
+/**
+ * Encodes a GeoJSON LineString feature/geometry.
+ *
+ * @param {Object} geojson
+ * @param {Number} precision
+ * @returns {String}
+ */
+polyline.fromGeoJSON = function(geojson, precision) {
+    if (geojson && geojson.type === 'Feature') {
+        geojson = geojson.geometry;
+    }
+    if (!geojson || geojson.type !== 'LineString') {
+        throw new Error('Input must be a GeoJSON LineString');
+    }
+    return polyline.encode(flipped(geojson.coordinates), precision);
+};
+
+/**
+ * Decodes to a GeoJSON LineString geometry.
+ *
+ * @param {String} str
+ * @param {Number} precision
+ * @returns {Object}
+ */
+polyline.toGeoJSON = function(str, precision) {
+    var coords = polyline.decode(str, precision);
+    return {
+        type: 'LineString',
+        coordinates: flipped(coords)
+    };
+};
+
+if (typeof module === 'object' && module.exports) {
+    module.exports = polyline;
+}
+
+},{}],2:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -203,7 +358,7 @@ Tests ...
 --- End of DataManager.js file ----------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":42}],2:[function(require,module,exports){
+},{"../data/Route":39,"../data/Travel":40,"../util/Utilities":43}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -325,7 +480,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":30,"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],3:[function(require,module,exports){
+},{"../data/Collection":31,"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -433,9 +588,9 @@ Tests ...
 					width : _Width,
 					color : _Color,
 					chain :_Chain,
-					distance : _Distance,
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
-					chainedDistance : _ChainedDistance,
+					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -470,7 +625,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":30,"../data/DataManager":31,"../data/Itinerary":32,"../data/ObjId":36,"../data/ObjType":37,"../data/Waypoint":41,"./Itinerary":2}],4:[function(require,module,exports){
+},{"../data/Collection":31,"../data/DataManager":32,"../data/Itinerary":33,"../data/ObjId":37,"../data/ObjType":38,"../data/Waypoint":42,"./Itinerary":3}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -572,7 +727,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":30,"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"../data/Route":38}],5:[function(require,module,exports){
+},{"../data/Collection":31,"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38,"../data/Route":39}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -647,7 +802,7 @@ Tests ...
 /*
 --- End of L.TravelNotes.Control.js file ------------------------------------------------------------------------------
 */
-},{"./UI/UserInterface":21}],6:[function(require,module,exports){
+},{"./UI/UserInterface":22}],7:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -1002,7 +1157,7 @@ Tests ...
 */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":5,"./UI/ContextMenu":10,"./UI/Translator":19,"./UI/TravelEditorUI":20,"./UI/UserInterface":21,"./core/NoteEditor":26,"./core/RouteEditor":27,"./core/TravelEditor":29,"./data/DataManager":31,"./data/ItineraryPoint":33,"./data/Maneuver":34,"./data/Travel":39,"./util/Utilities":42}],7:[function(require,module,exports){
+},{"./L.TravelNotes.Control":6,"./UI/ContextMenu":11,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./core/NoteEditor":27,"./core/RouteEditor":28,"./core/TravelEditor":30,"./data/DataManager":32,"./data/ItineraryPoint":34,"./data/Maneuver":35,"./data/Travel":40,"./util/Utilities":43}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1077,7 +1232,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":8,"../UI/Translator":19,"../data/DataManager":31,"./HTMLElementsFactory":12}],8:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"../data/DataManager":32,"./HTMLElementsFactory":13}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1320,7 +1475,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":19,"./HTMLElementsFactory":12}],9:[function(require,module,exports){
+},{"../UI/Translator":20,"./HTMLElementsFactory":13}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1619,7 +1774,7 @@ Tests ...
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":8,"../UI/Translator":19,"./HTMLElementsFactory":12}],10:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"./HTMLElementsFactory":13}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1901,7 +2056,7 @@ Tests ...
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------
 */	
 
-},{"../data/DataManager":31,"./HTMLElementsFactory":12,"./Translator":19}],11:[function(require,module,exports){
+},{"../data/DataManager":32,"./HTMLElementsFactory":13,"./Translator":20}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2060,7 +2215,7 @@ Tests ...
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
 */	
-},{"./HTMLElementsFactory":12,"./Translator":19}],12:[function(require,module,exports){
+},{"./HTMLElementsFactory":13,"./Translator":20}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2155,7 +2310,7 @@ Tests ...
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
 */	
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2521,7 +2676,7 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLElementsFactory":12,"../UI/Translator":19,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"../data/ObjId":36,"../util/Utilities":42}],14:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":13,"../UI/Translator":20,"../core/NoteEditor":27,"../core/RouteEditor":28,"../data/DataManager":32,"../data/ObjId":37,"../util/Utilities":43}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2960,7 +3115,7 @@ Tests ...
 /*
 --- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLViewsFactory":13,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/RouteEditor":27,"../data/DataManager":31,"./HTMLElementsFactory":12,"./Translator":19}],15:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":14,"../core/MapEditor":26,"../core/NoteEditor":27,"../core/RouteEditor":28,"../data/DataManager":32,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3501,7 +3656,7 @@ Tests ...
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":8,"../UI/Translator":19,"../core/GeoCoder":23,"../core/NoteEditor":26,"../data/DataManager":31,"./HTMLElementsFactory":12}],16:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"../core/GeoCoder":24,"../core/NoteEditor":27,"../data/DataManager":32,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3913,7 +4068,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../core/RouteEditor":27,"../data/DataManager":31,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],17:[function(require,module,exports){
+},{"../core/RouteEditor":28,"../data/DataManager":32,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4067,7 +4222,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../UI/ColorDialog":9,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"./HTMLElementsFactory":12}],18:[function(require,module,exports){
+},{"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":26,"../core/RouteEditor":28,"../core/TravelEditor":30,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -4326,7 +4481,7 @@ Tests ...
 --- End of SortableList.js file ---------------------------------------------------------------------------------------
 */	
 
-},{"../UI/Translator":19,"./HTMLElementsFactory":12}],19:[function(require,module,exports){
+},{"../UI/Translator":20,"./HTMLElementsFactory":13}],20:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4406,7 +4561,7 @@ Tests ...
 */	
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4837,7 +4992,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../core/TravelEditor":29,"../data/DataManager":31,"./HTMLElementsFactory":12,"./SortableList":18,"./Translator":19}],21:[function(require,module,exports){
+},{"../core/TravelEditor":30,"../data/DataManager":32,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4910,7 +5065,7 @@ Tests ...
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------
 */	
-},{"./ErrorEditorUI":11,"./HTMLElementsFactory":12,"./ItineraryEditorUI":14,"./RouteEditorUI":16,"./TravelEditorUI":20}],22:[function(require,module,exports){
+},{"./ErrorEditorUI":12,"./HTMLElementsFactory":13,"./ItineraryEditorUI":15,"./RouteEditorUI":17,"./TravelEditorUI":21}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4977,7 +5132,7 @@ Tests ...
 /*
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../UI/ErrorEditorUI":11}],23:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":12}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5082,7 +5237,7 @@ Tests ...
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":31}],24:[function(require,module,exports){
+},{"../data/DataManager":32}],25:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5146,7 +5301,7 @@ Tests ...
 /*
 --- End of ItineraryEditor.js file ------------------------------------------------------------------------------------
 */
-},{"../UI/ItineraryEditorUI":14}],25:[function(require,module,exports){
+},{"../UI/ItineraryEditorUI":15}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5769,7 +5924,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/ContextMenu":10,"../core/NoteEditor":26,"../core/RouteEditor":27,"../core/TravelEditor":29,"./NoteEditor":26}],26:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":27,"../core/RouteEditor":28,"../core/TravelEditor":30,"./NoteEditor":27}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6185,7 +6340,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/NoteDialog":15,"../UI/Translator":19,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/RouteEditor":27,"../core/TravelEditor":29,"../data/Note":35,"../util/Utilities":42}],27:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":25,"../core/MapEditor":26,"../core/RouteEditor":28,"../core/TravelEditor":30,"../data/Note":36,"../util/Utilities":43}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6984,7 +7139,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/RouteEditorUI":16,"../UI/RoutePropertiesDialog":17,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ErrorEditor":22,"../core/GeoCoder":23,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/NoteEditor":26,"../core/Router":28,"../core/TravelEditor":29,"../data/Route":38,"../data/Waypoint.js":41,"../util/Utilities":42}],28:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ErrorEditor":23,"../core/GeoCoder":24,"../core/ItineraryEditor":25,"../core/MapEditor":26,"../core/NoteEditor":27,"../core/Router":29,"../core/TravelEditor":30,"../data/Route":39,"../data/Waypoint.js":42,"../util/Utilities":43}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7218,7 +7373,7 @@ Tests ...
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../UI/Translator":19,"../core/ErrorEditor":22,"../util/Utilities":42,"./RouteEditor":27}],29:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/Translator":20,"../core/ErrorEditor":23,"../util/Utilities":43,"./RouteEditor":28}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7288,15 +7443,44 @@ Tests ...
 
 		var _LoadFile = function ( textFile, fileName, readOnly ) {
 			
+			var compressedTravel = null;
 			try {
-				_DataManager.travel.object = JSON.parse ( textFile ) ;
+				compressedTravel = JSON.parse ( textFile ) ;
 			}
 			catch ( e ) {
 				return;
 			}
+			
+			// decompressing the itineraryPoints
+			compressedTravel.routes.forEach ( 
+				function ( route ) {
+					route.itinerary.itineraryPoints.latLngs = require ( 'polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+					var decompressedItineraryPoints = [];
+					var latLngsCounter = 0;
+					route.itinerary.itineraryPoints.latLngs.forEach (
+						function ( latLng ) {
+							var itineraryPoint = {};
+							itineraryPoint.lat = latLng [ 0 ];
+							itineraryPoint.lng = latLng [ 1 ];
+							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
+							decompressedItineraryPoints.push ( itineraryPoint );
+							latLngsCounter ++;
+						}
+					);
+					route.itinerary.itineraryPoints = decompressedItineraryPoints;
+				}
+			);
+			
+			// ... and transform the data in the correct format
+			_DataManager.travel.object = compressedTravel;
+
+			// ... travel name = file name
 			if ( '' !== fileName ) {
 				_DataManager.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
 			}
+
 			_DataManager.travel.readOnly = readOnly;
 			
 			// the map is cleaned
@@ -7471,7 +7655,28 @@ Tests ...
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name + '.trv', JSON.stringify ( _DataManager.travel.object ) );
+					// compressing the itineraryPoints
+					var compressedTravel = _DataManager.travel.object;
+					compressedTravel.routes.forEach (
+						function ( route ) {
+							var objType = {};
+							if ( 0 !== route.itinerary.itineraryPoints.length ) {
+								objType = route.itinerary.itineraryPoints [ 0 ].objType;
+							}
+							var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+							route.itinerary.itineraryPoints.forEach ( 
+								function ( itineraryPoint ) {
+									compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
+									compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+									compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+								}
+							);
+							compressedItineraryPoints.latLngs = require ( 'polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+							route.itinerary.itineraryPoints = compressedItineraryPoints;
+						}
+					);
+					// save file
+					require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 				}
 			},
 
@@ -7585,7 +7790,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":1,"../Data/Route":3,"../Data/Travel":4,"../UI/AboutDialog":7,"../UI/HTMLViewsFactory":13,"../UI/RouteEditorUI":16,"../UI/Translator":19,"../UI/TravelEditorUI":20,"../core/ItineraryEditor":24,"../core/MapEditor":25,"../core/RouteEditor":27,"../util/Utilities":42,"./ErrorEditor":22,"./MapEditor":25,"./RouteEditor":27}],30:[function(require,module,exports){
+},{"../Data/DataManager":2,"../Data/Route":4,"../Data/Travel":5,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":25,"../core/MapEditor":26,"../core/RouteEditor":28,"../util/Utilities":43,"./ErrorEditor":23,"./MapEditor":26,"./RouteEditor":28,"polyline":1}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8004,11 +8209,11 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":33,"../data/Maneuver":34,"../data/Note":35,"../data/Route":38,"../data/WayPoint":40}],31:[function(require,module,exports){
-arguments[4][1][0].apply(exports,arguments)
-},{"../data/Route":38,"../data/Travel":39,"../util/Utilities":42,"dup":1}],32:[function(require,module,exports){
+},{"../data/ItineraryPoint":34,"../data/Maneuver":35,"../data/Note":36,"../data/Route":39,"../data/WayPoint":41}],32:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../data/Collection":30,"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"dup":2}],33:[function(require,module,exports){
+},{"../data/Route":39,"../data/Travel":40,"../util/Utilities":43,"dup":2}],33:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"../data/Collection":31,"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38,"dup":3}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8082,19 +8287,15 @@ Tests ...
 			get distance ( ) { return _Distance;},
 			set distance ( Distance ) { _Distance = Distance; },
 
-			get maneuverObjId ( ) { return _ManeuverObjId;},
-			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
-
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
 
 			get object ( ) {
 				return {
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					maneuverObjId : _ManeuverObjId,
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -8104,7 +8305,6 @@ Tests ...
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_Distance = Object.distance || 0;
-				_ManeuverObjId = Object.maneuverObjId || -1;
 				_ObjId = require ( '../data/ObjId' ) ( );
 			}
 		};
@@ -8123,7 +8323,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],34:[function(require,module,exports){
+},{"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8202,7 +8402,7 @@ Tests ...
 				return {
 					iconName : _IconName,
 					instruction : _Instruction,
-					distance : _Distance,
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
 					itineraryPointObjId : _ItineraryPointObjId,
 					objId : _ObjId,
@@ -8234,7 +8434,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],35:[function(require,module,exports){
+},{"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8372,12 +8572,12 @@ Tests ...
 					phone : _Phone,
 					url : _Url,
 					address : _Address,
-					iconLat : _IconLat,
-					iconLng : _IconLng,
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					chainedDistance : _ChainedDistance,
+					iconLat : parseFloat ( _IconLat.toFixed ( 6 ) ),
+					iconLng : parseFloat ( _IconLng.toFixed ( 6 ) ),
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
+					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -8416,7 +8616,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],36:[function(require,module,exports){
+},{"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38}],37:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -8470,7 +8670,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8564,11 +8764,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],38:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":30,"../data/DataManager":31,"../data/Itinerary":32,"../data/ObjId":36,"../data/ObjType":37,"../data/Waypoint":41,"./Itinerary":32,"dup":3}],39:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../data/Collection":30,"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"../data/Route":38,"dup":4}],40:[function(require,module,exports){
+},{"../data/Collection":31,"../data/DataManager":32,"../data/Itinerary":33,"../data/ObjId":37,"../data/ObjType":38,"../data/Waypoint":42,"./Itinerary":33,"dup":4}],40:[function(require,module,exports){
+arguments[4][5][0].apply(exports,arguments)
+},{"../data/Collection":31,"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38,"../data/Route":39,"dup":5}],41:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8649,8 +8849,8 @@ Tests ...
 			get object ( ) {
 				return {
 					name : _Name,
-					lat : _Lat,
-					lng : _Lng,
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -8680,9 +8880,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37}],41:[function(require,module,exports){
-arguments[4][40][0].apply(exports,arguments)
-},{"../data/DataManager":31,"../data/ObjId":36,"../data/ObjType":37,"dup":40}],42:[function(require,module,exports){
+},{"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38}],42:[function(require,module,exports){
+arguments[4][41][0].apply(exports,arguments)
+},{"../data/DataManager":32,"../data/ObjId":37,"../data/ObjType":38,"dup":41}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8879,4 +9079,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":19}]},{},[6]);
+},{"../UI/Translator":20}]},{},[7]);

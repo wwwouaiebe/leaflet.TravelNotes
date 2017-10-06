@@ -71,19 +71,15 @@ Tests ...
 			get distance ( ) { return _Distance;},
 			set distance ( Distance ) { _Distance = Distance; },
 
-			get maneuverObjId ( ) { return _ManeuverObjId;},
-			set maneuverObjId ( ManeuverObjId ) { _ManeuverObjId = ManeuverObjId; },
-
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
 
 			get object ( ) {
 				return {
-					lat : _Lat,
-					lng : _Lng,
-					distance : _Distance,
-					maneuverObjId : _ManeuverObjId,
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
@@ -93,7 +89,6 @@ Tests ...
 				_Lat = Object.lat || 0;
 				_Lng = Object.lng || 0;
 				_Distance = Object.distance || 0;
-				_ManeuverObjId = Object.maneuverObjId || -1;
 				_ObjId = require ( '../data/ObjId' ) ( );
 			}
 		};

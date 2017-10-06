@@ -67,15 +67,44 @@ Tests ...
 
 		var _LoadFile = function ( textFile, fileName, readOnly ) {
 			
+			var compressedTravel = null;
 			try {
-				_DataManager.travel.object = JSON.parse ( textFile ) ;
+				compressedTravel = JSON.parse ( textFile ) ;
 			}
 			catch ( e ) {
 				return;
 			}
+			
+			// decompressing the itineraryPoints
+			compressedTravel.routes.forEach ( 
+				function ( route ) {
+					route.itinerary.itineraryPoints.latLngs = require ( 'polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+					var decompressedItineraryPoints = [];
+					var latLngsCounter = 0;
+					route.itinerary.itineraryPoints.latLngs.forEach (
+						function ( latLng ) {
+							var itineraryPoint = {};
+							itineraryPoint.lat = latLng [ 0 ];
+							itineraryPoint.lng = latLng [ 1 ];
+							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
+							decompressedItineraryPoints.push ( itineraryPoint );
+							latLngsCounter ++;
+						}
+					);
+					route.itinerary.itineraryPoints = decompressedItineraryPoints;
+				}
+			);
+			
+			// ... and transform the data in the correct format
+			_DataManager.travel.object = compressedTravel;
+
+			// ... travel name = file name
 			if ( '' !== fileName ) {
 				_DataManager.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
 			}
+
 			_DataManager.travel.readOnly = readOnly;
 			
 			// the map is cleaned
@@ -250,7 +279,28 @@ Tests ...
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					require ( '../util/Utilities' ) ( ).saveFile ( _DataManager.travel.name + '.trv', JSON.stringify ( _DataManager.travel.object ) );
+					// compressing the itineraryPoints
+					var compressedTravel = _DataManager.travel.object;
+					compressedTravel.routes.forEach (
+						function ( route ) {
+							var objType = {};
+							if ( 0 !== route.itinerary.itineraryPoints.length ) {
+								objType = route.itinerary.itineraryPoints [ 0 ].objType;
+							}
+							var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+							route.itinerary.itineraryPoints.forEach ( 
+								function ( itineraryPoint ) {
+									compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
+									compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+									compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+								}
+							);
+							compressedItineraryPoints.latLngs = require ( 'polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+							route.itinerary.itineraryPoints = compressedItineraryPoints;
+						}
+					);
+					// save file
+					require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 				}
 			},
 

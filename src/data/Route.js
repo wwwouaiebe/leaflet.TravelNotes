@@ -105,9 +105,9 @@ Tests ...
 					width : _Width,
 					color : _Color,
 					chain :_Chain,
-					distance : _Distance,
+					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
-					chainedDistance : _ChainedDistance,
+					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};

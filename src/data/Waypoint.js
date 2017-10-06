@@ -78,8 +78,8 @@ Tests ...
 			get object ( ) {
 				return {
 					name : _Name,
-					lat : _Lat,
-					lng : _Lng,
+					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
+					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
 				};
