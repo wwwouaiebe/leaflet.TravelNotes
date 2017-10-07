@@ -326,6 +326,12 @@ Tests ...
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
+					_MapEditor.removeAllObjects ( );
+					_DataManager.editedRoute = require ( '../Data/Route') ( );
+					_DataManager.editedRoute.routeChanged = false;
+					_DataManager.editedRoute.routeInitialObjId = -1;
+					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					_LoadFile ( fileReader.result, fileName, false );
 				};
 				var fileName = event.target.files [ 0 ].name;

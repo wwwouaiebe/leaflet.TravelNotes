@@ -7443,7 +7443,9 @@ Tests ...
 
 		var _LoadFile = function ( textFile, fileName, readOnly ) {
 
+			// an old map file is opened... converting the file...
 			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
+				// ... if the convert object is loaded
 				if ( ! window.convertMapsData ) {
 					return;
 				}
@@ -7504,7 +7506,6 @@ Tests ...
 			// travel notes are added
 			var notesIterator = _DataManager.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-console.log ( notesIterator.value.object );
 				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
 			
@@ -7701,6 +7702,12 @@ console.log ( notesIterator.value.object );
 			openTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
+					_MapEditor.removeAllObjects ( );
+					_DataManager.editedRoute = require ( '../Data/Route') ( );
+					_DataManager.editedRoute.routeChanged = false;
+					_DataManager.editedRoute.routeInitialObjId = -1;
+					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					_LoadFile ( fileReader.result, fileName, false );
 				};
 				var fileName = event.target.files [ 0 ].name;
@@ -8276,8 +8283,6 @@ Tests ...
 		var _Lng = 0;
 
 		var _Distance = 0;
-
-		var _ManeuverObjId = -1;
 
 		var _ObjId = require ( '../data/ObjId' ) ( );
 
