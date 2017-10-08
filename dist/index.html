@@ -6,92 +6,17 @@
 		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
 		<title>Travel & Notes by wwwouaiebe</title>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
-		<link rel="stylesheet" href="leaflet.fullscreen/Control.FullScreen.css" />
 		<link rel="stylesheet" href="Maps/Maps.min.css" />
 		<link rel="stylesheet" href="TravelNotes.min.css" />
-		<link rel="stylesheet" href="TravelNotesIndex.css" media="screen"/>
-		<link rel="stylesheet" href="myStyles.css" />
 	</head>
 	<body>
-		<div id="cySiteTitle"></div>
-			<div id="cyMenu">
-			<div class="cyMenuItem">
-				<h5><a href="..">&#x1f3e0;</a></h5>
-				<div>
-					<p><a href="..">Accueil</a></p>
-				</div>
-			</div>
-			<div class="cyMenuItem">
-				<h5><a id="cyMailto1" href="mailto:Hgltdfgt@anthisnes.org">&#x1f4e7;</a></h5>
-				<div>
-					<p><a id="cyMailto2" href="mailto:Hgltdfgt@anthisnes.org">Contact</a></p>
-				</div>
-			</div>
-			<div class="cyMenuItem">
-				<h5><a id="cyNewMap1" href="../maps/">&#x21bb;</a></h5>
-				<div>
-					<p><a id="cyNewMap2" href="..">Nouvelle carte</a></p>
-				</div>
-			</div>
-			<div class="cyMenuItem">
-				<h5>&copy;</h5>
-				<div id="cyCredits">
-					<h2>Copyrights et crédits</h2>
-					<p>
-						Les photos aériennes sont fournies par <a href="http://www.esri.com/" title="esri">esri</a>,
-						les cartes par <a href="http://www.openstreetmap.org/copyright" title="OpenStreetMap">OpenStreetMap</a> et <a href="http://www.thunderforest.com/" title="Thunderforest">Thunderforest</a>
-						ainsi que par <a href="http://www.kartverket.no/" title="Kartverket">Kartverket</a> pour la Norvège.
-						.
-					</p>
-					<p>
-						La recherche des adresses est faite par <a href ="http://wiki.openstreetmap.org/wiki/Nominatim" title="Nominatim">Nominatim</a>.
-					</p>
-					<p>
-						Le calcul des itinéraires est réalisé par 
-						<a href ="https://graphhopper.com/" title="GraphHopper">GraphHopper</a>,
-						<a href ="https://mapzen.com/" title="Mapzen">Mapzen</a> ou
-						<a href ="https://www.mapbox.com/" title="Mapbox">Mapbox</a>.
-					</p>
-					<p>
-						Cette page est créée avec <a href="http://www.leafletjs.com/" title="Leaflet">Leaflet</a>,
-						<a href ="https://github.com/brunob/leaflet.fullscreen" title="Leaflet Fullscreen">Leaflet&nbsp;Fullscreen</a>, 
-						<a href ="https://github.com/wwwouaiebe/maps" title="Maps">Maps</a> et 
-						<a href ="https://github.com/wwwouaiebe/leaflet.TravelNotes" title="TravelNotes">TravelNotes</a>. 
-					</p>
-					<p>
-						Référez-vous aux différents sites ci-dessus pour en connaître les droits d'utilisation. 
-					</p>
-					<p>
-						Pour les autres parties de cette page&nbsp;: &copy;&nbsp;Christian&nbsp;Guyette sous licence 
-						<a href="http://www.gnu.org/licenses/gpl.html" title="GNU General Public License V3">GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;V3</a>
-					</p>
-				</div>
-			</div>
-			<div class="cyMenuItem">
-				<h5><a id="cyGM1" href="" target="_blank" >&#x1f47f;</a></h5>
-				<div id="cyDiable">
-					<p>Chez le <a id="cyGM2" href="" target="_blank" title="Chez le diable qui veut tout connaître sur vous">diable</a> qui veut tout connaître sur vous. Ah ah ah, aidez-le!</p>
-				</div>
-			</div>
-		</div>
-		<div id="cyMap">
-		</div>
-		<div id="cyFrame">
-		</div>
-		<div id="PinsContent">
-			<div></div>
-		</div>
-		<div id="RouteDescription">
-			<div></div>
-		</div>
+		<div id="mapsMap"></div>
 		<script src="leaflet/leaflet.js"></script>
-		<script src="Maps/leaflet.fullscreen/Control.FullScreen.js"></script>
 		<script src="TravelNotes.js"></script>
 		<script src="TravelNotesConvert/Convert.js"></script>
-		<script src="TravelNotesProviders/MapzenRouteProvider.js"></script>
-		<script src="TravelNotesProviders/MapboxRouteProvider.js"></script>
-		<script src="TravelNotesProviders/GraphHopperRouteProvider.js"></script>
-		<script src="TravelNotesProviders/OSRMRouteProvider.js"></script>
-		<script src="Maps/Maps.js"></script><noscript>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oh oh. Javascript n'est pas activé. Il n'est pas possible d'afficher cette page sans Javascript.</noscript>
+		<script src="TravelNotesProviders/MapzenRouteProvider.min.js"></script>
+		<script src="TravelNotesProviders/MapboxRouteProvider.min.js"></script>
+		<script src="TravelNotesProviders/GraphHopperRouteProvider.min.js"></script>
+		<script src="Maps/Maps.min.js"></script><noscript>Oh oh. Javascript is not enabled. It's impossible to display this page without javascript.</noscript>
 	</body>
 </html>
