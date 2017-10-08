@@ -177,11 +177,11 @@
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
-		"msgstr" : "Il n'est pas possible d'éditer une route sans sauver ou abandonner les modifications"
+		"msgstr" : "Il n'est pas possible d'éditer un trajet sans sauver ou abandonner les modifications"
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
-		"msgstr" : "Il n'est pas possible d'éditer une route créée avec ce fournisseur ({provider})."
+		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
 	},
 	{
 		"msgid" : "RouteEditor - Add a waypoint on the route",
@@ -205,11 +205,11 @@
 	},
 	{
 		"msgid" : "RouteEditor - Edit this route",
-		"msgstr" : "Éditer cette route"
+		"msgstr" : "Éditer ce trajet"
 	},
 	{
 		"msgid" : "RouteEditor - Delete this route",
-		"msgstr" : "Supprimer cette route"
+		"msgstr" : "Supprimer ce trajet"
 	},
 	{
 		"msgid" : "RouteEditor - Properties",
@@ -237,7 +237,7 @@
 	},
 	{
 		"msgid" : "RouteEditorUI - Waypoints",
-		"msgstr" : "Points de passage&nbsp;de la route:"
+		"msgstr" : "Points de passage&nbsp;du trajet:"
 	},
 	{
 		"msgid" : "RouteEditorUI - Start",
@@ -333,11 +333,11 @@
 	},
 	{
 		"msgid" : "TravelEditorUI - Routes",
-		"msgstr" : "Routes du voyage&nbsp;:"
+		"msgstr" : "Trajets du voyage&nbsp;:"
 	},
 	{
 		"msgid" : "TravelEditorUI - Route",
-		"msgstr" : "Route"
+		"msgstr" : "Trajet"
 	},
 	{
 		"msgid" : "TravelEditorUI - Reduce the list",
@@ -349,11 +349,11 @@
 	},
 	{
 		"msgid" : "TravelEditorUI - New route",
-		"msgstr" : "Nouvelle route"
+		"msgstr" : "Nouveau trajet"
 	},
 	{
 		"msgid" : "TravelEditorUI - Delete all routes",
-		"msgstr" : "Supprimer toutes les routes"
+		"msgstr" : "Supprimer tous les trajets"
 	},
 	{
 		"msgid" : "TravelEditorUI - Save travel",
@@ -369,15 +369,15 @@
 	},
 	{
 		"msgid" : "TravelEditorUI - Undo",
-		"msgstr" : "Réouvrir une route supprimée"
+		"msgstr" : "Réouvrir un trajet supprimé"
 	},
 	{
 		"msgid" : "TravelEditor - cannot remove an edited route",
-		"msgstr" : "Il n'est pas possible de supprimer une route quand celle-ci est en cours d'édition"
+		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
 	{
 		"msgid" : "TravelEditor - Not possible to save a travel without a save or cancel",
-		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de route. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
+		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de trajet. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
 	},
 	{
 		"msgid" : "TravelEditorUI - Cancel travel",
