@@ -250,6 +250,10 @@
 {
 	background-image : url('TravelNotesIcons/NotesIcons/kRotaryRightBig.png');
 }
+.TravelNotes-ManeuverNote-kRoundaboutExit
+{
+	background-image : url('TravelNotesIcons/NotesIcons/kRoundaboutExitBig.png');
+}
 .TravelNotes-ManeuverNote-kRoundaboutLeft
 {
 	background-image : url('TravelNotesIcons/NotesIcons/kRoundaboutLeftBig.png');
