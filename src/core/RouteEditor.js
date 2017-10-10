@@ -232,6 +232,7 @@ Tests ...
 				if ( ! _DataManager.config.routing.auto ) {
 					return;
 				}
+				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
 				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );
 			},
 			
@@ -257,9 +258,10 @@ Tests ...
 				
 				// the new route is added to the map
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
-				if ( 2 === _DataManager.editedRoute.wayPoints.length ) {
+				if ( ! _DataManager.editedRoute.haveItinerary ) {
 					_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
 				}
+				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
 				
 				// and the itinerary and waypoints are displayed
 				_ItineraryEditor.setItinerary ( );
@@ -364,6 +366,7 @@ Tests ...
 				// Route is cloned, so we can have a cancel button in the editor
 				_DataManager.editedRoute.object = initialRoute.object;
 				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
+				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
 				_MapEditor.removeRoute ( initialRoute, true, false );
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				this.chainRoutes ( );

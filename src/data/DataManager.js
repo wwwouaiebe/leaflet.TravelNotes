@@ -95,6 +95,7 @@ Tests ...
 				global.editedRoute = require ( '../data/Route' ) ( );
 				global.editedRoute.routeChanged = false;
 				global.editedRoute.routeInitialObjId = -1;
+				global.editedRoute.haveItinerary = false;
 				global.travel = require ( '../data/Travel' ) ( );
 				global.mapObjects = new Map ( );
 				global.routing = {};
