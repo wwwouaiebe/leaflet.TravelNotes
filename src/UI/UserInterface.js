@@ -45,7 +45,37 @@ Tests ...
 			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
 			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
+			_MainDiv.addEventListener ( 
+				'click',
+				function ( event ) {
 
+					if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
+						return; 
+					}
+					if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
+						return;
+					}
+					event.stopPropagation ( );
+					event.preventDefault ( );
+				},
+				false
+			);
+			_MainDiv.addEventListener ( 
+				'dblclick',
+				function ( event ) {
+					event.stopPropagation ( );
+					event.preventDefault ( );
+				},
+				false
+			);
+			_MainDiv.addEventListener ( 
+				'wheel',
+				function ( event ) {
+					event.stopPropagation ( );
+					event.preventDefault ( );
+				},
+				false
+			);
 		};
 		
 		if ( ! _MainDiv ) {

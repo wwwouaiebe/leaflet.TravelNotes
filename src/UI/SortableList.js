@@ -188,13 +188,13 @@ Tests ...
 			item.dataObjId = dataObjId; 
 
 			this.items.push ( item );
-
+/*
 			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
 			}
-	
+*/	
 			this.container.appendChild ( item );
 		};
 		
