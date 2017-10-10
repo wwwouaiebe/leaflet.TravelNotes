@@ -4370,10 +4370,11 @@ Tests ...
 			htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
 			inputElement.addEventListener ( 'change' , onChange, false );
+
+			//Workaround for issue #8
 			inputElement.addEventListener ( 
 				'focus',
 				function ( event ) {
-console.log ( 'focus' );
 					event.target.parentElement.draggable = false;
 				},
 				false
@@ -4381,7 +4382,6 @@ console.log ( 'focus' );
 			inputElement.addEventListener ( 
 				'blur',
 				function ( event ) {
-console.log ( 'blur' );
 					event.target.parentElement.draggable = event.target.parentElement.canDrag;
 				},
 				false
@@ -4913,7 +4913,7 @@ Tests ...
 					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-					innerHTML : '<a href="TravelNotesRoadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+					innerHTML : '<a id="TravelNotes-Control-OpenTravelRoadbookLink" href="TravelNotesRoadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 				}, 
 				buttonsDiv
 			);

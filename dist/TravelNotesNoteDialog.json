@@ -16,29 +16,60 @@
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "Å",
-			"htmlBefore" : "Å"
+			"title" : "<span style='color:black;background-color:cyan'>Cyan</span>",
+			"htmlBefore" : "<span style='color:black;background-color:cyan'>",
+			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "å",
-			"htmlBefore" : "å"
+			"title": "&lt;li&gt;●&lt;li&gt;",
+			"htmlBefore": "<li>",
+			"htmlAfter": "</li>"
+		}, 	
+		{
+			"title": "Å",
+			"htmlBefore": "Å"
 		}, 
 		{
-			"title" : "Æ",
-			"htmlBefore" : "Æ"
+			"title": "å",
+			"htmlBefore": "å"
 		}, 
 		{
-			"title" : "æ",
-			"htmlBefore" : "æ"
+			"title": "Æ",
+			"htmlBefore": "Æ"
 		}, 
 		{
-			"title" : "Ø",
-			"htmlBefore" : "Ø"
+			"title": "æ",
+			"htmlBefore": "æ"
 		}, 
 		{
-			"title" : "&amp;nbsp;",
-			"htmlBefore" : "&nbsp;"
+			"title": "Ø",
+			"htmlBefore": "Ø"
+		}, 
+		{
+			"title": "ø",
+			"htmlBefore": "ø"
+		}, 
+		{
+			"title": "&gt;&lt;",
+			"htmlBefore": "&gt;&lt;"
+		}, 
+		{
+			"title": "&lt;",
+			"htmlBefore": "&lt;"
+		}, 
+		{
+			"title": "&gt;",
+			"htmlBefore": "&gt;"
+		}, 
+		{
+			"title": "&#x1F6B2;",
+			"htmlBefore": "&nbsp;&#x1F6B2;&nbsp;"
+		}, 
+		{
+			"title": "&amp;nbsp;",
+			"htmlBefore": "&nbsp;"
 		}
+
 	],
 	"preDefinedIconsList" :
 	[
