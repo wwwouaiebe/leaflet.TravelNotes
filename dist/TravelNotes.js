@@ -4370,6 +4370,23 @@ Tests ...
 			htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
 			var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
 			inputElement.addEventListener ( 'change' , onChange, false );
+			inputElement.addEventListener ( 
+				'focus',
+				function ( event ) {
+console.log ( 'focus' );
+					event.target.parentElement.draggable = false;
+				},
+				false
+			);
+			inputElement.addEventListener ( 
+				'blur',
+				function ( event ) {
+console.log ( 'blur' );
+					event.target.parentElement.draggable = event.target.parentElement.canDrag;
+				},
+				false
+			);
+				
 			var upArrowButton = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -4413,14 +4430,16 @@ Tests ...
 			deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
 			item.dataObjId = dataObjId; 
 
-			this.items.push ( item );
-/*
+			item.canDrag = false;
 			if ( ( ( 'LimitedSort' !== this.options.listStyle ) || ( 1 < this.items.length ) ) && ( ! isLastItem  ) ){
 				item.draggable = true;
 				item.addEventListener ( 'dragstart', onDragStart, false );	
 				item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
+				item.canDrag = true;
 			}
-*/	
+			
+			this.items.push ( item );
+
 			this.container.appendChild ( item );
 		};
 		
