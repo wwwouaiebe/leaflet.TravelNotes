@@ -6769,23 +6769,6 @@ Tests ...
 			},
 			
 			/*
-			--- removeRoute method ------------------------------------------------------------------------------------
-
-			This method removes a route
-			
-			parameters:
-			- routeObjId : the TravelNotes route objId to remove
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeRoute : function ( routeObjId ) { 
-				require ( '../core/TravelEditor' ) ( ).removeRoute ( routeObjId );
-				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
-			},
-			
-			/*
 			--- routeProperties method --------------------------------------------------------------------------------
 
 			This method opens the RouteProperties dialog
@@ -7112,6 +7095,7 @@ Tests ...
 
 			getRouteContextMenu : function ( routeObjId ) {
 				var contextMenu = [];
+				var travelEditor = require ( '../core/TravelEditor' ) ( );
 				contextMenu.push ( 
 					{ 
 						context : this, 
@@ -7122,9 +7106,9 @@ Tests ...
 				);
 				contextMenu.push ( 
 					{
-						context : this, 
+						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.removeRoute :null,
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute :null,
 						param: routeObjId
 					}
 				);
@@ -7646,7 +7630,7 @@ Tests ...
 					return;
 				}
 
-				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+				require ( './MapEditor' ) ( ).removeRoute ( _DataManager.getRoute ( routeObjId ), true, true );
 				_DataManager.travel.routes.remove ( routeObjId );
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {

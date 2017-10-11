@@ -217,7 +217,7 @@ Tests ...
 					return;
 				}
 
-				require ( './MapEditor' ) ( ).removeObject ( routeObjId );
+				require ( './MapEditor' ) ( ).removeRoute ( _DataManager.getRoute ( routeObjId ), true, true );
 				_DataManager.travel.routes.remove ( routeObjId );
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
