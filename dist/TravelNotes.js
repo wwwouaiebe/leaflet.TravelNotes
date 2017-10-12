@@ -6373,7 +6373,7 @@ Tests ...
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - phone' )  + note.phone + '</div>';
 				}
 				if ( 0 !== note.url.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url +'</a></div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
 				}
 				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
 					_Translator.getText ( 
