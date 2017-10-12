@@ -16,22 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/* --- Main settings --- */
+
 #TravelNotes-Control-MainDiv
 {
-	background-color: white;
 	height: 100vh;
 	max-height : 100vh;
 	font-family : sans-serif;
 	font-size: 1em;
 	margin: 0;
-	display: flex;
-	flex-direction: column;
-	width: 30em;
 }
 #TravelNotes-Control-MainDiv-Title
 {
-	transform-origin: bottom right;
-	transform: rotateZ(-90deg) translateX(3em);
 	text-align:center;
 	font-size: 1em;
 	font-weight: bold;
@@ -40,87 +36,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	padding: 0.5em;
 	margin:0;
 }
-.TravelNotes-Control-HiddenControl,
-#TravelNotes-Control-MainDiv-Title
-{
-	visibility: hidden;
-	width: 0;
-	height: 0;
-}
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize
-{
-	width: 9em;
-	height: 3em;
-	background-color: transparent;
-}
-.TravelNotes-Control-MainDiv-Minimize > div
-{
-	visibility:hidden;
-	height:0;
-	width:0;
-}
-.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title
-{
-	visibility: visible;
-	width: 8em;
-	height: 3em;
-}
 
-.TravelNotes-Control-HeaderDiv,
-.TravelNotes-Control-DataDiv,
-.TravelNotes-Control-ButtonsDiv
+/* --- flex column --- */
+
+#TravelNotes-Control-MainDiv
 {
-	padding-left: 0.5em;
-	padding-right: 0.5em;
-}
-.TravelNotes-Control-HeaderDiv
-{
-	padding-top: 0.5em;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 }
-.TravelNotes-Control-HeaderText
-{
-	font-weight: bold;
-}
-.TravelNotes-Control-DataDiv
-{
-	padding-top: 0.5em;
-}
-#TravelNotes-Control-RouteDataDiv,
-#TravelNotes-Control-TravelDataDiv
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-RouteDataDiv,
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-TravelDataDiv
 {
 	flex-shrink: 0;
 	max-height: 7em;
 	overflow: auto;
 }
-#TravelNotes-Control-RouteDataDiv.TravelNotes-Control-ExpandedList,
-#TravelNotes-Control-TravelDataDiv.TravelNotes-Control-ExpandedList
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-ItineraryDataDiv
 {
-	max-height: 40%;
+	margin-bottom: auto;
 }
-.TravelNotes-Control-ButtonsDiv
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-ErrorDataDiv
 {
-	padding-bottom: 0.5em;
-	text-align: right;
-	border-bottom-style: solid;
-	border-bottom-width: 0.1em;
-	border-color: lightgray;
+	flex-shrink: 0;
+	max-height: 7em;
+	overflow: auto;
+}
+/* --- flex row ---*/
+
+
+#TravelNotes-Control-MainDiv > div.TravelNotes-Control-HeaderDiv,
+#TravelNotes-Control-MainDiv > div.TravelNotes-Control-ButtonsDiv
+{
 	display: flex;
 	flex-direction: row;
 }
-.TravelNotes-Control-HiddenList
+
+#TravelNotes-Control-PinButton,
+#TravelNotes-Control-ReverseWayPointsButton,
+#TravelNotes-Control-AddRoutesButton
 {
-	padding-top:0;
-	padding-bottom: 0;
-	visibility: hidden;
-	height: 0;
+	margin-left: auto;
 }
-.TravelNotes-Control-SmallHeader
-{
-	padding-top: 0;
-	padding-bottom: 0;
-}
+
+/* --- buttons ---*/
+
 .TravelNotes-Control-Button
 {
 	font-weight: bold;
@@ -146,12 +105,192 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	cursor: default;
 	color:red;
 }
-#TravelNotes-Control-PinButton,
-#TravelNotes-Control-ReverseWayPointsButton,
-#TravelNotes-Control-AddRoutesButton
+
+#TravelNotes-Control-CancelTravelButton:hover,
+#TravelNotes-Control-RemoveAllWayPointsButton:hover,
+#TravelNotes-Control-CancelRouteButton:hover,
+#TravelNotes-Control-PinButton:hover,
+#TravelNotes-Control-ErrorExpandButton:hover
 {
-	margin-left: auto;
+	color: red;
 }
+
+#TravelNotes-Control-ItineraryButtonsDiv
+{
+	padding-top: 0.5em;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: lightgray;
+}
+.TravelNotes-Control-ImgButton
+{
+	padding: 0.1em;
+	margin: 0.1em;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+}
+.TravelNotes-Control-ActiveProviderImgButton,
+.TravelNotes-Control-ActiveTransitModeImgButton
+{
+	border-color: black;
+}
+.TravelNotes-Control-InactiveTransitModeImgButton
+{
+	visibility: hidden;
+}
+#TravelNotes-Control-OpenTravelInput
+{
+	opacity: 0;
+	position: relative;
+	width: 0em;
+}
+#TravelNotes-Control-OpenTravelFakeDiv
+{
+	display: inline;
+}
+/* --- End buttons */
+
+/* --- overload for maximized control --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize
+{
+	width: 30em;
+	background-color: white;
+}
+
+		/* --- title --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-MainDiv-Title
+{
+	margin:0;
+	padding : 0;
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+		/* --- padding left and padding-right --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-HeaderDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
+{
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+		/* --- padding-top --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-HeaderDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-ErrorDataDiv
+{
+	padding-top: 0.5em;
+}
+
+		/* --- padding-bottom --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ErrorDataDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ErrorHeaderDiv,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
+{
+	padding-bottom: 0.5em;
+}
+
+		/* --- border-bottom --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
+{
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+}
+		/* --- max-height overload for expanded list --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-RouteDataDiv.TravelNotes-Control-ExpandedList,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-TravelDataDiv.TravelNotes-Control-ExpandedList
+{
+	max-height: 40%;
+}
+
+		/* padding-top and bottom overload for small headers --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-SmallHeader
+{
+	padding-top: 0;
+	padding-bottom: 0;
+}
+		/* --- overload for hidden lists --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv.TravelNotes-Control-HiddenList,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-ErrorDataDiv.TravelNotes-Control-HiddenList
+{
+	visibility: hidden;
+	height: 0;
+	width: 25em;
+	margin: 0;
+	padding: 0;
+}
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ItineraryButtonsDiv.TravelNotes-Control-HiddenList >img.TravelNotes-Control-ImgButton
+{
+	padding: 0;
+	margin: 0;
+	border-style: none;
+	border-width: 0;
+}
+/* --- overload for minimized control --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize
+{
+	height: 3em;
+	width: 9em;
+	background-color: transparent;
+}
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div
+{
+	margin:0;
+	padding : 0;
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title
+{
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateY(1em) translateX(3em);
+	padding-top : 0.5em;
+	height: 3em;
+	width: 8em;
+	visibility: visible;
+}
+
+/* --- overload for hidden control --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden
+{
+	visibility: hidden;
+	margin:0;
+	padding : 0;
+	height: 0;
+	width: 30em;
+}#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > div
+{
+	visibility: hidden;
+	margin:0;
+	padding : 0;
+	height: 0;
+	width: 0;
+}
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > #TravelNotes-Control-ItineraryButtonsDiv >img.TravelNotes-Control-ImgButton
+{
+	padding: 0;
+	margin: 0;
+	border-style: none;
+	border-width: 0;
+}
+/* --- Itinerary --- */
+
 #TravelNotes-Control-ItineraryDiv
 {
 	overflow: auto;
@@ -160,14 +299,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	max-height: none;
 	overflow: auto;
-	margin-bottom: auto;
-}
-#TravelNotes-Control-CancelTravelButton:hover,
-#TravelNotes-Control-RemoveAllWayPointsButton:hover,
-#TravelNotes-Control-CancelRouteButton:hover,
-#TravelNotes-Control-PinButton:hover
-{
-	color: red;
 }
 .TravelNotes-Control-Route-ManeuversAndNotes
 {
@@ -197,64 +328,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	min-height: 20px;
 	background-repeat: no-repeat;
 }
-#TravelNotes-Control-ItineraryButtonsDiv
+
+/* --- special texts --- */
+
+.TravelNotes-Control-HeaderText
 {
-	padding-top: 0.5em;
-	border-style: solid;
-	border-width: 0.1em;
-	border-color: lightgray;
-}
-.TravelNotes-Control-ImgButton
-{
-	padding: 0.1em;
-	margin: 0.1em;
-	border-style: solid;
-	border-width: 0.1em;
-	border-color: white;
-}
-.TravelNotes-Control-ActiveProviderImgButton,
-.TravelNotes-Control-ActiveTransitModeImgButton
-{
-	border-color: black;
-}
-.TravelNotes-Control-InactiveTransitModeImgButton
-{
-	visibility: hidden;
-}
-#TravelNotes-Control-ErrorDiv
-{
-	margin-top: 0.5em;
-}
-#TravelNotes-Control-ErrorDataDiv
-{
-	flex-shrink: 0;
-	max-height: 5em;
-	overflow: auto;
-	border-top-style: solid;
-	border-top-width: 0.1em;
-	border-top-color: lightgray;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-}
-#TravelNotes-Control-ErrorHeaderDiv
-{
-	padding-bottom: 0.5em;
+	font-weight: bold;
 }
 .TravelNotes-Control-Error
 {
 	color: red;
 	font-weight: bold;
 }
-#TravelNotes-Control-OpenTravelDiv
-{
-}
-#TravelNotes-Control-OpenTravelInput
-{
-	opacity: 0;
-	position: relative;
-	width: 0em;
-}
-#TravelNotes-Control-OpenTravelFakeDiv
-{
-	display: inline;
-}
+
+
+
+

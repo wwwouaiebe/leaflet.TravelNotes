@@ -50,8 +50,8 @@ Tests ...
 
 		var _ReduceUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = '';
+			//document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML = '';
 		};
 		
 		/*
@@ -67,9 +67,9 @@ Tests ...
 				clearTimeout ( _TimerId );
 				_TimerId = null;
 			}
-			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = message;
+			document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML = message;
 			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-			document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			//document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 			_TimerId = setTimeout ( _ReduceUI, require ( '../data/DataManager' ) ( ).config.errorMessages.timeout );
 		};
 		
@@ -88,17 +88,15 @@ Tests ...
 			}
 
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-			
-			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
-			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv TravelNotes-Control-HiddenList'}, controlDiv );
+			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv TravelNotes-Control-HiddenList'}, dataDiv );
 			var expandButton = htmlElementsFactory.create (
 				'span',
 				{ 
 					innerHTML : '&#x274c',
 					title : translator.getText ( 'ErrorEditorUI - Hide' ),
 					id : 'TravelNotes-Control-ErrorExpandButton',
-					className : 'TravelNotes-Control-ExpandButton'
+					className : 'TravelNotes-Control-HiddenList'
 				},
 				headerDiv 
 			);
@@ -106,13 +104,14 @@ Tests ...
 				'click' ,
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
-					if ( ! document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML.length ) {
+					if ( ! document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML.length ) {
 						return;
 					}	
 					_ReduceUI ( );
 				},
 				false 
 			);
+			var messageDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorMessageDiv'}, dataDiv );
 		};
 				
 		/*
