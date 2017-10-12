@@ -5385,7 +5385,29 @@ Tests ...
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 
 	var MapEditor = function ( ) {
-		
+
+		/*
+		--- _UpdateRouteTooltip function -------------------------------------------------------------------------------------------
+
+		This function updates the route tooltip with the distance when the mouse move on the polyline
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _UpdateRouteTooltip = function ( event ) { 
+			var route = _DataManager.getRoute (  event.target.objId );
+			var distance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
+			distance += route.chainedDistance;
+			distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
+			var polyline = _DataManager.mapObjects.get ( event.target.objId );
+			polyline.closeTooltip ( );
+			var tooltipText = _DataManager.getRoute ( event.target.objId ).name;
+			tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
+			tooltipText += distance;
+			polyline.setTooltipContent ( tooltipText );
+			polyline.openTooltip (  event.latlng );
+		};
+	
 		/*
 		--- _AddTo function -------------------------------------------------------------------------------------------
 
@@ -5531,7 +5553,13 @@ Tests ...
 				_AddTo ( route.objId, polyline );
 				
 				// tooltip and popup are created
-				polyline.bindTooltip ( function ( layer ) { return _DataManager.getRoute ( layer.objId ).name; } );
+				polyline.bindTooltip ( 
+					 route.name,
+					{ sticky : true, direction : 'right' }
+				);
+				polyline.on ( 'mouseover' , _UpdateRouteTooltip	);
+				polyline.on ( 'mousemove' , _UpdateRouteTooltip );
+				
 				polyline.bindPopup ( 
 					function ( layer ) {
 						var route = _DataManager.getRoute ( layer.objId );
@@ -5968,7 +5996,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":27,"../core/RouteEditor":28,"../core/TravelEditor":30,"./NoteEditor":27}],27:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":27,"../core/RouteEditor":28,"../core/TravelEditor":30,"../util/Utilities":43,"./NoteEditor":27}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
