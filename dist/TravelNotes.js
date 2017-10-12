@@ -205,6 +205,10 @@ Tests ...
 					contextMenu : {
 						timeout : 1500
 					},
+					errorMessages :
+					{
+						timeout : 20000
+					},
 					routing : {
 						auto : true
 					},
@@ -974,9 +978,6 @@ Tests ...
 						if ( this.status === 200 ) {
 							try {
 								_DataManager.config = JSON.parse ( this.responseText );
-								
-								console.log ( _DataManager.config );
-								
 								if ( '' !== _Langage ) {
 									_DataManager.config.language = _Langage;
 								}
@@ -2093,11 +2094,46 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
+	
+	var _TimerId = null;
 
 	var ErrorEditorUI = function ( ) {
 				
 		var translator = require ( './Translator' ) ( );
 
+		/*
+		--- _ReduceUI function ----------------------------------------------------------------------------------------
+
+		This function reduces the UI
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _ReduceUI = function ( ) {
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = '';
+		};
+		
+		/*
+		--- _SetMessage function ----------------------------------------------------------------------------------------
+
+		This function add a message, expand the UI and start a timer
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _SetMessage = function ( message ) {
+			if ( _TimerId ) {
+				clearTimeout ( _TimerId );
+				_TimerId = null;
+			}
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = message;
+			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
+			_TimerId = setTimeout ( _ReduceUI, require ( '../data/DataManager' ) ( ).config.errorMessages.timeout );
+		};
+		
 		/*
 		--- _CreateUI function ----------------------------------------------------------------------------------------
 
@@ -2116,12 +2152,12 @@ Tests ...
 			
 			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
 			
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv TravelNotes-Control-HiddenList'}, controlDiv );
 			var expandButton = htmlElementsFactory.create (
 				'span',
 				{ 
-					innerHTML : '&#x25b6;',
-					title : translator.getText ( 'ErrorEditorUI - Show' ),
+					innerHTML : '&#x274c',
+					title : translator.getText ( 'ErrorEditorUI - Hide' ),
 					id : 'TravelNotes-Control-ErrorExpandButton',
 					className : 'TravelNotes-Control-ExpandButton'
 				},
@@ -2134,48 +2170,12 @@ Tests ...
 					if ( ! document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML.length ) {
 						return;
 					}	
-					document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					var hiddenList = document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25b2;';
-					document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = hiddenList ? translator.getText ( 'ErrorEditorUI - Show' ) : translator.getText ( 'ErrorEditorUI - Hide' );
-					if ( hiddenList ) {
-						document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = '';
-					}
+					_ReduceUI ( );
 				},
 				false 
 			);
-			htmlElementsFactory.create ( 'span', { innerHTML : translator.getText ( 'ErrorEditorUI - Errors' ), id : 'TravelNotes-Control-ErrorHeaderText', className : 'TravelNotes-Control-HeaderText'}, headerDiv );
-			
 		};
 				
-		/*
-		--- _ExpandUI function ----------------------------------------------------------------------------------------
-
-		This function expands the UI
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ExpandUI = function ( ) {
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b2;';
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = translator.getText ( 'ErrorEditorUI - Hide' );
-			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-		};
-				
-		/*
-		--- _ReduceUI function ----------------------------------------------------------------------------------------
-
-		This function reduces the UI
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ReduceUI = function ( ) {
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).innerHTML = '&#x25b6;';
-			document.getElementById ( 'TravelNotes-Control-ErrorExpandButton' ).title = translator.getText ( 'ErrorEditorUI - Show' );
-			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).add ( 'TravelNotes-Control-HiddenList' );
-		};
-
 		/*
 		--- ErrorEditorUI object --------------------------------------------------------------------------------------
 
@@ -2188,15 +2188,10 @@ Tests ...
 				_CreateUI ( controlDiv ); 
 			},
 	
-			expand : function ( ) {
-				_ExpandUI ( );
+			set message ( message )
+			{ 
+				_SetMessage ( message );
 			},
-			
-			reduce : function ( ) {
-				_ReduceUI ( );
-			},
-			
-			set message ( Message ) { document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML = Message; },
 			
 			get message (  ) { return document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML; }
 			
@@ -2216,7 +2211,7 @@ Tests ...
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
 */	
-},{"./HTMLElementsFactory":13,"./Translator":20}],13:[function(require,module,exports){
+},{"../data/DataManager":32,"./HTMLElementsFactory":13,"./Translator":20}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5160,7 +5155,6 @@ Tests ...
 				var header = '<span class="TravelNotes-Control-Error">';
 				var footer = '</span>';
 				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
-				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
 			},
 
 			clear : function ( routeObjId ) {

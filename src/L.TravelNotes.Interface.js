@@ -167,9 +167,6 @@ Tests ...
 						if ( this.status === 200 ) {
 							try {
 								_DataManager.config = JSON.parse ( this.responseText );
-								
-								console.log ( _DataManager.config );
-								
 								if ( '' !== _Langage ) {
 									_DataManager.config.language = _Langage;
 								}

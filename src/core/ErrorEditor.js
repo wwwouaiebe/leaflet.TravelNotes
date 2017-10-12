@@ -42,7 +42,6 @@ Tests ...
 				var header = '<span class="TravelNotes-Control-Error">';
 				var footer = '</span>';
 				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
-				require ( '../UI/ErrorEditorUI' ) ( ).expand ( );
 			},
 
 			clear : function ( routeObjId ) {

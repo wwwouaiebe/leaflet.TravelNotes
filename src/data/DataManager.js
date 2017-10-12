@@ -48,6 +48,10 @@ Tests ...
 					contextMenu : {
 						timeout : 1500
 					},
+					errorMessages :
+					{
+						timeout : 20000
+					},
 					routing : {
 						auto : true
 					},
