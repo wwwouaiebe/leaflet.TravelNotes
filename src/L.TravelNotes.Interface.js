@@ -90,7 +90,7 @@ Tests ...
 				}
 			}
 			var stateObj = { index: "bar" };
-			history.pushState(stateObj, "page", newUrlSearch );
+			history.replaceState(stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
