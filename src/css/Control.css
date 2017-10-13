@@ -244,7 +244,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize
 {
 	height: 3em;
-	width: 9em;
 	background-color: transparent;
 }
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div
@@ -252,14 +251,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	margin:0;
 	padding : 0;
 	height: 0;
-	width: 0;
+	transform: scaleX(0);
 	visibility: hidden;
 }
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title
 {
 	transform-origin: bottom right;
-	transform: rotateZ(-90deg) translateY(1em) translateX(3em);
+	transform: rotateZ(-90deg) translateY(17.5em) translateX(3em) scaleX(1);
 	padding-top : 0.5em;
+	margin:0;
 	height: 3em;
 	width: 8em;
 	visibility: visible;
