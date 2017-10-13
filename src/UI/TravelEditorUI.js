@@ -138,7 +138,7 @@ Tests ...
 			htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), 
+					innerHTML : _Translator.getText ( 'TravelEditorUI - Travel routes' ), 
 					id : 'TravelNotes-Control-TravelHeaderText', 
 					className : 'TravelNotes-Control-HeaderText'
 				},

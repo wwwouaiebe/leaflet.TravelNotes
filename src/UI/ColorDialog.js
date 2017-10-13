@@ -113,7 +113,7 @@ Tests ...
 
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = translator.getText ( 'ColorDialog - Title' );
+		baseDialog.title = translator.getText ( 'ColorDialog - Colors' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		baseDialog.getNewColor = function ( ) {
 			return newColor;
@@ -201,7 +201,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - red'),
+				data : translator.getText ( 'ColorDialog - Red'),
 			},
 			rvbDiv
 		);
@@ -225,7 +225,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - green'),
+				data : translator.getText ( 'ColorDialog - Green'),
 			},
 			rvbDiv
 		);
@@ -247,7 +247,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - blue'),
+				data : translator.getText ( 'ColorDialog - Blue'),
 			},
 			rvbDiv
 		);

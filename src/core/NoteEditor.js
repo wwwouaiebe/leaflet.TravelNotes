@@ -301,7 +301,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - new travel note" ), 
+						name : _Translator.getText ( "NoteEditor - New travel note" ), 
 						action : this.newTravelNote,
 						param : latLng
 					} 
@@ -340,7 +340,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - edit note" ), 
+						name : _Translator.getText ( "NoteEditor - Edit this note" ), 
 						action : this.editNote,
 						param : noteObjId
 					} 
@@ -348,7 +348,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - delete note" ), 
+						name : _Translator.getText ( "NoteEditor - Delete this note" ), 
 						action : this.removeNote,
 						param : noteObjId
 					} 
@@ -356,7 +356,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - zoom to note" ), 
+						name : _Translator.getText ( "NoteEditor - Zoom to note" ), 
 						action : this.zoomToNote,
 						param : noteObjId
 					} 
@@ -388,17 +388,17 @@ Tests ...
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
 				}
 				if ( 0 !== note.address.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - address' )  + note.address + '</div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
 				}
 				if ( 0 !== note.phone.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - phone' )  + note.phone + '</div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
 				}
 				if ( 0 !== note.url.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
 				}
 				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
 					_Translator.getText ( 
-						'NoteEditor - latlng',
+						'NoteEditor - Latitude Longitude',
 						{ 
 							lat : _Utilities.formatLat ( note.lat ),
 							lng : _Utilities.formatLng ( note.lng )
@@ -408,7 +408,7 @@ Tests ...
 				if ( -1 !== note.distance ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
 						_Translator.getText ( 
-							'NoteEditor - distance', 
+							'NoteEditor - Distance', 
 							{ 
 								distance: _Utilities.formatDistance ( note.chainedDistance + note.distance )
 							}

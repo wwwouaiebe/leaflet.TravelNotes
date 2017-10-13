@@ -226,7 +226,7 @@ Tests ...
 			{ 
 				innerHTML: '&#x274c', 
 				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : require ( './Translator' ) ( ).getText ( "ContextMenu - close" )
+				title : require ( './Translator' ) ( ).getText ( "ContextMenu - Close" )
 			},
 			_ContextMenuContainer
 		);

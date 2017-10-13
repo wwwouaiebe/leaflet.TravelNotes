@@ -180,11 +180,11 @@ Tests ...
 												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
 											}
 											catch ( e ) {
-												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
 											}
 										}
 										else {
-											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
 										}
 										if ( divControlId )	{
 											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
@@ -201,7 +201,7 @@ Tests ...
 								};
 								translationsHttpRequest.open ( 
 									'GET',
-									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json',
+									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json',
 									true
 								);
 								translationsHttpRequest.send ( null );

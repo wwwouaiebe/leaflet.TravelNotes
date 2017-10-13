@@ -66,7 +66,7 @@ Tests ...
 
 		// the dialog base is created
 		var colorDialog = require ( '../UI/ColorDialog' ) ( route.color );
-		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Title' );
+		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Route properties' );
 		colorDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -130,7 +130,7 @@ Tests ...
 			'label',
 			{
 				for : 'TravelNotes-RoutePropertiesDialog-ChainInput',
-				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chain')
+				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chained route')
 			},
 			chainDiv
 		);

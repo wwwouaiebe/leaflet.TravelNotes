@@ -98,7 +98,7 @@ Tests ...
 			{ 
 				innerHTML: '&#x274c', 
 				id : 'TravelNotes-BaseDialog-CancelButton',
-				title : require ( '../UI/Translator' ) ( ).getText ( "DialogBase - close" )
+				title : require ( '../UI/Translator' ) ( ).getText ( "BaseDialog - Cancel" )
 			},
 			topBar
 		);

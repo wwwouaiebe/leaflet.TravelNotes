@@ -991,11 +991,11 @@ Tests ...
 												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
 											}
 											catch ( e ) {
-												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
 											}
 										}
 										else {
-											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json' );
+											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
 										}
 										if ( divControlId )	{
 											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
@@ -1012,7 +1012,7 @@ Tests ...
 								};
 								translationsHttpRequest.open ( 
 									'GET',
-									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toLowerCase ( ) + '.json',
+									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json',
 									true
 								);
 								translationsHttpRequest.send ( null );
@@ -1199,7 +1199,7 @@ Tests ...
 	var AboutDialog = function ( color ) {
 		
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'AboutDialog - Title' );
+		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'AboutDialog - About Travel & Notes' );
 		
 		var aboutDiv = require ( './HTMLElementsFactory' ) ( ).create (
 			'div',
@@ -1335,7 +1335,7 @@ Tests ...
 			{ 
 				innerHTML: '&#x274c', 
 				id : 'TravelNotes-BaseDialog-CancelButton',
-				title : require ( '../UI/Translator' ) ( ).getText ( "DialogBase - close" )
+				title : require ( '../UI/Translator' ) ( ).getText ( "BaseDialog - Cancel" )
 			},
 			topBar
 		);
@@ -1593,7 +1593,7 @@ Tests ...
 
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = translator.getText ( 'ColorDialog - Title' );
+		baseDialog.title = translator.getText ( 'ColorDialog - Colors' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		baseDialog.getNewColor = function ( ) {
 			return newColor;
@@ -1681,7 +1681,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - red'),
+				data : translator.getText ( 'ColorDialog - Red'),
 			},
 			rvbDiv
 		);
@@ -1705,7 +1705,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - green'),
+				data : translator.getText ( 'ColorDialog - Green'),
 			},
 			rvbDiv
 		);
@@ -1727,7 +1727,7 @@ Tests ...
 		htmlElementsFactory.create (
 			'text',
 			{
-				data : translator.getText ( 'ColorDialog - blue'),
+				data : translator.getText ( 'ColorDialog - Blue'),
 			},
 			rvbDiv
 		);
@@ -2005,7 +2005,7 @@ Tests ...
 			{ 
 				innerHTML: '&#x274c', 
 				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : require ( './Translator' ) ( ).getText ( "ContextMenu - close" )
+				title : require ( './Translator' ) ( ).getText ( "ContextMenu - Close" )
 			},
 			_ContextMenuContainer
 		);
@@ -2421,7 +2421,7 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Header-TravelDistance',
-					innerHTML:  _Translator.getText ( 'HTMLViewsFactory - Travel distance', { distance : _Utilities.formatDistance ( travelDistance ) } )
+					innerHTML:  _Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', { distance : _Utilities.formatDistance ( travelDistance ) } )
 				},
 				travelHeaderHTML
 			); 
@@ -2515,7 +2515,7 @@ Tests ...
 						if ( 0 < maneuversIterator.value.distance ) {
 							maneuverText +=	'<div>' + 
 								_Translator.getText ( 
-									'HTMLViewsFactory - ToNextInstruction', 
+									'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}', 
 									{
 										distance : _Utilities.formatDistance ( maneuversIterator.value.distance ),
 										duration : _Utilities.formatTime (maneuversIterator.value.duration )
@@ -2573,7 +2573,7 @@ Tests ...
 			var innerHTML = '';
 			if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
 				innerHTML = _Translator.getText ( 
-					'HTMLViewsFactory - Route footer', 
+					'HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}', 
 					{
 						provider: route.itinerary.provider, 
 						transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
@@ -3167,7 +3167,7 @@ Tests ...
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
-			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - empty icon content' );
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - The icon content cannot be empty' );
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
 			return false;
 		}
@@ -3249,7 +3249,7 @@ Tests ...
 		
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
+		baseDialog.title = _Translator.getText ( 'NoteDialog - Note' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -3444,7 +3444,7 @@ Tests ...
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Icon content' )
 			},
 			NoteDataDiv
 		);
@@ -3470,7 +3470,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Text' )
 			},
 			NoteDataDiv
 		);
@@ -3496,7 +3496,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			NoteDataDiv
 		);
@@ -3523,7 +3523,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			NoteDataDiv
 		);
@@ -3550,7 +3550,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Link' )
 			},
 			NoteDataDiv
 		);
@@ -3577,7 +3577,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Phone' )
 			},
 			NoteDataDiv
 		);
@@ -3892,7 +3892,7 @@ Tests ...
 				{ 
 					id : 'TravelNotes-Control-gpxButton',
 					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - gpx' ), 
+					title : _Translator.getText ( 'RouteEditorUI - Save the route in a gpx file' ), 
 					innerHTML : 'gpx'
 				},
 				buttonsDiv 
@@ -4132,7 +4132,7 @@ Tests ...
 
 		// the dialog base is created
 		var colorDialog = require ( '../UI/ColorDialog' ) ( route.color );
-		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Title' );
+		colorDialog.title = _Translator.getText ( 'RoutePropertiesDialog - Route properties' );
 		colorDialog.addClickOkButtonEventListener ( onOkButtonClick );
 		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -4196,7 +4196,7 @@ Tests ...
 			'label',
 			{
 				for : 'TravelNotes-RoutePropertiesDialog-ChainInput',
-				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chain')
+				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chained route')
 			},
 			chainDiv
 		);
@@ -4730,7 +4730,7 @@ Tests ...
 			htmlElementsFactory.create ( 
 				'span', 
 				{ 
-					innerHTML : _Translator.getText ( 'TravelEditorUI - Routes' ), 
+					innerHTML : _Translator.getText ( 'TravelEditorUI - Travel routes' ), 
 					id : 'TravelNotes-Control-TravelHeaderText', 
 					className : 'TravelNotes-Control-HeaderText'
 				},
@@ -6315,7 +6315,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - new travel note" ), 
+						name : _Translator.getText ( "NoteEditor - New travel note" ), 
 						action : this.newTravelNote,
 						param : latLng
 					} 
@@ -6354,7 +6354,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - edit note" ), 
+						name : _Translator.getText ( "NoteEditor - Edit this note" ), 
 						action : this.editNote,
 						param : noteObjId
 					} 
@@ -6362,7 +6362,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - delete note" ), 
+						name : _Translator.getText ( "NoteEditor - Delete this note" ), 
 						action : this.removeNote,
 						param : noteObjId
 					} 
@@ -6370,7 +6370,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : this, 
-						name : _Translator.getText ( "NoteEditor - zoom to note" ), 
+						name : _Translator.getText ( "NoteEditor - Zoom to note" ), 
 						action : this.zoomToNote,
 						param : noteObjId
 					} 
@@ -6402,17 +6402,17 @@ Tests ...
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
 				}
 				if ( 0 !== note.address.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - address' )  + note.address + '</div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
 				}
 				if ( 0 !== note.phone.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - phone' )  + note.phone + '</div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
 				}
 				if ( 0 !== note.url.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - url' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
+					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
 				}
 				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
 					_Translator.getText ( 
-						'NoteEditor - latlng',
+						'NoteEditor - Latitude Longitude',
 						{ 
 							lat : _Utilities.formatLat ( note.lat ),
 							lng : _Utilities.formatLng ( note.lng )
@@ -6422,7 +6422,7 @@ Tests ...
 				if ( -1 !== note.distance ) {
 					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
 						_Translator.getText ( 
-							'NoteEditor - distance', 
+							'NoteEditor - Distance', 
 							{ 
 								distance: _Utilities.formatDistance ( note.chainedDistance + note.distance )
 							}
@@ -7685,7 +7685,7 @@ Tests ...
 			removeRoute : function ( routeObjId ) {
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId && _DataManager.editedRoute.routeChanged ) {
 					// cannot remove the route currently edited
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 					return;
 				}
 
@@ -7880,7 +7880,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : null,
-						name : _Translator.getText ( "TravelEditor - About" ), 
+						name : _Translator.getText ( "TravelEditor - About Travel & Notes" ), 
 						action : require ( '../UI/AboutDialog' )
 					} 
 				);
@@ -9139,16 +9139,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var minutes = Math.floor ( time % 3600 / 60 );
 				var seconds = Math.floor ( time % 60 );
 				if ( 0 < days ) {
-					return days + '&nbsp;' + _Translator.getText ( 'Utilities - day' ) + '&nbsp;' + hours + '&nbsp;h';
+					return days + '&nbsp;' + _Translator.getText ( 'Utilities - Day' ) + '&nbsp;' + hours + '&nbsp;' + _Translator.getText ( 'Utilities - Hour' );
 				}
 				else if ( 0 < hours ) {
-					return hours + '&nbsp;' + _Translator.getText ( 'Utilities - hour' ) +'&nbsp;' + minutes + '&nbsp;' + _Translator.getText ( 'Utilities - minute' );
+					return hours + '&nbsp;' + _Translator.getText ( 'Utilities - Hour' ) +'&nbsp;' + minutes + '&nbsp;' + _Translator.getText ( 'Utilities - Minute' );
 				}
 				else if ( 0 < minutes ) {
-					return minutes + '&nbsp;' + _Translator.getText ( 'Utilities - minute' );
+					return minutes + '&nbsp;' + _Translator.getText ( 'Utilities - Minute' );
 				}
 				else {
-					return seconds + '&nbsp;' + _Translator.getText ( 'Utilities - second' );
+					return seconds + '&nbsp;' + _Translator.getText ( 'Utilities - Second' );
 				}
 				return '';
 			},

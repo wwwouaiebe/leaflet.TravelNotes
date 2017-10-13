@@ -37,7 +37,7 @@ Tests ...
 	var AboutDialog = function ( color ) {
 		
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'AboutDialog - Title' );
+		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'AboutDialog - About Travel & Notes' );
 		
 		var aboutDiv = require ( './HTMLElementsFactory' ) ( ).create (
 			'div',

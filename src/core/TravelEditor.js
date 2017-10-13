@@ -215,7 +215,7 @@ Tests ...
 			removeRoute : function ( routeObjId ) {
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId && _DataManager.editedRoute.routeChanged ) {
 					// cannot remove the route currently edited
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - cannot remove an edited route' ) );
+					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 					return;
 				}
 
@@ -410,7 +410,7 @@ Tests ...
 				contextMenu.push ( 
 					{ 
 						context : null,
-						name : _Translator.getText ( "TravelEditor - About" ), 
+						name : _Translator.getText ( "TravelEditor - About Travel & Notes" ), 
 						action : require ( '../UI/AboutDialog' )
 					} 
 				);

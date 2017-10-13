@@ -143,16 +143,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				var minutes = Math.floor ( time % 3600 / 60 );
 				var seconds = Math.floor ( time % 60 );
 				if ( 0 < days ) {
-					return days + '&nbsp;' + _Translator.getText ( 'Utilities - day' ) + '&nbsp;' + hours + '&nbsp;h';
+					return days + '&nbsp;' + _Translator.getText ( 'Utilities - Day' ) + '&nbsp;' + hours + '&nbsp;' + _Translator.getText ( 'Utilities - Hour' );
 				}
 				else if ( 0 < hours ) {
-					return hours + '&nbsp;' + _Translator.getText ( 'Utilities - hour' ) +'&nbsp;' + minutes + '&nbsp;' + _Translator.getText ( 'Utilities - minute' );
+					return hours + '&nbsp;' + _Translator.getText ( 'Utilities - Hour' ) +'&nbsp;' + minutes + '&nbsp;' + _Translator.getText ( 'Utilities - Minute' );
 				}
 				else if ( 0 < minutes ) {
-					return minutes + '&nbsp;' + _Translator.getText ( 'Utilities - minute' );
+					return minutes + '&nbsp;' + _Translator.getText ( 'Utilities - Minute' );
 				}
 				else {
-					return seconds + '&nbsp;' + _Translator.getText ( 'Utilities - second' );
+					return seconds + '&nbsp;' + _Translator.getText ( 'Utilities - Second' );
 				}
 				return '';
 			},

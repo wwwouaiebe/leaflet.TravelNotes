@@ -238,7 +238,7 @@ Tests ...
 				{ 
 					id : 'TravelNotes-Control-gpxButton',
 					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - gpx' ), 
+					title : _Translator.getText ( 'RouteEditorUI - Save the route in a gpx file' ), 
 					innerHTML : 'gpx'
 				},
 				buttonsDiv 

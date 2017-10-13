@@ -54,7 +54,7 @@ Tests ...
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
 		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
-			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - empty icon content' );
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - The icon content cannot be empty' );
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
 			return false;
 		}
@@ -136,7 +136,7 @@ Tests ...
 		
 		// the dialog base is created
 		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'NoteDialog - Title' );
+		baseDialog.title = _Translator.getText ( 'NoteDialog - Note' );
 		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
@@ -331,7 +331,7 @@ Tests ...
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - IconHtmlContentTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Icon content' )
 			},
 			NoteDataDiv
 		);
@@ -357,7 +357,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - PopupContentTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Text' )
 			},
 			NoteDataDiv
 		);
@@ -383,7 +383,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - TooltipTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			NoteDataDiv
 		);
@@ -410,7 +410,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - AdressTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			NoteDataDiv
 		);
@@ -437,7 +437,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - LinkTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Link' )
 			},
 			NoteDataDiv
 		);
@@ -464,7 +464,7 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - PhoneTitle' )
+				innerHTML : _Translator.getText ( 'NoteDialog - Phone' )
 			},
 			NoteDataDiv
 		);

@@ -113,7 +113,7 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Header-TravelDistance',
-					innerHTML:  _Translator.getText ( 'HTMLViewsFactory - Travel distance', { distance : _Utilities.formatDistance ( travelDistance ) } )
+					innerHTML:  _Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', { distance : _Utilities.formatDistance ( travelDistance ) } )
 				},
 				travelHeaderHTML
 			); 
@@ -207,7 +207,7 @@ Tests ...
 						if ( 0 < maneuversIterator.value.distance ) {
 							maneuverText +=	'<div>' + 
 								_Translator.getText ( 
-									'HTMLViewsFactory - ToNextInstruction', 
+									'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}', 
 									{
 										distance : _Utilities.formatDistance ( maneuversIterator.value.distance ),
 										duration : _Utilities.formatTime (maneuversIterator.value.duration )
@@ -265,7 +265,7 @@ Tests ...
 			var innerHTML = '';
 			if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
 				innerHTML = _Translator.getText ( 
-					'HTMLViewsFactory - Route footer', 
+					'HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}', 
 					{
 						provider: route.itinerary.provider, 
 						transitMode : _Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
