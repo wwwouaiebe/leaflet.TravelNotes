@@ -273,6 +273,18 @@ Tests ...
 			},
 			
 			/*
+			--- zoomToNote method -------------------------------------------------------------------------------------
+
+			This method zoom to a given note
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			zoomToNote : function ( noteObjId ) {
+				require ( '../core/MapEditor' ) ( ).zoomToPoint ( _DataManager.getNoteAndRoute ( noteObjId).note.latLng );
+			},
+			
+			/*
 			--- getMapContextMenu method ------------------------------------------------------------------------------
 
 			This method gives the note part of the map context menu
@@ -338,6 +350,14 @@ Tests ...
 						context : this, 
 						name : _Translator.getText ( "NoteEditor - delete note" ), 
 						action : this.removeNote,
+						param : noteObjId
+					} 
+				);
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "NoteEditor - zoom to note" ), 
+						action : this.zoomToNote,
 						param : noteObjId
 					} 
 				);

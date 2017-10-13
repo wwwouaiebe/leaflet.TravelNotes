@@ -132,6 +132,10 @@
 		"msgstr" : "Effacer cette note"
 	},
 	{
+		"msgid" : "NoteEditor - zoom to note",
+		"msgstr" : "Zoom sur cette note"
+	},
+	{
 		"msgid" : "NoteEditor - address",
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
 	},
