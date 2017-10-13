@@ -32,6 +32,8 @@ Tests ...
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
+	
+	var _DataObjId  = 0;
 
 	var onDragStart = function  ( dragEvent ) {
 		dragEvent.stopPropagation ( ); 
@@ -41,6 +43,13 @@ Tests ...
 		}
 		catch ( e ) {
 		}
+		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
+		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
+		_DataObjId = dragEvent.target.dataObjId - 1;
+	};
+	
+	var onDragOver = function ( event ) {
+		event.preventDefault ( );
 	};
 	
 	var onDrop = function ( dragEvent ) { 
@@ -51,7 +60,11 @@ Tests ...
 		}
 		var clientRect = element.getBoundingClientRect ( );
 		var event = new Event ( 'SortableListDrop' );
-		event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		
+		// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
+		//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		event.draggedObjId = _DataObjId + 1;
+
 		event.targetObjId = element.dataObjId;
 		event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
 		element.parentNode.dispatchEvent ( event );
@@ -241,6 +254,7 @@ Tests ...
 			this.container = htmlElementsFactory.create ( 'div', { id : options.id, className : 'TravelNotes-SortableList-Container' } );
 			this.container.classList.add ( this.options.listStyle );
 			this.container.addEventListener ( 'drop', onDrop, false );
+			this.container.addEventListener ( 'dragover', onDragOver, false );
 			this.container.addEventListener ( 'wheel', onWheel, false );
 
 			if ( parentNode ) {
