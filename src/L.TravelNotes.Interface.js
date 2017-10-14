@@ -204,6 +204,7 @@ Tests ...
 									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json',
 									true
 								);
+								translationsHttpRequest.overrideMimeType ( 'application/json' );
 								translationsHttpRequest.send ( null );
 							}
 							catch ( e ) {
@@ -220,6 +221,7 @@ Tests ...
 					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json',
 					true
 				);
+				configHttpRequest.overrideMimeType ( 'application/json' );
 				configHttpRequest.send ( null );
 			},
 			

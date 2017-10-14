@@ -362,6 +362,7 @@ Tests ...
 						}
 					};
 					xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
+					xmlHttpRequest.overrideMimeType ( 'application/json' );
 					xmlHttpRequest.send ( null );
 				}
 			},
