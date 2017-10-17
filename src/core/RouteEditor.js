@@ -256,6 +256,9 @@ Tests ...
 					notesIterator.value.distance = latLngDistance.distance;
 				}
 				
+				// and the notes sorted
+				_DataManager.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+				
 				// the new route is added to the map
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				if ( ! _DataManager.editedRoute.haveItinerary ) {
