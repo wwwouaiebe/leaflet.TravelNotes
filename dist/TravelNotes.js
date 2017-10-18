@@ -7353,6 +7353,21 @@ Tests ...
 			while ( ! itineraryPointsIterator.done ) {
 				itineraryPointsIterator.value.distance *= correctionFactor;
 			}
+			
+			// Placing the waypoints on the itinerary
+			var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done )
+			{
+				if ( wayPointsIterator.first ) {
+					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.first.latLng;
+				}
+				else if ( wayPointsIterator.last ) {
+					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.last.latLng;
+				}
+				else{
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
+				}
+			}		
 
 			// and calling the route editor for displaying the results
 			require ( './RouteEditor' ) ( ).endRouting ( );
