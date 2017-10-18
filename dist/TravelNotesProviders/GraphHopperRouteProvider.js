@@ -234,7 +234,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							maneuver.distance = instruction.distance;
 							/*maneuversDistance += maneuver.distance;*/
 							maneuver.itineraryPointObjId = itineraryPoints [ instruction.interval [ 0 ] ].objId;
-							itineraryPoints [ instruction.interval [ 0 ] ].maneuverObjId = maneuver.objId;
 							route.itinerary.maneuvers.add ( maneuver );							
 						}
 					);

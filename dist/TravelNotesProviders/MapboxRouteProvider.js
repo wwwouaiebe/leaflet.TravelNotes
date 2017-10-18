@@ -6347,10 +6347,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			};
 
 			var osrmTextInstructions = require('osrm-text-instructions')('v5', options );
-			var lastPointWithDistance = 0;
 
 			response.routes [ 0 ].legs.forEach ( 
 				function ( leg ) {
+					var lastPointWithDistance = 0;
 					leg.steps.forEach ( 
 						function ( step ) {
 							step.geometry = require ( 'polyline' ).decode ( step.geometry, 6 );
@@ -6371,7 +6371,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								}
 								if ( 0 === geometryCounter ) {
 									maneuver.itineraryPointObjId = itineraryPoint.objId;
-									itineraryPoint.maneuverObjId = maneuver.objId;
 								}
 							}
 							maneuver.distance = distance;

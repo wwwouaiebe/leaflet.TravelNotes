@@ -260,7 +260,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							travelNotesManeuver.distance = ( mapzenManeuver.length || 0 ) * 1000;
 							travelNotesManeuver.duration = mapzenManeuver.time || 0;
 							travelNotesManeuver.itineraryPointObjId = itineraryPoints [ mapzenManeuver.begin_shape_index ].objId;
-							itineraryPoints [ mapzenManeuver.begin_shape_index ].maneuverObjId = travelNotesManeuver.objId;
 							route.itinerary.maneuvers.add ( travelNotesManeuver );
 						}
 					);
