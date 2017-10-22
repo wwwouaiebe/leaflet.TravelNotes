@@ -150,7 +150,7 @@ avec un glisser / déposer.
 - le bouton &#x274c; abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
 avant d'être édité
 - le bouton &#x1f4be; sauve les modifications faites au trajet.
-- le bouton --gpx-- sauve l'itinéraire calculé dans un fichier gpx
+- le bouton __gpx__ sauve l'itinéraire calculé dans un fichier gpx
 - le bouton &#x21c5; inverse l'ordre des points de passage
 - Le bouton &#x267b; supprime tous les points de passage
 
@@ -171,11 +171,11 @@ Les notes de trajet sont toujours positionnées sur un trajet et affichées avec
 
 ### Créer une note de voyage
 
-Faite un clic droit à l'endroit souhaité sur la carte et sélectionnez "Ajouter une note" dans le menu contextuel.
+Faite un clic droit à l'endroit souhaité sur la __carte__ et sélectionnez "Ajouter une note" dans le menu contextuel.
 
 ### Créer une note de trajet
 
-Faite un clic droit à l'endroit souhaité sur le trajet et sélectionnez "Ajouter une note à ce trajet" dans le menu contextuel.
+Faite un clic droit à l'endroit souhaité sur le __trajet__ et sélectionnez "Ajouter une note à ce trajet" dans le menu contextuel.
 
 ### consulter une note
 
