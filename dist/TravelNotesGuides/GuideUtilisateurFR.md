@@ -210,7 +210,7 @@ Dans le haut de la boite, une liste déroulante permet de choisir des notes pré
 Le premier bouton vous permet de charger votre propre fichier avec des notes prédéfinies dans Travel & Notes. Consultez le guide d'installation pour savoir comment 
 créer ce fichier.
 
-Les boutons div p span et a permettent d'ajouter les balises html <div>, <p>, <span> et <a> dans les zones d'édition. Tous les autres boutons sont modifiables et
+Les boutons div p span et a permettent d'ajouter les balises html &lt;div&gt;, &lt;p&gt;, &lt;span&gt; et &lt;a&gt; dans les zones d'édition. Tous les autres boutons sont modifiables et
 permettent aussi d'insérer du texte prédéfini dans les zones d'édition. Consultez le guide d'installation.
 
 Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien".
