@@ -1,8 +1,7 @@
 # Travel & Notes
 
-## Guide de l'utilisateur
 
-### Pourquoi Travel & Notes
+## Pourquoi Travel & Notes
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. Ce genre de voyage ne s'improvise pas, même si il y a
 toujours une part d'imprévu. Il me fallait un outil pour préparer mon itinéraire à partir de la carte et pouvoir y ajouter des notes.
@@ -14,9 +13,11 @@ de kilomètres.
 En final , il est aussi important de pouvoir enrégistrer ce qui a été préparé car cela ne se fait pas en quelques minutes.Il faut aussi pouvoir imprimer le résultat. Dans
 certaines région isolées, il n'y a pas toujours de réseau mobile ni de possibilité de recharger une batterie. Une bonne vieille copie papier est souvent précieuse.
 
-### Quelques explications sur les termes utilisés
+## Quelques explications sur les termes utilisés
 
 Un **trajet** relie deux points. Sur la carte, il est représenté par une ligne continue.
+
+Un **itinéraire** est la description des différents changements de direction nécessaire pour parcourir le trajet.
 
 Un **voyage** est constitué de un ou plusieurs trajets. Ceux-ci ne doivent pas obligatoirement se toucher à leur extrémités. Il peut également y avoir plus de deux trajets
 partant d'un même point.
@@ -29,7 +30,7 @@ Aucune de ces informations n'est obligatoire, à l'exception de l'icône, qui es
 
 Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, les trajets et la description de ceux-ci.
 
-### Avant de commencer à utiliser Travel & Notes
+## Avant de commencer à utiliser Travel & Notes
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox et Mapzen. Il est également possible d'utiliser OSRM, mais pour l'instant le serveur OSRM est hors service.
@@ -41,7 +42,7 @@ Vous devez également lire correctement  les conditions d'utilisation des clefs 
 Vous êtes également responsable de l'utilisation qui est faite de vos clefs d'accès. N'oubliez pas qu'il peut y avoir une facturation qui est faite sur la base de ces clefs d'accès. Ne les donnez pas à n'importe qui 
 ni ne les laissez pas trainer n'importe où.
 
-#### Comment introduire vos clefs d'accès dans Travel & Notes
+### Comment introduire vos clefs d'accès dans Travel & Notes
 
 Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
 suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
@@ -57,7 +58,7 @@ lors de la fermeture du browser
 Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
 
-### Interface
+## Interface
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
 
@@ -69,13 +70,13 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton &#x1f4cc;
 
-#### Trajets du voyage
+### Trajets du voyage
 
 Dans cette partie, les différents trajets du voyage ainsi que une barre d'outils sont affichés.
 
 Pour chaque trajet :
 - les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets. Ces boutons ne sont visibles que lorsque plusieurs trajets sont présents.
-- Le bouton &#x21f0; place le trajet dans l'éditeur de trajet.
+- Le bouton &#x21f0; commence l'édition d'un trajet.
 - Le bouton &#x267b; supprime le trajet.
 
 Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
@@ -93,7 +94,7 @@ Sur la barre d'outils:
 - le bouton &#x1f4cb; ouvre le livre de voyage
 - le bouton + ajoute un nouveau trajet au voyage
 
-### Édition d'un trajet
+### Points de passage du trajet
 
 Lorsque un trajet est édité, les différents points de passage de ce trajet sont affichés dans la partie "Points de passage du trajet".
 
@@ -113,7 +114,7 @@ L'ordre des points de passage est également indiqué (A pour le point de dépar
 
 <img src="RouteEditor1FR.PNG" />
 
-- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des points intermédiaires. Ces boutons ne sont visibles que lorsque plusieurs points intermédiaires sont présents. il
+- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des points intermédiaires. Ces boutons ne sont visibles que lorsque plusieurs points intermédiaires sont présents. Il
 n'est pas possible de transformer le point de départ ou le point de fin en point intermédiaire.
 - Le bouton &#x267b; supprime le point de passage. Il n'est pas possible de supprimer le point de départ ou le point de fin.
 
@@ -125,7 +126,7 @@ Faites un glisser / déposer du point de passage sur la carte pour modifier un p
 
 Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton ou voiture) ainsi que le fournisseur de trajet.
 
-<img src="RouteEditor1FR.PNG" />
+<img src="RouterButtons.PNG" />
 
 #### Calcul de l'itinéraire
 
@@ -136,12 +137,99 @@ La description de l'itinéraire est également affichée dans la partie "Itinér
 
 #### Insérer un point intermédiaire.
 
-Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte ou via le bouton +, il est toujours ajouté comme étant le dernier point intermédiaire. Cela peut donner des résultats 
+Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte, il est toujours ajouté comme étant le dernier point intermédiaire. Cela peut donner des résultats 
 étranges au niveau de l'itinéraire calculé.
 
 Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. Faites un clic droit sur le trajet à l'endroit où vous voulez insérer
 le point de passage et sélectionner dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point peut ensuite être déplacé à sa nouvelle position 
 avec un glisser / déposer.
+
+#### Boutons de la barre d'outils
+
+- le bouton &#x25bd; agrandit la liste des points de passage
+- le bouton &#x274c; abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
+avant d'être édité
+- le bouton &#x1f4be; sauve les modifications faites au trajet.
+- le bouton --gpx-- sauve l'itinéraire calculé dans un fichier gpx
+- le bouton &#x21c5; inverse l'ordre des points de passage
+- Le bouton &#x267b; supprime tous les points de passage
+
+### Itinéraire et notes
+
+Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
+
+Lorsque la souris est placée sur une ligne de l'itinéraire, un marqueur est affiché à cet endroit sur la carte.
+
+Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte.
+
+Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, note précomplétée avec les instructions de changement de direction
+
+## Notes
+
+Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage est totalement libre et elles seront toutes affichées au début du livre de voyage.
+Les notes de trajet sont toujours positionnées sur un trajet et affichées avec l'itinéraire dans le livre de voyage.
+
+### Créer une note de voyage
+
+Faite un clic droit à l'endroit souhaité sur la carte et sélectionnez "Ajouter une note" dans le menu contextuel.
+
+### Créer une note de trajet
+
+Faite un clic droit à l'endroit souhaité sur le trajet et sélectionnez "Ajouter une note à ce trajet" dans le menu contextuel.
+
+### consulter une note
+
+Faites un clic gauche sur l'icône de la note.
+
+### Modifier le contenu d'une note
+
+Faites un clic droit sur l'icône de la note et sélectionnez "Éditer cette note" dans le menu contextuel.
+
+### Effacer une note
+
+Faites un clic droit sur l'icône de la note et sélectionnez "Effacer cette note" dans le menu contextuel.
+
+### Déplacer l'icône d'une note
+
+Faites un glisser / déposer de la note. Une ligne sera tracée entre l'icône de la note et le point choisi pour l'insertion de la note. La latitude et longitude de la note 
+ne sont pas modifiées.
+
+### Modifier la latitude et la longitude d'une note
+
+Déplacez l'icône de la note pour que la ligne soit visible. Ensuite faites un glisser / déposer de l'extrémité libre de cette ligne.
+
+Une note de trajet a toujours sa latitude et longitude sur le trajet. Lorsque la ligne est déposée, le point le plus proche sur le trajet est recherché et l'extrémité libre
+de la ligne déplacé vers ce point.
+
+### La boite d'édition d'une note
+
+<img src="NoteEditionFR.PNG" />
+
+Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible de modifier cette liste. Consultez le guide d'installation.
+
+Le premier bouton vous permet de charger votre propre fichier avec des notes prédéfinies dans Travel & Notes. Consultez le guide d'installation pour savoir comment 
+créer ce fichier.
+
+Les boutons div p span et a permettent d'ajouter les balises html <div>, <p>, <span> et <a> dans les zones d'édition. Tous les autres boutons sont modifiables et
+permettent aussi d'insérer du texte prédéfini dans les zones d'édition. Consultez le guide d'installation.
+
+Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien".
+
+La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la carte et ne peut pas être vide (laisser cette zone vide empêcherait toute modification ultérieure de la note).
+
+La zone "Adresse" est complétée automatiquement lors de la création de la note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
+Cette zone ne sera jamais modifiée par Nominantim par la suite, même si la note a été déplacée.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
