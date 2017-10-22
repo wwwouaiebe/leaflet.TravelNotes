@@ -74,15 +74,13 @@ Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton &#
 Dans cette partie, les différents trajets du voyage ainsi que une barre d'outils sont affichés.
 
 Pour chaque trajet :
-- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets.
+- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets. Ces boutons ne sont visibles que lorsque plusieurs trajets sont présents.
 - Le bouton &#x21f0; place le trajet dans l'éditeur de trajet.
 - Le bouton &#x267b; supprime le trajet.
 
 Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
 
 Lorsque un trajet est chainé, une icône &#x26d3; est présente.
-
-
 
 Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
 
@@ -94,4 +92,56 @@ Sur la barre d'outils:
 - le bouton &#x1f4c2; ouvre un voyage préalablement sauvé dans un fichier
 - le bouton &#x1f4cb; ouvre le livre de voyage
 - le bouton + ajoute un nouveau trajet au voyage
+
+### Édition d'un trajet
+
+Lorsque un trajet est édité, les différents points de passage de ce trajet sont affichés dans la partie "Points de passage du trajet".
+
+#### Créer un point de passage
+
+<img src="RouteEditorFR.PNG" />
+
+Pour compléter un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
+ou "Sélectionner cet endroit comme point de fin" dans le menu:
+
+<img src="MapContextMenuFR.PNG" />
+
+Une icône verte (pour le point de départ), orange (pour un point intermédiaire) ou rouge (pour le point de fin) est ajoutée à la carte à l'endroit choisi et le point de passage complété,
+soit avec les coordonnées de l'endroit, soit avec l'adresse.
+
+L'ordre des points de passage est également indiqué (A pour le point de départ, B pour le point d'arrivée et un chiffre pour les points intermédiaires).
+
+<img src="RouteEditor1FR.PNG" />
+
+- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des points intermédiaires. Ces boutons ne sont visibles que lorsque plusieurs points intermédiaires sont présents. il
+n'est pas possible de transformer le point de départ ou le point de fin en point intermédiaire.
+- Le bouton &#x267b; supprime le point de passage. Il n'est pas possible de supprimer le point de départ ou le point de fin.
+
+#### Modifier un point de passage 
+
+Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
+
+#### Choisir un mode de parcours et un fournisseur d'itinéraire
+
+Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton ou voiture) ainsi que le fournisseur de trajet.
+
+<img src="RouteEditor1FR.PNG" />
+
+#### Calcul de l'itinéraire
+
+Lorsque le point de départ et le point de fin sont connus, l'itinéraire est calculé et affiché sur la carte. Il en est de même chaque fois
+qu'un point intermédiaire est ajouté ou qu'un point de passage est déplacé.
+
+La description de l'itinéraire est également affichée dans la partie "Itinéraire et notes".
+
+#### Insérer un point intermédiaire.
+
+Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte ou via le bouton +, il est toujours ajouté comme étant le dernier point intermédiaire. Cela peut donner des résultats 
+étranges au niveau de l'itinéraire calculé.
+
+Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. Faites un clic droit sur le trajet à l'endroit où vous voulez insérer
+le point de passage et sélectionner dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point peut ensuite être déplacé à sa nouvelle position 
+avec un glisser / déposer.
+
+
 
