@@ -61,8 +61,10 @@ Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont e
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
 
-<img style="border:0.1em solid" src="MinInterface.PNG" />
+<img src="MinInterface.PNG" />
 
 Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
-<img style="border:0.1em solid" src="InterfaceFR.PNG" />
+<img src="InterfaceFR.PNG" />
+
+Si vous désirez que l'interface soie toujours visible, cliquez sur le bouton &#x274c;
