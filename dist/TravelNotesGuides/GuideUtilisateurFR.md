@@ -67,4 +67,4 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 <img src="InterfaceFR.PNG" />
 
-Si vous désirez que l'interface soie toujours visible, cliquez sur le bouton &#x274c;
+Si vous désirez que l'interface soie toujours visible, cliquez sur le bouton &#x1f4cc;
