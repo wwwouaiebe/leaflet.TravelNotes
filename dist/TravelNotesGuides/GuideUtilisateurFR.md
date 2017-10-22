@@ -67,4 +67,31 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 <img src="InterfaceFR.PNG" />
 
-Si vous désirez que l'interface soie toujours visible, cliquez sur le bouton &#x1f4cc;
+Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton &#x1f4cc;
+
+#### Trajets du voyage
+
+Dans cette partie, les différents trajets du voyage ainsi que une barre d'outils sont affichés.
+
+Pour chaque trajet :
+- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets.
+- Le bouton &#x21f0; place le trajet dans l'éditeur de trajet.
+- Le bouton &#x267b; supprime le trajet.
+
+Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
+
+Lorsque un trajet est chainé, une icône &#x26d3; est présente.
+
+
+
+Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
+
+Sur la barre d'outils:
+
+- le bouton &#x25bd; agrandit la liste des trajets
+- le bouton &#x274c; efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
+- le bouton &#x1f4be; sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
+- le bouton &#x1f4c2; ouvre un voyage préalablement sauvé dans un fichier
+- le bouton &#x1f4cb; ouvre le livre de voyage
+- le bouton + ajoute un nouveau trajet au voyage
+
