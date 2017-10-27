@@ -24,7 +24,7 @@ partant d'un même point.
 Dans un voyage, certains trajets peuvent être **chainés** entre eux. Dans ce cas les différents trajets chainés seront considérés comme n'en faisant qu'un seul pour le calcul des distances. Une seule chaine
 peut-être créée par voyage, mais il n'est pas obligatoire que tous les trajets soient inclus dans la chaine.
 
-Une **note** est un ensemble d'informations qui concerne un point précis sur la carte ou sur un trajet. Une note est composée d'une icône, d'un 'tooltip', d'un texte libre, d'une adresse et d'un numéro de téléphone.
+Une **note** est un ensemble d'informations qui concerne un point précis sur la carte ou sur un trajet. Une note est composée d'une icône, d'un 'tooltip', d'un texte libre, d'une adresse, d'un lien et d'un numéro de téléphone.
 Aucune de ces informations n'est obligatoire, à l'exception de l'icône, qui est utilisée pour représenter la note sur la carte. Cette icône peut être une image, une photo, un texte...
 
 Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, les trajets et la description de ceux-ci.
@@ -153,6 +153,13 @@ Pour éviter cela, il est également possible d'ajouter un point de passage à u
 le point de passage et sélectionner dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point peut ensuite être déplacé à sa nouvelle position 
 avec un glisser / déposer.
 
+#### Sauver ou abandonner les modifications
+
+Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci.
+
+Il est également possible d'abandonner l'édition d'un trajet et de revenir à la situation avant modifications avec le bouton &#x274c;. Attention, __toutes__ les modifications seront
+perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
+
 ### Itinéraire et notes
 
 Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
@@ -239,7 +246,7 @@ la barre dans la partie supérieure.
 
 ## Livre de voyage
 
-Cliquez sur le bouton le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
+Cliquez sur le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
 créées sur la carte. Il est possible de choisir ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
 <img src="RoadbookFR.PNG" />
