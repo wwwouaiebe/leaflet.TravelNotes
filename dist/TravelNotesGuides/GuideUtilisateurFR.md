@@ -1,6 +1,5 @@
 # Travel & Notes
 
-
 ## Pourquoi Travel & Notes
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. Ce genre de voyage ne s'improvise pas, même si il y a
@@ -85,7 +84,7 @@ Lorsque un trajet est chainé, une icône &#x26d3; est présente.
 
 Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
 
-Sur la barre d'outils:
+#### Boutons de la barre d'outils "Trajets du voyage"
 
 - le bouton &#x25bd; agrandit la liste des trajets
 - le bouton &#x274c; efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
@@ -97,6 +96,16 @@ Sur la barre d'outils:
 ### Points de passage du trajet
 
 Lorsque un trajet est édité, les différents points de passage de ce trajet sont affichés dans la partie "Points de passage du trajet".
+
+#### Boutons de la barre d'outils "Points de passage du trajet"
+
+- le bouton &#x25bd; agrandit la liste des points de passage
+- le bouton &#x274c; abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
+avant d'être édité
+- le bouton &#x1f4be; sauve les modifications faites au trajet.
+- le bouton __gpx__ sauve l'itinéraire calculé dans un fichier gpx
+- le bouton &#x21c5; inverse l'ordre des points de passage
+- Le bouton &#x267b; supprime tous les points de passage
 
 #### Créer un point de passage
 
@@ -143,16 +152,6 @@ Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte, 
 Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. Faites un clic droit sur le trajet à l'endroit où vous voulez insérer
 le point de passage et sélectionner dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point peut ensuite être déplacé à sa nouvelle position 
 avec un glisser / déposer.
-
-#### Boutons de la barre d'outils
-
-- le bouton &#x25bd; agrandit la liste des points de passage
-- le bouton &#x274c; abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
-avant d'être édité
-- le bouton &#x1f4be; sauve les modifications faites au trajet.
-- le bouton __gpx__ sauve l'itinéraire calculé dans un fichier gpx
-- le bouton &#x21c5; inverse l'ordre des points de passage
-- Le bouton &#x267b; supprime tous les points de passage
 
 ### Itinéraire et notes
 
@@ -220,16 +219,30 @@ La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la ca
 La zone "Adresse" est complétée automatiquement lors de la création de la note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
 Cette zone ne sera jamais modifiée par Nominantim par la suite, même si la note a été déplacée.
 
+### La boite d'édition des propriétés d'un trajet
 
+Faites un clic droit sur le trajet et sélectionnez "Propriétés" dans le menu contextuel.
 
+<img src="RoutePropertiesFR.PNG" />
 
+Les 6 premières rangées de boutons de couleur permettent de sélectionner la couleur utilisée pour afficher le trajet. La dernière rangée de boutons de couleur ajoute plus ou moins 
+de nuance de rouge dans les couleurs proposées.
 
+Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement via les 3 zones d'édition des couleurs.
 
+Il est également possible de modifier la largeur du trajet.
 
+### Déplacer une boite d'édition sur l'écran.
 
+Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est toujours possible de glisser / déposer une boite d'édition en la saississant par
+la barre dans la partie supérieure.
 
+## Livre de voyage
 
+Cliquez sur le bouton le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
+créées sur la carte. Il est possible de choisir ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
+<img src="RoadbookFR.PNG" />
 
 
 
