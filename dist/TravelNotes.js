@@ -3233,16 +3233,20 @@ Tests ...
 			if ( ! focusControl ) {
 				return;
 			}
-			var bInsertBeforeAndAfter = event.target.htmlAfter && 0 < event.target.htmlAfter.length;
+			var button = event.target;
+			while ( ! button.htmlBefore ) {
+				button = button.parentNode;
+			}
+			var bInsertBeforeAndAfter = button.htmlAfter && 0 < button.htmlAfter.length;
 			var selectionStart = focusControl.selectionStart;
 			var selectionEnd = focusControl.selectionEnd;
 			var oldText = focusControl.value;
 			focusControl.value = oldText.substring ( 0, selectionStart ) + 
-				( bInsertBeforeAndAfter ? event.target.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + event.target.htmlAfter : event.target.htmlBefore ) + 
+				( bInsertBeforeAndAfter ? button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter : button.htmlBefore ) + 
 				oldText.substring ( selectionEnd );
 			focusControl.setSelectionRange ( 
-				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + event.target.htmlBefore.length : selectionStart,
-				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + event.target.htmlBefore.length );
+				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + button.htmlBefore.length : selectionStart,
+				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length );
 			focusControl.focus ( );
 		};	
 
