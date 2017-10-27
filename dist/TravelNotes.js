@@ -1547,6 +1547,24 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		var numbersToColor = function ( r, g, b ) {
+			// MS Edge do't know padStart...
+			if ( ! String.prototype.padStart ) {
+				String.prototype.padStart = function padStart ( targetLength, padString ) {
+					targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
+					padString = String ( padString || ' ' );
+					if ( this.length > targetLength ) {
+						return String ( this );
+					}
+					else {
+						targetLength = targetLength - this.length;
+						if ( targetLength > padString.length ) {
+							padString += padString.repeat ( targetLength / padString.length ); //append to original to ensure we are longer than needed
+						}
+						return padString.slice ( 0, targetLength ) + String ( this );
+					}
+				};
+			}			
+			
 			return '#' + 
 				parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
 				parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
