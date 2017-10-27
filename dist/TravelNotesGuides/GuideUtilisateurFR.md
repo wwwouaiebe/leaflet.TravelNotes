@@ -1,4 +1,4 @@
-# Travel & Notes
+# Travel & Notes - Guide de l'utilisateur
 
 ## __Pourquoi Travel & Notes__
 
