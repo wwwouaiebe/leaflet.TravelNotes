@@ -1,6 +1,6 @@
 # Travel & Notes
 
-## Pourquoi Travel & Notes
+## __Pourquoi Travel & Notes__
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. Ce genre de voyage ne s'improvise pas, même si il y a
 toujours une part d'imprévu. Il me fallait un outil pour préparer mon itinéraire à partir de la carte et pouvoir y ajouter des notes.
@@ -12,7 +12,7 @@ de kilomètres.
 En final , il est aussi important de pouvoir enrégistrer ce qui a été préparé car cela ne se fait pas en quelques minutes.Il faut aussi pouvoir imprimer le résultat. Dans
 certaines région isolées, il n'y a pas toujours de réseau mobile ni de possibilité de recharger une batterie. Une bonne vieille copie papier est souvent précieuse.
 
-## Quelques explications sur les termes utilisés
+## __Quelques explications sur les termes utilisés__
 
 Un **trajet** relie deux points. Sur la carte, il est représenté par une ligne continue.
 
@@ -29,7 +29,7 @@ Aucune de ces informations n'est obligatoire, à l'exception de l'icône, qui es
 
 Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, les trajets et la description de ceux-ci.
 
-## Avant de commencer à utiliser Travel & Notes
+## __Avant de commencer à utiliser Travel & Notes__
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox et Mapzen. Il est également possible d'utiliser OSRM, mais pour l'instant le serveur OSRM est hors service.
@@ -57,7 +57,7 @@ lors de la fermeture du browser
 Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
 
-## Interface
+## __Interface__
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
 
@@ -170,7 +170,7 @@ Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte
 
 Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, note précomplétée avec les instructions de changement de direction
 
-## Notes
+## __Notes__
 
 Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage est totalement libre et elles seront toutes affichées au début du livre de voyage.
 Les notes de trajet sont toujours positionnées sur un trajet et affichées avec l'itinéraire dans le livre de voyage.
@@ -244,7 +244,7 @@ Il est également possible de modifier la largeur du trajet.
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est toujours possible de glisser / déposer une boite d'édition en la saississant par
 la barre dans la partie supérieure.
 
-## Livre de voyage
+## __Livre de voyage__
 
 Cliquez sur le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
 créées sur la carte. Il est possible de choisir ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
