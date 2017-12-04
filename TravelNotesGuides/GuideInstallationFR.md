@@ -4,6 +4,12 @@
 
 Travel & Notes peut bien sûr être installé sur un serveur web. Il peut également être installé sur le disque d'un ordinateur et utilisé localement.
 
+### Guide d'installation pour les null
+
+Pas de grandes connaissances informatiques? Si la démo vous convient, vous pouvez télécharger celle-ci en vous rendant dans la branche gh-pages.
+Encore trop compliqué? suivez directement ce [lien](https://github.com/wwwouaiebe/leaflet.TravelNotes/archive/gh-pages.zip) qui vous permet de télécharger la démo. 
+Ouvrez le fichier zip et installez son contenu dans un répertoire sur votre PC ou sur votre serveur et ouvrez le fichier index.html. That's all :-).
+
 ### Qu'est ce qu'il faut faire dans le fichier HTML?
 
 Travel & Notes utilise [Leaflet](http://leafletjs.com/) pour afficher la carte. Vous devez donc télécharger et installer Leaflet.
