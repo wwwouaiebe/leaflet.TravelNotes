@@ -31,7 +31,7 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 
 ## __Avant de commencer à utiliser Travel & Notes__
 
-Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toutes la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
+Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer ci-dessous toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox et Mapzen. 
