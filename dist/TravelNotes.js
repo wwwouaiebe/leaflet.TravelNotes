@@ -5264,7 +5264,7 @@ Tests ...
 				}
 				_RequestStarted = true;
 				var NominatimUrl = 
-					'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../data/DataManager' ) ( ).config.language;
+					'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../data/DataManager' ) ( ).config.language;
 				var XmlHttpRequest = new XMLHttpRequest ( );
 				XmlHttpRequest.onreadystatechange = function ( ) { 
 					if ( XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200 ) {
