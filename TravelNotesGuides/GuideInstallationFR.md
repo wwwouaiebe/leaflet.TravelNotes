@@ -10,7 +10,7 @@ Pas de grandes connaissances informatiques? Si la démo vous convient, vous pouv
 Encore trop compliqué? suivez directement ce [lien](https://github.com/wwwouaiebe/leaflet.TravelNotes/archive/gh-pages.zip) qui vous permet de télécharger la démo. 
 Ouvrez le fichier zip et installez son contenu dans un répertoire sur votre PC ou sur votre serveur et ouvrez le fichier index.html. That's all :-).
 
-### Qu'est ce qu'il faut faire dans le fichier HTML?
+### Guide d'installation pour les geeks
 
 Travel & Notes utilise [Leaflet](http://leafletjs.com/) pour afficher la carte. Vous devez donc télécharger et installer Leaflet.
 
@@ -38,6 +38,7 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet et de Travel & Notes ,
 	<script src="TravelNotesProviders/MapzenRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/MapboxRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/GraphHopperRouteProvider.min.js"></script>
+	<script src="TravelNotesProviders/OSRMRouteProvider.min.js"></script>
 	<script>
 		(function( ) 
 		{
