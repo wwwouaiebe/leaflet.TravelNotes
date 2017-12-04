@@ -31,8 +31,10 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 
 ## __Avant de commencer à utiliser Travel & Notes__
 
+Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toutes la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
+
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
-sont GraphHopper, Mapbox et Mapzen. Il est également possible d'utiliser OSRM, mais pour l'instant le serveur OSRM est hors service.
+sont GraphHopper, Mapbox et Mapzen. 
 
 Pour GraphHopper, Mapbox et Mapzen il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 
