@@ -41,8 +41,8 @@ Tests ...
 	
 	var _LeftUserContextMenu = [];
 	var _RightUserContextMenu = [];
-	var _RightContextMenu = false;
 	var _LeftContextMenu = false;
+	var _RightContextMenu = false;
 	
 	var _Langage = '';
 	var _DataManager = require ( './data/DataManager' ) ( );
@@ -252,9 +252,11 @@ Tests ...
 			addMapContextMenu : function ( leftButton, rightButton ) {
 				if ( leftButton ) {
 					_DataManager.map.on ( 'click', onMapClick );
+					_LeftContextMenu = true;
 				}
 				if ( rightButton ) {
 					_DataManager.map.on ( 'contextmenu', onMapClick );
+					_RightContextMenu = true;
 				}
 			},
 

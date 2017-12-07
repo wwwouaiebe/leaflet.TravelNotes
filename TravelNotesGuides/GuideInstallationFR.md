@@ -60,8 +60,58 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet et de Travel & Notes ,
 
 #### Quelques explications complémentaires sur le Javascript
 
+##### L.travelNotes.interface ( )
 
+Cette méthode renvoie un objet unique qui permet de communiquer avec TravelNotes à partir de Javascript
 
+##### Méthodes de L.travelNotes.interface ( )
+
+__addControl ( map, divControlId, options )__
+
+Cette méthode ajoute le contrôle de TravelNotes à la carte. 
+
+Il y a deux moyens d'ajouter le contrôle à la carte: soit comme un contrôle normal de leaflet, soit dans un élément HTML complètement séparé de la carte.
+
+Paramètres :
+
+- map : une référence Javascript vers  l'objet L.map
+- divControlId : l'id de l'élément HTML dans lequel le contrôle TravelNotes doit être installé (quand ce contrôle est séparé de la carte) ou null (quand un contrôle leaflet standard est utilisé)
+- options : les options du contrôle qui seront utilisées (quand un contrôle leaflet standard est utilisé - ce paramètre est ignoré quand le contrôle est séparé de la carte)
+
+__addProvider ( provider )__
+
+Cette méthode est utilisée uniquement par les pluggins
+
+__addMapContextMenu ( leftButton, rightButton )__
+
+Cette méthode ajoute les menus contextuels gauche et droit
+
+Paramètres :
+
+- leftButton : quand ce paramètre est true, un menu contextuel est affiché quand un clic gauche est fait sur la carte
+- rightButton : quand ce paramètre est true, un menu contextuel est affiché quand un clic droit est fait sur la carte
+
+__getProviderKey ( providerName )__
+
+Cette méthode renvoie la clef d'accès d'un fournisseur d'itinéraires
+
+Propriétés de L.travelNotes.interface ( )
+
+- __userData__ : un objet Javascript contenant des données non liées à TravelNotes et qui sera sauvé dans le fichier du voyage
+
+- __leftContextMenu__ : boolean activant ou désactivant le menu contextuel gauche
+
+- __rightContextMenu__ : boolean activant ou désactivant le menu contextuel droit
+
+- __leftUserContextMenu__ : une collection d'objets ajoutant des commandes dans le menu contextuel gauche
+
+- __rightUserContextMenu__ : une collection d'objets ajoutant des commandes dans le menu contextuel droit
+
+- __maneuver__ : renvoie un nouvel objet maneuver. Uniquement utilisé par les pluggins
+
+- __itineraryPoint__ : renvoie un nouvel objet itineraryPoint. Uniquement utilisé par les pluggins
+
+- __version__ (lecture seule) : la version courante de TravelNotes.
 
 #### Le fichier TravelNotesConfig.json
 
