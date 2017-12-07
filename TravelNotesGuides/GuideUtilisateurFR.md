@@ -268,7 +268,7 @@ La boite de dialogue:
 
 Et le résultat dans TravelNotes:
 
-<img src="NotePhoto1FR.PNG" />
+<img src="NotePhoto2FR.PNG" />
 
 ### La boite d'édition des propriétés d'un trajet
 
@@ -281,7 +281,7 @@ de nuance de rouge dans les couleurs proposées.
 
 Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement via les 3 zones d'édition des couleurs.
 
-Il est également possible de modifier la largeur du trajet.
+Il est également possible de modifier la largeur du trajet ainsi que chainer le trajet au voyage.
 
 ### Déplacer une boite d'édition sur l'écran.
 
