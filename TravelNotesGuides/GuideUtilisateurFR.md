@@ -16,7 +16,7 @@ certaines région isolées, il n'y a pas toujours de réseau mobile ni de possib
 
 Un **trajet** relie deux points. Sur la carte, il est représenté par une ligne continue.
 
-Un **itinéraire** est la description des différents changements de direction nécessaire pour parcourir le trajet.
+Un **itinéraire** est la description des différents changements de direction nécessaires pour parcourir le trajet.
 
 Un **voyage** est constitué de un ou plusieurs trajets. Ceux-ci ne doivent pas obligatoirement se toucher à leur extrémités. Il peut également y avoir plus de deux trajets
 partant d'un même point.
@@ -31,10 +31,10 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 
 ## __Avant de commencer à utiliser Travel & Notes__
 
-Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer ci-dessous toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
+Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
-sont GraphHopper, Mapbox et Mapzen. 
+sont GraphHopper, Mapbox et Mapzen et OSRM. 
 
 Pour GraphHopper, Mapbox et Mapzen il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 

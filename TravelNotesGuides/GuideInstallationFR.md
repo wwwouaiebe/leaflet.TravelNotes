@@ -12,6 +12,8 @@ Ouvrez le fichier zip et installez son contenu dans un répertoire sur votre PC 
 
 ### Guide d'installation pour les geeks
 
+#### Que faut-il faire dans le fichier HTML?
+
 Travel & Notes utilise [Leaflet](http://leafletjs.com/) pour afficher la carte. Vous devez donc télécharger et installer Leaflet.
 
 Dans le &lt;head&gt; du fichier, chargez la feuille de style de Leaflet et de TravelNotes:

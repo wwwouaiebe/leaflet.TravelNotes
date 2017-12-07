@@ -1008,6 +1008,7 @@ Tests ...
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( );
+										require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
 									}
 								};
 								translationsHttpRequest.open ( 
@@ -1161,7 +1162,7 @@ Tests ...
 */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":6,"./UI/ContextMenu":11,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./core/NoteEditor":27,"./core/RouteEditor":28,"./core/TravelEditor":30,"./data/DataManager":32,"./data/ItineraryPoint":34,"./data/Maneuver":35,"./data/Travel":40,"./util/Utilities":43}],8:[function(require,module,exports){
+},{"./L.TravelNotes.Control":6,"./UI/ContextMenu":11,"./UI/RouteEditorUI":17,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./core/NoteEditor":27,"./core/RouteEditor":28,"./core/TravelEditor":30,"./data/DataManager":32,"./data/ItineraryPoint":34,"./data/Maneuver":35,"./data/Travel":40,"./util/Utilities":43}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3108,7 +3109,6 @@ Tests ...
 				 }
 			},
 			setTransitMode : function ( transitMode ) {
-				console.log ( transitMode );
 				var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );
@@ -3719,6 +3719,11 @@ Tests ...
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
+		if ( -1 === require ( '../data/DataManager' ) ( ).editedRoute.routeInitialObjId ) {
+			return;
+		}
+
 		document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
@@ -4343,7 +4348,6 @@ Tests ...
 	};
 	
 	var onChange = function ( changeEvent ) {
-		console.log ( 'onChange' );
 		var event = new Event ( 'SortableListChange' );
 		event.dataObjId = changeEvent.target.parentNode.dataObjId;
 		event.changeValue = changeEvent.target.value;
@@ -6795,7 +6799,8 @@ Tests ...
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
-				_RouteEditorUI.setWayPointsList (  );
+				_RouteEditorUI.setWayPointsList ( );
+				_RouteEditorUI .reduce ( );
 				_ItineraryEditor.setItinerary ( );
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );

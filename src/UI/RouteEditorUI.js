@@ -41,6 +41,11 @@ Tests ...
 	
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+
+		if ( -1 === require ( '../data/DataManager' ) ( ).editedRoute.routeInitialObjId ) {
+			return;
+		}
+
 		document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
 		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );

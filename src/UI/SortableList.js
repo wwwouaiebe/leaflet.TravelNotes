@@ -99,7 +99,6 @@ Tests ...
 	};
 	
 	var onChange = function ( changeEvent ) {
-		console.log ( 'onChange' );
 		var event = new Event ( 'SortableListChange' );
 		event.dataObjId = changeEvent.target.parentNode.dataObjId;
 		event.changeValue = changeEvent.target.value;

@@ -414,7 +414,6 @@ Tests ...
 				 }
 			},
 			setTransitMode : function ( transitMode ) {
-				console.log ( transitMode );
 				var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );

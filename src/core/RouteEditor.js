@@ -321,7 +321,8 @@ Tests ...
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
 				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
-				_RouteEditorUI.setWayPointsList (  );
+				_RouteEditorUI.setWayPointsList ( );
+				_RouteEditorUI .reduce ( );
 				_ItineraryEditor.setItinerary ( );
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );

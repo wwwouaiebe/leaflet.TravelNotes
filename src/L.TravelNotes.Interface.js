@@ -197,6 +197,7 @@ Tests ...
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( );
+										require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
 									}
 								};
 								translationsHttpRequest.open ( 
