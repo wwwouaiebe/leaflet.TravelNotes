@@ -97,7 +97,7 @@ Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable 
 
 ### Points de passage du trajet
 
-Lorsque un trajet est édité, les différents points de passage de ce trajet sont affichés dans la partie "Points de passage du trajet".
+Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessaire de commencer l'édition de celui-ci avec le bouton &#x21f0; présent dans la liste des trajets.
 
 #### Boutons de la barre d'outils "Points de passage du trajet"
 
@@ -227,6 +227,48 @@ La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la ca
 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
 Cette zone ne sera jamais modifiée par Nominantim par la suite, même si la note a été déplacée.
+
+#### Quleques exemples de notes 
+
+##### Une note simple créée à partir d'une note prédéfinies
+
+La boite de dialogue: 
+
+<img src="NoteStandard1FR.PNG" />
+
+Et le résultat dans TravelNotes:
+
+<img src="NoteStandard2FR.PNG" />
+
+##### Une note avec un texte sur une ligne
+
+La boite de dialogue: 
+
+<img src="NoteTexte1FR.PNG" />
+
+Et le résultat dans TravelNotes:
+
+<img src="NoteTexte2FR.PNG" />
+
+##### Une note avec un texte sur plusieurs lignes
+
+La boite de dialogue: 
+
+<img src="NoteTexte3FR.PNG" />
+
+Et le résultat dans TravelNotes:
+
+<img src="NoteTexte4FR.PNG" />
+
+##### Une note avec une photo
+
+La boite de dialogue: 
+
+<img src="NotePhoto1FR.PNG" />
+
+Et le résultat dans TravelNotes:
+
+<img src="NotePhoto1FR.PNG" />
 
 ### La boite d'édition des propriétés d'un trajet
 
