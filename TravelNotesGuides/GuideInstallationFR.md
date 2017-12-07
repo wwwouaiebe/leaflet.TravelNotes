@@ -70,7 +70,7 @@ __addControl ( map, divControlId, options )__
 
 Cette méthode ajoute le contrôle de TravelNotes à la carte. 
 
-Il y a deux moyens d'ajouter le contrôle à la carte: soit comme un contrôle normal de leaflet, soit dans un élément HTML complètement séparé de la carte.
+Il y a deux moyens d'ajouter le contrôle à la carte: soit comme un contrôle normal de Leaflet, soit dans un élément HTML complètement séparé de la carte.
 
 Paramètres :
 
@@ -95,7 +95,7 @@ __getProviderKey ( providerName )__
 
 Cette méthode renvoie la clef d'accès d'un fournisseur d'itinéraires
 
-Propriétés de L.travelNotes.interface ( )
+##### Propriétés de L.travelNotes.interface ( )
 
 - __userData__ : un objet Javascript contenant des données non liées à TravelNotes et qui sera sauvé dans le fichier du voyage
 
@@ -119,46 +119,25 @@ Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prude
 
 ##### le contenu du fichier TravelNotesConfig.json
 
-contextMenu.timeout : le temps qui va s'écouler entre le moment où la souris ne se trouve plus sur le menu contextuel et le moment ou le menu se ferme automatiquement. 
-
-errorMessages.timeout : le temps qui va s'écouler entre le moment où un message d'erreur est affiché et le moment où il est effacé.
-
-routing.auto : n'est pas utilisé actuellement
-
-language : la langue utilisée par défaut dans TravelNotes
-
-itineraryPointMarker.color : la couleur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
-
-itineraryPointMarker.weight : l'épaisseur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
-
-itineraryPointMarker.radius : le rayon du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
-
-itineraryPointMarker.fill : le remplissage du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
-
-wayPoint.reverseGeocoding : quand cette valeur est true, les coordonnées des points de passage sont remplacées par une adresse.
-
-route.color : la couleur par défaut d'un trajet
-
-route.width : l'épaisseur par défaut d'un trajet
-
-note.reverseGeocoding : quand cette valeur est true, les coordonnées des notes sont remplacées par une adresse.
-
-note.grip.size : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
-
-note.grip.opacity : l'opacité de la poignée à l'extrémité de la ligne de rappel d'une note (0 = invisible!)
-
-note.polyline.color : la couleur de la ligne de rappel d'une note
-
-note.polyline.weight : l'épaisseur de la ligne de rappel d'une note
-
-note.style : le style css utilisé pour représenter une note
-
-itineraryPointZoom : le facteur de zoom utilisé pour zoomer sur un point de l'itinéraire à partir d'un double-clic dans le contrôle
-
-displayEditionInHTMLPage : quand cette valeur est true et que un trajet est en cours d'édition, les modifications de ce trajet seront immédiatement importées dans le livre de voyage
-
-travelEditor.clearAfterSave : n'est pas utilisé actuellement
-
-travelEditor.startMinimized : quand cette valeur est true, le contrôle de TravelNotes est affiché sous forme réduite au départ
-
-travelEditor.timeout : le temps qui va s'écouler entre le moment où la souris ne se trouve plus dans le contrôle et le moment où celui-ci sera réduit.
+- __contextMenu.timeout__ : le temps qui va s'écouler entre le moment où la souris ne se trouve plus sur le menu contextuel et le moment ou le menu se ferme automatiquement. 
+- __errorMessages.timeout__ : le temps qui va s'écouler entre le moment où un message d'erreur est affiché et le moment où il est effacé.
+- __routing.auto__ : n'est pas utilisé actuellement
+- __language__ : la langue utilisée par défaut dans TravelNotes
+- __itineraryPointMarker.color__ : la couleur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+- __itineraryPointMarker.weight__ : l'épaisseur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris. 
+- __itineraryPointMarker.radius__ : le rayon du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+- __itineraryPointMarker.fill__ : le remplissage du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+- __wayPoint.reverseGeocoding__ : quand cette valeur est true, les coordonnées des points de passage sont remplacées par une adresse.
+- __route.color__ : la couleur par défaut d'un trajet
+- __route.width__ : l'épaisseur par défaut d'un trajet
+- __note.reverseGeocoding__ : quand cette valeur est true, les coordonnées des notes sont remplacées par une adresse.
+- __note.grip.size__ : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
+- __note.grip.opacity__ : l'opacité de la poignée à l'extrémité de la ligne de rappel d'une note (0 = invisible!) 
+- __note.polyline.color__ : la couleur de la ligne de rappel d'une note
+- __note.polyline.weight__ : l'épaisseur de la ligne de rappel d'une note
+- __note.style__ : le style css utilisé pour représenter une note
+- __itineraryPointZoom__ : le facteur de zoom utilisé pour zoomer sur un point de l'itinéraire à partir d'un double-clic dans le contrôle
+- __displayEditionInHTMLPage__ : quand cette valeur est true et que un trajet est en cours d'édition, les modifications de ce trajet seront immédiatement importées dans le livre de voyage
+- __travelEditor.clearAfterSave__ : n'est pas utilisé actuellement
+- __travelEditor.startMinimized__ : quand cette valeur est true, le contrôle de TravelNotes est affiché sous forme réduite au départ
+- __travelEditor.timeout__ : le temps qui va s'écouler entre le moment où la souris ne se trouve plus dans le contrôle et le moment où celui-ci sera réduit.
