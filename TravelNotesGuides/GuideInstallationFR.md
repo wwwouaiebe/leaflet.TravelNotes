@@ -58,5 +58,57 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet et de Travel & Notes ,
 </body>
 ```
 
+#### Quelques explications complémentaires sur le Javascript
 
 
+
+
+#### Le fichier TravelNotesConfig.json
+
+Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prudents quand vous modifiez ce fichier. Vous devez suivre __toutes__ les règles d'écriture des fichiers json.
+
+##### le contenu du fichier TravelNotesConfig.json
+
+contextMenu.timeout : le temps qui va s'écouler entre le moment où la souris ne se trouve plus sur le menu contextuel et le moment ou le menu se ferme automatiquement. 
+
+errorMessages.timeout : le temps qui va s'écouler entre le moment où un message d'erreur est affiché et le moment où il est effacé.
+
+routing.auto : n'est pas utilisé actuellement
+
+language : la langue utilisée par défaut dans TravelNotes
+
+itineraryPointMarker.color : la couleur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+
+itineraryPointMarker.weight : l'épaisseur du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+
+itineraryPointMarker.radius : le rayon du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+
+itineraryPointMarker.fill : le remplissage du cercle utilisé pour indiquer sur la carte le point de l'itinéraire sur lequel se trouve la souris.
+
+wayPoint.reverseGeocoding : quand cette valeur est true, les coordonnées des points de passage sont remplacées par une adresse.
+
+route.color : la couleur par défaut d'un trajet
+
+route.width : l'épaisseur par défaut d'un trajet
+
+note.reverseGeocoding : quand cette valeur est true, les coordonnées des notes sont remplacées par une adresse.
+
+note.grip.size : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
+
+note.grip.opacity : l'opacité de la poignée à l'extrémité de la ligne de rappel d'une note (0 = invisible!)
+
+note.polyline.color : la couleur de la ligne de rappel d'une note
+
+note.polyline.weight : l'épaisseur de la ligne de rappel d'une note
+
+note.style : le style css utilisé pour représenter une note
+
+itineraryPointZoom : le facteur de zoom utilisé pour zoomer sur un point de l'itinéraire à partir d'un double-clic dans le contrôle
+
+displayEditionInHTMLPage : quand cette valeur est true et que un trajet est en cours d'édition, les modifications de ce trajet seront immédiatement importées dans le livre de voyage
+
+travelEditor.clearAfterSave : n'est pas utilisé actuellement
+
+travelEditor.startMinimized : quand cette valeur est true, le contrôle de TravelNotes est affiché sous forme réduite au départ
+
+travelEditor.timeout : le temps qui va s'écouler entre le moment où la souris ne se trouve plus dans le contrôle et le moment où celui-ci sera réduit.
