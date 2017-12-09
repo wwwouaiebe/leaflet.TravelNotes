@@ -117,7 +117,7 @@ Cette méthode renvoie la clef d'accès d'un fournisseur d'itinéraires
 
 Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prudents quand vous modifiez ce fichier. Vous devez suivre __toutes__ les règles d'écriture des fichiers json.
 
-##### le contenu du fichier TravelNotesConfig.json
+Le contenu du fichier TravelNotesConfig.json:
 
 - __contextMenu.timeout__ : le temps qui va s'écouler entre le moment où la souris ne se trouve plus sur le menu contextuel et le moment ou le menu se ferme automatiquement. 
 - __errorMessages.timeout__ : le temps qui va s'écouler entre le moment où un message d'erreur est affiché et le moment où il est effacé.
@@ -141,3 +141,67 @@ Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prude
 - __travelEditor.clearAfterSave__ : n'est pas utilisé actuellement
 - __travelEditor.startMinimized__ : quand cette valeur est true, le contrôle de TravelNotes est affiché sous forme réduite au départ
 - __travelEditor.timeout__ : le temps qui va s'écouler entre le moment où la souris ne se trouve plus dans le contrôle et le moment où celui-ci sera réduit.
+
+#### Le contenu du fichier TravelNotesNoteDialog.json
+
+Ce fichier contient les définitions des boutons et de la liste des icônes prédéfinies de la bote d'édition des notes. Ces définitions peuvent être adaptées à vos besoins.
+
+Exemple de fichier comprenant 3 boutons et 2 icônes prédéfinies:
+```
+{ "editionButtons" : 
+	[
+		{
+			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:red'>Red</span>",
+			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title": "Ø",
+			"htmlBefore": "Ø"
+		}
+	],
+	"preDefinedIconsList" :
+	[
+		{
+			"name" : "Vélos admis",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0005'></div>",
+			"tooltip" : "Vélos admis",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Autobus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0006'></div>",
+			"tooltip" : "Autobus",
+			"width" : 40,
+			"height" : 40
+		}
+	]
+}
+```
+
+Deux collections d'objets __doivent__ être présentes dans le fichier : "editionButtons" pour les boutons supplémentaires et "preDefinedIconsList" pour les iônes prédéfinies. Ces collections peuvent être vides
+mais doivent être présentes.
+
+Chaque objet de la collection "editionButtons" a deux ou trois propriétés;
+
+- __title__ : le texte qui apparaitra sur le bouton dans la boite de dialogue
+- __htmlBefore__ : le texte qui sera inséré avant la sélection lorsque l'on cliquera sur le bouton
+- __htmlAfter__ : le texte qui sera inséré après la sélection lorsque l'on cliquera sur le bouton. Cette propriété est optionnielle.
+
+Chaque objet de la collection preDefinedIconsList a cinq propriétés:
+
+- __name__ : le nom qui sera affiché dans la liste déroulante (texte)
+- __icon__ : le contenu de l'icône (html)
+- __tooltip__ : le contenu du tooltip (html)
+- __width__ : la largeur de l'icône en pixels
+- __height__ : la hauteur de l'icône en pixels
+
+#### Le contenu du fichier de configuration pouvant être chargé avec le bouton &#x23CD;
+
+L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
