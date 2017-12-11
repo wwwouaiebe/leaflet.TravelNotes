@@ -295,5 +295,5 @@ créées sur la carte. Il est possible de choisir ce que l'on désire voir prés
 
 <img src="RoadbookFR.PNG" />
 
-
+<object class="cyMap" data="https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2" style="width:80%;height:800px;" type="text/html"></object>
 
