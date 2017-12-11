@@ -295,5 +295,18 @@ créées sur la carte. Il est possible de choisir ce que l'on désire voir prés
 
 <img src="RoadbookFR.PNG" />
 
-<object class="cyMap" data="https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2" style="width:80%;height:800px;" type="text/html"></object>
+## Préparer un voyage et le consulter depuis internet
 
+Il est possible de préparer un voyage, sauver celui-ci dans un fichier sur un serveur web et consulter celui-ci depuis internet.
+
+Pour consulter le voyage, il faut appeler TravelNotes en lui donnant en paramètre dans l'url l'adresse du fichier convertie en base64.
+
+```
+https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2
+```
+
+aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2 en l'équivalent de https://wwwouaiebe.github.io/sample.trv encodé en base64
+
+Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2)
+
+Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas visible et les menus contextuels sont désactivés.
