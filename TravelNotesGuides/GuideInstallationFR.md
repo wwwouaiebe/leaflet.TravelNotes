@@ -35,7 +35,7 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet et de Travel & Notes ,
 	<div id="Map">
 	...
 	<script src="leaflet/leaflet.js"></script>
-	<script src="TravelNotes.js"></script>
+	<script src="TravelNotes.min.js"></script>
 	<!-- route providers scripts have only to be installed if you have an API key for this provider -->
 	<script src="TravelNotesProviders/MapzenRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/MapboxRouteProvider.min.js"></script>
@@ -192,9 +192,9 @@ Chaque objet de la collection "editionButtons" a deux ou trois propriétés;
 
 - __title__ : le texte qui apparaitra sur le bouton dans la boite de dialogue
 - __htmlBefore__ : le texte qui sera inséré avant la sélection lorsque l'on cliquera sur le bouton
-- __htmlAfter__ : le texte qui sera inséré après la sélection lorsque l'on cliquera sur le bouton. Cette propriété est optionnielle.
+- __htmlAfter__ : le texte qui sera inséré après la sélection lorsque l'on cliquera sur le bouton. Cette propriété est optionnelle.
 
-Chaque objet de la collection preDefinedIconsList a cinq propriétés:
+Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 
 - __name__ : le nom qui sera affiché dans la liste déroulante (texte)
 - __icon__ : le contenu de l'icône (html)
@@ -205,3 +205,6 @@ Chaque objet de la collection preDefinedIconsList a cinq propriétés:
 #### Le contenu du fichier de configuration pouvant être chargé avec le bouton &#x23CD;
 
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
+
+### Traductions
+### Pluggins
