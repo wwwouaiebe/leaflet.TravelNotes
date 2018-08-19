@@ -1,6 +1,6 @@
 # Travel & Notes with Leaflet
 
-You are a native english speaker? and you understand french? perfect, you can help to translate the user guide and the installation guide. Don't hesitate!
+You are a native english speaker? And you understand french? Perfect, you can help to translate the user guide and the installation guide. Don't hesitate!
 
 [Guide pour les utilisateurs - fr ](TravelNotesGuides/GuideUtilisateurFR.md)
 
@@ -8,11 +8,11 @@ You are a native english speaker? and you understand french? perfect, you can he
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
 
-__Avertissement__ : cette démo utilise le serveur de demo de OSRM. Voyez la page [https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server] pour les conditions d'utilisation. 
+__Avertissement__ : cette démo utilise le serveur de démo de OSRM. Voyez la page https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server pour les conditions d'utilisation. 
 Suite à un traffic important sur ce serveur, vous pouvez fréquement recevoir une erreur http 429.
 
 Si vous disposez d'une API key pour Mapbox ou GraphHopper, vous pouvez également utiliser cette démo avec Mapbox ou GraphHopper.
-Ajoutez simplement MapboxProviderKey=votre_API_key_Mapbox and/or GraphHopperProviderKey=votre_API_key_GraphHopper à l'url de la démo: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=votre_API_key_Mapbox&GraphHopperProviderKey=votre_API_key_GraphHopper .
+Ajoutez simplement MapboxProviderKey=votre_API_key_Mapbox et/ou GraphHopperProviderKey=votre_API_key_GraphHopper à l'url de la démo: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=votre_API_key_Mapbox&GraphHopperProviderKey=votre_API_key_GraphHopper .
 
 Et avec Mapbox et Graphhopper, vous pouvez rechercher un trajet pour une voiture, un vélo ou un piéton.
 
