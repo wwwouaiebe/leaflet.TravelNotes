@@ -9,7 +9,7 @@ You are a native english speaker? And you understand french? Perfect, you can he
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
 
 __Avertissement__ : cette démo utilise le serveur de démo de OSRM. Voyez la page https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server pour les conditions d'utilisation. 
-Suite à un traffic important sur ce serveur, vous pouvez fréquement recevoir une erreur http 429.
+Suite à un traffic important sur ce serveur, vous pouvez fréquemment recevoir une erreur http 429.
 
 Si vous disposez d'une API key pour Mapbox ou GraphHopper, vous pouvez également utiliser cette démo avec Mapbox ou GraphHopper.
 Ajoutez simplement MapboxProviderKey=votre_API_key_Mapbox et/ou GraphHopperProviderKey=votre_API_key_GraphHopper à l'url de la démo: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=votre_API_key_Mapbox&GraphHopperProviderKey=votre_API_key_GraphHopper .
