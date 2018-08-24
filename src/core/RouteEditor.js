@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #28: Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
 Doc reviewed 20170928
 Tests ...
 
@@ -670,7 +672,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.setStartPoint : null,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.first.lat ) ? this.setStartPoint : null,
 						param : latLng
 					} 
 				);
@@ -686,7 +688,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.setEndPoint : null,
+						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
 						param : latLng
 					}
 				);
