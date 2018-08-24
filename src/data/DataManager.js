@@ -92,7 +92,8 @@ Tests ...
 					travelEditor : {
 						clearAfterSave : true,
 						startMinimized : true,
-						timeout : 1000
+						timeout : 1000,
+						startupRouteEdition:true
 					},
 					haveBeforeUnloadWarning : true
 				};

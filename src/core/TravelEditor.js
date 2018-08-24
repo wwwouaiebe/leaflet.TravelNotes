@@ -426,6 +426,9 @@ Tests ...
 				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.changeTravelHTML ( true );
+				if ( _DataManager.config.travelEditor.startupRouteEdition ) {
+					this.editRoute ( _DataManager.travel.routes.first.objId );
+				}
 			},
 
 			/*

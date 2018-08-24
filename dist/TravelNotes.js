@@ -178,6 +178,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
 Doc reviewed 20170926
 Tests ...
 
@@ -247,7 +249,8 @@ Tests ...
 					travelEditor : {
 						clearAfterSave : true,
 						startMinimized : true,
-						timeout : 1000
+						timeout : 1000,
+						startupRouteEdition:true
 					},
 					haveBeforeUnloadWarning : true
 				};
@@ -836,6 +839,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
 Doc reviewed 20171001
 Tests ...
 
@@ -1009,7 +1014,12 @@ Tests ...
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
 										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
-										require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
+										if ( _DataManager.config.travelEditor.startupRouteEdition ) {
+											require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
+										}
+										else {
+											require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
+										}
 									}
 								};
 								translationsHttpRequest.open ( 
@@ -4647,6 +4657,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
 Doc reviewed 20170930
 Tests ...
 
@@ -7554,6 +7566,9 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
+		
 Doc reviewed 20170928
 Tests ...
 
@@ -7915,6 +7930,13 @@ Tests ...
 				}
 			},
 
+			/*
+			--- confirmClose method ------------------------------------------------------------------------------------------
+
+			This method ask a confirmation to the user
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
 			confirmClose : function ( ) {
 				if ( _haveBeforeUnloadListener ) {
 					return window.confirm ( _Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
@@ -7946,6 +7968,9 @@ Tests ...
 				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.changeTravelHTML ( true );
+				if ( _DataManager.config.travelEditor.startupRouteEdition ) {
+					this.editRoute ( _DataManager.travel.routes.first.objId );
+				}
 			},
 
 			/*
