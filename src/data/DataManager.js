@@ -21,6 +21,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
 Doc reviewed 20170926
 Tests ...
 
@@ -91,7 +93,8 @@ Tests ...
 						clearAfterSave : true,
 						startMinimized : true,
 						timeout : 1000
-					}
+					},
+					haveBeforeUnloadWarning : true
 				};
 				global.version = '1.0.0';
 				global.map = map;

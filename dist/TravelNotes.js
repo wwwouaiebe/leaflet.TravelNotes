@@ -248,7 +248,8 @@ Tests ...
 						clearAfterSave : true,
 						startMinimized : true,
 						timeout : 1000
-					}
+					},
+					haveBeforeUnloadWarning : true
 				};
 				global.version = '1.0.0';
 				global.map = map;
@@ -1007,7 +1008,7 @@ Tests ...
 										}
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
-										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( );
+										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
 										require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
 									}
 								};
@@ -4944,7 +4945,17 @@ Tests ...
 				}, 
 				openTravelFakeDiv 
 			);
-			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
+			openTravelButton.addEventListener ( 
+				'click' , 
+				function ( ) 
+				{ 
+					if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
+					{
+						return;
+					}
+					openTravelInput.click ( );
+				}, 
+				false );
 			
 			// roadbook button
 			var openTravelRoadbookButton = htmlElementsFactory.create ( 
@@ -7557,6 +7568,12 @@ Tests ...
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
+
+	var _haveBeforeUnloadListener = false;
+	var onBeforeUnload = function ( event ) {
+		event.returnValue = 'x';
+		return 'x';
+	};
 	
 	var TravelEditor = function ( ) {
 		
@@ -7568,7 +7585,19 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ChangeTravelHTML = function ( ) {
+		var _ChangeTravelHTML = function ( isNewTravel ) {
+			if ( ! isNewTravel ) {
+				if ( ! _haveBeforeUnloadListener && _DataManager.config.haveBeforeUnloadWarning ) {
+					window.addEventListener( 
+						'beforeunload', 
+						function ( event ) {
+							event.returnValue = 'x';
+							return 'x'; 
+						}
+					);
+					_haveBeforeUnloadListener = true;
+				}
+			}
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
 				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
@@ -7686,8 +7715,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			changeTravelHTML : function ( ) {
-				_ChangeTravelHTML ( );
+			changeTravelHTML : function ( isNewTravel ) {
+				_ChangeTravelHTML ( isNewTravel );
 			},
 
 			/*
@@ -7886,6 +7915,15 @@ Tests ...
 				}
 			},
 
+			confirmClose : function ( ) {
+				if ( _haveBeforeUnloadListener ) {
+					return window.confirm ( _Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
+				}
+				return true;
+			},
+
+
+
 			/*
 			--- clear method ------------------------------------------------------------------------------------------
 
@@ -7895,6 +7933,10 @@ Tests ...
 			*/
 
 			clear : function ( ) {
+				if ( ! this.confirmClose ( ) )
+				{
+					return;
+				}
 				_MapEditor.removeAllObjects ( );
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;
@@ -7903,7 +7945,7 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				this.changeTravelHTML ( );
+				this.changeTravelHTML ( true );
 			},
 
 			/*

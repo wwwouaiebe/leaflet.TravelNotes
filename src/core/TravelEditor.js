@@ -24,6 +24,9 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
+		
 Doc reviewed 20170928
 Tests ...
 
@@ -38,6 +41,12 @@ Tests ...
 	var _DataManager = require ( '../Data/DataManager' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
+
+	var _haveBeforeUnloadListener = false;
+	var onBeforeUnload = function ( event ) {
+		event.returnValue = 'x';
+		return 'x';
+	};
 	
 	var TravelEditor = function ( ) {
 		
@@ -49,7 +58,19 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ChangeTravelHTML = function ( ) {
+		var _ChangeTravelHTML = function ( isNewTravel ) {
+			if ( ! isNewTravel ) {
+				if ( ! _haveBeforeUnloadListener && _DataManager.config.haveBeforeUnloadWarning ) {
+					window.addEventListener( 
+						'beforeunload', 
+						function ( event ) {
+							event.returnValue = 'x';
+							return 'x'; 
+						}
+					);
+					_haveBeforeUnloadListener = true;
+				}
+			}
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
 				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
@@ -167,8 +188,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			changeTravelHTML : function ( ) {
-				_ChangeTravelHTML ( );
+			changeTravelHTML : function ( isNewTravel ) {
+				_ChangeTravelHTML ( isNewTravel );
 			},
 
 			/*
@@ -368,6 +389,22 @@ Tests ...
 			},
 
 			/*
+			--- confirmClose method ------------------------------------------------------------------------------------------
+
+			This method ask a confirmation to the user
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			confirmClose : function ( ) {
+				if ( _haveBeforeUnloadListener ) {
+					return window.confirm ( _Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
+				}
+				return true;
+			},
+
+
+
+			/*
 			--- clear method ------------------------------------------------------------------------------------------
 
 			This method remove completely the current travel
@@ -376,6 +413,10 @@ Tests ...
 			*/
 
 			clear : function ( ) {
+				if ( ! this.confirmClose ( ) )
+				{
+					return;
+				}
 				_MapEditor.removeAllObjects ( );
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;
@@ -384,7 +425,7 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				this.changeTravelHTML ( );
+				this.changeTravelHTML ( true );
 			},
 
 			/*

@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #26 : added confirmation message before leaving the page when data modified.
 Doc reviewed 20170930
 Tests ...
 
@@ -322,7 +324,17 @@ Tests ...
 				}, 
 				openTravelFakeDiv 
 			);
-			openTravelButton.addEventListener ( 'click' , function ( ) { openTravelInput.click ( ); }, false );
+			openTravelButton.addEventListener ( 
+				'click' , 
+				function ( ) 
+				{ 
+					if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
+					{
+						return;
+					}
+					openTravelInput.click ( );
+				}, 
+				false );
 			
 			// roadbook button
 			var openTravelRoadbookButton = htmlElementsFactory.create ( 
