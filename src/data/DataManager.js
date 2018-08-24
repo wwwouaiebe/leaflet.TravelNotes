@@ -23,6 +23,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
+		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
 Doc reviewed 20170926
 Tests ...
 
@@ -139,7 +140,31 @@ Tests ...
 
 			get map ( ) { return global.map; },
 
+			/*
+			--- getWayPoint method --------------------------------------------------------------------------------
 
+			This method returns a wayPoint from the wayPointObjId
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getWayPoint : function ( wayPointObjId ) {
+				var wayPoint = null;
+				var routeIterator = this.travel.routes.iterator;
+				while ( ! routeIterator.done ) {
+					wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
+					if ( wayPoint ) {
+						return wayPoint;
+					}
+				}
+				wayPoint = this.editedRoute.wayPoints.getAt ( wayPointObjId );
+				if ( ! wayPoint ) {
+					console.log ( 'Invalid wayPointObjId ' + wayPointObjId + ' for function DataManager.getWayPoint ( )' );
+					return null;
+				}
+				return wayPoint;
+			},
+			
 			/*
 			--- getNoteAndRoute method --------------------------------------------------------------------------------
 
@@ -161,7 +186,7 @@ Tests ...
 						return { note : note, route : routeIterator.value };
 					}
 				}
-				note = this.editedRoute.notes.getAt (noteObjId );
+				note = this.editedRoute.notes.getAt ( noteObjId );
 				if ( ! note ) {
 					console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataManager.getNote ( )' );
 					return { note : null, route : null };

@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
 Doc reviewed 20170927
 Tests ...
 
@@ -408,7 +410,10 @@ Tests ...
 						draggable : true
 					} 
 				);	
-				
+
+				marker.bindTooltip ( function ( wayPoint ) { return _DataManager.getWayPoint ( wayPoint.objId ).UIName; } );
+				marker.getTooltip ( ).options.offset  = [ 20, -20 ];
+
 				// ... and added to the map...
 				marker.objId = wayPoint.objId;
 				_AddTo ( wayPoint.objId, marker );
