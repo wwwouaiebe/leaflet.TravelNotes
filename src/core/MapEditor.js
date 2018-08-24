@@ -26,6 +26,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
+		- Issue #30: Add a context menu with delete command to the waypoints
 Doc reviewed 20170927
 Tests ...
 
@@ -414,6 +415,14 @@ Tests ...
 				marker.bindTooltip ( function ( wayPoint ) { return _DataManager.getWayPoint ( wayPoint.objId ).UIName; } );
 				marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
+				L.DomEvent.on ( 
+					marker, 
+					'contextmenu', 
+					function ( event ) { 
+						require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+					}
+				);
+				
 				// ... and added to the map...
 				marker.objId = wayPoint.objId;
 				_AddTo ( wayPoint.objId, marker );

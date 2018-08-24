@@ -5468,6 +5468,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
+		- Issue #30: Add a context menu with delete command to the waypoints
 Doc reviewed 20170927
 Tests ...
 
@@ -5856,6 +5857,14 @@ Tests ...
 				marker.bindTooltip ( function ( wayPoint ) { return _DataManager.getWayPoint ( wayPoint.objId ).UIName; } );
 				marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
+				L.DomEvent.on ( 
+					marker, 
+					'contextmenu', 
+					function ( event ) { 
+						require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+					}
+				);
+				
 				// ... and added to the map...
 				marker.objId = wayPoint.objId;
 				_AddTo ( wayPoint.objId, marker );
@@ -6095,7 +6104,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":27,"../core/RouteEditor":28,"../core/TravelEditor":30,"../util/Utilities":43,"./NoteEditor":27}],27:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":27,"../core/RouteEditor":28,"../core/TravelEditor":30,"../util/Utilities":43,"./NoteEditor":27,"./RouteEditor":28}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6560,6 +6569,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #28: Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
+		- Issue #30: Add a context menu with delete command to the waypoints
 Doc reviewed 20170928
 Tests ...
 
@@ -7225,6 +7235,30 @@ Tests ...
 						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
 						param : latLng
 					}
+				);
+				return contextMenu;
+			},
+
+			/*
+			--- getWayPointContextMenu method --------------------------------------------------------------------------
+
+			This method gives the wayPoint context menu
+			
+			parameters:
+			- wayPointObjId : the wayPoint objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getWayPointContextMenu : function ( wayPointObjId ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Delete this waypoint" ), 
+						action : ( ( _DataManager.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( _DataManager.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? this.removeWayPoint : null,
+						param: wayPointObjId
+					} 
 				);
 				return contextMenu;
 			},

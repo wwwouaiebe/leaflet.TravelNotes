@@ -26,6 +26,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #28: Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
+		- Issue #30: Add a context menu with delete command to the waypoints
 Doc reviewed 20170928
 Tests ...
 
@@ -691,6 +692,30 @@ Tests ...
 						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
 						param : latLng
 					}
+				);
+				return contextMenu;
+			},
+
+			/*
+			--- getWayPointContextMenu method --------------------------------------------------------------------------
+
+			This method gives the wayPoint context menu
+			
+			parameters:
+			- wayPointObjId : the wayPoint objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			getWayPointContextMenu : function ( wayPointObjId ) {
+				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : _Translator.getText ( "RouteEditor - Delete this waypoint" ), 
+						action : ( ( _DataManager.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( _DataManager.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? this.removeWayPoint : null,
+						param: wayPointObjId
+					} 
 				);
 				return contextMenu;
 			},

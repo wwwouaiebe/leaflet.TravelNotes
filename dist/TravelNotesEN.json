@@ -180,6 +180,10 @@
 		"msgstr" : "Delete this route"
 	},
 	{
+		"msgid" : "RouteEditor - Delete this waypoint",
+		"msgstr" : "Delete this waypoint"
+	},
+	{
 		"msgid" : "RouteEditor - Edit this route",
 		"msgstr" : "Edit this route"
 	},

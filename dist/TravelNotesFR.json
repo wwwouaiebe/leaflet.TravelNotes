@@ -180,6 +180,10 @@
 		"msgstr" : "Supprimer ce trajet"
 	},
 	{
+		"msgid" : "RouteEditor - Delete this waypoint",
+		"msgstr" : "Supprimer ce point de passage"
+	},
+	{
 		"msgid" : "RouteEditor - Edit this route",
 		"msgstr" : "Éditer ce trajet"
 	},
