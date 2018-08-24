@@ -26,6 +26,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
+		- Issue #27 : push directly the route in the editor when starting a new travel
 Doc reviewed 20171001
 Tests ...
 
