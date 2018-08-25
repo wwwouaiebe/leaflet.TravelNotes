@@ -575,6 +575,8 @@ Tests ...
 		var _Distance = 0;
 
 		var _Duration = 0;
+		
+		var _Hidden = false;
 
 		var _ObjId = require ( '../data/ObjId' ) ( );
 
@@ -609,6 +611,9 @@ Tests ...
 			get duration ( ) { return _Duration; },
 			set duration ( Duration ) { _Duration = Duration; },
 
+			get hidden ( ) { return _Hidden; },
+			set hidden ( Hidden ) { _Hidden = Hidden; },
+
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
@@ -624,6 +629,7 @@ Tests ...
 					chain :_Chain,
 					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
+					hidden : _Hidden,
 					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
@@ -640,6 +646,7 @@ Tests ...
 				_Chain = Object.chain || false;
 				_Distance = Object.distance;
 				_Duration = Object.duration;
+				_Hidden = Object.hidden || false;
 				_ChainedDistance = Object.chainedDistance;
 				_ObjId = require ( '../data/ObjId' ) ( );
 			}
@@ -7376,7 +7383,26 @@ Tests ...
 				);
 				return contextMenu;
 			},
+
+			/*
+			--- hideRoute method ----------------------------------------------------------------------------
+
+			This method hide a route on the map
 			
+			parameters:
+			- routeObjId : the route objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			hideRoute : function ( routeObjId ) {
+				var route = _DataManager.getRoute ( routeObjId );
+				if ( route ) {
+					_MapEditor.removeRoute ( route, true, true );
+					route.hidden = true;
+				}
+			},
+
 			/*
 			--- getRouteContextMenu method ----------------------------------------------------------------------------
 
@@ -7403,7 +7429,15 @@ Tests ...
 					{
 						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute :null,
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute : null,
+						param: routeObjId
+					}
+				);
+				contextMenu.push ( 
+					{
+						context : travelEditor, 
+						name : _Translator.getText ( "RouteEditor - Hide this route" ), 
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.hideRoute : null,
 						param: routeObjId
 					}
 				);

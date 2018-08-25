@@ -188,6 +188,10 @@
 		"msgstr" : "Edit this route"
 	},
 	{
+		"msgid" : "RouteEditor - Hide this route",
+		"msgstr" : "Hide this route"
+	},
+	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "It's impossible to edit a route created with this provider ({provider})."
 	},

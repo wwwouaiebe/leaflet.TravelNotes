@@ -21,6 +21,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #33: Add a command to hide a route
 Doc reviewed 20170926
 Tests ...
 
@@ -58,6 +60,8 @@ Tests ...
 		var _Distance = 0;
 
 		var _Duration = 0;
+		
+		var _Hidden = false;
 
 		var _ObjId = require ( '../data/ObjId' ) ( );
 
@@ -92,6 +96,9 @@ Tests ...
 			get duration ( ) { return _Duration; },
 			set duration ( Duration ) { _Duration = Duration; },
 
+			get hidden ( ) { return _Hidden; },
+			set hidden ( Hidden ) { _Hidden = Hidden; },
+
 			get objId ( ) { return _ObjId; },
 
 			get objType ( ) { return _ObjType; },
@@ -107,6 +114,7 @@ Tests ...
 					chain :_Chain,
 					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
+					hidden : _Hidden,
 					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
 					objId : _ObjId,
 					objType : _ObjType.object
@@ -123,6 +131,7 @@ Tests ...
 				_Chain = Object.chain || false;
 				_Distance = Object.distance;
 				_Duration = Object.duration;
+				_Hidden = Object.hidden || false;
 				_ChainedDistance = Object.chainedDistance;
 				_ObjId = require ( '../data/ObjId' ) ( );
 			}

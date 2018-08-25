@@ -27,6 +27,7 @@ Changes:
 	-v1.1.0:
 		- Issue #28: Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
 		- Issue #30: Add a context menu with delete command to the waypoints
+		- Issue #33: Add a command to hide a route
 Doc reviewed 20170928
 Tests ...
 
@@ -719,7 +720,26 @@ Tests ...
 				);
 				return contextMenu;
 			},
+
+			/*
+			--- hideRoute method ----------------------------------------------------------------------------
+
+			This method hide a route on the map
 			
+			parameters:
+			- routeObjId : the route objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			hideRoute : function ( routeObjId ) {
+				var route = _DataManager.getRoute ( routeObjId );
+				if ( route ) {
+					_MapEditor.removeRoute ( route, true, true );
+					route.hidden = true;
+				}
+			},
+
 			/*
 			--- getRouteContextMenu method ----------------------------------------------------------------------------
 
@@ -746,7 +766,15 @@ Tests ...
 					{
 						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute :null,
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute : null,
+						param: routeObjId
+					}
+				);
+				contextMenu.push ( 
+					{
+						context : travelEditor, 
+						name : _Translator.getText ( "RouteEditor - Hide this route" ), 
+						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.hideRoute : null,
 						param: routeObjId
 					}
 				);

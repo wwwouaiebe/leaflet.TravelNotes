@@ -188,6 +188,10 @@
 		"msgstr" : "Éditer ce trajet"
 	},
 	{
+		"msgid" : "RouteEditor - Hide this route",
+		"msgstr" : "Masquer ce trajet"
+	},
+	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
 	},
