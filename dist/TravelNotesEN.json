@@ -328,6 +328,10 @@
 		"msgstr" : "It's impossible to save a travel without a saving or cancelling the modifications"
 	},
 	{
+		"msgid" : "TravelEditor - Show all routes",
+		"msgstr" : "Afficher tous les trajets"
+	},
+	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "This page ask to close; data are perhaps not saved."
 	},

@@ -28,6 +28,7 @@ Changes:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
 		- Issue #31 : Add a command to import from others maps
+		- Issue #34 : Add a command to show all routes
 Doc reviewed 20170928
 Tests ...
 
@@ -517,7 +518,15 @@ Tests ...
 
 			getMapContextMenu :function ( latLng ) {
 				var mapEditor = require ( '../core/MapEditor' ) ( );
+				var routeEditor = require ( '../core/RouteEditor' ) ( );
 				var contextMenu = [];
+				contextMenu.push ( 
+					{ 
+						context : routeEditor, 
+						name : _Translator.getText ( "TravelEditor - Show all routes" ), 
+						action : routeEditor.showRoutes
+					} 
+				);
 				contextMenu.push ( 
 					{ 
 						context : mapEditor, 

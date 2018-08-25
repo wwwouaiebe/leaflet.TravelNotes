@@ -25,9 +25,10 @@ Changes:
 	- v1.0.0:
 		- created
 	-v1.1.0:
-		- Issue #28: Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
-		- Issue #30: Add a context menu with delete command to the waypoints
-		- Issue #33: Add a command to hide a route
+		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
+		- Issue #30 : Add a context menu with delete command to the waypoints
+		- Issue #33 : Add a command to hide a route
+		- Issue #34 : Add a command to show all routes
 Doc reviewed 20170928
 Tests ...
 
@@ -375,6 +376,8 @@ Tests ...
 				_DataManager.editedRoute.object = initialRoute.object;
 				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
 				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
+				_DataManager.editedRoute.hidden = false;
+				initialRoute.hidden = false;
 				_MapEditor.removeRoute ( initialRoute, true, false );
 				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
 				this.chainRoutes ( );
@@ -658,6 +661,42 @@ Tests ...
 			},
 			
 			/*
+			--- hideRoute method --------------------------------------------------------------------------------------
+
+			This method hide a route on the map
+			
+			parameters:
+			- routeObjId : the route objId that was clicked
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			hideRoute : function ( routeObjId ) {
+				var route = _DataManager.getRoute ( routeObjId );
+				if ( route ) {
+					_MapEditor.removeRoute ( route, true, true );
+					route.hidden = true;
+				}
+			},
+			
+			/*
+			--- showRoutes method -------------------------------------------------------------------------------------
+
+			This method show all the hidden routes
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			showRoutes : function ( ) {
+				var routesIterator = _DataManager.travel.routes.iterator;
+				while ( ! routesIterator.done ) {
+					if ( routesIterator.value.hidden ) {
+						_MapEditor.addRoute ( routesIterator.value, true, true, false );
+					}
+				}
+			},
+
+			/*
 			--- getMapContextMenu method ------------------------------------------------------------------------------
 
 			This method gives the route part of the map context menu
@@ -722,25 +761,6 @@ Tests ...
 			},
 
 			/*
-			--- hideRoute method ----------------------------------------------------------------------------
-
-			This method hide a route on the map
-			
-			parameters:
-			- routeObjId : the route objId that was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			hideRoute : function ( routeObjId ) {
-				var route = _DataManager.getRoute ( routeObjId );
-				if ( route ) {
-					_MapEditor.removeRoute ( route, true, true );
-					route.hidden = true;
-				}
-			},
-
-			/*
 			--- getRouteContextMenu method ----------------------------------------------------------------------------
 
 			This method gives the route context menu
@@ -774,7 +794,7 @@ Tests ...
 					{
 						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Hide this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.hideRoute : null,
+						action : ( _DataManager.editedRoute.objId !== routeObjId ) ? this.hideRoute : null,
 						param: routeObjId
 					}
 				);

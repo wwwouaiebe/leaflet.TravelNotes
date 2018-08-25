@@ -328,6 +328,10 @@
 		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de trajet. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
 	},
 	{
+		"msgid" : "TravelEditor - Show all routes",
+		"msgstr" : "Afficher tous les trajets"
+	},
+	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "Cette page demande de confirmer sa fermeture ; des données saisies pourraient ne pas être enregistrées."
 	},
