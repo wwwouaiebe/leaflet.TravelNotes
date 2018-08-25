@@ -327,7 +327,6 @@
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "Cette page demande de confirmer sa fermeture ; des données saisies pourraient ne pas être enregistrées."
 	},
-	
 	{
 		"msgid" : "TravelEditor - Zoom to travel",
 		"msgstr" : "Zoom sur le voyage"
@@ -347,6 +346,10 @@
 	{
 		"msgid" : "TravelEditorUI - Hide",
 		"msgstr" : "Masquer"
+	},
+	{
+		"msgid" : "TravelEditorUI - Import travel",
+		"msgstr" : "Importer des trajets et des notes depuis un autre voyage"
 	},
 	{
 		"msgid" : "TravelEditorUI - New route",
@@ -379,10 +382,6 @@
 	{
 		"msgid" : "TravelEditorUI - Show",
 		"msgstr" : "Afficher"
-	},
-	{
-		"msgid" : "TravelEditorUI - Undo",
-		"msgstr" : "Réouvrir un trajet supprimé"
 	},
 	{
 		"msgid" : "Utilities - Day",

@@ -24,9 +24,10 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
+		- Issue #31 : Add a command to import from others maps
 Doc reviewed 20170928
 Tests ...
 
@@ -79,20 +80,19 @@ Tests ...
 		};
 
 		/*
-		--- _LoadFile function ----------------------------------------------------------------------------------------
+		--- _ConvertAndDecompressFile function --------------------------------------------------------------------------------
 
-		This function load a file content 
-
+		This function convert old files (.map) and decompress the travel
+		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _LoadFile = function ( textFile, fileName, readOnly ) {
-
+		var _ConvertAndDecompressFile  = function ( textFile, fileName  ) {
 			// an old map file is opened... converting the file...
 			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
 				// ... if the convert object is loaded
 				if ( ! window.convertMapsData ) {
-					return;
+					return null;
 				}
 				else {
 					textFile = convertMapsData.mapsDataToTravelNotes ( textFile );
@@ -104,7 +104,7 @@ Tests ...
 				compressedTravel = JSON.parse ( textFile ) ;
 			}
 			catch ( e ) {
-				return;
+				return null;
 			}
 			
 			// decompressing the itineraryPoints
@@ -128,9 +128,66 @@ Tests ...
 					route.itinerary.itineraryPoints = decompressedItineraryPoints;
 				}
 			);
-			
+			return compressedTravel;
+		};
+		
+		/*
+		--- _ImportFile function --------------------------------------------------------------------------------------
+
+		This function import a file content 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _ImportFile = function ( textFile, fileName ) {
+			// converting and decompressing the file
+			var importData = _ConvertAndDecompressFile ( textFile, fileName );
+			if ( ! importData ) {
+				return;
+			}
 			// ... and transform the data in the correct format
-			_DataManager.travel.object = compressedTravel;
+			var importTravel = require ( '../Data/Travel') ( );
+			importTravel.object = importData;
+			
+			// routes are added with their notes
+			var routesIterator = importTravel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				_DataManager.travel.routes.add ( routesIterator.value );
+				_MapEditor.addRoute ( routesIterator.value, true, false, false );
+			}
+			// travel notes are added
+			var notesIterator = importTravel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				_DataManager.travel.notes.add ( notesIterator.value );
+				_MapEditor.addNote ( notesIterator.value, false );
+			}
+			
+			// zoom on the travel
+			_MapEditor.zoomToTravel ( );
+			
+			// updating UI and html page
+			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			_ChangeTravelHTML ( );
+		
+		};
+		
+		/*
+		--- _LoadFile function ----------------------------------------------------------------------------------------
+
+		This function load a file content 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _LoadFile = function ( textFile, fileName, readOnly ) {
+
+			// converting and decompressing the file
+			var travel = _ConvertAndDecompressFile ( textFile, fileName );
+			if ( ! travel ) {
+				return;
+			}
+			// ... and transform the data in the correct format
+			_DataManager.travel.object = travel;
 
 			// ... travel name = file name
 			if ( '' !== fileName ) {
@@ -338,6 +395,22 @@ Tests ...
 				}
 			},
 
+			/*
+			--- openTravel method -------------------------------------------------------------------------------------
+
+			This method open a travel from a local file
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			importTravel : function ( event ) {
+				var fileReader = new FileReader( );
+				fileReader.onload = function ( event ) {
+					_ImportFile ( fileReader.result, fileName );
+				};
+				var fileName = event.target.files [ 0 ].name;
+				fileReader.readAsText ( event.target.files [ 0 ] );
+			},
 			/*
 			--- openTravel method -------------------------------------------------------------------------------------
 

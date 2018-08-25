@@ -24,8 +24,9 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
+		- Issue #31 : Add a command to import from others maps
 Doc reviewed 20170930
 Tests ...
 
@@ -283,6 +284,7 @@ Tests ...
 			);
 
 			// open travel button with the well know hack....
+			// See also UserInterface.js. Click events are first going to the interface div...
 			var openTravelDiv = htmlElementsFactory.create ( 
 				'div', 
 				{ 
@@ -334,8 +336,61 @@ Tests ...
 					}
 					openTravelInput.click ( );
 				}, 
-				false );
-			
+				false 
+			);
+
+			// import travel button with the well know hack....
+			// See also UserInterface.js. Click events are first going to the interface div...
+			var importTravelDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-Control-ImportTravelDiv'
+				}, 
+				buttonsDiv 
+			);
+			var importTravelInput = htmlElementsFactory.create ( 
+				'input',
+				{
+					id : 'TravelNotes-Control-ImportTravelInput', 
+					type : 'file',
+					accept : '.trv,.map'
+				},
+				importTravelDiv
+			);
+			importTravelInput.addEventListener ( 
+				'change', 
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
+				},
+				false 
+			);
+			var importTravelFakeDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-Control-ImportTravelFakeDiv'
+				}, 
+				importTravelDiv 
+			);
+			var importTravelButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-ImportTravelButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Import travel' ), 
+					innerHTML : '&#x1F30F;'
+				}, 
+				importTravelFakeDiv 
+			);
+			importTravelButton.addEventListener ( 
+				'click' , 
+				function ( event ) 
+				{ 
+					importTravelInput.click ( );
+				}, 
+				false 
+			);
+
 			// roadbook button
 			var openTravelRoadbookButton = htmlElementsFactory.create ( 
 				'div', 
@@ -348,6 +403,63 @@ Tests ...
 				buttonsDiv
 			);
 
+			// import button
+
+/*
+			var importTravelDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-Control-ImportTravelDiv'
+				}, 
+				buttonsDiv 
+			);
+			var importTravelInput = htmlElementsFactory.create ( 
+				'input',
+				{
+					id : 'TravelNotes-Control-ImportTravelInput', 
+					type : 'file',
+					accept : '.trv,.map'
+				},
+				importTravelDiv
+			);
+			importTravelInput.addEventListener ( 
+				'change', 
+				function ( clickEvent ) {
+					clickEvent.stopPropagation ( );
+					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
+				},
+				false 
+			);
+			var importTravelFakeDiv = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-Control-ImportTravelFakeDiv'
+				}, 
+				importTravelDiv 
+			);
+			var importTravelButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-ImportTravelButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'TravelEditorUI - Import travel' ), 
+					innerHTML : '&#x1F30F;'
+				},
+				importTravelFakeDiv 
+			);
+			importTravelButton.addEventListener ( 
+				'click' , 
+				function ( ) 
+				{ 
+					if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
+					{
+						return;
+					}
+					importTravelInput.click ( );
+				}, 
+				false 
+			);
+*/			
 			/*
 			// Todo...
 			var undoButton = htmlElementsFactory.create ( 

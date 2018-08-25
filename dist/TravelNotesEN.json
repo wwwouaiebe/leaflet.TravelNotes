@@ -323,10 +323,11 @@
 		"msgid" : "TravelEditor - Not possible to save a travel without a save or cancel",
 		"msgstr" : "It's impossible to save a travel without a saving or cancelling the modifications"
 	},
-{
+	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "This page ask to close; data are perhaps not saved."
-	},	{
+	},
+	{
 		"msgid" : "TravelEditor - Zoom to travel",
 		"msgstr" : "Zoom to travel"
 	},
@@ -345,6 +346,10 @@
 	{
 		"msgid" : "TravelEditorUI - Hide",
 		"msgstr" : "Hide"
+	},
+	{
+		"msgid" : "TravelEditorUI - Import travel",
+		"msgstr" : "Import routes and notes from another travel"
 	},
 	{
 		"msgid" : "TravelEditorUI - New route",
@@ -380,7 +385,7 @@
 	},
 	{
 		"msgid" : "Utilities - Day",
-		"msgstr" : "jours"
+		"msgstr" : "days"
 	},
 	{
 		"msgid" : "Utilities - Hour",

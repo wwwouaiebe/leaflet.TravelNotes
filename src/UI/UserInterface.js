@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.1.0:
+		- Issue #31 : Add a command to import from others maps
 Doc reviewed 20170929
 Tests ...
 
@@ -52,7 +54,7 @@ Tests ...
 					if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
 						return; 
 					}
-					if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
+					if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-ImportTravelInput", "TravelNotes-Control-ImportTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
 						return;
 					}
 					event.stopPropagation ( );
