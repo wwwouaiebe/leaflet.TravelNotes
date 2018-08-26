@@ -7555,6 +7555,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.1.0:
+		- Issue #35 : Add something to draw polylines on the map.
 Doc reviewed 20170928
 Tests ...
 
@@ -7697,24 +7699,27 @@ Tests ...
 				providerKey = atob ( sessionStorage.getItem ( _RouteProvider.name.toLowerCase ( ) ) );
 			}
 			
-			// creating the http request
-			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.onreadystatechange = function ( event ) {
-				if ( this.readyState === XMLHttpRequest.DONE ) {
-					if ( this.status === 200 ) {
-						_ParseResponse ( this.responseText );
-					} 
-					else {
-						_ParseError ( this.status, this.statusText );
+			var providerUrl = _RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _DataManager.config.language, null );
+			
+			if ( providerUrl ) {
+				// creating the http request
+				var xmlHttpRequest = new XMLHttpRequest ( );
+				xmlHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === XMLHttpRequest.DONE ) {
+						if ( this.status === 200 ) {
+							_ParseResponse ( this.responseText );
+						} 
+						else {
+							_ParseError ( this.status, this.statusText );
+						}
 					}
-				}
-			};
-			xmlHttpRequest.open ( 
-				'GET',
-				_RouteProvider.getUrl ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _DataManager.config.language, null ),
-				true
-			);
-			xmlHttpRequest.send ( null );
+				};
+				xmlHttpRequest.open ( 'GET', providerUrl, true );
+				xmlHttpRequest.send ( null );
+			}
+			else {
+				_ParseResponse ( null );
+			}
 		};
 		
 		/*
