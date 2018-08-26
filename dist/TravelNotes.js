@@ -275,7 +275,7 @@ Tests ...
 					},
 					haveBeforeUnloadWarning : true
 				};
-				global.version = '1.0.0';
+				global.version = '1.1.0';
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
@@ -9299,7 +9299,18 @@ Tests ...
 					throw 'No version for ' + _Name;
 				}
 				if ( _Version !== object.objType.version ) {
-					throw 'invalid version for ' + _Name;
+					if ( '1.0.0' === object.objType.version ) {
+						//start upgrade from 1.0.0 to 1.1.0
+						if ( 'Route' === object.objType.name ) {
+							object.dashArray = 0;
+							object.hidden = false;
+						}
+						object.objType.version = '1.1.0';
+						//end upgrade from 1.0.0 to 1.1.0
+					}
+					else {
+						throw 'invalid version for ' + _Name;
+					}
 				}
 				if ( ! object.objId ) {
 					throw 'No objId for ' + _Name;

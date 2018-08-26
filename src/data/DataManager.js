@@ -118,7 +118,7 @@ Tests ...
 					},
 					haveBeforeUnloadWarning : true
 				};
-				global.version = '1.0.0';
+				global.version = '1.1.0';
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
