@@ -27,6 +27,7 @@ Changes:
 	-v1.1.0:
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
 		- Issue #30: Add a context menu with delete command to the waypoints
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170927
 Tests ...
 
@@ -140,6 +141,23 @@ Tests ...
 			return latLngs;
 		};
 		
+		var _getDashArray = function ( route ) {
+			if ( route.dashArray >= _DataManager.config.route.dashChoices.length ) {
+				route.dashArray = 0;
+			}
+			var iDashArray = _DataManager.config.route.dashChoices [ route.dashArray ].iDashArray;
+			if ( iDashArray ) {
+				var dashArray = '';
+				var dashCounter = 0;
+				for ( dashCounter = 0; dashCounter < iDashArray.length - 1; dashCounter ++ ) {
+					dashArray += iDashArray [ dashCounter ] * route.width + ',';
+				}
+				dashArray += iDashArray [ dashCounter ] * route.width ;
+				
+				return dashArray;
+			}
+			return null;
+		};
 		/*
 		--- MapEditor object ------------------------------------------------------------------------------------------
 
@@ -204,9 +222,8 @@ Tests ...
 				}
 				
 				// the leaflet polyline is created and added to the map
-				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width } );
+				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
 				_AddTo ( route.objId, polyline );
-				
 				// tooltip and popup are created
 				polyline.bindTooltip ( 
 					 route.name,
@@ -265,7 +282,7 @@ Tests ...
 
 			editRoute : function ( route ) {
 				var polyline = _DataManager.mapObjects.get ( route.objId );
-				polyline.setStyle( { color : route.color, weight : route.width } );
+				polyline.setStyle( { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
 			},
 			
 			/*

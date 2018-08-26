@@ -24,6 +24,7 @@ Changes:
 	-v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170926
 Tests ...
 
@@ -72,7 +73,26 @@ Tests ...
 					route : 
 					{
 						color : '#ff0000',
-						width : 3
+						width : 3,
+						dashArray : 0,
+						dashChoices : [
+							{ 
+								text : "——————",
+								iDashArray : null
+							}, 
+							{
+								text : "— — — — —",
+								iDashArray : [ 4, 2 ] 
+							}, 
+							{
+								text : "—‧—‧—‧—‧—",
+								iDashArray : [ 4, 2, 0, 2 ] 
+							}, 
+							{
+								text : "················",
+								iDashArray : [ 0, 2 ] 
+							}
+						]
 					},
 					note : {
 						reverseGeocoding : false,

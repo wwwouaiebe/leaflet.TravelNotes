@@ -26,7 +26,26 @@
 	"route":
 	{
 		"color":"#ff0000",
-		"width":3
+		"width":3,
+		"dashArray": 0,
+		"dashChoices": [
+			{ 
+				"text":"——————",
+				"iDashArray" : null
+			}, 
+			{
+				"text":"— — — — —",
+				"iDashArray":[4,2] 
+			}, 
+			{
+				"text":"—‧—‧—‧—‧—",
+				"iDashArray":[4,2,0,2] 
+			}, 
+			{
+				"text":"················",
+				"iDashArray":[0,2] 
+			}
+		]
 	},
 	"note":
 	{

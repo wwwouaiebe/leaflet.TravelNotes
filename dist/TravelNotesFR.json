@@ -281,7 +281,11 @@
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Chained route",
-		"msgstr" : "Trajet&nbsp;chaîné"
+		"msgstr" : "Trajet chaîné : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Linetype",
+		"msgstr" : "Type de ligne : "
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Route properties",

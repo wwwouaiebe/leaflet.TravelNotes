@@ -23,6 +23,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #33: Add a command to hide a route
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170926
 Tests ...
 
@@ -52,6 +53,8 @@ Tests ...
 		var _Width = require ( '../data/DataManager' ) ( ).config.route.width || 5;
 
 		var _Color = require ( '../data/DataManager' ) ( ).config.route.color || '#ff0000';
+		
+		var _DashArray = require ( '../data/DataManager' ) ( ).config.route.dashArray || 0;
 
 		var _Chain = false;
 
@@ -84,6 +87,9 @@ Tests ...
 			get color ( ) { return _Color; },
 			set color ( Color ) { _Color = Color; },
 
+			get dashArray ( ) { return _DashArray; },
+			set dashArray ( DashArray ) { _DashArray = DashArray; },
+
 			get chain ( ) { return _Chain; },
 			set chain ( Chain ) { _Chain = Chain; },
 
@@ -111,6 +117,7 @@ Tests ...
 					itinerary : _Itinerary.object,
 					width : _Width,
 					color : _Color,
+					dashArray : _DashArray,
 					chain :_Chain,
 					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
@@ -128,6 +135,7 @@ Tests ...
 				_Itinerary.object = Object.itinerary || require ( './Itinerary' ) ( ).object;
 				_Width = Object.width || 5;
 				_Color = Object.color || '#000000';
+				_DashArray = Object.dashArray || 0;
 				_Chain = Object.chain || false;
 				_Distance = Object.distance;
 				_Duration = Object.duration;

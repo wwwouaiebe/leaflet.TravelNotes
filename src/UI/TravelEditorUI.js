@@ -404,62 +404,7 @@ Tests ...
 			);
 
 			// import button
-
-/*
-			var importTravelDiv = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id: 'TravelNotes-Control-ImportTravelDiv'
-				}, 
-				buttonsDiv 
-			);
-			var importTravelInput = htmlElementsFactory.create ( 
-				'input',
-				{
-					id : 'TravelNotes-Control-ImportTravelInput', 
-					type : 'file',
-					accept : '.trv,.map'
-				},
-				importTravelDiv
-			);
-			importTravelInput.addEventListener ( 
-				'change', 
-				function ( clickEvent ) {
-					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
-				},
-				false 
-			);
-			var importTravelFakeDiv = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id: 'TravelNotes-Control-ImportTravelFakeDiv'
-				}, 
-				importTravelDiv 
-			);
-			var importTravelButton = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-ImportTravelButton', 
-					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'TravelEditorUI - Import travel' ), 
-					innerHTML : '&#x1F30F;'
-				},
-				importTravelFakeDiv 
-			);
-			importTravelButton.addEventListener ( 
-				'click' , 
-				function ( ) 
-				{ 
-					if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
-					{
-						return;
-					}
-					importTravelInput.click ( );
-				}, 
-				false 
-			);
-*/			
+			
 			/*
 			// Todo...
 			var undoButton = htmlElementsFactory.create ( 

@@ -28,6 +28,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170930
 Tests ...
 
@@ -57,6 +59,8 @@ Tests ...
 			route.color = colorDialog.getNewColor ( );
 			route.width = parseInt ( widthInput.value );
 			route.chain = chainInput.checked;
+			route.dashArray = dashSelect.selectedIndex;
+
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
@@ -88,13 +92,7 @@ Tests ...
 			},
 			routePropertiesDiv
 		);
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'RoutePropertiesDialog - Width'),
-			},
-			widthDiv
-		);
+		widthDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
 		var widthInput =  htmlElementsFactory.create (
 			'input',
 			{
@@ -108,6 +106,31 @@ Tests ...
 		widthInput.min = 1;
 		widthInput.max = 40;
 
+		// dash
+		var dashDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
+			},
+			routePropertiesDiv
+		);
+		dashDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
+		var dashSelect = htmlElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-Select',
+				id : 'TravelNotes-RoutePropertiesDialog-DashSelect'
+			},
+			dashDiv
+		);
+
+		var dashChoices = require ( '../data/DataManager' ) ( ).config.route.dashChoices;
+		for ( var optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
+			dashSelect.add ( htmlElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
+		}
+		dashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+		
 		// chain
 		var chainDiv = htmlElementsFactory.create (
 			'div',
@@ -117,6 +140,7 @@ Tests ...
 			},
 			routePropertiesDiv
 		);
+		chainDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
 		var chainInput =  htmlElementsFactory.create (
 			'input',
 			{
@@ -126,15 +150,6 @@ Tests ...
 			chainDiv
 		);
 		chainInput.checked = route.chain;
-		htmlElementsFactory.create ( 
-			'label',
-			{
-				for : 'TravelNotes-RoutePropertiesDialog-ChainInput',
-				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chained route')
-			},
-			chainDiv
-		);
-		
 		return colorDialog;
 	};
 	

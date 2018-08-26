@@ -181,6 +181,7 @@ Changes:
 	-v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170926
 Tests ...
 
@@ -229,7 +230,26 @@ Tests ...
 					route : 
 					{
 						color : '#ff0000',
-						width : 3
+						width : 3,
+						dashArray : 0,
+						dashChoices : [
+							{ 
+								text : "——————",
+								iDashArray : null
+							}, 
+							{
+								text : "— — — — —",
+								iDashArray : [ 4, 2 ] 
+							}, 
+							{
+								text : "—‧—‧—‧—‧—",
+								iDashArray : [ 4, 2, 0, 2 ] 
+							}, 
+							{
+								text : "················",
+								iDashArray : [ 0, 2 ] 
+							}
+						]
 					},
 					note : {
 						reverseGeocoding : false,
@@ -540,6 +560,7 @@ Changes:
 		- created
 	-v1.1.0:
 		- Issue #33: Add a command to hide a route
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170926
 Tests ...
 
@@ -569,6 +590,8 @@ Tests ...
 		var _Width = require ( '../data/DataManager' ) ( ).config.route.width || 5;
 
 		var _Color = require ( '../data/DataManager' ) ( ).config.route.color || '#ff0000';
+		
+		var _DashArray = require ( '../data/DataManager' ) ( ).config.route.dashArray || 0;
 
 		var _Chain = false;
 
@@ -601,6 +624,9 @@ Tests ...
 			get color ( ) { return _Color; },
 			set color ( Color ) { _Color = Color; },
 
+			get dashArray ( ) { return _DashArray; },
+			set dashArray ( DashArray ) { _DashArray = DashArray; },
+
 			get chain ( ) { return _Chain; },
 			set chain ( Chain ) { _Chain = Chain; },
 
@@ -628,6 +654,7 @@ Tests ...
 					itinerary : _Itinerary.object,
 					width : _Width,
 					color : _Color,
+					dashArray : _DashArray,
 					chain :_Chain,
 					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
 					duration : _Duration,
@@ -645,6 +672,7 @@ Tests ...
 				_Itinerary.object = Object.itinerary || require ( './Itinerary' ) ( ).object;
 				_Width = Object.width || 5;
 				_Color = Object.color || '#000000';
+				_DashArray = Object.dashArray || 0;
 				_Chain = Object.chain || false;
 				_Distance = Object.distance;
 				_Duration = Object.duration;
@@ -4171,6 +4199,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	-v1.1.0:
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170930
 Tests ...
 
@@ -4200,6 +4230,8 @@ Tests ...
 			route.color = colorDialog.getNewColor ( );
 			route.width = parseInt ( widthInput.value );
 			route.chain = chainInput.checked;
+			route.dashArray = dashSelect.selectedIndex;
+
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
@@ -4231,13 +4263,7 @@ Tests ...
 			},
 			routePropertiesDiv
 		);
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'RoutePropertiesDialog - Width'),
-			},
-			widthDiv
-		);
+		widthDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
 		var widthInput =  htmlElementsFactory.create (
 			'input',
 			{
@@ -4251,6 +4277,31 @@ Tests ...
 		widthInput.min = 1;
 		widthInput.max = 40;
 
+		// dash
+		var dashDiv = htmlElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
+			},
+			routePropertiesDiv
+		);
+		dashDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
+		var dashSelect = htmlElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-Select',
+				id : 'TravelNotes-RoutePropertiesDialog-DashSelect'
+			},
+			dashDiv
+		);
+
+		var dashChoices = require ( '../data/DataManager' ) ( ).config.route.dashChoices;
+		for ( var optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
+			dashSelect.add ( htmlElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
+		}
+		dashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+		
 		// chain
 		var chainDiv = htmlElementsFactory.create (
 			'div',
@@ -4260,6 +4311,7 @@ Tests ...
 			},
 			routePropertiesDiv
 		);
+		chainDiv.innerHTML = '<span>' + _Translator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
 		var chainInput =  htmlElementsFactory.create (
 			'input',
 			{
@@ -4269,15 +4321,6 @@ Tests ...
 			chainDiv
 		);
 		chainInput.checked = route.chain;
-		htmlElementsFactory.create ( 
-			'label',
-			{
-				for : 'TravelNotes-RoutePropertiesDialog-ChainInput',
-				innerHTML : _Translator.getText ( 'RoutePropertiesDialog - Chained route')
-			},
-			chainDiv
-		);
-		
 		return colorDialog;
 	};
 	
@@ -4294,7 +4337,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":26,"../core/RouteEditor":28,"../core/TravelEditor":30,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
+},{"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":26,"../core/RouteEditor":28,"../core/TravelEditor":30,"../data/DataManager":32,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5072,62 +5115,7 @@ Tests ...
 			);
 
 			// import button
-
-/*
-			var importTravelDiv = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id: 'TravelNotes-Control-ImportTravelDiv'
-				}, 
-				buttonsDiv 
-			);
-			var importTravelInput = htmlElementsFactory.create ( 
-				'input',
-				{
-					id : 'TravelNotes-Control-ImportTravelInput', 
-					type : 'file',
-					accept : '.trv,.map'
-				},
-				importTravelDiv
-			);
-			importTravelInput.addEventListener ( 
-				'change', 
-				function ( clickEvent ) {
-					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
-				},
-				false 
-			);
-			var importTravelFakeDiv = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id: 'TravelNotes-Control-ImportTravelFakeDiv'
-				}, 
-				importTravelDiv 
-			);
-			var importTravelButton = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-ImportTravelButton', 
-					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'TravelEditorUI - Import travel' ), 
-					innerHTML : '&#x1F30F;'
-				},
-				importTravelFakeDiv 
-			);
-			importTravelButton.addEventListener ( 
-				'click' , 
-				function ( ) 
-				{ 
-					if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
-					{
-						return;
-					}
-					importTravelInput.click ( );
-				}, 
-				false 
-			);
-*/			
+			
 			/*
 			// Todo...
 			var undoButton = htmlElementsFactory.create ( 
@@ -5592,6 +5580,7 @@ Changes:
 	-v1.1.0:
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
 		- Issue #30: Add a context menu with delete command to the waypoints
+		- Issue #36: Add a linetype property to route
 Doc reviewed 20170927
 Tests ...
 
@@ -5705,6 +5694,23 @@ Tests ...
 			return latLngs;
 		};
 		
+		var _getDashArray = function ( route ) {
+			if ( route.dashArray >= _DataManager.config.route.dashChoices.length ) {
+				route.dashArray = 0;
+			}
+			var iDashArray = _DataManager.config.route.dashChoices [ route.dashArray ].iDashArray;
+			if ( iDashArray ) {
+				var dashArray = '';
+				var dashCounter = 0;
+				for ( dashCounter = 0; dashCounter < iDashArray.length - 1; dashCounter ++ ) {
+					dashArray += iDashArray [ dashCounter ] * route.width + ',';
+				}
+				dashArray += iDashArray [ dashCounter ] * route.width ;
+				
+				return dashArray;
+			}
+			return null;
+		};
 		/*
 		--- MapEditor object ------------------------------------------------------------------------------------------
 
@@ -5769,9 +5775,8 @@ Tests ...
 				}
 				
 				// the leaflet polyline is created and added to the map
-				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width } );
+				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
 				_AddTo ( route.objId, polyline );
-				
 				// tooltip and popup are created
 				polyline.bindTooltip ( 
 					 route.name,
@@ -5830,7 +5835,7 @@ Tests ...
 
 			editRoute : function ( route ) {
 				var polyline = _DataManager.mapObjects.get ( route.objId );
-				polyline.setStyle( { color : route.color, weight : route.width } );
+				polyline.setStyle( { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
 			},
 			
 			/*
