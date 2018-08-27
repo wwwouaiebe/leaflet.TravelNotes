@@ -29,6 +29,7 @@ Changes:
 		- Issue #27 : push directly the route in the editor when starting a new travel
 		- Issue #31 : Add a command to import from others maps
 		- Issue #34 : Add a command to show all routes
+		- Issue #37 : Add the file name and mouse coordinates somewhere
 Doc reviewed 20170928
 Tests ...
 
@@ -227,7 +228,7 @@ Tests ...
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 			}
-			_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly } );
+			_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly, name : _DataManager.travel.name } );
 		};
 		
 		/*
@@ -491,6 +492,7 @@ Tests ...
 				{
 					return;
 				}
+				_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
 				_DataManager.editedRoute = require ( '../Data/Route') ( );
 				_DataManager.editedRoute.routeChanged = false;
