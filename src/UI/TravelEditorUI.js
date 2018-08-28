@@ -451,6 +451,9 @@ Tests ...
 				controlDiv.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
 				controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 			}
+			else {
+				controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
+			}
 		};	
 		
 		/*
