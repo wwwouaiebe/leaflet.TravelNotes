@@ -70,7 +70,7 @@
 	"travelEditor":
 	{
 		"clearAfterSave":true,
-		"startMinimized":false,
+		"startMinimized":true,
 		"timeout":1000,
 		"startupRouteEdition":true
 	},
