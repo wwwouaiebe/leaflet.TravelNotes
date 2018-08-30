@@ -38,4 +38,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');	
 	grunt.registerTask('default', ['jshint', 'browserify', 'uglify','cssmin']);
+	var now = new Date ();
+	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
+	console.log ( '\n                              ' + now.toTimeString ( ) +'\n' );
+	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 };
