@@ -37,10 +37,10 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet et de Travel & Notes ,
 	<script src="leaflet/leaflet.js"></script>
 	<script src="TravelNotes.min.js"></script>
 	<!-- route providers scripts have only to be installed if you have an API key for this provider -->
-	<script src="TravelNotesProviders/MapzenRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/MapboxRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/GraphHopperRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/OSRMRouteProvider.min.js"></script>
+	<script src="TravelNotesProviders/PolylineRouteProvider.min.js"></script>
 	<script>
 		(function( ) 
 		{
@@ -130,6 +130,10 @@ Le contenu du fichier TravelNotesConfig.json:
 - __wayPoint.reverseGeocoding__ : quand cette valeur est true, les coordonnées des points de passage sont remplacées par une adresse.
 - __route.color__ : la couleur par défaut d'un trajet
 - __route.width__ : l'épaisseur par défaut d'un trajet
+- __route.dashArray__ : le type de ligne à utiliser par défaut ( = un nombre correspondant à l'indice du type de ligne dans le tableau dashChoices ).
+- __route.dashChoices__ : un tableau reprenant les différents type de lignes affichés dans la boite de dialogue RoutesPropertiesDialog. Text sera affiché dans le sélecteur du type de ligne et iDashArray 
+est le template du type de ligne. Attention: les valeurs contenues dans ce tableau sont des valeurs numériques et seront multipliées par l'épaisseur de la ligne (width) et transformées en texte
+avant d'être utilisées pour adapter le type de ligne dans Leaflet.
 - __note.reverseGeocoding__ : quand cette valeur est true, les coordonnées des notes sont remplacées par une adresse.
 - __note.grip.size__ : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
 - __note.grip.opacity__ : l'opacité de la poignée à l'extrémité de la ligne de rappel d'une note (0 = invisible!) 
@@ -141,6 +145,8 @@ Le contenu du fichier TravelNotesConfig.json:
 - __travelEditor.clearAfterSave__ : n'est pas utilisé actuellement
 - __travelEditor.startMinimized__ : quand cette valeur est true, le contrôle de TravelNotes est affiché sous forme réduite au départ
 - __travelEditor.timeout__ : le temps qui va s'écouler entre le moment où la souris ne se trouve plus dans le contrôle et le moment où celui-ci sera réduit.
+- __travelEditor.startupRouteEdition__ : quand cette valeur est true, un trajet est directement édité au chargement d'un nouveau fichier.
+- __haveBeforeUnloadWarning__ : quand cette valeur est true, un avertissement est affiché quand la page web est fermée mais que des données pourraient ne pas être sauvegardées.
 
 #### Le contenu du fichier TravelNotesNoteDialog.json
 
@@ -207,4 +213,13 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
 
 ### Traductions
+
+Travel & Notes est traduit en 'fr' et en 'en'. Si vous désirez traduire Travel & Notes dans une autre langue, copiez le fichier TravelNotesEN.json et renommez-le en fonction de la langue utilisée. Ensuite,
+éditez ce fichier et traduisez toutes les lignes msgstr dans la langue souhaitée.
+Pour charger Travel & Notes dans une autre langue, ajoutez à l'url lng= et la langue à utiliser (exemple pour utiliser Travel & Notes en en: https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en.
+
+L'organisation de ces fichiers est la plus proche possible de celle de [GNU getText](https://en.wikipedia.org/wiki/Gettext)
+
 ### Pluggins
+
+Pour utiliser un pluggin, charegez simplement celui-ci à partir de la page html en utilisant le tag <script>
