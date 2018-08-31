@@ -1,5 +1,5 @@
 {
-  "name": "leaflet.TravelNotes",
+  "name": "leaflet.travelnotes",
   "version": "1.1.0",
   "description": "Editable markers and routing engine for leaflet",
   "main": "src/L.TravelNotes.js",
