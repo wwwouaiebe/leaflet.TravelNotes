@@ -16,6 +16,8 @@ Ajoutez simplement MapboxProviderKey=votre_API_key_Mapbox et/ou GraphHopperProvi
 
 Et avec Mapbox et Graphhopper, vous pouvez rechercher un trajet pour une voiture, un vélo ou un piéton.
 
+Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2) qui affiche un voyage avec un trajet et des icônes, sans aucun contrôle, et donc sans possibilité de modifications.
+
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
 
 __Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server for conditions. 
@@ -25,3 +27,6 @@ If you have a Mapbox or GraphHopper API key, you can also use this demo with Map
 Simply add MapboxProviderKey=your_Mapbox_API_key and/or GraphHopperProviderKey=your_GraphHopper_API_key to the demo url: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=your_mapbox_API_key&GraphHopperProviderKey=your_GraphHopper_API_key .
 
 And with Mapbox and GraphHopper, you can search a route for car, bike or pedestrian.
+
+see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2).  This demo displays a travel with a route and two icons
+and without any control, so the user cannot modify the travel.
