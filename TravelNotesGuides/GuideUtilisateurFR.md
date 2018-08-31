@@ -14,7 +14,7 @@ certaines région isolées, il n'y a pas toujours de réseau mobile ni de possib
 
 ## __Quelques explications sur les termes utilisés__
 
-Un **trajet** relie deux points. Sur la carte, il est représenté par une ligne continue.
+Un **trajet** relie deux points. Sur la carte, il est représenté par une polyligne.
 
 Un **itinéraire** est la description des différents changements de direction nécessaires pour parcourir le trajet.
 
@@ -34,9 +34,9 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
-sont GraphHopper, Mapbox et Mapzen et OSRM. 
+sont GraphHopper, Mapbox et et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins.
 
-Pour GraphHopper, Mapbox et Mapzen il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
+Pour GraphHopper et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 
 Vous devez également lire correctement  les conditions d'utilisation des clefs d'accès et vérifier que ce que vous faites avec Travel & Notes correspond à ces conditions d'utilisation.
 
@@ -50,7 +50,7 @@ suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être in
 
 Exemple:
 ```
-https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&MapzenProviderKey=votre_clef_access_Mapzen&GraphHopperProviderKey=votre_clef_acces_GraphHopper
+https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
 ```
 
 Les clefs d'accès sont sauvegardées dans le _sessionStorage_ du browser. Il n'est donc pas nécessaire de les réintroduire lors de chaque rafraichissement de la page. Cependant, elles sont définitivement effacées 
@@ -92,6 +92,7 @@ Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable 
 - le bouton &#x274c; efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
 - le bouton &#x1f4be; sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
 - le bouton &#x1f4c2; ouvre un voyage préalablement sauvé dans un fichier
+- le bouton &#x1F30F; ouvre un voyage préalablement sauvé dans un fichier et inclut tous les trajets et toutes les notes de ce voyage dans le voyage en cours d'édition
 - le bouton &#x1f4cb; ouvre le livre de voyage
 - le bouton + ajoute un nouveau trajet au voyage
 
@@ -133,6 +134,10 @@ n'est pas possible de transformer le point de départ ou le point de fin en poin
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
+#### Supprimer un pont de passage
+
+Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu. Il n'est pas possible de supprimer le point de départ ni le point de fin. Seul un glisser / déposer est possible.
+
 #### Choisir un mode de parcours et un fournisseur d'itinéraire
 
 Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton ou voiture) ainsi que le fournisseur de trajet.
@@ -151,7 +156,7 @@ La description de l'itinéraire est également affichée dans la partie "Itinér
 Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte, il est toujours ajouté comme étant le dernier point intermédiaire. Cela peut donner des résultats 
 étranges au niveau de l'itinéraire calculé.
 
-Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. Faites un clic droit sur le trajet à l'endroit où vous voulez insérer
+Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. Faites un clic droit sur le __trajet__ à l'endroit où vous voulez insérer
 le point de passage et sélectionner dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point peut ensuite être déplacé à sa nouvelle position 
 avec un glisser / déposer.
 
@@ -281,7 +286,7 @@ de nuance de rouge dans les couleurs proposées.
 
 Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement via les 3 zones d'édition des couleurs.
 
-Il est également possible de modifier la largeur du trajet ainsi que chainer le trajet au voyage.
+Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également chainer le trajet au voyage.
 
 ### Déplacer une boite d'édition sur l'écran.
 
