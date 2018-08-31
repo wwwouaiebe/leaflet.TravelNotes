@@ -8165,6 +8165,11 @@ Tests ...
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
+					var routesIterator = _DataManager.travel.routes.iterator;
+					while ( ! routesIterator.done ) {
+						routesIterator.value.hidden = false;
+					}
+						
 					// compressing the itineraryPoints
 					var compressedTravel = _DataManager.travel.object;
 					compressedTravel.routes.forEach (
