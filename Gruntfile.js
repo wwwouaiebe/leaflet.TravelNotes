@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 		uglify: {
 			options: {
 				banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - ' +
-				'<%= grunt.template.today("yyyy-mm-dd") %> - Copyright 2015 2017 Christian Guyette - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
+				'<%= grunt.template.today("yyyy-mm-dd") %> - Copyright 2015 2018 Christian Guyette - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
 			},
 			build: {
 				src: 'dist/TravelNotes.js',
