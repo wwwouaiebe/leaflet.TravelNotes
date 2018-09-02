@@ -1,3 +1,6 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+gh-page/
 node_modules/
-dist/leaflet/
-dist/Maps/

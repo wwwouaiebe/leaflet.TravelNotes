@@ -1,0 +1,414 @@
+[
+	{
+		"msgid" : "AboutDialog - About Travel & Notes",
+		"msgstr" : "À propos de Travel & Notes"
+	},
+	{
+		"msgid" : "BaseDialog - Cancel",
+		"msgstr" : "Abandonner"
+	},
+	{
+		"msgid" : "ColorDialog - Blue",
+		"msgstr" : "Bleu"
+	},
+	{
+		"msgid" : "ColorDialog - Green",
+		"msgstr" : "Vert"
+	},
+	{
+		"msgid" : "ColorDialog - Red",
+		"msgstr" : "Rouge"
+	},
+	{
+		"msgid" : "ColorDialog - Colors",
+		"msgstr" : "Couleurs"
+	},
+	{
+		"msgid" : "ContextMenu - Close",
+		"msgstr" : "Fermer"
+	},
+	{
+		"msgid" : "ErrorEditorUI - Hide",
+		"msgstr" : "Masquer"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
+		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}",
+		"msgstr" : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - TransitMode bike",
+		"msgstr" : "un vélo"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - TransitMode car",
+		"msgstr" : "une voiture"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - TransitMode pedestrian",
+		"msgstr" : "un piéton"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
+		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel footer",
+		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© Christian Guyette 2017</a>"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Hide",
+		"msgstr" : "Masquer"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Itinerary and notes",
+		"msgstr" : "Itinéraire et notes"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Show",
+		"msgstr" : "Afficher"
+	},
+	{
+		"msgid" : "NoteDialog - Address&nbsp;:",
+		"msgstr" : "Adresse&nbsp;:"
+	},
+	{
+		"msgid" : "Notedialog - The icon content cannot be empty",
+		"msgstr" : "Le contenu de l'icône doit être complété."
+	},
+	{
+		"msgid" : "NoteDialog - Icon height",
+		"msgstr" : "Hauteur de l'icône : "
+	},
+	{
+		"msgid" : "NoteDialog - Icon width",
+		"msgstr" : "Largeur de l'icône : "
+	},
+	{
+		"msgid" : "NoteDialog - Icon content",
+		"msgstr" : "Contenu de l'icône&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Link",
+		"msgstr" : "Lien&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Note",
+		"msgstr" : "Note"
+	},
+	{
+		"msgid" : "NoteDialog - Phone",
+		"msgstr" : "Téléphone&nbsp:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Text",
+		"msgstr" : "Texte&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Tooltip content",
+		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Address",
+		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Delete this note",
+		"msgstr" : "Effacer cette note"
+	},
+	{
+		"msgid" : "NoteEditor - Distance",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "NoteEditor - Edit this note",
+		"msgstr" : "Éditer cette note"
+	},
+	{
+		"msgid" : "NoteEditor - Hide notes",
+		"msgstr" : "Masquer les notes"
+	},
+	{
+		"msgid" : "NoteEditor - New travel note",
+		"msgstr" : "Ajouter une note"
+	},
+	{
+		"msgid" : "NoteEditor - Latitude Longitude",
+		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "NoteEditor - Phone",
+		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Show notes",
+		"msgstr" : "Afficher les notes"
+	},
+	{
+		"msgid" : "NoteEditor - Link",
+		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Zoom to note",
+		"msgstr" : "Zoom sur cette note"
+	},
+	{
+		"msgid" : "RouteEditor - Add a note on the route",
+		"msgstr" : "Ajouter une note à ce trajet"
+	},
+	{
+		"msgid" : "RouteEditor - Add a waypoint on the route",
+		"msgstr" : "Ajouter une point de passage à ce trajet"
+	},
+	{
+		"msgid" : "RouteEditor - Cancel modifications on this route",
+		"msgstr" : "Abandonner les modifications"
+	},
+	{
+		"msgid" : "RouteEditor - Distance",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "RouteEditor - Duration",
+		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
+	},
+	{
+		"msgid" : "RouteEditor - Delete this route",
+		"msgstr" : "Supprimer ce trajet"
+	},
+	{
+		"msgid" : "RouteEditor - Delete this waypoint",
+		"msgstr" : "Supprimer ce point de passage"
+	},
+	{
+		"msgid" : "RouteEditor - Edit this route",
+		"msgstr" : "Éditer ce trajet"
+	},
+	{
+		"msgid" : "RouteEditor - Hide this route",
+		"msgstr" : "Masquer ce trajet"
+	},
+	{
+		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
+		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
+	},
+	{
+		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
+		"msgstr" : "Il n'est pas possible d'éditer un trajet sans sauver ou abandonner les modifications"
+	},
+	{
+		"msgid" : "RouteEditor - Properties",
+		"msgstr" : "Propriétés"
+	},
+	{
+		"msgid" : "RouteEditor - Save modifications on this route",
+		"msgstr" : "Sauver les modifications"
+	},
+	{
+		"msgid" : "RouteEditor - Select this point as end point",
+		"msgstr" : "Sélectionner cet endroit comme point de fin"
+	},
+	{
+		"msgid" : "RouteEditor - Select this point as start point",
+		"msgstr" : "Sélectionner cet endroit comme point de départ"
+	},
+	{
+		"msgid" : "RouteEditor - Select this point as way point",
+		"msgstr" : "Sélectionner cet endroit comme point intermédiaire"
+	},
+	{
+		"msgid" : "RouteEditor - Zoom to route",
+		"msgstr" : "Zoom sur le trajet"
+	},
+	{
+		"msgid" : "RouteEditorUI - Add waypoint",
+		"msgstr" : "Ajouter un point de passage"
+	},
+	{
+		"msgid" : "RouteEditorUI - Cancel",
+		"msgstr" : "Abandonner les modifications"
+	},
+	{
+		"msgid" : "RouteEditorUI - Delete all waypoints",
+		"msgstr" : "Supprimer tous les points de passage"
+	},
+	{
+		"msgid" : "RouteEditorUI - End",
+		"msgstr" : "Fin"
+	},
+	{
+		"msgid" : "RouteEditorUI - Expand the list",
+		"msgstr" : "Étendre"
+	},
+	{
+		"msgid" : "RouteEditorUI - Hide",
+		"msgstr" : "Masquer"
+	},
+	{
+		"msgid" : "RouteEditorUI - Invert waypoints",
+		"msgstr" : "Inverser les points de passage"
+	},
+	{
+		"msgid" : "RouteEditorUI - Reduce the list",
+		"msgstr" : "Réduire"
+	},
+	{
+		"msgid" : "RouteEditorUI - Save",
+		"msgstr" : "Sauver les modifications"
+	},
+	{
+		"msgid" : "RouteEditorUI - Save the route in a gpx file",
+		"msgstr" : "Sauver la route dans un fichier gpx"
+	},
+	{
+		"msgid" : "RouteEditorUI - Show",
+		"msgstr" : "Afficher"
+	},
+	{
+		"msgid" : "RouteEditorUI - Start",
+		"msgstr" : "Départ"
+	},
+	{
+		"msgid" : "RouteEditorUI - Via",
+		"msgstr" : "Point de passage"
+	},
+	{
+		"msgid" : "RouteEditorUI - Waypoints",
+		"msgstr" : "Points de passage&nbsp;du trajet:"
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Chained route",
+		"msgstr" : "Trajet chaîné : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Linetype",
+		"msgstr" : "Type de ligne : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Route properties",
+		"msgstr" : "Propriétés du trajet"
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Width",
+		"msgstr" : "Largeur : "
+	},
+	{
+		"msgid" : "Router - An error occurs when parsing the response",
+		"msgstr" : "Une erreur s'est produite lors de l'analyse de la réponse"
+	},
+	{
+		"msgid" : "Router - An error occurs when sending the request",
+		"msgstr" : "Une erreur s'est produite lors de l'envoi de la requête (Statut: {status} - {statusText})"
+	},
+	{
+		"msgid" : "SortableList - Delete",
+		"msgstr" : "Supprimer"
+	},
+	{
+		"msgid" : "SortableList - Edit",
+		"msgstr" : "Éditer"
+	},
+	{
+		"msgid" : "SortableList - Move down",
+		"msgstr" : "Déplacer vers le bas"
+	},
+	{
+		"msgid" : "SortableList - Move up",
+		"msgstr" : "Déplacer vers le haut"
+	},
+	{
+		"msgid" : "TravelEditor - About Travel & Notes",
+		"msgstr" : "À propos de Travel & Notes"
+	},
+	{
+		"msgid" : "TravelEditor - Cannot remove an edited route",
+		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
+	},
+	{
+		"msgid" : "TravelEditor - Not possible to save a travel without a save or cancel",
+		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de trajet. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
+	},
+	{
+		"msgid" : "TravelEditor - Show all routes",
+		"msgstr" : "Afficher tous les trajets"
+	},
+	{
+		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
+		"msgstr" : "Cette page demande de confirmer sa fermeture ; des données saisies pourraient ne pas être enregistrées."
+	},
+	{
+		"msgid" : "TravelEditor - Zoom to travel",
+		"msgstr" : "Zoom sur le voyage"
+	},
+	{
+		"msgid" : "TravelEditorUI - Cancel travel",
+		"msgstr" : "Abandonner ce voyage"
+	},
+	{
+		"msgid" : "TravelEditorUI - Delete all routes",
+		"msgstr" : "Supprimer tous les trajets"
+	},
+	{
+		"msgid" : "TravelEditorUI - Expand the list",
+		"msgstr" : "Étendre"
+	},
+	{
+		"msgid" : "TravelEditorUI - Hide",
+		"msgstr" : "Masquer"
+	},
+	{
+		"msgid" : "TravelEditorUI - Import travel",
+		"msgstr" : "Importer des trajets et des notes depuis un autre voyage"
+	},
+	{
+		"msgid" : "TravelEditorUI - New route",
+		"msgstr" : "Nouveau trajet"
+	},
+	{
+		"msgid" : "TravelEditorUI - Open travel roadbook",
+		"msgstr" : "Ouvrir le livre de voyage"
+	},
+	{
+		"msgid" : "TravelEditorUI - Reduce the list",
+		"msgstr" : "Réduire"
+	},
+	{
+		"msgid" : "TravelEditorUI - Route",
+		"msgstr" : "Trajet"
+	},
+	{
+		"msgid" : "TravelEditorUI - Travel routes",
+		"msgstr" : "Trajets du voyage&nbsp;:"
+	},
+	{
+		"msgid" : "TravelEditorUI - Save travel",
+		"msgstr" : "Sauver dans un fichier"
+	},
+	{
+		"msgid" : "TravelEditorUI - Open travel",
+		"msgstr" : "Ouvrir un fichier"
+	},
+	{
+		"msgid" : "TravelEditorUI - Show",
+		"msgstr" : "Afficher"
+	},
+	{
+		"msgid" : "Utilities - Day",
+		"msgstr" : "jours"
+	},
+	{
+		"msgid" : "Utilities - Hour",
+		"msgstr" : "h"
+	},
+	{
+		"msgid" : "Utilities - Minute",
+		"msgstr" : "min"
+	},
+	{
+		"msgid" : "Utilities - Second",
+		"msgstr" : "sec"
+	}
+]

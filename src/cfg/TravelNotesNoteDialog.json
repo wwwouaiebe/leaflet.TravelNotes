@@ -1,0 +1,273 @@
+{ "editionButtons" : 
+	[
+		{
+			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:red'>Red</span>",
+			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:black;background-color:yellow'>Yellow</span>",
+			"htmlBefore" : "<span style='color:black;background-color:yellow'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:black;background-color:cyan'>Cyan</span>",
+			"htmlBefore" : "<span style='color:black;background-color:cyan'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title": "&lt;li&gt;●&lt;li&gt;",
+			"htmlBefore": "<li>",
+			"htmlAfter": "</li>"
+		}, 	
+		{
+			"title": "Å",
+			"htmlBefore": "Å"
+		}, 
+		{
+			"title": "å",
+			"htmlBefore": "å"
+		}, 
+		{
+			"title": "Æ",
+			"htmlBefore": "Æ"
+		}, 
+		{
+			"title": "æ",
+			"htmlBefore": "æ"
+		}, 
+		{
+			"title": "Ø",
+			"htmlBefore": "Ø"
+		}, 
+		{
+			"title": "ø",
+			"htmlBefore": "ø"
+		}, 
+		{
+			"title": "&gt;&lt;",
+			"htmlBefore": "&gt;&lt;"
+		}, 
+		{
+			"title": "&lt;",
+			"htmlBefore": "&lt;"
+		}, 
+		{
+			"title": "&gt;",
+			"htmlBefore": "&gt;"
+		}, 
+		{
+			"title": "&#x1F6B2;",
+			"htmlBefore": "&nbsp;&#x1F6B2;&nbsp;"
+		}, 
+		{
+			"title": "&amp;nbsp;",
+			"htmlBefore": "&nbsp;"
+		}
+
+	],
+	"preDefinedIconsList" :
+	[
+		{
+			"name" : "Aéroport",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0001'></div>",
+			"tooltip" : "Aéroport",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Montée",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0002'></div>",
+			"tooltip" : "Montée",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Distributeur de billets",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0003'></div>",
+			"tooltip" : "Distributeur de billets",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Attention requise",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0004'></div>",
+			"tooltip" : "Attention requise",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Vélos admis",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0005'></div>",
+			"tooltip" : "Vélos admis",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Autobus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0006'></div>",
+			"tooltip" : "Autobus",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Photo",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0007'></div>",
+			"tooltip" : "Photo",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Camping",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0008'></div>",
+			"tooltip" : "Camping",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Ferry",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0009'></div>",
+			"tooltip" : "Ferry",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Auberge de jeunesse",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0010'></div>",
+			"tooltip" : "Auberge de jeunesse",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Point d'information",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0011'></div>",
+			"tooltip" : "Point d'information",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Parc national",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0012'></div>",
+			"tooltip" : "Parc national",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Vélos mal vus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0013'></div>",
+			"tooltip" : "Vélos mal vus",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Parc régional",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0014'></div>",
+			"tooltip" : "Parc régional",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Entretien vélo",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0015'></div>",
+			"tooltip" : "Entretien vélo",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Magasin",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0016'></div>",
+			"tooltip" : "Magasin",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Aide",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0017'></div>",
+			"tooltip" : "Aide",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Stop",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0018'></div>",
+			"tooltip" : "Stop",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Table",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0019'></div>",
+			"tooltip" : "Table",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Toilettes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0020'></div>",
+			"tooltip" : "Toilettes",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Gare",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0021'></div>",
+			"tooltip" : "Gare",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Tunnel",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0022'></div>",
+			"tooltip" : "Tunnel",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Point d'eau",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0023'></div>",
+			"tooltip" : "Point d'eau",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Chambre d'hotes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0024'></div>",
+			"tooltip" : "Chambre d'hotes",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Cafetaria",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0025'></div>",
+			"tooltip" : "Cafetaria",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Restaurant",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0026'></div>",
+			"tooltip" : "Restaurant",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Hôtel",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0027'></div>",
+			"tooltip" : "Hôtel",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Départ",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0028'></div>",
+			"tooltip" : "Départ",
+			"width" : 40,
+			"height" : 40
+		}
+	]
+}

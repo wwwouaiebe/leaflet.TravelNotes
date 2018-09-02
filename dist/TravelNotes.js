@@ -4688,7 +4688,7 @@ Tests ...
 					);
 				}
 				
-				return ! translation ? msgid : translation;
+				return translation ? translation : msgid;
 			}
 		};
 	};

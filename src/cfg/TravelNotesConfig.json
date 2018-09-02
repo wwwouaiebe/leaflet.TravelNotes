@@ -1,0 +1,78 @@
+{
+	"contextMenu":
+	{
+		"timeout": 1500
+	},
+	"errorMessages" :
+	{
+		"timeout" : 20000
+	},
+	"routing":
+	{
+		"auto":true
+	},
+	"language":"fr",
+	"itineraryPointMarker":
+	{
+		"color":"red",
+		"weight":2,
+		"radius":7,
+		"fill":false
+	},
+	"wayPoint":
+	{
+		"reverseGeocoding":true
+	},
+	"route":
+	{
+		"color":"#ff0000",
+		"width":3,
+		"dashArray": 0,
+		"dashChoices": [
+			{ 
+				"text":"——————",
+				"iDashArray" : null
+			}, 
+			{
+				"text":"— — — — —",
+				"iDashArray":[4,2] 
+			}, 
+			{
+				"text":"—‧—‧—‧—‧—",
+				"iDashArray":[4,2,0,2] 
+			}, 
+			{
+				"text":"················",
+				"iDashArray":[0,2] 
+			}
+		]
+	},
+	"note":
+	{
+		"reverseGeocoding":true,
+		"grip":
+		{
+			"size":10,
+			"opacity":0
+		},
+		"polyline":
+		{
+			"color":"gray",
+			"weight":1
+		},
+		"style":"TravelNotes-NotesStyle"
+	},
+	"itineraryPointZoom":17,
+	"routeEditor":
+	{
+		"displayEditionInHTMLPage" : true
+	},
+	"travelEditor":
+	{
+		"clearAfterSave":true,
+		"startMinimized":true,
+		"timeout":1000,
+		"startupRouteEdition":true
+	},
+	"haveBeforeUnloadWarning" : true
+}

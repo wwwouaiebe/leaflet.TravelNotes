@@ -1,6 +1,6 @@
 {
   "name": "leaflet.travelnotes",
-  "version": "1.1.0",
+  "version": "1.2.0-alpha",
   "description": "Editable markers and routing engine for leaflet",
   "main": "src/L.TravelNotes.js",
   "dependencies": {
@@ -9,6 +9,8 @@
   "devDependencies": {
     "grunt": "^1.0.3",
     "grunt-browserify": "^4.0.1",
+    "grunt-build-number": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^2.2.1",
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^3.4.0"
@@ -30,5 +32,6 @@
   "bugs": {
     "url": "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
   },
-  "homepage": "https://github.com/wwwouaiebe/leaflet.TravelNotes#readme"
+  "homepage": "https://github.com/wwwouaiebe/leaflet.TravelNotes#readme",
+  "nextBuild": "12"
 }

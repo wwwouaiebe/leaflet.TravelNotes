@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+		<title>Travel & notes by wwwouaiebe</title>
+		<meta name="author" content="Christian Guyette" />
+		<link rel="stylesheet" href="TravelNotesRoadbook.min.css" />
+		<link rel="stylesheet" href="myStyles.css" />
+	</head>
+	<body id='TravelNotes-Top'>
+		<div id="TravelNotes-Menu">
+			<div id='TravelNotes-GoTop'><a href='#TravelNotes-Top'>&#x1f53a;</a></div>
+			<div><input type="checkbox" checked="true" id="TravelNotes-Travel-ShowNotes" /> <label for="TravelNotes-Travel-ShowNotes">Notes du voyage</label></div>
+			<div><input type="checkbox" checked="true" id="TravelNotes-Routes-ShowManeuvers" /> <label for="TravelNotes-Routes-ShowManeuvers">Itinéraire</label></div>
+			<div><input type="checkbox" checked="true" id="TravelNotes-Routes-ShowNotes" /> <label for="TravelNotes-Routes-ShowNotes">Notes de l'itinéraire</label></div>
+		</div>
+		<div id='TravelNotes'>
+			<div>Pour des raisons de sécurité liées à la configuration de votre navigateur, cette page ne peut pas être affichée (cookies désactivés).</div>
+		</div>
+		<script>
+			function getPageId ( ) {
+				var UrlSearch = decodeURI ( window.location.search );
+				if ( 0 == UrlSearch.length )
+				{
+					return '';
+				}
+				if ( 0 <= UrlSearch.indexOf ( 'page=' ) )
+				{
+					return UrlSearch.substr ( UrlSearch.indexOf ( 'page=' ) + 5 );
+				}
+				return '';
+			}
+			
+			function showTravelNotes ( event )
+			{
+				var show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
+				var notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
+				for ( var notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+					if ( show ) {
+						notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+					else {
+						notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+				}
+			}
+			
+			function showRouteNotes ( event )
+			{
+				var show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
+				var notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
+				for ( var notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+					if ( show ) {
+						notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+					else {
+						notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+				}
+			}
+
+			function showRouteManeuvers( event )
+			{
+				var show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
+				var maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
+				for ( var maneuversCounter = 0; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
+					if ( show ) {
+						maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+					else {
+						maneuvers [ maneuversCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+					}
+				}
+			}
+			
+			var pageId = getPageId ( );
+			if ( 0 < pageId.length ) {
+				document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( getPageId ( ) + "-TravelNotesHTML" ); 
+				showTravelNotes ( );
+				showRouteNotes ( );
+				showRouteManeuvers ( );
+				window.addEventListener(
+					'storage', 
+					function ( event ) { 
+						document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( getPageId ( ) + "-TravelNotesHTML" );
+						showTravelNotes ( );
+						showRouteNotes ( );
+						showRouteManeuvers ( );
+					}
+				);
+			}
+
+			document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change',showTravelNotes );
+			document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change',showRouteNotes );
+			document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
+		</script>
+	</body>
+</html>
