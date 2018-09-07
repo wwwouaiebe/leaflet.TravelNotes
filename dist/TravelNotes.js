@@ -12,10 +12,17 @@
 
 var polyline = {};
 
-function encode(coordinate, factor) {
-    coordinate = Math.round(coordinate * factor);
+function py2_round(value) {
+    // Google's polyline algorithm uses the same rounding strategy as Python 2, which is different from JS for negative values
+    return Math.floor(Math.abs(value) + 0.5) * (value >= 0 ? 1 : -1);
+}
+
+function encode(current, previous, factor) {
+    current = py2_round(current * factor);
+    previous = py2_round(previous * factor);
+    var coordinate = current - previous;
     coordinate <<= 1;
-    if (coordinate < 0) {
+    if (current - previous < 0) {
         coordinate = ~coordinate;
     }
     var output = '';
@@ -98,12 +105,12 @@ polyline.encode = function(coordinates, precision) {
     if (!coordinates.length) { return ''; }
 
     var factor = Math.pow(10, precision || 5),
-        output = encode(coordinates[0][0], factor) + encode(coordinates[0][1], factor);
+        output = encode(coordinates[0][0], 0, factor) + encode(coordinates[0][1], 0, factor);
 
     for (var i = 1; i < coordinates.length; i++) {
         var a = coordinates[i], b = coordinates[i - 1];
-        output += encode(a[0] - b[0], factor);
-        output += encode(a[1] - b[1], factor);
+        output += encode(a[0], b[0], factor);
+        output += encode(a[1], b[1], factor);
     }
 
     return output;
@@ -7905,7 +7912,7 @@ Tests ...
 			// decompressing the itineraryPoints
 			compressedTravel.routes.forEach ( 
 				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( 'polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
 					var decompressedItineraryPoints = [];
 					var latLngsCounter = 0;
 					route.itinerary.itineraryPoints.latLngs.forEach (
@@ -8186,7 +8193,7 @@ Tests ...
 									compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
 								}
 							);
-							compressedItineraryPoints.latLngs = require ( 'polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+							compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
 							route.itinerary.itineraryPoints = compressedItineraryPoints;
 						}
 					);
@@ -8360,7 +8367,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../Data/Route":4,"../Data/Travel":5,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":25,"../core/MapEditor":26,"../core/RouteEditor":28,"../util/Utilities":43,"./ErrorEditor":23,"./MapEditor":26,"./RouteEditor":28,"polyline":1}],31:[function(require,module,exports){
+},{"../Data/DataManager":2,"../Data/Route":4,"../Data/Travel":5,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":25,"../core/MapEditor":26,"../core/RouteEditor":28,"../util/Utilities":43,"./ErrorEditor":23,"./MapEditor":26,"./RouteEditor":28,"@mapbox/polyline":1}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

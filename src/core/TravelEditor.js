@@ -112,7 +112,7 @@ Tests ...
 			// decompressing the itineraryPoints
 			compressedTravel.routes.forEach ( 
 				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( 'polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
 					var decompressedItineraryPoints = [];
 					var latLngsCounter = 0;
 					route.itinerary.itineraryPoints.latLngs.forEach (
@@ -393,7 +393,7 @@ Tests ...
 									compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
 								}
 							);
-							compressedItineraryPoints.latLngs = require ( 'polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+							compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
 							route.itinerary.itineraryPoints = compressedItineraryPoints;
 						}
 					);
