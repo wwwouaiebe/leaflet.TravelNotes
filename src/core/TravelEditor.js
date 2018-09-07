@@ -449,23 +449,18 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			openServerTravel : function ( ) {
-				var urlSearch = decodeURI ( window.location.search );
-				var serverUrl = null;
-				if ( 'fil=' === urlSearch.substr ( 1, 4 ) ) {
-					serverUrl = atob ( urlSearch.substr ( 5 ) );
-					var xmlHttpRequest = new XMLHttpRequest ( );
-					xmlHttpRequest.onreadystatechange = function ( event ) {
-						if ( this.readyState === XMLHttpRequest.DONE ) {
-							if ( this.status === 200 ) {
-								_LoadFile ( this.responseText,'', true );
-							} 
-						}
-					};
-					xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
-					xmlHttpRequest.overrideMimeType ( 'application/json' );
-					xmlHttpRequest.send ( null );
-				}
+			openServerTravel : function ( serverUrl ) {
+				var xmlHttpRequest = new XMLHttpRequest ( );
+				xmlHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === XMLHttpRequest.DONE ) {
+						if ( this.status === 200 ) {
+							_LoadFile ( this.responseText,'', true );
+						} 
+					}
+				};
+				xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
+				xmlHttpRequest.overrideMimeType ( 'application/json' );
+				xmlHttpRequest.send ( null );
 			},
 
 			/*

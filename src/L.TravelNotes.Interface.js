@@ -48,6 +48,7 @@ Tests ...
 	var _RightContextMenu = false;
 	
 	var _Langage = '';
+	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
 
@@ -75,6 +76,14 @@ Tests ...
 			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
 			var newUrlSearch = '?' ;
 			for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
+				
+				if ( 'fil=' === urlSearch [ urlCounter ].substr ( 0, 4 ).toLowerCase ( ) ) {
+					_LoadedTravel = atob ( urlSearch [ urlCounter ].substr ( 4 ) );
+					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+					newUrlSearch += urlSearch [ urlCounter ];
+					continue;
+				}
+				
 				var param = urlSearch [ urlCounter ].split ( '=' );
 				if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
 					if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
@@ -198,7 +207,9 @@ Tests ...
 											}
 										}
 										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-										require ( './core/TravelEditor' ) ( ).openServerTravel ( );
+										if ( _LoadedTravel ) {
+											require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
+										}
 										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
 										if ( _DataManager.config.travelEditor.startupRouteEdition ) {
 											require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
