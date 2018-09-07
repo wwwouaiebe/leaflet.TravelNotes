@@ -201,6 +201,64 @@ Tests ...
 
 	var DataManager = function ( ) {
 
+			/*
+			--- _copyObjectTo method -------------------------------------------------------------------------------------------
+
+			This method:
+				- search recursively all dest properties
+				- foreach found property, search the same property in source
+				- copy the property value from source to dest if found
+				- search recursively all sources properties
+				- foreach found property search the same property in dest
+				-copy the property value from source to dest
+				
+				So: 
+					- if a property is missing in the user config, the property is selected from the default config
+					- if a property is in the user config but missing in the default config, the property is also added (and reminder
+					  that the user can have more dashChoices than the default config )
+					- if a property is changed in the user config, the property is adapted
+			
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			var _copyObjectTo = function ( source, dest ) {
+			if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
+				return;
+			}
+			try {
+			
+				var property;
+				for ( property in dest ) {
+					if ( 'object' === typeof dest [ property ] ) {
+						_copyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ] || dest [ property ];
+					}
+				}
+
+				for ( property in source ) {
+					if ( 'object' === typeof source [ property ] ) {
+						if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
+							dest [ property ] = dest [ property ] || [];
+						}
+						else {
+							dest [ property ] = dest [ property ] || {};
+						}
+						_copyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ];
+					}
+				}
+			}
+			catch ( e ) {
+				console.log ( 'Not possible to load TravelNotesConfig.json' );
+			}
+			
+			return;
+		};
+		
 		return {
 
 			/*
@@ -318,7 +376,7 @@ Tests ...
 			set travel ( Travel ) { global.travel = Travel; },
 
 			get config ( ) { return global.config; },
-			set config ( Config ) { global.config = Config; },
+			set config ( Config ) { _copyObjectTo ( Config, global.config ); },
 
 			get mapObjects ( ) { return global.mapObjects; },
 
