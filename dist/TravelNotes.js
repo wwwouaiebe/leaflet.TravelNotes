@@ -962,7 +962,7 @@ Tests ...
 			for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
 				
 				if ( 'fil=' === urlSearch [ urlCounter ].substr ( 0, 4 ).toLowerCase ( ) ) {
-					_LoadedTravel = atob ( urlSearch [ urlCounter ].substr ( 4 ) );
+					_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearch [ urlCounter ].substr ( 4 ) ) ) );
 					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 					newUrlSearch += urlSearch [ urlCounter ];
 					continue;
