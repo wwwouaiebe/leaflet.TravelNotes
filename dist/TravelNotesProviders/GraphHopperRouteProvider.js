@@ -185,8 +185,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getGraphHopperRouteProvider = function ( ) {
 
+		var _WayPoints;
+		var _TransitMode;
+		var _ProviderKey;
+		var _UserLanguage;
+		var _Options;
 
-	
 		var _IconList = 
 		[
 			"kUndefined",
@@ -202,15 +206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			"kRoundaboutRight", //USE_ROUNDABOUT = 6
 		];
 
-		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
-			
-			var response = null;
-			try {
-				response = JSON.parse( requestResponse );
-			}
-			catch ( e ) {
-				return false;
-			}
+		var _ParseResponse = function ( response, route, userLanguage ) {
 			
 			if ( 0 === response.paths.length ) {
 				return false;
@@ -259,7 +255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return true;
 		};
 		
-		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+		var _GetUrl = function ( ) {
 			
 			var wayPointsToString = function ( wayPoint, result )  {
 				if ( null === result ) {
@@ -271,10 +267,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				result += 'point=' + wayPoint.lat.toFixed ( 6 ) + ',' + wayPoint.lng.toFixed ( 6 ) ;
 				return result;
 			};
-			var wayPointsString = wayPoints.forEach ( wayPointsToString );
+			var wayPointsString = _WayPoints.forEach ( wayPointsToString );
 			
 			var vehicle = '';
-			switch ( transitMode ) {
+			switch ( _TransitMode ) {
 				case 'bike':
 				{
 					vehicle = 'bike';
@@ -293,22 +289,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 			
 			return 'https://graphhopper.com/api/1/route?' + wayPointsString +
-				 '&instructions=true&type=json&key=' + providerKey + '&locale=' + userLanguage +
+				 '&instructions=true&type=json&key=' + _ProviderKey + '&locale=' + _UserLanguage +
 				 '&vehicle=' + vehicle;
 		};
 		
 		return {
+			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+				
+				_WayPoints = wayPoints;
+				_TransitMode = transitMode;
+				_ProviderKey = providerKey;
+				_UserLanguage = userLanguage;
+				_Options = options;
+				
+				return [
+					{
+						task: 'loadJsonFile',
+						context : null,
+						func : _GetUrl
+					},
+					{	
+						task: 'wait'
+					}
+				];
+			},
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AocDyYTxtPEYwAABGtJREFUSMedVU1MXFUUPue+9+bNAMMUZrCFVAsiDEGpJlpdtCY0sTU1xIA1QNSNIcYGuyAuxBp1oU1DYu2iNlKsJopVYy2lkpiyoCCptLWF1DKFkpb/YShvmBmYX97/dUECw5sBpj2r97577pdzv3vud/BLzw8XF3s5ZGG9QAQA0CggAEGgFDYLRVffsu/HUlcNAyQ5J0NApzGXXxwLKvNLhCNcbrqlNJvfYaWavjE7hyzLIUuTFYIskd2RByduRfu9im9pBed3ZG79oCzr9QKqrMtOgXLIrquDOBqcONQjeyIGXJoKTX/URyUtu6aIStoGhZOk4mpBeeL97kTelXB/dj3QPoYseThq5HD6yFV5Npq4xMadcvZof8zlRwZTpUYTE7w0Fb4ya8CLi4vb2toGBgZ6enpqa2sBQAvLvtYRLaauR52gNaW+s/cMWGFhYUdHh9PpXP4tLy/Pz89vamqSugXze7r8JJMCNcGl4YDkDq/BCGloaHA6nVPy3GnvhZvRYQdrq/n0QFrzqVgw8sQV03gh6lTfRBBEEO8F1YAYD9rt9sP1hyflB4cmm9oDPYLsd8XGjkyfsrxgB4DB367tztipUHUTaqqDNBMxNGxlZSUQOOO96JG9PDERJCwyZjSpqAPAqGd898xTKtE2o1Z1bUE0ZFRUVLiptz96FyC+GVAcCy5/3fnr5nO2Ei1BE2K4w8Q3VlJSMhpzT8tzGHclakCUJkLLf5c6O19z7EnUhBhMg8ngDBnhaOSuOBlvBsTC+n9d7aKhoaFnYAcibkjNoml7BqzNOd92PsyKqzsJKt6Y7+eRlQRZlsNTC9t4OwW6vtYULE9ncw5LPPj18eOuvluEEkAABH1Jnfn8XzUsx+f4Zrx55hy6UV/rNG2nw7onN9A+vmq+kvLLmydyDjotpVm6rC92TkWuzxnOHvWHHivNAqDxV218jVSneY3PZ4+yo664N7lE58+ObOT9MdnGWuka5kR70qmeTvb9/u6B8lch5WCBSSPmzTwEgAWmV/3vWPsnb5w72NxyWhAERVEopQzD8DwviqIgCIYtNmtmAOQU/BqARebY7I+Z7xQODAy4+m/3Xv67u6v7Wt9V1+3B6urqxPxtubmJNoLP3nk76QBbHkIFfN5e264XM0rzTA4GiFvwvOJ8ORQJGZIDiwsnY21/+LoYJMt704h53QGGgCrV7ovu+6L7O+HC8rQUml2JvEVFRVm2LYvBEKYiSLKZgap/Sfh2MHGlvr4+CpJXCcDaB5kqNTEznqP9VDVKl5OTU1dXJ8i+McnziFVTSdtaXwZ5vAFvaWmxWq03wsMLagjhkaqmGiX56Sdv/PTxh422TBvP8w6Ho7W1taqqSqHKGV+7CblUOyRpZLOZXxU3lGkF8x5he/7jAKBQ9YvZ78/5u8yEj++uNGLGUlcNC0yK1DpQC5r2btm13/ZSHueYleb/XOi9HOpnkVnbuGBCBhvd33Qs/MMhAw8TPHIssirVJConsRSq1tr3/Q+O4QqEHeMWIQAAAABJRU5ErkJggg==';
-			},
-			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
 			},
 			parseResponse : function ( requestResponse, route, userLanguage ) {
 				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'GraphHopper';},
-			get transitModes ( ) { return { car : true, bike : true, pedestrian : true } ; },
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false } ; },
 			get providerKeyNeeded ( ) { return true; }
 		};
 	};

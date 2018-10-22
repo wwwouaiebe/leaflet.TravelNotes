@@ -35,17 +35,27 @@ Tests ...
 	
 	'use strict';
 
-	var onKeyDown = function ( keyBoardEvent ) {
-		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			document.removeEventListener ( 'keydown', onKeyDown, true );
-			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
-		}
-	};
 	
 	var BaseDialog = function ( ) {
 		
 		var okButtonListener = null;
+		var cancelButtonListener = null;
+		var escapeKeyEventListener = null;
+		
 		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		
+		var onKeyDown = function ( keyBoardEvent ) {
+			if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+				if ( escapeKeyEventListener ) {
+					if ( ! escapeKeyEventListener ( ) ) {
+						return;
+					}
+				}
+
+				document.removeEventListener ( 'keydown', onKeyDown, true );
+				document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
+			}
+		};
 		
 		// A new element covering the entire screen is created, with drag and drop event listeners
 		var body = document.getElementsByTagName('body') [0];
@@ -105,6 +115,11 @@ Tests ...
 		cancelButton.addEventListener ( 
 			'click',
 			function ( ) {
+				if ( cancelButtonListener ) {
+					if ( ! cancelButtonListener ( ) ) {
+						return;
+					}
+				}
 				document.removeEventListener ( 'keydown', onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( backgroundDiv );
 			},
@@ -201,6 +216,14 @@ Tests ...
 			
 			addClickOkButtonEventListener : function ( listener ) {
 				okButtonListener = listener;
+			},
+			
+			addClickCancelButtonEventListener : function ( listener ) {
+				cancelButtonListener = listener;
+			},
+			
+			addEscapeKeyEventListener : function ( listener ) {
+				escapeKeyEventListener = listener;
 			},
 			
 			get title ( ) { return headerDiv.innerHTML; },

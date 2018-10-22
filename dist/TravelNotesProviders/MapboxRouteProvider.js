@@ -15558,6 +15558,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getMapboxRouteProvider = function ( ) {
 	
+		var _WayPoints;
+		var _TransitMode;
+		var _ProviderKey;
+		var _UserLanguage;
+		var _Options;
+
 		var _IconList = 
 		{
 			"turn": {
@@ -15693,16 +15699,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
+		var _ParseResponse = function ( response, route, userLanguage ) {
 			
-			var response = null;
-			try {
-				response = JSON.parse( requestResponse );
-			}
-			catch ( e ) {
-				return false;
-			}
-
 			if ( "Ok" !== response.code )
 			{
 				return false;
@@ -15773,7 +15771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return true;
 		};
 		
-		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+		var _GetUrl = function ( ) {
 			
 			var wayPointsToString = function ( wayPoint, result )  {
 				if ( null === result ) {
@@ -15782,10 +15780,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				result += wayPoint.lng.toFixed ( 6 ) + ',' + wayPoint.lat.toFixed ( 6 ) + ';' ;
 				return result;
 			};
-			var wayPointsString = wayPoints.forEach ( wayPointsToString );
+			var wayPointsString = _WayPoints.forEach ( wayPointsToString );
 			
 			var profile = '';
-			switch ( transitMode ) {
+			switch ( _TransitMode ) {
 				case 'bike':
 				{
 					profile = 'mapbox/cycling/';
@@ -15806,21 +15804,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return 'https://api.mapbox.com/directions/v5/' + profile +
 				 wayPointsString.substr ( 0, wayPointsString.length - 1 ) +
 				'?geometries=polyline6&overview=full&steps=true&annotations=distance&access_token=' +
-				providerKey;
+				_ProviderKey;
 		};
 		
 		return {
+			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+				
+				_WayPoints = wayPoints;
+				_TransitMode = transitMode;
+				_ProviderKey = providerKey;
+				_UserLanguage = userLanguage;
+				_Options = options;
+				
+				return [
+					{
+						task: 'loadJsonFile',
+						context : null,
+						func : _GetUrl
+					},
+					{	
+						task: 'wait'
+					}
+				];
+			},
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AocEwcBrMn63AAAAk1JREFUSMftlj9oU1EUxn8neQ0thE6lgpO1TiptHhShJiIu2qHJA6FudtBRUBcpouJUnRyqgpODVcG62LROHfzHexGiJWkEQbCr0IqVYKPStDkOpuYRfW1eTNCh33Tvufec717udz8ObOFfITqV3XA9Njn3W+xAMuO7pnhs7AQiwCqwpvBNVN47Vu8SQDSZwbFMqsexyUyHinQjtAEBwACyTiKyWM1heBzyMHDXdbplRCeiyexVCei8HTfpf5gCwLFM9k/lEF3bpSIXgWNAm6vWceBercQrVfMwcBKhvVRcOwEst2zbXlldXQljGFeAoRpqbUjshSExgo9iM6kHLw7uUIDYTEr0ezDuQeoJw7/8ZLRUCD/ZNz6/AFAqFDolWBr1WyVQh/C7JKgj6eFu0sPdSFBHgC6/RWq7sbCI0g60/gzoqWhy7v762LXzC/AR2NmQG6tyE3jnCoUQHUN0DAi54m+BGw27sUAGyAOjZYUD9Fdty4vqLRX51Mg3bnUSkevAm6rc9XwFXtuWeafyHI0hDgCI6AXg8x/WlwTO+6npS9V23HwKJMtW+ss+FCbsRORVU79TMdByFlhwhT60hELnmvqP+6dzpAf35BG9DBSBoqheej6w+2vsca55xC/jPei04sTN20AKsG3LHN87cg17sKe5ztXHbFnHclrgDEDHwFGa41wuzMb7iCbncKzeHEBsKsuzQ74dsy6vxrF6K0pPROrqdOoibgT+O+LQJvONUFOul7hmgCNlhzKArA/i+nK92tvN2t6/zd1C0/ADiOy3l0UZHxAAAAAASUVORK5CYII=';
-			},
-			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
 			},
 			parseResponse : function ( requestResponse, route, userLanguage ) {
 				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'Mapbox';},
-			get transitModes ( ) { return { car : true, bike : true, pedestrian : true} ; },
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false } ; },
 			get providerKeyNeeded ( ) { return true; }
 		};
 	};

@@ -299,12 +299,17 @@ Tests ...
 				
 				return providerKey;
 			},
+			
 
 			/*
 			--- getters and setters -----------------------------------------------------------------------------------
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
+
+			get selectDialog ( ) {
+				return require ( './UI/SelectDialog' );
+			},
 
 			get userData ( ) { 
 				if ( _DataManager.travel.userData ) { 

@@ -23,6 +23,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getPolylineRouteProvider = function ( ) {
 
+		var _WayPoints;
+		var _TransitMode;
+		var _ProviderKey;
+		var _UserLanguage;
+		var _Options;
+
 		var instructionsList = 
 		{
 			en : { kStart : "Start", kContinue : "Continue", kEnd : "Stop" },
@@ -64,23 +70,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			return true;
 		};
 		
-		var _GetUrl = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-			
-			return null;
-		};
-		
 		return {
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4ggaBh8z7ov/KQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAqElEQVRIx9VW0Q6AIAgU5v//sr1Us0I6EGy5HnLR3XnAhFprJWdxSVuJ0FX7SLS/uEzDVJ8cMdAuOJfXCBPR/gSn8cHNMz+7DLEa3ccf5QSo7itPpBzoYAOuCHTbdvEMqQBb5hoGp1G0RbIYg9bFvqXaUnxKPiURHNDfg8PxLMrYNHYabe5GxI2eUqWvHj3YgTjJjWXX7vS18u2wEDT0rJlDoie0fw5mG+C/L0HylIYKAAAAAElFTkSuQmCC';
 			},
-			getUrl : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				return _GetUrl ( wayPoints, transitMode, providerKey, userLanguage, options );
+			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
+				
+				_WayPoints = wayPoints;
+				_TransitMode = transitMode;
+				_ProviderKey = providerKey;
+				_UserLanguage = userLanguage;
+				_Options = options;
+				
+				return [];
 			},
 			parseResponse : function ( requestResponse, route, userLanguage ) {
 				return _ParseResponse ( requestResponse, route, userLanguage );
 			},
 			get name ( ) { return 'Polyline';},
-			get transitModes ( ) { return { car : true, bike : true, pedestrian : true}; },
+			get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : true}; },
 			get providerKeyNeeded ( ) { return false; }
 		};
 	};
