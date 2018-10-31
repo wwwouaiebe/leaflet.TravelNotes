@@ -56,6 +56,59 @@ Tests ...
 		*/
 
 		return {
+			cutRoute : function ( route, latLng ) {
+
+				// an array is created with 2 clones of the route
+				var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
+				routes [ 0 ].object = route.object;
+				routes [ 1 ].object = route.object;
+				
+				// and the itineraryPoints are removed
+				routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
+				routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
+				
+				// the distance between the origin and the cutting point is computed
+				var cuttingPointLatLngDistance = this.getClosestLatLngDistance ( route, latLng );
+
+				// iteration on the itineraryPoints
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+				var iterationDistance = 0;
+				var itineraryPoint;
+				var previousItineraryPoint = null;
+				
+				var routeCounter = 0;
+				while ( ! itineraryPointIterator.done ) {
+					itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
+					itineraryPoint.object = itineraryPointIterator.value.object;
+					if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+						// we have passed the cutting point...
+						var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
+						// a new point is created at the cutting point position and added to the first route.
+						var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+						routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
+						routes [ 0 ].distance = iterationDistance - removedDistance;
+						if ( previousItineraryPoint ) {
+							previousItineraryPoint.distance -= removedDistance;
+						}
+
+						routeCounter = 1;
+						
+						// a new point is created at the cutting point position and added to the second route.
+						cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+						cuttingPoint.distance = removedDistance;
+						routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
+						iterationDistance = removedDistance;
+					}
+					routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
+					iterationDistance +=itineraryPointIterator.value.distance;
+					previousItineraryPoint = itineraryPoint;
+				}
+				routes [ routeCounter ].distance = iterationDistance;
+
+				return routes;
+			},
 
 			/*
 			--- getClosestLatLngDistance method -----------------------------------------------------------------------

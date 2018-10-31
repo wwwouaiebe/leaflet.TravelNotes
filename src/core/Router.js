@@ -64,7 +64,7 @@ Tests ...
 				}
 			);
 		};
-				
+		
 		/*
 		--- _StartRequest function ------------------------------------------------------------------------------------
 
@@ -86,13 +86,12 @@ Tests ...
 			var _EndRequest = function ( responses ) {
 
 				_RequestStarted = false;
-				//( 0 <= tasks.length - 2 ) ? [ tasks.length - 2 ] : [ 0 ]
-				console.log ( responses );
 				
 				if ( responses [ 0 ] && responses [ 0 ].status && 0 != responses [ 0 ].status  && responses [ 0 ].statusText ) {
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when sending the request', responses [ 0 ] ) );
 					return;
 				}
+				
 				// the response is passed to the routeProvider object for parsing. 
 				if ( ! _RouteProvider.parseResponse ( responses [ 0 ], _DataManager.editedRoute, _DataManager.config.language ) ) {
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
@@ -102,7 +101,7 @@ Tests ...
 				// provider name and transit mode are added to the road
 				_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 				_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
-
+				
 				// Computing the distance between itineraryPoints if not know ( depending of the provider...)
 				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
 				var routeDistance = 0;
@@ -115,8 +114,9 @@ Tests ...
 					routeDistance += previousPoint.distance;
 					previousPoint = itineraryPointsIterator.value;
 				}
-				
-				// Computing the complete route distance ad duration based on the values given by the providers in the maneuvers
+
+				// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
+				//var routeDistance = _DataManager.editedRoute.distance;
 				_DataManager.editedRoute.distance = 0;
 				_DataManager.editedRoute.duration = 0;
 				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
@@ -124,12 +124,17 @@ Tests ...
 					_DataManager.editedRoute.distance += maneuverIterator.value.distance;
 					_DataManager.editedRoute.duration += maneuverIterator.value.duration;
 				}
-
-				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
-				while ( ! itineraryPointsIterator.done ) {
-					itineraryPointsIterator.value.distance *= correctionFactor;
+				
+				if ( 0 != _DataManager.editedRoute.distance ) {
+					// Computing a correction factor for distance betwwen itinerayPoints
+					var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
+					itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+					while ( ! itineraryPointsIterator.done ) {
+						itineraryPointsIterator.value.distance *= correctionFactor;
+					}
+				}
+				else {
+					_DataManager.editedRoute.distance = routeDistance;
 				}
 
 				// Placing the waypoints on the itinerary
@@ -146,7 +151,6 @@ Tests ...
 						wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
 					}
 				}		
-
 				// and calling the route editor for displaying the results
 				require ( './RouteEditor' ) ( ).endRouting ( );
 			};
