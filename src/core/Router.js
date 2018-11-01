@@ -150,13 +150,14 @@ Tests ...
 					else{
 						wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
 					}
-				}		
+				}	
+				
 				// and calling the route editor for displaying the results
 				require ( './RouteEditor' ) ( ).endRouting ( );
 			};
 			
 			/*
-			--- End of _ParseResponse function ---
+			--- End of _EndRequest function ---
 			*/
 				
 			_RequestStarted = true;

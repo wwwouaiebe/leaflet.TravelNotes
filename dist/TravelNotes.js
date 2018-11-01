@@ -6968,6 +6968,59 @@ Tests ...
 		*/
 
 		return {
+			cutRoute : function ( route, latLng ) {
+
+				// an array is created with 2 clones of the route
+				var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
+				routes [ 0 ].object = route.object;
+				routes [ 1 ].object = route.object;
+				
+				// and the itineraryPoints are removed
+				routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
+				routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
+				
+				// the distance between the origin and the cutting point is computed
+				var cuttingPointLatLngDistance = this.getClosestLatLngDistance ( route, latLng );
+
+				// iteration on the itineraryPoints
+				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+				var iterationDistance = 0;
+				var itineraryPoint;
+				var previousItineraryPoint = null;
+				
+				var routeCounter = 0;
+				while ( ! itineraryPointIterator.done ) {
+					itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
+					itineraryPoint.object = itineraryPointIterator.value.object;
+					if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+						// we have passed the cutting point...
+						var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
+						// a new point is created at the cutting point position and added to the first route.
+						var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+						routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
+						routes [ 0 ].distance = iterationDistance - removedDistance;
+						if ( previousItineraryPoint ) {
+							previousItineraryPoint.distance -= removedDistance;
+						}
+
+						routeCounter = 1;
+						
+						// a new point is created at the cutting point position and added to the second route.
+						cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+						cuttingPoint.distance = removedDistance;
+						routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
+						iterationDistance = removedDistance;
+					}
+					routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
+					iterationDistance +=itineraryPointIterator.value.distance;
+					previousItineraryPoint = itineraryPoint;
+				}
+				routes [ routeCounter ].distance = iterationDistance;
+
+				return routes;
+			},
 
 			/*
 			--- getClosestLatLngDistance method -----------------------------------------------------------------------
@@ -7774,7 +7827,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":21,"../UI/TravelEditorUI":22,"../core/ErrorEditor":24,"../core/GeoCoder":25,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/Router":30,"../core/TravelEditor":33,"../data/Route":42,"../data/Waypoint.js":45,"../util/Utilities":46}],30:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":21,"../UI/TravelEditorUI":22,"../core/ErrorEditor":24,"../core/GeoCoder":25,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/Router":30,"../core/TravelEditor":33,"../data/ItineraryPoint":37,"../data/Route":42,"../data/Waypoint.js":45,"../util/Utilities":46}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7841,7 +7894,7 @@ Tests ...
 				}
 			);
 		};
-				
+		
 		/*
 		--- _StartRequest function ------------------------------------------------------------------------------------
 
@@ -7863,13 +7916,12 @@ Tests ...
 			var _EndRequest = function ( responses ) {
 
 				_RequestStarted = false;
-				//( 0 <= tasks.length - 2 ) ? [ tasks.length - 2 ] : [ 0 ]
-				console.log ( responses );
 				
 				if ( responses [ 0 ] && responses [ 0 ].status && 0 != responses [ 0 ].status  && responses [ 0 ].statusText ) {
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when sending the request', responses [ 0 ] ) );
 					return;
 				}
+				
 				// the response is passed to the routeProvider object for parsing. 
 				if ( ! _RouteProvider.parseResponse ( responses [ 0 ], _DataManager.editedRoute, _DataManager.config.language ) ) {
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
@@ -7879,7 +7931,7 @@ Tests ...
 				// provider name and transit mode are added to the road
 				_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
 				_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
-
+				
 				// Computing the distance between itineraryPoints if not know ( depending of the provider...)
 				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
 				var routeDistance = 0;
@@ -7892,8 +7944,9 @@ Tests ...
 					routeDistance += previousPoint.distance;
 					previousPoint = itineraryPointsIterator.value;
 				}
-				
-				// Computing the complete route distance ad duration based on the values given by the providers in the maneuvers
+
+				// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
+				//var routeDistance = _DataManager.editedRoute.distance;
 				_DataManager.editedRoute.distance = 0;
 				_DataManager.editedRoute.duration = 0;
 				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
@@ -7901,12 +7954,17 @@ Tests ...
 					_DataManager.editedRoute.distance += maneuverIterator.value.distance;
 					_DataManager.editedRoute.duration += maneuverIterator.value.duration;
 				}
-
-				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
-				while ( ! itineraryPointsIterator.done ) {
-					itineraryPointsIterator.value.distance *= correctionFactor;
+				
+				if ( 0 != _DataManager.editedRoute.distance ) {
+					// Computing a correction factor for distance betwwen itinerayPoints
+					var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
+					itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+					while ( ! itineraryPointsIterator.done ) {
+						itineraryPointsIterator.value.distance *= correctionFactor;
+					}
+				}
+				else {
+					_DataManager.editedRoute.distance = routeDistance;
 				}
 
 				// Placing the waypoints on the itinerary
@@ -7922,14 +7980,14 @@ Tests ...
 					else{
 						wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
 					}
-				}		
-
+				}	
+				
 				// and calling the route editor for displaying the results
 				require ( './RouteEditor' ) ( ).endRouting ( );
 			};
 			
 			/*
-			--- End of _ParseResponse function ---
+			--- End of _EndRequest function ---
 			*/
 				
 			_RequestStarted = true;
