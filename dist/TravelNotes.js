@@ -477,7 +477,7 @@ Tests ...
 --- End of DataManager.js file ----------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../data/Route":42,"../data/Travel":43,"../util/Utilities":46}],3:[function(require,module,exports){
+},{"../data/Route":40,"../data/Travel":41,"../util/Utilities":44}],3:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -599,7 +599,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":34,"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41}],4:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -761,7 +761,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":34,"../data/DataManager":35,"../data/Itinerary":36,"../data/ObjId":40,"../data/ObjType":41,"../data/Waypoint":45,"./Itinerary":3}],5:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/Itinerary":34,"../data/ObjId":38,"../data/ObjType":39,"../data/Waypoint":43,"./Itinerary":3}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -863,7 +863,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":34,"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41,"../data/Route":42}],6:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39,"../data/Route":40}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -938,7 +938,7 @@ Tests ...
 /*
 --- End of L.TravelNotes.Control.js file ------------------------------------------------------------------------------
 */
-},{"./UI/UserInterface":23}],7:[function(require,module,exports){
+},{"./UI/UserInterface":22}],7:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -989,7 +989,7 @@ Tests ...
 	var _LeftContextMenu = false;
 	var _RightContextMenu = false;
 	
-	var _Langage = '';
+	var _Langage = 'fr';
 	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
@@ -1015,51 +1015,112 @@ Tests ...
 		*/
 
 		var _ReadURL = function ( ) {
-			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
 			var newUrlSearch = '?' ;
-			for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
-				
-				if ( 'fil=' === urlSearch [ urlCounter ].substr ( 0, 4 ).toLowerCase ( ) ) {
-					_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearch [ urlCounter ].substr ( 4 ) ) ) );
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearch [ urlCounter ];
-					continue;
-				}
-				
-				var param = urlSearch [ urlCounter ].split ( '=' );
-				if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
-					if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
-						sessionStorage.setItem ( 
-							param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
-							btoa ( param [ 1 ] )
-						);
+			( decodeURI ( window.location.search ).substr ( 1 ).split ( '&' ) ).forEach ( 
+				function ( urlSearchSubString ){
+					if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+						// Needed to first extract the file name because the file name 
+						// can contains some = chars (see base64 specs)
+						_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += urlSearch [ urlCounter ];
+					}
+					else {
+						var param = urlSearchSubString.split ( '=' );
+						if ( 2 === param.length ) {
+							if ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' )  ) {
+								var providerName = param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( );
+								var provider = _DataManager.providers.get ( providerName );
+								if ( provider && provider.providerKeyNeeded ) {
+									provider.providerKey = param [ 1 ];
+								}
+								sessionStorage.setItem ( providerName, btoa ( param [ 1 ] ) );
+							}
+							else {
+								newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+								newUrlSearch += urlSearchSubString;
+								if ( 'lng' === param [ 0 ].toLowerCase ( ) ) {
+									_Langage = param [ 1 ].toLowerCase ( );
+								}
+							}
+						}
 					}
 				}
-				else {
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearch [ urlCounter ];
-				}
-				if ( ( 2 === param.length ) && 'lng' === param [ 0 ].toLowerCase ( ) ) {
-					_Langage = param [ 1 ].toLowerCase ( );
-				}
-			}
+			);
+			
 			var stateObj = { index: "bar" };
-			history.replaceState(stateObj, "page", newUrlSearch );
+			history.replaceState ( stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
-					if ( provider.providerKeyNeeded ) {
+					provider.userLanguage = _Langage;
+					if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
 						var providerKey = null;
 						if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
 							providerKey = sessionStorage.getItem ( provider.name.toLowerCase ( ) ) ;
 						}
-						if ( ! providerKey ) {
+						if ( providerKey ) {
+							provider.providerKey = atob ( providerKey );
+						}
+						else {
 							_DataManager.providers.delete ( provider.name.toLowerCase( ) );
 						}
 					}
 				}
 			);
 		};
+
+		/*
+		--- End of _ReadURL function ---
+		*/
+		
+		/*
+		--- _StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var _XMLHttpRequestUrl = '';
+
+
+		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+			
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = 5000;
+			
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+			
+			xmlHttpRequest.onreadystatechange = function ( ) {
+				if ( xmlHttpRequest.readyState === 4 ) {
+					if ( xmlHttpRequest.status === 200 ) {
+						var response;
+						try {
+							response = JSON.parse ( xmlHttpRequest.responseText );
+						}
+						catch ( e ) {
+							returnOnError ( 'JSON parsing error' );
+						}
+						returnOnOk ( response );
+					}
+					else {
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};
+			
+			xmlHttpRequest.open ( "GET", _XMLHttpRequestUrl, true );
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
+			
+		};
+		
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
 
 		/*
 		--- onMapClick function ---------------------------------------------------------------------------------------
@@ -1115,76 +1176,44 @@ Tests ...
 			addControl : function ( map, divControlId, options ) {
 				_DataManager.init ( map );
 				_ReadURL ( );
-				var configHttpRequest = new XMLHttpRequest ( );
-				configHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === configHttpRequest.DONE ) {
-						if ( this.status === 200 ) {
-							try {
-								_DataManager.config = JSON.parse ( this.responseText );
-								if ( '' !== _Langage ) {
-									_DataManager.config.language = _Langage;
-								}
-								_DataManager.travel = require ( './data/Travel' ) ( );
-
-								var translationsHttpRequest = new XMLHttpRequest ( );
-								translationsHttpRequest.onreadystatechange = function ( event ) {
-									if ( this.readyState === translationsHttpRequest.DONE ) {
-										if ( this.status === 200 ) {
-											try {
-												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
-											}
-											catch ( e ) {
-												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
-											}
-										}
-										else {
-											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
-										}
-										if ( divControlId )	{
-											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-										}	
-										else {
-											if ( typeof module !== 'undefined' && module.exports ) {
-												map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
-											}
-										}
-										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-										if ( _LoadedTravel ) {
-											require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
-										}
-										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
-										if ( _DataManager.config.travelEditor.startupRouteEdition ) {
-											require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
-										}
-										else {
-											require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
-										}
-									}
-								};
-								translationsHttpRequest.open ( 
-									'GET',
-									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json',
-									true
-								);
-								translationsHttpRequest.overrideMimeType ( 'application/json' );
-								translationsHttpRequest.send ( null );
-							}
-							catch ( e ) {
-								console.log ( 'Not possible to parse TravelNotesConfig.json' );
-							}
-						} 
-						else {
-							console.log ( 'Not possible to load TravelNotesConfig.json' );
+				
+				var promises = [];
+				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
+				promises.push ( new Promise ( _StartXMLHttpRequest ) );
+				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json';
+				promises.push ( new Promise ( _StartXMLHttpRequest ) );
+				if ( _LoadedTravel ) {
+					_XMLHttpRequestUrl = _LoadedTravel;
+					promises.push (  new Promise ( _StartXMLHttpRequest ) );
+				}
+				Promise.all ( promises ).then ( 
+					function ( values ) {
+						_DataManager.config = values [ 0 ];
+						if ( '' !== _Langage ) {
+							_DataManager.config.language = _Langage;
 						}
+						_DataManager.travel = require ( './data/Travel' ) ( );
+						require ( './UI/Translator' ) ( ).setTranslations ( values [ 1 ] );
+						if ( divControlId )	{
+							document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+						}	
+						else {
+							map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+						}
+						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+						if ( _LoadedTravel ) {
+							require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
+						}
+						require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+						if ( _DataManager.config.travelEditor.startupRouteEdition ) {
+							require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
+						}
+						else {
+							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
+						}	
 					}
-				};
-				configHttpRequest.open ( 
-					'GET',
-					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json',
-					true
 				);
-				configHttpRequest.overrideMimeType ( 'application/json' );
-				configHttpRequest.send ( null );
+				
 			},
 			
 			/*
@@ -1249,8 +1278,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			get selectDialog ( ) {
-				return require ( './UI/SelectDialog' );
+			get baseDialog ( ) {
+				return require ( './UI/baseDialog' ) ( );
 			},
 
 			get userData ( ) { 
@@ -1262,6 +1291,7 @@ Tests ...
 			set userData ( userData ) {
 				 _DataManager.travel.userData = userData;
 			},
+			
 			get rightContextMenu ( ) { return _RightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {
@@ -1319,7 +1349,7 @@ Tests ...
 */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./L.TravelNotes.Control":6,"./UI/ContextMenu":11,"./UI/RouteEditorUI":17,"./UI/SelectDialog":19,"./UI/Translator":21,"./UI/TravelEditorUI":22,"./UI/UserInterface":23,"./core/NoteEditor":28,"./core/RouteEditor":29,"./core/TravelEditor":33,"./data/DataManager":35,"./data/ItineraryPoint":37,"./data/Maneuver":38,"./data/Travel":43,"./util/Utilities":46}],8:[function(require,module,exports){
+},{"./L.TravelNotes.Control":6,"./UI/ContextMenu":11,"./UI/RouteEditorUI":17,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./UI/baseDialog":23,"./core/NoteEditor":28,"./core/RouteEditor":29,"./core/TravelEditor":31,"./data/DataManager":33,"./data/ItineraryPoint":35,"./data/Maneuver":36,"./data/Travel":41,"./util/Utilities":44}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1394,7 +1424,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":21,"../data/DataManager":35,"./HTMLElementsFactory":13}],9:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"../data/DataManager":33,"./HTMLElementsFactory":13}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1660,7 +1690,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":21,"./HTMLElementsFactory":13}],10:[function(require,module,exports){
+},{"../UI/Translator":20,"./HTMLElementsFactory":13}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1977,7 +2007,7 @@ Tests ...
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":21,"./HTMLElementsFactory":13}],11:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"./HTMLElementsFactory":13}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2259,7 +2289,7 @@ Tests ...
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------
 */	
 
-},{"../data/DataManager":35,"./HTMLElementsFactory":13,"./Translator":21}],12:[function(require,module,exports){
+},{"../data/DataManager":33,"./HTMLElementsFactory":13,"./Translator":20}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2411,7 +2441,7 @@ Tests ...
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
 */	
-},{"../data/DataManager":35,"./HTMLElementsFactory":13,"./Translator":21}],13:[function(require,module,exports){
+},{"../data/DataManager":33,"./HTMLElementsFactory":13,"./Translator":20}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2872,7 +2902,7 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLElementsFactory":13,"../UI/Translator":21,"../core/NoteEditor":28,"../core/RouteEditor":29,"../data/DataManager":35,"../data/ObjId":40,"../util/Utilities":46}],15:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":13,"../UI/Translator":20,"../core/NoteEditor":28,"../core/RouteEditor":29,"../data/DataManager":33,"../data/ObjId":38,"../util/Utilities":44}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3338,7 +3368,7 @@ Tests ...
 /*
 --- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLViewsFactory":14,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/RouteEditor":29,"../data/DataManager":35,"./HTMLElementsFactory":13,"./Translator":21}],16:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":14,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/RouteEditor":29,"../data/DataManager":33,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3883,7 +3913,7 @@ Tests ...
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":21,"../core/GeoCoder":25,"../core/NoteEditor":28,"../data/DataManager":35,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"../core/GeoCoder":25,"../core/NoteEditor":28,"../data/DataManager":33,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4300,7 +4330,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../core/RouteEditor":29,"../data/DataManager":35,"./HTMLElementsFactory":13,"./SortableList":20,"./Translator":21}],18:[function(require,module,exports){
+},{"../core/RouteEditor":29,"../data/DataManager":33,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4469,113 +4499,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../UI/ColorDialog":10,"../UI/Translator":21,"../UI/TravelEditorUI":22,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":33,"../data/DataManager":35,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
-/*
-Copyright - 2018 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/*
---- SelectDialog.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the SelectDialog object
-	- the module.exports implementation
-Changes:
-	- v1.3.0:
-		- created
-Tests ...
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var SelectDialog = function ( taskLoader, task, responses ) {
-		
-		var onCancelButtonClick = function ( ) {
-			task.response = { status : 3 , statusText : 'cancelled by user'};
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_NOK ;
-			taskLoader.endTask ( task );
-
-			return true;
-		};
-		
-		var onOkButtonClick = function ( ) {
-			task.response = { index : selectElement.selectedIndex };
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_OK ;
-			taskLoader.endTask ( task );
-
-			return true;
-		};
-
-		if ( 0 === responses [ 0 ].length ) {
-			task.response = { status : 4 , statusText : 'No direct relation found'};
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_NOK ;
-			taskLoader.endTask ( task );
-			
-			return;
-		}
-		
-		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = require ( '../UI/Translator' ) ( ).getText ( 'SelectDialog - Select an item' );
-		
-		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
-		baseDialog.addClickCancelButtonEventListener (onCancelButtonClick );
-		baseDialog.addEscapeKeyEventListener (onCancelButtonClick );
-		
-		var selectDiv = require ( './HTMLElementsFactory' ) ( ).create (
-			'div',
-			{
-				id : 'TravelNotes-SelectDialog-SelectDiv'
-			},
-			baseDialog.content
-		);
-		
-		var selectElement = require ( './HTMLElementsFactory' ) ( ).create (
-			'select',
-			{
-				id : 'TravelNotes-SelectDialog-SelectElement'
-			},
-			selectDiv
-		);
-		responses [ 0 ].forEach ( function ( dataElement ) { require ( './HTMLElementsFactory' ) ( ).create ('option',{ text : dataElement }, selectElement ); } );
-		
-		selectElement.selectedIndex = 0;
-		
-		baseDialog.center ( );
-		
-		return baseDialog;
-	};
-	
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = SelectDialog;
-	}
-
-}());
-
-/*
---- End of SelectDialog.js file ----------------------------------------------------------------------------------------
-*/	
-},{"../UI/BaseDialog":9,"../UI/Translator":21,"../core/TaskStatus":32,"./HTMLElementsFactory":13}],20:[function(require,module,exports){
+},{"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":31,"../data/DataManager":33,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -4866,7 +4790,7 @@ Tests ...
 --- End of SortableList.js file ---------------------------------------------------------------------------------------
 */	
 
-},{"../UI/Translator":21,"./HTMLElementsFactory":13}],21:[function(require,module,exports){
+},{"../UI/Translator":20,"./HTMLElementsFactory":13}],20:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -4946,7 +4870,7 @@ Tests ...
 */	
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5451,7 +5375,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../core/TravelEditor":33,"../data/DataManager":35,"./HTMLElementsFactory":13,"./SortableList":20,"./Translator":21}],23:[function(require,module,exports){
+},{"../core/TravelEditor":31,"../data/DataManager":33,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5556,7 +5480,9 @@ Tests ...
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------
 */	
-},{"./ErrorEditorUI":12,"./HTMLElementsFactory":13,"./ItineraryEditorUI":15,"./RouteEditorUI":17,"./TravelEditorUI":22}],24:[function(require,module,exports){
+},{"./ErrorEditorUI":12,"./HTMLElementsFactory":13,"./ItineraryEditorUI":15,"./RouteEditorUI":17,"./TravelEditorUI":21}],23:[function(require,module,exports){
+arguments[4][9][0].apply(exports,arguments)
+},{"../UI/Translator":20,"./HTMLElementsFactory":13,"dup":9}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5727,7 +5653,7 @@ Tests ...
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":35}],26:[function(require,module,exports){
+},{"../data/DataManager":33}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6473,7 +6399,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":28,"../core/RouteEditor":29,"../core/TravelEditor":33,"../util/Utilities":46,"./NoteEditor":28,"./RouteEditor":29}],28:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/ContextMenu":11,"../core/NoteEditor":28,"../core/RouteEditor":29,"../core/TravelEditor":31,"../util/Utilities":44,"./NoteEditor":28,"./RouteEditor":29}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6909,7 +6835,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/NoteDialog":16,"../UI/Translator":21,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":33,"../data/Note":39,"../util/Utilities":46}],29:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":31,"../data/Note":37,"../util/Utilities":44}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7827,7 +7753,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":21,"../UI/TravelEditorUI":22,"../core/ErrorEditor":24,"../core/GeoCoder":25,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/Router":30,"../core/TravelEditor":33,"../data/ItineraryPoint":37,"../data/Route":42,"../data/Waypoint.js":45,"../util/Utilities":46}],30:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ErrorEditor":24,"../core/GeoCoder":25,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/Router":30,"../core/TravelEditor":31,"../data/ItineraryPoint":35,"../data/Route":40,"../data/Waypoint.js":43,"../util/Utilities":44}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7896,124 +7822,98 @@ Tests ...
 		};
 		
 		/*
-		--- _StartRequest function ------------------------------------------------------------------------------------
+		--- End of _HaveValidWayPoints function ---
+		*/
 
-		This function launch the http request
+		/*
+		--- _EndError function -----------------------------------------------------------------------------------
+
+		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _StartRequest = function ( ) {
+		var _EndError = function ( message ) {
 
-			/*
-			--- _EndRequest function -----------------------------------------------------------------------------------
+			_RequestStarted = false;
 
-			This function ...
+			require ( '../core/ErrorEditor' ) ( ).showError ( message );// _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
+		};
+	
+		/*
+		--- End of _EndError function ---
+		*/
 
-			---------------------------------------------------------------------------------------------------------------
-			*/
+		/*
+		--- _EndOk function -----------------------------------------------------------------------------------
 
-			var _EndRequest = function ( responses ) {
+		This function ...
 
-				_RequestStarted = false;
-				
-				if ( responses [ 0 ] && responses [ 0 ].status && 0 != responses [ 0 ].status  && responses [ 0 ].statusText ) {
-					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when sending the request', responses [ 0 ] ) );
-					return;
-				}
-				
-				// the response is passed to the routeProvider object for parsing. 
-				if ( ! _RouteProvider.parseResponse ( responses [ 0 ], _DataManager.editedRoute, _DataManager.config.language ) ) {
-					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
-					return;
-				}
-				
-				// provider name and transit mode are added to the road
-				_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
-				_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
-				
-				// Computing the distance between itineraryPoints if not know ( depending of the provider...)
-				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
-				var routeDistance = 0;
-				var dummy = itineraryPointsIterator.done;
-				var previousPoint = itineraryPointsIterator.value;
-				while ( ! itineraryPointsIterator.done ) {
-					if ( 0 === previousPoint.distance ) {
-						previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
-					}
-					routeDistance += previousPoint.distance;
-					previousPoint = itineraryPointsIterator.value;
-				}
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-				// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
-				//var routeDistance = _DataManager.editedRoute.distance;
-				_DataManager.editedRoute.distance = 0;
-				_DataManager.editedRoute.duration = 0;
-				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
-				while ( ! maneuverIterator.done ) {
-					_DataManager.editedRoute.distance += maneuverIterator.value.distance;
-					_DataManager.editedRoute.duration += maneuverIterator.value.duration;
-				}
-				
-				if ( 0 != _DataManager.editedRoute.distance ) {
-					// Computing a correction factor for distance betwwen itinerayPoints
-					var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
-					itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
-					while ( ! itineraryPointsIterator.done ) {
-						itineraryPointsIterator.value.distance *= correctionFactor;
-					}
-				}
-				else {
-					_DataManager.editedRoute.distance = routeDistance;
-				}
+		var _EndOk = function ( message ) {
 
-				// Placing the waypoints on the itinerary
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done )
-				{
-					if ( wayPointsIterator.first ) {
-						wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.first.latLng;
-					}
-					else if ( wayPointsIterator.last ) {
-						wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.last.latLng;
-					}
-					else{
-						wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
-					}
-				}	
-				
-				// and calling the route editor for displaying the results
-				require ( './RouteEditor' ) ( ).endRouting ( );
-			};
+			_RequestStarted = false;
 			
-			/*
-			--- End of _EndRequest function ---
-			*/
-				
-			_RequestStarted = true;
-
-			// Choosing the correct route provider
-			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
-
-			// Searching the provider key
-			var providerKey = '';
-			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'sessionStorage' ) ) {
-				providerKey = atob ( sessionStorage.getItem ( _RouteProvider.name.toLowerCase ( ) ) );
+			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
+			var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+			var routeDistance = 0;
+			var dummy = itineraryPointsIterator.done;
+			var previousPoint = itineraryPointsIterator.value;
+			while ( ! itineraryPointsIterator.done ) {
+				if ( 0 === previousPoint.distance ) {
+					previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				}
+				routeDistance += previousPoint.distance;
+				previousPoint = itineraryPointsIterator.value;
 			}
-			var tasks = _RouteProvider.getTasks ( _DataManager.editedRoute.wayPoints, _DataManager.routing.transitMode, providerKey, _DataManager.config.language, null );
 
-			tasks.push ( 
-				{	
-					task: 'run',
-					func : _EndRequest,
-					context : null,
-					useResponses : ( 0 <= tasks.length - 2 ) ? [ tasks.length - 2 ] : [ 0 ]
-				}	
-			);
+			// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
+			//var routeDistance = _DataManager.editedRoute.distance;
+			_DataManager.editedRoute.distance = 0;
+			_DataManager.editedRoute.duration = 0;
+			var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				_DataManager.editedRoute.distance += maneuverIterator.value.distance;
+				_DataManager.editedRoute.duration += maneuverIterator.value.duration;
+			}
 			
-			require ( './TaskLoader' ) ( ).start ( tasks );
+			if ( 0 != _DataManager.editedRoute.distance ) {
+				// Computing a correction factor for distance betwwen itinerayPoints
+				var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
+				itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+				while ( ! itineraryPointsIterator.done ) {
+					itineraryPointsIterator.value.distance *= correctionFactor;
+				}
+			}
+			else {
+				_DataManager.editedRoute.distance = routeDistance;
+			}
+
+			// Placing the waypoints on the itinerary
+			var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done )
+			{
+				if ( wayPointsIterator.first ) {
+					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.first.latLng;
+				}
+				else if ( wayPointsIterator.last ) {
+					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.last.latLng;
+				}
+				else{
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
+				}
+			}	
+			
+			// and calling the route editor for displaying the results
+			require ( './RouteEditor' ) ( ).endRouting ( );
 		};
 		
+		/*
+		--- End of _EndOk function ---
+		*/
+			
 		/*
 		--- _StartRouting function ------------------------------------------------------------------------------------
 
@@ -8023,22 +7923,35 @@ Tests ...
 		*/
 
 		var _StartRouting = function ( ) {
+
 			// We verify that another request is not loaded
 			if ( _RequestStarted ) {
 				return false;
 			}
 			
-			
-			// Controle of the wayPoints
+			// Control of the wayPoints
 			if ( ! _HaveValidWayPoints ( ) ) {
 				return false;
 			}
 			
-			_StartRequest ( );
+			_RequestStarted = true;
+
+			// Choosing the correct route provider
+			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
+
+			// provider name and transit mode are added to the road
+			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
+			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
+
+			_RouteProvider.getPromiseRoute ( _DataManager.editedRoute, null ).then (  _EndOk, _EndError  );
 
 			return true;
 		};
 	
+		/*
+		--- End of _StartRouting function ---
+		*/
+
 		/*
 		--- Router object ---------------------------------------------------------------------------------------------
 
@@ -8074,309 +7987,7 @@ Tests ...
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../UI/Translator":21,"../core/ErrorEditor":24,"../util/Utilities":46,"./RouteEditor":29,"./TaskLoader":31}],31:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/*
---- TaskLoader.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the TaskLoader object
-	- the module.exports implementation
-Notice:
-	why doing simple when you can do it complex?	
-Changes:
-	- v1.3.0:
-		- Created
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var TaskLoader = function ( ) {
-		
-		var _Tasks = [];
-		var _TaskPointer = 0;
-		var _TaskStatus = require ( './TaskStatus' ) ( ).taskStatus;
-
-		/*
-		--- _LoadJsonFile function ------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		var _LoadJsonFile = function ( taskLoader, task )
-		{
-			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = 5000;
-			
-			xmlHttpRequest.ontimeout = function ( event ) {
-				task.response = { status : 1 , statusText : 'xmlHttpRequest.timeout error'};
-				task.status = _TaskStatus.FINISH_NOK;
-				taskLoader.endTask ( task );
-			};
-			
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( xmlHttpRequest.readyState === 4 ) {
-					if ( xmlHttpRequest.status === 200 ) {
-						try {
-							task.response = JSON.parse ( xmlHttpRequest.responseText );
-							task.status = _TaskStatus.FINISH_OK;
-						}
-						catch ( e ) {
-							task.response = { status : 2 , statusText : 'JSON parsing error'};
-							task.status = _TaskStatus.FINISH_NOK;
-						}
-						taskLoader.endTask ( task );
-					}
-					else {
-						task.response = { status : this.status, statusText : this.statusText };
-						task.status = _TaskStatus.FINISH_NOK;
-						taskLoader.endTask ( task );
-					}
-				}
-			};
-			
-			xmlHttpRequest.open ( 
-				"GET", 
-				task.func.call ( task.context ), 
-				true );
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( null );
-		};
-		
-		/*
-		--- End of _LoadJsonFile function ---
-		*/
-
-		/*
-		--- _ShowDialog function --------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		var _ShowDialog = function ( taskLoader, task ) {
-			var responses = [];
-			// responses from previous tasks are added to the params if needed
-			if ( task.useResponses ) {
-				task.useResponses.forEach (
-					function ( useResponse ) {
-						responses.push ( _Tasks [ useResponse ].response );
-					}
-				);
-			}
-			task.func.call ( task.context, taskLoader, task, responses );
-		};
-
-		/*
-		--- End of _ShowDialog function ---
-		*/
-
-		/*
-		--- _Run function ---------------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		var _Run = function ( task ) {
-			var params = task.params || [ ];
-			if ( task.useResponses ) {
-				task.useResponses.forEach (
-					function ( useResponse ) {
-						params.push ( _Tasks [ useResponse ].response );
-					}
-				);
-			}
-			task.response = task.func.call ( task.context, params );
-			task.status = _TaskStatus.FINISH_OK;
-		};
-
-		/*
-		--- End of _Run function ---
-		*/
-							
-		/*
-		--- taskLoader object -----------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return {
-			
-			start : function ( tasks ) {
-				_Tasks = tasks;
-				var taskNumber = 0;
-				_Tasks.forEach ( 
-					function ( task ) {
-						task.status = _TaskStatus.READY;
-						task.response = { status : 0 , statusText : 'Task not yet executed' };
-						task.number = taskNumber ++;
-					}
-				);
-				_TaskPointer = 0;
-				this.taskRunner ( );
-			},
-			
-			taskRunner : function ( ) {
-
-				var wait = false;
-				while (  ( ! wait ) && _TaskPointer < _Tasks.length   ) {
-					var currentTask = _Tasks [ _TaskPointer];
-					currentTask.status = _TaskStatus.STARTED;
-
-					switch ( currentTask.task )
-					{
-						case 'loadJsonFile':
-							_LoadJsonFile ( this, currentTask );
-							_TaskPointer ++;
-							break;
-						case 'wait':
-							this.endTask ( "", currentTask ); // calling endTask to avoid an infinite break if previous tasks are already finished
-							wait = true;
-							break;
-						case 'showDialog' :
-							_ShowDialog ( this, currentTask );
-							_TaskPointer ++;
-							break;
-						case 'run' :
-							_Run ( currentTask );
-							_TaskPointer ++;
-							break;
-						default:
-							_TaskPointer ++;
-							break;
-					}
-				}
-			},
-			
-			endTask : function ( finishedTask ) {
-
-				if ( _TaskStatus.FINISH_NOK === finishedTask.status ) {
-					// a task is not correctly executed...
-					_Tasks.forEach (
-						// ... all task responses are filled with the error
-						function ( task ) {
-							task.response = finishedTask.response;
-						}
-					);
-					// the task pointer is set to the last task
-					_TaskPointer = _Tasks.length - 1;
-					// and this task is executed
-					this.taskRunner ( );
-					return;
-				}
-				
-				var currentTask = _Tasks [ _TaskPointer ];
-				if ( 'wait' === currentTask.task ) {
-					// the TaskLoader is in 'wait' state. We look if the previous tasks are finished
-					var previousTasksFinished = true;
-					for ( var taskCounter = 0; taskCounter < currentTask.number; taskCounter ++ )
-					{
-						previousTasksFinished &= ( _Tasks [ taskCounter ].status >= _TaskStatus.FINISH_OK );
-					}
-					if ( previousTasksFinished ) {
-						// and we start eventually the next task
-						currentTask.status = _TaskStatus.FINISH_OK;
-						_TaskPointer ++;
-						this.taskRunner ( );
-					}
-				}
-			}
-		};
-	};
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = TaskLoader;
-	}
-
-}());
-
-/*
---- End of TaskLoader.js file ----------------------------------------------------------------------------------------
-*/
-},{"./TaskStatus":32}],32:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/*
---- TaskStatus.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the TaskStatus object
-	- the module.exports implementation
-Changes:
-	- v2.3.0:
-		- created
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var _TaskStatus = function ( ) {
-		
-		return {
-			get taskStatus ( ) { return { READY : 0, STARTED : 1, FINISH_OK : 2, FINISH_NOK : 3} ; },
-			set taskStatus ( TaskStatus ) { return; }
-		};
-	};
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = _TaskStatus;
-	}
-
-}());
-
-/*
---- End of TaskStatus.js file ----------------------------------------------------------------------------------------
-*/
-},{}],33:[function(require,module,exports){
+},{"../Data/DataManager":2,"../UI/Translator":20,"../core/ErrorEditor":24,"./RouteEditor":29}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8468,26 +8079,7 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ConvertAndDecompressFile  = function ( textFile, fileName  ) {
-			// an old map file is opened... converting the file...
-			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
-				// ... if the convert object is loaded
-				if ( ! window.convertMapsData ) {
-					return null;
-				}
-				else {
-					textFile = convertMapsData.mapsDataToTravelNotes ( textFile );
-				}
-			}
-		
-			var compressedTravel = null;
-			try {
-				compressedTravel = JSON.parse ( textFile ) ;
-			}
-			catch ( e ) {
-				return null;
-			}
-			
+		var _ConvertAndDecompressFile  = function ( compressedTravel, fileName  ) {
 			// decompressing the itineraryPoints
 			compressedTravel.routes.forEach ( 
 				function ( route ) {
@@ -8520,9 +8112,9 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ImportFile = function ( textFile, fileName ) {
+		var _ImportFile = function ( compressedTravel, fileName ) {
 			// converting and decompressing the file
-			var importData = _ConvertAndDecompressFile ( textFile, fileName );
+			var importData = _ConvertAndDecompressFile ( compressedTravel, fileName );
 			if ( ! importData ) {
 				return;
 			}
@@ -8560,10 +8152,10 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _LoadFile = function ( textFile, fileName, readOnly ) {
+		var _LoadFile = function ( compressedTravel, fileName, readOnly ) {
 
 			// converting and decompressing the file
-			var travel = _ConvertAndDecompressFile ( textFile, fileName );
+			var travel = _ConvertAndDecompressFile ( compressedTravel, fileName );
 			if ( ! travel ) {
 				return;
 			}
@@ -8792,7 +8384,11 @@ Tests ...
 			importTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_ImportFile ( fileReader.result, fileName );
+					try {
+						_ImportFile ( JSON.parse ( fileReader.result ), fileName );
+					}
+					catch ( e ) {
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -8814,7 +8410,11 @@ Tests ...
 					_DataManager.editedRoute.routeInitialObjId = -1;
 					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-					_LoadFile ( fileReader.result, fileName, false );
+					try {
+						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
+					}
+					catch ( e ) {
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -8828,18 +8428,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			openServerTravel : function ( serverUrl ) {
-				var xmlHttpRequest = new XMLHttpRequest ( );
-				xmlHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === XMLHttpRequest.DONE ) {
-						if ( this.status === 200 ) {
-							_LoadFile ( this.responseText,'', true );
-						} 
-					}
-				};
-				xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
-				xmlHttpRequest.overrideMimeType ( 'application/json' );
-				xmlHttpRequest.send ( null );
+			openServerTravel : function ( compressedTravel ) {
+				_LoadFile ( compressedTravel, '', true );
 			},
 
 			/*
@@ -8941,7 +8531,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataManager":2,"../Data/Route":4,"../Data/Travel":5,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":21,"../UI/TravelEditorUI":22,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../util/Utilities":46,"./ErrorEditor":24,"./MapEditor":27,"./RouteEditor":29,"@mapbox/polyline":1}],34:[function(require,module,exports){
+},{"../Data/DataManager":2,"../Data/Route":4,"../Data/Travel":5,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../util/Utilities":44,"./ErrorEditor":24,"./MapEditor":27,"./RouteEditor":29,"@mapbox/polyline":1}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9360,11 +8950,11 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":37,"../data/Maneuver":38,"../data/Note":39,"../data/Route":42,"../data/WayPoint":44}],35:[function(require,module,exports){
+},{"../data/ItineraryPoint":35,"../data/Maneuver":36,"../data/Note":37,"../data/Route":40,"../data/WayPoint":42}],33:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../data/Route":42,"../data/Travel":43,"../util/Utilities":46,"dup":2}],36:[function(require,module,exports){
+},{"../data/Route":40,"../data/Travel":41,"../util/Utilities":44,"dup":2}],34:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":34,"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41,"dup":3}],37:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39,"dup":3}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9472,7 +9062,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41}],38:[function(require,module,exports){
+},{"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9583,7 +9173,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41}],39:[function(require,module,exports){
+},{"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39}],37:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9765,7 +9355,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41}],40:[function(require,module,exports){
+},{"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39}],38:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -9819,7 +9409,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],41:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9928,11 +9518,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],42:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../data/Collection":34,"../data/DataManager":35,"../data/Itinerary":36,"../data/ObjId":40,"../data/ObjType":41,"../data/Waypoint":45,"./Itinerary":36,"dup":4}],43:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/Itinerary":34,"../data/ObjId":38,"../data/ObjType":39,"../data/Waypoint":43,"./Itinerary":34,"dup":4}],41:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../data/Collection":34,"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41,"../data/Route":42,"dup":5}],44:[function(require,module,exports){
+},{"../data/Collection":32,"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39,"../data/Route":40,"dup":5}],42:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10044,9 +9634,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41}],45:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"../data/DataManager":35,"../data/ObjId":40,"../data/ObjType":41,"dup":44}],46:[function(require,module,exports){
+},{"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39}],43:[function(require,module,exports){
+arguments[4][42][0].apply(exports,arguments)
+},{"../data/DataManager":33,"../data/ObjId":38,"../data/ObjType":39,"dup":42}],44:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10243,4 +9833,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":21}]},{},[7]);
+},{"../UI/Translator":20}]},{},[7]);

@@ -23,38 +23,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getPublicTransportRouteProvider = function ( ) {
 
-		var _WayPoints;
-		var _TransitMode;
-		var _ProviderKey;
-		var _UserLanguage;
+		var _ProviderKey = '';
+		var _UserLanguage = 'fr';
 		var _Options;
+		var _Route;
+		var _Response = '';
+		
+		var _NextPromise = 0;
+		var _Promises = [];
+		var _XMLHttpRequestUrl = '';
 
 		var _SelectedRelationId = -1;
-
 		var _WaysMap = new Map ( );
 		var _NodesMap = new Map ( );
 		var _StopsMap = new Map ( );
 		var _NewId = -1;
 		var _Nodes3WaysCounter = 0;
 		var	_Nodes3Ways = [];
-		
-			/*
-
-			node
-				id
-				lat
-				lon
-				type
-				startingWaysIds []
-				endingWaysIds []
-				isNode3Ways
-			way
-				id
-				type
-				nodesIds []
-				distance
-			
-			*/ 
 		
 		/*
 		--- _FirstOf function -----------------------------------------------------------------------------------------
@@ -529,12 +514,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			
 			_StopsMap.forEach (
 				function ( stop ) {
-					var distance = L.latLng ( [ stop.lat, stop.lon ] ).distanceTo ( _WayPoints.first.latLng );
+					var distance = L.latLng ( [ stop.lat, stop.lon ] ).distanceTo ( _Route.wayPoints.first.latLng );
 					if ( distance < startStopDistance ) {
 						startStopDistance = distance;
 						startStop = stop;
 					}
-					distance = L.latLng ( [ stop.lat, stop.lon ] ).distanceTo ( _WayPoints.last.latLng );
+					distance = L.latLng ( [ stop.lat, stop.lon ] ).distanceTo ( _Route.wayPoints.last.latLng );
 					if ( distance < endStopDistance ) {
 						endStopDistance = distance;
 						endStop = stop;
@@ -654,7 +639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
+		var _ParseResponse = function ( returnOnOk, returnOnError ) {
 
 			// resetting variables
 			_NewId = -1;
@@ -662,7 +647,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			_Nodes3WaysCounter = 0;
 
 			// maps creation
-			_CreateMaps ( requestResponse.elements );
+			_CreateMaps ( _Response.elements );
 			
 			// Searching all nodes where a way can start or end
 
@@ -712,9 +697,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 
 			// route creation
-			_CreateRoute ( route );
+			_CreateRoute ( _Route );
 				
-			return true;
+			returnOnOk ( '' );
 		};
 		
 		/*
@@ -731,13 +716,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		var _GetRelationsUrl = function ( ) {
 			return 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
-				_WayPoints.first.lat.toFixed ( 6 ) +
+				_Route.wayPoints.first.lat.toFixed ( 6 ) +
 				',' +
-				_WayPoints.first.lng.toFixed ( 6 ) +
+				_Route.wayPoints.first.lng.toFixed ( 6 ) +
 				')->.s;rel(bn.s)->.s;node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
-				_WayPoints.last.lat.toFixed ( 6 ) +
+				_Route.wayPoints.last.lat.toFixed ( 6 ) +
 				',' +
-				_WayPoints.last.lng.toFixed ( 6 ) +
+				_Route.wayPoints.last.lng.toFixed ( 6 ) +
 				')->.e;rel(bn.e)->.e;rel.e.s;out tags;';	
 		};
 
@@ -810,6 +795,142 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 		
 		/*
+		--- _ShowDialog function ----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _ShowDialog = function ( returnOnOk, returnOnError  ) {
+
+			var onCancelButtonClick = function ( ) {
+
+				returnOnError ( 'Cancelled by user' );
+				
+				return true;
+			};
+			
+			var onOkButtonClick = function ( ) {
+				_SelectedRelationId = _Response.elements [ selectElement.selectedIndex ].id;
+				_XMLHttpRequestUrl = _GetWayNodesUrl ( );
+				returnOnOk ( new Promise ( _Promises [ _NextPromise ++ ] ) );
+				
+				return true;
+			};
+
+			if ( 0 === _Response.elements.length ) {
+				
+				returnOnError ( 'No relation found' );
+			}
+			
+			var baseDialog = L.travelNotes.interface ( ).baseDialog ;
+			
+			baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+			baseDialog.addClickCancelButtonEventListener (onCancelButtonClick );
+			baseDialog.addEscapeKeyEventListener (onCancelButtonClick );
+			
+			var selectDiv = document.createElement ( 'div' );
+			selectDiv.id = 'TravelNotes-SelectDialog-SelectDiv';
+			baseDialog.content.appendChild ( selectDiv );
+			
+			var selectElement =	document.createElement ( 'select' );
+			selectElement.id = 'TravelNotes-SelectDialog-SelectElement';
+			selectDiv.appendChild ( selectElement );
+			
+			_Response.elements.forEach ( 
+				function ( dataElement ) {
+					var optionElement = document.createElement ( 'option' );
+					optionElement.text = dataElement.tags.name;
+					selectElement.appendChild ( optionElement );
+				}
+			);
+			selectElement.selectedIndex = 0;
+
+			baseDialog.center ( );
+
+		};
+		
+		/*
+		--- End of _ShowDialog function ---
+		*/
+
+		/*
+		--- _StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+			
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = 5000;
+			
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+			
+			xmlHttpRequest.onreadystatechange = function ( ) {
+				if ( xmlHttpRequest.readyState === 4 ) {
+					if ( xmlHttpRequest.status === 200 ) {
+						try {
+							_Response = JSON.parse ( xmlHttpRequest.responseText );
+						}
+						catch ( e ) {
+							returnOnError ( 'JSON parsing error' );
+						}
+						returnOnOk ( new Promise ( _Promises [ _NextPromise ++ ] ) );
+					}
+					else {
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};
+			
+			xmlHttpRequest.open ( "GET", _XMLHttpRequestUrl, true );
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
+			
+		};
+		
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
+
+		/*
+		--- _GetPromiseRoute function ---------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _GetPromiseRoute = function ( route, options ) {
+
+			_Route = route;
+			_Options = options;
+			_Response = '';
+			
+			_XMLHttpRequestUrl = _GetRelationsUrl ( );
+
+			_NextPromise = 0;
+			_Promises = [];
+			
+			_Promises.push ( _StartXMLHttpRequest );
+			_Promises.push ( _ShowDialog );
+			_Promises.push ( _StartXMLHttpRequest );
+			_Promises.push ( _ParseResponse );
+			
+			return new Promise ( _Promises [ _NextPromise ++ ] );
+		};
+		
+		/*
+		--- End of _GetPromiseRoute function ---
+		*/
+		
+		/*
 		--- _GetTasks function ----------------------------------------------------------------------------------------
 
 		This function ...
@@ -818,12 +939,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 
 		var _GetTasks = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-			
-			_WayPoints = wayPoints;
-			_TransitMode = transitMode;
-			_ProviderKey = providerKey;
-			_UserLanguage = userLanguage;
-			_Options = options;
 			
 			return [
 				{
@@ -878,24 +993,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		return {
 			
+			getPromiseRoute : function ( route, options ) {
+				return _GetPromiseRoute ( route, options );
+			},
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4goTCi4V9AmY6AAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAEc0lEQVRIx8VXTUhbWxD+zr0ag77Gqo1/RazRYjcBaxAVoxXFhQtRXLgt2iJUaAl9FBFcPBdtceeuBXGr4uaCq67rz0IaaUtFBcXAq1WjVkhiTm6u3u8tXs1TG6NVyxuYzZy5fHNm5s58R5Ak/gdJOs+htbUVNpsNLpcLZWVlcDqdyMrKujoyE8j4+DhVVaXH42FdXR2tVisBxNTlcnF2dpaXEfyKcyAQIAD29vZydHSUdrudT58+/b3AUkru7OywoaGBdrudpmnyKiLOa67d3V3U19fjy5cvJ+ylpaVwOp3IyMhAWloa7HY7Kioq4HK5kJmZebUaR6NRKooSq6mqqlRVlUKIE7U+ra9fv75aqvPy8giARUVF9Pv91HWduq5TSkmv18v+/n5WVVXFBX/48OHlgFtaWgiA6enpF6pZNBplMBjk3t4e9/b2uL+/T5/P92vA79+/j0Xu9Xov3UBSSn79+jXu2U8DxOfzoa6uDgDw9u1blJeXAwAGBgYwMzODcDgMALBarbh58yZyc3NRXFyMe/fuIT8/H6qqIhKJ4ODgALdu3UJycvL5zfXp06fYTYeGhmL2tra2hM10nj569OjsVGuaRgAUQnBycpIkubi4yOzs7CuBHunu7u7PwD09PQTA27dvMxQKUUrJZ8+eXQvgkTocjpPAhYWFBMCBgQGS5PLy8rUCHtdAIBADVhwOB46GV3V1NQKBwG9bhY2Njf+txa6uLrS3t0PTNFRWVib8sLS0FG63G2VlZSguLsaNGzcQiUTw/ft3bGxs4Nu3b/D7/QgGgwiHw5BSQkoJXdcRjUYRDAah6zpSUlKQpGkapZQCAEKhEFRVxf3791FbW8uGhgbcuXMH+fn5sNvtiWISp3+WODb8SDcsFgvE58+fabPZoKoqsrOzYbFYfivz2NraQk5ODpKcTmfc6C5KiYQQP92YJMWPg9P2w8NDmKYJVdO0v3w+Hw4ODqDrOhRFQWpqKsQFxePxiOnpaUxNTUFRFBQWFuI06NbWFtbX17G9vS0cDoeQUgokJSXFbf2Ojg6+e/eOm5ubjEajZ87j42szIyMjrs/Q0NCJ2W8YBkHSnJubY0lJiXkqCPO4ulwuU9M0U0ppGoZhHsns7KwJgCkpKSwoKCBJmqfoid/vZ15eHm02m7mysmJGIhHzxKw2DIMLCwt0u91nDgFFUWixWHj37l0ODg5yfn6eh4eHCXma1+vl2NgYnzx5QgAMhULx1+LIyAhfvnzJpaUl1tTUXOv06uzsTEwE5ubmaLVa2dTUxImJCb558+ZagI+yk5D66LrO5uZmAmB5eTmXl5c5Pj7OBw8e/DJgZmYm19bWLs4yAWB4eBjd3d0AgL6+Prx69QoAMD8/j48fP2J1dRXb29sIh8MwDANCCITDYZimiZycHHR2dsLtdl+cZR6XnZ0dOhyOWIN9+PDhTN/p6Wl6PB62trYSAGtrazk1NUXDMC73kiDJx4+7KMS/6Xv+3EPD0M/07evrpc32x4mUv3jxJ9fX/+Y/YWHR4vXjhpgAAAAASUVORK5CYII=';
 			},
-			
-			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				return _GetTasks ( wayPoints, transitMode, providerKey, userLanguage, options );
-			},
-			
-			parseResponse : function ( requestResponse, route, userLanguage ) {
-				return _ParseResponse ( requestResponse, route, userLanguage );
-			},
-			
 			get name ( ) { return 'leaflet.TravelNotesPublicTransport & 0penStreetMap';},
-			
 			get transitModes ( ) { return { car : false, bike : false, pedestrian : false, train : true}; },
+			get providerKeyNeeded ( ) { return false; },
 			
-			get providerKeyNeeded ( ) { return false; }
+			get providerKey ( ) { return _ProviderKey.length; },
+			set providerKey ( ProviderKey ) { if ( '' === _ProviderKey ) { _ProviderKey = ProviderKey;}},
 			
+			get userLanguage ( ) { return _UserLanguage; },
+			set userLanguage ( UserLanguage ) { _UserLanguage = UserLanguage; }
 		};
 	};
 	

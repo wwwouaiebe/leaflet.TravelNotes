@@ -15558,11 +15558,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getMapboxRouteProvider = function ( ) {
 	
-		var _WayPoints;
-		var _TransitMode;
-		var _ProviderKey;
-		var _UserLanguage;
+		var _ProviderKey = '';
+		var _UserLanguage = 'fr';
 		var _Options;
+		var _Route;
+		var _Response = '';
+		
+		var _NextPromise = 0;
+		var _Promises = [];
+		var _XMLHttpRequestUrl = '';
 
 		var _IconList = 
 		{
@@ -15699,22 +15703,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			}
 		};
 		
-		var _ParseResponse = function ( response, route, userLanguage ) {
-			
-			if ( "Ok" !== response.code )
+		/*
+		--- _ParseResponse function -----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _ParseResponse = function ( returnOnOk, returnOnError ) {
+		
+			if ( "Ok" !== _Response.code )
 			{
-				return false;
+				returnOnError ( 'Response code not ok' );
 			}
 			
-			if ( 0 === response.routes.length )
+			if ( 0 === _Response.routes.length )
 			{
-				return false;
+				returnOnError ( 'Route not found' );
 			}
 
-			route.itinerary.itineraryPoints.removeAll ( );
-			route.itinerary.maneuvers.removeAll ( );
+			_Route.itinerary.itineraryPoints.removeAll ( );
+			_Route.itinerary.maneuvers.removeAll ( );
 			
-			response.routes [ 0 ].geometry = require ( '@mapbox/polyline' ).decode ( response.routes [ 0 ].geometry, 6 );
+			_Response.routes [ 0 ].geometry = require ( '@mapbox/polyline' ).decode ( _Response.routes [ 0 ].geometry, 6 );
 
 			var options = {};
 			options.hooks= {};
@@ -15727,7 +15739,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			var osrmTextInstructions = require('osrm-text-instructions')('v5', options );
 
-			response.routes [ 0 ].legs.forEach ( 
+			_Response.routes [ 0 ].legs.forEach ( 
 				function ( leg ) {
 					var lastPointWithDistance = 0;
 					leg.steps.forEach ( 
@@ -15736,14 +15748,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 							var maneuver = L.travelNotes.interface ( ).maneuver;
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
-							maneuver.instruction = osrmTextInstructions.compile ( userLanguage, step );
+							maneuver.instruction = osrmTextInstructions.compile ( _UserLanguage, step );
 							maneuver.duration = step.duration;
 							var distance = 0;
 							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {
 								var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
 								itineraryPoint.latLng = [ step.geometry [ geometryCounter ] [ 0 ], step.geometry [ geometryCounter ] [ 1 ] ];
 								itineraryPoint.distance = leg.annotation.distance [ lastPointWithDistance ] ? leg.annotation.distance [ lastPointWithDistance ] : 0;
-								route.itinerary.itineraryPoints.add ( itineraryPoint );
+								_Route.itinerary.itineraryPoints.add ( itineraryPoint );
 								if (geometryCounter !== step.geometry.length - 1 ) {
 									distance += itineraryPoint.distance;
 									lastPointWithDistance++;
@@ -15753,14 +15765,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								}
 							}
 							maneuver.distance = distance;
-							route.itinerary.maneuvers.add ( maneuver );
+							_Route.itinerary.maneuvers.add ( maneuver );
 						}
 					);
 				}
 			);
 			
-			var wayPointsIterator = route.wayPoints.iterator;
-			response.waypoints.forEach ( 
+			var wayPointsIterator = _Route.wayPoints.iterator;
+			_Response.waypoints.forEach ( 
 				function ( wayPoint ) {
 					if ( ! wayPointsIterator.done ) {
 						wayPointsIterator.value.latLng = [ wayPoint.location [ 1 ] , wayPoint.location [ 0 ] ];
@@ -15768,9 +15780,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 			);
 
-			return true;
+			returnOnOk ( '' );
 		};
 		
+		/*
+		--- End of _ParseResponse function ---
+		*/
+
+		/*
+		--- _GetUrl function ------------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _GetUrl = function ( ) {
 			
 			var wayPointsToString = function ( wayPoint, result )  {
@@ -15780,10 +15804,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				result += wayPoint.lng.toFixed ( 6 ) + ',' + wayPoint.lat.toFixed ( 6 ) + ';' ;
 				return result;
 			};
-			var wayPointsString = _WayPoints.forEach ( wayPointsToString );
+			var wayPointsString = _Route.wayPoints.forEach ( wayPointsToString );
 			
 			var profile = '';
-			switch ( _TransitMode ) {
+			switch ( _Route.itinerary.transitMode ) {
 				case 'bike':
 				{
 					profile = 'mapbox/cycling/';
@@ -15807,35 +15831,99 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				_ProviderKey;
 		};
 		
-		return {
-			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				
-				_WayPoints = wayPoints;
-				_TransitMode = transitMode;
-				_ProviderKey = providerKey;
-				_UserLanguage = userLanguage;
-				_Options = options;
-				
-				return [
-					{
-						task: 'loadJsonFile',
-						context : null,
-						func : _GetUrl
-					},
-					{	
-						task: 'wait'
+		/*
+		--- End of _GetUrl function ---
+		*/
+
+		/*
+		--- _StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+			
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = 5000;
+			
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+			
+			xmlHttpRequest.onreadystatechange = function ( ) {
+				if ( xmlHttpRequest.readyState === 4 ) {
+					if ( xmlHttpRequest.status === 200 ) {
+						try {
+							_Response = JSON.parse ( xmlHttpRequest.responseText );
+						}
+						catch ( e ) {
+							returnOnError ( 'JSON parsing error' );
+						}
+						returnOnOk ( new Promise ( _Promises [ _NextPromise ++ ] ) );
 					}
-				];
+					else {
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};
+			
+			xmlHttpRequest.open ( "GET", _XMLHttpRequestUrl, true );
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
+			
+		};
+		
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
+
+		/*
+		--- _GetPromiseRoute function ---------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _GetPromiseRoute = function ( route, options ) {
+			_Route = route;
+			_Options = options;
+			_Response = '';
+			
+			_XMLHttpRequestUrl = _GetUrl ( );
+			
+			_NextPromise = 0;
+			_Promises = [];
+			
+			_Promises.push ( _StartXMLHttpRequest );
+			_Promises.push ( _ParseResponse );
+			
+			return new Promise ( _Promises [ _NextPromise ++ ] );
+		};
+		
+		/*
+		--- End of _GetPromiseRoute function ---
+		*/
+
+		return {
+			
+			getPromiseRoute : function ( route, options ) {
+				return _GetPromiseRoute ( route, options );
 			},
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AocEwcBrMn63AAAAk1JREFUSMftlj9oU1EUxn8neQ0thE6lgpO1TiptHhShJiIu2qHJA6FudtBRUBcpouJUnRyqgpODVcG62LROHfzHexGiJWkEQbCr0IqVYKPStDkOpuYRfW1eTNCh33Tvufec717udz8ObOFfITqV3XA9Njn3W+xAMuO7pnhs7AQiwCqwpvBNVN47Vu8SQDSZwbFMqsexyUyHinQjtAEBwACyTiKyWM1heBzyMHDXdbplRCeiyexVCei8HTfpf5gCwLFM9k/lEF3bpSIXgWNAm6vWceBercQrVfMwcBKhvVRcOwEst2zbXlldXQljGFeAoRpqbUjshSExgo9iM6kHLw7uUIDYTEr0ezDuQeoJw7/8ZLRUCD/ZNz6/AFAqFDolWBr1WyVQh/C7JKgj6eFu0sPdSFBHgC6/RWq7sbCI0g60/gzoqWhy7v762LXzC/AR2NmQG6tyE3jnCoUQHUN0DAi54m+BGw27sUAGyAOjZYUD9Fdty4vqLRX51Mg3bnUSkevAm6rc9XwFXtuWeafyHI0hDgCI6AXg8x/WlwTO+6npS9V23HwKJMtW+ss+FCbsRORVU79TMdByFlhwhT60hELnmvqP+6dzpAf35BG9DBSBoqheej6w+2vsca55xC/jPei04sTN20AKsG3LHN87cg17sKe5ztXHbFnHclrgDEDHwFGa41wuzMb7iCbncKzeHEBsKsuzQ74dsy6vxrF6K0pPROrqdOoibgT+O+LQJvONUFOul7hmgCNlhzKArA/i+nK92tvN2t6/zd1C0/ADiOy3l0UZHxAAAAAASUVORK5CYII=';
 			},
-			parseResponse : function ( requestResponse, route, userLanguage ) {
-				return _ParseResponse ( requestResponse, route, userLanguage );
-			},
 			get name ( ) { return 'Mapbox';},
 			get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false } ; },
-			get providerKeyNeeded ( ) { return true; }
+			get providerKeyNeeded ( ) { return true; },
+			
+			get providerKey ( ) { return _ProviderKey.length; },
+			set providerKey ( ProviderKey ) { if ( '' === _ProviderKey ) { _ProviderKey = ProviderKey;}},
+			
+			get userLanguage ( ) { return _UserLanguage; },
+			set userLanguage ( UserLanguage ) { _UserLanguage = UserLanguage; }
 		};
 	};
 	

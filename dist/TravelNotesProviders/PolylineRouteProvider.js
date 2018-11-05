@@ -23,11 +23,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	var getPolylineRouteProvider = function ( ) {
 
-		var _WayPoints;
-		var _TransitMode;
-		var _ProviderKey;
-		var _UserLanguage;
+		var _ProviderKey = '';
+		var _UserLanguage = 'fr';
 		var _Options;
+		var _Route;
+		var _Response = '';
 
 		var instructionsList = 
 		{
@@ -35,18 +35,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			fr : { kStart : "Départ", kContinue : "Continuer", kEnd : "Arrivée" }
 		};
 		
-		var _ParseResponse = function ( requestResponse, route, userLanguage ) {
-			route.itinerary.itineraryPoints.removeAll ( );
-			route.itinerary.maneuvers.removeAll ( );
-			var wayPointsIterator = route.wayPoints.iterator;
+		/*
+		--- _ParseResponse function ------------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _ParseResponse = function ( returnOnOk, returnOnError ) {
+			
+			_Route.itinerary.itineraryPoints.removeAll ( );
+			_Route.itinerary.maneuvers.removeAll ( );
+			var wayPointsIterator = _Route.wayPoints.iterator;
 			var done = wayPointsIterator.done;
 			var iconName = "kDepartDefault";
-			var instruction = instructionsList [ userLanguage ] ? instructionsList [ userLanguage ].kStart : instructionsList.en.kStart;
+			var instruction = instructionsList [ _UserLanguage ] ? instructionsList [ _UserLanguage ].kStart : instructionsList.en.kStart;
 			while ( ! done ) {
 				var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
 				itineraryPoint.latLng = wayPointsIterator.value.latLng;
 				itineraryPoint.distance = 0;
-				route.itinerary.itineraryPoints.add ( itineraryPoint );
+				_Route.itinerary.itineraryPoints.add ( itineraryPoint );
 				
 				var maneuver = L.travelNotes.interface ( ).maneuver;
 				maneuver.iconName = iconName;
@@ -59,37 +68,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				}
 				else {
 					maneuver.iconName = "kArriveDefault";
-					maneuver.instruction = instructionsList [ userLanguage ] ? instructionsList [ userLanguage ].kEnd : instructionsList.en.kEnd;
+					maneuver.instruction = instructionsList [ _UserLanguage ] ? instructionsList [ _UserLanguage ].kEnd : instructionsList.en.kEnd;
 				}
-				route.itinerary.maneuvers.add ( maneuver );
+				_Route.itinerary.maneuvers.add ( maneuver );
 				iconName = "kContinueStraight";
-				instruction = instructionsList [ userLanguage ] ? instructionsList [ userLanguage ].kContinue : instructionsList.en.kContinue;
+				instruction = instructionsList [ _UserLanguage ] ? instructionsList [ _UserLanguage ].kContinue : instructionsList.en.kContinue;
 				
 			}
 			
-			return true;
+			returnOnOk ( '' );
 		};
 		
+		/*
+		--- End of _ParseResponse function ---
+		*/
+
+		/*
+		--- _GetPromiseRoute function ---------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _GetPromiseRoute = function ( route, options ) {
+			_Route = route;
+			_Options = options;
+			_Response = '';
+			return new Promise ( _ParseResponse );
+		};
+		
+		/*
+		--- End of _GetPromiseRoute function ---
+		*/
+
 		return {
+			
+			getPromiseRoute : function ( route, options ) {
+				return _GetPromiseRoute ( route, options );
+			},
 			get icon ( ) {
 				return 'iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4ggaBh8z7ov/KQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAqElEQVRIx9VW0Q6AIAgU5v//sr1Us0I6EGy5HnLR3XnAhFprJWdxSVuJ0FX7SLS/uEzDVJ8cMdAuOJfXCBPR/gSn8cHNMz+7DLEa3ccf5QSo7itPpBzoYAOuCHTbdvEMqQBb5hoGp1G0RbIYg9bFvqXaUnxKPiURHNDfg8PxLMrYNHYabe5GxI2eUqWvHj3YgTjJjWXX7vS18u2wEDT0rJlDoie0fw5mG+C/L0HylIYKAAAAAElFTkSuQmCC';
 			},
-			getTasks : function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-				
-				_WayPoints = wayPoints;
-				_TransitMode = transitMode;
-				_ProviderKey = providerKey;
-				_UserLanguage = userLanguage;
-				_Options = options;
-				
-				return [];
-			},
-			parseResponse : function ( requestResponse, route, userLanguage ) {
-				return _ParseResponse ( requestResponse, route, userLanguage );
-			},
 			get name ( ) { return 'Polyline';},
 			get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : true}; },
-			get providerKeyNeeded ( ) { return false; }
+			get providerKeyNeeded ( ) { return false; },
+			
+			//get providerKey ( ) { return 0 < _ProviderKey.length; },
+			get providerKey ( ) { return _ProviderKey.length; },
+			set providerKey ( ProviderKey ) { if ( '' === _ProviderKey ) { _ProviderKey = ProviderKey;}},
+			
+			get userLanguage ( ) { return _UserLanguage; },
+			set userLanguage ( UserLanguage ) { _UserLanguage = UserLanguage; }
+			
 		};
 	};
 	
