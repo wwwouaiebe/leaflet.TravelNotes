@@ -89,26 +89,7 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ConvertAndDecompressFile  = function ( textFile, fileName  ) {
-			// an old map file is opened... converting the file...
-			if ( '.map' === fileName.substr ( fileName.lastIndexOf ( '.' ) ).toLowerCase ( ) ) {
-				// ... if the convert object is loaded
-				if ( ! window.convertMapsData ) {
-					return null;
-				}
-				else {
-					textFile = convertMapsData.mapsDataToTravelNotes ( textFile );
-				}
-			}
-		
-			var compressedTravel = null;
-			try {
-				compressedTravel = JSON.parse ( textFile ) ;
-			}
-			catch ( e ) {
-				return null;
-			}
-			
+		var _ConvertAndDecompressFile  = function ( compressedTravel, fileName  ) {
 			// decompressing the itineraryPoints
 			compressedTravel.routes.forEach ( 
 				function ( route ) {
@@ -141,9 +122,9 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ImportFile = function ( textFile, fileName ) {
+		var _ImportFile = function ( compressedTravel, fileName ) {
 			// converting and decompressing the file
-			var importData = _ConvertAndDecompressFile ( textFile, fileName );
+			var importData = _ConvertAndDecompressFile ( compressedTravel, fileName );
 			if ( ! importData ) {
 				return;
 			}
@@ -181,10 +162,10 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _LoadFile = function ( textFile, fileName, readOnly ) {
+		var _LoadFile = function ( compressedTravel, fileName, readOnly ) {
 
 			// converting and decompressing the file
-			var travel = _ConvertAndDecompressFile ( textFile, fileName );
+			var travel = _ConvertAndDecompressFile ( compressedTravel, fileName );
 			if ( ! travel ) {
 				return;
 			}
@@ -413,7 +394,11 @@ Tests ...
 			importTravel : function ( event ) {
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
-					_ImportFile ( fileReader.result, fileName );
+					try {
+						_ImportFile ( JSON.parse ( fileReader.result ), fileName );
+					}
+					catch ( e ) {
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -435,7 +420,11 @@ Tests ...
 					_DataManager.editedRoute.routeInitialObjId = -1;
 					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
 					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-					_LoadFile ( fileReader.result, fileName, false );
+					try {
+						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
+					}
+					catch ( e ) {
+					}
 				};
 				var fileName = event.target.files [ 0 ].name;
 				fileReader.readAsText ( event.target.files [ 0 ] );
@@ -449,18 +438,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			openServerTravel : function ( serverUrl ) {
-				var xmlHttpRequest = new XMLHttpRequest ( );
-				xmlHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === XMLHttpRequest.DONE ) {
-						if ( this.status === 200 ) {
-							_LoadFile ( this.responseText,'', true );
-						} 
-					}
-				};
-				xmlHttpRequest.open ( 'GET', serverUrl, true	) ;
-				xmlHttpRequest.overrideMimeType ( 'application/json' );
-				xmlHttpRequest.send ( null );
+			openServerTravel : function ( compressedTravel ) {
+				_LoadFile ( compressedTravel, '', true );
 			},
 
 			/*

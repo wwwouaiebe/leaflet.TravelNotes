@@ -47,7 +47,7 @@ Tests ...
 	var _LeftContextMenu = false;
 	var _RightContextMenu = false;
 	
-	var _Langage = 'fr';
+	var _Langage = '';
 	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
@@ -105,13 +105,15 @@ Tests ...
 					}
 				}
 			);
-			
+			if ( '' === _Langage ) {
+				_Langage = 'fr'
+			}
 			var stateObj = { index: "bar" };
 			history.replaceState ( stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
-					provider.userLanguage = _Langage;
+					provider.userLanguage =  _Langage;
 					if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
 						var providerKey = null;
 						if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
@@ -127,6 +129,58 @@ Tests ...
 				}
 			);
 		};
+
+		/*
+		--- End of _ReadURL function ---
+		*/
+		
+		/*
+		--- _StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var _XMLHttpRequestUrl = '';
+
+
+		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+			
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = 5000;
+			
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+			
+			xmlHttpRequest.onreadystatechange = function ( ) {
+				if ( xmlHttpRequest.readyState === 4 ) {
+					if ( xmlHttpRequest.status === 200 ) {
+						var response;
+						try {
+							response = JSON.parse ( xmlHttpRequest.responseText );
+						}
+						catch ( e ) {
+							returnOnError ( 'JSON parsing error' );
+						}
+						returnOnOk ( response );
+					}
+					else {
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};
+			
+			xmlHttpRequest.open ( "GET", _XMLHttpRequestUrl, true );
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
+			
+		};
+		
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
 
 		/*
 		--- onMapClick function ---------------------------------------------------------------------------------------
@@ -174,7 +228,7 @@ Tests ...
 			/*
 			--- addControl method --------------------------------------------------------------------------------------
 
-			This method add the control in the page
+			This method add the control on the page
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
@@ -182,76 +236,44 @@ Tests ...
 			addControl : function ( map, divControlId, options ) {
 				_DataManager.init ( map );
 				_ReadURL ( );
-				var configHttpRequest = new XMLHttpRequest ( );
-				configHttpRequest.onreadystatechange = function ( event ) {
-					if ( this.readyState === configHttpRequest.DONE ) {
-						if ( this.status === 200 ) {
-							try {
-								_DataManager.config = JSON.parse ( this.responseText );
-								if ( '' !== _Langage ) {
-									_DataManager.config.language = _Langage;
-								}
-								_DataManager.travel = require ( './data/Travel' ) ( );
-
-								var translationsHttpRequest = new XMLHttpRequest ( );
-								translationsHttpRequest.onreadystatechange = function ( event ) {
-									if ( this.readyState === translationsHttpRequest.DONE ) {
-										if ( this.status === 200 ) {
-											try {
-												require ( './UI/Translator' ) ( ).setTranslations ( JSON.parse ( this.responseText ) );
-											}
-											catch ( e ) {
-												console.log ( 'Not possible to parse TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
-											}
-										}
-										else {
-											console.log ( 'Not possible to load TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json' );
-										}
-										if ( divControlId )	{
-											document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
-										}	
-										else {
-											if ( typeof module !== 'undefined' && module.exports ) {
-												map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
-											}
-										}
-										require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
-										if ( _LoadedTravel ) {
-											require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
-										}
-										require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
-										if ( _DataManager.config.travelEditor.startupRouteEdition ) {
-											require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
-										}
-										else {
-											require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
-										}
-									}
-								};
-								translationsHttpRequest.open ( 
-									'GET',
-									window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json',
-									true
-								);
-								translationsHttpRequest.overrideMimeType ( 'application/json' );
-								translationsHttpRequest.send ( null );
-							}
-							catch ( e ) {
-								console.log ( 'Not possible to parse TravelNotesConfig.json' );
-							}
-						} 
-						else {
-							console.log ( 'Not possible to load TravelNotesConfig.json' );
+				
+				var promises = [];
+				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
+				promises.push ( new Promise ( _StartXMLHttpRequest ) );
+				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json';
+				promises.push ( new Promise ( _StartXMLHttpRequest ) );
+				if ( _LoadedTravel ) {
+					_XMLHttpRequestUrl = _LoadedTravel;
+					promises.push (  new Promise ( _StartXMLHttpRequest ) );
+				}
+				Promise.all ( promises ).then ( 
+					function ( values ) {
+						_DataManager.config = values [ 0 ];
+						if ( '' !== _Langage ) {
+							_DataManager.config.language = _Langage;
 						}
+						_DataManager.travel = require ( './data/Travel' ) ( );
+						require ( './UI/Translator' ) ( ).setTranslations ( values [ 1 ] );
+						if ( divControlId )	{
+							document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
+						}	
+						else {
+							map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+						}
+						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
+						if ( _LoadedTravel ) {
+							require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
+						}
+						require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+						if ( _DataManager.config.travelEditor.startupRouteEdition ) {
+							require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
+						}
+						else {
+							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
+						}	
 					}
-				};
-				configHttpRequest.open ( 
-					'GET',
-					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json',
-					true
 				);
-				configHttpRequest.overrideMimeType ( 'application/json' );
-				configHttpRequest.send ( null );
+				
 			},
 			
 			/*
