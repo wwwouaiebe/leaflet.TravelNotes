@@ -47,7 +47,7 @@ Tests ...
 	var _LeftContextMenu = false;
 	var _RightContextMenu = false;
 	
-	var _Langage = '';
+	var _Langage = 'fr';
 	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
@@ -86,7 +86,9 @@ Tests ...
 				
 				var param = urlSearch [ urlCounter ].split ( '=' );
 				if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
-					if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
+					var provider = _DataManager.providers.get ( param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ) );
+					if ( provider && provider.providerKeyNeeded ) {
+						provider.providerKey = param [ 1 ];
 						sessionStorage.setItem ( 
 							param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
 							btoa ( param [ 1 ] )
@@ -106,12 +108,16 @@ Tests ...
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
-					if ( provider.providerKeyNeeded ) {
+					provider.userLanguage = _Langage;
+					if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
 						var providerKey = null;
 						if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
 							providerKey = sessionStorage.getItem ( provider.name.toLowerCase ( ) ) ;
 						}
-						if ( ! providerKey ) {
+						if ( providerKey ) {
+							provider.providerKey = atob ( providerKey );
+						}
+						else {
 							_DataManager.providers.delete ( provider.name.toLowerCase( ) );
 						}
 					}
@@ -307,8 +313,8 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			get selectDialog ( ) {
-				return require ( './UI/SelectDialog' );
+			get baseDialog ( ) {
+				return require ( './UI/baseDialog' ) ( );
 			},
 
 			get userData ( ) { 
@@ -320,6 +326,7 @@ Tests ...
 			set userData ( userData ) {
 				 _DataManager.travel.userData = userData;
 			},
+			
 			get rightContextMenu ( ) { return _RightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 
 				if  ( ( RightContextMenu ) && ( ! _RightContextMenu ) ) {

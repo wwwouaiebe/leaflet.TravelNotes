@@ -33,28 +33,22 @@ Tests ...
 	
 	'use strict';
 
-	var SelectDialog = function ( taskLoader, task, responses ) {
+	var SelectDialog = function (  returnOnOk, returnOnError ) {
 		
 		var onCancelButtonClick = function ( ) {
-			task.response = { status : 3 , statusText : 'cancelled by user'};
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_NOK ;
-			taskLoader.endTask ( task );
 
-			return true;
+			returnOnError ( 'Cancelled by user' );
 		};
 		
 		var onOkButtonClick = function ( ) {
-			task.response = { index : selectElement.selectedIndex };
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_OK ;
-			taskLoader.endTask ( task );
 
-			return true;
+			returnOnOk ( new Promise ( _NextPromise ) );
 		};
 
+		console.log ( '_Response SelectDialog' );
+		console.log ( _Response );
+
 		if ( 0 === responses [ 0 ].length ) {
-			task.response = { status : 4 , statusText : 'No direct relation found'};
-			task.status = require ( '../core/TaskStatus' ) ( ).taskStatus.FINISH_NOK ;
-			taskLoader.endTask ( task );
 			
 			return;
 		}
