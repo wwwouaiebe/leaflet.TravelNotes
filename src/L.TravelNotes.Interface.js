@@ -73,38 +73,41 @@ Tests ...
 		*/
 
 		var _ReadURL = function ( ) {
-			var urlSearch = decodeURI ( window.location.search ).substr ( 1 ).split ( '&' );
 			var newUrlSearch = '?' ;
-			for ( var urlCounter = 0; urlCounter < urlSearch.length; urlCounter ++ ) {
-				
-				if ( 'fil=' === urlSearch [ urlCounter ].substr ( 0, 4 ).toLowerCase ( ) ) {
-					_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearch [ urlCounter ].substr ( 4 ) ) ) );
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearch [ urlCounter ];
-					continue;
-				}
-				
-				var param = urlSearch [ urlCounter ].split ( '=' );
-				if ( ( 2 === param.length ) && ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' ) ) ) {
-					var provider = _DataManager.providers.get ( param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ) );
-					if ( provider && provider.providerKeyNeeded ) {
-						provider.providerKey = param [ 1 ];
-						sessionStorage.setItem ( 
-							param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( ),
-							btoa ( param [ 1 ] )
-						);
+			( decodeURI ( window.location.search ).substr ( 1 ).split ( '&' ) ).forEach ( 
+				function ( urlSearchSubString ){
+					if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+						// Needed to first extract the file name because the file name 
+						// can contains some = chars (see base64 specs)
+						_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += urlSearch [ urlCounter ];
+					}
+					else {
+						var param = urlSearchSubString.split ( '=' );
+						if ( 2 === param.length ) {
+							if ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' )  ) {
+								var providerName = param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( );
+								var provider = _DataManager.providers.get ( providerName );
+								if ( provider && provider.providerKeyNeeded ) {
+									provider.providerKey = param [ 1 ];
+								}
+								sessionStorage.setItem ( providerName, btoa ( param [ 1 ] ) );
+							}
+							else {
+								newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+								newUrlSearch += urlSearchSubString;
+								if ( 'lng' === param [ 0 ].toLowerCase ( ) ) {
+									_Langage = param [ 1 ].toLowerCase ( );
+								}
+							}
+						}
 					}
 				}
-				else {
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearch [ urlCounter ];
-				}
-				if ( ( 2 === param.length ) && 'lng' === param [ 0 ].toLowerCase ( ) ) {
-					_Langage = param [ 1 ].toLowerCase ( );
-				}
-			}
+			);
+			
 			var stateObj = { index: "bar" };
-			history.replaceState(stateObj, "page", newUrlSearch );
+			history.replaceState ( stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
