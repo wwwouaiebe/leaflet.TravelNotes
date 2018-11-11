@@ -563,7 +563,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							}
 							if ( stopNode.id === startStop.id ) {
 								maneuver.iconName = 'kTrainStart';
-								maneuver.instruction += 'Monter sur le train';
+								maneuver.instruction += 'Monter dans le train';
 							}
 							else if ( stopNode.id === endStop.id ) {
 								maneuver.iconName = 'kTrainEnd';
@@ -571,7 +571,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							}
 							else {
 								maneuver.iconName = 'kTrainContinue';
-								maneuver.instruction += 'Rester sur le train';
+								maneuver.instruction += 'Rester dans le train';
 							}
 							maneuver.distance = 0;
 							maneuver.duration = 0;
@@ -822,6 +822,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			if ( 0 === _Response.elements.length ) {
 				
 				returnOnError ( 'No relation found' );
+				return;
 			}
 			
 			var baseDialog = L.travelNotes.interface ( ).baseDialog ;

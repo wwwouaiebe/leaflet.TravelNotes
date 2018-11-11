@@ -81,7 +81,7 @@ Tests ...
 						// can contains some = chars (see base64 specs)
 						_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-						newUrlSearch += urlSearch [ urlCounter ];
+						newUrlSearch += urlSearchSubString;
 					}
 					else {
 						var param = urlSearchSubString.split ( '=' );
