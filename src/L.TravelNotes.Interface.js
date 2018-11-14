@@ -106,7 +106,7 @@ Tests ...
 				}
 			);
 			if ( '' === _Langage ) {
-				_Langage = 'fr'
+				_Langage = 'fr';
 			}
 			var stateObj = { index: "bar" };
 			history.replaceState ( stateObj, "page", newUrlSearch );
@@ -194,7 +194,7 @@ Tests ...
 			if ( _DataManager.travel.readOnly ) {
 				return;
 			}
-			require ('./UI/ContextMenu' ) ( 
+			require ( './UI/ContextMenu' ) ( 
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
@@ -214,7 +214,7 @@ Tests ...
 			if ( _DataManager.travel.readOnly ) {
 				return;
 			}
-			require ('./UI/ContextMenu' ) (
+			require ( './UI/ContextMenu' ) (
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
@@ -258,7 +258,7 @@ Tests ...
 							document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 						}	
 						else {
-							map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+							map.addControl ( require ( './L.TravelNotes.Control' ) ( options ) );
 						}
 						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 						if ( _LoadedTravel ) {

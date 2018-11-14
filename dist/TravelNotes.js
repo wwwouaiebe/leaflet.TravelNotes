@@ -989,7 +989,7 @@ Tests ...
 	var _LeftContextMenu = false;
 	var _RightContextMenu = false;
 	
-	var _Langage = 'fr';
+	var _Langage = '';
 	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
@@ -1023,7 +1023,7 @@ Tests ...
 						// can contains some = chars (see base64 specs)
 						_LoadedTravel = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-						newUrlSearch += urlSearch [ urlCounter ];
+						newUrlSearch += urlSearchSubString;
 					}
 					else {
 						var param = urlSearchSubString.split ( '=' );
@@ -1047,13 +1047,15 @@ Tests ...
 					}
 				}
 			);
-			
+			if ( '' === _Langage ) {
+				_Langage = 'fr';
+			}
 			var stateObj = { index: "bar" };
 			history.replaceState ( stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
-					provider.userLanguage = _Langage;
+					provider.userLanguage =  _Langage;
 					if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
 						var providerKey = null;
 						if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
@@ -1134,7 +1136,7 @@ Tests ...
 			if ( _DataManager.travel.readOnly ) {
 				return;
 			}
-			require ('./UI/ContextMenu' ) ( 
+			require ( './UI/ContextMenu' ) ( 
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
@@ -1154,7 +1156,7 @@ Tests ...
 			if ( _DataManager.travel.readOnly ) {
 				return;
 			}
-			require ('./UI/ContextMenu' ) (
+			require ( './UI/ContextMenu' ) (
 				event, 
 				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
@@ -1168,7 +1170,7 @@ Tests ...
 			/*
 			--- addControl method --------------------------------------------------------------------------------------
 
-			This method add the control in the page
+			This method add the control on the page
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
@@ -1198,7 +1200,7 @@ Tests ...
 							document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 						}	
 						else {
-							map.addControl ( require ('./L.TravelNotes.Control' ) ( options ) );
+							map.addControl ( require ( './L.TravelNotes.Control' ) ( options ) );
 						}
 						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 						if ( _LoadedTravel ) {
@@ -3438,7 +3440,7 @@ Tests ...
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor') ( ).endNoteDialog ( _Note, _RouteObjId );
+		require ( '../core/NoteEditor' ) ( ).endNoteDialog ( _Note, _RouteObjId );
 		return true;
 	};
 
@@ -5967,7 +5969,7 @@ Tests ...
 						polyline, 
 						'contextmenu', 
 						function ( event ) {
-							require ('../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
+							require ( '../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
 						}
 					);
 				}
@@ -6156,7 +6158,7 @@ Tests ...
 					marker, 
 					'contextmenu', 
 					function ( event ) { 
-						require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+						require ( '../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
 					}
 				);
 				
@@ -6301,7 +6303,7 @@ Tests ...
 						marker, 
 						'contextmenu', 
 						function ( event ) { 
-							require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
+							require ( '../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
 						}
 					);
 					// event listener for the dragend event
@@ -7216,7 +7218,7 @@ Tests ...
 				_DataManager.editedRoute = require ( '../data/Route' ) ( );
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
-				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 				_RouteEditorUI.setWayPointsList ( );
 				_RouteEditorUI .reduce ( );
 				_ItineraryEditor.setItinerary ( );
@@ -7797,7 +7799,7 @@ Tests ...
 	var _RouteProvider = null;
 
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _Translator = require( '../UI/Translator' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var Router = function ( ) {
 		
@@ -8119,7 +8121,7 @@ Tests ...
 				return;
 			}
 			// ... and transform the data in the correct format
-			var importTravel = require ( '../Data/Travel') ( );
+			var importTravel = require ( '../Data/Travel' ) ( );
 			importTravel.object = importData;
 			
 			// routes are added with their notes
@@ -8274,7 +8276,7 @@ Tests ...
 				_DataManager.travel.routes.remove ( routeObjId );
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
-					require ( './RouteEditor') ( ).clear ( );
+					require ( './RouteEditor' ) ( ).clear ( );
 				}
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 				this.changeTravelHTML ( );
@@ -8405,10 +8407,10 @@ Tests ...
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_MapEditor.removeAllObjects ( );
-					_DataManager.editedRoute = require ( '../Data/Route') ( );
+					_DataManager.editedRoute = require ( '../Data/Route' ) ( );
 					_DataManager.editedRoute.routeChanged = false;
 					_DataManager.editedRoute.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					try {
 						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
@@ -8463,12 +8465,12 @@ Tests ...
 				}
 				_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
-				_DataManager.editedRoute = require ( '../Data/Route') ( );
+				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
 				_DataManager.travel = require ( '../Data/Travel' ) ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.changeTravelHTML ( true );
 				if ( _DataManager.config.travelEditor.startupRouteEdition ) {

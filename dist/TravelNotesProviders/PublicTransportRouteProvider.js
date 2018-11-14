@@ -540,7 +540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					if ( 0 === addPoint && ( nodeId === startStop.id || nodeId === endStop.id ) ) {
 						// start stop or end stop is reached
 						addPoint = 1;
-						reversePoints = ( nodeId ===endStop.id );
+						reversePoints = ( nodeId === endStop.id );
 					}
 					else if ( 2 === addPoint && ( nodeId === startStop.id || nodeId === endStop.id ) ) {
 						// the second stop is reached

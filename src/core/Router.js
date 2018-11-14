@@ -41,7 +41,7 @@ Tests ...
 	var _RouteProvider = null;
 
 	var _DataManager = require ( '../Data/DataManager' ) ( );
-	var _Translator = require( '../UI/Translator' ) ( );
+	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var Router = function ( ) {
 		

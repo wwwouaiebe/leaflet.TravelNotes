@@ -247,7 +247,7 @@ Tests ...
 						polyline, 
 						'contextmenu', 
 						function ( event ) {
-							require ('../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
+							require ( '../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
 						}
 					);
 				}
@@ -436,7 +436,7 @@ Tests ...
 					marker, 
 					'contextmenu', 
 					function ( event ) { 
-						require ('../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+						require ( '../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
 					}
 				);
 				
@@ -581,7 +581,7 @@ Tests ...
 						marker, 
 						'contextmenu', 
 						function ( event ) { 
-							require ('../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
+							require ( '../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
 						}
 					);
 					// event listener for the dragend event

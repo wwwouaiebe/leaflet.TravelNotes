@@ -378,7 +378,7 @@ Tests ...
 				_DataManager.editedRoute = require ( '../data/Route' ) ( );
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
-				require ( '../UI/TravelEditorUI') ( ).setRoutesList ( );
+				require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 				_RouteEditorUI.setWayPointsList ( );
 				_RouteEditorUI .reduce ( );
 				_ItineraryEditor.setItinerary ( );

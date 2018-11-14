@@ -129,7 +129,7 @@ Tests ...
 				return;
 			}
 			// ... and transform the data in the correct format
-			var importTravel = require ( '../Data/Travel') ( );
+			var importTravel = require ( '../Data/Travel' ) ( );
 			importTravel.object = importData;
 			
 			// routes are added with their notes
@@ -284,7 +284,7 @@ Tests ...
 				_DataManager.travel.routes.remove ( routeObjId );
 				_TravelEditorUI.setRoutesList ( );
 				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
-					require ( './RouteEditor') ( ).clear ( );
+					require ( './RouteEditor' ) ( ).clear ( );
 				}
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 				this.changeTravelHTML ( );
@@ -415,10 +415,10 @@ Tests ...
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_MapEditor.removeAllObjects ( );
-					_DataManager.editedRoute = require ( '../Data/Route') ( );
+					_DataManager.editedRoute = require ( '../Data/Route' ) ( );
 					_DataManager.editedRoute.routeChanged = false;
 					_DataManager.editedRoute.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					try {
 						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
@@ -473,12 +473,12 @@ Tests ...
 				}
 				_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
-				_DataManager.editedRoute = require ( '../Data/Route') ( );
+				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
 				_DataManager.editedRoute.routeChanged = false;
 				_DataManager.editedRoute.routeInitialObjId = -1;
 				_DataManager.travel = require ( '../Data/Travel' ) ( );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				require ( '../UI/RouteEditorUI') ( ).setWayPointsList (  );
+				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.changeTravelHTML ( true );
 				if ( _DataManager.config.travelEditor.startupRouteEdition ) {
