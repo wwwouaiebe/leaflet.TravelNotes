@@ -3,6 +3,7 @@
 ## Demo
 
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
+
 __Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server for conditions. 
 Due to heavy traffic on this server, you can frequently receive an http error 429. 
 
@@ -11,7 +12,7 @@ Simply add MapboxProviderKey=your_Mapbox_API_key and/or GraphHopperProviderKey=y
 
 And with Mapbox and GraphHopper, you can search a route for car, bike or pedestrian.
 
-See also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2).  This demo displays a travel with a route and two icons
+See also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2&lng=en).  This demo displays a travel with a route and two icons
 and without any control, so the user cannot modify the travel.
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
@@ -30,14 +31,26 @@ Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR
 
 ### gh-pages branch
 
-The gh-pages branch is the last stable version. This branch contains all the needed files to run Travel and Notes, but not the sources.
+The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
+This branch contains all the needed files to run Travel & Notes, but not the sources.
+
+La [branch gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
+Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
 ### v1.2.0 branch
 
-the v1.2.0 branch contains the source files of the last stable version
+The [v1.2.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.2.0) contains the source files of the last stable version.
+
+La [branche v1.2.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.2.0) contient les sources de la dernière version stable.
 
 ### master branch
 
-The master branch is the development branch and is unstable. 
+The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) is the development branch and is unstable. 
+
+La [master branche](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) est la branche de développement et est instable.
 
 ## Documentation
+
+The user guide and installation guide in english or french for the last stable are [there](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
+
+Le guides utilisateur et le guide d'installation, en français ou en anglais de la dernière version stable sont [ici](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)

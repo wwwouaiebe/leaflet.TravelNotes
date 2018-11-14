@@ -81,7 +81,7 @@ For each route :
 
 It is also possible to drag and drop to reorder the different routes.
 
-When a route is chained, an icon & # x26d3; is present.
+When a route is chained, an icon &#x26d3; is present.
 
 It is possible to give a name to each route. This is not essential but can make your job easier, especially when the travel has a lot of routes.
 
@@ -90,14 +90,16 @@ It is possible to give a name to each route. This is not essential but can make 
 - the button &#x25bd; enlarge the list of routes
 - the button &#x274c; erases all travel data and starts editing a new travel.
 - the button &#x1f4be; saves the travel being edited to a file on your computer
-- the button &#x1f4c2; opens a previously saved travel to a file
-- the button &#x1F30F; opens a previously saved travel to a file and includes all routes and notes from that travel in the current edited travel
+- the button &#x1f4c2; opens a previously saved travel
+- the button &#x1F30F; opens a previously saved travel and includes all routes and notes from that travel in the current edited travel
 - the button &#x1f4cb; opens the roadbook
 - the button + add a new route to the travel
 
-### Waypoints of the route
+### Route waypoints
 
 Before you can view the waypoints of a route, it is necessary to start editing it with the &#x21f0; present in the route list.
+
+<img src="RouteEditorEN.PNG" />
 
 #### Toolbar buttons "Waypoints of the route"
 
@@ -111,10 +113,9 @@ before being edited
 
 #### Create a waypoint
 
-<img src="RouteEditorEN.PNG" />
-
 To create a waypoint, right-click on the map at the desired location and choose "Select this point as start point", "Select this point as waypoint"
 or "Select this point as end point" in the menu:
+
 <img src="MapContextMenuEN.PNG" />
 
 A green icon (for the start point), orange (for a waypoint) or red (for the end point) is added to the map at the chosen location and the waypoint is completed,
@@ -125,7 +126,7 @@ The order of the waypoints is also indicated (A for the start point, B for the e
 <img src="RouteEditor1EN.PNG" />
 
 - the buttons &#x21e7; et &#x21e9; allow you to change the order of the intermediate points. These buttons are visible only when several intermediate points are present.
-It is not possible to transform the starting point or end point into an intermediate point.
+It is not possible to transform the start point or end point into an intermediate point.
 - the button &#x267b; delete the waypoint. It is not possible to delete the start point or the end point.
 
 #### Modify a waypoint
@@ -169,7 +170,7 @@ lost, including modified properties and notes added since the beginning of editi
 
 This part includes the itinerary of the route as well as notes related to the route.
 
-When the mouse is placed on a line of the itineray, a marker is displayed at this location on the map.
+When the mouse is placed on a line of the itinerary, a marker is displayed at this location on the map.
 
 A left click on a line of the itinerary will zoom in on the location on the map.
 
@@ -209,7 +210,7 @@ are not modified.
 
 Move the note icon to make the line visible. Then drag and drop the free end of this line.
 
-A route note always has its latitude and longitude on the route. When the line is dropped, the nearest point on the path is searched and the free end
+A route note always has its latitude and longitude on the route. When the line is dropped, the nearest point on the route is searched and the free end
 of the line moved to this point.
 
 ### The note dialog box
@@ -228,7 +229,7 @@ Each edit box can contain plain text or html, except for the "Link" area.
 
 The "Icon Content" area will be used to represent the note on the map and can not be empty (leaving this area blank would prevent any subsequent changes to the note).
 
-The "Address" area is completed automatically when creating the note - [Nominatim] (http://wiki.openstreetmap.org/wiki/Nominatim) is used to geotag the notes.
+The "Address" area is completed automatically when creating the note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) is used to geotag the notes.
 This area will never be changed by Nominatim afterwards, even if the note has been moved.
 
 #### Some examples of notes
@@ -309,6 +310,6 @@ https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLm
 
 aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2 is https://wwwouaiebe.github.io/sample.trv base64 encoded.
 
-See the sample on the [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2)
+See the sample on the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2&lng=en)
 
 When such a file is displayed, it is not possible to modify it. The TravelNotes interface is not visible and all context menus are disabled.

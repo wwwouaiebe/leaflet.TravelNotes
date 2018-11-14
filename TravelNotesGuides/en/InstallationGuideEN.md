@@ -16,7 +16,7 @@ Open the zip file and install its contents in a directory on your PC or on your 
 
 Travel & Notes uses [Leaflet] (http://leafletjs.com/) to display the map. You must therefore download and install Leaflet.
 
-In the & lt; head & gt; file, load the Leaflet and TravelNotes stylesheet:
+In the &lt;head&gt; file, load the Leaflet and TravelNotes stylesheet:
 
 ```
 <head>
@@ -27,7 +27,7 @@ In the & lt; head & gt; file, load the Leaflet and TravelNotes stylesheet:
 </head>
 ```
 
-And in the & lt; body & gt; load Leaflet and Travel & Notes Javascript, create the map and add the Travel & Notes control:
+And in the &lt;body&gt; load Leaflet and Travel & Notes Javascript, create the map and add the Travel & Notes control:
 
 ```
 <body>
@@ -86,7 +86,7 @@ __addMapContextMenu ( leftButton, rightButton )__
 
 This method adds the left and right context menus
 
-Paramètres :
+Parameters :
 
 - leftButton : when this parameter is true, a pop-up menu is displayed when a left click is made on the map
 - rightButton : when this parameter is true, a pop-up menu is displayed when a right click is made on the map
@@ -107,9 +107,9 @@ This method returns the access key of a route provider
 
 - __rightUserContextMenu__ : a collection of objects adding commands to the right context menu
 
-- __maneuver__ : returns a new maneuver object. Only used by pluggins
+- __maneuver__ : returns a new maneuver object. Only used by plugins
 
-- __itineraryPoint__ : returns a new itineraryPoint object. Only used by pluggins
+- __itineraryPoint__ : returns a new itineraryPoint object. Only used by plugins
 
 - __version__ (read only) : the current version of TravelNotes
 
