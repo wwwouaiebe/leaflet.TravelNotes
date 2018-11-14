@@ -81,7 +81,7 @@ Tests ...
 
 			_RequestStarted = false;
 
-			require ( '../core/ErrorEditor' ) ( ).showError ( message );// _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
+			require ( '../core/ErrorEditor' ) ( ).showError ( message );
 		};
 	
 		/*

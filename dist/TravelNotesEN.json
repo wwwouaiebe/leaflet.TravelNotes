@@ -100,6 +100,10 @@
 		"msgstr" : "Note"
 	},
 	{
+		"msgid" : "NoteDialog - Open a configuration file",
+		"msgstr" : "Open a configuration file"
+	},
+	{
 		"msgid" : "NoteDialog - Phone",
 		"msgstr" : "Phone&nbsp:&nbsp;"
 	},
@@ -294,14 +298,6 @@
 	{
 		"msgid" : "RoutePropertiesDialog - Width",
 		"msgstr" : "Width : "
-	},
-	{
-		"msgid" : "Router - An error occurs when parsing the response",
-		"msgstr" : "An error occurs when parsing the response"
-	},
-	{
-		"msgid" : "Router - An error occurs when sending the request",
-		"msgstr" : "An error occurs when sending the request (Status: {status} - {statusText})"
 	},
 	{
 		"msgid" : "SortableList - Delete",

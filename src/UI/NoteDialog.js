@@ -239,7 +239,7 @@ Tests ...
 			{ 
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
 				className: 'TravelNotes-NoteDialog-EditorButton', 
-				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
+				title : _Translator.getText ( 'NoteDialog - Open a configuration file' ), 
 				innerHTML : '&#x23CD;'
 			}, 
 			openUserDataFileFakeDiv 

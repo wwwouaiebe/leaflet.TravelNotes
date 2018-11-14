@@ -3617,7 +3617,7 @@ Tests ...
 			{ 
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
 				className: 'TravelNotes-NoteDialog-EditorButton', 
-				title : _Translator.getText ( 'TravelEditorUI - Open travel' ), 
+				title : _Translator.getText ( 'NoteDialog - Open a configuration file' ), 
 				innerHTML : '&#x23CD;'
 			}, 
 			openUserDataFileFakeDiv 
@@ -7844,7 +7844,7 @@ Tests ...
 
 			_RequestStarted = false;
 
-			require ( '../core/ErrorEditor' ) ( ).showError ( message );// _Translator.getText ( 'Router - An error occurs when parsing the response' ) );
+			require ( '../core/ErrorEditor' ) ( ).showError ( message );
 		};
 	
 		/*
