@@ -27,7 +27,7 @@ peut-être créée par voyage, mais il n'est pas obligatoire que tous les trajet
 Une **note** est un ensemble d'informations qui concerne un point précis sur la carte ou sur un trajet. Une note est composée d'une icône, d'un 'tooltip', d'un texte libre, d'une adresse, d'un lien et d'un numéro de téléphone.
 Aucune de ces informations n'est obligatoire, à l'exception de l'icône, qui est utilisée pour représenter la note sur la carte. Cette icône peut être une image, une photo, un texte...
 
-Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, les trajets et la description de ceux-ci.
+Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, les trajets et les itinéraires.
 
 ## __Avant de commencer à utiliser Travel & Notes__
 
@@ -114,7 +114,7 @@ avant d'être édité
 
 <img src="RouteEditorFR.PNG" />
 
-Pour compléter un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
+Pour créer un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
 ou "Sélectionner cet endroit comme point de fin" dans le menu:
 
 <img src="MapContextMenuFR.PNG" />
@@ -231,11 +231,11 @@ Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception 
 La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la carte et ne peut pas être vide (laisser cette zone vide empêcherait toute modification ultérieure de la note).
 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
-Cette zone ne sera jamais modifiée par Nominantim par la suite, même si la note a été déplacée.
+Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée.
 
 #### Quleques exemples de notes 
 
-##### Une note simple créée à partir d'une note prédéfinies
+##### Une note simple créée à partir d'une note prédéfinie
 
 La boite de dialogue: 
 
@@ -314,4 +314,4 @@ aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2 en l'équivalent de https:/
 
 Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2)
 
-Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas visible et les menus contextuels sont désactivés.
+Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas visible et tous les menus contextuels sont désactivés.

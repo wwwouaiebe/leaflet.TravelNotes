@@ -80,7 +80,7 @@ Paramètres :
 
 __addProvider ( provider )__
 
-Cette méthode est utilisée uniquement par les pluggins
+Cette méthode est utilisée uniquement par les plugins
 
 __addMapContextMenu ( leftButton, rightButton )__
 
@@ -107,9 +107,9 @@ Cette méthode renvoie la clef d'accès d'un fournisseur d'itinéraires
 
 - __rightUserContextMenu__ : une collection d'objets ajoutant des commandes dans le menu contextuel droit
 
-- __maneuver__ : renvoie un nouvel objet maneuver. Uniquement utilisé par les pluggins
+- __maneuver__ : renvoie un nouvel objet maneuver. Uniquement utilisé par les plugins
 
-- __itineraryPoint__ : renvoie un nouvel objet itineraryPoint. Uniquement utilisé par les pluggins
+- __itineraryPoint__ : renvoie un nouvel objet itineraryPoint. Uniquement utilisé par les plugins
 
 - __version__ (lecture seule) : la version courante de TravelNotes.
 
@@ -150,7 +150,7 @@ avant d'être utilisées pour adapter le type de ligne dans Leaflet.
 
 #### Le contenu du fichier TravelNotesNoteDialog.json
 
-Ce fichier contient les définitions des boutons et de la liste des icônes prédéfinies de la bote d'édition des notes. Ces définitions peuvent être adaptées à vos besoins.
+Ce fichier contient les définitions des boutons et de la liste des icônes prédéfinies de la boite d'édition des notes. Ces définitions peuvent être adaptées à vos besoins.
 
 Exemple de fichier comprenant 3 boutons et 2 icônes prédéfinies:
 ```
@@ -191,7 +191,7 @@ Exemple de fichier comprenant 3 boutons et 2 icônes prédéfinies:
 }
 ```
 
-Deux collections d'objets __doivent__ être présentes dans le fichier : "editionButtons" pour les boutons supplémentaires et "preDefinedIconsList" pour les iônes prédéfinies. Ces collections peuvent être vides
+Deux collections d'objets __doivent__ être présentes dans le fichier : "editionButtons" pour les boutons supplémentaires et "preDefinedIconsList" pour les icônes prédéfinies. Ces collections peuvent être vides
 mais doivent être présentes.
 
 Chaque objet de la collection "editionButtons" a deux ou trois propriétés;
@@ -220,6 +220,6 @@ Pour charger Travel & Notes dans une autre langue, ajoutez à l'url lng= et la l
 
 L'organisation de ces fichiers est la plus proche possible de celle de [GNU getText](https://en.wikipedia.org/wiki/Gettext)
 
-### Pluggins
+### Plugins
 
-Pour utiliser un pluggin, charegez simplement celui-ci à partir de la page html en utilisant le tag <script>
+Pour utiliser un plugin, charegez simplement celui-ci à partir de la page html en utilisant le tag <script>

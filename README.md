@@ -1,10 +1,18 @@
 # Travel & Notes with Leaflet
 
-You are a native english speaker? And you understand french? Perfect, you can help to translate the user guide and the installation guide. Don't hesitate!
+## Demo
 
-[Guide pour les utilisateurs - fr ](TravelNotesGuides/GuideUtilisateurFR.md)
+[Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
+__Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server for conditions. 
+Due to heavy traffic on this server, you can frequently receive an http error 429. 
 
-[Guide d'installation - fr ](TravelNotesGuides/GuideInstallationFR.md)
+If you have a Mapbox or GraphHopper API key, you can also use this demo with Mapbox and/or GraphHopper. 
+Simply add MapboxProviderKey=your_Mapbox_API_key and/or GraphHopperProviderKey=your_GraphHopper_API_key to the demo url: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=your_mapbox_API_key&GraphHopperProviderKey=your_GraphHopper_API_key .
+
+And with Mapbox and GraphHopper, you can search a route for car, bike or pedestrian.
+
+See also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2).  This demo displays a travel with a route and two icons
+and without any control, so the user cannot modify the travel.
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
 
@@ -18,15 +26,18 @@ Et avec Mapbox et Graphhopper, vous pouvez rechercher un trajet pour une voiture
 
 Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2) qui affiche un voyage avec un trajet et des icônes, sans aucun contrôle, et donc sans possibilité de modifications.
 
-[Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
+## Releases and branches
 
-__Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server for conditions. 
-Due to heavy traffic on this server, you can frequently receive an http error 429. 
+### gh-pages branch
 
-If you have a Mapbox or GraphHopper API key, you can also use this demo with Mapbox and/or GraphHopper. 
-Simply add MapboxProviderKey=your_Mapbox_API_key and/or GraphHopperProviderKey=your_GraphHopper_API_key to the demo url: https://wwwouaiebe.github.io/leaflet.TravelNotes/?MapboxProviderKey=your_mapbox_API_key&GraphHopperProviderKey=your_GraphHopper_API_key .
+The gh-pages branch is the last stable version. This branch contains all the needed files to run Travel and Notes, but not the sources.
 
-And with Mapbox and GraphHopper, you can search a route for car, bike or pedestrian.
+### v1.2.0 branch
 
-see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2).  This demo displays a travel with a route and two icons
-and without any control, so the user cannot modify the travel.
+the v1.2.0 branch contains the source files of the last stable version
+
+### master branch
+
+The master branch is the development branch and is unstable. 
+
+## Documentation
