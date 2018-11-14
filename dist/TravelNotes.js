@@ -989,7 +989,7 @@ Tests ...
 	var _LeftContextMenu = false;
 	var _RightContextMenu = false;
 	
-	var _Langage = '';
+	var _Langage = null;
 	var _LoadedTravel = null;
 	var _DataManager = require ( './data/DataManager' ) ( );
 	var _Utilities = require ( './util/Utilities' ) ( );
@@ -1047,15 +1047,11 @@ Tests ...
 					}
 				}
 			);
-			if ( '' === _Langage ) {
-				_Langage = 'fr';
-			}
 			var stateObj = { index: "bar" };
 			history.replaceState ( stateObj, "page", newUrlSearch );
 			
 			_DataManager.providers.forEach (
 				function ( provider ) {
-					provider.userLanguage =  _Langage;
 					if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
 						var providerKey = null;
 						if ( _Utilities.storageAvailable ( 'sessionStorage' ) ) {
@@ -1086,14 +1082,13 @@ Tests ...
 		
 		var _XMLHttpRequestUrl = '';
 
-
 		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
 			
 			var xmlHttpRequest = new XMLHttpRequest ( );
 			xmlHttpRequest.timeout = 5000;
 			
 			xmlHttpRequest.ontimeout = function ( event ) {
-				returnOnError ( 'TimeOut error' );
+				returnOnError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
 			};
 			
 			xmlHttpRequest.onreadystatechange = function ( ) {
@@ -1104,12 +1099,12 @@ Tests ...
 							response = JSON.parse ( xmlHttpRequest.responseText );
 						}
 						catch ( e ) {
-							returnOnError ( 'JSON parsing error' );
+							returnOnError ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL );
 						}
 						returnOnOk ( response );
 					}
 					else {
-						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+						returnOnError ( 'Error XMLHttpRequest - Status : ' + xmlHttpRequest.status + ' - StatusText : ' + xmlHttpRequest.statusText + ' - File : ' + xmlHttpRequest.responseURL );
 					}
 				}
 			};
@@ -1182,7 +1177,7 @@ Tests ...
 				var promises = [];
 				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
 				promises.push ( new Promise ( _StartXMLHttpRequest ) );
-				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + _DataManager.config.language.toUpperCase ( ) + '.json';
+				_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + ( _Langage || _DataManager.config.language).toUpperCase ( )  + '.json';
 				promises.push ( new Promise ( _StartXMLHttpRequest ) );
 				if ( _LoadedTravel ) {
 					_XMLHttpRequestUrl = _LoadedTravel;
@@ -1191,9 +1186,15 @@ Tests ...
 				Promise.all ( promises ).then ( 
 					function ( values ) {
 						_DataManager.config = values [ 0 ];
-						if ( '' !== _Langage ) {
+						if ( _Langage ) {
 							_DataManager.config.language = _Langage;
 						}
+						_DataManager.providers.forEach (
+							function ( provider ) {
+								provider.userLanguage =  _DataManager.config.language;
+							}
+						);
+						
 						_DataManager.travel = require ( './data/Travel' ) ( );
 						require ( './UI/Translator' ) ( ).setTranslations ( values [ 1 ] );
 						if ( divControlId )	{
@@ -1213,6 +1214,10 @@ Tests ...
 						else {
 							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
 						}	
+					}
+				).catch ( 
+					function ( error ) {
+						document.getElementsByTagName ( 'body' )[0].innerHTML = error;
 					}
 				);
 				
