@@ -24,11 +24,14 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
 		- Issue #30 : Add a context menu with delete command to the waypoints
 		- Issue #33 : Add a command to hide a route
 		- Issue #34 : Add a command to show all routes
+	- v1.3.0:
+		- added cutRoute method (not tested...)
+
 Doc reviewed 20170928
 Tests ...
 

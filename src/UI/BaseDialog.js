@@ -25,6 +25,9 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.3.0:
+		- added the possibility to have an event listener on the cancel button and escape key in
+		the derived dialog boxes (see addClickCancelButtonEventListener addEscapeKeyEventListener)
 Doc reviewed 20170928
 Tests ...
 

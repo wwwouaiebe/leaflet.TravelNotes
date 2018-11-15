@@ -49,7 +49,7 @@ Tests ...
 		
 		aboutDiv.innerHTML = 
 			"<p>This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.</p>" +
-			"<p>Copyright - 2017 - Christian Guyette</p>" +
+			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
 			"<p>Version : " + require ( '../data/DataManager' ) ( ).version +'.';

@@ -81,6 +81,10 @@ Tests ...
 						object.objType.version = '1.2.0';
 						//end upgrade from 1.1.0 to 1.2.0
 					}
+					if ( '1.2.0' === object.objType.version ) {
+						object.objType.version = '1.3.0';
+						//end upgrade from 1.2.0 to 1.3.0
+					}
 					if ( _Version !== object.objType.version ) {
 						throw 'invalid version for ' + _Name;
 					}

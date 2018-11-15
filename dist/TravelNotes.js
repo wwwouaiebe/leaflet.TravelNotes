@@ -340,7 +340,7 @@ Tests ...
 					},
 					haveBeforeUnloadWarning : true
 				};
-				global.version = '1.2.0';
+				global.version = '1.3.0';
 				global.map = map;
 				global.travelObjId = 0;
 				global.editedRoute = require ( '../data/Route' ) ( );
@@ -966,9 +966,13 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
+	- v1.3.0:
+		- Improved _ReadURL method
+		- Working with Promise at startup
+		- Added baseDialog property
 Doc reviewed 20171001
 Tests ...
 
@@ -1205,7 +1209,7 @@ Tests ...
 						}
 						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 						if ( _LoadedTravel ) {
-							require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
+							require ( './core/TravelEditor' ) ( ).openServerTravel ( values [ 2 ] );
 						}
 						require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
 						if ( _DataManager.config.travelEditor.startupRouteEdition ) {
@@ -1408,7 +1412,7 @@ Tests ...
 		
 		aboutDiv.innerHTML = 
 			"<p>This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.</p>" +
-			"<p>Copyright - 2017 - Christian Guyette</p>" +
+			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
 			"<p>Version : " + require ( '../data/DataManager' ) ( ).version +'.';
@@ -1459,6 +1463,9 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.3.0:
+		- added the possibility to have an event listener on the cancel button and escape key in
+		the derived dialog boxes (see addClickCancelButtonEventListener addEscapeKeyEventListener)
 Doc reviewed 20170928
 Tests ...
 
@@ -2936,6 +2943,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.3.0:
+		- added train button
 Doc reviewed 20170929
 Tests ...
 
@@ -3402,6 +3411,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.3.0:
+		- changed message
 Doc reviewed 20170929
 Tests ...
 
@@ -6869,11 +6880,14 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
 		- Issue #30 : Add a context menu with delete command to the waypoints
 		- Issue #33 : Add a command to hide a route
 		- Issue #34 : Add a command to show all routes
+	- v1.3.0:
+		- added cutRoute method (not tested...)
+
 Doc reviewed 20170928
 Tests ...
 
@@ -7789,6 +7803,8 @@ Changes:
 		- created
 	- v1.1.0:
 		- Issue #35 : Add something to draw polylines on the map.
+	- v1.3.0:
+		- Reviewed way of working to use Promise
 Doc reviewed 20170928
 Tests ...
 
@@ -8027,6 +8043,8 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 		- Issue #34 : Add a command to show all routes
 		- Issue #37 : Add the file name and mouse coordinates somewhere
+	- v1.3.0:
+		- moved JSON.parse, due to use of Promise
 Doc reviewed 20170928
 Tests ...
 
@@ -9499,6 +9517,10 @@ Tests ...
 					if ( '1.1.0' === object.objType.version ) {
 						object.objType.version = '1.2.0';
 						//end upgrade from 1.1.0 to 1.2.0
+					}
+					if ( '1.2.0' === object.objType.version ) {
+						object.objType.version = '1.3.0';
+						//end upgrade from 1.2.0 to 1.3.0
 					}
 					if ( _Version !== object.objType.version ) {
 						throw 'invalid version for ' + _Name;

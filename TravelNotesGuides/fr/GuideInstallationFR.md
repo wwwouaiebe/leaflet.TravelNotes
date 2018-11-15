@@ -111,6 +111,8 @@ Cette méthode renvoie la clef d'accès d'un fournisseur d'itinéraires
 
 - __itineraryPoint__ : renvoie un nouvel objet itineraryPoint. Uniquement utilisé par les plugins
 
+- __baseDialog__ : aun objet pour créer facilement des dialogues modaux
+
 - __version__ (lecture seule) : la version courante de TravelNotes.
 
 #### Le fichier TravelNotesConfig.json

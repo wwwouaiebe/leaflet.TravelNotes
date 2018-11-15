@@ -30,6 +30,8 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 		- Issue #34 : Add a command to show all routes
 		- Issue #37 : Add the file name and mouse coordinates somewhere
+	- v1.3.0:
+		- moved JSON.parse, due to use of Promise
 Doc reviewed 20170928
 Tests ...
 

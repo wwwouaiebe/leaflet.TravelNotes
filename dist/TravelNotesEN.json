@@ -52,6 +52,10 @@
 		"msgstr" : "a pedestrian"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - TransitMode train",
+		"msgstr" : "the train"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
 		"msgstr" : "Travel distance&nbsp;:&nbsp;{distance}"
 	},
@@ -329,7 +333,7 @@
 	},
 	{
 		"msgid" : "TravelEditor - Show all routes",
-		"msgstr" : "Afficher tous les trajets"
+		"msgstr" : "Show all routes"
 	},
 	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",

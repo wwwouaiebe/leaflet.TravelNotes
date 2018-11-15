@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.3.0:
+		- added train button
 Doc reviewed 20170929
 Tests ...
 

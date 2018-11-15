@@ -24,9 +24,13 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
+	- v1.3.0:
+		- Improved _ReadURL method
+		- Working with Promise at startup
+		- Added baseDialog property
 Doc reviewed 20171001
 Tests ...
 
@@ -263,7 +267,7 @@ Tests ...
 						}
 						require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _DataManager.travel.routes );
 						if ( _LoadedTravel ) {
-							require ( './core/TravelEditor' ) ( ).openServerTravel ( _LoadedTravel );
+							require ( './core/TravelEditor' ) ( ).openServerTravel ( values [ 2 ] );
 						}
 						require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
 						if ( _DataManager.config.travelEditor.startupRouteEdition ) {

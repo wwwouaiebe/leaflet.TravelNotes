@@ -52,6 +52,10 @@
 		"msgstr" : "un piéton"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - TransitMode train",
+		"msgstr" : "le train"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
 		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
 	},

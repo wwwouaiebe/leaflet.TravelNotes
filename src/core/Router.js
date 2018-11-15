@@ -26,6 +26,8 @@ Changes:
 		- created
 	- v1.1.0:
 		- Issue #35 : Add something to draw polylines on the map.
+	- v1.3.0:
+		- Reviewed way of working to use Promise
 Doc reviewed 20170928
 Tests ...
 

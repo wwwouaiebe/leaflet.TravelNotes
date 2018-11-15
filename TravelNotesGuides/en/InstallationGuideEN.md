@@ -111,6 +111,8 @@ This method returns the access key of a route provider
 
 - __itineraryPoint__ : returns a new itineraryPoint object. Only used by plugins
 
+- __baseDialog__ : an objet that can be used to easily create modal dialogs
+
 - __version__ (read only) : the current version of TravelNotes
 
 #### The TravelNotesConfig.json file
