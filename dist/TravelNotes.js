@@ -1089,7 +1089,7 @@ Tests ...
 		var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
 			
 			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = 5000;
+			xmlHttpRequest.timeout = 20000;
 			
 			xmlHttpRequest.ontimeout = function ( event ) {
 				returnOnError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
