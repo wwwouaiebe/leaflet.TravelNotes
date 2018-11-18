@@ -1211,7 +1211,9 @@ Tests ...
 						if ( _LoadedTravel ) {
 							require ( './core/TravelEditor' ) ( ).openServerTravel ( values [ 2 ] );
 						}
-						require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+						else {
+							require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+						}
 						if ( _DataManager.config.travelEditor.startupRouteEdition ) {
 							require ( './core/TravelEditor' ) ( ).editRoute ( _DataManager.travel.routes.first.objId );
 						}
