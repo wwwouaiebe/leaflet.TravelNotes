@@ -8062,11 +8062,8 @@ Tests ...
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 
-	var _haveBeforeUnloadListener = false;
-	var onBeforeUnload = function ( event ) {
-		event.returnValue = 'x';
-		return 'x';
-	};
+	var _haveBeforeUnloadWarning = false;
+	var _haveUnloadCleanStorage = false;
 	
 	var TravelEditor = function ( ) {
 		
@@ -8079,18 +8076,28 @@ Tests ...
 		*/
 
 		var _ChangeTravelHTML = function ( isNewTravel ) {
-			if ( ! isNewTravel ) {
-				if ( ! _haveBeforeUnloadListener && _DataManager.config.haveBeforeUnloadWarning ) {
-					window.addEventListener( 
-						'beforeunload', 
-						function ( event ) {
-							event.returnValue = 'x';
-							return 'x'; 
-						}
-					);
-					_haveBeforeUnloadListener = true;
-				}
+
+			if ( ! _haveUnloadCleanStorage ) {
+				window.addEventListener( 
+					'unload', 
+					function ( event ) {
+						localStorage.removeItem ( require ( '../Data/DataManager' ) ( ).UUID + "-TravelNotesHTML" );
+					}
+				);
+				_haveUnloadCleanStorage = true;
 			}
+
+			if ( ! isNewTravel && ! _haveBeforeUnloadWarning && _DataManager.config.haveBeforeUnloadWarning ) {
+				window.addEventListener( 
+					'beforeunload', 
+					function ( event ) {
+						event.returnValue = 'x';
+						return 'x'; 
+					}
+				);
+				_haveBeforeUnloadWarning = true;
+			}
+			
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
 				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
@@ -8467,7 +8474,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			confirmClose : function ( ) {
-				if ( _haveBeforeUnloadListener ) {
+				if ( _haveBeforeUnloadWarning ) {
 					return window.confirm ( _Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
 				}
 				return true;
