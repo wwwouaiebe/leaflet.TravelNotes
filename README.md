@@ -37,11 +37,11 @@ This branch contains all the needed files to run Travel & Notes, but not the sou
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### v1.2.0 branch
+### v1.3.0 branch
 
-The [v1.2.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.2.0) contains the source files of the last stable version.
+The [v1.3.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.3.0) contains the source files of the last stable version.
 
-La [branche v1.2.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.2.0) contient les sources de la dernière version stable.
+La [branche v1.3.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.3.0) contient les sources de la dernière version stable.
 
 ### master branch
 
