@@ -28,6 +28,8 @@ Changes:
 		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
 		- Issue #30: Add a context menu with delete command to the waypoints
 		- Issue #36: Add a linetype property to route
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170927
 Tests ...
 
@@ -38,7 +40,8 @@ Tests ...
 	
 	'use strict';
 	
-	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
+	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
 
 	var MapEditor = function ( ) {
 
@@ -51,13 +54,13 @@ Tests ...
 		*/
 
 		var _UpdateRouteTooltip = function ( event ) { 
-			var route = _DataManager.getRoute (  event.target.objId );
+			var route = _DataSearchEngine.getRoute (  event.target.objId );
 			var distance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
 			distance += route.chainedDistance;
 			distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
-			var polyline = _DataManager.mapObjects.get ( event.target.objId );
+			var polyline = _TravelNotesData.mapObjects.get ( event.target.objId );
 			polyline.closeTooltip ( );
-			var tooltipText = _DataManager.getRoute ( event.target.objId ).name;
+			var tooltipText = _DataSearchEngine.getRoute ( event.target.objId ).name;
 			tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
 			tooltipText += distance;
 			polyline.setTooltipContent ( tooltipText );
@@ -74,8 +77,8 @@ Tests ...
 
 		var _AddTo = function ( objId, object ) {
 			object.objId = objId;
-			object.addTo ( _DataManager.map );
-			_DataManager.mapObjects.set ( objId, object );
+			object.addTo ( _TravelNotesData.map );
+			_TravelNotesData.mapObjects.set ( objId, object );
 		};
 		
 		/*
@@ -87,11 +90,11 @@ Tests ...
 		*/
 
 		var _RemoveFrom = function ( objId ) {
-			var layer = _DataManager.mapObjects.get ( objId );
+			var layer = _TravelNotesData.mapObjects.get ( objId );
 			if ( layer ) {
 				L.DomEvent.off ( layer );
-				_DataManager.map.removeLayer ( layer );
-				_DataManager.mapObjects.delete ( objId );
+				_TravelNotesData.map.removeLayer ( layer );
+				_TravelNotesData.mapObjects.delete ( objId );
 			}
 		};
 		
@@ -142,10 +145,10 @@ Tests ...
 		};
 		
 		var _getDashArray = function ( route ) {
-			if ( route.dashArray >= _DataManager.config.route.dashChoices.length ) {
+			if ( route.dashArray >= _TravelNotesData.config.route.dashChoices.length ) {
 				route.dashArray = 0;
 			}
-			var iDashArray = _DataManager.config.route.dashChoices [ route.dashArray ].iDashArray;
+			var iDashArray = _TravelNotesData.config.route.dashChoices [ route.dashArray ].iDashArray;
 			if ( iDashArray ) {
 				var dashArray = '';
 				var dashCounter = 0;
@@ -234,7 +237,7 @@ Tests ...
 				
 				polyline.bindPopup ( 
 					function ( layer ) {
-						var route = _DataManager.getRoute ( layer.objId );
+						var route = _DataSearchEngine.getRoute ( layer.objId );
 						return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
 					}
 				);
@@ -262,7 +265,7 @@ Tests ...
 
 				// waypoints are added
 				if ( addWayPoints ) {
-					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+					var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 					while ( ! wayPointsIterator.done ) {
 						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
 					}
@@ -281,7 +284,7 @@ Tests ...
 			*/
 
 			editRoute : function ( route ) {
-				var polyline = _DataManager.mapObjects.get ( route.objId );
+				var polyline = _TravelNotesData.mapObjects.get ( route.objId );
 				polyline.setStyle( { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
 			},
 			
@@ -310,13 +313,13 @@ Tests ...
 			*/
 
 			removeAllObjects : function ( ) {
-				_DataManager.mapObjects.forEach ( 
+				_TravelNotesData.mapObjects.forEach ( 
 					function ( travelObjectValue, travelObjectKey, travelObjects ) {
 						L.DomEvent.off ( travelObjectValue );
-						_DataManager.map.removeLayer ( travelObjectValue );
+						_TravelNotesData.map.removeLayer ( travelObjectValue );
 					}
 				);
-				_DataManager.mapObjects.clear ( );
+				_TravelNotesData.mapObjects.clear ( );
 			},
 			
 			
@@ -329,7 +332,7 @@ Tests ...
 			*/
 
 			zoomToPoint : function ( latLng ) {
-				map.setView ( latLng, _DataManager.config.itineraryPointZoom );
+				map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
 			},
 			
 			
@@ -345,9 +348,9 @@ Tests ...
 			*/
 
 			zoomToRoute : function ( routeObjId ) {
-				var latLngs = _GetRouteLatLng (  _DataManager.getRoute ( routeObjId ) );
+				var latLngs = _GetRouteLatLng (  _DataSearchEngine.getRoute ( routeObjId ) );
 				if ( 0 !== latLngs.length ) {
-					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
+					_TravelNotesData.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
@@ -361,19 +364,19 @@ Tests ...
 
 			zoomToTravel : function ( ) {				
 				var latLngs = [];
-				_DataManager.travel.routes.forEach (
+				_TravelNotesData.travel.routes.forEach (
 					function ( route ) {
 						latLngs = latLngs.concat ( _GetRouteLatLng ( route ) );
 					}
 				);
-				travel.notes.forEach (
+				_TravelNotesData.travel.notes.forEach (
 					function ( note ) {
 						latLngs.push ( note.latLng );
 						latLngs.push ( note.iconLatLng );
 					}
 				);
 				if ( 0 !== latLngs.length ) {
-					_DataManager.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
+					_TravelNotesData.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
 				}
 			},
 			
@@ -393,7 +396,7 @@ Tests ...
 			addItineraryPointMarker : function ( objId, latLng ) {
 				_AddTo ( 
 					objId,
-					L.circleMarker ( latLng, _DataManager.config.itineraryPointMarker )
+					L.circleMarker ( latLng, _TravelNotesData.config.itineraryPointMarker )
 				);
 			},
 			
@@ -429,7 +432,7 @@ Tests ...
 					} 
 				);	
 
-				marker.bindTooltip ( function ( wayPoint ) { return _DataManager.getWayPoint ( wayPoint.objId ).UIName; } );
+				marker.bindTooltip ( function ( wayPoint ) { return _DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
 				marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
 				L.DomEvent.on ( 
@@ -449,7 +452,7 @@ Tests ...
 					marker,
 					'dragend', 
 					function ( event ) {
-						var wayPoint = _DataManager.editedRoute.wayPoints.getAt ( event.target.objId );
+						var wayPoint = _TravelNotesData.editedRoute.wayPoints.getAt ( event.target.objId );
 						wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 						require ( '../core/RouteEditor' )( ).wayPointDragEnd ( event.target.objId );
 					}
@@ -481,18 +484,18 @@ Tests ...
 						icon : L.divIcon ( 
 							{ 
 								iconSize: [ 
-									_DataManager.config.note.grip.size , 
-									_DataManager.config.note.grip.size
+									_TravelNotesData.config.note.grip.size , 
+									_TravelNotesData.config.note.grip.size
 								], 
 								iconAnchor: [ 
-									_DataManager.config.note.grip.size / 2,
-									_DataManager.config.note.grip.size / 2 
+									_TravelNotesData.config.note.grip.size / 2,
+									_TravelNotesData.config.note.grip.size / 2 
 								],
 								html : '<div></div>'
 							}
 						),
 						zIndexOffset : -1000 ,
-						opacity : _DataManager.config.note.grip.opacity,
+						opacity : _TravelNotesData.config.note.grip.opacity,
 						draggable : ! readOnly
 					} 
 				);	
@@ -505,11 +508,11 @@ Tests ...
 						'dragend', 
 						function ( event ) {
 							// the TravelNotes note and route are searched...
-							var noteAndRoute = _DataManager.getNoteAndRoute ( event.target.objId );
+							var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( event.target.objId );
 							var note = noteAndRoute.note;
 							var route = noteAndRoute.route;
 							// ... then the layerGroup is searched...
-							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
 							if ( null != route ) {
 								// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
 								var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
@@ -536,8 +539,8 @@ Tests ...
 						bullet, 
 						'drag', 
 						function ( event ) {
-							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
-							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 						}
 					);
@@ -550,7 +553,7 @@ Tests ...
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, - note.iconHeight / 2 ], 
 						html : note.iconContent,
-						className : _DataManager.config.note.style
+						className : _TravelNotesData.config.note.style
 					}
 				);
 				var marker = L.marker ( 
@@ -565,14 +568,14 @@ Tests ...
 				// a popup is binded to the the marker...
 				marker.bindPopup (
 					function ( layer ) {
-						var note = _DataManager.getNoteAndRoute ( layer.objId ).note;
+						var note = _DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
 						return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
 					}			
 				);
 				
 				// ... and also a tooltip
 				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
+					marker.bindTooltip ( function ( layer ) { return _DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
 				if ( ! readOnly ) {
@@ -590,11 +593,11 @@ Tests ...
 						'dragend',
 						function ( event ) {
 							// The TravelNotes note linked to the marker is searched...
-							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 							// ... new coordinates are saved in the TravelNotes note...
 							note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 							// ... then the layerGroup is searched...
-							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
 							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 						}
@@ -605,9 +608,9 @@ Tests ...
 						'drag',
 						function ( event ) {
 							// The TravelNotes note linked to the marker is searched...
-							var note = _DataManager.getNoteAndRoute ( event.target.objId ).note;
+							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 							// ... then the layerGroup is searched...
-							var layerGroup = _DataManager.mapObjects.get ( event.target.objId );
+							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
 							// ... and finally the polyline is updated with the new coordinates
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
 						}
@@ -615,7 +618,7 @@ Tests ...
 				}
 				
 				// Finally a polyline is created between the 2 markers
-				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _DataManager.config.note.polyline );
+				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _TravelNotesData.config.note.polyline );
 				polyline.objId = note.objId;
 				
 				// The 3 objects are added to a layerGroup
@@ -648,18 +651,18 @@ Tests ...
 						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
 						popupAnchor: [ 0, -note.iconHeight / 2 ], 
 						html : note.iconContent,
-						className : _DataManager.config.note.style
+						className : _TravelNotesData.config.note.style
 					}
 				);
 				// and the marker icon replaced by the new one
-				var layerGroup = _DataManager.mapObjects.get ( note.objId );
+				var layerGroup = _TravelNotesData.mapObjects.get ( note.objId );
 				var marker = layerGroup.getLayer ( layerGroup.markerId );
 				marker.setIcon ( icon );
 				
 				// then, the tooltip is changed
 				marker.unbindTooltip ( );
 				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( function ( layer ) { return _DataManager.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
+					marker.bindTooltip ( function ( layer ) { return _DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 				}
 			}

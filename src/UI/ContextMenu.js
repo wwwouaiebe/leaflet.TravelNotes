@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -219,7 +221,7 @@ Tests ...
 			},
 			false
 		);
-		_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, require ( '../data/DataManager' ) ( ).config.contextMenu.timeout ); }, false );
+		_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, require ( '../L.TravelNotes' ).config.contextMenu.timeout ); }, false );
 		// close button
 		var closeButton = htmlElementsFactory.create ( 
 			'div',

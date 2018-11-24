@@ -21,6 +21,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170926
 Tests ...
 
@@ -31,7 +33,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( '../data/DataManager' ) ( ).version );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( './Version' ) );
 
 	var Travel = function ( ) {
 
@@ -40,7 +42,6 @@ Tests ...
 		var _Name = 'TravelNotes';
 
 		var _Routes = require ( '../data/Collection' ) ( 'Route' );
-		_Routes.add ( require ( '../data/Route' ) ( ) );
 
 		var _Notes = require ( '../data/Collection' ) ( 'Note' );
 

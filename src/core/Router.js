@@ -28,6 +28,8 @@ Changes:
 		- Issue #35 : Add something to draw polylines on the map.
 	- v1.3.0:
 		- Reviewed way of working to use Promise
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170928
 Tests ...
 
@@ -42,7 +44,7 @@ Tests ...
 	var _RequestStarted = false;
 	var _RouteProvider = null;
 
-	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	
 	var Router = function ( ) {
@@ -56,7 +58,7 @@ Tests ...
 		*/
 
 		var _HaveValidWayPoints = function ( ) {
-			return _DataManager.editedRoute.wayPoints.forEach ( 
+			return _TravelNotesData.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -103,7 +105,7 @@ Tests ...
 			_RequestStarted = false;
 			
 			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
-			var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+			var itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 			var routeDistance = 0;
 			var dummy = itineraryPointsIterator.done;
 			var previousPoint = itineraryPointsIterator.value;
@@ -116,39 +118,39 @@ Tests ...
 			}
 
 			// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
-			//var routeDistance = _DataManager.editedRoute.distance;
-			_DataManager.editedRoute.distance = 0;
-			_DataManager.editedRoute.duration = 0;
-			var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
+			//var routeDistance = _TravelNotesData.editedRoute.distance;
+			_TravelNotesData.editedRoute.distance = 0;
+			_TravelNotesData.editedRoute.duration = 0;
+			var maneuverIterator = _TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
-				_DataManager.editedRoute.distance += maneuverIterator.value.distance;
-				_DataManager.editedRoute.duration += maneuverIterator.value.duration;
+				_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
+				_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
 			}
 			
-			if ( 0 != _DataManager.editedRoute.distance ) {
+			if ( 0 != _TravelNotesData.editedRoute.distance ) {
 				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = _DataManager.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+				var correctionFactor = _TravelNotesData.editedRoute.distance / routeDistance;
+				itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 				while ( ! itineraryPointsIterator.done ) {
 					itineraryPointsIterator.value.distance *= correctionFactor;
 				}
 			}
 			else {
-				_DataManager.editedRoute.distance = routeDistance;
+				_TravelNotesData.editedRoute.distance = routeDistance;
 			}
 
 			// Placing the waypoints on the itinerary
-			var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.first.latLng;
+					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
 				}
 				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = _DataManager.editedRoute.itinerary.itineraryPoints.last.latLng;
+					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
 				}
 				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _DataManager.editedRoute, wayPointsIterator.value.latLng ).latLng;
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
 				}
 			}	
 			
@@ -183,13 +185,13 @@ Tests ...
 			_RequestStarted = true;
 
 			// Choosing the correct route provider
-			_RouteProvider = _DataManager.providers.get ( _DataManager.routing.provider );
+			_RouteProvider = _TravelNotesData.providers.get ( _TravelNotesData.routing.provider );
 
 			// provider name and transit mode are added to the road
-			_DataManager.editedRoute.itinerary.provider = _RouteProvider.name;
-			_DataManager.editedRoute.itinerary.transitMode = _DataManager.routing.transitMode;
+			_TravelNotesData.editedRoute.itinerary.provider = _RouteProvider.name;
+			_TravelNotesData.editedRoute.itinerary.transitMode = _TravelNotesData.routing.transitMode;
 
-			_RouteProvider.getPromiseRoute ( _DataManager.editedRoute, null ).then (  _EndOk, _EndError  );
+			_RouteProvider.getPromiseRoute ( _TravelNotesData.editedRoute, null ).then (  _EndOk, _EndError  );
 
 			return true;
 		};

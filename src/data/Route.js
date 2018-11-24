@@ -24,6 +24,8 @@ Changes:
 	-v1.1.0:
 		- Issue #33: Add a command to hide a route
 		- Issue #36: Add a linetype property to route
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170926
 Tests ...
 
@@ -34,7 +36,7 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( '../data/DataManager' ) ( ).version );
+	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( './Version' ) );
 
 	var Route = function ( ) {
 
@@ -50,11 +52,11 @@ Tests ...
 
 		var _Itinerary = require ( '../data/Itinerary' ) ( );
 
-		var _Width = require ( '../data/DataManager' ) ( ).config.route.width || 5;
+		var _Width = require ( '../L.TravelNotes' ).config.route.width || 5;
 
-		var _Color = require ( '../data/DataManager' ) ( ).config.route.color || '#ff0000';
+		var _Color = require ( '../L.TravelNotes' ).config.route.color || '#ff0000';
 		
-		var _DashArray = require ( '../data/DataManager' ) ( ).config.route.dashArray || 0;
+		var _DashArray = require ( '../L.TravelNotes' ).config.route.dashArray || 0;
 
 		var _Chain = false;
 

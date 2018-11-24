@@ -26,6 +26,8 @@ Changes:
 		- created
 	- v1.3.0:
 		- added train button
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -37,7 +39,7 @@ Tests ...
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	var _DataManager = require ( '../data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
 	
 	/*
 	--- onWheel function ----------------------------------------------------------------------------------
@@ -149,7 +151,7 @@ Tests ...
 	var onClicktransitModeButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 
-		_DataManager.routing.transitMode = clickEvent.target.transitMode;
+		_TravelNotesData.routing.transitMode = clickEvent.target.transitMode;
 
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
@@ -168,13 +170,13 @@ Tests ...
 	var onProviderButtonClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 
-		_DataManager.routing.provider = clickEvent.target.provider;
+		_TravelNotesData.routing.provider = clickEvent.target.provider;
 
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
 
 		// activating the transit mode buttons, depending of the capabilities of the provider
-		var provider = _DataManager.providers.get ( clickEvent.target.provider );
+		var provider = _TravelNotesData.providers.get ( clickEvent.target.provider );
 		if ( provider.transitModes.car ) {
 			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
@@ -201,7 +203,7 @@ Tests ...
 		}
 		
 		// verfying that the current transit mode is supported by the provider, otherwise changes the transit mode
-		if ( ! _DataManager.providers.get ( clickEvent.target.provider ).transitModes [ _DataManager.routing.transitMode ] ) { // you understand?
+		if ( ! _TravelNotesData.providers.get ( clickEvent.target.provider ).transitModes [ _TravelNotesData.routing.transitMode ] ) { // you understand?
 			if ( provider.transitModes.bike ) {
 				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).click ( );
 			}
@@ -312,9 +314,9 @@ Tests ...
 			trainButton.addEventListener ( 'click', onClicktransitModeButton, false );
 			
 			// providers
-			if ( _DataManager.providers ) {
+			if ( _TravelNotesData.providers ) {
 				var activeButton = false;
-				_DataManager.providers.forEach (
+				_TravelNotesData.providers.forEach (
 					function ( provider ) {
 						var providerButton = htmlElementsFactory.create (
 							'img',
@@ -331,22 +333,22 @@ Tests ...
 						// when loading the control, the first provider will be the active provider
 						if ( ! activeButton ) {
 							providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
-							_DataManager.routing.provider = providerButton.provider;
+							_TravelNotesData.routing.provider = providerButton.provider;
 							activeButton = true;
 							
 							// ... and the first possible transit mode will be the active transit mode
 							if ( provider.transitModes.bike ) {
 								bikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-								_DataManager.routing.transitMode = 'bike';
+								_TravelNotesData.routing.transitMode = 'bike';
 							} else if ( provider.transitModes.pedestrian ) {
 								pedestrianButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-								_DataManager.routing.transitMode = 'pedestrian';
+								_TravelNotesData.routing.transitMode = 'pedestrian';
 							} else if ( provider.transitModes.car ) {
 								carButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-								_DataManager.routing.transitMode = 'car';
+								_TravelNotesData.routing.transitMode = 'car';
 							} else if ( provider.transitModes.train ) {
 								trainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-								_DataManager.routing.transitMode = 'train';
+								_TravelNotesData.routing.transitMode = 'train';
 							} 
 							
 							// deactivating transit mode buttons if not supported by the provider

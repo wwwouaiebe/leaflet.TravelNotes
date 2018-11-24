@@ -15746,13 +15746,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						function ( step ) {
 							step.geometry = require ( '@mapbox/polyline' ).decode ( step.geometry, 6 );
 
-							var maneuver = L.travelNotes.interface ( ).maneuver;
+							var maneuver = L.travelNotes.maneuver;
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
 							maneuver.instruction = osrmTextInstructions.compile ( _UserLanguage, step );
 							maneuver.duration = step.duration;
 							var distance = 0;
 							for ( var geometryCounter = 0; ( 1 === step.geometry.length ) ? ( geometryCounter < 1 ) : ( geometryCounter < step.geometry.length )  ; geometryCounter ++ ) {
-								var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
+								var itineraryPoint = L.travelNotes.itineraryPoint;
 								itineraryPoint.latLng = [ step.geometry [ geometryCounter ] [ 0 ], step.geometry [ geometryCounter ] [ 1 ] ];
 								itineraryPoint.distance = leg.annotation.distance [ lastPointWithDistance ] ? leg.annotation.distance [ lastPointWithDistance ] : 0;
 								_Route.itinerary.itineraryPoints.add ( itineraryPoint );
@@ -15908,7 +15908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	L.travelNotes.interface ( ).addProvider ( getOSRMRouteProvider ( ) );
+	L.travelNotes.addProvider ( getOSRMRouteProvider ( ) );
 
 }());
 

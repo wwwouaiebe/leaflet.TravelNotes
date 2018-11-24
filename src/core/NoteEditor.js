@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170927
 Tests ...
 
@@ -35,7 +37,8 @@ Tests ...
 	'use strict';
 
 	var _Translator = require ( '../UI/Translator' ) ( );
-	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
+	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var NoteEditor = function ( ) {
@@ -77,7 +80,7 @@ Tests ...
 			newRouteNote : function ( routeObjId, event ) {
 				// the nearest point and distance on the route is searched
 				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-					_DataManager.getRoute ( routeObjId ),
+					_DataSearchEngine.getRoute ( routeObjId ),
 					[ event.latlng.lat, event.latlng.lng ] 
 				);
 				
@@ -104,11 +107,11 @@ Tests ...
 			newManeuverNote : function ( maneuverObjId, latLng ) {
 				// the nearest point and distance on the route is searched
 				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-					_DataManager.editedRoute,
+					_TravelNotesData.editedRoute,
 					latLng
 				);
 				// the maneuver is searched
-				var maneuver = _DataManager.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+				var maneuver = _TravelNotesData.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
 
 				// the note is created
 				var note = this.newNote ( latLng );
@@ -119,7 +122,7 @@ Tests ...
 				note.height = 40;
 
 				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, _DataManager.editedRoute.objId, true );
+				require ( '../UI/NoteDialog' ) ( note, _TravelNotesData.editedRoute.objId, true );
 			},
 		
 			/*
@@ -154,7 +157,7 @@ Tests ...
 			*/
 
 			endNoteDialog : function ( note, routeObjId ) {
-				if ( _DataManager.getNoteAndRoute ( note.objId ).note ) {
+				if ( _DataSearchEngine.getNoteAndRoute ( note.objId ).note ) {
 					// it's an existing note. The note is changed on the map
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
 				}
@@ -162,11 +165,11 @@ Tests ...
 					// it's a new note
 					if ( -1 === routeObjId ) {
 						// it's a global note
-						_DataManager.travel.notes.add ( note );
+						_TravelNotesData.travel.notes.add ( note );
 					}
 					else {
 						// the note is linked with a route, so...
-						var route = _DataManager.getRoute ( routeObjId );
+						var route = _DataSearchEngine.getRoute ( routeObjId );
 						route.notes.add ( note );
 						// ... the chainedDistance is adapted...
 						note.chainedDistance = route.chainedDistance;
@@ -194,7 +197,7 @@ Tests ...
 			*/
 
 			editNote : function ( noteObjId ) {
-				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
 				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
 			},
 		
@@ -213,7 +216,7 @@ Tests ...
 				// the note is removed from the leaflet map
 				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
 				// the note and the route are searched
-				var noteAndRoute = _DataManager.getNoteAndRoute ( noteObjId );
+				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
 				if ( noteAndRoute.route ) {
 					// it's a route note
 					noteAndRoute.route.notes.remove ( noteObjId );
@@ -221,7 +224,7 @@ Tests ...
 				}
 				else {
 					// it's a travel note
-					_DataManager.travel.notes.remove ( noteObjId );
+					_TravelNotesData.travel.notes.remove ( noteObjId );
 				}
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
@@ -236,11 +239,11 @@ Tests ...
 			*/
 
 			hideNotes : function ( ) {
-				var notesIterator = _DataManager.travel.notes.iterator;
+				var notesIterator = _TravelNotesData.travel.notes.iterator;
 				while ( ! notesIterator.done ) {
 					require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );
 				}
-				var routesIterator = _DataManager.travel.routes.iterator;
+				var routesIterator = _TravelNotesData.travel.routes.iterator;
 				while ( ! routesIterator.done ) {
 					notesIterator = routesIterator.value.notes.iterator;
 					while ( ! notesIterator.done ) {
@@ -259,11 +262,11 @@ Tests ...
 
 			showNotes : function ( ) {
 				this.hideNotes ( );
-				var notesIterator = _DataManager.travel.notes.iterator;
+				var notesIterator = _TravelNotesData.travel.notes.iterator;
 				while ( ! notesIterator.done ) {
 					require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
 				}
-				var routesIterator = _DataManager.travel.routes.iterator;
+				var routesIterator = _TravelNotesData.travel.routes.iterator;
 				while ( ! routesIterator.done ) {
 					notesIterator = routesIterator.value.notes.iterator;
 					while ( ! notesIterator.done ) {
@@ -281,7 +284,7 @@ Tests ...
 			*/
 
 			zoomToNote : function ( noteObjId ) {
-				require ( '../core/MapEditor' ) ( ).zoomToPoint ( _DataManager.getNoteAndRoute ( noteObjId).note.latLng );
+				require ( '../core/MapEditor' ) ( ).zoomToPoint ( _DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng );
 			},
 			
 			/*

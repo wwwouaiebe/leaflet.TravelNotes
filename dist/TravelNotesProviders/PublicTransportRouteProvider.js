@@ -548,7 +548,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 					if ( 0 < addPoint && 4 > addPoint ) {
 						// an itinerary point is created from the node and is added to the itinerary
-						var itineraryPoint = L.travelNotes.interface ( ).itineraryPoint;
+						var itineraryPoint = L.travelNotes.itineraryPoint;
 						var node = _NodesMap.get ( nodeId );
 						itineraryPoint.latLng = [ node.lat , node.lon ];
 						route.itinerary.itineraryPoints.add ( itineraryPoint );
@@ -557,7 +557,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						var stopNode = _StopsMap.get ( nodeId );
 						if ( stopNode ) {
 							
-							var maneuver = L.travelNotes.interface ( ).maneuver;
+							var maneuver = L.travelNotes.maneuver;
 							if ( stopNode.tags && stopNode.tags.name ) {
 								maneuver.instruction = stopNode.tags.name + '&nbsp;:&nbsp;';
 							}
@@ -825,7 +825,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				return;
 			}
 			
-			var baseDialog = L.travelNotes.interface ( ).baseDialog ;
+			var baseDialog = L.travelNotes.baseDialog ;
 			
 			baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 			baseDialog.addClickCancelButtonEventListener (onCancelButtonClick );
@@ -932,61 +932,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		*/
 		
 		/*
-		--- _GetTasks function ----------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _GetTasks = function ( wayPoints, transitMode, providerKey, userLanguage, options ) {
-			
-			return [
-				{
-					task: 'loadJsonFile',
-					context : null,
-					func : _GetRelationsUrl
-				},
-				{	
-					task: 'wait'
-				},
-				{	
-					task: 'run',
-					context : null,
-					func : _GetRouteList,
-					useResponses : [ 0 ]
-				},
-				{	
-					task: 'showDialog',
-					func : L.travelNotes.interface ( ).selectDialog,
-					context : null,
-					useResponses : [ 2 ]
-				},
-				{	
-					task: 'wait'
-				},
-				{	
-					task: 'run',
-					context : null,
-					func : _SetSelectedRelationId,
-					useResponses : [ 0, 3 ]
-				},
-				{
-					task: 'loadJsonFile',
-					context : null,
-					func : _GetWayNodesUrl
-				},
-				{	
-					task: 'wait'
-				},
-			];
-		};
-		
-		/*
-		--- End of _GetTasks function ---
-		*/
-							
-		/*
 		--- PublicTransportRouteProvider object -----------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
@@ -1012,7 +957,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		};
 	};
 	
-	L.travelNotes.interface ( ).addProvider ( getPublicTransportRouteProvider ( ) );
+	L.travelNotes.addProvider ( getPublicTransportRouteProvider ( ) );
 
 }());
 

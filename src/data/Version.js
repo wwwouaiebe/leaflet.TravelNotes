@@ -12,46 +12,29 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-
 /*
---- ObjId.js file -----------------------------------------------------------------------------------------------------
-
-Changes:
-	- v1.0.0:
-		- created
+--- Version.js file ---------------------------------------------------------------------------------------------------
+This file contains:
+	- the version number
 	- v1.4.0:
-		- Initialization changed
-Doc reviewed 20170926
-Tests ...
+		- created from DataManager
+Doc reviewed ....
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-
-(function() {
-
+( function ( ) {
+	
 	'use strict';
-
-
-	var ObjId = function ( ) {
-		if ( ! global.TravelNotesObjId ) {
-			global.TravelNotesObjId = 0;
-		}
-		
-		return ++ global.TravelNotesObjId;
-	};
-
 	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ObjId;
-
+		module.exports = '1.3.0';
 	}
-
+	
 } ) ( );
 
 /*
---- End of ObjId.js file ----------------------------------------------------------------------------------------------
+--- End of Version.js file --------------------------------------------------------------------------------------------
 */

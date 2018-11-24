@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -42,7 +44,7 @@ Tests ...
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 
-		if ( -1 === require ( '../data/DataManager' ) ( ).editedRoute.routeInitialObjId ) {
+		if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
 			return;
 		}
 
@@ -363,11 +365,11 @@ Tests ...
 		var _SetWayPointsList = function ( ) {
 			_WayPointsList.removeAllItems ( );
 
-			if ( -1 === require ( '../data/DataManager' ) ( ).editedRoute.routeInitialObjId ) {
+			if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
 				return;
 			}
 			
-			var wayPointsIterator = require ( '../data/DataManager' ) ( ).editedRoute.wayPoints.iterator;
+			var wayPointsIterator = require ( '../L.TravelNotes' ).editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				var indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
 				var placeholder = 

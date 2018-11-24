@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -35,7 +37,7 @@ Tests ...
 	'use strict';
 	
 	var _HTMLElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( );
-	var _DataManager = require ( '../data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
@@ -88,13 +90,13 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Header-Name',
-					innerHTML: _DataManager.travel.name
+					innerHTML: _TravelNotesData.travel.name
 				},
 				travelHeaderHTML
 			); 
 			
 			var travelDistance = 0;
-			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
 				_HTMLElementsFactory.create ( 
 					'div',
@@ -132,7 +134,7 @@ Tests ...
 
 		var _GetTravelNotesHTML = function ( ) {
 			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
-			var travelNotesIterator = _DataManager.travel.notes.iterator;
+			var travelNotesIterator = _TravelNotesData.travel.notes.iterator;
 			while ( ! travelNotesIterator.done ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
@@ -309,12 +311,12 @@ Tests ...
 			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
 			travelHTML.appendChild ( _GetTravelNotesHTML ( ) );
 			
-			var travelRoutesIterator = _DataManager.travel.routes.iterator;
+			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
-				var useEditedRoute = _DataManager.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _DataManager.editedRoute.routeInitialObjId;
-				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _DataManager.editedRoute :travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _DataManager.editedRoute : travelRoutesIterator.value ) );
+				var useEditedRoute = _TravelNotesData.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _TravelNotesData.routeEdition.routeInitialObjId;
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _TravelNotesData.editedRoute :travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
 			}
 			
 			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
@@ -337,11 +339,11 @@ Tests ...
 			
 			get travelNotesHTML ( )  { return _GetTravelNotesHTML ( ); }, 
 			
-			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _DataManager.editedRoute ); }, 
+			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _TravelNotesData.editedRoute ); }, 
 			
-			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _DataManager.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _TravelNotesData.editedRoute ); }, 
 			
-			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _DataManager.editedRoute ); }, 
+			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _TravelNotesData.editedRoute ); }, 
 			
 			get travelFooterHTML ( )  { return _GetTravelFooterHTML ( ); }, 
 			

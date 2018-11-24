@@ -32,6 +32,8 @@ Changes:
 		- Issue #37 : Add the file name and mouse coordinates somewhere
 	- v1.3.0:
 		- moved JSON.parse, due to use of Promise
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170928
 Tests ...
 
@@ -43,7 +45,8 @@ Tests ...
 	'use strict';
 	
 	var _Translator = require ( '../UI/Translator' ) ( );
-	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
+	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
 	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 
@@ -66,13 +69,13 @@ Tests ...
 				window.addEventListener( 
 					'unload', 
 					function ( event ) {
-						localStorage.removeItem ( require ( '../Data/DataManager' ) ( ).UUID + "-TravelNotesHTML" );
+						localStorage.removeItem ( require ( '../L.TravelNotes' ).UUID + "-TravelNotesHTML" );
 					}
 				);
 				_haveUnloadCleanStorage = true;
 			}
 
-			if ( ! isNewTravel && ! _haveBeforeUnloadWarning && _DataManager.config.haveBeforeUnloadWarning ) {
+			if ( ! isNewTravel && ! _haveBeforeUnloadWarning && _TravelNotesData.config.haveBeforeUnloadWarning ) {
 				window.addEventListener( 
 					'beforeunload', 
 					function ( event ) {
@@ -86,7 +89,7 @@ Tests ...
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
 				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
-				localStorage.setItem ( _DataManager.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
+				localStorage.setItem ( _TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
 			}
 		};
 
@@ -144,13 +147,13 @@ Tests ...
 			// routes are added with their notes
 			var routesIterator = importTravel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				_DataManager.travel.routes.add ( routesIterator.value );
+				_TravelNotesData.travel.routes.add ( routesIterator.value );
 				_MapEditor.addRoute ( routesIterator.value, true, false, false );
 			}
 			// travel notes are added
 			var notesIterator = importTravel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				_DataManager.travel.notes.add ( notesIterator.value );
+				_TravelNotesData.travel.notes.add ( notesIterator.value );
 				_MapEditor.addNote ( notesIterator.value, false );
 			}
 			
@@ -178,34 +181,35 @@ Tests ...
 			if ( ! travel ) {
 				return;
 			}
+
 			// ... and transform the data in the correct format
-			_DataManager.travel.object = travel;
+			_TravelNotesData.travel.object = travel;
 
 			// ... travel name = file name
 			if ( '' !== fileName ) {
-				_DataManager.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
+				_TravelNotesData.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
 			}
 
-			_DataManager.travel.readOnly = readOnly;
+			_TravelNotesData.travel.readOnly = readOnly;
 			
 			// the map is cleaned
 			_MapEditor.removeAllObjects ( );
 			
 			// routes are added with their notes
-			var routesIterator = _DataManager.travel.routes.iterator;
+			var routesIterator = _TravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
 			}
 			
 			// travel notes are added
-			var notesIterator = _DataManager.travel.notes.iterator;
+			var notesIterator = _TravelNotesData.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
 				_MapEditor.addNote ( notesIterator.value, readOnly );
 			}
 			
 			// zoom on the travel
 			_MapEditor.zoomToTravel ( );
-			
+
 			// Editors and HTML pages are filled
 			if ( ! readOnly ) {
 			// Editors and HTML pages are filled
@@ -218,7 +222,7 @@ Tests ...
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 			}
-			_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly, name : _DataManager.travel.name } );
+			_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly, name : _TravelNotesData.travel.name } );
 		};
 		
 		/*
@@ -250,7 +254,7 @@ Tests ...
 			*/
 
 			addRoute : function ( ) {
-				_DataManager.travel.routes.add ( require ( '../Data/Route' ) ( ) );
+				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 				this.changeTravelHTML ( );
@@ -283,16 +287,16 @@ Tests ...
 			*/
 
 			removeRoute : function ( routeObjId ) {
-				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId && _DataManager.editedRoute.routeChanged ) {
+				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId && _TravelNotesData.routeEdition.routeChanged ) {
 					// cannot remove the route currently edited
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 					return;
 				}
 
-				require ( './MapEditor' ) ( ).removeRoute ( _DataManager.getRoute ( routeObjId ), true, true );
-				_DataManager.travel.routes.remove ( routeObjId );
+				require ( './MapEditor' ) ( ).removeRoute ( _DataSearchEngine.getRoute ( routeObjId ), true, true );
+				_TravelNotesData.travel.routes.remove ( routeObjId );
 				_TravelEditorUI.setRoutesList ( );
-				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId  ) {
+				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId  ) {
 					require ( './RouteEditor' ) ( ).clear ( );
 				}
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
@@ -311,10 +315,10 @@ Tests ...
 			*/
 
 			renameRoute : function ( routeObjId, routeName ) {
-				_DataManager.getRoute ( routeObjId ).name = routeName;
+				_DataSearchEngine.getRoute ( routeObjId ).name = routeName;
 				_TravelEditorUI.setRoutesList ( );
-				if ( routeObjId === _DataManager.editedRoute.routeInitialObjId ) {
-					_DataManager.editedRoute.name = routeName;
+				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId ) {
+					_TravelNotesData.editedRoute.name = routeName;
 				}
 				this.changeTravelHTML ( );
 			},
@@ -328,7 +332,7 @@ Tests ...
 			*/
 
 			swapRoute : function ( routeObjId, swapUp ) {
-				_DataManager.travel.routes.swap ( routeObjId, swapUp );
+				_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 				this.changeTravelHTML ( );
@@ -343,7 +347,7 @@ Tests ...
 			*/
 			
 			routeDropped : function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
-				_DataManager.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+				_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 				this.changeTravelHTML ( );
@@ -358,17 +362,17 @@ Tests ...
 			*/
 
 			saveTravel : function ( ) {
-				if ( _DataManager.editedRoute.routeChanged ) {
+				if ( _TravelNotesData.routeEdition.routeChanged ) {
 					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
 				}
 				else {
-					var routesIterator = _DataManager.travel.routes.iterator;
+					var routesIterator = _TravelNotesData.travel.routes.iterator;
 					while ( ! routesIterator.done ) {
 						routesIterator.value.hidden = false;
 					}
 						
 					// compressing the itineraryPoints
-					var compressedTravel = _DataManager.travel.object;
+					var compressedTravel = _TravelNotesData.travel.object;
 					compressedTravel.routes.forEach (
 						function ( route ) {
 							var objType = {};
@@ -424,9 +428,9 @@ Tests ...
 				var fileReader = new FileReader( );
 				fileReader.onload = function ( event ) {
 					_MapEditor.removeAllObjects ( );
-					_DataManager.editedRoute = require ( '../Data/Route' ) ( );
-					_DataManager.editedRoute.routeChanged = false;
-					_DataManager.editedRoute.routeInitialObjId = -1;
+					_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
+					_TravelNotesData.routeEdition.routeChanged = false;
+					_TravelNotesData.routeEdition.routeInitialObjId = -1;
 					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					try {
@@ -480,18 +484,19 @@ Tests ...
 				{
 					return;
 				}
-				_DataManager.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+				_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
-				_DataManager.editedRoute = require ( '../Data/Route' ) ( );
-				_DataManager.editedRoute.routeChanged = false;
-				_DataManager.editedRoute.routeInitialObjId = -1;
-				_DataManager.travel = require ( '../Data/Travel' ) ( );
+				_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
+				_TravelNotesData.routeEdition.routeChanged = false;
+				_TravelNotesData.routeEdition.routeInitialObjId = -1;
+				_TravelNotesData.travel = require ( '../Data/Travel' ) ( );
+				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.changeTravelHTML ( true );
-				if ( _DataManager.config.travelEditor.startupRouteEdition ) {
-					this.editRoute ( _DataManager.travel.routes.first.objId );
+				if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
+					this.editRoute ( _TravelNotesData.travel.routes.first.objId );
 				}
 			},
 

@@ -4,3 +4,4 @@ logs
 npm-debug.log*
 gh-page/
 node_modules/
+backup/

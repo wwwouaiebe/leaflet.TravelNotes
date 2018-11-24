@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		},
 		browserify: {
 			control: {
-				src: ['src/L.TravelNotes.Interface.js'],
+				src: ['src/L.TravelNotes.js'],
 				dest: 'dist/TravelNotes.js'
 			}
 		},

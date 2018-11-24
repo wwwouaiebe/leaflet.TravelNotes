@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -52,7 +54,7 @@ Tests ...
 			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-			"<p>Version : " + require ( '../data/DataManager' ) ( ).version +'.';
+			"<p>Version : " + require ( '../data/Version' ) +'.';
 		
 		baseDialog.center ( );
 		

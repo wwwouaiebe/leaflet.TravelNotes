@@ -28,8 +28,10 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-	-v1.1.0:
+	- v1.1.0:
 		- Issue #36: Add a linetype property to route
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170930
 Tests ...
 
@@ -125,7 +127,7 @@ Tests ...
 			dashDiv
 		);
 
-		var dashChoices = require ( '../data/DataManager' ) ( ).config.route.dashChoices;
+		var dashChoices = require ( '../L.TravelNotes' ).config.route.dashChoices;
 		for ( var optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
 			dashSelect.add ( htmlElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
 		}

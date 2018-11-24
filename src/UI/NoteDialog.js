@@ -26,6 +26,8 @@ Changes:
 		- created
 	- v1.3.0:
 		- changed message
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -523,7 +525,7 @@ Tests ...
 		}
 
 		// geolocalization
-		if ( ( require ( '../data/DataManager' ) ( ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+		if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
 		}
 		

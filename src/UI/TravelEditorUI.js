@@ -27,6 +27,8 @@ Changes:
 	- v1.1.0:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #31 : Add a command to import from others maps
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170930
 Tests ...
 
@@ -38,7 +40,7 @@ Tests ...
 	'use strict';
 	
 	var _Translator = require ( './Translator' ) ( );
-	var _DataManager = require ( '../data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
 	var _RoutesList = null;
 	
 	// Events handler for expand and expand list buttons
@@ -79,7 +81,7 @@ Tests ...
 	};
 	
 	var onMouseLeaveControl =function ( event ) {
-		_TimerId = setTimeout(onTimeOut, _DataManager.config.travelEditor.timeout );
+		_TimerId = setTimeout(onTimeOut, _TravelNotesData.config.travelEditor.timeout );
 	};
 	
 	var onClickPinButton = function ( event ) {
@@ -398,7 +400,7 @@ Tests ...
 					id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 					className: 'TravelNotes-Control-Button', 
 					title : _Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-					innerHTML : '<a id="TravelNotes-Control-OpenTravelRoadbookLink" href="TravelNotesRoadbook.html?page=' + _DataManager.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+					innerHTML : '<a id="TravelNotes-Control-OpenTravelRoadbookLink" href="TravelNotesRoadbook.html?page=' + _TravelNotesData.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 				}, 
 				buttonsDiv
 			);
@@ -445,7 +447,7 @@ Tests ...
 				},
 				false
 			);
-			if ( _DataManager.config.travelEditor.startMinimized ) {
+			if ( _TravelNotesData.config.travelEditor.startMinimized ) {
 				pinButton.innerHTML = '&#x1f4cc;';
 				controlDiv.addEventListener ( 'mouseenter', onMouseEnterControl, false );
 				controlDiv.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
@@ -466,7 +468,7 @@ Tests ...
 
 		var _SetRoutesList = function (  ) {
 			_RoutesList.removeAllItems ( );
-			var routesIterator = _DataManager.travel.routes.iterator;
+			var routesIterator = _TravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', _Translator.getText ( 'TravelEditorUI - Route' ) ,routesIterator.value.objId, false );
 			}

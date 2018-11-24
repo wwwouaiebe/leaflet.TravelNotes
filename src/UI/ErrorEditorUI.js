@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170929
 Tests ...
 
@@ -70,7 +72,7 @@ Tests ...
 			document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML = message;
 			document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 			//document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-			_TimerId = setTimeout ( _ReduceUI, require ( '../data/DataManager' ) ( ).config.errorMessages.timeout );
+			_TimerId = setTimeout ( _ReduceUI, require ( '../L.TravelNotes' ).config.errorMessages.timeout );
 		};
 		
 		/*

@@ -31,7 +31,8 @@ Changes:
 		- Issue #34 : Add a command to show all routes
 	- v1.3.0:
 		- added cutRoute method (not tested...)
-
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 Doc reviewed 20170928
 Tests ...
 
@@ -42,7 +43,8 @@ Tests ...
 	
 	'use strict';
 
-	var _DataManager = require ( '../Data/DataManager' ) ( );
+	var _TravelNotesData = require ( '../L.TravelNotes' );
+	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _MapEditor = require ( '../core/MapEditor' ) ( );
@@ -185,7 +187,7 @@ Tests ...
 				gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
 
 				// waypoints
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done )
 				{
 					gpxString += 
@@ -196,9 +198,9 @@ Tests ...
 				
 				// route
 				gpxString += tab1 + "<rte>";
-				var maneuverIterator = _DataManager.editedRoute.itinerary.maneuvers.iterator;
+				var maneuverIterator = _TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
 				while ( ! maneuverIterator.done ) {
-					var wayPoint = _DataManager.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+					var wayPoint = _TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
 					var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
 					gpxString +=
 						tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
@@ -208,7 +210,7 @@ Tests ...
 				// track
 				gpxString += tab1 + "<trk>";
 				gpxString += tab2 + "<trkseg>";
-				var itineraryPointsIterator = _DataManager.editedRoute.itinerary.itineraryPoints.iterator;
+				var itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 				while ( ! itineraryPointsIterator.done ) {
 					gpxString +=
 						tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
@@ -220,7 +222,7 @@ Tests ...
 				gpxString += tab0 + "</gpx>";
 				
 				// file is saved
-				var fileName = _DataManager.editedRoute.name;
+				var fileName = _TravelNotesData.editedRoute.name;
 				if ( '' === fileName ) {
 					fileName = 'TravelNote';
 				}
@@ -264,7 +266,7 @@ Tests ...
 			*/
 
 			chainRoutes : function ( ) {
-				var routesIterator = _DataManager.travel.routes.iterator;
+				var routesIterator = _TravelNotesData.travel.routes.iterator;
 				var chainedDistance = 0;
 				while ( ! routesIterator.done ) {
 					if ( routesIterator.value.chain ) {
@@ -290,11 +292,10 @@ Tests ...
 			*/
 
 			startRouting : function ( ) {
-				if ( ! _DataManager.config.routing.auto ) {
+				if ( ! _TravelNotesData.config.routing.auto ) {
 					return;
 				}
-				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
-				require ( '../core/Router' ) ( ).startRouting ( _DataManager.editedRoute );
+				require ( '../core/Router' ) ( ).startRouting ( _TravelNotesData.editedRoute );
 			},
 			
 			/*
@@ -307,25 +308,24 @@ Tests ...
 
 			endRouting : function ( ) {
 				// the previous route is removed from the leaflet map
-				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
+				_MapEditor.removeRoute ( _TravelNotesData.editedRoute, true, true );
 				
 				// the position of the notes linked to the route is recomputed
-				var notesIterator = _DataManager.editedRoute.notes.iterator;
+				var notesIterator = _TravelNotesData.editedRoute.notes.iterator;
 				while ( ! notesIterator.done ) {
-					var latLngDistance = this.getClosestLatLngDistance ( _DataManager.editedRoute, notesIterator.value.latLng );
+					var latLngDistance = this.getClosestLatLngDistance ( _TravelNotesData.editedRoute, notesIterator.value.latLng );
 					notesIterator.value.latLng = latLngDistance.latLng;
 					notesIterator.value.distance = latLngDistance.distance;
 				}
 				
 				// and the notes sorted
-				_DataManager.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+				_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 				
 				// the new route is added to the map
-				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
-				if ( ! _DataManager.editedRoute.haveItinerary ) {
-					_MapEditor.zoomToRoute ( _DataManager.editedRoute.objId );
+				_MapEditor.addRoute ( _TravelNotesData.editedRoute, true, true );
+				if ( 0 !== _TravelNotesData.editedRoute.itinerary.itineraryPoints.length ) {
+					_MapEditor.zoomToRoute ( _TravelNotesData.editedRoute.objId );
 				}
-				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
 				
 				// and the itinerary and waypoints are displayed
 				_ItineraryEditor.setItinerary ( );
@@ -347,10 +347,10 @@ Tests ...
 			saveEdition : function ( ) {
 				// the edited route is cloned
 				var clonedRoute = require ( '../data/Route' ) ( );
-				clonedRoute.object = _DataManager.editedRoute.object;
+				clonedRoute.object = _TravelNotesData.editedRoute.object;
 				// and the initial route replaced with the clone
-				_DataManager.travel.routes.replace ( _DataManager.editedRoute.routeInitialObjId, clonedRoute );
-				_DataManager.editedRoute.routeInitialObjId = clonedRoute.objId;
+				_TravelNotesData.travel.routes.replace ( _TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
+				_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
 				this.clear ( );
 			},
 			
@@ -375,12 +375,12 @@ Tests ...
 			*/
 
 			clear : function ( ) {
-				_MapEditor.removeRoute ( _DataManager.editedRoute, true, true );
-				_MapEditor.addRoute ( _DataManager.getRoute ( _DataManager.editedRoute.routeInitialObjId ), true, false );
+				_MapEditor.removeRoute ( _TravelNotesData.editedRoute, true, true );
+				_MapEditor.addRoute ( _DataSearchEngine.getRoute ( _TravelNotesData.routeEdition.routeInitialObjId ), true, false );
 
-				_DataManager.editedRoute = require ( '../data/Route' ) ( );
-				_DataManager.editedRoute.routeChanged = false;
-				_DataManager.editedRoute.routeInitialObjId = -1;
+				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+				_TravelNotesData.routeEdition.routeChanged = false;
+				_TravelNotesData.routeEdition.routeInitialObjId = -1;
 				require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 				_RouteEditorUI.setWayPointsList ( );
 				_RouteEditorUI .reduce ( );
@@ -402,20 +402,20 @@ Tests ...
 			*/
 
 			editRoute : function ( routeObjId ) { 
-				if ( _DataManager.editedRoute.routeChanged ) {
+				if ( _TravelNotesData.routeEdition.routeChanged ) {
 					// not possible to edit - the current edited route is not saved or cancelled
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 					return;
 				}
-				if ( -1 !== _DataManager.editedRoute.routeInitialObjId ) {
+				if ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) {
 					// the current edited route is not changed. Cleaning the editors
 					this.clear ( );
 				}
 				
 				// We verify that the provider  for this route is available
-				var initialRoute = _DataManager.getRoute ( routeObjId );
+				var initialRoute = _DataSearchEngine.getRoute ( routeObjId );
 				var providerName = initialRoute.itinerary.provider;
-				if ( providerName && ( '' !== providerName ) && ( ! _DataManager.providers.get ( providerName.toLowerCase ( ) ) ) )
+				if ( providerName && ( '' !== providerName ) && ( ! _TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
 				{
 					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
 					return;
@@ -427,15 +427,14 @@ Tests ...
 					_ItineraryEditor.setTransitMode ( transitMode );
 				}
 				// The edited route is pushed in the editors
-				_DataManager.editedRoute = require ( '../data/Route' ) ( );
+				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
 				// Route is cloned, so we can have a cancel button in the editor
-				_DataManager.editedRoute.object = initialRoute.object;
-				_DataManager.editedRoute.routeInitialObjId = initialRoute.objId;
-				_DataManager.editedRoute.haveItinerary = ( 0 !== _DataManager.editedRoute.itinerary.itineraryPoints.length );
-				_DataManager.editedRoute.hidden = false;
+				_TravelNotesData.editedRoute.object = initialRoute.object;
+				_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
+				_TravelNotesData.editedRoute.hidden = false;
 				initialRoute.hidden = false;
 				_MapEditor.removeRoute ( initialRoute, true, false );
-				_MapEditor.addRoute ( _DataManager.editedRoute, true, true );
+				_MapEditor.addRoute ( _TravelNotesData.editedRoute, true, true );
 				this.chainRoutes ( );
 				_RouteEditorUI .expand ( );
 				_RouteEditorUI.setWayPointsList ( );
@@ -454,7 +453,7 @@ Tests ...
 			*/
 
 			routeProperties : function ( routeObjId ) {
-				var route = _DataManager.getRoute ( routeObjId );
+				var route = _DataSearchEngine.getRoute ( routeObjId );
 				require ( '../UI/RoutePropertiesDialog' ) ( route );
 			},
 			
@@ -470,31 +469,31 @@ Tests ...
 			*/
 
 			addWayPoint : function ( latLng, event, distance ) {
-				_DataManager.editedRoute.routeChanged = true;
+				_TravelNotesData.routeEdition.routeChanged = true;
 				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 				if ( latLng ) {
 					newWayPoint.latLng = latLng;
-					if ( _DataManager.config.wayPoint.reverseGeocoding ) {
+					if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
 						require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, newWayPoint.objId );
 					}
 				}
-				_DataManager.editedRoute.wayPoints.add ( newWayPoint );
-				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, _DataManager.editedRoute.wayPoints.length - 2 );
+				_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
+				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.last, _TravelNotesData.editedRoute.wayPoints.length - 2 );
 				if ( distance ) {
-					var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+					var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 					while ( ! wayPointsIterator.done ) {
 						var latLngDistance = this.getClosestLatLngDistance ( 
-							_DataManager.editedRoute,
+							_TravelNotesData.editedRoute,
 							wayPointsIterator.value.latLng 
 						);
 						if ( distance < latLngDistance.distance ) {
-							_DataManager.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
+							_TravelNotesData.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
 							break;
 						}
 					}
 				}
 				else {
-					_DataManager.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+					_TravelNotesData.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
 				}
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
@@ -514,7 +513,7 @@ Tests ...
 
 			addWayPointOnRoute : function ( routeObjId, event ) {
 				var latLngDistance = this.getClosestLatLngDistance ( 
-					_DataManager.getRoute ( routeObjId ),
+					_DataSearchEngine.getRoute ( routeObjId ),
 					[ event.latlng.lat, event.latlng.lng ] 
 				);
 				this.addWayPoint ( latLngDistance.latLng, null, latLngDistance.distance );
@@ -529,13 +528,13 @@ Tests ...
 			*/
 
 			reverseWayPoints : function ( ) {
-				_DataManager.editedRoute.routeChanged = true;
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				_TravelNotesData.routeEdition.routeChanged = true;
+				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					_MapEditor.removeObject ( wayPointsIterator.value.objId );
 				}
-				_DataManager.editedRoute.wayPoints.reverse ( );
-				wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				_TravelNotesData.editedRoute.wayPoints.reverse ( );
+				wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
 				}
@@ -552,12 +551,12 @@ Tests ...
 			*/
 
 			removeAllWayPoints : function ( ) {
-				_DataManager.editedRoute.routeChanged = true;
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				_TravelNotesData.routeEdition.routeChanged = true;
+				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					_MapEditor.removeObject ( wayPointsIterator.value.objId );
 				}
-				_DataManager.editedRoute.wayPoints.removeAll ( true );
+				_TravelNotesData.editedRoute.wayPoints.removeAll ( true );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
@@ -574,9 +573,9 @@ Tests ...
 			*/
 
 			removeWayPoint : function ( wayPointObjId ) {
-				_DataManager.editedRoute.routeChanged = true;
+				_TravelNotesData.routeEdition.routeChanged = true;
 				_MapEditor.removeObject ( wayPointObjId );
-				_DataManager.editedRoute.wayPoints.remove ( wayPointObjId );
+				_TravelNotesData.editedRoute.wayPoints.remove ( wayPointObjId );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
@@ -594,8 +593,8 @@ Tests ...
 			*/
 
 			renameWayPoint : function ( wayPointName, wayPointObjId ) {
-				_DataManager.editedRoute.routeChanged = true;
-				_DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+				_TravelNotesData.routeEdition.routeChanged = true;
+				_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 				_RouteEditorUI.setWayPointsList ( );
 			},
 			
@@ -612,8 +611,8 @@ Tests ...
 			*/
 
 			swapWayPoints : function ( wayPointObjId, swapUp ) {
-				_DataManager.editedRoute.routeChanged = true;
-				_DataManager.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+				_TravelNotesData.routeEdition.routeChanged = true;
+				_TravelNotesData.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 				_RouteEditorUI.setWayPointsList (  );
 				this.startRouting ( );
 			},
@@ -630,15 +629,15 @@ Tests ...
 			*/
 
 			setStartPoint : function ( latLng ) {
-				_DataManager.editedRoute.routeChanged = true;
-				if ( 0 !== _DataManager.editedRoute.wayPoints.first.lat ) {
-					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.first.objId );
+				_TravelNotesData.routeEdition.routeChanged = true;
+				if ( 0 !== _TravelNotesData.editedRoute.wayPoints.first.lat ) {
+					_MapEditor.removeObject ( _TravelNotesData.editedRoute.wayPoints.first.objId );
 				}
-				_DataManager.editedRoute.wayPoints.first.latLng = latLng;
-				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.first.objId );
+				_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
+				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _TravelNotesData.editedRoute.wayPoints.first.objId );
 				}
-				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.first, 'A' );
+				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.first, 'A' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
@@ -656,15 +655,15 @@ Tests ...
 			*/
 
 			setEndPoint : function ( latLng ) {
-				_DataManager.editedRoute.routeChanged = true;
-				if ( 0 !== _DataManager.editedRoute.wayPoints.last.lat ) {
-					_MapEditor.removeObject ( _DataManager.editedRoute.wayPoints.last.objId );
+				_TravelNotesData.routeEdition.routeChanged = true;
+				if ( 0 !== _TravelNotesData.editedRoute.wayPoints.last.lat ) {
+					_MapEditor.removeObject ( _TravelNotesData.editedRoute.wayPoints.last.objId );
 				}
-				_DataManager.editedRoute.wayPoints.last.latLng = latLng;
-				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _DataManager.editedRoute.wayPoints.last.objId );
+				_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
+				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _TravelNotesData.editedRoute.wayPoints.last.objId );
 				}
-				_MapEditor.addWayPoint ( _DataManager.editedRoute.wayPoints.last, 'B' );
+				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.last, 'B' );
 				_RouteEditorUI.setWayPointsList ( );
 				this.startRouting ( );
 			},
@@ -681,9 +680,9 @@ Tests ...
 			*/
 
 			wayPointDragEnd : function ( wayPointObjId ) {
-				_DataManager.editedRoute.routeChanged = true;
-				if ( _DataManager.config.wayPoint.reverseGeocoding ) {
-					var latLng = _DataManager.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+				_TravelNotesData.routeEdition.routeChanged = true;
+				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
+					var latLng = _TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
 					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, wayPointObjId );
 				}
 				_RouteEditorUI.setWayPointsList ( );
@@ -699,16 +698,16 @@ Tests ...
 			*/
 
 			wayPointDropped : function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-				_DataManager.editedRoute.routeChanged = true;
-				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.first.objId && draggedBefore ) {
+				_TravelNotesData.routeEdition.routeChanged = true;
+				if ( targetWayPointObjId === _TravelNotesData.editedRoute.wayPoints.first.objId && draggedBefore ) {
 					return;
 				}
-				if ( targetWayPointObjId === _DataManager.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+				if ( targetWayPointObjId === _TravelNotesData.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
 					return;
 				}
-				_DataManager.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+				_TravelNotesData.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
 				_RouteEditorUI.setWayPointsList ( );
-				var wayPointsIterator = _DataManager.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 						_MapEditor.removeObject ( wayPointsIterator.value.objId );
 						_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
@@ -728,7 +727,7 @@ Tests ...
 			*/
 
 			hideRoute : function ( routeObjId ) {
-				var route = _DataManager.getRoute ( routeObjId );
+				var route = _DataSearchEngine.getRoute ( routeObjId );
 				if ( route ) {
 					_MapEditor.removeRoute ( route, true, true );
 					route.hidden = true;
@@ -744,7 +743,7 @@ Tests ...
 			*/
 
 			showRoutes : function ( ) {
-				var routesIterator = _DataManager.travel.routes.iterator;
+				var routesIterator = _TravelNotesData.travel.routes.iterator;
 				while ( ! routesIterator.done ) {
 					if ( routesIterator.value.hidden ) {
 						_MapEditor.addRoute ( routesIterator.value, true, true, false );
@@ -769,7 +768,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.first.lat ) ? this.setStartPoint : null,
+						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === _TravelNotesData.editedRoute.wayPoints.first.lat ) ? this.setStartPoint : null,
 						param : latLng
 					} 
 				);
@@ -777,7 +776,7 @@ Tests ...
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.addWayPoint : null,
+						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) ? this.addWayPoint : null,
 						param : latLng
 					}
 				);
@@ -785,7 +784,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) && ( 0 === _DataManager.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
+						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === _TravelNotesData.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
 						param : latLng
 					}
 				);
@@ -809,7 +808,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Delete this waypoint" ), 
-						action : ( ( _DataManager.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( _DataManager.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? this.removeWayPoint : null,
+						action : ( ( _TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( _TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? this.removeWayPoint : null,
 						param: wayPointObjId
 					} 
 				);
@@ -834,7 +833,7 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Edit this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? this.editRoute : null,
+						action : ( ( _TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! _TravelNotesData.routeEdition.routeChanged ) ) ? this.editRoute : null,
 						param: routeObjId
 					} 
 				);
@@ -842,7 +841,7 @@ Tests ...
 					{
 						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( _DataManager.editedRoute.routeInitialObjId !== routeObjId ) && ( ! _DataManager.editedRoute.routeChanged ) ) ? travelEditor.removeRoute : null,
+						action : ( ( _TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! _TravelNotesData.routeEdition.routeChanged ) ) ? travelEditor.removeRoute : null,
 						param: routeObjId
 					}
 				);
@@ -850,7 +849,7 @@ Tests ...
 					{
 						context : travelEditor, 
 						name : _Translator.getText ( "RouteEditor - Hide this route" ), 
-						action : ( _DataManager.editedRoute.objId !== routeObjId ) ? this.hideRoute : null,
+						action : ( _TravelNotesData.editedRoute.objId !== routeObjId ) ? this.hideRoute : null,
 						param: routeObjId
 					}
 				);
@@ -858,7 +857,7 @@ Tests ...
 					{
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
-						action : ( -1 !== _DataManager.editedRoute.routeInitialObjId ) ? this.addWayPointOnRoute : null,
+						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) ? this.addWayPointOnRoute : null,
 						param: routeObjId
 					}
 				);
@@ -890,14 +889,14 @@ Tests ...
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
-						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.saveEdition : null,
+						action : ( _TravelNotesData.editedRoute.objId === routeObjId ) ? this.saveEdition : null,
 					}
 				);
 				contextMenu.push (
 					{ 
 						context : this, 
 						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
-						action : ( _DataManager.editedRoute.objId === routeObjId ) ? this.cancelEdition : null
+						action : ( _TravelNotesData.editedRoute.objId === routeObjId ) ? this.cancelEdition : null
 					}
 				);
 				return contextMenu;
