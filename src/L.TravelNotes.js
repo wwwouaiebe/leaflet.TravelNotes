@@ -232,11 +232,11 @@ Tests ...
 					// user interface is added
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 					require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _TravelNotesData.travel.routes );
-					require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+					require ( './core/TravelEditor' ) ( ).updateRoadBook ( true );
 
 					if ( _TravelUrl ) {
 						// loading travel...
-						require ( './core/TravelEditor' ) ( ).openServerTravel ( values [ 2 ] );
+						require ( './core/FileLoader' ) ( ).openDistantFile ( values [ 2 ] );
 					}
 					else {
 						if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
@@ -321,9 +321,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			
-			addProvider : function ( provider ) { 
-				_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider );
-			},
+			addProvider : function ( provider ) { _TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider ); },
 			
 			/*
 			--- addMapContextMenu method ------------------------------------------------------------------------------
@@ -350,19 +348,10 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			get baseDialog ( ) {
-				return require ( './UI/baseDialog' ) ( );
-			},
+			get baseDialog ( ) { return require ( './UI/baseDialog' ) ( ); },
 
-			get userData ( ) { 
-				if ( _TravelNotesData.travel.userData ) { 
-					return _TravelNotesData.travel.userData;
-				}
-				return {};
-			},
-			set userData ( userData ) {
-				 _TravelNotesData.travel.userData = userData;
-			},
+			get userData ( ) { return _TravelNotesData.travel.userData;},
+			set userData ( userData ) { _TravelNotesData.travel.userData = userData;},
 			
 			get rightContextMenu ( ) { return _HaveRightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 

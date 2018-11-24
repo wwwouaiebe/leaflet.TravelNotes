@@ -29,6 +29,7 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- moving file functions from TravelEditor to the new FileLoader
 Doc reviewed 20170930
 Tests ...
 
@@ -307,7 +308,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).openTravel ( clickEvent );
+					require ( '../core/FileLoader' ) ( ).openLocalFile ( clickEvent );
 				},
 				false 
 			);
@@ -363,7 +364,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
+					require ( '../core/FileLoader' ) ( ).mergeLocalFile ( clickEvent );
 				},
 				false 
 			);

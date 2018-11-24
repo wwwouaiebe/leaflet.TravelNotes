@@ -144,6 +144,14 @@ Tests ...
 			return latLngs;
 		};
 		
+		/*
+		--- _getDashArray function ----------------------------------------------------------------------------------
+
+		This function returns the dashArray used for th epolyline representation. See also leaflet docs
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _getDashArray = function ( route ) {
 			if ( route.dashArray >= _TravelNotesData.config.route.dashChoices.length ) {
 				route.dashArray = 0;
@@ -161,6 +169,7 @@ Tests ...
 			}
 			return null;
 		};
+		
 		/*
 		--- MapEditor object ------------------------------------------------------------------------------------------
 
@@ -531,7 +540,7 @@ Tests ...
 							// in all cases, the polyline is updated
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 							// and the HTML page is adapted
-							require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+							require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 						}
  					);
 					// event listener for the drag event

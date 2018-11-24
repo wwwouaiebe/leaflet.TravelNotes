@@ -182,7 +182,7 @@ Tests ...
 				// and in the itinerary is adapted...
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},	
 		
 			/*
@@ -227,7 +227,7 @@ Tests ...
 					_TravelNotesData.travel.notes.remove ( noteObjId );
 				}
 				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 		
 			/*
@@ -372,7 +372,7 @@ Tests ...
 			--- getNoteHTML method ------------------------------------------------------------------------------------
 
 			This method returns an HTML string with the note contents. This string will be used in the
-			note popup and on the HTML page
+			note popup and on the roadbook page
 			
 			parameters:
 			- note : the TravelNotes object

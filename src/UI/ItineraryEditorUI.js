@@ -439,13 +439,15 @@ Tests ...
 				_CreateUI ( controlDiv ); 
 			},
 			setItinerary : function ( ) { _SetItinerary ( ); },
-			setProvider : function ( providerName ) {
+			get provider ( ) { return _TravelNotesData.routing.provider;},
+			set provider ( providerName ) {
 				 var button = document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );
 				 }
 			},
-			setTransitMode : function ( transitMode ) {
+			get transitMode ( ) { return _TravelNotesData.routing.transitMode; },
+			set transitMode ( transitMode ) {
 				var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );

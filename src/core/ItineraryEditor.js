@@ -36,15 +36,13 @@ Tests ...
 	var ItineraryEditor = function ( ) {
 		
 		return {
-			setItinerary : function ( ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );
-			},
-			setProvider : function ( providerName ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setProvider ( providerName );
-			},
-			setTransitMode : function ( transitMode ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setTransitMode ( transitMode );
-			}
+			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
+			
+			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
+			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
+			
+			get transitMode ( ) { return require ( '../L.TravelNotes' ).routing.transitMode; },
+			set transitMode ( transitMode ) { require ( '../UI/ItineraryEditorUI' ) ( ).transitMode = transitMode ; }
 		};
 	};
 

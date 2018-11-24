@@ -44,7 +44,7 @@ Tests ...
 				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
 			},
 
-			clear : function ( routeObjId ) {
+			clear : function ( ) {
 				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
 			}
 		};

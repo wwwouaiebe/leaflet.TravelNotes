@@ -429,7 +429,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":32,"../data/ObjId":38,"../data/ObjType":39,"./Version":6}],4:[function(require,module,exports){
+},{"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40,"./Version":6}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -593,7 +593,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../data/Collection":32,"../data/Itinerary":34,"../data/ObjId":38,"../data/ObjType":39,"../data/Waypoint":45,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":33,"../data/Itinerary":35,"../data/ObjId":39,"../data/ObjType":40,"../data/Waypoint":46,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -696,7 +696,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":32,"../data/ObjId":38,"../data/ObjType":39,"./Version":6}],6:[function(require,module,exports){
+},{"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40,"./Version":6}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -972,11 +972,11 @@ Tests ...
 					// user interface is added
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 					require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _TravelNotesData.travel.routes );
-					require ( './core/TravelEditor' ) ( ).changeTravelHTML ( true );
+					require ( './core/TravelEditor' ) ( ).updateRoadBook ( true );
 
 					if ( _TravelUrl ) {
 						// loading travel...
-						require ( './core/TravelEditor' ) ( ).openServerTravel ( values [ 2 ] );
+						require ( './core/FileLoader' ) ( ).openDistantFile ( values [ 2 ] );
 					}
 					else {
 						if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
@@ -1061,9 +1061,7 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			
-			addProvider : function ( provider ) { 
-				_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider );
-			},
+			addProvider : function ( provider ) { _TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider ); },
 			
 			/*
 			--- addMapContextMenu method ------------------------------------------------------------------------------
@@ -1090,19 +1088,10 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			get baseDialog ( ) {
-				return require ( './UI/baseDialog' ) ( );
-			},
+			get baseDialog ( ) { return require ( './UI/baseDialog' ) ( ); },
 
-			get userData ( ) { 
-				if ( _TravelNotesData.travel.userData ) { 
-					return _TravelNotesData.travel.userData;
-				}
-				return {};
-			},
-			set userData ( userData ) {
-				 _TravelNotesData.travel.userData = userData;
-			},
+			get userData ( ) { return _TravelNotesData.travel.userData;},
+			set userData ( userData ) { _TravelNotesData.travel.userData = userData;},
 			
 			get rightContextMenu ( ) { return _HaveRightContextMenu; },
 			set rightContextMenu ( RightContextMenu ) { 
@@ -1149,7 +1138,7 @@ Tests ...
 --- End of L.TravelNotes.js file --------------------------------------------------------------------------------------
 */
 
-},{"./UI/ContextMenu":11,"./UI/RouteEditorUI":17,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./UI/baseDialog":23,"./core/NoteEditor":28,"./core/RouteEditor":29,"./core/TravelEditor":31,"./data/ItineraryPoint":35,"./data/Maneuver":36,"./data/Route":40,"./data/Travel":41,"./data/TravelNotesData":42,"./data/Version":43,"./util/Utilities":46}],8:[function(require,module,exports){
+},{"./UI/ContextMenu":11,"./UI/RouteEditorUI":17,"./UI/Translator":20,"./UI/TravelEditorUI":21,"./UI/UserInterface":22,"./UI/baseDialog":23,"./core/FileLoader":25,"./core/NoteEditor":29,"./core/RouteEditor":30,"./core/TravelEditor":32,"./data/ItineraryPoint":36,"./data/Maneuver":37,"./data/Route":41,"./data/Travel":42,"./data/TravelNotesData":43,"./data/Version":44,"./util/Utilities":47}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1226,7 +1215,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":20,"../data/Version":43,"./HTMLElementsFactory":13}],9:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":20,"../data/Version":44,"./HTMLElementsFactory":13}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2713,7 +2702,7 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":13,"../UI/Translator":20,"../core/NoteEditor":28,"../core/RouteEditor":29,"../data/ObjId":38,"../util/Utilities":46}],15:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":13,"../UI/Translator":20,"../core/NoteEditor":29,"../core/RouteEditor":30,"../data/ObjId":39,"../util/Utilities":47}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3155,13 +3144,15 @@ Tests ...
 				_CreateUI ( controlDiv ); 
 			},
 			setItinerary : function ( ) { _SetItinerary ( ); },
-			setProvider : function ( providerName ) {
+			get provider ( ) { return _TravelNotesData.routing.provider;},
+			set provider ( providerName ) {
 				 var button = document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );
 				 }
 			},
-			setTransitMode : function ( transitMode ) {
+			get transitMode ( ) { return _TravelNotesData.routing.transitMode; },
+			set transitMode ( transitMode ) {
 				var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
 				 if ( button ) {
 					 button.click ( );
@@ -3183,7 +3174,7 @@ Tests ...
 /*
 --- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":14,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/RouteEditor":29,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":14,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/RouteEditor":30,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3732,7 +3723,7 @@ Tests ...
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":20,"../core/GeoCoder":25,"../core/NoteEditor":28,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":20,"../core/GeoCoder":26,"../core/NoteEditor":29,"./HTMLElementsFactory":13}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4151,7 +4142,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/RouteEditor":29,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],18:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/RouteEditor":30,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4220,7 +4211,7 @@ Tests ...
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
-			require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			return true;
 		};
 
@@ -4322,7 +4313,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":31,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/MapEditor":28,"../core/RouteEditor":30,"../core/TravelEditor":32,"./HTMLElementsFactory":13}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -4725,6 +4716,7 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- moving file functions from TravelEditor to the new FileLoader
 Doc reviewed 20170930
 Tests ...
 
@@ -5003,7 +4995,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).openTravel ( clickEvent );
+					require ( '../core/FileLoader' ) ( ).openLocalFile ( clickEvent );
 				},
 				false 
 			);
@@ -5059,7 +5051,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).importTravel ( clickEvent );
+					require ( '../core/FileLoader' ) ( ).mergeLocalFile ( clickEvent );
 				},
 				false 
 			);
@@ -5200,7 +5192,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/TravelEditor":31,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/FileLoader":25,"../core/TravelEditor":32,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5354,7 +5346,7 @@ Tests ...
 				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
 			},
 
-			clear : function ( routeObjId ) {
+			clear : function ( ) {
 				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
 			}
 		};
@@ -5374,6 +5366,241 @@ Tests ...
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
 */
 },{"../UI/ErrorEditorUI":12}],25:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- FileLoader.js file ----------------------------------------------------------------------------------------------
+This file contains:
+	- the FileLoader object
+	- the module.exports implementation
+Changes:
+	- v1.4.0:
+		- created from TravelEditor
+Doc reviewed ...
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var FileLoader = function ( ) {
+
+		var _TravelNotesData = require ( '../L.TravelNotes' );
+		var _MapEditor = require ( '../core/MapEditor' ) ( );
+	
+		var _MergeContent = false;
+		var _FileName = '';
+		var _IsFileReadOnly = false;
+		var _FileContent = {};
+		
+		/*
+		--- _DecompressFileContent function --------------------------------------------------------------------------------
+
+		This function decompress the file data
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _DecompressFileContent = function ( ) {
+			
+			_FileContent.routes.forEach ( 
+				function ( route ) {
+					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+					var decompressedItineraryPoints = [];
+					var latLngsCounter = 0;
+					route.itinerary.itineraryPoints.latLngs.forEach (
+						function ( latLng ) {
+							var itineraryPoint = {};
+							itineraryPoint.lat = latLng [ 0 ];
+							itineraryPoint.lng = latLng [ 1 ];
+							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
+							decompressedItineraryPoints.push ( itineraryPoint );
+							latLngsCounter ++;
+						}
+					);
+					route.itinerary.itineraryPoints = decompressedItineraryPoints;
+				}
+			);
+			
+			if ( _MergeContent ) {
+				_Merge ( );
+			}
+			else {
+				_Open ( );
+			}
+		};
+		
+		/*
+		--- _Merge function -------------------------------------------------------------------------------------------
+
+		This function merge the file data with the _TravelNotesData.travel
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _Merge = function ( ) {
+			// ... and transform the data in the correct format
+			var travel = require ( '../Data/Travel' ) ( );
+			travel.object = _FileContent;
+			
+			// routes are added with their notes
+			var routesIterator = travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				_TravelNotesData.travel.routes.add ( routesIterator.value );
+			}
+			// travel notes are added
+			var notesIterator = travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				_TravelNotesData.travel.notes.add ( notesIterator.value );
+			}
+		
+			_Display ( );
+		};
+		
+		/*
+		--- _Open function -------------------------------------------------------------------------------------------
+
+		This function load the file data within the _TravelNotesData.travel
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _Open = function ( ) {
+			_TravelNotesData.travel.object = _FileContent;
+			if ( '' !== _FileName ) {
+				_TravelNotesData.travel.name = _FileName.substr ( 0, _FileName.lastIndexOf ( '.' ) ) ;
+			}
+			_TravelNotesData.travel.readOnly = _IsFileReadOnly;			
+			
+			_Display ( );
+		};
+		
+		/*
+		--- _Display function -----------------------------------------------------------------------------------------
+
+		This function update the screen
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _Display = function ( ) {
+			
+			// the map is cleaned
+			_MapEditor.removeAllObjects ( );
+			
+			// routes are added with their notes
+			var routesIterator = _TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				_MapEditor.addRoute ( routesIterator.value, true, false, _IsFileReadOnly );
+			}
+			
+			// travel notes are added
+			var notesIterator = _TravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				_MapEditor.addNote ( notesIterator.value, _IsFileReadOnly );
+			}
+			
+			// zoom on the travel
+			_MapEditor.zoomToTravel ( );
+
+			// Editors and roadbook are filled
+			if ( ! _IsFileReadOnly ) {
+			// Editors and HTML pages are filled
+				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( false );
+			}
+			else {
+				// control is hidden
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+			}
+			_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : _IsFileReadOnly, name : _TravelNotesData.travel.name } );
+		};
+			
+		/*
+		--- _Display function -----------------------------------------------------------------------------------------
+
+		This function open a local file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _OpenLocalFile = function ( ) {
+			_FileName = event.target.files [ 0 ].name;
+			
+			var fileReader = new FileReader( );
+			fileReader.onload = function ( event ) {
+				try {
+					_FileContent =  JSON.parse ( fileReader.result );
+					_DecompressFileContent ( );
+				}
+				catch ( e ) {
+				}
+			};
+			fileReader.readAsText ( event.target.files [ 0 ] );
+		};
+	
+		/*
+		--- FileLoader object -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return {
+			openLocalFile : function ( event ) {
+				_MergeContent = false;
+				_IsFileReadOnly = false;
+				_OpenLocalFile ( event );
+			},
+			mergeLocalFile : function ( event ) {
+				_MergeContent = true;
+				_IsFileReadOnly = false;
+				_OpenLocalFile ( event );
+			},
+			openDistantFile : function ( fileContent ) {
+				_IsFileReadOnly = true;
+				_FileContent = fileContent;
+				_DecompressFileContent ( );
+			}
+		};
+		
+	};
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+	
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = FileLoader;
+	}
+
+}());
+
+/*
+--- End of FileLoader.js file -----------------------------------------------------------------------------------------
+*/	
+},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":21,"../core/MapEditor":28,"../core/TravelEditor":32,"@mapbox/polyline":1}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5480,7 +5707,7 @@ Tests ...
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7}],26:[function(require,module,exports){
+},{"../L.TravelNotes":7}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5519,15 +5746,13 @@ Tests ...
 	var ItineraryEditor = function ( ) {
 		
 		return {
-			setItinerary : function ( ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );
-			},
-			setProvider : function ( providerName ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setProvider ( providerName );
-			},
-			setTransitMode : function ( transitMode ) {
-				require ( '../UI/ItineraryEditorUI' ) ( ).setTransitMode ( transitMode );
-			}
+			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
+			
+			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
+			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
+			
+			get transitMode ( ) { return require ( '../L.TravelNotes' ).routing.transitMode; },
+			set transitMode ( transitMode ) { require ( '../UI/ItineraryEditorUI' ) ( ).transitMode = transitMode ; }
 		};
 	};
 
@@ -5544,7 +5769,7 @@ Tests ...
 /*
 --- End of ItineraryEditor.js file ------------------------------------------------------------------------------------
 */
-},{"../UI/ItineraryEditorUI":15}],27:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/ItineraryEditorUI":15}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5691,6 +5916,14 @@ Tests ...
 			return latLngs;
 		};
 		
+		/*
+		--- _getDashArray function ----------------------------------------------------------------------------------
+
+		This function returns the dashArray used for th epolyline representation. See also leaflet docs
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
 		var _getDashArray = function ( route ) {
 			if ( route.dashArray >= _TravelNotesData.config.route.dashChoices.length ) {
 				route.dashArray = 0;
@@ -5708,6 +5941,7 @@ Tests ...
 			}
 			return null;
 		};
+		
 		/*
 		--- MapEditor object ------------------------------------------------------------------------------------------
 
@@ -6078,7 +6312,7 @@ Tests ...
 							// in all cases, the polyline is updated
 							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 							// and the HTML page is adapted
-							require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+							require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 						}
  					);
 					// event listener for the drag event
@@ -6229,7 +6463,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../core/NoteEditor":28,"../core/RouteEditor":29,"../core/TravelEditor":31,"../util/Utilities":46,"./NoteEditor":28,"./RouteEditor":29}],28:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../core/NoteEditor":29,"../core/RouteEditor":30,"../core/TravelEditor":32,"../util/Utilities":47,"./NoteEditor":29,"./RouteEditor":30}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6414,7 +6648,7 @@ Tests ...
 				// and in the itinerary is adapted...
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},	
 		
 			/*
@@ -6459,7 +6693,7 @@ Tests ...
 					_TravelNotesData.travel.notes.remove ( noteObjId );
 				}
 				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 		
 			/*
@@ -6604,7 +6838,7 @@ Tests ...
 			--- getNoteHTML method ------------------------------------------------------------------------------------
 
 			This method returns an HTML string with the note contents. This string will be used in the
-			note popup and on the HTML page
+			note popup and on the roadbook page
 			
 			parameters:
 			- note : the TravelNotes object
@@ -6668,7 +6902,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../core/TravelEditor":31,"../data/Note":37,"../util/Utilities":46}],29:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/RouteEditor":30,"../core/TravelEditor":32,"../data/Note":38,"../util/Utilities":47}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6905,7 +7139,7 @@ Tests ...
 			--- getRouteHTML method -----------------------------------------------------------------------------------
 
 			This method returns an HTML string with the route contents. This string will be used in the
-			route popup and on the HTML page
+			route popup and on the roadbook page
 			
 			parameters:
 			- route : the TravelNotes route object
@@ -7004,7 +7238,7 @@ Tests ...
 				
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 			
 			/*
@@ -7058,7 +7292,7 @@ Tests ...
 				_ItineraryEditor.setItinerary ( );
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 			
 			/*
@@ -7092,10 +7326,10 @@ Tests ...
 					return;
 				}
 				// Provider and transit mode are changed in the itinerary editor
-				_ItineraryEditor.setProvider ( providerName );
+				_ItineraryEditor.provider = providerName;
 				var transitMode = initialRoute.itinerary.transitMode;
 				if ( transitMode && '' !== transitMode ) {
-					_ItineraryEditor.setTransitMode ( transitMode );
+					_ItineraryEditor.transitMode = transitMode;
 				}
 				// The edited route is pushed in the editors
 				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
@@ -7131,7 +7365,7 @@ Tests ...
 			/*
 			--- addWayPoint method ------------------------------------------------------------------------------------
 
-			This method add a waypoint
+			This method add a waypoint 
 			
 			parameters:
 			- latLng : 
@@ -7588,7 +7822,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ErrorEditor":24,"../core/GeoCoder":25,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/NoteEditor":28,"../core/Router":30,"../core/TravelEditor":31,"../data/ItineraryPoint":35,"../data/Route":40,"../data/Waypoint.js":45,"../util/Utilities":46}],30:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":17,"../UI/RoutePropertiesDialog":18,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ErrorEditor":24,"../core/GeoCoder":26,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/Router":31,"../core/TravelEditor":32,"../data/ItineraryPoint":36,"../data/Route":41,"../data/Waypoint.js":46,"../util/Utilities":47}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7826,7 +8060,7 @@ Tests ...
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../UI/Translator":20,"../core/ErrorEditor":24,"./RouteEditor":29}],31:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/Translator":20,"../core/ErrorEditor":24,"./RouteEditor":30}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7863,6 +8097,7 @@ Changes:
 		- moved JSON.parse, due to use of Promise
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- moving file functions from TravelEditor to the new FileLoader
 Doc reviewed 20170928
 Tests ...
 
@@ -7885,14 +8120,14 @@ Tests ...
 	var TravelEditor = function ( ) {
 		
 		/*
-		--- _ChangeTravelHTML function --------------------------------------------------------------------------------
+		--- _UpdateRoadBook function --------------------------------------------------------------------------------
 
 		This function changes the HTML page content
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ChangeTravelHTML = function ( isNewTravel ) {
+		var _UpdateRoadBook = function ( isNewTravel ) {
 
 			if ( ! _haveUnloadCleanStorage ) {
 				window.addEventListener( 
@@ -7923,138 +8158,6 @@ Tests ...
 		};
 
 		/*
-		--- _ConvertAndDecompressFile function --------------------------------------------------------------------------------
-
-		This function convert old files (.map) and decompress the travel
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ConvertAndDecompressFile  = function ( compressedTravel, fileName  ) {
-			// decompressing the itineraryPoints
-			compressedTravel.routes.forEach ( 
-				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
-					var decompressedItineraryPoints = [];
-					var latLngsCounter = 0;
-					route.itinerary.itineraryPoints.latLngs.forEach (
-						function ( latLng ) {
-							var itineraryPoint = {};
-							itineraryPoint.lat = latLng [ 0 ];
-							itineraryPoint.lng = latLng [ 1 ];
-							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
-							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
-							decompressedItineraryPoints.push ( itineraryPoint );
-							latLngsCounter ++;
-						}
-					);
-					route.itinerary.itineraryPoints = decompressedItineraryPoints;
-				}
-			);
-			return compressedTravel;
-		};
-		
-		/*
-		--- _ImportFile function --------------------------------------------------------------------------------------
-
-		This function import a file content 
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ImportFile = function ( compressedTravel, fileName ) {
-			// converting and decompressing the file
-			var importData = _ConvertAndDecompressFile ( compressedTravel, fileName );
-			if ( ! importData ) {
-				return;
-			}
-			// ... and transform the data in the correct format
-			var importTravel = require ( '../Data/Travel' ) ( );
-			importTravel.object = importData;
-			
-			// routes are added with their notes
-			var routesIterator = importTravel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				_TravelNotesData.travel.routes.add ( routesIterator.value );
-				_MapEditor.addRoute ( routesIterator.value, true, false, false );
-			}
-			// travel notes are added
-			var notesIterator = importTravel.notes.iterator;
-			while ( ! notesIterator.done ) {
-				_TravelNotesData.travel.notes.add ( notesIterator.value );
-				_MapEditor.addNote ( notesIterator.value, false );
-			}
-			
-			// zoom on the travel
-			_MapEditor.zoomToTravel ( );
-			
-			// updating UI and html page
-			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-			_ChangeTravelHTML ( );
-		
-		};
-		
-		/*
-		--- _LoadFile function ----------------------------------------------------------------------------------------
-
-		This function load a file content 
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _LoadFile = function ( compressedTravel, fileName, readOnly ) {
-
-			// converting and decompressing the file
-			var travel = _ConvertAndDecompressFile ( compressedTravel, fileName );
-			if ( ! travel ) {
-				return;
-			}
-
-			// ... and transform the data in the correct format
-			_TravelNotesData.travel.object = travel;
-
-			// ... travel name = file name
-			if ( '' !== fileName ) {
-				_TravelNotesData.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
-			}
-
-			_TravelNotesData.travel.readOnly = readOnly;
-			
-			// the map is cleaned
-			_MapEditor.removeAllObjects ( );
-			
-			// routes are added with their notes
-			var routesIterator = _TravelNotesData.travel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
-			}
-			
-			// travel notes are added
-			var notesIterator = _TravelNotesData.travel.notes.iterator;
-			while ( ! notesIterator.done ) {
-				_MapEditor.addNote ( notesIterator.value, readOnly );
-			}
-			
-			// zoom on the travel
-			_MapEditor.zoomToTravel ( );
-
-			// Editors and HTML pages are filled
-			if ( ! readOnly ) {
-			// Editors and HTML pages are filled
-				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				_ChangeTravelHTML ( );
-			}
-			else {
-				// control is hidden
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
-			}
-			_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly, name : _TravelNotesData.travel.name } );
-		};
-		
-		/*
 		--- TravelEditor object ---------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
@@ -8063,15 +8166,15 @@ Tests ...
 		return {
 
 			/*
-			--- changeTravelHTML method -------------------------------------------------------------------------------
+			--- updateRoadBook method -------------------------------------------------------------------------------
 
 			This method changes the HTML page content
 			
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			changeTravelHTML : function ( isNewTravel ) {
-				_ChangeTravelHTML ( isNewTravel );
+			updateRoadBook : function ( isNewTravel ) {
+				_UpdateRoadBook ( isNewTravel );
 			},
 
 			/*
@@ -8086,7 +8189,7 @@ Tests ...
 				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -8129,7 +8232,7 @@ Tests ...
 					require ( './RouteEditor' ) ( ).clear ( );
 				}
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -8149,7 +8252,7 @@ Tests ...
 				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId ) {
 					_TravelNotesData.editedRoute.name = routeName;
 				}
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -8164,7 +8267,7 @@ Tests ...
 				_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -8179,7 +8282,7 @@ Tests ...
 				_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 			
 			/*
@@ -8226,65 +8329,6 @@ Tests ...
 			},
 
 			/*
-			--- openTravel method -------------------------------------------------------------------------------------
-
-			This method open a travel from a local file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			importTravel : function ( event ) {
-				var fileReader = new FileReader( );
-				fileReader.onload = function ( event ) {
-					try {
-						_ImportFile ( JSON.parse ( fileReader.result ), fileName );
-					}
-					catch ( e ) {
-					}
-				};
-				var fileName = event.target.files [ 0 ].name;
-				fileReader.readAsText ( event.target.files [ 0 ] );
-			},
-			/*
-			--- openTravel method -------------------------------------------------------------------------------------
-
-			This method open a travel from a local file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			openTravel : function ( event ) {
-				var fileReader = new FileReader( );
-				fileReader.onload = function ( event ) {
-					_MapEditor.removeAllObjects ( );
-					_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
-					_TravelNotesData.routeEdition.routeChanged = false;
-					_TravelNotesData.routeEdition.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
-					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-					try {
-						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
-					}
-					catch ( e ) {
-					}
-				};
-				var fileName = event.target.files [ 0 ].name;
-				fileReader.readAsText ( event.target.files [ 0 ] );
-			},
-
-			/*
-			--- openServerTravel method -------------------------------------------------------------------------------
-
-			This method open a travel from a distant file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			openServerTravel : function ( compressedTravel ) {
-				_LoadFile ( compressedTravel, '', true );
-			},
-
-			/*
 			--- confirmClose method ------------------------------------------------------------------------------------------
 
 			This method ask a confirmation to the user
@@ -8323,7 +8367,7 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				this.changeTravelHTML ( true );
+				this.updateRoadBook ( true );
 				if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
 					this.editRoute ( _TravelNotesData.travel.routes.first.objId );
 				}
@@ -8384,7 +8428,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":26,"../core/MapEditor":27,"../core/RouteEditor":29,"../util/Utilities":46,"./ErrorEditor":24,"./MapEditor":27,"./RouteEditor":29,"@mapbox/polyline":1}],32:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":14,"../UI/RouteEditorUI":17,"../UI/Translator":20,"../UI/TravelEditorUI":21,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/RouteEditor":30,"../util/Utilities":47,"./ErrorEditor":24,"./MapEditor":28,"./RouteEditor":30,"@mapbox/polyline":1}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -8803,7 +8847,7 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":35,"../data/Maneuver":36,"../data/Note":37,"../data/Route":40,"../data/WayPoint":44}],33:[function(require,module,exports){
+},{"../data/ItineraryPoint":36,"../data/Maneuver":37,"../data/Note":38,"../data/Route":41,"../data/WayPoint":45}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9021,9 +9065,9 @@ Tests ...
 --- End of Config.js file ---------------------------------------------------------------------------------------------
 */
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":32,"../data/ObjId":38,"../data/ObjType":39,"./Version":43,"dup":3}],35:[function(require,module,exports){
+},{"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40,"./Version":44,"dup":3}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9133,7 +9177,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":38,"../data/ObjType":39,"./Version":43}],36:[function(require,module,exports){
+},{"../data/ObjId":39,"../data/ObjType":40,"./Version":44}],37:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9246,7 +9290,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":38,"../data/ObjType":39,"./Version":43}],37:[function(require,module,exports){
+},{"../data/ObjId":39,"../data/ObjType":40,"./Version":44}],38:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9430,7 +9474,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":38,"../data/ObjType":39,"./Version":43}],38:[function(require,module,exports){
+},{"../data/ObjId":39,"../data/ObjType":40,"./Version":44}],39:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -9490,7 +9534,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9603,11 +9647,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"../data/Collection":32,"../data/Itinerary":34,"../data/ObjId":38,"../data/ObjType":39,"../data/Waypoint":45,"./Itinerary":34,"./Version":43,"dup":4}],41:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":33,"../data/Itinerary":35,"../data/ObjId":39,"../data/ObjType":40,"../data/Waypoint":46,"./Itinerary":35,"./Version":44,"dup":4}],42:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../data/Collection":32,"../data/ObjId":38,"../data/ObjType":39,"./Version":43,"dup":5}],42:[function(require,module,exports){
+},{"../data/Collection":33,"../data/ObjId":39,"../data/ObjType":40,"./Version":44,"dup":5}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9700,9 +9744,9 @@ Tests ...
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */
-},{"../data/Config":33,"../data/Travel":41,"../util/Utilities":46}],43:[function(require,module,exports){
+},{"../data/Config":34,"../data/Travel":42,"../util/Utilities":47}],44:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],44:[function(require,module,exports){
+},{"dup":6}],45:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -9815,9 +9859,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":38,"../data/ObjType":39,"./Version":43}],45:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"../data/ObjId":38,"../data/ObjType":39,"./Version":43,"dup":44}],46:[function(require,module,exports){
+},{"../data/ObjId":39,"../data/ObjType":40,"./Version":44}],46:[function(require,module,exports){
+arguments[4][45][0].apply(exports,arguments)
+},{"../data/ObjId":39,"../data/ObjType":40,"./Version":44,"dup":45}],47:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;

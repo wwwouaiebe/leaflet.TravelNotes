@@ -34,6 +34,7 @@ Changes:
 		- moved JSON.parse, due to use of Promise
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- moving file functions from TravelEditor to the new FileLoader
 Doc reviewed 20170928
 Tests ...
 
@@ -56,14 +57,14 @@ Tests ...
 	var TravelEditor = function ( ) {
 		
 		/*
-		--- _ChangeTravelHTML function --------------------------------------------------------------------------------
+		--- _UpdateRoadBook function --------------------------------------------------------------------------------
 
 		This function changes the HTML page content
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _ChangeTravelHTML = function ( isNewTravel ) {
+		var _UpdateRoadBook = function ( isNewTravel ) {
 
 			if ( ! _haveUnloadCleanStorage ) {
 				window.addEventListener( 
@@ -94,138 +95,6 @@ Tests ...
 		};
 
 		/*
-		--- _ConvertAndDecompressFile function --------------------------------------------------------------------------------
-
-		This function convert old files (.map) and decompress the travel
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ConvertAndDecompressFile  = function ( compressedTravel, fileName  ) {
-			// decompressing the itineraryPoints
-			compressedTravel.routes.forEach ( 
-				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
-					var decompressedItineraryPoints = [];
-					var latLngsCounter = 0;
-					route.itinerary.itineraryPoints.latLngs.forEach (
-						function ( latLng ) {
-							var itineraryPoint = {};
-							itineraryPoint.lat = latLng [ 0 ];
-							itineraryPoint.lng = latLng [ 1 ];
-							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
-							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
-							decompressedItineraryPoints.push ( itineraryPoint );
-							latLngsCounter ++;
-						}
-					);
-					route.itinerary.itineraryPoints = decompressedItineraryPoints;
-				}
-			);
-			return compressedTravel;
-		};
-		
-		/*
-		--- _ImportFile function --------------------------------------------------------------------------------------
-
-		This function import a file content 
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _ImportFile = function ( compressedTravel, fileName ) {
-			// converting and decompressing the file
-			var importData = _ConvertAndDecompressFile ( compressedTravel, fileName );
-			if ( ! importData ) {
-				return;
-			}
-			// ... and transform the data in the correct format
-			var importTravel = require ( '../Data/Travel' ) ( );
-			importTravel.object = importData;
-			
-			// routes are added with their notes
-			var routesIterator = importTravel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				_TravelNotesData.travel.routes.add ( routesIterator.value );
-				_MapEditor.addRoute ( routesIterator.value, true, false, false );
-			}
-			// travel notes are added
-			var notesIterator = importTravel.notes.iterator;
-			while ( ! notesIterator.done ) {
-				_TravelNotesData.travel.notes.add ( notesIterator.value );
-				_MapEditor.addNote ( notesIterator.value, false );
-			}
-			
-			// zoom on the travel
-			_MapEditor.zoomToTravel ( );
-			
-			// updating UI and html page
-			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-			_ChangeTravelHTML ( );
-		
-		};
-		
-		/*
-		--- _LoadFile function ----------------------------------------------------------------------------------------
-
-		This function load a file content 
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _LoadFile = function ( compressedTravel, fileName, readOnly ) {
-
-			// converting and decompressing the file
-			var travel = _ConvertAndDecompressFile ( compressedTravel, fileName );
-			if ( ! travel ) {
-				return;
-			}
-
-			// ... and transform the data in the correct format
-			_TravelNotesData.travel.object = travel;
-
-			// ... travel name = file name
-			if ( '' !== fileName ) {
-				_TravelNotesData.travel.name = fileName.substr ( 0, fileName.lastIndexOf ( '.' ) ) ;
-			}
-
-			_TravelNotesData.travel.readOnly = readOnly;
-			
-			// the map is cleaned
-			_MapEditor.removeAllObjects ( );
-			
-			// routes are added with their notes
-			var routesIterator = _TravelNotesData.travel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				_MapEditor.addRoute ( routesIterator.value, true, false, readOnly );
-			}
-			
-			// travel notes are added
-			var notesIterator = _TravelNotesData.travel.notes.iterator;
-			while ( ! notesIterator.done ) {
-				_MapEditor.addNote ( notesIterator.value, readOnly );
-			}
-			
-			// zoom on the travel
-			_MapEditor.zoomToTravel ( );
-
-			// Editors and HTML pages are filled
-			if ( ! readOnly ) {
-			// Editors and HTML pages are filled
-				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				_ChangeTravelHTML ( );
-			}
-			else {
-				// control is hidden
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
-			}
-			_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : readOnly, name : _TravelNotesData.travel.name } );
-		};
-		
-		/*
 		--- TravelEditor object ---------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
@@ -234,15 +103,15 @@ Tests ...
 		return {
 
 			/*
-			--- changeTravelHTML method -------------------------------------------------------------------------------
+			--- updateRoadBook method -------------------------------------------------------------------------------
 
 			This method changes the HTML page content
 			
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			changeTravelHTML : function ( isNewTravel ) {
-				_ChangeTravelHTML ( isNewTravel );
+			updateRoadBook : function ( isNewTravel ) {
+				_UpdateRoadBook ( isNewTravel );
 			},
 
 			/*
@@ -257,7 +126,7 @@ Tests ...
 				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -300,7 +169,7 @@ Tests ...
 					require ( './RouteEditor' ) ( ).clear ( );
 				}
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -320,7 +189,7 @@ Tests ...
 				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId ) {
 					_TravelNotesData.editedRoute.name = routeName;
 				}
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -335,7 +204,7 @@ Tests ...
 				_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 
 			/*
@@ -350,7 +219,7 @@ Tests ...
 				_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 				_TravelEditorUI.setRoutesList ( );
 				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.changeTravelHTML ( );
+				this.updateRoadBook ( );
 			},
 			
 			/*
@@ -397,65 +266,6 @@ Tests ...
 			},
 
 			/*
-			--- openTravel method -------------------------------------------------------------------------------------
-
-			This method open a travel from a local file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			importTravel : function ( event ) {
-				var fileReader = new FileReader( );
-				fileReader.onload = function ( event ) {
-					try {
-						_ImportFile ( JSON.parse ( fileReader.result ), fileName );
-					}
-					catch ( e ) {
-					}
-				};
-				var fileName = event.target.files [ 0 ].name;
-				fileReader.readAsText ( event.target.files [ 0 ] );
-			},
-			/*
-			--- openTravel method -------------------------------------------------------------------------------------
-
-			This method open a travel from a local file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			openTravel : function ( event ) {
-				var fileReader = new FileReader( );
-				fileReader.onload = function ( event ) {
-					_MapEditor.removeAllObjects ( );
-					_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
-					_TravelNotesData.routeEdition.routeChanged = false;
-					_TravelNotesData.routeEdition.routeInitialObjId = -1;
-					require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
-					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-					try {
-						_LoadFile ( JSON.parse ( fileReader.result ), fileName, false );
-					}
-					catch ( e ) {
-					}
-				};
-				var fileName = event.target.files [ 0 ].name;
-				fileReader.readAsText ( event.target.files [ 0 ] );
-			},
-
-			/*
-			--- openServerTravel method -------------------------------------------------------------------------------
-
-			This method open a travel from a distant file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			openServerTravel : function ( compressedTravel ) {
-				_LoadFile ( compressedTravel, '', true );
-			},
-
-			/*
 			--- confirmClose method ------------------------------------------------------------------------------------------
 
 			This method ask a confirmation to the user
@@ -494,7 +304,7 @@ Tests ...
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				this.changeTravelHTML ( true );
+				this.updateRoadBook ( true );
 				if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
 					this.editRoute ( _TravelNotesData.travel.routes.first.objId );
 				}

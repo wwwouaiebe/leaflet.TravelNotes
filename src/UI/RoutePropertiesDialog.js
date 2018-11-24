@@ -66,7 +66,7 @@ Tests ...
 			require ( '../core/MapEditor' ) ( ).editRoute ( route );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
-			require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			return true;
 		};
 

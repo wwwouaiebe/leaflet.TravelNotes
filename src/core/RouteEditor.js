@@ -234,7 +234,7 @@ Tests ...
 			--- getRouteHTML method -----------------------------------------------------------------------------------
 
 			This method returns an HTML string with the route contents. This string will be used in the
-			route popup and on the HTML page
+			route popup and on the roadbook page
 			
 			parameters:
 			- route : the TravelNotes route object
@@ -333,7 +333,7 @@ Tests ...
 				
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 			
 			/*
@@ -387,7 +387,7 @@ Tests ...
 				_ItineraryEditor.setItinerary ( );
 				// the HTML page is adapted ( depending of the config.... )
 				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).changeTravelHTML ( );
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},
 			
 			/*
@@ -421,10 +421,10 @@ Tests ...
 					return;
 				}
 				// Provider and transit mode are changed in the itinerary editor
-				_ItineraryEditor.setProvider ( providerName );
+				_ItineraryEditor.provider = providerName;
 				var transitMode = initialRoute.itinerary.transitMode;
 				if ( transitMode && '' !== transitMode ) {
-					_ItineraryEditor.setTransitMode ( transitMode );
+					_ItineraryEditor.transitMode = transitMode;
 				}
 				// The edited route is pushed in the editors
 				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
@@ -460,7 +460,7 @@ Tests ...
 			/*
 			--- addWayPoint method ------------------------------------------------------------------------------------
 
-			This method add a waypoint
+			This method add a waypoint 
 			
 			parameters:
 			- latLng : 
