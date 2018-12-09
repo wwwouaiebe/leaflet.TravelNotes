@@ -54,7 +54,12 @@ Tests ...
 			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-			"<p>Version : " + require ( '../data/Version' ) +'.';
+			"<p>Version : " + require ( '../data/Version' ) +'.' +
+			"<p>This program uses:" +
+			" <a href='https://leafletjs.com/' target='_blank'>leaflet</a>," +
+			" <a href='https://github.com/mapbox/polyline' target='_blank'>mapbox/polyline</a>," +
+			" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>Project-OSRM/osrm-text-instructions</a> and " +
+			" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
 		
 		baseDialog.center ( );
 		

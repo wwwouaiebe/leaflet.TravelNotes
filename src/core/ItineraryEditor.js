@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- added search and travel notes panes
 Doc reviewed 20170927
 Tests ...
 
@@ -37,6 +39,8 @@ Tests ...
 		
 		return {
 			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
+			setTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes (  );},
+			setSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setSearch (  );},
 			
 			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
 			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},

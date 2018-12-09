@@ -34,6 +34,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- removing interface
 		- moving file functions from TravelEditor to the new FileLoader
+		- added loading of osmSearch
 
 Doc reviewed 20171001
 Tests ...
@@ -219,6 +220,18 @@ Tests ...
 						values [ 0 ].language = _Langage;
 					}
 					_TravelNotesData.config = values [ 0 ];
+					
+					if ( window.osmSearch ) {
+						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language )
+						.then ( 
+							function ( ) { console.log ( 'Dictionary loaded' ); },
+							function ( error ) { console.log ( error ); }
+						);
+					}
+					else {
+						console.log ( 'osmSearch not found' );
+					}
+
 					_TravelNotesData.providers.forEach (
 						function ( provider ) {
 							provider.userLanguage =  _TravelNotesData.config.language;

@@ -21,6 +21,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+		- added searchData
 Doc reviewed ...
 Tests ...
 
@@ -42,6 +43,7 @@ Tests ...
 			editedRoute : null,
 			routeEdition : Object.seal ( { routeChanged : false, routeInitialObjId : -1 } ),
 			routing : Object.seal ( { provider : '', transitMode : ''} ),
+			searchData : [],
 			UUID : require ( '../util/Utilities' ) ( ).UUID
 		};
 		
@@ -72,6 +74,9 @@ Tests ...
 			get routeEdition ( ) { return _TravelNotesData.routeEdition; },
 			
 			get routing ( ) { return _TravelNotesData.routing; },
+			
+			get searchData ( ) { return _TravelNotesData.searchData; },
+			set searchData ( SearchData ) { _TravelNotesData.searchData = SearchData; },
 
 			get UUID ( ) { return _TravelNotesData.UUID; },
 		};

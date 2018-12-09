@@ -16,6 +16,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- control.css file --------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the control
+Changes:
+	- v1.0.0:
+		- created
+	- v1.4.0:
+		- added css for search and pane buttons
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 /* --- Main settings --- */
 
 #TravelNotes-Control-MainDiv
@@ -113,6 +127,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #TravelNotes-Control-ErrorExpandButton:hover
 {
 	color: red;
+}
+
+.TravelNotes-Control-PaneButton
+{
+	border-style: solid;
+	border-top-width: 0.3em;
+	border-right-width: 0.1em;
+	border-bottom-width: 0.1em;
+	border-left-width: 0.3em;
+	border-color: gray;
+	background-color: lightgray;
+	margin-left: 0.1em;
+}
+
+.TravelNotes-Control-ActivePaneButton
+{
+	background-color: white;
+	border-bottom-color: white;
 }
 
 #TravelNotes-Control-ItineraryButtonsDiv
@@ -334,6 +366,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	height: 40px;
 	min-height: 20px;
 	background-repeat: no-repeat;
+}
+
+/* --- search --- */
+#TravelNotes-Control-SearchInput
+{
+	height: 1.4em;
+	width: calc(100% - 3em) ;
+	margin:0;
+	padding:0;
+}
+#TravelNotes-Control-SearchButton
+{
+	margin-right:0.3em;
+}
+.TravelNotes-Control-SearchResult
+{
+	line-height: 1.2em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	margin: 0.3em;
+}
+.TravelNotes-Control-SearchResult > p
+{
+	margin: 0;
+	padding: 0;
+}
+.TravelNotes-Control-SearchResult > p:first-child
+{
+	text-decoration: underline;
+}
+.TravelNotes-Control-SearchResult:hover
+{
+	background-color:lightgray;
 }
 
 /* --- special texts --- */

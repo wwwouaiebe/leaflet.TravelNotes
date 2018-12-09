@@ -26,6 +26,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 Doc reviewed 20170927
 Tests ...
 
@@ -91,11 +92,37 @@ Tests ...
 				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
 			},
+			
+			/*
+			--- newSearchNote method --------------------------------------------------------------------------------
+
+			This method start the creation of a TravelNotes note object linked to a maneuver
+			
+			parameters:
+			- searchResult : the search results with witch the note will be created
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			newSearchNote : function ( searchResult ) {
+				var note = this.newNote ( [ searchResult.lat, searchResult.lon ] );
+				
+				note.address = ( '' !== searchResult.housenumber ? searchResult.housenumber + ' ' : '' ) +
+					( '' !== searchResult.street ? searchResult.street + ' ' : '' ) +
+					searchResult.city;
+				
+				note.url = searchResult.website;
+				note.phone = searchResult.phone;
+				note.tooltipContent = searchResult.name;
+				note.popupContent = searchResult.name;
+				
+				require ( '../UI/NoteDialog' ) ( note, -1, true );
+			},
 		
 			/*
 			--- newManeuverNote method --------------------------------------------------------------------------------
 
-			This method start the creation f a TravelNotes note object linked to a maneuver
+			This method start the creation of a TravelNotes note object linked to a maneuver
 			
 			parameters:
 			- maneuverObjId : the objId of the maneuver
@@ -157,15 +184,21 @@ Tests ...
 			*/
 
 			endNoteDialog : function ( note, routeObjId ) {
-				if ( _DataSearchEngine.getNoteAndRoute ( note.objId ).note ) {
+				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( note.objId );
+				if ( noteAndRoute.note ) {
 					// it's an existing note. The note is changed on the map
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
+					if ( ! noteAndRoute.route ) {
+						// it's a travel note. UI is also adapted
+						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
+					}
 				}
 				else {
 					// it's a new note
 					if ( -1 === routeObjId ) {
 						// it's a global note
 						_TravelNotesData.travel.notes.add ( note );
+						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
 					}
 					else {
 						// the note is linked with a route, so...
@@ -175,12 +208,12 @@ Tests ...
 						note.chainedDistance = route.chainedDistance;
 						// and the notes sorted
 						route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+						// and in the itinerary is adapted...
+						require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					}
 					// the note is added to the leaflet map
 					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
-				// and in the itinerary is adapted...
-				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},	

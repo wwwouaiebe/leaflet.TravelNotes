@@ -24,6 +24,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
 Doc reviewed ...
 Tests ...
 
@@ -126,6 +127,22 @@ Tests ...
 				radius : 7,
 				fill : false
 			},
+			searchPointMarker : {
+				color : 'green',
+				weight : 4,
+				radius : 20,
+				fill : false
+			},
+			previousSearchLimit : {
+				color : "green",
+				fill : false,
+				weight : 1
+			},
+			nextSearchLimit : {
+				color : "red",
+				fill : false,
+				weight : 1
+			},
 			wayPoint : {
 				reverseGeocoding : false
 			},
@@ -189,6 +206,9 @@ Tests ...
 			get routing ( ) { return _Config.routing; },
 			get language ( ) { return _Config.language; },
 			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
+			get searchPointMarker ( ) { return _Config.searchPointMarker; },
+			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
+			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
 			get wayPoint ( ) { return _Config.wayPoint; },
 			get route ( ) { return _Config.route; },
 			get note ( ) { return _Config.note; },

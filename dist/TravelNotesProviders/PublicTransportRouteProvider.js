@@ -558,14 +558,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 						if ( stopNode ) {
 							
 							var maneuver = L.travelNotes.maneuver;
+							var stopName = null;
 							if ( stopNode.tags && stopNode.tags.name ) {
-								maneuver.instruction = stopNode.tags.name + '&nbsp;:&nbsp;';
+								stopName = stopNode.tags.name;
+								maneuver.instruction = stopName + '&nbsp;:&nbsp;';
 							}
 							if ( stopNode.id === startStop.id ) {
+								if ( stopName ) {
+									route.wayPoints.first.name = stopName;	
+								}
 								maneuver.iconName = 'kTrainStart';
 								maneuver.instruction += 'Monter dans le train';
 							}
 							else if ( stopNode.id === endStop.id ) {
+								if ( stopName ) {
+									route.wayPoints.last.name = stopName;	
+								}
 								maneuver.iconName = 'kTrainEnd';
 								maneuver.instruction += 'Descendre du train';
 							}

@@ -19,6 +19,22 @@
 		"radius":7,
 		"fill":false
 	},
+	"searchPointMarker" : {
+		"color" : "green",
+		"weight" : 4,
+		"radius" : 20,
+		"fill" : false
+	},
+	"previousSearchLimit" : {
+		"color" : "green",
+		"fill" : false,
+		"weight" : 1
+	},
+	"nextSearchLimit" : {
+		"color" : "red",
+		"fill" : false,
+		"weight" : 1
+	},
 	"wayPoint":
 	{
 		"reverseGeocoding":true

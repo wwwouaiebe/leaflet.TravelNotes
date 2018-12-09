@@ -773,6 +773,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- removing interface
+		- moving file functions from TravelEditor to the new FileLoader
 
 Doc reviewed 20171001
 Tests ...
@@ -958,6 +959,18 @@ Tests ...
 						values [ 0 ].language = _Langage;
 					}
 					_TravelNotesData.config = values [ 0 ];
+					
+					if ( window.osmSearch ) {
+						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language )
+						.then ( 
+							function ( ) { console.log ( 'Dictionary loaded' ); },
+							function ( error ) { console.log ( error ); }
+						);
+					}
+					else {
+						console.log ( 'osmSearch not found' );
+					}
+
 					_TravelNotesData.providers.forEach (
 						function ( provider ) {
 							provider.userLanguage =  _TravelNotesData.config.language;
@@ -1195,7 +1208,12 @@ Tests ...
 			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-			"<p>Version : " + require ( '../data/Version' ) +'.';
+			"<p>Version : " + require ( '../data/Version' ) +'.' +
+			"<p>This program uses:" +
+			" <a href='https://leafletjs.com/' target='_blank'>leaflet</a>," +
+			" <a href='https://github.com/mapbox/polyline' target='_blank'>mapbox/polyline</a>," +
+			" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>Project-OSRM/osrm-text-instructions</a> and " +
+			" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
 		
 		baseDialog.center ( );
 		
@@ -1482,7 +1500,7 @@ Tests ...
 }());
 
 /*
---- End of AboutDialog.js file ----------------------------------------------------------------------------------------
+--- End of BaseDialog.js file -----------------------------------------------------------------------------------------
 */
 },{"../UI/Translator":20,"./HTMLElementsFactory":13}],10:[function(require,module,exports){
 /*
@@ -2411,6 +2429,7 @@ Tests ...
 				}, 
 				rowDiv
 			);
+			rowDiv.noteObjId = note.objId;
 		};
 				
 		/*
@@ -2745,9 +2764,14 @@ Tests ...
 	
 	var _Translator = require ( './Translator' ) ( );
 	var _TravelNotesData = require ( '../L.TravelNotes' );
+	var _ActivePaneIndex = -1;
+	var _OsmSearchStarted = false;
+	var _SearchParameters = { searchPhrase : '', bbox : null };
+	var _PreviousSearchRectangleObjId = -1;
+	var _NextSearchRectangleObjId = -1;
 	
 	/*
-	--- onWheel function ----------------------------------------------------------------------------------
+	--- onWheel function ----------------------------------------------------------------------------------------------
 
 	wheel event listener for the data div
 
@@ -2769,6 +2793,7 @@ Tests ...
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
+	/*
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		document.getElementById ( 'TravelNotes-Control-ItineraryHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
@@ -2778,7 +2803,17 @@ Tests ...
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
 		document.getElementById ( 'TravelNotes-Control-ItineraryExpandButton' ).title = hiddenList ? _Translator.getText ( 'ItineraryEditorUI - Show' ) : _Translator.getText ( 'ItineraryEditorUI - Hide' );
 	};
+	*/
 	
+	
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| Itinerary events                          |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
 	/*
 	--- onInstructionClick function -----------------------------------------------------------------------------------
 
@@ -2844,7 +2879,220 @@ Tests ...
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
 	};
+
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| Travel notes events                       |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
+	/*
+	--- onTravelNoteContextMenu function ------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onTravelNoteContextMenu = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
+		var element = clickEvent.target;
+		while ( ! element.noteObjId ) {
+			element = element.parentNode;
+		}
+		require ( '../core/MapEditor' ) ( ).zoomToNote ( element.noteObjId );
+	};
 	
+	/*
+	--- onTravelNoteClick function ------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onTravelNoteClick = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
+		var element = clickEvent.target;
+		while ( ! element.noteObjId ) {
+			element = element.parentNode;
+		}
+		require ( '../core/NoteEditor' ) ( ).editNote ( element.noteObjId );
+	};
+	
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| Search events                             |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
+	/*
+	--- _DrawSearchRectangle function ---------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	
+	var _DrawSearchRectangle = function ( ) {
+		if ( ! _SearchParameters.bbox ) {
+			return;
+		}
+		if ( -1 !== _PreviousSearchRectangleObjId ) {
+			require ( '../core/MapEditor' ) ( ).removeObject ( _PreviousSearchRectangleObjId );
+		}
+		else {
+			_PreviousSearchRectangleObjId = require ( '../data/ObjId' ) ( );
+		}
+		require ( '../core/MapEditor' ) ( ).addRectangle ( _PreviousSearchRectangleObjId, _SearchParameters.bbox , _TravelNotesData.config.previousSearchLimit );
+	};
+	
+	/*
+	--- onSearchSuccess function --------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchSuccess = function ( searchData ) {
+		_TravelNotesData.searchData = searchData;
+		_OsmSearchStarted = false;
+		_DrawSearchRectangle ( );
+		ItineraryEditorUI( ).setSearch ( );
+	};
+	
+	/*
+	--- onSearchError function ----------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchError = function ( error ) {
+		console.log ( error );
+		_OsmSearchStarted = false;
+	};
+	
+	/*
+	--- onSearchInputChange function ----------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchInputChange = function ( event ) {
+		if ( _OsmSearchStarted ) {
+			return;
+		}
+		_OsmSearchStarted = true;
+		_SearchParameters = {
+			bbox : _TravelNotesData.map.getBounds ( ),
+			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
+		};
+		_TravelNotesData.searchData = [];
+		window.osmSearch.getSearchPromise ( _SearchParameters ).then (  onSearchSuccess, onSearchError  );
+	};
+	
+	/*
+	--- _SetSearch function -------------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onMapChange = function ( event ) {
+		var mapCenter = _TravelNotesData.map.getCenter ( );
+		if ( -1 !== _NextSearchRectangleObjId ) {
+			require ( '../core/MapEditor' ) ( ).removeObject ( _NextSearchRectangleObjId );
+		}
+		else {
+			_NextSearchRectangleObjId = require ( '../data/ObjId' ) ( );
+		}
+		require ( '../core/MapEditor' ) ( ).addRectangle ( 
+			_NextSearchRectangleObjId, 
+			L.latLngBounds ( L.latLng ( mapCenter.lat - 0.05, mapCenter.lng - 0.05 ), L.latLng (  mapCenter.lat + 0.05, mapCenter.lng + 0.05 ) ), 
+			_TravelNotesData.config.nextSearchLimit );
+	};
+
+	/*
+	--- onSearchClick function ----------------------------------------------------------------------------------------
+
+	click event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchClick = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		var element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		require ( '../core/MapEditor' ) ( ).zoomToPoint ( element.latLng );
+	};
+	
+	/*
+	--- onSearchContextMenu function ----------------------------------------------------------------------------------
+
+	contextmenu event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchContextMenu = function ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
+		var element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		require ( '../core/NoteEditor' ) ( ).newSearchNote ( element.searchResult );
+	};
+	
+	/*
+	--- onSearchMouseEnter function -----------------------------------------------------------------------------------
+
+	mouseenter event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchMouseEnter = function ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
+	};
+	
+	/*
+	--- onSearchMouseLeave function -----------------------------------------------------------------------------------
+
+	mouseleave event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onSearchMouseLeave = function ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
+	};
+
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| Provider toolbar events                   |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
 	/*
 	--- onClicktransitModeButton function -----------------------------------------------------------------------------
 
@@ -2926,8 +3174,68 @@ Tests ...
 		require ( '../core/RouteEditor' ) ( ).startRouting ( );
 	};
 
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| Pane buttons events                       |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
+	/*
+	--- onClickItineraryPaneButton function -----------------------------------------------------------------------
+
+	This function ...
+
+	---------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onClickItineraryPaneButton = function ( clickEvent ) {
+		ItineraryEditorUI ( ).setItinerary ( );
+	};
+
+	/*
+	--- onClickTravelNotesPaneButton function ---------------------------------------------------------------------
+
+	This function ...
+
+	---------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onClickTravelNotesPaneButton = function ( clickEvent ) {
+		ItineraryEditorUI ( ).setTravelNotes ( );
+	};
+
+	/*
+	--- onClickSearchPaneButton function --------------------------------------------------------------------------
+
+	This function ...
+
+	---------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onClickSearchPaneButton = function ( clickEvent ) {
+		ItineraryEditorUI ( ).setSearch ( );
+	};
+
+	/*
+	+-------------------------------------------+
+	|                                           |
+	| main function                             |
+	|                                           |
+	+-------------------------------------------+
+	*/
+
+	/*
+	--- ItineraryEditorUI function ------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	var ItineraryEditorUI = function ( ) {
+
 
 		/*
 		--- _CreateUI function ----------------------------------------------------------------------------------------
@@ -2948,6 +3256,8 @@ Tests ...
 
 			// header div: expand button and title
 			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+			
+			/*
 			var expandButton = htmlElementsFactory.create ( 'span', { innerHTML : '&#x25bc;', id : 'TravelNotes-Control-ItineraryExpandButton', className : 'TravelNotes-Control-ExpandButton'}, headerDiv );
 			expandButton.addEventListener ( 'click' , onClickExpandButton, false );
 			htmlElementsFactory.create ( 
@@ -2959,10 +3269,46 @@ Tests ...
 				},
 				headerDiv 
 			);
+			*/
+			
+			var itineraryPaneButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					innerHTML : _Translator.getText ( 'ItineraryEditorUI - Itinerary' ), 
+					id : 'TravelNotes-Control-ItineraryPaneButton', 
+					className : 'TravelNotes-Control-PaneButton'
+				},
+				headerDiv 
+			);
+			itineraryPaneButton.addEventListener ( 'click', onClickItineraryPaneButton, false );
+			var travelNotesPaneButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					innerHTML : _Translator.getText ( 'ItineraryEditorUI - Travel notes' ), 
+					id : 'TravelNotes-Control-TravelNotesPaneButton', 
+					className : 'TravelNotes-Control-PaneButton'
+				},
+				headerDiv 
+			);
+			travelNotesPaneButton.addEventListener ( 'click', onClickTravelNotesPaneButton, false );
+			if ( window.osmSearch ) {
+				var searchPaneButton = htmlElementsFactory.create ( 
+					'div', 
+					{ 
+						innerHTML : _Translator.getText ( 'ItineraryEditorUI - Search' ), 
+						id : 'TravelNotes-Control-SearchPaneButton', 
+						className : 'TravelNotes-Control-PaneButton'
+					},
+					headerDiv 
+				);
+				searchPaneButton.addEventListener ( 'click', onClickSearchPaneButton, false );
+			}
 			
 			// data div: currently empty. Will be completed later. See _SetItinerary ( )
 			var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryDataDiv', className : 'TravelNotes-Control-DataDiv'}, controlDiv );
 			dataDiv.addEventListener ( 'wheel', onWheel, false );
+			
+			
 			// buttons div ...
 			var buttonsDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 			
@@ -3074,19 +3420,50 @@ Tests ...
 				);
 			}
 		};
-		
-		/*
-		--- _SetItinerary function ------------------------------------------------------------------------------------
 
-		This function add the itinerary to the UI
+		/*
+		--- _RemoveActivePane function --------------------------------------------------------------------------------
+
+		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _SetItinerary = function ( ) {
+		var _RemoveActivePane = function ( ) {
+			switch ( _ActivePaneIndex ) {
+				case 0:
+					_RemoveItinerary ( );
+					break;
+				case 1:
+					_RemoveTravelNotes ( );
+					break;
+				case 2 :
+					if ( window.osmSearch ) {
+						_RemoveSearch ( );
+					}
+					break;
+				default:
+					break;
+			}
+		};
+		
+		/*
+		+-------------------------------------------+
+		|                                           |
+		| Itinerary functions                       |
+		|                                           |
+		+-------------------------------------------+
+		*/
 
-			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
-			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+		/*
+		--- _RemoveItinerary function ---------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var _RemoveItinerary = function ( ) {
 			
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
@@ -3098,8 +3475,6 @@ Tests ...
 			if ( routeHeader ) {
 				dataDiv.removeChild ( routeHeader );
 			}
-			// and adding the new one
-			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 			
 			// removing previous itinerary
 			var childCounter;
@@ -3117,12 +3492,46 @@ Tests ...
 				}
 				dataDiv.removeChild ( routeManeuversNotesList );
 			}
+		};
+				
+		/*
+		--- _SetItinerary function ------------------------------------------------------------------------------------
+
+		This function add the itinerary to the UI
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _SetItinerary = function ( ) {
 			
-			// and adding the new one
+			_ActivePaneIndex = 0;
+
+			document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			if ( window.osmSearch ) {
+				document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			}
+			
+			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+			
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+			if ( ! dataDiv ) {
+				return;
+			}
+			
+			// adding new header
+			dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
+			
+			
+			// adding new itinerary
 			dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 			
 			// adding event listeners 
-			routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+			var childCounter;
+			var childNodes;
+			var childNode;			
+			var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 			if ( routeManeuversNotesList ) {
 				childNodes = routeManeuversNotesList.childNodes;
 				for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
@@ -3134,16 +3543,244 @@ Tests ...
 				}
 			}
 		};
+		
+		/*
+		+-------------------------------------------+
+		|                                           |
+		| Travel notes functions                    |
+		|                                           |
+		+-------------------------------------------+
+		*/
+
+		/*
+		--- _RemoveTravelNotes function -------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _RemoveTravelNotes = function ( ) {
+
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+			if ( ! dataDiv ) {
+				return;
+			}
+
+			var travelNotesDiv = dataDiv.firstChild;
+			if ( travelNotesDiv ) {
+				travelNotesDiv.childNodes.forEach (
+					function ( childNode  ) {
+						childNode.removeEventListener ( 'click' , onTravelNoteClick, false );
+						childNode.removeEventListener ( 'contextmenu' , onTravelNoteContextMenu, false );
+					}
+				);
+				dataDiv.removeChild ( travelNotesDiv );
+			}
+		};
+		
+		/*
+		--- _SetTravelNotes function ----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var _SetTravelNotes = function ( ) {
+
+			_ActivePaneIndex = 1;
+
+			document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+			if ( window.osmSearch ) {
+				document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			}
+			
+			var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
+			htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+			
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+			if ( ! dataDiv ) {
+				return;
+			}
+			
+			// adding travel notes
+			var travelNotesDiv = htmlViewsFactory.travelNotesHTML;
+			dataDiv.appendChild ( travelNotesDiv );
+			travelNotesDiv.childNodes.forEach (
+				function ( childNode  ) {
+					childNode.addEventListener ( 'click' , onTravelNoteClick, false );
+					childNode.addEventListener ( 'contextmenu' , onTravelNoteContextMenu, false );
+				}
+			);
+		};
+		
+		/*
+		+-------------------------------------------+
+		|                                           |
+		| Search functions                          |
+		|                                           |
+		+-------------------------------------------+
+		*/
+
+		/*
+		--- _RemoveSearch function ------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _RemoveSearch = function ( ) {
+			
+			_TravelNotesData.map.off ( 'zoom', onMapChange );
+			_TravelNotesData.map.off ( 'move', onMapChange );
+			if ( -1 !== _NextSearchRectangleObjId ) {
+				require ( '../core/MapEditor' ) ( ).removeObject ( _NextSearchRectangleObjId );
+				_NextSearchRectangleObjId = -1;
+			}
+			if ( -1 !== _PreviousSearchRectangleObjId ) {
+				require ( '../core/MapEditor' ) ( ).removeObject ( _PreviousSearchRectangleObjId );
+				_PreviousSearchRectangleObjId = -1;
+			}
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+			if ( ! dataDiv ) {
+				return;
+			}
+			var searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
+			if ( searchInputElement ) {
+				searchInputElement.removeEventListener ( 'change', onSearchInputChange, false );
+			}
+			var searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+			
+			var searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+			
+			Array.prototype.forEach.call ( 
+				searchResultsElements,
+				function ( searchResultsElement ) {
+					searchResultsElement.removeEventListener ( 'click' , onSearchClick );
+					searchResultsElement.removeEventListener ( 'contextmenu' , onSearchContextMenu, false );
+					searchResultsElement.removeEventListener ( 'mouseenter' , onSearchMouseEnter, false );
+					searchResultsElement.removeEventListener ( 'mouseleave' , onSearchMouseLeave, false );
+				}
+			);
+			
+			if ( searchDiv ) {
+				dataDiv.removeChild ( searchDiv );
+			}
+		};
+		
+		/*
+		--- _SetSearch function ---------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var _SetSearch = function ( ) {
+			
+			_ActivePaneIndex = 2;
+
+			document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+
+			_TravelNotesData.map.on ( 'zoom', onMapChange );
+			_TravelNotesData.map.on ( 'move', onMapChange );
+			onMapChange ( );
+			_DrawSearchRectangle ( );
+			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+			if ( ! dataDiv ) {
+				return;
+			}
+			
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+			var searchDiv = htmlElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-Control-SearchDiv'
+				},
+				dataDiv
+			);
+			var searchButton = htmlElementsFactory.create (
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-SearchButton',
+					className: 'TravelNotes-Control-Button', 
+					title : _Translator.getText ( 'ItineraryEditorUI - Search OpenStreetMap' ), 
+					innerHTML : '&#x1f50e'
+				},
+				searchDiv 
+			);
+			searchButton.addEventListener ( 'click', onSearchInputChange, false );
+
+			var searchInput = htmlElementsFactory.create ( 
+				'input', 
+				{ 
+					type : 'text', 
+					id : 'TravelNotes-Control-SearchInput', 
+					placeholder : _Translator.getText ( 'ItineraryEditorUI - Search phrase' ),
+					value: _SearchParameters.searchPhrase
+				},
+				searchDiv 
+			);
+			searchInput.addEventListener ( 'change', onSearchInputChange, false );
+			searchInput.focus ( );
+			var resultsCounter = 0;
+			_TravelNotesData.searchData.forEach ( 
+				function ( searchResult ) {
+					var searchResultDiv = htmlElementsFactory.create (
+						'div',
+						{
+							id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
+							className :	'TravelNotes-Control-SearchResult',
+							innerHTML : ( searchResult.description != '' ? '<p class=\'TravelNotes-Control-SearchResultDescription\'>' + searchResult.description + '</p>' : '' ) +
+								( searchResult.name != '' ?  '<p>' + searchResult.name + '</p>' : '' ) +
+								( searchResult.street != '' ? '<p>' + searchResult.street + ' ' + searchResult.housenumber +'</p>' : '' ) +
+								( searchResult.city != '' ? '<p>' + searchResult.postcode + ' ' + searchResult.city +'</p>' : '' ) +
+								( searchResult.phone != '' ? '<p>' + searchResult.phone + '</p>' : '' ) +
+								( searchResult.email != '' ? '<p><a href=\'mailto:' + searchResult.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
+								( searchResult.website != '' ? '<p><a href=\''+ searchResult.website +'\' target=\'_blank\'>' + searchResult.website + '</a></p>' : '' ) +
+								( searchResult.ranking ? '<p>&#x26ab;' + searchResult.ranking + '</p>' : '' )
+						},
+						searchDiv
+					);
+					searchResultDiv.searchResult = searchResult;
+					searchResultDiv.objId = require ( '../data/ObjId' ) ( );
+					searchResultDiv.osmId = searchResult.id;
+					searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
+					searchResultDiv.addEventListener ( 'click' , onSearchClick, false );
+					searchResultDiv.addEventListener ( 'contextmenu' , onSearchContextMenu, false );
+					searchResultDiv.addEventListener ( 'mouseenter' , onSearchMouseEnter, false );
+					searchResultDiv.addEventListener ( 'mouseleave' , onSearchMouseLeave, false );
+				}
+			);	
+		};
+
 		/* 
 		--- ItineraryEditorUI object ----------------------------------------------------------------------------------
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
+		
 		return {
 			createUI : function ( controlDiv ) { 
 				_CreateUI ( controlDiv ); 
 			},
-			setItinerary : function ( ) { _SetItinerary ( ); },
+			setItinerary : function ( ) { 
+				_RemoveActivePane ( );
+				_SetItinerary ( );
+			},
+			setTravelNotes : function ( ) { 
+				_RemoveActivePane ( );
+				_SetTravelNotes ( );
+			},
+			setSearch : function ( ) { 
+				_RemoveActivePane ( );
+				_SetSearch ( );
+			},
 			get provider ( ) { return _TravelNotesData.routing.provider;},
 			set provider ( providerName ) {
 				 var button = document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' );
@@ -3172,9 +3809,9 @@ Tests ...
 }());
 
 /*
---- End of ItineraryEditorUI.js file --------------------------------------------------------------------------------
+--- End of ItineraryEditorUI.js file ----------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":14,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/RouteEditor":30,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":14,"../core/MapEditor":28,"../core/NoteEditor":29,"../core/RouteEditor":30,"../data/ObjId":39,"./HTMLElementsFactory":13,"./Translator":20}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5747,6 +6384,8 @@ Tests ...
 		
 		return {
 			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
+			setTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes (  );},
+			setSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setSearch (  );},
 			
 			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
 			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
@@ -6113,9 +6752,23 @@ Tests ...
 			*/
 
 			zoomToPoint : function ( latLng ) {
-				map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
+				_TravelNotesData.map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
 			},
 			
+			/*
+			--- zoomToRoute method ------------------------------------------------------------------------------------
+
+			This method zoom on a note
+
+			parameters:
+			- noteObjId : the TravelNotes objId of the desired note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			zoomToNote : function ( noteObjId ) {
+				this.zoomToPoint ( _DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
+			},
 			
 			/*
 			--- zoomToRoute method ------------------------------------------------------------------------------------
@@ -6178,6 +6831,32 @@ Tests ...
 				_AddTo ( 
 					objId,
 					L.circleMarker ( latLng, _TravelNotesData.config.itineraryPointMarker )
+				);
+			},
+			
+			addRectangle : function( objId, bounds, properties ) {
+				_AddTo (
+					objId,
+					L.rectangle ( bounds, properties )
+				);
+			},
+			
+			/*
+			--- addSearchPointMarker method ---------------------------------------------------------------------------
+
+			This method add a leaflet circleMarker at a given point
+			
+			parameters:
+			- objId : a unique identifier to attach to the circleMarker
+			- latLng : the center of the circleMarker
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			addSearchPointMarker : function ( objId, latLng ) {
+				_AddTo ( 
+					objId,
+					L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker )
 				);
 			},
 			
@@ -6557,11 +7236,37 @@ Tests ...
 				// and displayed in a dialog box
 				require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
 			},
+			
+			/*
+			--- newSearchNote method --------------------------------------------------------------------------------
+
+			This method start the creation of a TravelNotes note object linked to a maneuver
+			
+			parameters:
+			- searchResult : the search results with witch the note will be created
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			newSearchNote : function ( searchResult ) {
+				var note = this.newNote ( [ searchResult.lat, searchResult.lon ] );
+				
+				note.address = ( '' !== searchResult.housenumber ? searchResult.housenumber + ' ' : '' ) +
+					( '' !== searchResult.street ? searchResult.street + ' ' : '' ) +
+					searchResult.city;
+				
+				note.url = searchResult.website;
+				note.phone = searchResult.phone;
+				note.tooltipContent = searchResult.name;
+				note.popupContent = searchResult.name;
+				
+				require ( '../UI/NoteDialog' ) ( note, -1, true );
+			},
 		
 			/*
 			--- newManeuverNote method --------------------------------------------------------------------------------
 
-			This method start the creation f a TravelNotes note object linked to a maneuver
+			This method start the creation of a TravelNotes note object linked to a maneuver
 			
 			parameters:
 			- maneuverObjId : the objId of the maneuver
@@ -6623,15 +7328,21 @@ Tests ...
 			*/
 
 			endNoteDialog : function ( note, routeObjId ) {
-				if ( _DataSearchEngine.getNoteAndRoute ( note.objId ).note ) {
+				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( note.objId );
+				if ( noteAndRoute.note ) {
 					// it's an existing note. The note is changed on the map
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
+					if ( ! noteAndRoute.route ) {
+						// it's a travel note. UI is also adapted
+						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
+					}
 				}
 				else {
 					// it's a new note
 					if ( -1 === routeObjId ) {
 						// it's a global note
 						_TravelNotesData.travel.notes.add ( note );
+						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
 					}
 					else {
 						// the note is linked with a route, so...
@@ -6641,12 +7352,12 @@ Tests ...
 						note.chainedDistance = route.chainedDistance;
 						// and the notes sorted
 						route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+						// and in the itinerary is adapted...
+						require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 					}
 					// the note is added to the leaflet map
 					require ( '../core/MapEditor' ) ( ).addNote ( note );
 				}
-				// and in the itinerary is adapted...
-				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			},	
@@ -6902,7 +7613,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/RouteEditor":30,"../core/TravelEditor":32,"../data/Note":38,"../util/Utilities":47}],30:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ItineraryEditorUI":15,"../UI/NoteDialog":16,"../UI/Translator":20,"../core/ItineraryEditor":27,"../core/MapEditor":28,"../core/RouteEditor":30,"../core/TravelEditor":32,"../data/Note":38,"../util/Utilities":47}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8976,6 +9687,22 @@ Tests ...
 				radius : 7,
 				fill : false
 			},
+			searchPointMarker : {
+				color : 'green',
+				weight : 4,
+				radius : 20,
+				fill : false
+			},
+			previousSearchLimit : {
+				color : "green",
+				fill : false,
+				weight : 1
+			},
+			nextSearchLimit : {
+				color : "red",
+				fill : false,
+				weight : 1
+			},
 			wayPoint : {
 				reverseGeocoding : false
 			},
@@ -9039,6 +9766,9 @@ Tests ...
 			get routing ( ) { return _Config.routing; },
 			get language ( ) { return _Config.language; },
 			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
+			get searchPointMarker ( ) { return _Config.searchPointMarker; },
+			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
+			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
 			get wayPoint ( ) { return _Config.wayPoint; },
 			get route ( ) { return _Config.route; },
 			get note ( ) { return _Config.note; },
@@ -9696,6 +10426,7 @@ Tests ...
 			editedRoute : null,
 			routeEdition : Object.seal ( { routeChanged : false, routeInitialObjId : -1 } ),
 			routing : Object.seal ( { provider : '', transitMode : ''} ),
+			searchData : [],
 			UUID : require ( '../util/Utilities' ) ( ).UUID
 		};
 		
@@ -9726,6 +10457,9 @@ Tests ...
 			get routeEdition ( ) { return _TravelNotesData.routeEdition; },
 			
 			get routing ( ) { return _TravelNotesData.routing; },
+			
+			get searchData ( ) { return _TravelNotesData.searchData; },
+			set searchData ( SearchData ) { _TravelNotesData.searchData = SearchData; },
 
 			get UUID ( ) { return _TravelNotesData.UUID; },
 		};

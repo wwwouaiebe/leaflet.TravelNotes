@@ -30,6 +30,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- added zoomToNote, addRectangle and addSearchPointMarker methods
 Doc reviewed 20170927
 Tests ...
 
@@ -341,9 +342,23 @@ Tests ...
 			*/
 
 			zoomToPoint : function ( latLng ) {
-				map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
+				_TravelNotesData.map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
 			},
 			
+			/*
+			--- zoomToNote method ------------------------------------------------------------------------------------
+
+			This method zoom on a note
+
+			parameters:
+			- noteObjId : the TravelNotes objId of the desired note
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			zoomToNote : function ( noteObjId ) {
+				this.zoomToPoint ( _DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
+			},
 			
 			/*
 			--- zoomToRoute method ------------------------------------------------------------------------------------
@@ -406,6 +421,32 @@ Tests ...
 				_AddTo ( 
 					objId,
 					L.circleMarker ( latLng, _TravelNotesData.config.itineraryPointMarker )
+				);
+			},
+			
+			addRectangle : function( objId, bounds, properties ) {
+				_AddTo (
+					objId,
+					L.rectangle ( bounds, properties )
+				);
+			},
+			
+			/*
+			--- addSearchPointMarker method ---------------------------------------------------------------------------
+
+			This method add a leaflet circleMarker at a given point
+			
+			parameters:
+			- objId : a unique identifier to attach to the circleMarker
+			- latLng : the center of the circleMarker
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+			
+			addSearchPointMarker : function ( objId, latLng ) {
+				_AddTo ( 
+					objId,
+					L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker )
 				);
 			},
 			

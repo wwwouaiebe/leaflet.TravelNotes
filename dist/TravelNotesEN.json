@@ -68,12 +68,33 @@
 		"msgstr" : "Hide"
 	},
 	{
+		"msgid" : "ItineraryEditorUI - Itinerary",
+		"msgstr" : "Itinerary"
+	},
+	{
 		"msgid" : "ItineraryEditorUI - Itinerary and notes",
 		"msgstr" : "Itinerary and notes"
 	},
 	{
+		"msgid" : "ItineraryEditorUI - Search",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Search OpenStreetMap",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Search phrase",
+		"msgstr" : "Search words"
+	},
+
+	{
 		"msgid" : "ItineraryEditorUI - Show",
 		"msgstr" : "Show"
+	},
+	{
+		"msgid" : "ItineraryEditorUI - Travel notes",
+		"msgstr" : "Travel notes"
 	},
 	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
