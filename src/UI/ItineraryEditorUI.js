@@ -45,6 +45,7 @@ Tests ...
 	var _SearchParameters = { searchPhrase : '', bbox : null };
 	var _PreviousSearchRectangleObjId = -1;
 	var _NextSearchRectangleObjId = -1;
+	var _SearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 	
 	/*
 	--- onWheel function ----------------------------------------------------------------------------------------------
@@ -226,7 +227,10 @@ Tests ...
 		else {
 			_PreviousSearchRectangleObjId = require ( '../data/ObjId' ) ( );
 		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( _PreviousSearchRectangleObjId, _SearchParameters.bbox , _TravelNotesData.config.previousSearchLimit );
+		require ( '../core/MapEditor' ) ( ).addRectangle ( 
+			_PreviousSearchRectangleObjId, 
+			L.latLngBounds ( _SearchParameters.bbox.southWest, _SearchParameters.bbox.northEast ) , 
+			_TravelNotesData.config.previousSearchLimit );
 	};
 	
 	/*
@@ -270,8 +274,9 @@ Tests ...
 			return;
 		}
 		_OsmSearchStarted = true;
+		var mapBounds =  _TravelNotesData.map.getBounds ( );
 		_SearchParameters = {
-			bbox : _TravelNotesData.map.getBounds ( ),
+			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};
 		_TravelNotesData.searchData = [];
@@ -296,7 +301,7 @@ Tests ...
 		}
 		require ( '../core/MapEditor' ) ( ).addRectangle ( 
 			_NextSearchRectangleObjId, 
-			L.latLngBounds ( L.latLng ( mapCenter.lat - 0.05, mapCenter.lng - 0.05 ), L.latLng (  mapCenter.lat + 0.05, mapCenter.lng + 0.05 ) ), 
+			L.latLngBounds ( L.latLng ( mapCenter.lat - _SearchLimits.lat, mapCenter.lng - _SearchLimits.lng ), L.latLng (  mapCenter.lat + _SearchLimits.lat, mapCenter.lng + _SearchLimits.lng ) ), 
 			_TravelNotesData.config.nextSearchLimit );
 	};
 

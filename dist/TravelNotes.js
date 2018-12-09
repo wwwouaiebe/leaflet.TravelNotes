@@ -774,6 +774,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- removing interface
 		- moving file functions from TravelEditor to the new FileLoader
+		- added loading of osmSearch
 
 Doc reviewed 20171001
 Tests ...
@@ -2381,6 +2382,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- Added noteObjId in the _AddNoteHTML function
 Doc reviewed 20170929
 Tests ...
 
@@ -2769,6 +2771,7 @@ Tests ...
 	var _SearchParameters = { searchPhrase : '', bbox : null };
 	var _PreviousSearchRectangleObjId = -1;
 	var _NextSearchRectangleObjId = -1;
+	var _SearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 	
 	/*
 	--- onWheel function ----------------------------------------------------------------------------------------------
@@ -2950,7 +2953,10 @@ Tests ...
 		else {
 			_PreviousSearchRectangleObjId = require ( '../data/ObjId' ) ( );
 		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( _PreviousSearchRectangleObjId, _SearchParameters.bbox , _TravelNotesData.config.previousSearchLimit );
+		require ( '../core/MapEditor' ) ( ).addRectangle ( 
+			_PreviousSearchRectangleObjId, 
+			L.latLngBounds ( _SearchParameters.bbox.southWest, _SearchParameters.bbox.northEast ) , 
+			_TravelNotesData.config.previousSearchLimit );
 	};
 	
 	/*
@@ -2994,8 +3000,9 @@ Tests ...
 			return;
 		}
 		_OsmSearchStarted = true;
+		var mapBounds =  _TravelNotesData.map.getBounds ( );
 		_SearchParameters = {
-			bbox : _TravelNotesData.map.getBounds ( ),
+			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};
 		_TravelNotesData.searchData = [];
@@ -3020,7 +3027,7 @@ Tests ...
 		}
 		require ( '../core/MapEditor' ) ( ).addRectangle ( 
 			_NextSearchRectangleObjId, 
-			L.latLngBounds ( L.latLng ( mapCenter.lat - 0.05, mapCenter.lng - 0.05 ), L.latLng (  mapCenter.lat + 0.05, mapCenter.lng + 0.05 ) ), 
+			L.latLngBounds ( L.latLng ( mapCenter.lat - _SearchLimits.lat, mapCenter.lng - _SearchLimits.lng ), L.latLng (  mapCenter.lat + _SearchLimits.lat, mapCenter.lng + _SearchLimits.lng ) ), 
 			_TravelNotesData.config.nextSearchLimit );
 	};
 
@@ -6370,6 +6377,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- added search and travel notes panes
 Doc reviewed 20170927
 Tests ...
 
@@ -6441,6 +6450,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- added zoomToNote, addRectangle and addSearchPointMarker methods
 Doc reviewed 20170927
 Tests ...
 
@@ -6756,7 +6766,7 @@ Tests ...
 			},
 			
 			/*
-			--- zoomToRoute method ------------------------------------------------------------------------------------
+			--- zoomToNote method ------------------------------------------------------------------------------------
 
 			This method zoom on a note
 
@@ -7171,6 +7181,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 Doc reviewed 20170927
 Tests ...
 
@@ -9585,6 +9596,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
 Doc reviewed ...
 Tests ...
 
@@ -10405,6 +10417,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+		- added searchData
 Doc reviewed ...
 Tests ...
 
