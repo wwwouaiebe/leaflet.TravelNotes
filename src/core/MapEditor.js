@@ -30,7 +30,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-		- added zoomToNote, addRectangle and addSearchPointMarker methods
+		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
 Doc reviewed 20170927
 Tests ...
 
@@ -424,6 +424,19 @@ Tests ...
 				);
 			},
 			
+			/*
+			--- addRectangle method -----------------------------------------------------------------------------------
+
+			This method draw a rectangle on the map
+			
+			parameters:
+			- objId : a unique identifier to attach to the rectangle
+			- bounds : the lower left and upper right corner of the rectangle ( see leaflet docs )
+			- properties : the properties of the rectangle 
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
 			addRectangle : function( objId, bounds, properties ) {
 				_AddTo (
 					objId,
@@ -508,7 +521,22 @@ Tests ...
 					}
 				);
 			},
-			
+
+			/*
+			--- redrawNote method -------------------------------------------------------------------------------------
+
+			This method redraw a note object on the leaflet map
+
+			parameters:
+			- note : a TravelNotes note object
+
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			redrawNote : function  ( note ) {
+				this.removeObject ( note.objId );
+				this.addNote ( note );
+			},
 			
 			/*
 			--- addNote method ----------------------------------------------------------------------------------------

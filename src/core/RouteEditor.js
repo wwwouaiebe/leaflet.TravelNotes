@@ -33,6 +33,8 @@ Changes:
 		- added cutRoute method (not tested...)
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- modified getClosestLatLngDistance to avoid crash on empty routes
+		- fixed issue #45
 Doc reviewed 20170928
 Tests ...
 
@@ -130,6 +132,9 @@ Tests ...
 
 			getClosestLatLngDistance : function ( route, latLng ) {
 				
+				if ( 0 === route.itinerary.itineraryPoints.length ) {
+					return null;
+				}
 				// an iterator on the route points is created...
 				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
 				// ... and placed on the first point

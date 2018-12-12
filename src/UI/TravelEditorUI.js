@@ -30,6 +30,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
+		- modified event listener for cancel travel button ( issue #45 )
 Doc reviewed 20170930
 Tests ...
 
@@ -100,6 +101,15 @@ Tests ...
 		}
 	};
 
+	var onCancelTravelClick = function ( clickEvent ) {
+		clickEvent.stopPropagation();
+		require ( '../core/TravelEditor' ) ( ).clear ( );
+		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
+			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+		}
+		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+	};
+				
 	var TravelEditorUI = function ( ) {
 				
 		/*
@@ -257,14 +267,7 @@ Tests ...
 				},
 				buttonsDiv 
 			);
-			cancelTravelButton.addEventListener ( 
-				'click', 
-				function ( clickEvent ) {
-					clickEvent.stopPropagation();
-					require ( '../core/TravelEditor' ) ( ).clear ( );
-				}, 
-				false
-			);
+			cancelTravelButton.addEventListener ( 'click', onCancelTravelClick, false );
 
 			// save travel button
 			var saveTravelButton = htmlElementsFactory.create ( 
@@ -300,7 +303,7 @@ Tests ...
 				{
 					id : 'TravelNotes-Control-OpenTravelInput', 
 					type : 'file',
-					accept : '.trv,.map'
+					accept : '.trv'
 				},
 				openTravelDiv
 			);
@@ -308,6 +311,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 					require ( '../core/FileLoader' ) ( ).openLocalFile ( clickEvent );
 				},
 				false 

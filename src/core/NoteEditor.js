@@ -27,6 +27,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
+		- addedattachNoteToRoute and detachNoteFromRoute methods
 Doc reviewed 20170927
 Tests ...
 
@@ -43,6 +44,81 @@ Tests ...
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var NoteEditor = function ( ) {
+		
+		/*
+		--- _AttachNoteToRoute function -------------------------------------------------------------------------------
+
+		This function transform a travel note into a route note ( when possible )
+		
+		parameters:
+		- noteObjId : the objId of the note to transform
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _AttachNoteToRoute = function ( noteObjId ) {
+			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+			var distance = 999999999;
+			var selectedRoute = null;
+			var attachPoint = null;
+			
+			_TravelNotesData.travel.routes.forEach ( 
+				function ( route ) {
+					var pointAndDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
+					if ( pointAndDistance ) {
+						var distanceToRoute = L.latLng ( noteAndRoute.note.latLng ).distanceTo ( L.latLng ( pointAndDistance.latLng ) );
+						if ( distanceToRoute < distance ) {
+							distance = distanceToRoute;
+							selectedRoute = route;
+							attachPoint = pointAndDistance.latLng;
+						}
+					}
+				}
+			);
+			
+			if ( selectedRoute ) {
+				_TravelNotesData.travel.notes.remove (  noteObjId );
+				noteAndRoute.note.distance = distance;
+				noteAndRoute.note.latLng = attachPoint;
+				noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
+
+				// ... the chainedDistance is adapted...
+				selectedRoute.notes.add ( noteAndRoute.note );
+				// and the notes sorted
+				selectedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+
+				require ( '../core/MapEditor' ) ( ).redrawNote ( noteAndRoute.note );
+				require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
+				require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+				// and the HTML page is adapted
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+			}
+		};
+
+		/*
+		--- _DetachNoteFromRoute function -----------------------------------------------------------------------------
+
+		This function transform a route note into a travel note
+		
+		parameters:
+		- noteObjId : the objId of the note to transform
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var _DetachNoteFromRoute = function ( noteObjId ) {
+			// the note and the route are searched
+			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+			noteAndRoute.route.notes.remove ( noteObjId );
+			noteAndRoute.note.distance = -1;
+			noteAndRoute.note.chainedDistance = 0;
+			_TravelNotesData.travel.notes.add ( noteAndRoute.note );
+			
+			require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
+			require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+			// and the HTML page is adapted
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
 		
 		return {	
 		
@@ -398,8 +474,22 @@ Tests ...
 					} 
 				);
 				
+				var route = _DataSearchEngine.getNoteAndRoute ( noteObjId ).route;
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : route ?  _Translator.getText ( "NoteEditor - Detach note from route" ) : _Translator.getText ( "NoteEditor - Attach note to route" ), 
+						action : ( ( -1 === _TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? this.detachNoteFromRoute : this.attachNoteToRoute ) : null ),
+						param : noteObjId
+					} 
+				);
+				
 				return contextMenu;
 			},
+			
+			attachNoteToRoute : function ( noteObjId ) { _AttachNoteToRoute ( noteObjId ); },
+			
+			detachNoteFromRoute : function ( noteObjId ) { _DetachNoteFromRoute ( noteObjId ); },
 			
 			/*
 			--- getNoteHTML method ------------------------------------------------------------------------------------

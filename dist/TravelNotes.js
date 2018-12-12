@@ -3780,9 +3780,21 @@ Tests ...
 				_RemoveActivePane ( );
 				_SetItinerary ( );
 			},
+			updateItinerary : function ( ) {
+				if ( 0 === _ActivePaneIndex ) {
+					_RemoveItinerary ( );
+					_SetItinerary ( );
+				}
+			},
 			setTravelNotes : function ( ) { 
 				_RemoveActivePane ( );
 				_SetTravelNotes ( );
+			},
+			updateTravelNotes : function ( ) {
+				if ( 1 === _ActivePaneIndex ) {
+					_RemoveTravelNotes ( );
+					_SetTravelNotes ( );
+				}
 			},
 			setSearch : function ( ) { 
 				_RemoveActivePane ( );
@@ -5431,6 +5443,15 @@ Tests ...
 		}
 	};
 
+	var onCancelTravelClick = function ( clickEvent ) {
+		clickEvent.stopPropagation();
+		require ( '../core/TravelEditor' ) ( ).clear ( );
+		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
+			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+		}
+		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+	};
+				
 	var TravelEditorUI = function ( ) {
 				
 		/*
@@ -5588,14 +5609,7 @@ Tests ...
 				},
 				buttonsDiv 
 			);
-			cancelTravelButton.addEventListener ( 
-				'click', 
-				function ( clickEvent ) {
-					clickEvent.stopPropagation();
-					require ( '../core/TravelEditor' ) ( ).clear ( );
-				}, 
-				false
-			);
+			cancelTravelButton.addEventListener ( 'click', onCancelTravelClick, false );
 
 			// save travel button
 			var saveTravelButton = htmlElementsFactory.create ( 
@@ -5631,7 +5645,7 @@ Tests ...
 				{
 					id : 'TravelNotes-Control-OpenTravelInput', 
 					type : 'file',
-					accept : '.trv,.map'
+					accept : '.trv'
 				},
 				openTravelDiv
 			);
@@ -5639,6 +5653,7 @@ Tests ...
 				'change', 
 				function ( clickEvent ) {
 					clickEvent.stopPropagation ( );
+					require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 					require ( '../core/FileLoader' ) ( ).openLocalFile ( clickEvent );
 				},
 				false 
@@ -5836,7 +5851,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/FileLoader":25,"../core/TravelEditor":32,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/FileLoader":25,"../core/RouteEditor":30,"../core/TravelEditor":32,"./HTMLElementsFactory":13,"./SortableList":19,"./Translator":20}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6395,6 +6410,9 @@ Tests ...
 			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
 			setTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes (  );},
 			setSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setSearch (  );},
+			updateItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateItinerary (  );},
+			updateTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateTravelNotes (  );},
+			updateSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateSearch (  );},
 			
 			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
 			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
@@ -6928,7 +6946,12 @@ Tests ...
 					}
 				);
 			},
-			
+
+
+			redrawNote : function  ( note ) {
+				this.removeObject ( note.objId );
+				this.addNote ( note );
+			},
 			
 			/*
 			--- addNote method ----------------------------------------------------------------------------------------
@@ -7198,6 +7221,59 @@ Tests ...
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	
 	var NoteEditor = function ( ) {
+		
+		var _AttachNoteToRoute = function ( noteObjId ) {
+			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+			var distance = 999999999;
+			var selectedRoute = null;
+			var attachPoint = null;
+			
+			_TravelNotesData.travel.routes.forEach ( 
+				function ( route ) {
+					var pointAndDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
+					if ( pointAndDistance ) {
+						var distanceToRoute = L.latLng ( noteAndRoute.note.latLng ).distanceTo ( L.latLng ( pointAndDistance.latLng ) );
+						if ( distanceToRoute < distance ) {
+							distance = distanceToRoute;
+							selectedRoute = route;
+							attachPoint = pointAndDistance.latLng;
+						}
+					}
+				}
+			);
+			
+			_TravelNotesData.travel.notes.remove (  noteObjId );
+			if ( selectedRoute ) {
+				noteAndRoute.note.distance = distance;
+				noteAndRoute.note.latLng = attachPoint;
+				noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
+
+				// ... the chainedDistance is adapted...
+				selectedRoute.notes.add ( noteAndRoute.note );
+				// and the notes sorted
+				selectedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+
+				require ( '../core/MapEditor' ) ( ).redrawNote ( noteAndRoute.note );
+				require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
+				require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+				// and the HTML page is adapted
+				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+			}
+		};
+
+		var _DetachNoteFromRoute = function ( noteObjId ) {
+			// the note and the route are searched
+			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+			noteAndRoute.route.notes.remove ( noteObjId );
+			noteAndRoute.note.distance = -1;
+			noteAndRoute.note.chainedDistance = 0;
+			_TravelNotesData.travel.notes.add ( noteAndRoute.note );
+			
+			require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
+			require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+			// and the HTML page is adapted
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
 		
 		return {	
 		
@@ -7553,8 +7629,22 @@ Tests ...
 					} 
 				);
 				
+				var route = _DataSearchEngine.getNoteAndRoute ( noteObjId ).route;
+				contextMenu.push ( 
+					{ 
+						context : this, 
+						name : route ?  _Translator.getText ( "NoteEditor - Detach note from route" ) : _Translator.getText ( "NoteEditor - Attach note to route" ), 
+						action : ( ( -1 === _TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? this.detachNoteFromRoute : this.attachNoteToRoute ) : null ),
+						param : noteObjId
+					} 
+				);
+				
 				return contextMenu;
 			},
+			
+			attachNoteToRoute : function ( noteObjId ) { _AttachNoteToRoute ( noteObjId ); },
+			
+			detachNoteFromRoute : function ( noteObjId ) { _DetachNoteFromRoute ( noteObjId ); },
 			
 			/*
 			--- getNoteHTML method ------------------------------------------------------------------------------------
@@ -7757,6 +7847,9 @@ Tests ...
 
 			getClosestLatLngDistance : function ( route, latLng ) {
 				
+				if ( 0 === route.itinerary.itineraryPoints.length ) {
+					return null;
+				}
 				// an iterator on the route points is created...
 				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
 				// ... and placed on the first point
@@ -9079,7 +9172,6 @@ Tests ...
 				{
 					return;
 				}
-				_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
 				_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
 				_TravelNotesData.routeEdition.routeChanged = false;
@@ -9090,9 +9182,6 @@ Tests ...
 				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.updateRoadBook ( true );
-				if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
-					this.editRoute ( _TravelNotesData.travel.routes.first.objId );
-				}
 			},
 
 			/*

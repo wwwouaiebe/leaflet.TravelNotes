@@ -294,7 +294,6 @@ Tests ...
 				{
 					return;
 				}
-				_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				_MapEditor.removeAllObjects ( );
 				_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
 				_TravelNotesData.routeEdition.routeChanged = false;
@@ -305,9 +304,6 @@ Tests ...
 				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
 				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
 				this.updateRoadBook ( true );
-				if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
-					this.editRoute ( _TravelNotesData.travel.routes.first.objId );
-				}
 			},
 
 			/*

@@ -145,8 +145,16 @@
 		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
 	},
 	{
+		"msgid" : "NoteEditor - Attach note to route",
+		"msgstr" : "transform to route note"
+	},
+	{
 		"msgid" : "NoteEditor - Delete this note",
 		"msgstr" : "Delete this note"
+	},
+	{
+		"msgid" : "NoteEditor - Detach note from route",
+		"msgstr" : "Transform to travel note"
 	},
 	{
 		"msgid" : "NoteEditor - Distance",
@@ -155,7 +163,7 @@
 	{
 		"msgid" : "NoteEditor - Edit this note",
 		"msgstr" : "Edit this note"
-	},
+ 	},
 	{
 		"msgid" : "NoteEditor - Hide notes",
 		"msgstr" : "Hide notes"

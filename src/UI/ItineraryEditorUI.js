@@ -1054,9 +1054,21 @@ Tests ...
 				_RemoveActivePane ( );
 				_SetItinerary ( );
 			},
+			updateItinerary : function ( ) {
+				if ( 0 === _ActivePaneIndex ) {
+					_RemoveItinerary ( );
+					_SetItinerary ( );
+				}
+			},
 			setTravelNotes : function ( ) { 
 				_RemoveActivePane ( );
 				_SetTravelNotes ( );
+			},
+			updateTravelNotes : function ( ) {
+				if ( 1 === _ActivePaneIndex ) {
+					_RemoveTravelNotes ( );
+					_SetTravelNotes ( );
+				}
 			},
 			setSearch : function ( ) { 
 				_RemoveActivePane ( );

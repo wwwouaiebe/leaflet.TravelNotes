@@ -25,6 +25,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- added search and travel notes panes
+		- added update functions for panes
 Doc reviewed 20170927
 Tests ...
 
@@ -41,6 +42,9 @@ Tests ...
 			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
 			setTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes (  );},
 			setSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setSearch (  );},
+			updateItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateItinerary (  );},
+			updateTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateTravelNotes (  );},
+			updateSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateSearch (  );},
 			
 			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
 			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
