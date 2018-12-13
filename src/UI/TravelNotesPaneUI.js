@@ -33,6 +33,70 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
+
+	var s_NoteObjId  = 0;
+	
+	/*
+	--- onDragStart function ------------------------------------------------------------------------------------------
+
+	drag start event listener for the notes
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onDragStart = function  ( dragEvent ) {
+		dragEvent.stopPropagation ( ); 
+		try {
+			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
+			dragEvent.dataTransfer.dropEffect = "move";
+		}
+		catch ( e ) {
+		}
+		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
+		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
+		s_NoteObjId = dragEvent.target.noteObjId - 1;
+	};
+	
+	/*
+	--- onDragOver function -------------------------------------------------------------------------------------------
+
+	drag over event listener for the notes
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onDragOver = function ( event ) {
+		event.preventDefault ( );
+	};
+	
+	/*
+	--- onDrop function -----------------------------------------------------------------------------------------------
+
+	drop listener for the notes
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var onDrop = function ( dragEvent ) { 
+		dragEvent.preventDefault ( );
+		var element = dragEvent.target;
+
+		while ( ! element.noteObjId ) {
+			element = element.parentElement;
+		}
+		var clientRect = element.getBoundingClientRect ( );
+		
+		// for this #@!& MS Edge... don't remove + 1 otherwise crazy things comes in FF
+		//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		require ( '../L.TravelNotes' ).travel.notes.moveTo ( 
+			s_NoteObjId + 1, 
+			element.noteObjId, 
+			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
+		);
+		travelNotesPaneUI ( ).remove ( );
+		travelNotesPaneUI ( ).add ( );
+		require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+	};
 	
 	/*
 	--- onTravelNoteContextMenu function ------------------------------------------------------------------------------
@@ -133,12 +197,17 @@ Tests ...
 			
 			// adding travel notes
 			var travelNotesDiv = htmlViewsFactory.travelNotesHTML;
+			travelNotesDiv.addEventListener ( 'drop', onDrop, false );
+			travelNotesDiv.addEventListener ( 'dragover', onDragOver, false );
+			
 			dataDiv.appendChild ( travelNotesDiv );
 			travelNotesDiv.childNodes.forEach (
 				function ( childNode  ) {
 					childNode.addEventListener ( 'click' , onTravelNoteClick, false );
 					childNode.addEventListener ( 'contextmenu' , onTravelNoteContextMenu, false );
-				}
+					childNode.draggable = true;
+					childNode.addEventListener ( 'dragstart', onDragStart, false );	
+					childNode.classList.add ( 'TravelNotes-SortableList-MoveCursor' );				}
 			);
 		};
 

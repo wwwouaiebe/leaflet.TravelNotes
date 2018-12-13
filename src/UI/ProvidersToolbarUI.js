@@ -219,7 +219,6 @@ Tests ...
 		*/
 
 		var m_createTransitModesButtons = function ( ) {
-			
 			m_BikeButton = m_HtmlElementsFactory.create (
 				'img',
 					{ 
@@ -280,7 +279,7 @@ Tests ...
 
 		var m_CreateUI = function ( controlDiv ) {
 
-			var m_ButtonsDiv = m_HtmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+			m_ButtonsDiv = m_HtmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 
 			m_createTransitModesButtons ( );
 			m_createProvidersButtons ( );
