@@ -38,16 +38,18 @@ Tests ...
 	
 	var UserInterface = function ( ) {
 
-		var _MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+		var m_MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 
-		var _CreateUI = function ( ){ 
-			_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
-			require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, _MainDiv);
-			require ( './TravelEditorUI' ) ( ).createUI ( _MainDiv ); 
-			require ( './RouteEditorUI' ) ( ).createUI ( _MainDiv ); 
-			require ( './ItineraryEditorUI' ) ( ).createUI ( _MainDiv ); 
-			require ( './ErrorEditorUI' ) ( ).createUI ( _MainDiv ); 
-			_MainDiv.addEventListener ( 
+		var m_CreateUI = function ( ){ 
+			m_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
+			require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
+			require ( './TravelEditorUI' ) ( ).createUI ( m_MainDiv ); 
+			require ( './RouteEditorUI' ) ( ).createUI ( m_MainDiv ); 
+			require ( './DataPanesUI' ) ( ).createUI ( m_MainDiv ); 
+			require ( './ProvidersToolbarUI' ) ( ).createUI ( m_MainDiv ); 
+			require ( './ErrorEditorUI' ) ( ).createUI ( m_MainDiv ); 
+			
+			m_MainDiv.addEventListener ( 
 				'click',
 				function ( event ) {
 
@@ -62,7 +64,8 @@ Tests ...
 				},
 				false
 			);
-			_MainDiv.addEventListener ( 
+			
+			m_MainDiv.addEventListener ( 
 				'dblclick',
 				function ( event ) {
 					event.stopPropagation ( );
@@ -70,7 +73,8 @@ Tests ...
 				},
 				false
 			);
-			_MainDiv.addEventListener ( 
+			
+			m_MainDiv.addEventListener ( 
 				'wheel',
 				function ( event ) {
 					event.stopPropagation ( );
@@ -80,12 +84,12 @@ Tests ...
 			);
 		};
 		
-		if ( ! _MainDiv ) {
-			_CreateUI ( );
+		if ( ! m_MainDiv ) {
+			m_CreateUI ( );
 		}
 		
 		return {
-			get UI ( ) { return _MainDiv; }
+			get UI ( ) { return m_MainDiv; }
 		};
 	};
 	

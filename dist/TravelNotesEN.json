@@ -28,6 +28,30 @@
 		"msgstr" : "Close"
 	},
 	{
+		"msgid" : "DataPanesUI - Hide",
+		"msgstr" : "Hide"
+	},
+	{
+		"msgid" : "DataPanesUI - Itinerary",
+		"msgstr" : "Itinerary"
+	},
+	{
+		"msgid" : "DataPanesUI - Itinerary and notes",
+		"msgstr" : "Itinerary and notes"
+	},
+	{
+		"msgid" : "DataPanesUI - Search",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "DataPanesUI - Show",
+		"msgstr" : "Show"
+	},
+	{
+		"msgid" : "DataPanesUI - Travel notes",
+		"msgstr" : "Travel notes"
+	},
+	{
 		"msgid" : "ErrorEditorUI - Hide",
 		"msgstr" : "Hide"
 	},
@@ -62,39 +86,6 @@
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
 		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© Christian Guyette 2017</a>"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Hide",
-		"msgstr" : "Hide"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Itinerary",
-		"msgstr" : "Itinerary"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Itinerary and notes",
-		"msgstr" : "Itinerary and notes"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Search",
-		"msgstr" : "Search OpenStreetMap"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Search OpenStreetMap",
-		"msgstr" : "Search OpenStreetMap"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Search phrase",
-		"msgstr" : "Search words"
-	},
-
-	{
-		"msgid" : "ItineraryEditorUI - Show",
-		"msgstr" : "Show"
-	},
-	{
-		"msgid" : "ItineraryEditorUI - Travel notes",
-		"msgstr" : "Travel notes"
 	},
 	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
@@ -331,6 +322,14 @@
 	{
 		"msgid" : "RoutePropertiesDialog - Width",
 		"msgstr" : "Width : "
+	},
+	{
+		"msgid" : "SearchPaneUI - Search OpenStreetMap",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "SearchPaneUI - Search phrase",
+		"msgstr" : "Search words"
 	},
 	{
 		"msgid" : "SortableList - Delete",

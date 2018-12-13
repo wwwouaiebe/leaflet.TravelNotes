@@ -266,7 +266,7 @@ Tests ...
 					require ( '../core/MapEditor' ) ( ).editNote ( note );
 					if ( ! noteAndRoute.route ) {
 						// it's a travel note. UI is also adapted
-						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
+						require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
 					}
 				}
 				else {
@@ -274,7 +274,7 @@ Tests ...
 					if ( -1 === routeObjId ) {
 						// it's a global note
 						_TravelNotesData.travel.notes.add ( note );
-						require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes ( );
+						require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
 					}
 					else {
 						// the note is linked with a route, so...

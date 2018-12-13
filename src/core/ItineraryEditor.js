@@ -39,18 +39,18 @@ Tests ...
 	var ItineraryEditor = function ( ) {
 		
 		return {
-			setItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setItinerary (  );},
-			setTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setTravelNotes (  );},
-			setSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).setSearch (  );},
-			updateItinerary : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateItinerary (  );},
-			updateTravelNotes : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateTravelNotes (  );},
-			updateSearch : function ( ) { require ( '../UI/ItineraryEditorUI' ) ( ).updateSearch (  );},
+			setItinerary : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setItinerary (  );},
+			setTravelNotes : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setTravelNotes (  );},
+			setSearch : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setSearch (  );},
+			updateItinerary : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateItinerary (  );},
+			updateTravelNotes : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes (  );},
+			updateSearch : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateSearch (  );},
 			
 			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
-			set provider ( providerName ) { require ( '../UI/ItineraryEditorUI' ) ( ).provider = providerName ;},
+			set provider ( providerName ) { require ( '../UI/DataPanesUI' ) ( ).provider = providerName ;},
 			
 			get transitMode ( ) { return require ( '../L.TravelNotes' ).routing.transitMode; },
-			set transitMode ( transitMode ) { require ( '../UI/ItineraryEditorUI' ) ( ).transitMode = transitMode ; }
+			set transitMode ( transitMode ) { require ( '../UI/DataPanesUI' ) ( ).transitMode = transitMode ; }
 		};
 	};
 

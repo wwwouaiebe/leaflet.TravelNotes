@@ -426,10 +426,10 @@ Tests ...
 					return;
 				}
 				// Provider and transit mode are changed in the itinerary editor
-				_ItineraryEditor.provider = providerName;
+				require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
 				var transitMode = initialRoute.itinerary.transitMode;
 				if ( transitMode && '' !== transitMode ) {
-					_ItineraryEditor.transitMode = transitMode;
+					require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
 				}
 				// The edited route is pushed in the editors
 				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
