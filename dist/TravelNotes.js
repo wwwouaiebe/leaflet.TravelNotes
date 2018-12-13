@@ -3296,6 +3296,7 @@ Changes:
 		- changed message
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- added reset button for address
 Doc reviewed 20170929
 Tests ...
 
@@ -3342,7 +3343,7 @@ Tests ...
 		require ( '../core/NoteEditor' ) ( ).endNoteDialog ( _Note, _RouteObjId );
 		return true;
 	};
-
+	
 	/*
 	--- NoteDialog function -------------------------------------------------------------------------------------------
 
@@ -3686,10 +3687,18 @@ Tests ...
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Address&nbsp;:' )
+				innerHTML : '<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + _Translator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			NoteDataDiv
 		);
+		document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
+			'click', 
+			function ( ) {
+				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+			},
+			false 
+		);
+		
 		var address = htmlElementsFactory.create ( 
 			'input',
 			{ 
