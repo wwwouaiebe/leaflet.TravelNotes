@@ -133,6 +133,15 @@ Tests ...
 				radius : 20,
 				fill : false
 			},
+			searchPointPolyline : {
+				polyline : {
+					color : 'green',
+					weight : 4,
+					radius : 20,
+					fill : false,
+				},
+				minZoom : 17
+			},
 			previousSearchLimit : {
 				color : "green",
 				fill : false,
@@ -207,6 +216,7 @@ Tests ...
 			get language ( ) { return _Config.language; },
 			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
 			get searchPointMarker ( ) { return _Config.searchPointMarker; },
+			get searchPointPolyline ( ) { return _Config.searchPointPolyline; },
 			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
 			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
 			get wayPoint ( ) { return _Config.wayPoint; },

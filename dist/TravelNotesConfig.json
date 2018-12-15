@@ -25,6 +25,15 @@
 		"radius" : 20,
 		"fill" : false
 	},
+	"searchPointPolyline" : {
+		"polyline" : {
+			"color" : "green",
+			"weight" : 4,
+			"radius" : 20,
+			"fill" : false
+		},
+		"minZoom" : 17
+	},
 	"previousSearchLimit" : {
 		"color" : "green",
 		"fill" : false,

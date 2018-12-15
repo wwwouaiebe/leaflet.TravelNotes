@@ -183,7 +183,7 @@ Tests ...
 
 	var onSearchMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
+		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
 	};
 	
 	/*
@@ -320,12 +320,12 @@ Tests ...
 							id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
 							className :	'TravelNotes-Control-SearchResult',
 							innerHTML : ( searchResult.description != '' ? '<p class=\'TravelNotes-Control-SearchResultDescription\'>' + searchResult.description + '</p>' : '' ) +
-								( searchResult.name != '' ?  '<p>' + searchResult.name + '</p>' : '' ) +
-								( searchResult.street != '' ? '<p>' + searchResult.street + ' ' + searchResult.housenumber +'</p>' : '' ) +
-								( searchResult.city != '' ? '<p>' + searchResult.postcode + ' ' + searchResult.city +'</p>' : '' ) +
-								( searchResult.phone != '' ? '<p>' + searchResult.phone + '</p>' : '' ) +
-								( searchResult.email != '' ? '<p><a href=\'mailto:' + searchResult.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
-								( searchResult.website != '' ? '<p><a href=\''+ searchResult.website +'\' target=\'_blank\'>' + searchResult.website + '</a></p>' : '' ) +
+								( searchResult.tags.name ?  '<p>' + searchResult.tags.name + '</p>' : '' ) +
+								( searchResult.tags [ 'addr:street' ] ? '<p>' + searchResult.tags [ 'addr:street' ] + ' ' + ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] : '' ) +'</p>' : '' ) +
+								( searchResult.tags [ 'addr:city' ] ? '<p>' + ( searchResult.tags [ 'addr:postcode' ] ? searchResult.tags [ 'addr:postcode' ] + ' ' : '' ) + searchResult.tags [ 'addr:city' ] + '</p>' : '' ) +
+								( searchResult.tags.phone ? '<p>' + searchResult.tags.phone + '</p>' : '' ) +
+								( searchResult.tags.email ? '<p><a href=\'mailto:' + searchResult.tags.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
+								( searchResult.tags.website ? '<p><a href=\''+ searchResult.tags.website +'\' target=\'_blank\'>' + searchResult.tags.website + '</a></p>' : '' ) +
 								( searchResult.ranking ? '<p>&#x26ab;' + searchResult.ranking + '</p>' : '' )
 						},
 						searchDiv
@@ -334,6 +334,7 @@ Tests ...
 					searchResultDiv.objId = require ( '../data/ObjId' ) ( );
 					searchResultDiv.osmId = searchResult.id;
 					searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
+					searchResultDiv.geometry = searchResult.geometry;
 					searchResultDiv.addEventListener ( 'click' , onSearchClick, false );
 					searchResultDiv.addEventListener ( 'contextmenu' , onSearchContextMenu, false );
 					searchResultDiv.addEventListener ( 'mouseenter' , onSearchMouseEnter, false );

@@ -4949,7 +4949,7 @@ Tests ...
 
 	var onSearchMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
+		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
 	};
 	
 	/*
@@ -5086,12 +5086,12 @@ Tests ...
 							id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
 							className :	'TravelNotes-Control-SearchResult',
 							innerHTML : ( searchResult.description != '' ? '<p class=\'TravelNotes-Control-SearchResultDescription\'>' + searchResult.description + '</p>' : '' ) +
-								( searchResult.name != '' ?  '<p>' + searchResult.name + '</p>' : '' ) +
-								( searchResult.street != '' ? '<p>' + searchResult.street + ' ' + searchResult.housenumber +'</p>' : '' ) +
-								( searchResult.city != '' ? '<p>' + searchResult.postcode + ' ' + searchResult.city +'</p>' : '' ) +
-								( searchResult.phone != '' ? '<p>' + searchResult.phone + '</p>' : '' ) +
-								( searchResult.email != '' ? '<p><a href=\'mailto:' + searchResult.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
-								( searchResult.website != '' ? '<p><a href=\''+ searchResult.website +'\' target=\'_blank\'>' + searchResult.website + '</a></p>' : '' ) +
+								( searchResult.tags.name ?  '<p>' + searchResult.tags.name + '</p>' : '' ) +
+								( searchResult.tags [ 'addr:street' ] ? '<p>' + searchResult.tags [ 'addr:street' ] + ' ' + ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] : '' ) +'</p>' : '' ) +
+								( searchResult.tags [ 'addr:city' ] ? '<p>' + ( searchResult.tags [ 'addr:postcode' ] ? searchResult.tags [ 'addr:postcode' ] + ' ' : '' ) + searchResult.tags [ 'addr:city' ] + '</p>' : '' ) +
+								( searchResult.tags.phone ? '<p>' + searchResult.tags.phone + '</p>' : '' ) +
+								( searchResult.tags.email ? '<p><a href=\'mailto:' + searchResult.tags.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
+								( searchResult.tags.website ? '<p><a href=\''+ searchResult.tags.website +'\' target=\'_blank\'>' + searchResult.tags.website + '</a></p>' : '' ) +
 								( searchResult.ranking ? '<p>&#x26ab;' + searchResult.ranking + '</p>' : '' )
 						},
 						searchDiv
@@ -5100,6 +5100,7 @@ Tests ...
 					searchResultDiv.objId = require ( '../data/ObjId' ) ( );
 					searchResultDiv.osmId = searchResult.id;
 					searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
+					searchResultDiv.geometry = searchResult.geometry;
 					searchResultDiv.addEventListener ( 'click' , onSearchClick, false );
 					searchResultDiv.addEventListener ( 'contextmenu' , onSearchContextMenu, false );
 					searchResultDiv.addEventListener ( 'mouseenter' , onSearchMouseEnter, false );
@@ -7291,11 +7292,14 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			
-			addSearchPointMarker : function ( objId, latLng ) {
-				_AddTo ( 
-					objId,
-					L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker )
-				);
+			addSearchPointMarker : function ( objId, latLng, geometry ) {
+
+				if ( geometry && _TravelNotesData.config.searchPointPolyline.minZoom <= _TravelNotesData.map.getZoom ( ) ) {
+					_AddTo ( objId, L.polyline ( geometry, _TravelNotesData.config.searchPointPolyline.polyline ) );
+				}
+				else {
+					_AddTo ( objId, L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker ) );
+				}
 			},
 			
 			
@@ -7781,14 +7785,14 @@ Tests ...
 			newSearchNote : function ( searchResult ) {
 				var note = this.newNote ( [ searchResult.lat, searchResult.lon ] );
 				
-				note.address = ( '' !== searchResult.housenumber ? searchResult.housenumber + ' ' : '' ) +
-					( '' !== searchResult.street ? searchResult.street + ' ' : '' ) +
-					searchResult.city;
+				note.address = ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+					( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
+					( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
 				
-				note.url = searchResult.website;
-				note.phone = searchResult.phone;
-				note.tooltipContent = searchResult.name;
-				note.popupContent = searchResult.name;
+				note.url = searchResult.tags.website || '';
+				note.phone = searchResult.tags.phone || '';
+				note.tooltipContent = searchResult.tags.name || '';
+				note.popupContent = searchResult.tags.name || '';
 				
 				require ( '../UI/NoteDialog' ) ( note, -1, true );
 			},
@@ -10239,6 +10243,15 @@ Tests ...
 				radius : 20,
 				fill : false
 			},
+			searchPointPolyline : {
+				polyline : {
+					color : 'green',
+					weight : 4,
+					radius : 20,
+					fill : false,
+				},
+				minZoom : 17
+			},
 			previousSearchLimit : {
 				color : "green",
 				fill : false,
@@ -10313,6 +10326,7 @@ Tests ...
 			get language ( ) { return _Config.language; },
 			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
 			get searchPointMarker ( ) { return _Config.searchPointMarker; },
+			get searchPointPolyline ( ) { return _Config.searchPointPolyline; },
 			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
 			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
 			get wayPoint ( ) { return _Config.wayPoint; },

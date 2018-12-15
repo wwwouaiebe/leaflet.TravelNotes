@@ -183,14 +183,14 @@ Tests ...
 			newSearchNote : function ( searchResult ) {
 				var note = this.newNote ( [ searchResult.lat, searchResult.lon ] );
 				
-				note.address = ( '' !== searchResult.housenumber ? searchResult.housenumber + ' ' : '' ) +
-					( '' !== searchResult.street ? searchResult.street + ' ' : '' ) +
-					searchResult.city;
+				note.address = ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+					( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
+					( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
 				
-				note.url = searchResult.website;
-				note.phone = searchResult.phone;
-				note.tooltipContent = searchResult.name;
-				note.popupContent = searchResult.name;
+				note.url = searchResult.tags.website || '';
+				note.phone = searchResult.tags.phone || '';
+				note.tooltipContent = searchResult.tags.name || '';
+				note.popupContent = searchResult.tags.name || '';
 				
 				require ( '../UI/NoteDialog' ) ( note, -1, true );
 			},

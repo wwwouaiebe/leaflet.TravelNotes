@@ -456,11 +456,14 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			
-			addSearchPointMarker : function ( objId, latLng ) {
-				_AddTo ( 
-					objId,
-					L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker )
-				);
+			addSearchPointMarker : function ( objId, latLng, geometry ) {
+
+				if ( geometry && _TravelNotesData.config.searchPointPolyline.minZoom <= _TravelNotesData.map.getZoom ( ) ) {
+					_AddTo ( objId, L.polyline ( geometry, _TravelNotesData.config.searchPointPolyline.polyline ) );
+				}
+				else {
+					_AddTo ( objId, L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker ) );
+				}
 			},
 			
 			
