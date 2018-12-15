@@ -381,7 +381,9 @@ Tests ...
 
 			clear : function ( ) {
 				_MapEditor.removeRoute ( _TravelNotesData.editedRoute, true, true );
-				_MapEditor.addRoute ( _DataSearchEngine.getRoute ( _TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+				if ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) {
+					_MapEditor.addRoute ( _DataSearchEngine.getRoute ( _TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+				}
 
 				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
 				_TravelNotesData.routeEdition.routeChanged = false;
