@@ -21,7 +21,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170925
+Doc reviewed 20181215
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -39,47 +39,75 @@ Tests ...
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var Collection = function ( objName ) {
+	var collection = function ( objName ) {
 
-		// Private variables and functions
+		var m_Array = [];
 
-		var _Array = [];
+		var m_ObjName = objName;
 
-		var _ObjName = objName;
+		/*
+		--- m_Add function --------------------------------------------------------------------------------------------
 
-		var _Add = function ( object ) {
-			if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== _ObjName ) ) {
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_Add = function ( object ) {
+			if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== m_ObjName ) ) {
 				throw 'invalid object name for add function';
 			}
-			_Array.push ( object );
+			m_Array.push ( object );
 
 			return;
 		};
 
-		var _First = function ( ) {
-			return _Array [ 0 ];
+		/*
+		--- m_First function ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_First = function ( ) {
+			return m_Array [ 0 ];
 		};
 
-		var _ForEach = function ( funct ) {
+		/*
+		--- m_ForEach function ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ForEach = function ( funct ) {
 			var result = null;
-			var iterator = _Iterator ( );
+			var iterator = m_Iterator ( );
 			while ( ! iterator.done ) {
 					result = funct ( iterator.value, result );
 			}
 			return result;
 		};
 
-		var _GetAt = function ( objId ) {
-			var index = _IndexOfObjId ( objId );
+		/*
+		--- m_GetAt function ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetAt = function ( objId ) {
+			var index = m_IndexOfObjId ( objId );
 			if ( -1 === index ) {
 				return null;
 			}
-			return _Array [ index ];
+			return m_Array [ index ];
 		};
 
-		var _GetObject = function ( ) {
+		/*
+		--- m_GetObject function --------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetObject = function ( ) {
 			var array = [ ];
-			var iterator = _Iterator ( );
+			var iterator = m_Iterator ( );
 			while ( ! iterator.done ) {
 				array.push ( iterator.value.object );
 			}
@@ -87,320 +115,394 @@ Tests ...
 			return array;
 		};
 		
-		var _MoveTo = function ( objId, targetObjId, moveBefore ) {
-			var oldPosition = _IndexOfObjId ( objId );
-			var newPosition = _IndexOfObjId ( targetObjId );
+		/*
+		--- m_MoveTo function -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_MoveTo = function ( objId, targetObjId, moveBefore ) {
+			var oldPosition = m_IndexOfObjId ( objId );
+			var newPosition = m_IndexOfObjId ( targetObjId );
 			if ( ! moveBefore ) {
 				newPosition ++;
 			}
-			_Array.splice ( newPosition, 0, _Array [ oldPosition ] );
+			m_Array.splice ( newPosition, 0, m_Array [ oldPosition ] );
 			if ( newPosition < oldPosition )
 			{
 				oldPosition ++ ;
 			}
-			_Array.splice ( oldPosition, 1 );
+			m_Array.splice ( oldPosition, 1 );
 		};
 
-		var _IndexOfObjId = function ( objId ) {
+		/*
+		--- m_IndexOfObjId function -----------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_IndexOfObjId = function ( objId ) {
 			function haveObjId ( element ) {
 				return element.objId === objId;
 			}
-			return _Array.findIndex ( haveObjId );
+			return m_Array.findIndex ( haveObjId );
 		};
 
-		var _Iterator = function ( ) {
+		/*
+		--- m_Iterator function ---------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Iterator = function ( ) {
 			var nextIndex = -1;
 			return {
-			   get value ( ) { return nextIndex < _Array.length ?  _Array [ nextIndex ] : null; },
-			   get done ( ) { return ++ nextIndex  >= _Array.length; },
+			   get value ( ) { return nextIndex < m_Array.length ?  m_Array [ nextIndex ] : null; },
+			   get done ( ) { return ++ nextIndex  >= m_Array.length; },
 			   get first ( ) { return 0 === nextIndex; },
-			   get last ( ) { return nextIndex  >= _Array.length - 1; },
+			   get last ( ) { return nextIndex  >= m_Array.length - 1; },
 			   get index ( ) { return nextIndex; }
 			};
 		};
 
-		var _Last = function ( ) {
-			return _Array [ _Array.length - 1 ];
+		/*
+		--- m_Last function -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Last = function ( ) {
+			return m_Array [ m_Array.length - 1 ];
 		};
 
-		var _Remove = function ( objId ) {
-			var index = _IndexOfObjId ( objId );
+		/*
+		--- m_Remove function -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Remove = function ( objId ) {
+			var index = m_IndexOfObjId ( objId );
 			if ( -1 === index ) {
 				throw 'invalid objId for remove function';
 			}
-			_Array.splice ( _IndexOfObjId ( objId ), 1 );
+			m_Array.splice ( m_IndexOfObjId ( objId ), 1 );
 		};
 
-		var _RemoveAll = function ( ExceptFirstLast ) {
+		/*
+		--- m_RemoveAll function --------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RemoveAll = function ( ExceptFirstLast ) {
 			if ( ExceptFirstLast ) {
-				_Array.splice ( 1, _Array.length - 2 );
+				m_Array.splice ( 1, m_Array.length - 2 );
 			}
 			else {
-				_Array.length = 0;
+				m_Array.length = 0;
 			}
 		};
 
-		var _Replace = function ( oldObjId, object ) {
-			var index = _IndexOfObjId ( oldObjId );
+		/*
+		--- m_Replace function ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Replace = function ( oldObjId, object ) {
+			var index = m_IndexOfObjId ( oldObjId );
 			if ( -1 === index ) {
 				throw 'invalid objId for replace function';
 			}
-			_Array [ index ] = object;
+			m_Array [ index ] = object;
 		};
 
-		var _Reverse = function ( ) {
-			_Array.reverse ( );
+		/*
+		--- m_Reverse function ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Reverse = function ( ) {
+			m_Array.reverse ( );
 		};
 
-		var _SetObject = function ( Objects ) {
-			_Array.length = 0;
+		/*
+		--- m_SetObject function --------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SetObject = function ( Array ) {
+			m_Array.length = 0;
 			var newObject;
-			for (var objectCounter = 0; objectCounter < Objects.length; objectCounter ++ ) {
-				switch ( _ObjName ) {
-					case 'Route' :
-					newObject = require ( '../data/Route' ) ( );
-					break;
-					case 'Note' :
-					newObject = require ( '../data/Note' ) ( );
-					break;
-					case 'WayPoint' :
-					newObject = require ( '../data/WayPoint' ) ( );
-					break;
-					case 'Maneuver' :
-					newObject = require ( '../data/Maneuver' ) ( );
-					break;
-					case 'ItineraryPoint' :
-					newObject = require ( '../data/ItineraryPoint' ) ( );
-					break;
-					default:
-					throw ( 'invalid ObjName ( ' + _ObjName +' ) in Collection._SetObject' );
+			Array.forEach (
+				function ( arrayObject ) {
+					switch ( m_ObjName ) {
+						case 'Route' :
+						newObject = require ( '../data/Route' ) ( );
+						break;
+						case 'Note' :
+						newObject = require ( '../data/Note' ) ( );
+						break;
+						case 'WayPoint' :
+						newObject = require ( '../data/WayPoint' ) ( );
+						break;
+						case 'Maneuver' :
+						newObject = require ( '../data/Maneuver' ) ( );
+						break;
+						case 'ItineraryPoint' :
+						newObject = require ( '../data/ItineraryPoint' ) ( );
+						break;
+						default:
+						throw ( 'invalid ObjName ( ' + m_ObjName +' ) in Collection.m_SetObject' );
+					}
+					newObject.object = arrayObject;
+					m_Add ( newObject );
 				}
-				newObject.object = Objects [ objectCounter ];
-				_Add ( newObject );
-			}
+			);
 		};
 
-		var _Sort = function ( compareFunction ) {
-			_Array.sort ( compareFunction );
+		/*
+		--- m_Sort function -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Sort = function ( compareFunction ) {
+			m_Array.sort ( compareFunction );
 		};
 
-		var _Swap = function ( objId, swapUp ) {
-			var index = _IndexOfObjId ( objId );
-			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( _Array.length - 1 === index ) && ( ! swapUp ) ) ) {
+		/*
+		--- m_Swap function -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Swap = function ( objId, swapUp ) {
+			var index = m_IndexOfObjId ( objId );
+			if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( m_Array.length - 1 === index ) && ( ! swapUp ) ) ) {
 				throw 'invalid objId for swap function';
 			}
-			var tmp = _Array [ index ];
-			_Array [ index ] = _Array [ index + ( swapUp ? -1 : 1  ) ];
-			_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;
+			var tmp = m_Array [ index ];
+			m_Array [ index ] = m_Array [ index + ( swapUp ? -1 : 1  ) ];
+			m_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;
 		};
 
-		// Collection object
+		/*
+		--- Collection object -----------------------------------------------------------------------------------------
 
-		return {
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			/*
-			--- add function ------------------------------------------------------------------------------------------
+		return Object.seal (
+			{
 
-			This function add an object to the collection
-			throw when the object type is invalid
+				/*
+				--- add function ------------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function add an object to the collection
+				throw when the object type is invalid
 
-			add : function ( object ) {
-				_Add ( object );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- forEach function --------------------------------------------------------------------------------------
+				add : function ( object ) {
+					m_Add ( object );
+				},
 
-			This function executes a function on each object of the collection and returns the final result
+				/*
+				--- forEach function --------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function executes a function on each object of the collection and returns the final result
 
-			forEach : function ( funct ) {
-				return _ForEach ( funct );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- getAt function ----------------------------------------------------------------------------------------
+				forEach : function ( funct ) {
+					return m_ForEach ( funct );
+				},
 
-			This function returns the object with the given objId or null when the object is not found
+				/*
+				--- getAt function ----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function returns the object with the given objId or null when the object is not found
 
-			getAt : function ( objId ) {
-				return _GetAt ( objId );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- moveTo function ----------------------------------------------------------------------------------------
+				getAt : function ( objId ) {
+					return m_GetAt ( objId );
+				},
 
-			This function move the object identified by objId to the position ocuped by the object
-			identified by targetObjId 
+				/*
+				--- moveTo function ---------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			moveTo : function ( objId, targetObjId, moveBefore ) {
-				_MoveTo ( objId, targetObjId, moveBefore );
-			},
-			/*
-			--- remove function ---------------------------------------------------------------------------------------
+				This function move the object identified by objId to the position ocuped by the object
+				identified by targetObjId 
 
-			This function remove the object with the given objId
-			throw when the object is not found
+				-----------------------------------------------------------------------------------------------------------
+				*/
+				moveTo : function ( objId, targetObjId, moveBefore ) {
+					m_MoveTo ( objId, targetObjId, moveBefore );
+				},
+				/*
+				--- remove function ---------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function remove the object with the given objId
+				throw when the object is not found
 
-			remove : function ( objId ) {
-				_Remove ( objId );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- removeAll function ------------------------------------------------------------------------------------
+				remove : function ( objId ) {
+					m_Remove ( objId );
+				},
 
-			This function remove all objects in the collection
-			when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
+				/*
+				--- removeAll function ------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function remove all objects in the collection
+				when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
 
-			removeAll : function ( exceptFirstLast ) {
-				_RemoveAll ( exceptFirstLast );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- replace function --------------------------------------------------------------------------------------
+				removeAll : function ( exceptFirstLast ) {
+					m_RemoveAll ( exceptFirstLast );
+				},
 
-			This function replace the object identified by oldObjId with a new object
-			throw when the object type is invalid
+				/*
+				--- replace function --------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function replace the object identified by oldObjId with a new object
+				throw when the object type is invalid
 
-			replace : function ( oldObjId, object ) {
-				_Replace ( oldObjId, object );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- reverse function --------------------------------------------------------------------------------------
+				replace : function ( oldObjId, object ) {
+					m_Replace ( oldObjId, object );
+				},
 
-			This function reverse the objects in the collection
+				/*
+				--- reverse function --------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function reverse the objects in the collection
 
-			reverse : function ( ) {
-				_Reverse ( );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- sort function -----------------------------------------------------------------------------------------
+				reverse : function ( ) {
+					m_Reverse ( );
+				},
 
-			This function sort the collection, using the compare function
+				/*
+				--- sort function -----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function sort the collection, using the compare function
 
-			sort : function ( compareFunction ) {
-				_Sort ( compareFunction );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- swap function -----------------------------------------------------------------------------------------
+				sort : function ( compareFunction ) {
+					m_Sort ( compareFunction );
+				},
 
-			This function move up ( when sapUp is true ) or move down an object in the collection
-			throw when the swap is not possible
+				/*
+				--- swap function -----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				This function move up ( when swapUp is true ) or move down an object in the collection
+				throw when the swap is not possible
 
-			swap : function ( objId, swapUp ) {
-				_Swap ( objId, swapUp );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- first getter ------------------------------------------------------------------------------------------
+				swap : function ( objId, swapUp ) {
+					m_Swap ( objId, swapUp );
+				},
 
-			The first object in the collection
+				/*
+				--- first getter ------------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				The first object in the collection
 
-			get first ( ) {
-				return _First ( );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- iterator getter ---------------------------------------------------------------------------------------
+				get first ( ) {
+					return m_First ( );
+				},
 
-			Returns an iterator on the collection.
-			The iterator have the following properties:
-			value : the object pointed by the iterator
-			done : true when the iterator is at the end of the collection. Each time this property is called, the iterator move to the next object
-			first : true when the iterator is on the first object
-			last : true when the iterator is on the last object
-			index : the current position of the iterator in the collection
+				/*
+				--- iterator getter ---------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			get iterator ( ) {
-				return _Iterator ( );
-			},
+				Returns an iterator on the collection.
+				The iterator have the following properties:
+				value : the object pointed by the iterator
+				done : true when the iterator is at the end of the collection. Each time this property is called, the iterator move to the next object
+				first : true when the iterator is on the first object
+				last : true when the iterator is on the last object
+				index : the current position of the iterator in the collection
 
-			/*
-			--- last getter -------------------------------------------------------------------------------------------
+				-----------------------------------------------------------------------------------------------------------
+				*/
+				get iterator ( ) {
+					return m_Iterator ( );
+				},
 
-			The last object in the collection
+				/*
+				--- last getter -------------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				The last object in the collection
 
-			get last ( ) {
-				return _Last ( );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- length getter -----------------------------------------------------------------------------------------
+				get last ( ) {
+					return m_Last ( );
+				},
 
-			The length of the collection
+				/*
+				--- length getter -----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				The length of the collection
 
-			get length ( ) {
-				return _Array.length;
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- object getter -----------------------------------------------------------------------------------------
+				get length ( ) {
+					return m_Array.length;
+				},
 
-			Transform the collection into an array that can be used with JSON
+				/*
+				--- object getter -----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				Transform the collection into an array that can be used with JSON
 
-			get object ( ) {
-				return _GetObject ( );
-			},
+				-----------------------------------------------------------------------------------------------------------
+				*/
 
-			/*
-			--- object setter -----------------------------------------------------------------------------------------
+				get object ( ) {
+					return m_GetObject ( );
+				},
 
-			Transform an array to a collection
-			throw when an object in the array have an invalid type
+				/*
+				--- object setter -----------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				Transform an array to a collection
+				throw when an object in the array have an invalid type
 
-			set object ( Object ) {
-				_SetObject ( Object );
+				-----------------------------------------------------------------------------------------------------------
+				*/
+
+				set object ( Array ) {
+					m_SetObject ( Array );
+				}
+
 			}
-
-		};
+		);
 	};
 
 	/*
@@ -408,7 +510,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Collection;
+		module.exports = collection;
 	}
 
 } ) ( );
