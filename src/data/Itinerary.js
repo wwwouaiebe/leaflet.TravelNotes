@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,79 +33,103 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( './Version' ) );
 
 	/*
-	--- Itinerary object ----------------------------------------------------------------------------------------------
+	--- itinerary function --------------------------------------------------------------------------------------------
 
 	Patterns : Closure
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var Itinerary = function ( ) {
+	var itinerary = function ( ) {
 
 		// Private variables
 
-		var _Provider = '';
+		var m_Provider = '';
 
-		var _TransitMode = '';
+		var m_TransitMode = '';
 
-		var _ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
+		var m_ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
 
-		var _Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
+		var m_Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		return {
+		/*
+		--- m_GetObject function --------------------------------------------------------------------------------------
 
-			// getters and setters...
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get itineraryPoints ( ) { return _ItineraryPoints; },
+		var m_GetObject = function ( ) {
+			return {
+				itineraryPoints : m_ItineraryPoints.object,
+				maneuvers : m_Maneuvers.object,
+				provider : m_Provider,
+				transitMode : m_TransitMode,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
+		};
+		
+		/*
+		--- m_SetObject function --------------------------------------------------------------------------------------
 
-			get maneuvers ( ) { return _Maneuvers; },
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get provider ( ) { return _Provider; },
-			set provider ( Provider ) { _Provider = Provider; },
-
-			get transitMode ( ) { return _TransitMode; },
-			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					itineraryPoints : _ItineraryPoints.object,
-					maneuvers : _Maneuvers.object,
-					provider : _Provider,
-					transitMode : _TransitMode,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_ItineraryPoints.object = Object.itineraryPoints || [];
-				_Maneuvers.object = Object.maneuvers || [];
-				_Provider = Object.provider || '';
-				_TransitMode = Object.transitMode || '';
-				_ObjId = require ( '../data/ObjId' ) ( );
-				// rebuilding links between maneuvers and itineraryPoints
-				var itineraryPointObjIdMap = new Map ( );
-				var sourceCounter = 0;
-				var targetIterator = _ItineraryPoints.iterator;
-				while ( ! targetIterator.done ) {
-					itineraryPointObjIdMap.set ( Object.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
-					sourceCounter ++;
-				}
-				var maneuverIterator = _Maneuvers.iterator;
-				while ( ! maneuverIterator.done ) {
-					maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
-				}
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_ItineraryPoints.object = something.itineraryPoints || [];
+			m_Maneuvers.object = something.maneuvers || [];
+			m_Provider = something.provider || '';
+			m_TransitMode = something.transitMode || '';
+			m_ObjId = require ( '../data/ObjId' ) ( );
+			
+			// rebuilding links between maneuvers and itineraryPoints
+			var itineraryPointObjIdMap = new Map ( );
+			var sourceCounter = 0;
+			var targetIterator = m_ItineraryPoints.iterator;
+			while ( ! targetIterator.done ) {
+				itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
+				sourceCounter ++;
+			}
+			var maneuverIterator = m_Maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
 			}
 		};
+		
+		/*
+		--- itinerary object ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+
+				get itineraryPoints ( ) { return m_ItineraryPoints; },
+
+				get maneuvers ( ) { return m_Maneuvers; },
+
+				get provider ( ) { return m_Provider; },
+				set provider ( Provider ) { m_Provider = Provider; },
+
+				get transitMode ( ) { return m_TransitMode; },
+				set transitMode ( TransitMode ) { m_TransitMode = TransitMode; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( );},
+				set object ( something ) { m_SetObject ( something ); }
+				
+			}
+		);
 	};
 
 	/*
@@ -113,7 +137,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Itinerary;
+		module.exports = itinerary;
 	}
 
 } ) ( );

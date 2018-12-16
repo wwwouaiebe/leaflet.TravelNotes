@@ -22,7 +22,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Initialization changed
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -32,8 +32,13 @@ Tests ...
 
 	'use strict';
 
+	/*
+	--- objId function ------------------------------------------------------------------------------------------------
 
-	var ObjId = function ( ) {
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var objId = function ( ) {
 		if ( ! global.TravelNotesObjId ) {
 			global.TravelNotesObjId = 0;
 		}
@@ -46,7 +51,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ObjId;
+		module.exports = objId;
 
 	}
 

@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,68 +33,86 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( './Version' ) );
 
-	var Maneuver = function ( ) {
+	/*
+	--- maneuver function ---------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var maneuver = function ( ) {
 
 		// Private variables
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _IconName = '';
+		var m_IconName = '';
 
-		var _Instruction = '';
+		var m_Instruction = '';
 
-		var _ItineraryPointObjId = -1;
+		var m_ItineraryPointObjId = -1;
 
-		var _Distance = 0;
+		var m_Distance = 0;
 
-		var _Duration = 0;
+		var m_Duration = 0;
 
-		return {
-
-			// getters and setters...
-
-			get iconName ( ) { return _IconName;},
-			set iconName ( IconName ) { _IconName = IconName; },
-
-			get instruction ( ) { return _Instruction;},
-			set instruction ( Instruction ) { _Instruction = Instruction; },
-
-			get itineraryPointObjId ( ) { return _ItineraryPointObjId;},
-			set itineraryPointObjId ( ItineraryPointObjId ) { _ItineraryPointObjId = ItineraryPointObjId; },
-
-			get distance ( ) { return _Distance;},
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get duration ( ) { return _Duration;},
-			set duration ( Duration ) { _Duration = Duration; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					iconName : _IconName,
-					instruction : _Instruction,
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					duration : _Duration,
-					itineraryPointObjId : _ItineraryPointObjId,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconName = Object.iconName || '';
-				_Instruction = Object.instruction || '';
-				_Distance = Object.distance || 0;
-				_Duration = Object.duration || 0;
-				_ItineraryPointObjId = Object.itineraryPointObjId || -1;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				iconName : m_IconName,
+				instruction : m_Instruction,
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				duration : m_Duration,
+				itineraryPointObjId : m_ItineraryPointObjId,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_IconName = something.iconName || '';
+			m_Instruction = something.instruction || '';
+			m_Distance = something.distance || 0;
+			m_Duration = something.duration || 0;
+			m_ItineraryPointObjId = something.itineraryPointObjId || -1;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+
+		/*
+		--- maneuver object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				
+				get iconName ( ) { return m_IconName;},
+				set iconName ( IconName ) { m_IconName = IconName; },
+
+				get instruction ( ) { return m_Instruction;},
+				set instruction ( Instruction ) { m_Instruction = Instruction; },
+
+				get itineraryPointObjId ( ) { return m_ItineraryPointObjId;},
+				set itineraryPointObjId ( ItineraryPointObjId ) { m_ItineraryPointObjId = ItineraryPointObjId; },
+
+				get distance ( ) { return m_Distance;},
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get duration ( ) { return m_Duration;},
+				set duration ( Duration ) { m_Duration = Duration; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -102,7 +120,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Maneuver;
+		module.exports = maneuver;
 	}
 
 } ) ( );

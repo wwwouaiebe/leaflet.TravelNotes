@@ -25,7 +25,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
-Doc reviewed ...
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -34,83 +34,9 @@ Tests ...
 	
 	'use strict';
 
-	var Config = function ( ) {
+	var config = function ( ) {
 
-		/*
-		--- _copyObjectTo method --------------------------------------------------------------------------------------
-
-		This method:
-			- search recursively all dest properties
-			- foreach found property, search the same property in source
-			- copy the property value from source to dest if found
-			- search recursively all sources properties
-			- foreach found property search the same property in dest
-			- copy the property value from source to dest
-			
-			So: 
-				- if a property is missing in the user config, the property is selected from the default config
-				- if a property is in the user config but missing in the default config, the property is also added (and reminder
-				  that the user can have more dashChoices than the default config )
-				- if a property is changed in the user config, the property is adapted
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _copyObjectTo = function ( source, dest ) {
-			if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
-				return;
-			}
-			try {
-				var property;
-				for ( property in dest ) {
-					if ( 'object' === typeof dest [ property ] ) {
-						_copyObjectTo ( source [ property ], dest [ property ] );
-					}
-					else {
-						dest [ property ] = source [ property ] || dest [ property ];
-					}
-				}
-
-				for ( property in source ) {
-					if ( 'object' === typeof source [ property ] ) {
-						if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
-							dest [ property ] = dest [ property ] || [];
-						}
-						else {
-							dest [ property ] = dest [ property ] || {};
-						}
-						_copyObjectTo ( source [ property ], dest [ property ] );
-					}
-					else {
-						dest [ property ] = source [ property ];
-					}
-				}
-			}
-			catch ( e ) {
-				console.log ( e );
-				console.log ( 'Not possible to overload Config' );
-			}
-			
-			return;
-		};
-		
-		var _Freeze = function ( object ) {
-			var property;
-			for ( property in object ) {
-				if ( 'object' === typeof object [ property ] ) {
-					object [ property ] = _Freeze (  object [ property ] );
-				}
-			}
-			
-			return Object.freeze (object );
-		};
-		
-		var _Overload = function ( source ) {
-			_copyObjectTo ( source, _Config );
-			_Config = _Freeze ( _Config );
-		};
-
-		var _Config = {
+		var m_Config = {
 			contextMenu : {
 				timeout : 1500
 			},
@@ -202,32 +128,120 @@ Tests ...
 			},
 			haveBeforeUnloadWarning : true
 		};		
+
+		/*
+		--- m_CopyObjectTo function -----------------------------------------------------------------------------------
+
+		This method:
+			- search recursively all dest properties
+			- foreach found property, search the same property in source
+			- copy the property value from source to dest if found
+			- search recursively all sources properties
+			- foreach found property search the same property in dest
+			- copy the property value from source to dest
+			
+			So: 
+				- if a property is missing in the user config, the property is selected from the default config
+				- if a property is in the user config but missing in the default config, the property is also added (and reminder
+				  that the user can have more dashChoices than the default config )
+				- if a property is changed in the user config, the property is adapted
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CopyObjectTo = function ( source, dest ) {
+			if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
+				return;
+			}
+			try {
+				var property;
+				for ( property in dest ) {
+					if ( 'object' === typeof dest [ property ] ) {
+						m_CopyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ] || dest [ property ];
+					}
+				}
+
+				for ( property in source ) {
+					if ( 'object' === typeof source [ property ] ) {
+						if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
+							dest [ property ] = dest [ property ] || [];
+						}
+						else {
+							dest [ property ] = dest [ property ] || {};
+						}
+						m_CopyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ];
+					}
+				}
+			}
+			catch ( e ) {
+				console.log ( e );
+				console.log ( 'Not possible to overload Config' );
+			}
+			
+			return;
+		};
+		
+		/*
+		--- m_Freeze function -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Freeze = function ( object ) {
+			var property;
+			for ( property in object ) {
+				if ( 'object' === typeof object [ property ] ) {
+					object [ property ] = m_Freeze (  object [ property ] );
+				}
+			}
+			
+			return Object.freeze (object );
+		};
+		
+		/*
+		--- m_Overload function ---------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Overload = function ( source ) {
+			m_CopyObjectTo ( source, m_Config );
+			m_Config = m_Freeze ( m_Config );
+		};
 	
 		/* 
-		--- Config object ---------------------------------------------------------------------------------------------
+		--- config object ---------------------------------------------------------------------------------------------
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
 		return {
-			get contextMenu ( ) { return _Config.contextMenu; },
-			get errorMessages ( ) { return _Config.errorMessages; },
-			get routing ( ) { return _Config.routing; },
-			get language ( ) { return _Config.language; },
-			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
-			get searchPointMarker ( ) { return _Config.searchPointMarker; },
-			get searchPointPolyline ( ) { return _Config.searchPointPolyline; },
-			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
-			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
-			get wayPoint ( ) { return _Config.wayPoint; },
-			get route ( ) { return _Config.route; },
-			get note ( ) { return _Config.note; },
-			get itineraryPointZoom ( ) { return _Config.itineraryPointZoom; },
-			get routeEditor ( ) { return _Config.routeEditor; },
-			get travelEditor ( ) { return _Config.travelEditor; },
-			get haveBeforeUnloadWarning ( ) { return _Config.haveBeforeUnloadWarning; },
 			
-			overload : function ( newConfig ) { _Overload ( newConfig ) ;}
+			get contextMenu ( ) { return m_Config.contextMenu; },
+			get errorMessages ( ) { return m_Config.errorMessages; },
+			get routing ( ) { return m_Config.routing; },
+			get language ( ) { return m_Config.language; },
+			get itineraryPointMarker ( ) { return m_Config.itineraryPointMarker; },
+			get searchPointMarker ( ) { return m_Config.searchPointMarker; },
+			get searchPointPolyline ( ) { return m_Config.searchPointPolyline; },
+			get previousSearchLimit ( ) { return m_Config.previousSearchLimit; },
+			get nextSearchLimit ( ) { return m_Config.nextSearchLimit; },
+			get wayPoint ( ) { return m_Config.wayPoint; },
+			get route ( ) { return m_Config.route; },
+			get note ( ) { return m_Config.note; },
+			get itineraryPointZoom ( ) { return m_Config.itineraryPointZoom; },
+			get routeEditor ( ) { return m_Config.routeEditor; },
+			get travelEditor ( ) { return m_Config.travelEditor; },
+			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
+			
+			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
+			
 		};
 	};
 	
@@ -236,7 +250,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Config ( );
+		module.exports = config ( );
 	}
 	
 } ) ( );

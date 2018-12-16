@@ -22,7 +22,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchData
-Doc reviewed ...
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -32,9 +32,17 @@ Tests ...
 
 	'use strict';
 
-	var TravelNotesData = function ( ) {
+	/*
+	--- travelNotesData function --------------------------------------------------------------------------------------
 
-		var _TravelNotesData = {
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var travelNotesData = function ( ) {
+
+		var m_TravelNotesData = {
 			config : require ( '../data/Config' ),
 			map : null,
 			providers : new Map ( ),
@@ -47,39 +55,41 @@ Tests ...
 			UUID : require ( '../util/Utilities' ) ( ).UUID
 		};
 		
-		return {
-
 		/*
-			--- getters and setters  ----------------------------------------------------------------------------------
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		--- travelNotesData object ------------------------------------------------------------------------------------
 
-			get config ( ) { return _TravelNotesData.config; },
-			set config ( Config ) { _TravelNotesData.config.overload ( Config ); },
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get map ( ) { return _TravelNotesData.map; },
-			set map ( Map ) { _TravelNotesData.map = Map; },
+		return Object.seal (
+			{
 
-			get providers ( ) { return _TravelNotesData.providers; },
+				get config ( ) { return m_TravelNotesData.config; },
+				set config ( Config ) { m_TravelNotesData.config.overload ( Config ); },
 
-			get mapObjects ( ) { return _TravelNotesData.mapObjects; },
+				get map ( ) { return m_TravelNotesData.map; },
+				set map ( Map ) { m_TravelNotesData.map = Map; },
 
-			get travel ( ) { return _TravelNotesData.travel; },
-			set travel ( Travel ) { _TravelNotesData.travel = Travel; },
+				get providers ( ) { return m_TravelNotesData.providers; },
 
-			get editedRoute ( ) { return _TravelNotesData.editedRoute; },
-			set editedRoute ( editedRoute ) { _TravelNotesData.editedRoute = editedRoute; },
+				get mapObjects ( ) { return m_TravelNotesData.mapObjects; },
 
-			get routeEdition ( ) { return _TravelNotesData.routeEdition; },
-			
-			get routing ( ) { return _TravelNotesData.routing; },
-			
-			get searchData ( ) { return _TravelNotesData.searchData; },
-			set searchData ( SearchData ) { _TravelNotesData.searchData = SearchData; },
+				get travel ( ) { return m_TravelNotesData.travel; },
+				set travel ( Travel ) { m_TravelNotesData.travel = Travel; },
 
-			get UUID ( ) { return _TravelNotesData.UUID; },
-		};
+				get editedRoute ( ) { return m_TravelNotesData.editedRoute; },
+				set editedRoute ( editedRoute ) { m_TravelNotesData.editedRoute = editedRoute; },
+
+				get routeEdition ( ) { return m_TravelNotesData.routeEdition; },
+				
+				get routing ( ) { return m_TravelNotesData.routing; },
+				
+				get searchData ( ) { return m_TravelNotesData.searchData; },
+				set searchData ( SearchData ) { m_TravelNotesData.searchData = SearchData; },
+
+				get UUID ( ) { return m_TravelNotesData.UUID; }
+			}
+		);
 	};
 
 	/*
@@ -87,7 +97,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = TravelNotesData;
+		module.exports = travelNotesData;
 	}
 
 } ) ( );

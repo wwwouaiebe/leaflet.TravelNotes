@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,65 +33,73 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( './Version' ) );
 
 	/*
-	--- ItineraryPoint object -----------------------------------------------------------------------------------------
+	--- itineraryPoint function ---------------------------------------------------------------------------------------
 
 	Patterns : Closure
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var ItineraryPoint = function ( ) {
+	var itineraryPoint = function ( ) {
 
-		// Private variables
+		var m_Lat = 0;
 
-		var _Lat = 0;
+		var m_Lng = 0;
 
-		var _Lng = 0;
+		var m_Distance = 0;
 
-		var _Distance = 0;
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
-
-		return {
-
-			// getters and setters...
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get distance ( ) { return _Distance;},
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || 0;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_Distance = something.distance || 0;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- itineraryPoint object -------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get distance ( ) { return m_Distance;},
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -99,7 +107,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ItineraryPoint;
+		module.exports = itineraryPoint;
 	}
 
 } ) ( );

@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,67 +33,85 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( './Version' ) );
 
-	var WayPoint = function ( ) {
+	/*
+	--- wayPoint function ---------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _Name = '';
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _Lat = 0;
+	var wayPoint = function ( ) {
 
-		var _Lng = 0;
+		var m_Name = '';
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_Lat = 0;
 
-		return {
+		var m_Lng = 0;
 
-			// getters and setters...
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-
-			get UIName ( ) {
-				if ( '' !== _Name ) {
-					return _Name;
-				}
-				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
-					return _Lat.toFixed ( 6 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 6 )  + ( 0 < _Lng ? ' E' : ' W' );
-				}
-				return '';
-			},
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_ObjId = require ( '../data/ObjId' ) ( );
+		var m_GetUIName = function ( ) {
+			if ( '' !== m_Name ) {
+				return m_Name;
 			}
+			if ( ( 0 !== m_Lat ) && ( 0 !== m_Lng ) ) {
+				return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
+			}
+			return '';
 		};
+		
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
+		};
+		
+		var m_SetObject =function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Name = something.name || '';
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- wayPoint object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get name ( ) { return m_Name; },
+				set name ( Name ) { m_Name = Name;},
+
+				get UIName ( ) { return m_GetUIName ( ); },
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject; },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 
@@ -102,7 +120,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = WayPoint;
+		module.exports = wayPoint;
 	}
 
 } ) ( );

@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,139 +33,155 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Note', require ( './Version' ) );
 
-	var Note = function ( ) {
+	/*
+	--- note function -------------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _IconHeight = 40;
+	var note = function ( ) {
 
-		var _IconWidth = 40;
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _IconContent = '';
+		var m_IconHeight = 40;
 
-		var _PopupContent = '';
+		var m_IconWidth = 40;
 
-		var _TooltipContent = '';
+		var m_IconContent = '';
 
-		var _Phone = '';
+		var m_PopupContent = '';
 
-		var _Url = '';
+		var m_TooltipContent = '';
 
-		var _Address = '';
+		var m_Phone = '';
 
-		var _IconLat = 0;
+		var m_Url = '';
 
-		var _IconLng = 0;
+		var m_Address = '';
 
-		var _Lat = 0;
+		var m_IconLat = 0;
 
-		var _Lng = 0;
+		var m_IconLng = 0;
 
-		var _Distance = -1;
+		var m_Lat = 0;
 
-		var _ChainedDistance = 0;
+		var m_Lng = 0;
 
-		return {
+		var m_Distance = -1;
 
-			// getters and setters...
+		var m_ChainedDistance = 0;
 
-			get isRouteNote ( ) { return _Distance !== -1; },
-
-			get iconHeight ( ) { return _IconHeight;},
-			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
-
-			get iconWidth ( ) { return _IconWidth;},
-			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
-
-			get iconContent ( ) { return _IconContent;},
-			set iconContent ( IconContent ) { _IconContent = IconContent; },
-
-			get popupContent ( ) { return _PopupContent;},
-			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
-
-			get tooltipContent ( ) { return _TooltipContent;},
-			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
-
-			get phone ( ) { return _Phone;},
-			set phone ( Phone ) { _Phone = Phone; },
-
-			get url ( ) { return _Url;},
-			set url ( Url ) { _Url = Url; },
-
-			get address ( ) { return _Address;},
-			set address ( Address ) { _Address = Address; },
-
-			get iconLat ( ) { return _IconLat;},
-			set iconLat ( IconLat ) { _IconLat = IconLat; },
-
-			get iconLng ( ) { return _IconLng;},
-			set iconLng ( IconLng ) { _IconLng = IconLng; },
-
-			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
-			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get distance ( ) { return _Distance; },
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get chainedDistance ( ) { return _ChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					iconHeight : _IconHeight,
-                    iconWidth : _IconWidth,
-                    iconContent : _IconContent,
-                    popupContent : _PopupContent,
-                    tooltipContent : _TooltipContent,
-					phone : _Phone,
-					url : _Url,
-					address : _Address,
-					iconLat : parseFloat ( _IconLat.toFixed ( 6 ) ),
-					iconLng : parseFloat ( _IconLng.toFixed ( 6 ) ),
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconHeight = Object.iconHeight || 40;
-				_IconWidth = Object.iconWidth || 40;
-				_IconContent = Object.iconContent || '';
-				_PopupContent = Object.popupContent || '';
-				_TooltipContent = Object.tooltipContent || '';
-				_Phone = Object.phone || '';
-				_Url = Object.url || '';
-				_Address = Object.address || '';
-				_IconLat = Object.iconLat || 0;
-				_IconLng = Object.iconLng || 0;
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || -1;
-				_ChainedDistance = Object.chainedDistance;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				iconHeight : m_IconHeight,
+				iconWidth : m_IconWidth,
+				iconContent : m_IconContent,
+				popupContent : m_PopupContent,
+				tooltipContent : m_TooltipContent,
+				phone : m_Phone,
+				url : m_Url,
+				address : m_Address,
+				iconLat : parseFloat ( m_IconLat.toFixed ( 6 ) ),
+				iconLng : parseFloat ( m_IconLng.toFixed ( 6 ) ),
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_IconHeight = something.iconHeight || 40;
+			m_IconWidth = something.iconWidth || 40;
+			m_IconContent = something.iconContent || '';
+			m_PopupContent = something.popupContent || '';
+			m_TooltipContent = something.tooltipContent || '';
+			m_Phone = something.phone || '';
+			m_Url = something.url || '';
+			m_Address = something.address || '';
+			m_IconLat = something.iconLat || 0;
+			m_IconLng = something.iconLng || 0;
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_Distance = something.distance || -1;
+			m_ChainedDistance = something.chainedDistance;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- note object -----------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get isRouteNote ( ) { return m_Distance !== -1; },
+
+				get iconHeight ( ) { return m_IconHeight;},
+				set iconHeight ( IconHeight ) { m_IconHeight = IconHeight; },
+
+				get iconWidth ( ) { return m_IconWidth;},
+				set iconWidth ( IconWidth ) { m_IconWidth = IconWidth; },
+
+				get iconContent ( ) { return m_IconContent;},
+				set iconContent ( IconContent ) { m_IconContent = IconContent; },
+
+				get popupContent ( ) { return m_PopupContent;},
+				set popupContent ( PopupContent ) { m_PopupContent = PopupContent; },
+
+				get tooltipContent ( ) { return m_TooltipContent;},
+				set tooltipContent ( TooltipContent ) { m_TooltipContent = TooltipContent; },
+
+				get phone ( ) { return m_Phone;},
+				set phone ( Phone ) { m_Phone = Phone; },
+
+				get url ( ) { return m_Url;},
+				set url ( Url ) { m_Url = Url; },
+
+				get address ( ) { return m_Address;},
+				set address ( Address ) { m_Address = Address; },
+
+				get iconLat ( ) { return m_IconLat;},
+				set iconLat ( IconLat ) { m_IconLat = IconLat; },
+
+				get iconLng ( ) { return m_IconLng;},
+				set iconLng ( IconLng ) { m_IconLng = IconLng; },
+
+				get iconLatLng ( ) { return [ m_IconLat, m_IconLng ];},
+				set iconLatLng ( IconLatLng ) { m_IconLat = IconLatLng [ 0 ]; m_IconLng = IconLatLng [ 1 ]; },
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get distance ( ) { return m_Distance; },
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get chainedDistance ( ) { return m_ChainedDistance; },
+				set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -173,7 +189,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Note;
+		module.exports = note;
 	}
 
 } ) ( );

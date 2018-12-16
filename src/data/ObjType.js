@@ -21,7 +21,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -31,70 +31,86 @@ Tests ...
 
 	'use strict';
 
-	var ObjType = function ( name, version ) {
+	/*
+	--- objType function ----------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _Name = name;
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _Version = version;
+	var objType = function ( name, version ) {
 
-		return {
+		var m_Name = name;
 
-			// getters and setters...
-
-			get name ( ) { return _Name; },
-
-			get version ( ) { return _Version; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					version : _Version
-				};
-			},
-
-			validate : function ( object ) {
-				if ( ! object.objType ) {
-					throw 'No objType for ' + _Name;
-				}
-				if ( ! object.objType.name ) {
-					throw 'No name for ' + _Name;
-				}
-				if ( _Name !== object.objType.name ) {
-					throw 'Invalid name for ' + _Name;
-				}
-				if ( ! object.objType.version ) {
-					throw 'No version for ' + _Name;
-				}
-				if ( _Version !== object.objType.version ) {
-					if ( '1.0.0' === object.objType.version ) {
-						//start upgrade from 1.0.0 to 1.1.0
-						if ( 'Route' === object.objType.name ) {
-							object.dashArray = 0;
-							object.hidden = false;
-						}
-						object.objType.version = '1.1.0';
-						//end upgrade from 1.0.0 to 1.1.0
-					}
-					if ( '1.1.0' === object.objType.version ) {
-						object.objType.version = '1.2.0';
-						//end upgrade from 1.1.0 to 1.2.0
-					}
-					if ( '1.2.0' === object.objType.version ) {
-						object.objType.version = '1.3.0';
-						//end upgrade from 1.2.0 to 1.3.0
-					}
-					if ( _Version !== object.objType.version ) {
-						throw 'invalid version for ' + _Name;
-					}
-				}
-				if ( ! object.objId ) {
-					throw 'No objId for ' + _Name;
-				}
-				return object;
-			}
+		var m_Version = version;
+		
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				version : m_Version
+			};
 		};
+		
+		var m_Validate = function ( something ) {
+			if ( ! something.objType ) {
+				throw 'No objType for ' + m_Name;
+			}
+			if ( ! something.objType.name ) {
+				throw 'No name for ' + m_Name;
+			}
+			if ( m_Name !== something.objType.name ) {
+				throw 'Invalid name for ' + m_Name;
+			}
+			if ( ! something.objType.version ) {
+				throw 'No version for ' + m_Name;
+			}
+			if ( m_Version !== something.objType.version ) {
+				if ( '1.0.0' === something.objType.version ) {
+					//start upgrade from 1.0.0 to 1.1.0
+					if ( 'Route' === something.objType.name ) {
+						something.dashArray = 0;
+						something.hidden = false;
+					}
+					something.objType.version = '1.1.0';
+					//end upgrade from 1.0.0 to 1.1.0
+				}
+				if ( '1.1.0' === something.objType.version ) {
+					something.objType.version = '1.2.0';
+					//end upgrade from 1.1.0 to 1.2.0
+				}
+				if ( '1.2.0' === something.objType.version ) {
+					something.objType.version = '1.3.0';
+					//end upgrade from 1.2.0 to 1.3.0
+				}
+				if ( m_Version !== something.objType.version ) {
+					throw 'invalid version for ' + m_Name;
+				}
+			}
+			if ( ! something.objId ) {
+				throw 'No objId for ' + m_Name;
+			}
+			return something;
+		};
+
+		/*
+		--- objType object --------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get name ( ) { return m_Name; },
+
+				get version ( ) { return m_Version; },
+
+				get object ( ) { return m_GetObject; },
+
+				validate : function ( something ) { return m_Validate ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -102,7 +118,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ObjType;
+		module.exports = objType;
 	}
 
 } ) ( );

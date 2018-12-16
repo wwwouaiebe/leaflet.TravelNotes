@@ -180,14 +180,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- DataSearchEngine.js file -----------------------------------------------------------------------------------------------
+--- DataSearchEngine.js file ------------------------------------------------------------------------------------------
 This file contains:
 	- the DataSearchEngine object
 	- the module.exports implementation
 Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed ...
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -197,24 +197,24 @@ Tests ...
 
 	'use strict';
 	
-	var DataSearchEngine = function ( ) {
+	var dataSearchEngine = function ( ) {
 
-		var _TravelNotesData = require ( '../L.TravelNotes' );
+		var g_TravelNotesData = require ( '../L.TravelNotes' );
 		
 		/*
-		--- getRoute function -------------------------------------------------------------------------------------
+		--- m_getRoute function ---------------------------------------------------------------------------------------
 
 		This function returns a route when giving the routeObjId
 		
-		-----------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _GetRoute = function ( routeObjId ) {
+		var m_GetRoute = function ( routeObjId ) {
 			var route = null;
-			route = _TravelNotesData.travel.routes.getAt ( routeObjId );
+			route = g_TravelNotesData.travel.routes.getAt ( routeObjId );
 			if ( ! route ) {
-				if ( routeObjId === _TravelNotesData.editedRoute.objId ) {
-					route = _TravelNotesData.editedRoute;
+				if ( routeObjId === g_TravelNotesData.editedRoute.objId ) {
+					route = g_TravelNotesData.editedRoute;
 				}
 			}
 			if ( ! route ) {
@@ -225,53 +225,53 @@ Tests ...
 		};
 
 		/*
-		--- _GetNoteAndRoute method --------------------------------------------------------------------------------
+		--- m_GetNoteAndRoute method ----------------------------------------------------------------------------------
 
 		This function returns a note and a route ( when the note is linked to a route ) from the noteObjId
 		
-		-----------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _GetNoteAndRoute = function ( noteObjId ) {
+		var m_GetNoteAndRoute = function ( noteObjId ) {
 			var note = null;
-			note = _TravelNotesData.travel.notes.getAt ( noteObjId );
+			note = g_TravelNotesData.travel.notes.getAt ( noteObjId );
 			if ( note ) {
 				return { note : note, route : null };
 			}
-			var routeIterator = _TravelNotesData.travel.routes.iterator;
+			var routeIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! routeIterator.done ) {
 				note = routeIterator.value.notes.getAt ( noteObjId );
 				if ( note ) {
 					return { note : note, route : routeIterator.value };
 				}
 			}
-			note = _TravelNotesData.editedRoute.notes.getAt ( noteObjId );
+			note = g_TravelNotesData.editedRoute.notes.getAt ( noteObjId );
 			if ( ! note ) {
 				console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataSearchEngine.getNote ( )' );
 				return { note : null, route : null };
 			}
 
-			return { note : note, route : _TravelNotesData.editedRoute };
+			return { note : note, route : g_TravelNotesData.editedRoute };
 		};
 		
 		/*
-		--- _GetWayPoint method -----------------------------------------------------------------------------------
+		--- m_GetWayPoint method --------------------------------------------------------------------------------------
 
 		This function returns a wayPoint from the wayPointObjId
 		
-		-----------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _GetWayPoint = function ( wayPointObjId ) {
+		var m_GetWayPoint = function ( wayPointObjId ) {
 			var wayPoint = null;
-			var routeIterator = _TravelNotesData.travel.routes.iterator;
+			var routeIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! routeIterator.done ) {
 				wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
 				if ( wayPoint ) {
 					return wayPoint;
 				}
 			}
-			wayPoint = _TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId );
+			wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId );
 			if ( ! wayPoint ) {
 				console.log ( 'Invalid wayPointObjId ' + wayPointObjId + ' for function DataSearchEngine.getWayPoint ( )' );
 				return null;
@@ -280,16 +280,18 @@ Tests ...
 		};
 
 		/* 
-		--- DataSearchEngine object -----------------------------------------------------------------------------------
+		--- dataSearchEngine object -----------------------------------------------------------------------------------
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		return {
-			getRoute : function ( routeObjId ) { return _GetRoute ( routeObjId ); },
-			getNoteAndRoute : function ( noteObjId ) { return _GetNoteAndRoute ( noteObjId ); },
-			getWayPoint : function ( wayPointObjId ) { return _GetWayPoint ( wayPointObjId ); }
-		};
+		return Object.seal ( 
+			{
+				getRoute : function ( routeObjId ) { return m_GetRoute ( routeObjId ); },
+				getNoteAndRoute : function ( noteObjId ) { return m_GetNoteAndRoute ( noteObjId ); },
+				getWayPoint : function ( wayPointObjId ) { return m_GetWayPoint ( wayPointObjId ); }
+			}
+		);
 	};
 
 	/*
@@ -297,13 +299,13 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = DataSearchEngine;
+		module.exports = dataSearchEngine;
 	}
 
 } ) ( );
 
 /*
---- End of DataSearchEngine.js file ----------------------------------------------------------------------------------------
+--- End of DataSearchEngine.js file -----------------------------------------------------------------------------------
 */
 },{"../L.TravelNotes":7}],3:[function(require,module,exports){
 /*
@@ -331,7 +333,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -341,79 +343,103 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Itinerary', require ( './Version' ) );
 
 	/*
-	--- Itinerary object ----------------------------------------------------------------------------------------------
+	--- itinerary function --------------------------------------------------------------------------------------------
 
 	Patterns : Closure
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var Itinerary = function ( ) {
+	var itinerary = function ( ) {
 
 		// Private variables
 
-		var _Provider = '';
+		var m_Provider = '';
 
-		var _TransitMode = '';
+		var m_TransitMode = '';
 
-		var _ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
+		var m_ItineraryPoints = require ( '../data/Collection' ) ( 'ItineraryPoint' );
 
-		var _Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
+		var m_Maneuvers = require ( '../data/Collection' ) ( 'Maneuver' );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		return {
+		/*
+		--- m_GetObject function --------------------------------------------------------------------------------------
 
-			// getters and setters...
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get itineraryPoints ( ) { return _ItineraryPoints; },
+		var m_GetObject = function ( ) {
+			return {
+				itineraryPoints : m_ItineraryPoints.object,
+				maneuvers : m_Maneuvers.object,
+				provider : m_Provider,
+				transitMode : m_TransitMode,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
+		};
+		
+		/*
+		--- m_SetObject function --------------------------------------------------------------------------------------
 
-			get maneuvers ( ) { return _Maneuvers; },
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get provider ( ) { return _Provider; },
-			set provider ( Provider ) { _Provider = Provider; },
-
-			get transitMode ( ) { return _TransitMode; },
-			set transitMode ( TransitMode ) { _TransitMode = TransitMode; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					itineraryPoints : _ItineraryPoints.object,
-					maneuvers : _Maneuvers.object,
-					provider : _Provider,
-					transitMode : _TransitMode,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_ItineraryPoints.object = Object.itineraryPoints || [];
-				_Maneuvers.object = Object.maneuvers || [];
-				_Provider = Object.provider || '';
-				_TransitMode = Object.transitMode || '';
-				_ObjId = require ( '../data/ObjId' ) ( );
-				// rebuilding links between maneuvers and itineraryPoints
-				var itineraryPointObjIdMap = new Map ( );
-				var sourceCounter = 0;
-				var targetIterator = _ItineraryPoints.iterator;
-				while ( ! targetIterator.done ) {
-					itineraryPointObjIdMap.set ( Object.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
-					sourceCounter ++;
-				}
-				var maneuverIterator = _Maneuvers.iterator;
-				while ( ! maneuverIterator.done ) {
-					maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
-				}
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_ItineraryPoints.object = something.itineraryPoints || [];
+			m_Maneuvers.object = something.maneuvers || [];
+			m_Provider = something.provider || '';
+			m_TransitMode = something.transitMode || '';
+			m_ObjId = require ( '../data/ObjId' ) ( );
+			
+			// rebuilding links between maneuvers and itineraryPoints
+			var itineraryPointObjIdMap = new Map ( );
+			var sourceCounter = 0;
+			var targetIterator = m_ItineraryPoints.iterator;
+			while ( ! targetIterator.done ) {
+				itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
+				sourceCounter ++;
+			}
+			var maneuverIterator = m_Maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
 			}
 		};
+		
+		/*
+		--- itinerary object ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+
+				get itineraryPoints ( ) { return m_ItineraryPoints; },
+
+				get maneuvers ( ) { return m_Maneuvers; },
+
+				get provider ( ) { return m_Provider; },
+				set provider ( Provider ) { m_Provider = Provider; },
+
+				get transitMode ( ) { return m_TransitMode; },
+				set transitMode ( TransitMode ) { m_TransitMode = TransitMode; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( );},
+				set object ( something ) { m_SetObject ( something ); }
+				
+			}
+		);
 	};
 
 	/*
@@ -421,7 +447,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Itinerary;
+		module.exports = itinerary;
 	}
 
 } ) ( );
@@ -458,7 +484,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -468,116 +494,132 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Route', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Route', require ( './Version' ) );
 
-	var Route = function ( ) {
+	/*
+	--- route function ------------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _Name = '';
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _WayPoints = require ( '../data/Collection' ) ( 'WayPoint' );
-		_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
-		_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
+	var route = function ( ) {
 
-		var _Notes = require ( '../data/Collection' ) ( 'Note' );
+		var m_Name = '';
 
-		var _Itinerary = require ( '../data/Itinerary' ) ( );
+		var m_WayPoints = require ( '../data/Collection' ) ( 'WayPoint' );
+		m_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
+		m_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
 
-		var _Width = require ( '../L.TravelNotes' ).config.route.width || 5;
+		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
-		var _Color = require ( '../L.TravelNotes' ).config.route.color || '#ff0000';
+		var m_Itinerary = require ( '../data/Itinerary' ) ( );
+
+		var m_Width = require ( '../L.TravelNotes' ).config.route.width || 5;
+
+		var m_Color = require ( '../L.TravelNotes' ).config.route.color || '#ff0000';
 		
-		var _DashArray = require ( '../L.TravelNotes' ).config.route.dashArray || 0;
+		var m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray || 0;
 
-		var _Chain = false;
+		var m_Chain = false;
 
-		var _ChainedDistance = 0;
+		var m_ChainedDistance = 0;
 
-		var _Distance = 0;
+		var m_Distance = 0;
 
-		var _Duration = 0;
+		var m_Duration = 0;
 		
-		var _Hidden = false;
+		var m_Hidden = false;
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		return {
-
-			// getters and setters...
-
-			get wayPoints ( ) { return _WayPoints; },
-
-			get itinerary ( ) { return _Itinerary; },
-
-			get notes ( ) { return _Notes; },
-
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-
-			get width ( ) { return _Width; },
-			set width ( Width ) { _Width = Width; },
-
-			get color ( ) { return _Color; },
-			set color ( Color ) { _Color = Color; },
-
-			get dashArray ( ) { return _DashArray; },
-			set dashArray ( DashArray ) { _DashArray = DashArray; },
-
-			get chain ( ) { return _Chain; },
-			set chain ( Chain ) { _Chain = Chain; },
-
-			get chainedDistance ( ) { return _ChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
-
-			get distance ( ) { return _Distance; },
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get duration ( ) { return _Duration; },
-			set duration ( Duration ) { _Duration = Duration; },
-
-			get hidden ( ) { return _Hidden; },
-			set hidden ( Hidden ) { _Hidden = Hidden; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					wayPoints : _WayPoints.object,
-					notes : _Notes.object,
-					itinerary : _Itinerary.object,
-					width : _Width,
-					color : _Color,
-					dashArray : _DashArray,
-					chain :_Chain,
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					duration : _Duration,
-					hidden : _Hidden,
-					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_WayPoints.object = Object.wayPoints || [];
-				_Notes.object = Object.notes || [];
-				_Itinerary.object = Object.itinerary || require ( './Itinerary' ) ( ).object;
-				_Width = Object.width || 5;
-				_Color = Object.color || '#000000';
-				_DashArray = Object.dashArray || 0;
-				_Chain = Object.chain || false;
-				_Distance = Object.distance;
-				_Duration = Object.duration;
-				_Hidden = Object.hidden || false;
-				_ChainedDistance = Object.chainedDistance;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				wayPoints : m_WayPoints.object,
+				notes : m_Notes.object,
+				itinerary : m_Itinerary.object,
+				width : m_Width,
+				color : m_Color,
+				dashArray : m_DashArray,
+				chain :m_Chain,
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				duration : m_Duration,
+				hidden : m_Hidden,
+				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Name = something.name || '';
+			m_WayPoints.object = something.wayPoints || [];
+			m_Notes.object = something.notes || [];
+			m_Itinerary.object = something.itinerary || require ( './Itinerary' ) ( ).object;
+			m_Width = something.width || 5;
+			m_Color = something.color || '#000000';
+			m_DashArray = something.dashArray || 0;
+			m_Chain = something.chain || false;
+			m_Distance = something.distance;
+			m_Duration = something.duration;
+			m_Hidden = something.hidden || false;
+			m_ChainedDistance = something.chainedDistance;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+
+		/*
+		--- route object -----------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal ( 
+			{
+
+				get wayPoints ( ) { return m_WayPoints; },
+
+				get itinerary ( ) { return m_Itinerary; },
+
+				get notes ( ) { return m_Notes; },
+
+				get name ( ) { return m_Name; },
+				set name ( Name ) { m_Name = Name;},
+
+				get width ( ) { return m_Width; },
+				set width ( Width ) { m_Width = Width; },
+
+				get color ( ) { return m_Color; },
+				set color ( Color ) { m_Color = Color; },
+
+				get dashArray ( ) { return m_DashArray; },
+				set dashArray ( DashArray ) { m_DashArray = DashArray; },
+
+				get chain ( ) { return m_Chain; },
+				set chain ( Chain ) { m_Chain = Chain; },
+
+				get chainedDistance ( ) { return m_ChainedDistance; },
+				set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+
+				get distance ( ) { return m_Distance; },
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get duration ( ) { return m_Duration; },
+				set duration ( Duration ) { m_Duration = Duration; },
+
+				get hidden ( ) { return m_Hidden; },
+				set hidden ( Hidden ) { m_Hidden = Hidden; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -585,7 +627,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Route;
+		module.exports = route;
 	}
 
 } ) ( );
@@ -619,7 +661,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -629,66 +671,91 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( './Version' ) );
 
-	var Travel = function ( ) {
+	/*
+	--- travel function -----------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var travel = function ( ) {
 
 		// Private variables
 
-		var _Name = 'TravelNotes';
+		var m_Name = 'TravelNotes';
 
-		var _Routes = require ( '../data/Collection' ) ( 'Route' );
+		var m_Routes = require ( '../data/Collection' ) ( 'Route' );
 
-		var _Notes = require ( '../data/Collection' ) ( 'Note' );
+		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
+
+		var m_ReadOnly = false;
 		
-		var _UserData = {};
+		var m_UserData = {};
 
-		return {
-
-			// getters and setters...
-
-			get routes ( ) { return _Routes; },
-
-			get notes ( ) { return _Notes; },
-
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-
-			get userData ( ) { return _UserData; },
-			set userData ( UserData ) { _UserData = UserData;},
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					routes : _Routes.object,
-					notes : _Notes.object,
-					userData : _UserData,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_UserData = Object.userData || {};
-				_Routes.object = Object.routes || [];
-				_Notes.object = Object.notes || [];
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				routes : m_Routes.object,
+				notes : m_Notes.object,
+				userData : m_UserData,
+				readOnly : m_ReadOnly,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Name = something.name || '';
+			m_UserData = something.userData || {};
+			m_ReadOnly = something.readOnly || false;
+			m_Routes.object = something.routes || [];
+			m_Notes.object = something.notes || [];
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- travel object ---------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+				get routes ( ) { return m_Routes; },
+
+				get notes ( ) { return m_Notes; },
+
+				get name ( ) { return m_Name; },
+				set name ( Name ) { m_Name = Name; },
+				
+				get readOnly ( ) { return m_ReadOnly; },
+				set readOnly ( ReadOnly ) { m_ReadOnly = ReadOnly; },
+
+				get userData ( ) { return m_UserData; },
+				set userData ( UserData ) { m_UserData = UserData;},
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
+	
 	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Travel;
+		module.exports = travel;
 	}
 
 } ) ( );
@@ -717,7 +784,7 @@ This file contains:
 	- the version number
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed ....
+Doc reviewed 20181216
 
 -----------------------------------------------------------------------------------------------------------------------
 */
@@ -9725,7 +9792,7 @@ Tests ...
 	'use strict';
 
 	/*
-	--- Collection object ---------------------------------------------------------------------------------------------
+	--- collection function -------------------------------------------------------------------------------------------
 
 	Patterns : Closure
 
@@ -9835,10 +9902,11 @@ Tests ...
 		*/
 
 		var m_IndexOfObjId = function ( objId ) {
-			function haveObjId ( element ) {
-				return element.objId === objId;
-			}
-			return m_Array.findIndex ( haveObjId );
+			return m_Array.findIndex ( 
+				function ( element ) {
+					return element.objId === objId;
+				} 
+			);
 		};
 
 		/*
@@ -9927,10 +9995,10 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var m_SetObject = function ( Array ) {
+		var m_SetObject = function ( something ) {
 			m_Array.length = 0;
 			var newObject;
-			Array.forEach (
+			something.forEach (
 				function ( arrayObject ) {
 					switch ( m_ObjName ) {
 						case 'Route' :
@@ -9993,12 +10061,12 @@ Tests ...
 			{
 
 				/*
-				--- add function ------------------------------------------------------------------------------------------
+				--- add function --------------------------------------------------------------------------------------
 
 				This function add an object to the collection
 				throw when the object type is invalid
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				add : function ( object ) {
@@ -10006,11 +10074,11 @@ Tests ...
 				},
 
 				/*
-				--- forEach function --------------------------------------------------------------------------------------
+				--- forEach function ----------------------------------------------------------------------------------
 
 				This function executes a function on each object of the collection and returns the final result
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				forEach : function ( funct ) {
@@ -10018,11 +10086,11 @@ Tests ...
 				},
 
 				/*
-				--- getAt function ----------------------------------------------------------------------------------------
+				--- getAt function ------------------------------------------------------------------------------------
 
 				This function returns the object with the given objId or null when the object is not found
-
-				-----------------------------------------------------------------------------------------------------------
+				
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				getAt : function ( objId ) {
@@ -10030,23 +10098,23 @@ Tests ...
 				},
 
 				/*
-				--- moveTo function ---------------------------------------------------------------------------------------
+				--- moveTo function -----------------------------------------------------------------------------------
 
 				This function move the object identified by objId to the position ocuped by the object
 				identified by targetObjId 
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 				moveTo : function ( objId, targetObjId, moveBefore ) {
 					m_MoveTo ( objId, targetObjId, moveBefore );
 				},
 				/*
-				--- remove function ---------------------------------------------------------------------------------------
+				--- remove function -----------------------------------------------------------------------------------
 
 				This function remove the object with the given objId
 				throw when the object is not found
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				remove : function ( objId ) {
@@ -10054,12 +10122,12 @@ Tests ...
 				},
 
 				/*
-				--- removeAll function ------------------------------------------------------------------------------------
+				--- removeAll function --------------------------------------------------------------------------------
 
 				This function remove all objects in the collection
 				when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				removeAll : function ( exceptFirstLast ) {
@@ -10067,12 +10135,12 @@ Tests ...
 				},
 
 				/*
-				--- replace function --------------------------------------------------------------------------------------
+				--- replace function ----------------------------------------------------------------------------------
 
 				This function replace the object identified by oldObjId with a new object
 				throw when the object type is invalid
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				replace : function ( oldObjId, object ) {
@@ -10080,11 +10148,11 @@ Tests ...
 				},
 
 				/*
-				--- reverse function --------------------------------------------------------------------------------------
+				--- reverse function ----------------------------------------------------------------------------------
 
 				This function reverse the objects in the collection
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				reverse : function ( ) {
@@ -10092,11 +10160,11 @@ Tests ...
 				},
 
 				/*
-				--- sort function -----------------------------------------------------------------------------------------
+				--- sort function -------------------------------------------------------------------------------------
 
 				This function sort the collection, using the compare function
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				sort : function ( compareFunction ) {
@@ -10104,12 +10172,12 @@ Tests ...
 				},
 
 				/*
-				--- swap function -----------------------------------------------------------------------------------------
+				--- swap function -------------------------------------------------------------------------------------
 
 				This function move up ( when swapUp is true ) or move down an object in the collection
 				throw when the swap is not possible
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				swap : function ( objId, swapUp ) {
@@ -10117,11 +10185,11 @@ Tests ...
 				},
 
 				/*
-				--- first getter ------------------------------------------------------------------------------------------
+				--- first getter --------------------------------------------------------------------------------------
 
 				The first object in the collection
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				get first ( ) {
@@ -10129,7 +10197,7 @@ Tests ...
 				},
 
 				/*
-				--- iterator getter ---------------------------------------------------------------------------------------
+				--- iterator getter -----------------------------------------------------------------------------------
 
 				Returns an iterator on the collection.
 				The iterator have the following properties:
@@ -10139,18 +10207,18 @@ Tests ...
 				last : true when the iterator is on the last object
 				index : the current position of the iterator in the collection
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 				get iterator ( ) {
 					return m_Iterator ( );
 				},
 
 				/*
-				--- last getter -------------------------------------------------------------------------------------------
+				--- last getter ---------------------------------------------------------------------------------------
 
 				The last object in the collection
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				get last ( ) {
@@ -10158,11 +10226,11 @@ Tests ...
 				},
 
 				/*
-				--- length getter -----------------------------------------------------------------------------------------
+				--- length getter -------------------------------------------------------------------------------------
 
 				The length of the collection
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				get length ( ) {
@@ -10170,11 +10238,11 @@ Tests ...
 				},
 
 				/*
-				--- object getter -----------------------------------------------------------------------------------------
+				--- object getter -------------------------------------------------------------------------------------
 
 				Transform the collection into an array that can be used with JSON
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
 				get object ( ) {
@@ -10182,16 +10250,16 @@ Tests ...
 				},
 
 				/*
-				--- object setter -----------------------------------------------------------------------------------------
+				--- object setter -------------------------------------------------------------------------------------
 
 				Transform an array to a collection
 				throw when an object in the array have an invalid type
 
-				-----------------------------------------------------------------------------------------------------------
+				-------------------------------------------------------------------------------------------------------
 				*/
 
-				set object ( Array ) {
-					m_SetObject ( Array );
+				set object ( something ) {
+					m_SetObject ( something );
 				}
 
 			}
@@ -10239,7 +10307,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
-Doc reviewed ...
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10248,83 +10316,9 @@ Tests ...
 	
 	'use strict';
 
-	var Config = function ( ) {
+	var config = function ( ) {
 
-		/*
-		--- _copyObjectTo method --------------------------------------------------------------------------------------
-
-		This method:
-			- search recursively all dest properties
-			- foreach found property, search the same property in source
-			- copy the property value from source to dest if found
-			- search recursively all sources properties
-			- foreach found property search the same property in dest
-			- copy the property value from source to dest
-			
-			So: 
-				- if a property is missing in the user config, the property is selected from the default config
-				- if a property is in the user config but missing in the default config, the property is also added (and reminder
-				  that the user can have more dashChoices than the default config )
-				- if a property is changed in the user config, the property is adapted
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var _copyObjectTo = function ( source, dest ) {
-			if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
-				return;
-			}
-			try {
-				var property;
-				for ( property in dest ) {
-					if ( 'object' === typeof dest [ property ] ) {
-						_copyObjectTo ( source [ property ], dest [ property ] );
-					}
-					else {
-						dest [ property ] = source [ property ] || dest [ property ];
-					}
-				}
-
-				for ( property in source ) {
-					if ( 'object' === typeof source [ property ] ) {
-						if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
-							dest [ property ] = dest [ property ] || [];
-						}
-						else {
-							dest [ property ] = dest [ property ] || {};
-						}
-						_copyObjectTo ( source [ property ], dest [ property ] );
-					}
-					else {
-						dest [ property ] = source [ property ];
-					}
-				}
-			}
-			catch ( e ) {
-				console.log ( e );
-				console.log ( 'Not possible to overload Config' );
-			}
-			
-			return;
-		};
-		
-		var _Freeze = function ( object ) {
-			var property;
-			for ( property in object ) {
-				if ( 'object' === typeof object [ property ] ) {
-					object [ property ] = _Freeze (  object [ property ] );
-				}
-			}
-			
-			return Object.freeze (object );
-		};
-		
-		var _Overload = function ( source ) {
-			_copyObjectTo ( source, _Config );
-			_Config = _Freeze ( _Config );
-		};
-
-		var _Config = {
+		var m_Config = {
 			contextMenu : {
 				timeout : 1500
 			},
@@ -10416,32 +10410,120 @@ Tests ...
 			},
 			haveBeforeUnloadWarning : true
 		};		
+
+		/*
+		--- m_CopyObjectTo function -----------------------------------------------------------------------------------
+
+		This method:
+			- search recursively all dest properties
+			- foreach found property, search the same property in source
+			- copy the property value from source to dest if found
+			- search recursively all sources properties
+			- foreach found property search the same property in dest
+			- copy the property value from source to dest
+			
+			So: 
+				- if a property is missing in the user config, the property is selected from the default config
+				- if a property is in the user config but missing in the default config, the property is also added (and reminder
+				  that the user can have more dashChoices than the default config )
+				- if a property is changed in the user config, the property is adapted
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CopyObjectTo = function ( source, dest ) {
+			if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
+				return;
+			}
+			try {
+				var property;
+				for ( property in dest ) {
+					if ( 'object' === typeof dest [ property ] ) {
+						m_CopyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ] || dest [ property ];
+					}
+				}
+
+				for ( property in source ) {
+					if ( 'object' === typeof source [ property ] ) {
+						if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
+							dest [ property ] = dest [ property ] || [];
+						}
+						else {
+							dest [ property ] = dest [ property ] || {};
+						}
+						m_CopyObjectTo ( source [ property ], dest [ property ] );
+					}
+					else {
+						dest [ property ] = source [ property ];
+					}
+				}
+			}
+			catch ( e ) {
+				console.log ( e );
+				console.log ( 'Not possible to overload Config' );
+			}
+			
+			return;
+		};
+		
+		/*
+		--- m_Freeze function -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Freeze = function ( object ) {
+			var property;
+			for ( property in object ) {
+				if ( 'object' === typeof object [ property ] ) {
+					object [ property ] = m_Freeze (  object [ property ] );
+				}
+			}
+			
+			return Object.freeze (object );
+		};
+		
+		/*
+		--- m_Overload function ---------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Overload = function ( source ) {
+			m_CopyObjectTo ( source, m_Config );
+			m_Config = m_Freeze ( m_Config );
+		};
 	
 		/* 
-		--- Config object ---------------------------------------------------------------------------------------------
+		--- config object ---------------------------------------------------------------------------------------------
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
 		return {
-			get contextMenu ( ) { return _Config.contextMenu; },
-			get errorMessages ( ) { return _Config.errorMessages; },
-			get routing ( ) { return _Config.routing; },
-			get language ( ) { return _Config.language; },
-			get itineraryPointMarker ( ) { return _Config.itineraryPointMarker; },
-			get searchPointMarker ( ) { return _Config.searchPointMarker; },
-			get searchPointPolyline ( ) { return _Config.searchPointPolyline; },
-			get previousSearchLimit ( ) { return _Config.previousSearchLimit; },
-			get nextSearchLimit ( ) { return _Config.nextSearchLimit; },
-			get wayPoint ( ) { return _Config.wayPoint; },
-			get route ( ) { return _Config.route; },
-			get note ( ) { return _Config.note; },
-			get itineraryPointZoom ( ) { return _Config.itineraryPointZoom; },
-			get routeEditor ( ) { return _Config.routeEditor; },
-			get travelEditor ( ) { return _Config.travelEditor; },
-			get haveBeforeUnloadWarning ( ) { return _Config.haveBeforeUnloadWarning; },
 			
-			overload : function ( newConfig ) { _Overload ( newConfig ) ;}
+			get contextMenu ( ) { return m_Config.contextMenu; },
+			get errorMessages ( ) { return m_Config.errorMessages; },
+			get routing ( ) { return m_Config.routing; },
+			get language ( ) { return m_Config.language; },
+			get itineraryPointMarker ( ) { return m_Config.itineraryPointMarker; },
+			get searchPointMarker ( ) { return m_Config.searchPointMarker; },
+			get searchPointPolyline ( ) { return m_Config.searchPointPolyline; },
+			get previousSearchLimit ( ) { return m_Config.previousSearchLimit; },
+			get nextSearchLimit ( ) { return m_Config.nextSearchLimit; },
+			get wayPoint ( ) { return m_Config.wayPoint; },
+			get route ( ) { return m_Config.route; },
+			get note ( ) { return m_Config.note; },
+			get itineraryPointZoom ( ) { return m_Config.itineraryPointZoom; },
+			get routeEditor ( ) { return m_Config.routeEditor; },
+			get travelEditor ( ) { return m_Config.travelEditor; },
+			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
+			
+			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
+			
 		};
 	};
 	
@@ -10450,7 +10532,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Config ( );
+		module.exports = config ( );
 	}
 	
 } ) ( );
@@ -10487,7 +10569,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10497,65 +10579,73 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( './Version' ) );
 
 	/*
-	--- ItineraryPoint object -----------------------------------------------------------------------------------------
+	--- itineraryPoint function ---------------------------------------------------------------------------------------
 
 	Patterns : Closure
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var ItineraryPoint = function ( ) {
+	var itineraryPoint = function ( ) {
 
-		// Private variables
+		var m_Lat = 0;
 
-		var _Lat = 0;
+		var m_Lng = 0;
 
-		var _Lng = 0;
+		var m_Distance = 0;
 
-		var _Distance = 0;
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
-
-		return {
-
-			// getters and setters...
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get distance ( ) { return _Distance;},
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || 0;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_Distance = something.distance || 0;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- itineraryPoint object -------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get distance ( ) { return m_Distance;},
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -10563,7 +10653,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ItineraryPoint;
+		module.exports = itineraryPoint;
 	}
 
 } ) ( );
@@ -10597,7 +10687,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170925
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10607,68 +10697,86 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Maneuver', require ( './Version' ) );
 
-	var Maneuver = function ( ) {
+	/*
+	--- maneuver function ---------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var maneuver = function ( ) {
 
 		// Private variables
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _IconName = '';
+		var m_IconName = '';
 
-		var _Instruction = '';
+		var m_Instruction = '';
 
-		var _ItineraryPointObjId = -1;
+		var m_ItineraryPointObjId = -1;
 
-		var _Distance = 0;
+		var m_Distance = 0;
 
-		var _Duration = 0;
+		var m_Duration = 0;
 
-		return {
-
-			// getters and setters...
-
-			get iconName ( ) { return _IconName;},
-			set iconName ( IconName ) { _IconName = IconName; },
-
-			get instruction ( ) { return _Instruction;},
-			set instruction ( Instruction ) { _Instruction = Instruction; },
-
-			get itineraryPointObjId ( ) { return _ItineraryPointObjId;},
-			set itineraryPointObjId ( ItineraryPointObjId ) { _ItineraryPointObjId = ItineraryPointObjId; },
-
-			get distance ( ) { return _Distance;},
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get duration ( ) { return _Duration;},
-			set duration ( Duration ) { _Duration = Duration; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					iconName : _IconName,
-					instruction : _Instruction,
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					duration : _Duration,
-					itineraryPointObjId : _ItineraryPointObjId,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconName = Object.iconName || '';
-				_Instruction = Object.instruction || '';
-				_Distance = Object.distance || 0;
-				_Duration = Object.duration || 0;
-				_ItineraryPointObjId = Object.itineraryPointObjId || -1;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				iconName : m_IconName,
+				instruction : m_Instruction,
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				duration : m_Duration,
+				itineraryPointObjId : m_ItineraryPointObjId,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_IconName = something.iconName || '';
+			m_Instruction = something.instruction || '';
+			m_Distance = something.distance || 0;
+			m_Duration = something.duration || 0;
+			m_ItineraryPointObjId = something.itineraryPointObjId || -1;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+
+		/*
+		--- maneuver object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				
+				get iconName ( ) { return m_IconName;},
+				set iconName ( IconName ) { m_IconName = IconName; },
+
+				get instruction ( ) { return m_Instruction;},
+				set instruction ( Instruction ) { m_Instruction = Instruction; },
+
+				get itineraryPointObjId ( ) { return m_ItineraryPointObjId;},
+				set itineraryPointObjId ( ItineraryPointObjId ) { m_ItineraryPointObjId = ItineraryPointObjId; },
+
+				get distance ( ) { return m_Distance;},
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get duration ( ) { return m_Duration;},
+				set duration ( Duration ) { m_Duration = Duration; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -10676,7 +10784,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Maneuver;
+		module.exports = maneuver;
 	}
 
 } ) ( );
@@ -10710,7 +10818,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10720,139 +10828,155 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Note', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Note', require ( './Version' ) );
 
-	var Note = function ( ) {
+	/*
+	--- note function -------------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _IconHeight = 40;
+	var note = function ( ) {
 
-		var _IconWidth = 40;
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-		var _IconContent = '';
+		var m_IconHeight = 40;
 
-		var _PopupContent = '';
+		var m_IconWidth = 40;
 
-		var _TooltipContent = '';
+		var m_IconContent = '';
 
-		var _Phone = '';
+		var m_PopupContent = '';
 
-		var _Url = '';
+		var m_TooltipContent = '';
 
-		var _Address = '';
+		var m_Phone = '';
 
-		var _IconLat = 0;
+		var m_Url = '';
 
-		var _IconLng = 0;
+		var m_Address = '';
 
-		var _Lat = 0;
+		var m_IconLat = 0;
 
-		var _Lng = 0;
+		var m_IconLng = 0;
 
-		var _Distance = -1;
+		var m_Lat = 0;
 
-		var _ChainedDistance = 0;
+		var m_Lng = 0;
 
-		return {
+		var m_Distance = -1;
 
-			// getters and setters...
+		var m_ChainedDistance = 0;
 
-			get isRouteNote ( ) { return _Distance !== -1; },
-
-			get iconHeight ( ) { return _IconHeight;},
-			set iconHeight ( IconHeight ) { _IconHeight = IconHeight; },
-
-			get iconWidth ( ) { return _IconWidth;},
-			set iconWidth ( IconWidth ) { _IconWidth = IconWidth; },
-
-			get iconContent ( ) { return _IconContent;},
-			set iconContent ( IconContent ) { _IconContent = IconContent; },
-
-			get popupContent ( ) { return _PopupContent;},
-			set popupContent ( PopupContent ) { _PopupContent = PopupContent; },
-
-			get tooltipContent ( ) { return _TooltipContent;},
-			set tooltipContent ( TooltipContent ) { _TooltipContent = TooltipContent; },
-
-			get phone ( ) { return _Phone;},
-			set phone ( Phone ) { _Phone = Phone; },
-
-			get url ( ) { return _Url;},
-			set url ( Url ) { _Url = Url; },
-
-			get address ( ) { return _Address;},
-			set address ( Address ) { _Address = Address; },
-
-			get iconLat ( ) { return _IconLat;},
-			set iconLat ( IconLat ) { _IconLat = IconLat; },
-
-			get iconLng ( ) { return _IconLng;},
-			set iconLng ( IconLng ) { _IconLng = IconLng; },
-
-			get iconLatLng ( ) { return [ _IconLat, _IconLng ];},
-			set iconLatLng ( IconLatLng ) { _IconLat = IconLatLng [ 0 ]; _IconLng = IconLatLng [ 1 ]; },
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get distance ( ) { return _Distance; },
-			set distance ( Distance ) { _Distance = Distance; },
-
-			get chainedDistance ( ) { return _ChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { _ChainedDistance = ChainedDistance; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					iconHeight : _IconHeight,
-                    iconWidth : _IconWidth,
-                    iconContent : _IconContent,
-                    popupContent : _PopupContent,
-                    tooltipContent : _TooltipContent,
-					phone : _Phone,
-					url : _Url,
-					address : _Address,
-					iconLat : parseFloat ( _IconLat.toFixed ( 6 ) ),
-					iconLng : parseFloat ( _IconLng.toFixed ( 6 ) ),
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					distance : parseFloat ( _Distance.toFixed ( 2 ) ),
-					chainedDistance : parseFloat ( _ChainedDistance.toFixed ( 2 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_IconHeight = Object.iconHeight || 40;
-				_IconWidth = Object.iconWidth || 40;
-				_IconContent = Object.iconContent || '';
-				_PopupContent = Object.popupContent || '';
-				_TooltipContent = Object.tooltipContent || '';
-				_Phone = Object.phone || '';
-				_Url = Object.url || '';
-				_Address = Object.address || '';
-				_IconLat = Object.iconLat || 0;
-				_IconLng = Object.iconLng || 0;
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_Distance = Object.distance || -1;
-				_ChainedDistance = Object.chainedDistance;
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				iconHeight : m_IconHeight,
+				iconWidth : m_IconWidth,
+				iconContent : m_IconContent,
+				popupContent : m_PopupContent,
+				tooltipContent : m_TooltipContent,
+				phone : m_Phone,
+				url : m_Url,
+				address : m_Address,
+				iconLat : parseFloat ( m_IconLat.toFixed ( 6 ) ),
+				iconLng : parseFloat ( m_IconLng.toFixed ( 6 ) ),
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_IconHeight = something.iconHeight || 40;
+			m_IconWidth = something.iconWidth || 40;
+			m_IconContent = something.iconContent || '';
+			m_PopupContent = something.popupContent || '';
+			m_TooltipContent = something.tooltipContent || '';
+			m_Phone = something.phone || '';
+			m_Url = something.url || '';
+			m_Address = something.address || '';
+			m_IconLat = something.iconLat || 0;
+			m_IconLng = something.iconLng || 0;
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_Distance = something.distance || -1;
+			m_ChainedDistance = something.chainedDistance;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- note object -----------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get isRouteNote ( ) { return m_Distance !== -1; },
+
+				get iconHeight ( ) { return m_IconHeight;},
+				set iconHeight ( IconHeight ) { m_IconHeight = IconHeight; },
+
+				get iconWidth ( ) { return m_IconWidth;},
+				set iconWidth ( IconWidth ) { m_IconWidth = IconWidth; },
+
+				get iconContent ( ) { return m_IconContent;},
+				set iconContent ( IconContent ) { m_IconContent = IconContent; },
+
+				get popupContent ( ) { return m_PopupContent;},
+				set popupContent ( PopupContent ) { m_PopupContent = PopupContent; },
+
+				get tooltipContent ( ) { return m_TooltipContent;},
+				set tooltipContent ( TooltipContent ) { m_TooltipContent = TooltipContent; },
+
+				get phone ( ) { return m_Phone;},
+				set phone ( Phone ) { m_Phone = Phone; },
+
+				get url ( ) { return m_Url;},
+				set url ( Url ) { m_Url = Url; },
+
+				get address ( ) { return m_Address;},
+				set address ( Address ) { m_Address = Address; },
+
+				get iconLat ( ) { return m_IconLat;},
+				set iconLat ( IconLat ) { m_IconLat = IconLat; },
+
+				get iconLng ( ) { return m_IconLng;},
+				set iconLng ( IconLng ) { m_IconLng = IconLng; },
+
+				get iconLatLng ( ) { return [ m_IconLat, m_IconLng ];},
+				set iconLatLng ( IconLatLng ) { m_IconLat = IconLatLng [ 0 ]; m_IconLng = IconLatLng [ 1 ]; },
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get distance ( ) { return m_Distance; },
+				set distance ( Distance ) { m_Distance = Distance; },
+
+				get chainedDistance ( ) { return m_ChainedDistance; },
+				set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -10860,7 +10984,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Note;
+		module.exports = note;
 	}
 
 } ) ( );
@@ -10894,7 +11018,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Initialization changed
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10904,8 +11028,13 @@ Tests ...
 
 	'use strict';
 
+	/*
+	--- objId function ------------------------------------------------------------------------------------------------
 
-	var ObjId = function ( ) {
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var objId = function ( ) {
 		if ( ! global.TravelNotesObjId ) {
 			global.TravelNotesObjId = 0;
 		}
@@ -10918,7 +11047,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ObjId;
+		module.exports = objId;
 
 	}
 
@@ -10952,7 +11081,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10962,70 +11091,86 @@ Tests ...
 
 	'use strict';
 
-	var ObjType = function ( name, version ) {
+	/*
+	--- objType function ----------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _Name = name;
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _Version = version;
+	var objType = function ( name, version ) {
 
-		return {
+		var m_Name = name;
 
-			// getters and setters...
-
-			get name ( ) { return _Name; },
-
-			get version ( ) { return _Version; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					version : _Version
-				};
-			},
-
-			validate : function ( object ) {
-				if ( ! object.objType ) {
-					throw 'No objType for ' + _Name;
-				}
-				if ( ! object.objType.name ) {
-					throw 'No name for ' + _Name;
-				}
-				if ( _Name !== object.objType.name ) {
-					throw 'Invalid name for ' + _Name;
-				}
-				if ( ! object.objType.version ) {
-					throw 'No version for ' + _Name;
-				}
-				if ( _Version !== object.objType.version ) {
-					if ( '1.0.0' === object.objType.version ) {
-						//start upgrade from 1.0.0 to 1.1.0
-						if ( 'Route' === object.objType.name ) {
-							object.dashArray = 0;
-							object.hidden = false;
-						}
-						object.objType.version = '1.1.0';
-						//end upgrade from 1.0.0 to 1.1.0
-					}
-					if ( '1.1.0' === object.objType.version ) {
-						object.objType.version = '1.2.0';
-						//end upgrade from 1.1.0 to 1.2.0
-					}
-					if ( '1.2.0' === object.objType.version ) {
-						object.objType.version = '1.3.0';
-						//end upgrade from 1.2.0 to 1.3.0
-					}
-					if ( _Version !== object.objType.version ) {
-						throw 'invalid version for ' + _Name;
-					}
-				}
-				if ( ! object.objId ) {
-					throw 'No objId for ' + _Name;
-				}
-				return object;
-			}
+		var m_Version = version;
+		
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				version : m_Version
+			};
 		};
+		
+		var m_Validate = function ( something ) {
+			if ( ! something.objType ) {
+				throw 'No objType for ' + m_Name;
+			}
+			if ( ! something.objType.name ) {
+				throw 'No name for ' + m_Name;
+			}
+			if ( m_Name !== something.objType.name ) {
+				throw 'Invalid name for ' + m_Name;
+			}
+			if ( ! something.objType.version ) {
+				throw 'No version for ' + m_Name;
+			}
+			if ( m_Version !== something.objType.version ) {
+				if ( '1.0.0' === something.objType.version ) {
+					//start upgrade from 1.0.0 to 1.1.0
+					if ( 'Route' === something.objType.name ) {
+						something.dashArray = 0;
+						something.hidden = false;
+					}
+					something.objType.version = '1.1.0';
+					//end upgrade from 1.0.0 to 1.1.0
+				}
+				if ( '1.1.0' === something.objType.version ) {
+					something.objType.version = '1.2.0';
+					//end upgrade from 1.1.0 to 1.2.0
+				}
+				if ( '1.2.0' === something.objType.version ) {
+					something.objType.version = '1.3.0';
+					//end upgrade from 1.2.0 to 1.3.0
+				}
+				if ( m_Version !== something.objType.version ) {
+					throw 'invalid version for ' + m_Name;
+				}
+			}
+			if ( ! something.objId ) {
+				throw 'No objId for ' + m_Name;
+			}
+			return something;
+		};
+
+		/*
+		--- objType object --------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get name ( ) { return m_Name; },
+
+				get version ( ) { return m_Version; },
+
+				get object ( ) { return m_GetObject; },
+
+				validate : function ( something ) { return m_Validate ( something ); }
+			}
+		);
 	};
 
 	/*
@@ -11033,7 +11178,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ObjType;
+		module.exports = objType;
 	}
 
 } ) ( );
@@ -11070,7 +11215,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchData
-Doc reviewed ...
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -11080,9 +11225,17 @@ Tests ...
 
 	'use strict';
 
-	var TravelNotesData = function ( ) {
+	/*
+	--- travelNotesData function --------------------------------------------------------------------------------------
 
-		var _TravelNotesData = {
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var travelNotesData = function ( ) {
+
+		var m_TravelNotesData = {
 			config : require ( '../data/Config' ),
 			map : null,
 			providers : new Map ( ),
@@ -11095,39 +11248,41 @@ Tests ...
 			UUID : require ( '../util/Utilities' ) ( ).UUID
 		};
 		
-		return {
-
 		/*
-			--- getters and setters  ----------------------------------------------------------------------------------
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		--- travelNotesData object ------------------------------------------------------------------------------------
 
-			get config ( ) { return _TravelNotesData.config; },
-			set config ( Config ) { _TravelNotesData.config.overload ( Config ); },
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			get map ( ) { return _TravelNotesData.map; },
-			set map ( Map ) { _TravelNotesData.map = Map; },
+		return Object.seal (
+			{
 
-			get providers ( ) { return _TravelNotesData.providers; },
+				get config ( ) { return m_TravelNotesData.config; },
+				set config ( Config ) { m_TravelNotesData.config.overload ( Config ); },
 
-			get mapObjects ( ) { return _TravelNotesData.mapObjects; },
+				get map ( ) { return m_TravelNotesData.map; },
+				set map ( Map ) { m_TravelNotesData.map = Map; },
 
-			get travel ( ) { return _TravelNotesData.travel; },
-			set travel ( Travel ) { _TravelNotesData.travel = Travel; },
+				get providers ( ) { return m_TravelNotesData.providers; },
 
-			get editedRoute ( ) { return _TravelNotesData.editedRoute; },
-			set editedRoute ( editedRoute ) { _TravelNotesData.editedRoute = editedRoute; },
+				get mapObjects ( ) { return m_TravelNotesData.mapObjects; },
 
-			get routeEdition ( ) { return _TravelNotesData.routeEdition; },
-			
-			get routing ( ) { return _TravelNotesData.routing; },
-			
-			get searchData ( ) { return _TravelNotesData.searchData; },
-			set searchData ( SearchData ) { _TravelNotesData.searchData = SearchData; },
+				get travel ( ) { return m_TravelNotesData.travel; },
+				set travel ( Travel ) { m_TravelNotesData.travel = Travel; },
 
-			get UUID ( ) { return _TravelNotesData.UUID; },
-		};
+				get editedRoute ( ) { return m_TravelNotesData.editedRoute; },
+				set editedRoute ( editedRoute ) { m_TravelNotesData.editedRoute = editedRoute; },
+
+				get routeEdition ( ) { return m_TravelNotesData.routeEdition; },
+				
+				get routing ( ) { return m_TravelNotesData.routing; },
+				
+				get searchData ( ) { return m_TravelNotesData.searchData; },
+				set searchData ( SearchData ) { m_TravelNotesData.searchData = SearchData; },
+
+				get UUID ( ) { return m_TravelNotesData.UUID; }
+			}
+		);
 	};
 
 	/*
@@ -11135,7 +11290,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = TravelNotesData;
+		module.exports = travelNotesData;
 	}
 
 } ) ( );
@@ -11171,7 +11326,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -11181,67 +11336,85 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( './Version' ) );
 
-	var WayPoint = function ( ) {
+	/*
+	--- wayPoint function ---------------------------------------------------------------------------------------------
 
-		// Private variables
+	Patterns : Closure
 
-		var _Name = '';
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		var _Lat = 0;
+	var wayPoint = function ( ) {
 
-		var _Lng = 0;
+		var m_Name = '';
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_Lat = 0;
 
-		return {
+		var m_Lng = 0;
 
-			// getters and setters...
+		var m_ObjId = require ( '../data/ObjId' ) ( );
 
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-
-			get UIName ( ) {
-				if ( '' !== _Name ) {
-					return _Name;
-				}
-				if ( ( 0 !== _Lat ) && ( 0 !== _Lng ) ) {
-					return _Lat.toFixed ( 6 ) + ( 0 < _Lat ? ' N - ' : ' S - ' ) + _Lng.toFixed ( 6 )  + ( 0 < _Lng ? ' E' : ' W' );
-				}
-				return '';
-			},
-
-			get lat ( ) { return _Lat;},
-			set lat ( Lat ) { _Lat = Lat; },
-
-			get lng ( ) { return _Lng;},
-			set lng ( Lng ) { _Lng = Lng; },
-
-			get latLng ( ) { return [ _Lat, _Lng ];},
-			set latLng ( LatLng ) { _Lat = LatLng [ 0 ]; _Lng = LatLng [ 1 ]; },
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					lat : parseFloat ( _Lat.toFixed ( 6 ) ),
-					lng : parseFloat ( _Lng.toFixed ( 6 ) ),
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_Lat = Object.lat || 0;
-				_Lng = Object.lng || 0;
-				_ObjId = require ( '../data/ObjId' ) ( );
+		var m_GetUIName = function ( ) {
+			if ( '' !== m_Name ) {
+				return m_Name;
 			}
+			if ( ( 0 !== m_Lat ) && ( 0 !== m_Lng ) ) {
+				return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
+			}
+			return '';
 		};
+		
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
+		};
+		
+		var m_SetObject =function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Name = something.name || '';
+			m_Lat = something.lat || 0;
+			m_Lng = something.lng || 0;
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- wayPoint object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+
+				get name ( ) { return m_Name; },
+				set name ( Name ) { m_Name = Name;},
+
+				get UIName ( ) { return m_GetUIName ( ); },
+
+				get lat ( ) { return m_Lat;},
+				set lat ( Lat ) { m_Lat = Lat; },
+
+				get lng ( ) { return m_Lng;},
+				set lng ( Lng ) { m_Lng = Lng; },
+
+				get latLng ( ) { return [ m_Lat, m_Lng ];},
+				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject; },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
 
 
@@ -11250,7 +11423,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = WayPoint;
+		module.exports = wayPoint;
 	}
 
 } ) ( );

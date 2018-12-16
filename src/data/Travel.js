@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170926
+Doc reviewed 20181216
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -33,66 +33,91 @@ Tests ...
 
 	'use strict';
 
-	var _ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( './Version' ) );
+	var s_ObjType = require ( '../data/ObjType' ) ( 'Travel', require ( './Version' ) );
 
-	var Travel = function ( ) {
+	/*
+	--- travel function -----------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var travel = function ( ) {
 
 		// Private variables
 
-		var _Name = 'TravelNotes';
+		var m_Name = 'TravelNotes';
 
-		var _Routes = require ( '../data/Collection' ) ( 'Route' );
+		var m_Routes = require ( '../data/Collection' ) ( 'Route' );
 
-		var _Notes = require ( '../data/Collection' ) ( 'Note' );
+		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
-		var _ObjId = require ( '../data/ObjId' ) ( );
+		var m_ObjId = require ( '../data/ObjId' ) ( );
+
+		var m_ReadOnly = false;
 		
-		var _UserData = {};
+		var m_UserData = {};
 
-		return {
-
-			// getters and setters...
-
-			get routes ( ) { return _Routes; },
-
-			get notes ( ) { return _Notes; },
-
-			get name ( ) { return _Name; },
-			set name ( Name ) { _Name = Name;},
-
-			get userData ( ) { return _UserData; },
-			set userData ( UserData ) { _UserData = UserData;},
-
-			get objId ( ) { return _ObjId; },
-
-			get objType ( ) { return _ObjType; },
-
-			get object ( ) {
-				return {
-					name : _Name,
-					routes : _Routes.object,
-					notes : _Notes.object,
-					userData : _UserData,
-					objId : _ObjId,
-					objType : _ObjType.object
-				};
-			},
-			set object ( Object ) {
-				Object = _ObjType.validate ( Object );
-				_Name = Object.name || '';
-				_UserData = Object.userData || {};
-				_Routes.object = Object.routes || [];
-				_Notes.object = Object.notes || [];
-				_ObjId = require ( '../data/ObjId' ) ( );
-			}
+		var m_GetObject = function ( ) {
+			return {
+				name : m_Name,
+				routes : m_Routes.object,
+				notes : m_Notes.object,
+				userData : m_UserData,
+				readOnly : m_ReadOnly,
+				objId : m_ObjId,
+				objType : s_ObjType.object
+			};
 		};
+		
+		var m_SetObject = function ( something ) {
+			something = s_ObjType.validate ( something );
+			m_Name = something.name || '';
+			m_UserData = something.userData || {};
+			m_ReadOnly = something.readOnly || false;
+			m_Routes.object = something.routes || [];
+			m_Notes.object = something.notes || [];
+			m_ObjId = require ( '../data/ObjId' ) ( );
+		};
+		
+		/*
+		--- travel object ---------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+				get routes ( ) { return m_Routes; },
+
+				get notes ( ) { return m_Notes; },
+
+				get name ( ) { return m_Name; },
+				set name ( Name ) { m_Name = Name; },
+				
+				get readOnly ( ) { return m_ReadOnly; },
+				set readOnly ( ReadOnly ) { m_ReadOnly = ReadOnly; },
+
+				get userData ( ) { return m_UserData; },
+				set userData ( UserData ) { m_UserData = UserData;},
+
+				get objId ( ) { return m_ObjId; },
+
+				get objType ( ) { return s_ObjType; },
+
+				get object ( ) { return m_GetObject ( ); },
+				set object ( something ) { m_SetObject ( something ); }
+			}
+		);
 	};
+	
 	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Travel;
+		module.exports = travel;
 	}
 
 } ) ( );
