@@ -105,7 +105,7 @@ Tests ...
 		clickEvent.stopPropagation();
 		require ( '../core/TravelEditor' ) ( ).clear ( );
 		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
-			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+			require ( '../core/RouteEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
 		}
 		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 	};
@@ -212,7 +212,7 @@ Tests ...
 				'SortableListRightArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+					require ( '../core/RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 				}, 
 				false 
 			);

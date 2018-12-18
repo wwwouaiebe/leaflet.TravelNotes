@@ -106,7 +106,7 @@ Tests ...
 
 				get version ( ) { return m_Version; },
 
-				get object ( ) { return m_GetObject; },
+				get object ( ) { return m_GetObject ( ); },
 
 				validate : function ( something ) { return m_Validate ( something ); }
 			}

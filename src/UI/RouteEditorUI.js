@@ -139,7 +139,7 @@ Tests ...
 				'SortableListDelete', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
+					require ( '../core/WaypointEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
 				},
 				false
 			);
@@ -147,7 +147,7 @@ Tests ...
 				'SortableListUpArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
+					require ( '../core/WaypointEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
 				},
 				false
 			);
@@ -155,7 +155,7 @@ Tests ...
 				'SortableListDownArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
+					require ( '../core/WaypointEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
 				}, 
 				false
 			);
@@ -163,7 +163,7 @@ Tests ...
 				'SortableListChange', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
+					require ( '../core/WaypointEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 				}, 
 				false 
 			);
@@ -171,7 +171,7 @@ Tests ...
 				'SortableListDrop', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+					require ( '../core/WaypointEditor' ) ( ).wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
 				}, 
 				false 
 			);
@@ -274,35 +274,11 @@ Tests ...
 				'click' , 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
+					require ( '../core/WaypointEditor' ) ( ).reverseWayPoints ( );
 				},
 				false 
 			);
-			
-			// add wayPoint button
-			// Todo... not usefull without geocoding...
-			/*
-			var addWayPointButton = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-AddWayPointButton',
-					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - Add waypoint' ), 
-					innerHTML : '+'
-				},
-				buttonsDiv 
-			);
-			
-			addWayPointButton.addEventListener ( 
-				'click', 
-				function ( event ) {
-					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
-				},
-				false 
-			);
-			*/
-			
+					
 			// remove all wayPoints button
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'div', 
@@ -318,7 +294,7 @@ Tests ...
 				'click' , 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
+					require ( '../core/WaypointEditor' ) ( ).removeAllWayPoints ( );
 				},
 				false
 			);

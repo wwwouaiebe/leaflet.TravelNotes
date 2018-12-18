@@ -42,7 +42,7 @@ Tests ...
 
 		return {
 			
-			getAddress : function ( lat, lng, callback, context, parameter ) {
+			getAddress : function ( lat, lng, callback, parameter ) {
 				if ( _RequestStarted ) {
 					return;
 				}
@@ -82,7 +82,7 @@ Tests ...
 						if ( 0 === address.length ) {
 							address += response.address.country;
 						}
-						callback.call ( context, address, parameter );
+						callback.call ( null, address, parameter );
 					}
 				};  
 				XmlHttpRequest.open ( "GET", NominatimUrl, true );

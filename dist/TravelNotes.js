@@ -455,7 +455,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":38,"../data/ObjId":44,"../data/ObjType":45,"./Version":6}],4:[function(require,module,exports){
+},{"../data/Collection":40,"../data/ObjId":47,"../data/ObjType":48,"./Version":6}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -635,7 +635,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../data/Collection":38,"../data/Itinerary":40,"../data/ObjId":44,"../data/ObjType":45,"../data/Waypoint":51,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":40,"../data/Itinerary":43,"../data/ObjId":47,"../data/ObjType":48,"../data/Waypoint":54,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -763,7 +763,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":38,"../data/ObjId":44,"../data/ObjType":45,"./Version":6}],6:[function(require,module,exports){
+},{"../data/Collection":40,"../data/ObjId":47,"../data/ObjType":48,"./Version":6}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1061,7 +1061,7 @@ Tests ...
 					}
 					else {
 						if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
-							require ( './core/TravelEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
+							require ( './core/RouteEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
 						}
 						else {
 							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
@@ -1095,8 +1095,7 @@ Tests ...
 			}
 			require ( './UI/ContextMenu' ) ( 
 				event, 
-				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
+				require ( './UI/ContextMenuFactory' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( _LeftUserContextMenuData ) 
 			);
 		};
@@ -1115,9 +1114,7 @@ Tests ...
 			}
 			require ( './UI/ContextMenu' ) (
 				event, 
-				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
-				.concat ( require ( './core/TravelEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
+				require ( './UI/ContextMenuFactory' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( _RightUserContextMenuData )
 			);
 		};
@@ -1219,7 +1216,7 @@ Tests ...
 --- End of L.TravelNotes.js file --------------------------------------------------------------------------------------
 */
 
-},{"./UI/ContextMenu":11,"./UI/RouteEditorUI":20,"./UI/Translator":24,"./UI/TravelEditorUI":25,"./UI/UserInterface":27,"./UI/baseDialog":28,"./core/FileLoader":30,"./core/NoteEditor":34,"./core/RouteEditor":35,"./core/TravelEditor":37,"./data/ItineraryPoint":41,"./data/Maneuver":42,"./data/Route":46,"./data/Travel":47,"./data/TravelNotesData":48,"./data/Version":49,"./util/Utilities":52}],8:[function(require,module,exports){
+},{"./UI/ContextMenu":11,"./UI/ContextMenuFactory":12,"./UI/RouteEditorUI":21,"./UI/Translator":25,"./UI/TravelEditorUI":26,"./UI/UserInterface":28,"./UI/baseDialog":29,"./core/FileLoader":31,"./core/RouteEditor":35,"./core/TravelEditor":37,"./data/ItineraryPoint":44,"./data/Maneuver":45,"./data/Route":49,"./data/Travel":50,"./data/TravelNotesData":51,"./data/Version":52,"./util/Utilities":55}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1301,7 +1298,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":24,"../data/Version":49,"./HTMLElementsFactory":14}],9:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":25,"../data/Version":52,"./HTMLElementsFactory":15}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1570,7 +1567,7 @@ Tests ...
 /*
 --- End of BaseDialog.js file -----------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":24,"./HTMLElementsFactory":14}],10:[function(require,module,exports){
+},{"../UI/Translator":25,"./HTMLElementsFactory":15}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1887,7 +1884,7 @@ Tests ...
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":24,"./HTMLElementsFactory":14}],11:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":25,"./HTMLElementsFactory":15}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2171,7 +2168,296 @@ Tests ...
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------
 */	
 
-},{"../L.TravelNotes":7,"./HTMLElementsFactory":14,"./Translator":24}],12:[function(require,module,exports){
+},{"../L.TravelNotes":7,"./HTMLElementsFactory":15,"./Translator":25}],12:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- ContextMenuFactory.js file ----------------------------------------------------------------------------------------
+This file contains:
+	- the ContextMenuFactory object
+	- the module.exports implementation
+Changes:
+	- v1.4.0:
+		- created
+
+Doc reviewed ...
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
+		
+	/*
+	--- contextMenuFactory function -----------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var contextMenuFactory = function ( ) {
+		
+			var m_MapEditor = require ( '../core/MapEditor' ) ( );
+			var m_NoteEditor = require ( '../core/NoteEditor' ) ( );
+			var m_RouteEditor = require ( '../core/RouteEditor' ) ( );
+			var m_TravelEditor = require ( '../core/TravelEditor' ) ( );
+			var m_WaypointEditor = require ( '../core/waypointEditor' ) ( );
+			var m_Translator = require ( '../UI/Translator' ) ( );
+
+			/*
+		--- m_GetMapContextMenu function ------------------------------------------------------------------------------
+
+		This function gives the route part of the map context menu
+		
+		parameters:
+		- latLng : the coordinates where the map was clicked
+
+		-----------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetMapContextMenu = function ( latLng ) {
+			return [
+				{ 
+					context : m_WaypointEditor, 
+					name : m_Translator.getText ( "RouteEditor - Select this point as start point" ), 
+					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
+					param : latLng
+				},
+				{
+					context : m_WaypointEditor, 
+					name : m_Translator.getText ( "RouteEditor - Select this point as way point" ), 
+					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
+					param : latLng
+				},
+				{ 
+					context : m_WaypointEditor, 
+					name : m_Translator.getText ( "RouteEditor - Select this point as end point" ), 
+					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
+					param : latLng
+				},
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - New travel note" ), 
+					action : m_NoteEditor.newTravelNote,
+					param : latLng
+				},
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - Hide notes" ), 
+					action : m_NoteEditor.hideNotes
+				},
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - Show notes" ), 
+					action : m_NoteEditor.showNotes
+				},
+				{ 
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "TravelEditor - Show all routes" ), 
+					action : m_RouteEditor.showRoutes
+				}, 
+				{ 
+					context : m_MapEditor, 
+					name : m_Translator.getText ( "TravelEditor - Zoom to travel" ), 
+					action : m_MapEditor.zoomToTravel
+				},
+				{ 
+					context : null,
+					name : m_Translator.getText ( "TravelEditor - About Travel & Notes" ), 
+					action : require ( '../UI/AboutDialog' )
+				} 
+			];
+		};
+
+		/*
+		--- m_GetWayPointContextMenu function --------------------------------------------------------------------------
+
+		This function gives the wayPoint context menu
+		
+		parameters:
+		- wayPointObjId : the wayPoint objId that was clicked
+
+		-----------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetWayPointContextMenu = function ( wayPointObjId ) {
+			return [
+				{ 
+					context : m_WaypointEditor, 
+					name : m_Translator.getText ( "RouteEditor - Delete this waypoint" ), 
+					action : ( ( g_TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
+					param: wayPointObjId
+				} 
+			];
+		};
+		
+		/*
+		--- m_GetRouteContextMenu function ----------------------------------------------------------------------------
+
+		This function gives the route context menu
+		
+		parameters:
+		- routeObjId : the route objId that was clicked
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetRouteContextMenu = function ( routeObjId ) {
+			return [
+				{ 
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Edit this route" ), 
+					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_RouteEditor.editRoute : null,
+					param: routeObjId
+				},
+				{
+					context : m_TravelEditor, 
+					name : m_Translator.getText ( "RouteEditor - Delete this route" ), 
+					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.removeRoute : null,
+					param: routeObjId
+				},
+				{
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Hide this route" ), 
+					action : ( g_TravelNotesData.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
+					param: routeObjId
+				},
+				{
+					context : m_WaypointEditor, 
+					name : m_Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
+					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
+					param: routeObjId
+				},
+				{
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Add a note on the route" ), 
+					action : m_NoteEditor.newRouteNote,
+					param: routeObjId
+				},
+				{
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Properties" ), 
+					action : m_RouteEditor.routeProperties,
+					param: routeObjId
+				},
+				{
+					context : m_MapEditor, 
+					name : m_Translator.getText ( "RouteEditor - Zoom to route" ), 
+					action : m_MapEditor.zoomToRoute,
+					param: routeObjId
+				},
+				{ 
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Save modifications on this route" ), 
+					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
+				},
+				{ 
+					context : m_RouteEditor, 
+					name : m_Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
+					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
+				}
+			];
+		};		
+
+		/*
+		--- m_GetNoteContextMenu function -----------------------------------------------------------------------------
+
+		This function gives the note context menu
+		
+		parameters:
+		- noteObjId : the note objId that was clicked
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetNoteContextMenu = function ( noteObjId ) {
+			var contextMenu = [];
+			contextMenu.push ( 
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - Edit this note" ), 
+					action : m_NoteEditor.editNote,
+					param : noteObjId
+				} 
+			);
+			contextMenu.push ( 
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - Delete this note" ), 
+					action : m_NoteEditor.removeNote,
+					param : noteObjId
+				} 
+			);
+			contextMenu.push ( 
+				{ 
+					context : m_NoteEditor, 
+					name : m_Translator.getText ( "NoteEditor - Zoom to note" ), 
+					action : m_NoteEditor.zoomToNote,
+					param : noteObjId
+				} 
+			);
+			
+			var route = require ( '../data/DataSearchEngine' ) ( ).getNoteAndRoute ( noteObjId ).route;
+			contextMenu.push ( 
+				{ 
+					context : m_NoteEditor, 
+					name : route ?  m_Translator.getText ( "NoteEditor - Detach note from route" ) : m_Translator.getText ( "NoteEditor - Attach note to route" ), 
+					action : ( ( -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
+					param : noteObjId
+				} 
+			);
+			
+			return contextMenu;
+		};
+		
+		return Object.seal (
+			{
+				getMapContextMenu :function ( latLng ) { return m_GetMapContextMenu ( latLng ); },
+
+				getWayPointContextMenu : function ( wayPointObjId ) { return m_GetWayPointContextMenu ( wayPointObjId ); },
+
+				getRouteContextMenu : function ( routeObjId ) { return m_GetRouteContextMenu ( routeObjId ); },
+				
+				getNoteContextMenu : function ( noteObjId ) { return m_GetNoteContextMenu ( noteObjId ) ; }
+			}
+		);
+	};
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = contextMenuFactory;
+	}
+
+}());
+
+/*
+--- End of ContextMenuFactory.js file ---------------------------------------------------------------------------------
+*/		
+},{"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/Translator":25,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/RouteEditor":35,"../core/TravelEditor":37,"../core/waypointEditor":39,"../data/DataSearchEngine":42}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2492,7 +2778,7 @@ Tests ...
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLElementsFactory":14,"../UI/ItineraryPaneUI":17,"../UI/SearchPaneUI":22,"../UI/Translator":24,"../UI/TravelNotesPaneUI":26}],13:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":15,"../UI/ItineraryPaneUI":18,"../UI/SearchPaneUI":23,"../UI/Translator":25,"../UI/TravelNotesPaneUI":27}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2646,7 +2932,7 @@ Tests ...
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"./HTMLElementsFactory":14,"./Translator":24}],14:[function(require,module,exports){
+},{"../L.TravelNotes":7,"./HTMLElementsFactory":15,"./Translator":25}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2741,7 +3027,7 @@ Tests ...
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
 */	
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3111,9 +3397,9 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":14,"../UI/Translator":24,"../core/NoteEditor":34,"../core/RouteEditor":35,"../data/ObjId":44,"../util/Utilities":52}],16:[function(require,module,exports){
-arguments[4][14][0].apply(exports,arguments)
-},{"dup":14}],17:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":15,"../UI/Translator":25,"../core/NoteEditor":34,"../core/RouteEditor":35,"../data/ObjId":47,"../util/Utilities":55}],17:[function(require,module,exports){
+arguments[4][15][0].apply(exports,arguments)
+},{"dup":15}],18:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3332,7 +3618,7 @@ Tests ...
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------
 */		
-},{"../UI/HTMLViewsFactory":15,"../core/MapEditor":33,"../core/NoteEditor":34}],18:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":16,"../core/MapEditor":33,"../core/NoteEditor":34}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3407,7 +3693,7 @@ Tests ...
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor' ) ( ).endNoteDialog ( _Note, _RouteObjId );
+		require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( _Note, _RouteObjId );
 		return true;
 	};
 	
@@ -3761,7 +4047,7 @@ Tests ...
 		document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
 			'click', 
 			function ( ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
 			},
 			false 
 		);
@@ -3870,7 +4156,7 @@ Tests ...
 
 		// geolocalization
 		if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
 		}
 		
 		// and the dialog is centered on the screen
@@ -3890,7 +4176,7 @@ Tests ...
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":24,"../core/GeoCoder":31,"../core/NoteEditor":34,"./HTMLElementsFactory":14}],19:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":25,"../core/GeoCoder":32,"../core/NoteEditor":34,"./HTMLElementsFactory":15}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4240,7 +4526,7 @@ Tests ...
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HtmlElementsFactory":16,"../core/RouteEditor":35}],20:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HtmlElementsFactory":17,"../core/RouteEditor":35}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4382,7 +4668,7 @@ Tests ...
 				'SortableListDelete', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
+					require ( '../core/WaypointEditor' ) ( ).removeWayPoint ( event.itemNode.dataObjId );
 				},
 				false
 			);
@@ -4390,7 +4676,7 @@ Tests ...
 				'SortableListUpArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
+					require ( '../core/WaypointEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, true );
 				},
 				false
 			);
@@ -4398,7 +4684,7 @@ Tests ...
 				'SortableListDownArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
+					require ( '../core/WaypointEditor' ) ( ).swapWayPoints ( event.itemNode.dataObjId, false );
 				}, 
 				false
 			);
@@ -4406,7 +4692,7 @@ Tests ...
 				'SortableListChange', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
+					require ( '../core/WaypointEditor' ) ( ).renameWayPoint ( event.dataObjId, event.changeValue );
 				}, 
 				false 
 			);
@@ -4414,7 +4700,7 @@ Tests ...
 				'SortableListDrop', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+					require ( '../core/WaypointEditor' ) ( ).wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
 				}, 
 				false 
 			);
@@ -4517,35 +4803,11 @@ Tests ...
 				'click' , 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).reverseWayPoints ( );
+					require ( '../core/WaypointEditor' ) ( ).reverseWayPoints ( );
 				},
 				false 
 			);
-			
-			// add wayPoint button
-			// Todo... not usefull without geocoding...
-			/*
-			var addWayPointButton = htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-AddWayPointButton',
-					className: 'TravelNotes-Control-Button', 
-					title : _Translator.getText ( 'RouteEditorUI - Add waypoint' ), 
-					innerHTML : '+'
-				},
-				buttonsDiv 
-			);
-			
-			addWayPointButton.addEventListener ( 
-				'click', 
-				function ( event ) {
-					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).addWayPoint ( );
-				},
-				false 
-			);
-			*/
-			
+					
 			// remove all wayPoints button
 			var removeAllWayPointsButton = htmlElementsFactory.create ( 
 				'div', 
@@ -4561,7 +4823,7 @@ Tests ...
 				'click' , 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/RouteEditor' ) ( ).removeAllWayPoints ( );
+					require ( '../core/WaypointEditor' ) ( ).removeAllWayPoints ( );
 				},
 				false
 			);
@@ -4659,7 +4921,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/RouteEditor":35,"./HTMLElementsFactory":14,"./SortableList":23,"./Translator":24}],21:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/RouteEditor":35,"../core/WaypointEditor":38,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4830,7 +5092,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":24,"../UI/TravelEditorUI":25,"../core/MapEditor":33,"../core/RouteEditor":35,"../core/TravelEditor":37,"./HTMLElementsFactory":14}],22:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/RouteEditor":35,"../core/TravelEditor":37,"./HTMLElementsFactory":15}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5195,7 +5457,7 @@ Tests ...
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/DataPanesUI":12,"../core/MapEditor":33,"../core/NoteEditor":34,"../data/ObjId":44,"./HTMLElementsFactory":14,"./Translator":24}],23:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../core/MapEditor":33,"../core/NoteEditor":34,"../data/ObjId":47,"./HTMLElementsFactory":15,"./Translator":25}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5486,7 +5748,7 @@ Tests ...
 --- End of SortableList.js file ---------------------------------------------------------------------------------------
 */	
 
-},{"../UI/Translator":24,"./HTMLElementsFactory":14}],24:[function(require,module,exports){
+},{"../UI/Translator":25,"./HTMLElementsFactory":15}],25:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -5566,7 +5828,7 @@ Tests ...
 */	
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5674,7 +5936,7 @@ Tests ...
 		clickEvent.stopPropagation();
 		require ( '../core/TravelEditor' ) ( ).clear ( );
 		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
-			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+			require ( '../core/RouteEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
 		}
 		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 	};
@@ -5781,7 +6043,7 @@ Tests ...
 				'SortableListRightArrow', 
 				function ( event ) {
 					event.stopPropagation ( );
-					require ( '../core/TravelEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
+					require ( '../core/RouteEditor' ) ( ).editRoute ( event.itemNode.dataObjId );
 				}, 
 				false 
 			);
@@ -6078,7 +6340,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/FileLoader":30,"../core/RouteEditor":35,"../core/TravelEditor":37,"./HTMLElementsFactory":14,"./SortableList":23,"./Translator":24}],26:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/FileLoader":31,"../core/RouteEditor":35,"../core/TravelEditor":37,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6311,7 +6573,7 @@ Tests ...
 /*
 --- End of TravelNotesPaneUI.js file ----------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":15,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/TravelEditor":37}],27:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLViewsFactory":16,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/TravelEditor":37}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6420,9 +6682,9 @@ Tests ...
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------
 */	
-},{"./DataPanesUI":12,"./ErrorEditorUI":13,"./HTMLElementsFactory":14,"./ProvidersToolbarUI":19,"./RouteEditorUI":20,"./TravelEditorUI":25}],28:[function(require,module,exports){
+},{"./DataPanesUI":13,"./ErrorEditorUI":14,"./HTMLElementsFactory":15,"./ProvidersToolbarUI":20,"./RouteEditorUI":21,"./TravelEditorUI":26}],29:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
-},{"../UI/Translator":24,"./HTMLElementsFactory":14,"dup":9}],29:[function(require,module,exports){
+},{"../UI/Translator":25,"./HTMLElementsFactory":15,"dup":9}],30:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6488,7 +6750,7 @@ Tests ...
 /*
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../UI/ErrorEditorUI":13}],30:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":14}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6515,7 +6777,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
-Doc reviewed ...
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6525,27 +6787,34 @@ Tests ...
 	
 	'use strict';
 
-	var FileLoader = function ( ) {
+	/*
+	--- fileLoader function -------------------------------------------------------------------------------------------
 
-		var _TravelNotesData = require ( '../L.TravelNotes' );
-		var _MapEditor = require ( '../core/MapEditor' ) ( );
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 	
-		var _MergeContent = false;
-		var _FileName = '';
-		var _IsFileReadOnly = false;
-		var _FileContent = {};
+	var fileLoader = function ( ) {
+
+		var g_TravelNotesData = require ( '../L.TravelNotes' );
+	
+		var m_MergeContent = false;
+		var m_FileName = '';
+		var m_IsFileReadOnly = false;
+		var m_FileContent = {};
 		
 		/*
-		--- _DecompressFileContent function --------------------------------------------------------------------------------
+		--- m_DecompressFileContent function --------------------------------------------------------------------------
 
 		This function decompress the file data
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _DecompressFileContent = function ( ) {
+		var m_DecompressFileContent = function ( ) {
 			
-			_FileContent.routes.forEach ( 
+			m_FileContent.routes.forEach ( 
 				function ( route ) {
 					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
 					var decompressedItineraryPoints = [];
@@ -6566,89 +6835,91 @@ Tests ...
 				}
 			);
 			
-			if ( _MergeContent ) {
-				_Merge ( );
+			if ( m_MergeContent ) {
+				m_Merge ( );
 			}
 			else {
-				_Open ( );
+				m_Open ( );
 			}
 		};
 		
 		/*
-		--- _Merge function -------------------------------------------------------------------------------------------
+		--- m_Merge function ------------------------------------------------------------------------------------------
 
-		This function merge the file data with the _TravelNotesData.travel
+		This function merge the file data with the g_TravelNotesData.travel
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _Merge = function ( ) {
+		var m_Merge = function ( ) {
 			// ... and transform the data in the correct format
 			var travel = require ( '../Data/Travel' ) ( );
-			travel.object = _FileContent;
+			travel.object = m_FileContent;
 			
 			// routes are added with their notes
 			var routesIterator = travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				_TravelNotesData.travel.routes.add ( routesIterator.value );
+				g_TravelNotesData.travel.routes.add ( routesIterator.value );
 			}
 			// travel notes are added
 			var notesIterator = travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				_TravelNotesData.travel.notes.add ( notesIterator.value );
+				g_TravelNotesData.travel.notes.add ( notesIterator.value );
 			}
 		
-			_Display ( );
+			m_Display ( );
 		};
 		
 		/*
-		--- _Open function -------------------------------------------------------------------------------------------
+		--- m_Open function -------------------------------------------------------------------------------------------
 
-		This function load the file data within the _TravelNotesData.travel
+		This function load the file data within the g_TravelNotesData.travel
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _Open = function ( ) {
-			_TravelNotesData.travel.object = _FileContent;
-			if ( '' !== _FileName ) {
-				_TravelNotesData.travel.name = _FileName.substr ( 0, _FileName.lastIndexOf ( '.' ) ) ;
+		var m_Open = function ( ) {
+			g_TravelNotesData.travel.object = m_FileContent;
+			if ( '' !== m_FileName ) {
+				g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
 			}
-			_TravelNotesData.travel.readOnly = _IsFileReadOnly;			
+			g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;			
 			
-			_Display ( );
+			m_Display ( );
 		};
 		
 		/*
-		--- _Display function -----------------------------------------------------------------------------------------
+		--- m_Display function -----------------------------------------------------------------------------------------
 
 		This function update the screen
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _Display = function ( ) {
+		var m_Display = function ( ) {
 			
+			var mapEditor = require ( '../core/MapEditor' ) ( );
+
 			// the map is cleaned
-			_MapEditor.removeAllObjects ( );
+			mapEditor.removeAllObjects ( );
 			
 			// routes are added with their notes
-			var routesIterator = _TravelNotesData.travel.routes.iterator;
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				_MapEditor.addRoute ( routesIterator.value, true, false, _IsFileReadOnly );
+				mapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
 			}
 			
 			// travel notes are added
-			var notesIterator = _TravelNotesData.travel.notes.iterator;
+			var notesIterator = g_TravelNotesData.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				_MapEditor.addNote ( notesIterator.value, _IsFileReadOnly );
+				mapEditor.addNote ( notesIterator.value, m_IsFileReadOnly );
 			}
 			
 			// zoom on the travel
-			_MapEditor.zoomToTravel ( );
+			mapEditor.zoomToTravel ( );
 
 			// Editors and roadbook are filled
-			if ( ! _IsFileReadOnly ) {
+			if ( ! m_IsFileReadOnly ) {
 			// Editors and HTML pages are filled
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( false );
@@ -6659,30 +6930,72 @@ Tests ...
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
 				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 			}
-			_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : _IsFileReadOnly, name : _TravelNotesData.travel.name } );
+			g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : m_IsFileReadOnly, name : g_TravelNotesData.travel.name } );
 		};
 			
 		/*
-		--- _Display function -----------------------------------------------------------------------------------------
+		--- m_OpenFile function ---------------------------------------------------------------------------------------
 
 		This function open a local file
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _OpenLocalFile = function ( ) {
-			_FileName = event.target.files [ 0 ].name;
+		var m_OpenFile = function ( ) {
+			m_FileName = event.target.files [ 0 ].name;
 			
 			var fileReader = new FileReader( );
 			fileReader.onload = function ( event ) {
 				try {
-					_FileContent =  JSON.parse ( fileReader.result );
-					_DecompressFileContent ( );
+					m_FileContent =  JSON.parse ( fileReader.result );
+					m_DecompressFileContent ( );
 				}
 				catch ( e ) {
 				}
 			};
 			fileReader.readAsText ( event.target.files [ 0 ] );
+		};
+
+		/*
+		--- m_OpenLocalFile function ----------------------------------------------------------------------------------
+
+		This function open a local file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_OpenLocalFile = function ( event ) {
+			m_MergeContent = false;
+			m_IsFileReadOnly = false;
+			m_OpenFile ( event );
+		};
+		
+		/*
+		--- m_MergeLocalFile function ---------------------------------------------------------------------------------
+
+		This function open a local file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_MergeLocalFile = function ( event ) {
+			m_MergeContent = true;
+			m_IsFileReadOnly = false;
+			m_OpenFile ( event );
+		};
+		
+		/*
+		--- m_OpenDistantFile function --------------------------------------------------------------------------------
+
+		This function open a local file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_OpenDistantFile = function ( fileContent ) {
+			m_IsFileReadOnly = true;
+			m_FileContent = fileContent;
+			m_DecompressFileContent ( );
 		};
 	
 		/*
@@ -6691,31 +7004,20 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		return {
-			openLocalFile : function ( event ) {
-				_MergeContent = false;
-				_IsFileReadOnly = false;
-				_OpenLocalFile ( event );
-			},
-			mergeLocalFile : function ( event ) {
-				_MergeContent = true;
-				_IsFileReadOnly = false;
-				_OpenLocalFile ( event );
-			},
-			openDistantFile : function ( fileContent ) {
-				_IsFileReadOnly = true;
-				_FileContent = fileContent;
-				_DecompressFileContent ( );
+		return Object.seal (
+			{
+				openLocalFile : function ( event ) { m_OpenLocalFile ( event ); },
+				mergeLocalFile : function ( event ) { m_MergeLocalFile ( event ); },
+				openDistantFile : function ( fileContent ) { m_OpenDistantFile ( fileContent ); }
 			}
-		};
-		
+		);
 	};
 	/*
 	--- Exports -------------------------------------------------------------------------------------------------------
 	*/
 	
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = FileLoader;
+		module.exports = fileLoader;
 	}
 
 }());
@@ -6723,7 +7025,7 @@ Tests ...
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------
 */	
-},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":25,"../core/MapEditor":33,"../core/TravelEditor":37,"@mapbox/polyline":1}],31:[function(require,module,exports){
+},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/TravelEditor":37,"@mapbox/polyline":1}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6768,7 +7070,7 @@ Tests ...
 
 		return {
 			
-			getAddress : function ( lat, lng, callback, context, parameter ) {
+			getAddress : function ( lat, lng, callback, parameter ) {
 				if ( _RequestStarted ) {
 					return;
 				}
@@ -6808,7 +7110,7 @@ Tests ...
 						if ( 0 === address.length ) {
 							address += response.address.country;
 						}
-						callback.call ( context, address, parameter );
+						callback.call ( null, address, parameter );
 					}
 				};  
 				XmlHttpRequest.open ( "GET", NominatimUrl, true );
@@ -6830,77 +7132,7 @@ Tests ...
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7}],32:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-/*
---- ItineraryEditor.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the ItineraryEditor object
-	- the module.exports implementation
-Changes:
-	- v1.0.0:
-		- created
-	- v1.4.0:
-		- added search and travel notes panes
-		- added update functions for panes
-Doc reviewed 20170927
-Tests ...
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var ItineraryEditor = function ( ) {
-		
-		return {
-			setItinerary : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setItinerary (  );},
-			setTravelNotes : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setTravelNotes (  );},
-			setSearch : function ( ) { require ( '../UI/DataPanesUI' ) ( ).setSearch (  );},
-			updateItinerary : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateItinerary (  );},
-			updateTravelNotes : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes (  );},
-			updateSearch : function ( ) { require ( '../UI/DataPanesUI' ) ( ).updateSearch (  );},
-			
-			get provider ( ) { return require ( '../L.TravelNotes' ).routing.provider;},
-			set provider ( providerName ) { require ( '../UI/DataPanesUI' ) ( ).provider = providerName ;},
-			
-			get transitMode ( ) { return require ( '../L.TravelNotes' ).routing.transitMode; },
-			set transitMode ( transitMode ) { require ( '../UI/DataPanesUI' ) ( ).transitMode = transitMode ; }
-		};
-	};
-
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ItineraryEditor;
-	}
-
-}());
-
-/*
---- End of ItineraryEditor.js file ------------------------------------------------------------------------------------
-*/
-},{"../L.TravelNotes":7,"../UI/DataPanesUI":12}],33:[function(require,module,exports){
+},{"../L.TravelNotes":7}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6934,7 +7166,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
-Doc reviewed 20170927
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6944,27 +7176,28 @@ Tests ...
 	
 	'use strict';
 	
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 
 	var MapEditor = function ( ) {
 
+		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+
 		/*
-		--- _UpdateRouteTooltip function -------------------------------------------------------------------------------------------
+		--- m_UpdateRouteTooltip function -----------------------------------------------------------------------------
 
 		This function updates the route tooltip with the distance when the mouse move on the polyline
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _UpdateRouteTooltip = function ( event ) { 
-			var route = _DataSearchEngine.getRoute (  event.target.objId );
+		var m_UpdateRouteTooltip = function ( event ) { 
+			var route = m_DataSearchEngine.getRoute (  event.target.objId );
 			var distance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
 			distance += route.chainedDistance;
 			distance = require ( '../util/Utilities' ) ( ).formatDistance ( distance );
-			var polyline = _TravelNotesData.mapObjects.get ( event.target.objId );
+			var polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
 			polyline.closeTooltip ( );
-			var tooltipText = _DataSearchEngine.getRoute ( event.target.objId ).name;
+			var tooltipText = m_DataSearchEngine.getRoute ( event.target.objId ).name;
 			tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
 			tooltipText += distance;
 			polyline.setTooltipContent ( tooltipText );
@@ -6972,45 +7205,45 @@ Tests ...
 		};
 	
 		/*
-		--- _AddTo function -------------------------------------------------------------------------------------------
+		--- m_AddTo function ------------------------------------------------------------------------------------------
 
 		This function add a leaflet object to the leaflet map and to the JavaScript map
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _AddTo = function ( objId, object ) {
+		var m_AddTo = function ( objId, object ) {
 			object.objId = objId;
-			object.addTo ( _TravelNotesData.map );
-			_TravelNotesData.mapObjects.set ( objId, object );
+			object.addTo ( g_TravelNotesData.map );
+			g_TravelNotesData.mapObjects.set ( objId, object );
 		};
 		
 		/*
-		--- _RemoveFrom function --------------------------------------------------------------------------------------
+		--- m_RemoveObject function -----------------------------------------------------------------------------------
 
 		This function remove a leaflet object from the leaflet map and from the JavaScript map
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _RemoveFrom = function ( objId ) {
-			var layer = _TravelNotesData.mapObjects.get ( objId );
+		var m_RemoveObject = function ( objId ) {
+			var layer = g_TravelNotesData.mapObjects.get ( objId );
 			if ( layer ) {
 				L.DomEvent.off ( layer );
-				_TravelNotesData.map.removeLayer ( layer );
-				_TravelNotesData.mapObjects.delete ( objId );
+				g_TravelNotesData.map.removeLayer ( layer );
+				g_TravelNotesData.mapObjects.delete ( objId );
 			}
 		};
 		
 		/*
-		--- _GetLatLngBounds function ---------------------------------------------------------------------------------
+		--- m_GetLatLngBounds function --------------------------------------------------------------------------------
 
 		This function build a L.latLngBounds object from an array of points
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _GetLatLngBounds = function ( latLngs ) {
+		var m_GetLatLngBounds = function ( latLngs ) {
 			var sw = L.latLng ( [ 90, 180] );
 			var ne = L.latLng ( [ -90, -180 ] );
 			latLngs.forEach ( 
@@ -7025,14 +7258,14 @@ Tests ...
 		};
 		
 		/*
-		--- _GetRouteLatLng function ----------------------------------------------------------------------------------
+		--- m_GetRouteLatLng function ---------------------------------------------------------------------------------
 
 		This function returns an array of points from a route and the notes linked to the route
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _GetRouteLatLng = function ( route ) {
+		var m_GetRouteLatLng = function ( route ) {
 			var latLngs = [];
 			route.itinerary.itineraryPoints.forEach ( 
 				function ( itineraryPoint ) {
@@ -7049,18 +7282,18 @@ Tests ...
 		};
 		
 		/*
-		--- _getDashArray function ----------------------------------------------------------------------------------
+		--- m_getDashArray function -----------------------------------------------------------------------------------
 
-		This function returns the dashArray used for th epolyline representation. See also leaflet docs
+		This function returns the dashArray used for the polyline representation. See also leaflet docs
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _getDashArray = function ( route ) {
-			if ( route.dashArray >= _TravelNotesData.config.route.dashChoices.length ) {
+		var m_getDashArray = function ( route ) {
+			if ( route.dashArray >= g_TravelNotesData.config.route.dashChoices.length ) {
 				route.dashArray = 0;
 			}
-			var iDashArray = _TravelNotesData.config.route.dashChoices [ route.dashArray ].iDashArray;
+			var iDashArray = g_TravelNotesData.config.route.dashChoices [ route.dashArray ].iDashArray;
 			if ( iDashArray ) {
 				var dashArray = '';
 				var dashCounter = 0;
@@ -7073,19 +7306,11 @@ Tests ...
 			}
 			return null;
 		};
-		
-		/*
-		--- MapEditor object ------------------------------------------------------------------------------------------
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return {
-			
 			/*
-			--- removeRoute method ------------------------------------------------------------------------------------
+			--- m_RemoveRoute function --------------------------------------------------------------------------------
 
-			This method remove a route and eventually the attached notes and waypoints 
+			This function remove a route and eventually the attached notes and waypoints 
 			from the leaflet map and the JavaScript map
 			
 			parameters:
@@ -7096,26 +7321,26 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 			
-			removeRoute : function ( route, removeNotes, removeWayPoints ) {
-				this.removeObject ( route.objId );
+			var m_RemoveRoute = function ( route, removeNotes, removeWayPoints ) {
+				m_RemoveObject ( route.objId );
 				if ( removeNotes ) {
 					var notesIterator = route.notes.iterator;
 					while ( ! notesIterator.done ) {
-						this.removeObject ( notesIterator.value.objId );
+						m_RemoveObject ( notesIterator.value.objId );
 					}
 				}
 				if ( removeWayPoints ) {
 					var wayPointsIterator = route.wayPoints.iterator;
 					while ( ! wayPointsIterator.done ) {
-						this.removeObject ( wayPointsIterator.value.objId );
+						m_RemoveObject ( wayPointsIterator.value.objId );
 					}
 				}
-			},
-			
+			};
+					
 			/*
-			--- addRoute method ---------------------------------------------------------------------------------------
+			--- m_AddRoute function -----------------------------------------------------------------------------------
 
-			This method add a route and eventually the attached notes and waypoints 
+			This function add a route and eventually the attached notes and waypoints 
 			to the leaflet map and the JavaScript map
 
 			parameters:
@@ -7127,530 +7352,553 @@ Tests ...
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			addRoute : function ( route, addNotes, addWayPoints, readOnly ) {
-				readOnly = readOnly || false;
-				
-				// an array of points is created
-				var latLng = [];
-				var pointsIterator = route.itinerary.itineraryPoints.iterator;
-				while ( ! pointsIterator.done ) {
-					latLng.push ( pointsIterator.value.latLng );
+		var m_AddRoute = function ( route, addNotes, addWayPoints, readOnly ) {
+			readOnly = readOnly || false;
+			
+			// an array of points is created
+			var latLng = [];
+			var pointsIterator = route.itinerary.itineraryPoints.iterator;
+			while ( ! pointsIterator.done ) {
+				latLng.push ( pointsIterator.value.latLng );
+			}
+			
+			// the leaflet polyline is created and added to the map
+			var polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
+			m_AddTo ( route.objId, polyline );
+			// tooltip and popup are created
+			polyline.bindTooltip ( 
+				 route.name,
+				{ sticky : true, direction : 'right' }
+			);
+			polyline.on ( 'mouseover' , m_UpdateRouteTooltip	);
+			polyline.on ( 'mousemove' , m_UpdateRouteTooltip );
+			
+			polyline.bindPopup ( 
+				function ( layer ) {
+					var route = m_DataSearchEngine.getRoute ( layer.objId );
+					return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
 				}
-				
-				// the leaflet polyline is created and added to the map
-				var polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
-				_AddTo ( route.objId, polyline );
-				// tooltip and popup are created
-				polyline.bindTooltip ( 
-					 route.name,
-					{ sticky : true, direction : 'right' }
-				);
-				polyline.on ( 'mouseover' , _UpdateRouteTooltip	);
-				polyline.on ( 'mousemove' , _UpdateRouteTooltip );
-				
-				polyline.bindPopup ( 
-					function ( layer ) {
-						var route = _DataSearchEngine.getRoute ( layer.objId );
-						return require ( '../core/RouteEditor' )( ).getRouteHTML ( route, 'TravelNotes-' );
+			);
+			
+			// left click event
+			L.DomEvent.on ( polyline, 'click', function ( event ) { event.target.openPopup ( event.latlng ); } );
+			// right click event
+			if ( ! readOnly ) {
+				L.DomEvent.on ( 
+					polyline, 
+					'contextmenu', 
+					function ( event ) {
+						require ( '../UI/ContextMenu' ) ( event, require ( '../UI/ContextMenuFactory' )( ).getRouteContextMenu ( event.target.objId ) );
 					}
 				);
-				
-				// left click event
-				L.DomEvent.on ( polyline, 'click', function ( event ) { event.target.openPopup ( event.latlng ); } );
-				// right click event
-				if ( ! readOnly ) {
-					L.DomEvent.on ( 
-						polyline, 
-						'contextmenu', 
-						function ( event ) {
-							require ( '../UI/ContextMenu' ) ( event, require ( '../core/RouteEditor' )( ).getRouteContextMenu ( event.target.objId ) );
+			}
+			
+			// notes are added
+			if ( addNotes ) {
+				var notesIterator = route.notes.iterator;
+				while ( ! notesIterator.done ) {
+					m_AddNote ( notesIterator.value, readOnly );
+				}
+			}
+
+			// waypoints are added
+			if ( addWayPoints ) {
+				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+					m_AddWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
+				}
+			}
+		};
+			
+		/*
+		--- m_EditRoute function --------------------------------------------------------------------------------------
+
+		This function changes the color and width of a route
+
+		parameters:
+		- route : a TravelNotes route object.
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EditRoute = function ( route ) {
+			var polyline = g_TravelNotesData.mapObjects.get ( route.objId );
+			polyline.setStyle( { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
+		};
+			
+		/*
+		--- m_RemoveAllObjects function ---------------------------------------------------------------------------
+
+		This function remove all the objects from the leaflet map and from the JavaScript map
+
+		-----------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RemoveAllObjects = function ( ) {
+			g_TravelNotesData.mapObjects.forEach ( 
+				function ( travelObjectValue, travelObjectKey, travelObjects ) {
+					L.DomEvent.off ( travelObjectValue );
+					g_TravelNotesData.map.removeLayer ( travelObjectValue );
+				}
+			);
+			g_TravelNotesData.mapObjects.clear ( );
+		};
+		
+		/*
+		--- m_ZoomToPoint function ------------------------------------------------------------------------------------
+
+		This function zoom on a given point
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ZoomToPoint = function ( latLng ) {
+			g_TravelNotesData.map.setView ( latLng, g_TravelNotesData.config.itineraryPointZoom );
+		};
+
+		/*
+		--- m_ZoomToNote function ------------------------------------------------------------------------------------
+
+		This function zoom on a note
+
+		parameters:
+		- noteObjId : the TravelNotes objId of the desired note
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ZoomToNote = function ( noteObjId ) {
+			m_ZoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
+		};
+			
+		/*
+		--- m_ZoomToRoute function ------------------------------------------------------------------------------------
+
+		This function zoom on a route
+
+		parameters:
+		- routeObjId : the TravelNotes objId of the desired route
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ZoomToRoute = function ( routeObjId ) {
+			var latLngs = m_GetRouteLatLng (  m_DataSearchEngine.getRoute ( routeObjId ) );
+			if ( 0 !== latLngs.length ) {
+				g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			}
+		};
+
+		/*
+		--- m_ZoomToTravel function -----------------------------------------------------------------------------------
+
+		This function zoom on the entire travel
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ZoomToTravel = function ( ) {				
+			var latLngs = [];
+			g_TravelNotesData.travel.routes.forEach (
+				function ( route ) {
+					latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) );
+				}
+			);
+			g_TravelNotesData.travel.notes.forEach (
+				function ( note ) {
+					latLngs.push ( note.latLng );
+					latLngs.push ( note.iconLatLng );
+				}
+			);
+			if ( 0 !== latLngs.length ) {
+				g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			}
+		};
+			
+		/*
+		--- m_AddItineraryPointMarker function ------------------------------------------------------------------------
+
+		This function add a leaflet circleMarker at a given point
+		
+		parameters:
+		- objId : a unique identifier to attach to the circleMarker
+		- latLng : the center of the circleMarker
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddItineraryPointMarker = function ( objId, latLng ) {
+			m_AddTo ( 
+				objId,
+				L.circleMarker ( latLng, g_TravelNotesData.config.itineraryPointMarker )
+			);
+		};
+
+		/*
+		--- m_AddSearchPointMarker function ---------------------------------------------------------------------------
+
+		This function add a leaflet circleMarker at a given point
+		
+		parameters:
+		- objId : a unique identifier to attach to the circleMarker
+		- latLng : the center of the circleMarker
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_AddSearchPointMarker = function ( objId, latLng, geometry ) {
+
+			if ( geometry && g_TravelNotesData.config.searchPointPolyline.minZoom <= g_TravelNotesData.map.getZoom ( ) ) {
+				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline.polyline ) );
+			}
+			else {
+				m_AddTo ( objId, L.circleMarker ( latLng, g_TravelNotesData.config.searchPointMarker ) );
+			}
+		};
+			
+		/*
+		--- m_AddRectangle method -----------------------------------------------------------------------------------
+
+		This method draw a rectangle on the map
+		
+		parameters:
+		- objId : a unique identifier to attach to the rectangle
+		- bounds : the lower left and upper right corner of the rectangle ( see leaflet docs )
+		- properties : the properties of the rectangle 
+
+		-----------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddRectangle = function ( objId, bounds, properties ) {
+			m_AddTo (
+				objId,
+				L.rectangle ( bounds, properties )
+			);
+		};
+		
+		/*
+		--- m_AddWayPoint function ------------------------------------------------------------------------------------
+
+		This function add a TravelNotes waypoint object to the leaflet map
+
+		parameters:
+		- wayPoint : a TravelNotes waypoint object
+		- letter : the letter to be displayed under the waypoint
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddWayPoint = function ( wayPoint, letter ) {
+			if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
+				return;
+			}
+			
+			// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
+			var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
+			( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) + 
+			'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
+			
+			// a leaflet marker is created...
+			var marker = L.marker ( 
+				wayPoint.latLng,
+				{ 
+					icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
+					draggable : true
+				} 
+			);	
+
+			marker.bindTooltip ( function ( wayPoint ) { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
+			marker.getTooltip ( ).options.offset  = [ 20, -20 ];
+
+			L.DomEvent.on ( 
+				marker, 
+				'contextmenu', 
+				function ( event ) { 
+					require ( '../UI/ContextMenu' ) ( event, require ( '../UI/ContextMenuFactory' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+				}
+			);
+			
+			// ... and added to the map...
+			marker.objId = wayPoint.objId;
+			m_AddTo ( wayPoint.objId, marker );
+			
+			// ... and a dragend event listener is created
+			L.DomEvent.on (
+				marker,
+				'dragend', 
+				function ( event ) {
+					var wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( event.target.objId );
+					wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+					require ( '../core/WaypointEditor' )( ).wayPointDragEnd ( event.target.objId );
+				}
+			);
+		};
+
+		/*
+		--- m_RedrawNote function -------------------------------------------------------------------------------------
+
+		This function redraw a note object on the leaflet map
+
+		parameters:
+		- note : a TravelNotes note object
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RedrawNote = function  ( note ) {
+			m_RemoveObject ( note.objId );
+			m_AddNote ( note );
+		};
+			
+		/*
+		--- m_AddNote function ----------------------------------------------------------------------------------------
+
+		This function add a TravelNotes note object to the leaflet map
+
+		parameters:
+		- note : a TravelNotes note object
+		- readOnly : a boolean. Created objects cannot be edited when true
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddNote = function ( note, readOnly ) {
+			
+			readOnly = readOnly || false;
+			
+			// first a marker is created at the note position. This marker is empty and transparent, so 
+			// not visible on the map but the marker can be dragged
+			var bullet = L.marker ( 
+				note.latLng,
+				{ 
+					icon : L.divIcon ( 
+						{ 
+							iconSize: [ 
+								g_TravelNotesData.config.note.grip.size , 
+								g_TravelNotesData.config.note.grip.size
+							], 
+							iconAnchor: [ 
+								g_TravelNotesData.config.note.grip.size / 2,
+								g_TravelNotesData.config.note.grip.size / 2 
+							],
+							html : '<div></div>'
 						}
-					);
-				}
-				
-				// notes are added
-				if ( addNotes ) {
-					var notesIterator = route.notes.iterator;
-					while ( ! notesIterator.done ) {
-						this.addNote ( notesIterator.value, readOnly );
-					}
-				}
-
-				// waypoints are added
-				if ( addWayPoints ) {
-					var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-					while ( ! wayPointsIterator.done ) {
-						this.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
-					}
-				}
-			},
+					),
+					zIndexOffset : -1000 ,
+					opacity : g_TravelNotesData.config.note.grip.opacity,
+					draggable : ! readOnly
+				} 
+			);	
+			bullet.objId = note.objId;
 			
-			/*
-			--- editRoute method --------------------------------------------------------------------------------------
-
-			This method changes the color and width of a route
-
-			parameters:
-			- route : a TravelNotes route object.
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			editRoute : function ( route ) {
-				var polyline = _TravelNotesData.mapObjects.get ( route.objId );
-				polyline.setStyle( { color : route.color, weight : route.width, dashArray : _getDashArray ( route ) } );
-			},
-			
-			/*
-			--- removeObject method -----------------------------------------------------------------------------------
-
-			This method remove an object from the leaflet map and from the JavaScript map
-
-			parameters:
-			- objId : the TravelNotes objId of the object to remove
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeObject : function ( objId ) {
-				_RemoveFrom ( objId );
-			},
-			
-			
-			/*
-			--- removeAllObjects method -------------------------------------------------------------------------------
-
-			This method remove all the objects from the leaflet map and from the JavaScript map
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeAllObjects : function ( ) {
-				_TravelNotesData.mapObjects.forEach ( 
-					function ( travelObjectValue, travelObjectKey, travelObjects ) {
-						L.DomEvent.off ( travelObjectValue );
-						_TravelNotesData.map.removeLayer ( travelObjectValue );
+			if ( ! readOnly ) {
+				// event listener for the dragend event
+				L.DomEvent.on ( 
+					bullet, 
+					'dragend', 
+					function ( event ) {
+						// the TravelNotes note and route are searched...
+						var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( event.target.objId );
+						var note = noteAndRoute.note;
+						var route = noteAndRoute.route;
+						// ... then the layerGroup is searched...
+						var layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+						if ( null != route ) {
+							// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
+							var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+							// coordinates and distance are changed in the note
+							note.latLng = latLngDistance.latLng;
+							note.distance = latLngDistance.distance;
+							// notes are sorted on the distance
+							route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+							// the coordinates of the bullet are adapted
+							layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+						}
+						else {
+							// the note is not attached to a route, so the coordinates of the note can be directly changed
+							note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+						}
+						// in all cases, the polyline is updated
+						layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+						// and the HTML page is adapted
+						require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 					}
 				);
-				_TravelNotesData.mapObjects.clear ( );
-			},
-			
-			
-			/*
-			--- zoomToPoint method ------------------------------------------------------------------------------------
-
-			This method zoom on a given point
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			zoomToPoint : function ( latLng ) {
-				_TravelNotesData.map.setView ( latLng, _TravelNotesData.config.itineraryPointZoom );
-			},
-			
-			/*
-			--- zoomToNote method ------------------------------------------------------------------------------------
-
-			This method zoom on a note
-
-			parameters:
-			- noteObjId : the TravelNotes objId of the desired note
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			zoomToNote : function ( noteObjId ) {
-				this.zoomToPoint ( _DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
-			},
-			
-			/*
-			--- zoomToRoute method ------------------------------------------------------------------------------------
-
-			This method zoom on a route
-
-			parameters:
-			- routeObjId : the TravelNotes objId of the desired route
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			zoomToRoute : function ( routeObjId ) {
-				var latLngs = _GetRouteLatLng (  _DataSearchEngine.getRoute ( routeObjId ) );
-				if ( 0 !== latLngs.length ) {
-					_TravelNotesData.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
-				}
-			},
-			
-			/*
-			--- zoomToTravel method -----------------------------------------------------------------------------------
-
-			This method zoom on the entire travel
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			zoomToTravel : function ( ) {				
-				var latLngs = [];
-				_TravelNotesData.travel.routes.forEach (
-					function ( route ) {
-						latLngs = latLngs.concat ( _GetRouteLatLng ( route ) );
+				// event listener for the drag event
+				L.DomEvent.on ( 
+					bullet, 
+					'drag', 
+					function ( event ) {
+						var note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+						var layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+						layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 					}
 				);
-				_TravelNotesData.travel.notes.forEach (
-					function ( note ) {
-						latLngs.push ( note.latLng );
-						latLngs.push ( note.iconLatLng );
-					}
-				);
-				if ( 0 !== latLngs.length ) {
-					_TravelNotesData.map.fitBounds ( _GetLatLngBounds ( latLngs ) );
+			}
+			
+			// a second marker is now created. The icon created by the user is used for this marker
+			var icon = L.divIcon (
+				{ 
+					iconSize: [ note.iconWidth, note.iconHeight ], 
+					iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+					popupAnchor: [ 0, - note.iconHeight / 2 ], 
+					html : note.iconContent,
+					className : g_TravelNotesData.config.note.style
 				}
-			},
-			
-			
-			/*
-			--- addItineraryPointMarker method ------------------------------------------------------------------------
-
-			This method add a leaflet circleMarker at a given point
-			
-			parameters:
-			- objId : a unique identifier to attach to the circleMarker
-			- latLng : the center of the circleMarker
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addItineraryPointMarker : function ( objId, latLng ) {
-				_AddTo ( 
-					objId,
-					L.circleMarker ( latLng, _TravelNotesData.config.itineraryPointMarker )
-				);
-			},
-			
-			/*
-			--- addRectangle method -----------------------------------------------------------------------------------
-
-			This method draw a rectangle on the map
-			
-			parameters:
-			- objId : a unique identifier to attach to the rectangle
-			- bounds : the lower left and upper right corner of the rectangle ( see leaflet docs )
-			- properties : the properties of the rectangle 
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addRectangle : function( objId, bounds, properties ) {
-				_AddTo (
-					objId,
-					L.rectangle ( bounds, properties )
-				);
-			},
-			
-			/*
-			--- addSearchPointMarker method ---------------------------------------------------------------------------
-
-			This method add a leaflet circleMarker at a given point
-			
-			parameters:
-			- objId : a unique identifier to attach to the circleMarker
-			- latLng : the center of the circleMarker
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			
-			addSearchPointMarker : function ( objId, latLng, geometry ) {
-
-				if ( geometry && _TravelNotesData.config.searchPointPolyline.minZoom <= _TravelNotesData.map.getZoom ( ) ) {
-					_AddTo ( objId, L.polyline ( geometry, _TravelNotesData.config.searchPointPolyline.polyline ) );
+			);
+			var marker = L.marker ( 
+				note.iconLatLng,
+				{
+					icon : icon,
+					draggable : ! readOnly
 				}
-				else {
-					_AddTo ( objId, L.circleMarker ( latLng, _TravelNotesData.config.searchPointMarker ) );
-				}
-			},
+			);	
+			marker.objId = note.objId;
 			
+			// a popup is binded to the the marker...
+			marker.bindPopup (
+				function ( layer ) {
+					var note = m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
+					return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
+				}			
+			);
 			
-			/*
-			--- addWayPoint method ------------------------------------------------------------------------------------
-
-			This method add a TravelNotes waypoint object to the leaflet map
-
-			parameters:
-			- wayPoint : a TravelNotes waypoint object
-			- letter : the letter to be displayed under the waypoint
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addWayPoint : function ( wayPoint, letter ) {
-				if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
-					return;
-				}
-				
-				// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
-				var iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
-				( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) + 
-				'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
-				
-				// a leaflet marker is created...
-				var marker = L.marker ( 
-					wayPoint.latLng,
-					{ 
-						icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
-						draggable : true
-					} 
-				);	
-
-				marker.bindTooltip ( function ( wayPoint ) { return _DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
-				marker.getTooltip ( ).options.offset  = [ 20, -20 ];
-
+			// ... and also a tooltip
+			if ( 0 !== note.tooltipContent.length ) {
+				marker.bindTooltip ( function ( layer ) { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
+				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+			}
+			if ( ! readOnly ) {
+				// event listener for the contextmenu event
 				L.DomEvent.on ( 
 					marker, 
 					'contextmenu', 
 					function ( event ) { 
-						require ( '../UI/ContextMenu' ) ( event, require ( './RouteEditor' ) ( ).getWayPointContextMenu ( event.target.objId ) );	
+						require ( '../UI/ContextMenu' ) ( event, require ( '../UI/ContextMenuFactory' ) ( ).getNoteContextMenu ( event.target.objId ) );	
 					}
 				);
-				
-				// ... and added to the map...
-				marker.objId = wayPoint.objId;
-				_AddTo ( wayPoint.objId, marker );
-				
-				// ... and a dragend event listener is created
-				L.DomEvent.on (
-					marker,
-					'dragend', 
+				// event listener for the dragend event
+				L.DomEvent.on ( 
+					marker, 
+					'dragend',
 					function ( event ) {
-						var wayPoint = _TravelNotesData.editedRoute.wayPoints.getAt ( event.target.objId );
-						wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-						require ( '../core/RouteEditor' )( ).wayPointDragEnd ( event.target.objId );
+						// The TravelNotes note linked to the marker is searched...
+						var note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+						// ... new coordinates are saved in the TravelNotes note...
+						note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+						// ... then the layerGroup is searched...
+						var layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+						// ... and finally the polyline is updated with the new coordinates
+						layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 					}
 				);
-			},
-
-			/*
-			--- redrawNote method -------------------------------------------------------------------------------------
-
-			This method redraw a note object on the leaflet map
-
-			parameters:
-			- note : a TravelNotes note object
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			redrawNote : function  ( note ) {
-				this.removeObject ( note.objId );
-				this.addNote ( note );
-			},
+				// event listener for the drag event
+				L.DomEvent.on ( 
+					marker, 
+					'drag',
+					function ( event ) {
+						// The TravelNotes note linked to the marker is searched...
+						var note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+						// ... then the layerGroup is searched...
+						var layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+						// ... and finally the polyline is updated with the new coordinates
+						layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+					}
+				);
+			}
 			
-			/*
-			--- addNote method ----------------------------------------------------------------------------------------
-
-			This method add a TravelNotes note object to the leaflet map
-
-			parameters:
-			- note : a TravelNotes note object
-			- readOnly : a boolean. Created objects cannot be edited when true
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addNote : function ( note, readOnly ) {
-				
-				readOnly = readOnly || false;
-				
-				// first a marker is created at the note position. This marker is empty and transparent, so 
-				// not visible on the map but the marker can be dragged
-				var bullet = L.marker ( 
-					note.latLng,
-					{ 
-						icon : L.divIcon ( 
-							{ 
-								iconSize: [ 
-									_TravelNotesData.config.note.grip.size , 
-									_TravelNotesData.config.note.grip.size
-								], 
-								iconAnchor: [ 
-									_TravelNotesData.config.note.grip.size / 2,
-									_TravelNotesData.config.note.grip.size / 2 
-								],
-								html : '<div></div>'
-							}
-						),
-						zIndexOffset : -1000 ,
-						opacity : _TravelNotesData.config.note.grip.opacity,
-						draggable : ! readOnly
-					} 
-				);	
-				bullet.objId = note.objId;
-				
-				if ( ! readOnly ) {
-					// event listener for the dragend event
-					L.DomEvent.on ( 
-						bullet, 
-						'dragend', 
-						function ( event ) {
-							// the TravelNotes note and route are searched...
-							var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( event.target.objId );
-							var note = noteAndRoute.note;
-							var route = noteAndRoute.route;
-							// ... then the layerGroup is searched...
-							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
-							if ( null != route ) {
-								// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
-								var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
-								// coordinates and distance are changed in the note
-								note.latLng = latLngDistance.latLng;
-								note.distance = latLngDistance.distance;
-								// notes are sorted on the distance
-								route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-								// the coordinates of the bullet are adapted
-								layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
-							}
-							else {
-								// the note is not attached to a route, so the coordinates of the note can be directly changed
-								note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-							}
-							// in all cases, the polyline is updated
-							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
-							// and the HTML page is adapted
-							require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-						}
- 					);
-					// event listener for the drag event
-					L.DomEvent.on ( 
-						bullet, 
-						'drag', 
-						function ( event ) {
-							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
-							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
-							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
-						}
-					);
-				}
-				
-				// a second marker is now created. The icon created by the user is used for this marker
-				var icon = L.divIcon (
-					{ 
-						iconSize: [ note.iconWidth, note.iconHeight ], 
-						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
-						popupAnchor: [ 0, - note.iconHeight / 2 ], 
-						html : note.iconContent,
-						className : _TravelNotesData.config.note.style
-					}
-				);
-				var marker = L.marker ( 
-					note.iconLatLng,
-					{
-						icon : icon,
-						draggable : ! readOnly
-					}
-				);	
-				marker.objId = note.objId;
-				
-				// a popup is binded to the the marker...
-				marker.bindPopup (
-					function ( layer ) {
-						var note = _DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
-						return require ( '../core/NoteEditor' )( ).getNoteHTML ( note, 'TravelNotes-' );
-					}			
-				);
-				
-				// ... and also a tooltip
-				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( function ( layer ) { return _DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
-					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
-				}
-				if ( ! readOnly ) {
-					// event listener for the contextmenu event
-					L.DomEvent.on ( 
-						marker, 
-						'contextmenu', 
-						function ( event ) { 
-							require ( '../UI/ContextMenu' ) ( event, require ( './NoteEditor' ) ( ).getNoteContextMenu ( event.target.objId ) );	
-						}
-					);
-					// event listener for the dragend event
-					L.DomEvent.on ( 
-						marker, 
-						'dragend',
-						function ( event ) {
-							// The TravelNotes note linked to the marker is searched...
-							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
-							// ... new coordinates are saved in the TravelNotes note...
-							note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-							// ... then the layerGroup is searched...
-							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
-							// ... and finally the polyline is updated with the new coordinates
-							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
-						}
-					);
-					// event listener for the drag event
-					L.DomEvent.on ( 
-						marker, 
-						'drag',
-						function ( event ) {
-							// The TravelNotes note linked to the marker is searched...
-							var note = _DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
-							// ... then the layerGroup is searched...
-							var layerGroup = _TravelNotesData.mapObjects.get ( event.target.objId );
-							// ... and finally the polyline is updated with the new coordinates
-							layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
-						}
-					);
-				}
-				
-				// Finally a polyline is created between the 2 markers
-				var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], _TravelNotesData.config.note.polyline );
-				polyline.objId = note.objId;
-				
-				// The 3 objects are added to a layerGroup
-				var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
-				layerGroup.markerId = L.Util.stamp ( marker );
-				layerGroup.polylineId = L.Util.stamp ( polyline );
-				layerGroup.bulletId = L.Util.stamp ( bullet );
-				
-				// and the layerGroup added to the leaflet map and JavaScript map
-				_AddTo ( note.objId, layerGroup );
-			},			
+			// Finally a polyline is created between the 2 markers
+			var polyline = L.polyline ( [ note.latLng, note.iconLatLng ], g_TravelNotesData.config.note.polyline );
+			polyline.objId = note.objId;
 			
-			/*
-			--- editNote method ---------------------------------------------------------------------------------------
-
-			This method changes a note after edition by the user
-
-			parameters:
-			- note : the TravelNotes note object modified by the user
+			// The 3 objects are added to a layerGroup
+			var layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
+			layerGroup.markerId = L.Util.stamp ( marker );
+			layerGroup.polylineId = L.Util.stamp ( polyline );
+			layerGroup.bulletId = L.Util.stamp ( bullet );
 			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+			// and the layerGroup added to the leaflet map and JavaScript map
+			m_AddTo ( note.objId, layerGroup );
+		};
 
-			editNote : function ( note ) {
-				
-				// a new icon is created
-				var icon = L.divIcon (
-					{ 
-						iconSize: [ note.iconWidth, note.iconHeight ], 
-						iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
-						popupAnchor: [ 0, -note.iconHeight / 2 ], 
-						html : note.iconContent,
-						className : _TravelNotesData.config.note.style
-					}
-				);
-				// and the marker icon replaced by the new one
-				var layerGroup = _TravelNotesData.mapObjects.get ( note.objId );
-				var marker = layerGroup.getLayer ( layerGroup.markerId );
-				marker.setIcon ( icon );
-				
-				// then, the tooltip is changed
-				marker.unbindTooltip ( );
-				if ( 0 !== note.tooltipContent.length ) {
-					marker.bindTooltip ( function ( layer ) { return _DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
-					marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+		/*
+		--- m_EditNote function ---------------------------------------------------------------------------------------
+
+		This function changes a note after edition by the user
+
+		parameters:
+		- note : the TravelNotes note object modified by the user
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EditNote = function ( note ) {
+			
+			// a new icon is created
+			var icon = L.divIcon (
+				{ 
+					iconSize: [ note.iconWidth, note.iconHeight ], 
+					iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+					popupAnchor: [ 0, -note.iconHeight / 2 ], 
+					html : note.iconContent,
+					className : g_TravelNotesData.config.note.style
 				}
+			);
+			// and the marker icon replaced by the new one
+			var layerGroup = g_TravelNotesData.mapObjects.get ( note.objId );
+			var marker = layerGroup.getLayer ( layerGroup.markerId );
+			marker.setIcon ( icon );
+			
+			// then, the tooltip is changed
+			marker.unbindTooltip ( );
+			if ( 0 !== note.tooltipContent.length ) {
+				marker.bindTooltip ( function ( layer ) { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
+				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 			}
 		};
+		
+		/*
+		--- MapEditor object ------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				
+				removeRoute : function ( route, removeNotes, removeWayPoints ) { m_RemoveRoute ( route, removeNotes, removeWayPoints ); },
+				
+				addRoute : function ( route, addNotes, addWayPoints, readOnly ) { m_AddRoute ( route, addNotes, addWayPoints, readOnly ); },
+				
+				editRoute : function ( route ) { m_EditRoute ( route ); },
+				
+				removeObject : function ( objId ) { m_RemoveObject ( objId ); },
+				
+				removeAllObjects : function ( ) { m_RemoveAllObjects ( ); },
+				
+				zoomToPoint : function ( latLng ) { m_ZoomToPoint ( latLng ); },
+				
+				zoomToNote : function ( noteObjId ) { m_ZoomToNote ( noteObjId ); },
+				
+				zoomToRoute : function ( routeObjId ) { m_ZoomToRoute ( routeObjId );  },
+				
+				zoomToTravel : function ( ) { m_ZoomToTravel ( ); },
+
+				addItineraryPointMarker : function ( objId, latLng ) { m_AddItineraryPointMarker ( objId, latLng ); },
+				
+				addSearchPointMarker : function ( objId, latLng, geometry ) { m_AddSearchPointMarker ( objId, latLng, geometry ); },
+
+				addRectangle : function ( objId, bounds, properties ) { m_AddRectangle ( objId, bounds, properties ); },
+				
+				addWayPoint : function ( wayPoint, letter ) { m_AddWayPoint  ( wayPoint, letter ); },
+
+				redrawNote : function  ( note ) { m_RedrawNote ( note ); },
+				
+				addNote : function ( note, readOnly ) { m_AddNote ( note, readOnly ); },			
+				
+				editNote : function ( note ) { m_EditNote ( note ); }
+			}
+		);
 	};
 
 	/*
@@ -7666,7 +7914,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../core/NoteEditor":34,"../core/RouteEditor":35,"../core/TravelEditor":37,"../util/Utilities":52,"./NoteEditor":34,"./RouteEditor":35}],34:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../UI/ContextMenuFactory":12,"../core/NoteEditor":34,"../core/RouteEditor":35,"../core/TravelEditor":37,"../core/WaypointEditor":38,"../util/Utilities":55}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7697,7 +7945,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 		- addedattachNoteToRoute and detachNoteFromRoute methods
-Doc reviewed 20170927
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -7707,15 +7955,15 @@ Tests ...
 	
 	'use strict';
 
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
 	var NoteEditor = function ( ) {
 		
+		var m_Translator = require ( '../UI/Translator' ) ( );
+		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+	
 		/*
-		--- _AttachNoteToRoute function -------------------------------------------------------------------------------
+		--- m_AttachNoteToRoute function ------------------------------------------------------------------------------
 
 		This function transform a travel note into a route note ( when possible )
 		
@@ -7725,13 +7973,13 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _AttachNoteToRoute = function ( noteObjId ) {
-			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+		var m_AttachNoteToRoute = function ( noteObjId ) {
+			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 			var distance = 999999999;
 			var selectedRoute = null;
 			var attachPoint = null;
 			
-			_TravelNotesData.travel.routes.forEach ( 
+			g_TravelNotesData.travel.routes.forEach ( 
 				function ( route ) {
 					var pointAndDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 					if ( pointAndDistance ) {
@@ -7746,7 +7994,7 @@ Tests ...
 			);
 			
 			if ( selectedRoute ) {
-				_TravelNotesData.travel.notes.remove (  noteObjId );
+				g_TravelNotesData.travel.notes.remove (  noteObjId );
 				noteAndRoute.note.distance = distance;
 				noteAndRoute.note.latLng = attachPoint;
 				noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
@@ -7757,15 +8005,15 @@ Tests ...
 				selectedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 
 				require ( '../core/MapEditor' ) ( ).redrawNote ( noteAndRoute.note );
-				require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
-				require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+				require ( '../UI/DataPanesUI' ) ( ).updateItinerary ( );
+				require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes ( );
 				// and the HTML page is adapted
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 			}
 		};
 
 		/*
-		--- _DetachNoteFromRoute function -----------------------------------------------------------------------------
+		--- m_DetachNoteFromRoute function ----------------------------------------------------------------------------
 
 		This function transform a route note into a travel note
 		
@@ -7775,444 +8023,385 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _DetachNoteFromRoute = function ( noteObjId ) {
+		var m_DetachNoteFromRoute = function ( noteObjId ) {
 			// the note and the route are searched
-			var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
+			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 			noteAndRoute.route.notes.remove ( noteObjId );
 			noteAndRoute.note.distance = -1;
 			noteAndRoute.note.chainedDistance = 0;
-			_TravelNotesData.travel.notes.add ( noteAndRoute.note );
+			g_TravelNotesData.travel.notes.add ( noteAndRoute.note );
 			
-			require ( '../core/ItineraryEditor' ) ( ).updateItinerary ( );
-			require ( '../core/ItineraryEditor' ) ( ).updateTravelNotes ( );
+			require ( '../UI/DataPanesUI' ) ( ).updateItinerary ( );
+			require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes ( );
+			// and the HTML page is adapted
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
+
+		/*
+		--- m_NewNote function ----------------------------------------------------------------------------------------
+
+		This function create a new TravelNotes note object
+		
+		parameters:
+		- latLng : the coordinates of the new note
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NewNote = function ( latLng ) {
+			var note = require ( '../data/Note' ) ( );
+			note.latLng = latLng;
+			note.iconLatLng = latLng;
+			
+			return note;
+		};
+		
+		/*
+		--- m_NewRouteNote function -----------------------------------------------------------------------------------
+
+		This function start the creation of a TravelNotes note object linked with a route
+		
+		parameters:
+		- routeObjId : the objId of the route to witch the note will be linked
+		- event : the event that have triggered the method ( a right click on the 
+		route polyline and then a choice in a context menu)
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NewRouteNote = function ( routeObjId, event ) {
+			// the nearest point and distance on the route is searched
+			var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
+				m_DataSearchEngine.getRoute ( routeObjId ),
+				[ event.latlng.lat, event.latlng.lng ] 
+			);
+			
+			// the note is created
+			var note = m_NewNote ( latLngDistance.latLng );
+			note.distance = latLngDistance.distance;
+			
+			// and displayed in a dialog box
+			require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
+		};
+		
+		/*
+		--- m_NewSearchNote function ----------------------------------------------------------------------------------
+
+		This function start the creation of a TravelNotes note object linked to a search
+		
+		parameters:
+		- searchResult : the search results with witch the note will be created
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NewSearchNote = function ( searchResult ) {
+			var note = m_NewNote ( [ searchResult.lat, searchResult.lon ] );
+			
+			note.address = ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+				( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
+				( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
+			
+			note.url = searchResult.tags.website || '';
+			note.phone = searchResult.tags.phone || '';
+			note.tooltipContent = searchResult.tags.name || '';
+			note.popupContent = searchResult.tags.name || '';
+			
+			require ( '../UI/NoteDialog' ) ( note, -1, true );
+		};
+		
+		/*
+		--- m_NewManeuverNote function --------------------------------------------------------------------------------
+
+		This function start the creation of a TravelNotes note object linked to a maneuver
+		
+		parameters:
+		- maneuverObjId : the objId of the maneuver
+		- latLng : the coordinates of the maneuver
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NewManeuverNote = function ( maneuverObjId, latLng ) {
+			// the nearest point and distance on the route is searched
+			var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
+				g_TravelNotesData.editedRoute,
+				latLng
+			);
+			// the maneuver is searched
+			var maneuver = g_TravelNotesData.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+
+			// the note is created
+			var note = m_NewNote ( latLng );
+			note.distance = latLngDistance.distance;
+			note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
+			note.popupContent = maneuver.instruction;
+			note.width = 40;
+			note.height = 40;
+
+			// and displayed in a dialog box
+			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.editedRoute.objId, true );
+		};
+
+		/*
+		--- m_NewTravelNote function ----------------------------------------------------------------------------------
+
+		This function start the creation f a TravelNotes note object
+		
+		parameters:
+		- latLng : the coordinates of the new note
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NewTravelNote = function ( latLng ) {
+			// the note is created
+			var note = m_NewNote ( latLng );
+
+			// and displayed in a dialog box
+			require ( '../UI/NoteDialog' ) ( note, -1, true );
+		};
+
+		/*
+		--- m_AfterNoteDialog function --------------------------------------------------------------------------------
+
+		This function is called when the user push on the ok button of the note dialog
+		
+		parameters:
+		- note : the note modified in the dialog box
+		- routeObjId : the TravelNotes route objId passed to the note dialog box
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AfterNoteDialog = function ( note, routeObjId ) {
+			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( note.objId );
+			if ( noteAndRoute.note ) {
+				// it's an existing note. The note is changed on the map
+				require ( '../core/MapEditor' ) ( ).editNote ( note );
+				if ( ! noteAndRoute.route ) {
+					// it's a travel note. UI is also adapted
+					require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
+				}
+			}
+			else {
+				// it's a new note
+				if ( -1 === routeObjId ) {
+					// it's a global note
+					g_TravelNotesData.travel.notes.add ( note );
+					require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
+				}
+				else {
+					// the note is linked with a route, so...
+					var route = m_DataSearchEngine.getRoute ( routeObjId );
+					route.notes.add ( note );
+					// ... the chainedDistance is adapted...
+					note.chainedDistance = route.chainedDistance;
+					// and the notes sorted
+					route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+					// and in the itinerary is adapted...
+					require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+				}
+				// the note is added to the leaflet map
+				require ( '../core/MapEditor' ) ( ).addNote ( note );
+			}
 			// and the HTML page is adapted
 			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 		};
 		
-		return {	
+		/*
+		--- m_EditNote function ---------------------------------------------------------------------------------------
+
+		This function start the modification of a note
 		
-			/*
-			--- newNote method ----------------------------------------------------------------------------------------
+		parameters:
+		- noteObjId : the objId of the edited note
 
-			This method create a new TravelNotes note object
-			
-			parameters:
-			- latLng : the coordinates of the new note
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		var m_EditNote = function ( noteObjId ) {
+			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
+			require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
+		};
 
-			newNote : function ( latLng ) {
-				var note = require ( '../data/Note' ) ( );
-				note.latLng = latLng;
-				note.iconLatLng = latLng;
-				
-				return note;
-			},
+		/*
+		--- m_RemoveNote function -------------------------------------------------------------------------------------
+
+		This function removes a note
 		
-			/*
-			--- newRouteNote method -----------------------------------------------------------------------------------
+		parameters:
+		- noteObjId : the objId of the note to remove
 
-			This method start the creation of a TravelNotes note object linked with a route
-			
-			parameters:
-			- routeObjId : the objId of the route to witch the note will be linked
-			- event : the event that have triggered the method ( a right click on the 
-			route polyline and then a choice in a context menu)
+		-----------------------------------------------------------------------------------------------------------
+		*/
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			newRouteNote : function ( routeObjId, event ) {
-				// the nearest point and distance on the route is searched
-				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-					_DataSearchEngine.getRoute ( routeObjId ),
-					[ event.latlng.lat, event.latlng.lng ] 
-				);
-				
-				// the note is created
-				var note = this.newNote ( latLngDistance.latLng );
-				note.distance = latLngDistance.distance;
-				
-				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, routeObjId, true );
-			},
-			
-			/*
-			--- newSearchNote method --------------------------------------------------------------------------------
-
-			This method start the creation of a TravelNotes note object linked to a maneuver
-			
-			parameters:
-			- searchResult : the search results with witch the note will be created
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			newSearchNote : function ( searchResult ) {
-				var note = this.newNote ( [ searchResult.lat, searchResult.lon ] );
-				
-				note.address = ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-					( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
-					( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
-				
-				note.url = searchResult.tags.website || '';
-				note.phone = searchResult.tags.phone || '';
-				note.tooltipContent = searchResult.tags.name || '';
-				note.popupContent = searchResult.tags.name || '';
-				
-				require ( '../UI/NoteDialog' ) ( note, -1, true );
-			},
+		var m_RemoveNote = function ( noteObjId ) {
+			// the note is removed from the leaflet map
+			require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
+			// the note and the route are searched
+			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
+			if ( noteAndRoute.route ) {
+				// it's a route note
+				noteAndRoute.route.notes.remove ( noteObjId );
+				require ( '../UI/DataPanesUI' ) ( ).updateItinerary ( );
+			}
+			else {
+				// it's a travel note
+				g_TravelNotesData.travel.notes.remove ( noteObjId );
+				require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes( );
+			}
+			// and the HTML page is adapted
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
 		
-			/*
-			--- newManeuverNote method --------------------------------------------------------------------------------
+		/*
+		--- m_HideNotes function --------------------------------------------------------------------------------------
 
-			This method start the creation of a TravelNotes note object linked to a maneuver
-			
-			parameters:
-			- maneuverObjId : the objId of the maneuver
-			- latLng : the coordinates of the maneuver
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			newManeuverNote : function ( maneuverObjId, latLng ) {
-				// the nearest point and distance on the route is searched
-				var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-					_TravelNotesData.editedRoute,
-					latLng
-				);
-				// the maneuver is searched
-				var maneuver = _TravelNotesData.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
-
-				// the note is created
-				var note = this.newNote ( latLng );
-				note.distance = latLngDistance.distance;
-				note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
-				note.popupContent = maneuver.instruction;
-				note.width = 40;
-				note.height = 40;
-
-				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, _TravelNotesData.editedRoute.objId, true );
-			},
+		This function hide the notes on the map
 		
-			/*
-			--- newTravelNote method ----------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			This method start the creation f a TravelNotes note object
-			
-			parameters:
-			- latLng : the coordinates of the new note
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			newTravelNote : function ( latLng ) {
-				// the note is created
-				var note = this.newNote ( latLng );
-
-				// and displayed in a dialog box
-				require ( '../UI/NoteDialog' ) ( note, -1, true );
-			},
-		
-			/*
-			--- endNoteDialog method ----------------------------------------------------------------------------------
-
-			This method is called when the user push on the ok button of the note dialog
-			
-			parameters:
-			- note : the note modified in the dialog box
-			- routeObjId : the TravelNotes route objId passed to the note dialog box
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			endNoteDialog : function ( note, routeObjId ) {
-				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( note.objId );
-				if ( noteAndRoute.note ) {
-					// it's an existing note. The note is changed on the map
-					require ( '../core/MapEditor' ) ( ).editNote ( note );
-					if ( ! noteAndRoute.route ) {
-						// it's a travel note. UI is also adapted
-						require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
-					}
-				}
-				else {
-					// it's a new note
-					if ( -1 === routeObjId ) {
-						// it's a global note
-						_TravelNotesData.travel.notes.add ( note );
-						require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
-					}
-					else {
-						// the note is linked with a route, so...
-						var route = _DataSearchEngine.getRoute ( routeObjId );
-						route.notes.add ( note );
-						// ... the chainedDistance is adapted...
-						note.chainedDistance = route.chainedDistance;
-						// and the notes sorted
-						route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-						// and in the itinerary is adapted...
-						require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-					}
-					// the note is added to the leaflet map
-					require ( '../core/MapEditor' ) ( ).addNote ( note );
-				}
-				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-			},	
-		
-			/*
-			--- editNote method ---------------------------------------------------------------------------------------
-
-			This method start the modification of a note
-			
-			parameters:
-			- noteObjId : the objId of the edited note
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			editNote : function ( noteObjId ) {
-				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
-				require ( '../UI/NoteDialog' ) ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
-			},
-		
-			/*
-			--- removeNote method -------------------------------------------------------------------------------------
-
-			This method removes a note
-			
-			parameters:
-			- noteObjId : the objId of the note to remove
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeNote : function ( noteObjId ) {
-				// the note is removed from the leaflet map
-				require ( '../core/MapEditor' ) ( ).removeObject ( noteObjId );
-				// the note and the route are searched
-				var noteAndRoute = _DataSearchEngine.getNoteAndRoute ( noteObjId );
-				if ( noteAndRoute.route ) {
-					// it's a route note
-					noteAndRoute.route.notes.remove ( noteObjId );
-					require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				}
-				else {
-					// it's a travel note
-					_TravelNotesData.travel.notes.remove ( noteObjId );
-				}
-				// and the HTML page is adapted
-				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-			},
-		
-			/*
-			--- hideNotes method -------------------------------------------------------------------------------------
-
-			This method hide the notes on the map
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			hideNotes : function ( ) {
-				var notesIterator = _TravelNotesData.travel.notes.iterator;
+		var m_HideNotes = function ( ) {
+			var notesIterator = g_TravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );
+			}
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				notesIterator = routesIterator.value.notes.iterator;
 				while ( ! notesIterator.done ) {
-					require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );
+					require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );					
 				}
-				var routesIterator = _TravelNotesData.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					notesIterator = routesIterator.value.notes.iterator;
-					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).removeObject ( notesIterator.value.objId );					
-					}
-				}
-			},
+			}
+		};
 			
-			/*
-			--- showNotes method -------------------------------------------------------------------------------------
+		/*
+		--- m_ShowNotes function --------------------------------------------------------------------------------------
 
-			This method show the notes on the map
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			showNotes : function ( ) {
-				this.hideNotes ( );
-				var notesIterator = _TravelNotesData.travel.notes.iterator;
-				while ( ! notesIterator.done ) {
-					require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
-				}
-				var routesIterator = _TravelNotesData.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					notesIterator = routesIterator.value.notes.iterator;
-					while ( ! notesIterator.done ) {
-						require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );					
-					}
-				}
-			},
-			
-			/*
-			--- zoomToNote method -------------------------------------------------------------------------------------
-
-			This method zoom to a given note
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			zoomToNote : function ( noteObjId ) {
-				require ( '../core/MapEditor' ) ( ).zoomToPoint ( _DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng );
-			},
-			
-			/*
-			--- getMapContextMenu method ------------------------------------------------------------------------------
-
-			This method gives the note part of the map context menu
-			
-			parameters:
-			- latLng : the coordinates where the map was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getMapContextMenu :function ( latLng ) {
-				
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - New travel note" ), 
-						action : this.newTravelNote,
-						param : latLng
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - Hide notes" ), 
-						action : this.hideNotes
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - Show notes" ), 
-						action : this.showNotes
-					} 
-				);
-				
-				return contextMenu;
-			},
+		This function show the notes on the map
 		
-			/*
-			--- getNoteContextMenu method -----------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			This method gives the note context menu
+		var m_ShowNotes = function ( ) {
+			m_HideNotes ( );
+			var notesIterator = g_TravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );
+			}
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				notesIterator = routesIterator.value.notes.iterator;
+				while ( ! notesIterator.done ) {
+					require ( '../core/MapEditor' ) ( ).addNote ( notesIterator.value );					
+				}
+			}
+		};
 			
-			parameters:
-			- noteObjId : the note objId that was clicked
+		/*
+		--- m_ZoomToNote function -------------------------------------------------------------------------------------
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		This function zoom to a given note
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			getNoteContextMenu :function ( noteObjId ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - Edit this note" ), 
-						action : this.editNote,
-						param : noteObjId
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - Delete this note" ), 
-						action : this.removeNote,
-						param : noteObjId
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "NoteEditor - Zoom to note" ), 
-						action : this.zoomToNote,
-						param : noteObjId
-					} 
-				);
-				
-				var route = _DataSearchEngine.getNoteAndRoute ( noteObjId ).route;
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : route ?  _Translator.getText ( "NoteEditor - Detach note from route" ) : _Translator.getText ( "NoteEditor - Attach note to route" ), 
-						action : ( ( -1 === _TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? this.detachNoteFromRoute : this.attachNoteToRoute ) : null ),
-						param : noteObjId
-					} 
-				);
-				
-				return contextMenu;
-			},
+		var m_ZoomToNote = function ( noteObjId ) {
+			require ( '../core/MapEditor' ) ( ).zoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng );
+		};
 			
-			attachNoteToRoute : function ( noteObjId ) { _AttachNoteToRoute ( noteObjId ); },
-			
-			detachNoteFromRoute : function ( noteObjId ) { _DetachNoteFromRoute ( noteObjId ); },
-			
-			/*
-			--- getNoteHTML method ------------------------------------------------------------------------------------
+		/*
+		--- m_GetNoteHTML function --------------------------------------------------------------------------------------
 
-			This method returns an HTML string with the note contents. This string will be used in the
-			note popup and on the roadbook page
-			
-			parameters:
-			- note : the TravelNotes object
-			- classNamePrefix : a string that will be added to all the HTML classes
+		This function returns an HTML string with the note contents. This string will be used in the
+		note popup and on the roadbook page
+		
+		parameters:
+		- note : the TravelNotes object
+		- classNamePrefix : a string that will be added to all the HTML classes
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			getNoteHTML : function ( note, classNamePrefix ) {
-			
+		var m_GetNoteHTML = function ( note, classNamePrefix ) {
+		
 			var noteText = '';
-				if ( 0 !== note.tooltipContent.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
-				}
-				if ( 0 !== note.popupContent.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
-				}
-				if ( 0 !== note.address.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + _Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
-				}
-				if ( 0 !== note.phone.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + _Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
-				}
-				if ( 0 !== note.url.length ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + _Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
-				}
-				noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
-					_Translator.getText ( 
-						'NoteEditor - Latitude Longitude',
+			if ( 0 !== note.tooltipContent.length ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
+			}
+			if ( 0 !== note.popupContent.length ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
+			}
+			if ( 0 !== note.address.length ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + m_Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
+			}
+			if ( 0 !== note.phone.length ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + m_Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
+			}
+			if ( 0 !== note.url.length ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + m_Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
+			}
+			var utilities = require ( '../util/Utilities' ) ( );
+			noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
+				m_Translator.getText ( 
+					'NoteEditor - Latitude Longitude',
+					{ 
+						lat : utilities.formatLat ( note.lat ),
+						lng : utilities.formatLng ( note.lng )
+					}
+				) + '</div>';
+				
+			if ( -1 !== note.distance ) {
+				noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
+					m_Translator.getText ( 
+						'NoteEditor - Distance', 
 						{ 
-							lat : _Utilities.formatLat ( note.lat ),
-							lng : _Utilities.formatLng ( note.lng )
+							distance: utilities.formatDistance ( note.chainedDistance + note.distance )
 						}
 					) + '</div>';
-					
-				if ( -1 !== note.distance ) {
-					noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
-						_Translator.getText ( 
-							'NoteEditor - Distance', 
-							{ 
-								distance: _Utilities.formatDistance ( note.chainedDistance + note.distance )
-							}
-						) + '</div>';
-				}
-				
-				return noteText;
-			}		
+			}
+			
+			return noteText;
 		};
+		
+		/*
+		--- noteEditor object -----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{	
+			
+				newRouteNote : function ( routeObjId, event ) { m_NewRouteNote ( routeObjId, event ); },
+				
+				newSearchNote : function ( searchResult ) { m_NewSearchNote ( searchResult ); },
+			
+				newManeuverNote : function ( maneuverObjId, latLng ) { m_NewManeuverNote ( maneuverObjId, latLng ); },
+			
+				newTravelNote : function ( latLng ) { m_NewTravelNote ( latLng ); },
+			
+				afterNoteDialog : function ( note, routeObjId ) { m_AfterNoteDialog ( note, routeObjId ); },	
+			
+				editNote : function ( noteObjId ) {	m_EditNote ( noteObjId ); },
+			
+				removeNote : function ( noteObjId ) { m_RemoveNote ( noteObjId ); },
+			
+				hideNotes : function ( ) { m_HideNotes ( ); },
+				
+				showNotes : function ( ) { m_ShowNotes ( ); },
+				
+				zoomToNote : function ( noteObjId ) { m_ZoomToNote ( noteObjId ); },
+							
+				attachNoteToRoute : function ( noteObjId ) { m_AttachNoteToRoute ( noteObjId ); },
+				
+				detachNoteFromRoute : function ( noteObjId ) { m_DetachNoteFromRoute ( noteObjId ); },
+				
+				getNoteHTML : function ( note, classNamePrefix ) { return m_GetNoteHTML ( note, classNamePrefix ); }		
+			}
+		);
 	};
 
 	/*
@@ -8228,7 +8417,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":12,"../UI/NoteDialog":18,"../UI/Translator":24,"../core/ItineraryEditor":32,"../core/MapEditor":33,"../core/RouteEditor":35,"../core/TravelEditor":37,"../data/Note":43,"../util/Utilities":52}],35:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/NoteDialog":19,"../UI/Translator":25,"../core/MapEditor":33,"../core/RouteEditor":35,"../core/TravelEditor":37,"../data/Note":46,"../util/Utilities":55}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8266,7 +8455,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
 		- fixed issue #45
-Doc reviewed 20170928
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -8276,870 +8465,497 @@ Tests ...
 	
 	'use strict';
 
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
-	var _MapEditor = require ( '../core/MapEditor' ) ( );
-	var _RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
-	var _ItineraryEditor = require ( '../core/ItineraryEditor' ) ( );
-	var _Utilities = require ( '../util/Utilities' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
+
 		
-	var RouteEditor = function ( ) {
+	/*
+	--- routeEditor function ------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var routeEditor = function ( ) {
 		
+		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+		var m_Translator = require ( '../UI/Translator' ) ( );
+		var m_NoteEditor = require ( '../core/NoteEditor' ) ( );
+		var m_MapEditor = require ( '../core/MapEditor' ) ( );
+		var m_RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+
 		/*
-		--- RouteEditor object ----------------------------------------------------------------------------------------
+		--- m_CutRoute function ---------------------------------------------------------------------------------------
+
+		This function cut a route at a given point
+		Warning: not tested, not used!!!
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CutRoute = function ( route, latLng ) {
+
+			// an array is created with 2 clones of the route
+			var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
+			routes [ 0 ].object = route.object;
+			routes [ 1 ].object = route.object;
+			
+			// and the itineraryPoints are removed
+			routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
+			routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
+			
+			// the distance between the origin and the cutting point is computed
+			var cuttingPointLatLngDistance = m_GetClosestLatLngDistance ( route, latLng );
+
+			// iteration on the itineraryPoints
+			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+			var iterationDistance = 0;
+			var itineraryPoint;
+			var previousItineraryPoint = null;
+			
+			var routeCounter = 0;
+			while ( ! itineraryPointIterator.done ) {
+				itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
+				itineraryPoint.object = itineraryPointIterator.value.object;
+				if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+					// we have passed the cutting point...
+					var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
+					// a new point is created at the cutting point position and added to the first route.
+					var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+					routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
+					routes [ 0 ].distance = iterationDistance - removedDistance;
+					if ( previousItineraryPoint ) {
+						previousItineraryPoint.distance -= removedDistance;
+					}
+
+					routeCounter = 1;
+					
+					// a new point is created at the cutting point position and added to the second route.
+					cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+					cuttingPoint.distance = removedDistance;
+					routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
+					iterationDistance = removedDistance;
+				}
+				routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
+				iterationDistance +=itineraryPointIterator.value.distance;
+				previousItineraryPoint = itineraryPoint;
+			}
+			routes [ routeCounter ].distance = iterationDistance;
+
+			return routes;
+		};
+
+		/*
+		--- m_GetClosestLatLngDistance function -----------------------------------------------------------------------
+
+		This function search the nearest point on a route from a given point and compute the distance
+		between the beginning of the route and the nearest point
+		
+		parameters:
+		- route : the TravelNotes route object to be used
+		- latLng : the coordinates of the point
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		return {
-			cutRoute : function ( route, latLng ) {
-
-				// an array is created with 2 clones of the route
-				var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
-				routes [ 0 ].object = route.object;
-				routes [ 1 ].object = route.object;
-				
-				// and the itineraryPoints are removed
-				routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
-				routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
-				
-				// the distance between the origin and the cutting point is computed
-				var cuttingPointLatLngDistance = this.getClosestLatLngDistance ( route, latLng );
-
-				// iteration on the itineraryPoints
-				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-				var iterationDistance = 0;
-				var itineraryPoint;
-				var previousItineraryPoint = null;
-				
-				var routeCounter = 0;
-				while ( ! itineraryPointIterator.done ) {
-					itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
-					itineraryPoint.object = itineraryPointIterator.value.object;
-					if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
-						// we have passed the cutting point...
-						var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
-						// a new point is created at the cutting point position and added to the first route.
-						var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
-						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-						routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
-						routes [ 0 ].distance = iterationDistance - removedDistance;
-						if ( previousItineraryPoint ) {
-							previousItineraryPoint.distance -= removedDistance;
-						}
-
-						routeCounter = 1;
-						
-						// a new point is created at the cutting point position and added to the second route.
-						cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
-						cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-						cuttingPoint.distance = removedDistance;
-						routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
-						iterationDistance = removedDistance;
-					}
-					routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
-					iterationDistance +=itineraryPointIterator.value.distance;
-					previousItineraryPoint = itineraryPoint;
-				}
-				routes [ routeCounter ].distance = iterationDistance;
-
-				return routes;
-			},
-
-			/*
-			--- getClosestLatLngDistance method -----------------------------------------------------------------------
-
-			This method search the nearest point on a route from a given point and compute the distance
-			between the beginning of the route and the nearest point
+		var m_GetClosestLatLngDistance = function ( route, latLng ) {
 			
-			parameters:
-			- route : the TravelNotes route object to be used
-			- latLng : the coordinates of the point
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getClosestLatLngDistance : function ( route, latLng ) {
-				
-				if ( 0 === route.itinerary.itineraryPoints.length ) {
-					return null;
-				}
-				// an iterator on the route points is created...
-				var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-				// ... and placed on the first point
-				var dummy = itineraryPointIterator.done;
-				// the smallest distance is initialized ...
-				var minDistance = Number.MAX_VALUE;
-				// projections of points are made
-				var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
-				var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-				// variables initialization
-				var closestLatLng = null;
-				var closestDistance = 0;
-				var endSegmentDistance = itineraryPointIterator.value.distance;
-				// iteration on the route points
-				while ( ! itineraryPointIterator.done ) {
-					// projection of the second point...
-					var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-					// and distance is computed
-					var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-					if ( distance < minDistance )
-					{
-						// we have found the smallest distance ... till now :-)
-						minDistance = distance;
-						// the nearest point is computed
-						closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
-						// and the distance also
-						closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-					}
-					// we prepare the iteration for the next point...
-					endSegmentDistance += itineraryPointIterator.value.distance;
-					point1 = point2;
-				}
-				
-				return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
-			},
-
-			/*
-			--- saveGpx method ----------------------------------------------------------------------------------------
-
-			This method save the currently edited route to a GPX file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			saveGpx : function ( ) {
-				// initializations...
-				var tab0 = "\n";
-				var tab1 = "\n\t";
-				var tab2 = "\n\t\t";
-				var tab3 = "\n\t\t\t";
-				var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
-				
-				// header
-				var gpxString = "<?xml version='1.0'?>" + tab0;
-				gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
-
-				// waypoints
-				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done )
+			if ( 0 === route.itinerary.itineraryPoints.length ) {
+				return null;
+			}
+			// an iterator on the route points is created...
+			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+			// ... and placed on the first point
+			var dummy = itineraryPointIterator.done;
+			// the smallest distance is initialized ...
+			var minDistance = Number.MAX_VALUE;
+			// projections of points are made
+			var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+			var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+			// variables initialization
+			var closestLatLng = null;
+			var closestDistance = 0;
+			var endSegmentDistance = itineraryPointIterator.value.distance;
+			// iteration on the route points
+			while ( ! itineraryPointIterator.done ) {
+				// projection of the second point...
+				var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				// and distance is computed
+				var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+				if ( distance < minDistance )
 				{
-					gpxString += 
-						tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
-						timeStamp + "/>";
-					
+					// we have found the smallest distance ... till now :-)
+					minDistance = distance;
+					// the nearest point is computed
+					closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+					// and the distance also
+					closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
 				}
+				// we prepare the iteration for the next point...
+				endSegmentDistance += itineraryPointIterator.value.distance;
+				point1 = point2;
+			}
+			
+			return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
+		};
+	
+		/*
+		--- m_SaveGpx function ----------------------------------------------------------------------------------------
+
+		This function save the currently edited route to a GPX file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SaveGpx = function ( ) {
+			// initializations...
+			var tab0 = "\n";
+			var tab1 = "\n\t";
+			var tab2 = "\n\t\t";
+			var tab3 = "\n\t\t\t";
+			var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
+			
+			// header
+			var gpxString = "<?xml version='1.0'?>" + tab0;
+			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
+
+			// waypoints
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done )
+			{
+				gpxString += 
+					tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
+					timeStamp + "/>";
 				
-				// route
-				gpxString += tab1 + "<rte>";
-				var maneuverIterator = _TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
-				while ( ! maneuverIterator.done ) {
-					var wayPoint = _TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
-					var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
-					gpxString +=
-						tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
-				}
-				gpxString += tab1 + "</rte>";
-				
-				// track
-				gpxString += tab1 + "<trk>";
-				gpxString += tab2 + "<trkseg>";
-				var itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
-				while ( ! itineraryPointsIterator.done ) {
-					gpxString +=
-						tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
-				}
-				gpxString += tab2 + "</trkseg>";				
-				gpxString += tab1 + "</trk>";
-				
-				// eof
-				gpxString += tab0 + "</gpx>";
-				
-				// file is saved
-				var fileName = _TravelNotesData.editedRoute.name;
-				if ( '' === fileName ) {
-					fileName = 'TravelNote';
-				}
-				fileName += '.gpx';
-				require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
-			},
+			}
 			
-			/*
-			--- getRouteHTML method -----------------------------------------------------------------------------------
-
-			This method returns an HTML string with the route contents. This string will be used in the
-			route popup and on the roadbook page
+			// route
+			gpxString += tab1 + "<rte>";
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				var wayPoint = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+				var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
+				gpxString +=
+					tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
+			}
+			gpxString += tab1 + "</rte>";
 			
-			parameters:
-			- route : the TravelNotes route object
-			- classNamePrefix : a string that will be added to all the HTML classes
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getRouteHTML : function ( route, classNamePrefix ) {
-				var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
-					route.name + 
-					'</div>';
-				if (0 !== route.distance ) {
-					returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
-						_Translator.getText ( 'RouteEditor - Distance', { distance : _Utilities.formatDistance ( route.distance ) } ) + '</div>' +
-						'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
-						_Translator.getText ( 'RouteEditor - Duration', { duration : _Utilities.formatTime ( route.duration ) } ) + '</div>';
-				}
-				
-				return returnValue;
-			},
+			// track
+			gpxString += tab1 + "<trk>";
+			gpxString += tab2 + "<trkseg>";
+			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			while ( ! itineraryPointsIterator.done ) {
+				gpxString +=
+					tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
+			}
+			gpxString += tab2 + "</trkseg>";				
+			gpxString += tab1 + "</trk>";
 			
-			/*
-			--- chainRoutes method ------------------------------------------------------------------------------------
-
-			This method recompute the distances when routes are chained
+			// eof
+			gpxString += tab0 + "</gpx>";
 			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+			// file is saved
+			var fileName = g_TravelNotesData.editedRoute.name;
+			if ( '' === fileName ) {
+				fileName = 'TravelNote';
+			}
+			fileName += '.gpx';
+			require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
+		};
+		
+		/*
+		--- m_GetRouteHTML function -----------------------------------------------------------------------------------
 
-			chainRoutes : function ( ) {
-				var routesIterator = _TravelNotesData.travel.routes.iterator;
-				var chainedDistance = 0;
-				while ( ! routesIterator.done ) {
-					if ( routesIterator.value.chain ) {
-						routesIterator.value.chainedDistance = chainedDistance;
-						chainedDistance += routesIterator.value.distance;
-					}
-					else {
-						routesIterator.value.chainedDistance = 0;
-					}
-					var notesIterator = routesIterator.value.notes.iterator;
-					while (! notesIterator.done ) {
-						notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
-					}
-				}
-			},
+		This function returns an HTML string with the route contents. This string will be used in the
+		route popup and on the roadbook page
+		
+		parameters:
+		- route : the TravelNotes route object
+		- classNamePrefix : a string that will be added to all the HTML classes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetRouteHTML = function ( route, classNamePrefix ) {
 			
-			/*
-			--- startRouting method -----------------------------------------------------------------------------------
+			var utilities = require ( '../util/Utilities' ) ( );
 
-			This method start the router
+			var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
+				route.name + 
+				'</div>';
+			if (0 !== route.distance ) {
+				returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
+					m_Translator.getText ( 'RouteEditor - Distance', { distance : utilities.formatDistance ( route.distance ) } ) + '</div>' +
+					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
+					m_Translator.getText ( 'RouteEditor - Duration', { duration : utilities.formatTime ( route.duration ) } ) + '</div>';
+			}
 			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			startRouting : function ( ) {
-				if ( ! _TravelNotesData.config.routing.auto ) {
-					return;
-				}
-				require ( '../core/Router' ) ( ).startRouting ( _TravelNotesData.editedRoute );
-			},
+			return returnValue;
+		};
 			
-			/*
-			--- endRouting method -------------------------------------------------------------------------------------
+		/*
+		--- m_ChainRoutes function ------------------------------------------------------------------------------------
 
-			This method is called by the router when a routing operation is successfully finished
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		This function recompute the distances when routes are chained
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-			endRouting : function ( ) {
-				// the previous route is removed from the leaflet map
-				_MapEditor.removeRoute ( _TravelNotesData.editedRoute, true, true );
-				
-				// the position of the notes linked to the route is recomputed
-				var notesIterator = _TravelNotesData.editedRoute.notes.iterator;
-				while ( ! notesIterator.done ) {
-					var latLngDistance = this.getClosestLatLngDistance ( _TravelNotesData.editedRoute, notesIterator.value.latLng );
-					notesIterator.value.latLng = latLngDistance.latLng;
-					notesIterator.value.distance = latLngDistance.distance;
-				}
-				
-				// and the notes sorted
-				_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-				
-				// the new route is added to the map
-				_MapEditor.addRoute ( _TravelNotesData.editedRoute, true, true );
-				if ( 0 !== _TravelNotesData.editedRoute.itinerary.itineraryPoints.length ) {
-					_MapEditor.zoomToRoute ( _TravelNotesData.editedRoute.objId );
-				}
-				
-				// and the itinerary and waypoints are displayed
-				_ItineraryEditor.setItinerary ( );
-				_RouteEditorUI.setWayPointsList ( );
-				
-				// the HTML page is adapted ( depending of the config.... )
-				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-			},
-			
-			/*
-			--- saveEdition method ------------------------------------------------------------------------------------
-
-			This method save the current edited route
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			saveEdition : function ( ) {
-				// the edited route is cloned
-				var clonedRoute = require ( '../data/Route' ) ( );
-				clonedRoute.object = _TravelNotesData.editedRoute.object;
-				// and the initial route replaced with the clone
-				_TravelNotesData.travel.routes.replace ( _TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
-				_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
-				this.clear ( );
-			},
-			
-			/*
-			--- cancelEdition method ----------------------------------------------------------------------------------
-
-			This method cancel the current edited route
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			cancelEdition : function ( ) {
-				this.clear ( );
-			},
-			
-			/*
-			--- clear method ------------------------------------------------------------------------------------------
-
-			This method clean the editors and the HTML page after a save or cancel
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			clear : function ( ) {
-				_MapEditor.removeRoute ( _TravelNotesData.editedRoute, true, true );
-				if ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) {
-					_MapEditor.addRoute ( _DataSearchEngine.getRoute ( _TravelNotesData.routeEdition.routeInitialObjId ), true, false );
-				}
-
-				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-				_TravelNotesData.routeEdition.routeChanged = false;
-				_TravelNotesData.routeEdition.routeInitialObjId = -1;
-				require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
-				_RouteEditorUI.setWayPointsList ( );
-				_RouteEditorUI .reduce ( );
-				_ItineraryEditor.setItinerary ( );
-				// the HTML page is adapted ( depending of the config.... )
-				this.chainRoutes ( );
-				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-			},
-			
-			/*
-			--- editRoute method --------------------------------------------------------------------------------------
-
-			This method start the edition of a route
-			
-			parameters:
-			- routeObjId : the TravelNotes route objId to edit
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			editRoute : function ( routeObjId ) { 
-				if ( _TravelNotesData.routeEdition.routeChanged ) {
-					// not possible to edit - the current edited route is not saved or cancelled
-					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
-					return;
-				}
-				if ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) {
-					// the current edited route is not changed. Cleaning the editors
-					this.clear ( );
-				}
-				
-				// We verify that the provider  for this route is available
-				var initialRoute = _DataSearchEngine.getRoute ( routeObjId );
-				var providerName = initialRoute.itinerary.provider;
-				if ( providerName && ( '' !== providerName ) && ( ! _TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
-				{
-					require ( '../core/ErrorEditor' ) ( ).showError ( _Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
-					return;
-				}
-				// Provider and transit mode are changed in the itinerary editor
-				require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
-				var transitMode = initialRoute.itinerary.transitMode;
-				if ( transitMode && '' !== transitMode ) {
-					require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
-				}
-				// The edited route is pushed in the editors
-				_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-				// Route is cloned, so we can have a cancel button in the editor
-				_TravelNotesData.editedRoute.object = initialRoute.object;
-				_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
-				_TravelNotesData.editedRoute.hidden = false;
-				initialRoute.hidden = false;
-				_MapEditor.removeRoute ( initialRoute, true, false );
-				_MapEditor.addRoute ( _TravelNotesData.editedRoute, true, true );
-				this.chainRoutes ( );
-				_RouteEditorUI .expand ( );
-				_RouteEditorUI.setWayPointsList ( );
-				_ItineraryEditor.setItinerary ( );
-			},
-			
-			/*
-			--- routeProperties method --------------------------------------------------------------------------------
-
-			This method opens the RouteProperties dialog
-			
-			parameters:
-			- routeObjId : 
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			routeProperties : function ( routeObjId ) {
-				var route = _DataSearchEngine.getRoute ( routeObjId );
-				require ( '../UI/RoutePropertiesDialog' ) ( route );
-			},
-			
-			/*
-			--- addWayPoint method ------------------------------------------------------------------------------------
-
-			This method add a waypoint 
-			
-			parameters:
-			- latLng : 
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addWayPoint : function ( latLng, event, distance ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				var newWayPoint = require ( '../data/Waypoint.js' ) ( );
-				if ( latLng ) {
-					newWayPoint.latLng = latLng;
-					if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
-						require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, newWayPoint.objId );
-					}
-				}
-				_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
-				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.last, _TravelNotesData.editedRoute.wayPoints.length - 2 );
-				if ( distance ) {
-					var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-					while ( ! wayPointsIterator.done ) {
-						var latLngDistance = this.getClosestLatLngDistance ( 
-							_TravelNotesData.editedRoute,
-							wayPointsIterator.value.latLng 
-						);
-						if ( distance < latLngDistance.distance ) {
-							_TravelNotesData.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
-							break;
-						}
-					}
+		var m_ChainRoutes = function ( ) {
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			var chainedDistance = 0;
+			while ( ! routesIterator.done ) {
+				if ( routesIterator.value.chain ) {
+					routesIterator.value.chainedDistance = chainedDistance;
+					chainedDistance += routesIterator.value.distance;
 				}
 				else {
-					_TravelNotesData.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+					routesIterator.value.chainedDistance = 0;
 				}
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- addWayPoint method ------------------------------------------------------------------------------------
-
-			This method add a waypoint at a given position on the edited route
-			
-			parameters:
-			- latLng : 
-			- event :
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			addWayPointOnRoute : function ( routeObjId, event ) {
-				var latLngDistance = this.getClosestLatLngDistance ( 
-					_DataSearchEngine.getRoute ( routeObjId ),
-					[ event.latlng.lat, event.latlng.lng ] 
-				);
-				this.addWayPoint ( latLngDistance.latLng, null, latLngDistance.distance );
-			},
-			
-			/*
-			--- reverseWayPoints method -------------------------------------------------------------------------------
-
-			This method reverse the waypoints order
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			reverseWayPoints : function ( ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					_MapEditor.removeObject ( wayPointsIterator.value.objId );
+				var notesIterator = routesIterator.value.notes.iterator;
+				while (! notesIterator.done ) {
+					notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
 				}
-				_TravelNotesData.editedRoute.wayPoints.reverse ( );
-				wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
-				}
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- removeAllWayPoints method -----------------------------------------------------------------------------
-
-			This method remove all waypoints except the first and last ( see Collection to understand...)
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeAllWayPoints : function ( ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-					_MapEditor.removeObject ( wayPointsIterator.value.objId );
-				}
-				_TravelNotesData.editedRoute.wayPoints.removeAll ( true );
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- removeWayPoint method ---------------------------------------------------------------------------------
-
-			This method remove a waypoint
-			
-			parameters:
-			- wayPointObjId : the waypoint objId to remove
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeWayPoint : function ( wayPointObjId ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				_MapEditor.removeObject ( wayPointObjId );
-				_TravelNotesData.editedRoute.wayPoints.remove ( wayPointObjId );
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- renameWayPoint method ---------------------------------------------------------------------------------
-
-			This method rename a wayPoint
-			
-			parameters:
-			- wayPointObjId : the waypoint objId to rename
-			- wayPointName : the new name
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			renameWayPoint : function ( wayPointName, wayPointObjId ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-				_RouteEditorUI.setWayPointsList ( );
-			},
-			
-			/*
-			--- swapWayPoints method ----------------------------------------------------------------------------------
-
-			This method change the order of two waypoints
-			
-			parameters:
-			- wayPointObjId : the waypoint objId to swap
-			- swapUp : when true the waypoint is swapped with the previous one, otherwise with the next
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			swapWayPoints : function ( wayPointObjId, swapUp ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				_TravelNotesData.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
-				_RouteEditorUI.setWayPointsList (  );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- setStartPoint method ----------------------------------------------------------------------------------
-
-			This method set the start waypoint
-			
-			parameters:
-			- latLng : the coordinates of the start waypoint
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			setStartPoint : function ( latLng ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				if ( 0 !== _TravelNotesData.editedRoute.wayPoints.first.lat ) {
-					_MapEditor.removeObject ( _TravelNotesData.editedRoute.wayPoints.first.objId );
-				}
-				_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
-				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _TravelNotesData.editedRoute.wayPoints.first.objId );
-				}
-				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.first, 'A' );
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- setEndPoint method ------------------------------------------------------------------------------------
-
-			This method set the end waypoint
-			
-			parameters:
-			- latLng : the coordinates of the end waypoint
-
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			setEndPoint : function ( latLng ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				if ( 0 !== _TravelNotesData.editedRoute.wayPoints.last.lat ) {
-					_MapEditor.removeObject ( _TravelNotesData.editedRoute.wayPoints.last.objId );
-				}
-				_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
-				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, _TravelNotesData.editedRoute.wayPoints.last.objId );
-				}
-				_MapEditor.addWayPoint ( _TravelNotesData.editedRoute.wayPoints.last, 'B' );
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- wayPointDragEnd method --------------------------------------------------------------------------------
-
-			This method is called when the dragend event is fired on a waypoint
-			
-			parameters:
-			- wayPointObjId : the TravelNotes waypoint objId
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			wayPointDragEnd : function ( wayPointObjId ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				if ( _TravelNotesData.config.wayPoint.reverseGeocoding ) {
-					var latLng = _TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
-					require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], this.renameWayPoint, this, wayPointObjId );
-				}
-				_RouteEditorUI.setWayPointsList ( );
-				this.startRouting ( );
-			},
-			
-			/*
-			--- wayPointDropped method --------------------------------------------------------------------------------
-
-			This method is called when the drop event is fired on a waypoint
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			wayPointDropped : function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-				_TravelNotesData.routeEdition.routeChanged = true;
-				if ( targetWayPointObjId === _TravelNotesData.editedRoute.wayPoints.first.objId && draggedBefore ) {
-					return;
-				}
-				if ( targetWayPointObjId === _TravelNotesData.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
-					return;
-				}
-				_TravelNotesData.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
-				_RouteEditorUI.setWayPointsList ( );
-				var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
-				while ( ! wayPointsIterator.done ) {
-						_MapEditor.removeObject ( wayPointsIterator.value.objId );
-						_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
-				}
-				this.startRouting ( );
-			},
-			
-			/*
-			--- hideRoute method --------------------------------------------------------------------------------------
-
-			This method hide a route on the map
-			
-			parameters:
-			- routeObjId : the route objId that was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			hideRoute : function ( routeObjId ) {
-				var route = _DataSearchEngine.getRoute ( routeObjId );
-				if ( route ) {
-					_MapEditor.removeRoute ( route, true, true );
-					route.hidden = true;
-				}
-			},
-			
-			/*
-			--- showRoutes method -------------------------------------------------------------------------------------
-
-			This method show all the hidden routes
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			showRoutes : function ( ) {
-				var routesIterator = _TravelNotesData.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					if ( routesIterator.value.hidden ) {
-						_MapEditor.addRoute ( routesIterator.value, true, true, false );
-					}
-				}
-			},
-
-			/*
-			--- getMapContextMenu method ------------------------------------------------------------------------------
-
-			This method gives the route part of the map context menu
-			
-			parameters:
-			- latLng : the coordinates where the map was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getMapContextMenu :function ( latLng ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Select this point as start point" ), 
-						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === _TravelNotesData.editedRoute.wayPoints.first.lat ) ? this.setStartPoint : null,
-						param : latLng
-					} 
-				);
-				contextMenu.push ( 
-					{
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Select this point as way point" ), 
-						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) ? this.addWayPoint : null,
-						param : latLng
-					}
-				);
-				contextMenu.push (
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Select this point as end point" ), 
-						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === _TravelNotesData.editedRoute.wayPoints.last.lat ) ? this.setEndPoint : null,
-						param : latLng
-					}
-				);
-				return contextMenu;
-			},
-
-			/*
-			--- getWayPointContextMenu method --------------------------------------------------------------------------
-
-			This method gives the wayPoint context menu
-			
-			parameters:
-			- wayPointObjId : the wayPoint objId that was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getWayPointContextMenu : function ( wayPointObjId ) {
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Delete this waypoint" ), 
-						action : ( ( _TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( _TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? this.removeWayPoint : null,
-						param: wayPointObjId
-					} 
-				);
-				return contextMenu;
-			},
-
-			/*
-			--- getRouteContextMenu method ----------------------------------------------------------------------------
-
-			This method gives the route context menu
-			
-			parameters:
-			- routeObjId : the route objId that was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getRouteContextMenu : function ( routeObjId ) {
-				var contextMenu = [];
-				var travelEditor = require ( '../core/TravelEditor' ) ( );
-				contextMenu.push ( 
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Edit this route" ), 
-						action : ( ( _TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! _TravelNotesData.routeEdition.routeChanged ) ) ? this.editRoute : null,
-						param: routeObjId
-					} 
-				);
-				contextMenu.push ( 
-					{
-						context : travelEditor, 
-						name : _Translator.getText ( "RouteEditor - Delete this route" ), 
-						action : ( ( _TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! _TravelNotesData.routeEdition.routeChanged ) ) ? travelEditor.removeRoute : null,
-						param: routeObjId
-					}
-				);
-				contextMenu.push ( 
-					{
-						context : travelEditor, 
-						name : _Translator.getText ( "RouteEditor - Hide this route" ), 
-						action : ( _TravelNotesData.editedRoute.objId !== routeObjId ) ? this.hideRoute : null,
-						param: routeObjId
-					}
-				);
-				contextMenu.push ( 
-					{
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
-						action : ( -1 !== _TravelNotesData.routeEdition.routeInitialObjId ) ? this.addWayPointOnRoute : null,
-						param: routeObjId
-					}
-				);
-				contextMenu.push ( 
-					{
-						context : _NoteEditor, 
-						name : _Translator.getText ( "RouteEditor - Add a note on the route" ), 
-						action : _NoteEditor.newRouteNote,
-						param: routeObjId
-					}
-				);
-				contextMenu.push ( 
-					{
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Properties" ), 
-						action : this.routeProperties,
-						param: routeObjId
-					}
-				);
-				contextMenu.push ( 
-					{
-						context : _MapEditor, 
-						name : _Translator.getText ( "RouteEditor - Zoom to route" ), 
-						action : _MapEditor.zoomToRoute,
-						param: routeObjId
-					}
-				);
-				contextMenu.push (
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Save modifications on this route" ), 
-						action : ( _TravelNotesData.editedRoute.objId === routeObjId ) ? this.saveEdition : null,
-					}
-				);
-				contextMenu.push (
-					{ 
-						context : this, 
-						name : _Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
-						action : ( _TravelNotesData.editedRoute.objId === routeObjId ) ? this.cancelEdition : null
-					}
-				);
-				return contextMenu;
 			}
 		};
+			
+		/*
+		--- m_StartRouting function -----------------------------------------------------------------------------------
+
+		This function start the router
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_StartRouting = function ( ) {
+			if ( ! g_TravelNotesData.config.routing.auto ) {
+				return;
+			}
+			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
+		};
+			
+			
+		/*
+		--- m_EndRouting function -------------------------------------------------------------------------------------
+
+		This function is called by the router when a routing operation is successfully finished
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EndRouting = function ( ) {
+			// the previous route is removed from the leaflet map
+			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			
+			// the position of the notes linked to the route is recomputed
+			var notesIterator = g_TravelNotesData.editedRoute.notes.iterator;
+			while ( ! notesIterator.done ) {
+				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.editedRoute, notesIterator.value.latLng );
+				notesIterator.value.latLng = latLngDistance.latLng;
+				notesIterator.value.distance = latLngDistance.distance;
+			}
+			
+			// and the notes sorted
+			g_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+			
+			// the new route is added to the map
+			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			if ( 0 !== g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length ) {
+				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
+			}
+			
+			// and the itinerary and waypoints are displayed
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+			m_RouteEditorUI.setWayPointsList ( );
+			
+			// the HTML page is adapted ( depending of the config.... )
+			m_ChainRoutes ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
+
+		/*
+		--- m_SaveEdition function ------------------------------------------------------------------------------------
+
+		This function save the current edited route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SaveEdition = function ( ) {
+			// the edited route is cloned
+			var clonedRoute = require ( '../data/Route' ) ( );
+			clonedRoute.object = g_TravelNotesData.editedRoute.object;
+			// and the initial route replaced with the clone
+			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
+			g_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
+			m_CancelEdition ( );
+		};
+			
+		/*
+		--- m_CancelEdition function ----------------------------------------------------------------------------------
+
+		This function cancel the current edited route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CancelEdition = function ( ) {
+			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+				m_MapEditor.addRoute ( m_DataSearchEngine.getRoute ( g_TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+			}
+
+			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.routeEdition.routeChanged = false;
+			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditorUI .reduce ( );
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+			m_ChainRoutes ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
+		
+		/*
+		--- m_EditRoute function --------------------------------------------------------------------------------------
+
+		This function start the edition of a route
+		
+		parameters:
+		- routeObjId : the TravelNotes route objId to edit
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EditRoute = function ( routeObjId ) { 
+			if ( g_TravelNotesData.routeEdition.routeChanged ) {
+				// not possible to edit - the current edited route is not saved or cancelled
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
+				return;
+			}
+			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+				// the current edited route is not changed. Cleaning the editors
+				m_CancelEdition ( );
+			}
+			// We verify that the provider  for this route is available
+			var initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
+			var providerName = initialRoute.itinerary.provider;
+			if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
+			{
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
+				return;
+			}
+			// Provider and transit mode are changed in the itinerary editor
+			require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			var transitMode = initialRoute.itinerary.transitMode;
+			if ( transitMode && '' !== transitMode ) {
+				require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
+			}
+			// The edited route is pushed in the editors
+			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			// Route is cloned, so we can have a cancel button in the editor
+			g_TravelNotesData.editedRoute.object = initialRoute.object;
+			g_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
+			g_TravelNotesData.editedRoute.hidden = false;
+			initialRoute.hidden = false;
+			m_MapEditor.removeRoute ( initialRoute, true, false );
+			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			m_ChainRoutes ( );
+			m_RouteEditorUI .expand ( );
+			m_RouteEditorUI.setWayPointsList ( );
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+		};
+		
+		/*
+		--- m_RouteProperties function --------------------------------------------------------------------------------
+
+		This function opens the RouteProperties dialog
+		
+		parameters:
+		- routeObjId : 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RouteProperties = function ( routeObjId ) {
+			var route = m_DataSearchEngine.getRoute ( routeObjId );
+			require ( '../UI/RoutePropertiesDialog' ) ( route );
+		};
+			
+		/*
+		--- m_HideRoute function --------------------------------------------------------------------------------------
+
+		This function hide a route on the map
+		
+		parameters:
+		- routeObjId : the route objId that was clicked
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_HideRoute = function ( routeObjId ) {
+			var route = m_DataSearchEngine.getRoute ( routeObjId );
+			if ( route ) {
+				m_MapEditor.removeRoute ( route, true, true );
+				route.hidden = true;
+			}
+		};
+			
+		/*
+		--- m_ShowRoutes function -------------------------------------------------------------------------------------
+
+		This function show all the hidden routes
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ShowRoutes = function ( ) {
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if ( routesIterator.value.hidden ) {
+					m_MapEditor.addRoute ( routesIterator.value, true, true, false );
+				}
+			}
+		};
+
+		/*
+		--- routeEditor object ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				
+				cutRoute : function ( route, latLng ) { return m_CutRoute ( route, latLng ); },
+
+				getClosestLatLngDistance : function ( route, latLng ) { return m_GetClosestLatLngDistance ( route, latLng ); },
+
+				saveGpx : function ( ) { m_SaveGpx ( ); },
+				
+				getRouteHTML : function ( route, classNamePrefix ) { return m_GetRouteHTML ( route, classNamePrefix ); },
+
+				chainRoutes : function ( ) { m_ChainRoutes ( ); },
+				
+				startRouting : function ( ) { m_StartRouting ( ); },
+				
+				endRouting : function ( ) { m_EndRouting ( ); },
+
+				saveEdition : function ( ) { m_SaveEdition ( ); },
+				
+				cancelEdition : function ( ) { m_CancelEdition ( ); },
+				
+				editRoute : function ( routeObjId ) { m_EditRoute ( routeObjId ); },
+				
+				routeProperties : function ( routeObjId ) { m_RouteProperties ( routeObjId ); },
+			
+				hideRoute : function ( routeObjId ) { m_HideRoute ( routeObjId ); },
+
+				showRoutes : function ( ) { m_ShowRoutes ( ); },
+			}
+		);
 	};
 
 	/*
@@ -9147,7 +8963,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = RouteEditor;
+		module.exports = routeEditor;
 	}
 
 }());
@@ -9155,7 +8971,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ProvidersToolbarUI":19,"../UI/RouteEditorUI":20,"../UI/RoutePropertiesDialog":21,"../UI/Translator":24,"../UI/TravelEditorUI":25,"../core/ErrorEditor":29,"../core/GeoCoder":31,"../core/ItineraryEditor":32,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/Router":36,"../core/TravelEditor":37,"../data/ItineraryPoint":41,"../data/Route":46,"../data/Waypoint.js":51,"../util/Utilities":52}],36:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/ProvidersToolbarUI":20,"../UI/RouteEditorUI":21,"../UI/RoutePropertiesDialog":22,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/ErrorEditor":30,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/Router":36,"../core/TravelEditor":37,"../data/ItineraryPoint":44,"../data/Route":49,"../util/Utilities":55}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9188,7 +9004,8 @@ Changes:
 		- Reviewed way of working to use Promise
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170928
+		- splitted with WaypointEditor
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -9199,24 +9016,30 @@ Tests ...
 	
 	'use strict';
 
-	var _RequestStarted = false;
-	var _RouteProvider = null;
+	var s_RequestStarted = false;
 
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _Translator = require ( '../UI/Translator' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
-	var Router = function ( ) {
+	/*
+	--- router function -----------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var router = function ( ) {
 		
 		/*
-		--- _HaveValidWayPoints function ------------------------------------------------------------------------------
+		--- m_HaveValidWayPoints function ------------------------------------------------------------------------------
 
 		This function verify that the waypoints have coordinates
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _HaveValidWayPoints = function ( ) {
-			return _TravelNotesData.editedRoute.wayPoints.forEach ( 
+		var m_HaveValidWayPoints = function ( ) {
+			return g_TravelNotesData.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -9228,42 +9051,34 @@ Tests ...
 		};
 		
 		/*
-		--- End of _HaveValidWayPoints function ---
-		*/
-
-		/*
-		--- _EndError function -----------------------------------------------------------------------------------
+		--- m_EndError function ---------------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _EndError = function ( message ) {
+		var m_EndError = function ( message ) {
 
-			_RequestStarted = false;
+			s_RequestStarted = false;
 
 			require ( '../core/ErrorEditor' ) ( ).showError ( message );
 		};
 	
 		/*
-		--- End of _EndError function ---
-		*/
-
-		/*
-		--- _EndOk function -----------------------------------------------------------------------------------
+		--- m_EndOk function -----------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _EndOk = function ( message ) {
+		var m_EndOk = function ( message ) {
 
-			_RequestStarted = false;
+			s_RequestStarted = false;
 			
 			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
-			var itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 			var routeDistance = 0;
 			var dummy = itineraryPointsIterator.done;
 			var previousPoint = itineraryPointsIterator.value;
@@ -9276,39 +9091,39 @@ Tests ...
 			}
 
 			// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
-			//var routeDistance = _TravelNotesData.editedRoute.distance;
-			_TravelNotesData.editedRoute.distance = 0;
-			_TravelNotesData.editedRoute.duration = 0;
-			var maneuverIterator = _TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			//var routeDistance = g_TravelNotesData.editedRoute.distance;
+			g_TravelNotesData.editedRoute.distance = 0;
+			g_TravelNotesData.editedRoute.duration = 0;
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
-				_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
-				_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
+				g_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
+				g_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
 			}
 			
-			if ( 0 != _TravelNotesData.editedRoute.distance ) {
+			if ( 0 != g_TravelNotesData.editedRoute.distance ) {
 				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = _TravelNotesData.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+				var correctionFactor = g_TravelNotesData.editedRoute.distance / routeDistance;
+				itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 				while ( ! itineraryPointsIterator.done ) {
 					itineraryPointsIterator.value.distance *= correctionFactor;
 				}
 			}
 			else {
-				_TravelNotesData.editedRoute.distance = routeDistance;
+				g_TravelNotesData.editedRoute.distance = routeDistance;
 			}
 
 			// Placing the waypoints on the itinerary
-			var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
 				}
 				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
 				}
 				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
 				}
 			}	
 			
@@ -9317,67 +9132,51 @@ Tests ...
 		};
 		
 		/*
-		--- End of _EndOk function ---
-		*/
-			
-		/*
-		--- _StartRouting function ------------------------------------------------------------------------------------
+		--- m_StartRouting function -----------------------------------------------------------------------------------
 
 			This function start the routing :-)
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _StartRouting = function ( ) {
+		var m_StartRouting = function ( ) {
 
 			// We verify that another request is not loaded
-			if ( _RequestStarted ) {
+			if ( s_RequestStarted ) {
 				return false;
 			}
 			
 			// Control of the wayPoints
-			if ( ! _HaveValidWayPoints ( ) ) {
+			if ( ! m_HaveValidWayPoints ( ) ) {
 				return false;
 			}
 			
-			_RequestStarted = true;
+			s_RequestStarted = true;
 
 			// Choosing the correct route provider
-			_RouteProvider = _TravelNotesData.providers.get ( _TravelNotesData.routing.provider );
+			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider );
 
 			// provider name and transit mode are added to the road
-			_TravelNotesData.editedRoute.itinerary.provider = _RouteProvider.name;
-			_TravelNotesData.editedRoute.itinerary.transitMode = _TravelNotesData.routing.transitMode;
+			g_TravelNotesData.editedRoute.itinerary.provider = routeProvider.name;
+			g_TravelNotesData.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-			_RouteProvider.getPromiseRoute ( _TravelNotesData.editedRoute, null ).then (  _EndOk, _EndError  );
+			routeProvider.getPromiseRoute ( g_TravelNotesData.editedRoute, null ).then (  m_EndOk, m_EndError  );
 
 			return true;
 		};
 	
-		/*
-		--- End of _StartRouting function ---
-		*/
-
 		/*
 		--- Router object ---------------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		return {
-
-			/*
-			--- startRouting method -----------------------------------------------------------------------------------
-
-			This method start the routing :-)
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			startRouting : function ( ) {
-				return _StartRouting ( );
+		return Object.seal (
+			{
+				startRouting : function ( ) { return m_StartRouting ( );
+				}
 			}
-		};
+		);
 	};
 
 	/*
@@ -9385,7 +9184,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Router;
+		module.exports = router;
 	}
 
 }());
@@ -9393,7 +9192,7 @@ Tests ...
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../UI/Translator":24,"../core/ErrorEditor":29,"./RouteEditor":35}],37:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/ErrorEditor":30,"./RouteEditor":35}],37:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9431,7 +9230,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
-Doc reviewed 20170928
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -9441,38 +9240,45 @@ Tests ...
 	
 	'use strict';
 	
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
-	var _MapEditor = require ( '../core/MapEditor' ) ( );
-	var _TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 
-	var _haveBeforeUnloadWarning = false;
-	var _haveUnloadCleanStorage = false;
+	var s_haveBeforeUnloadWarning = false;
+	var s_haveUnloadCleanStorage = false;
+
+	/*
+	--- travelEditor function -----------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var travelEditor = function ( ) {
+
+		var m_Translator = require ( '../UI/Translator' ) ( );
+		var m_TravelEditorUI = require ( '../UI/TravelEditorUI' ) ( );
 	
-	var TravelEditor = function ( ) {
-		
 		/*
-		--- _UpdateRoadBook function --------------------------------------------------------------------------------
+		--- m_UpdateRoadBook function ---------------------------------------------------------------------------------
 
 		This function changes the HTML page content
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _UpdateRoadBook = function ( isNewTravel ) {
+		var m_UpdateRoadBook = function ( isNewTravel ) {
 
-			if ( ! _haveUnloadCleanStorage ) {
+			if ( ! s_haveUnloadCleanStorage ) {
 				window.addEventListener( 
 					'unload', 
 					function ( event ) {
 						localStorage.removeItem ( require ( '../L.TravelNotes' ).UUID + "-TravelNotesHTML" );
 					}
 				);
-				_haveUnloadCleanStorage = true;
+				s_haveUnloadCleanStorage = true;
 			}
 
-			if ( ! isNewTravel && ! _haveBeforeUnloadWarning && _TravelNotesData.config.haveBeforeUnloadWarning ) {
+			if ( ! isNewTravel && ! s_haveBeforeUnloadWarning && g_TravelNotesData.config.haveBeforeUnloadWarning ) {
 				window.addEventListener( 
 					'beforeunload', 
 					function ( event ) {
@@ -9480,268 +9286,221 @@ Tests ...
 						return 'x'; 
 					}
 				);
-				_haveBeforeUnloadWarning = true;
+				s_haveBeforeUnloadWarning = true;
 			}
 			
 			if ( require ( '../util/Utilities' ) ( ).storageAvailable ( 'localStorage' ) ) {
 				var htmlViewsFactory = require ( '../UI/HTMLViewsFactory' ) ( );
 				htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
-				localStorage.setItem ( _TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
+				localStorage.setItem ( g_TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
 			}
 		};
 
 		/*
-		--- TravelEditor object ---------------------------------------------------------------------------------------
+		--- m_AddRoute function ---------------------------------------------------------------------------------------
+
+		This function add a new route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_AddRoute = function ( ) {
+			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
+			m_TravelEditorUI.setRoutesList ( );
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			m_UpdateRoadBook ( );
+		};
+		
+		/*
+		--- m_RemoveRoute function ------------------------------------------------------------------------------------
+
+		This function remove a route
+
+		parameters :
+		- routeObjId : the TravelNotes route objId to remove
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RemoveRoute = function ( routeObjId ) {
+			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId && g_TravelNotesData.routeEdition.routeChanged ) {
+				// cannot remove the route currently edited
+				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+				return;
+			}
+
+			require ( './MapEditor' ) ( ).removeRoute ( require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ), true, true );
+			g_TravelNotesData.travel.routes.remove ( routeObjId );
+			m_TravelEditorUI.setRoutesList ( );
+			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId  ) {
+				require ( './RouteEditor' ) ( ).cancelEdition ( );
+			}
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			m_UpdateRoadBook ( );
+		};
+		
+		/*
+		--- m_RenameRoute function ------------------------------------------------------------------------------------
+
+		This function rename a route
+		parameters :
+		- routeObjId : the TravelNotes route objId to remove
+		- routeName: the new name
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RenameRoute = function ( routeObjId, routeName ) {
+			require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ).name = routeName;
+			m_TravelEditorUI.setRoutesList ( );
+			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId ) {
+				g_TravelNotesData.editedRoute.name = routeName;
+			}
+			m_UpdateRoadBook ( );
+		};
+		
+		/*
+		--- m_SwapRoute function --------------------------------------------------------------------------------------
+
+		This function changes the position of a route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SwapRoute = function ( routeObjId, swapUp ) {
+			g_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
+			m_TravelEditorUI.setRoutesList ( );
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			m_UpdateRoadBook ( );
+		};
+		
+		/*
+		--- m_RouteDropped function -----------------------------------------------------------------------------------
+
+		This function changes the position of a route after a drag and drop
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_RouteDropped = function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
+			g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+			m_TravelEditorUI.setRoutesList ( );
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			m_UpdateRoadBook ( );
+		};
+
+
+		/*
+		--- m_SaveTravel function -------------------------------------------------------------------------------------
+
+		This function save a travel to a local file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SaveTravel = function ( ) {
+			if ( g_TravelNotesData.routeEdition.routeChanged ) {
+				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
+			}
+			else {
+				var routesIterator = g_TravelNotesData.travel.routes.iterator;
+				while ( ! routesIterator.done ) {
+					routesIterator.value.hidden = false;
+				}
+					
+				// compressing the itineraryPoints
+				var compressedTravel = g_TravelNotesData.travel.object;
+				compressedTravel.routes.forEach (
+					function ( route ) {
+						var objType = {};
+						if ( 0 !== route.itinerary.itineraryPoints.length ) {
+							objType = route.itinerary.itineraryPoints [ 0 ].objType;
+						}
+						var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+						route.itinerary.itineraryPoints.forEach ( 
+							function ( itineraryPoint ) {
+								compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
+								compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+								compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+							}
+						);
+						compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+						route.itinerary.itineraryPoints = compressedItineraryPoints;
+					}
+				);
+				// save file
+				require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+			}
+		};
+		
+		/*
+		--- m_ConfirmClose function -----------------------------------------------------------------------------------
+
+		This function ask a confirmation to the user
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var m_ConfirmClose = function ( ) {
+			if ( s_haveBeforeUnloadWarning ) {
+				return window.confirm ( m_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
+			}
+			return true;
+		};
+		
+		/*
+		--- m_Clear function ------------------------------------------------------------------------------------------
+
+		This function remove completely the current travel
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_Clear = function ( ) {
+			if ( ! m_ConfirmClose ( ) )
+			{
+				return;
+			}
+			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
+			g_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
+			g_TravelNotesData.routeEdition.routeChanged = false;
+			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			g_TravelNotesData.travel = require ( '../Data/Travel' ) ( );
+			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
+			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+			require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+			m_UpdateRoadBook ( true );
+		};
+
+		/*
+		--- travelEditor object ---------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		return {
+		return Object.seal (
+			{
 
-			/*
-			--- updateRoadBook method -------------------------------------------------------------------------------
+				updateRoadBook : function ( isNewTravel ) { m_UpdateRoadBook ( isNewTravel ); },
 
-			This method changes the HTML page content
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				addRoute : function ( ) { m_AddRoute ( ); },
 
-			updateRoadBook : function ( isNewTravel ) {
-				_UpdateRoadBook ( isNewTravel );
-			},
+				removeRoute : function ( routeObjId ) { m_RemoveRoute ( routeObjId ); },
 
-			/*
-			--- addRoute method ---------------------------------------------------------------------------------------
+				renameRoute : function ( routeObjId, routeName ) { m_RenameRoute ( routeObjId, routeName ); },
 
-			This method add a new route
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
+				swapRoute : function ( routeObjId, swapUp ) { m_SwapRoute  ( routeObjId, swapUp ); },
 
-			addRoute : function ( ) {
-				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
-				_TravelEditorUI.setRoutesList ( );
-				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.updateRoadBook ( );
-			},
-
-			/*
-			--- editRoute method --------------------------------------------------------------------------------------
-
-			This method edit a route
-			
-			parameters :
-			- routeObjId : the TravelNotes route objId to edit
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			editRoute : function ( routeObjId ) {
-				require ( '../core/RouteEditor' ) ( ).editRoute ( routeObjId );
-			},
-
-			/*
-			--- removeRoute method ------------------------------------------------------------------------------------
-
-			This method remove a route
-
-			parameters :
-			- routeObjId : the TravelNotes route objId to remove
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			removeRoute : function ( routeObjId ) {
-				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId && _TravelNotesData.routeEdition.routeChanged ) {
-					// cannot remove the route currently edited
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
-					return;
-				}
-
-				require ( './MapEditor' ) ( ).removeRoute ( _DataSearchEngine.getRoute ( routeObjId ), true, true );
-				_TravelNotesData.travel.routes.remove ( routeObjId );
-				_TravelEditorUI.setRoutesList ( );
-				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId  ) {
-					require ( './RouteEditor' ) ( ).clear ( );
-				}
-				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.updateRoadBook ( );
-			},
-
-			/*
-			--- renameRoute method ------------------------------------------------------------------------------------
-
-			This method rename a route
-			parameters :
-			- routeObjId : the TravelNotes route objId to remove
-			- routeName: the new name
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			renameRoute : function ( routeObjId, routeName ) {
-				_DataSearchEngine.getRoute ( routeObjId ).name = routeName;
-				_TravelEditorUI.setRoutesList ( );
-				if ( routeObjId === _TravelNotesData.routeEdition.routeInitialObjId ) {
-					_TravelNotesData.editedRoute.name = routeName;
-				}
-				this.updateRoadBook ( );
-			},
-
-			/*
-			--- swapRoute method --------------------------------------------------------------------------------------
-
-			This method changes the position of a route
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			swapRoute : function ( routeObjId, swapUp ) {
-				_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
-				_TravelEditorUI.setRoutesList ( );
-				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.updateRoadBook ( );
-			},
-
-			/*
-			--- routeDropped method --------------------------------------------------------------------------------------
-
-			This method changes the position of a route after a drag and drop
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			
-			routeDropped : function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
-				_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-				_TravelEditorUI.setRoutesList ( );
-				require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
-				this.updateRoadBook ( );
-			},
-			
-			/*
-			--- saveTravel method -------------------------------------------------------------------------------------
-
-			This method save the travel to a local file
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			saveTravel : function ( ) {
-				if ( _TravelNotesData.routeEdition.routeChanged ) {
-					require ( './ErrorEditor' ) ( ).showError ( _Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
-				}
-				else {
-					var routesIterator = _TravelNotesData.travel.routes.iterator;
-					while ( ! routesIterator.done ) {
-						routesIterator.value.hidden = false;
-					}
-						
-					// compressing the itineraryPoints
-					var compressedTravel = _TravelNotesData.travel.object;
-					compressedTravel.routes.forEach (
-						function ( route ) {
-							var objType = {};
-							if ( 0 !== route.itinerary.itineraryPoints.length ) {
-								objType = route.itinerary.itineraryPoints [ 0 ].objType;
-							}
-							var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
-							route.itinerary.itineraryPoints.forEach ( 
-								function ( itineraryPoint ) {
-									compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
-									compressedItineraryPoints.distances.push ( itineraryPoint.distance );
-									compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
-								}
-							);
-							compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
-							route.itinerary.itineraryPoints = compressedItineraryPoints;
-						}
-					);
-					// save file
-					require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
-				}
-			},
-
-			/*
-			--- confirmClose method ------------------------------------------------------------------------------------------
-
-			This method ask a confirmation to the user
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			confirmClose : function ( ) {
-				if ( _haveBeforeUnloadWarning ) {
-					return window.confirm ( _Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
-				}
-				return true;
-			},
-
-
-
-			/*
-			--- clear method ------------------------------------------------------------------------------------------
-
-			This method remove completely the current travel
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			clear : function ( ) {
-				if ( ! this.confirmClose ( ) )
-				{
-					return;
-				}
-				_MapEditor.removeAllObjects ( );
-				_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
-				_TravelNotesData.routeEdition.routeChanged = false;
-				_TravelNotesData.routeEdition.routeInitialObjId = -1;
-				_TravelNotesData.travel = require ( '../Data/Travel' ) ( );
-				_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
-				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
-				require ( '../UI/RouteEditorUI' ) ( ).setWayPointsList (  );
-				require ( '../core/ItineraryEditor' ) ( ).setItinerary ( );
-				this.updateRoadBook ( true );
-			},
-
-			/*
-			--- getMapContextMenu method ------------------------------------------------------------------------------
-
-			This method gives the travel part of the map context menu
-			
-			parameters:
-			- latLng : the coordinates where the map was clicked
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			getMapContextMenu :function ( latLng ) {
-				var mapEditor = require ( '../core/MapEditor' ) ( );
-				var routeEditor = require ( '../core/RouteEditor' ) ( );
-				var contextMenu = [];
-				contextMenu.push ( 
-					{ 
-						context : routeEditor, 
-						name : _Translator.getText ( "TravelEditor - Show all routes" ), 
-						action : routeEditor.showRoutes
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : mapEditor, 
-						name : _Translator.getText ( "TravelEditor - Zoom to travel" ), 
-						action : mapEditor.zoomToTravel
-					} 
-				);
-				contextMenu.push ( 
-					{ 
-						context : null,
-						name : _Translator.getText ( "TravelEditor - About Travel & Notes" ), 
-						action : require ( '../UI/AboutDialog' )
-					} 
-				);
+				routeDropped : function ( draggedRouteObjId, targetRouteObjId, draggedBefore ) { m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ); },
 				
-				return contextMenu;
+				saveTravel : function ( ) { m_SaveTravel ( ); },
+
+				confirmClose : function ( ) { return m_ConfirmClose ( ); },
+
+				clear : function ( ) { m_Clear ( ); },
+
 			}
-		};
+		);
 	};
 
 	/*
@@ -9749,7 +9508,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = TravelEditor;
+		module.exports = travelEditor;
 	}
 
 }());
@@ -9757,7 +9516,373 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/HTMLViewsFactory":15,"../UI/RouteEditorUI":20,"../UI/Translator":24,"../UI/TravelEditorUI":25,"../core/ItineraryEditor":32,"../core/MapEditor":33,"../core/RouteEditor":35,"../util/Utilities":52,"./ErrorEditor":29,"./MapEditor":33,"./RouteEditor":35,"@mapbox/polyline":1}],38:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/HTMLViewsFactory":16,"../UI/RouteEditorUI":21,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/RouteEditor":35,"../util/Utilities":55,"./ErrorEditor":30,"./MapEditor":33,"./RouteEditor":35,"@mapbox/polyline":1}],38:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- WaypointEditor.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the WaypointEditor object
+	- the module.exports implementation
+Changes:
+	- v1.4.0:
+		- created from RouteEditor
+
+Doc reviewed 20181218
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
+
+		
+	/*
+	--- waypointEditor function ------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var waypointEditor = function ( ) {
+		
+		var m_MapEditor = require ( '../core/MapEditor' ) ( );
+		var m_RouteEditor = require ( '../core/RouteEditor' ) ( );
+		var m_RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+
+
+		/*
+		--- m_AddWayPoint function ------------------------------------------------------------------------------------
+
+		This function add a waypoint 
+		
+		parameters:
+		- latLng : 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddWayPoint = function ( latLng, distance ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			var newWayPoint = require ( '../data/Waypoint.js' ) ( );
+			if ( latLng ) {
+				newWayPoint.latLng = latLng;
+				if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( 
+						latLng [ 0 ], 
+						latLng [ 1 ], 
+						m_RenameWayPoint, 
+						newWayPoint.objId 
+					);
+				}
+			}
+			g_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, g_TravelNotesData.editedRoute.wayPoints.length - 2 );
+			if ( distance ) {
+				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+					var latLngDistance = m_RouteEditor.getClosestLatLngDistance ( 
+						g_TravelNotesData.editedRoute,
+						wayPointsIterator.value.latLng 
+					);
+					if ( distance < latLngDistance.distance ) {
+						g_TravelNotesData.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
+						break;
+					}
+				}
+			}
+			else {
+				g_TravelNotesData.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+			}
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+			
+		/*
+		--- m_AddWayPointOnRoute function -----------------------------------------------------------------------------
+
+		This function add a waypoint at a given position on the edited route
+		
+		parameters:
+		- latLng : 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddWayPointOnRoute = function ( routeObjId, event ) {
+			var latLngDistance = m_RouteEditor.getClosestLatLngDistance ( 
+				require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ),
+				[ event.latlng.lat, event.latlng.lng ] 
+			);
+			m_AddWayPoint ( latLngDistance.latLng, latLngDistance.distance );
+		};
+		
+		/*
+		--- m_ReverseWayPoints function -------------------------------------------------------------------------------
+
+		This function reverse the waypoints order
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ReverseWayPoints = function ( ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
+			}
+			g_TravelNotesData.editedRoute.wayPoints.reverse ( );
+			wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+				m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
+			}
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+			
+		/*
+		--- m_RemoveAllWayPoints function -----------------------------------------------------------------------------
+
+		This function remove all waypoints except the first and last ( see also Collection ...)
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RemoveAllWayPoints = function ( ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
+			}
+			g_TravelNotesData.editedRoute.wayPoints.removeAll ( true );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+		
+		/*
+		--- m_RemoveWayPoint function ---------------------------------------------------------------------------------
+
+		This function remove a waypoint
+		
+		parameters:
+		- wayPointObjId : the waypoint objId to remove
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RemoveWayPoint = function ( wayPointObjId ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			m_MapEditor.removeObject ( wayPointObjId );
+			g_TravelNotesData.editedRoute.wayPoints.remove ( wayPointObjId );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+
+		/*
+		--- m_RenameWayPoint function ---------------------------------------------------------------------------------
+
+		This function rename a wayPoint
+		
+		parameters:
+		- wayPointObjId : the waypoint objId to rename
+		- wayPointName : the new name
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RenameWayPoint = function ( wayPointName, wayPointObjId ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+			m_RouteEditorUI.setWayPointsList ( );
+		};
+		
+		/*
+		--- m_SwapWayPoints function ----------------------------------------------------------------------------------
+
+		This function change the order of two waypoints
+		
+		parameters:
+		- wayPointObjId : the waypoint objId to swap
+		- swapUp : when true the waypoint is swapped with the previous one, otherwise with the next
+
+		-----------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SwapWayPoints = function ( wayPointObjId, swapUp ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+			m_RouteEditorUI.setWayPointsList (  );
+			m_RouteEditor.startRouting ( );
+		};
+			
+		/*
+		--- m_SetStartPoint function ----------------------------------------------------------------------------------
+
+		This function set the start waypoint
+		
+		parameters:
+		- latLng : the coordinates of the start waypoint
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SetStartPoint = function ( latLng ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.first.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.first.objId );
+			}
+			g_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
+			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
+				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.first.objId );
+			}
+			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.first, 'A' );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+			
+		/*
+		--- m_SetEndPoint function ------------------------------------------------------------------------------------
+
+		This function set the end waypoint
+		
+		parameters:
+		- latLng : the coordinates of the end waypoint
+
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SetEndPoint = function ( latLng ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.last.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.last.objId );
+			}
+			g_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
+			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
+				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.last.objId );
+			}
+			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, 'B' );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+			
+		/*
+		--- m_WayPointDragEnd function --------------------------------------------------------------------------------
+
+		This function is called when the dragend event is fired on a waypoint
+		
+		parameters:
+		- wayPointObjId : the TravelNotes waypoint objId
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_WayPointDragEnd = function ( wayPointObjId ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
+				var latLng = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, wayPointObjId );
+			}
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditor.startRouting ( );
+		};
+		
+		/*
+		--- m_WayPointDropped function --------------------------------------------------------------------------------
+
+		This function is called when the drop event is fired on a waypoint
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_WayPointDropped = function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
+			g_TravelNotesData.routeEdition.routeChanged = true;
+			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.first.objId && draggedBefore ) {
+				return;
+			}
+			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+				return;
+			}
+			g_TravelNotesData.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+			m_RouteEditorUI.setWayPointsList ( );
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+					m_MapEditor.removeObject ( wayPointsIterator.value.objId );
+					m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
+			}
+			m_RouteEditor.startRouting ( );
+		};
+		
+		/*
+		--- waypointEditor object ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				addWayPoint : function ( latLng, distance ) { m_AddWayPoint ( latLng, event, distance ); },
+				
+				addWayPointOnRoute : function ( routeObjId, event ) { m_AddWayPointOnRoute ( routeObjId, event ); },
+				
+				reverseWayPoints : function ( ) { m_ReverseWayPoints ( ); },
+			
+				removeAllWayPoints : function ( ) { m_RemoveAllWayPoints ( ); },
+				
+				removeWayPoint : function ( wayPointObjId ) { m_RemoveWayPoint ( wayPointObjId ); },
+				
+				renameWayPoint : function ( wayPointName, wayPointObjId ) { m_RenameWayPoint ( wayPointName, wayPointObjId ); },
+				
+				swapWayPoints : function ( wayPointObjId, swapUp ) { m_SwapWayPoints ( wayPointObjId, swapUp ); },
+				
+				setStartPoint : function ( latLng ) { m_SetStartPoint ( latLng ); },
+
+				setEndPoint : function ( latLng ) { m_SetEndPoint ( latLng ); },
+
+				wayPointDragEnd : function ( wayPointObjId ) { m_WayPointDragEnd ( wayPointObjId ); },
+
+				wayPointDropped : function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) { m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ); },
+			}
+		);
+	};
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = waypointEditor;
+	}
+
+}());
+
+/*
+--- End of WaypointEditor.js file ----------------------------------------------------------------------------------------
+*/
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":35,"../data/Waypoint.js":54}],39:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":35,"../data/Waypoint.js":54,"dup":38}],40:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10279,7 +10404,7 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":41,"../data/Maneuver":42,"../data/Note":43,"../data/Route":46,"../data/WayPoint":50}],39:[function(require,module,exports){
+},{"../data/ItineraryPoint":44,"../data/Maneuver":45,"../data/Note":46,"../data/Route":49,"../data/WayPoint":53}],41:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10541,9 +10666,11 @@ Tests ...
 --- End of Config.js file ---------------------------------------------------------------------------------------------
 */
 
-},{}],40:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
+arguments[4][2][0].apply(exports,arguments)
+},{"../L.TravelNotes":7,"dup":2}],43:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":38,"../data/ObjId":44,"../data/ObjType":45,"./Version":49,"dup":3}],41:[function(require,module,exports){
+},{"../data/Collection":40,"../data/ObjId":47,"../data/ObjType":48,"./Version":52,"dup":3}],44:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10661,7 +10788,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":44,"../data/ObjType":45,"./Version":49}],42:[function(require,module,exports){
+},{"../data/ObjId":47,"../data/ObjType":48,"./Version":52}],45:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10792,7 +10919,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":44,"../data/ObjType":45,"./Version":49}],43:[function(require,module,exports){
+},{"../data/ObjId":47,"../data/ObjType":48,"./Version":52}],46:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10992,7 +11119,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":44,"../data/ObjType":45,"./Version":49}],44:[function(require,module,exports){
+},{"../data/ObjId":47,"../data/ObjType":48,"./Version":52}],47:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -11057,7 +11184,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11166,7 +11293,7 @@ Tests ...
 
 				get version ( ) { return m_Version; },
 
-				get object ( ) { return m_GetObject; },
+				get object ( ) { return m_GetObject ( ); },
 
 				validate : function ( something ) { return m_Validate ( something ); }
 			}
@@ -11186,11 +11313,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],46:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"../data/Collection":38,"../data/Itinerary":40,"../data/ObjId":44,"../data/ObjType":45,"../data/Waypoint":51,"./Itinerary":40,"./Version":49,"dup":4}],47:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":40,"../data/Itinerary":43,"../data/ObjId":47,"../data/ObjType":48,"../data/Waypoint":54,"./Itinerary":43,"./Version":52,"dup":4}],50:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../data/Collection":38,"../data/ObjId":44,"../data/ObjType":45,"./Version":49,"dup":5}],48:[function(require,module,exports){
+},{"../data/Collection":40,"../data/ObjId":47,"../data/ObjType":48,"./Version":52,"dup":5}],51:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11298,9 +11425,9 @@ Tests ...
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */
-},{"../data/Config":39,"../data/Travel":47,"../util/Utilities":52}],49:[function(require,module,exports){
+},{"../data/Config":41,"../data/Travel":50,"../util/Utilities":55}],52:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],50:[function(require,module,exports){
+},{"dup":6}],53:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11411,7 +11538,7 @@ Tests ...
 
 				get objType ( ) { return s_ObjType; },
 
-				get object ( ) { return m_GetObject; },
+				get object ( ) { return m_GetObject ( ); },
 				set object ( something ) { m_SetObject ( something ); }
 			}
 		);
@@ -11431,9 +11558,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":44,"../data/ObjType":45,"./Version":49}],51:[function(require,module,exports){
-arguments[4][50][0].apply(exports,arguments)
-},{"../data/ObjId":44,"../data/ObjType":45,"./Version":49,"dup":50}],52:[function(require,module,exports){
+},{"../data/ObjId":47,"../data/ObjType":48,"./Version":52}],54:[function(require,module,exports){
+arguments[4][53][0].apply(exports,arguments)
+},{"../data/ObjId":47,"../data/ObjType":48,"./Version":52,"dup":53}],55:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11630,4 +11757,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":24}]},{},[7]);
+},{"../UI/Translator":25}]},{},[7]);

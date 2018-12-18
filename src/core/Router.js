@@ -30,7 +30,8 @@ Changes:
 		- Reviewed way of working to use Promise
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170928
+		- splitted with WaypointEditor
+Doc reviewed 20181218
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -41,24 +42,30 @@ Tests ...
 	
 	'use strict';
 
-	var _RequestStarted = false;
-	var _RouteProvider = null;
+	var s_RequestStarted = false;
 
-	var _TravelNotesData = require ( '../L.TravelNotes' );
-	var _Translator = require ( '../UI/Translator' ) ( );
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
-	var Router = function ( ) {
+	/*
+	--- router function -----------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var router = function ( ) {
 		
 		/*
-		--- _HaveValidWayPoints function ------------------------------------------------------------------------------
+		--- m_HaveValidWayPoints function ------------------------------------------------------------------------------
 
 		This function verify that the waypoints have coordinates
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _HaveValidWayPoints = function ( ) {
-			return _TravelNotesData.editedRoute.wayPoints.forEach ( 
+		var m_HaveValidWayPoints = function ( ) {
+			return g_TravelNotesData.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -70,42 +77,34 @@ Tests ...
 		};
 		
 		/*
-		--- End of _HaveValidWayPoints function ---
-		*/
-
-		/*
-		--- _EndError function -----------------------------------------------------------------------------------
+		--- m_EndError function ---------------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _EndError = function ( message ) {
+		var m_EndError = function ( message ) {
 
-			_RequestStarted = false;
+			s_RequestStarted = false;
 
 			require ( '../core/ErrorEditor' ) ( ).showError ( message );
 		};
 	
 		/*
-		--- End of _EndError function ---
-		*/
-
-		/*
-		--- _EndOk function -----------------------------------------------------------------------------------
+		--- m_EndOk function -----------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _EndOk = function ( message ) {
+		var m_EndOk = function ( message ) {
 
-			_RequestStarted = false;
+			s_RequestStarted = false;
 			
 			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
-			var itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 			var routeDistance = 0;
 			var dummy = itineraryPointsIterator.done;
 			var previousPoint = itineraryPointsIterator.value;
@@ -118,39 +117,39 @@ Tests ...
 			}
 
 			// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
-			//var routeDistance = _TravelNotesData.editedRoute.distance;
-			_TravelNotesData.editedRoute.distance = 0;
-			_TravelNotesData.editedRoute.duration = 0;
-			var maneuverIterator = _TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			//var routeDistance = g_TravelNotesData.editedRoute.distance;
+			g_TravelNotesData.editedRoute.distance = 0;
+			g_TravelNotesData.editedRoute.duration = 0;
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
-				_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
-				_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
+				g_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
+				g_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
 			}
 			
-			if ( 0 != _TravelNotesData.editedRoute.distance ) {
+			if ( 0 != g_TravelNotesData.editedRoute.distance ) {
 				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = _TravelNotesData.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = _TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+				var correctionFactor = g_TravelNotesData.editedRoute.distance / routeDistance;
+				itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 				while ( ! itineraryPointsIterator.done ) {
 					itineraryPointsIterator.value.distance *= correctionFactor;
 				}
 			}
 			else {
-				_TravelNotesData.editedRoute.distance = routeDistance;
+				g_TravelNotesData.editedRoute.distance = routeDistance;
 			}
 
 			// Placing the waypoints on the itinerary
-			var wayPointsIterator = _TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
 				}
 				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = _TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
 				}
 				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( _TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
 				}
 			}	
 			
@@ -159,67 +158,51 @@ Tests ...
 		};
 		
 		/*
-		--- End of _EndOk function ---
-		*/
-			
-		/*
-		--- _StartRouting function ------------------------------------------------------------------------------------
+		--- m_StartRouting function -----------------------------------------------------------------------------------
 
 			This function start the routing :-)
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var _StartRouting = function ( ) {
+		var m_StartRouting = function ( ) {
 
 			// We verify that another request is not loaded
-			if ( _RequestStarted ) {
+			if ( s_RequestStarted ) {
 				return false;
 			}
 			
 			// Control of the wayPoints
-			if ( ! _HaveValidWayPoints ( ) ) {
+			if ( ! m_HaveValidWayPoints ( ) ) {
 				return false;
 			}
 			
-			_RequestStarted = true;
+			s_RequestStarted = true;
 
 			// Choosing the correct route provider
-			_RouteProvider = _TravelNotesData.providers.get ( _TravelNotesData.routing.provider );
+			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider );
 
 			// provider name and transit mode are added to the road
-			_TravelNotesData.editedRoute.itinerary.provider = _RouteProvider.name;
-			_TravelNotesData.editedRoute.itinerary.transitMode = _TravelNotesData.routing.transitMode;
+			g_TravelNotesData.editedRoute.itinerary.provider = routeProvider.name;
+			g_TravelNotesData.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-			_RouteProvider.getPromiseRoute ( _TravelNotesData.editedRoute, null ).then (  _EndOk, _EndError  );
+			routeProvider.getPromiseRoute ( g_TravelNotesData.editedRoute, null ).then (  m_EndOk, m_EndError  );
 
 			return true;
 		};
 	
-		/*
-		--- End of _StartRouting function ---
-		*/
-
 		/*
 		--- Router object ---------------------------------------------------------------------------------------------
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		return {
-
-			/*
-			--- startRouting method -----------------------------------------------------------------------------------
-
-			This method start the routing :-)
-			
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			startRouting : function ( ) {
-				return _StartRouting ( );
+		return Object.seal (
+			{
+				startRouting : function ( ) { return m_StartRouting ( );
+				}
 			}
-		};
+		);
 	};
 
 	/*
@@ -227,7 +210,7 @@ Tests ...
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Router;
+		module.exports = router;
 	}
 
 }());

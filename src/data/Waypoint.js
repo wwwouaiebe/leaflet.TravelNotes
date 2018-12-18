@@ -108,7 +108,7 @@ Tests ...
 
 				get objType ( ) { return s_ObjType; },
 
-				get object ( ) { return m_GetObject; },
+				get object ( ) { return m_GetObject ( ); },
 				set object ( something ) { m_SetObject ( something ); }
 			}
 		);

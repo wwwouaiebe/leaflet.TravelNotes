@@ -72,7 +72,7 @@ Tests ...
 		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor' ) ( ).endNoteDialog ( _Note, _RouteObjId );
+		require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( _Note, _RouteObjId );
 		return true;
 	};
 	
@@ -426,7 +426,7 @@ Tests ...
 		document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
 			'click', 
 			function ( ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
 			},
 			false 
 		);
@@ -535,7 +535,7 @@ Tests ...
 
 		// geolocalization
 		if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; }, this );
+			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
 		}
 		
 		// and the dialog is centered on the screen

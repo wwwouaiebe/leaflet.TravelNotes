@@ -254,7 +254,7 @@ Tests ...
 					}
 					else {
 						if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
-							require ( './core/TravelEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
+							require ( './core/RouteEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
 						}
 						else {
 							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );
@@ -288,8 +288,7 @@ Tests ...
 			}
 			require ( './UI/ContextMenu' ) ( 
 				event, 
-				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
+				require ( './UI/ContextMenuFactory' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( _LeftUserContextMenuData ) 
 			);
 		};
@@ -308,9 +307,7 @@ Tests ...
 			}
 			require ( './UI/ContextMenu' ) (
 				event, 
-				require ( './core/RouteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-				.concat ( require ( './core/NoteEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
-				.concat ( require ( './core/TravelEditor' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] ) )
+				require ( './UI/ContextMenuFactory' ) ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
 				.concat ( _RightUserContextMenuData )
 			);
 		};
