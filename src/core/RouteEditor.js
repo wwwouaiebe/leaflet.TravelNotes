@@ -399,56 +399,6 @@ Tests ...
 		};
 		
 		/*
-		--- m_EditRoute function --------------------------------------------------------------------------------------
-
-		This function start the edition of a route
-		
-		parameters:
-		- routeObjId : the TravelNotes route objId to edit
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_EditRoute = function ( routeObjId ) { 
-			if ( g_TravelNotesData.routeEdition.routeChanged ) {
-				// not possible to edit - the current edited route is not saved or cancelled
-				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
-				return;
-			}
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				// the current edited route is not changed. Cleaning the editors
-				m_CancelEdition ( );
-			}
-			// We verify that the provider  for this route is available
-			var initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
-			var providerName = initialRoute.itinerary.provider;
-			if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
-			{
-				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
-				return;
-			}
-			// Provider and transit mode are changed in the itinerary editor
-			require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
-			var transitMode = initialRoute.itinerary.transitMode;
-			if ( transitMode && '' !== transitMode ) {
-				require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
-			}
-			// The edited route is pushed in the editors
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-			// Route is cloned, so we can have a cancel button in the editor
-			g_TravelNotesData.editedRoute.object = initialRoute.object;
-			g_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
-			g_TravelNotesData.editedRoute.hidden = false;
-			initialRoute.hidden = false;
-			m_MapEditor.removeRoute ( initialRoute, true, false );
-			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
-			m_ChainRoutes ( );
-			m_RouteEditorUI .expand ( );
-			m_RouteEditorUI.setWayPointsList ( );
-			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
-		};
-		
-		/*
 		--- m_RouteProperties function --------------------------------------------------------------------------------
 
 		This function opens the RouteProperties dialog
@@ -526,8 +476,6 @@ Tests ...
 				saveEdition : function ( ) { m_SaveEdition ( ); },
 				
 				cancelEdition : function ( ) { m_CancelEdition ( ); },
-				
-				editRoute : function ( routeObjId ) { m_EditRoute ( routeObjId ); },
 				
 				routeProperties : function ( routeObjId ) { m_RouteProperties ( routeObjId ); },
 			

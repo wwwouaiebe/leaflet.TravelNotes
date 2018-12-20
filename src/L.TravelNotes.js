@@ -254,7 +254,7 @@ Tests ...
 					}
 					else {
 						if ( _TravelNotesData.config.travelEditor.startupRouteEdition ) {
-							require ( './core/RouteEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
+							require ( './core/TravelEditor' ) ( ).editRoute ( _TravelNotesData.travel.routes.first.objId );
 						}
 						else {
 							require ( './UI/RouteEditorUI' ) ( ) .reduce ( );

@@ -24,7 +24,7 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed ...
+Doc reviewed 20181219
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -87,15 +87,11 @@ Tests ...
 		var clientRect = element.getBoundingClientRect ( );
 		
 		// for this #@!& MS Edge... don't remove + 1 otherwise crazy things comes in FF
-		//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-		require ( '../L.TravelNotes' ).travel.notes.moveTo ( 
+		require ( '../core/NoteEditor' ).noteDropped ( 
 			s_NoteObjId + 1, 
 			element.noteObjId, 
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
 		);
-		travelNotesPaneUI ( ).remove ( );
-		travelNotesPaneUI ( ).add ( );
-		require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
 	};
 	
 	/*
@@ -165,6 +161,7 @@ Tests ...
 					function ( childNode  ) {
 						childNode.removeEventListener ( 'click' , onTravelNoteClick, false );
 						childNode.removeEventListener ( 'contextmenu' , onTravelNoteContextMenu, false );
+						childNode.removeEventListener ( 'dragstart', onDragStart, false );	
 					}
 				);
 				dataDiv.removeChild ( travelNotesDiv );
@@ -194,8 +191,7 @@ Tests ...
 			if ( ! dataDiv ) {
 				return;
 			}
-			
-			// adding travel notes
+
 			var travelNotesDiv = htmlViewsFactory.travelNotesHTML;
 			travelNotesDiv.addEventListener ( 'drop', onDrop, false );
 			travelNotesDiv.addEventListener ( 'dragover', onDragOver, false );
@@ -211,10 +207,18 @@ Tests ...
 			);
 		};
 
-		return {
-			remove : function ( ) { m_Remove ( ); },
-			add : function ( ) { m_Add ( ); }
-		};
+		/*
+		--- travelNotesPaneUI object ----------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+				remove : function ( ) { m_Remove ( ); },
+				add : function ( ) { m_Add ( ); }
+			}
+		);
 	};
 	
 	/*

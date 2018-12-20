@@ -124,17 +124,11 @@ Tests ...
 
 		return {
 			
-			createUI : function ( controlDiv ) { 
-				_CreateUI ( controlDiv ); 
-			},
+			createUI : function ( controlDiv ) { _CreateUI ( controlDiv ); },
 	
-			set message ( message )
-			{ 
-				_SetMessage ( message );
-			},
+			set message ( message ) { _SetMessage ( message );	},
 			
-			get message (  ) { return document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML; }
-			
+			get message (  ) { return document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML; }		
 		};
 	};
 	

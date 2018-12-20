@@ -394,6 +394,20 @@ Tests ...
 		var m_ZoomToNote = function ( noteObjId ) {
 			require ( '../core/MapEditor' ) ( ).zoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng );
 		};
+		
+		/*
+		--- m_NoteDropped function ------------------------------------------------------------------------------------
+
+		This function changes the position of a note after a drag and drop
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_NoteDropped = function(  draggedNoteObjId, targetNoteObjId, draggedBefore ) {
+			g_TravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
+			require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
 			
 		/*
 		--- m_GetNoteHTML function --------------------------------------------------------------------------------------
@@ -448,7 +462,7 @@ Tests ...
 			
 			return noteText;
 		};
-		
+				
 		/*
 		--- noteEditor object -----------------------------------------------------------------------------------------
 
@@ -481,6 +495,8 @@ Tests ...
 				attachNoteToRoute : function ( noteObjId ) { m_AttachNoteToRoute ( noteObjId ); },
 				
 				detachNoteFromRoute : function ( noteObjId ) { m_DetachNoteFromRoute ( noteObjId ); },
+				
+				noteDropped : function ( draggedNoteObjId, targetNoteObjId, draggedBefore ) { m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore ); },
 				
 				getNoteHTML : function ( note, classNamePrefix ) { return m_GetNoteHTML ( note, classNamePrefix ); }		
 			}

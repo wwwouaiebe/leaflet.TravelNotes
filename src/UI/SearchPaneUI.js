@@ -24,7 +24,8 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed ...
+Doc reviewed 2018122
+
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -34,65 +35,8 @@ Tests ...
 	
 	'use strict';
 
-	var g_TravelNotesData = require ( '../L.TravelNotes' );
-	var s_OsmSearchStarted = false;
-	var s_SearchParameters = { searchPhrase : '', bbox : null };
-	var s_PreviousSearchRectangleObjId = -1;
-	var s_NextSearchRectangleObjId = -1;
-	var s_SearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
-	
-	/*
-	--- s_DrawSearchRectangle function --------------------------------------------------------------------------------
-
-	This function draw the search limits on the map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-	
-	var s_DrawSearchRectangle = function ( ) {
-		if ( ! s_SearchParameters.bbox ) {
-			return;
-		}
-		if ( -1 !== s_PreviousSearchRectangleObjId ) {
-			require ( '../core/MapEditor' ) ( ).removeObject ( s_PreviousSearchRectangleObjId );
-		}
-		else {
-			s_PreviousSearchRectangleObjId = require ( '../data/ObjId' ) ( );
-		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( 
-			s_PreviousSearchRectangleObjId, 
-			L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) , 
-			g_TravelNotesData.config.previousSearchLimit 
-		);
-	};
-	
-	/*
-	--- onSearchSuccess function --------------------------------------------------------------------------------------
-
-	Promise success function for osmSearch
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onSearchSuccess = function ( searchData ) {
-		g_TravelNotesData.searchData = searchData;
-		s_OsmSearchStarted = false;
-		s_DrawSearchRectangle ( );
-		require ( '../UI/DataPanesUI' ) ( ).updateSearch ( );
-	};
-	
-	/*
-	--- onSearchError function ----------------------------------------------------------------------------------------
-
-	Promise error function for osmSearch
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onSearchError = function ( error ) {
-		console.log ( error );
-		s_OsmSearchStarted = false;
-	};
+	var s_OsmSearchEngine = require ( '../core/OsmSearchEngine' ) ( );
+	var s_SearchInputValue = '';
 	
 	/*
 	--- onSearchInputChange function ----------------------------------------------------------------------------------
@@ -103,50 +47,37 @@ Tests ...
 	*/
 
 	var onSearchInputChange = function ( event ) {
-		if ( s_OsmSearchStarted ) {
-			return;
+		// saving the search phrase
+		s_SearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
+
+		var searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+		// removing previous search results
+		var searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		while ( 0 !== searchResultsElements.length ) {
+			// cannot use forEach because searchResultsElements is directly update when removing an element!!!
+			searchResultsElements [ 0 ].removeEventListener ( 'click' , onSearchResultClick, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
+			searchDiv.removeChild ( searchResultsElements [ 0 ] );
 		}
-		s_OsmSearchStarted = true;
-		var mapBounds =  g_TravelNotesData.map.getBounds ( );
-		s_SearchParameters = {
-			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
-			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
-		};
-		g_TravelNotesData.searchData = [];
-		window.osmSearch.getSearchPromise ( s_SearchParameters ).then (  onSearchSuccess, onSearchError  );
+		// adding wait animation
+		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
+		
+		// search...
+		s_OsmSearchEngine.search ( );
 	};
 	
 	/*
-	--- onMapChange function ------------------------------------------------------------------------------------------
-
-	change event listener for the map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onMapChange = function ( event ) {
-		var mapCenter = g_TravelNotesData.map.getCenter ( );
-		if ( -1 !== s_NextSearchRectangleObjId ) {
-			require ( '../core/MapEditor' ) ( ).removeObject ( s_NextSearchRectangleObjId );
-		}
-		else {
-			s_NextSearchRectangleObjId = require ( '../data/ObjId' ) ( );
-		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( 
-			s_NextSearchRectangleObjId, 
-			L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ), 
-			g_TravelNotesData.config.nextSearchLimit );
-	};
-
-	/*
-	--- onSearchClick function ----------------------------------------------------------------------------------------
+	--- onSearchResultClick function ----------------------------------------------------------------------------------
 
 	click event listener for the search
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchClick = function ( clickEvent ) {
+	var onSearchResultClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		var element = clickEvent.target;
 		while ( ! element.latLng ) {
@@ -156,14 +87,14 @@ Tests ...
 	};
 	
 	/*
-	--- onSearchContextMenu function ----------------------------------------------------------------------------------
+	--- onSearchResultContextMenu function ----------------------------------------------------------------------------
 
 	contextmenu event listener for the search
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchContextMenu = function ( clickEvent ) {
+	var onSearchResultContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		var element = clickEvent.target;
@@ -174,27 +105,27 @@ Tests ...
 	};
 	
 	/*
-	--- onSearchMouseEnter function -----------------------------------------------------------------------------------
+	--- onSearchResultMouseEnter function -----------------------------------------------------------------------------
 
 	mouseenter event listener for the search
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchMouseEnter = function ( mouseEvent ) {
+	var onSearchResultMouseEnter = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
 	};
 	
 	/*
-	--- onSearchMouseLeave function -----------------------------------------------------------------------------------
+	--- onSearchResultMouseLeave function -----------------------------------------------------------------------------
 
 	mouseleave event listener for the search
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchMouseLeave = function ( mouseEvent ) {
+	var onSearchResultMouseLeave = function ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		require ( '../core/MapEditor' ) ( ).removeObject ( mouseEvent.target.objId );
 	};
@@ -219,20 +150,18 @@ Tests ...
 
 		var m_Remove = function ( ) {
 			
-			g_TravelNotesData.map.off ( 'zoom', onMapChange );
-			g_TravelNotesData.map.off ( 'move', onMapChange );
-			if ( -1 !== s_NextSearchRectangleObjId ) {
-				require ( '../core/MapEditor' ) ( ).removeObject ( s_NextSearchRectangleObjId );
-				s_NextSearchRectangleObjId = -1;
-			}
-			if ( -1 !== s_PreviousSearchRectangleObjId ) {
-				require ( '../core/MapEditor' ) ( ).removeObject ( s_PreviousSearchRectangleObjId );
-				s_PreviousSearchRectangleObjId = -1;
-			}
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
+			
+			s_OsmSearchEngine.hide ( );
+			
+			var searchButton = document.getElementById ( 'TravelNotes-Control-SearchButton' );
+			if ( searchButton ) {
+				searchButton.removeEventListener ( 'click', onSearchInputChange, false );
+			}
+			
 			var searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
 			if ( searchInputElement ) {
 				searchInputElement.removeEventListener ( 'change', onSearchInputChange, false );
@@ -244,10 +173,10 @@ Tests ...
 			Array.prototype.forEach.call ( 
 				searchResultsElements,
 				function ( searchResultsElement ) {
-					searchResultsElement.removeEventListener ( 'click' , onSearchClick );
-					searchResultsElement.removeEventListener ( 'contextmenu' , onSearchContextMenu, false );
-					searchResultsElement.removeEventListener ( 'mouseenter' , onSearchMouseEnter, false );
-					searchResultsElement.removeEventListener ( 'mouseleave' , onSearchMouseLeave, false );
+					searchResultsElement.removeEventListener ( 'click' , onSearchResultClick, false );
+					searchResultsElement.removeEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
+					searchResultsElement.removeEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
+					searchResultsElement.removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
 				}
 			);
 			
@@ -270,14 +199,12 @@ Tests ...
 			document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 
-			g_TravelNotesData.map.on ( 'zoom', onMapChange );
-			g_TravelNotesData.map.on ( 'move', onMapChange );
-			onMapChange ( );
-			s_DrawSearchRectangle ( );
 			var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 			if ( ! dataDiv ) {
 				return;
 			}
+			
+			s_OsmSearchEngine.show ( );
 			
 			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 			var searchDiv = htmlElementsFactory.create (
@@ -305,14 +232,14 @@ Tests ...
 					type : 'text', 
 					id : 'TravelNotes-Control-SearchInput', 
 					placeholder : require ( './Translator' ) ( ).getText ( 'SearchPaneUI - Search phrase' ),
-					value: s_SearchParameters.searchPhrase
+					value: s_SearchInputValue
 				},
 				searchDiv 
 			);
 			searchInput.addEventListener ( 'change', onSearchInputChange, false );
 			searchInput.focus ( );
 			var resultsCounter = 0;
-			g_TravelNotesData.searchData.forEach ( 
+			require ( '../L.TravelNotes' ).searchData.forEach ( 
 				function ( searchResult ) {
 					var searchResultDiv = htmlElementsFactory.create (
 						'div',
@@ -335,18 +262,26 @@ Tests ...
 					searchResultDiv.osmId = searchResult.id;
 					searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
 					searchResultDiv.geometry = searchResult.geometry;
-					searchResultDiv.addEventListener ( 'click' , onSearchClick, false );
-					searchResultDiv.addEventListener ( 'contextmenu' , onSearchContextMenu, false );
-					searchResultDiv.addEventListener ( 'mouseenter' , onSearchMouseEnter, false );
-					searchResultDiv.addEventListener ( 'mouseleave' , onSearchMouseLeave, false );
+					searchResultDiv.addEventListener ( 'click' , onSearchResultClick, false );
+					searchResultDiv.addEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
+					searchResultDiv.addEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
+					searchResultDiv.addEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
 				}
 			);	
 		};
 	
-		return {
-			remove : function ( ) { m_Remove ( ); },
-			add : function ( ) { m_Add ( ); }
-		};
+		/*
+		--- travelNotesPaneUI object ----------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal ( 
+			{
+				remove : function ( ) { m_Remove ( ); },
+				add : function ( ) { m_Add ( ); },
+			}
+		);
 	};
 	
 	/*

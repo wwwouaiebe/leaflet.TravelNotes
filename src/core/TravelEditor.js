@@ -145,6 +145,58 @@ Tests ...
 		};
 		
 		/*
+		--- m_EditRoute function --------------------------------------------------------------------------------------
+
+		This function start the edition of a route
+		
+		parameters:
+		- routeObjId : the TravelNotes route objId to edit
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EditRoute = function ( routeObjId ) { 
+			if ( g_TravelNotesData.routeEdition.routeChanged ) {
+				// not possible to edit - the current edited route is not saved or cancelled
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
+				return;
+			}
+			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+				// the current edited route is not changed. Cleaning the editors
+				require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
+			}
+			// We verify that the provider  for this route is available
+			var initialRoute = require ( '../data/DataSearchEngine' ) ( ).getRoute ( routeObjId );
+			var providerName = initialRoute.itinerary.provider;
+			if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
+			{
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
+				return;
+			}
+			// Provider and transit mode are changed in the itinerary editor
+			require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			var transitMode = initialRoute.itinerary.transitMode;
+			if ( transitMode && '' !== transitMode ) {
+				require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
+			}
+			// The edited route is pushed in the editors
+			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			// Route is cloned, so we can have a cancel button in the editor
+			g_TravelNotesData.editedRoute.object = initialRoute.object;
+			g_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
+			g_TravelNotesData.editedRoute.hidden = false;
+			initialRoute.hidden = false;
+			var mapEditor = require ( '../core/MapEditor' ) ( );
+			mapEditor.removeRoute ( initialRoute, true, false );
+			mapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+			var routeEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+			routeEditorUI .expand ( );
+			routeEditorUI.setWayPointsList ( );
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+		};
+		
+		/*
 		--- m_RenameRoute function ------------------------------------------------------------------------------------
 
 		This function rename a route
@@ -292,6 +344,8 @@ Tests ...
 
 				removeRoute : function ( routeObjId ) { m_RemoveRoute ( routeObjId ); },
 
+				editRoute : function ( routeObjId ) { m_EditRoute ( routeObjId ); },
+				
 				renameRoute : function ( routeObjId, routeName ) { m_RenameRoute ( routeObjId, routeName ); },
 
 				swapRoute : function ( routeObjId, swapUp ) { m_SwapRoute  ( routeObjId, swapUp ); },

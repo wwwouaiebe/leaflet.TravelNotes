@@ -260,6 +260,12 @@ Tests ...
 			return contextMenu;
 		};
 		
+		/*
+		--- contextMenuFactory object ---------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
 		return Object.seal (
 			{
 				getMapContextMenu :function ( latLng ) { return m_GetMapContextMenu ( latLng ); },

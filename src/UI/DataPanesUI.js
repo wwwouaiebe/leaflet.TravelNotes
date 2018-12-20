@@ -28,7 +28,7 @@ Changes:
 		- added train button
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed ...
+Doc reviewed 20181219
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -162,9 +162,6 @@ Tests ...
 					className : 'TravelNotes-Control-DataDiv'
 				},
 			controlDiv ).addEventListener ( 'wheel', onWheel, false );
-			
-			
-			
 		};
 
 		/*
@@ -289,20 +286,22 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		return {
-			
-			createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
-			
-			setItinerary : function ( ) { m_SetItinerary ( ); },
-			updateItinerary : function ( ) { m_UpdateItinerary ( ); },
+		return Object.seal (
+			{
+				
+				createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
+				
+				setItinerary : function ( ) { m_SetItinerary ( ); },
+				updateItinerary : function ( ) { m_UpdateItinerary ( ); },
 
-			setTravelNotes : function ( ) { m_SetTravelNotes ( ); },
-			updateTravelNotes : function ( ) { m_UpdateTravelNotes ( ); },
-			
-			setSearch : function ( ) { m_SetSearch ( ); },
-			updateSearch : function ( ) { m_UpdateSearch ( ); }
-			
-		};
+				setTravelNotes : function ( ) { m_SetTravelNotes ( ); },
+				updateTravelNotes : function ( ) { m_UpdateTravelNotes ( ); },
+				
+				setSearch : function ( ) { m_SetSearch ( ); },
+				updateSearch : function ( ) { m_UpdateSearch ( ); }
+				
+			}
+		);
 	};
 	
 	/*

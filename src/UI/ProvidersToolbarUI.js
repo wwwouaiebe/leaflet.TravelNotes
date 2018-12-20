@@ -24,7 +24,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20181220
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -322,16 +322,18 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		return {
-			
-			createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
-			
-			get provider ( ) { return g_TravelNotesData.routing.provider; },
-			set provider ( providerName ) { m_SetProvider ( providerName ); },
-			
-			get transitMode ( ) { return g_TravelNotesData.routing.transitMode; },
-			set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); }
-		};
+		return Object.seal (
+			{
+				
+				createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
+				
+				get provider ( ) { return g_TravelNotesData.routing.provider; },
+				set provider ( providerName ) { m_SetProvider ( providerName ); },
+				
+				get transitMode ( ) { return g_TravelNotesData.routing.transitMode; },
+				set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); }
+			}
+		);
 	};
 	
 	/*

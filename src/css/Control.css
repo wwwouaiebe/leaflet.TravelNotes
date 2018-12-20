@@ -400,6 +400,24 @@ Changes:
 {
 	background-color:lightgray;
 }
+#TravelNotes-Control-SearchWait
+{
+	margin : 1em;
+	height: 1em;
+	width: calc(100%; - 2em);
+	overflow: hidden;
+}
+#TravelNotes-Control-SearchWaitBullet
+{
+	background-color: red;
+	height: 100%;
+	width: 1em;
+	animation: 2s linear 0s infinite alternate searchBullet;
+}
+@keyframes searchBullet
+{
+	from { margin-left: 0%; } to { margin-left: calc(100% - 1em); }
+}
 
 /* --- special texts --- */
 
