@@ -38,6 +38,14 @@ Tests ...
 	var s_OsmSearchEngine = require ( '../core/OsmSearchEngine' ) ( );
 	var s_SearchInputValue = '';
 	
+	
+	var onKeyDownInputChange = function ( keyBoardEvent ) {
+		
+		if ( 'Enter' === keyBoardEvent.key ) {
+			onSearchInputChange ( keyBoardEvent );
+		}
+	};
+
 	/*
 	--- onSearchInputChange function ----------------------------------------------------------------------------------
 
@@ -237,6 +245,7 @@ Tests ...
 				searchDiv 
 			);
 			searchInput.addEventListener ( 'change', onSearchInputChange, false );
+			searchInput.addEventListener ( 'keydown', onKeyDownInputChange, false );
 			searchInput.focus ( );
 			var resultsCounter = 0;
 			require ( '../L.TravelNotes' ).searchData.forEach ( 

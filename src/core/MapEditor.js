@@ -451,7 +451,7 @@ Tests ...
 					( ( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) ) / (  mapBounds.getNorth ( ) - mapBounds.getSouth ( ) ) ) > 0.01;
 			}
 			if ( showGeometry ) {
-				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline.polyline ) );
+				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline ) );
 			}
 			else {
 				m_AddTo ( objId, L.circleMarker ( latLng, g_TravelNotesData.config.searchPointMarker ) );

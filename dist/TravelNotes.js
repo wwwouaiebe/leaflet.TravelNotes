@@ -5177,6 +5177,14 @@ Tests ...
 	var s_OsmSearchEngine = require ( '../core/OsmSearchEngine' ) ( );
 	var s_SearchInputValue = '';
 	
+	
+	var onKeyDownInputChange = function ( keyBoardEvent ) {
+		
+		if ( 'Enter' === keyBoardEvent.key ) {
+			onSearchInputChange ( keyBoardEvent );
+		}
+	};
+
 	/*
 	--- onSearchInputChange function ----------------------------------------------------------------------------------
 
@@ -5376,6 +5384,7 @@ Tests ...
 				searchDiv 
 			);
 			searchInput.addEventListener ( 'change', onSearchInputChange, false );
+			searchInput.addEventListener ( 'keydown', onKeyDownInputChange, false );
 			searchInput.focus ( );
 			var resultsCounter = 0;
 			require ( '../L.TravelNotes' ).searchData.forEach ( 
@@ -7586,7 +7595,7 @@ Tests ...
 					( ( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) ) / (  mapBounds.getNorth ( ) - mapBounds.getSouth ( ) ) ) > 0.01;
 			}
 			if ( showGeometry ) {
-				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline.polyline ) );
+				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline ) );
 			}
 			else {
 				m_AddTo ( objId, L.circleMarker ( latLng, g_TravelNotesData.config.searchPointMarker ) );
@@ -10744,13 +10753,10 @@ Tests ...
 				fill : false
 			},
 			searchPointPolyline : {
-				polyline : {
-					color : 'green',
-					weight : 4,
-					radius : 20,
-					fill : false,
-				},
-				minZoom : 17
+				color : 'green',
+				weight : 4,
+				radius : 20,
+				fill : false,
 			},
 			previousSearchLimit : {
 				color : "green",

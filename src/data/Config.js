@@ -60,13 +60,10 @@ Tests ...
 				fill : false
 			},
 			searchPointPolyline : {
-				polyline : {
-					color : 'green',
-					weight : 4,
-					radius : 20,
-					fill : false,
-				},
-				minZoom : 17
+				color : 'green',
+				weight : 4,
+				radius : 20,
+				fill : false,
 			},
 			previousSearchLimit : {
 				color : "green",
