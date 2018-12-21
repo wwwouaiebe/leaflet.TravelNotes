@@ -54,7 +54,7 @@ Tests ...
 		// removing previous search results
 		var searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
 		while ( 0 !== searchResultsElements.length ) {
-			// cannot use forEach because searchResultsElements is directly update when removing an element!!!
+			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
 			searchResultsElements [ 0 ].removeEventListener ( 'click' , onSearchResultClick, false );
 			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
 			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
@@ -83,7 +83,7 @@ Tests ...
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		require ( '../core/MapEditor' ) ( ).zoomToPoint ( element.latLng );
+		require ( '../core/MapEditor' ) ( ).zoomToSearchResult ( element.latLng, element.geometry );
 	};
 	
 	/*

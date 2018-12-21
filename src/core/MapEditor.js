@@ -322,6 +322,30 @@ Tests ...
 		};
 
 		/*
+		--- m_ZoomToSearchResult function -----------------------------------------------------------------------------
+
+		This function zoom on a search result
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ZoomToSearchResult = function ( latLng, geometry ) {
+			if ( geometry ) {
+				var latLngs = [];
+				geometry.forEach ( 
+					function ( geometryPart ) {
+						latLngs = latLngs.concat ( geometryPart );
+					}
+				);
+				g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			}
+			else
+			{
+				m_ZoomToPoint ( latLng );
+			}
+		};
+		
+		/*
 		--- m_ZoomToNote function ------------------------------------------------------------------------------------
 
 		This function zoom on a note
@@ -413,7 +437,20 @@ Tests ...
 		
 		var m_AddSearchPointMarker = function ( objId, latLng, geometry ) {
 
-			if ( geometry && g_TravelNotesData.config.searchPointPolyline.minZoom <= g_TravelNotesData.map.getZoom ( ) ) {
+			var showGeometry = false;
+			if ( geometry ) {
+				var latLngs = [];
+				geometry.forEach ( 
+					function ( geometryPart ) {
+						latLngs = latLngs.concat ( geometryPart );
+					}
+				);
+				var geometryBounds = m_GetLatLngBounds ( latLngs );
+				var mapBounds = g_TravelNotesData.map.getBounds ( );
+				showGeometry = ( ( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) ) / (  mapBounds.getEast ( ) - mapBounds.getWest ( ) ) ) > 0.01 &&
+					( ( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) ) / (  mapBounds.getNorth ( ) - mapBounds.getSouth ( ) ) ) > 0.01;
+			}
+			if ( showGeometry ) {
 				m_AddTo ( objId, L.polyline ( geometry, g_TravelNotesData.config.searchPointPolyline.polyline ) );
 			}
 			else {
@@ -742,6 +779,8 @@ Tests ...
 				removeAllObjects : function ( ) { m_RemoveAllObjects ( ); },
 				
 				zoomToPoint : function ( latLng ) { m_ZoomToPoint ( latLng ); },
+				
+				zoomToSearchResult : function ( latLng, geometry ) { m_ZoomToSearchResult ( latLng, geometry ); },
 				
 				zoomToNote : function ( noteObjId ) { m_ZoomToNote ( noteObjId ); },
 				
