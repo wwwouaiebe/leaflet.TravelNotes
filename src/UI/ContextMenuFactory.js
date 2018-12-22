@@ -69,51 +69,51 @@ Tests ...
 			return [
 				{ 
 					context : m_WaypointEditor, 
-					name : m_Translator.getText ( "RouteEditor - Select this point as start point" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Select this point as start point" ), 
 					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
 					param : latLng
 				},
 				{
 					context : m_WaypointEditor, 
-					name : m_Translator.getText ( "RouteEditor - Select this point as way point" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Select this point as way point" ), 
 					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
 					param : latLng
 				},
 				{ 
 					context : m_WaypointEditor, 
-					name : m_Translator.getText ( "RouteEditor - Select this point as end point" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Select this point as end point" ), 
 					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
 					param : latLng
 				},
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - New travel note" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - New travel note" ), 
 					action : m_NoteEditor.newTravelNote,
 					param : latLng
 				},
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - Hide notes" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Hide notes" ), 
 					action : m_NoteEditor.hideNotes
 				},
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - Show notes" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Show notes" ), 
 					action : m_NoteEditor.showNotes
 				},
 				{ 
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "TravelEditor - Show all routes" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Show all routes" ), 
 					action : m_RouteEditor.showRoutes
 				}, 
 				{ 
 					context : m_MapEditor, 
-					name : m_Translator.getText ( "TravelEditor - Zoom to travel" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Zoom to travel" ), 
 					action : m_MapEditor.zoomToTravel
 				},
 				{ 
 					context : null,
-					name : m_Translator.getText ( "TravelEditor - About Travel & Notes" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - About Travel & Notes" ), 
 					action : require ( '../UI/AboutDialog' )
 				} 
 			];
@@ -134,7 +134,7 @@ Tests ...
 			return [
 				{ 
 					context : m_WaypointEditor, 
-					name : m_Translator.getText ( "RouteEditor - Delete this waypoint" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ), 
 					action : ( ( g_TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
 					param: wayPointObjId
 				} 
@@ -156,54 +156,54 @@ Tests ...
 			return [
 				{ 
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Edit this route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Edit this route" ), 
 					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.editRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_TravelEditor, 
-					name : m_Translator.getText ( "RouteEditor - Delete this route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Delete this route" ), 
 					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.removeRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Hide this route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
 					action : ( g_TravelNotesData.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_WaypointEditor, 
-					name : m_Translator.getText ( "RouteEditor - Add a waypoint on the route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ), 
 					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Add a note on the route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Add a note on the route" ), 
 					action : m_NoteEditor.newRouteNote,
 					param: routeObjId
 				},
 				{
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Properties" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Properties" ), 
 					action : m_RouteEditor.routeProperties,
 					param: routeObjId
 				},
 				{
 					context : m_MapEditor, 
-					name : m_Translator.getText ( "RouteEditor - Zoom to route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Zoom to route" ), 
 					action : m_MapEditor.zoomToRoute,
 					param: routeObjId
 				},
 				{ 
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Save modifications on this route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Save modifications on this route" ), 
 					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
 				},
 				{ 
 					context : m_RouteEditor, 
-					name : m_Translator.getText ( "RouteEditor - Cancel modifications on this route" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Cancel modifications on this route" ), 
 					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
 				}
 			];
@@ -225,7 +225,7 @@ Tests ...
 			contextMenu.push ( 
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - Edit this note" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Edit this note" ), 
 					action : m_NoteEditor.editNote,
 					param : noteObjId
 				} 
@@ -233,7 +233,7 @@ Tests ...
 			contextMenu.push ( 
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - Delete this note" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Delete this note" ), 
 					action : m_NoteEditor.removeNote,
 					param : noteObjId
 				} 
@@ -241,7 +241,7 @@ Tests ...
 			contextMenu.push ( 
 				{ 
 					context : m_NoteEditor, 
-					name : m_Translator.getText ( "NoteEditor - Zoom to note" ), 
+					name : m_Translator.getText ( "ContextMenuFactory - Zoom to note" ), 
 					action : m_NoteEditor.zoomToNote,
 					param : noteObjId
 				} 
@@ -251,7 +251,7 @@ Tests ...
 			contextMenu.push ( 
 				{ 
 					context : m_NoteEditor, 
-					name : route ?  m_Translator.getText ( "NoteEditor - Detach note from route" ) : m_Translator.getText ( "NoteEditor - Attach note to route" ), 
+					name : route ?  m_Translator.getText ( "ContextMenuFactory - Detach note from route" ) : m_Translator.getText ( "ContextMenuFactory - Attach note to route" ), 
 					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
 					param : noteObjId
 				} 

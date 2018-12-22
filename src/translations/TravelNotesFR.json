@@ -28,6 +28,102 @@
 		"msgstr" : "Fermer"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Attach note to route",
+		"msgstr" : "transformer en note de trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this note",
+		"msgstr" : "Effacer cette note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Detach note from route",
+		"msgstr" : "Transformer en note de voyage"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Edit this note",
+		"msgstr" : "Éditer cette note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Hide notes",
+		"msgstr" : "Masquer les notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - New travel note",
+		"msgstr" : "Ajouter une note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Show notes",
+		"msgstr" : "Afficher les notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to note",
+		"msgstr" : "Zoom sur cette note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Add a note on the route",
+		"msgstr" : "Ajouter une note à ce trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Add a waypoint on the route",
+		"msgstr" : "Ajouter une point de passage à ce trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
+		"msgstr" : "Abandonner les modifications"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this route",
+		"msgstr" : "Supprimer ce trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this waypoint",
+		"msgstr" : "Supprimer ce point de passage"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Edit this route",
+		"msgstr" : "Éditer ce trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Hide this route",
+		"msgstr" : "Masquer ce trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Properties",
+		"msgstr" : "Propriétés"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Save modifications on this route",
+		"msgstr" : "Sauver les modifications"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as end point",
+		"msgstr" : "Sélectionner cet endroit comme point de fin"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as start point",
+		"msgstr" : "Sélectionner cet endroit comme point de départ"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as way point",
+		"msgstr" : "Sélectionner cet endroit comme point intermédiaire"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to route",
+		"msgstr" : "Zoom sur le trajet"
+	},
+	{
+		"msgid" : "ContextMenuFactory - About Travel & Notes",
+		"msgstr" : "À propos de Travel & Notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Show all routes",
+		"msgstr" : "Afficher tous les trajets"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to travel",
+		"msgstr" : "Zoom sur le voyage"
+	},
+	{
 		"msgid" : "DataPanesUI - Hide",
 		"msgstr" : "Masquer"
 	},
@@ -136,32 +232,8 @@
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteEditor - Attach note to route",
-		"msgstr" : "transformer en note de trajet"
-	},
-	{
-		"msgid" : "NoteEditor - Delete this note",
-		"msgstr" : "Effacer cette note"
-	},
-	{
-		"msgid" : "NoteEditor - Detach note from route",
-		"msgstr" : "Transformer en note de voyage"
-	},
-	{
 		"msgid" : "NoteEditor - Distance",
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "NoteEditor - Edit this note",
-		"msgstr" : "Éditer cette note"
-	},
-	{
-		"msgid" : "NoteEditor - Hide notes",
-		"msgstr" : "Masquer les notes"
-	},
-	{
-		"msgid" : "NoteEditor - New travel note",
-		"msgstr" : "Ajouter une note"
 	},
 	{
 		"msgid" : "NoteEditor - Latitude Longitude",
@@ -172,28 +244,8 @@
 		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteEditor - Show notes",
-		"msgstr" : "Afficher les notes"
-	},
-	{
 		"msgid" : "NoteEditor - Link",
 		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
-	},
-	{
-		"msgid" : "NoteEditor - Zoom to note",
-		"msgstr" : "Zoom sur cette note"
-	},
-	{
-		"msgid" : "RouteEditor - Add a note on the route",
-		"msgstr" : "Ajouter une note à ce trajet"
-	},
-	{
-		"msgid" : "RouteEditor - Add a waypoint on the route",
-		"msgstr" : "Ajouter une point de passage à ce trajet"
-	},
-	{
-		"msgid" : "RouteEditor - Cancel modifications on this route",
-		"msgstr" : "Abandonner les modifications"
 	},
 	{
 		"msgid" : "RouteEditor - Distance",
@@ -204,52 +256,12 @@
 		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
-		"msgid" : "RouteEditor - Delete this route",
-		"msgstr" : "Supprimer ce trajet"
-	},
-	{
-		"msgid" : "RouteEditor - Delete this waypoint",
-		"msgstr" : "Supprimer ce point de passage"
-	},
-	{
-		"msgid" : "RouteEditor - Edit this route",
-		"msgstr" : "Éditer ce trajet"
-	},
-	{
-		"msgid" : "RouteEditor - Hide this route",
-		"msgstr" : "Masquer ce trajet"
-	},
-	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
 		"msgstr" : "Il n'est pas possible d'éditer un trajet sans sauver ou abandonner les modifications"
-	},
-	{
-		"msgid" : "RouteEditor - Properties",
-		"msgstr" : "Propriétés"
-	},
-	{
-		"msgid" : "RouteEditor - Save modifications on this route",
-		"msgstr" : "Sauver les modifications"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as end point",
-		"msgstr" : "Sélectionner cet endroit comme point de fin"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as start point",
-		"msgstr" : "Sélectionner cet endroit comme point de départ"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as way point",
-		"msgstr" : "Sélectionner cet endroit comme point intermédiaire"
-	},
-	{
-		"msgid" : "RouteEditor - Zoom to route",
-		"msgstr" : "Zoom sur le trajet"
 	},
 	{
 		"msgid" : "RouteEditorUI - Add waypoint",
@@ -348,10 +360,6 @@
 		"msgstr" : "Déplacer vers le haut"
 	},
 	{
-		"msgid" : "TravelEditor - About Travel & Notes",
-		"msgstr" : "À propos de Travel & Notes"
-	},
-	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
@@ -360,16 +368,8 @@
 		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de trajet. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
 	},
 	{
-		"msgid" : "TravelEditor - Show all routes",
-		"msgstr" : "Afficher tous les trajets"
-	},
-	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "Cette page demande de confirmer sa fermeture ; des données saisies pourraient ne pas être enregistrées."
-	},
-	{
-		"msgid" : "TravelEditor - Zoom to travel",
-		"msgstr" : "Zoom sur le voyage"
 	},
 	{
 		"msgid" : "TravelEditorUI - Cancel travel",

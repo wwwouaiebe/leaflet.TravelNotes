@@ -28,6 +28,102 @@
 		"msgstr" : "Close"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Attach note to route",
+		"msgstr" : "transform to route note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this note",
+		"msgstr" : "Delete this note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Detach note from route",
+		"msgstr" : "Transform to travel note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Edit this note",
+		"msgstr" : "Edit this note"
+ 	},
+	{
+		"msgid" : "ContextMenuFactory - Hide notes",
+		"msgstr" : "Hide notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - New travel note",
+		"msgstr" : "New travel note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Show notes",
+		"msgstr" : "Show notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to note",
+		"msgstr" : "Zoom to note"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Add a note on the route",
+		"msgstr" : "Add a note on the route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Add a waypoint on the route",
+		"msgstr" : "Add a waypoint on the route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
+		"msgstr" : "Cancel the modifications on this route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this route",
+		"msgstr" : "Delete this route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Delete this waypoint",
+		"msgstr" : "Delete this waypoint"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Edit this route",
+		"msgstr" : "Edit this route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Hide this route",
+		"msgstr" : "Hide this route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Properties",
+		"msgstr" : "Properties"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Save modifications on this route",
+		"msgstr" : "Save the modifications"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as end point",
+		"msgstr" : "Select this point as end point"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as start point",
+		"msgstr" : "Select this point as start point"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Select this point as way point",
+		"msgstr" : "Select this point as waypoint"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to route",
+		"msgstr" : "Zoom to route"
+	},
+	{
+		"msgid" : "ContextMenuFactory - About Travel & Notes",
+		"msgstr" : "About Travel & Notes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Show all routes",
+		"msgstr" : "Show all routes"
+	},
+	{
+		"msgid" : "ContextMenuFactory - Zoom to travel",
+		"msgstr" : "Zoom to travel"
+	},
+	{
 		"msgid" : "DataPanesUI - Hide",
 		"msgstr" : "Hide"
 	},
@@ -136,32 +232,8 @@
 		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteEditor - Attach note to route",
-		"msgstr" : "transform to route note"
-	},
-	{
-		"msgid" : "NoteEditor - Delete this note",
-		"msgstr" : "Delete this note"
-	},
-	{
-		"msgid" : "NoteEditor - Detach note from route",
-		"msgstr" : "Transform to travel note"
-	},
-	{
 		"msgid" : "NoteEditor - Distance",
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "NoteEditor - Edit this note",
-		"msgstr" : "Edit this note"
- 	},
-	{
-		"msgid" : "NoteEditor - Hide notes",
-		"msgstr" : "Hide notes"
-	},
-	{
-		"msgid" : "NoteEditor - New travel note",
-		"msgstr" : "New travel note"
 	},
 	{
 		"msgid" : "NoteEditor - Latitude Longitude",
@@ -172,28 +244,8 @@
 		"msgstr" : "<span>Phone</span>&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteEditor - Show notes",
-		"msgstr" : "Show notes"
-	},
-	{
 		"msgid" : "NoteEditor - Link",
 		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
-	},
-	{
-		"msgid" : "NoteEditor - Zoom to note",
-		"msgstr" : "Zoom to note"
-	},
-	{
-		"msgid" : "RouteEditor - Add a note on the route",
-		"msgstr" : "Add a note on the route"
-	},
-	{
-		"msgid" : "RouteEditor - Add a waypoint on the route",
-		"msgstr" : "Add a waypoint on the route"
-	},
-	{
-		"msgid" : "RouteEditor - Cancel modifications on this route",
-		"msgstr" : "Cancel the modifications on this route"
 	},
 	{
 		"msgid" : "RouteEditor - Distance",
@@ -204,52 +256,12 @@
 		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
-		"msgid" : "RouteEditor - Delete this route",
-		"msgstr" : "Delete this route"
-	},
-	{
-		"msgid" : "RouteEditor - Delete this waypoint",
-		"msgstr" : "Delete this waypoint"
-	},
-	{
-		"msgid" : "RouteEditor - Edit this route",
-		"msgstr" : "Edit this route"
-	},
-	{
-		"msgid" : "RouteEditor - Hide this route",
-		"msgstr" : "Hide this route"
-	},
-	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "It's impossible to edit a route created with this provider ({provider})."
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
 		"msgstr" : "It's impossible to edit a route without a save or cancel on the modifications"
-	},
-	{
-		"msgid" : "RouteEditor - Properties",
-		"msgstr" : "Properties"
-	},
-	{
-		"msgid" : "RouteEditor - Save modifications on this route",
-		"msgstr" : "Save the modifications"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as end point",
-		"msgstr" : "Select this point as end point"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as start point",
-		"msgstr" : "Select this point as start point"
-	},
-	{
-		"msgid" : "RouteEditor - Select this point as way point",
-		"msgstr" : "Select this point as waypoint"
-	},
-	{
-		"msgid" : "RouteEditor - Zoom to route",
-		"msgstr" : "Zoom to route"
 	},
 	{
 		"msgid" : "RouteEditorUI - Add waypoint",
@@ -348,10 +360,6 @@
 		"msgstr" : "Move up"
 	},
 	{
-		"msgid" : "TravelEditor - About Travel & Notes",
-		"msgstr" : "About Travel & Notes"
-	},
-	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "It's impossible to remove an edited route"
 	},
@@ -360,16 +368,8 @@
 		"msgstr" : "It's impossible to save a travel without a saving or cancelling the modifications"
 	},
 	{
-		"msgid" : "TravelEditor - Show all routes",
-		"msgstr" : "Show all routes"
-	},
-	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "This page ask to close; data are perhaps not saved."
-	},
-	{
-		"msgid" : "TravelEditor - Zoom to travel",
-		"msgstr" : "Zoom to travel"
 	},
 	{
 		"msgid" : "TravelEditorUI - Cancel travel",
