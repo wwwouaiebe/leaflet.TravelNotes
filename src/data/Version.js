@@ -30,7 +30,7 @@ Doc reviewed 20181216
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = '1.3.0';
+		module.exports = '1.4.0';
 	}
 	
 } ) ( );
