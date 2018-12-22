@@ -222,7 +222,7 @@ Tests ...
 					_TravelNotesData.config = values [ 0 ];
 					
 					if ( window.osmSearch ) {
-						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language )
+						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language, 'travelNotes' )
 						.then ( 
 							function ( ) { console.log ( 'Dictionary loaded' ); },
 							function ( error ) { console.log ( error ); }

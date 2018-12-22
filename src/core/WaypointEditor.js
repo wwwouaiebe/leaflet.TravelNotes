@@ -323,7 +323,7 @@ Tests ...
 
 		return Object.seal (
 			{
-				addWayPoint : function ( latLng, distance ) { m_AddWayPoint ( latLng, event, distance ); },
+				addWayPoint : function ( latLng ) { m_AddWayPoint ( latLng ); },
 				
 				addWayPointOnRoute : function ( routeObjId, event ) { m_AddWayPointOnRoute ( routeObjId, event ); },
 				

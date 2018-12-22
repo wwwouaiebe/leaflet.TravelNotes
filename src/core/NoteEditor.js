@@ -219,8 +219,8 @@ Tests ...
 			note.distance = latLngDistance.distance;
 			note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
 			note.popupContent = maneuver.instruction;
-			note.width = 40;
-			note.height = 40;
+			note.iconWidth = 40;
+			note.iconHeight = 40;
 
 			// and displayed in a dialog box
 			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.editedRoute.objId, true );

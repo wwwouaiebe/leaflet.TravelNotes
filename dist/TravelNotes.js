@@ -1029,7 +1029,7 @@ Tests ...
 					_TravelNotesData.config = values [ 0 ];
 					
 					if ( window.osmSearch ) {
-						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language )
+						window.osmSearch.getDictionaryPromise ( _TravelNotesData.config.language, 'travelNotes' )
 						.then ( 
 							function ( ) { console.log ( 'Dictionary loaded' ); },
 							function ( error ) { console.log ( error ); }
@@ -2328,7 +2328,7 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "RouteEditor - Edit this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_RouteEditor.editRoute : null,
+					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.editRoute : null,
 					param: routeObjId
 				},
 				{
@@ -2423,7 +2423,7 @@ Tests ...
 				{ 
 					context : m_NoteEditor, 
 					name : route ?  m_Translator.getText ( "NoteEditor - Detach note from route" ) : m_Translator.getText ( "NoteEditor - Attach note to route" ), 
-					action : ( ( -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
+					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
 					param : noteObjId
 				} 
 			);
@@ -5177,9 +5177,7 @@ Tests ...
 	var s_OsmSearchEngine = require ( '../core/OsmSearchEngine' ) ( );
 	var s_SearchInputValue = '';
 	
-	
 	var onKeyDownInputChange = function ( keyBoardEvent ) {
-		
 		if ( 'Enter' === keyBoardEvent.key ) {
 			onSearchInputChange ( keyBoardEvent );
 		}
@@ -5208,10 +5206,11 @@ Tests ...
 			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
 			searchDiv.removeChild ( searchResultsElements [ 0 ] );
 		}
-		// adding wait animation
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
-		
+		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+			// adding wait animation
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
+		}
 		// search...
 		s_OsmSearchEngine.search ( );
 	};
@@ -8184,8 +8183,8 @@ Tests ...
 			note.distance = latLngDistance.distance;
 			note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
 			note.popupContent = maneuver.instruction;
-			note.width = 40;
-			note.height = 40;
+			note.iconWidth = 40;
+			note.iconHeight = 40;
 
 			// and displayed in a dialog box
 			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.editedRoute.objId, true );
@@ -8903,7 +8902,7 @@ Tests ...
 			
 			// header
 			var gpxString = "<?xml version='1.0'?>" + tab0;
-			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='Leaflet-Routing-Gpx'>";
+			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='leaflet.TravelNotes'>";
 
 			// waypoints
 			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
@@ -10128,7 +10127,7 @@ Tests ...
 
 		return Object.seal (
 			{
-				addWayPoint : function ( latLng, distance ) { m_AddWayPoint ( latLng, event, distance ); },
+				addWayPoint : function ( latLng ) { m_AddWayPoint ( latLng ); },
 				
 				addWayPointOnRoute : function ( routeObjId, event ) { m_AddWayPointOnRoute ( routeObjId, event ); },
 				

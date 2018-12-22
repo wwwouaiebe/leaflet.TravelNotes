@@ -38,9 +38,7 @@ Tests ...
 	var s_OsmSearchEngine = require ( '../core/OsmSearchEngine' ) ( );
 	var s_SearchInputValue = '';
 	
-	
 	var onKeyDownInputChange = function ( keyBoardEvent ) {
-		
 		if ( 'Enter' === keyBoardEvent.key ) {
 			onSearchInputChange ( keyBoardEvent );
 		}
@@ -69,10 +67,11 @@ Tests ...
 			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
 			searchDiv.removeChild ( searchResultsElements [ 0 ] );
 		}
-		// adding wait animation
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
-		
+		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+			// adding wait animation
+			var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
+		}
 		// search...
 		s_OsmSearchEngine.search ( );
 	};

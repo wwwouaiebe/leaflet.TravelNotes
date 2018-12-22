@@ -157,7 +157,7 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "RouteEditor - Edit this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_RouteEditor.editRoute : null,
+					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.editRoute : null,
 					param: routeObjId
 				},
 				{
@@ -252,7 +252,7 @@ Tests ...
 				{ 
 					context : m_NoteEditor, 
 					name : route ?  m_Translator.getText ( "NoteEditor - Detach note from route" ) : m_Translator.getText ( "NoteEditor - Attach note to route" ), 
-					action : ( ( -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
+					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
 					param : noteObjId
 				} 
 			);
