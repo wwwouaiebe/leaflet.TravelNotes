@@ -5398,7 +5398,7 @@ Tests ...
 								( searchResult.tags [ 'addr:street' ] ? '<p>' + searchResult.tags [ 'addr:street' ] + ' ' + ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] : '' ) +'</p>' : '' ) +
 								( searchResult.tags [ 'addr:city' ] ? '<p>' + ( searchResult.tags [ 'addr:postcode' ] ? searchResult.tags [ 'addr:postcode' ] + ' ' : '' ) + searchResult.tags [ 'addr:city' ] + '</p>' : '' ) +
 								( searchResult.tags.phone ? '<p>' + searchResult.tags.phone + '</p>' : '' ) +
-								( searchResult.tags.email ? '<p><a href=\'mailto:' + searchResult.tags.email + '\'>' + searchResult.email + '</a></p>' : '' ) +
+								( searchResult.tags.email ? '<p><a href=\'mailto:' + searchResult.tags.email + '\'>' + searchResult.tags.email + '</a></p>' : '' ) +
 								( searchResult.tags.website ? '<p><a href=\''+ searchResult.tags.website +'\' target=\'_blank\'>' + searchResult.tags.website + '</a></p>' : '' ) +
 								( searchResult.ranking ? '<p>&#x26ab;' + searchResult.ranking + '</p>' : '' )
 						},
