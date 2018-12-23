@@ -7900,6 +7900,10 @@ Tests ...
 				marker.bindTooltip ( function ( layer ) { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
 				marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 			}
+			if ( marker.isPopupOpen( ) ) {
+				marker.closePopup ( );
+				marker.openPopup ( );
+			}
 		};
 		
 		/*
