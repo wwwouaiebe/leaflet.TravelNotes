@@ -46,6 +46,8 @@ Tests ...
 	'use strict';
 
 	var g_TravelNotesData = require ( '../L.TravelNotes' );
+	
+	var s_ZoomToRoute = false;
 
 		
 	/*
@@ -313,6 +315,7 @@ Tests ...
 			if ( ! g_TravelNotesData.config.routing.auto ) {
 				return;
 			}
+			s_ZoomToRoute = 0 === g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length;
 			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
 		};
 			
@@ -342,7 +345,7 @@ Tests ...
 			
 			// the new route is added to the map
 			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
-			if ( 0 !== g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length ) {
+			if ( s_ZoomToRoute ) {
 				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
 			}
 			
