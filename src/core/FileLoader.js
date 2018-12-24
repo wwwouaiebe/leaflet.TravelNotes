@@ -188,7 +188,7 @@ Tests ...
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var m_OpenFile = function ( ) {
+		var m_OpenFile = function ( event ) {
 			m_FileName = event.target.files [ 0 ].name;
 			
 			var fileReader = new FileReader( );
