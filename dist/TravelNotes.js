@@ -8234,6 +8234,9 @@ Tests ...
 					// it's a travel note. UI is also adapted
 					require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
 				}
+				else {
+					require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+				}
 			}
 			else {
 				// it's a new note
