@@ -58,7 +58,7 @@ Tests ...
 
 		var m_AttachNoteToRoute = function ( noteObjId ) {
 			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
-			var distance = 999999999;
+			var distance = Number.MAX_VALUE;
 			var selectedRoute = null;
 			var attachPoint = null;
 			

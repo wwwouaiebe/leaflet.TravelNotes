@@ -181,7 +181,7 @@ Tests ...
 			
 			var notesIterator = route.notes.iterator;
 			var notesDone =  notesIterator.done;
-			var notesDistance = ! notesDone ? notesIterator.value.distance : 999999999;
+			var notesDistance = ! notesDone ? notesIterator.value.distance : Number.MAX_VALUE;
 			
 			var maneuversIterator = route.itinerary.maneuvers.iterator;
 			var maneuversDone = maneuversIterator.done;
@@ -234,7 +234,7 @@ Tests ...
 						maneuversDistance +=  maneuversIterator.value.distance;
 						maneuversDone = maneuversIterator.done;
 						if ( maneuversDone ) {
-							maneuversDistance = 999999999;
+							maneuversDistance = Number.MAX_VALUE;
 						}
 					}
 				}
@@ -249,7 +249,7 @@ Tests ...
 						rowDiv.noteObjId = notesIterator.value.objId;
 						
 						notesDone = notesIterator.done;
-						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;
+						notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
 					}
 				}	
 			}
