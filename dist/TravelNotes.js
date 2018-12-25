@@ -3210,7 +3210,7 @@ Tests ...
 			
 			var notesIterator = route.notes.iterator;
 			var notesDone =  notesIterator.done;
-			var notesDistance = ! notesDone ? notesIterator.value.distance : 999999999;
+			var notesDistance = ! notesDone ? notesIterator.value.distance : Number.MAX_VALUE;
 			
 			var maneuversIterator = route.itinerary.maneuvers.iterator;
 			var maneuversDone = maneuversIterator.done;
@@ -3263,7 +3263,7 @@ Tests ...
 						maneuversDistance +=  maneuversIterator.value.distance;
 						maneuversDone = maneuversIterator.done;
 						if ( maneuversDone ) {
-							maneuversDistance = 999999999;
+							maneuversDistance = Number.MAX_VALUE;
 						}
 					}
 				}
@@ -3278,7 +3278,7 @@ Tests ...
 						rowDiv.noteObjId = notesIterator.value.objId;
 						
 						notesDone = notesIterator.done;
-						notesDistance = notesDone ? 999999999 :  notesIterator.value.distance;
+						notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
 					}
 				}	
 			}
@@ -8026,7 +8026,7 @@ Tests ...
 
 		var m_AttachNoteToRoute = function ( noteObjId ) {
 			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
-			var distance = 999999999;
+			var distance = Number.MAX_VALUE;
 			var selectedRoute = null;
 			var attachPoint = null;
 			
@@ -9317,7 +9317,7 @@ Tests ...
 		var m_EndOk = function ( message ) {
 
 			s_RequestStarted = false;
-			
+/*			
 			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
 			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
 			var routeDistance = 0;
@@ -9352,6 +9352,35 @@ Tests ...
 			else {
 				g_TravelNotesData.editedRoute.distance = routeDistance;
 			}
+*/
+			// Computing the distance between itineraryPoints
+			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			var routeDistance = 0;
+			var maneuverDistance = 0;
+			var dummy = itineraryPointsIterator.done;
+			dummy = maneuverIterator.done;
+			var previousPoint = itineraryPointsIterator.value;
+			var previousManeuver = maneuverIterator.value;
+			dummy = maneuverIterator.done;
+			var nextManeuver = maneuverIterator.value;
+			g_TravelNotesData.editedRoute.duration = 0;
+			while ( ! itineraryPointsIterator.done ) {
+				previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				if ( nextManeuver.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
+					previousManeuver.distance = maneuverDistance;
+					g_TravelNotesData.editedRoute.duration += previousManeuver.duration;
+					maneuverDistance = 0;
+					previousManeuver = nextManeuver;
+					dummy = maneuverIterator.done;
+					nextManeuver = maneuverIterator.value;
+				}
+				routeDistance += previousPoint.distance;
+				maneuverDistance += previousPoint.distance;
+				previousPoint = itineraryPointsIterator.value;
+			}
+			
+			g_TravelNotesData.editedRoute.distance = routeDistance;
 
 			// Placing the waypoints on the itinerary
 			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;

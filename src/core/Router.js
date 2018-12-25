@@ -102,41 +102,39 @@ Tests ...
 		var m_EndOk = function ( message ) {
 
 			s_RequestStarted = false;
+
+			// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
+			// valid function to compute the distances. So all distances are always 
+			// recomputed with this function.
 			
-			// Computing the distance between itineraryPoints if not know ( depending of the provider...)
+			// Computing the distance between itineraryPoints
 			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
 			var routeDistance = 0;
+			var maneuverDistance = 0;
 			var dummy = itineraryPointsIterator.done;
+			dummy = maneuverIterator.done;
 			var previousPoint = itineraryPointsIterator.value;
+			var previousManeuver = maneuverIterator.value;
+			dummy = maneuverIterator.done;
+			var nextManeuver = maneuverIterator.value;
+			g_TravelNotesData.editedRoute.duration = 0;
 			while ( ! itineraryPointsIterator.done ) {
-				if ( 0 === previousPoint.distance ) {
-					previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				if ( nextManeuver.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
+					previousManeuver.distance = maneuverDistance;
+					g_TravelNotesData.editedRoute.duration += previousManeuver.duration;
+					maneuverDistance = 0;
+					previousManeuver = nextManeuver;
+					dummy = maneuverIterator.done;
+					nextManeuver = maneuverIterator.value;
 				}
 				routeDistance += previousPoint.distance;
+				maneuverDistance += previousPoint.distance;
 				previousPoint = itineraryPointsIterator.value;
 			}
-
-			// Computing the complete route distance and duration based on the values given by the providers in the maneuvers
-			//var routeDistance = g_TravelNotesData.editedRoute.distance;
-			g_TravelNotesData.editedRoute.distance = 0;
-			g_TravelNotesData.editedRoute.duration = 0;
-			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
-			while ( ! maneuverIterator.done ) {
-				g_TravelNotesData.editedRoute.distance += maneuverIterator.value.distance;
-				g_TravelNotesData.editedRoute.duration += maneuverIterator.value.duration;
-			}
 			
-			if ( 0 != g_TravelNotesData.editedRoute.distance ) {
-				// Computing a correction factor for distance betwwen itinerayPoints
-				var correctionFactor = g_TravelNotesData.editedRoute.distance / routeDistance;
-				itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
-				while ( ! itineraryPointsIterator.done ) {
-					itineraryPointsIterator.value.distance *= correctionFactor;
-				}
-			}
-			else {
-				g_TravelNotesData.editedRoute.distance = routeDistance;
-			}
+			g_TravelNotesData.editedRoute.distance = routeDistance;
 
 			// Placing the waypoints on the itinerary
 			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
