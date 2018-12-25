@@ -107,34 +107,7 @@ Tests ...
 			// valid function to compute the distances. So all distances are always 
 			// recomputed with this function.
 			
-			// Computing the distance between itineraryPoints
-			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
-			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
-			var routeDistance = 0;
-			var maneuverDistance = 0;
-			var dummy = itineraryPointsIterator.done;
-			dummy = maneuverIterator.done;
-			var previousPoint = itineraryPointsIterator.value;
-			var previousManeuver = maneuverIterator.value;
-			dummy = maneuverIterator.done;
-			var nextManeuver = maneuverIterator.value;
-			g_TravelNotesData.editedRoute.duration = 0;
-			while ( ! itineraryPointsIterator.done ) {
-				previousPoint.distance = L.latLng ( previousPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
-				if ( nextManeuver.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
-					previousManeuver.distance = maneuverDistance;
-					g_TravelNotesData.editedRoute.duration += previousManeuver.duration;
-					maneuverDistance = 0;
-					previousManeuver = nextManeuver;
-					dummy = maneuverIterator.done;
-					nextManeuver = maneuverIterator.value;
-				}
-				routeDistance += previousPoint.distance;
-				maneuverDistance += previousPoint.distance;
-				previousPoint = itineraryPointsIterator.value;
-			}
-			
-			g_TravelNotesData.editedRoute.distance = routeDistance;
+			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.editedRoute );
 
 			// Placing the waypoints on the itinerary
 			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;

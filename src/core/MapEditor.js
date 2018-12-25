@@ -615,10 +615,12 @@ Tests ...
 							route.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 							// the coordinates of the bullet are adapted
 							layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+							require ( '../UI/DataPanesUI' ) ( ).updateItinerary ( );
 						}
 						else {
 							// the note is not attached to a route, so the coordinates of the note can be directly changed
 							note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+							require ( '../UI/DataPanesUI' ) ( ).updateTravelNotes ( );
 						}
 						// in all cases, the polyline is updated
 						layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );

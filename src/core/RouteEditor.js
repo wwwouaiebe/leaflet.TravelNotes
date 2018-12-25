@@ -130,6 +130,43 @@ Tests ...
 		};
 
 		/*
+		--- m_ComputeRouteDistances function -----------------------------------------------------------------------
+
+		This function compute the route, itineraryPoints and maneuvers distances
+		
+		parameters:
+		- route : the TravelNotes route object to be used
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ComputeRouteDistances = function ( route ) {
+			// Computing the distance between itineraryPoints
+			var itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
+			var maneuverIterator = route.itinerary.maneuvers.iterator;
+			var dummy = itineraryPointsIterator.done;
+			dummy = maneuverIterator.done;
+			var previousItineraryPoint = itineraryPointsIterator.value;
+			var previousManeuver = maneuverIterator.value;
+			previousManeuver.distance = 0;
+			dummy = maneuverIterator.done;
+			route.distance = 0;
+			route.duration = 0;
+			while ( ! itineraryPointsIterator.done ) {
+				previousItineraryPoint.distance = L.latLng ( previousItineraryPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
+					route.duration += previousManeuver.duration;
+					previousManeuver =  maneuverIterator.value;
+					maneuverIterator.value.distance = 0;
+					dummy = maneuverIterator.done;
+				}
+				route.distance += previousItineraryPoint.distance;
+				previousManeuver.distance += previousItineraryPoint.distance;
+				previousItineraryPoint = itineraryPointsIterator.value;
+			}
+		};
+
+		/*
 		--- m_GetClosestLatLngDistance function -----------------------------------------------------------------------
 
 		This function search the nearest point on a route from a given point and compute the distance
@@ -463,6 +500,8 @@ Tests ...
 			{
 				
 				cutRoute : function ( route, latLng ) { return m_CutRoute ( route, latLng ); },
+				
+				computeRouteDistances : function ( route ) { m_ComputeRouteDistances ( route ); },
 
 				getClosestLatLngDistance : function ( route, latLng ) { return m_GetClosestLatLngDistance ( route, latLng ); },
 
