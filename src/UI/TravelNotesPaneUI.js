@@ -95,14 +95,14 @@ Tests ...
 	};
 	
 	/*
-	--- onTravelNoteContextMenu function ------------------------------------------------------------------------------
+	--- onTravelNoteClick function ------------------------------------------------------------------------------------
 
-	contextmenu event listener for the notes
+	click event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onTravelNoteContextMenu = function ( clickEvent ) {
+	var onTravelNoteClick = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		var element = clickEvent.target;
@@ -113,14 +113,14 @@ Tests ...
 	};
 	
 	/*
-	--- onTravelNoteClick function ------------------------------------------------------------------------------------
+	--- onTravelNoteContextMenu function ------------------------------------------------------------------------------
 
-	click event listener for the notes
+	contextmenu event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onTravelNoteClick = function ( clickEvent ) {
+	var onTravelNoteContextMenu = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		var element = clickEvent.target;
