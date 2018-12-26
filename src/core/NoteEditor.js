@@ -60,8 +60,9 @@ Tests ...
 			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 			var distance = Number.MAX_VALUE;
 			var selectedRoute = null;
-			var attachPoint = null;
-			
+			var newNoteLatLng = null;
+			var newNoteDistance = null;
+
 			g_TravelNotesData.travel.routes.forEach ( 
 				function ( route ) {
 					var pointAndDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
@@ -70,7 +71,8 @@ Tests ...
 						if ( distanceToRoute < distance ) {
 							distance = distanceToRoute;
 							selectedRoute = route;
-							attachPoint = pointAndDistance.latLng;
+							newNoteLatLng = pointAndDistance.latLng;
+							newNoteDistance = pointAndDistance.distance;
 						}
 					}
 				}
@@ -78,8 +80,8 @@ Tests ...
 			
 			if ( selectedRoute ) {
 				g_TravelNotesData.travel.notes.remove (  noteObjId );
-				noteAndRoute.note.distance = distance;
-				noteAndRoute.note.latLng = attachPoint;
+				noteAndRoute.note.distance = newNoteDistance;
+				noteAndRoute.note.latLng = newNoteLatLng;
 				noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
 
 				// ... the chainedDistance is adapted...
