@@ -6434,7 +6434,7 @@ Tests ...
 		var clientRect = element.getBoundingClientRect ( );
 		
 		// for this #@!& MS Edge... don't remove + 1 otherwise crazy things comes in FF
-		require ( '../core/NoteEditor' ).noteDropped ( 
+		require ( '../core/NoteEditor' ) ( ).noteDropped ( 
 			s_NoteObjId + 1, 
 			element.noteObjId, 
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
