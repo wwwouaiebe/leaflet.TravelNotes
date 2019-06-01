@@ -90,7 +90,7 @@ Tests ...
 			_GlobalData.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
 			var elementCounter = 0;
 			for ( elementCounter = preDefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
-				preDefinedIconsSelect.remove ( counter );
+				preDefinedIconsSelect.remove ( elementCounter );
 			}
 			for ( elementCounter = 0; elementCounter < _GlobalData.preDefinedIconsList.length; elementCounter ++ ) {
 				var option = htmlElementsFactory.create ( 'option', { text :  _GlobalData.preDefinedIconsList [ elementCounter ].name } );
