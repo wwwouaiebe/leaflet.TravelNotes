@@ -1,3 +1,57 @@
+.TravelNotes-OSM-Highway
+{
+	fill : none;
+	stroke-width : 2;
+}
+.TravelNotes-OSM-Highway-motorway,
+.TravelNotes-OSM-Highway-trunk,
+.TravelNotes-OSM-Highway-primary,
+.TravelNotes-OSM-Highway-secondary,
+.TravelNotes-OSM-Highway-tertiary,
+.TravelNotes-OSM-Highway-unclassified,
+.TravelNotes-OSM-Highway-residential,
+.TravelNotes-OSM-Highway-motorway_link,
+.TravelNotes-OSM-Highway-trunk_link,
+.TravelNotes-OSM-Highway-primary_link,
+.TravelNotes-OSM-Highway-secondary_link,
+.TravelNotes-OSM-Highway-tertiary_link
+.TravelNotes-OSM-Highway-living_street,
+.TravelNotes-OSM-Highway-service
+{
+	stroke : gray;
+}
+.TravelNotes-OSM-Highway-pedestrian
+{
+	stroke : darkgray;
+}
+.TravelNotes-OSM-Highway-cycleway
+{
+	stroke : blue;
+	stroke-dasharray : 6 2;
+}
+.TravelNotes-OSM-Highway-track,
+.TravelNotes-OSM-Highway-bridleway
+{
+	stroke :brown;
+	stroke-dasharray : 6 2;
+}
+.TravelNotes-OSM-Highway-path,
+.TravelNotes-OSM-Highway-footway
+{
+	stroke :red;
+	stroke-dasharray : 2 2;
+}
+.TravelNotes-SvgIcon-Background
+{
+	fill : white;
+	stroke : white;
+}
+.TravelNotes-SvgIcon-Foreground
+{
+	fill : transparent;
+	stroke : black;
+	stroke-width : 5;
+}
 .TravelNotes-MapNoteCategory-0001
 {
 	background-image : url('data:image/png;base64,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');

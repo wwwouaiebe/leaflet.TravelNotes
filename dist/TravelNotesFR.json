@@ -192,6 +192,10 @@
 		"msgstr" : "Le contenu de l'icône doit être complété."
 	},
 	{
+		"msgid" : "NoteDialog - Continue",
+		"msgstr" : "Continuer"
+	},
+	{
 		"msgid" : "NoteDialog - Icon height",
 		"msgstr" : "Hauteur de l'icône : "
 	},
@@ -220,12 +224,40 @@
 		"msgstr" : "Téléphone&nbsp:&nbsp;"
 	},
 	{
+		"msgid" : "NoteDialog - SVG icon from OSM",
+		"msgstr" : "Icône SVG depuis OSM"
+	},
+	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Texte&nbsp;:&nbsp;"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
 		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Turn right",
+		"msgstr" : "Tourner à droite"
+	},
+	{
+		"msgid" : "NoteDialog - Turn slight right",
+		"msgstr" : "Tourner légèrement à droite"
+	},
+	{
+		"msgid" : "NoteDialog - Turn slight left",
+		"msgstr" : "Tourner légèrement à gauche"
+	},
+	{
+		"msgid" : "NoteDialog - Turn left",
+		"msgstr" : "Tourner à gauche"
+	},
+	{
+		"msgid" : "NoteDialog - Turn sharp left",
+		"msgstr" : "Tourner fortement à gauche"
+	},
+	{
+		"msgid" : "NoteDialog - Turn sharp right",
+		"msgstr" : "Tourner fortement à droite"
 	},
 	{
 		"msgid" : "NoteEditor - Address",

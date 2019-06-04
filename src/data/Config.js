@@ -111,7 +111,9 @@ Tests ...
 					color : 'gray',
 					weight : 1
 				},
-				style : 'TravelNotes-NotesStyle'
+				style : 'TravelNotes-NotesStyle',
+				svgIconWidthScale : 10,
+				svgIconWidth : 200
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {

@@ -44,6 +44,8 @@ Tests ...
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
+	var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
+	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 
 	var HTMLViewsFactory = function ( ) {
@@ -65,7 +67,14 @@ Tests ...
 				}, 
 				rowDiv
 			);
-			iconCell.setAttribute ( "style", "width:" + note.iconWidth + "px;" );
+			var iconWidthScale = 1;
+			if ( ( 'svg' === iconCell.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === _ClassNamePrefix ) ) {
+				iconWidthScale = require ( '../L.TravelNotes' ).config.note.svgIconWidthScale;
+				iconCell.firstChild.setAttributeNS ( null, "viewBox", "0 0 " + m_SvgIconSize + " " + m_SvgIconSize);
+			}
+			
+			
+			iconCell.setAttribute ( "style", "width:" + note.iconWidth * iconWidthScale + "px;" );
 			
 			var noteElement = _HTMLElementsFactory.create (
 				'div',

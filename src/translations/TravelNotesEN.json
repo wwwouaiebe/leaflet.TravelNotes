@@ -192,6 +192,10 @@
 		"msgstr" : "The icon content cannot be empty."
 	},
 	{
+		"msgid" : "NoteDialog - Continue",
+		"msgstr" : "Continue"
+	},
+	{
 		"msgid" : "NoteDialog - Icon height",
 		"msgstr" : "Icon height : "
 	},
@@ -220,12 +224,40 @@
 		"msgstr" : "Phone&nbsp:&nbsp;"
 	},
 	{
+		"msgid" : "NoteDialog - SVG icon from OSM",
+		"msgstr" : "SVG icon from OSM"
+	},
+	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Text&nbsp;:&nbsp;"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
 		"msgstr" : "Tooltip content&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteDialog - Turn right",
+		"msgstr" : "Turn right"
+	},
+	{
+		"msgid" : "NoteDialog - Turn slight right",
+		"msgstr" : "Turn slight right"
+	},
+	{
+		"msgid" : "NoteDialog - Turn slight left",
+		"msgstr" : "Turn slight left"
+	},
+	{
+		"msgid" : "NoteDialog - Turn left",
+		"msgstr" : "Turn left"
+	},
+	{
+		"msgid" : "NoteDialog - Turn sharp left",
+		"msgstr" : "Turn sharp left"
+	},
+	{
+		"msgid" : "NoteDialog - Turn sharp right",
+		"msgstr" : "Turn sharp right"
 	},
 	{
 		"msgid" : "NoteEditor - Address",

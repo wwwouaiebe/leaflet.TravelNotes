@@ -455,7 +455,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":41,"../data/ObjId":48,"../data/ObjType":49,"./Version":6}],4:[function(require,module,exports){
+},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":6}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -635,7 +635,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../data/Collection":41,"../data/Itinerary":44,"../data/ObjId":48,"../data/ObjType":49,"../data/Waypoint":55,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":42,"../data/Itinerary":45,"../data/ObjId":49,"../data/ObjType":50,"../data/Waypoint":56,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -763,7 +763,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":41,"../data/ObjId":48,"../data/ObjType":49,"./Version":6}],6:[function(require,module,exports){
+},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":6}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1216,7 +1216,7 @@ Tests ...
 --- End of L.TravelNotes.js file --------------------------------------------------------------------------------------
 */
 
-},{"./UI/ContextMenu":11,"./UI/ContextMenuFactory":12,"./UI/RouteEditorUI":21,"./UI/Translator":25,"./UI/TravelEditorUI":26,"./UI/UserInterface":28,"./UI/baseDialog":29,"./core/FileLoader":31,"./core/TravelEditor":38,"./data/ItineraryPoint":45,"./data/Maneuver":46,"./data/Route":50,"./data/Travel":51,"./data/TravelNotesData":52,"./data/Version":53,"./util/Utilities":56}],8:[function(require,module,exports){
+},{"./UI/ContextMenu":11,"./UI/ContextMenuFactory":12,"./UI/RouteEditorUI":21,"./UI/Translator":25,"./UI/TravelEditorUI":26,"./UI/UserInterface":28,"./UI/baseDialog":29,"./core/FileLoader":31,"./core/TravelEditor":39,"./data/ItineraryPoint":46,"./data/Maneuver":47,"./data/Route":51,"./data/Travel":52,"./data/TravelNotesData":53,"./data/Version":54,"./util/Utilities":57}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1298,7 +1298,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":25,"../data/Version":53,"./HTMLElementsFactory":15}],9:[function(require,module,exports){
+},{"../UI/BaseDialog":9,"../UI/Translator":25,"../data/Version":54,"./HTMLElementsFactory":15}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2463,7 +2463,7 @@ Tests ...
 /*
 --- End of ContextMenuFactory.js file ---------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/Translator":25,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":38,"../core/waypointEditor":40,"../data/DataSearchEngine":43}],13:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/Translator":25,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":39,"../core/waypointEditor":41,"../data/DataSearchEngine":44}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3073,6 +3073,8 @@ Tests ...
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
 	var _RouteEditor = require ( '../core/RouteEditor' ) ( );
 	
+	var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
+	
 	var _ClassNamePrefix = 'TravelNotes-Control-';
 
 	var HTMLViewsFactory = function ( ) {
@@ -3094,7 +3096,14 @@ Tests ...
 				}, 
 				rowDiv
 			);
-			iconCell.setAttribute ( "style", "width:" + note.iconWidth + "px;" );
+			var iconWidthScale = 1;
+			if ( ( 'svg' === iconCell.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === _ClassNamePrefix ) ) {
+				iconWidthScale = require ( '../L.TravelNotes' ).config.note.svgIconWidthScale;
+				iconCell.firstChild.setAttributeNS ( null, "viewBox", "0 0 " + m_SvgIconSize + " " + m_SvgIconSize);
+			}
+			
+			
+			iconCell.setAttribute ( "style", "width:" + note.iconWidth * iconWidthScale + "px;" );
 			
 			var noteElement = _HTMLElementsFactory.create (
 				'div',
@@ -3396,7 +3405,7 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":15,"../UI/Translator":25,"../core/NoteEditor":34,"../core/RouteEditor":36,"../data/ObjId":48,"../util/Utilities":56}],17:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":15,"../UI/Translator":25,"../core/NoteEditor":34,"../core/RouteEditor":36,"../data/ObjId":49,"../util/Utilities":57}],17:[function(require,module,exports){
 arguments[4][15][0].apply(exports,arguments)
 },{"dup":15}],18:[function(require,module,exports){
 /*
@@ -3961,6 +3970,65 @@ Tests ...
 			iconDimensionsDiv
 		);
 		heightInput.value = note.iconHeight;
+
+		// SVG icon from OSM
+		
+		var svgIconFromOsmFactory = require ( '../core/SvgIconFromOsmFactory' ) ( );
+		
+		var svgIconCallback = function ( data ) {
+			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
+			if ( data.direction < 35 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+			}
+			else if ( data.direction < 80 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
+			}
+			else if ( data.direction < 100 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
+			}
+			else if ( data.direction < 145 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
+			}
+			else if ( data.direction < 200 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
+			}
+			else if ( data.direction < 270 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
+			}
+			else if ( data.direction < 340 ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
+			}
+			else {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+			}
+		};
+
+		htmlElementsFactory.create (
+			'text',
+			{
+				data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
+			},
+			iconDimensionsDiv
+		);
+		var SvgIconFromOsmInput =  htmlElementsFactory.create (
+			'input',
+			{
+				type : 'checkbox',
+				className : 'TravelNotes-NoteDialog-CheckboxInput',
+				id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
+			},
+			iconDimensionsDiv
+		);
+		SvgIconFromOsmInput.addEventListener ( 
+			'change',
+			function ( event ) {
+				if ( SvgIconFromOsmInput.checked )
+				{
+					svgIconFromOsmFactory.getSvgIcon( note.latLng, routeObjId, svgIconCallback );
+				}
+			},
+			false
+		);
 		
 		// icon content
 		htmlElementsFactory.create ( 
@@ -4183,7 +4251,7 @@ Tests ...
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":25,"../core/GeoCoder":32,"../core/NoteEditor":34,"./HTMLElementsFactory":15}],20:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":25,"../core/GeoCoder":32,"../core/NoteEditor":34,"../core/SvgIconFromOsmFactory":38,"./HTMLElementsFactory":15}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4965,7 +5033,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/RouteEditor":36,"../core/WaypointEditor":39,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],22:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/RouteEditor":36,"../core/WaypointEditor":40,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5136,7 +5204,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":38,"./HTMLElementsFactory":15}],23:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":39,"./HTMLElementsFactory":15}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5444,7 +5512,7 @@ Tests ...
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/OsmSearchEngine":35,"../data/ObjId":48,"./HTMLElementsFactory":15,"./Translator":25}],24:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/OsmSearchEngine":35,"../data/ObjId":49,"./HTMLElementsFactory":15,"./Translator":25}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -6344,7 +6412,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/FileLoader":31,"../core/RouteEditor":36,"../core/TravelEditor":38,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],27:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../core/FileLoader":31,"../core/RouteEditor":36,"../core/TravelEditor":39,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7033,7 +7101,7 @@ Tests ...
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------
 */	
-},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/TravelEditor":38,"@mapbox/polyline":1}],32:[function(require,module,exports){
+},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/TravelEditor":39,"@mapbox/polyline":1}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7967,7 +8035,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../UI/ContextMenuFactory":12,"../UI/DataPanesUI":13,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":38,"../core/WaypointEditor":39,"../util/Utilities":56}],34:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../UI/ContextMenuFactory":12,"../UI/DataPanesUI":13,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":39,"../core/WaypointEditor":40,"../util/Utilities":57}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8491,7 +8559,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/NoteDialog":19,"../UI/Translator":25,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":38,"../data/Note":47,"../util/Utilities":56}],35:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/NoteDialog":19,"../UI/Translator":25,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":39,"../data/Note":48,"../util/Utilities":57}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8711,7 +8779,7 @@ Tests ...
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../core/MapEditor":33,"../data/ObjId":48}],36:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../core/MapEditor":33,"../data/ObjId":49}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9255,7 +9323,7 @@ Tests ...
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/RouteEditorUI":21,"../UI/RoutePropertiesDialog":22,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/Router":37,"../core/TravelEditor":38,"../data/ItineraryPoint":45,"../data/Route":50,"../util/Utilities":56}],37:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/RouteEditorUI":21,"../UI/RoutePropertiesDialog":22,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/Router":37,"../core/TravelEditor":39,"../data/ItineraryPoint":46,"../data/Route":51,"../util/Utilities":57}],37:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9448,6 +9516,471 @@ Tests ...
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
 },{"../L.TravelNotes":7,"../core/ErrorEditor":30,"./RouteEditor":36}],38:[function(require,module,exports){
+/*
+Copyright - 2019 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- SvgIconFromOsmFactory.js file -------------------------------------------------------------------------------------
+This file contains:
+	-
+Changes:
+	- v1.4.0:
+		- created
+Doc reviewed ...
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+
+( function ( ){
+	
+	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
+
+	var s_RequestStarted = false;
+
+	var svgIconFromOsmFactory = function ( ) {
+
+		var m_IconLatLng = L.latLng ( 0, 0);
+		
+		var m_RouteObjId = 0;
+		var m_Callback = null;
+		
+		var m_Response = {};
+		var m_NextPromise = 0;
+		var m_Promises = [];
+		var m_XMLHttpRequestUrl = '';
+		
+		var m_WaysMap = new Map ( );
+		var m_NodesMap = new Map ( );
+		var m_Svg = null;
+		
+		var m_Delta = L.point ( 0, 0 );
+		var m_Points = '';
+		var m_Rotation = 0;
+		var m_Direction = 0;
+		
+		var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
+		
+		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+		
+		/*
+		--- m_EndError function ---------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EndError = function ( message ) {
+
+			s_RequestStarted = false;
+		};
+	
+		/*
+		--- End of m_EndError function ---
+		*/
+
+		/*
+		--- m_EndOk function -----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EndOk = function ( message ) {
+
+			s_RequestStarted = false;
+			m_Callback ( { svg : m_Svg.outerHTML, direction : m_Direction } );
+		};
+
+		/*
+		--- End of m_EndOk function ---
+		*/
+
+		/*
+		--- m_CreateMaps function -----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateMaps = function ( )
+		{
+			m_WaysMap.clear ( );
+			m_NodesMap.clear ( );
+			
+			// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
+			m_Response.elements.forEach (
+				function ( element ) {
+					switch ( element.type ) {
+						case 'way' :
+							// replacing the nodes property with the nodesId property to 
+							// avoid confusion between nodes and nodesId. the element.nodes contains nodesIds!!
+							element.nodesIds = element.nodes;
+							delete element.nodes;
+							m_WaysMap.set ( element.id, element );
+							break;
+						case 'node' :
+							m_NodesMap.set ( element.id, element );
+							break;
+						default:
+							break;
+					}
+				}
+			);
+		};
+		
+		/*
+		--- End of m_CreateMaps function ---
+		*/
+		
+
+		/*
+		--- m_CreateWays function -------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateWays = function ( ) {
+			
+			m_WaysMap.forEach ( 
+				function ( way ) {
+					var points = '';
+					way.nodesIds.forEach (
+						function ( nodeId ) {
+							var node = m_NodesMap.get ( nodeId );
+							var point = g_TravelNotesData.map.project ( L.latLng ( node.lat, node.lon ), 17 ).add ( m_Delta );
+							points += point.x.toFixed ( 0 ) + ',' + point.y.toFixed ( 0 ) + ' ';
+						}
+					);
+					var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
+					polyline.setAttributeNS ( null, "points", points );
+					polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Highway TravelNotes-OSM-Highway-" + way.tags.highway );
+					polyline.setAttributeNS ( null, "transform", "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
+					
+					m_Svg.appendChild ( polyline );
+				}
+			);
+			
+		};
+
+		/*
+		--- End of m_CreateWays function ---
+		*/
+
+		/*
+		--- m_CreateRoute function ------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateRoute = function ( ) {
+			
+			var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
+			polyline.setAttributeNS ( null, "points", m_Points );
+			polyline.setAttributeNS ( null, "fill", "none" );
+			polyline.setAttributeNS ( null, "stroke", "red" );
+			polyline.setAttributeNS ( null, "stroke-width", "6" );
+			polyline.setAttributeNS ( null, "transform",  "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
+			m_Svg.appendChild ( polyline );
+		};
+
+		/*
+		--- End of m_CreateRoute function ---
+		*/
+
+		/*
+		--- m_ParseResponse function ----------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ParseResponse = function ( returnOnOk, returnOnError ) {
+			
+			m_CreateMaps ( );
+
+			m_Svg = document.createElementNS ( "http://www.w3.org/2000/svg", "svg" );
+			m_Svg.setAttributeNS ( null, "viewBox", "" + m_SvgIconSize / 4 + " " + m_SvgIconSize / 4 + " " + m_SvgIconSize / 2 + " " + m_SvgIconSize / 2 );
+			var backgroundRect = document.createElementNS ( "http://www.w3.org/2000/svg", "rect" );
+			backgroundRect.setAttributeNS ( null, "class", "TravelNotes-SvgIcon-Background" );
+			backgroundRect.setAttributeNS ( null, "width", m_SvgIconSize.toFixed ( 0 ) );
+			backgroundRect.setAttributeNS ( null, "height", m_SvgIconSize.toFixed ( 0 ) );
+			m_Svg.appendChild ( backgroundRect );
+			
+			m_CreateRoute ( );
+			
+			m_CreateWays ( );
+			
+			var foregroundRect = document.createElementNS ( "http://www.w3.org/2000/svg", "rect" );
+			foregroundRect.setAttributeNS ( null, "class", "TravelNotes-SvgIcon-Foreground" );
+			foregroundRect.setAttributeNS ( null, "width", m_SvgIconSize.toFixed ( 0 ) );
+			foregroundRect.setAttributeNS ( null, "height", m_SvgIconSize.toFixed ( 0 ) );
+			m_Svg.appendChild ( foregroundRect );
+			
+			returnOnOk ( '' );
+		};
+		
+		/*
+		--- End of m_ParseResponse function ---
+		*/
+		
+		/*
+		--- m_StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = 5000;
+			
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+			
+			xmlHttpRequest.onreadystatechange = function ( ) {
+				if ( xmlHttpRequest.readyState === 4 ) {
+					if ( xmlHttpRequest.status === 200 ) {
+						try {
+							m_Response = JSON.parse ( xmlHttpRequest.responseText );
+						}
+						catch ( e ) {
+							returnOnError ( 'JSON parsing error' );
+						}
+						returnOnOk ( new Promise ( m_Promises [ m_NextPromise ++ ] ) );
+					}
+					else {
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};
+			
+			xmlHttpRequest.open ( "GET", m_XMLHttpRequestUrl, true );
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
+		
+		};
+		
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
+		
+		/*
+		--- m_ComputeRoute function -------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_ComputeRoute = function ( ) {
+			var route = m_DataSearchEngine.getRoute ( m_RouteObjId );
+
+			if ( ! route ) {
+				// Route not found...
+				return;
+			}
+			
+			// Searching the nearest itinerary point
+			var minDistance = Number.MAX_VALUE;
+			var nearestPointIndex = - 1;
+			var index = 0;
+			
+			// Iteration on the points. The collection is transformed to an array....
+			var itineraryPoints = route.itinerary.itineraryPoints.object;
+			itineraryPoints.forEach ( 
+				function ( itineraryPoint ) {
+					var pointDistance = m_IconLatLng.distanceTo ( L.latLng ( itineraryPoint.lat, itineraryPoint.lng ) );
+					if ( minDistance > pointDistance ) {
+						minDistance = pointDistance;
+						nearestPointIndex = index;
+					}
+					index ++;
+				}
+			);
+			
+			// The coordinates of the nearest point are used as center of the SVG
+			m_IconLatLng = L.latLng ( route.itinerary.itineraryPoints.getAt ( itineraryPoints [ nearestPointIndex ].objId ).latLng );
+			m_Delta = L.point ( m_SvgIconSize / 2, m_SvgIconSize / 2 ).subtract ( g_TravelNotesData.map.project ( m_IconLatLng, 17 ) );
+			
+			// Searching the itinerary points with a least 100 m and 10 m from the nearest point...
+			// First in the direction of the beginning and 100 m
+			index = nearestPointIndex - 1;
+			var distance = 0;
+			while ( ( 0 <= index ) && ( 100 > distance ) ) {
+				distance += itineraryPoints [ index ].distance;
+				index --;
+			}
+			var startPointIndex = index;
+			
+			// then  in the direction of the beginning and 10 m...
+			index = nearestPointIndex - 1;
+			distance = 0;
+			while ( ( 0 <= index ) && ( 10 > distance ) ) {
+				distance += itineraryPoints [ index ].distance;
+				index --;
+			}
+	
+			// ...the rotation is computed
+			var rotationPointIndex = index;
+			var nearestPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ nearestPointIndex ].lat, itineraryPoints [ nearestPointIndex ].lng ), 17 ).add ( m_Delta );
+			var rotationPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ rotationPointIndex ].lat, itineraryPoints [ rotationPointIndex ].lng ), 17 ).add ( m_Delta );
+			m_Rotation = Math.atan (  ( nearestPoint.y - rotationPoint.y ) / ( rotationPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
+			if ( 0 > m_Rotation ) {
+				m_Rotation += 360;
+			}
+			m_Rotation -= 270;
+			
+			if ( 0 > rotationPoint.x - nearestPoint.x ) {
+				m_Rotation += 180;
+			}
+
+			// ... then  in the direction of the end and 100 m
+			index = nearestPointIndex;
+			distance = 0;
+			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 100 > distance ) ) ) {
+				distance += itineraryPoints [ index ].distance;
+				index ++;
+			}
+			var endPointIndex = index;
+
+			// ... then  in the direction of the end and 10 m
+			index = nearestPointIndex;
+			distance = 0;
+			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 10 > distance ) ) ) {
+				distance += itineraryPoints [ index ].distance;
+				index ++;
+			}
+			var directionPointIndex = index;
+			
+			var directionPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ directionPointIndex ].lat, itineraryPoints [ directionPointIndex ].lng ), 17 ).add ( m_Delta );
+			m_Direction = Math.atan (  ( nearestPoint.y - directionPoint.y ) / ( directionPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
+			if ( 0 > directionPoint.x - nearestPoint.x ) {
+				m_Direction += 180;
+			}
+			
+			m_Direction -= m_Rotation;
+			while ( 0 > m_Direction ) {
+				m_Direction += 360;
+			}
+			while ( 360 < m_Direction ) {
+				m_Direction -= 360;
+			}
+console.log ( 'm_direction = ' + m_Direction );
+			// ... points for the SVG are created
+			m_Points = '';
+			for ( index = startPointIndex; index <= endPointIndex; index ++ ) {
+				var point = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ index ].lat, itineraryPoints [ index ].lng ), 17 ).add ( m_Delta );
+				m_Points += point.x.toFixed ( 0 ) + ',' + point.y.toFixed ( 0 ) + ' ';
+			}
+
+		};
+				
+		/*
+		--- End of m_ComputeRoute function ---
+		*/
+		
+		/*
+		--- m_GetSvgIcon function -------------------------------------------------------------------------------------
+
+		This function ...
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_GetSvgIcon = function ( iconLatLng, routeObjId, callback ) {
+			
+			// We verify that another request is not loaded
+			if ( s_RequestStarted ) {
+				return false;
+			}
+			s_RequestStarted = true;
+			
+			m_IconLatLng = L.latLng ( iconLatLng );
+			
+			m_RouteObjId = routeObjId;
+
+
+			m_Callback = callback;
+
+			m_Response = {};
+			m_Svg = null;
+			
+			m_ComputeRoute ( );
+			
+			m_XMLHttpRequestUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];way[highway](around:' + 
+			m_SvgIconSize + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
+			')->.a;(.a >;.a;);out;';
+			
+			m_NextPromise = 0;
+			m_Promises = [];
+			
+			m_Promises.push ( m_StartXMLHttpRequest );
+			m_Promises.push ( m_ParseResponse );
+			
+			new Promise ( m_Promises [ m_NextPromise ++ ] ).then (  m_EndOk, m_EndError  );
+		};
+		
+		/*
+		--- End of m_GetSvgIcon function ---
+		*/
+		
+		/*
+		--- svgIconFromOsmFactory object ------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				getSvgIcon : function ( iconLatLng, routeObjId, callback ) { return m_GetSvgIcon ( iconLatLng, routeObjId, callback ); }				
+			}
+		);
+	};
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = svgIconFromOsmFactory;
+	}
+
+}());
+
+/*
+--- End of svgIconFromOsmFactory.js file ------------------------------------------------------------------------------
+*/
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7}],39:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9825,7 +10358,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/HTMLViewsFactory":16,"../UI/ProvidersToolbarUI":20,"../UI/RouteEditorUI":21,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/ErrorEditor":30,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/DataSearchEngine":43,"../data/Route":50,"../util/Utilities":56,"./ErrorEditor":30,"./MapEditor":33,"./RouteEditor":36,"@mapbox/polyline":1}],39:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/HTMLViewsFactory":16,"../UI/ProvidersToolbarUI":20,"../UI/RouteEditorUI":21,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/ErrorEditor":30,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/DataSearchEngine":44,"../data/Route":51,"../util/Utilities":57,"./ErrorEditor":30,"./MapEditor":33,"./RouteEditor":36,"@mapbox/polyline":1}],40:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10189,9 +10722,9 @@ Tests ...
 /*
 --- End of WaypointEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":55}],40:[function(require,module,exports){
-arguments[4][39][0].apply(exports,arguments)
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":55,"dup":39}],41:[function(require,module,exports){
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":56}],41:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":56,"dup":40}],42:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -10713,7 +11246,7 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":45,"../data/Maneuver":46,"../data/Note":47,"../data/Route":50,"../data/WayPoint":54}],42:[function(require,module,exports){
+},{"../data/ItineraryPoint":46,"../data/Maneuver":47,"../data/Note":48,"../data/Route":51,"../data/WayPoint":55}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10827,7 +11360,9 @@ Tests ...
 					color : 'gray',
 					weight : 1
 				},
-				style : 'TravelNotes-NotesStyle'
+				style : 'TravelNotes-NotesStyle',
+				svgIconWidthScale : 10,
+				svgIconWidth : 200
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {
@@ -10972,11 +11507,11 @@ Tests ...
 --- End of Config.js file ---------------------------------------------------------------------------------------------
 */
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"dup":2}],44:[function(require,module,exports){
+},{"../L.TravelNotes":7,"dup":2}],45:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":41,"../data/ObjId":48,"../data/ObjType":49,"./Version":53,"dup":3}],45:[function(require,module,exports){
+},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":3}],46:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11094,7 +11629,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":48,"../data/ObjType":49,"./Version":53}],46:[function(require,module,exports){
+},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],47:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11225,7 +11760,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":48,"../data/ObjType":49,"./Version":53}],47:[function(require,module,exports){
+},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],48:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11425,7 +11960,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":48,"../data/ObjType":49,"./Version":53}],48:[function(require,module,exports){
+},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],49:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -11490,7 +12025,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11623,11 +12158,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"../data/Collection":41,"../data/Itinerary":44,"../data/ObjId":48,"../data/ObjType":49,"../data/Waypoint":55,"./Itinerary":44,"./Version":53,"dup":4}],51:[function(require,module,exports){
+},{"../L.TravelNotes":7,"../data/Collection":42,"../data/Itinerary":45,"../data/ObjId":49,"../data/ObjType":50,"../data/Waypoint":56,"./Itinerary":45,"./Version":54,"dup":4}],52:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../data/Collection":41,"../data/ObjId":48,"../data/ObjType":49,"./Version":53,"dup":5}],52:[function(require,module,exports){
+},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":5}],53:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11735,9 +12270,9 @@ Tests ...
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */
-},{"../data/Config":42,"../data/Travel":51,"../util/Utilities":56}],53:[function(require,module,exports){
+},{"../data/Config":43,"../data/Travel":52,"../util/Utilities":57}],54:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],54:[function(require,module,exports){
+},{"dup":6}],55:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11868,9 +12403,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":48,"../data/ObjType":49,"./Version":53}],55:[function(require,module,exports){
-arguments[4][54][0].apply(exports,arguments)
-},{"../data/ObjId":48,"../data/ObjType":49,"./Version":53,"dup":54}],56:[function(require,module,exports){
+},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],56:[function(require,module,exports){
+arguments[4][55][0].apply(exports,arguments)
+},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":55}],57:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
