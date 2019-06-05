@@ -335,63 +335,65 @@ Tests ...
 		heightInput.value = note.iconHeight;
 
 		// SVG icon from OSM
-		
-		var svgIconFromOsmFactory = require ( '../core/SvgIconFromOsmFactory' ) ( );
-		
-		var svgIconCallback = function ( data ) {
-			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
-			if ( data.direction < 35 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-			}
-			else if ( data.direction < 80 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
-			}
-			else if ( data.direction < 100 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
-			}
-			else if ( data.direction < 145 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
-			}
-			else if ( data.direction < 200 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
-			}
-			else if ( data.direction < 270 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
-			}
-			else if ( data.direction < 340 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
-			}
-			else {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-			}
-		};
-
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
-			},
-			iconDimensionsDiv
-		);
-		var SvgIconFromOsmInput =  htmlElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				className : 'TravelNotes-NoteDialog-CheckboxInput',
-				id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
-			},
-			iconDimensionsDiv
-		);
-		SvgIconFromOsmInput.addEventListener ( 
-			'change',
-			function ( event ) {
-				if ( SvgIconFromOsmInput.checked )
-				{
-					svgIconFromOsmFactory.getSvgIcon( note.latLng, routeObjId, svgIconCallback );
+console.log ( "_RouteObjId = " + _RouteObjId );		
+		if ( -1 < _RouteObjId ) {
+			var svgIconCallback = function ( data ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
+				if ( null !== data.direction ) {
+					if ( data.direction < 35 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+					}
+					else if ( data.direction < 80 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
+					}
+					else if ( data.direction < 100 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
+					}
+					else if ( data.direction < 145 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
+					}
+					else if ( data.direction < 200 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
+					}
+					else if ( data.direction < 270 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
+					}
+					else if ( data.direction < 340 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
+					}
+					else {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+					}
 				}
-			},
-			false
-		);
+			};
+
+			htmlElementsFactory.create (
+				'text',
+				{
+					data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
+				},
+				iconDimensionsDiv
+			);
+			var SvgIconFromOsmInput =  htmlElementsFactory.create (
+				'input',
+				{
+					type : 'checkbox',
+					className : 'TravelNotes-NoteDialog-CheckboxInput',
+					id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
+				},
+				iconDimensionsDiv
+			);
+			SvgIconFromOsmInput.addEventListener ( 
+				'change',
+				function ( event ) {
+					if ( SvgIconFromOsmInput.checked )
+					{
+						require ( '../core/SvgIconFromOsmFactory' ) ( ).getSvgIcon( note.latLng, routeObjId, svgIconCallback );
+					}
+				},
+				false
+			);
+		}
 		
 		// icon content
 		htmlElementsFactory.create ( 

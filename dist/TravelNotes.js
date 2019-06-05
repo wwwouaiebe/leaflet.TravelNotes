@@ -3972,63 +3972,65 @@ Tests ...
 		heightInput.value = note.iconHeight;
 
 		// SVG icon from OSM
-		
-		var svgIconFromOsmFactory = require ( '../core/SvgIconFromOsmFactory' ) ( );
-		
-		var svgIconCallback = function ( data ) {
-			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
-			if ( data.direction < 35 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-			}
-			else if ( data.direction < 80 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
-			}
-			else if ( data.direction < 100 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
-			}
-			else if ( data.direction < 145 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
-			}
-			else if ( data.direction < 200 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
-			}
-			else if ( data.direction < 270 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
-			}
-			else if ( data.direction < 340 ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
-			}
-			else {
-				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-			}
-		};
-
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
-			},
-			iconDimensionsDiv
-		);
-		var SvgIconFromOsmInput =  htmlElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				className : 'TravelNotes-NoteDialog-CheckboxInput',
-				id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
-			},
-			iconDimensionsDiv
-		);
-		SvgIconFromOsmInput.addEventListener ( 
-			'change',
-			function ( event ) {
-				if ( SvgIconFromOsmInput.checked )
-				{
-					svgIconFromOsmFactory.getSvgIcon( note.latLng, routeObjId, svgIconCallback );
+console.log ( "_RouteObjId = " + _RouteObjId );		
+		if ( -1 < _RouteObjId ) {
+			var svgIconCallback = function ( data ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
+				if ( null !== data.direction ) {
+					if ( data.direction < 35 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+					}
+					else if ( data.direction < 80 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
+					}
+					else if ( data.direction < 100 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
+					}
+					else if ( data.direction < 145 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
+					}
+					else if ( data.direction < 200 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
+					}
+					else if ( data.direction < 270 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
+					}
+					else if ( data.direction < 340 ) {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
+					}
+					else {
+						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
+					}
 				}
-			},
-			false
-		);
+			};
+
+			htmlElementsFactory.create (
+				'text',
+				{
+					data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
+				},
+				iconDimensionsDiv
+			);
+			var SvgIconFromOsmInput =  htmlElementsFactory.create (
+				'input',
+				{
+					type : 'checkbox',
+					className : 'TravelNotes-NoteDialog-CheckboxInput',
+					id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
+				},
+				iconDimensionsDiv
+			);
+			SvgIconFromOsmInput.addEventListener ( 
+				'change',
+				function ( event ) {
+					if ( SvgIconFromOsmInput.checked )
+					{
+						require ( '../core/SvgIconFromOsmFactory' ) ( ).getSvgIcon( note.latLng, routeObjId, svgIconCallback );
+					}
+				},
+				false
+			);
+		}
 		
 		// icon content
 		htmlElementsFactory.create ( 
@@ -9575,7 +9577,7 @@ Tests ...
 		var m_Delta = L.point ( 0, 0 );
 		var m_Points = '';
 		var m_Rotation = 0;
-		var m_Direction = 0;
+		var m_Direction = null;
 		
 		var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
 		
@@ -9702,9 +9704,7 @@ Tests ...
 			
 			var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
 			polyline.setAttributeNS ( null, "points", m_Points );
-			polyline.setAttributeNS ( null, "fill", "none" );
-			polyline.setAttributeNS ( null, "stroke", "red" );
-			polyline.setAttributeNS ( null, "stroke-width", "6" );
+			polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Itinerary" );
 			polyline.setAttributeNS ( null, "transform",  "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
 			m_Svg.appendChild ( polyline );
 		};
@@ -9714,40 +9714,31 @@ Tests ...
 		*/
 
 		/*
-		--- m_ParseResponse function ----------------------------------------------------------------------------------
+		--- m_createSvg function ----------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var m_ParseResponse = function ( returnOnOk, returnOnError ) {
+		var m_createSvg = function ( returnOnOk, returnOnError ) {
 			
 			m_CreateMaps ( );
 
 			m_Svg = document.createElementNS ( "http://www.w3.org/2000/svg", "svg" );
 			m_Svg.setAttributeNS ( null, "viewBox", "" + m_SvgIconSize / 4 + " " + m_SvgIconSize / 4 + " " + m_SvgIconSize / 2 + " " + m_SvgIconSize / 2 );
-			var backgroundRect = document.createElementNS ( "http://www.w3.org/2000/svg", "rect" );
-			backgroundRect.setAttributeNS ( null, "class", "TravelNotes-SvgIcon-Background" );
-			backgroundRect.setAttributeNS ( null, "width", m_SvgIconSize.toFixed ( 0 ) );
-			backgroundRect.setAttributeNS ( null, "height", m_SvgIconSize.toFixed ( 0 ) );
-			m_Svg.appendChild ( backgroundRect );
+			m_Svg.setAttributeNS ( null, "class", "TravelNotes-SvgIcon" );
 			
 			m_CreateRoute ( );
 			
 			m_CreateWays ( );
 			
-			var foregroundRect = document.createElementNS ( "http://www.w3.org/2000/svg", "rect" );
-			foregroundRect.setAttributeNS ( null, "class", "TravelNotes-SvgIcon-Foreground" );
-			foregroundRect.setAttributeNS ( null, "width", m_SvgIconSize.toFixed ( 0 ) );
-			foregroundRect.setAttributeNS ( null, "height", m_SvgIconSize.toFixed ( 0 ) );
-			m_Svg.appendChild ( foregroundRect );
 			
 			returnOnOk ( '' );
 		};
 		
 		/*
-		--- End of m_ParseResponse function ---
+		--- End of m_createSvg function ---
 		*/
 		
 		/*
@@ -9815,8 +9806,9 @@ Tests ...
 			var nearestPointIndex = - 1;
 			var index = 0;
 			
-			// Iteration on the points. The collection is transformed to an array....
+			// The collection is transformed to an array....
 			var itineraryPoints = route.itinerary.itineraryPoints.object;
+			// Iteration on the points...
 			itineraryPoints.forEach ( 
 				function ( itineraryPoint ) {
 					var pointDistance = m_IconLatLng.distanceTo ( L.latLng ( itineraryPoint.lat, itineraryPoint.lng ) );
@@ -9830,41 +9822,55 @@ Tests ...
 			
 			// The coordinates of the nearest point are used as center of the SVG
 			m_IconLatLng = L.latLng ( route.itinerary.itineraryPoints.getAt ( itineraryPoints [ nearestPointIndex ].objId ).latLng );
+
+			// and a delta computed for all points
 			m_Delta = L.point ( m_SvgIconSize / 2, m_SvgIconSize / 2 ).subtract ( g_TravelNotesData.map.project ( m_IconLatLng, 17 ) );
 			
-			// Searching the itinerary points with a least 100 m and 10 m from the nearest point...
-			// First in the direction of the beginning and 100 m
-			index = nearestPointIndex - 1;
+			var nearestPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ nearestPointIndex ].lat, itineraryPoints [ nearestPointIndex ].lng ), 17 ).add ( m_Delta );
+			
+			// Searching in the itinerary a point with a least a distance of 100 m of the nearest point in the origin direction.
+			// This point will be used to draw the itinerary in the SVG
+			index = nearestPointIndex;
 			var distance = 0;
-			while ( ( 0 <= index ) && ( 100 > distance ) ) {
+			while ( ( 0 <  index -- ) && ( 100 > distance ) ) {
 				distance += itineraryPoints [ index ].distance;
-				index --;
 			}
 			var startPointIndex = index;
 			
-			// then  in the direction of the beginning and 10 m...
-			index = nearestPointIndex - 1;
-			distance = 0;
-			while ( ( 0 <= index ) && ( 10 > distance ) ) {
-				distance += itineraryPoints [ index ].distance;
-				index --;
+			if ( 0 > startPointIndex ) {
+				// no point found. We use the first point
+				startPointIndex = 0;
 			}
-	
-			// ...the rotation is computed
-			var rotationPointIndex = index;
-			var nearestPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ nearestPointIndex ].lat, itineraryPoints [ nearestPointIndex ].lng ), 17 ).add ( m_Delta );
-			var rotationPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ rotationPointIndex ].lat, itineraryPoints [ rotationPointIndex ].lng ), 17 ).add ( m_Delta );
-			m_Rotation = Math.atan (  ( nearestPoint.y - rotationPoint.y ) / ( rotationPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
-			if ( 0 > m_Rotation ) {
-				m_Rotation += 360;
-			}
-			m_Rotation -= 270;
 			
-			if ( 0 > rotationPoint.x - nearestPoint.x ) {
-				m_Rotation += 180;
-			}
 
-			// ... then  in the direction of the end and 100 m
+			// Searching in the itinerary a point with a least a distance of 10 m of the nearest point in the origin direction.
+			// This point will be used to compute the rotation of the SVG
+			index = nearestPointIndex ;
+			distance = 0;
+			while ( ( 0 < index -- ) && ( 10 > distance ) ) {
+				distance += itineraryPoints [ index ].distance;
+			}
+			var rotationPointIndex = index;
+
+			if ( 0 <= rotationPointIndex ) {
+				// A point for rotation was found. The rotation is computed. 
+				// Reminder: 
+				// - the upper left corner is the 0, 0 point
+				// - the rotation point must be in the bottom of the SVG
+				// - rotation must be in degree
+				var rotationPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ rotationPointIndex ].lat, itineraryPoints [ rotationPointIndex ].lng ), 17 ).add ( m_Delta );
+				m_Rotation = Math.atan (  ( nearestPoint.y - rotationPoint.y ) / ( rotationPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
+				if ( 0 > m_Rotation ) {
+					m_Rotation += 360;
+				}
+				m_Rotation -= 270;
+				
+				if ( 0 > rotationPoint.x - nearestPoint.x ) {
+					m_Rotation += 180;
+				}
+			}
+			// Searching in the itinerary a point with a least a distance of 100 m of the nearest point in the end direction.
+			// This point will be used to draw the itinerary in the SVG
 			index = nearestPointIndex;
 			distance = 0;
 			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 100 > distance ) ) ) {
@@ -9872,8 +9878,13 @@ Tests ...
 				index ++;
 			}
 			var endPointIndex = index;
+			if ( endPointIndex >= itineraryPoints.length ) {
+				// no point found. We use the last point.
+				endPointIndex = itineraryPoints.length - 1;
+			}
 
-			// ... then  in the direction of the end and 10 m
+			// Searching in the itinerary a point with a least a distance of 10 m of the nearest point in the end direction.
+			// This point will be used to compute the direction to follow (left or right)
 			index = nearestPointIndex;
 			distance = 0;
 			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 10 > distance ) ) ) {
@@ -9882,27 +9893,36 @@ Tests ...
 			}
 			var directionPointIndex = index;
 			
-			var directionPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ directionPointIndex ].lat, itineraryPoints [ directionPointIndex ].lng ), 17 ).add ( m_Delta );
-			m_Direction = Math.atan (  ( nearestPoint.y - directionPoint.y ) / ( directionPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
-			if ( 0 > directionPoint.x - nearestPoint.x ) {
-				m_Direction += 180;
+			if ( directionPointIndex < itineraryPoints.length ) {
+				// A point for direction was found. The direction is computed. 
+				var directionPoint = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ directionPointIndex ].lat, itineraryPoints [ directionPointIndex ].lng ), 17 ).add ( m_Delta );
+				m_Direction = Math.atan (  ( nearestPoint.y - directionPoint.y ) / ( directionPoint.x - nearestPoint.x ) ) * 180 / Math.PI;
+				if ( 0 > directionPoint.x - nearestPoint.x ) {
+					m_Direction += 180;
+				}
+				m_Direction -= m_Rotation;
+				while ( 0 > m_Direction ) {
+					m_Direction += 360;
+				}
+				while ( 360 < m_Direction ) {
+					m_Direction -= 360;
+				}
+				if ( 0 > rotationPointIndex ) {
+					// a rotation point was not found. We use  direction as rotation and put the direction to null
+					m_Rotation = - m_Direction - 90;
+					m_Direction = null;
+				}
 			}
-			
-			m_Direction -= m_Rotation;
-			while ( 0 > m_Direction ) {
-				m_Direction += 360;
+			else {
+				m_Direction = null;
 			}
-			while ( 360 < m_Direction ) {
-				m_Direction -= 360;
-			}
-console.log ( 'm_direction = ' + m_Direction );
+
 			// ... points for the SVG are created
 			m_Points = '';
 			for ( index = startPointIndex; index <= endPointIndex; index ++ ) {
 				var point = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ index ].lat, itineraryPoints [ index ].lng ), 17 ).add ( m_Delta );
 				m_Points += point.x.toFixed ( 0 ) + ',' + point.y.toFixed ( 0 ) + ' ';
 			}
-
 		};
 				
 		/*
@@ -9945,7 +9965,7 @@ console.log ( 'm_direction = ' + m_Direction );
 			m_Promises = [];
 			
 			m_Promises.push ( m_StartXMLHttpRequest );
-			m_Promises.push ( m_ParseResponse );
+			m_Promises.push ( m_createSvg );
 			
 			new Promise ( m_Promises [ m_NextPromise ++ ] ).then (  m_EndOk, m_EndError  );
 		};
