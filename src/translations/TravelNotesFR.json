@@ -180,6 +180,10 @@
 		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}",
+		"msgstr" : "Note suivante dans&nbsp;:&nbsp;{distance}"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
 		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© Christian Guyette 2017</a>"
 	},

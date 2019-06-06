@@ -186,10 +186,12 @@ Tests ...
 			var notesIterator = route.notes.iterator;
 			var notesDone =  notesIterator.done;
 			var notesDistance = ! notesDone ? notesIterator.value.distance : Number.MAX_VALUE;
+			var previousNotesDistance = notesDistance;
 			
 			var maneuversIterator = route.itinerary.maneuvers.iterator;
 			var maneuversDone = maneuversIterator.done;
 			var maneuversDistance = 0;
+			
 			
 			while ( ! ( maneuversDone && notesDone ) ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
@@ -251,9 +253,22 @@ Tests ...
 						rowDiv.objId= require ( '../data/ObjId' ) ( );
 						rowDiv.latLng = notesIterator.value.latLng;
 						rowDiv.noteObjId = notesIterator.value.objId;
-						
+						previousNotesDistance = notesIterator.value.distance;
 						notesDone = notesIterator.done;
 						notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
+						if ( ! notesDone  ) {
+							var nextDistance = notesIterator.value.distance - previousNotesDistance;
+							if ( 2 < nextDistance ) {
+								_HTMLElementsFactory.create (
+									'div',
+									{ 
+										className : _ClassNamePrefix + 'NoteHtml-NextDistance',
+										innerHTML : _Translator.getText ( 'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}', { distance : _Utilities.formatDistance ( nextDistance ) } )
+									}, 
+									rowDiv.lastChild
+								);	
+							}
+						}
 					}
 				}	
 			}
