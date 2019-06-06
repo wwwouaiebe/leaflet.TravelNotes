@@ -162,11 +162,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				if ( 0 === distance ) {
 					return '';
 				} 
-				else if ( 1000 > distance ) {
-					return distance.toFixed ( 0 ) + '&nbsp;m';
-				}
 				else {
-					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 100 ) + '&nbsp;km';
+					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 10 ) + '&nbsp;km';
 				}
 			},
 			
