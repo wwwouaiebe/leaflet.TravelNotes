@@ -112,7 +112,6 @@ Tests ...
 					weight : 1
 				},
 				style : 'TravelNotes-NotesStyle',
-				svgIconWidthScale : 10,
 				svgIconWidth : 200
 			},
 			itineraryPointZoom: 17,

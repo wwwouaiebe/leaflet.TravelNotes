@@ -67,14 +67,9 @@ Tests ...
 				}, 
 				rowDiv
 			);
-			var iconWidthScale = 1;
 			if ( ( 'svg' === iconCell.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === _ClassNamePrefix ) ) {
-				iconWidthScale = require ( '../L.TravelNotes' ).config.note.svgIconWidthScale;
 				iconCell.firstChild.setAttributeNS ( null, "viewBox", "0 0 " + m_SvgIconSize + " " + m_SvgIconSize);
 			}
-			
-			
-			iconCell.setAttribute ( "style", "width:" + note.iconWidth * iconWidthScale + "px;" );
 			
 			var noteElement = _HTMLElementsFactory.create (
 				'div',
