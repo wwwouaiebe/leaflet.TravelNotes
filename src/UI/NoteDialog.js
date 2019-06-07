@@ -29,6 +29,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added reset button for address
+		- added svg icons
 Doc reviewed 20170929
 Tests ...
 
@@ -45,6 +46,7 @@ Tests ...
 	var _GlobalData = { editionButtons : [], preDefinedIconsList : [] };
 	var _Note;
 	var _RouteObjId;
+	var _ConfigNote = require ( '../L.TravelNotes' ).config.note;
 	
 	
 	/*
@@ -335,30 +337,29 @@ Tests ...
 		heightInput.value = note.iconHeight;
 
 		// SVG icon from OSM
-console.log ( "_RouteObjId = " + _RouteObjId );		
 		if ( -1 < _RouteObjId ) {
 			var svgIconCallback = function ( data ) {
 				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
 				if ( null !== data.direction ) {
-					if ( data.direction < 35 ) {
+					if ( data.direction < _ConfigNote.svgAnleMaxDirection.right ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
 					}
-					else if ( data.direction < 80 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.slightRight ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
 					}
-					else if ( data.direction < 100 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.continue ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
 					}
-					else if ( data.direction < 145 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.slightLeft ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
 					}
-					else if ( data.direction < 200 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.left ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
 					}
-					else if ( data.direction < 270 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.sharpLeft ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
 					}
-					else if ( data.direction < 340 ) {
+					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.sharpRight ) {
 						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
 					}
 					else {
@@ -595,7 +596,7 @@ console.log ( "_RouteObjId = " + _RouteObjId );
 		}
 
 		// geolocalization
-		if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+		if ( ( _ConfigNote.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
 			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
 		}
 		
