@@ -112,7 +112,17 @@ Tests ...
 					weight : 1
 				},
 				style : 'TravelNotes-NotesStyle',
-				svgIconWidth : 200
+				svgIconWidth : 200,
+				svgAnleMaxDirection:
+				{
+					right:35,
+					slightRight:80,
+					continue:100,
+					slightLeft:145,
+					left:200,
+					sharpLeft:270,
+					sharpRight:340
+				}
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {
