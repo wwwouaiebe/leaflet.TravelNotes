@@ -258,7 +258,7 @@ Tests ...
 						notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
 						if ( ! notesDone  ) {
 							var nextDistance = notesIterator.value.distance - previousNotesDistance;
-							if ( 2 < nextDistance ) {
+							if ( 9 < nextDistance ) {
 								_HTMLElementsFactory.create (
 									'div',
 									{ 

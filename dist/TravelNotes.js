@@ -180,6 +180,550 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
+--- RouteEditor.js file -------------------------------------------------------------------------------------------------
+This file contains:
+	- the RouteEditor object
+	- the module.exports implementation
+Changes:
+	- v1.0.0:
+		- created
+	- v1.1.0:
+		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
+		- Issue #30 : Add a context menu with delete command to the waypoints
+		- Issue #33 : Add a command to hide a route
+		- Issue #34 : Add a command to show all routes
+	- v1.3.0:
+		- added cutRoute method (not tested...)
+	- v1.4.0:
+		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- modified getClosestLatLngDistance to avoid crash on empty routes
+		- fixed issue #45
+Doc reviewed 20181218
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+( function ( ){
+	
+	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
+	
+	var s_ZoomToRoute = false;
+
+		
+	/*
+	--- routeEditor function ------------------------------------------------------------------------------------------
+
+	Patterns : Closure
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var routeEditor = function ( ) {
+		
+		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
+		var m_Translator = require ( '../UI/Translator' ) ( );
+		var m_NoteEditor = require ( '../core/NoteEditor' ) ( );
+		var m_MapEditor = require ( '../core/MapEditor' ) ( );
+		var m_RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+
+		/*
+		--- m_CutRoute function ---------------------------------------------------------------------------------------
+
+		This function cut a route at a given point
+		Warning: not tested, not used!!!
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CutRoute = function ( route, latLng ) {
+
+			// an array is created with 2 clones of the route
+			var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
+			routes [ 0 ].object = route.object;
+			routes [ 1 ].object = route.object;
+			
+			// and the itineraryPoints are removed
+			routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
+			routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
+			
+			// the distance between the origin and the cutting point is computed
+			var cuttingPointLatLngDistance = m_GetClosestLatLngDistance ( route, latLng );
+
+			// iteration on the itineraryPoints
+			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+			var iterationDistance = 0;
+			var itineraryPoint;
+			var previousItineraryPoint = null;
+			
+			var routeCounter = 0;
+			while ( ! itineraryPointIterator.done ) {
+				itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
+				itineraryPoint.object = itineraryPointIterator.value.object;
+				if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+					// we have passed the cutting point...
+					var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
+					// a new point is created at the cutting point position and added to the first route.
+					var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+					routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
+					routes [ 0 ].distance = iterationDistance - removedDistance;
+					if ( previousItineraryPoint ) {
+						previousItineraryPoint.distance -= removedDistance;
+					}
+
+					routeCounter = 1;
+					
+					// a new point is created at the cutting point position and added to the second route.
+					cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
+					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
+					cuttingPoint.distance = removedDistance;
+					routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
+					iterationDistance = removedDistance;
+				}
+				routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
+				iterationDistance +=itineraryPointIterator.value.distance;
+				previousItineraryPoint = itineraryPoint;
+			}
+			routes [ routeCounter ].distance = iterationDistance;
+
+			return routes;
+		};
+
+		/*
+		--- m_ComputeRouteDistances function -----------------------------------------------------------------------
+
+		This function compute the route, itineraryPoints and maneuvers distances
+		
+		parameters:
+		- route : the TravelNotes route object to be used
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ComputeRouteDistances = function ( route ) {
+			// Computing the distance between itineraryPoints
+			var itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
+			var maneuverIterator = route.itinerary.maneuvers.iterator;
+			var dummy = itineraryPointsIterator.done;
+			dummy = maneuverIterator.done;
+			var previousItineraryPoint = itineraryPointsIterator.value;
+			var previousManeuver = maneuverIterator.value;
+			previousManeuver.distance = 0;
+			dummy = maneuverIterator.done;
+			route.distance = 0;
+			route.duration = 0;
+			while ( ! itineraryPointsIterator.done ) {
+				previousItineraryPoint.distance = L.latLng ( previousItineraryPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+				if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
+					route.duration += previousManeuver.duration;
+					previousManeuver =  maneuverIterator.value;
+					maneuverIterator.value.distance = 0;
+					dummy = maneuverIterator.done;
+				}
+				route.distance += previousItineraryPoint.distance;
+				previousManeuver.distance += previousItineraryPoint.distance;
+				previousItineraryPoint = itineraryPointsIterator.value;
+			}
+		};
+
+		/*
+		--- m_GetClosestLatLngDistance function -----------------------------------------------------------------------
+
+		This function search the nearest point on a route from a given point and compute the distance
+		between the beginning of the route and the nearest point
+		
+		parameters:
+		- route : the TravelNotes route object to be used
+		- latLng : the coordinates of the point
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetClosestLatLngDistance = function ( route, latLng ) {
+			
+			if ( 0 === route.itinerary.itineraryPoints.length ) {
+				return null;
+			}
+			// an iterator on the route points is created...
+			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+			// ... and placed on the first point
+			var dummy = itineraryPointIterator.done;
+			// the smallest distance is initialized ...
+			var minDistance = Number.MAX_VALUE;
+			// projections of points are made
+			var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+			var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+			// variables initialization
+			var closestLatLng = null;
+			var closestDistance = 0;
+			var endSegmentDistance = itineraryPointIterator.value.distance;
+			// iteration on the route points
+			while ( ! itineraryPointIterator.done ) {
+				// projection of the second point...
+				var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				// and distance is computed
+				var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+				if ( distance < minDistance )
+				{
+					// we have found the smallest distance ... till now :-)
+					minDistance = distance;
+					// the nearest point is computed
+					closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+					// and the distance also
+					closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				}
+				// we prepare the iteration for the next point...
+				endSegmentDistance += itineraryPointIterator.value.distance;
+				point1 = point2;
+			}
+			
+			return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
+		};
+	
+		/*
+		--- m_SaveGpx function ----------------------------------------------------------------------------------------
+
+		This function save the currently edited route to a GPX file
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SaveGpx = function ( ) {
+			// initializations...
+			var tab0 = "\n";
+			var tab1 = "\n\t";
+			var tab2 = "\n\t\t";
+			var tab3 = "\n\t\t\t";
+			var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
+			
+			// header
+			var gpxString = "<?xml version='1.0'?>" + tab0;
+			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='leaflet.TravelNotes'>";
+
+			// waypoints
+			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done )
+			{
+				gpxString += 
+					tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
+					timeStamp + "/>";
+				
+			}
+			
+			// route
+			gpxString += tab1 + "<rte>";
+			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			while ( ! maneuverIterator.done ) {
+				var wayPoint = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+				var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
+				gpxString +=
+					tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
+			}
+			gpxString += tab1 + "</rte>";
+			
+			// track
+			gpxString += tab1 + "<trk>";
+			gpxString += tab2 + "<trkseg>";
+			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			while ( ! itineraryPointsIterator.done ) {
+				gpxString +=
+					tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
+			}
+			gpxString += tab2 + "</trkseg>";				
+			gpxString += tab1 + "</trk>";
+			
+			// eof
+			gpxString += tab0 + "</gpx>";
+			
+			// file is saved
+			var fileName = g_TravelNotesData.editedRoute.name;
+			if ( '' === fileName ) {
+				fileName = 'TravelNote';
+			}
+			fileName += '.gpx';
+			require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
+		};
+		
+		/*
+		--- m_GetRouteHTML function -----------------------------------------------------------------------------------
+
+		This function returns an HTML string with the route contents. This string will be used in the
+		route popup and on the roadbook page
+		
+		parameters:
+		- route : the TravelNotes route object
+		- classNamePrefix : a string that will be added to all the HTML classes
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GetRouteHTML = function ( route, classNamePrefix ) {
+			
+			var utilities = require ( '../util/Utilities' ) ( );
+
+			var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
+				route.name + 
+				'</div>';
+			if (0 !== route.distance ) {
+				returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
+					m_Translator.getText ( 'RouteEditor - Distance', { distance : utilities.formatDistance ( route.distance ) } ) + '</div>' +
+					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
+					m_Translator.getText ( 'RouteEditor - Duration', { duration : utilities.formatTime ( route.duration ) } ) + '</div>';
+			}
+			
+			return returnValue;
+		};
+			
+		/*
+		--- m_ChainRoutes function ------------------------------------------------------------------------------------
+
+		This function recompute the distances when routes are chained
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ChainRoutes = function ( ) {
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			var chainedDistance = 0;
+			while ( ! routesIterator.done ) {
+				if ( routesIterator.value.chain ) {
+					routesIterator.value.chainedDistance = chainedDistance;
+					chainedDistance += routesIterator.value.distance;
+				}
+				else {
+					routesIterator.value.chainedDistance = 0;
+				}
+				var notesIterator = routesIterator.value.notes.iterator;
+				while (! notesIterator.done ) {
+					notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
+				}
+			}
+		};
+			
+		/*
+		--- m_StartRouting function -----------------------------------------------------------------------------------
+
+		This function start the router
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_StartRouting = function ( ) {
+			if ( ! g_TravelNotesData.config.routing.auto ) {
+				return;
+			}
+			s_ZoomToRoute = 0 === g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length;
+			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
+		};
+			
+			
+		/*
+		--- m_EndRouting function -------------------------------------------------------------------------------------
+
+		This function is called by the router when a routing operation is successfully finished
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_EndRouting = function ( ) {
+			// the previous route is removed from the leaflet map
+			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			
+			// the position of the notes linked to the route is recomputed
+			var notesIterator = g_TravelNotesData.editedRoute.notes.iterator;
+			while ( ! notesIterator.done ) {
+				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.editedRoute, notesIterator.value.latLng );
+				notesIterator.value.latLng = latLngDistance.latLng;
+				notesIterator.value.distance = latLngDistance.distance;
+			}
+			
+			// and the notes sorted
+			g_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+			
+			// the new route is added to the map
+			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			if ( s_ZoomToRoute ) {
+				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
+			}
+			
+			// and the itinerary and waypoints are displayed
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+			m_RouteEditorUI.setWayPointsList ( );
+			
+			// the HTML page is adapted ( depending of the config.... )
+			m_ChainRoutes ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
+
+		/*
+		--- m_SaveEdition function ------------------------------------------------------------------------------------
+
+		This function save the current edited route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SaveEdition = function ( ) {
+			// the edited route is cloned
+			var clonedRoute = require ( '../data/Route' ) ( );
+			clonedRoute.object = g_TravelNotesData.editedRoute.object;
+			// and the initial route replaced with the clone
+			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
+			g_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
+			m_CancelEdition ( );
+		};
+			
+		/*
+		--- m_CancelEdition function ----------------------------------------------------------------------------------
+
+		This function cancel the current edited route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CancelEdition = function ( ) {
+			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+				m_MapEditor.addRoute ( m_DataSearchEngine.getRoute ( g_TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+			}
+
+			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.routeEdition.routeChanged = false;
+			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
+			m_RouteEditorUI.setWayPointsList ( );
+			m_RouteEditorUI .reduce ( );
+			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+			m_ChainRoutes ( );
+			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
+		};
+		
+		/*
+		--- m_RouteProperties function --------------------------------------------------------------------------------
+
+		This function opens the RouteProperties dialog
+		
+		parameters:
+		- routeObjId : 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_RouteProperties = function ( routeObjId ) {
+			var route = m_DataSearchEngine.getRoute ( routeObjId );
+			require ( '../UI/RoutePropertiesDialog' ) ( route );
+		};
+			
+		/*
+		--- m_HideRoute function --------------------------------------------------------------------------------------
+
+		This function hide a route on the map
+		
+		parameters:
+		- routeObjId : the route objId that was clicked
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_HideRoute = function ( routeObjId ) {
+			var route = m_DataSearchEngine.getRoute ( routeObjId );
+			if ( route ) {
+				m_MapEditor.removeRoute ( route, true, true );
+				route.hidden = true;
+			}
+		};
+			
+		/*
+		--- m_ShowRoutes function -------------------------------------------------------------------------------------
+
+		This function show all the hidden routes
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_ShowRoutes = function ( ) {
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if ( routesIterator.value.hidden ) {
+					m_MapEditor.addRoute ( routesIterator.value, true, true, false );
+				}
+			}
+		};
+
+		/*
+		--- routeEditor object ----------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		return Object.seal (
+			{
+				
+				cutRoute : function ( route, latLng ) { return m_CutRoute ( route, latLng ); },
+				
+				computeRouteDistances : function ( route ) { m_ComputeRouteDistances ( route ); },
+
+				getClosestLatLngDistance : function ( route, latLng ) { return m_GetClosestLatLngDistance ( route, latLng ); },
+
+				saveGpx : function ( ) { m_SaveGpx ( ); },
+				
+				getRouteHTML : function ( route, classNamePrefix ) { return m_GetRouteHTML ( route, classNamePrefix ); },
+
+				chainRoutes : function ( ) { m_ChainRoutes ( ); },
+				
+				startRouting : function ( ) { m_StartRouting ( ); },
+				
+				endRouting : function ( ) { m_EndRouting ( ); },
+
+				saveEdition : function ( ) { m_SaveEdition ( ); },
+				
+				cancelEdition : function ( ) { m_CancelEdition ( ); },
+				
+				routeProperties : function ( routeObjId ) { m_RouteProperties ( routeObjId ); },
+			
+				hideRoute : function ( routeObjId ) { m_HideRoute ( routeObjId ); },
+
+				showRoutes : function ( ) { m_ShowRoutes ( ); },
+			}
+		);
+	};
+
+	/*
+	--- Exports -------------------------------------------------------------------------------------------------------
+	*/
+
+	if ( typeof module !== 'undefined' && module.exports ) {
+		module.exports = routeEditor;
+	}
+
+}());
+
+/*
+--- End of RouteEditor.js file ----------------------------------------------------------------------------------------
+*/
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/RouteEditorUI":22,"../UI/RoutePropertiesDialog":23,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/Router":38,"../core/TravelEditor":40,"../data/ItineraryPoint":47,"../data/Route":52,"../util/Utilities":58}],3:[function(require,module,exports){
+/*
+Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
 --- DataSearchEngine.js file ------------------------------------------------------------------------------------------
 This file contains:
 	- the DataSearchEngine object
@@ -307,7 +851,7 @@ Tests ...
 /*
 --- End of DataSearchEngine.js file -----------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7}],3:[function(require,module,exports){
+},{"../L.TravelNotes":8}],4:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -455,7 +999,7 @@ Tests ...
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":6}],4:[function(require,module,exports){
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":7}],5:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -635,7 +1179,7 @@ Tests ...
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../data/Collection":42,"../data/Itinerary":45,"../data/ObjId":49,"../data/ObjType":50,"../data/Waypoint":56,"./Itinerary":3,"./Version":6}],5:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../data/Collection":43,"../data/Itinerary":46,"../data/ObjId":50,"../data/ObjType":51,"../data/Waypoint":57,"./Itinerary":4,"./Version":7}],6:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -763,7 +1307,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":6}],6:[function(require,module,exports){
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":7}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -804,7 +1348,7 @@ Doc reviewed 20181216
 /*
 --- End of Version.js file --------------------------------------------------------------------------------------------
 */
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1216,7 +1760,7 @@ Tests ...
 --- End of L.TravelNotes.js file --------------------------------------------------------------------------------------
 */
 
-},{"./UI/ContextMenu":11,"./UI/ContextMenuFactory":12,"./UI/RouteEditorUI":21,"./UI/Translator":25,"./UI/TravelEditorUI":26,"./UI/UserInterface":28,"./UI/baseDialog":29,"./core/FileLoader":31,"./core/TravelEditor":39,"./data/ItineraryPoint":46,"./data/Maneuver":47,"./data/Route":51,"./data/Travel":52,"./data/TravelNotesData":53,"./data/Version":54,"./util/Utilities":57}],8:[function(require,module,exports){
+},{"./UI/ContextMenu":12,"./UI/ContextMenuFactory":13,"./UI/RouteEditorUI":22,"./UI/Translator":26,"./UI/TravelEditorUI":27,"./UI/UserInterface":29,"./UI/baseDialog":30,"./core/FileLoader":32,"./core/TravelEditor":40,"./data/ItineraryPoint":47,"./data/Maneuver":48,"./data/Route":52,"./data/Travel":53,"./data/TravelNotesData":54,"./data/Version":55,"./util/Utilities":58}],9:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1298,7 +1842,7 @@ Tests ...
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":25,"../data/Version":54,"./HTMLElementsFactory":15}],9:[function(require,module,exports){
+},{"../UI/BaseDialog":10,"../UI/Translator":26,"../data/Version":55,"./HTMLElementsFactory":16}],10:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1567,7 +2111,7 @@ Tests ...
 /*
 --- End of BaseDialog.js file -----------------------------------------------------------------------------------------
 */
-},{"../UI/Translator":25,"./HTMLElementsFactory":15}],10:[function(require,module,exports){
+},{"../UI/Translator":26,"./HTMLElementsFactory":16}],11:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -1884,7 +2428,7 @@ Tests ...
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/BaseDialog":9,"../UI/Translator":25,"./HTMLElementsFactory":15}],11:[function(require,module,exports){
+},{"../UI/BaseDialog":10,"../UI/Translator":26,"./HTMLElementsFactory":16}],12:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2168,7 +2712,7 @@ Tests ...
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------
 */	
 
-},{"../L.TravelNotes":7,"./HTMLElementsFactory":15,"./Translator":25}],12:[function(require,module,exports){
+},{"../L.TravelNotes":8,"./HTMLElementsFactory":16,"./Translator":26}],13:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2463,7 +3007,7 @@ Tests ...
 /*
 --- End of ContextMenuFactory.js file ---------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/AboutDialog":8,"../UI/Translator":25,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":39,"../core/waypointEditor":41,"../data/DataSearchEngine":44}],13:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/AboutDialog":9,"../UI/Translator":26,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/RouteEditor":37,"../core/TravelEditor":40,"../core/waypointEditor":42,"../data/DataSearchEngine":45}],14:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2783,7 +3327,7 @@ Tests ...
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
 */	
-},{"../UI/HTMLElementsFactory":15,"../UI/ItineraryPaneUI":18,"../UI/SearchPaneUI":23,"../UI/Translator":25,"../UI/TravelNotesPaneUI":27}],14:[function(require,module,exports){
+},{"../UI/HTMLElementsFactory":16,"../UI/ItineraryPaneUI":19,"../UI/SearchPaneUI":24,"../UI/Translator":26,"../UI/TravelNotesPaneUI":28}],15:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -2931,7 +3475,7 @@ Tests ...
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"./HTMLElementsFactory":15,"./Translator":25}],15:[function(require,module,exports){
+},{"../L.TravelNotes":8,"./HTMLElementsFactory":16,"./Translator":26}],16:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3026,7 +3570,7 @@ Tests ...
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
 */	
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3287,7 +3831,7 @@ Tests ...
 						notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
 						if ( ! notesDone  ) {
 							var nextDistance = notesIterator.value.distance - previousNotesDistance;
-							if ( 2 < nextDistance ) {
+							if ( 9 < nextDistance ) {
 								_HTMLElementsFactory.create (
 									'div',
 									{ 
@@ -3415,9 +3959,9 @@ Tests ...
 /*
 --- End of HTMLViewsFactory.js file --------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HTMLElementsFactory":15,"../UI/Translator":25,"../core/NoteEditor":34,"../core/RouteEditor":36,"../data/ObjId":49,"../util/Utilities":57}],17:[function(require,module,exports){
-arguments[4][15][0].apply(exports,arguments)
-},{"dup":15}],18:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/HTMLElementsFactory":16,"../UI/Translator":26,"../core/NoteEditor":35,"../core/RouteEditor":37,"../data/ObjId":50,"../util/Utilities":58}],18:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"dup":16}],19:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -3644,7 +4188,7 @@ Tests ...
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------
 */		
-},{"../UI/HTMLViewsFactory":16,"../core/MapEditor":33,"../core/NoteEditor":34}],19:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":17,"../core/MapEditor":34,"../core/NoteEditor":35}],20:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4263,7 +4807,7 @@ console.log ( "_RouteObjId = " + _RouteObjId );
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/BaseDialog":9,"../UI/Translator":25,"../core/GeoCoder":32,"../core/NoteEditor":34,"../core/SvgIconFromOsmFactory":38,"./HTMLElementsFactory":15}],20:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/BaseDialog":10,"../UI/Translator":26,"../core/GeoCoder":33,"../core/NoteEditor":35,"../core/SvgIconFromOsmFactory":39,"./HTMLElementsFactory":16}],21:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -4615,7 +5159,7 @@ Tests ...
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/HtmlElementsFactory":17,"../core/RouteEditor":36}],21:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/HtmlElementsFactory":18,"../core/RouteEditor":37}],22:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5045,7 +5589,7 @@ Tests ...
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/RouteEditor":36,"../core/WaypointEditor":40,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],22:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../core/RouteEditor":37,"../core/WaypointEditor":41,"./HTMLElementsFactory":16,"./SortableList":25,"./Translator":26}],23:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5216,7 +5760,7 @@ Tests ...
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
 */	
-},{"../L.TravelNotes":7,"../UI/ColorDialog":10,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":39,"./HTMLElementsFactory":15}],23:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/ColorDialog":11,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16}],24:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -5524,7 +6068,7 @@ Tests ...
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/OsmSearchEngine":35,"../data/ObjId":49,"./HTMLElementsFactory":15,"./Translator":25}],24:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/OsmSearchEngine":36,"../data/ObjId":50,"./HTMLElementsFactory":16,"./Translator":26}],25:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -5815,7 +6359,7 @@ Tests ...
 --- End of SortableList.js file ---------------------------------------------------------------------------------------
 */	
 
-},{"../UI/Translator":25,"./HTMLElementsFactory":15}],25:[function(require,module,exports){
+},{"../UI/Translator":26,"./HTMLElementsFactory":16}],26:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -5895,7 +6439,7 @@ Tests ...
 */	
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6424,7 +6968,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/FileLoader":31,"../core/RouteEditor":36,"../core/TravelEditor":39,"./HTMLElementsFactory":15,"./SortableList":24,"./Translator":25}],27:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../core/FileLoader":32,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16,"./SortableList":25,"./Translator":26}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6661,7 +7205,7 @@ Tests ...
 /*
 --- End of TravelNotesPaneUI.js file ----------------------------------------------------------------------------------
 */		
-},{"../UI/HTMLViewsFactory":16,"../core/MapEditor":33,"../core/NoteEditor":34}],28:[function(require,module,exports){
+},{"../UI/HTMLViewsFactory":17,"../core/MapEditor":34,"../core/NoteEditor":35}],29:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6770,9 +7314,9 @@ Tests ...
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------
 */	
-},{"./DataPanesUI":13,"./ErrorEditorUI":14,"./HTMLElementsFactory":15,"./ProvidersToolbarUI":20,"./RouteEditorUI":21,"./TravelEditorUI":26}],29:[function(require,module,exports){
-arguments[4][9][0].apply(exports,arguments)
-},{"../UI/Translator":25,"./HTMLElementsFactory":15,"dup":9}],30:[function(require,module,exports){
+},{"./DataPanesUI":14,"./ErrorEditorUI":15,"./HTMLElementsFactory":16,"./ProvidersToolbarUI":21,"./RouteEditorUI":22,"./TravelEditorUI":27}],30:[function(require,module,exports){
+arguments[4][10][0].apply(exports,arguments)
+},{"../UI/Translator":26,"./HTMLElementsFactory":16,"dup":10}],31:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6838,7 +7382,7 @@ Tests ...
 /*
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../UI/ErrorEditorUI":14}],31:[function(require,module,exports){
+},{"../UI/ErrorEditorUI":15}],32:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -6954,6 +7498,8 @@ Tests ...
 			while ( ! notesIterator.done ) {
 				g_TravelNotesData.travel.notes.add ( notesIterator.value );
 			}
+			
+			require ( '../Core/RouteEditor' ) ( ).chainRoutes ( );
 		
 			m_Display ( );
 		};
@@ -7113,7 +7659,7 @@ Tests ...
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------
 */	
-},{"../Data/Travel":5,"../L.TravelNotes":7,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/TravelEditor":39,"@mapbox/polyline":1}],32:[function(require,module,exports){
+},{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -7220,7 +7766,7 @@ Tests ...
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7}],33:[function(require,module,exports){
+},{"../L.TravelNotes":8}],34:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8047,7 +8593,7 @@ Tests ...
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/ContextMenu":11,"../UI/ContextMenuFactory":12,"../UI/DataPanesUI":13,"../core/NoteEditor":34,"../core/RouteEditor":36,"../core/TravelEditor":39,"../core/WaypointEditor":40,"../util/Utilities":57}],34:[function(require,module,exports){
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/ContextMenu":12,"../UI/ContextMenuFactory":13,"../UI/DataPanesUI":14,"../core/NoteEditor":35,"../core/RouteEditor":37,"../core/TravelEditor":40,"../core/WaypointEditor":41,"../util/Utilities":58}],35:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8571,7 +9117,7 @@ Tests ...
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/NoteDialog":19,"../UI/Translator":25,"../core/MapEditor":33,"../core/RouteEditor":36,"../core/TravelEditor":39,"../data/Note":48,"../util/Utilities":57}],35:[function(require,module,exports){
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/NoteDialog":20,"../UI/Translator":26,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"../data/Note":49,"../util/Utilities":58}],36:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -8791,551 +9337,9 @@ Tests ...
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------
 */		
-},{"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../core/MapEditor":33,"../data/ObjId":49}],36:[function(require,module,exports){
-/*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
-
-This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software Foundation;
-either version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/*
---- RouteEditor.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the RouteEditor object
-	- the module.exports implementation
-Changes:
-	- v1.0.0:
-		- created
-	- v1.1.0:
-		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
-		- Issue #30 : Add a context menu with delete command to the waypoints
-		- Issue #33 : Add a command to hide a route
-		- Issue #34 : Add a command to show all routes
-	- v1.3.0:
-		- added cutRoute method (not tested...)
-	- v1.4.0:
-		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-		- modified getClosestLatLngDistance to avoid crash on empty routes
-		- fixed issue #45
-Doc reviewed 20181218
-Tests ...
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-( function ( ){
-	
-	'use strict';
-
-	var g_TravelNotesData = require ( '../L.TravelNotes' );
-	
-	var s_ZoomToRoute = false;
-
-		
-	/*
-	--- routeEditor function ------------------------------------------------------------------------------------------
-
-	Patterns : Closure
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var routeEditor = function ( ) {
-		
-		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
-		var m_Translator = require ( '../UI/Translator' ) ( );
-		var m_NoteEditor = require ( '../core/NoteEditor' ) ( );
-		var m_MapEditor = require ( '../core/MapEditor' ) ( );
-		var m_RouteEditorUI = require ( '../UI/RouteEditorUI' ) ( );
-
-		/*
-		--- m_CutRoute function ---------------------------------------------------------------------------------------
-
-		This function cut a route at a given point
-		Warning: not tested, not used!!!
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_CutRoute = function ( route, latLng ) {
-
-			// an array is created with 2 clones of the route
-			var routes = [ require ( '../data/Route' ) ( ), require ( '../data/Route' ) ( ) ];
-			routes [ 0 ].object = route.object;
-			routes [ 1 ].object = route.object;
-			
-			// and the itineraryPoints are removed
-			routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
-			routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
-			
-			// the distance between the origin and the cutting point is computed
-			var cuttingPointLatLngDistance = m_GetClosestLatLngDistance ( route, latLng );
-
-			// iteration on the itineraryPoints
-			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-			var iterationDistance = 0;
-			var itineraryPoint;
-			var previousItineraryPoint = null;
-			
-			var routeCounter = 0;
-			while ( ! itineraryPointIterator.done ) {
-				itineraryPoint = require ( '../data/ItineraryPoint' ) ( );
-				itineraryPoint.object = itineraryPointIterator.value.object;
-				if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
-					// we have passed the cutting point...
-					var removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
-					// a new point is created at the cutting point position and added to the first route.
-					var cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
-					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-					routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
-					routes [ 0 ].distance = iterationDistance - removedDistance;
-					if ( previousItineraryPoint ) {
-						previousItineraryPoint.distance -= removedDistance;
-					}
-
-					routeCounter = 1;
-					
-					// a new point is created at the cutting point position and added to the second route.
-					cuttingPoint = require ( '../data/ItineraryPoint' ) ( );
-					cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-					cuttingPoint.distance = removedDistance;
-					routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
-					iterationDistance = removedDistance;
-				}
-				routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
-				iterationDistance +=itineraryPointIterator.value.distance;
-				previousItineraryPoint = itineraryPoint;
-			}
-			routes [ routeCounter ].distance = iterationDistance;
-
-			return routes;
-		};
-
-		/*
-		--- m_ComputeRouteDistances function -----------------------------------------------------------------------
-
-		This function compute the route, itineraryPoints and maneuvers distances
-		
-		parameters:
-		- route : the TravelNotes route object to be used
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_ComputeRouteDistances = function ( route ) {
-			// Computing the distance between itineraryPoints
-			var itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
-			var maneuverIterator = route.itinerary.maneuvers.iterator;
-			var dummy = itineraryPointsIterator.done;
-			dummy = maneuverIterator.done;
-			var previousItineraryPoint = itineraryPointsIterator.value;
-			var previousManeuver = maneuverIterator.value;
-			previousManeuver.distance = 0;
-			dummy = maneuverIterator.done;
-			route.distance = 0;
-			route.duration = 0;
-			while ( ! itineraryPointsIterator.done ) {
-				previousItineraryPoint.distance = L.latLng ( previousItineraryPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
-				if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
-					route.duration += previousManeuver.duration;
-					previousManeuver =  maneuverIterator.value;
-					maneuverIterator.value.distance = 0;
-					dummy = maneuverIterator.done;
-				}
-				route.distance += previousItineraryPoint.distance;
-				previousManeuver.distance += previousItineraryPoint.distance;
-				previousItineraryPoint = itineraryPointsIterator.value;
-			}
-		};
-
-		/*
-		--- m_GetClosestLatLngDistance function -----------------------------------------------------------------------
-
-		This function search the nearest point on a route from a given point and compute the distance
-		between the beginning of the route and the nearest point
-		
-		parameters:
-		- route : the TravelNotes route object to be used
-		- latLng : the coordinates of the point
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_GetClosestLatLngDistance = function ( route, latLng ) {
-			
-			if ( 0 === route.itinerary.itineraryPoints.length ) {
-				return null;
-			}
-			// an iterator on the route points is created...
-			var itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-			// ... and placed on the first point
-			var dummy = itineraryPointIterator.done;
-			// the smallest distance is initialized ...
-			var minDistance = Number.MAX_VALUE;
-			// projections of points are made
-			var point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
-			var point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-			// variables initialization
-			var closestLatLng = null;
-			var closestDistance = 0;
-			var endSegmentDistance = itineraryPointIterator.value.distance;
-			// iteration on the route points
-			while ( ! itineraryPointIterator.done ) {
-				// projection of the second point...
-				var point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-				// and distance is computed
-				var distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-				if ( distance < minDistance )
-				{
-					// we have found the smallest distance ... till now :-)
-					minDistance = distance;
-					// the nearest point is computed
-					closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
-					// and the distance also
-					closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-				}
-				// we prepare the iteration for the next point...
-				endSegmentDistance += itineraryPointIterator.value.distance;
-				point1 = point2;
-			}
-			
-			return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
-		};
-	
-		/*
-		--- m_SaveGpx function ----------------------------------------------------------------------------------------
-
-		This function save the currently edited route to a GPX file
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SaveGpx = function ( ) {
-			// initializations...
-			var tab0 = "\n";
-			var tab1 = "\n\t";
-			var tab2 = "\n\t\t";
-			var tab3 = "\n\t\t\t";
-			var timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
-			
-			// header
-			var gpxString = "<?xml version='1.0'?>" + tab0;
-			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='leaflet.TravelNotes'>";
-
-			// waypoints
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
-			while ( ! wayPointsIterator.done )
-			{
-				gpxString += 
-					tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
-					timeStamp + "/>";
-				
-			}
-			
-			// route
-			gpxString += tab1 + "<rte>";
-			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
-			while ( ! maneuverIterator.done ) {
-				var wayPoint = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
-				var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
-				gpxString +=
-					tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
-			}
-			gpxString += tab1 + "</rte>";
-			
-			// track
-			gpxString += tab1 + "<trk>";
-			gpxString += tab2 + "<trkseg>";
-			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
-			while ( ! itineraryPointsIterator.done ) {
-				gpxString +=
-					tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
-			}
-			gpxString += tab2 + "</trkseg>";				
-			gpxString += tab1 + "</trk>";
-			
-			// eof
-			gpxString += tab0 + "</gpx>";
-			
-			// file is saved
-			var fileName = g_TravelNotesData.editedRoute.name;
-			if ( '' === fileName ) {
-				fileName = 'TravelNote';
-			}
-			fileName += '.gpx';
-			require ( '../util/Utilities' ) ( ).saveFile ( fileName, gpxString );
-		};
-		
-		/*
-		--- m_GetRouteHTML function -----------------------------------------------------------------------------------
-
-		This function returns an HTML string with the route contents. This string will be used in the
-		route popup and on the roadbook page
-		
-		parameters:
-		- route : the TravelNotes route object
-		- classNamePrefix : a string that will be added to all the HTML classes
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_GetRouteHTML = function ( route, classNamePrefix ) {
-			
-			var utilities = require ( '../util/Utilities' ) ( );
-
-			var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
-				route.name + 
-				'</div>';
-			if (0 !== route.distance ) {
-				returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
-					m_Translator.getText ( 'RouteEditor - Distance', { distance : utilities.formatDistance ( route.distance ) } ) + '</div>' +
-					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
-					m_Translator.getText ( 'RouteEditor - Duration', { duration : utilities.formatTime ( route.duration ) } ) + '</div>';
-			}
-			
-			return returnValue;
-		};
-			
-		/*
-		--- m_ChainRoutes function ------------------------------------------------------------------------------------
-
-		This function recompute the distances when routes are chained
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_ChainRoutes = function ( ) {
-			var routesIterator = g_TravelNotesData.travel.routes.iterator;
-			var chainedDistance = 0;
-			while ( ! routesIterator.done ) {
-				if ( routesIterator.value.chain ) {
-					routesIterator.value.chainedDistance = chainedDistance;
-					chainedDistance += routesIterator.value.distance;
-				}
-				else {
-					routesIterator.value.chainedDistance = 0;
-				}
-				var notesIterator = routesIterator.value.notes.iterator;
-				while (! notesIterator.done ) {
-					notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
-				}
-			}
-		};
-			
-		/*
-		--- m_StartRouting function -----------------------------------------------------------------------------------
-
-		This function start the router
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_StartRouting = function ( ) {
-			if ( ! g_TravelNotesData.config.routing.auto ) {
-				return;
-			}
-			s_ZoomToRoute = 0 === g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length;
-			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
-		};
-			
-			
-		/*
-		--- m_EndRouting function -------------------------------------------------------------------------------------
-
-		This function is called by the router when a routing operation is successfully finished
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_EndRouting = function ( ) {
-			// the previous route is removed from the leaflet map
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
-			
-			// the position of the notes linked to the route is recomputed
-			var notesIterator = g_TravelNotesData.editedRoute.notes.iterator;
-			while ( ! notesIterator.done ) {
-				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.editedRoute, notesIterator.value.latLng );
-				notesIterator.value.latLng = latLngDistance.latLng;
-				notesIterator.value.distance = latLngDistance.distance;
-			}
-			
-			// and the notes sorted
-			g_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
-			
-			// the new route is added to the map
-			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
-			if ( s_ZoomToRoute ) {
-				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
-			}
-			
-			// and the itinerary and waypoints are displayed
-			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
-			m_RouteEditorUI.setWayPointsList ( );
-			
-			// the HTML page is adapted ( depending of the config.... )
-			m_ChainRoutes ( );
-			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-		};
-
-		/*
-		--- m_SaveEdition function ------------------------------------------------------------------------------------
-
-		This function save the current edited route
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SaveEdition = function ( ) {
-			// the edited route is cloned
-			var clonedRoute = require ( '../data/Route' ) ( );
-			clonedRoute.object = g_TravelNotesData.editedRoute.object;
-			// and the initial route replaced with the clone
-			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
-			g_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
-			m_CancelEdition ( );
-		};
-			
-		/*
-		--- m_CancelEdition function ----------------------------------------------------------------------------------
-
-		This function cancel the current edited route
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_CancelEdition = function ( ) {
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				m_MapEditor.addRoute ( m_DataSearchEngine.getRoute ( g_TravelNotesData.routeEdition.routeInitialObjId ), true, false );
-			}
-
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-			g_TravelNotesData.routeEdition.routeChanged = false;
-			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
-			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
-			m_RouteEditorUI.setWayPointsList ( );
-			m_RouteEditorUI .reduce ( );
-			require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
-			m_ChainRoutes ( );
-			require ( '../core/TravelEditor' ) ( ).updateRoadBook ( );
-		};
-		
-		/*
-		--- m_RouteProperties function --------------------------------------------------------------------------------
-
-		This function opens the RouteProperties dialog
-		
-		parameters:
-		- routeObjId : 
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_RouteProperties = function ( routeObjId ) {
-			var route = m_DataSearchEngine.getRoute ( routeObjId );
-			require ( '../UI/RoutePropertiesDialog' ) ( route );
-		};
-			
-		/*
-		--- m_HideRoute function --------------------------------------------------------------------------------------
-
-		This function hide a route on the map
-		
-		parameters:
-		- routeObjId : the route objId that was clicked
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_HideRoute = function ( routeObjId ) {
-			var route = m_DataSearchEngine.getRoute ( routeObjId );
-			if ( route ) {
-				m_MapEditor.removeRoute ( route, true, true );
-				route.hidden = true;
-			}
-		};
-			
-		/*
-		--- m_ShowRoutes function -------------------------------------------------------------------------------------
-
-		This function show all the hidden routes
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_ShowRoutes = function ( ) {
-			var routesIterator = g_TravelNotesData.travel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				if ( routesIterator.value.hidden ) {
-					m_MapEditor.addRoute ( routesIterator.value, true, true, false );
-				}
-			}
-		};
-
-		/*
-		--- routeEditor object ----------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return Object.seal (
-			{
-				
-				cutRoute : function ( route, latLng ) { return m_CutRoute ( route, latLng ); },
-				
-				computeRouteDistances : function ( route ) { m_ComputeRouteDistances ( route ); },
-
-				getClosestLatLngDistance : function ( route, latLng ) { return m_GetClosestLatLngDistance ( route, latLng ); },
-
-				saveGpx : function ( ) { m_SaveGpx ( ); },
-				
-				getRouteHTML : function ( route, classNamePrefix ) { return m_GetRouteHTML ( route, classNamePrefix ); },
-
-				chainRoutes : function ( ) { m_ChainRoutes ( ); },
-				
-				startRouting : function ( ) { m_StartRouting ( ); },
-				
-				endRouting : function ( ) { m_EndRouting ( ); },
-
-				saveEdition : function ( ) { m_SaveEdition ( ); },
-				
-				cancelEdition : function ( ) { m_CancelEdition ( ); },
-				
-				routeProperties : function ( routeObjId ) { m_RouteProperties ( routeObjId ); },
-			
-				hideRoute : function ( routeObjId ) { m_HideRoute ( routeObjId ); },
-
-				showRoutes : function ( ) { m_ShowRoutes ( ); },
-			}
-		);
-	};
-
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = routeEditor;
-	}
-
-}());
-
-/*
---- End of RouteEditor.js file ----------------------------------------------------------------------------------------
-*/
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/RouteEditorUI":21,"../UI/RoutePropertiesDialog":22,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/MapEditor":33,"../core/NoteEditor":34,"../core/Router":37,"../core/TravelEditor":39,"../data/ItineraryPoint":46,"../data/Route":51,"../util/Utilities":57}],37:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../core/MapEditor":34,"../data/ObjId":50}],37:[function(require,module,exports){
+arguments[4][2][0].apply(exports,arguments)
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/RouteEditorUI":22,"../UI/RoutePropertiesDialog":23,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/Router":38,"../core/TravelEditor":40,"../data/ItineraryPoint":47,"../data/Route":52,"../util/Utilities":58,"dup":2}],38:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9527,7 +9531,7 @@ Tests ...
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":7,"../core/ErrorEditor":30,"./RouteEditor":36}],38:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../core/ErrorEditor":31,"./RouteEditor":37}],39:[function(require,module,exports){
 /*
 Copyright - 2019 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -9762,7 +9766,7 @@ Tests ...
 		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
 
 			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = 5000;
+			xmlHttpRequest.timeout = 15000;
 			
 			xmlHttpRequest.ontimeout = function ( event ) {
 				returnOnError ( 'TimeOut error' );
@@ -10010,7 +10014,7 @@ Tests ...
 /*
 --- End of svgIconFromOsmFactory.js file ------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7}],39:[function(require,module,exports){
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8}],40:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10388,7 +10392,7 @@ Tests ...
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../Data/Route":4,"../Data/Travel":5,"../L.TravelNotes":7,"../UI/DataPanesUI":13,"../UI/HTMLViewsFactory":16,"../UI/ProvidersToolbarUI":20,"../UI/RouteEditorUI":21,"../UI/Translator":25,"../UI/TravelEditorUI":26,"../core/ErrorEditor":30,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/DataSearchEngine":44,"../data/Route":51,"../util/Utilities":57,"./ErrorEditor":30,"./MapEditor":33,"./RouteEditor":36,"@mapbox/polyline":1}],40:[function(require,module,exports){
+},{"../Data/DataSearchEngine":3,"../Data/Route":5,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/HTMLViewsFactory":17,"../UI/ProvidersToolbarUI":21,"../UI/RouteEditorUI":22,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/ErrorEditor":31,"../core/MapEditor":34,"../core/RouteEditor":37,"../data/DataSearchEngine":45,"../data/Route":52,"../util/Utilities":58,"./ErrorEditor":31,"./MapEditor":34,"./RouteEditor":37,"@mapbox/polyline":1}],41:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -10752,9 +10756,9 @@ Tests ...
 /*
 --- End of WaypointEditor.js file ----------------------------------------------------------------------------------------
 */
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":56}],41:[function(require,module,exports){
-arguments[4][40][0].apply(exports,arguments)
-},{"../Data/DataSearchEngine":2,"../L.TravelNotes":7,"../UI/RouteEditorUI":21,"../core/GeoCoder":32,"../core/MapEditor":33,"../core/RouteEditor":36,"../data/Waypoint.js":56,"dup":40}],42:[function(require,module,exports){
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/RouteEditorUI":22,"../core/GeoCoder":33,"../core/MapEditor":34,"../core/RouteEditor":37,"../data/Waypoint.js":57}],42:[function(require,module,exports){
+arguments[4][41][0].apply(exports,arguments)
+},{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/RouteEditorUI":22,"../core/GeoCoder":33,"../core/MapEditor":34,"../core/RouteEditor":37,"../data/Waypoint.js":57,"dup":41}],43:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11276,7 +11280,7 @@ Tests ...
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------
 */
-},{"../data/ItineraryPoint":46,"../data/Maneuver":47,"../data/Note":48,"../data/Route":51,"../data/WayPoint":55}],43:[function(require,module,exports){
+},{"../data/ItineraryPoint":47,"../data/Maneuver":48,"../data/Note":49,"../data/Route":52,"../data/WayPoint":56}],44:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 
@@ -11536,11 +11540,11 @@ Tests ...
 --- End of Config.js file ---------------------------------------------------------------------------------------------
 */
 
-},{}],44:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"dup":2}],45:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":3}],46:[function(require,module,exports){
+},{"../L.TravelNotes":8,"dup":3}],46:[function(require,module,exports){
+arguments[4][4][0].apply(exports,arguments)
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":4}],47:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11658,7 +11662,7 @@ Tests ...
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],47:[function(require,module,exports){
+},{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],48:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11789,7 +11793,7 @@ Tests ...
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],48:[function(require,module,exports){
+},{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],49:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -11989,7 +11993,7 @@ Tests ...
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],49:[function(require,module,exports){
+},{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],50:[function(require,module,exports){
 (function (global){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
@@ -12054,7 +12058,7 @@ Tests ...
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------
 */
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -12187,11 +12191,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],51:[function(require,module,exports){
-arguments[4][4][0].apply(exports,arguments)
-},{"../L.TravelNotes":7,"../data/Collection":42,"../data/Itinerary":45,"../data/ObjId":49,"../data/ObjType":50,"../data/Waypoint":56,"./Itinerary":45,"./Version":54,"dup":4}],52:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"../data/Collection":42,"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":5}],53:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../data/Collection":43,"../data/Itinerary":46,"../data/ObjId":50,"../data/ObjType":51,"../data/Waypoint":57,"./Itinerary":46,"./Version":55,"dup":5}],53:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":6}],54:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -12299,9 +12303,9 @@ Tests ...
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */
-},{"../data/Config":43,"../data/Travel":52,"../util/Utilities":57}],54:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],55:[function(require,module,exports){
+},{"../data/Config":44,"../data/Travel":53,"../util/Utilities":58}],55:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"dup":7}],56:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -12432,9 +12436,9 @@ Tests ...
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
 */
-},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54}],56:[function(require,module,exports){
-arguments[4][55][0].apply(exports,arguments)
-},{"../data/ObjId":49,"../data/ObjType":50,"./Version":54,"dup":55}],57:[function(require,module,exports){
+},{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],57:[function(require,module,exports){
+arguments[4][56][0].apply(exports,arguments)
+},{"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":56}],58:[function(require,module,exports){
 /*
 Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -12600,7 +12604,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					return '';
 				} 
 				else {
-					return Math.floor ( distance / 1000 ) +'.' + Math.floor ( ( distance % 1000 ) / 10 ) + '&nbsp;km';
+					return Math.floor ( distance / 1000 ) +',' + Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 ).padStart ( 2, '0' ).padEnd ( 3, '0') + '&nbsp;km';
 				}
 			},
 			
@@ -12628,4 +12632,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 } ) ( );
 
-},{"../UI/Translator":25}]},{},[7]);
+},{"../UI/Translator":26}]},{},[8]);

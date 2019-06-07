@@ -232,7 +232,7 @@ Tests ...
 		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
 
 			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = 5000;
+			xmlHttpRequest.timeout = 15000;
 			
 			xmlHttpRequest.ontimeout = function ( event ) {
 				returnOnError ( 'TimeOut error' );
