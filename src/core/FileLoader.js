@@ -113,6 +113,8 @@ Tests ...
 			while ( ! notesIterator.done ) {
 				g_TravelNotesData.travel.notes.add ( notesIterator.value );
 			}
+			
+			require ( '../Core/RouteEditor' ) ( ).chainRoutes ( );
 		
 			m_Display ( );
 		};
