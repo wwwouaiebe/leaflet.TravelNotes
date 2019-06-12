@@ -30,6 +30,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added reset button for address
 		- added svg icons
+		- reviewed code
+		- added language for TravelNotesDialogXX.json file
 Doc reviewed 20170929
 Tests ...
 
@@ -40,43 +42,11 @@ Tests ...
 	
 	'use strict';
 
-	var _Translator = require ( '../UI/Translator' ) ( );
-	var _UserData = { editionButtons : [], preDefinedIconsList : [] };
-	var _ServerData = { editionButtons : [], preDefinedIconsList : [] };
-	var _GlobalData = { editionButtons : [], preDefinedIconsList : [] };
-	var _Note;
-	var _RouteObjId;
-	var _ConfigNote = require ( '../L.TravelNotes' ).config.note;
+	var g_Translator = require ( '../UI/Translator' ) ( );
+	var g_UserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+	var g_TravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+	var g_AllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 	
-	
-	/*
-	--- onOkButtonClick function ----------------------------------------------------------------------------------
-
-	click event listener for the ok button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onOkButtonClick = function ( ) {
-		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
-		// and then, cannot be edited or removed!
-		if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
-			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = _Translator.getText ( 'Notedialog - The icon content cannot be empty' );
-			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
-			return false;
-		}
-		// saving values in the note.
-		_Note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
-		_Note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
-		_Note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
-		_Note.popupContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-PopupContent' ).value;
-		_Note.tooltipContent = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value;
-		_Note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
-		_Note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
-		_Note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
-		require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( _Note, _RouteObjId );
-		return true;
-	};
 	
 	/*
 	--- NoteDialog function -------------------------------------------------------------------------------------------
@@ -85,26 +55,235 @@ Tests ...
 	*/
 
 	var NoteDialog = function ( note, routeObjId, newNote ) {
+		
+		var m_BaseDialog = null;
+		var m_NoteDataDiv = null;
+		var m_FocusControl = null;
+		var m_HtmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 
-		// function to add the predefined icons to the select
-		var addPreDefinedIconsList = function ( ) {
-			_GlobalData.preDefinedIconsList = _ServerData.preDefinedIconsList.concat ( _UserData.preDefinedIconsList );
-			_GlobalData.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
+		/*
+		--- onOkButtonClick function ----------------------------------------------------------------------------------
+
+		click event listener for the ok button
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onOkButtonClick = function ( ) {
+			// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
+			// and then, cannot be edited or removed!
+			if ( 0 === document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value.length ) {
+				document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = g_Translator.getText ( 'Notedialog - The icon content cannot be empty' );
+				document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
+				return false;
+			}
+			// saving values in the note.
+			note.iconWidth = document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value;
+			note.iconHeight = document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value;
+			note.iconContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value;
+			note.popupContent = document.getElementById ( 'TravelNotes-NoteDialog-TextArea-PopupContent' ).value;
+			note.tooltipContent = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value;
+			note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
+			note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
+			note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
+			require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( note, routeObjId );
+			return true;
+		};
+	
+		/*
+		--- End of onOkButtonClick function ---
+		*/
+
+		/*
+		--- onSvgIconCallback function --------------------------------------------------------------------------------
+
+		event handler for predefined icons list
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onSvgIconCallback = function ( data ) {
+			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
+			if ( null !== data.direction ) {
+				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
+				if ( data.direction < cfgDirection.right ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
+				}
+				else if ( data.direction < cfgDirection.slightRight ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight right');
+				}
+				else if ( data.direction < cfgDirection.continue ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Continue');
+				}
+				else if ( data.direction < cfgDirection.slightLeft ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight left');
+				}
+				else if ( data.direction < cfgDirection.left ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn left');
+				}
+				else if ( data.direction < cfgDirection.sharpLeft ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp left');
+				}
+				else if ( data.direction < cfgDirection.sharpRight ) {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp right');
+				}
+				else {
+					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
+				}
+			}
+		};
+		
+		/*
+		--- End of onSvgIconCallback function ---
+		*/
+
+		/*
+		--- onPredefinedIconListSelectChange function -----------------------------------------------------------------
+
+		event handler for predefined icons list
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onPredefinedIconListSelectChange = function ( changeEvent ) {
+
+			var preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
+			if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
+				require ( '../core/SvgIconFromOsmFactory' ) ( ).getSvgIcon( note.latLng, routeObjId, onSvgIconCallback );
+			}
+			else{
+				document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value = preDefinedIcon.width ;
+				document.getElementById ( 'TravelNotes-NoteDialog-HeightNumberInput' ).value = preDefinedIcon.height ;
+				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = preDefinedIcon.icon ;
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = preDefinedIcon.tooltip ;
+			}
+		};
+
+		/*
+		--- End of onPredefinedIconListSelectChange function ---
+		*/
+
+		/*
+		--- onClickEditionButton function -----------------------------------------------------------------------------
+
+		event handler for edition with the styles buttons
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onClickEditionButton = function ( event ) {
+			if ( ! m_FocusControl ) {
+				return;
+			}
+			var button = event.target;
+			while ( ! button.htmlBefore ) {
+				button = button.parentNode;
+			}
+			var bInsertBeforeAndAfter = button.htmlAfter && 0 < button.htmlAfter.length;
+			var selectionStart = m_FocusControl.selectionStart;
+			var selectionEnd = m_FocusControl.selectionEnd;
+			var oldText = m_FocusControl.value;
+			m_FocusControl.value = oldText.substring ( 0, selectionStart ) + 
+				( bInsertBeforeAndAfter ? button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter : button.htmlBefore ) + 
+				oldText.substring ( selectionEnd );
+			m_FocusControl.setSelectionRange ( 
+				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + button.htmlBefore.length : selectionStart,
+				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length );
+			m_FocusControl.focus ( );
+		};	
+
+		/*
+		--- End of onClickEditionButton function ---
+		*/
+
+		/*
+		--- onOpenUserDataFileInputChange function --------------------------------------------------------------------
+
+		event handler for 
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onOpenUserDataFileInputChange = function ( event ) {
+			var fileReader = new FileReader( );
+			fileReader.onload = function ( event ) {
+				try {
+					var newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
+					g_UserButtonsAndIcons.editionButtons = g_UserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
+					g_UserButtonsAndIcons.preDefinedIconsList = g_UserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
+					m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
+					m_AddPreDefinedIconsList ( );
+				}
+				catch ( e )
+				{
+				}
+			};
+			var fileName = event.target.files [ 0 ].name;
+			fileReader.readAsText ( event.target.files [ 0 ] );
+		};
+
+		/*
+		--- End of onOpenUserDataFileInputChange function ---
+		*/
+
+		/*
+		--- onFocusControl function -----------------------------------------------------------------------------------
+
+		event handler for 
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onFocusControl = function ( event ) {
+			m_FocusControl = event.target;
+		};
+		
+		/*
+		--- End of onFocusControl function ---
+		*/
+
+		/*
+		--- m_AddPreDefinedIconsList function ---------------------------------------------------------------------------
+
+		function to add the predefined icons to the select
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddPreDefinedIconsList = function ( ) {
+			g_AllButtonsAndIcons.preDefinedIconsList = g_TravelNotesButtonsAndIcons.preDefinedIconsList.concat ( g_UserButtonsAndIcons.preDefinedIconsList );
+
+			if ( -1 < routeObjId ) {
+				g_AllButtonsAndIcons.preDefinedIconsList.push ( { name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), icon : '', tooltip : '', width : 40, height : 40 } );
+			}
+
+			g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
 			var elementCounter = 0;
+			var preDefinedIconsSelect = document.getElementById ( 'TravelNotes-NoteDialog-IconSelect' );
 			for ( elementCounter = preDefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
 				preDefinedIconsSelect.remove ( elementCounter );
 			}
-			for ( elementCounter = 0; elementCounter < _GlobalData.preDefinedIconsList.length; elementCounter ++ ) {
-				var option = htmlElementsFactory.create ( 'option', { text :  _GlobalData.preDefinedIconsList [ elementCounter ].name } );
+			for ( elementCounter = 0; elementCounter < g_AllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
+				var option = m_HtmlElementsFactory.create ( 'option', { text :  g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name } );
 				preDefinedIconsSelect.add ( option );
 			}
 		};
 
-		// function to add buttons on the toolbar
-		var addEditionButtons = function ( editionButtons ) {
+		/*
+		--- End of m_AddPreDefinedIconsList function ---
+		*/
+
+		/*
+		--- m_AddEditionButtons function ------------------------------------------------------------------------------
+
+		function to add buttons on the toolbar
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_AddEditionButtons = function ( editionButtons ) {
 			editionButtons.forEach ( 
 				function ( editionButton ) {
-					var newButton = htmlElementsFactory.create ( 
+					var newButton = m_HtmlElementsFactory.create ( 
 						'button',
 						{
 							type : 'button',
@@ -113,495 +292,473 @@ Tests ...
 							htmlAfter : editionButton.htmlAfter || '',
 							className : 'TravelNotes-NoteDialog-EditorButton'
 						},
-						toolbarDiv
+						document.getElementById ( 'TravelNotes-NoteDialog-ToolbarDiv' )
 					);
 					newButton.addEventListener ( 'click', onClickEditionButton, false );
 				}
 			);
 		};
 
-		// event handler for edition with the styles buttons
-		var onClickEditionButton = function ( event ) {
-			if ( ! focusControl ) {
-				return;
-			}
-			var button = event.target;
-			while ( ! button.htmlBefore ) {
-				button = button.parentNode;
-			}
-			var bInsertBeforeAndAfter = button.htmlAfter && 0 < button.htmlAfter.length;
-			var selectionStart = focusControl.selectionStart;
-			var selectionEnd = focusControl.selectionEnd;
-			var oldText = focusControl.value;
-			focusControl.value = oldText.substring ( 0, selectionStart ) + 
-				( bInsertBeforeAndAfter ? button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter : button.htmlBefore ) + 
-				oldText.substring ( selectionEnd );
-			focusControl.setSelectionRange ( 
-				bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + button.htmlBefore.length : selectionStart,
-				( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length );
-			focusControl.focus ( );
-		};	
+		/*
+		--- End of m_AddEditionButtons function ---
+		*/
+		
+		/*
+		--- m_CreateBaseDialog function -------------------------------------------------------------------------------
 
-		_Note = note;
-		_RouteObjId = routeObjId;
+		Creation of the base dialog
 		
-		// the dialog base is created
-		var baseDialog = require ( '../UI/BaseDialog' ) ( );
-		baseDialog.title = _Translator.getText ( 'NoteDialog - Note' );
-		baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+		---------------------------------------------------------------------------------------------------------------
+		*/
 
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		var m_CreateBaseDialog = function ( ) {
+		
+			// the dialog base is created
+			m_BaseDialog = require ( '../UI/BaseDialog' ) ( );
+			m_BaseDialog.title = g_Translator.getText ( 'NoteDialog - Note' );
+			m_BaseDialog.addClickOkButtonEventListener ( onOkButtonClick );
 
-		var NoteDataDiv = htmlElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-MainDataDiv'
-			},
-			baseDialog.content
-		);
-		
-		// Toolbar
-		var toolbarDiv = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-ToolbarDiv',
-				id : 'TravelNotes-NoteDialog-ToolbarDiv'
-			},
-			NoteDataDiv
-		);
-		
-		// a select is added for the predefined icons
-		var preDefinedIconsSelect = htmlElementsFactory.create (
-			'select',
-			{
-				className : 'TravelNotes-NoteDialog-Select',
-				id : 'TravelNotes-NoteDialog-IconSelect'
-			},
-			toolbarDiv
-		);
-		
-		// change event listener on the select
-		preDefinedIconsSelect.addEventListener ( 
-			'change', 
-			function ( changeEvent ) {
-				var index = preDefinedIconsSelect.selectedIndex ;
-				var preDefinedIcon = _GlobalData.preDefinedIconsList [ preDefinedIconsSelect.selectedIndex ];
-				widthInput.value = preDefinedIcon.width ;
-				heightInput.value = preDefinedIcon.height ;
-				iconHtmlContent.value = preDefinedIcon.icon ;
-				tooltip.value = preDefinedIcon.tooltip ;
-			},
-			false 
-		);
-		
-		var focusControl = null;
-
-		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		var openUserDataFileDiv = htmlElementsFactory.create ( 
-			'div', 
-			{ 
-				id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
-			}, 
-			toolbarDiv 
-		);
-		var openUserDataFileInput = htmlElementsFactory.create ( 
-			'input',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
-				type : 'file',
-				accept : '.json'
-			},
-			openUserDataFileDiv
-		);
-		openUserDataFileInput.addEventListener ( 
-			'change', 
-			function ( event ) {
-				var fileReader = new FileReader( );
-				fileReader.onload = function ( event ) {
-					try {
-						var newEditorData = JSON.parse ( fileReader.result ) ;
-						_UserData.editionButtons = _UserData.editionButtons.concat ( newEditorData.editionButtons );
-						_UserData.preDefinedIconsList = _UserData.preDefinedIconsList.concat ( newEditorData.preDefinedIconsList );
-						addEditionButtons ( newEditorData.editionButtons );
-						addPreDefinedIconsList ( );
-					}
-					catch ( e )
-					{
-					}
-				};
-				var fileName = event.target.files [ 0 ].name;
-				fileReader.readAsText ( event.target.files [ 0 ] );
-			},
-			false
-		);
-		var openUserDataFileFakeDiv = htmlElementsFactory.create ( 
-			'div', 
-			{ 
-				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
-			}, 
-			openUserDataFileDiv 
-		);
-		var openUserDataFileButton = htmlElementsFactory.create ( 
-			'button', 
-			{ 
-				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
-				className: 'TravelNotes-NoteDialog-EditorButton', 
-				title : _Translator.getText ( 'NoteDialog - Open a configuration file' ), 
-				innerHTML : '&#x23CD;'
-			}, 
-			openUserDataFileFakeDiv 
-		);
-		
-		openUserDataFileButton.addEventListener ( 'click' , function ( ) { openUserDataFileInput.click ( ); }, false );
-	
-		
-		// standard buttons for div, p, span and a
-		addEditionButtons (
-			[
+			m_NoteDataDiv = m_HtmlElementsFactory.create (
+				'div',
 				{
-					title : 'div',
-					htmlBefore : '<div>',
-					htmlAfter :  '</div>'
+					id : 'TravelNotes-NoteDialog-MainDataDiv'
 				},
-				{
-					title : 'p',
-					htmlBefore : '<p>',
-					htmlAfter : '</p>'
-				},
-				{
-					title : 'span',
-					htmlBefore : '<span>',
-					htmlAfter : '</span>'
-				},
-				{
-					title : 'a',
-					htmlBefore : '<a target="_blank" href="">',
-					htmlAfter : '</a>'
-				},
-			]
-		);
-		
-		// personnalised buttons from server file are restored
-		addEditionButtons ( _ServerData.editionButtons );
-		// personnalised buttons from local file are restored
-		addEditionButtons ( _UserData.editionButtons );
-		addPreDefinedIconsList ( );
-		
-		// icon dimensions...
-		var iconDimensionsDiv = htmlElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv',
-				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
-			},
-			NoteDataDiv
-		);
-		
-		// ... width ...
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - Icon width'),
-			},
-			iconDimensionsDiv
-		);
-		var widthInput =  htmlElementsFactory.create (
-			'input',
-			{
-				type : 'number',
-				className : 'TravelNotes-NoteDialog-NumberInput',
-				id : 'TravelNotes-NoteDialog-WidthNumberInput'
-				
-			},
-			iconDimensionsDiv
-		);
-		widthInput.value = note.iconWidth;
-		
-		// ... and height
-		htmlElementsFactory.create (
-			'text',
-			{
-				data : _Translator.getText ( 'NoteDialog - Icon height'),
-			},
-			iconDimensionsDiv
-		);
-		var heightInput =  htmlElementsFactory.create (
-			'input',
-			{
-				type : 'number',
-				className : 'TravelNotes-NoteDialog-NumberInput',
-				id : 'TravelNotes-NoteDialog-HeightNumberInput'
-			},
-			iconDimensionsDiv
-		);
-		heightInput.value = note.iconHeight;
-
-		// SVG icon from OSM
-		if ( -1 < _RouteObjId ) {
-			var svgIconCallback = function ( data ) {
-				document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
-				if ( null !== data.direction ) {
-					if ( data.direction < _ConfigNote.svgAnleMaxDirection.right ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.slightRight ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight right');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.continue ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Continue');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.slightLeft ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn slight left');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.left ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn left');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.sharpLeft ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp left');
-					}
-					else if ( data.direction < _ConfigNote.svgAnleMaxDirection.sharpRight ) {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn sharp right');
-					}
-					else {
-						document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = _Translator.getText ( 'NoteDialog - Turn right');
-					}
-				}
-			};
-
-			htmlElementsFactory.create (
-				'text',
-				{
-					data : _Translator.getText ( 'NoteDialog - SVG icon from OSM'),
-				},
-				iconDimensionsDiv
+				m_BaseDialog.content
 			);
-			var SvgIconFromOsmInput =  htmlElementsFactory.create (
+		};
+		
+		/*
+		--- End of m_CreateBaseDialog function ---
+		*/
+
+		/*
+		--- m_CreateToolbar function -------------------------------------------------------------------------------
+
+		Creation of the toolbar 
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateToolbar = function ( ) {
+			var toolbarDiv = m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-ToolbarDiv',
+					id : 'TravelNotes-NoteDialog-ToolbarDiv'
+				},
+				m_NoteDataDiv
+			);
+			
+			// a select is added for the predefined icons
+			var preDefinedIconsSelect = m_HtmlElementsFactory.create (
+				'select',
+				{
+					className : 'TravelNotes-NoteDialog-Select',
+					id : 'TravelNotes-NoteDialog-IconSelect'
+				},
+				toolbarDiv
+			);
+			
+			// change event listener on the select
+			preDefinedIconsSelect.addEventListener ( 'change', onPredefinedIconListSelectChange, false );
+			
+
+			// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
+			var openUserDataFileDiv = m_HtmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
+				}, 
+				toolbarDiv 
+			);
+			var openUserDataFileInput = m_HtmlElementsFactory.create ( 
 				'input',
 				{
-					type : 'checkbox',
-					className : 'TravelNotes-NoteDialog-CheckboxInput',
-					id : 'TravelNotes-NoteDialog-SvgIconFromOsmInput'
+					id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
+					type : 'file',
+					accept : '.json'
+				},
+				openUserDataFileDiv
+			);
+			openUserDataFileInput.addEventListener ( 'change', onOpenUserDataFileInputChange, false );
+			var openUserDataFileFakeDiv = m_HtmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
+				}, 
+				openUserDataFileDiv 
+			);
+			var openUserDataFileButton = m_HtmlElementsFactory.create ( 
+				'button', 
+				{ 
+					id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
+					className: 'TravelNotes-NoteDialog-EditorButton', 
+					title : g_Translator.getText ( 'NoteDialog - Open a configuration file' ), 
+					innerHTML : '&#x23CD;'
+				}, 
+				openUserDataFileFakeDiv 
+			);
+			
+			openUserDataFileButton.addEventListener ( 'click' , function ( ) { openUserDataFileInput.click ( ); }, false );
+			
+			// personnalised buttons from server file are restored
+			m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
+			
+			// personnalised buttons from local file are restored
+			m_AddEditionButtons ( g_UserButtonsAndIcons.editionButtons );
+
+			m_AddPreDefinedIconsList ( );
+		};
+		
+		/*
+		--- End of m_CreateToolbar function ---
+		*/
+
+		/*
+		--- m_CreateIconDimensions function ---------------------------------------------------------------------------
+
+		Creation of icon dimensions...
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var m_CreateIconDimensions = function ( ) {
+			var iconDimensionsDiv = m_HtmlElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-NoteDialog-DataDiv',
+					id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
+				},
+				m_NoteDataDiv
+			);
+			
+			// ... width ...
+			m_HtmlElementsFactory.create (
+				'text',
+				{
+					data : g_Translator.getText ( 'NoteDialog - Icon width'),
 				},
 				iconDimensionsDiv
 			);
-			SvgIconFromOsmInput.addEventListener ( 
-				'change',
+			var widthInput =  m_HtmlElementsFactory.create (
+				'input',
+				{
+					type : 'number',
+					className : 'TravelNotes-NoteDialog-NumberInput',
+					id : 'TravelNotes-NoteDialog-WidthNumberInput'
+					
+				},
+				iconDimensionsDiv
+			);
+			widthInput.value = note.iconWidth;
+			
+			// ... and height
+			m_HtmlElementsFactory.create (
+				'text',
+				{
+					data : g_Translator.getText ( 'NoteDialog - Icon height'),
+				},
+				iconDimensionsDiv
+			);
+			var heightInput =  m_HtmlElementsFactory.create (
+				'input',
+				{
+					type : 'number',
+					className : 'TravelNotes-NoteDialog-NumberInput',
+					id : 'TravelNotes-NoteDialog-HeightNumberInput'
+				},
+				iconDimensionsDiv
+			);
+			heightInput.value = note.iconHeight;
+		};
+
+		/*
+		--- End of m_CreateIconDimensions function ---
+		*/
+
+		/*
+		--- m_CreateIconContent function ---------------------------------------------------------------------------
+
+		Creation of icon content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateIconContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
+					innerHTML : g_Translator.getText ( 'NoteDialog - Icon content' )
+				},
+				m_NoteDataDiv
+			);
+			var iconHtmlContent = m_HtmlElementsFactory.create ( 
+				'textarea',
+				{ 
+					className : 'TravelNotes-NoteDialog-TextArea',
+					id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
+				},
+				m_NoteDataDiv
+			);
+			iconHtmlContent.addEventListener ( 'focus', onFocusControl, false );
+			iconHtmlContent.value = note.iconContent;
+		};
+		
+		/*
+		--- End of m_CreateIconContent function ---
+		*/
+
+		/*
+		--- m_CreatePopupContent function ---------------------------------------------------------------------------
+
+		Creation of popup content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreatePopupContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					innerHTML : g_Translator.getText ( 'NoteDialog - Text' )
+				},
+				m_NoteDataDiv
+			);
+			var popUpContent = m_HtmlElementsFactory.create ( 
+				'textarea',
+				{ 
+					className : 'TravelNotes-NoteDialog-TextArea',
+					id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
+				},
+				m_NoteDataDiv
+			);
+			popUpContent.addEventListener ( 'focus', onFocusControl, false );
+			popUpContent.value = note.popupContent;
+		};
+		
+		/*
+		--- End of m_CreatePopupContent function ---
+		*/
+
+		/*
+		--- m_CreateTooltipContent function ---------------------------------------------------------------------------
+
+		Creation of tooltip content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateTooltipContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					innerHTML : g_Translator.getText ( 'NoteDialog - Tooltip content' )
+				},
+				m_NoteDataDiv
+			);
+			var tooltip = m_HtmlElementsFactory.create ( 
+				'input',
+				{ 
+					type : 'text',
+					className : 'TravelNotes-NoteDialog-InputText',
+					id: 'TravelNotes-NoteDialog-InputText-Tooltip'
+				},
+				m_NoteDataDiv
+			);
+			tooltip.addEventListener ( 'focus', onFocusControl, false );
+			tooltip.value = note.tooltipContent;
+		};
+		
+		/*
+		--- End of m_CreateTooltipContent function ---
+		*/
+
+		/*
+		--- m_CreateAddressContent function ---------------------------------------------------------------------------
+
+		Creation of address content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateAddressContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					innerHTML : '<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + g_Translator.getText ( 'NoteDialog - Address&nbsp;:' )
+				},
+				m_NoteDataDiv
+			);
+			document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
+				'click', 
+				function ( ) {
+					require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
+				},
+				false 
+			);
+			
+			var address = m_HtmlElementsFactory.create ( 
+				'input',
+				{ 
+					type : 'text',
+					className : 'TravelNotes-NoteDialog-InputText',
+					id: 'TravelNotes-NoteDialog-InputText-Adress'
+				},
+				m_NoteDataDiv
+			);
+			address.addEventListener ( 'focus', onFocusControl, false );
+			address.value = note.address;
+			
+			// geolocalization
+			if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
+			}
+		};
+		
+		/*
+		--- End of m_CreateAddressContent function ---
+		*/
+
+		/*
+		--- m_CreateLinkContent function ------------------------------------------------------------------------------
+
+		Creation of link content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreateLinkContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					innerHTML : g_Translator.getText ( 'NoteDialog - Link' )
+				},
+				m_NoteDataDiv
+			);
+			var link = m_HtmlElementsFactory.create ( 
+				'input',
+				{ 
+					type : 'text',
+					className : 'TravelNotes-NoteDialog-InputText',
+					id: 'TravelNotes-NoteDialog-InputText-Link'
+				},
+				m_NoteDataDiv
+			);
+			link.addEventListener (
+				'focus',
 				function ( event ) {
-					if ( SvgIconFromOsmInput.checked )
-					{
-						require ( '../core/SvgIconFromOsmFactory' ) ( ).getSvgIcon( note.latLng, routeObjId, svgIconCallback );
-					}
+					m_FocusControl = null;
 				},
 				false
 			);
-		}
+			link.value = note.url;
+		};
 		
-		// icon content
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Icon content' )
-			},
-			NoteDataDiv
-		);
-		var iconHtmlContent = htmlElementsFactory.create ( 
-			'textarea',
-			{ 
-				className : 'TravelNotes-NoteDialog-TextArea',
-				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
-			},
-			NoteDataDiv
-		);
-		iconHtmlContent.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = iconHtmlContent;
-			},
-			false
-		);
-		iconHtmlContent.value = note.iconContent;
-		
-		// Popup content
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Text' )
-			},
-			NoteDataDiv
-		);
-		var popUpContent = htmlElementsFactory.create ( 
-			'textarea',
-			{ 
-				className : 'TravelNotes-NoteDialog-TextArea',
-				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
-			},
-			NoteDataDiv
-		);
-		popUpContent.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = popUpContent;
-			},
-			false
-		);
-		popUpContent.value = note.popupContent;
-		
-		// tooltip content
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Tooltip content' )
-			},
-			NoteDataDiv
-		);
-		var tooltip = htmlElementsFactory.create ( 
-			'input',
-			{ 
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
-			},
-			NoteDataDiv
-		);
-		tooltip.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = tooltip;
-			},
-			false
-		);
-		tooltip.value = note.tooltipContent;
-		
-		// Address
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : '<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + _Translator.getText ( 'NoteDialog - Address&nbsp;:' )
-			},
-			NoteDataDiv
-		);
-		document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
-			'click', 
-			function ( ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-			},
-			false 
-		);
-		
-		var address = htmlElementsFactory.create ( 
-			'input',
-			{ 
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Adress'
-			},
-			NoteDataDiv
-		);
-		address.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = address;
-			},
-			false
-		);
-		address.value = note.address;
-		
-		// link
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Link' )
-			},
-			NoteDataDiv
-		);
-		var link = htmlElementsFactory.create ( 
-			'input',
-			{ 
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Link'
-			},
-			NoteDataDiv
-		);
-		link.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = null;
-			},
-			false
-		);
-		link.value = note.url;
-		
-		// phone
-		htmlElementsFactory.create ( 
-			'div',
-			{ 
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : _Translator.getText ( 'NoteDialog - Phone' )
-			},
-			NoteDataDiv
-		);
-		var phone = htmlElementsFactory.create ( 
-			'input',
-			{ 
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Phone'
-			},
-			NoteDataDiv
-		);
-		phone.addEventListener (
-			'focus',
-			function ( event ) {
-				focusControl = phone;
-			},
-			false
-		);
-		phone.value = note.phone;
+		/*
+		--- End of m_CreateLinkContent function ---
+		*/
 
-		// predefined icons and editionButtons are loaded if not already done previously
-		if ( 0 === _ServerData.preDefinedIconsList.length ) {
-			var buttonsHttpRequest = new XMLHttpRequest ( );
-			buttonsHttpRequest.onreadystatechange = function ( event ) {
-				if ( this.readyState === buttonsHttpRequest.DONE ) {
-					if ( this.status === 200 ) {
-						try {
-							_ServerData = JSON.parse ( this.responseText );
-							addEditionButtons ( _ServerData.editionButtons );
-							_ServerData.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
-							addPreDefinedIconsList ( );
-						}
-						catch ( e )
-						{
-							console.log ( 'Error reading TravelNotesNoteDialog.json' );
-						}
-					} 
-					else {
-						console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
-					}
-				}
-			};
-			buttonsHttpRequest.open ( 
-				'GET',
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog.json',
-				true
+		/*
+		--- m_CreatePhoneContent function -----------------------------------------------------------------------------
+
+		Creation of phone content
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CreatePhoneContent = function ( ) {
+			m_HtmlElementsFactory.create ( 
+				'div',
+				{ 
+					className : 'TravelNotes-NoteDialog-TitleDiv',
+					innerHTML : g_Translator.getText ( 'NoteDialog - Phone' )
+				},
+				m_NoteDataDiv
 			);
-			buttonsHttpRequest.send ( null );
-		}
+			var phone = m_HtmlElementsFactory.create ( 
+				'input',
+				{ 
+					type : 'text',
+					className : 'TravelNotes-NoteDialog-InputText',
+					id: 'TravelNotes-NoteDialog-InputText-Phone'
+				},
+				m_NoteDataDiv
+			);
+			phone.addEventListener ( 'focus', onFocusControl, false );
+			phone.value = note.phone;
+		};
+		
+		/*
+		--- End of m_CreatePhoneContent function ---
+		*/
 
-		// geolocalization
-		if ( ( _ConfigNote.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-			require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-		}
+		/*
+		--- m_LoadIconsAndButtons function ----------------------------------------------------------------------------
+
+		loading predefined icons and buttons
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_LoadIconsAndButtons = function ( ) {
+			if ( 0 === g_TravelNotesButtonsAndIcons.preDefinedIconsList.length ) {
+				var buttonsHttpRequest = new XMLHttpRequest ( );
+				buttonsHttpRequest.onreadystatechange = function ( event ) {
+					if ( this.readyState === buttonsHttpRequest.DONE ) {
+						if ( this.status === 200 ) {
+							try {
+								g_TravelNotesButtonsAndIcons = JSON.parse ( this.responseText );
+								m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
+								g_TravelNotesButtonsAndIcons.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+								m_AddPreDefinedIconsList ( );
+							}
+							catch ( e )
+							{
+								console.log ( 'Error reading TravelNotesNoteDialog.json' );
+							}
+						} 
+						else {
+							console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
+						}
+					}
+				};
+				buttonsHttpRequest.open ( 
+					'GET',
+					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language + '.json',
+					true
+				);
+				buttonsHttpRequest.send ( null );
+			}
+		};
+		
+		/*
+		--- End of m_LoadIconsAndButtons function ---
+		*/
+
+		/*
+		--- Main function ----------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		m_CreateBaseDialog ( );
+		m_CreateToolbar ( );
+		m_CreateIconDimensions ( );
+		m_CreateIconContent ( );
+		m_CreatePopupContent ( );
+		m_CreateTooltipContent ( );
+		m_CreateAddressContent ( );
+		m_CreateLinkContent ( );
+		m_CreatePhoneContent ( );
+		m_LoadIconsAndButtons ( );
 		
 		// and the dialog is centered on the screen
-		baseDialog.center ( );
+		m_BaseDialog.center ( );
 	};
 	
 	/*
