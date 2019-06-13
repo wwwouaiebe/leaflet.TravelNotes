@@ -232,6 +232,14 @@
 		"msgstr" : "Icône SVG depuis OSM"
 	},
 	{
+		"msgid" : "NoteDialog - Start",
+		"msgstr" : "Départ"
+	},
+	{
+		"msgid" : "NoteDialog - Stop",
+		"msgstr" : "Arrivée"
+	},
+	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Texte&nbsp;:&nbsp;"
 	},

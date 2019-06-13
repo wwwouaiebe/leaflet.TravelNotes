@@ -103,7 +103,7 @@ Tests ...
 		*/
 
 		var onSvgIcon = function ( data ) {
-			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
+			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg.outerHTML;
 			if ( null !== data.direction ) {
 				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
 				if ( data.direction < cfgDirection.right ) {
@@ -131,6 +131,14 @@ Tests ...
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
 				}
 			}
+			if ( -1 === data.startStop ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Start');
+			}
+			else if ( 1 === data.startStop ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Stop');
+			}
+			
+			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
 		};
 		
 		/*
@@ -147,6 +155,7 @@ Tests ...
 		var onErrorSvgIcon = function ( ) {
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' );
 			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
+			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
 		};
 
 		/*
@@ -165,7 +174,8 @@ Tests ...
 
 			var preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 			if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
-				 require ( '../core/SvgIconFromOsmFactory' ) ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( onSvgIcon, onErrorSvgIcon );
+				document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'hidden';
+				require ( '../core/SvgIconFromOsmFactory' ) ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( onSvgIcon, onErrorSvgIcon );
 			}
 			else{
 				document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value = preDefinedIcon.width ;

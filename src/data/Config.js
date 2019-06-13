@@ -122,7 +122,9 @@ Tests ...
 					left:200,
 					sharpLeft:270,
 					sharpRight:340
-				}
+				},
+				svgZoom : 17,
+				svgAngleDistance : 10
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {
