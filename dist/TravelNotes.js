@@ -4286,14 +4286,14 @@ Tests ...
 		*/
 
 		/*
-		--- onSvgIconCallback function --------------------------------------------------------------------------------
+		--- onSvgIcon function ----------------------------------------------------------------------------------------
 
 		event handler for predefined icons list
 		
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var onSvgIconCallback = function ( data ) {
+		var onSvgIcon = function ( data ) {
 			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg;
 			if ( null !== data.direction ) {
 				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
@@ -4325,7 +4325,23 @@ Tests ...
 		};
 		
 		/*
-		--- End of onSvgIconCallback function ---
+		--- End of onSvgIcon function ---
+		*/
+
+		/*
+		--- onErrorSvgIcon function -----------------------------------------------------------------------------------
+
+		event handler for predefined icons list
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var onErrorSvgIcon = function ( ) {
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).innerHTML = g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' );
+			document.getElementById ( 'TravelNotes-BaseDialog-ErrorDiv' ).classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
+		};
+
+		/*
+		--- End of onErrorSvgIcon function ---
 		*/
 
 		/*
@@ -4340,7 +4356,7 @@ Tests ...
 
 			var preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 			if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
-				require ( '../core/SvgIconFromOsmFactory' ) ( ).getSvgIcon( note.latLng, routeObjId, onSvgIconCallback );
+				 require ( '../core/SvgIconFromOsmFactory' ) ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( onSvgIcon, onErrorSvgIcon );
 			}
 			else{
 				document.getElementById ( 'TravelNotes-NoteDialog-WidthNumberInput' ).value = preDefinedIcon.width ;
@@ -9733,14 +9749,9 @@ Tests ...
 	var svgIconFromOsmFactory = function ( ) {
 
 		var m_IconLatLng = L.latLng ( 0, 0);
-		
 		var m_RouteObjId = 0;
-		var m_Callback = null;
 		
 		var m_Response = {};
-		var m_NextPromise = 0;
-		var m_Promises = [];
-		var m_XMLHttpRequestUrl = '';
 		
 		var m_WaysMap = new Map ( );
 		var m_NodesMap = new Map ( );
@@ -9752,53 +9763,16 @@ Tests ...
 		var m_Direction = null;
 		
 		var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
-		
-		var m_DataSearchEngine  = require ( '../Data/DataSearchEngine' ) ( );
-		
+				
 		/*
-		--- m_EndError function ---------------------------------------------------------------------------------------
+		--- m_CreateNodesAndWaysMaps function -------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var m_EndError = function ( message ) {
-
-			s_RequestStarted = false;
-		};
-	
-		/*
-		--- End of m_EndError function ---
-		*/
-
-		/*
-		--- m_EndOk function -----------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_EndOk = function ( message ) {
-
-			s_RequestStarted = false;
-			m_Callback ( { svg : m_Svg.outerHTML, direction : m_Direction } );
-		};
-
-		/*
-		--- End of m_EndOk function ---
-		*/
-
-		/*
-		--- m_CreateMaps function -----------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_CreateMaps = function ( )
+		var m_CreateNodesAndWaysMaps = function ( )
 		{
 			m_WaysMap.clear ( );
 			m_NodesMap.clear ( );
@@ -9809,7 +9783,7 @@ Tests ...
 					switch ( element.type ) {
 						case 'way' :
 							// replacing the nodes property with the nodesId property to 
-							// avoid confusion between nodes and nodesId. the element.nodes contains nodesIds!!
+							// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
 							element.nodesIds = element.nodes;
 							delete element.nodes;
 							m_WaysMap.set ( element.id, element );
@@ -9825,10 +9799,8 @@ Tests ...
 		};
 		
 		/*
-		--- End of m_CreateMaps function ---
+		--- End of m_CreateNodesAndWaysMaps function ---
 		*/
-		
-
 		/*
 		--- m_CreateWays function -------------------------------------------------------------------------------------
 
@@ -9889,27 +9861,6 @@ Tests ...
 		*/
 
 		/*
-		--- m_CreateRoute function ------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_CreateRoute = function ( ) {
-			
-			var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
-			polyline.setAttributeNS ( null, "points", m_Points );
-			polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Itinerary" );
-			polyline.setAttributeNS ( null, "transform",  "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
-			m_Svg.appendChild ( polyline );
-		};
-
-		/*
-		--- End of m_CreateRoute function ---
-		*/
-
-		/*
 		--- m_createSvg function ----------------------------------------------------------------------------------
 
 		This function ...
@@ -9918,19 +9869,16 @@ Tests ...
 		*/
 
 		var m_createSvg = function ( returnOnOk, returnOnError ) {
-			
-			m_CreateMaps ( );
+
+			m_CreateNodesAndWaysMaps ( );
 
 			m_Svg = document.createElementNS ( "http://www.w3.org/2000/svg", "svg" );
 			m_Svg.setAttributeNS ( null, "viewBox", "" + m_SvgIconSize / 4 + " " + m_SvgIconSize / 4 + " " + m_SvgIconSize / 2 + " " + m_SvgIconSize / 2 );
 			m_Svg.setAttributeNS ( null, "class", "TravelNotes-SvgIcon" );
 			
-			m_CreateRoute ( );
+			m_ComputeRoute ( );
 			
 			m_CreateWays ( );
-			
-			
-			returnOnOk ( '' );
 		};
 		
 		/*
@@ -9959,11 +9907,12 @@ Tests ...
 					if ( xmlHttpRequest.status === 200 ) {
 						try {
 							m_Response = JSON.parse ( xmlHttpRequest.responseText );
+							m_createSvg ( );
 						}
 						catch ( e ) {
-							returnOnError ( 'JSON parsing error' );
+							returnOnError ( );
 						}
-						returnOnOk ( new Promise ( m_Promises [ m_NextPromise ++ ] ) );
+						returnOnOk ( { svg : m_Svg.outerHTML, direction : m_Direction } );
 					}
 					else {
 						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
@@ -9971,7 +9920,13 @@ Tests ...
 				}
 			};
 			
-			xmlHttpRequest.open ( "GET", m_XMLHttpRequestUrl, true );
+			xmlHttpRequest.open ( 
+				"GET", 
+				require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];way[highway](around:' + 
+					( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
+					')->.a;(.a >;.a;);out;',
+				true
+			);
 			xmlHttpRequest.overrideMimeType ( 'application/json' );
 			xmlHttpRequest.send ( null );
 		
@@ -9990,13 +9945,8 @@ Tests ...
 		*/
 		
 		var m_ComputeRoute = function ( ) {
-			var route = m_DataSearchEngine.getRoute ( m_RouteObjId );
+			var route = require ( '../Data/DataSearchEngine' ) ( ).getRoute ( m_RouteObjId );
 
-			if ( ! route ) {
-				// Route not found...
-				return;
-			}
-			
 			// Searching the nearest itinerary point
 			var minDistance = Number.MAX_VALUE;
 			var nearestPointIndex = - 1;
@@ -10119,6 +10069,11 @@ Tests ...
 				var point = g_TravelNotesData.map.project ( L.latLng ( itineraryPoints [ index ].lat, itineraryPoints [ index ].lng ), 17 ).add ( m_Delta );
 				m_Points += point.x.toFixed ( 0 ) + ',' + point.y.toFixed ( 0 ) + ' ';
 			}
+			var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
+			polyline.setAttributeNS ( null, "points", m_Points );
+			polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Itinerary" );
+			polyline.setAttributeNS ( null, "transform",  "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
+			m_Svg.appendChild ( polyline );
 		};
 				
 		/*
@@ -10126,48 +10081,31 @@ Tests ...
 		*/
 		
 		/*
-		--- m_GetSvgIcon function -------------------------------------------------------------------------------------
+		--- m_GetPromiseSvgIcon function ------------------------------------------------------------------------------
 
 		This function ...
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		var m_GetSvgIcon = function ( iconLatLng, routeObjId, callback ) {
+		var m_GetPromiseSvgIcon = function ( iconLatLng, routeObjId ) {
 			
 			// We verify that another request is not loaded
 			if ( s_RequestStarted ) {
-				return false;
+				return Promise.reject ( );
 			}
 			s_RequestStarted = true;
 			
 			m_IconLatLng = L.latLng ( iconLatLng );
-			
 			m_RouteObjId = routeObjId;
-
-
-			m_Callback = callback;
-
 			m_Response = {};
 			m_Svg = null;
 			
-			m_ComputeRoute ( );
-			
-			m_XMLHttpRequestUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];way[highway](around:' + 
-			( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
-			')->.a;(.a >;.a;);out;';
-			
-			m_NextPromise = 0;
-			m_Promises = [];
-			
-			m_Promises.push ( m_StartXMLHttpRequest );
-			m_Promises.push ( m_createSvg );
-			
-			new Promise ( m_Promises [ m_NextPromise ++ ] ).then (  m_EndOk, m_EndError  );
+			return new Promise ( m_StartXMLHttpRequest );
 		};
 		
 		/*
-		--- End of m_GetSvgIcon function ---
+		--- End of m_GetPromiseSvgIcon function ---
 		*/
 		
 		/*
@@ -10178,7 +10116,7 @@ Tests ...
 
 		return Object.seal (
 			{
-				getSvgIcon : function ( iconLatLng, routeObjId, callback ) { return m_GetSvgIcon ( iconLatLng, routeObjId, callback ); }				
+				getPromiseSvgIcon : function ( iconLatLng, routeObjId ) { return m_GetPromiseSvgIcon ( iconLatLng, routeObjId ); }				
 			}
 		);
 	};
@@ -11599,7 +11537,9 @@ Tests ...
 				timeout : 1000,
 				startupRouteEdition:true
 			},
-			haveBeforeUnloadWarning : true
+			haveBeforeUnloadWarning : true,
+			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter" 
+
 		};		
 
 		/*
@@ -11712,6 +11652,7 @@ Tests ...
 			get routeEditor ( ) { return m_Config.routeEditor; },
 			get travelEditor ( ) { return m_Config.travelEditor; },
 			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
+			get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
 			
 			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
 			

@@ -113,5 +113,6 @@
 		"timeout":1000,
 		"startupRouteEdition":true
 	},
-	"haveBeforeUnloadWarning" : true
+	"haveBeforeUnloadWarning":true,
+	"overpassApiUrl":"https://lz4.overpass-api.de/api/interpreter" 
 }

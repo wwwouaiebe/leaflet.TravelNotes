@@ -134,7 +134,9 @@ Tests ...
 				timeout : 1000,
 				startupRouteEdition:true
 			},
-			haveBeforeUnloadWarning : true
+			haveBeforeUnloadWarning : true,
+			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter" 
+
 		};		
 
 		/*
@@ -247,6 +249,7 @@ Tests ...
 			get routeEditor ( ) { return m_Config.routeEditor; },
 			get travelEditor ( ) { return m_Config.travelEditor; },
 			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
+			get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
 			
 			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
 			
