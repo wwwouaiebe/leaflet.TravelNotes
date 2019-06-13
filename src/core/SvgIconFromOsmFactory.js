@@ -149,20 +149,44 @@ Tests ...
 			
 			m_WaysMap.forEach ( 
 				function ( way ) {
-					var points = '';
+					var firstPointIndex = -1;
+					var lastPointIndex = -1;
+					var index = -1;
+					var points = [ ];
 					way.nodesIds.forEach (
 						function ( nodeId ) {
+							index ++;
 							var node = m_NodesMap.get ( nodeId );
 							var point = g_TravelNotesData.map.project ( L.latLng ( node.lat, node.lon ), 17 ).add ( m_Delta );
-							points += point.x.toFixed ( 0 ) + ',' + point.y.toFixed ( 0 ) + ' ';
+							points.push ( point );
+							var pointIsInside = point.x >= 0 && point.y >= 0 && point.x <=  m_SvgIconSize && point.y <= m_SvgIconSize;
+							if ( pointIsInside ) {
+								if ( -1 === firstPointIndex )  {
+									firstPointIndex = index;
+								}
+								lastPointIndex = index;
+							}
 						}
 					);
-					var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
-					polyline.setAttributeNS ( null, "points", points );
-					polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Highway TravelNotes-OSM-Highway-" + way.tags.highway );
-					polyline.setAttributeNS ( null, "transform", "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
-					
-					m_Svg.appendChild ( polyline );
+					if ( -1 !== firstPointIndex && -1 !== lastPointIndex ) {
+						if ( 0 < firstPointIndex ) {
+							firstPointIndex --;
+						}
+						if ( way.nodesIds.length -1 > lastPointIndex ) {
+							lastPointIndex ++;
+						}
+						var pointsAttribute = '';
+						for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
+								pointsAttribute += points[ index ].x.toFixed ( 0 ) + ',' + points[ index ].y.toFixed ( 0 ) + ' ';
+						}
+
+						var polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
+						polyline.setAttributeNS ( null, "points", pointsAttribute );
+						polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Highway TravelNotes-OSM-Highway-" + way.tags.highway );
+						polyline.setAttributeNS ( null, "transform", "rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" );
+						
+						m_Svg.appendChild ( polyline );
+					}
 				}
 			);
 			
@@ -312,7 +336,7 @@ Tests ...
 			// This point will be used to draw the itinerary in the SVG
 			index = nearestPointIndex;
 			var distance = 0;
-			while ( ( 0 <  index -- ) && ( 100 > distance ) ) {
+			while ( ( 0 <  index -- ) && ( 150 > distance ) ) {
 				distance += itineraryPoints [ index ].distance;
 			}
 			var startPointIndex = index;
@@ -353,7 +377,7 @@ Tests ...
 			// This point will be used to draw the itinerary in the SVG
 			index = nearestPointIndex;
 			distance = 0;
-			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 100 > distance ) ) ) {
+			while ( ( index < nearestPointIndex + 1 ) || ( ( index < itineraryPoints.length ) && ( 150 > distance ) ) ) {
 				distance += itineraryPoints [ index ].distance;
 				index ++;
 			}
@@ -438,7 +462,7 @@ Tests ...
 			m_ComputeRoute ( );
 			
 			m_XMLHttpRequestUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];way[highway](around:' + 
-			m_SvgIconSize + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
+			( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
 			')->.a;(.a >;.a;);out;';
 			
 			m_NextPromise = 0;
