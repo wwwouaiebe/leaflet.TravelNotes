@@ -21,6 +21,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.4.0:
+		- added next and previous method
 Doc reviewed 20181215
 Tests ...
 
@@ -176,6 +178,33 @@ Tests ...
 			return m_Array [ m_Array.length - 1 ];
 		};
 
+		/*
+		--- m_NextOrPrevious function ---------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_NextOrPrevious = function ( objId, condition, direction ) {
+			var index = m_IndexOfObjId ( objId );
+			if ( -1 === index ) {
+				throw 'invalid objId for next or previous function';
+			}
+			
+			if ( ! condition ) {
+				condition = function ( ) { return true; };
+			}
+			index += direction;
+			
+			while ( ( -1 < index ) && ( index < m_Array.length ) && ! condition ( m_Array [ index ] ) ) {
+							index += direction;
+			}
+			if ( -1 === index || m_Array.length === index ) {
+				return null;
+			}
+			
+			return m_Array [ index ];
+		};
+		
 		/*
 		--- m_Remove function -----------------------------------------------------------------------------------------
 
@@ -345,9 +374,35 @@ Tests ...
 
 				-------------------------------------------------------------------------------------------------------
 				*/
+				
 				moveTo : function ( objId, targetObjId, moveBefore ) {
 					m_MoveTo ( objId, targetObjId, moveBefore );
 				},
+				
+				/*
+				--- next function -----------------------------------------------------------------------------------
+
+				This function 
+
+				-------------------------------------------------------------------------------------------------------
+				*/
+
+				next : function ( objId, condition ) {
+					return m_NextOrPrevious ( objId, condition, 1 );
+				},
+				
+				/*
+				--- previous function ---------------------------------------------------------------------------------
+
+				This function 
+
+				-------------------------------------------------------------------------------------------------------
+				*/
+
+				previous : function ( objId, condition ) {
+					return m_NextOrPrevious ( objId, condition, -1 );
+				},
+				
 				/*
 				--- remove function -----------------------------------------------------------------------------------
 

@@ -124,7 +124,9 @@ Tests ...
 					sharpRight:340
 				},
 				svgZoom : 17,
-				svgAngleDistance : 10
+				svgAngleDistance : 10,
+				cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
+				cityPostfix : "</span'>"
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {

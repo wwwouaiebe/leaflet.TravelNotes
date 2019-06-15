@@ -103,32 +103,42 @@ Tests ...
 		*/
 
 		var onSvgIcon = function ( data ) {
+console.log ( data );
 			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg.outerHTML;
+			var directionArrow = '';
 			if ( null !== data.direction ) {
 				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
 				if ( data.direction < cfgDirection.right ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
+					directionArrow = ' &#x1F882; ';
 				}
 				else if ( data.direction < cfgDirection.slightRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight right');
+					directionArrow = ' &#x1F885; ';
 				}
 				else if ( data.direction < cfgDirection.continue ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Continue');
+					directionArrow = ' &#x1F881; ';
 				}
 				else if ( data.direction < cfgDirection.slightLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight left');
+					directionArrow = ' &#x1F884; ';
 				}
 				else if ( data.direction < cfgDirection.left ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn left');
+					directionArrow = ' &#x1F880; ';
 				}
 				else if ( data.direction < cfgDirection.sharpLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp left');
+					directionArrow = ' &#x1F887; ';
 				}
 				else if ( data.direction < cfgDirection.sharpRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp right');
+					directionArrow = ' &#x1F886; ';
 				}
 				else {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
+					directionArrow = ' &#x1F882; ';
 				}
 			}
 			if ( -1 === data.startStop ) {
@@ -137,6 +147,28 @@ Tests ...
 			else if ( 1 === data.startStop ) {
 				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Stop');
 			}
+			
+			var address = '';
+			for ( var counter = 0; counter < data.streets.length; counter ++ ) {
+				address += data.streets [ counter ];
+				switch ( counter ) {
+					case data.streets.length - 2:
+						address += directionArrow;
+						break;
+					case data.streets.length - 1:
+						break;
+					default:
+					address += ' &gt;&lt; ';
+						break;
+				}
+			}
+			if ( data.city ) {
+				address += ' ' + require ( '../L.TravelNotes' ).config.note.cityPrefix + data.city + require ( '../L.TravelNotes' ).config.note.cityPostfix;
+			}
+			if ( data.place && data.place !== data.city ) {
+				address += ' (' + data.place + ')';
+			}
+			document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress').value = address;
 			
 			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
 		};

@@ -21,11 +21,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	font-weight: bold;
 }
-.TravelNotes-NoteHtml-Address > span,
-.TravelNotes-NoteHtml-Phone > span,
-.TravelNotes-NoteHtml-Url > span,
+.TravelNotes-NoteHtml-Address > span:first-child,
+.TravelNotes-NoteHtml-Phone > span:first-child,
+.TravelNotes-NoteHtml-Url > span:first-child,
 .TravelNotes-NoteHtml-LatLng > span,
-.TravelNotes-NoteHtml-Distance > span
+.TravelNotes-NoteHtml-Distance > span:first-child,
+.TravelNotes-NoteHtml-Address-City
 {
 	text-decoration : underline;
 }

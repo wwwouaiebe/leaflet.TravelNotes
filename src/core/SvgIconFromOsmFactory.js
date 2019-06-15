@@ -42,13 +42,17 @@ Tests ...
 
 		var m_IconLatLng = L.latLng ( 0, 0 ); // the icon lat and lng
 		var m_IconDistance = 0; // the icon distance from the beginning of the route
-		var m_IconPointObjId = -1;
+		var m_IconPoint = null;
 		var m_Route = null; // the L.TravelNotes route object
 		
 		var m_Response = {}; // the xmlHttpRequest parsed
 		
 		var m_WaysMap = new Map ( );
 		var m_NodesMap = new Map ( );
+		var m_Places = [];
+		var m_Place = null;
+		var m_City = null;
+		
 		var m_Svg = null; // the svg element
 		var m_StartStop = 0; // a flag to indicates where is the icon : -1 on the first node, 1 on the end node, 0 on an intermediate node
 		
@@ -59,6 +63,10 @@ Tests ...
 		var m_SvgIconSize = require ( '../L.TravelNotes' ).config.note.svgIconWidth;
 		var m_SvgZoom = require ( '../L.TravelNotes' ).config.note.svgZoom;
 		var m_SvgAngleDistance = require ( '../L.TravelNotes' ).config.note.svgAngleDistance;
+		
+		var m_IncomingPoint = null;
+		var m_OutgoingPoint = null;
+		var m_PassingStreets = [];
 				
 		/*
 		--- m_CreateNodesAndWaysMaps function -------------------------------------------------------------------------
@@ -77,6 +85,11 @@ Tests ...
 			m_Response.elements.forEach (
 				function ( element ) {
 					switch ( element.type ) {
+						case 'area' :
+							if ( element.tags && element.tags.boundary && element.tags.name ) {
+								m_City = element.tags.name;
+							}
+							break;
 						case 'way' :
 							// replacing the nodes property with the nodesId property to 
 							// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
@@ -86,6 +99,9 @@ Tests ...
 							break;
 						case 'node' :
 							m_NodesMap.set ( element.id, element );
+							if ( element.tags && element.tags.place ) {
+								m_Places.push ( element );
+							}
 							break;
 						default:
 							break;
@@ -99,17 +115,16 @@ Tests ...
 		*/
 
 		/*
-		--- m_SearchNearestItineraryPoint function --------------------------------------------------------------------
+		--- m_SearchItineraryPoints function --------------------------------------------------------------------------
 
-		This function the nearest route point from the icon and compute the distance from the begining of the route
+		This function search the nearest route point from the icon and compute the distance from the begining of the route
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		var m_SearchNearestItineraryPoint = function ( ) {
+		var m_SearchItineraryPoints = function ( ) {
 			// Searching the nearest itinerary point
 			var minDistance = Number.MAX_VALUE;
-			var nearestPoint = null;
 			var distance = 0;
 			
 			// Iteration on the points...
@@ -118,7 +133,7 @@ Tests ...
 					var pointDistance = m_IconLatLng.distanceTo ( L.latLng ( itineraryPoint.latLng ) );
 					if ( minDistance > pointDistance ) {
 						minDistance = pointDistance;
-						nearestPoint = itineraryPoint;
+						m_IconPoint = itineraryPoint;
 						m_IconDistance = distance;
 					}
 					distance += itineraryPoint.distance;
@@ -126,12 +141,91 @@ Tests ...
 			);
 			
 			// The coordinates of the nearest point are used as position of the icon
-			m_IconLatLng = L.latLng ( nearestPoint.latLng );
-			m_IconPointObjId = nearestPoint.objId;
+			m_IconLatLng = L.latLng ( m_IconPoint.latLng );
+			
+			var latLngCompare = function ( itineraryPoint ) {
+				return m_IconPoint.lat !== itineraryPoint.lat || m_IconPoint.lng !== itineraryPoint.lng;
+			};
+			m_IncomingPoint = m_Route.itinerary.itineraryPoints.previous ( m_IconPoint.objId, latLngCompare );
+			m_OutgoingPoint = m_Route.itinerary.itineraryPoints.next ( m_IconPoint.objId, latLngCompare );
 		};
 		
 		/*
-		--- End of m_SearchNearestItineraryPoint function ---
+		--- End of m_SearchItineraryPoints function ---
+		*/
+		
+		/*
+		--- m_SearchHamlet function -----------------------------------------------------------------------------------
+
+		This function 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SearchHamlet = function ( ) {
+			var minDistance = Number.MAX_VALUE;
+			m_Places.forEach (
+				function ( place ) {
+				var placeDistance = L.latLng ( m_IconPoint.latLng ).distanceTo ( L.latLng ( place.lat, place.lon ) );
+					if ( minDistance > placeDistance ) {
+						minDistance = placeDistance;
+						m_Place = place.tags.name;
+					}
+				}
+			);
+		};
+		
+		/*
+		--- End of m_SearchHamlet function ---
+		*/
+
+		/*
+		--- m_SearchPassingStreets function -----------------------------------------------------------------------------
+
+		This function 
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SearchPassingStreets = function ( ) {
+
+			var iconPointId = -1;
+			var incomingPointId = -1;
+			var outgoingPointId = -1;
+			m_NodesMap.forEach (
+				function ( node ) {
+					if ( m_IconPoint && Math.abs ( node.lat - m_IconPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_IconPoint.lng ) < 0.000001 ) {
+						iconPointId = node.id;
+					}
+					if ( m_IncomingPoint && Math.abs ( node.lat - m_IncomingPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_IncomingPoint.lng ) < 0.000001 ) {
+						incomingPointId = node.id;
+					}
+					if ( m_OutgoingPoint && Math.abs ( node.lat - m_OutgoingPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_OutgoingPoint.lng ) < 0.000001  ) {
+						outgoingPointId = node.id;
+					}
+				}
+			);
+			var incomingStreet = '';
+			var outgoingStreet = '';
+			m_WaysMap.forEach ( 
+				function ( way ) {
+					if ( way.nodesIds.includes ( iconPointId ) && ! way.nodesIds.includes ( incomingPointId ) && ! way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
+						m_PassingStreets.push ( way.tags.name );
+					}
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) )  {
+						incomingStreet = way.tags.name ? way.tags.name : '???';
+					}
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) )  {
+						outgoingStreet =  way.tags.name ? way.tags.name : '???' ;
+					}
+				}
+			);
+			m_PassingStreets.unshift ( incomingStreet );
+			m_PassingStreets.push ( outgoingStreet );
+		};
+
+		/*
+		--- End of m_SearchPassingStreets function ---
 		*/
 
 		/*
@@ -180,7 +274,7 @@ Tests ...
 			
 			var iconPoint = g_TravelNotesData.map.project ( m_IconLatLng , m_SvgZoom ).add ( m_Translation );
 			// computing rotation... if possible
-			if ( m_IconPointObjId !== m_Route.itinerary.itineraryPoints.first.objId  ) {
+			if ( m_IconPoint.objId !== m_Route.itinerary.itineraryPoints.first.objId  ) {
 				var rotationPoint = g_TravelNotesData.map.project ( L.latLng ( rotationItineraryPoint.latLng ), m_SvgZoom ).add ( m_Translation );
 				m_Rotation = Math.atan (  ( iconPoint.y - rotationPoint.y ) / ( rotationPoint.x - iconPoint.x ) ) * 180 / Math.PI;
 				if ( 0 > m_Rotation ) {
@@ -195,7 +289,7 @@ Tests ...
 			}
 			//computing direction ... if possible
 
-			if ( m_IconPointObjId !== m_Route.itinerary.itineraryPoints.last.objId  ) {
+			if ( m_IconPoint.objId !== m_Route.itinerary.itineraryPoints.last.objId  ) {
 				var directionPoint = g_TravelNotesData.map.project ( L.latLng ( directionItineraryPoint.latLng ), m_SvgZoom ).add ( m_Translation );
 				m_Direction = Math.atan (  ( iconPoint.y - directionPoint.y ) / ( directionPoint.x - iconPoint.x ) ) * 180 / Math.PI;
 				// point 0,0 of the svg is the UPPER left corner
@@ -211,7 +305,7 @@ Tests ...
 					m_Direction -= 360;
 				}
 			}
-			if ( m_IconPointObjId === m_Route.itinerary.itineraryPoints.first.objId  ) {
+			if ( m_IconPoint.objId === m_Route.itinerary.itineraryPoints.first.objId  ) {
 				m_Rotation = - m_Direction - 90;
 				m_Direction = null;
 				m_StartStop = -1;
@@ -354,7 +448,9 @@ Tests ...
 			m_Svg.setAttributeNS ( null, "viewBox", "" + m_SvgIconSize / 4 + " " + m_SvgIconSize / 4 + " " + m_SvgIconSize / 2 + " " + m_SvgIconSize / 2 );
 			m_Svg.setAttributeNS ( null, "class", "TravelNotes-SvgIcon" );
 			
-			m_SearchNearestItineraryPoint ( );
+			m_SearchItineraryPoints ( );
+			m_SearchPassingStreets ( );
+			m_SearchHamlet ( );
 			m_ComputeTranslation ( );
 			m_ComputeRotationAndDirection ( );
 			m_CreateRoute ( );
@@ -394,7 +490,7 @@ Tests ...
 						}
 						m_createSvg ( );
 						s_RequestStarted = false;
-						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop } );
+						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets } );
 					}
 					else {
 						s_RequestStarted = false;
@@ -402,14 +498,17 @@ Tests ...
 					}
 				}
 			};
+			// https://lz4.overpass-api.de/api/interpreter?data=[out:json];way[highway](around:150,50.508801,5.493137)->.a;(.a >;.a;)->.a;is_in(50.508801,5.493137)->.e;area.e[admin_level="8"]->.f;(node(area.f)[place="village"];node(area.f)[place="hamlet"];)->.g;(node(around:500,50.508801,5.493137)[place="village"];node(around:500,50.508801,5.493137)[place="hamlet"];)->.h;node.g.h->.i;(.a;.f;.i;);out;
 			
-			xmlHttpRequest.open ( 
-				"GET", 
-				require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];way[highway](around:' + 
-					( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 ) + 
-					')->.a;(.a >;.a;);out;',
-				true
-			);
+			var requestLatLng = m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 );
+			var requestCityDistance = '500,';
+			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];way[highway](around:' + 
+				( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;is_in(' + requestLatLng +
+				')->.e;area.e[admin_level="8"]->.f;(node(area.f)[place="village"];node(area.f)[place="hamlet"];)->.g;(node(around:' +
+				requestCityDistance + requestLatLng + ')[place="village"];node(around:' +
+				requestCityDistance + requestLatLng + ')[place="hamlet"];)->.h;node.g.h->.i;(.a;.f;.i;);out;';
+
+			xmlHttpRequest.open ( "GET", requestUrl, true);
 			xmlHttpRequest.overrideMimeType ( 'application/json' );
 			xmlHttpRequest.send ( null );
 		
