@@ -60,6 +60,7 @@ Tests ...
 		var m_NoteDataDiv = null;
 		var m_FocusControl = null;
 		var m_HtmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		var m_LatLng = note.latLng;
 
 		/*
 		--- onOkButtonClick function ----------------------------------------------------------------------------------
@@ -86,6 +87,7 @@ Tests ...
 			note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 			note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 			note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
+			note.latLng = m_LatLng;
 			require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( note, routeObjId );
 			return true;
 		};
@@ -103,42 +105,41 @@ Tests ...
 		*/
 
 		var onSvgIcon = function ( data ) {
-console.log ( data );
 			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg.outerHTML;
 			var directionArrow = '';
 			if ( null !== data.direction ) {
 				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
 				if ( data.direction < cfgDirection.right ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
-					directionArrow = ' &#x1F882; ';
+					directionArrow = String.fromCodePoint ( 0x1F882 );
 				}
 				else if ( data.direction < cfgDirection.slightRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight right');
-					directionArrow = ' &#x1F885; ';
+					directionArrow = String.fromCodePoint ( 0x1F885 );
 				}
 				else if ( data.direction < cfgDirection.continue ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Continue');
-					directionArrow = ' &#x1F881; ';
+					directionArrow = String.fromCodePoint ( 0x1F881 );
 				}
 				else if ( data.direction < cfgDirection.slightLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight left');
-					directionArrow = ' &#x1F884; ';
+					directionArrow = String.fromCodePoint ( 0x1F884 );
 				}
 				else if ( data.direction < cfgDirection.left ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn left');
-					directionArrow = ' &#x1F880; ';
+					directionArrow = String.fromCodePoint ( 0x1F880 );
 				}
 				else if ( data.direction < cfgDirection.sharpLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp left');
-					directionArrow = ' &#x1F887; ';
+					directionArrow = String.fromCodePoint ( 0x1F887 );
 				}
 				else if ( data.direction < cfgDirection.sharpRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp right');
-					directionArrow = ' &#x1F886; ';
+					directionArrow = String.fromCodePoint ( 0x1F886 );
 				}
 				else {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
-					directionArrow = ' &#x1F882; ';
+					directionArrow = String.fromCodePoint ( 0x1F882 );
 				}
 			}
 			if ( -1 === data.startStop ) {
@@ -149,8 +150,16 @@ console.log ( data );
 			}
 			
 			var address = '';
+			var showPlace = 0;
 			for ( var counter = 0; counter < data.streets.length; counter ++ ) {
-				address += data.streets [ counter ];
+				if ( ( 0 === counter  || data.streets.length - 1 === counter ) && data.streets [ counter ] === '' ) {
+					address += '???';
+					showPlace ++;
+				}
+				else {
+					address += data.streets [ counter ];
+					showPlace --;
+				}
 				switch ( counter ) {
 					case data.streets.length - 2:
 						address += directionArrow;
@@ -158,19 +167,20 @@ console.log ( data );
 					case data.streets.length - 1:
 						break;
 					default:
-					address += ' &gt;&lt; ';
+					address += String.fromCodePoint ( 0x2AA5 );
 						break;
 				}
 			}
 			if ( data.city ) {
 				address += ' ' + require ( '../L.TravelNotes' ).config.note.cityPrefix + data.city + require ( '../L.TravelNotes' ).config.note.cityPostfix;
 			}
-			if ( data.place && data.place !== data.city ) {
+			if ( data.place && data.place !== data.city  && showPlace !== 2 ) {
 				address += ' (' + data.place + ')';
 			}
 			document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress').value = address;
 			
 			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
+			m_LatLng = data.latLng;
 		};
 		
 		/*

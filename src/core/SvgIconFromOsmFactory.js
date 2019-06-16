@@ -80,7 +80,6 @@ Tests ...
 		{
 			m_WaysMap.clear ( );
 			m_NodesMap.clear ( );
-			
 			// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
 			m_Response.elements.forEach (
 				function ( element ) {
@@ -212,11 +211,11 @@ Tests ...
 					if ( way.nodesIds.includes ( iconPointId ) && ! way.nodesIds.includes ( incomingPointId ) && ! way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
 						m_PassingStreets.push ( way.tags.name );
 					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) )  {
-						incomingStreet = way.tags.name ? way.tags.name : '???';
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) &&  way.tags.name )  {
+						incomingStreet = way.tags.name;
 					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) )  {
-						outgoingStreet =  way.tags.name ? way.tags.name : '???' ;
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
+						outgoingStreet =  way.tags.name;
 					}
 				}
 			);
@@ -490,7 +489,7 @@ Tests ...
 						}
 						m_createSvg ( );
 						s_RequestStarted = false;
-						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets } );
+						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets, latLng : m_IconPoint.latLng } );
 					}
 					else {
 						s_RequestStarted = false;

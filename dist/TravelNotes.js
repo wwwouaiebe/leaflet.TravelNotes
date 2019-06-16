@@ -4251,6 +4251,7 @@ Tests ...
 		var m_NoteDataDiv = null;
 		var m_FocusControl = null;
 		var m_HtmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
+		var m_LatLng = note.latLng;
 
 		/*
 		--- onOkButtonClick function ----------------------------------------------------------------------------------
@@ -4277,6 +4278,7 @@ Tests ...
 			note.address = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress' ).value;
 			note.url = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Link' ).value;
 			note.phone = document.getElementById ( 'TravelNotes-NoteDialog-InputText-Phone' ).value;
+			note.latLng = m_LatLng;
 			require ( '../core/NoteEditor' ) ( ).afterNoteDialog ( note, routeObjId );
 			return true;
 		};
@@ -4294,42 +4296,41 @@ Tests ...
 		*/
 
 		var onSvgIcon = function ( data ) {
-console.log ( data );
 			document.getElementById ( 'TravelNotes-NoteDialog-TextArea-IconHtmlContent' ).value = data.svg.outerHTML;
 			var directionArrow = '';
 			if ( null !== data.direction ) {
 				var cfgDirection = require ( '../L.TravelNotes' ).config.note.svgAnleMaxDirection;
 				if ( data.direction < cfgDirection.right ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
-					directionArrow = ' &#x1F882; ';
+					directionArrow = String.fromCodePoint ( 0x1F882 );
 				}
 				else if ( data.direction < cfgDirection.slightRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight right');
-					directionArrow = ' &#x1F885; ';
+					directionArrow = String.fromCodePoint ( 0x1F885 );
 				}
 				else if ( data.direction < cfgDirection.continue ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Continue');
-					directionArrow = ' &#x1F881; ';
+					directionArrow = String.fromCodePoint ( 0x1F881 );
 				}
 				else if ( data.direction < cfgDirection.slightLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn slight left');
-					directionArrow = ' &#x1F884; ';
+					directionArrow = String.fromCodePoint ( 0x1F884 );
 				}
 				else if ( data.direction < cfgDirection.left ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn left');
-					directionArrow = ' &#x1F880; ';
+					directionArrow = String.fromCodePoint ( 0x1F880 );
 				}
 				else if ( data.direction < cfgDirection.sharpLeft ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp left');
-					directionArrow = ' &#x1F887; ';
+					directionArrow = String.fromCodePoint ( 0x1F887 );
 				}
 				else if ( data.direction < cfgDirection.sharpRight ) {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn sharp right');
-					directionArrow = ' &#x1F886; ';
+					directionArrow = String.fromCodePoint ( 0x1F886 );
 				}
 				else {
 					document.getElementById ( 'TravelNotes-NoteDialog-InputText-Tooltip' ).value = g_Translator.getText ( 'NoteDialog - Turn right');
-					directionArrow = ' &#x1F882; ';
+					directionArrow = String.fromCodePoint ( 0x1F882 );
 				}
 			}
 			if ( -1 === data.startStop ) {
@@ -4340,8 +4341,16 @@ console.log ( data );
 			}
 			
 			var address = '';
+			var showPlace = 0;
 			for ( var counter = 0; counter < data.streets.length; counter ++ ) {
-				address += data.streets [ counter ];
+				if ( ( 0 === counter  || data.streets.length - 1 === counter ) && data.streets [ counter ] === '' ) {
+					address += '???';
+					showPlace ++;
+				}
+				else {
+					address += data.streets [ counter ];
+					showPlace --;
+				}
 				switch ( counter ) {
 					case data.streets.length - 2:
 						address += directionArrow;
@@ -4349,19 +4358,20 @@ console.log ( data );
 					case data.streets.length - 1:
 						break;
 					default:
-					address += ' &gt;&lt; ';
+					address += String.fromCodePoint ( 0x2AA5 );
 						break;
 				}
 			}
 			if ( data.city ) {
 				address += ' ' + require ( '../L.TravelNotes' ).config.note.cityPrefix + data.city + require ( '../L.TravelNotes' ).config.note.cityPostfix;
 			}
-			if ( data.place && data.place !== data.city ) {
+			if ( data.place && data.place !== data.city  && showPlace !== 2 ) {
 				address += ' (' + data.place + ')';
 			}
 			document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress').value = address;
 			
 			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
+			m_LatLng = data.latLng;
 		};
 		
 		/*
@@ -9075,7 +9085,7 @@ Tests ...
 			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( note.objId );
 			if ( noteAndRoute.note ) {
 				// it's an existing note. The note is changed on the map
-				require ( '../core/MapEditor' ) ( ).editNote ( note );
+				require ( '../core/MapEditor' ) ( ).redrawNote ( note );
 				if ( ! noteAndRoute.route ) {
 					// it's a travel note. UI is also adapted
 					require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
@@ -9830,7 +9840,6 @@ Tests ...
 		{
 			m_WaysMap.clear ( );
 			m_NodesMap.clear ( );
-			
 			// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
 			m_Response.elements.forEach (
 				function ( element ) {
@@ -9962,11 +9971,11 @@ Tests ...
 					if ( way.nodesIds.includes ( iconPointId ) && ! way.nodesIds.includes ( incomingPointId ) && ! way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
 						m_PassingStreets.push ( way.tags.name );
 					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) )  {
-						incomingStreet = way.tags.name ? way.tags.name : '???';
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) &&  way.tags.name )  {
+						incomingStreet = way.tags.name;
 					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) )  {
-						outgoingStreet =  way.tags.name ? way.tags.name : '???' ;
+					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
+						outgoingStreet =  way.tags.name;
 					}
 				}
 			);
@@ -10240,7 +10249,7 @@ Tests ...
 						}
 						m_createSvg ( );
 						s_RequestStarted = false;
-						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets } );
+						returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets, latLng : m_IconPoint.latLng } );
 					}
 					else {
 						s_RequestStarted = false;

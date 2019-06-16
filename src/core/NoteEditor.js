@@ -263,7 +263,7 @@ Tests ...
 			var noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( note.objId );
 			if ( noteAndRoute.note ) {
 				// it's an existing note. The note is changed on the map
-				require ( '../core/MapEditor' ) ( ).editNote ( note );
+				require ( '../core/MapEditor' ) ( ).redrawNote ( note );
 				if ( ! noteAndRoute.route ) {
 					// it's a travel note. UI is also adapted
 					require ( '../UI/DataPanesUI' ) ( ).setTravelNotes ( );
