@@ -98,7 +98,7 @@ Tests ...
 							break;
 						case 'node' :
 							m_NodesMap.set ( element.id, element );
-							if ( element.tags && element.tags.place ) {
+							if ( element.tags && element.tags.place && [ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place ) ) {
 								m_Places.push ( element );
 							}
 							break;
@@ -501,11 +501,23 @@ Tests ...
 			
 			var requestLatLng = m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 );
 			var requestCityDistance = '500,';
-			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];way[highway](around:' + 
-				( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;is_in(' + requestLatLng +
-				')->.e;area.e[admin_level="8"]->.f;(node(area.f)[place="village"];node(area.f)[place="hamlet"];)->.g;(node(around:' +
-				requestCityDistance + requestLatLng + ')[place="village"];node(around:' +
-				requestCityDistance + requestLatLng + ')[place="hamlet"];)->.h;node.g.h->.i;(.a;.f;.i;);out;';
+			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];' + 
+				'way[highway](around:' + ( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;' +
+				'is_in(' + requestLatLng + ')->.e;area.e[admin_level="8"]->.f;' +
+				'(' + 
+				'node(area.f)[place="village"];' +
+				'node(area.f)[place="hamlet"];' +
+				'node(area.f)[place="city"];' +
+				'node(area.f)[place="town"];' +
+				')->.g;' +
+				'(' + 
+				'node(around:' + requestCityDistance + requestLatLng + ')[place="hamlet"];' + 
+				'node(around:' + requestCityDistance + requestLatLng + ')[place="village"];' + 
+				'node(around:' + requestCityDistance + requestLatLng + ')[place="city"];' +
+				'node(around:' + requestCityDistance + requestLatLng + ')[place="town"];' +
+				')->.h;' +
+				'node.g.h->.i;' + 
+				'(.a;.f;.i;);out;';
 
 			xmlHttpRequest.open ( "GET", requestUrl, true);
 			xmlHttpRequest.overrideMimeType ( 'application/json' );
