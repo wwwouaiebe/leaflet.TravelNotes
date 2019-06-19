@@ -125,6 +125,11 @@ Tests ...
 				},
 				svgZoom : 17,
 				svgAngleDistance : 10,
+				svgHamletDistance : 200,
+				svgVillageDistance : 400,
+				svgCityDistance : 1200,
+				svgTownDistance: 1500,
+				
 				cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
 				cityPostfix : "</span'>"
 			},

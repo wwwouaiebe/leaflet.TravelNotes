@@ -9930,13 +9930,8 @@ Tests ...
 						minDistance = placeDistance;
 						m_Place = place.tags.name;
 					}
-console.log ( 'place' );
-console.log ( place );
-console.log ( 'placeDistance' );
-console.log ( placeDistance );
 				}
 			);
-console.log ( m_Place );
 		};
 		
 		/*
@@ -10266,23 +10261,24 @@ console.log ( m_Place );
 			
 			var requestLatLng = m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 );
 			var requestCityDistance = '500,';
-			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];' + 
-				'way[highway](around:' + ( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;' +
-				'is_in(' + requestLatLng + ')->.e;area.e[admin_level="8"]->.f;' +
-				'(' + 
-				'node(area.f)[place="village"];' +
-				'node(area.f)[place="hamlet"];' +
-				'node(area.f)[place="city"];' +
-				'node(area.f)[place="town"];' +
-				')->.g;' +
-				'(' + 
-				'node(around:' + requestCityDistance + requestLatLng + ')[place="hamlet"];' + 
-				'node(around:' + requestCityDistance + requestLatLng + ')[place="village"];' + 
-				'node(around:' + requestCityDistance + requestLatLng + ')[place="city"];' +
-				'node(around:' + requestCityDistance + requestLatLng + ')[place="town"];' +
-				')->.h;' +
-				'node.g.h->.i;' + 
-				'(.a;.f;.i;);out;';
+
+
+			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];' +
+				'way[highway](around:' + ( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
+				'is_in(' + requestLatLng + ')->.e;' +
+				'area.e[admin_level="4"][name="England"]->.f;' +
+				'area.e[admin_level="8"]->.g;' +
+				'area.e[admin_level="10"]->.h;' +
+				'if(f.count(deriveds)==0){.g->.i;}else{if(h.count(deriveds)==0){.g->.i;}else{.h->.i;}}.i out;' +
+				'(node(area.i)[place="village"];node(area.i)[place="hamlet"];node(area.i)[place="city"];node(area.i)[place="town"];)->.k;' +
+				'( ' +
+				'node(around:' + require ( '../L.TravelNotes' ).config.note.svgHamletDistance + ',' + requestLatLng + ')[place="hamlet"];' +
+				'node(around:' + require ( '../L.TravelNotes' ).config.note.svgVillageDistance + ',' + requestLatLng + ')[place="village"];' +
+				'node(around:' + require ( '../L.TravelNotes' ).config.note.svgCityDistance + ',' + requestLatLng + ')[place="city"];' +
+				'node(around:' + require ( '../L.TravelNotes' ).config.note.svgTownDistance + ',' + requestLatLng + ')[place="town"];' +
+				')->.l;' +
+				'node.k.l->.m;' +
+				'.m out;';
 
 			xmlHttpRequest.open ( "GET", requestUrl, true);
 			xmlHttpRequest.overrideMimeType ( 'application/json' );
@@ -11797,6 +11793,11 @@ Tests ...
 				},
 				svgZoom : 17,
 				svgAngleDistance : 10,
+				svgHamletDistance : 200,
+				svgVillageDistance : 400,
+				svgCityDistance : 1200,
+				svgTownDistance: 1500,
+				
 				cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
 				cityPostfix : "</span'>"
 			},
