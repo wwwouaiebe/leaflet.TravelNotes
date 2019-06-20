@@ -471,7 +471,7 @@ Tests ...
 		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
 
 			var xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = 15000;
+			xmlHttpRequest.timeout = require ( '../L.TravelNotes' ).config.note.svgTimeOut;
 			
 			xmlHttpRequest.ontimeout = function ( event ) {
 				returnOnError ( 'TimeOut error' );
@@ -497,16 +497,15 @@ Tests ...
 					}
 				}
 			};
-			// https://lz4.overpass-api.de/api/interpreter?data=[out:json];way[highway](around:150,50.508801,5.493137)->.a;(.a >;.a;)->.a;is_in(50.508801,5.493137)->.e;area.e[admin_level="8"]->.f;(node(area.f)[place="village"];node(area.f)[place="hamlet"];)->.g;(node(around:500,50.508801,5.493137)[place="village"];node(around:500,50.508801,5.493137)[place="hamlet"];)->.h;node.g.h->.i;(.a;.f;.i;);out;
-			
+
 			var requestLatLng = m_IconLatLng.lat.toFixed ( 6 ) + ',' + m_IconLatLng.lng.toFixed ( 6 );
 			var requestCityDistance = '500,';
 
 
-			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json];' +
+			var requestUrl = require ( '../L.TravelNotes' ).config.overpassApiUrl + '?data=[out:json][timeout:' + require ( '../L.TravelNotes' ).config.note.svgTimeOut + '];' +
 				'way[highway](around:' + ( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
 				'is_in(' + requestLatLng + ')->.e;' +
-				'area.e[admin_level="4"][name="England"]->.f;' +
+				'area.e[admin_level="2"][name="United Kingdom"]->.f;' +
 				'area.e[admin_level="8"]->.g;' +
 				'area.e[admin_level="10"]->.h;' +
 				'if(f.count(deriveds)==0){.g->.i;}else{if(h.count(deriveds)==0){.g->.i;}else{.h->.i;}}.i out;' +

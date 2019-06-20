@@ -128,8 +128,8 @@ Tests ...
 				svgHamletDistance : 200,
 				svgVillageDistance : 400,
 				svgCityDistance : 1200,
-				svgTownDistance: 1500,
-				
+				svgTownDistance : 1500,
+				svgTimeOut : 15000,
 				cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
 				cityPostfix : "</span'>"
 			},
