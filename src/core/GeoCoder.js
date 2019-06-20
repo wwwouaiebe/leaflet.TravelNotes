@@ -26,6 +26,8 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- Working with Promise
+		- returning the complete Nominatim responce in place of a computed address
 Doc reviewed 20170927
 Tests ...
 
@@ -36,59 +38,113 @@ Tests ...
 	
 	'use strict';
 
-	var _RequestStarted = false;
+	var s_RequestStarted = false;
 	
 	var GeoCoder = function ( ) {
+	
+		var m_ObjId = -1;
+		var m_Lat = 0;
+		var m_Lng = 0;
 
-		return {
+		/*
+		--- m_StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function start the http request to OSM
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = require ( '../L.TravelNotes' ).config.note.svgTimeOut;
 			
-			getAddress : function ( lat, lng, callback, parameter ) {
-				if ( _RequestStarted ) {
-					return;
-				}
-				_RequestStarted = true;
-				var NominatimUrl = 
-					'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../L.TravelNotes' ).config.language;
-				var XmlHttpRequest = new XMLHttpRequest ( );
-				XmlHttpRequest.onreadystatechange = function ( ) { 
-					if ( XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200 ) {
-						_RequestStarted = false;
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+
+			xmlHttpRequest.onreadystatechange = function ( ) { 
+				if ( xmlHttpRequest.readyState == 4 ) {
+					if ( xmlHttpRequest.status == 200 ) {
+						s_RequestStarted = false;
 						var response;
 						try {
 							response = JSON.parse( this.responseText );
 						}
 						catch ( e ) {
-							return;
+							s_RequestStarted = false;
+							returnOnError ( 'Parsing error' );
 						}
-						var address = '';
-						if ( undefined !== response.address.house_number ) {
-							address += response.address.house_number + ' ';
-						}
-						if ( undefined !== response.address.road ) {
-							address += response.address.road + ' ';
-						}
-						else if ( undefined !== response.address.pedestrian ) {
-							address += response.address.pedestrian + ' ';
-						}
-						if ( undefined !== response.address.village ) {
-							address += response.address.village;
-						}
-						else if ( undefined !== response.address.town ) {
-							address += response.address.town;
-						}
-						else if ( undefined !== response.address.city ) {
-							address += response.address.city;
-						}
-						if ( 0 === address.length ) {
-							address += response.address.country;
-						}
-						callback.call ( null, address, parameter );
+						s_RequestStarted = false;
+						response.objId = m_ObjId;
+						returnOnOk ( response );	
 					}
-				};  
-				XmlHttpRequest.open ( "GET", NominatimUrl, true );
-				XmlHttpRequest.send ( null );
+					else {
+						s_RequestStarted = false;
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};  
+			var NominatimUrl = 
+				require ( '../L.TravelNotes' ).config.nominatim.url + 'reverse?format=json&lat=' + 
+				m_Lat + '&lon=' + m_Lng + 
+				'&zoom=18&addressdetails=1';
+			var nominatimLanguage = require ( '../L.TravelNotes' ).config.nominatim.language;
+console.log ('---');
+console.log (nominatimLanguage);
+console.log ('---');
+			if (  nominatimLanguage && nominatimLanguage !== '*' ) {
+				NominatimUrl += '&accept-language=' + nominatimLanguage;
 			}
+			xmlHttpRequest.open ( "GET", NominatimUrl, true );
+			if (  nominatimLanguage && nominatimLanguage === '*' ) {
+				xmlHttpRequest.setRequestHeader ( 'accept-language', '' );
+			}
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
 		};
+
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
+
+		/*
+		--- m_GetPromiseAddress function ------------------------------------------------------------------------------
+
+		This function creates the address promise
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_GetPromiseAddress = function ( lat, lng, objId ) {
+			if ( s_RequestStarted ) {
+				return Promise.reject ( );
+			}
+			s_RequestStarted = true;
+			
+			m_ObjId = objId || -1;
+			m_Lat = lat;
+			m_Lng = lng;
+			
+			return new Promise ( m_StartXMLHttpRequest );
+		};
+		
+		/*
+		--- End of m_GetPromiseAddress function ---
+		*/
+
+		/*
+		--- geoCoder object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+				getPromiseAddress : function ( lat, lng, objId ) { return m_GetPromiseAddress ( lat, lng, objId ); }				
+			}
+		);
+			
 	};
 
 	/*

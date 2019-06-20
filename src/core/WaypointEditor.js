@@ -70,12 +70,7 @@ Tests ...
 			if ( latLng ) {
 				newWayPoint.latLng = latLng;
 				if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( 
-						latLng [ 0 ], 
-						latLng [ 1 ], 
-						m_RenameWayPoint, 
-						newWayPoint.objId 
-					);
+					require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], newWayPoint.objId ).then ( m_GeocoderRenameWayPoint );
 				}
 			}
 			g_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
@@ -199,6 +194,43 @@ Tests ...
 		};
 		
 		/*
+		--- m_GeocoderRenameWayPoint function ---------------------------------------------------------------------------------
+
+		This function rename a wayPoint with the geoCoder response
+		
+		parameters:
+		- geoCoderData : data returned by the geoCoder
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GeocoderRenameWayPoint = function ( geoCoderData ) {
+			var address = '';
+			if ( geoCoderData.address.house_number ) {
+				address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				address += geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				address += geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				address += geoCoderData.address.city;
+			}
+			if ( 0 === address.length ) {
+				address += geoCoderData.address.country;
+			}
+			m_RenameWayPoint ( address, geoCoderData.objId );
+		};
+		
+		/*
 		--- m_SwapWayPoints function ----------------------------------------------------------------------------------
 
 		This function change the order of two waypoints
@@ -235,7 +267,7 @@ Tests ...
 			}
 			g_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.first.objId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.first, 'A' );
 			m_RouteEditorUI.setWayPointsList ( );
@@ -261,7 +293,7 @@ Tests ...
 			}
 			g_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.last.objId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, 'B' );
 			m_RouteEditorUI.setWayPointsList ( );
@@ -283,7 +315,7 @@ Tests ...
 			g_TravelNotesData.routeEdition.routeChanged = true;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
 				var latLng = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, wayPointObjId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );

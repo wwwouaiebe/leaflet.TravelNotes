@@ -144,7 +144,12 @@ Tests ...
 				startupRouteEdition:true
 			},
 			haveBeforeUnloadWarning : true,
-			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter" 
+			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter",
+			nominatim:
+			{
+				url: "https://nominatim.openstreetmap.org/",
+				language :"*"
+			}
 
 		};		
 
@@ -259,6 +264,7 @@ Tests ...
 			get travelEditor ( ) { return m_Config.travelEditor; },
 			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
 			get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
+			get nominatim ( ) { return m_Config.nominatim; },
 			
 			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
 			

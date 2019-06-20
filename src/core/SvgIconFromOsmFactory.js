@@ -485,7 +485,7 @@ Tests ...
 						}
 						catch ( e ) {
 							s_RequestStarted = false;
-							returnOnError ( );
+							returnOnError ( 'Parsing error' );
 						}
 						m_createSvg ( );
 						s_RequestStarted = false;
@@ -549,6 +549,7 @@ Tests ...
 			m_Route = require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId );
 			m_Response = {};
 			m_Svg = null;
+			m_City = null;
 			
 			return new Promise ( m_StartXMLHttpRequest );
 		};

@@ -61,6 +61,8 @@ Tests ...
 		var m_FocusControl = null;
 		var m_HtmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		var m_LatLng = note.latLng;
+		var m_Address = '';
+		var m_City = '';
 
 		/*
 		--- onOkButtonClick function ----------------------------------------------------------------------------------
@@ -95,7 +97,50 @@ Tests ...
 		/*
 		--- End of onOkButtonClick function ---
 		*/
+		
+		/*
+		--- onGeocoderResponse function -------------------------------------------------------------------------------
 
+		Handler for the geoCoder call
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var onGeocoderResponse = function ( geoCoderData ) {
+			m_Address = '';
+			m_City = '';
+			if ( geoCoderData.address.house_number ) {
+				m_Address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				m_Address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				m_Address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				m_City = geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				m_City = geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				m_City = geoCoderData.address.city;
+			}
+			if ( '' !== m_City ) {
+				m_Address += require ( '../L.TravelNotes' ).config.note.cityPrefix + m_City + require ( '../L.TravelNotes' ).config.note.cityPostfix;
+			}
+			if ( 0 === m_Address.length ) {
+				m_Address += geoCoderData.address.country;
+			}
+			if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress').value = m_Address;
+			}
+		};
+		
+		/*
+		--- End of onGeocoderResponse function ---
+		*/
+		
 		/*
 		--- onSvgIcon function ----------------------------------------------------------------------------------------
 
@@ -170,6 +215,9 @@ Tests ...
 					address += String.fromCodePoint ( 0x2AA5 );
 						break;
 				}
+			}
+			if ( ! data.city && '' !== m_City ) {
+				data.city = m_City;
 			}
 			if ( data.city ) {
 				address += ' ' + require ( '../L.TravelNotes' ).config.note.cityPrefix + data.city + require ( '../L.TravelNotes' ).config.note.cityPostfix;
@@ -663,9 +711,7 @@ Tests ...
 			);
 			document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
 				'click', 
-				function ( ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-				},
+				function ( ) { address.value = m_Address; },
 				false 
 			);
 			
@@ -682,9 +728,7 @@ Tests ...
 			address.value = note.address;
 			
 			// geolocalization
-			if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-			}
+			require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( note.lat, note.lng ).then ( onGeocoderResponse );
 		};
 		
 		/*

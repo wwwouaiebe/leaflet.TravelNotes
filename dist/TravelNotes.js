@@ -4252,6 +4252,8 @@ Tests ...
 		var m_FocusControl = null;
 		var m_HtmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
 		var m_LatLng = note.latLng;
+		var m_Address = '';
+		var m_City = '';
 
 		/*
 		--- onOkButtonClick function ----------------------------------------------------------------------------------
@@ -4286,7 +4288,50 @@ Tests ...
 		/*
 		--- End of onOkButtonClick function ---
 		*/
+		
+		/*
+		--- onGeocoderResponse function -------------------------------------------------------------------------------
 
+		Handler for the geoCoder call
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var onGeocoderResponse = function ( geoCoderData ) {
+			m_Address = '';
+			m_City = '';
+			if ( geoCoderData.address.house_number ) {
+				m_Address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				m_Address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				m_Address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				m_City = geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				m_City = geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				m_City = geoCoderData.address.city;
+			}
+			if ( '' !== m_City ) {
+				m_Address += require ( '../L.TravelNotes' ).config.note.cityPrefix + m_City + require ( '../L.TravelNotes' ).config.note.cityPostfix;
+			}
+			if ( 0 === m_Address.length ) {
+				m_Address += geoCoderData.address.country;
+			}
+			if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+				document.getElementById ( 'TravelNotes-NoteDialog-InputText-Adress').value = m_Address;
+			}
+		};
+		
+		/*
+		--- End of onGeocoderResponse function ---
+		*/
+		
 		/*
 		--- onSvgIcon function ----------------------------------------------------------------------------------------
 
@@ -4361,6 +4406,9 @@ Tests ...
 					address += String.fromCodePoint ( 0x2AA5 );
 						break;
 				}
+			}
+			if ( ! data.city && '' !== m_City ) {
+				data.city = m_City;
 			}
 			if ( data.city ) {
 				address += ' ' + require ( '../L.TravelNotes' ).config.note.cityPrefix + data.city + require ( '../L.TravelNotes' ).config.note.cityPostfix;
@@ -4854,9 +4902,7 @@ Tests ...
 			);
 			document.getElementById ( 'TravelNotes-NoteDialog-Reset-Address-Button' ).addEventListener ( 
 				'click', 
-				function ( ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-				},
+				function ( ) { address.value = m_Address; },
 				false 
 			);
 			
@@ -4873,9 +4919,7 @@ Tests ...
 			address.value = note.address;
 			
 			// geolocalization
-			if ( ( require ( '../L.TravelNotes' ).config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( note.lat, note.lng, function ( newAddress ) { address.value = newAddress ; } );
-			}
+			require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( note.lat, note.lng ).then ( onGeocoderResponse );
 		};
 		
 		/*
@@ -7914,6 +7958,8 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+		- Working with Promise
+		- returning the complete Nominatim responce in place of a computed address
 Doc reviewed 20170927
 Tests ...
 
@@ -7924,59 +7970,113 @@ Tests ...
 	
 	'use strict';
 
-	var _RequestStarted = false;
+	var s_RequestStarted = false;
 	
 	var GeoCoder = function ( ) {
+	
+		var m_ObjId = -1;
+		var m_Lat = 0;
+		var m_Lng = 0;
 
-		return {
+		/*
+		--- m_StartXMLHttpRequest function -----------------------------------------------------------------------------
+
+		This function start the http request to OSM
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+
+			var xmlHttpRequest = new XMLHttpRequest ( );
+			xmlHttpRequest.timeout = require ( '../L.TravelNotes' ).config.note.svgTimeOut;
 			
-			getAddress : function ( lat, lng, callback, parameter ) {
-				if ( _RequestStarted ) {
-					return;
-				}
-				_RequestStarted = true;
-				var NominatimUrl = 
-					'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=' + require ( '../L.TravelNotes' ).config.language;
-				var XmlHttpRequest = new XMLHttpRequest ( );
-				XmlHttpRequest.onreadystatechange = function ( ) { 
-					if ( XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200 ) {
-						_RequestStarted = false;
+			xmlHttpRequest.ontimeout = function ( event ) {
+				returnOnError ( 'TimeOut error' );
+			};
+
+			xmlHttpRequest.onreadystatechange = function ( ) { 
+				if ( xmlHttpRequest.readyState == 4 ) {
+					if ( xmlHttpRequest.status == 200 ) {
+						s_RequestStarted = false;
 						var response;
 						try {
 							response = JSON.parse( this.responseText );
 						}
 						catch ( e ) {
-							return;
+							s_RequestStarted = false;
+							returnOnError ( 'Parsing error' );
 						}
-						var address = '';
-						if ( undefined !== response.address.house_number ) {
-							address += response.address.house_number + ' ';
-						}
-						if ( undefined !== response.address.road ) {
-							address += response.address.road + ' ';
-						}
-						else if ( undefined !== response.address.pedestrian ) {
-							address += response.address.pedestrian + ' ';
-						}
-						if ( undefined !== response.address.village ) {
-							address += response.address.village;
-						}
-						else if ( undefined !== response.address.town ) {
-							address += response.address.town;
-						}
-						else if ( undefined !== response.address.city ) {
-							address += response.address.city;
-						}
-						if ( 0 === address.length ) {
-							address += response.address.country;
-						}
-						callback.call ( null, address, parameter );
+						s_RequestStarted = false;
+						response.objId = m_ObjId;
+						returnOnOk ( response );	
 					}
-				};  
-				XmlHttpRequest.open ( "GET", NominatimUrl, true );
-				XmlHttpRequest.send ( null );
+					else {
+						s_RequestStarted = false;
+						returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
+					}
+				}
+			};  
+			var NominatimUrl = 
+				require ( '../L.TravelNotes' ).config.nominatim.url + 'reverse?format=json&lat=' + 
+				m_Lat + '&lon=' + m_Lng + 
+				'&zoom=18&addressdetails=1';
+			var nominatimLanguage = require ( '../L.TravelNotes' ).config.nominatim.language;
+console.log ('---');
+console.log (nominatimLanguage);
+console.log ('---');
+			if (  nominatimLanguage && nominatimLanguage !== '*' ) {
+				NominatimUrl += '&accept-language=' + nominatimLanguage;
 			}
+			xmlHttpRequest.open ( "GET", NominatimUrl, true );
+			if (  nominatimLanguage && nominatimLanguage === '*' ) {
+				xmlHttpRequest.setRequestHeader ( 'accept-language', '' );
+			}
+			xmlHttpRequest.overrideMimeType ( 'application/json' );
+			xmlHttpRequest.send ( null );
 		};
+
+		/*
+		--- End of _StartXMLHttpRequest function ---
+		*/
+
+		/*
+		--- m_GetPromiseAddress function ------------------------------------------------------------------------------
+
+		This function creates the address promise
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_GetPromiseAddress = function ( lat, lng, objId ) {
+			if ( s_RequestStarted ) {
+				return Promise.reject ( );
+			}
+			s_RequestStarted = true;
+			
+			m_ObjId = objId || -1;
+			m_Lat = lat;
+			m_Lng = lng;
+			
+			return new Promise ( m_StartXMLHttpRequest );
+		};
+		
+		/*
+		--- End of m_GetPromiseAddress function ---
+		*/
+
+		/*
+		--- geoCoder object -------------------------------------------------------------------------------------------
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		
+		return Object.seal (
+			{
+				getPromiseAddress : function ( lat, lng, objId ) { return m_GetPromiseAddress ( lat, lng, objId ); }				
+			}
+		);
+			
 	};
 
 	/*
@@ -10245,7 +10345,7 @@ Tests ...
 						}
 						catch ( e ) {
 							s_RequestStarted = false;
-							returnOnError ( );
+							returnOnError ( 'Parsing error' );
 						}
 						m_createSvg ( );
 						s_RequestStarted = false;
@@ -10309,6 +10409,7 @@ Tests ...
 			m_Route = require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId );
 			m_Response = {};
 			m_Svg = null;
+			m_City = null;
 			
 			return new Promise ( m_StartXMLHttpRequest );
 		};
@@ -10794,12 +10895,7 @@ Tests ...
 			if ( latLng ) {
 				newWayPoint.latLng = latLng;
 				if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-					require ( '../core/GeoCoder' ) ( ).getAddress ( 
-						latLng [ 0 ], 
-						latLng [ 1 ], 
-						m_RenameWayPoint, 
-						newWayPoint.objId 
-					);
+					require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], newWayPoint.objId ).then ( m_GeocoderRenameWayPoint );
 				}
 			}
 			g_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
@@ -10923,6 +11019,43 @@ Tests ...
 		};
 		
 		/*
+		--- m_GeocoderRenameWayPoint function ---------------------------------------------------------------------------------
+
+		This function rename a wayPoint with the geoCoder response
+		
+		parameters:
+		- geoCoderData : data returned by the geoCoder
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_GeocoderRenameWayPoint = function ( geoCoderData ) {
+			var address = '';
+			if ( geoCoderData.address.house_number ) {
+				address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				address += geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				address += geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				address += geoCoderData.address.city;
+			}
+			if ( 0 === address.length ) {
+				address += geoCoderData.address.country;
+			}
+			m_RenameWayPoint ( address, geoCoderData.objId );
+		};
+		
+		/*
 		--- m_SwapWayPoints function ----------------------------------------------------------------------------------
 
 		This function change the order of two waypoints
@@ -10959,7 +11092,7 @@ Tests ...
 			}
 			g_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.first.objId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.first, 'A' );
 			m_RouteEditorUI.setWayPointsList ( );
@@ -10985,7 +11118,7 @@ Tests ...
 			}
 			g_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, g_TravelNotesData.editedRoute.wayPoints.last.objId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, 'B' );
 			m_RouteEditorUI.setWayPointsList ( );
@@ -11007,7 +11140,7 @@ Tests ...
 			g_TravelNotesData.routeEdition.routeChanged = true;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
 				var latLng = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
-				require ( '../core/GeoCoder' ) ( ).getAddress ( latLng [ 0 ], latLng [ 1 ], m_RenameWayPoint, wayPointObjId );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
@@ -11811,7 +11944,12 @@ Tests ...
 				startupRouteEdition:true
 			},
 			haveBeforeUnloadWarning : true,
-			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter" 
+			overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter",
+			nominatim:
+			{
+				url: "https://nominatim.openstreetmap.org/",
+				language :"*"
+			}
 
 		};		
 
@@ -11926,6 +12064,7 @@ Tests ...
 			get travelEditor ( ) { return m_Config.travelEditor; },
 			get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
 			get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
+			get nominatim ( ) { return m_Config.nominatim; },
 			
 			overload : function ( newConfig ) { m_Overload ( newConfig ) ;}
 			

@@ -120,5 +120,10 @@
 		"startupRouteEdition":true
 	},
 	"haveBeforeUnloadWarning":true,
-	"overpassApiUrl":"https://lz4.overpass-api.de/api/interpreter" 
+	"overpassApiUrl":"https://lz4.overpass-api.de/api/interpreter",
+	"nominatim":
+	{
+		"url":"https://nominatim.openstreetmap.org/",
+		"language": "*"
+	}
 }
