@@ -5026,13 +5026,13 @@ Tests ...
 							}
 						} 
 						else {
-							console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
+							console.log ( 'Error sending request for TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language.toUpperCase ( ) + '.json' );
 						}
 					}
 				};
 				buttonsHttpRequest.open ( 
 					'GET',
-					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language + '.json',
+					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language.toUpperCase ( ) + '.json',
 					true
 				);
 				buttonsHttpRequest.send ( null );
@@ -8022,9 +8022,6 @@ Tests ...
 				m_Lat + '&lon=' + m_Lng + 
 				'&zoom=18&addressdetails=1';
 			var nominatimLanguage = require ( '../L.TravelNotes' ).config.nominatim.language;
-console.log ('---');
-console.log (nominatimLanguage);
-console.log ('---');
 			if (  nominatimLanguage && nominatimLanguage !== '*' ) {
 				NominatimUrl += '&accept-language=' + nominatimLanguage;
 			}
@@ -10001,10 +9998,18 @@ Tests ...
 			
 			// The coordinates of the nearest point are used as position of the icon
 			m_IconLatLng = L.latLng ( m_IconPoint.latLng );
-			
 			var latLngCompare = function ( itineraryPoint ) {
-				return m_IconPoint.lat !== itineraryPoint.lat || m_IconPoint.lng !== itineraryPoint.lng;
+				var isntWayPoint = true;
+				m_Route.wayPoints.forEach ( 
+					function ( wayPoint ) {
+						if ( ( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < 0.00001 ) && ( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < 0.00001 ) ) {
+							isntWayPoint = false;
+						}
+					}
+				);
+				return  isntWayPoint && ( m_IconPoint.lat !== itineraryPoint.lat || m_IconPoint.lng !== itineraryPoint.lng );
 			};
+			
 			m_IncomingPoint = m_Route.itinerary.itineraryPoints.previous ( m_IconPoint.objId, latLngCompare );
 			m_OutgoingPoint = m_Route.itinerary.itineraryPoints.next ( m_IconPoint.objId, latLngCompare );
 		};
@@ -10051,16 +10056,32 @@ Tests ...
 			var iconPointId = -1;
 			var incomingPointId = -1;
 			var outgoingPointId = -1;
+			var iconPointDistance = Number.MAX_VALUE;
+			var incomingPointDistance = Number.MAX_VALUE;
+			var outgoingPointDistance = Number.MAX_VALUE;
+			var pointDistance = 0;
 			m_NodesMap.forEach (
 				function ( node ) {
-					if ( m_IconPoint && Math.abs ( node.lat - m_IconPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_IconPoint.lng ) < 0.000001 ) {
-						iconPointId = node.id;
+					if ( m_IconPoint ) {
+						pointDistance =  L.latLng ( node.lat, node.lon ).distanceTo ( L.latLng ( m_IconPoint.lat, m_IconPoint.lng ) );
+						if ( pointDistance < iconPointDistance ) {
+							iconPointId = node.id;
+							iconPointDistance = pointDistance;
+						}
 					}
-					if ( m_IncomingPoint && Math.abs ( node.lat - m_IncomingPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_IncomingPoint.lng ) < 0.000001 ) {
-						incomingPointId = node.id;
+					if ( m_IncomingPoint ) {
+						pointDistance =  L.latLng ( node.lat, node.lon ).distanceTo ( L.latLng ( m_IncomingPoint.lat, m_IncomingPoint.lng ) );
+						if ( pointDistance < incomingPointDistance ) {
+							incomingPointId = node.id;
+							incomingPointDistance = pointDistance;
+						}
 					}
-					if ( m_OutgoingPoint && Math.abs ( node.lat - m_OutgoingPoint.lat ) < 0.000001 && Math.abs ( node.lon - m_OutgoingPoint.lng ) < 0.000001  ) {
-						outgoingPointId = node.id;
+					if ( m_OutgoingPoint   ) {
+						pointDistance =  L.latLng ( node.lat, node.lon ).distanceTo ( L.latLng ( m_OutgoingPoint.lat, m_OutgoingPoint.lng ) );
+						if ( pointDistance < outgoingPointDistance ) {
+							outgoingPointId = node.id;
+							outgoingPointDistance = pointDistance;
+						}
 					}
 				}
 			);
@@ -10068,14 +10089,33 @@ Tests ...
 			var outgoingStreet = '';
 			m_WaysMap.forEach ( 
 				function ( way ) {
-					if ( way.nodesIds.includes ( iconPointId ) && ! way.nodesIds.includes ( incomingPointId ) && ! way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
-						m_PassingStreets.push ( way.tags.name );
-					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( incomingPointId ) &&  way.tags.name )  {
-						incomingStreet = way.tags.name;
-					}
-					if ( way.nodesIds.includes ( iconPointId ) && way.nodesIds.includes ( outgoingPointId ) &&  way.tags.name )  {
-						outgoingStreet =  way.tags.name;
+					var name = ( way.tags.name ? way.tags.name : '' ) + ( way.tags.name && way.tags.ref ? ' '  : '' ) + ( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
+					if ( way.nodesIds.includes ( iconPointId ) ) {
+						var isClosed = way.nodesIds [ 0 ] === way.nodesIds [ way.nodesIds.length - 1 ];
+						var isInOutStreet = ( 0 !== way.nodesIds.indexOf ( iconPointId ) ) && ( way.nodesIds.length - 1 !== way.nodesIds.lastIndexOf ( iconPointId ) );
+						var isIncomingStreet = way.nodesIds.includes ( incomingPointId );
+						var isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
+						var isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
+						var haveName = name!== '';
+						
+						if ( isSimpleStreet && haveName )  {
+							m_PassingStreets.push ( name );
+						}
+						if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) )  {
+							if ( ! isIncomingStreet && ! isOutgoingStreet ) {
+								m_PassingStreets.push ( name );
+								m_PassingStreets.push ( name );
+							}
+							else if ( ( isIncomingStreet && ! isOutgoingStreet ) || ( ! isIncomingStreet && isOutgoingStreet ) ) {
+								m_PassingStreets.push ( name );
+							}
+						}
+						if ( isIncomingStreet )  {
+							incomingStreet = haveName ? name : '???';
+						}
+						if ( isOutgoingStreet )  {
+							outgoingStreet =  haveName ? name : '???';
+						}
 					}
 				}
 			);

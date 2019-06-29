@@ -90,9 +90,6 @@ Tests ...
 				m_Lat + '&lon=' + m_Lng + 
 				'&zoom=18&addressdetails=1';
 			var nominatimLanguage = require ( '../L.TravelNotes' ).config.nominatim.language;
-console.log ('---');
-console.log (nominatimLanguage);
-console.log ('---');
 			if (  nominatimLanguage && nominatimLanguage !== '*' ) {
 				NominatimUrl += '&accept-language=' + nominatimLanguage;
 			}

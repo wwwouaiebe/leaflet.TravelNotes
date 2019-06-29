@@ -835,13 +835,13 @@ Tests ...
 							}
 						} 
 						else {
-							console.log ( 'Error sending request for TravelNotesNoteDialog.json' );
+							console.log ( 'Error sending request for TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language.toUpperCase ( ) + '.json' );
 						}
 					}
 				};
 				buttonsHttpRequest.open ( 
 					'GET',
-					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language + '.json',
+					window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + require ( '../L.TravelNotes' ).config.language.toUpperCase ( ) + '.json',
 					true
 				);
 				buttonsHttpRequest.send ( null );
