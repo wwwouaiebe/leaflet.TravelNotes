@@ -8155,8 +8155,10 @@ Tests ...
 			var polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
 			polyline.closeTooltip ( );
 			var tooltipText = m_DataSearchEngine.getRoute ( event.target.objId ).name;
-			tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
-			tooltipText += distance;
+			if ( ! g_TravelNotesData.travel.readOnly ) {
+				tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
+				tooltipText += distance;
+			}
 			polyline.setTooltipContent ( tooltipText );
 			polyline.openTooltip (  event.latlng );
 		};
@@ -8264,50 +8266,50 @@ Tests ...
 			return null;
 		};
 
-			/*
-			--- m_RemoveRoute function --------------------------------------------------------------------------------
+		/*
+		--- m_RemoveRoute function --------------------------------------------------------------------------------
 
-			This function remove a route and eventually the attached notes and waypoints 
-			from the leaflet map and the JavaScript map
-			
-			parameters:
-			- route : a TravelNotes route object.
-			- removeNotes : a boolean. Linked notes are removed when true
-			- removeWayPoints : a boolean. Linked waypoints are removed when true
+		This function remove a route and eventually the attached notes and waypoints 
+		from the leaflet map and the JavaScript map
+		
+		parameters:
+		- route : a TravelNotes route object.
+		- removeNotes : a boolean. Linked notes are removed when true
+		- removeWayPoints : a boolean. Linked waypoints are removed when true
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
-			
-			var m_RemoveRoute = function ( route, removeNotes, removeWayPoints ) {
-				m_RemoveObject ( route.objId );
-				if ( removeNotes ) {
-					var notesIterator = route.notes.iterator;
-					while ( ! notesIterator.done ) {
-						m_RemoveObject ( notesIterator.value.objId );
-					}
+		-----------------------------------------------------------------------------------------------------------
+		*/
+		
+		var m_RemoveRoute = function ( route, removeNotes, removeWayPoints ) {
+			m_RemoveObject ( route.objId );
+			if ( removeNotes ) {
+				var notesIterator = route.notes.iterator;
+				while ( ! notesIterator.done ) {
+					m_RemoveObject ( notesIterator.value.objId );
 				}
-				if ( removeWayPoints ) {
-					var wayPointsIterator = route.wayPoints.iterator;
-					while ( ! wayPointsIterator.done ) {
-						m_RemoveObject ( wayPointsIterator.value.objId );
-					}
+			}
+			if ( removeWayPoints ) {
+				var wayPointsIterator = route.wayPoints.iterator;
+				while ( ! wayPointsIterator.done ) {
+					m_RemoveObject ( wayPointsIterator.value.objId );
 				}
-			};
-					
-			/*
-			--- m_AddRoute function -----------------------------------------------------------------------------------
+			}
+		};
+				
+		/*
+		--- m_AddRoute function -----------------------------------------------------------------------------------
 
-			This function add a route and eventually the attached notes and waypoints 
-			to the leaflet map and the JavaScript map
+		This function add a route and eventually the attached notes and waypoints 
+		to the leaflet map and the JavaScript map
 
-			parameters:
-			- route : a TravelNotes route object.
-			- addNotes : a boolean. Attached notes are added when true
-			- addWayPoints : a boolean. Attached waypoints are added when true
-			- readOnly : a boolean. Created objects cannot be edited when true.
+		parameters:
+		- route : a TravelNotes route object.
+		- addNotes : a boolean. Attached notes are added when true
+		- addWayPoints : a boolean. Attached waypoints are added when true
+		- readOnly : a boolean. Created objects cannot be edited when true.
 
-			-----------------------------------------------------------------------------------------------------------
-			*/
+		-----------------------------------------------------------------------------------------------------------
+		*/
 
 		var m_AddRoute = function ( route, addNotes, addWayPoints, readOnly ) {
 			readOnly = readOnly || false;
