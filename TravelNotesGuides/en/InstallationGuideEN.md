@@ -47,7 +47,7 @@ And in the &lt;body&gt; load Leaflet and Travel & Notes Javascript, create the m
 			'use strict';
 			// Leaflet installation. See Leaflet documentation
 			var Map = L.map ( 'Map' ).setView( [ 50.50923,5.49542 ], 17 );
-			L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">Christian Guyette</a>' } ).addTo ( Map );
+			L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">wwwouaiebe</a>' } ).addTo ( Map );
 			// TravelNotes installation
 			var myInterface = L.travelNotes.interface ( );
 			myInterface.addControl ( Map, null, { position: "topright"} );

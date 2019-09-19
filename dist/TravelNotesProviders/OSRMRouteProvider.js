@@ -15535,7 +15535,7 @@ module.exports={
 
 },{}],47:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 

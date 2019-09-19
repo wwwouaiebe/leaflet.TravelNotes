@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 

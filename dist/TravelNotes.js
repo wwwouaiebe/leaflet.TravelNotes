@@ -162,7 +162,7 @@ if (typeof module === 'object' && module.exports) {
 
 },{}],2:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -706,7 +706,7 @@ Tests ...
 */
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/RouteEditorUI":22,"../UI/RoutePropertiesDialog":23,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/Router":38,"../core/TravelEditor":40,"../data/ItineraryPoint":47,"../data/Route":52,"../util/Utilities":58}],3:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -853,7 +853,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8}],4:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -1001,7 +1001,7 @@ Tests ...
 */
 },{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":7}],5:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -1181,7 +1181,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8,"../data/Collection":43,"../data/Itinerary":46,"../data/ObjId":50,"../data/ObjType":51,"../data/Waypoint":57,"./Itinerary":4,"./Version":7}],6:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -1309,7 +1309,7 @@ Tests ...
 */
 },{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":7}],7:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -1350,7 +1350,7 @@ Doc reviewed 20190919
 */
 },{}],8:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -1762,7 +1762,7 @@ Tests ...
 
 },{"./UI/ContextMenu":12,"./UI/ContextMenuFactory":13,"./UI/RouteEditorUI":22,"./UI/Translator":26,"./UI/TravelEditorUI":27,"./UI/UserInterface":29,"./UI/baseDialog":30,"./core/FileLoader":32,"./core/TravelEditor":40,"./data/ItineraryPoint":47,"./data/Maneuver":48,"./data/Route":52,"./data/Travel":53,"./data/TravelNotesData":54,"./data/Version":55,"./util/Utilities":58}],9:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -1814,7 +1814,7 @@ Tests ...
 		
 		aboutDiv.innerHTML = 
 			"<p>This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.</p>" +
-			"<p>Copyright - 2017 2018 - Christian Guyette</p>" +
+			"<p>Copyright - 2017 2019 - wwwouaiebe</p>" +
 			"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 			"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
 			"<p>Version : " + require ( '../data/Version' ) +'.' +
@@ -1844,7 +1844,7 @@ Tests ...
 */	
 },{"../UI/BaseDialog":10,"../UI/Translator":26,"../data/Version":55,"./HTMLElementsFactory":16}],10:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -2113,7 +2113,7 @@ Tests ...
 */
 },{"../UI/Translator":26,"./HTMLElementsFactory":16}],11:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -2430,7 +2430,7 @@ Tests ...
 */	
 },{"../UI/BaseDialog":10,"../UI/Translator":26,"./HTMLElementsFactory":16}],12:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -2714,7 +2714,7 @@ Tests ...
 
 },{"../L.TravelNotes":8,"./HTMLElementsFactory":16,"./Translator":26}],13:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -3009,7 +3009,7 @@ Tests ...
 */		
 },{"../L.TravelNotes":8,"../UI/AboutDialog":9,"../UI/Translator":26,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/RouteEditor":37,"../core/TravelEditor":40,"../core/waypointEditor":42,"../data/DataSearchEngine":45}],14:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -3329,7 +3329,7 @@ Tests ...
 */	
 },{"../UI/HTMLElementsFactory":16,"../UI/ItineraryPaneUI":19,"../UI/SearchPaneUI":24,"../UI/Translator":26,"../UI/TravelNotesPaneUI":28}],15:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -3477,7 +3477,7 @@ Tests ...
 */	
 },{"../L.TravelNotes":8,"./HTMLElementsFactory":16,"./Translator":26}],16:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -3572,7 +3572,7 @@ Tests ...
 
 },{}],17:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -3963,7 +3963,7 @@ Tests ...
 arguments[4][16][0].apply(exports,arguments)
 },{"dup":16}],19:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -4190,7 +4190,7 @@ Tests ...
 */		
 },{"../UI/HTMLViewsFactory":17,"../core/MapEditor":34,"../core/NoteEditor":35}],20:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -5079,7 +5079,7 @@ Tests ...
 */	
 },{"../L.TravelNotes":8,"../UI/BaseDialog":10,"../UI/Translator":26,"../core/GeoCoder":33,"../core/NoteEditor":35,"../core/SvgIconFromOsmFactory":39,"./HTMLElementsFactory":16}],21:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -5431,7 +5431,7 @@ Tests ...
 */	
 },{"../L.TravelNotes":8,"../UI/HtmlElementsFactory":18,"../core/RouteEditor":37}],22:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -5861,7 +5861,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8,"../core/RouteEditor":37,"../core/WaypointEditor":41,"./HTMLElementsFactory":16,"./SortableList":25,"./Translator":26}],23:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -6032,7 +6032,7 @@ Tests ...
 */	
 },{"../L.TravelNotes":8,"../UI/ColorDialog":11,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16}],24:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -6340,7 +6340,7 @@ Tests ...
 */		
 },{"../L.TravelNotes":8,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/OsmSearchEngine":36,"../data/ObjId":50,"./HTMLElementsFactory":16,"./Translator":26}],25:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;
@@ -6632,7 +6632,7 @@ Tests ...
 },{"../UI/Translator":26,"./HTMLElementsFactory":16}],26:[function(require,module,exports){
 (function (global){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;
@@ -6711,7 +6711,7 @@ Tests ...
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],27:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -7246,7 +7246,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8,"../core/FileLoader":32,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16,"./SortableList":25,"./Translator":26}],28:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -7483,7 +7483,7 @@ Tests ...
 */		
 },{"../UI/HTMLViewsFactory":17,"../core/MapEditor":34,"../core/NoteEditor":35}],29:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -7594,7 +7594,7 @@ Tests ...
 arguments[4][10][0].apply(exports,arguments)
 },{"../UI/Translator":26,"./HTMLElementsFactory":16,"dup":10}],31:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -7660,7 +7660,7 @@ Tests ...
 */
 },{"../UI/ErrorEditorUI":15}],32:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -7937,7 +7937,7 @@ Tests ...
 */	
 },{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -8097,7 +8097,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8}],34:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -8927,7 +8927,7 @@ Tests ...
 */
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/ContextMenu":12,"../UI/ContextMenuFactory":13,"../UI/DataPanesUI":14,"../core/NoteEditor":35,"../core/RouteEditor":37,"../core/TravelEditor":40,"../core/WaypointEditor":41,"../util/Utilities":58}],35:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -9451,7 +9451,7 @@ Tests ...
 */
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/NoteDialog":20,"../UI/Translator":26,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"../data/Note":49,"../util/Utilities":58}],36:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -9673,7 +9673,7 @@ Tests ...
 arguments[4][2][0].apply(exports,arguments)
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/RouteEditorUI":22,"../UI/RoutePropertiesDialog":23,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/NoteEditor":35,"../core/Router":38,"../core/TravelEditor":40,"../data/ItineraryPoint":47,"../data/Route":52,"../util/Utilities":58,"dup":2}],38:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -9865,7 +9865,7 @@ Tests ...
 */
 },{"../L.TravelNotes":8,"../core/ErrorEditor":31,"./RouteEditor":37}],39:[function(require,module,exports){
 /*
-Copyright - 2019 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -10495,7 +10495,7 @@ Tests ...
 */
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8}],40:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -10873,7 +10873,7 @@ Tests ...
 */
 },{"../Data/DataSearchEngine":3,"../Data/Route":5,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/HTMLViewsFactory":17,"../UI/ProvidersToolbarUI":21,"../UI/RouteEditorUI":22,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/ErrorEditor":31,"../core/MapEditor":34,"../core/RouteEditor":37,"../data/DataSearchEngine":45,"../data/Route":52,"../util/Utilities":58,"./ErrorEditor":31,"./MapEditor":34,"./RouteEditor":37,"@mapbox/polyline":1}],41:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -11271,7 +11271,7 @@ Tests ...
 arguments[4][41][0].apply(exports,arguments)
 },{"../Data/DataSearchEngine":3,"../L.TravelNotes":8,"../UI/RouteEditorUI":22,"../core/GeoCoder":33,"../core/MapEditor":34,"../core/RouteEditor":37,"../data/Waypoint.js":57,"dup":41}],43:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -11848,7 +11848,7 @@ Tests ...
 */
 },{"../data/ItineraryPoint":47,"../data/Maneuver":48,"../data/Note":49,"../data/Route":52,"../data/WayPoint":56}],44:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
@@ -12140,7 +12140,7 @@ arguments[4][3][0].apply(exports,arguments)
 arguments[4][4][0].apply(exports,arguments)
 },{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":4}],47:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12258,7 +12258,7 @@ Tests ...
 */
 },{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],48:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12389,7 +12389,7 @@ Tests ...
 */
 },{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],49:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12590,7 +12590,7 @@ Tests ...
 },{"../data/ObjId":50,"../data/ObjType":51,"./Version":55}],50:[function(require,module,exports){
 (function (global){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12654,7 +12654,7 @@ Tests ...
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],51:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12791,7 +12791,7 @@ arguments[4][5][0].apply(exports,arguments)
 arguments[4][6][0].apply(exports,arguments)
 },{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":6}],54:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12901,7 +12901,7 @@ Tests ...
 arguments[4][7][0].apply(exports,arguments)
 },{"dup":7}],56:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -13034,7 +13034,7 @@ Tests ...
 arguments[4][56][0].apply(exports,arguments)
 },{"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":56}],58:[function(require,module,exports){
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the 
 GNU General Public License as published by the Free Software Foundation;

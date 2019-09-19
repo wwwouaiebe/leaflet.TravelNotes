@@ -185,7 +185,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
-		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© Christian Guyette 2017</a>"
+		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2019</a>"
 	},
 	{
 		"msgid" : "NoteDialog - Address&nbsp;:",

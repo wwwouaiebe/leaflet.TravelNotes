@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 		uglify: {
 			options: {
 				banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
-				'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> Christian Guyette - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
+				'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
 			},
 			build: {
 				src: 'dist/TravelNotes.js',
