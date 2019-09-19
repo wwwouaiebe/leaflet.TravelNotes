@@ -1,6 +1,6 @@
 {
   "name": "leaflet.travelnotes",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Editable markers and routing engine for leaflet",
   "main": "src/L.TravelNotes.js",
   "dependencies": {
@@ -34,5 +34,5 @@
     "url": "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
   },
   "homepage": "https://github.com/wwwouaiebe/leaflet.TravelNotes#readme",
-  "nextBuild": "1514"
+  "nextBuild": "1515"
 }

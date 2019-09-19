@@ -35,7 +35,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
 		- fixed issue #45
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

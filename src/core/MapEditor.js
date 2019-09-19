@@ -31,7 +31,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
-Doc reviewed 20181218
+		- removed partial distance in the tooltip when readOnly
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

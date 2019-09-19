@@ -27,8 +27,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
-		- addedattachNoteToRoute and detachNoteFromRoute methods
-Doc reviewed 20181218
+		- added attachNoteToRoute and detachNoteFromRoute methods
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ This file contains:
 	- the version number
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20181216
+Doc reviewed 20190919
 
 -----------------------------------------------------------------------------------------------------------------------
 */

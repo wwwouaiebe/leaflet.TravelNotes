@@ -31,7 +31,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
 		- modified event listener for cancel travel button ( issue #45 )
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

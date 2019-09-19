@@ -27,7 +27,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Added noteObjId in the _AddNoteHTML function
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

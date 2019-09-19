@@ -198,7 +198,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
 		- fixed issue #45
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -731,7 +731,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -877,7 +877,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -1028,7 +1028,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -1205,7 +1205,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -1328,7 +1328,7 @@ This file contains:
 	- the version number
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20181216
+Doc reviewed 20190919
 
 -----------------------------------------------------------------------------------------------------------------------
 */
@@ -3038,7 +3038,7 @@ Changes:
 		- added train button
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -3356,7 +3356,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -3502,7 +3502,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -3600,7 +3600,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Added noteObjId in the _AddNoteHTML function
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -3988,7 +3988,7 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -4223,7 +4223,7 @@ Changes:
 		- added svg icons
 		- reviewed code
 		- added language for TravelNotesDialogXX.json file
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -5104,7 +5104,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
-Doc reviewed 20181220
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -5458,7 +5458,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -5894,7 +5894,7 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170930
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6057,7 +6057,7 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed 2018122
+Doc reviewed 20190919
 
 Tests ...
 
@@ -6362,7 +6362,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20171001
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6654,7 +6654,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170930
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6743,7 +6743,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
 		- modified event listener for cancel travel button ( issue #45 )
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -6898,7 +6898,7 @@ Tests ...
 	};
 
 	/*
-	--- event listeners for open travel input and button --------------------------------------------------------------
+	--- event listener for open travel input  -------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -6909,6 +6909,12 @@ Tests ...
 		require ( '../core/FileLoader' ) ( ).openLocalFile ( clickEvent );
 	};
 	
+	/*
+	--- event listener for open travel  button ------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	var onClickOpenTravelButton = function ( ) 
 	{ 
 		if ( ! require ( '../core/TravelEditor' ) ( ).confirmClose ( ) )
@@ -7265,7 +7271,7 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed 20181219
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -7613,7 +7619,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20170927
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -7679,7 +7685,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -7960,7 +7966,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Working with Promise
 		- returning the complete Nominatim responce in place of a computed address
-Doc reviewed 20170927
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -8123,7 +8129,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
-Doc reviewed 20181218
+		- removed partial distance in the tooltip when readOnly
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -8948,8 +8955,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
-		- addedattachNoteToRoute and detachNoteFromRoute methods
-Doc reviewed 20181218
+		- added attachNoteToRoute and detachNoteFromRoute methods
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -9469,7 +9476,7 @@ Changes:
 	- v1.4.0:
 		- created
 
-Doc reviewed 20181220
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -9698,7 +9705,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- splitted with WaypointEditor
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -9882,7 +9889,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10524,7 +10531,7 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -10892,7 +10899,7 @@ Changes:
 	- v1.4.0:
 		- created from RouteEditor
 
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -11288,7 +11295,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- added next and previous method
-Doc reviewed 20181215
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -11867,7 +11874,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12157,7 +12164,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12275,7 +12282,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12406,7 +12413,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12606,7 +12613,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Initialization changed
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12669,7 +12676,7 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12807,7 +12814,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchData
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -12918,7 +12925,7 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
-Doc reviewed 20181218
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

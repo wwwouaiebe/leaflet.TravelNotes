@@ -25,7 +25,7 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
-Doc reviewed 20181216
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

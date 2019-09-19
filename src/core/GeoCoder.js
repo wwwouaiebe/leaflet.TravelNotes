@@ -28,7 +28,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Working with Promise
 		- returning the complete Nominatim responce in place of a computed address
-Doc reviewed 20170927
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

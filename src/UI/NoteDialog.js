@@ -32,7 +32,7 @@ Changes:
 		- added svg icons
 		- reviewed code
 		- added language for TravelNotesDialogXX.json file
-Doc reviewed 20170929
+Doc reviewed 20190919
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
