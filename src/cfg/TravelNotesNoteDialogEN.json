@@ -31,35 +31,52 @@
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:black;background-color:yellow'>Yellow</span>",
-			"htmlBefore" : "<span style='color:black;background-color:yellow'>",
+			"title" : "<span style='color:white;background-color:green'>Green</span>",
+			"htmlBefore" : "<span style='color:white;background-color:green'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:black;background-color:cyan'>Cyan</span>",
-			"htmlBefore" : "<span style='color:black;background-color:cyan'>",
+			"title" : "<span style='color:white;background-color:black'>Black</span>",
+			"htmlBefore" : "<span style='color:white;background-color:black'>",
 			"htmlAfter" : "</span>"
 		}, 
+		{
+			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:brown'>Brown</span>",
+			"htmlBefore" : "<span style='color:white;background-color:brown'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>&nbsp;</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		},
+		{
+			"title" : "<span style='border:solid 0.1em'>White</span>",
+			"htmlBefore" : "<span style='border:solid 0.1em'>",
+			"htmlAfter" : "</span>"
+		},
+		{
+			"title" : "<span style='text-decoration: underline'>U</span>",
+			"htmlBefore" : "<span style='text-decoration: underline'>",
+			"htmlAfter" : "</span>"
+		},
 		{
 			"title": "&lt;li&gt;●&lt;li&gt;",
 			"htmlBefore": "<li>",
 			"htmlAfter": "</li>"
 		}, 	
 		{
-			"title": "&gt;&lt;",
-			"htmlBefore": "&gt;&lt;"
+			"title": "⮜",
+			"htmlBefore": "⮜"
 		}, 
 		{
-			"title": "=&gt;",
-			"htmlBefore": "=&gt;"
-		}, 
-		{
-			"title": "&lt;",
-			"htmlBefore": "&lt;"
-		}, 
-		{
-			"title": "&gt;",
-			"htmlBefore": "&gt;"
+			"title": "⮞",
+			"htmlBefore": "⮞"
 		}, 
 		{
 			"title": "&#x1F6B2;",
@@ -68,8 +85,31 @@
 		{
 			"title": "&amp;nbsp;",
 			"htmlBefore": "&nbsp;"
+		},
+		{
+			"title": "Å",
+			"htmlBefore": "Å"
+		}, 
+		{
+			"title": "å",
+			"htmlBefore": "å"
+		}, 
+		{
+			"title": "Æ",
+			"htmlBefore": "Æ"
+		}, 
+		{
+			"title": "æ",
+			"htmlBefore": "æ"
+		}, 
+		{
+			"title": "Ø",
+			"htmlBefore": "Ø"
+		}, 
+		{
+			"title": "ø",
+			"htmlBefore": "ø"
 		}
-
 	],
 	"preDefinedIconsList" :
 	[
