@@ -11973,7 +11973,7 @@ Tests ...
 				svgTownDistance : 1500,
 				svgTimeOut : 15000,
 				cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
-				cityPostfix : "</span'>"
+				cityPostfix : "</span>"
 			},
 			itineraryPointZoom: 17,
 			routeEditor : {
