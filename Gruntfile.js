@@ -79,6 +79,24 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'TravelNotesGuides/',
+						src: ['*.md'],
+						dest: 'gh-page/TravelNotesGuides/'
+					},
+					{
+						expand: true,
+						cwd: 'TravelNotesGuides/en/',
+						src: ['*.md', '*.png'],
+						dest: 'gh-page/TravelNotesGuides/en/'
+					},
+					{
+						expand: true,
+						cwd: 'TravelNotesGuides/fr/',
+						src: ['*.md', '*.png'],
+						dest: 'gh-page/TravelNotesGuides/fr/'
+					},
+					{
+						expand: true,
 						cwd: 'dist/',
 						src: ['*.css', '*.js'],
 						dest: 'gh-page/'
