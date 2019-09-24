@@ -23,7 +23,7 @@ et y installer TravelNotes.
 
 Travel & Notes utilise [Leaflet](http://leafletjs.com/) pour afficher la carte. Vous devez donc télécharger et installer Leaflet.
 
-Dans le &lt;head&gt; du fichier, chargez la feuille de style de Leaflet et de TravelNotes et créez une balise style pour la carte et le contrôle TravelNote :
+Dans le &lt;head&gt; du fichier, chargez la feuille de style de Leaflet et de TravelNotes et créez une balise &lt;style&gt; pour la carte et le contrôle TravelNote :
 
 ```
 <head>

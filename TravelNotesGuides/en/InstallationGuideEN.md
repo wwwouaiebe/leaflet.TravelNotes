@@ -23,7 +23,7 @@ and install TravelNotes.
 
 Travel & Notes uses [Leaflet] (http://leafletjs.com/) to display the map. You must therefore download and install Leaflet.
 
-In the &lt;head&gt; of the html file, load the Leaflet and TravelNotes stylesheet and create a style tag for the TravelNote map and control:
+In the &lt;head&gt; of the html file, load the Leaflet and TravelNotes stylesheet and create a &lt;style&gt; tag for the TravelNote map and control:
 
 ```
 <head>
