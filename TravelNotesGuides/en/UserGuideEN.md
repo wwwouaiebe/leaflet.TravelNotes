@@ -249,7 +249,7 @@ the nearest intersection located on the route and will create an SVG icon showin
 
 The intersection will be placed in the center of the icon and its content will be oriented according to the path followed: the route by which one arrives at the intersection will be turned towards the bottom of the icon.
 
-The address will also be modified: all the street names found at the intersection will be indicated, separated by a symbol &0x2AA5;. The first street name will always be the one by which we arrive at the intersection
+The address will also be modified: all the street names found at the intersection will be indicated, separated by a symbol &#x2AA5;. The first street name will always be the one by which we arrive at the intersection
 and the last name the one by which one leaves the intersection. This name will be preceded by an arrow indicating the direction to follow. The name of the town / city will also be added. If a hamlet or village name is
 found near the intersection, it will also be added in parentheses.
 

@@ -34,7 +34,7 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
-sont GraphHopper, Mapbox et et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
+sont GraphHopper, Mapbox et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
 que cet itinéraire soit encodé dans Openstreetmap, en respectant les règles des transports publics version 2.
 
 Pour GraphHopper et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
@@ -135,7 +135,7 @@ n'est pas possible de transformer le point de départ ou le point de fin en poin
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
-#### Supprimer un pont de passage
+#### Supprimer un point de passage
 
 Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu. Il n'est pas possible de supprimer le point de départ ni le point de fin. Seul un glisser / déposer est possible.
 
@@ -250,7 +250,7 @@ l'intersection la plus proche située sur le trajet et va créer une icône en S
 
 L'intersection sera placée au centre de l'icône et le contenu de celle-ci sera orientée en fonction du trajet suivi: la route par laquelle on arrive à l'intersection sera tournée vers le bas de l'icône.
 
-L'adresse sera également modifiée: tous les noms de rue trouvés à l'intersection seront indiqués, séparés par un symbole &0x2AA5;. Le premier nom de rue sera toujours celui par lequel on arrive à l'intersection
+L'adresse sera également modifiée: tous les noms de rue trouvés à l'intersection seront indiqués, séparés par un symbole &#x2AA5;. Le premier nom de rue sera toujours celui par lequel on arrive à l'intersection
 et le dernier nom celui par lequel on quitte l'intersection. Ce nom sera précédé d'une flèche indiquant la direction à suivre. Le nom de la commune / ville sera également ajouté. Si un nom de hameau ou de village est 
 trouvé à proximité de l'intersection, celui-ci sera également ajouté entre parenthèses.
 
