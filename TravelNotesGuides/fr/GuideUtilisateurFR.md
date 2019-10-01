@@ -34,7 +34,8 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
-sont GraphHopper, Mapbox et et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins.
+sont GraphHopper, Mapbox et et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
+que cet itinéraire soit encodé dans Openstreetmap, en respectant les règles des transports publics version 2.
 
 Pour GraphHopper et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 
@@ -140,7 +141,7 @@ Faites un click droit sur le point de passage et choisissez "supprimer ce point 
 
 #### Choisir un mode de parcours et un fournisseur d'itinéraire
 
-Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton ou voiture) ainsi que le fournisseur de trajet.
+Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton, voiture ou train) ainsi que le fournisseur de trajet.
 
 <img src="RouterButtons.PNG" />
 
@@ -214,6 +215,15 @@ Déplacez l'icône de la note pour que la ligne soit visible. Ensuite faites un 
 Une note de trajet a toujours sa latitude et longitude sur le trajet. Lorsque la ligne est déposée, le point le plus proche sur le trajet est recherché et l'extrémité libre
 de la ligne déplacé vers ce point.
 
+### Transformer une note de trajet en note de voyage
+
+Faites un clic droit sur l'icône de la note et sélectionnez "Transformer en note de voyage" dans le menu contextuel. La transformation n'est possible que si aucun trajet n'est en cours d'édition.
+
+### Transformer une note de voyage en note de trajet
+
+Faites un clic droit sur l'icône de la note et sélectionnez "Transformer en note de trajet" dans le menu contextuel. La transformation n'est possible que si aucun trajet n'est en cours d'édition.
+La note sera attachée au trajet le plus proche de celle-ci.
+
 ### La boite d'édition d'une note
 
 <img src="NoteEditionFR.PNG" />
@@ -231,7 +241,18 @@ Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception 
 La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la carte et ne peut pas être vide (laisser cette zone vide empêcherait toute modification ultérieure de la note).
 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
-Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée.
+Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. Le bouton &#x1f504; permet cependant de demander une nouvelle géolocalisation à Nominatim.
+
+#### Note de trajet prédéfinie "Icône SVG depuis OSM"
+
+Lorsque l'on crée une note de trajet, il est possible de choisir "Icône SVG depuis OSM" dans la liste des notes prédéfinies. Dans ce cas, Travel & Notes va rechercher dans Openstreetmap
+l'intersection la plus proche située sur le trajet et va créer une icône en SVG reprenant les rues proches de cette intersection.
+
+L'intersection sera placée au centre de l'icône et le contenu de celle-ci sera orientée en fonction du trajet suivi: la route par laquelle on arrive à l'intersection sera tournée vers le bas de l'icône.
+
+L'adresse sera également modifiée: tous les noms de rue trouvés à l'intersection seront indiqués, séparés par un symbole &0x2AA5;. Le premier nom de rue sera toujours celui par lequel on arrive à l'intersection
+et le dernier nom celui par lequel on quitte l'intersection. Ce nom sera précédé d'une flèche indiquant la direction à suivre. Le nom de la commune / ville sera également ajouté. Si un nom de hameau ou de village est 
+trouvé à proximité de l'intersection, celui-ci sera également ajouté entre parenthèses.
 
 #### Quleques exemples de notes 
 
@@ -245,6 +266,15 @@ Et le résultat dans TravelNotes:
 
 <img src="NoteStandard2FR.PNG" />
 
+##### Une note de trajet créée avec "Icône SVG depuis OSM"
+
+Le trajet va de la droite vers la gauche. L'intersection des rues Tiyou d'Hestreu, Chemin des Patars et Basse Voie se trouve au centre de l'icône.
+Les rues sont orientées de telle sorte que une personne qui suit le trajet sur le terrain voit les rues dans la même position que sur l'icône.
+La rue par laquelle on arrive est le Tiyou d'Hestreu. Une flèche vers la droite indique qu'il faut tourner à droite dans la Basse Voie.
+Nous sommes dans la commune de Anthisnes et au hameau de Limont.
+
+<img src="SVGIconFR.PNG" />
+
 ##### Une note avec un texte sur une ligne
 
 La boite de dialogue: 
@@ -254,16 +284,6 @@ La boite de dialogue:
 Et le résultat dans TravelNotes:
 
 <img src="NoteTexte2FR.PNG" />
-
-##### Une note avec un texte sur plusieurs lignes
-
-La boite de dialogue: 
-
-<img src="NoteTexte3FR.PNG" />
-
-Et le résultat dans TravelNotes:
-
-<img src="NoteTexte4FR.PNG" />
 
 ##### Une note avec une photo
 
@@ -299,6 +319,9 @@ Cliquez sur le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de vo
 créées sur la carte. Il est possible de choisir ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
 <img src="RoadbookFR.PNG" />
+
+Le bouton "Enrégistrer" permet de sauver le fichier html sur votre PC. Pour pouvoir affichier correctement ce fichier par après, le fichier
+TravelNotesRoadbook.min.css doit être présent dans le même répertoire.
 
 ## Préparer un voyage et le consulter depuis internet
 

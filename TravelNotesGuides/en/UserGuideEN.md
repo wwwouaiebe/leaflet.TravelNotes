@@ -33,7 +33,8 @@ The **roadbook** is an HTML page that contains all the information of the travel
 If you use Travel & Notes only to create notes, you can skip all the part about the access keys. These are only used for calculating routes.
 
 Travel & Notes does not calculate routes and itineraries. It connects to a route provider to get this route. The different route providers that can currently be used
-are GraphHopper, Mapbox and OSRM. It is also possible to draw a polyline between two places, without following paths.
+are GraphHopper, Mapbox and OSRM. It is also possible to draw a polyline between two places, without following paths. A train route between two stations can also be added, provided
+that this route is encoded in OpenStreetMap, respecting the rules of public transport version 2.
 
 For GraphHopper and Mapbox it is necessary to have an access key (**API Key**) to connect to the server. Check the websites of these different providers to obtain an access key.
 
@@ -139,7 +140,7 @@ Right click on the waypoint and choose "delete this waypoint" from the menu. It 
 
 #### Choose a route mode and route provider
 
-Use the buttons at the bottom of the control to change the route mode (bike, pedestrian or car) as well as the route provider.
+Use the buttons at the bottom of the control to change the route mode (bike, pedestrian, car or train) as well as the route provider.
 
 <img src="RouterButtons.PNG" />
 
@@ -213,6 +214,15 @@ Move the note icon to make the line visible. Then drag and drop the free end of 
 A route note always has its latitude and longitude on the route. When the line is dropped, the nearest point on the route is searched and the free end
 of the line moved to this point.
 
+### Turn a route note into a travel note
+
+Right-click on the note icon and select "Transform to travel note" from the context menu. The transformation is only possible if no route is being edited.
+
+### Turn a travel note into a route note
+
+Right-click on the note icon and select "Transform to route note" from the context menu. The transformation is only possible if no route is being edited.
+The note will be attached to the route closest to it.
+
 ### The note dialog box
 
 <img src="NoteEditionEN.PNG" />
@@ -230,7 +240,18 @@ Each edit box can contain plain text or html, except for the "Link" area.
 The "Icon Content" area will be used to represent the note on the map and can not be empty (leaving this area blank would prevent any subsequent changes to the note).
 
 The "Address" area is completed automatically when creating the note - [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) is used to geotag the notes.
-This area will never be changed by Nominatim afterwards, even if the note has been moved.
+This area will never be changed by Nominatim afterwards, even if the note has been moved. The button &#x1f504; allows, however, to request a new geolocation to Nominatim.
+
+#### Predefined route notes "SVG icon from OSM"
+
+When creating a route note, you can choose "SVG icon from OSM" in the list of predefined notes. In this case, Travel & Notes will search OpenStreetMap
+the nearest intersection located on the route and will create an SVG icon showing the streets near this intersection.
+
+The intersection will be placed in the center of the icon and its content will be oriented according to the path followed: the route by which one arrives at the intersection will be turned towards the bottom of the icon.
+
+The address will also be modified: all the street names found at the intersection will be indicated, separated by a symbol &0x2AA5;. The first street name will always be the one by which we arrive at the intersection
+and the last name the one by which one leaves the intersection. This name will be preceded by an arrow indicating the direction to follow. The name of the town / city will also be added. If a hamlet or village name is
+found near the intersection, it will also be added in parentheses.
 
 #### Some examples of notes
 
@@ -244,6 +265,15 @@ And the result on TravelNotes:
 
 <img src="NoteStandard2EN.PNG" />
 
+##### A route note created with "SVG icon from OSM"
+
+The path goes from right to left. The intersection of Tiyou d'Hestreu, Chemin des Patars and Basse Voie streets is at the center of the icon.
+The streets are oriented so that a person who follows the path on the ground sees the streets in the same position as on the icon.
+The street we arrive at is Tiyou d'Hestreu. An arrow to the right indicates that you must turn right in the Basse Voie.
+We are in the city of Anthisnes and the hamlet of Limont.
+
+<img src="SVGIconEN.PNG" />
+
 ##### A note with a text on a line
 
 The dialog box: 
@@ -253,16 +283,6 @@ The dialog box:
 And the result on TravelNotes:
 
 <img src="NoteTexte2EN.PNG" />
-
-##### A note with a text on several lines
-
-The dialog box: 
-
-<img src="NoteTexte3EN.PNG" />
-
-And the result on TravelNotes:
-
-<img src="NoteTexte4EN.PNG" />
 
 ##### A note with a photo
 
@@ -297,6 +317,9 @@ Click on the button &#x1f4cb;. A new tab is created with the roadbook. This cont
 created on the map. It is possible to choose what you want to see in the roadbook via the menu at the top of the page:
 
 <img src="RoadbookEN.PNG" />
+
+The "Save" button saves the html file on your PC. To be able to correctly display this file afterwards, the file
+TravelNotesRoadbook.min.css must be present in the same directory.
 
 ## Prepare a travel and consult it from the internet
 
