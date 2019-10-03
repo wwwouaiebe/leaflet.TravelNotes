@@ -1340,7 +1340,7 @@ Doc reviewed 20190919
 	*/
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = '1.4.0';
+		module.exports = '1.5.0';
 	}
 	
 } ) ( );
