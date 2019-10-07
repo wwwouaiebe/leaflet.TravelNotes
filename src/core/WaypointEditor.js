@@ -24,7 +24,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from RouteEditor
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -65,7 +66,7 @@ Tests ...
 		*/
 
 		var m_AddWayPoint = function ( latLng, distance ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 			if ( latLng ) {
 				newWayPoint.latLng = latLng;
@@ -73,23 +74,23 @@ Tests ...
 					require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], newWayPoint.objId ).then ( m_GeocoderRenameWayPoint );
 				}
 			}
-			g_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, g_TravelNotesData.editedRoute.wayPoints.length - 2 );
+			g_TravelNotesData.travel.editedRoute.wayPoints.add ( newWayPoint );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.last, g_TravelNotesData.travel.editedRoute.wayPoints.length - 2 );
 			if ( distance ) {
-				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					var latLngDistance = m_RouteEditor.getClosestLatLngDistance ( 
-						g_TravelNotesData.editedRoute,
+						g_TravelNotesData.travel.editedRoute,
 						wayPointsIterator.value.latLng 
 					);
 					if ( distance < latLngDistance.distance ) {
-						g_TravelNotesData.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
+						g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
 						break;
 					}
 				}
 			}
 			else {
-				g_TravelNotesData.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				g_TravelNotesData.travel.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
@@ -123,13 +124,13 @@ Tests ...
 		*/
 
 		var m_ReverseWayPoints = function ( ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.reverse ( );
-			wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.wayPoints.reverse ( );
+			wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
 			}
@@ -146,12 +147,12 @@ Tests ...
 		*/
 
 		var m_RemoveAllWayPoints = function ( ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.removeAll ( true );
+			g_TravelNotesData.travel.editedRoute.wayPoints.removeAll ( true );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -168,9 +169,9 @@ Tests ...
 		*/
 
 		var m_RemoveWayPoint = function ( wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			m_MapEditor.removeObject ( wayPointObjId );
-			g_TravelNotesData.editedRoute.wayPoints.remove ( wayPointObjId );
+			g_TravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -188,8 +189,8 @@ Tests ...
 		*/
 
 		var m_RenameWayPoint = function ( wayPointName, wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 			m_RouteEditorUI.setWayPointsList ( );
 		};
 		
@@ -243,8 +244,8 @@ Tests ...
 		*/
 
 		var m_SwapWayPoints = function ( wayPointObjId, swapUp ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			g_TravelNotesData.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			g_TravelNotesData.travel.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 			m_RouteEditorUI.setWayPointsList (  );
 			m_RouteEditor.startRouting ( );
 		};
@@ -261,15 +262,15 @@ Tests ...
 		*/
 
 		var m_SetStartPoint = function ( latLng ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.first.lat ) {
-				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.first.objId );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.travel.editedRoute.wayPoints.first.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
+			g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
 			}
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.first, 'A' );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.first, 'A' );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -287,15 +288,15 @@ Tests ...
 		*/
 
 		var m_SetEndPoint = function ( latLng ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.last.lat ) {
-				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.last.objId );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.travel.editedRoute.wayPoints.last.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
+			g_TravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
 			}
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, 'B' );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.last, 'B' );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -312,9 +313,9 @@ Tests ...
 		*/
 
 		var m_WayPointDragEnd = function ( wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				var latLng = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+				var latLng = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
 				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
@@ -330,16 +331,16 @@ Tests ...
 		*/
 
 		var m_WayPointDropped = function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.first.objId && draggedBefore ) {
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.first.objId && draggedBefore ) {
 				return;
 			}
-			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+			if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
 				return;
 			}
-			g_TravelNotesData.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+			g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
 			m_RouteEditorUI.setWayPointsList ( );
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 					m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 					m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );

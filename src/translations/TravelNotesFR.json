@@ -152,6 +152,14 @@
 		"msgstr" : "Masquer"
 	},
 	{
+		"msgid" : "FileLoader - Not possible to merge a travel when a route is edited",
+		"msgstr" : "Il n'est pas possible defusionner un voyage quand une route est en cours d'édition"
+	},
+	{
+		"msgid" : "FileLoader - Not possible to select as provider",
+		"msgstr" : "Impossible de sélectionner {provider}"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
@@ -406,10 +414,6 @@
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
-	},
-	{
-		"msgid" : "TravelEditor - Not possible to save a travel without a save or cancel",
-		"msgstr" : "Des données non sauvées sont présentes dans l'éditeur de trajet. Sauvez ou abandonnez celles-ci avant de sauver le voyage dans un fichier"
 	},
 	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",

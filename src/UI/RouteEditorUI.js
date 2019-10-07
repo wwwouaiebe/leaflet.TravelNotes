@@ -48,7 +48,7 @@ Tests ...
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 
-		if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
+		if ( -1 === require ( '../L.TravelNotes' ).editedRouteObjId ) {
 			return;
 		}
 
@@ -374,12 +374,10 @@ Tests ...
 
 		var m_SetWayPointsList = function ( ) {
 			m_WayPointsList.removeAllItems ( );
-
-			if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
+			if ( -1 === require ( '../L.TravelNotes' ).editedRouteObjId ) {
 				return;
 			}
-			
-			var wayPointsIterator = require ( '../L.TravelNotes' ).editedRoute.wayPoints.iterator;
+			var wayPointsIterator = require ( '../L.TravelNotes' ).travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				var indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
 				var placeholder = wayPointsIterator.first ? m_Translator.getText ( 'RouteEditorUI - Start' ) : ( wayPointsIterator.last ? m_Translator.getText ( 'RouteEditorUI - End' ) : m_Translator.getText ( 'RouteEditorUI - Via' ) );

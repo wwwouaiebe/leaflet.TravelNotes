@@ -35,7 +35,8 @@ Changes:
 		- removing interface
 		- moving file functions from TravelEditor to the new FileLoader
 		- added loading of osmSearch
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20171001
 Tests ...
 
@@ -242,7 +243,6 @@ Tests ...
 					// loading new travel
 					_TravelNotesData.travel = require ( './data/Travel' ) ( );
 					_TravelNotesData.travel.routes.add ( require ( './data/Route' ) ( ) );
-					_TravelNotesData.editedRoute = ( require ( './data/Route' ) ( ) );
 					// user interface is added
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 					require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _TravelNotesData.travel.routes );

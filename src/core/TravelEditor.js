@@ -35,6 +35,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -110,10 +112,14 @@ Tests ...
 		*/
 		
 		var m_AddRoute = function ( ) {
-			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
+			var newRoute = require ( '../Data/Route' ) ( );
+			g_TravelNotesData.travel.routes.add ( newRoute );
 			m_TravelEditorUI.setRoutesList ( );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			m_UpdateRoadBook ( );
+			if ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) {
+				m_EditRoute ( newRoute.objId );
+			}
 		};
 		
 		/*
@@ -128,7 +134,7 @@ Tests ...
 		*/
 
 		var m_RemoveRoute = function ( routeObjId ) {
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId && g_TravelNotesData.routeEdition.routeChanged ) {
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId && 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 				// cannot remove the route currently edited
 				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 				return;
@@ -137,7 +143,7 @@ Tests ...
 			require ( './MapEditor' ) ( ).removeRoute ( require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ), true, true );
 			g_TravelNotesData.travel.routes.remove ( routeObjId );
 			m_TravelEditorUI.setRoutesList ( );
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId  ) {
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId  ) {
 				require ( './RouteEditor' ) ( ).cancelEdition ( );
 			}
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
@@ -156,12 +162,12 @@ Tests ...
 		*/
 
 		var m_EditRoute = function ( routeObjId ) { 
-			if ( g_TravelNotesData.routeEdition.routeChanged ) {
+			if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 				// not possible to edit - the current edited route is not saved or cancelled
 				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 				return;
 			}
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				// the current edited route is not changed. Cleaning the editors
 				require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 			}
@@ -174,21 +180,24 @@ Tests ...
 				return;
 			}
 			// Provider and transit mode are changed in the itinerary editor
-			require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			if ( providerName && '' !== providerName ) {
+				require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			}
 			var transitMode = initialRoute.itinerary.transitMode;
 			if ( transitMode && '' !== transitMode ) {
 				require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
 			}
 			// The edited route is pushed in the editors
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.travel.editedRoute = require ( '../data/Route' ) ( );
+			initialRoute.edited = 1;
 			// Route is cloned, so we can have a cancel button in the editor
-			g_TravelNotesData.editedRoute.object = initialRoute.object;
-			g_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
-			g_TravelNotesData.editedRoute.hidden = false;
+			g_TravelNotesData.travel.editedRoute.object = initialRoute.object;
+			g_TravelNotesData.editedRouteObjId = initialRoute.objId;
+			g_TravelNotesData.travel.editedRoute.hidden = false;
 			initialRoute.hidden = false;
 			var mapEditor = require ( '../core/MapEditor' ) ( );
 			mapEditor.removeRoute ( initialRoute, true, false );
-			mapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			mapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			var routeEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 			routeEditorUI .expand ( );
@@ -210,8 +219,8 @@ Tests ...
 		var m_RenameRoute = function ( routeObjId, routeName ) {
 			require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ).name = routeName;
 			m_TravelEditorUI.setRoutesList ( );
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				g_TravelNotesData.editedRoute.name = routeName;
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId ) {
+				g_TravelNotesData.travel.editedRoute.name = routeName;
 			}
 			m_UpdateRoadBook ( );
 		};
@@ -246,6 +255,30 @@ Tests ...
 			m_UpdateRoadBook ( );
 		};
 
+		/*
+		--- m_CompressRoute function -------------------------------------------------------------------------------------
+
+		This function compress the itinerary points of a route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CompressRoute = function ( route ) {
+			var objType = {};
+			if ( 0 !== route.itinerary.itineraryPoints.length ) {
+				objType = route.itinerary.itineraryPoints [ 0 ].objType;
+			}
+			var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+			route.itinerary.itineraryPoints.forEach ( 
+				function ( itineraryPoint ) {
+					compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
+					compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+					compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+				}
+			);
+			compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+			route.itinerary.itineraryPoints = compressedItineraryPoints;
+		};
 
 		/*
 		--- m_SaveTravel function -------------------------------------------------------------------------------------
@@ -256,38 +289,17 @@ Tests ...
 		*/
 
 		var m_SaveTravel = function ( ) {
-			if ( g_TravelNotesData.routeEdition.routeChanged ) {
-				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.hidden = false;
 			}
-			else {
-				var routesIterator = g_TravelNotesData.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					routesIterator.value.hidden = false;
-				}
-					
-				// compressing the itineraryPoints
-				var compressedTravel = g_TravelNotesData.travel.object;
-				compressedTravel.routes.forEach (
-					function ( route ) {
-						var objType = {};
-						if ( 0 !== route.itinerary.itineraryPoints.length ) {
-							objType = route.itinerary.itineraryPoints [ 0 ].objType;
-						}
-						var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
-						route.itinerary.itineraryPoints.forEach ( 
-							function ( itineraryPoint ) {
-								compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
-								compressedItineraryPoints.distances.push ( itineraryPoint.distance );
-								compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
-							}
-						);
-						compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
-						route.itinerary.itineraryPoints = compressedItineraryPoints;
-					}
-				);
-				// save file
-				require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
-			}
+			
+			// compressing the itineraryPoints
+			var compressedTravel = g_TravelNotesData.travel.object;
+			compressedTravel.routes.forEach ( m_CompressRoute );
+			m_CompressRoute ( compressedTravel.editedRoute );
+			// save file
+			require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 		};
 		
 		/*
@@ -318,9 +330,8 @@ Tests ...
 				return;
 			}
 			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
-			g_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
-			g_TravelNotesData.routeEdition.routeChanged = false;
-			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			g_TravelNotesData.travel.editedRoute = require ( '../Data/Route' ) ( );
+			g_TravelNotesData.editedRouteObjId = -1;
 			g_TravelNotesData.travel = require ( '../Data/Travel' ) ( );
 			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );

@@ -27,6 +27,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Added noteObjId in the _AddNoteHTML function
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -36,9 +38,10 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
 	var _HTMLElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( );
-	var _TravelNotesData = require ( '../L.TravelNotes' );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
@@ -96,13 +99,13 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Header-Name',
-					innerHTML: _TravelNotesData.travel.name
+					innerHTML: g_TravelNotesData.travel.name
 				},
 				travelHeaderHTML
 			); 
 			
 			var travelDistance = 0;
-			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
+			var travelRoutesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
 				_HTMLElementsFactory.create ( 
 					'div',
@@ -140,7 +143,7 @@ Tests ...
 
 		var _GetTravelNotesHTML = function ( ) {
 			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
-			var travelNotesIterator = _TravelNotesData.travel.notes.iterator;
+			var travelNotesIterator = g_TravelNotesData.travel.notes.iterator;
 			while ( ! travelNotesIterator.done ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
@@ -332,12 +335,12 @@ Tests ...
 			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
 			travelHTML.appendChild ( _GetTravelNotesHTML ( ) );
 			
-			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
+			var travelRoutesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
-				var useEditedRoute = _TravelNotesData.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _TravelNotesData.routeEdition.routeInitialObjId;
-				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _TravelNotesData.editedRoute :travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
+				var useEditedRoute = g_TravelNotesData.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === g_TravelNotesData.editedRouteObjId;
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute :travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
 			}
 			
 			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
@@ -360,11 +363,11 @@ Tests ...
 			
 			get travelNotesHTML ( )  { return _GetTravelNotesHTML ( ); }, 
 			
-			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
-			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
-			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
 			get travelFooterHTML ( )  { return _GetTravelFooterHTML ( ); }, 
 			

@@ -23,6 +23,8 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -47,10 +49,12 @@ Tests ...
 
 		// Private variables
 
+		var m_EditedRoute = require ( '../data/Route' ) ( );
+
 		var m_Name = 'TravelNotes';
 
 		var m_Routes = require ( '../data/Collection' ) ( 'Route' );
-
+		
 		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var m_ObjId = require ( '../data/ObjId' ) ( );
@@ -61,6 +65,7 @@ Tests ...
 
 		var m_GetObject = function ( ) {
 			return {
+				editedRoute : m_EditedRoute.object,
 				name : m_Name,
 				routes : m_Routes.object,
 				notes : m_Notes.object,
@@ -73,6 +78,7 @@ Tests ...
 		
 		var m_SetObject = function ( something ) {
 			something = s_ObjType.validate ( something );
+			m_EditedRoute.object = something.editedRoute || require ( '../data/Route' ) ( );
 			m_Name = something.name || '';
 			m_UserData = something.userData || {};
 			m_ReadOnly = something.readOnly || false;
@@ -89,6 +95,9 @@ Tests ...
 		
 		return Object.seal (
 			{
+				get editedRoute ( ) { return m_EditedRoute; },
+				set editedRoute ( editedRoute ) { m_EditedRoute = editedRoute; },
+
 				get routes ( ) { return m_Routes; },
 
 				get notes ( ) { return m_Notes; },

@@ -198,6 +198,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
 		- fixed issue #45
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -404,7 +406,7 @@ Tests ...
 			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='leaflet.TravelNotes'>";
 
 			// waypoints
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				gpxString += 
@@ -415,9 +417,9 @@ Tests ...
 			
 			// route
 			gpxString += tab1 + "<rte>";
-			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			var maneuverIterator = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
-				var wayPoint = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+				var wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
 				var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
 				gpxString +=
 					tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
@@ -427,7 +429,7 @@ Tests ...
 			// track
 			gpxString += tab1 + "<trk>";
 			gpxString += tab2 + "<trkseg>";
-			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var itineraryPointsIterator = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
 			while ( ! itineraryPointsIterator.done ) {
 				gpxString +=
 					tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
@@ -439,7 +441,7 @@ Tests ...
 			gpxString += tab0 + "</gpx>";
 			
 			// file is saved
-			var fileName = g_TravelNotesData.editedRoute.name;
+			var fileName = g_TravelNotesData.travel.editedRoute.name;
 			if ( '' === fileName ) {
 				fileName = 'TravelNote';
 			}
@@ -515,8 +517,8 @@ Tests ...
 			if ( ! g_TravelNotesData.config.routing.auto ) {
 				return;
 			}
-			s_ZoomToRoute = 0 === g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length;
-			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
+			s_ZoomToRoute = 0 === g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.travel.editedRoute );
 		};
 			
 			
@@ -530,23 +532,23 @@ Tests ...
 
 		var m_EndRouting = function ( ) {
 			// the previous route is removed from the leaflet map
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			m_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			
 			// the position of the notes linked to the route is recomputed
-			var notesIterator = g_TravelNotesData.editedRoute.notes.iterator;
+			var notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
 			while ( ! notesIterator.done ) {
-				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.editedRoute, notesIterator.value.latLng );
+				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, notesIterator.value.latLng );
 				notesIterator.value.latLng = latLngDistance.latLng;
 				notesIterator.value.distance = latLngDistance.distance;
 			}
 			
 			// and the notes sorted
-			g_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+			g_TravelNotesData.travel.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 			
 			// the new route is added to the map
-			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			m_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			if ( s_ZoomToRoute ) {
-				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
+				m_MapEditor.zoomToRoute ( g_TravelNotesData.travel.editedRoute.objId );
 			}
 			
 			// and the itinerary and waypoints are displayed
@@ -569,10 +571,10 @@ Tests ...
 		var m_SaveEdition = function ( ) {
 			// the edited route is cloned
 			var clonedRoute = require ( '../data/Route' ) ( );
-			clonedRoute.object = g_TravelNotesData.editedRoute.object;
+			clonedRoute.object = g_TravelNotesData.travel.editedRoute.object;
 			// and the initial route replaced with the clone
-			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
-			g_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
+			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.editedRouteObjId, clonedRoute );
+			g_TravelNotesData.editedRouteObjId = clonedRoute.objId;
 			m_CancelEdition ( );
 		};
 			
@@ -585,14 +587,15 @@ Tests ...
 		*/
 
 		var m_CancelEdition = function ( ) {
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				m_MapEditor.addRoute ( m_DataSearchEngine.getRoute ( g_TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+			m_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+				var editedRoute = m_DataSearchEngine.getRoute ( g_TravelNotesData.editedRouteObjId );
+				editedRoute.edited = 0;
+				m_MapEditor.addRoute ( editedRoute , true, false );
 			}
 
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-			g_TravelNotesData.routeEdition.routeChanged = false;
-			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			g_TravelNotesData.travel.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.editedRouteObjId = -1;
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditorUI .reduce ( );
@@ -731,6 +734,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -757,8 +762,8 @@ Tests ...
 			var route = null;
 			route = g_TravelNotesData.travel.routes.getAt ( routeObjId );
 			if ( ! route ) {
-				if ( routeObjId === g_TravelNotesData.editedRoute.objId ) {
-					route = g_TravelNotesData.editedRoute;
+				if ( routeObjId === g_TravelNotesData.travel.editedRoute.objId ) {
+					route = g_TravelNotesData.travel.editedRoute;
 				}
 			}
 			if ( ! route ) {
@@ -789,13 +794,13 @@ Tests ...
 					return { note : note, route : routeIterator.value };
 				}
 			}
-			note = g_TravelNotesData.editedRoute.notes.getAt ( noteObjId );
+			note = g_TravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
 			if ( ! note ) {
 				console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataSearchEngine.getNote ( )' );
 				return { note : null, route : null };
 			}
 
-			return { note : note, route : g_TravelNotesData.editedRoute };
+			return { note : note, route : g_TravelNotesData.travel.editedRoute };
 		};
 		
 		/*
@@ -815,7 +820,7 @@ Tests ...
 					return wayPoint;
 				}
 			}
-			wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId );
+			wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 			if ( ! wayPoint ) {
 				console.log ( 'Invalid wayPointObjId ' + wayPointObjId + ' for function DataSearchEngine.getWayPoint ( )' );
 				return null;
@@ -1028,6 +1033,8 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -1059,12 +1066,19 @@ Tests ...
 		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var m_Itinerary = require ( '../data/Itinerary' ) ( );
-
-		var m_Width = require ( '../L.TravelNotes' ).config.route.width || 5;
-
-		var m_Color = require ( '../L.TravelNotes' ).config.route.color || '#ff0000';
 		
-		var m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray || 0;
+		var m_Width = 5;
+
+		var m_Color = '#ff0000';
+		
+		var m_DashArray = 0;
+
+		
+		if ( require ( '../L.TravelNotes' ).config ) {
+			m_Width = require ( '../L.TravelNotes' ).config.route.width;
+			m_Color = require ( '../L.TravelNotes' ).config.route.color;			
+			m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray;			
+		}
 
 		var m_Chain = false;
 
@@ -1074,8 +1088,19 @@ Tests ...
 
 		var m_Duration = 0;
 		
-		var m_Hidden = false;
+		var m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+		
+		var m_SetEdited = function ( edited ) {
+			if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
+				throw 'Invalid value for Route.edited : ' + edited;
+			}
+			else {
+				m_Edited = edited;
+			}
+		};
 
+		var m_Hidden = false;
+		
 		var m_ObjId = require ( '../data/ObjId' ) ( );
 
 		var m_GetObject = function ( ) {
@@ -1087,9 +1112,10 @@ Tests ...
 				width : m_Width,
 				color : m_Color,
 				dashArray : m_DashArray,
-				chain :m_Chain,
+				chain : m_Chain,
 				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
 				duration : m_Duration,
+				edited : m_Edited,
 				hidden : m_Hidden,
 				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
 				objId : m_ObjId,
@@ -1109,6 +1135,7 @@ Tests ...
 			m_Chain = something.chain || false;
 			m_Distance = something.distance;
 			m_Duration = something.duration;
+			m_Edited = something.edited || 0;
 			m_Hidden = something.hidden || false;
 			m_ChainedDistance = something.chainedDistance;
 			m_ObjId = require ( '../data/ObjId' ) ( );
@@ -1152,6 +1179,9 @@ Tests ...
 
 				get duration ( ) { return m_Duration; },
 				set duration ( Duration ) { m_Duration = Duration; },
+				
+				get edited ( ) { return m_Edited; },
+				set edited ( Edited ) { m_SetEdited ( Edited ); },
 
 				get hidden ( ) { return m_Hidden; },
 				set hidden ( Hidden ) { m_Hidden = Hidden; },
@@ -1205,6 +1235,8 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -1229,10 +1261,12 @@ Tests ...
 
 		// Private variables
 
+		var m_EditedRoute = require ( '../data/Route' ) ( );
+
 		var m_Name = 'TravelNotes';
 
 		var m_Routes = require ( '../data/Collection' ) ( 'Route' );
-
+		
 		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var m_ObjId = require ( '../data/ObjId' ) ( );
@@ -1243,6 +1277,7 @@ Tests ...
 
 		var m_GetObject = function ( ) {
 			return {
+				editedRoute : m_EditedRoute.object,
 				name : m_Name,
 				routes : m_Routes.object,
 				notes : m_Notes.object,
@@ -1255,6 +1290,7 @@ Tests ...
 		
 		var m_SetObject = function ( something ) {
 			something = s_ObjType.validate ( something );
+			m_EditedRoute.object = something.editedRoute || require ( '../data/Route' ) ( );
 			m_Name = something.name || '';
 			m_UserData = something.userData || {};
 			m_ReadOnly = something.readOnly || false;
@@ -1271,6 +1307,9 @@ Tests ...
 		
 		return Object.seal (
 			{
+				get editedRoute ( ) { return m_EditedRoute; },
+				set editedRoute ( editedRoute ) { m_EditedRoute = editedRoute; },
+
 				get routes ( ) { return m_Routes; },
 
 				get notes ( ) { return m_Notes; },
@@ -1307,7 +1346,7 @@ Tests ...
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------
 */
-},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":7}],7:[function(require,module,exports){
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"../data/Route":52,"./Version":7}],7:[function(require,module,exports){
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -1386,7 +1425,8 @@ Changes:
 		- removing interface
 		- moving file functions from TravelEditor to the new FileLoader
 		- added loading of osmSearch
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20171001
 Tests ...
 
@@ -1593,7 +1633,6 @@ Tests ...
 					// loading new travel
 					_TravelNotesData.travel = require ( './data/Travel' ) ( );
 					_TravelNotesData.travel.routes.add ( require ( './data/Route' ) ( ) );
-					_TravelNotesData.editedRoute = ( require ( './data/Route' ) ( ) );
 					// user interface is added
 					document.getElementById ( divControlId ).appendChild ( require ( './UI/UserInterface' ) ( ).UI );
 					require ( './UI/TravelEditorUI' ) ( ).setRoutesList ( _TravelNotesData.travel.routes );
@@ -2739,7 +2778,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed ...
 Tests ...
 
@@ -2785,19 +2825,19 @@ Tests ...
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as start point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
 					param : latLng
 				},
 				{
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as way point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
 					param : latLng
 				},
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as end point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
 					param : latLng
 				},
 				{ 
@@ -2850,7 +2890,7 @@ Tests ...
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ), 
-					action : ( ( g_TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
+					action : ( ( g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.travel.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
 					param: wayPointObjId
 				} 
 			];
@@ -2872,25 +2912,25 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Edit this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.editRoute : null,
+					action : ( ( g_TravelNotesData.editedRouteObjId !== routeObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? m_TravelEditor.editRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_TravelEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Delete this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.removeRoute : null,
+					action : ( ( g_TravelNotesData.editedRouteObjId !== routeObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? m_TravelEditor.removeRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
+					action : ( g_TravelNotesData.travel.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
 					param: routeObjId
 				},
 				{
@@ -2914,12 +2954,12 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Save modifications on this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
+					action : ( g_TravelNotesData.travel.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
 				},
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Cancel modifications on this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
+					action : ( g_TravelNotesData.travel.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
 				}
 			];
 		};		
@@ -2967,7 +3007,7 @@ Tests ...
 				{ 
 					context : m_NoteEditor, 
 					name : route ?  m_Translator.getText ( "ContextMenuFactory - Detach note from route" ) : m_Translator.getText ( "ContextMenuFactory - Attach note to route" ), 
-					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
+					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.editedRouteObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
 					param : noteObjId
 				} 
 			);
@@ -3600,6 +3640,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- Added noteObjId in the _AddNoteHTML function
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -3609,9 +3651,10 @@ Tests ...
 ( function ( ){
 	
 	'use strict';
+
+	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
 	var _HTMLElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( );
-	var _TravelNotesData = require ( '../L.TravelNotes' );
 	var _Translator = require ( '../UI/Translator' ) ( );
 	var _Utilities = require ( '../util/Utilities' ) ( );
 	var _NoteEditor = require ( '../core/NoteEditor' ) ( );
@@ -3669,13 +3712,13 @@ Tests ...
 				'div',
 				{ 
 					className : _ClassNamePrefix + 'Travel-Header-Name',
-					innerHTML: _TravelNotesData.travel.name
+					innerHTML: g_TravelNotesData.travel.name
 				},
 				travelHeaderHTML
 			); 
 			
 			var travelDistance = 0;
-			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
+			var travelRoutesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
 				_HTMLElementsFactory.create ( 
 					'div',
@@ -3713,7 +3756,7 @@ Tests ...
 
 		var _GetTravelNotesHTML = function ( ) {
 			var travelNotesHTML = _HTMLElementsFactory.create ( 'div', { className :  _ClassNamePrefix + 'Travel-Notes'} ); 
-			var travelNotesIterator = _TravelNotesData.travel.notes.iterator;
+			var travelNotesIterator = g_TravelNotesData.travel.notes.iterator;
 			while ( ! travelNotesIterator.done ) {
 				var rowDiv = _HTMLElementsFactory.create ( 
 					'div', 
@@ -3905,12 +3948,12 @@ Tests ...
 			travelHTML.appendChild ( _GetTravelHeaderHTML ( ) );
 			travelHTML.appendChild ( _GetTravelNotesHTML ( ) );
 			
-			var travelRoutesIterator = _TravelNotesData.travel.routes.iterator;
+			var travelRoutesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! travelRoutesIterator.done ) {
-				var useEditedRoute = _TravelNotesData.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === _TravelNotesData.routeEdition.routeInitialObjId;
-				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? _TravelNotesData.editedRoute :travelRoutesIterator.value ) );
-				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? _TravelNotesData.editedRoute : travelRoutesIterator.value ) );
+				var useEditedRoute = g_TravelNotesData.config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === g_TravelNotesData.editedRouteObjId;
+				travelHTML.appendChild ( _GetRouteHeaderHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteManeuversAndNotesHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute :travelRoutesIterator.value ) );
+				travelHTML.appendChild ( _GetRouteFooterHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
 			}
 			
 			travelHTML.appendChild ( _GetTravelFooterHTML ( ) );
@@ -3933,11 +3976,11 @@ Tests ...
 			
 			get travelNotesHTML ( )  { return _GetTravelNotesHTML ( ); }, 
 			
-			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeHeaderHTML ( )  { return _GetRouteHeaderHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
-			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( )  { return _GetRouteManeuversAndNotesHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
-			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( _TravelNotesData.editedRoute ); }, 
+			get routeFooterHTML ( )  { return _GetRouteFooterHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
 			get travelFooterHTML ( )  { return _GetTravelFooterHTML ( ); }, 
 			
@@ -5117,87 +5160,6 @@ Tests ...
 	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
 	/*
-	--- onProviderButtonClick function --------------------------------------------------------------------------------
-
-	click event listener for the providers button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onProviderButtonClick = function ( clickEvent ) {
-		
-		clickEvent.stopPropagation ( );
-
-		g_TravelNotesData.routing.provider = clickEvent.target.provider;
-
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
-		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
-
-		// activating the transit mode buttons, depending of the capabilities of the provider
-		var provider = g_TravelNotesData.providers.get ( clickEvent.target.provider );
-		if ( provider.transitModes.car ) {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.bike ) {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.pedestrian ) {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.train ) {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		
-		if ( ! g_TravelNotesData.providers.get ( clickEvent.target.provider ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
-			if ( provider.transitModes.bike ) {
-				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.pedestrian )  {
-				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.car )  {
-				document.getElementById ( 'TravelNotes-Control-carImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.train )  {
-				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).click ( );
-			}
-		}
-		
-		require ( '../core/RouteEditor' ) ( ).startRouting ( );
-	};
-
-	/*
-	--- onClickTransitModeButton function -----------------------------------------------------------------------------
-
-	click event listener  for the transit modes buttons
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickTransitModeButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-
-		g_TravelNotesData.routing.transitMode = clickEvent.target.transitMode;
-
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-
-		require ( '../core/RouteEditor' ) ( ).startRouting ( );
-	};
-	
-	/*
 	--- providersToolbarUI function -----------------------------------------------------------------------------------
 
 	This function returns the providersToolbarUI object
@@ -5214,6 +5176,106 @@ Tests ...
 		var m_PedestrianButton = null;
 		var m_CarButton = null;
 		var m_TrainButton = null;
+		
+		/*
+		--- m_SetProvider function ------------------------------------------------------------------------------------
+
+		This function set the provider
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SetProvider = function ( providerName ) {
+			g_TravelNotesData.routing.provider = providerName;
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
+			document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+
+			// activating the transit mode buttons, depending of the capabilities of the provider
+			var provider = g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) );
+			if ( provider.transitModes.car ) {
+				document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.bike ) {
+				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.pedestrian ) {
+				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.train ) {
+				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+
+			// changing the transitMode if the provider don't have the active transit mode
+			if ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
+				if ( provider.transitModes.bike ) {
+					m_SetTransitMode ( 'bike' );
+				}
+				else if ( provider.transitModes.pedestrian )  {
+					m_SetTransitMode ( 'pedestrian' );
+				}
+				else if ( provider.transitModes.car )  {
+					m_SetTransitMode ( 'car' );
+				}
+				else if ( provider.transitModes.train )  {
+					m_SetTransitMode ( 'train' );
+				}
+			}
+		};
+		
+		/*
+		--- onProviderButtonClick function --------------------------------------------------------------------------------
+
+		click event listener for the providers button
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onProviderButtonClick = function ( clickEvent ) {
+			
+			clickEvent.stopPropagation ( );
+			m_SetProvider ( clickEvent.target.provider );
+			require ( '../core/RouteEditor' ) ( ).startRouting ( );
+		};
+		
+		/*
+		--- m_SetTransitMode function ---------------------------------------------------------------------------------
+
+		This function set the transit mode
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var m_SetTransitMode = function ( transitMode ) {
+			
+			g_TravelNotesData.routing.transitMode = transitMode;
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		};
+		
+		/*
+		--- onClickTransitModeButton function -----------------------------------------------------------------------------
+
+		click event listener  for the transit modes buttons
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+		var onClickTransitModeButton = function ( clickEvent ) {
+
+			clickEvent.stopPropagation ( );
+			m_SetTransitMode ( clickEvent.target.transitMode );
+			require ( '../core/RouteEditor' ) ( ).startRouting ( );
+		};
 		
 		/*
 		--- m_createProviderButton function -------------------------------------------------------------------------
@@ -5235,7 +5297,7 @@ Tests ...
 					},
 				m_ButtonsDiv
 			);
-			providerButton.provider = provider.name.toLowerCase ( );
+			providerButton.provider = provider.name;
 			providerButton.addEventListener ( 'click', onProviderButtonClick, false );
 			// when loading the control, the first provider will be the active provider
 			if ( ! m_activeButton ) {
@@ -5273,7 +5335,6 @@ Tests ...
 				}
 			}
 		};
-
 
 		/*
 		--- m_createProvidersButtons function -------------------------------------------------------------------------
@@ -5366,36 +5427,6 @@ Tests ...
 		
 		};
 		
-		/*
-		--- m_SetProvider function ------------------------------------------------------------------------------------
-
-		This function set the provider
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SetProvider = function ( providerName ) {
-			 var button = document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' );
-			 if ( button ) {
-				 button.click ( );
-			 }
-		
-		};
-		
-		/*
-		--- m_SetProvider function ------------------------------------------------------------------------------------
-
-		This function set the transit mode
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		var m_SetTransitMode = function ( transitMode ) {
-			var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
-			 if ( button ) {
-				 button.click ( );
-			 }
-		};
-		
 		/* 
 		--- providersToolbarUI object ---------------------------------------------------------------------------------
 		
@@ -5480,7 +5511,7 @@ Tests ...
 	var onClickExpandButton = function ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 
-		if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
+		if ( -1 === require ( '../L.TravelNotes' ).editedRouteObjId ) {
 			return;
 		}
 
@@ -5806,12 +5837,10 @@ Tests ...
 
 		var m_SetWayPointsList = function ( ) {
 			m_WayPointsList.removeAllItems ( );
-
-			if ( -1 === require ( '../L.TravelNotes' ).routeEdition.routeInitialObjId ) {
+			if ( -1 === require ( '../L.TravelNotes' ).editedRouteObjId ) {
 				return;
 			}
-			
-			var wayPointsIterator = require ( '../L.TravelNotes' ).editedRoute.wayPoints.iterator;
+			var wayPointsIterator = require ( '../L.TravelNotes' ).travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				var indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
 				var placeholder = wayPointsIterator.first ? m_Translator.getText ( 'RouteEditorUI - Start' ) : ( wayPointsIterator.last ? m_Translator.getText ( 'RouteEditorUI - End' ) : m_Translator.getText ( 'RouteEditorUI - Via' ) );
@@ -6881,7 +6910,7 @@ Tests ...
 		clickEvent.stopPropagation();
 		require ( '../core/TravelEditor' ) ( ).clear ( );
 		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
-			require ( '../core/RouteEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
 		}
 		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 	};
@@ -7685,6 +7714,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -7711,6 +7742,33 @@ Tests ...
 		var m_FileName = '';
 		var m_IsFileReadOnly = false;
 		var m_FileContent = {};
+
+		/*
+		--- m_DecompressRoute function --------------------------------------------------------------------------------
+
+		This function decompress a route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_DecompressRoute = function ( route ) {
+			route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+			var decompressedItineraryPoints = [];
+			var latLngsCounter = 0;
+			route.itinerary.itineraryPoints.latLngs.forEach (
+				function ( latLng ) {
+					var itineraryPoint = {};
+					itineraryPoint.lat = latLng [ 0 ];
+					itineraryPoint.lng = latLng [ 1 ];
+					itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+					itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+					itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
+					decompressedItineraryPoints.push ( itineraryPoint );
+					latLngsCounter ++;
+				}
+			);
+			route.itinerary.itineraryPoints = decompressedItineraryPoints;
+		};
 		
 		/*
 		--- m_DecompressFileContent function --------------------------------------------------------------------------
@@ -7722,27 +7780,8 @@ Tests ...
 
 		var m_DecompressFileContent = function ( ) {
 			
-			m_FileContent.routes.forEach ( 
-				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
-					var decompressedItineraryPoints = [];
-					var latLngsCounter = 0;
-					route.itinerary.itineraryPoints.latLngs.forEach (
-						function ( latLng ) {
-							var itineraryPoint = {};
-							itineraryPoint.lat = latLng [ 0 ];
-							itineraryPoint.lng = latLng [ 1 ];
-							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
-							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
-							decompressedItineraryPoints.push ( itineraryPoint );
-							latLngsCounter ++;
-						}
-					);
-					route.itinerary.itineraryPoints = decompressedItineraryPoints;
-				}
-			);
-			
+			m_FileContent.routes.forEach ( m_DecompressRoute );
+			m_DecompressRoute ( m_FileContent.editedRoute );
 			if ( m_MergeContent ) {
 				m_Merge ( );
 			}
@@ -7790,11 +7829,18 @@ Tests ...
 
 		var m_Open = function ( ) {
 			g_TravelNotesData.travel.object = m_FileContent;
+
 			if ( '' !== m_FileName ) {
 				g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
 			}
-			g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;			
-			
+			g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;
+			g_TravelNotesData.travel.routes.forEach (
+				function ( route ) {
+					if ( 0 !== route.edited ) {
+						g_TravelNotesData.editedRouteObjId = route.objId;
+					}
+				}
+			);
 			m_Display ( );
 		};
 		
@@ -7807,16 +7853,20 @@ Tests ...
 		*/
 
 		var m_Display = function ( ) {
-			
 			var mapEditor = require ( '../core/MapEditor' ) ( );
 
 			// the map is cleaned
 			mapEditor.removeAllObjects ( );
-			
 			// routes are added with their notes
 			var routesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				mapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
+				if ( 0 === routesIterator.value.edited ) {
+					mapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
+				}
+			}
+			// edited route is added with notes and , depending of read only, waypoints
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+				mapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, ! m_IsFileReadOnly, m_IsFileReadOnly );
 			}
 			
 			// travel notes are added
@@ -7832,6 +7882,27 @@ Tests ...
 			if ( ! m_IsFileReadOnly ) {
 			// Editors and HTML pages are filled
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+					var providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
+					if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
+					{
+						require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
+					}
+					else {
+						// Provider and transit mode are changed in the itinerary editor
+						var transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
+						require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+						
+						if ( transitMode && '' !== transitMode ) {
+							require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
+						}
+					}
+					require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+					var routeEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+					routeEditorUI .expand ( );
+					routeEditorUI.setWayPointsList ( );
+					require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+				}
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( false );
 			}
 			else {
@@ -7889,6 +7960,12 @@ Tests ...
 		*/
 
 		var m_MergeLocalFile = function ( event ) {
+			
+			if ( g_TravelNotesData.travel.editedRouteObjId !== -1 ) {
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to merge a travel when a route is edited" ) );
+				return;
+			}
+			
 			m_MergeContent = true;
 			m_IsFileReadOnly = false;
 			m_OpenFile ( event );
@@ -7935,7 +8012,7 @@ Tests ...
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------
 */	
-},{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/TravelEditorUI":27,"../core/MapEditor":34,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
+},{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/ProvidersToolbarUI":21,"../UI/RouteEditorUI":22,"../UI/TravelEditorUI":27,"../core/ErrorEditor":31,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
@@ -8130,6 +8207,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
 		- removed partial distance in the tooltip when readOnly
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -8369,7 +8448,7 @@ Tests ...
 
 			// waypoints are added
 			if ( addWayPoints ) {
-				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					m_AddWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
 				}
@@ -8494,6 +8573,7 @@ Tests ...
 					latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) );
 				}
 			);
+			latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
 			g_TravelNotesData.travel.notes.forEach (
 				function ( note ) {
 					latLngs.push ( note.latLng );
@@ -8630,7 +8710,7 @@ Tests ...
 				marker,
 				'dragend', 
 				function ( event ) {
-					var wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( event.target.objId );
+					var wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
 					wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 					require ( '../core/WaypointEditor' )( ).wayPointDragEnd ( event.target.objId );
 				}
@@ -8956,6 +9036,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 		- added attachNoteToRoute and detachNoteFromRoute methods
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -9138,11 +9220,11 @@ Tests ...
 		var m_NewManeuverNote = function ( maneuverObjId, latLng ) {
 			// the nearest point and distance on the route is searched
 			var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-				g_TravelNotesData.editedRoute,
+				g_TravelNotesData.travel.editedRoute,
 				latLng
 			);
 			// the maneuver is searched
-			var maneuver = g_TravelNotesData.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+			var maneuver = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
 
 			// the note is created
 			var note = m_NewNote ( latLng );
@@ -9153,7 +9235,7 @@ Tests ...
 			note.iconHeight = 40;
 
 			// and displayed in a dialog box
-			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.editedRoute.objId, true );
+			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.travel.editedRoute.objId, true );
 		};
 
 		/*
@@ -9705,6 +9787,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- splitted with WaypointEditor
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -9739,7 +9823,7 @@ Tests ...
 		*/
 
 		var m_HaveValidWayPoints = function ( ) {
-			return g_TravelNotesData.editedRoute.wayPoints.forEach ( 
+			return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -9781,20 +9865,20 @@ Tests ...
 			// valid function to compute the distances. So all distances are always 
 			// recomputed with this function.
 			
-			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.editedRoute );
+			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
 
 			// Placing the waypoints on the itinerary
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
 				}
 				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 				}
 				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
 				}
 			}	
 			
@@ -9825,13 +9909,13 @@ Tests ...
 			s_RequestStarted = true;
 
 			// Choosing the correct route provider
-			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider );
+			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
 
 			// provider name and transit mode are added to the road
-			g_TravelNotesData.editedRoute.itinerary.provider = routeProvider.name;
-			g_TravelNotesData.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
+			g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+			g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-			routeProvider.getPromiseRoute ( g_TravelNotesData.editedRoute, null ).then (  m_EndOk, m_EndError  );
+			routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndOk, m_EndError  );
 
 			return true;
 		};
@@ -10531,6 +10615,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -10606,10 +10692,14 @@ Tests ...
 		*/
 		
 		var m_AddRoute = function ( ) {
-			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
+			var newRoute = require ( '../Data/Route' ) ( );
+			g_TravelNotesData.travel.routes.add ( newRoute );
 			m_TravelEditorUI.setRoutesList ( );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			m_UpdateRoadBook ( );
+			if ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) {
+				m_EditRoute ( newRoute.objId );
+			}
 		};
 		
 		/*
@@ -10624,7 +10714,7 @@ Tests ...
 		*/
 
 		var m_RemoveRoute = function ( routeObjId ) {
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId && g_TravelNotesData.routeEdition.routeChanged ) {
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId && 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 				// cannot remove the route currently edited
 				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 				return;
@@ -10633,7 +10723,7 @@ Tests ...
 			require ( './MapEditor' ) ( ).removeRoute ( require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ), true, true );
 			g_TravelNotesData.travel.routes.remove ( routeObjId );
 			m_TravelEditorUI.setRoutesList ( );
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId  ) {
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId  ) {
 				require ( './RouteEditor' ) ( ).cancelEdition ( );
 			}
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
@@ -10652,12 +10742,12 @@ Tests ...
 		*/
 
 		var m_EditRoute = function ( routeObjId ) { 
-			if ( g_TravelNotesData.routeEdition.routeChanged ) {
+			if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 				// not possible to edit - the current edited route is not saved or cancelled
 				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 				return;
 			}
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				// the current edited route is not changed. Cleaning the editors
 				require ( '../core/RouteEditor' ) ( ).cancelEdition ( );
 			}
@@ -10670,21 +10760,24 @@ Tests ...
 				return;
 			}
 			// Provider and transit mode are changed in the itinerary editor
-			require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			if ( providerName && '' !== providerName ) {
+				require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+			}
 			var transitMode = initialRoute.itinerary.transitMode;
 			if ( transitMode && '' !== transitMode ) {
 				require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
 			}
 			// The edited route is pushed in the editors
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.travel.editedRoute = require ( '../data/Route' ) ( );
+			initialRoute.edited = 1;
 			// Route is cloned, so we can have a cancel button in the editor
-			g_TravelNotesData.editedRoute.object = initialRoute.object;
-			g_TravelNotesData.routeEdition.routeInitialObjId = initialRoute.objId;
-			g_TravelNotesData.editedRoute.hidden = false;
+			g_TravelNotesData.travel.editedRoute.object = initialRoute.object;
+			g_TravelNotesData.editedRouteObjId = initialRoute.objId;
+			g_TravelNotesData.travel.editedRoute.hidden = false;
 			initialRoute.hidden = false;
 			var mapEditor = require ( '../core/MapEditor' ) ( );
 			mapEditor.removeRoute ( initialRoute, true, false );
-			mapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			mapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
 			var routeEditorUI = require ( '../UI/RouteEditorUI' ) ( );
 			routeEditorUI .expand ( );
@@ -10706,8 +10799,8 @@ Tests ...
 		var m_RenameRoute = function ( routeObjId, routeName ) {
 			require ( '../Data/DataSearchEngine' ) ( ).getRoute ( routeObjId ).name = routeName;
 			m_TravelEditorUI.setRoutesList ( );
-			if ( routeObjId === g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				g_TravelNotesData.editedRoute.name = routeName;
+			if ( routeObjId === g_TravelNotesData.editedRouteObjId ) {
+				g_TravelNotesData.travel.editedRoute.name = routeName;
 			}
 			m_UpdateRoadBook ( );
 		};
@@ -10742,6 +10835,30 @@ Tests ...
 			m_UpdateRoadBook ( );
 		};
 
+		/*
+		--- m_CompressRoute function -------------------------------------------------------------------------------------
+
+		This function compress the itinerary points of a route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_CompressRoute = function ( route ) {
+			var objType = {};
+			if ( 0 !== route.itinerary.itineraryPoints.length ) {
+				objType = route.itinerary.itineraryPoints [ 0 ].objType;
+			}
+			var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+			route.itinerary.itineraryPoints.forEach ( 
+				function ( itineraryPoint ) {
+					compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
+					compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+					compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+				}
+			);
+			compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
+			route.itinerary.itineraryPoints = compressedItineraryPoints;
+		};
 
 		/*
 		--- m_SaveTravel function -------------------------------------------------------------------------------------
@@ -10752,38 +10869,17 @@ Tests ...
 		*/
 
 		var m_SaveTravel = function ( ) {
-			if ( g_TravelNotesData.routeEdition.routeChanged ) {
-				require ( './ErrorEditor' ) ( ).showError ( m_Translator.getText ( "TravelEditor - Not possible to save a travel without a save or cancel" ) );
+			var routesIterator = g_TravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.hidden = false;
 			}
-			else {
-				var routesIterator = g_TravelNotesData.travel.routes.iterator;
-				while ( ! routesIterator.done ) {
-					routesIterator.value.hidden = false;
-				}
-					
-				// compressing the itineraryPoints
-				var compressedTravel = g_TravelNotesData.travel.object;
-				compressedTravel.routes.forEach (
-					function ( route ) {
-						var objType = {};
-						if ( 0 !== route.itinerary.itineraryPoints.length ) {
-							objType = route.itinerary.itineraryPoints [ 0 ].objType;
-						}
-						var compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
-						route.itinerary.itineraryPoints.forEach ( 
-							function ( itineraryPoint ) {
-								compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
-								compressedItineraryPoints.distances.push ( itineraryPoint.distance );
-								compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
-							}
-						);
-						compressedItineraryPoints.latLngs = require ( '@mapbox/polyline' ).encode ( compressedItineraryPoints.latLngs, 6 );
-						route.itinerary.itineraryPoints = compressedItineraryPoints;
-					}
-				);
-				// save file
-				require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
-			}
+			
+			// compressing the itineraryPoints
+			var compressedTravel = g_TravelNotesData.travel.object;
+			compressedTravel.routes.forEach ( m_CompressRoute );
+			m_CompressRoute ( compressedTravel.editedRoute );
+			// save file
+			require ( '../util/Utilities' ) ( ).saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 		};
 		
 		/*
@@ -10814,9 +10910,8 @@ Tests ...
 				return;
 			}
 			require ( '../core/MapEditor' ) ( ).removeAllObjects ( );
-			g_TravelNotesData.editedRoute = require ( '../Data/Route' ) ( );
-			g_TravelNotesData.routeEdition.routeChanged = false;
-			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			g_TravelNotesData.travel.editedRoute = require ( '../Data/Route' ) ( );
+			g_TravelNotesData.editedRouteObjId = -1;
 			g_TravelNotesData.travel = require ( '../Data/Travel' ) ( );
 			g_TravelNotesData.travel.routes.add ( require ( '../Data/Route' ) ( ) );
 			require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
@@ -10898,7 +10993,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from RouteEditor
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -10939,7 +11035,7 @@ Tests ...
 		*/
 
 		var m_AddWayPoint = function ( latLng, distance ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			var newWayPoint = require ( '../data/Waypoint.js' ) ( );
 			if ( latLng ) {
 				newWayPoint.latLng = latLng;
@@ -10947,23 +11043,23 @@ Tests ...
 					require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], newWayPoint.objId ).then ( m_GeocoderRenameWayPoint );
 				}
 			}
-			g_TravelNotesData.editedRoute.wayPoints.add ( newWayPoint );
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, g_TravelNotesData.editedRoute.wayPoints.length - 2 );
+			g_TravelNotesData.travel.editedRoute.wayPoints.add ( newWayPoint );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.last, g_TravelNotesData.travel.editedRoute.wayPoints.length - 2 );
 			if ( distance ) {
-				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					var latLngDistance = m_RouteEditor.getClosestLatLngDistance ( 
-						g_TravelNotesData.editedRoute,
+						g_TravelNotesData.travel.editedRoute,
 						wayPointsIterator.value.latLng 
 					);
 					if ( distance < latLngDistance.distance ) {
-						g_TravelNotesData.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
+						g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( newWayPoint.objId, wayPointsIterator.value.objId, true );
 						break;
 					}
 				}
 			}
 			else {
-				g_TravelNotesData.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
+				g_TravelNotesData.travel.editedRoute.wayPoints.swap ( newWayPoint.objId, true );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
@@ -10997,13 +11093,13 @@ Tests ...
 		*/
 
 		var m_ReverseWayPoints = function ( ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.reverse ( );
-			wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.wayPoints.reverse ( );
+			wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
 			}
@@ -11020,12 +11116,12 @@ Tests ...
 		*/
 
 		var m_RemoveAllWayPoints = function ( ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.removeAll ( true );
+			g_TravelNotesData.travel.editedRoute.wayPoints.removeAll ( true );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -11042,9 +11138,9 @@ Tests ...
 		*/
 
 		var m_RemoveWayPoint = function ( wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			m_MapEditor.removeObject ( wayPointObjId );
-			g_TravelNotesData.editedRoute.wayPoints.remove ( wayPointObjId );
+			g_TravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -11062,8 +11158,8 @@ Tests ...
 		*/
 
 		var m_RenameWayPoint = function ( wayPointName, wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 			m_RouteEditorUI.setWayPointsList ( );
 		};
 		
@@ -11117,8 +11213,8 @@ Tests ...
 		*/
 
 		var m_SwapWayPoints = function ( wayPointObjId, swapUp ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			g_TravelNotesData.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			g_TravelNotesData.travel.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 			m_RouteEditorUI.setWayPointsList (  );
 			m_RouteEditor.startRouting ( );
 		};
@@ -11135,15 +11231,15 @@ Tests ...
 		*/
 
 		var m_SetStartPoint = function ( latLng ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.first.lat ) {
-				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.first.objId );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.travel.editedRoute.wayPoints.first.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.first.latLng = latLng;
+			g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
 			}
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.first, 'A' );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.first, 'A' );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -11161,15 +11257,15 @@ Tests ...
 		*/
 
 		var m_SetEndPoint = function ( latLng ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( 0 !== g_TravelNotesData.editedRoute.wayPoints.last.lat ) {
-				m_MapEditor.removeObject ( g_TravelNotesData.editedRoute.wayPoints.last.objId );
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
+				m_MapEditor.removeObject ( g_TravelNotesData.travel.editedRoute.wayPoints.last.objId );
 			}
-			g_TravelNotesData.editedRoute.wayPoints.last.latLng = latLng;
+			g_TravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
+				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
 			}
-			m_MapEditor.addWayPoint ( g_TravelNotesData.editedRoute.wayPoints.last, 'B' );
+			m_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.last, 'B' );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditor.startRouting ( );
 		};
@@ -11186,9 +11282,9 @@ Tests ...
 		*/
 
 		var m_WayPointDragEnd = function ( wayPointObjId ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
+			g_TravelNotesData.travel.editedRoute.edited = 2;
 			if ( g_TravelNotesData.config.wayPoint.reverseGeocoding ) {
-				var latLng = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
+				var latLng = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
 				require ( '../core/GeoCoder' ) ( ).getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
 			}
 			m_RouteEditorUI.setWayPointsList ( );
@@ -11204,16 +11300,16 @@ Tests ...
 		*/
 
 		var m_WayPointDropped = function ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-			g_TravelNotesData.routeEdition.routeChanged = true;
-			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.first.objId && draggedBefore ) {
+			g_TravelNotesData.travel.editedRoute.edited = 2;
+			if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.first.objId && draggedBefore ) {
 				return;
 			}
-			if ( targetWayPointObjId === g_TravelNotesData.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
+			if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
 				return;
 			}
-			g_TravelNotesData.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+			g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
 			m_RouteEditorUI.setWayPointsList ( );
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 					m_MapEditor.removeObject ( wayPointsIterator.value.objId );
 					m_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
@@ -12676,6 +12772,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -12742,6 +12840,16 @@ Tests ...
 					something.objType.version = '1.4.0';
 					//end upgrade from 1.3.0 to 1.4.0
 				}
+				if ( '1.4.0' === something.objType.version ) {
+					if ( 'Route' === something.objType.name ) {
+						something.edited = 0;
+					}
+					if ( 'Travel' === something.objType.name ) {
+						something.editedRoute = require ( '../data/Route' ) ( );
+					}
+					something.objType.version = '1.5.0';
+					//end upgrade from 1.4.0 to 1.5.0
+				}
 				if ( m_Version !== something.objType.version ) {
 					throw 'invalid version for ' + m_Name;
 				}
@@ -12785,11 +12893,11 @@ Tests ...
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------
 */
-},{}],52:[function(require,module,exports){
+},{"../data/Route":52}],52:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
 },{"../L.TravelNotes":8,"../data/Collection":43,"../data/Itinerary":46,"../data/ObjId":50,"../data/ObjType":51,"../data/Waypoint":57,"./Itinerary":46,"./Version":55,"dup":5}],53:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"./Version":55,"dup":6}],54:[function(require,module,exports){
+},{"../data/Collection":43,"../data/ObjId":50,"../data/ObjType":51,"../data/Route":52,"./Version":55,"dup":6}],54:[function(require,module,exports){
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
@@ -12814,6 +12922,8 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchData
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -12840,8 +12950,7 @@ Tests ...
 			providers : new Map ( ),
 			mapObjects : new Map ( ),
 			travel : require ( '../data/Travel' ) ( ),
-			editedRoute : null,
-			routeEdition : Object.seal ( { routeChanged : false, routeInitialObjId : -1 } ),
+			editedRouteObjId : -1,
 			routing : Object.seal ( { provider : '', transitMode : ''} ),
 			searchData : [],
 			UUID : require ( '../util/Utilities' ) ( ).UUID
@@ -12868,9 +12977,9 @@ Tests ...
 
 				get travel ( ) { return m_TravelNotesData.travel; },
 				set travel ( Travel ) { m_TravelNotesData.travel = Travel; },
-
-				get editedRoute ( ) { return m_TravelNotesData.editedRoute; },
-				set editedRoute ( editedRoute ) { m_TravelNotesData.editedRoute = editedRoute; },
+				
+				get editedRouteObjId ( ) { return m_TravelNotesData.editedRouteObjId; },
+				set editedRouteObjId ( EditedRouteObjId ) { m_TravelNotesData.editedRouteObjId = EditedRouteObjId; },
 
 				get routeEdition ( ) { return m_TravelNotesData.routeEdition; },
 				

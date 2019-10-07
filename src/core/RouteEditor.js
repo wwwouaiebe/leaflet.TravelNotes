@@ -35,6 +35,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
 		- fixed issue #45
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -241,7 +243,7 @@ Tests ...
 			gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' version='1.1' creator='leaflet.TravelNotes'>";
 
 			// waypoints
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				gpxString += 
@@ -252,9 +254,9 @@ Tests ...
 			
 			// route
 			gpxString += tab1 + "<rte>";
-			var maneuverIterator = g_TravelNotesData.editedRoute.itinerary.maneuvers.iterator;
+			var maneuverIterator = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
 			while ( ! maneuverIterator.done ) {
-				var wayPoint = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
+				var wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
 				var instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('\"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
 				gpxString +=
 					tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
@@ -264,7 +266,7 @@ Tests ...
 			// track
 			gpxString += tab1 + "<trk>";
 			gpxString += tab2 + "<trkseg>";
-			var itineraryPointsIterator = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.iterator;
+			var itineraryPointsIterator = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
 			while ( ! itineraryPointsIterator.done ) {
 				gpxString +=
 					tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
@@ -276,7 +278,7 @@ Tests ...
 			gpxString += tab0 + "</gpx>";
 			
 			// file is saved
-			var fileName = g_TravelNotesData.editedRoute.name;
+			var fileName = g_TravelNotesData.travel.editedRoute.name;
 			if ( '' === fileName ) {
 				fileName = 'TravelNote';
 			}
@@ -352,8 +354,8 @@ Tests ...
 			if ( ! g_TravelNotesData.config.routing.auto ) {
 				return;
 			}
-			s_ZoomToRoute = 0 === g_TravelNotesData.editedRoute.itinerary.itineraryPoints.length;
-			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.editedRoute );
+			s_ZoomToRoute = 0 === g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+			require ( '../core/Router' ) ( ).startRouting ( g_TravelNotesData.travel.editedRoute );
 		};
 			
 			
@@ -367,23 +369,23 @@ Tests ...
 
 		var m_EndRouting = function ( ) {
 			// the previous route is removed from the leaflet map
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
+			m_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			
 			// the position of the notes linked to the route is recomputed
-			var notesIterator = g_TravelNotesData.editedRoute.notes.iterator;
+			var notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
 			while ( ! notesIterator.done ) {
-				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.editedRoute, notesIterator.value.latLng );
+				var latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, notesIterator.value.latLng );
 				notesIterator.value.latLng = latLngDistance.latLng;
 				notesIterator.value.distance = latLngDistance.distance;
 			}
 			
 			// and the notes sorted
-			g_TravelNotesData.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
+			g_TravelNotesData.travel.editedRoute.notes.sort ( function ( a, b ) { return a.distance - b.distance; } );
 			
 			// the new route is added to the map
-			m_MapEditor.addRoute ( g_TravelNotesData.editedRoute, true, true );
+			m_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 			if ( s_ZoomToRoute ) {
-				m_MapEditor.zoomToRoute ( g_TravelNotesData.editedRoute.objId );
+				m_MapEditor.zoomToRoute ( g_TravelNotesData.travel.editedRoute.objId );
 			}
 			
 			// and the itinerary and waypoints are displayed
@@ -406,10 +408,10 @@ Tests ...
 		var m_SaveEdition = function ( ) {
 			// the edited route is cloned
 			var clonedRoute = require ( '../data/Route' ) ( );
-			clonedRoute.object = g_TravelNotesData.editedRoute.object;
+			clonedRoute.object = g_TravelNotesData.travel.editedRoute.object;
 			// and the initial route replaced with the clone
-			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.routeEdition.routeInitialObjId, clonedRoute );
-			g_TravelNotesData.routeEdition.routeInitialObjId = clonedRoute.objId;
+			g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.editedRouteObjId, clonedRoute );
+			g_TravelNotesData.editedRouteObjId = clonedRoute.objId;
 			m_CancelEdition ( );
 		};
 			
@@ -422,14 +424,15 @@ Tests ...
 		*/
 
 		var m_CancelEdition = function ( ) {
-			m_MapEditor.removeRoute ( g_TravelNotesData.editedRoute, true, true );
-			if ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) {
-				m_MapEditor.addRoute ( m_DataSearchEngine.getRoute ( g_TravelNotesData.routeEdition.routeInitialObjId ), true, false );
+			m_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+				var editedRoute = m_DataSearchEngine.getRoute ( g_TravelNotesData.editedRouteObjId );
+				editedRoute.edited = 0;
+				m_MapEditor.addRoute ( editedRoute , true, false );
 			}
 
-			g_TravelNotesData.editedRoute = require ( '../data/Route' ) ( );
-			g_TravelNotesData.routeEdition.routeChanged = false;
-			g_TravelNotesData.routeEdition.routeInitialObjId = -1;
+			g_TravelNotesData.travel.editedRoute = require ( '../data/Route' ) ( );
+			g_TravelNotesData.editedRouteObjId = -1;
 			require ( '../UI/TravelEditorUI' ) ( ).setRoutesList ( );
 			m_RouteEditorUI.setWayPointsList ( );
 			m_RouteEditorUI .reduce ( );

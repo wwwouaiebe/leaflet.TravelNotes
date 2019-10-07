@@ -31,6 +31,8 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- splitted with WaypointEditor
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -65,7 +67,7 @@ Tests ...
 		*/
 
 		var m_HaveValidWayPoints = function ( ) {
-			return g_TravelNotesData.editedRoute.wayPoints.forEach ( 
+			return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
 				function ( wayPoint, result ) {
 					if ( null === result ) { 
 						result = true;
@@ -107,20 +109,20 @@ Tests ...
 			// valid function to compute the distances. So all distances are always 
 			// recomputed with this function.
 			
-			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.editedRoute );
+			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
 
 			// Placing the waypoints on the itinerary
-			var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done )
 			{
 				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.first.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
 				}
 				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.editedRoute.itinerary.itineraryPoints.last.latLng;
+					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 				}
 				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.editedRoute, wayPointsIterator.value.latLng ).latLng;
+					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
 				}
 			}	
 			
@@ -151,13 +153,13 @@ Tests ...
 			s_RequestStarted = true;
 
 			// Choosing the correct route provider
-			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider );
+			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
 
 			// provider name and transit mode are added to the road
-			g_TravelNotesData.editedRoute.itinerary.provider = routeProvider.name;
-			g_TravelNotesData.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
+			g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+			g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-			routeProvider.getPromiseRoute ( g_TravelNotesData.editedRoute, null ).then (  m_EndOk, m_EndError  );
+			routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndOk, m_EndError  );
 
 			return true;
 		};

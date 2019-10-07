@@ -152,6 +152,14 @@
 		"msgstr" : "Hide"
 	},
 	{
+		"msgid" : "FileLoader - Not possible to merge a travel when a route is edited",
+		"msgstr" : "Not possible to merge a travel when a route is edited"
+	},
+	{
+		"msgid" : "FileLoader - Not possible to select as provider",
+		"msgstr" : "Not possible to select {provider}"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
@@ -406,10 +414,6 @@
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "It's impossible to remove an edited route"
-	},
-	{
-		"msgid" : "TravelEditor - Not possible to save a travel without a save or cancel",
-		"msgstr" : "It's impossible to save a travel without a saving or cancelling the modifications"
 	},
 	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",

@@ -169,7 +169,7 @@ Tests ...
 		clickEvent.stopPropagation();
 		require ( '../core/TravelEditor' ) ( ).clear ( );
 		if ( require ( '../L.TravelNotes' ).config.travelEditor.startupRouteEdition ) {
-			require ( '../core/RouteEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
+			require ( '../core/TravelEditor' ) ( ).editRoute ( require ( '../L.TravelNotes' ).travel.routes.first.objId );
 		}
 		require ( '../L.TravelNotes' ).map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 	};

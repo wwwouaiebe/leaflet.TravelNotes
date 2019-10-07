@@ -22,6 +22,8 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 		- added searchData
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -48,8 +50,7 @@ Tests ...
 			providers : new Map ( ),
 			mapObjects : new Map ( ),
 			travel : require ( '../data/Travel' ) ( ),
-			editedRoute : null,
-			routeEdition : Object.seal ( { routeChanged : false, routeInitialObjId : -1 } ),
+			editedRouteObjId : -1,
 			routing : Object.seal ( { provider : '', transitMode : ''} ),
 			searchData : [],
 			UUID : require ( '../util/Utilities' ) ( ).UUID
@@ -76,9 +77,9 @@ Tests ...
 
 				get travel ( ) { return m_TravelNotesData.travel; },
 				set travel ( Travel ) { m_TravelNotesData.travel = Travel; },
-
-				get editedRoute ( ) { return m_TravelNotesData.editedRoute; },
-				set editedRoute ( editedRoute ) { m_TravelNotesData.editedRoute = editedRoute; },
+				
+				get editedRouteObjId ( ) { return m_TravelNotesData.editedRouteObjId; },
+				set editedRouteObjId ( EditedRouteObjId ) { m_TravelNotesData.editedRouteObjId = EditedRouteObjId; },
 
 				get routeEdition ( ) { return m_TravelNotesData.routeEdition; },
 				

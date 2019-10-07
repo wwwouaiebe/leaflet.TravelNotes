@@ -21,6 +21,8 @@ This file contains:
 Changes:
 	- v1.0.0:
 		- created
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -86,6 +88,16 @@ Tests ...
 				if ( '1.3.0' === something.objType.version ) {
 					something.objType.version = '1.4.0';
 					//end upgrade from 1.3.0 to 1.4.0
+				}
+				if ( '1.4.0' === something.objType.version ) {
+					if ( 'Route' === something.objType.name ) {
+						something.edited = 0;
+					}
+					if ( 'Travel' === something.objType.name ) {
+						something.editedRoute = require ( '../data/Route' ) ( );
+					}
+					something.objType.version = '1.5.0';
+					//end upgrade from 1.4.0 to 1.5.0
 				}
 				if ( m_Version !== something.objType.version ) {
 					throw 'invalid version for ' + m_Name;

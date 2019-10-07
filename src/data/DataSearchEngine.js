@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -50,8 +52,8 @@ Tests ...
 			var route = null;
 			route = g_TravelNotesData.travel.routes.getAt ( routeObjId );
 			if ( ! route ) {
-				if ( routeObjId === g_TravelNotesData.editedRoute.objId ) {
-					route = g_TravelNotesData.editedRoute;
+				if ( routeObjId === g_TravelNotesData.travel.editedRoute.objId ) {
+					route = g_TravelNotesData.travel.editedRoute;
 				}
 			}
 			if ( ! route ) {
@@ -82,13 +84,13 @@ Tests ...
 					return { note : note, route : routeIterator.value };
 				}
 			}
-			note = g_TravelNotesData.editedRoute.notes.getAt ( noteObjId );
+			note = g_TravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
 			if ( ! note ) {
 				console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataSearchEngine.getNote ( )' );
 				return { note : null, route : null };
 			}
 
-			return { note : note, route : g_TravelNotesData.editedRoute };
+			return { note : note, route : g_TravelNotesData.travel.editedRoute };
 		};
 		
 		/*
@@ -108,7 +110,7 @@ Tests ...
 					return wayPoint;
 				}
 			}
-			wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( wayPointObjId );
+			wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 			if ( ! wayPoint ) {
 				console.log ( 'Invalid wayPointObjId ' + wayPointObjId + ' for function DataSearchEngine.getWayPoint ( )' );
 				return null;

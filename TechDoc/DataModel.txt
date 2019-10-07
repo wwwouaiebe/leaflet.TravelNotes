@@ -73,6 +73,10 @@ dataManager {} +-> travel {} +-> routes [] +-> notes [] ----------+-> iconHeight
                |             |             |
                |             |             +-> distance
                |             |             |
+               |             |             +-> edited
+               |             |             |
+               |             |             +-> hidden
+               |             |             |
                |             |             +-> duration
                |             |             |
                |             |             +-> name
@@ -109,11 +113,11 @@ dataManager {} +-> travel {} +-> routes [] +-> notes [] ----------+-> iconHeight
                |             |
                |             |
                |             |
+               |             +-> editedRoute {}
+               |             |
                |             +-> name
                |             |
                |             +-> userData
-               |
-               +-> editedRoute {}
                |
                +-> map {}
                |

@@ -24,7 +24,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
-
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed ...
 Tests ...
 
@@ -70,19 +71,19 @@ Tests ...
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as start point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) ? require ( '../core/waypointEditor' ) ( ).setStartPoint : null,
 					param : latLng
 				},
 				{
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as way point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? require ( '../core/waypointEditor' ) ( ).addWayPoint : null,
 					param : latLng
 				},
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Select this point as end point" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) && ( 0 === g_TravelNotesData.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) ? require ( '../core/waypointEditor' ) ( ).setEndPoint : null,
 					param : latLng
 				},
 				{ 
@@ -135,7 +136,7 @@ Tests ...
 				{ 
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ), 
-					action : ( ( g_TravelNotesData.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
+					action : ( ( g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== wayPointObjId ) && ( g_TravelNotesData.travel.editedRoute.wayPoints.last.objId !== wayPointObjId ) ) ? require ( '../core/waypointEditor' ) ( ).removeWayPoint : null,
 					param: wayPointObjId
 				} 
 			];
@@ -157,25 +158,25 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Edit this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.editRoute : null,
+					action : ( ( g_TravelNotesData.editedRouteObjId !== routeObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? m_TravelEditor.editRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_TravelEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Delete this route" ), 
-					action : ( ( g_TravelNotesData.routeEdition.routeInitialObjId !== routeObjId ) && ( ! g_TravelNotesData.routeEdition.routeChanged ) ) ? m_TravelEditor.removeRoute : null,
+					action : ( ( g_TravelNotesData.editedRouteObjId !== routeObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? m_TravelEditor.removeRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
+					action : ( g_TravelNotesData.travel.editedRoute.objId !== routeObjId ) ? m_RouteEditor.hideRoute : null,
 					param: routeObjId
 				},
 				{
 					context : m_WaypointEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ), 
-					action : ( -1 !== g_TravelNotesData.routeEdition.routeInitialObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
+					action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? m_WaypointEditor.addWayPointOnRoute : null,
 					param: routeObjId
 				},
 				{
@@ -199,12 +200,12 @@ Tests ...
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Save modifications on this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
+					action : ( g_TravelNotesData.travel.editedRoute.objId === routeObjId ) ? m_RouteEditor.saveEdition : null,
 				},
 				{ 
 					context : m_RouteEditor, 
 					name : m_Translator.getText ( "ContextMenuFactory - Cancel modifications on this route" ), 
-					action : ( g_TravelNotesData.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
+					action : ( g_TravelNotesData.travel.editedRoute.objId === routeObjId ) ? m_RouteEditor.cancelEdition : null
 				}
 			];
 		};		
@@ -252,7 +253,7 @@ Tests ...
 				{ 
 					context : m_NoteEditor, 
 					name : route ?  m_Translator.getText ( "ContextMenuFactory - Detach note from route" ) : m_Translator.getText ( "ContextMenuFactory - Attach note to route" ), 
-					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.routeEdition.routeInitialObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
+					action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.editedRouteObjId ) ? ( route ? m_NoteEditor.detachNoteFromRoute : m_NoteEditor.attachNoteToRoute ) : null ),
 					param : noteObjId
 				} 
 			);

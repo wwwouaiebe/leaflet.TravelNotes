@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -50,6 +52,33 @@ Tests ...
 		var m_FileName = '';
 		var m_IsFileReadOnly = false;
 		var m_FileContent = {};
+
+		/*
+		--- m_DecompressRoute function --------------------------------------------------------------------------------
+
+		This function decompress a route
+		
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_DecompressRoute = function ( route ) {
+			route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+			var decompressedItineraryPoints = [];
+			var latLngsCounter = 0;
+			route.itinerary.itineraryPoints.latLngs.forEach (
+				function ( latLng ) {
+					var itineraryPoint = {};
+					itineraryPoint.lat = latLng [ 0 ];
+					itineraryPoint.lng = latLng [ 1 ];
+					itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+					itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+					itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
+					decompressedItineraryPoints.push ( itineraryPoint );
+					latLngsCounter ++;
+				}
+			);
+			route.itinerary.itineraryPoints = decompressedItineraryPoints;
+		};
 		
 		/*
 		--- m_DecompressFileContent function --------------------------------------------------------------------------
@@ -61,27 +90,8 @@ Tests ...
 
 		var m_DecompressFileContent = function ( ) {
 			
-			m_FileContent.routes.forEach ( 
-				function ( route ) {
-					route.itinerary.itineraryPoints.latLngs = require ( '@mapbox/polyline' ).decode ( route.itinerary.itineraryPoints.latLngs, 6 );
-					var decompressedItineraryPoints = [];
-					var latLngsCounter = 0;
-					route.itinerary.itineraryPoints.latLngs.forEach (
-						function ( latLng ) {
-							var itineraryPoint = {};
-							itineraryPoint.lat = latLng [ 0 ];
-							itineraryPoint.lng = latLng [ 1 ];
-							itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
-							itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-							itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
-							decompressedItineraryPoints.push ( itineraryPoint );
-							latLngsCounter ++;
-						}
-					);
-					route.itinerary.itineraryPoints = decompressedItineraryPoints;
-				}
-			);
-			
+			m_FileContent.routes.forEach ( m_DecompressRoute );
+			m_DecompressRoute ( m_FileContent.editedRoute );
 			if ( m_MergeContent ) {
 				m_Merge ( );
 			}
@@ -129,11 +139,18 @@ Tests ...
 
 		var m_Open = function ( ) {
 			g_TravelNotesData.travel.object = m_FileContent;
+
 			if ( '' !== m_FileName ) {
 				g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
 			}
-			g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;			
-			
+			g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;
+			g_TravelNotesData.travel.routes.forEach (
+				function ( route ) {
+					if ( 0 !== route.edited ) {
+						g_TravelNotesData.editedRouteObjId = route.objId;
+					}
+				}
+			);
 			m_Display ( );
 		};
 		
@@ -146,16 +163,20 @@ Tests ...
 		*/
 
 		var m_Display = function ( ) {
-			
 			var mapEditor = require ( '../core/MapEditor' ) ( );
 
 			// the map is cleaned
 			mapEditor.removeAllObjects ( );
-			
 			// routes are added with their notes
 			var routesIterator = g_TravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
-				mapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
+				if ( 0 === routesIterator.value.edited ) {
+					mapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
+				}
+			}
+			// edited route is added with notes and , depending of read only, waypoints
+			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+				mapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, ! m_IsFileReadOnly, m_IsFileReadOnly );
 			}
 			
 			// travel notes are added
@@ -171,6 +192,27 @@ Tests ...
 			if ( ! m_IsFileReadOnly ) {
 			// Editors and HTML pages are filled
 				require ( '../UI/TravelEditorUI' ) ( ). setRoutesList ( );
+				if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+					var providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
+					if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
+					{
+						require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
+					}
+					else {
+						// Provider and transit mode are changed in the itinerary editor
+						var transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
+						require ( '../UI/ProvidersToolbarUI') ( ).provider = providerName;
+						
+						if ( transitMode && '' !== transitMode ) {
+							require ( '../UI/ProvidersToolbarUI') ( ).transitMode = transitMode;
+						}
+					}
+					require ( '../core/RouteEditor' ) ( ).chainRoutes ( );
+					var routeEditorUI = require ( '../UI/RouteEditorUI' ) ( );
+					routeEditorUI .expand ( );
+					routeEditorUI.setWayPointsList ( );
+					require ( '../UI/DataPanesUI' ) ( ).setItinerary ( );
+				}
 				require ( '../core/TravelEditor' ) ( ).updateRoadBook ( false );
 			}
 			else {
@@ -228,6 +270,12 @@ Tests ...
 		*/
 
 		var m_MergeLocalFile = function ( event ) {
+			
+			if ( g_TravelNotesData.travel.editedRouteObjId !== -1 ) {
+				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to merge a travel when a route is edited" ) );
+				return;
+			}
+			
 			m_MergeContent = true;
 			m_IsFileReadOnly = false;
 			m_OpenFile ( event );

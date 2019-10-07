@@ -32,6 +32,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
 		- removed partial distance in the tooltip when readOnly
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -271,7 +273,7 @@ Tests ...
 
 			// waypoints are added
 			if ( addWayPoints ) {
-				var wayPointsIterator = g_TravelNotesData.editedRoute.wayPoints.iterator;
+				var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 				while ( ! wayPointsIterator.done ) {
 					m_AddWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
 				}
@@ -396,6 +398,7 @@ Tests ...
 					latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) );
 				}
 			);
+			latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
 			g_TravelNotesData.travel.notes.forEach (
 				function ( note ) {
 					latLngs.push ( note.latLng );
@@ -532,7 +535,7 @@ Tests ...
 				marker,
 				'dragend', 
 				function ( event ) {
-					var wayPoint = g_TravelNotesData.editedRoute.wayPoints.getAt ( event.target.objId );
+					var wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
 					wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 					require ( '../core/WaypointEditor' )( ).wayPointDragEnd ( event.target.objId );
 				}

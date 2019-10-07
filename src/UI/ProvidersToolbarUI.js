@@ -37,87 +37,6 @@ Tests ...
 	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
 	/*
-	--- onProviderButtonClick function --------------------------------------------------------------------------------
-
-	click event listener for the providers button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onProviderButtonClick = function ( clickEvent ) {
-		
-		clickEvent.stopPropagation ( );
-
-		g_TravelNotesData.routing.provider = clickEvent.target.provider;
-
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
-		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
-
-		// activating the transit mode buttons, depending of the capabilities of the provider
-		var provider = g_TravelNotesData.providers.get ( clickEvent.target.provider );
-		if ( provider.transitModes.car ) {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.bike ) {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.pedestrian ) {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		if ( provider.transitModes.train ) {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
-		}
-		
-		if ( ! g_TravelNotesData.providers.get ( clickEvent.target.provider ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
-			if ( provider.transitModes.bike ) {
-				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.pedestrian )  {
-				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.car )  {
-				document.getElementById ( 'TravelNotes-Control-carImgButton' ).click ( );
-			}
-			else if ( provider.transitModes.train )  {
-				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).click ( );
-			}
-		}
-		
-		require ( '../core/RouteEditor' ) ( ).startRouting ( );
-	};
-
-	/*
-	--- onClickTransitModeButton function -----------------------------------------------------------------------------
-
-	click event listener  for the transit modes buttons
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickTransitModeButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-
-		g_TravelNotesData.routing.transitMode = clickEvent.target.transitMode;
-
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		clickEvent.target.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-
-		require ( '../core/RouteEditor' ) ( ).startRouting ( );
-	};
-	
-	/*
 	--- providersToolbarUI function -----------------------------------------------------------------------------------
 
 	This function returns the providersToolbarUI object
@@ -134,6 +53,106 @@ Tests ...
 		var m_PedestrianButton = null;
 		var m_CarButton = null;
 		var m_TrainButton = null;
+		
+		/*
+		--- m_SetProvider function ------------------------------------------------------------------------------------
+
+		This function set the provider
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+
+		var m_SetProvider = function ( providerName ) {
+			g_TravelNotesData.routing.provider = providerName;
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
+			document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+
+			// activating the transit mode buttons, depending of the capabilities of the provider
+			var provider = g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) );
+			if ( provider.transitModes.car ) {
+				document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.bike ) {
+				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.pedestrian ) {
+				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( provider.transitModes.train ) {
+				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			else {
+				document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+
+			// changing the transitMode if the provider don't have the active transit mode
+			if ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
+				if ( provider.transitModes.bike ) {
+					m_SetTransitMode ( 'bike' );
+				}
+				else if ( provider.transitModes.pedestrian )  {
+					m_SetTransitMode ( 'pedestrian' );
+				}
+				else if ( provider.transitModes.car )  {
+					m_SetTransitMode ( 'car' );
+				}
+				else if ( provider.transitModes.train )  {
+					m_SetTransitMode ( 'train' );
+				}
+			}
+		};
+		
+		/*
+		--- onProviderButtonClick function --------------------------------------------------------------------------------
+
+		click event listener for the providers button
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+
+		var onProviderButtonClick = function ( clickEvent ) {
+			
+			clickEvent.stopPropagation ( );
+			m_SetProvider ( clickEvent.target.provider );
+			require ( '../core/RouteEditor' ) ( ).startRouting ( );
+		};
+		
+		/*
+		--- m_SetTransitMode function ---------------------------------------------------------------------------------
+
+		This function set the transit mode
+
+		---------------------------------------------------------------------------------------------------------------
+		*/
+		var m_SetTransitMode = function ( transitMode ) {
+			
+			g_TravelNotesData.routing.transitMode = transitMode;
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		};
+		
+		/*
+		--- onClickTransitModeButton function -----------------------------------------------------------------------------
+
+		click event listener  for the transit modes buttons
+
+		-------------------------------------------------------------------------------------------------------------------
+		*/
+		var onClickTransitModeButton = function ( clickEvent ) {
+
+			clickEvent.stopPropagation ( );
+			m_SetTransitMode ( clickEvent.target.transitMode );
+			require ( '../core/RouteEditor' ) ( ).startRouting ( );
+		};
 		
 		/*
 		--- m_createProviderButton function -------------------------------------------------------------------------
@@ -155,7 +174,7 @@ Tests ...
 					},
 				m_ButtonsDiv
 			);
-			providerButton.provider = provider.name.toLowerCase ( );
+			providerButton.provider = provider.name;
 			providerButton.addEventListener ( 'click', onProviderButtonClick, false );
 			// when loading the control, the first provider will be the active provider
 			if ( ! m_activeButton ) {
@@ -193,7 +212,6 @@ Tests ...
 				}
 			}
 		};
-
 
 		/*
 		--- m_createProvidersButtons function -------------------------------------------------------------------------
@@ -284,36 +302,6 @@ Tests ...
 			m_createTransitModesButtons ( );
 			m_createProvidersButtons ( );
 		
-		};
-		
-		/*
-		--- m_SetProvider function ------------------------------------------------------------------------------------
-
-		This function set the provider
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SetProvider = function ( providerName ) {
-			 var button = document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' );
-			 if ( button ) {
-				 button.click ( );
-			 }
-		
-		};
-		
-		/*
-		--- m_SetProvider function ------------------------------------------------------------------------------------
-
-		This function set the transit mode
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		var m_SetTransitMode = function ( transitMode ) {
-			var button = document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' );
-			 if ( button ) {
-				 button.click ( );
-			 }
 		};
 		
 		/* 

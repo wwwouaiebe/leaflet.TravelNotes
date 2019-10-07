@@ -28,6 +28,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 		- added attachNoteToRoute and detachNoteFromRoute methods
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -210,11 +212,11 @@ Tests ...
 		var m_NewManeuverNote = function ( maneuverObjId, latLng ) {
 			// the nearest point and distance on the route is searched
 			var latLngDistance = require ( '../core/RouteEditor' ) ( ).getClosestLatLngDistance ( 
-				g_TravelNotesData.editedRoute,
+				g_TravelNotesData.travel.editedRoute,
 				latLng
 			);
 			// the maneuver is searched
-			var maneuver = g_TravelNotesData.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
+			var maneuver = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
 
 			// the note is created
 			var note = m_NewNote ( latLng );
@@ -225,7 +227,7 @@ Tests ...
 			note.iconHeight = 40;
 
 			// and displayed in a dialog box
-			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.editedRoute.objId, true );
+			require ( '../UI/NoteDialog' ) ( note, g_TravelNotesData.travel.editedRoute.objId, true );
 		};
 
 		/*

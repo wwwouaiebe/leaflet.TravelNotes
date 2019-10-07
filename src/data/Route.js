@@ -26,6 +26,8 @@ Changes:
 		- Issue #36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
 Doc reviewed 20190919
 Tests ...
 
@@ -57,12 +59,19 @@ Tests ...
 		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
 
 		var m_Itinerary = require ( '../data/Itinerary' ) ( );
-
-		var m_Width = require ( '../L.TravelNotes' ).config.route.width || 5;
-
-		var m_Color = require ( '../L.TravelNotes' ).config.route.color || '#ff0000';
 		
-		var m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray || 0;
+		var m_Width = 5;
+
+		var m_Color = '#ff0000';
+		
+		var m_DashArray = 0;
+
+		
+		if ( require ( '../L.TravelNotes' ).config ) {
+			m_Width = require ( '../L.TravelNotes' ).config.route.width;
+			m_Color = require ( '../L.TravelNotes' ).config.route.color;			
+			m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray;			
+		}
 
 		var m_Chain = false;
 
@@ -72,8 +81,19 @@ Tests ...
 
 		var m_Duration = 0;
 		
-		var m_Hidden = false;
+		var m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+		
+		var m_SetEdited = function ( edited ) {
+			if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
+				throw 'Invalid value for Route.edited : ' + edited;
+			}
+			else {
+				m_Edited = edited;
+			}
+		};
 
+		var m_Hidden = false;
+		
 		var m_ObjId = require ( '../data/ObjId' ) ( );
 
 		var m_GetObject = function ( ) {
@@ -85,9 +105,10 @@ Tests ...
 				width : m_Width,
 				color : m_Color,
 				dashArray : m_DashArray,
-				chain :m_Chain,
+				chain : m_Chain,
 				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
 				duration : m_Duration,
+				edited : m_Edited,
 				hidden : m_Hidden,
 				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
 				objId : m_ObjId,
@@ -107,6 +128,7 @@ Tests ...
 			m_Chain = something.chain || false;
 			m_Distance = something.distance;
 			m_Duration = something.duration;
+			m_Edited = something.edited || 0;
 			m_Hidden = something.hidden || false;
 			m_ChainedDistance = something.chainedDistance;
 			m_ObjId = require ( '../data/ObjId' ) ( );
@@ -150,6 +172,9 @@ Tests ...
 
 				get duration ( ) { return m_Duration; },
 				set duration ( Duration ) { m_Duration = Duration; },
+				
+				get edited ( ) { return m_Edited; },
+				set edited ( Edited ) { m_SetEdited ( Edited ); },
 
 				get hidden ( ) { return m_Hidden; },
 				set hidden ( Hidden ) { m_Hidden = Hidden; },
