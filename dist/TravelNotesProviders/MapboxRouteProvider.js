@@ -18417,7 +18417,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 			_Route.itinerary.itineraryPoints.removeAll ( );
 			_Route.itinerary.maneuvers.removeAll ( );
-			
 			_Response.routes [ 0 ].geometry = require ( '@mapbox/polyline' ).decode ( _Response.routes [ 0 ].geometry, 6 );
 
 			var options = {};
@@ -18437,6 +18436,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					leg.steps.forEach ( 
 						function ( step ) {
 							step.geometry = require ( '@mapbox/polyline' ).decode ( step.geometry, 6 );
+							
+							// bug Mapbox for car: geometry have 2 points for 'arrive' maneuver type
+							if ( 'arrive' === step.maneuver.type && 2 === step.geometry.length && step.geometry [ 0 ] [ 0 ] === step.geometry [ 1 ] [ 0 ] && step.geometry [ 0 ] [ 1 ] === step.geometry [ 1 ] [ 1 ] ) {
+								step.geometry.pop ( );
+							}
 
 							var maneuver = L.travelNotes.maneuver;
 							maneuver.iconName = _IconList [ step.maneuver.type ] ? _IconList [  step.maneuver.type ] [  step.maneuver.modifier ] || _IconList [  step.maneuver.type ] [ "default" ] : _IconList [ "default" ] [ "default" ];
@@ -18471,7 +18475,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					}
 				}
 			);
-
 			returnOnOk ( '' );
 		};
 		
