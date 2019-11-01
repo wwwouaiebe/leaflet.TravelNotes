@@ -41,7 +41,7 @@ Tests ...
 	
 	'use strict';
 	
-	var m_Translator = require ( './Translator' ) ( );
+	var m_Translator = require ( '../UI/Translator' ) ( );
 	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	var m_RoutesList = null;
 
@@ -225,7 +225,12 @@ Tests ...
 	
 	var onClickImportTravelButton = function ( event ) 
 	{ 
-		document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+		if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
+			require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
+		}
+		else {
+			document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+		}
 	};
 
 	/*

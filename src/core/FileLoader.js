@@ -48,6 +48,7 @@ Tests ...
 
 		var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
+		var m_Translator = require ( '../UI/Translator' ) ( );
 		var m_MergeContent = false;
 		var m_FileName = '';
 		var m_IsFileReadOnly = false;
@@ -91,7 +92,10 @@ Tests ...
 		var m_DecompressFileContent = function ( ) {
 			
 			m_FileContent.routes.forEach ( m_DecompressRoute );
-			m_DecompressRoute ( m_FileContent.editedRoute );
+			if ( m_FileContent.editedRoute ) {
+				// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
+				m_DecompressRoute ( m_FileContent.editedRoute );
+			}
 			if ( m_MergeContent ) {
 				m_Merge ( );
 			}
@@ -139,6 +143,7 @@ Tests ...
 
 		var m_Open = function ( ) {
 			g_TravelNotesData.travel.object = m_FileContent;
+			g_TravelNotesData.editedRouteObjId = -1;
 
 			if ( '' !== m_FileName ) {
 				g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
@@ -242,6 +247,7 @@ Tests ...
 					m_DecompressFileContent ( );
 				}
 				catch ( e ) {
+					console.log ( e);
 				}
 			};
 			fileReader.readAsText ( event.target.files [ 0 ] );
@@ -270,11 +276,6 @@ Tests ...
 		*/
 
 		var m_MergeLocalFile = function ( event ) {
-			
-			if ( g_TravelNotesData.travel.editedRouteObjId !== -1 ) {
-				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to merge a travel when a route is edited" ) );
-				return;
-			}
 			
 			m_MergeContent = true;
 			m_IsFileReadOnly = false;

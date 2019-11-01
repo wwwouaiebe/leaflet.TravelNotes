@@ -6782,7 +6782,7 @@ Tests ...
 	
 	'use strict';
 	
-	var m_Translator = require ( './Translator' ) ( );
+	var m_Translator = require ( '../UI/Translator' ) ( );
 	var g_TravelNotesData = require ( '../L.TravelNotes' );
 	var m_RoutesList = null;
 
@@ -6966,7 +6966,12 @@ Tests ...
 	
 	var onClickImportTravelButton = function ( event ) 
 	{ 
-		document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+		if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
+			require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
+		}
+		else {
+			document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+		}
 	};
 
 	/*
@@ -7273,7 +7278,7 @@ Tests ...
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */
-},{"../L.TravelNotes":8,"../core/FileLoader":32,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16,"./SortableList":25,"./Translator":26}],28:[function(require,module,exports){
+},{"../L.TravelNotes":8,"../UI/Translator":26,"../core/ErrorEditor":31,"../core/FileLoader":32,"../core/RouteEditor":37,"../core/TravelEditor":40,"./HTMLElementsFactory":16,"./SortableList":25}],28:[function(require,module,exports){
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
@@ -7738,6 +7743,7 @@ Tests ...
 
 		var g_TravelNotesData = require ( '../L.TravelNotes' );
 	
+		var m_Translator = require ( '../UI/Translator' ) ( );
 		var m_MergeContent = false;
 		var m_FileName = '';
 		var m_IsFileReadOnly = false;
@@ -7781,7 +7787,10 @@ Tests ...
 		var m_DecompressFileContent = function ( ) {
 			
 			m_FileContent.routes.forEach ( m_DecompressRoute );
-			m_DecompressRoute ( m_FileContent.editedRoute );
+			if ( m_FileContent.editedRoute ) {
+				// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
+				m_DecompressRoute ( m_FileContent.editedRoute );
+			}
 			if ( m_MergeContent ) {
 				m_Merge ( );
 			}
@@ -7829,6 +7838,7 @@ Tests ...
 
 		var m_Open = function ( ) {
 			g_TravelNotesData.travel.object = m_FileContent;
+			g_TravelNotesData.editedRouteObjId = -1;
 
 			if ( '' !== m_FileName ) {
 				g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
@@ -7932,6 +7942,7 @@ Tests ...
 					m_DecompressFileContent ( );
 				}
 				catch ( e ) {
+					console.log ( e);
 				}
 			};
 			fileReader.readAsText ( event.target.files [ 0 ] );
@@ -7960,11 +7971,6 @@ Tests ...
 		*/
 
 		var m_MergeLocalFile = function ( event ) {
-			
-			if ( g_TravelNotesData.travel.editedRouteObjId !== -1 ) {
-				require ( '../core/ErrorEditor' ) ( ).showError ( m_Translator.getText ( "FileLoader - Not possible to merge a travel when a route is edited" ) );
-				return;
-			}
 			
 			m_MergeContent = true;
 			m_IsFileReadOnly = false;
@@ -8012,7 +8018,7 @@ Tests ...
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------
 */	
-},{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/ProvidersToolbarUI":21,"../UI/RouteEditorUI":22,"../UI/TravelEditorUI":27,"../core/ErrorEditor":31,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
+},{"../Core/RouteEditor":2,"../Data/Travel":6,"../L.TravelNotes":8,"../UI/DataPanesUI":14,"../UI/ProvidersToolbarUI":21,"../UI/RouteEditorUI":22,"../UI/Translator":26,"../UI/TravelEditorUI":27,"../core/ErrorEditor":31,"../core/MapEditor":34,"../core/RouteEditor":37,"../core/TravelEditor":40,"@mapbox/polyline":1}],33:[function(require,module,exports){
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 

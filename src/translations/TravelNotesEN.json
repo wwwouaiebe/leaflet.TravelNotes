@@ -152,10 +152,6 @@
 		"msgstr" : "Hide"
 	},
 	{
-		"msgid" : "FileLoader - Not possible to merge a travel when a route is edited",
-		"msgstr" : "Not possible to merge a travel when a route is edited"
-	},
-	{
 		"msgid" : "FileLoader - Not possible to select as provider",
 		"msgstr" : "Not possible to select {provider}"
 	},
@@ -442,6 +438,10 @@
 	{
 		"msgid" : "TravelEditorUI - New route",
 		"msgstr" : "New route"
+	},
+	{
+		"msgid" : "TravelEditorUI - Not possible to merge a travel when a route is edited",
+		"msgstr" : "Not possible to merge a travel when a route is edited"
 	},
 	{
 		"msgid" : "TravelEditorUI - Open travel roadbook",

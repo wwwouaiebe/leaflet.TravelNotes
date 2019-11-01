@@ -152,10 +152,6 @@
 		"msgstr" : "Masquer"
 	},
 	{
-		"msgid" : "FileLoader - Not possible to merge a travel when a route is edited",
-		"msgstr" : "Il n'est pas possible defusionner un voyage quand une route est en cours d'édition"
-	},
-	{
 		"msgid" : "FileLoader - Not possible to select as provider",
 		"msgstr" : "Impossible de sélectionner {provider}"
 	},
@@ -442,6 +438,10 @@
 	{
 		"msgid" : "TravelEditorUI - New route",
 		"msgstr" : "Nouveau trajet"
+	},
+	{
+		"msgid" : "TravelEditorUI - Not possible to merge a travel when a route is edited",
+		"msgstr" : "Il n'est pas possible de fusionner un voyage quand une route est en cours d'édition"
 	},
 	{
 		"msgid" : "TravelEditorUI - Open travel roadbook",
