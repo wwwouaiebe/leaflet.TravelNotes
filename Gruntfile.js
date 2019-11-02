@@ -34,8 +34,16 @@ module.exports = function(grunt) {
 			target: {
 				files: {
 					'dist/TravelNotes.min.css': ['src/css/ContextMenu.css', 'src/css/SortableList.css', 'src/css/BaseDialog.css', 'src/css/ColorDialog.css', 'src/css/RoutePropertiesDialog.css', 'src/css/NoteDialog.css', 'src/css/AboutDialog.css', 'src/css/Control.css', 'src/css/Popup.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/WayPoints.css'],
-					'dist/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/css/Roadbook.css']
+					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/css/Roadbook.css']
 				}
+			}
+		},
+		includes: {
+			files: {
+				src: ['src/html/TravelNotesRoadbook.html'],
+				dest: 'tmp',
+				flatten: true,
+				cwd: '.'
 			}
 		},
 		copy: {
@@ -56,7 +64,13 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/html/',
-						src: ['*.html'],
+						src: ['index.html'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
 						dest: 'dist/'
 					},
 					{
@@ -74,7 +88,13 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/html/',
-						src: ['*.html'],
+						src: ['index.html'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
 						dest: 'gh-page/'
 					},
 					{
@@ -104,15 +124,18 @@ module.exports = function(grunt) {
 				]
 			}
 		},
+		clean : ['tmp']
 	});
 	grunt.config.data.pkg.build = ("0000" + grunt.config.data.pkg.nextBuild).substr(-4,4) ;
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');	
+	grunt.loadNpmTasks('grunt-includes');	
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-build-number');
-	grunt.registerTask('default', ['jshint', 'buildnumber', 'browserify', 'uglify', 'cssmin', 'copy']);
+	grunt.registerTask('default', ['jshint', 'buildnumber', 'browserify', 'uglify', 'cssmin', 'includes', 'copy', 'clean']);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

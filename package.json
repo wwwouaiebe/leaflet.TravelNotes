@@ -11,10 +11,12 @@
     "grunt": "^1.0.4",
     "grunt-browserify": "^5.3.0",
     "grunt-build-number": "^1.0.0",
+    "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
     "grunt-contrib-jshint": "^2.1.0",
-    "grunt-contrib-uglify": "^4.0.1"
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-includes": "^1.1.0"
   },
   "repository": {
     "type": "git",
@@ -31,5 +33,5 @@
     "url": "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
   },
   "homepage": "https://github.com/wwwouaiebe/leaflet.TravelNotes#readme",
-  "nextBuild": "103"
+  "nextBuild": "130"
 }
