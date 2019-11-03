@@ -37,6 +37,7 @@ Changes:
 		- fixed issue #45
 	- v1.5.0:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue #62 : Remove time from route popup when readonly travel.
 Doc reviewed 20190919
 Tests ...
 
@@ -306,10 +307,12 @@ Tests ...
 			var returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
 				route.name + 
 				'</div>';
-			if (0 !== route.distance ) {
+			if ( 0 !== route.distance ) {
 				returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
-					m_Translator.getText ( 'RouteEditor - Distance', { distance : utilities.formatDistance ( route.distance ) } ) + '</div>' +
-					'<div class="' + classNamePrefix + 'Route-Header-Duration">' +
+					m_Translator.getText ( 'RouteEditor - Distance', { distance : utilities.formatDistance ( route.distance ) } ) + '</div>';
+			}
+			if ( ! g_TravelNotesData.travel.readOnly ) {
+				returnValue += '<div class="' + classNamePrefix + 'Route-Header-Duration">' +
 					m_Translator.getText ( 'RouteEditor - Duration', { duration : utilities.formatTime ( route.duration ) } ) + '</div>';
 			}
 			

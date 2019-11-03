@@ -26,6 +26,7 @@ Changes:
 		- created from TravelEditor
 	- v1.5.0:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue #61 : Disable right context menu when readonly travel.
 Doc reviewed 20190919
 Tests ...
 
