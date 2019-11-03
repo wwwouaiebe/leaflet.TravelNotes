@@ -11,19 +11,44 @@ module.exports = function(grunt) {
 			files: ['package.json']
 		},
 		browserify: {
-			control: {
-				src: ['src/L.TravelNotes.js'],
-				dest: 'dist/TravelNotes.js'
+			TravelNotes: {
+				files: {
+					'tmp/TravelNotes.js': ['src/L.TravelNotes.js']
+				}
 			}
 		},
 		uglify: {
-			options: {
-				banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
-				'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
+			TravelNotesDefault: {
+				options: {
+					mangle: false,
+					beautify: true
+				},
+				files: {
+					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.js']
+				}
 			},
-			build: {
-				src: 'dist/TravelNotes.js',
-				dest: 'dist/TravelNotes.min.js'
+			TravelNotesRelease: {
+				options: {
+					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
+					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
+				},
+				files: {
+					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.js']
+				}
+			},
+			RoadbookRelease: {
+				files: {
+					'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']
+				}
+			},
+			RoadbookDefault: {
+				options: {
+					mangle: false,
+					beautify: true
+				},
+				files: {
+					'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']
+				}
 			}
 		},
 		cssmin: {
@@ -31,23 +56,26 @@ module.exports = function(grunt) {
 				mergeIntoShorthands: false,
 				roundingPrecision: -1
 			},
-			target: {
+			TravelNotes: {
 				files: {
-					'dist/TravelNotes.min.css': ['src/css/ContextMenu.css', 'src/css/SortableList.css', 'src/css/BaseDialog.css', 'src/css/ColorDialog.css', 'src/css/RoutePropertiesDialog.css', 'src/css/NoteDialog.css', 'src/css/AboutDialog.css', 'src/css/Control.css', 'src/css/Popup.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/WayPoints.css'],
+					'tmp/TravelNotes.min.css': ['src/css/ContextMenu.css', 'src/css/SortableList.css', 'src/css/BaseDialog.css', 'src/css/ColorDialog.css', 'src/css/RoutePropertiesDialog.css', 'src/css/NoteDialog.css', 'src/css/AboutDialog.css', 'src/css/Control.css', 'src/css/Popup.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/WayPoints.css']
+				}
+			},
+			Roadbook: {
+				files: {
 					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/css/Roadbook.css']
 				}
 			}
 		},
 		includes: {
-			files: {
-				src: ['src/html/TravelNotesRoadbook.html'],
-				dest: 'tmp',
-				flatten: true,
-				cwd: '.'
+			Roadbook: {
+				files: {
+					'tmp/TravelNotesRoadbook.html' : ['src/html/TravelNotesRoadbook.html']
+				}
 			}
 		},
 		copy: {
-			main: {
+			dist: {
 				files: [
 					{
 						expand: true,
@@ -70,9 +98,25 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesRoadbook.html'],
+						src: ['TravelNotes.min.css'],
 						dest: 'dist/'
 					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotes.min.js'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
+						dest: 'dist/'
+					}					
+				]
+			},
+			ghpage: {
+				files: [
 					{
 						expand: true,
 						cwd: 'src/cfg/',
@@ -94,9 +138,25 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesRoadbook.html'],
+						src: ['TravelNotes.min.css'],
 						dest: 'gh-page/'
 					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotes.min.js'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
+						dest: 'gh-page/'
+					}					
+				]
+			},
+			TravelNotesGuides: {
+				files: [
 					{
 						expand: true,
 						cwd: 'TravelNotesGuides/',
@@ -114,12 +174,6 @@ module.exports = function(grunt) {
 						cwd: 'TravelNotesGuides/fr/',
 						src: ['*.md', '*.png'],
 						dest: 'gh-page/TravelNotesGuides/fr/'
-					},
-					{
-						expand: true,
-						cwd: 'dist/',
-						src: ['*.css', '*.js'],
-						dest: 'gh-page/'
 					}
 				]
 			}
@@ -135,7 +189,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-build-number');
-	grunt.registerTask('default', ['jshint', 'buildnumber', 'browserify', 'uglify', 'cssmin', 'includes', 'copy', 'clean']);
+	grunt.registerTask('default', ['jshint', 'buildnumber', 'browserify', 'uglify:TravelNotesDefault', 'uglify:RoadbookDefault', 'cssmin', 'includes', 'copy:ghpage', 'clean']);
+	grunt.registerTask('release', ['jshint', 'buildnumber', 'browserify', 'uglify:TravelNotesRelease', 'uglify:RoadbookRelease', 'cssmin', 'includes', 'copy', 'clean']);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
