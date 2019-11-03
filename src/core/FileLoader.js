@@ -291,6 +291,7 @@ Tests ...
 		*/
 
 		var m_OpenDistantFile = function ( fileContent ) {
+			L.travelNotes.rightContextMenu = false;
 			m_IsFileReadOnly = true;
 			m_FileContent = fileContent;
 			m_DecompressFileContent ( );
