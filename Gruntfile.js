@@ -15,6 +15,11 @@ module.exports = function(grunt) {
 				files: {
 					'tmp/TravelNotes.js': ['src/L.TravelNotes.js']
 				}
+			},
+			Roadbook: {
+				files: {
+					'tmp/TravelNotesRoadbook.js': ['src/roadbook/roadbook.js']
+				}
 			}
 		},
 		uglify: {
@@ -38,7 +43,7 @@ module.exports = function(grunt) {
 			},
 			RoadbookRelease: {
 				files: {
-					'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']
+					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.js']
 				}
 			},
 			RoadbookDefault: {
@@ -47,7 +52,7 @@ module.exports = function(grunt) {
 					beautify: true
 				},
 				files: {
-					'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']
+					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.js']
 				}
 			}
 		},

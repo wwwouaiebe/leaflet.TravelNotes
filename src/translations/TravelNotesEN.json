@@ -296,6 +296,22 @@
 		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
 	},
 	{
+		"msgid" : "Roadbook - show travel notes",
+		"msgstr" : "Show travel notes"
+	},
+	{
+		"msgid" : "Roadbook - show maneuver",
+		"msgstr" : "Show maneuver"
+	},
+	{
+		"msgid" : "Roadbook - show routes notes",
+		"msgstr" : "Show routes notes"
+	},
+	{
+		"msgid" : "Roadbook - Save",
+		"msgstr" : "Save"
+	},
+	{
 		"msgid" : "RouteEditor - Distance",
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
 	},
