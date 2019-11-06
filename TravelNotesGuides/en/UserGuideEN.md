@@ -33,10 +33,10 @@ The **roadbook** is an HTML page that contains all the information of the travel
 If you use Travel & Notes only to create notes, you can skip all the part about the access keys. These are only used for calculating routes.
 
 Travel & Notes does not calculate routes and itineraries. It connects to a route provider to get this route. The different route providers that can currently be used
-are GraphHopper, Mapbox and OSRM. It is also possible to draw a polyline between two places, without following paths. A train route between two stations can also be added, provided
+are GraphHopper, Mapbox, OpenRouteService and OSRM. It is also possible to draw a polyline between two places, without following paths. A train route between two stations can also be added, provided
 that this route is encoded in OpenStreetMap, respecting the rules of public transport version 2.
 
-For GraphHopper and Mapbox it is necessary to have an access key (**API Key**) to connect to the server. Check the websites of these different providers to obtain an access key.
+For GraphHopper, OpenRouteService and Mapbox it is necessary to have an access key (**API Key**) to connect to the server. Check the websites of these different providers to obtain an access key.
 
 You must also correctly read the conditions of use of the access keys and check that what you do with Travel & Notes corresponds to these conditions of use.
 
@@ -318,8 +318,7 @@ created on the map. It is possible to choose what you want to see in the roadboo
 
 <img src="RoadbookEN.PNG" />
 
-The "Save" button saves the html file on your PC. To be able to correctly display this file afterwards, the file
-TravelNotesRoadbook.min.css must be present in the same directory.
+The "Save" button saves the html file on your PC. 
 
 ## Prepare a travel and consult it from the internet
 

@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created
+	- v1.5.0:
+		- code review		
 Doc reviewed 20190919
 Tests ...
 

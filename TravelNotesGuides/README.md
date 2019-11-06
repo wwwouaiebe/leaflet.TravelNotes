@@ -42,3 +42,10 @@ Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR
 - Working now with Promise at startup and plugins
 - New plugin for trains
 - new property baseDialog for L.TravelNotesInterface ( )
+
+## What's new in release 1.5.0
+
+- Issue #52 fixed : when saving the travel to the file, save also the edited route.
+- Issue #60 fixed : Add translations for roadbook
+- Issue #61 fixed : Disable right context menu when readonly travel.
+- Issue #62 fixed : Remove time from route popup when readonly travel.

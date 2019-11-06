@@ -31,6 +31,9 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
 		- modified event listener for cancel travel button ( issue #45 )
+	- v1.5.0:
+		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue #60 : Add translations for roadbook
 Doc reviewed 20190919
 Tests ...
 
