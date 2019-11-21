@@ -15,11 +15,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- Router.js file -------------------------------------------------------------------------------------------------
 This file contains:
-	- the Router object
+	- the newRouter function
 	- the module.exports implementation
 Changes:
 	- v1.0.0:
@@ -33,160 +32,152 @@ Changes:
 		- splitted with WaypointEditor
 	- v1.5.0:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+'use strict';
 
-( function ( ){
-	
-	'use strict';
+export { newRouter };
 
-	var s_RequestStarted = false;
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { g_ErrorEditor } from '../core/ErrorEditor.js';
+import { g_RouteEditor } from '../core/RouteEditor.js';
 
-	var g_TravelNotesData = require ( '../L.TravelNotes' );
+var s_RequestStarted = false;
+
+/*
+--- newRouter function --------------------------------------------------------------------------------------------
+
+Patterns : Closure
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newRouter = function ( ) {
 	
 	/*
-	--- router function -----------------------------------------------------------------------------------------------
+	--- m_HaveValidWayPoints function ---------------------------------------------------------------------------------
 
-	Patterns : Closure
+	This function verify that the waypoints have coordinates
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var router = function ( ) {
-		
-		/*
-		--- m_HaveValidWayPoints function ------------------------------------------------------------------------------
-
-		This function verify that the waypoints have coordinates
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_HaveValidWayPoints = function ( ) {
-			return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
-				function ( wayPoint, result ) {
-					if ( null === result ) { 
-						result = true;
-					}
-					result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
-					return result;
+	var m_HaveValidWayPoints = function ( ) {
+		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
+			function ( wayPoint, result ) {
+				if ( null === result ) { 
+					result = true;
 				}
-			);
-		};
-		
-		/*
-		--- m_EndError function ---------------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_EndError = function ( message ) {
-
-			s_RequestStarted = false;
-
-			require ( '../core/ErrorEditor' ) ( ).showError ( message );
-		};
-	
-		/*
-		--- m_EndOk function -----------------------------------------------------------------------------------
-
-		This function ...
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_EndOk = function ( message ) {
-
-			s_RequestStarted = false;
-
-			// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
-			// valid function to compute the distances. So all distances are always 
-			// recomputed with this function.
-			
-			require ( './RouteEditor' ) ( ).computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
-
-			// Placing the waypoints on the itinerary
-			var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
-			while ( ! wayPointsIterator.done )
-			{
-				if ( wayPointsIterator.first ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
-				}
-				else if ( wayPointsIterator.last ) {
-					wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
-				}
-				else{
-					wayPointsIterator.value.latLng = require ( './RouteEditor' ) ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
-				}
-			}	
-			
-			// and calling the route editor for displaying the results
-			require ( './RouteEditor' ) ( ).endRouting ( );
-		};
-		
-		/*
-		--- m_StartRouting function -----------------------------------------------------------------------------------
-
-			This function start the routing :-)
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_StartRouting = function ( ) {
-
-			// We verify that another request is not loaded
-			if ( s_RequestStarted ) {
-				return false;
-			}
-			
-			// Control of the wayPoints
-			if ( ! m_HaveValidWayPoints ( ) ) {
-				return false;
-			}
-			
-			s_RequestStarted = true;
-
-			// Choosing the correct route provider
-			var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
-
-			// provider name and transit mode are added to the road
-			g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
-			g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
-
-			routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndOk, m_EndError  );
-
-			return true;
-		};
-	
-		/*
-		--- Router object ---------------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return Object.seal (
-			{
-				startRouting : function ( ) { return m_StartRouting ( );
-				}
+				result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
+				return result;
 			}
 		);
 	};
-
+	
 	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
+	--- m_EndError function -------------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = router;
-	}
+	var m_EndError = function ( message ) {
 
-}());
+		s_RequestStarted = false;
+
+		g_ErrorEditor ( ).showError ( message );
+	};
+
+	/*
+	--- m_EndOk function ----------------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_EndOk = function ( ) {
+
+		s_RequestStarted = false;
+
+		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
+		// valid function to compute the distances. So all distances are always 
+		// recomputed with this function.
+		
+		g_RouteEditor.computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
+
+		// Placing the waypoints on the itinerary
+		var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
+		while ( ! wayPointsIterator.done )
+		{
+			if ( wayPointsIterator.first ) {
+				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
+			}
+			else if ( wayPointsIterator.last ) {
+				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
+			}
+			else{
+				wayPointsIterator.value.latLng = g_RouteEditor.getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
+			}
+		}	
+		
+		// and calling the route editor for displaying the results
+		g_RouteEditor.endRouting ( );
+	};
+	
+	/*
+	--- m_StartRouting function ---------------------------------------------------------------------------------------
+
+		This function start the routing :-)
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_StartRouting = function ( ) {
+
+		// We verify that another request is not loaded
+		if ( s_RequestStarted ) {
+			return false;
+		}
+		
+		// Control of the wayPoints
+		if ( ! m_HaveValidWayPoints ( ) ) {
+			return false;
+		}
+		
+		s_RequestStarted = true;
+
+		// Choosing the correct route provider
+		var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
+
+		// provider name and transit mode are added to the road
+		g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+		g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
+
+		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndOk, m_EndError  );
+
+		return true;
+	};
+
+	/*
+	--- Router object -------------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	return Object.seal (
+		{
+			startRouting : function ( ) { return m_StartRouting ( ); }
+		}
+	);
+};
 
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------

@@ -15,12 +15,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- dataPanesUI.js file -----------------------------------------------------------------------------------------------
 This file contains:
-	- the dataPanesUI object
-	- the module.exports implementation
+	- the newDataPanesUI function
 Changes:
 	- v1.0.0:
 		- created
@@ -28,292 +26,294 @@ Changes:
 		- added train button
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
-	
-	'use strict';
-	
-	var s_ActivePaneIndex = -1;
-	
-	/*
-	--- onWheel function ----------------------------------------------------------------------------------------------
+'use strict';
 
-	wheel event listener for the data div
+export { newDataPanesUI };
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+import { g_Translator } from '../UI/Translator.js';
 
-	var onWheel = function ( wheelEvent ) { 
-		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
-		}
-		wheelEvent.stopPropagation ( );
-	};
+import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
+import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
+import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
-	/*
-	--- onClickItineraryPaneButton function ---------------------------------------------------------------------------
+var s_ActivePaneIndex = -1;
 
-	click event listener for the itinerary pane button
+/*
+--- onWheel function --------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+wheel event listener for the data div
 
-	var onClickItineraryPaneButton = function ( clickEvent ) {
-		dataPanesUI ( ).setItinerary ( );
-	};
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
-	/*
-	--- onClickTravelNotesPaneButton function -------------------------------------------------------------------------
-
-	click event listener for the travel notes pane button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickTravelNotesPaneButton = function ( clickEvent ) {
-		dataPanesUI ( ).setTravelNotes ( );
-	};
-
-	/*
-	--- onClickSearchPaneButton function ------------------------------------------------------------------------------
-
-	click event listener for the search pane button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickSearchPaneButton = function ( clickEvent ) {
-		dataPanesUI ( ).setSearch ( );
-	};
-
-	/*
-	--- dataPanesUI function ------------------------------------------------------------------------------------------
-
-	This function returns the dataPanesUI object
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var dataPanesUI = function ( ) {
-
-		var m_TravelNotesPaneUI = require ( '../UI/TravelNotesPaneUI' ) ( );
-		var m_SearchPaneUI = require ( '../UI/SearchPaneUI' ) ( );
-		var m_ItineraryPaneUI = require ( '../UI/ItineraryPaneUI' ) ( );
-
-		/*
-		--- m_CreateUI function ---------------------------------------------------------------------------------------
-
-		This function creates the UI
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_CreateUI = function ( controlDiv ) {
-			
-			if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
-				return;
-			}
-
-			var htmlElementsFactory = require ( '../UI/HTMLElementsFactory' ) ( ) ;
-
-			var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
-			
-			htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					innerHTML : require ( '../UI/Translator' ) ( ).getText ( 'DataPanesUI - Itinerary' ), 
-					id : 'TravelNotes-Control-ItineraryPaneButton', 
-					className : 'TravelNotes-Control-PaneButton'
-				},
-				headerDiv 
-			).addEventListener ( 'click', onClickItineraryPaneButton, false );
-			
-			htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					innerHTML : require ( '../UI/Translator' ) ( ).getText ( 'DataPanesUI - Travel notes' ), 
-					id : 'TravelNotes-Control-TravelNotesPaneButton', 
-					className : 'TravelNotes-Control-PaneButton'
-				},
-				headerDiv 
-			).addEventListener ( 'click', onClickTravelNotesPaneButton, false );
-			
-			if ( window.osmSearch ) {
-				htmlElementsFactory.create ( 
-					'div', 
-					{ 
-						innerHTML : require ( '../UI/Translator' ) ( ).getText ( 'DataPanesUI - Search' ), 
-						id : 'TravelNotes-Control-SearchPaneButton', 
-						className : 'TravelNotes-Control-PaneButton'
-					},
-					headerDiv 
-				).addEventListener ( 'click', onClickSearchPaneButton, false );
-			}
-			
-			htmlElementsFactory.create ( 
-				'div', 
-				{
-					id : 'TravelNotes-Control-ItineraryDataDiv', 
-					className : 'TravelNotes-Control-DataDiv'
-				},
-			controlDiv ).addEventListener ( 'wheel', onWheel, false );
-		};
-
-		/*
-		--- m_RemoveActivePane function -------------------------------------------------------------------------------
-
-		This function remove the active pane contents
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_RemoveActivePane = function ( ) {
-			switch ( s_ActivePaneIndex ) {
-				case 0:
-					m_ItineraryPaneUI.remove ( );
-					break;
-				case 1:
-					m_TravelNotesPaneUI.remove ( );
-					break;
-				case 2 :
-					if ( window.osmSearch ) {
-						m_SearchPaneUI.remove ( );
-					}
-					break;
-				default:
-					break;
-			}
-		};
-
-		/*
-		--- m_SetItinerary function -----------------------------------------------------------------------------------
-
-		This function set the itinerary pane contents
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SetItinerary = function ( ) { 
-			m_RemoveActivePane ( );
-			m_ItineraryPaneUI.add ( );
-
-			s_ActivePaneIndex = 0;
-		};
-
-		/*
-		--- m_UpdateItinerary function --------------------------------------------------------------------------------
-
-		This function set the itinerary pane contents only when this pane is active
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_UpdateItinerary = function ( ) {
-			if ( 0 === s_ActivePaneIndex ) {
-				m_ItineraryPaneUI.remove ( );
-				m_ItineraryPaneUI.add ( );
-			}
-		};
-		
-		/*
-		--- m_SetItinerary function -----------------------------------------------------------------------------------
-
-		This function set the travel notes pane contents
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SetTravelNotes = function ( ) { 
-			m_RemoveActivePane ( );
-			m_TravelNotesPaneUI.add ( );
-			s_ActivePaneIndex = 1;
-		};
-		
-		/*
-		--- m_UpdateTravelNotes function ------------------------------------------------------------------------------
-
-		This function set the travel notes pane contents only when this pane is active
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_UpdateTravelNotes = function ( ) {
-			if ( 1 === s_ActivePaneIndex ) {
-				m_TravelNotesPaneUI.remove ( );
-				m_TravelNotesPaneUI.add ( );
-			}
-		};
-		
-		/*
-		--- m_SetSearch function --------------------------------------------------------------------------------------
-
-		This function set the search pane contents
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_SetSearch = function ( ) { 
-			m_RemoveActivePane ( );
-			m_SearchPaneUI.add ( );
-
-			s_ActivePaneIndex = 2;
-
-		};
-		
-		/*
-		--- m_UpdateSearch function -----------------------------------------------------------------------------------
-
-		This function set the travel notes pane contents only when this pane is active
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_UpdateSearch = function ( ) {
-			if ( 2 === s_ActivePaneIndex ) {
-				m_SearchPaneUI.remove ( );
-				m_SearchPaneUI.add ( );
-			}
-		};
-		
-		/* 
-		--- dataPanesUI object ----------------------------------------------------------------------------------------
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		return Object.seal (
-			{
-				
-				createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
-				
-				setItinerary : function ( ) { m_SetItinerary ( ); },
-				updateItinerary : function ( ) { m_UpdateItinerary ( ); },
-
-				setTravelNotes : function ( ) { m_SetTravelNotes ( ); },
-				updateTravelNotes : function ( ) { m_UpdateTravelNotes ( ); },
-				
-				setSearch : function ( ) { m_SetSearch ( ); },
-				updateSearch : function ( ) { m_UpdateSearch ( ); }
-				
-			}
-		);
-	};
-	
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = dataPanesUI;
+var onWheel = function ( wheelEvent ) { 
+	if ( wheelEvent.deltaY ) {
+		wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
 	}
+	wheelEvent.stopPropagation ( );
+};
 
-}());
+/*
+--- onClickItineraryPaneButton function -------------------------------------------------------------------------------
 
+click event listener for the itinerary pane button
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+
+var onClickItineraryPaneButton = function ( ) {
+	newDataPanesUI ( ).setItinerary ( );
+};
+
+
+/*
+--- onClickTravelNotesPaneButton function -----------------------------------------------------------------------------
+
+click event listener for the travel notes pane button
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var onClickTravelNotesPaneButton = function ( ) {
+	newDataPanesUI ( ).setTravelNotes ( );
+};
+
+/*
+--- onClickSearchPaneButton function ----------------------------------------------------------------------------------
+
+click event listener for the search pane button
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var onClickSearchPaneButton = function ( ) {
+	newDataPanesUI ( ).setSearch ( );
+};
+
+
+/*
+--- dataPanesUI function ----------------------------------------------------------------------------------------------
+
+This function returns the dataPanesUI object
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newDataPanesUI = function ( ) {
+
+	var m_TravelNotesPaneUI = newTravelNotesPaneUI ( );
+	var m_SearchPaneUI = newSearchPaneUI ( );
+	var m_ItineraryPaneUI = newItineraryPaneUI ( );
+
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	This function creates the UI
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_CreateUI = function ( controlDiv ) {
+		
+		if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
+			return;
+		}
+
+		var htmlElementsFactory = newHTMLElementsFactory ( ) ;
+
+		var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+		
+		htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				innerHTML : g_Translator.getText ( 'DataPanesUI - Itinerary' ), 
+				id : 'TravelNotes-Control-ItineraryPaneButton', 
+				className : 'TravelNotes-Control-PaneButton'
+			},
+			headerDiv 
+		).addEventListener ( 'click', onClickItineraryPaneButton, false );
+		
+		htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				innerHTML : g_Translator.getText ( 'DataPanesUI - Travel notes' ), 
+				id : 'TravelNotes-Control-TravelNotesPaneButton', 
+				className : 'TravelNotes-Control-PaneButton'
+			},
+			headerDiv 
+		).addEventListener ( 'click', onClickTravelNotesPaneButton, false );
+		
+		if ( window.osmSearch ) {
+			htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					innerHTML : g_Translator.getText ( 'DataPanesUI - Search' ), 
+					id : 'TravelNotes-Control-SearchPaneButton', 
+					className : 'TravelNotes-Control-PaneButton'
+				},
+				headerDiv 
+			).addEventListener ( 'click', onClickSearchPaneButton, false );
+		}
+		
+		htmlElementsFactory.create ( 
+			'div', 
+			{
+				id : 'TravelNotes-Control-ItineraryDataDiv', 
+				className : 'TravelNotes-Control-DataDiv'
+			},
+		controlDiv ).addEventListener ( 'wheel', onWheel, false );
+	};
+
+	/*
+	--- m_RemoveActivePane function -----------------------------------------------------------------------------------
+
+	This function remove the active pane contents
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_RemoveActivePane = function ( ) {
+		switch ( s_ActivePaneIndex ) {
+			case 0:
+				m_ItineraryPaneUI.remove ( );
+				break;
+			case 1:
+				m_TravelNotesPaneUI.remove ( );
+				break;
+			case 2 :
+				if ( window.osmSearch ) {
+					m_SearchPaneUI.remove ( );
+				}
+				break;
+			default:
+				break;
+		}
+	};
+
+	/*
+	--- m_SetItinerary function ---------------------------------------------------------------------------------------
+
+	This function set the itinerary pane contents
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_SetItinerary = function ( ) { 
+		m_RemoveActivePane ( );
+		m_ItineraryPaneUI.add ( );
+
+		s_ActivePaneIndex = 0;
+	};
+
+	/*
+	--- m_UpdateItinerary function ------------------------------------------------------------------------------------
+
+	This function set the itinerary pane contents only when this pane is active
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_UpdateItinerary = function ( ) {
+		if ( 0 === s_ActivePaneIndex ) {
+			m_ItineraryPaneUI.remove ( );
+			m_ItineraryPaneUI.add ( );
+		}
+	};
+	
+	/*
+	--- m_SetItinerary function ---------------------------------------------------------------------------------------
+
+	This function set the travel notes pane contents
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_SetTravelNotes = function ( ) { 
+		m_RemoveActivePane ( );
+		m_TravelNotesPaneUI.add ( );
+		s_ActivePaneIndex = 1;
+	};
+	
+	/*
+	--- m_UpdateTravelNotes function ----------------------------------------------------------------------------------
+
+	This function set the travel notes pane contents only when this pane is active
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_UpdateTravelNotes = function ( ) {
+		if ( 1 === s_ActivePaneIndex ) {
+			m_TravelNotesPaneUI.remove ( );
+			m_TravelNotesPaneUI.add ( );
+		}
+	};
+	
+	/*
+	--- m_SetSearch function ------------------------------------------------------------------------------------------
+
+	This function set the search pane contents
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_SetSearch = function ( ) { 
+		m_RemoveActivePane ( );
+		m_SearchPaneUI.add ( );
+
+		s_ActivePaneIndex = 2;
+
+	};
+	
+	/*
+	--- m_UpdateSearch function ---------------------------------------------------------------------------------------
+
+	This function set the travel notes pane contents only when this pane is active
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var m_UpdateSearch = function ( ) {
+		if ( 2 === s_ActivePaneIndex ) {
+			m_SearchPaneUI.remove ( );
+			m_SearchPaneUI.add ( );
+		}
+	};
+	
+	/* 
+	--- dataPanesUI object --------------------------------------------------------------------------------------------
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	
+	return Object.seal (
+		{
+			
+			createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
+			
+			setItinerary : function ( ) { m_SetItinerary ( ); },
+			updateItinerary : function ( ) { m_UpdateItinerary ( ); },
+
+			setTravelNotes : function ( ) { m_SetTravelNotes ( ); },
+			updateTravelNotes : function ( ) { m_UpdateTravelNotes ( ); },
+			
+			setSearch : function ( ) { m_SetSearch ( ); },
+			updateSearch : function ( ) { m_UpdateSearch ( ); }
+			
+		}
+	);
+};
+	
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
 */	

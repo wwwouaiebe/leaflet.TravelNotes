@@ -12,12 +12,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- Route.js file -----------------------------------------------------------------------------------------------------
 This file contains:
-	- the Route object
-	- the module.exports implementation
+	- the newRoute function
 Changes:
 	- v1.0.0:
 		- created
@@ -28,176 +26,175 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.5.0:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-(function() {
+'use strict';
 
-	'use strict';
+export { newRoute };
+import { g_Config } from '../data/Config.js';
 
-	var s_ObjType = require ( '../data/ObjType' ) ( 'Route', require ( './Version' ) );
+import { newObjId } from '../data/ObjId.js';
+import { newObjType } from '../data/ObjType.js';
+import { newCollection } from '../data/Collection.js';
+import { newWayPoint } from '../data/WayPoint.js';
+import { newItinerary } from '../data/Itinerary.js';
+
+/*
+--- newRoute function ---------------------------------------------------------------------------------------------
+
+Patterns : Closure
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newRoute = function ( ) {
+
+	const s_ObjType = newObjType ( 'Route' );
+	
+	var m_Name = '';
+
+	var m_WayPoints = newCollection ( 'WayPoint' );
+	m_WayPoints.add ( newWayPoint ( ) );
+	m_WayPoints.add ( newWayPoint ( ) );
+
+	var m_Notes = newCollection ( 'Note' );
+
+	var m_Itinerary = newItinerary ( );
+	
+	var m_Width = 5;
+
+	var m_Color = '#ff0000';
+	
+	var m_DashArray = 0;
+
+	
+	if ( g_Config ) {
+		m_Width = g_Config.route.width;
+		m_Color = g_Config.route.color;			
+		m_DashArray = g_Config.route.dashArray;			
+	}
+
+	var m_Chain = false;
+
+	var m_ChainedDistance = 0;
+
+	var m_Distance = 0;
+
+	var m_Duration = 0;
+	
+	var m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+	
+	var m_SetEdited = function ( edited ) {
+		if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
+			throw 'Invalid value for Route.edited : ' + edited;
+		}
+		else {
+			m_Edited = edited;
+		}
+	};
+
+	var m_Hidden = false;
+	
+	var m_ObjId = newObjId ( );
+
+	var m_GetObject = function ( ) {
+		return {
+			name : m_Name,
+			wayPoints : m_WayPoints.object,
+			notes : m_Notes.object,
+			itinerary : m_Itinerary.object,
+			width : m_Width,
+			color : m_Color,
+			dashArray : m_DashArray,
+			chain : m_Chain,
+			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+			duration : m_Duration,
+			edited : m_Edited,
+			hidden : m_Hidden,
+			chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
+			objId : m_ObjId,
+			objType : s_ObjType.object
+		};
+	};
+	
+	var m_SetObject = function ( something ) {
+		something = s_ObjType.validate ( something );
+		m_Name = something.name || '';
+		m_WayPoints.object = something.wayPoints || [];
+		m_Notes.object = something.notes || [];
+		m_Itinerary.object = something.itinerary || newItinerary ( ).object;
+		m_Width = something.width || 5;
+		m_Color = something.color || '#000000';
+		m_DashArray = something.dashArray || 0;
+		m_Chain = something.chain || false;
+		m_Distance = something.distance;
+		m_Duration = something.duration;
+		m_Edited = something.edited || 0;
+		m_Hidden = something.hidden || false;
+		m_ChainedDistance = something.chainedDistance;
+		m_ObjId = newObjId ( );
+	};
 
 	/*
-	--- route function ------------------------------------------------------------------------------------------------
-
-	Patterns : Closure
+	--- route object --------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var route = function ( ) {
+	return Object.seal ( 
+		{
 
-		var m_Name = '';
+			get wayPoints ( ) { return m_WayPoints; },
 
-		var m_WayPoints = require ( '../data/Collection' ) ( 'WayPoint' );
-		m_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
-		m_WayPoints.add ( require ( '../data/Waypoint' ) ( ) );
+			get itinerary ( ) { return m_Itinerary; },
 
-		var m_Notes = require ( '../data/Collection' ) ( 'Note' );
+			get notes ( ) { return m_Notes; },
 
-		var m_Itinerary = require ( '../data/Itinerary' ) ( );
-		
-		var m_Width = 5;
+			get name ( ) { return m_Name; },
+			set name ( Name ) { m_Name = Name;},
 
-		var m_Color = '#ff0000';
-		
-		var m_DashArray = 0;
+			get width ( ) { return m_Width; },
+			set width ( Width ) { m_Width = Width; },
 
-		
-		if ( require ( '../L.TravelNotes' ).config ) {
-			m_Width = require ( '../L.TravelNotes' ).config.route.width;
-			m_Color = require ( '../L.TravelNotes' ).config.route.color;			
-			m_DashArray = require ( '../L.TravelNotes' ).config.route.dashArray;			
+			get color ( ) { return m_Color; },
+			set color ( Color ) { m_Color = Color; },
+
+			get dashArray ( ) { return m_DashArray; },
+			set dashArray ( DashArray ) { m_DashArray = DashArray; },
+
+			get chain ( ) { return m_Chain; },
+			set chain ( Chain ) { m_Chain = Chain; },
+
+			get chainedDistance ( ) { return m_ChainedDistance; },
+			set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+
+			get distance ( ) { return m_Distance; },
+			set distance ( Distance ) { m_Distance = Distance; },
+
+			get duration ( ) { return m_Duration; },
+			set duration ( Duration ) { m_Duration = Duration; },
+			
+			get edited ( ) { return m_Edited; },
+			set edited ( Edited ) { m_SetEdited ( Edited ); },
+
+			get hidden ( ) { return m_Hidden; },
+			set hidden ( Hidden ) { m_Hidden = Hidden; },
+
+			get objId ( ) { return m_ObjId; },
+
+			get objType ( ) { return s_ObjType; },
+
+			get object ( ) { return m_GetObject ( ); },
+			set object ( something ) { m_SetObject ( something ); }
 		}
-
-		var m_Chain = false;
-
-		var m_ChainedDistance = 0;
-
-		var m_Distance = 0;
-
-		var m_Duration = 0;
-		
-		var m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
-		
-		var m_SetEdited = function ( edited ) {
-			if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
-				throw 'Invalid value for Route.edited : ' + edited;
-			}
-			else {
-				m_Edited = edited;
-			}
-		};
-
-		var m_Hidden = false;
-		
-		var m_ObjId = require ( '../data/ObjId' ) ( );
-
-		var m_GetObject = function ( ) {
-			return {
-				name : m_Name,
-				wayPoints : m_WayPoints.object,
-				notes : m_Notes.object,
-				itinerary : m_Itinerary.object,
-				width : m_Width,
-				color : m_Color,
-				dashArray : m_DashArray,
-				chain : m_Chain,
-				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-				duration : m_Duration,
-				edited : m_Edited,
-				hidden : m_Hidden,
-				chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
-				objId : m_ObjId,
-				objType : s_ObjType.object
-			};
-		};
-		
-		var m_SetObject = function ( something ) {
-			something = s_ObjType.validate ( something );
-			m_Name = something.name || '';
-			m_WayPoints.object = something.wayPoints || [];
-			m_Notes.object = something.notes || [];
-			m_Itinerary.object = something.itinerary || require ( './Itinerary' ) ( ).object;
-			m_Width = something.width || 5;
-			m_Color = something.color || '#000000';
-			m_DashArray = something.dashArray || 0;
-			m_Chain = something.chain || false;
-			m_Distance = something.distance;
-			m_Duration = something.duration;
-			m_Edited = something.edited || 0;
-			m_Hidden = something.hidden || false;
-			m_ChainedDistance = something.chainedDistance;
-			m_ObjId = require ( '../data/ObjId' ) ( );
-		};
-
-		/*
-		--- route object -----------------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return Object.seal ( 
-			{
-
-				get wayPoints ( ) { return m_WayPoints; },
-
-				get itinerary ( ) { return m_Itinerary; },
-
-				get notes ( ) { return m_Notes; },
-
-				get name ( ) { return m_Name; },
-				set name ( Name ) { m_Name = Name;},
-
-				get width ( ) { return m_Width; },
-				set width ( Width ) { m_Width = Width; },
-
-				get color ( ) { return m_Color; },
-				set color ( Color ) { m_Color = Color; },
-
-				get dashArray ( ) { return m_DashArray; },
-				set dashArray ( DashArray ) { m_DashArray = DashArray; },
-
-				get chain ( ) { return m_Chain; },
-				set chain ( Chain ) { m_Chain = Chain; },
-
-				get chainedDistance ( ) { return m_ChainedDistance; },
-				set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
-
-				get distance ( ) { return m_Distance; },
-				set distance ( Distance ) { m_Distance = Distance; },
-
-				get duration ( ) { return m_Duration; },
-				set duration ( Duration ) { m_Duration = Duration; },
-				
-				get edited ( ) { return m_Edited; },
-				set edited ( Edited ) { m_SetEdited ( Edited ); },
-
-				get hidden ( ) { return m_Hidden; },
-				set hidden ( Hidden ) { m_Hidden = Hidden; },
-
-				get objId ( ) { return m_ObjId; },
-
-				get objType ( ) { return s_ObjType; },
-
-				get object ( ) { return m_GetObject ( ); },
-				set object ( something ) { m_SetObject ( something ); }
-			}
-		);
-	};
-
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = route;
-	}
-
-} ) ( );
+	);
+};
 
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------

@@ -12,50 +12,39 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-
 /*
 --- ObjId.js file -----------------------------------------------------------------------------------------------------
 
+This file contains:
+	- the newObjId function
 Changes:
 	- v1.0.0:
 		- created
 	- v1.4.0:
 		- Initialization changed
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-(function() {
+'use strict';
 
-	'use strict';
+export { newObjId };
 
-	/*
-	--- objId function ------------------------------------------------------------------------------------------------
+var g_TravelNotesObjId = 0;
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+/*
+--- newObjId function ---------------------------------------------------------------------------------------------
 
-	var objId = function ( ) {
-		if ( ! global.TravelNotesObjId ) {
-			global.TravelNotesObjId = 0;
-		}
-		
-		return ++ global.TravelNotesObjId;
-	};
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = objId;
-
-	}
-
-} ) ( );
+var newObjId = function ( ) {
+	return ++ g_TravelNotesObjId;
+};
 
 /*
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------

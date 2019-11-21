@@ -20,38 +20,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- ContextMenu.js file -----------------------------------------------------------------------------------------------
 This file contains:
 	- the ContextMenu object
-	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20170929
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
-	
-	'use strict';
-	
-	var _MenuItems = [];
-	var _ContextMenuContainer = null;
-	var _OriginalEvent = null;
-	var _FocusIsOnItem = 0;
-	var _Lat = 0;
-	var _Lng = 0;
-	var _TimerId = null;
-	
-	/*
-	--- onCloseMenu function ------------------------------------------------------------------------------------------
+'use strict';
 
-	event listener for the close button. Alson called from others events
+export { newContextMenu };
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-		
+import { g_Config } from '../data/Config.js';
+import { g_Translator } from '../UI/Translator.js';
+
+import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+
+var _MenuItems = [];
+var _ContextMenuContainer = null;
+var _OriginalEvent = null;
+var _FocusIsOnItem = 0;
+var _Lat = 0;
+var _Lng = 0;
+var _TimerId = null;
+
+/*
+--- onCloseMenu function ----------------------------------------------------------------------------------------------
+
+event listener for the close button. Alson called from others events
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+	
+
+
+/*
+--- ContextMenu object ------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newContextMenu = function ( event, userMenu ) {
+	
 	var onCloseMenu = function ( ) {
 		
 		if ( _TimerId ) {
@@ -79,7 +95,7 @@ Tests ...
 		_ContextMenuContainer = null;
 		_FocusIsOnItem = 0;
 	};
-	
+
 	/*
 	--- onKeyDown function --------------------------------------------------------------------------------------------
 
@@ -117,7 +133,7 @@ Tests ...
 			_ContextMenuContainer.childNodes[ _FocusIsOnItem ].firstChild.click ( );
 		}
 	};
-	
+
 	/*
 	--- onKeyPress function -------------------------------------------------------------------------------------------
 
@@ -130,7 +146,7 @@ Tests ...
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	};
-	
+
 	/*
 	--- onKeyUp function ----------------------------------------------------------------------------------------------
 
@@ -168,114 +184,99 @@ Tests ...
 			);
 		}
 		onCloseMenu ( );
-	};
+	};	
 	
-	/*
-	--- ContextMenu object --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var ContextMenu = function ( event, userMenu ) {
-		// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
-		// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
-		// and we stop the procedure if equals.
-		if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
-			_Lat = 0;
-			_Lng = 0;
-			return;
-		}
-		else
-		{
-			_Lat = event.latlng.lat;
-			_Lng = event.latlng.lng;
-		}
-		
-		_OriginalEvent = event; 
-		
-		// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-		if ( _ContextMenuContainer ) {
-			onCloseMenu ( );
-			return;
-		}
-		
-		_MenuItems = userMenu;
-		var body = document.getElementsByTagName('body') [0];
-		var htmlElementsFactory = require ( './HTMLElementsFactory' ) ( ) ;
-		
-		// a dummy div is created to find the screen width and height
-		var dummyDiv = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , body );
-		var screenWidth = dummyDiv.clientWidth;
-		var screenHeight = dummyDiv.clientHeight;
-		body.removeChild ( dummyDiv );
-		
-		// and then the menu is created
-		_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
-		_ContextMenuContainer.addEventListener ( 
-			'mouseenter',
-			function ( ) { 
-				if ( _TimerId ) {
-					clearTimeout ( _TimerId );
-					_TimerId = null;
-				}
-			},
-			false
-		);
-		_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, require ( '../L.TravelNotes' ).config.contextMenu.timeout ); }, false );
-		// close button
-		var closeButton = htmlElementsFactory.create ( 
-			'div',
-			{ 
-				innerHTML: '&#x274c', 
-				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : require ( './Translator' ) ( ).getText ( "ContextMenu - Close" )
-			},
-			_ContextMenuContainer
-		);
-		closeButton.addEventListener ( 'click', onCloseMenu, false );
-
-		// items
-		var menuItemCounter = 0;
-		_MenuItems.forEach ( 
-			function ( menuItem ) {
-				var itemContainer = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'},_ContextMenuContainer);
-				var item = htmlElementsFactory.create ( 
-					'button', 
-					{ 
-						innerHTML : menuItem.name,
-						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-						className : menuItem.action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
-					},
-					itemContainer
-				);
-				if ( menuItem.action ) {
-					item.addEventListener ( 'click', onClickItem, false );
-				}
-				item.menuItem = menuItemCounter;
-				++ menuItemCounter;
-			}
-		);
-		
-		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
-		var menuTop = Math.min ( event.originalEvent.clientY, screenHeight - _ContextMenuContainer.clientHeight - 20 );
-		var menuLeft = Math.min ( event.originalEvent.clientX, screenWidth - _ContextMenuContainer.clientWidth - 20 );
-		_ContextMenuContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
-		
-		// keyboard event listeners
-		document.addEventListener ( 'keydown', onKeyDown, true );
-		document.addEventListener ( 'keypress', onKeyPress, true );
-		document.addEventListener ( 'keyup', onKeyUp, true );
-	};
 	
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
 	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ContextMenu;
+	// stopPropagation ( ) and preventDefault ( ) are not working correctly on leaflet events, so the event continue and bubble.
+	// To avoid the menu close directly, we compare the lat and lng of the event with the lat and lng of the previous event
+	// and we stop the procedure if equals.
+	if  ( ( event.latlng.lat === _Lat ) && ( event.latlng.lng === _Lng ) ) {
+		_Lat = 0;
+		_Lng = 0;
+		return;
 	}
+	else
+	{
+		_Lat = event.latlng.lat;
+		_Lng = event.latlng.lng;
+	}
+	
+	_OriginalEvent = event; 
+	
+	// the menu is already opened, so we suppose the user will close the menu by clicking outside...
+	if ( _ContextMenuContainer ) {
+		onCloseMenu ( );
+		return;
+	}
+	
+	_MenuItems = userMenu;
+	var body = document.getElementsByTagName('body') [0];
+	var htmlElementsFactory = newHTMLElementsFactory ( ) ;
+	
+	// a dummy div is created to find the screen width and height
+	var dummyDiv = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , body );
+	var screenWidth = dummyDiv.clientWidth;
+	var screenHeight = dummyDiv.clientHeight;
+	body.removeChild ( dummyDiv );
+	
+	// and then the menu is created
+	_ContextMenuContainer = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, body );
+	_ContextMenuContainer.addEventListener ( 
+		'mouseenter',
+		function ( ) { 
+			if ( _TimerId ) {
+				clearTimeout ( _TimerId );
+				_TimerId = null;
+			}
+		},
+		false
+	);
+	_ContextMenuContainer.addEventListener ( 'mouseleave', function ( ) { _TimerId = setTimeout ( onCloseMenu, g_Config.contextMenu.timeout ); }, false );
+	// close button
+	var closeButton = htmlElementsFactory.create ( 
+		'div',
+		{ 
+			innerHTML: '&#x274c', 
+			className : 'TravelNotes-ContextMenu-CloseButton',
+			title : g_Translator.getText ( "ContextMenu - Close" )
+		},
+		_ContextMenuContainer
+	);
+	closeButton.addEventListener ( 'click', onCloseMenu, false );
 
-}());
+	// items
+	var menuItemCounter = 0;
+	_MenuItems.forEach ( 
+		function ( menuItem ) {
+			var itemContainer = htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'},_ContextMenuContainer);
+			var item = htmlElementsFactory.create ( 
+				'button', 
+				{ 
+					innerHTML : menuItem.name,
+					id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
+					className : menuItem.action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
+				},
+				itemContainer
+			);
+			if ( menuItem.action ) {
+				item.addEventListener ( 'click', onClickItem, false );
+			}
+			item.menuItem = menuItemCounter;
+			++ menuItemCounter;
+		}
+	);
+	
+	// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
+	var menuTop = Math.min ( event.originalEvent.clientY, screenHeight - _ContextMenuContainer.clientHeight - 20 );
+	var menuLeft = Math.min ( event.originalEvent.clientX, screenWidth - _ContextMenuContainer.clientWidth - 20 );
+	_ContextMenuContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
+	
+	// keyboard event listeners
+	document.addEventListener ( 'keydown', onKeyDown, true );
+	document.addEventListener ( 'keypress', onKeyPress, true );
+	document.addEventListener ( 'keyup', onKeyUp, true );
+};
 
 /*
 --- End of ContextMenu.js file ----------------------------------------------------------------------------------------

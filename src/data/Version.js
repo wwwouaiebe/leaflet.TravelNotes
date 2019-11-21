@@ -16,24 +16,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- Version.js file ---------------------------------------------------------------------------------------------------
 This file contains:
 	- the version number
+Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20190919
+Doc reviewed ...
+Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-( function ( ) {
 	
-	'use strict';
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
+'use strict';
 
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = '1.5.0';
-	}
-	
-} ) ( );
+export { currentVersion };
+
+var currentVersion = function ( ) {
+	return '1.6.0';
+};
+
 
 /*
 --- End of Version.js file --------------------------------------------------------------------------------------------

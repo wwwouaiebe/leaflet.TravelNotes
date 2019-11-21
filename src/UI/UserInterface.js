@@ -19,89 +19,88 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- UserInterface.js file ---------------------------------------------------------------------------------------------
 This file contains:
-	- the UserInterface object
-	- the module.exports implementation
+	- the newUserInterface function
 Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
 		- Issue #31 : Add a command to import from others maps
-Doc reviewed 20170929
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
-	
-	'use strict';
-	
-	var UserInterface = function ( ) {
+'use strict';
 
-		var m_MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+export { newUserInterface };
 
-		var m_CreateUI = function ( ){ 
-			m_MainDiv = require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
-			require ( './HTMLElementsFactory' ) ( ).create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
-			require ( './TravelEditorUI' ) ( ).createUI ( m_MainDiv ); 
-			require ( './RouteEditorUI' ) ( ).createUI ( m_MainDiv ); 
-			require ( './DataPanesUI' ) ( ).createUI ( m_MainDiv ); 
-			require ( './ProvidersToolbarUI' ) ( ).createUI ( m_MainDiv ); 
-			require ( './ErrorEditorUI' ) ( ).createUI ( m_MainDiv ); 
-			
-			m_MainDiv.addEventListener ( 
-				'click',
-				function ( event ) {
+import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
+import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
+import { newDataPanesUI } from '../UI/DataPanesUI.js';
+import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
+import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
 
-					if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
-						return; 
-					}
-					if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-ImportTravelInput", "TravelNotes-Control-ImportTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
-						return;
-					}
-					event.stopPropagation ( );
-					event.preventDefault ( );
-				},
-				false
-			);
-			
-			m_MainDiv.addEventListener ( 
-				'dblclick',
-				function ( event ) {
-					event.stopPropagation ( );
-					event.preventDefault ( );
-				},
-				false
-			);
-			
-			m_MainDiv.addEventListener ( 
-				'wheel',
-				function ( event ) {
-					event.stopPropagation ( );
-					event.preventDefault ( );
-				},
-				false
-			);
-		};
+var newUserInterface = function ( ) {
+
+	var m_MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+
+	var m_CreateUI = function ( ){ 
+		var htmlElementsFactory = newHTMLElementsFactory ( );
+		m_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
+		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
+		newTravelEditorUI ( ).createUI ( m_MainDiv ); 
+		newRouteEditorUI ( ).createUI ( m_MainDiv ); 
+		newDataPanesUI ( ).createUI ( m_MainDiv ); 
+		newProvidersToolbarUI ( ).createUI ( m_MainDiv ); 
+		newErrorEditorUI ( ).createUI ( m_MainDiv ); 
 		
-		if ( ! m_MainDiv ) {
-			m_CreateUI ( );
-		}
+		m_MainDiv.addEventListener ( 
+			'click',
+			function ( event ) {
+
+				if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
+					return; 
+				}
+				if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-ImportTravelInput", "TravelNotes-Control-ImportTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
+					return;
+				}
+				event.stopPropagation ( );
+				event.preventDefault ( );
+			},
+			false
+		);
 		
-		return {
-			get UI ( ) { return m_MainDiv; }
-		};
+		m_MainDiv.addEventListener ( 
+			'dblclick',
+			function ( event ) {
+				event.stopPropagation ( );
+				event.preventDefault ( );
+			},
+			false
+		);
+		
+		m_MainDiv.addEventListener ( 
+			'wheel',
+			function ( event ) {
+				event.stopPropagation ( );
+				event.preventDefault ( );
+			},
+			false
+		);
 	};
 	
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = UserInterface;
+	if ( ! m_MainDiv ) {
+		m_CreateUI ( );
 	}
-
-}());
+	
+	return {
+		get UI ( ) { return m_MainDiv; }
+	};
+};
 
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------

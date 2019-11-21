@@ -12,105 +12,99 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- ItineraryPoint.js file --------------------------------------------------------------------------------------------
 This file contains:
-	- the ItineraryPoint object
+	- the newItineraryPoint function
 	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-(function() {
+'use strict';
 
-	'use strict';
+export { newItineraryPoint };
 
-	var s_ObjType = require ( '../data/ObjType' ) ( 'ItineraryPoint', require ( './Version' ) );
+import { newObjId } from '../data/ObjId.js';
+import { newObjType } from '../data/ObjType.js';
 
+/*
+--- newItineraryPoint function ------------------------------------------------------------------------------------
+
+Patterns : Closure
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newItineraryPoint = function ( ) {
+
+	const s_ObjType = newObjType ( 'ItineraryPoint' );
+	
+	var m_Lat = 0;
+
+	var m_Lng = 0;
+
+	var m_Distance = 0;
+
+	var m_ObjId = newObjId ( );
+
+	var m_GetObject = function ( ) {
+		return {
+			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
+			objId : m_ObjId,
+			objType : s_ObjType.object
+		};
+	};
+	
+	var m_SetObject = function ( something ) {
+		something = s_ObjType.validate ( something );
+		m_Lat = something.lat || 0;
+		m_Lng = something.lng || 0;
+		m_Distance = something.distance || 0;
+		m_ObjId = newObjId ( );
+	};
+	
 	/*
-	--- itineraryPoint function ---------------------------------------------------------------------------------------
-
-	Patterns : Closure
+	--- itineraryPoint object -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+	
+	return Object.seal (
+		{
 
-	var itineraryPoint = function ( ) {
+			get lat ( ) { return m_Lat;},
+			set lat ( Lat ) { m_Lat = Lat; },
 
-		var m_Lat = 0;
+			get lng ( ) { return m_Lng;},
+			set lng ( Lng ) { m_Lng = Lng; },
 
-		var m_Lng = 0;
+			get latLng ( ) { return [ m_Lat, m_Lng ];},
+			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
 
-		var m_Distance = 0;
+			get distance ( ) { return m_Distance;},
+			set distance ( Distance ) { m_Distance = Distance; },
 
-		var m_ObjId = require ( '../data/ObjId' ) ( );
+			get objId ( ) { return m_ObjId; },
 
-		var m_GetObject = function ( ) {
-			return {
-				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
-				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
-				distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-				objId : m_ObjId,
-				objType : s_ObjType.object
-			};
-		};
-		
-		var m_SetObject = function ( something ) {
-			something = s_ObjType.validate ( something );
-			m_Lat = something.lat || 0;
-			m_Lng = something.lng || 0;
-			m_Distance = something.distance || 0;
-			m_ObjId = require ( '../data/ObjId' ) ( );
-		};
-		
-		/*
-		--- itineraryPoint object -------------------------------------------------------------------------------------
+			get objType ( ) { return s_ObjType; },
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		return Object.seal (
-			{
-
-				get lat ( ) { return m_Lat;},
-				set lat ( Lat ) { m_Lat = Lat; },
-
-				get lng ( ) { return m_Lng;},
-				set lng ( Lng ) { m_Lng = Lng; },
-
-				get latLng ( ) { return [ m_Lat, m_Lng ];},
-				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
-
-				get distance ( ) { return m_Distance;},
-				set distance ( Distance ) { m_Distance = Distance; },
-
-				get objId ( ) { return m_ObjId; },
-
-				get objType ( ) { return s_ObjType; },
-
-				get object ( ) { return m_GetObject ( ); },
-				set object ( something ) { m_SetObject ( something ); }
-			}
-		);
-	};
-
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = itineraryPoint;
-	}
-
-} ) ( );
+			get object ( ) { return m_GetObject ( ); },
+			set object ( something ) { m_SetObject ( something ); }
+		}
+	);
+};
 
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------

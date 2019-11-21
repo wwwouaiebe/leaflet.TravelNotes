@@ -12,64 +12,69 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- Translator.js file ------------------------------------------------------------------------------------------------
 This file contains:
-	- the Translator object
-	- the module.exports implementation
+	- the newTranslator function
+	- the g_Translator object
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed 20191121
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-(function() {
-	
-	'use strict';
-	var Translator = function ( ) {
-		
-		if ( ! global.translations ) {
-			global.translations = new Map ( );
-		}
+export { g_Translator };
 
-		return {
-			
-			setTranslations : function ( translations ) {
-				translations.forEach (
-					function ( translation ) {
-						global.translations.set ( translation.msgid, translation.msgstr );
-					}
-				);
-			},
-			
-			getText : function ( msgid , params ) { 
-				var translation = global.translations.get ( msgid );
-				if ( params && translation ) {
-					Object.getOwnPropertyNames ( params ).forEach (
-						function ( propertyName ) {
-							translation = translation.replace ( '{' + propertyName + '}' , params [ propertyName ] ); 
-						}
-					);
-				}
-				
-				return translation ? translation : msgid;
-			}
-		};
-	};
+/* 
+--- newTranslator funtion ---------------------------------------------------------------------------------------------
+
+This function returns a Translator object
+
+Patterns : Closure and singleton 
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function newTranslator ( ) {
+
+	let m_translations = new Map ( );
 	
-	/* 
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = Translator;
+	function m_SetTranslations ( translations ) {
+		translations.forEach (
+			translation => m_translations.set ( translation.msgid, translation.msgstr )
+		);
 	}
+	
+	function m_GetText ( msgid , params ) { 
+		let translation = m_translations.get ( msgid );
+		if ( params && translation ) {
+			Object.getOwnPropertyNames ( params ).forEach (
+				propertyName => translation = translation.replace ( '{' + propertyName + '}' , params [ propertyName ] )
+			);
+		}
+		
+		return translation ? translation : msgid;
+	}
+	
+	return {
+		setTranslations : translations => m_SetTranslations ( translations ),
+		getText : ( msgid , params ) => { return m_GetText ( msgid , params ); }
+	};
+}
 
-} ) ( );
+/* 
+--- g_Translator object -----------------------------------------------------------------------------------------------
+
+The one and only one translator
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+let g_Translator = newTranslator ( );
 
 /*
 --- End of Translator.js file -----------------------------------------------------------------------------------------

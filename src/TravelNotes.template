@@ -1,0 +1,7 @@
+( function ( ) {
+
+'use strict'
+
+	include "../tmp/TravelNotes.tmp.js"
+
+}) ( )

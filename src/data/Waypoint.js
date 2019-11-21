@@ -12,118 +12,110 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- WayPoint.js file --------------------------------------------------------------------------------------------------
 This file contains:
-	- the WayPoint object
-	- the module.exports implementation
+	- the newWayPoint function
 Changes:
 	- v1.0.0:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-(function() {
+'use strict';
 
-	'use strict';
+export { newWayPoint };
 
-	var s_ObjType = require ( '../data/ObjType' ) ( 'WayPoint', require ( './Version' ) );
+import { newObjId } from '../data/ObjId.js';
+import { newObjType } from '../data/ObjType.js';
 
+/*
+--- newWayPoint function ------------------------------------------------------------------------------------------
+
+Patterns : Closure
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newWayPoint = function ( ) {
+
+	const s_ObjType = newObjType ( 'WayPoint' );
+	
+	var m_Name = '';
+
+	var m_Lat = 0;
+
+	var m_Lng = 0;
+
+	var m_ObjId = newObjId ( );
+
+	var m_GetUIName = function ( ) {
+		if ( '' !== m_Name ) {
+			return m_Name;
+		}
+		if ( ( 0 !== m_Lat ) && ( 0 !== m_Lng ) ) {
+			return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
+		}
+		return '';
+	};
+	
+	var m_GetObject = function ( ) {
+		return {
+			name : m_Name,
+			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
+			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
+			objId : m_ObjId,
+			objType : s_ObjType.object
+		};
+	};
+	
+	var m_SetObject =function ( something ) {
+		something = s_ObjType.validate ( something );
+		m_Name = something.name || '';
+		m_Lat = something.lat || 0;
+		m_Lng = something.lng || 0;
+		m_ObjId = newObjId ( );
+	};
+	
 	/*
-	--- wayPoint function ---------------------------------------------------------------------------------------------
-
-	Patterns : Closure
+	--- wayPoint object -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var wayPoint = function ( ) {
+	return Object.seal (
+		{
 
-		var m_Name = '';
+			get name ( ) { return m_Name; },
+			set name ( Name ) { m_Name = Name;},
 
-		var m_Lat = 0;
+			get UIName ( ) { return m_GetUIName ( ); },
 
-		var m_Lng = 0;
+			get lat ( ) { return m_Lat;},
+			set lat ( Lat ) { m_Lat = Lat; },
 
-		var m_ObjId = require ( '../data/ObjId' ) ( );
+			get lng ( ) { return m_Lng;},
+			set lng ( Lng ) { m_Lng = Lng; },
 
-		var m_GetUIName = function ( ) {
-			if ( '' !== m_Name ) {
-				return m_Name;
-			}
-			if ( ( 0 !== m_Lat ) && ( 0 !== m_Lng ) ) {
-				return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
-			}
-			return '';
-		};
-		
-		var m_GetObject = function ( ) {
-			return {
-				name : m_Name,
-				lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
-				lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
-				objId : m_ObjId,
-				objType : s_ObjType.object
-			};
-		};
-		
-		var m_SetObject =function ( something ) {
-			something = s_ObjType.validate ( something );
-			m_Name = something.name || '';
-			m_Lat = something.lat || 0;
-			m_Lng = something.lng || 0;
-			m_ObjId = require ( '../data/ObjId' ) ( );
-		};
-		
-		/*
-		--- wayPoint object -------------------------------------------------------------------------------------------
+			get latLng ( ) { return [ m_Lat, m_Lng ];},
+			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
+			get objId ( ) { return m_ObjId; },
 
-		return Object.seal (
-			{
+			get objType ( ) { return s_ObjType; },
 
-				get name ( ) { return m_Name; },
-				set name ( Name ) { m_Name = Name;},
-
-				get UIName ( ) { return m_GetUIName ( ); },
-
-				get lat ( ) { return m_Lat;},
-				set lat ( Lat ) { m_Lat = Lat; },
-
-				get lng ( ) { return m_Lng;},
-				set lng ( Lng ) { m_Lng = Lng; },
-
-				get latLng ( ) { return [ m_Lat, m_Lng ];},
-				set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
-
-				get objId ( ) { return m_ObjId; },
-
-				get objType ( ) { return s_ObjType; },
-
-				get object ( ) { return m_GetObject ( ); },
-				set object ( something ) { m_SetObject ( something ); }
-			}
-		);
-	};
-
-
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = wayPoint;
-	}
-
-} ) ( );
+			get object ( ) { return m_GetObject ( ); },
+			set object ( something ) { m_SetObject ( something ); }
+		}
+	);
+};
 
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------

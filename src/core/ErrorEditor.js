@@ -15,50 +15,36 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- ErrorEditor.js file -----------------------------------------------------------------------------------------------
 This file contains:
-	- the ErrorEditor object
-	- the module.exports implementation
+	- the newErrorEditor function
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed 20191121
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
-	
-	'use strict';
+export { g_ErrorEditor };
 
-	var ErrorEditor = function ( ) {
+import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
 
-		return {
-			
-			showError : function ( error ) {
-				var header = '<span class="TravelNotes-Control-Error">';
-				var footer = '</span>';
-				require ( '../UI/ErrorEditorUI' ) ( ).message = header + error + footer;
-			},
+function newErrorEditor ( ) {
 
-			clear : function ( ) {
-				require ( '../UI/ErrorEditorUI' ) ( ).message = '';
-			}
-		};
-	};
+	return Object.seal (
+		{
+			showError : error  => { newErrorEditorUI ( ).message = '<span class="TravelNotes-Control-Error">' + error + '</span>'; },
+			clear : ( )  => { newErrorEditorUI ( ).message = ''; }
+		}
+	);
+}
 
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = ErrorEditor;
-	}
-
-}());
+let g_ErrorEditor = newErrorEditor ( );
 
 /*
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------

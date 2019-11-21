@@ -1,58 +1,32 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		jshint: {
-			files: ['Gruntfile.js', 'src/**/*.js'],
+		eslint: {
+			target: ['src/**/*.js']
+		},	
+		rollup : {
+			Default : {
+				files: {
+				  'tmp/TravelNotes.tmp.js': ['src/TravelNotes.js'],  
+				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']				  
+				}
+			}
 		},
-		buildnumber: {
-			options: {
-				field: 'nextBuild',
-			},
-			files: ['package.json']
-		},
-		browserify: {
+		includes: {
+			
 			TravelNotes: {
 				files: {
-					'tmp/TravelNotes.js': ['src/L.TravelNotes.js']
+					'tmp/TravelNotes.min.js' : ['src/TravelNotes.template']
+				}
+			},
+			Polyline: {
+				files: {
+					'src/polyline/Polyline.js' : ['src/polyline/Polyline.template']
 				}
 			},
 			Roadbook: {
 				files: {
-					'tmp/TravelNotesRoadbook.js': ['src/roadbook/roadbook.js']
-				}
-			}
-		},
-		uglify: {
-			TravelNotesDefault: {
-				options: {
-					mangle: false,
-					beautify: true
-				},
-				files: {
-					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.js']
-				}
-			},
-			TravelNotesRelease: {
-				options: {
-					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
-					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n'
-				},
-				files: {
-					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.js']
-				}
-			},
-			RoadbookRelease: {
-				files: {
-					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.js']
-				}
-			},
-			RoadbookDefault: {
-				options: {
-					mangle: false,
-					beautify: true
-				},
-				files: {
-					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.js']
+					'tmp/TravelNotesRoadbook.html' : ['src/html/TravelNotesRoadbook.html']
 				}
 			}
 		},
@@ -72,10 +46,27 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		includes: {
-			Roadbook: {
+		uglify: {
+			TravelNotes: {
+				options: {
+					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
+					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n',
+					mangle: true,
+					beautify: false
+				},
 				files: {
-					'tmp/TravelNotesRoadbook.html' : ['src/html/TravelNotesRoadbook.html']
+					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.min.js']
+				}
+			},
+			Roadbook: {
+				options: {
+					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
+					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n',
+					mangle: true,
+					beautify: false
+				},
+				files: {
+					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.min.js']
 				}
 			}
 		},
@@ -185,17 +176,17 @@ module.exports = function(grunt) {
 		},
 		clean : ['tmp']
 	});
-	grunt.config.data.pkg.build = ("0000" + grunt.config.data.pkg.nextBuild).substr(-4,4) ;
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-browserify');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');	
-	grunt.loadNpmTasks('grunt-includes');	
+	grunt.config.data.pkg.build = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.build ) + 1 )).substr ( -5, 5 ) ;
+	grunt.loadNpmTasks('grunt-eslint');
+	grunt.loadNpmTasks('grunt-rollup');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-includes');
+	grunt.loadNpmTasks('grunt-contrib-uglify-es');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-build-number');
-	grunt.registerTask('default', ['jshint', 'buildnumber', 'browserify', 'uglify:TravelNotesDefault', 'uglify:RoadbookDefault', 'cssmin', 'includes', 'copy:ghpage', 'clean']);
-	grunt.registerTask('release', ['jshint', 'buildnumber', 'browserify', 'uglify:TravelNotesRelease', 'uglify:RoadbookRelease', 'cssmin', 'includes', 'copy', 'clean']);
+	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'includes:TravelNotes', 'cssmin', 'includes:Roadbook', 'copy:ghpage'/*, 'clean'*/ ]);
+	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'includes:TravelNotes', 'uglify', 'cssmin', 'includes:Roadbook', 'copy', 'clean' ]);
+	grunt.file.write ( 'package.json', JSON.stringify ( grunt.config.data.pkg, null, 2 ) );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

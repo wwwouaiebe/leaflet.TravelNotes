@@ -15,204 +15,200 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 /*
 --- OsmSearchEngine.js file -------------------------------------------------------------------------------------------
 This file contains:
-	- 
+	- the newOsmSearchEngine function
 Changes:
 	- v1.4.0:
 		- created
-
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-
-( function ( ){
 	
-	'use strict';
+'use strict';
 
-	var g_TravelNotesData = require ( '../L.TravelNotes' );
+/* global L */
 
-	var s_OsmSearchStarted = false;
-	var s_SearchParameters = { searchPhrase : '', bbox : null };
-	var s_PreviousSearchRectangleObjId = -1;
-	var s_NextSearchRectangleObjId = -1;
-	var s_SearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
+export { newOsmSearchEngine };
+
+import { g_Config } from '../data/Config.js';
+import { newObjId } from '../data/ObjId.js';
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { g_MapEditor } from '../core/MapEditor.js';
+import { newDataPanesUI } from '../UI/DataPanesUI.js';
+
+var s_OsmSearchStarted = false;
+var s_SearchParameters = { searchPhrase : '', bbox : null };
+var s_PreviousSearchRectangleObjId = -1;
+var s_NextSearchRectangleObjId = -1;
+var s_SearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
+
+/*
+--- s_DrawSearchRectangle function --------------------------------------------------------------------------------
+
+This function draw the search limits on the map
+
+-------------------------------------------------------------------------------------------------------------------
+*/
+
+var s_DrawSearchRectangle = function ( ) {
+	if ( ! s_SearchParameters.bbox ) {
+		return;
+	}
+	if ( -1 !== s_PreviousSearchRectangleObjId ) {
+		g_MapEditor.removeObject ( s_PreviousSearchRectangleObjId );
+	}
+	else {
+		s_PreviousSearchRectangleObjId = newObjId ( );
+	}
+	g_MapEditor.addRectangle ( 
+		s_PreviousSearchRectangleObjId, 
+		L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) , 
+		g_Config.previousSearchLimit 
+	);
+};
+
+/*
+--- onSearchSuccess function ------------------------------------------------------------------------------------------
+
+Promise success function for osmSearch
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var onSearchSuccess = function ( searchData ) {
+	g_TravelNotesData.searchData = searchData;
+	s_OsmSearchStarted = false;
+	s_DrawSearchRectangle ( );
+	newDataPanesUI ( ).updateSearch ( );
+};
+
+/*
+--- onSearchError function --------------------------------------------------------------------------------------------
+
+Promise error function for osmSearch
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var onSearchError = function ( error ) {
+	console.log ( error );
+	s_OsmSearchStarted = false;
+};
+
+/*
+--- onMapChange function ----------------------------------------------------------------------------------------------
+
+change event listener for the map
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var onMapChange = function ( ) {
+	var mapCenter = g_TravelNotesData.map.getCenter ( );
+	if ( -1 !== s_NextSearchRectangleObjId ) {
+		g_MapEditor.removeObject ( s_NextSearchRectangleObjId );
+	}
+	else {
+		s_NextSearchRectangleObjId = newObjId ( );
+	}
+	g_MapEditor.addRectangle ( 
+		s_NextSearchRectangleObjId, 
+		L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ), 
+		g_Config.nextSearchLimit );
+};
+
+/*
+--- osmSearchEngine function --------------------------------------------------------------------------------------
+
+This function returns the osmSearchEngine object
+
+-------------------------------------------------------------------------------------------------------------------
+*/
+
+var newOsmSearchEngine = function ( ) {
 	
 	/*
-	--- s_DrawSearchRectangle function --------------------------------------------------------------------------------
+	--- m_Search function -----------------------------------------------------------------------------------------
 
-	This function draw the search limits on the map
+	This function start the search
 
-	-------------------------------------------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------------------------------------
 	*/
-	
-	var s_DrawSearchRectangle = function ( ) {
-		if ( ! s_SearchParameters.bbox ) {
+
+	var m_Search = function ( ) {
+		if ( s_OsmSearchStarted ) {
 			return;
 		}
-		if ( -1 !== s_PreviousSearchRectangleObjId ) {
-			require ( '../core/MapEditor' ) ( ).removeObject ( s_PreviousSearchRectangleObjId );
-		}
-		else {
-			s_PreviousSearchRectangleObjId = require ( '../data/ObjId' ) ( );
-		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( 
-			s_PreviousSearchRectangleObjId, 
-			L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) , 
-			g_TravelNotesData.config.previousSearchLimit 
-		);
+		
+		s_OsmSearchStarted = true;
+		
+		var mapBounds =  g_TravelNotesData.map.getBounds ( );
+		s_SearchParameters = {
+			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
+			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
+		};
+		g_TravelNotesData.searchData = [];
+		window.osmSearch.getSearchPromise ( s_SearchParameters ).then (  onSearchSuccess, onSearchError  );
 	};
 	
 	/*
-	--- onSearchSuccess function --------------------------------------------------------------------------------------
+	--- m_Show function -------------------------------------------------------------------------------------------
 
-	Promise success function for osmSearch
+	This function enable maps event and draw the search limits
 
-	-------------------------------------------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchSuccess = function ( searchData ) {
-		g_TravelNotesData.searchData = searchData;
-		s_OsmSearchStarted = false;
+	var m_Show = function ( ) {
+		g_TravelNotesData.map.on ( 'zoom', onMapChange );
+		g_TravelNotesData.map.on ( 'move', onMapChange );
+		onMapChange ( );
 		s_DrawSearchRectangle ( );
-		require ( '../UI/DataPanesUI' ) ( ).updateSearch ( );
 	};
 	
 	/*
-	--- onSearchError function ----------------------------------------------------------------------------------------
+	--- m_Show function -------------------------------------------------------------------------------------------
 
-	Promise error function for osmSearch
+	This function disable maps event and remove the search limits
 
-	-------------------------------------------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onSearchError = function ( error ) {
-		console.log ( error );
-		s_OsmSearchStarted = false;
-	};
-
-	/*
-	--- onMapChange function ------------------------------------------------------------------------------------------
-
-	change event listener for the map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onMapChange = function ( event ) {
-		var mapCenter = g_TravelNotesData.map.getCenter ( );
+	var m_Hide = function ( ) {
+		g_TravelNotesData.map.off ( 'zoom', onMapChange );
+		g_TravelNotesData.map.off ( 'move', onMapChange );
 		if ( -1 !== s_NextSearchRectangleObjId ) {
-			require ( '../core/MapEditor' ) ( ).removeObject ( s_NextSearchRectangleObjId );
+			g_MapEditor.removeObject ( s_NextSearchRectangleObjId );
+			s_NextSearchRectangleObjId = -1;
 		}
-		else {
-			s_NextSearchRectangleObjId = require ( '../data/ObjId' ) ( );
+		if ( -1 !== s_PreviousSearchRectangleObjId ) {
+			g_MapEditor.removeObject ( s_PreviousSearchRectangleObjId );
+			s_PreviousSearchRectangleObjId = -1;
 		}
-		require ( '../core/MapEditor' ) ( ).addRectangle ( 
-			s_NextSearchRectangleObjId, 
-			L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ), 
-			g_TravelNotesData.config.nextSearchLimit );
-	};
-
-	/*
-	--- osmSearchEngine function --------------------------------------------------------------------------------------
-
-	This function returns the osmSearchEngine object
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var osmSearchEngine = function ( ) {
-
-		/*
-		--- m_Search function -----------------------------------------------------------------------------------------
-
-		This function start the search
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_Search = function ( ) {
-			if ( s_OsmSearchStarted ) {
-				return;
-			}
-			
-			s_OsmSearchStarted = true;
-			
-			var mapBounds =  g_TravelNotesData.map.getBounds ( );
-			s_SearchParameters = {
-				bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
-				searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
-			};
-			g_TravelNotesData.searchData = [];
-			window.osmSearch.getSearchPromise ( s_SearchParameters ).then (  onSearchSuccess, onSearchError  );
-		};
-		
-		/*
-		--- m_Show function -------------------------------------------------------------------------------------------
-
-		This function enable maps event and draw the search limits
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_Show = function ( ) {
-			g_TravelNotesData.map.on ( 'zoom', onMapChange );
-			g_TravelNotesData.map.on ( 'move', onMapChange );
-			onMapChange ( );
-			s_DrawSearchRectangle ( );
-		};
-		
-		/*
-		--- m_Show function -------------------------------------------------------------------------------------------
-
-		This function disable maps event and remove the search limits
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		var m_Hide = function ( ) {
-			g_TravelNotesData.map.off ( 'zoom', onMapChange );
-			g_TravelNotesData.map.off ( 'move', onMapChange );
-			if ( -1 !== s_NextSearchRectangleObjId ) {
-				require ( '../core/MapEditor' ) ( ).removeObject ( s_NextSearchRectangleObjId );
-				s_NextSearchRectangleObjId = -1;
-			}
-			if ( -1 !== s_PreviousSearchRectangleObjId ) {
-				require ( '../core/MapEditor' ) ( ).removeObject ( s_PreviousSearchRectangleObjId );
-				s_PreviousSearchRectangleObjId = -1;
-			}
-		};
-		
-		/*
-		--- osmSearchEngine object ------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-		
-		return Object.seal (
-			{
-				search : function ( ) { m_Search ( ); },
-				
-				show : function ( ) { m_Show ( ); },
-				
-				hide : function ( ) { m_Hide ( ); }
-			}
-		);
 	};
 	
 	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
+	--- osmSearchEngine object ------------------------------------------------------------------------------------
+
+	---------------------------------------------------------------------------------------------------------------
 	*/
 	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = osmSearchEngine;
-	}
-
-}());
+	return Object.seal (
+		{
+			search : function ( ) { m_Search ( ); },
+			
+			show : function ( ) { m_Show ( ); },
+			
+			hide : function ( ) { m_Hide ( ); }
+		}
+	);
+};
 
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------

@@ -1,0 +1,6 @@
+
+/*global module */
+
+export { polyline };
+
+include "../../node_modules/@mapbox/polyline/src/Polyline.js"

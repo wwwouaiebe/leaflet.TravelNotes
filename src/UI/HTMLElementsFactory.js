@@ -19,36 +19,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- HTMLElementsFactory.js file ---------------------------------------------------------------------------------------
 This file contains:
-	- the HTMLElementsFactory object
+	- the newHTMLElementsFactory function
 	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
-Doc reviewed 20190919
+	- v1.6.0:
+		- Issue #65 : Time to go to ES6 modules?
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-( function ( ){
-	
-	'use strict';
-	
+'use strict';
+
+export { newHTMLElementsFactory };
+
+/* 
+--- newHTMLElementsFactory function -----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+var newHTMLElementsFactory = function ( ) {
+
 	/* 
 	--- HTMLElementsFactory object ------------------------------------------------------------------------------------
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var HTMLElementsFactory = function ( ) {
-
-		/* 
-		--- HTMLElementsFactory object --------------------------------------------------------------------------------
-		
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		return {
+	return Object.seal (
+		{
 			create : function ( tagName, properties, parentNode ) {
 				var element;
 				if ( 'text' === tagName.toLowerCase ( ) ) {
@@ -73,21 +76,10 @@ Tests ...
 				}
 				return element;
 			}
-			
-		};
-			
-	};
+		}
+	);	
+};
 	
-	/*
-	--- Exports -------------------------------------------------------------------------------------------------------
-	*/
-	
-	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = HTMLElementsFactory;
-	}
-
-}());
-
 /*
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
 */	
