@@ -6,19 +6,16 @@ module.exports = function(grunt) {
 		},	
 		rollup : {
 			Default : {
+				options : {
+					format : 'iife'
+				},
 				files: {
-				  'tmp/TravelNotes.tmp.js': ['src/TravelNotes.js'],  
+				  'tmp/TravelNotes.min.js': ['src/TravelNotes.js'],  
 				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']				  
 				}
 			}
 		},
 		includes: {
-			
-			TravelNotes: {
-				files: {
-					'tmp/TravelNotes.min.js' : ['src/TravelNotes.template']
-				}
-			},
 			Polyline: {
 				files: {
 					'src/polyline/Polyline.js' : ['src/polyline/Polyline.template']
@@ -49,8 +46,13 @@ module.exports = function(grunt) {
 		uglify: {
 			TravelNotes: {
 				options: {
-					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
-					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n',
+					banner: '\n/*!\n<%= pkg.name %> - version <%= pkg.version %> ' + 
+						'\nbuild <%= pkg.build %> - ' + 
+						'<%= grunt.template.today("isoDateTime") %> ' + 
+						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
+						'\nContact: http//www.ouaie.be/' + 
+						'\nSources: <%= pkg.sources %> ' + 
+						'\nLicense: <%= pkg.license %>\n*/\n\n',
 					mangle: true,
 					beautify: false
 				},
@@ -60,8 +62,13 @@ module.exports = function(grunt) {
 			},
 			Roadbook: {
 				options: {
-					banner: '/*! <%= pkg.name %> - version <%= pkg.version %> - build <%= pkg.build %> - ' +
-					'<%= grunt.template.today("isoDateTime") %> - Copyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe - Contact: http//www.ouaie.be/ - This  program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.*/\n\n',
+					banner: '\n/*!\n<%= pkg.name %> - version <%= pkg.version %> ' + 
+						'\nbuild <%= pkg.build %> - ' + 
+						'<%= grunt.template.today("isoDateTime") %> ' + 
+						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
+						'\nContact: http//www.ouaie.be/' + 
+						'\nSources: <%= pkg.sources %> ' + 
+						'\nLicense: <%= pkg.license %>\n*/\n\n',
 					mangle: true,
 					beautify: false
 				},
@@ -184,8 +191,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify-es');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'includes:TravelNotes', 'cssmin', 'includes:Roadbook', 'copy:ghpage'/*, 'clean'*/ ]);
-	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'includes:TravelNotes', 'uglify', 'cssmin', 'includes:Roadbook', 'copy', 'clean' ]);
+	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:ghpage', 'clean' ]);
+	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy', 'clean' ]);
 	grunt.file.write ( 'package.json', JSON.stringify ( grunt.config.data.pkg, null, 2 ) );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );
