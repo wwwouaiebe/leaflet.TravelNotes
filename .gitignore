@@ -6,3 +6,4 @@ gh-page/
 node_modules/
 backup/
 tmp/
+debug/

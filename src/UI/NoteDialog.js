@@ -48,8 +48,8 @@ import { g_NoteEditor } from '../core/NoteEditor.js';
 
 import { newBaseDialog } from '../UI/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
-import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory';
-import { newGeoCoder } from '../core/GeoCoder';
+import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
+import { newGeoCoder } from '../core/GeoCoder.js';
 
 
 var g_UserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };

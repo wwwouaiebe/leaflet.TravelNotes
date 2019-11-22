@@ -158,6 +158,46 @@ module.exports = function(grunt) {
 					}					
 				]
 			},
+			debug: {
+				files: [
+					{
+						expand: true,
+						cwd: 'src/cfg/',
+						src: ['*.json'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
+						cwd: 'src/translations/',
+						src: ['*.json'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
+						cwd: 'src/html/',
+						src: 'indexDebug.html',
+						rename: function ( ){return 'debug/index.html';}
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotes.min.css'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
+						cwd: 'src/',
+						src: ['**/*.js'],
+						dest: 'debug/src/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
+						dest: 'debug/'
+					}					
+				]
+			},
 			TravelNotesGuides: {
 				files: [
 					{
@@ -191,8 +231,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify-es');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:ghpage', 'clean' ]);
-	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy', 'clean' ]);
+	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
+	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
 	grunt.file.write ( 'package.json', JSON.stringify ( grunt.config.data.pkg, null, 2 ) );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );

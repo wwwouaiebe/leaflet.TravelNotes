@@ -35,7 +35,7 @@ Tests ...
 
 export { newItineraryPaneUI };
 
-import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory';
+import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
