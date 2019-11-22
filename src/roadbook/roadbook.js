@@ -42,11 +42,11 @@ Event listener for show/ hide travel notes checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var showTravelNotes = function ( )
+function showTravelNotes ( )
 {
-	var show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
-	var notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
-	for ( var notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
+	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
+	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -54,7 +54,7 @@ var showTravelNotes = function ( )
 			notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
 	}
-};
+}
 
 document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change',showTravelNotes );
 
@@ -66,11 +66,11 @@ Event listener for show/ hide route notes checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var showRouteNotes = function ( )
+function showRouteNotes ( )
 {
-	var show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
-	var notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
-	for ( var notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
+	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
+	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -78,7 +78,7 @@ var showRouteNotes = function ( )
 			notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
 	}
-};
+}
 
 document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change',showRouteNotes );
 
@@ -90,11 +90,11 @@ Event listener for show/ hide route maneuvers checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var showRouteManeuvers = function ( )
+function showRouteManeuvers ( )
 {
-	var show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
-	var maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
-	for ( var maneuversCounter = 0; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
+	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
+	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
+	for ( let maneuversCounter = 0; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
 		if ( show ) {
 			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -102,7 +102,7 @@ var showRouteManeuvers = function ( )
 			maneuvers [ maneuversCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
 	}
-};
+}
 
 document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
 
@@ -112,17 +112,17 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var params = new URLSearchParams(document.location.search.substring(1));
-var language = params.get("lng"); 
-var pageId = params.get("page");
+let params = new URLSearchParams(document.location.search.substring(1));
+let language = params.get("lng"); 
+let pageId = params.get("page");
 
 if ( pageId ) {
 	
-	var saveFile = function ( )
+	let saveFile = function ( )
 	{
 		try {
-			var mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
-			var element = document.createElement ( 'a' );
+			let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
+			let element = document.createElement ( 'a' );
 			element.setAttribute( 'href', mapFile );
 			element.setAttribute( 'download', document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ].innerHTML + '-Roadbook.html' );
 			element.style.display = 'none';
@@ -154,20 +154,20 @@ else {
 }
 
 if ( language ) {
-	var xmlHttpRequest = new XMLHttpRequest ( );
+	let xmlHttpRequest = new XMLHttpRequest ( );
 	xmlHttpRequest.timeout = 20000;
 	
 	xmlHttpRequest.onreadystatechange = function ( ) {
 		if ( xmlHttpRequest.readyState === 4 ) {
 			if ( xmlHttpRequest.status === 200 ) {
-				var response;
+				let response;
 				try {
 					response = JSON.parse ( xmlHttpRequest.responseText );
 					g_Translator. setTranslations ( response );
 					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show travel notes" );
 					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show maneuver" );
 					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show routes notes" );
-					var saveButton = document.getElementById ( "TravelNotes-SaveFile" );
+					let saveButton = document.getElementById ( "TravelNotes-SaveFile" );
 					if ( saveButton ) {
 						saveButton.value = g_Translator.getText ( "Roadbook - Save" );
 					}
@@ -182,7 +182,7 @@ if ( language ) {
 		}
 	};
 	
-	var XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + language.toUpperCase ( ) +'.json';
+	let XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + language.toUpperCase ( ) +'.json';
 	xmlHttpRequest.open ( "GET", XMLHttpRequestUrl, true );
 	xmlHttpRequest.overrideMimeType ( 'application/json' );
 	xmlHttpRequest.send ( null );
@@ -194,5 +194,6 @@ showRouteNotes ( );
 showRouteManeuvers ( );
 
 /*
+--- End of roadbook.js file -------------------------------------------------------------------------------------------
 
 */
