@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 			TravelNotes: {
 				options: {
 					banner: '\n/*!\n<%= pkg.name %> - version <%= pkg.version %> ' + 
-						'\nbuild <%= pkg.build %> - ' + 
+						'\nbuild <%= pkg.buildNumber %> - ' + 
 						'<%= grunt.template.today("isoDateTime") %> ' + 
 						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
 						'\nContact: http//www.ouaie.be/' + 
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 			Roadbook: {
 				options: {
 					banner: '\n/*!\n<%= pkg.name %> - version <%= pkg.version %> ' + 
-						'\nbuild <%= pkg.build %> - ' + 
+						'\nbuild <%= pkg.buildNumber %> - ' + 
 						'<%= grunt.template.today("isoDateTime") %> ' + 
 						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
 						'\nContact: http//www.ouaie.be/' + 
@@ -223,7 +223,8 @@ module.exports = function(grunt) {
 		},
 		clean : ['tmp']
 	});
-	grunt.config.data.pkg.build = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.build ) + 1 )).substr ( -5, 5 ) ;
+	grunt.config.data.pkg.buildNumber = grunt.file.readJSON('buildNumber.json').buildNumber;
+	grunt.config.data.pkg.buildNumber = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.buildNumber ) + 1 )).substr ( -5, 5 ) ;
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rollup');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -233,8 +234,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
 	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
-	grunt.file.write ( 'package.json', JSON.stringify ( grunt.config.data.pkg, null, 2 ) );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
-	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.build + ' - ' + grunt.template.today("isoDateTime") +'\n' );
+	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
+	grunt.file.write ( 'buildNumber.json', '{ "buildNumber" : "' + grunt.config.data.pkg.buildNumber + '"}'  );
 };
