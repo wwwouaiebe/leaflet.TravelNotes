@@ -49,7 +49,7 @@ import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
 import { newTravel } from '../data/Travel.js';
-//import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
+import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
@@ -210,7 +210,7 @@ var newFileLoader = function ( ) {
 		// Editors and roadbook are filled
 		if ( ! m_IsFileReadOnly ) {
 		// Editors and HTML pages are filled
-			//newTravelEditorUI ( ). setRoutesList ( );
+			newTravelEditorUI ( ). setRoutesList ( );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				var providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )

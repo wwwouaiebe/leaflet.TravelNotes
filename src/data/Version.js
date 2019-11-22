@@ -19,7 +19,7 @@ This file contains:
 Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -29,9 +29,7 @@ Tests ...
 
 export { currentVersion };
 
-var currentVersion = function ( ) {
-	return '1.6.0';
-};
+const currentVersion = '1.6.0';
 
 
 /*

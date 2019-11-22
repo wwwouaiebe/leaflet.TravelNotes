@@ -24,7 +24,7 @@ Changes:
 		- Initialization changed
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -42,9 +42,7 @@ var g_TravelNotesObjId = 0;
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newObjId = function ( ) {
-	return ++ g_TravelNotesObjId;
-};
+function newObjId ( ) { return ++ g_TravelNotesObjId; }
 
 /*
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------

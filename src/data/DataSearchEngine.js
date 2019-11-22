@@ -26,7 +26,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ export { newDataSearchEngine };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 
-var newDataSearchEngine = function ( ) {
+function newDataSearchEngine ( ) {
 
 	/*
 	--- m_getRoute function -------------------------------------------------------------------------------------------
@@ -48,20 +48,17 @@ var newDataSearchEngine = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_GetRoute = function ( routeObjId ) {
-		var route = null;
+	function m_GetRoute ( routeObjId ) {
+		let route = null;
 		route = g_TravelNotesData.travel.routes.getAt ( routeObjId );
 		if ( ! route ) {
 			if ( routeObjId === g_TravelNotesData.travel.editedRoute.objId ) {
 				route = g_TravelNotesData.travel.editedRoute;
 			}
 		}
-		if ( ! route ) {
-			console.log ( 'Invalid noteObjId ' + routeObjId + ' for function DataSearchEngine.getRoute ( )' );
-		}
 
 		return route;
-	};
+	}
 
 	/*
 	--- m_GetNoteAndRoute method --------------------------------------------------------------------------------------
@@ -71,13 +68,13 @@ var newDataSearchEngine = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_GetNoteAndRoute = function ( noteObjId ) {
-		var note = null;
+	function m_GetNoteAndRoute ( noteObjId ) {
+		let note = null;
 		note = g_TravelNotesData.travel.notes.getAt ( noteObjId );
 		if ( note ) {
 			return { note : note, route : null };
 		}
-		var routeIterator = g_TravelNotesData.travel.routes.iterator;
+		let routeIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routeIterator.done ) {
 			note = routeIterator.value.notes.getAt ( noteObjId );
 			if ( note ) {
@@ -86,12 +83,11 @@ var newDataSearchEngine = function ( ) {
 		}
 		note = g_TravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
 		if ( ! note ) {
-			console.log ( 'Invalid noteObjId ' + noteObjId + ' for function DataSearchEngine.getNote ( )' );
 			return { note : null, route : null };
 		}
 
 		return { note : note, route : g_TravelNotesData.travel.editedRoute };
-	};
+	}
 	
 	/*
 	--- m_GetWayPoint method ------------------------------------------------------------------------------------------
@@ -101,9 +97,9 @@ var newDataSearchEngine = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_GetWayPoint = function ( wayPointObjId ) {
-		var wayPoint = null;
-		var routeIterator = g_TravelNotesData.travel.routes.iterator;
+	function m_GetWayPoint ( wayPointObjId ) {
+		let wayPoint = null;
+		let routeIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routeIterator.done ) {
 			wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
 			if ( wayPoint ) {
@@ -112,11 +108,10 @@ var newDataSearchEngine = function ( ) {
 		}
 		wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		if ( ! wayPoint ) {
-			console.log ( 'Invalid wayPointObjId ' + wayPointObjId + ' for function DataSearchEngine.getWayPoint ( )' );
 			return null;
 		}
 		return wayPoint;
-	};
+	}
 
 	/* 
 	--- dataSearchEngine object ---------------------------------------------------------------------------------------
@@ -126,12 +121,12 @@ var newDataSearchEngine = function ( ) {
 	
 	return Object.seal ( 
 		{
-			getRoute : function ( routeObjId ) { return m_GetRoute ( routeObjId ); },
-			getNoteAndRoute : function ( noteObjId ) { return m_GetNoteAndRoute ( noteObjId ); },
-			getWayPoint : function ( wayPointObjId ) { return m_GetWayPoint ( wayPointObjId ); }
+			getRoute : routeObjId => { return m_GetRoute ( routeObjId ); },
+			getNoteAndRoute : noteObjId => { return m_GetNoteAndRoute ( noteObjId ); },
+			getWayPoint : wayPointObjId => { return m_GetWayPoint ( wayPointObjId ); }
 		}
 	);
-};
+}
 
 /*
 --- End of DataSearchEngine.js file -----------------------------------------------------------------------------------

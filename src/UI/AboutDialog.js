@@ -61,7 +61,7 @@ var newAboutDialog = function ( ) {
 		"<p>Copyright - 2017 2019 - wwwouaiebe</p>" +
 		"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 		"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-		"<p>Version : " + currentVersion ( ) +'.' +
+		"<p>Version : " + currentVersion +'.' +
 		"<p>This program uses:" +
 		" <a href='https://leafletjs.com/' target='_blank'>leaflet</a>," +
 		" <a href='https://github.com/mapbox/polyline' target='_blank'>mapbox/polyline</a>," +

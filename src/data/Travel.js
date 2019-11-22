@@ -25,7 +25,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -48,25 +48,25 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newTravel = function ( ) {
+function newTravel ( ) {
 
 	const s_ObjType = newObjType ( 'Travel' );
 
-	var m_EditedRoute = newRoute ( );
+	let m_EditedRoute = newRoute ( );
 
-	var m_Name = 'TravelNotes';
+	let m_Name = 'TravelNotes';
 
-	var m_Routes = newCollection ( 'Route' );
+	let m_Routes = newCollection ( 'Route' );
 	
-	var m_Notes = newCollection ( 'Note' );
+	let m_Notes = newCollection ( 'Note' );
 
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_ReadOnly = false;
+	let m_ReadOnly = false;
 	
-	var m_UserData = {};
+	let m_UserData = {};
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			editedRoute : m_EditedRoute.object,
 			name : m_Name,
@@ -77,9 +77,9 @@ var newTravel = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_EditedRoute.object = something.editedRoute || newRoute ( );
 		m_Name = something.name || '';
@@ -88,7 +88,7 @@ var newTravel = function ( ) {
 		m_Routes.object = something.routes || [];
 		m_Notes.object = something.notes || [];
 		m_ObjId = newObjId ( );
-	};
+	}
 	
 	/*
 	--- travel object -------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ var newTravel = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------

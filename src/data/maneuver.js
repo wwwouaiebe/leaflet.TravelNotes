@@ -23,7 +23,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -44,25 +44,25 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newManeuver = function ( ) {
+function newManeuver ( ) {
 
 	// Private variables
 
 	const s_ObjType = newObjType ( 'Maneuver' );
 
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_IconName = '';
+	let m_IconName = '';
 
-	var m_Instruction = '';
+	let m_Instruction = '';
 
-	var m_ItineraryPointObjId = -1;
+	let m_ItineraryPointObjId = -1;
 
-	var m_Distance = 0;
+	let m_Distance = 0;
 
-	var m_Duration = 0;
+	let m_Duration = 0;
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			iconName : m_IconName,
 			instruction : m_Instruction,
@@ -72,9 +72,9 @@ var newManeuver = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_IconName = something.iconName || '';
 		m_Instruction = something.instruction || '';
@@ -82,7 +82,7 @@ var newManeuver = function ( ) {
 		m_Duration = something.duration || 0;
 		m_ItineraryPointObjId = something.itineraryPointObjId || -1;
 		m_ObjId = newObjId ( );
-	};
+	}
 
 	/*
 	--- maneuver object -----------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ var newManeuver = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------

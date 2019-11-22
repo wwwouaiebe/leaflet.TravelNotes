@@ -23,7 +23,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -35,6 +35,8 @@ export { newObjType };
 
 import { currentVersion } from '../data/Version.js';
 
+import { newRoute } from '../data/Route.js';
+
 /*
 --- newObjType function -------------------------------------------------------------------------------------------
 
@@ -43,20 +45,20 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newObjType = function ( name ) {
+function newObjType ( name ) {
 
 	const m_Name = name;
 
-	const m_Version = currentVersion ( );
+	const m_Version = currentVersion;
 	
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			name : m_Name,
 			version : m_Version
 		};
-	};
+	}
 	
-	var m_Validate = function ( something ) {
+	function m_Validate ( something ) {
 		if ( ! something.objType ) {
 			throw 'No objType for ' + m_Name;
 		}
@@ -96,7 +98,7 @@ var newObjType = function ( name ) {
 					something.edited = 0;
 				}
 				if ( 'Travel' === something.objType.name ) {
-					something.editedRoute = {};
+					something.editedRoute = newRoute ( );
 				}
 				something.objType.version = '1.5.0';
 				//end upgrade from 1.4.0 to 1.5.0
@@ -113,7 +115,7 @@ var newObjType = function ( name ) {
 			throw 'No objId for ' + m_Name;
 		}
 		return something;
-	};
+	}
 
 	/*
 	--- objType object ------------------------------------------------------------------------------------------------
@@ -130,10 +132,10 @@ var newObjType = function ( name ) {
 
 			get object ( ) { return m_GetObject ( ); },
 
-			validate : function ( something ) { return m_Validate ( something ); }
+			validate : something => { return m_Validate ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------

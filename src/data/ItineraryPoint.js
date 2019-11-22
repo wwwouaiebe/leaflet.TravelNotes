@@ -24,7 +24,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -45,19 +45,19 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newItineraryPoint = function ( ) {
+function newItineraryPoint ( ) {
 
 	const s_ObjType = newObjType ( 'ItineraryPoint' );
 	
-	var m_Lat = 0;
+	let m_Lat = 0;
 
-	var m_Lng = 0;
+	let m_Lng = 0;
 
-	var m_Distance = 0;
+	let m_Distance = 0;
 
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
 			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
@@ -65,15 +65,15 @@ var newItineraryPoint = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_Lat = something.lat || 0;
 		m_Lng = something.lng || 0;
 		m_Distance = something.distance || 0;
 		m_ObjId = newObjId ( );
-	};
+	}
 	
 	/*
 	--- itineraryPoint object -----------------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ var newItineraryPoint = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------

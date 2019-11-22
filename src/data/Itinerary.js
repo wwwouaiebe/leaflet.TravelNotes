@@ -23,7 +23,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -45,19 +45,19 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newItinerary = function ( ) {
+function newItinerary ( ) {
 
 	const s_ObjType = newObjType ( 'Itinerary' );
 
-	var m_Provider = '';
+	let m_Provider = '';
 
-	var m_TransitMode = '';
+	let m_TransitMode = '';
 
-	var m_ItineraryPoints = newCollection ( 'ItineraryPoint' );
+	let m_ItineraryPoints = newCollection ( 'ItineraryPoint' );
 
-	var m_Maneuvers = newCollection ( 'Maneuver' );
+	let m_Maneuvers = newCollection ( 'Maneuver' );
 
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
 	/*
 	--- m_GetObject function ------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ var newItinerary = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			itineraryPoints : m_ItineraryPoints.object,
 			maneuvers : m_Maneuvers.object,
@@ -74,7 +74,7 @@ var newItinerary = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ var newItinerary = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_ItineraryPoints.object = something.itineraryPoints || [];
 		m_Maneuvers.object = something.maneuvers || [];
@@ -91,18 +91,18 @@ var newItinerary = function ( ) {
 		m_ObjId = newObjId ( );
 		
 		// rebuilding links between maneuvers and itineraryPoints
-		var itineraryPointObjIdMap = new Map ( );
-		var sourceCounter = 0;
-		var targetIterator = m_ItineraryPoints.iterator;
+		let itineraryPointObjIdMap = new Map ( );
+		let sourceCounter = 0;
+		let targetIterator = m_ItineraryPoints.iterator;
 		while ( ! targetIterator.done ) {
 			itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
 			sourceCounter ++;
 		}
-		var maneuverIterator = m_Maneuvers.iterator;
+		let maneuverIterator = m_Maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
 			maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
 		}
-	};
+	}
 	
 	/*
 	--- itinerary object ----------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ var newItinerary = function ( ) {
 			
 		}
 	);
-};
+}
 
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------

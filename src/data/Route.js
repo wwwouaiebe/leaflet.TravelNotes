@@ -28,7 +28,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -53,25 +53,25 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newRoute = function ( ) {
+function newRoute ( ) {
 
 	const s_ObjType = newObjType ( 'Route' );
 	
-	var m_Name = '';
+	let m_Name = '';
 
-	var m_WayPoints = newCollection ( 'WayPoint' );
+	let m_WayPoints = newCollection ( 'WayPoint' );
 	m_WayPoints.add ( newWayPoint ( ) );
 	m_WayPoints.add ( newWayPoint ( ) );
 
-	var m_Notes = newCollection ( 'Note' );
+	let m_Notes = newCollection ( 'Note' );
 
-	var m_Itinerary = newItinerary ( );
+	let m_Itinerary = newItinerary ( );
 	
-	var m_Width = 5;
+	let m_Width = 5;
 
-	var m_Color = '#ff0000';
+	let m_Color = '#ff0000';
 	
-	var m_DashArray = 0;
+	let m_DashArray = 0;
 
 	
 	if ( g_Config ) {
@@ -80,30 +80,30 @@ var newRoute = function ( ) {
 		m_DashArray = g_Config.route.dashArray;			
 	}
 
-	var m_Chain = false;
+	let m_Chain = false;
 
-	var m_ChainedDistance = 0;
+	let m_ChainedDistance = 0;
 
-	var m_Distance = 0;
+	let m_Distance = 0;
 
-	var m_Duration = 0;
+	let m_Duration = 0;
 	
-	var m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+	let m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
 	
-	var m_SetEdited = function ( edited ) {
+	function m_SetEdited ( edited ) {
 		if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
 		else {
 			m_Edited = edited;
 		}
-	};
+	}
 
-	var m_Hidden = false;
+	let m_Hidden = false;
 	
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			name : m_Name,
 			wayPoints : m_WayPoints.object,
@@ -121,9 +121,9 @@ var newRoute = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_Name = something.name || '';
 		m_WayPoints.object = something.wayPoints || [];
@@ -139,7 +139,7 @@ var newRoute = function ( ) {
 		m_Hidden = something.hidden || false;
 		m_ChainedDistance = something.chainedDistance;
 		m_ObjId = newObjId ( );
-	};
+	}
 
 	/*
 	--- route object --------------------------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ var newRoute = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------

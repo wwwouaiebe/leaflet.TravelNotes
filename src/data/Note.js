@@ -23,7 +23,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -44,41 +44,41 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newNote = function ( ) {
+function newNote ( ) {
 
 	const s_ObjType = newObjType ( 'Note' );
 	
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_IconHeight = 40;
+	let m_IconHeight = 40;
 
-	var m_IconWidth = 40;
+	let m_IconWidth = 40;
 
-	var m_IconContent = '';
+	let m_IconContent = '';
 
-	var m_PopupContent = '';
+	let m_PopupContent = '';
 
-	var m_TooltipContent = '';
+	let m_TooltipContent = '';
 
-	var m_Phone = '';
+	let m_Phone = '';
 
-	var m_Url = '';
+	let m_Url = '';
 
-	var m_Address = '';
+	let m_Address = '';
 
-	var m_IconLat = 0;
+	let m_IconLat = 0;
 
-	var m_IconLng = 0;
+	let m_IconLng = 0;
 
-	var m_Lat = 0;
+	let m_Lat = 0;
 
-	var m_Lng = 0;
+	let m_Lng = 0;
 
-	var m_Distance = -1;
+	let m_Distance = -1;
 
-	var m_ChainedDistance = 0;
+	let m_ChainedDistance = 0;
 
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			iconHeight : m_IconHeight,
 			iconWidth : m_IconWidth,
@@ -97,9 +97,9 @@ var newNote = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject = function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_IconHeight = something.iconHeight || 40;
 		m_IconWidth = something.iconWidth || 40;
@@ -116,7 +116,7 @@ var newNote = function ( ) {
 		m_Distance = something.distance || -1;
 		m_ChainedDistance = something.chainedDistance;
 		m_ObjId = newObjId ( );
-	};
+	}
 	
 	/*
 	--- note object ---------------------------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ var newNote = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------

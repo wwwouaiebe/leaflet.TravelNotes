@@ -412,7 +412,7 @@ var travelNotesFactory = function ( ) {
 		
 		get itineraryPoint ( ) { return newItineraryPoint ( );},
 		
-		get version ( ) { return currentVersion ( ) ; }
+		get version ( ) { return currentVersion; }
 	};
 };
 

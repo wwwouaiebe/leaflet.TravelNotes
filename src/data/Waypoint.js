@@ -23,7 +23,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -44,19 +44,19 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newWayPoint = function ( ) {
+function newWayPoint ( ) {
 
 	const s_ObjType = newObjType ( 'WayPoint' );
 	
-	var m_Name = '';
+	let m_Name = '';
 
-	var m_Lat = 0;
+	let m_Lat = 0;
 
-	var m_Lng = 0;
+	let m_Lng = 0;
 
-	var m_ObjId = newObjId ( );
+	let m_ObjId = newObjId ( );
 
-	var m_GetUIName = function ( ) {
+	function m_GetUIName ( ) {
 		if ( '' !== m_Name ) {
 			return m_Name;
 		}
@@ -64,9 +64,9 @@ var newWayPoint = function ( ) {
 			return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
 		}
 		return '';
-	};
+	}
 	
-	var m_GetObject = function ( ) {
+	function m_GetObject ( ) {
 		return {
 			name : m_Name,
 			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
@@ -74,15 +74,15 @@ var newWayPoint = function ( ) {
 			objId : m_ObjId,
 			objType : s_ObjType.object
 		};
-	};
+	}
 	
-	var m_SetObject =function ( something ) {
+	function m_SetObject ( something ) {
 		something = s_ObjType.validate ( something );
 		m_Name = something.name || '';
 		m_Lat = something.lat || 0;
 		m_Lng = something.lng || 0;
 		m_ObjId = newObjId ( );
-	};
+	}
 	
 	/*
 	--- wayPoint object -----------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ var newWayPoint = function ( ) {
 			set object ( something ) { m_SetObject ( something ); }
 		}
 	);
-};
+}
 
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------
