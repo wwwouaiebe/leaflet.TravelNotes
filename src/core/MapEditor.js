@@ -61,6 +61,32 @@ import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newUtilities } from '../util/Utilities.js';
 
 /*
+--- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
+
+Event listener for mouse move and mouse enter on route objects event
+This function updates the route tooltip with the distance
+
+-------------------------------------------------------------------------------------------------------------------
+*/
+
+function onMouseOverOrMoveOnRoute ( event ) { 
+	let dataSearchEngine  = newDataSearchEngine ( );
+	let route = dataSearchEngine.getRoute (  event.target.objId );
+	let distance = g_RouteEditor.getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
+	distance += route.chainedDistance;
+	distance = newUtilities ( ).formatDistance ( distance );
+	let polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
+	polyline.closeTooltip ( );
+	let tooltipText = dataSearchEngine.getRoute ( event.target.objId ).name;
+	if ( ! g_TravelNotesData.travel.readOnly ) {
+		tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
+		tooltipText += distance;
+	}
+	polyline.setTooltipContent ( tooltipText );
+	polyline.openTooltip (  event.latlng );
+}
+
+/*
 --- newMapEditor function ---------------------------------------------------------------------------------------------
 
 Patterns : Closure and Singleton
@@ -72,30 +98,6 @@ function newMapEditor ( ) {
 
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_contextMenuFactory = newContextMenuFactory ( );
-
-	/*
-	--- m_UpdateRouteTooltip function ---------------------------------------------------------------------------------
-
-	This function updates the route tooltip with the distance when the mouse move on the polyline
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_UpdateRouteTooltip ( event ) { 
-		let route = m_DataSearchEngine.getRoute (  event.target.objId );
-		let distance = g_RouteEditor.getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
-		distance += route.chainedDistance;
-		distance = newUtilities ( ).formatDistance ( distance );
-		let polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
-		polyline.closeTooltip ( );
-		let tooltipText = m_DataSearchEngine.getRoute ( event.target.objId ).name;
-		if ( ! g_TravelNotesData.travel.readOnly ) {
-			tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
-			tooltipText += distance;
-		}
-		polyline.setTooltipContent ( tooltipText );
-		polyline.openTooltip (  event.latlng );
-	}
 
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
@@ -259,8 +261,8 @@ function newMapEditor ( ) {
 			route.name,
 			{ sticky : true, direction : 'right' }
 		);
-		polyline.on ( 'mouseover' , m_UpdateRouteTooltip	);
-		polyline.on ( 'mousemove' , m_UpdateRouteTooltip );
+		polyline.on ( 'mouseover' , onMouseOverOrMoveOnRoute );
+		polyline.on ( 'mousemove' , onMouseOverOrMoveOnRoute );
 		
 		polyline.bindPopup ( 
 			layer => {
@@ -824,7 +826,7 @@ The one and only one mapEditor
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_MapEditor = newMapEditor ( );
+const g_MapEditor = newMapEditor ( );
 
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------

@@ -34,7 +34,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newRouter = function ( ) {
+function newRouter ( ) {
 	
 	/*
 	--- m_HaveValidWayPoints function ---------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ var newRouter = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_HaveValidWayPoints = function ( ) {
+	function m_HaveValidWayPoints ( ) {
 		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
 			function ( wayPoint, result ) {
 				if ( null === result ) { 
@@ -78,7 +78,7 @@ var newRouter = function ( ) {
 				return result;
 			}
 		);
-	};
+	}
 	
 	/*
 	--- m_EndError function -------------------------------------------------------------------------------------------
@@ -88,12 +88,12 @@ var newRouter = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_EndError = function ( message ) {
+	function m_EndError ( message ) {
 
 		s_RequestStarted = false;
 
 		g_ErrorEditor ( ).showError ( message );
-	};
+	}
 
 	/*
 	--- m_EndOk function ----------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ var newRouter = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_EndOk = function ( ) {
+	function m_EndOk ( ) {
 
 		s_RequestStarted = false;
 
@@ -114,7 +114,7 @@ var newRouter = function ( ) {
 		g_RouteEditor.computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
 
 		// Placing the waypoints on the itinerary
-		var wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
+		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done )
 		{
 			if ( wayPointsIterator.first ) {
@@ -130,7 +130,7 @@ var newRouter = function ( ) {
 		
 		// and calling the route editor for displaying the results
 		g_RouteEditor.endRouting ( );
-	};
+	}
 	
 	/*
 	--- m_StartRouting function ---------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ var newRouter = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_StartRouting = function ( ) {
+	function m_StartRouting ( ) {
 
 		// We verify that another request is not loaded
 		if ( s_RequestStarted ) {
@@ -155,7 +155,7 @@ var newRouter = function ( ) {
 		s_RequestStarted = true;
 
 		// Choosing the correct route provider
-		var routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
+		let routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
 
 		// provider name and transit mode are added to the road
 		g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
@@ -164,7 +164,7 @@ var newRouter = function ( ) {
 		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndOk, m_EndError  );
 
 		return true;
-	};
+	}
 
 	/*
 	--- Router object -------------------------------------------------------------------------------------------------
@@ -174,10 +174,10 @@ var newRouter = function ( ) {
 
 	return Object.seal (
 		{
-			startRouting : function ( ) { return m_StartRouting ( ); }
+			startRouting : ( ) => { return m_StartRouting ( ); }
 		}
 	);
-};
+}
 
 /*
 --- End of Router.js file ---------------------------------------------------------------------------------------------

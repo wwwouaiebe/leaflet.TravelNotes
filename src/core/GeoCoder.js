@@ -29,7 +29,7 @@ Changes:
 		- returning the complete Nominatim responce in place of a computed address
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -43,11 +43,11 @@ import { g_Config } from '../data/Config.js';
 
 var s_RequestStarted = false;
 
-var newGeoCoder = function ( ) {
+let newGeoCoder = function ( ) {
 
-	var m_ObjId = -1;
-	var m_Lat = 0;
-	var m_Lng = 0;
+	let m_ObjId = -1;
+	let m_Lat = 0;
+	let m_Lng = 0;
 
 	/*
 	--- m_StartXMLHttpRequest function --------------------------------------------------------------------------------
@@ -57,9 +57,9 @@ var newGeoCoder = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+	function m_StartXMLHttpRequest ( returnOnOk, returnOnError ) {
 
-		var xmlHttpRequest = new XMLHttpRequest ( );
+		let xmlHttpRequest = new XMLHttpRequest ( );
 		xmlHttpRequest.timeout = g_Config.note.svgTimeOut;
 		
 		xmlHttpRequest.ontimeout = function ( ) {
@@ -70,7 +70,7 @@ var newGeoCoder = function ( ) {
 			if ( xmlHttpRequest.readyState == 4 ) {
 				if ( xmlHttpRequest.status == 200 ) {
 					s_RequestStarted = false;
-					var response;
+					let response;
 					try {
 						response = JSON.parse( this.responseText );
 					}
@@ -88,11 +88,12 @@ var newGeoCoder = function ( ) {
 				}
 			}
 		};  
-		var NominatimUrl = 
+		
+		let NominatimUrl = 
 			g_Config.nominatim.url + 'reverse?format=json&lat=' + 
 			m_Lat + '&lon=' + m_Lng + 
 			'&zoom=18&addressdetails=1';
-		var nominatimLanguage = g_Config.nominatim.language;
+		let nominatimLanguage = g_Config.nominatim.language;
 		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
 			NominatimUrl += '&accept-language=' + nominatimLanguage;
 		}
@@ -102,7 +103,7 @@ var newGeoCoder = function ( ) {
 		}
 		xmlHttpRequest.overrideMimeType ( 'application/json' );
 		xmlHttpRequest.send ( null );
-	};
+	}
 
 	/*
 	--- End of _StartXMLHttpRequest function ---
@@ -116,7 +117,7 @@ var newGeoCoder = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var m_GetPromiseAddress = function ( lat, lng, objId ) {
+	function m_GetPromiseAddress ( lat, lng, objId ) {
 		if ( s_RequestStarted ) {
 			return Promise.reject ( );
 		}
@@ -127,7 +128,7 @@ var newGeoCoder = function ( ) {
 		m_Lng = lng;
 		
 		return new Promise ( m_StartXMLHttpRequest );
-	};
+	}
 	
 	/*
 	--- End of m_GetPromiseAddress function ---
@@ -141,7 +142,7 @@ var newGeoCoder = function ( ) {
 	
 	return Object.seal (
 		{
-			getPromiseAddress : function ( lat, lng, objId ) { return m_GetPromiseAddress ( lat, lng, objId ); }				
+			getPromiseAddress : ( lat, lng, objId ) => { return m_GetPromiseAddress ( lat, lng, objId ); }				
 		}
 	);
 		

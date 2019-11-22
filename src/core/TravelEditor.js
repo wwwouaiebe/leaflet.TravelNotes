@@ -398,7 +398,7 @@ The one and only one TravelEditor
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_TravelEditor = newTravelEditor ( );
+const g_TravelEditor = newTravelEditor ( );
 
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------

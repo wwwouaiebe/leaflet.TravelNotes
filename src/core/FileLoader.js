@@ -27,7 +27,7 @@ Changes:
 		- Issue #61 : Disable right context menu when readonly travel.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -62,12 +62,12 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newFileLoader = function ( ) {
+function newFileLoader ( ) {
 
-	var m_MergeContent = false;
-	var m_FileName = '';
-	var m_IsFileReadOnly = false;
-	var m_FileContent = {};
+	let m_MergeContent = false;
+	let m_FileName = '';
+	let m_IsFileReadOnly = false;
+	let m_FileContent = {};
 
 	/*
 	--- m_DecompressRoute function ------------------------------------------------------------------------------------
@@ -77,13 +77,13 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_DecompressRoute = function ( route ) {
+	function m_DecompressRoute ( route ) {
 		route.itinerary.itineraryPoints.latLngs = polyline.decode ( route.itinerary.itineraryPoints.latLngs, 6 );
-		var decompressedItineraryPoints = [];
-		var latLngsCounter = 0;
+		let decompressedItineraryPoints = [];
+		let latLngsCounter = 0;
 		route.itinerary.itineraryPoints.latLngs.forEach (
-			function ( latLng ) {
-				var itineraryPoint = {};
+			latLng => {
+				let itineraryPoint = {};
 				itineraryPoint.lat = latLng [ 0 ];
 				itineraryPoint.lng = latLng [ 1 ];
 				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
@@ -94,7 +94,7 @@ var newFileLoader = function ( ) {
 			}
 		);
 		route.itinerary.itineraryPoints = decompressedItineraryPoints;
-	};
+	}
 	
 	/*
 	--- m_DecompressFileContent function ------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_DecompressFileContent = function ( ) {
+	function m_DecompressFileContent ( ) {
 		
 		m_FileContent.routes.forEach ( m_DecompressRoute );
 		if ( m_FileContent.editedRoute ) {
@@ -117,7 +117,7 @@ var newFileLoader = function ( ) {
 		else {
 			m_Open ( );
 		}
-	};
+	}
 	
 	/*
 	--- m_Merge function ----------------------------------------------------------------------------------------------
@@ -127,18 +127,18 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Merge = function ( ) {
+	function m_Merge ( ) {
 		// ... and transform the data in the correct format
-		var travel = newTravel ( );
+		let travel = newTravel ( );
 		travel.object = m_FileContent;
 		
 		// routes are added with their notes
-		var routesIterator = travel.routes.iterator;
+		let routesIterator = travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			g_TravelNotesData.travel.routes.add ( routesIterator.value );
 		}
 		// travel notes are added
-		var notesIterator = travel.notes.iterator;
+		let notesIterator = travel.notes.iterator;
 		while ( ! notesIterator.done ) {
 			g_TravelNotesData.travel.notes.add ( notesIterator.value );
 		}
@@ -146,7 +146,7 @@ var newFileLoader = function ( ) {
 		g_RouteEditor.chainRoutes ( );
 	
 		m_Display ( );
-	};
+	}
 	
 	/*
 	--- m_Open function -----------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Open = function ( ) {
+	function m_Open ( ) {
 		g_TravelNotesData.travel.object = m_FileContent;
 		g_TravelNotesData.editedRouteObjId = -1;
 
@@ -165,14 +165,14 @@ var newFileLoader = function ( ) {
 		}
 		g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;
 		g_TravelNotesData.travel.routes.forEach (
-			function ( route ) {
+			route => {
 				if ( 0 !== route.edited ) {
 					g_TravelNotesData.editedRouteObjId = route.objId;
 				}
 			}
 		);
 		m_Display ( );
-	};
+	}
 	
 	/*
 	--- m_Display function --------------------------------------------------------------------------------------------
@@ -182,12 +182,12 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Display = function ( ) {
+	function m_Display ( ) {
 
 		// the map is cleaned
 		g_MapEditor.removeAllObjects ( );
 		// routes are added with their notes
-		var routesIterator = g_TravelNotesData.travel.routes.iterator;
+		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( 0 === routesIterator.value.edited ) {
 				g_MapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
@@ -199,7 +199,7 @@ var newFileLoader = function ( ) {
 		}
 		
 		// travel notes are added
-		var notesIterator = g_TravelNotesData.travel.notes.iterator;
+		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
 			g_MapEditor.addNote ( notesIterator.value, m_IsFileReadOnly );
 		}
@@ -212,15 +212,15 @@ var newFileLoader = function ( ) {
 		// Editors and HTML pages are filled
 			newTravelEditorUI ( ). setRoutesList ( );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
-				var providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
+				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
 				{
 					g_ErrorEditor.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
 				}
 				else {
 					// Provider and transit mode are changed in the itinerary editor
-					var transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
-					var providersToolbarUI = newProvidersToolbarUI ( );
+					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
+					let providersToolbarUI = newProvidersToolbarUI ( );
 					providersToolbarUI.provider = providerName;
 					
 					if ( transitMode && '' !== transitMode ) {
@@ -228,7 +228,7 @@ var newFileLoader = function ( ) {
 					}
 				}
 				g_RouteEditor.chainRoutes ( );
-				var routeEditorUI = newRouteEditorUI ( );
+				let routeEditorUI = newRouteEditorUI ( );
 				routeEditorUI .expand ( );
 				routeEditorUI.setWayPointsList ( );
 				newDataPanesUI ( ).setItinerary ( );
@@ -242,7 +242,7 @@ var newFileLoader = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : m_IsFileReadOnly, name : g_TravelNotesData.travel.name } );
-	};
+	}
 		
 	/*
 	--- m_OpenFile function -------------------------------------------------------------------------------------------
@@ -252,10 +252,10 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_OpenFile = function ( event ) {
+	function m_OpenFile ( event ) {
 		m_FileName = event.target.files [ 0 ].name;
 		
-		var fileReader = new FileReader( );
+		let fileReader = new FileReader( );
 		fileReader.onload = function ( ) {
 			try {
 				m_FileContent =  JSON.parse ( fileReader.result );
@@ -266,7 +266,7 @@ var newFileLoader = function ( ) {
 			}
 		};
 		fileReader.readAsText ( event.target.files [ 0 ] );
-	};
+	}
 
 	/*
 	--- m_OpenLocalFile function --------------------------------------------------------------------------------------
@@ -276,11 +276,11 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_OpenLocalFile = function ( event ) {
+	function m_OpenLocalFile ( event ) {
 		m_MergeContent = false;
 		m_IsFileReadOnly = false;
 		m_OpenFile ( event );
-	};
+	}
 	
 	/*
 	--- m_MergeLocalFile function -------------------------------------------------------------------------------------
@@ -290,12 +290,12 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_MergeLocalFile = function ( event ) {
+	function m_MergeLocalFile ( event ) {
 		
 		m_MergeContent = true;
 		m_IsFileReadOnly = false;
 		m_OpenFile ( event );
-	};
+	}
 	
 	/*
 	--- m_OpenDistantFile function ------------------------------------------------------------------------------------
@@ -305,12 +305,12 @@ var newFileLoader = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_OpenDistantFile = function ( fileContent ) {
+	function m_OpenDistantFile ( fileContent ) {
 		L.travelNotes.rightContextMenu = false;
 		m_IsFileReadOnly = true;
 		m_FileContent = fileContent;
 		m_DecompressFileContent ( );
-	};
+	}
 
 	/*
 	--- FileLoader object ---------------------------------------------------------------------------------------------
@@ -320,12 +320,12 @@ var newFileLoader = function ( ) {
 
 	return Object.seal (
 		{
-			openLocalFile : function ( event ) { m_OpenLocalFile ( event ); },
-			mergeLocalFile : function ( event ) { m_MergeLocalFile ( event ); },
-			openDistantFile : function ( fileContent ) { m_OpenDistantFile ( fileContent ); }
+			openLocalFile : event => m_OpenLocalFile ( event ),
+			mergeLocalFile : event => m_MergeLocalFile ( event ),
+			openDistantFile : fileContent => m_OpenDistantFile ( fileContent )
 		}
 	);
-};
+}
 	
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------

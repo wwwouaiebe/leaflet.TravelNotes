@@ -24,7 +24,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ This function draw the search limits on the map
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var s_DrawSearchRectangle = function ( ) {
+function s_DrawSearchRectangle ( ) {
 	if ( ! s_SearchParameters.bbox ) {
 		return;
 	}
@@ -71,7 +71,7 @@ var s_DrawSearchRectangle = function ( ) {
 		L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) , 
 		g_Config.previousSearchLimit 
 	);
-};
+}
 
 /*
 --- onSearchSuccess function ------------------------------------------------------------------------------------------
@@ -81,12 +81,12 @@ Promise success function for osmSearch
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var onSearchSuccess = function ( searchData ) {
+function onSearchSuccess ( searchData ) {
 	g_TravelNotesData.searchData = searchData;
 	s_OsmSearchStarted = false;
 	s_DrawSearchRectangle ( );
 	newDataPanesUI ( ).updateSearch ( );
-};
+}
 
 /*
 --- onSearchError function --------------------------------------------------------------------------------------------
@@ -96,10 +96,10 @@ Promise error function for osmSearch
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var onSearchError = function ( error ) {
+function onSearchError ( error ) {
 	console.log ( error );
 	s_OsmSearchStarted = false;
-};
+}
 
 /*
 --- onMapChange function ----------------------------------------------------------------------------------------------
@@ -109,8 +109,8 @@ change event listener for the map
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var onMapChange = function ( ) {
-	var mapCenter = g_TravelNotesData.map.getCenter ( );
+function onMapChange ( ) {
+	let mapCenter = g_TravelNotesData.map.getCenter ( );
 	if ( -1 !== s_NextSearchRectangleObjId ) {
 		g_MapEditor.removeObject ( s_NextSearchRectangleObjId );
 	}
@@ -121,7 +121,7 @@ var onMapChange = function ( ) {
 		s_NextSearchRectangleObjId, 
 		L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ), 
 		g_Config.nextSearchLimit );
-};
+}
 
 /*
 --- osmSearchEngine function --------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ This function returns the osmSearchEngine object
 -------------------------------------------------------------------------------------------------------------------
 */
 
-var newOsmSearchEngine = function ( ) {
+function newOsmSearchEngine ( ) {
 	
 	/*
 	--- m_Search function -----------------------------------------------------------------------------------------
@@ -141,21 +141,21 @@ var newOsmSearchEngine = function ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Search = function ( ) {
+	function m_Search ( ) {
 		if ( s_OsmSearchStarted ) {
 			return;
 		}
 		
 		s_OsmSearchStarted = true;
 		
-		var mapBounds =  g_TravelNotesData.map.getBounds ( );
+		let mapBounds =  g_TravelNotesData.map.getBounds ( );
 		s_SearchParameters = {
 			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};
 		g_TravelNotesData.searchData = [];
 		window.osmSearch.getSearchPromise ( s_SearchParameters ).then (  onSearchSuccess, onSearchError  );
-	};
+	}
 	
 	/*
 	--- m_Show function -------------------------------------------------------------------------------------------
@@ -165,12 +165,12 @@ var newOsmSearchEngine = function ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Show = function ( ) {
+	function m_Show ( ) {
 		g_TravelNotesData.map.on ( 'zoom', onMapChange );
 		g_TravelNotesData.map.on ( 'move', onMapChange );
 		onMapChange ( );
 		s_DrawSearchRectangle ( );
-	};
+	}
 	
 	/*
 	--- m_Show function -------------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ var newOsmSearchEngine = function ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Hide = function ( ) {
+	function m_Hide ( ) {
 		g_TravelNotesData.map.off ( 'zoom', onMapChange );
 		g_TravelNotesData.map.off ( 'move', onMapChange );
 		if ( -1 !== s_NextSearchRectangleObjId ) {
@@ -191,7 +191,7 @@ var newOsmSearchEngine = function ( ) {
 			g_MapEditor.removeObject ( s_PreviousSearchRectangleObjId );
 			s_PreviousSearchRectangleObjId = -1;
 		}
-	};
+	}
 	
 	/*
 	--- osmSearchEngine object ------------------------------------------------------------------------------------
@@ -201,14 +201,14 @@ var newOsmSearchEngine = function ( ) {
 	
 	return Object.seal (
 		{
-			search : function ( ) { m_Search ( ); },
+			search : ( ) => m_Search ( ),
 			
-			show : function ( ) { m_Show ( ); },
+			show : ( ) => m_Show ( ),
 			
-			hide : function ( ) { m_Hide ( ); }
+			hide : ( ) => m_Hide ( )
 		}
 	);
-};
+}
 
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------

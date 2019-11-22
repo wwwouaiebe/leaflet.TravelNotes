@@ -44,7 +44,7 @@ function newErrorEditor ( ) {
 	);
 }
 
-let g_ErrorEditor = newErrorEditor ( );
+const g_ErrorEditor = newErrorEditor ( );
 
 /*
 --- End of ErrorEditor.js file ----------------------------------------------------------------------------------------

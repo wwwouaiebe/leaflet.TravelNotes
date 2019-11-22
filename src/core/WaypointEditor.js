@@ -394,7 +394,7 @@ The one and only one wayPointEditor
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_WayPointEditor = newWayPointEditor ( );
+const g_WayPointEditor = newWayPointEditor ( );
 
 /*
 --- End of WayPointEditor.js file -------------------------------------------------------------------------------------

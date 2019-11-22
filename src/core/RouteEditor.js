@@ -40,8 +40,7 @@ Changes:
 		- Issue #62 : Remove time from route popup when readonly travel.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
-Doc reviewed 20190919
+Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -69,7 +68,7 @@ import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRoutePropertiesDialog } from '../UI/RoutePropertiesDialog.js';
 
-let s_ZoomToRoute = false;
+var s_ZoomToRoute = false;
 	
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
@@ -557,7 +556,7 @@ The one and only one routeEditor
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_RouteEditor = newRouteEditor ( );
+const g_RouteEditor = newRouteEditor ( );
 
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------

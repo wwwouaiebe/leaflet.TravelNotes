@@ -104,7 +104,7 @@ The one and only one translator
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_TravelNotesData = newTravelNotesData ( );
+const g_TravelNotesData = newTravelNotesData ( );
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */
