@@ -62,7 +62,7 @@ import { newUserInterface } from './UI/UserInterface.js';
 import { newTravelEditorUI } from './UI/TravelEditorUI.js';
 import { newFileLoader } from './core/FileLoader.js';
 import { newRouteEditorUI } from './UI/RouteEditorUI.js';
-import { newBaseDialog } from './UI/BaseDialog.js';
+import { newBaseDialog } from './dialogs/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
 import { currentVersion } from './data/Version.js';

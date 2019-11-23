@@ -39,7 +39,7 @@ export { newAboutDialog };
 
 import { g_Translator } from '../UI/Translator.js';
 
-import { newBaseDialog } from '../UI/BaseDialog.js';
+import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 import { currentVersion } from '../data/Version.js';
 

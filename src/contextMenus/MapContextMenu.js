@@ -39,7 +39,7 @@ import { g_RouteEditor} from '../core/RouteEditor.js';
 import { g_MapEditor} from '../core/MapEditor.js';
 import { g_TravelNotesData} from '../data/TravelNotesData.js';
 import { g_Translator } from '../UI/Translator.js';
-import { newAboutDialog } from '../UI/AboutDialog.js';
+import { newAboutDialog } from '../dialogs/AboutDialog.js';
 
 /*
 --- newMapContextMenu function ----------------------------------------------------------------------------------------

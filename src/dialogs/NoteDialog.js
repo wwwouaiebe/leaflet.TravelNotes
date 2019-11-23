@@ -46,7 +46,7 @@ import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
-import { newBaseDialog } from '../UI/BaseDialog.js';
+import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
@@ -440,7 +440,7 @@ var newNoteDialog = function ( note, routeObjId, newNote ) {
 		// the dialog base is created
 		m_BaseDialog = newBaseDialog ( );
 		m_BaseDialog.title = g_Translator.getText ( 'NoteDialog - Note' );
-		m_BaseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+		m_BaseDialog.okButtonListener = onOkButtonClick;
 
 		m_NoteDataDiv = m_HtmlElementsFactory.create (
 			'div',

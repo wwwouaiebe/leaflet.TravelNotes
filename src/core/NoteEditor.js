@@ -48,7 +48,7 @@ import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
-import { newNoteDialog } from '../UI/NoteDialog.js';
+import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';

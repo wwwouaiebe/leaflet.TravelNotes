@@ -66,7 +66,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { newRouter } from '../core/Router.js';
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
-import { newRoutePropertiesDialog } from '../UI/RoutePropertiesDialog.js';
+import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 
 var s_ZoomToRoute = false;
 	

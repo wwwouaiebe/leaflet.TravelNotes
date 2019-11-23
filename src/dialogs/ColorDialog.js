@@ -37,7 +37,7 @@ export { newColorDialog };
 
 import { g_Translator } from '../UI/Translator.js';
 
-import { newBaseDialog } from '../UI/BaseDialog.js';
+import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 
 var onOkButtonClick = function ( ) {
@@ -137,7 +137,7 @@ var newColorDialog = function ( color ) {
 	// the dialog base is created
 	var baseDialog = newBaseDialog ( );
 	baseDialog.title = g_Translator.getText ( 'ColorDialog - Colors' );
-	baseDialog.addClickOkButtonEventListener ( onOkButtonClick );
+	baseDialog.okButtonListener = onOkButtonClick;
 	baseDialog.getNewColor = function ( ) {
 		return newColor;
 	};

@@ -44,7 +44,7 @@ import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
-import { newColorDialog } from '../UI/ColorDialog.js';
+import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 
@@ -80,7 +80,7 @@ var newRoutePropertiesDialog = function ( route ) {
 	// the dialog base is created
 	var routePropertiesDialog = newColorDialog ( route.color );
 	routePropertiesDialog.title = g_Translator.getText ( 'RoutePropertiesDialog - Route properties' );
-	routePropertiesDialog.addClickOkButtonEventListener ( onOkButtonClick );
+	routePropertiesDialog.okButtonListener = onOkButtonClick;
 	
 	var htmlElementsFactory = newHTMLElementsFactory ( ) ;
 
