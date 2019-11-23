@@ -35,6 +35,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 Doc reviewed 20191121
 Tests ...
 
@@ -53,10 +54,10 @@ import { g_WayPointEditor } from '../core/WayPointEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
-
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newContextMenu } from '../UI/ContextMenu.js';
-import { newContextMenuFactory } from '../UI/ContextMenuFactory.js';
+import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
+import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newUtilities } from '../util/Utilities.js';
 
@@ -97,7 +98,6 @@ Patterns : Closure and Singleton
 function newMapEditor ( ) {
 
 	let m_DataSearchEngine  = newDataSearchEngine ( );
-	let m_contextMenuFactory = newContextMenuFactory ( );
 
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
@@ -278,7 +278,7 @@ function newMapEditor ( ) {
 			L.DomEvent.on ( 
 				polyline, 
 				'contextmenu', 
-				event => newContextMenu ( event, m_contextMenuFactory.getRouteContextMenu ( event.target.objId ) )
+				event => newRouteContextMenu ( event ).show ( )
 			);
 		}
 		
@@ -523,9 +523,7 @@ function newMapEditor ( ) {
 		L.DomEvent.on ( 
 			marker, 
 			'contextmenu', 
-			function ( event ) { 
-				newContextMenu ( event, m_contextMenuFactory.getWayPointContextMenu ( event.target.objId ) );	
-			}
+			event => newWayPointContextMenu ( event ).show ( )
 		);
 		
 		// ... and added to the map...
@@ -686,7 +684,7 @@ function newMapEditor ( ) {
 			L.DomEvent.on ( 
 				marker, 
 				'contextmenu', 
-				event => newContextMenu ( event, m_contextMenuFactory.getNoteContextMenu ( event.target.objId ) )
+				event => newNoteContextMenu ( event ).show ( )
 			);
 			// event listener for the dragend event
 			L.DomEvent.on ( 

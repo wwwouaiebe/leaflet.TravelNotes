@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+		<title>Travel & Notes by wwwouaiebe</title>
+		<meta name="author" content="wwwouaiebe" />
+		<link rel="stylesheet" href="leaflet/leaflet.css" />
+		<link rel="stylesheet" href="TravelNotes.min.css" />
+		<link rel="stylesheet" href="TravelNotesIndex.css" media="screen"/>
+	</head>
+	<body>
+		<div id="LeafletTravelNotesControl">
+		</div>
+		<div id="Map">
+		</div>
+		<script src="leaflet/leaflet.js"></script>
+		<script src="TravelNotes.js"></script>
+		<script src="TravelNotesProviders/MapzenRouteProvider.js"></script>
+		<script src="TravelNotesProviders/MapboxRouteProvider.js"></script>
+		<script src="TravelNotesProviders/GraphHopperRouteProvider.js"></script>
+		<script src="TravelNotesProviders/OSRMRouteProvider.js"></script>
+		<script>
+			(function( ) 
+			{
+				'use strict';
+				var Map = L.map ( 'Map' ).setView( [ 50.50923,5.49542 ], 17 );
+				L.tileLayer ( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" title="Contributeurs de OpenStreetMap">Contributeurs de OpenStreetMap</a> | &copy; <a href="http://www.ouaie.be/" title="http://www.ouaie.be/">wwwouaiebe</a>' } ).addTo ( Map );
+				var myInterface = L.travelNotes.interface ( );
+				myInterface.addControl ( Map, 'LeafletTravelNotesControl', { position: "topright"} );
+				myInterface.rightContextMenu = true;
+			} ());		
+		</script>
+	</body>
+</html>

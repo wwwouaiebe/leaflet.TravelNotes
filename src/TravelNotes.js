@@ -39,6 +39,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 Doc reviewed ...
 Tests ...
 
@@ -61,12 +62,12 @@ import { newUserInterface } from './UI/UserInterface.js';
 import { newTravelEditorUI } from './UI/TravelEditorUI.js';
 import { newFileLoader } from './core/FileLoader.js';
 import { newRouteEditorUI } from './UI/RouteEditorUI.js';
-import { newContextMenu } from './UI/ContextMenu.js';
-import { newContextMenuFactory } from './UI/ContextMenuFactory.js';
 import { newBaseDialog } from './UI/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
 import { currentVersion } from './data/Version.js';
+
+import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -296,15 +297,10 @@ var travelNotesFactory = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _OnMapClick = function ( event ) {
-		if ( g_TravelNotesData.travel.readOnly ) {
-			return;
+	var _OnMapClick = function ( /*event*/ ) {
+		if ( ! g_TravelNotesData.travel.readOnly ) {
+			newMapContextMenu ( event ).show ( );
 		}
-		newContextMenu ( 
-			event, 
-			newContextMenuFactory ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-			.concat ( _LeftUserContextMenuData ) 
-		);
 	};
 	
 	/*
@@ -316,14 +312,9 @@ var travelNotesFactory = function ( ) {
 	*/
 
 	var _OnMapContextMenu = function ( event ) {
-		if ( g_TravelNotesData.travel.readOnly ) {
-			return;
+		if ( ! g_TravelNotesData.travel.readOnly ) {
+			newMapContextMenu ( event ).show ( );
 		}
-		newContextMenu (
-			event, 
-			newContextMenuFactory ( ).getMapContextMenu ( [ event.latlng.lat, event.latlng.lng ] )
-			.concat ( _RightUserContextMenuData )
-		);
 	};
 
 	return {
