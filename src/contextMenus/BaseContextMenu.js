@@ -39,7 +39,6 @@ import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 let s_Container = null;
 let s_TimerId = null;
 let s_FocusIsOnItem = 0;
-let s_MenuItems = [];
 let s_OriginalEvent = null;
 let s_Lat = 0;
 let s_Lng = 0;
@@ -50,7 +49,9 @@ let s_Lng = 0;
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseContextMenu ( originalEvent, menuItems ) {
+function newBaseContextMenu ( originalEvent ) {
+	
+	let s_MenuItems = [];
 	
 	let m_htmlElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_Body = document.getElementsByTagName('body') [0];
@@ -313,13 +314,17 @@ function newBaseContextMenu ( originalEvent, menuItems ) {
 			return;
 		}
 
-		s_MenuItems = menuItems;
-		
 		m_BuildContainer ( );
 		m_AddCloseButton ( );
 		m_AddMenuItems ( );
 		m_MoveContainer ( );	
 		m_AddKeyboardEvents ( );
+	}
+
+	function m_init ( menuItems ) {
+		s_MenuItems = menuItems; 
+		// completely crazy...
+		delete m_BaseContextMenu.init;
 	}
 	
 	/*
@@ -327,12 +332,13 @@ function newBaseContextMenu ( originalEvent, menuItems ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+	
+	let m_BaseContextMenu = {
+		init : ( menuItems ) => m_init ( menuItems ),
+		show : ( ) => m_Show ( )
+	};
 
-	return Object.seal (
-		{
-			show : ( ) => m_Show ( )
-		}
-	);
+	return m_BaseContextMenu;
 }
 
 /*

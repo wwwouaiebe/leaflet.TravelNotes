@@ -52,12 +52,12 @@ function newRouteContextMenu ( event ) {
 	let m_RouteObjId = event.target.objId;
 
 	/*
-	--- m_GetContent function -----------------------------------------------------------------------------------------
+	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetContent ( ) {
+	function m_GetMenuItems ( ) {
 		return [
 			{ 
 				context : g_RouteEditor, 
@@ -119,7 +119,10 @@ function newRouteContextMenu ( event ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( event, m_GetContent ( ) );
+	let routeContextMenu = newBaseContextMenu ( event );
+	routeContextMenu.init ( m_GetMenuItems ( ) );
+	
+	return Object.seal ( routeContextMenu );
 }
 
 /*

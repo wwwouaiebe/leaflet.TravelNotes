@@ -48,12 +48,12 @@ function newWayPointContextMenu ( event ) {
 	let m_WayPointObjId = event.target.objId;
 
 	/*
-	--- m_GetContent function -----------------------------------------------------------------------------------------
+	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetContent ( ) {
+	function m_GetMenuItems ( ) {
 		let isMidWayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== m_WayPointObjId  &&  g_TravelNotesData.travel.editedRoute.wayPoints.last.objId !== m_WayPointObjId ;
 		return [
 			{ 
@@ -71,7 +71,10 @@ function newWayPointContextMenu ( event ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( event, m_GetContent ( ) );
+	let wayPointContextMenu = newBaseContextMenu ( event );
+	wayPointContextMenu.init ( m_GetMenuItems ( ) );
+	
+	return Object.seal ( wayPointContextMenu );
 }
 
 /*

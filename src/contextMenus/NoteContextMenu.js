@@ -49,12 +49,12 @@ function newNoteContextMenu ( event ) {
 	let m_NoteObjId = event.target.objId;
 
 	/*
-	--- m_GetContent function -----------------------------------------------------------------------------------------
+	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetContent ( ) {
+	function m_GetMenuItems ( ) {
 
 		let route = newDataSearchEngine ( ).getNoteAndRoute ( m_NoteObjId ).route;
 		
@@ -92,7 +92,10 @@ function newNoteContextMenu ( event ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( event, m_GetContent ( ) );
+	let noteContextMenu = newBaseContextMenu ( event );
+	noteContextMenu.init ( m_GetMenuItems ( ) );
+	
+	return Object.seal ( noteContextMenu );
 }
 
 /*

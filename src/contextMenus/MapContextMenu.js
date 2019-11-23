@@ -52,12 +52,12 @@ function newMapContextMenu ( event ) {
 	let m_LatLng = [ event.latlng.lat, event.latlng.lng ];
 
 	/*
-	--- m_GetContent function -----------------------------------------------------------------------------------------
+	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	function m_GetContent ( ) {
+	function m_GetMenuItems ( ) {
 		return [
 			{ 
 				context : g_WayPointEditor, 
@@ -117,7 +117,11 @@ function newMapContextMenu ( event ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( event, m_GetContent ( ) );
+	let mapContextMenu = newBaseContextMenu ( event );
+	
+	mapContextMenu.init ( m_GetMenuItems ( ) );
+	
+	return Object.seal ( mapContextMenu );
 }
 
 /*
