@@ -36,6 +36,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
+		- Issue #70 : Put the get...HTML functions outside of the editors
 Doc reviewed 20191121
 Tests ...
 
@@ -52,7 +53,6 @@ import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_WayPointEditor } from '../core/WayPointEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_NoteEditor } from '../core/NoteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
@@ -60,6 +60,7 @@ import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newUtilities } from '../util/Utilities.js';
+import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -267,7 +268,7 @@ function newMapEditor ( ) {
 		polyline.bindPopup ( 
 			layer => {
 				let route = m_DataSearchEngine.getRoute ( layer.objId );
-				return g_RouteEditor.getRouteHTML ( route, 'TravelNotes-' );
+				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( route );
 			}
 		);
 		
@@ -670,7 +671,7 @@ function newMapEditor ( ) {
 		marker.bindPopup (
 			layer => {
 				let note = m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
-				return g_NoteEditor.getNoteHTML ( note, 'TravelNotes-' );
+				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( note );
 			}			
 		);
 		

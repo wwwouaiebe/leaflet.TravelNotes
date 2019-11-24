@@ -115,8 +115,7 @@ function newTravelEditor ( ) {
 		}
 		
 		if ( m_Utilities.storageAvailable ( 'localStorage' ) ) {
-			let htmlViewsFactory = newHTMLViewsFactory ( );
-			htmlViewsFactory.classNamePrefix = 'TravelNotes-Roadbook-';
+			let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
 			localStorage.setItem ( g_TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
 		}
 	}

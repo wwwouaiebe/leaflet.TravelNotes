@@ -41,6 +41,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #70 : Put the get...HTML functions outside of the editors
 Doc reviewed 20191122
 Tests ...
 
@@ -52,10 +53,9 @@ Tests ...
 /* global L */
 
 export { g_RouteEditor };
-import { g_TravelEditor } from '../core/TravelEditor.js';
 
+import { g_TravelEditor } from '../core/TravelEditor.js';
 import { g_Config } from '../data/Config.js';
-import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 
@@ -305,36 +305,6 @@ function newRouteEditor ( ) {
 	}
 	
 	/*
-	--- m_GetRouteHTML function ---------------------------------------------------------------------------------------
-
-	This function returns an HTML string with the route contents. This string will be used in the
-	route popup and on the roadbook page
-	
-	parameters:
-	- route : the TravelNotes route object
-	- classNamePrefix : a string that will be added to all the HTML classes
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_GetRouteHTML ( route, classNamePrefix ) {
-		
-		let returnValue = '<div class="' + classNamePrefix + 'Route-Header-Name">' +
-			route.name + 
-			'</div>';
-		if ( 0 !== route.distance ) {
-			returnValue += '<div class="' + classNamePrefix + 'Route-Header-Distance">' +
-				g_Translator.getText ( 'RouteEditor - Distance', { distance : m_Utilities.formatDistance ( route.distance ) } ) + '</div>';
-		}
-		if ( ! g_TravelNotesData.travel.readOnly ) {
-			returnValue += '<div class="' + classNamePrefix + 'Route-Header-Duration">' +
-				g_Translator.getText ( 'RouteEditor - Duration', { duration : m_Utilities.formatTime ( route.duration ) } ) + '</div>';
-		}
-		
-		return returnValue;
-	}
-		
-	/*
 	--- m_ChainRoutes function ----------------------------------------------------------------------------------------
 
 	This function recompute the distances when routes are chained
@@ -537,8 +507,6 @@ function newRouteEditor ( ) {
 
 			saveGpx : ( ) => m_SaveGpx ( ),
 			
-			getRouteHTML : ( route, classNamePrefix ) => { return m_GetRouteHTML ( route, classNamePrefix ); },
-
 			chainRoutes : ( ) => m_ChainRoutes ( ),
 			
 			startRouting : ( ) => m_StartRouting ( ),
@@ -553,7 +521,7 @@ function newRouteEditor ( ) {
 		
 			hideRoute : routeObjId => m_HideRoute ( routeObjId ),
 
-			showRoutes : ( ) => m_ShowRoutes ( ),
+			showRoutes : ( ) => m_ShowRoutes ( )
 		}
 	);
 }

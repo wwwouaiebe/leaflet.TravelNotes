@@ -170,8 +170,7 @@ var newItineraryPaneUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		}
 		
-		var htmlViewsFactory = newHTMLViewsFactory ( );
-		htmlViewsFactory.classNamePrefix = 'TravelNotes-Control-';
+		var htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
 		
 		var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 		if ( ! dataDiv ) {

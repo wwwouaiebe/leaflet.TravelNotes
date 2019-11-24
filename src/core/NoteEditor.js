@@ -32,6 +32,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #70 : Put the get...HTML functions outside of the editors
 Doc reviewed 20191121
 Tests ...
 
@@ -42,7 +43,6 @@ Tests ...
 
 export { g_NoteEditor };
 
-import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
@@ -50,7 +50,6 @@ import { g_TravelEditor } from '../core/TravelEditor.js';
 
 import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
-import { newUtilities } from '../util/Utilities.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
@@ -452,60 +451,6 @@ function newNoteEditor ( ) {
 	}
 		
 	/*
-	--- m_GetNoteHTML function ----------------------------------------------------------------------------------------
-
-	This function returns an HTML string with the note contents. This string will be used in the
-	note popup and on the roadbook page
-	
-	parameters:
-	- note : the TravelNotes object
-	- classNamePrefix : a string that will be added to all the HTML classes
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_GetNoteHTML ( note, classNamePrefix ) {
-	
-		let noteText = '';
-		if ( 0 !== note.tooltipContent.length ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
-		}
-		if ( 0 !== note.popupContent.length ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
-		}
-		if ( 0 !== note.address.length ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-Address">' + g_Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
-		}
-		if ( 0 !== note.phone.length ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-Phone">' + g_Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
-		}
-		if ( 0 !== note.url.length ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-Url">' + g_Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
-		}
-		let utilities = newUtilities ( );
-		noteText += '<div class="' + classNamePrefix + 'NoteHtml-LatLng">' + 
-			g_Translator.getText ( 
-				'NoteEditor - Latitude Longitude',
-				{ 
-					lat : utilities.formatLat ( note.lat ),
-					lng : utilities.formatLng ( note.lng )
-				}
-			) + '</div>';
-			
-		if ( -1 !== note.distance ) {
-			noteText += '<div class="' + classNamePrefix + 'NoteHtml-Distance">' +
-				g_Translator.getText ( 
-					'NoteEditor - Distance', 
-					{ 
-						distance: utilities.formatDistance ( note.chainedDistance + note.distance )
-					}
-				) + '</div>';
-		}
-		
-		return noteText;
-	}
-			
-	/*
 	--- noteEditor object ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -536,9 +481,7 @@ function newNoteEditor ( ) {
 			
 			detachNoteFromRoute : noteObjId => m_DetachNoteFromRoute ( noteObjId ),
 			
-			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore ),
-			
-			getNoteHTML : ( note, classNamePrefix ) => { return m_GetNoteHTML ( note, classNamePrefix ); }		
+			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore )
 		}
 	);
 }
