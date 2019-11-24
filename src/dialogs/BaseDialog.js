@@ -29,7 +29,8 @@ Changes:
 		the derived dialog boxes
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+		- Issue #66 : Work with promises for dialogs
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -40,8 +41,14 @@ Tests ...
 export { newBaseDialog };
 
 import { g_Translator } from '../UI/Translator.js';
-
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+
+/*
+--- newBaseDialog function --------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 let newBaseDialog = function ( ) {
 
@@ -53,27 +60,35 @@ let newBaseDialog = function ( ) {
 	let m_ScreenWidth = 0;
 	let m_ScreenHeight = 0;
 
+	// Div
 	let m_BackgroundDiv = null;
 	let m_DialogDiv = null;
 	let m_HeaderDiv = null;
 	let m_ContentDiv = null;
 	let m_ErrorDiv = null;
 	let m_FooterDiv = null;
+	
+	// Utilities
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 
+	// Listeners
 	let m_OkButtonListener = null;
 	let m_CancelButtonListener = null;
 	let m_EscapeKeyEventListener = null;
+	
+	// Promise callback
+	let m_OnOk = null;
+	let m_OnCancel = null;
 
 	/*
-	--- onKeyDown function --------------------------------------------------------------------------------------------
+	--- m_onKeyDown function ------------------------------------------------------------------------------------------
 
 	Keyboard event listener
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function onKeyDown ( keyBoardEvent ) {
+	function m_onKeyDown ( keyBoardEvent ) {
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
 			if ( m_EscapeKeyEventListener ) {
 				if ( ! m_EscapeKeyEventListener ( ) ) {
@@ -81,7 +96,7 @@ let newBaseDialog = function ( ) {
 				}
 			}
 
-			document.removeEventListener ( 'keydown', onKeyDown, true );
+			document.removeEventListener ( 'keydown', m_onKeyDown, true );
 			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
 		}
 	}
@@ -94,24 +109,17 @@ let newBaseDialog = function ( ) {
 
 	function m_CreateBackgroundDiv ( ) {
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		let body = document.getElementsByTagName('body') [0];
-		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} , body );
+		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} );
 		m_BackgroundDiv.addEventListener ( 
 			'dragover', 
-			function ( ) {
-				return;
-			},
+			( ) => { return; },
 			false
 		);	
 		m_BackgroundDiv.addEventListener ( 
 			'drop', 
-			function ( ) {
-				return;
-			},
+			( ) => { return; },
 			false
 		);	
-		m_ScreenWidth = m_BackgroundDiv.clientWidth;
-		m_ScreenHeight = m_BackgroundDiv.clientHeight;
 	}
 
 	/*
@@ -159,21 +167,22 @@ let newBaseDialog = function ( ) {
 		);
 		cancelButton.addEventListener ( 
 			'click',
-			function ( ) {
+			( ) => {
 				if ( m_CancelButtonListener ) {
 					if ( ! m_CancelButtonListener ( ) ) {
 						return;
 					}
 				}
-				document.removeEventListener ( 'keydown', onKeyDown, true );
+				document.removeEventListener ( 'keydown', m_onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
+				m_OnCancel ( );
 			},
 			false
 		);
 		
 		topBar.addEventListener ( 
 			'dragstart', 
-			function ( event ) {
+			( event ) => {
 				try {
 					event.dataTransfer.setData ( 'Text', '1' );
 				}
@@ -187,7 +196,7 @@ let newBaseDialog = function ( ) {
 		);	
 		topBar.addEventListener ( 
 			'dragend', 
-			function ( event ) {
+			( event ) => {
 				m_DialogX += event.screenX - m_StartDragX;
 				m_DialogY += event.screenY - m_StartDragY;
 				m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ),m_ScreenWidth - m_DialogDiv.clientWidth -20 );
@@ -276,14 +285,17 @@ let newBaseDialog = function ( ) {
 		);
 		okButton.addEventListener ( 
 			'click',
-			function ( ) {
+			( ) => {
+				let returnValue = null;
 				if ( m_OkButtonListener ) {
-					if ( ! m_OkButtonListener ( ) ) {
+					returnValue = m_OkButtonListener ( );
+					if ( ! returnValue ) {
 						return;
 					}
 				}
-				document.removeEventListener ( 'keydown', onKeyDown, true );
+				document.removeEventListener ( 'keydown', m_onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
+				m_OnOk ( returnValue );
 			},
 			false
 		);			
@@ -328,6 +340,35 @@ let newBaseDialog = function ( ) {
 		m_DialogDiv.setAttribute ( "style", "top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" );
 	}
 
+	/*
+	--- m_Display function --------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Display ( onOk, onCancel ) {
+		m_OnOk = onOk;
+		m_OnCancel = onCancel;
+		
+		document.getElementsByTagName('body') [0].appendChild ( m_BackgroundDiv );
+		document.addEventListener ( 'keydown', m_onKeyDown, true );
+		
+		m_ScreenWidth = m_BackgroundDiv.clientWidth;
+		m_ScreenHeight = m_BackgroundDiv.clientHeight;
+		m_Center ( );
+	}
+	
+	/*
+	--- m_Show function -----------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Show ( ) {
+		return new Promise ( m_Display );
+	}
+	
+	// the dialog is created, but not displayed
 	m_CreateBackgroundDiv ( );
 	m_CreateDialogDiv ( );
 	m_CreateTopBar ( );
@@ -335,8 +376,6 @@ let newBaseDialog = function ( ) {
 	m_CreateContentDiv ( );
 	m_CreateErrorDiv ( );
 	m_CreateFooterDiv ( );
-
-	document.addEventListener ( 'keydown', onKeyDown, true );
 	
 	/*
 	--- BaseDialog object ---------------------------------------------------------------------------------------------
@@ -344,30 +383,32 @@ let newBaseDialog = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return {
-		set okButtonListener ( Listener ) { m_OkButtonListener = Listener; },
-		
-		set cancelButtonListener ( Listener ) { m_CancelButtonListener = Listener; },
-		
-		set escapeKeyListener ( Listener ) { m_EscapeKeyEventListener = Listener; },
-				
-		center : ( ) => m_Center ( ),
+	return Object.seal ( 
+		{
+			set okButtonListener ( Listener ) { m_OkButtonListener = Listener; },
+			
+			set cancelButtonListener ( Listener ) { m_CancelButtonListener = Listener; },
+			
+			set escapeKeyListener ( Listener ) { m_EscapeKeyEventListener = Listener; },
+					
+			showError : errorText => m_ShowError ( errorText ),
+			hideError : ( ) => m_HideError ( ),
 
-		showError : errorText => m_ShowError ( errorText ),
-		hideError : ( ) => m_HideError ( ),
+			get title ( ) { return m_HeaderDiv.innerHTML; },
+			set title ( Title ) { m_HeaderDiv.innerHTML = Title; },
 
-		get title ( ) { return m_HeaderDiv.innerHTML; },
-		set title ( Title ) { m_HeaderDiv.innerHTML = Title; },
+			get header ( ) { return m_HeaderDiv;},
+			set header ( Header ) { m_HeaderDiv = Header; },
+			
+			get content ( ) { return m_ContentDiv;},
+			set content ( Content ) { m_ContentDiv = Content; },
 
-		get header ( ) { return m_HeaderDiv;},
-		set header ( Header ) { m_HeaderDiv = Header; },
-		
-		get content ( ) { return m_ContentDiv;},
-		set content ( Content ) { m_ContentDiv = Content; },
-
-		get footer ( ) { return m_FooterDiv;},
-		set footer ( Footer ) { m_FooterDiv = Footer; },
-	};
+			get footer ( ) { return m_FooterDiv;},
+			set footer ( Footer ) { m_FooterDiv = Footer; },
+			
+			show : ( ) => { return m_Show ( ) ; }
+		}
+	);
 };
 
 /*

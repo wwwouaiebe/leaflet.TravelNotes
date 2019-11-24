@@ -25,7 +25,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+		- Issue #66 : Work with promises for dialogs
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -36,41 +37,52 @@ Tests ...
 export { newColorDialog };
 
 import { g_Translator } from '../UI/Translator.js';
-
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
-
-var onOkButtonClick = function ( ) {
-	return true;
-};
 	
+/*
+--- newColorDialog function -------------------------------------------------------------------------------------------
 
-var newColorDialog = function ( color ) {
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function newColorDialog ( color ) {
+	
+	let m_ColorDialog = null;
+	let m_ColorDiv = null;
+	let m_NewColor = color;
+	let m_RedInput = null;
+	let m_GreenInput = null;
+	let m_BlueInput = null;
+	let m_ColorSampleDiv = null;
+	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	
 	/*
-	--- colorToNumbers function ---------------------------------------------------------------------------------------
+	--- m_ColorToNumbers function -------------------------------------------------------------------------------------
 
 	This function transforms a css color into an object { r : xx, g : xx, b : xx}
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var colorToNumbers = function ( color ) {
+	function m_ColorToNumbers ( color ) {
 		return {
 			r : parseInt ( color.substr ( 1, 2 ), 16 ),
 			g : parseInt ( color.substr ( 3, 2 ), 16 ), 
 			b : parseInt ( color.substr ( 5, 2 ), 16 ), 
 		};
-	};
+	}
 	
 	/*
-	--- colorToNumbers function ---------------------------------------------------------------------------------------
+	--- m_NumbersToColor function -------------------------------------------------------------------------------------
 
 	This function transforms 3 numbers into a css color
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	var numbersToColor = function ( r, g, b ) {
+	
+	function m_NumbersToColor ( r, g, b ) {
 		// MS Edge do't know padStart...
 		if ( ! String.prototype.padStart ) {
 			String.prototype.padStart = function padStart ( targetLength, padString ) {
@@ -93,214 +105,274 @@ var newColorDialog = function ( color ) {
 			parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
 			parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
 			parseInt ( b ).toString(16).padStart ( 2, '0' ) ;
-	};
+	}
 
-	// Click event handler on a color button
-	var onColorClick = function ( event ) {
-		newColor = event.target.colorValue;
-		var numbers = colorToNumbers ( newColor );
-		redInput.value = numbers.r;
-		greenInput.value = numbers.g;
-		blueInput.value = numbers.b;
-		document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
-	};
+	/*
+	--- m_OnColorClick function ---------------------------------------------------------------------------------------
+
+	Click event handler on a color button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnColorClick ( event ) {
+		m_NewColor = event.target.colorValue;
+		let numbers = m_ColorToNumbers ( m_NewColor );
+		m_RedInput.value = numbers.r;
+		m_GreenInput.value = numbers.g;
+		m_BlueInput.value = numbers.b;
+		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		m_ColorSampleDiv.color = m_NewColor;
+	}
 	
-	// Click event handler on a red color button
-	var onRedColorClick = function ( event ) {
-		var r = event.target.redValue;
-		var g = 255;
-		var b = 255;
-		var rowCounter = 0;
+	/*
+	--- m_OnRedColorClick function ------------------------------------------------------------------------------------
+
+	Click event handler on a red color button
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnRedColorClick ( event ) {
+		let r = event.target.redValue;
+		let g = 255;
+		let b = 255;
+		let rowCounter = 0;
 		while ( ++ rowCounter < 7 ) {
-			var cellCounter = 0;
+			let cellCounter = 0;
 			g = 255;
 			while ( ++ cellCounter < 7 ) {
-				var button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-				button.colorValue = numbersToColor ( r, g, b );
-				button.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
+				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
+				button.colorValue = m_NumbersToColor ( r, g, b );
+				button.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( r, g, b ) );
 				g -= 51;
 			}
 			b -= 51;
 		}
-	};
+	}
 
-	// Red, green or blue input event handler 
-	var onColorInput = function ( )  {
-		newColor = numbersToColor ( redInput.value, greenInput.value, blueInput.value );
-		document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv').setAttribute ( 'style', 'background-color:' + newColor + ';' );
-	};
-	
+	/*
+	--- m_OnColorInput function ------------------------------------------------------------------------------------
 
-	var newColor = color;
-	var htmlElementsFactory = newHTMLElementsFactory ( ) ;
+	Red, green or blue input event handler 
 
-	// the dialog base is created
-	var baseDialog = newBaseDialog ( );
-	baseDialog.title = g_Translator.getText ( 'ColorDialog - Colors' );
-	baseDialog.okButtonListener = onOkButtonClick;
-	baseDialog.getNewColor = function ( ) {
-		return newColor;
-	};
-	
-	// elements are added to the base dialog content
-	var colorDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-ColorDialog-ColorDiv',
-			id : 'TravelNotes-ColorDialog-ColorDiv'
-		},
-		baseDialog.content
-	);
-	var buttonsDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-ColorDialog-ButtonsDiv',
-			id : 'TravelNotes-ColorDialog-ButtonsDiv'
-		},
-		colorDiv
-	);
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-	var r = 255;
-	var g = 255;
-	var b = 255;		
-	var rowCounter = 0;
-	
-	// loop on the 7 rows
-	while ( ++ rowCounter < 8 ) {			
-		var colorButtonsRowDiv = htmlElementsFactory.create (
+	function m_OnColorInput ( )  {
+		m_NewColor = m_NumbersToColor ( m_RedInput.value, m_GreenInput.value, m_BlueInput.value );
+		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:' + m_NewColor + ';' );
+		m_ColorSampleDiv.color = m_NewColor;
+	}
+
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateDialog ( ) {		
+		// the dialog base is created
+		m_ColorDialog = newBaseDialog ( );
+		m_ColorDialog.title = g_Translator.getText ( 'ColorDialog - Colors' );
+	}
+
+	/*
+	--- m_CreateColorDiv function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateColorDiv ( ) {
+		m_ColorDiv = m_HTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-RowColorDiv',
-				id : 'TravelNotes-ColorDialog-RowColorDiv' +rowCounter
+				className : 'TravelNotes-ColorDialog-ColorDiv',
+				id : 'TravelNotes-ColorDialog-ColorDiv'
 			},
-			buttonsDiv
+			m_ColorDialog.content
 		);
-		
-		var cellCounter = 0;
-		g = 255;
-		
-		// loop on the 6 cells
-		while ( ++ cellCounter < 7 ) {
-			var colorButtonCellDiv = htmlElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-ColorDialog-CellColorDiv',
-					id : ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter
-				},
-				colorButtonsRowDiv
-			);
-			if ( rowCounter < 7 ) {
-				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + numbersToColor ( r, g, b ) );
-				colorButtonCellDiv.colorValue = numbersToColor ( r, g, b );
-				colorButtonCellDiv.addEventListener ( 'click', onColorClick, false );
-				g -= 51;
-			}
-			else
-			{
-				r = ( cellCounter - 1 ) * 51;
-				var buttonColor = numbersToColor ( 255, r, r );
-				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
-				colorButtonCellDiv.redValue = 255 - r;
-				colorButtonCellDiv.addEventListener ( 'click', onRedColorClick, false );
-			}
-		}
-		b -= 51;
 	}
 	
-	var rvbDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-ColorDialog-DataDiv',
-			id : 'TravelNotes-ColorDialog-DataDiv'
-		},
-		colorDiv
-	);
-	
-	// ... red ...
-	htmlElementsFactory.create (
-		'text',
-		{
-			data : g_Translator.getText ( 'ColorDialog - Red'),
-		},
-		rvbDiv
-	);
-	var redInput =  htmlElementsFactory.create (
-		'input',
-		{
-			type : 'number',
-			className : 'TravelNotes-ColorDialog-NumberInput',
-			id : 'TravelNotes-ColorDialog-RedInput'
+	/*
+	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateButtonsDiv ( ) {
+		let buttonsDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-ButtonsDiv',
+				id : 'TravelNotes-ColorDialog-ButtonsDiv'
+			},
+			m_ColorDiv
+		);
+
+		let r = 255;
+		let g = 255;
+		let b = 255;		
+		let rowCounter = 0;
+		
+		// loop on the 7 rows
+		while ( ++ rowCounter < 8 ) {			
+			let colorButtonsRowDiv = m_HTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-ColorDialog-RowColorDiv',
+					id : 'TravelNotes-ColorDialog-RowColorDiv' +rowCounter
+				},
+				buttonsDiv
+			);
 			
-		},
-		rvbDiv
-	);
-	redInput.value = colorToNumbers ( color ).r;
-	redInput.min = 0;
-	redInput.max = 255;
+			let cellCounter = 0;
+			g = 255;
+			
+			// loop on the 6 cells
+			while ( ++ cellCounter < 7 ) {
+				let colorButtonCellDiv = m_HTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-ColorDialog-CellColorDiv',
+						id : ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter
+					},
+					colorButtonsRowDiv
+				);
+				if ( rowCounter < 7 ) {
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( r, g, b ) );
+					colorButtonCellDiv.colorValue = m_NumbersToColor ( r, g, b );
+					colorButtonCellDiv.addEventListener ( 'click', m_OnColorClick, false );
+					g -= 51;
+				}
+				else
+				{
+					r = ( cellCounter - 1 ) * 51;
+					let buttonColor = m_NumbersToColor ( 255, r, r );
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
+					colorButtonCellDiv.redValue = 255 - r;
+					colorButtonCellDiv.addEventListener ( 'click', m_OnRedColorClick, false );
+				}
+			}
+			b -= 51;
+		}
+	}
 	
-	redInput.addEventListener ( 'input', onColorInput, false );
-	
-	// ... and green...
-	htmlElementsFactory.create (
-		'text',
-		{
-			data : g_Translator.getText ( 'ColorDialog - Green'),
-		},
-		rvbDiv
-	);
-	var greenInput =  htmlElementsFactory.create (
-		'input',
-		{
-			type : 'number',
-			className : 'TravelNotes-ColorDialog-NumberInput',
-			id : 'TravelNotes-ColorDialog-GreenInput'
-		},
-		rvbDiv
-	);
-	greenInput.value = colorToNumbers ( color ).g;
-	greenInput.min = 0;
-	greenInput.max = 255;
-	greenInput.addEventListener ( 'input', onColorInput, false );
+	/*
+	--- m_CreateRvbDiv function ---------------------------------------------------------------------------------------
 
-	// ... and blue
-	htmlElementsFactory.create (
-		'text',
-		{
-			data : g_Translator.getText ( 'ColorDialog - Blue'),
-		},
-		rvbDiv
-	);
-	var blueInput =  htmlElementsFactory.create (
-		'input',
-		{
-			type : 'number',
-			className : 'TravelNotes-ColorDialog-NumberInput',
-			id : 'TravelNotes-ColorDialog-BlueInput'
-		},
-		rvbDiv
-	);
-	blueInput.value = colorToNumbers ( color ).b;
-	blueInput.min = 0;
-	blueInput.max = 255;
-	blueInput.addEventListener ( 'input', onColorInput, false );
-	
-	// Sample color
-	var colorSampleDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-ColorDialog-ColorSampleDiv',
-			id : 'TravelNotes-ColorDialog-ColorSampleDiv'
-		},
-		colorDiv
-	);
-	colorSampleDiv.setAttribute ( 'style', 'background-color:'+ color +';' );
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
+	function m_CreateRvbDiv ( ) {
+		let rvbDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-DataDiv',
+				id : 'TravelNotes-ColorDialog-DataDiv'
+			},
+			m_ColorDiv
+		);
+		
+		// ... red ...
+		m_HTMLElementsFactory.create (
+			'text',
+			{
+				data : g_Translator.getText ( 'ColorDialog - Red'),
+			},
+			rvbDiv
+		);
+		m_RedInput =  m_HTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-RedInput'
+				
+			},
+			rvbDiv
+		);
+		m_RedInput.value = m_ColorToNumbers ( m_NewColor ).r;
+		m_RedInput.min = 0;
+		m_RedInput.max = 255;
+		
+		m_RedInput.addEventListener ( 'input', m_OnColorInput, false );
+		
+		// ... and green...
+		m_HTMLElementsFactory.create (
+			'text',
+			{
+				data : g_Translator.getText ( 'ColorDialog - Green'),
+			},
+			rvbDiv
+		);
+		m_GreenInput =  m_HTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-GreenInput'
+			},
+			rvbDiv
+		);
+		m_GreenInput.value = m_ColorToNumbers ( m_NewColor ).g;
+		m_GreenInput.min = 0;
+		m_GreenInput.max = 255;
+		m_GreenInput.addEventListener ( 'input', m_OnColorInput, false );
+
+		// ... and blue
+		m_HTMLElementsFactory.create (
+			'text',
+			{
+				data : g_Translator.getText ( 'ColorDialog - Blue'),
+			},
+			rvbDiv
+		);
+		m_BlueInput =  m_HTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-ColorDialog-NumberInput',
+				id : 'TravelNotes-ColorDialog-BlueInput'
+			},
+			rvbDiv
+		);
+		m_BlueInput.value = m_ColorToNumbers ( m_NewColor ).b;
+		m_BlueInput.min = 0;
+		m_BlueInput.max = 255;
+		m_BlueInput.addEventListener ( 'input', m_OnColorInput, false );
+	}
 	
-	// and the dialog is centered on the screen
-	baseDialog.center ( );
+	/*
+	--- m_CreateColorSampleDiv function -------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateColorSampleDiv ( ) {
+		m_ColorSampleDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ColorDialog-ColorSampleDiv',
+				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
+			},
+			m_ColorDiv
+		);
+		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ m_NewColor +';' );
+		m_ColorSampleDiv.color = m_NewColor;
+	}
+
+
+
+
+	m_CreateDialog ( );
+	m_CreateColorDiv ( );
+	m_CreateButtonsDiv ( );
+	m_CreateRvbDiv ( );
+	m_CreateColorSampleDiv ( );
 	
-	return baseDialog;
-};
+	return m_ColorDialog;
+}
 
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------

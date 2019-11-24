@@ -40,6 +40,7 @@ Changes:
 		- Issue #62 : Remove time from route popup when readonly travel.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #66 : Work with promises for dialogs
 Doc reviewed 20191122
 Tests ...
 
@@ -471,7 +472,16 @@ function newRouteEditor ( ) {
 
 	function m_RouteProperties ( routeObjId ) {
 		let route = m_DataSearchEngine.getRoute ( routeObjId );
-		newRoutePropertiesDialog ( route );
+		let routePropertiesDialog = newRoutePropertiesDialog ( route );
+		
+		routePropertiesDialog.show ( ).then ( 
+			route => {
+				g_MapEditor.editRoute ( route );
+				g_RouteEditor.chainRoutes ( );
+				newTravelEditorUI ( ).setRoutesList ( );
+				g_TravelEditor.updateRoadBook ( );				
+			}		
+		).catch ( err => console.log ( err ? err : "an error occurs..." )  );
 	}
 		
 	/*

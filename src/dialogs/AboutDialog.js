@@ -27,7 +27,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+		- Issue #66 : Work with promises for dialogs
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -38,22 +39,28 @@ Tests ...
 export { newAboutDialog };
 
 import { g_Translator } from '../UI/Translator.js';
-
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
 import { currentVersion } from '../data/Version.js';
 
+/*
+--- newAboutDialog function -------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 var newAboutDialog = function ( ) {
 	
-	var baseDialog = newBaseDialog ( );
-	baseDialog.title = g_Translator.getText ( 'AboutDialog - About Travel & Notes' );
+	var aboutDialog = newBaseDialog ( );
+	aboutDialog.title = g_Translator.getText ( 'AboutDialog - About Travel & Notes' );
 	
 	var aboutDiv = newHTMLElementsFactory ( ).create (
 		'div',
 		{
 			id : 'TravelNotes-AboutDialog-AboutDiv'
 		},
-		baseDialog.content
+		aboutDialog.content
 	);
 	
 	aboutDiv.innerHTML = 
@@ -68,9 +75,8 @@ var newAboutDialog = function ( ) {
 		" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>Project-OSRM/osrm-text-instructions</a> and " +
 		" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
 	
-	baseDialog.center ( );
-	
-	return baseDialog;
+	aboutDialog.show ( ).then ( ).catch ( err => console.log ( err) );
+
 };
 
 /*

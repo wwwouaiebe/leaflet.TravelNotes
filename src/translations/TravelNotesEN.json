@@ -196,6 +196,10 @@
 		"msgstr" : "Address&nbsp;:"
 	},
 	{
+		"msgid" : "Notedialog - an error occurs when searching the adress",
+		"msgstr" : "An error occurs when searching the adress"
+	},
+	{
 		"msgid" : "Notedialog - The icon content cannot be empty",
 		"msgstr" : "The icon content cannot be empty."
 	},

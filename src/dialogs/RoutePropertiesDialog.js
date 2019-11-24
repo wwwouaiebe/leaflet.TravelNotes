@@ -28,7 +28,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+		- Issue #66 : Work with promises for dialogs
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -40,127 +41,168 @@ export { newRoutePropertiesDialog };
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
-import { g_MapEditor } from '../core/MapEditor.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
-
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
-import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 
 /*
---- newRoutePropertiesDialog function -----------------------------------------------------------------------------
+--- newRoutePropertiesDialog function ---------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newRoutePropertiesDialog = function ( route ) {
+function newRoutePropertiesDialog ( route ) {
 	
+	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let m_RoutePropertiesDialog = null;
+	let m_RoutePropertiesDiv = null;
+	let m_WidthInput = null;
+	let m_ChainInput = null;
+	let m_DashSelect = null;
 	/*
-	--- onOkButtonClick function --------------------------------------------------------------------------------------
+	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
 
 	click event listener for the ok button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var onOkButtonClick = function ( ) {
-		route.color = routePropertiesDialog.getNewColor ( );
-		route.width = parseInt ( widthInput.value );
-		route.chain = chainInput.checked;
-		route.dashArray = dashSelect.selectedIndex;
+	function m_OnOkButtonClick ( ) {
+		route.color = document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv' ).color;
+		route.width = parseInt ( m_WidthInput.value );
+		route.chain = m_ChainInput.checked;
+		route.dashArray = m_DashSelect.selectedIndex;
 
-		g_MapEditor.editRoute ( route );
-		g_RouteEditor.chainRoutes ( );
-		newTravelEditorUI ( ).setRoutesList ( );
-		g_TravelEditor.updateRoadBook ( );
-		return true;
-	};
-
-	// the dialog base is created
-	var routePropertiesDialog = newColorDialog ( route.color );
-	routePropertiesDialog.title = g_Translator.getText ( 'RoutePropertiesDialog - Route properties' );
-	routePropertiesDialog.okButtonListener = onOkButtonClick;
-	
-	var htmlElementsFactory = newHTMLElementsFactory ( ) ;
-
-	var routePropertiesDiv = htmlElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
-		},
-		routePropertiesDialog.content
-	);
-	
-	// ... width ...
-	var widthDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-			id : 'TravelNotes-RoutePropertiesDialog-WithDiv'
-		},
-		routePropertiesDiv
-	);
-	widthDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
-	var widthInput =  htmlElementsFactory.create (
-		'input',
-		{
-			type : 'number',
-			id : 'TravelNotes-RoutePropertiesDialog-WidthInput'
-			
-		},
-		widthDiv
-	);
-	widthInput.value = route.width;
-	widthInput.min = 1;
-	widthInput.max = 40;
-
-	// dash
-	var dashDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-			id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
-		},
-		routePropertiesDiv
-	);
-	dashDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
-	var dashSelect = htmlElementsFactory.create (
-		'select',
-		{
-			className : 'TravelNotes-RoutePropertiesDialog-Select',
-			id : 'TravelNotes-RoutePropertiesDialog-DashSelect'
-		},
-		dashDiv
-	);
-
-	var dashChoices = g_Config.route.dashChoices;
-	for ( var optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
-		dashSelect.add ( htmlElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
+		return route;
 	}
-	dashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateDialog ( ) {
+		// the dialog base is created
+		m_RoutePropertiesDialog = newColorDialog ( route.color );
+		m_RoutePropertiesDialog.title = g_Translator.getText ( 'RoutePropertiesDialog - Route properties' );
+		m_RoutePropertiesDialog.okButtonListener = m_OnOkButtonClick;
+	}
+
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateRoutePropertiesDiv ( ) {
+		m_RoutePropertiesDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
+			},
+			m_RoutePropertiesDialog.content
+		);
+	}
 	
-	// chain
-	var chainDiv = htmlElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-			id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'
-		},
-		routePropertiesDiv
-	);
-	chainDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
-	var chainInput =  htmlElementsFactory.create (
-		'input',
-		{
-			type : 'checkbox',
-			id : 'TravelNotes-RoutePropertiesDialog-ChainInput'			
-		},
-		chainDiv
-	);
-	chainInput.checked = route.chain;
-	return routePropertiesDialog;
-};
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateWidthDiv ( ) {
+		let widthDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-WithDiv'
+			},
+			m_RoutePropertiesDiv
+		);
+		widthDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
+		m_WidthInput =  m_HTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				id : 'TravelNotes-RoutePropertiesDialog-WidthInput'
+				
+			},
+			widthDiv
+		);
+		m_WidthInput.value = route.width;
+		m_WidthInput.min = 1;
+		m_WidthInput.max = 40;
+	}
+
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateDashDiv ( ) {
+		let dashDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
+			},
+			m_RoutePropertiesDiv
+		);
+		dashDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
+		m_DashSelect = m_HTMLElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-Select',
+				id : 'TravelNotes-RoutePropertiesDialog-DashSelect'
+			},
+			dashDiv
+		);
+
+		let dashChoices = g_Config.route.dashChoices;
+		for ( let optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
+			m_DashSelect.add ( m_HTMLElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
+		}
+		m_DashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+	}
+	
+	/*
+	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateChainDiv ( ) {
+		let chainDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'
+			},
+			m_RoutePropertiesDiv
+		);
+		chainDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
+		m_ChainInput =  m_HTMLElementsFactory.create (
+			'input',
+			{
+				type : 'checkbox',
+				id : 'TravelNotes-RoutePropertiesDialog-ChainInput'			
+			},
+			chainDiv
+		);
+		m_ChainInput.checked = route.chain;
+	}
+
+
+	
+	m_CreateDialog ( );
+	m_CreateRoutePropertiesDiv ( );
+	m_CreateWidthDiv ( );
+	m_CreateDashDiv ( );
+	m_CreateChainDiv ( );
+	
+	return m_RoutePropertiesDialog;
+}
 
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------

@@ -31,6 +31,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #66 : Work with promises for dialogs
 Doc reviewed 20191121
 Tests ...
 
@@ -186,7 +187,20 @@ function newNoteEditor ( ) {
 		note.distance = latLngDistance.distance;
 		
 		// and displayed in a dialog box
-		newNoteDialog ( note, routeObjId, true );
+		newNoteDialog ( note, routeObjId, true )
+		.show ( )
+		.then ( 
+			newNote => {
+				let route = m_DataSearchEngine.getRoute ( routeObjId );
+				route.notes.add ( newNote );
+				newNote.chainedDistance = route.chainedDistance;
+				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
+				newDataPanesUI ( ).setItinerary ( );
+				g_MapEditor.addNote ( newNote );
+				g_TravelEditor.updateRoadBook ( );
+			}
+		)
+		.catch ( err => console.log ( err ) );
 	}
 	
 	/*
@@ -212,7 +226,17 @@ function newNoteEditor ( ) {
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
 		
-		newNoteDialog ( note, -1, true );
+		newNoteDialog ( note, -1, true )
+		.show ( )
+		.then ( 
+			newNote => {
+				g_TravelNotesData.travel.notes.add ( newNote );
+				newDataPanesUI ( ).setTravelNotes ( );
+				g_MapEditor.addNote ( newNote );
+				g_TravelEditor.updateRoadBook ( );
+			}
+		)
+		.catch ( err => console.log ( err) );
 	}
 	
 	/*
@@ -245,7 +269,20 @@ function newNoteEditor ( ) {
 		note.iconHeight = 40;
 
 		// and displayed in a dialog box
-		newNoteDialog ( note, g_TravelNotesData.travel.editedRoute.objId, true );
+		newNoteDialog ( note, g_TravelNotesData.travel.editedRoute.objId, true )
+		.show ( )
+		.then ( 
+			newNote => {
+				let route = m_DataSearchEngine.getRoute ( g_TravelNotesData.travel.editedRoute.objId );
+				route.notes.add ( newNote );
+				newNote.chainedDistance = route.chainedDistance;
+				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
+				newDataPanesUI ( ).setItinerary ( );
+				g_MapEditor.addNote ( newNote );
+				g_TravelEditor.updateRoadBook ( );
+			}
+		)
+		.catch ( err => console.log ( err) );
 	}
 
 	/*
@@ -264,57 +301,18 @@ function newNoteEditor ( ) {
 		let note = m_NewNote ( latLng );
 
 		// and displayed in a dialog box
-		newNoteDialog ( note, -1, true );
-	}
-
-	/*
-	--- m_AfterNoteDialog function ------------------------------------------------------------------------------------
-
-	This function is called when the user push on the ok button of the note dialog
-	
-	parameters:
-	- note : the note modified in the dialog box
-	- routeObjId : the TravelNotes route objId passed to the note dialog box
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_AfterNoteDialog ( note, routeObjId ) {
-		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( note.objId );
-		if ( noteAndRoute.note ) {
-			// it's an existing note. The note is changed on the map
-			g_MapEditor.redrawNote ( note );
-			if ( ! noteAndRoute.route ) {
-				// it's a travel note. UI is also adapted
+		newNoteDialog ( note, -1, true )
+		.show ( )
+		.then ( 
+			newNote => 
+			{
+				g_TravelNotesData.travel.notes.add ( newNote );
 				newDataPanesUI ( ).setTravelNotes ( );
+				g_MapEditor.addNote ( newNote );
+				g_TravelEditor.updateRoadBook ( );
 			}
-			else {
-				newDataPanesUI ( ).setItinerary ( );
-			}
-		}
-		else {
-			// it's a new note
-			if ( -1 === routeObjId ) {
-				// it's a global note
-				g_TravelNotesData.travel.notes.add ( note );
-				newDataPanesUI ( ).setTravelNotes ( );
-			}
-			else {
-				// the note is linked with a route, so...
-				let route = m_DataSearchEngine.getRoute ( routeObjId );
-				route.notes.add ( note );
-				// ... the chainedDistance is adapted...
-				note.chainedDistance = route.chainedDistance;
-				// and the notes sorted
-				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
-				// and in the itinerary is adapted...
-				newDataPanesUI ( ).setItinerary ( );
-			}
-			// the note is added to the leaflet map
-			g_MapEditor.addNote ( note );
-		}
-		// and the HTML page is adapted
-		g_TravelEditor.updateRoadBook ( );
+		)
+		.catch ( err => console.log ( err) );
 	}
 	
 	/*
@@ -330,7 +328,26 @@ function newNoteEditor ( ) {
 
 	function m_EditNote ( noteObjId ) {
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
-		newNoteDialog ( noteAndRoute.note, null === noteAndRoute.route ? -1 : noteAndRoute.route.objId, false );
+		let routeObjId = null === noteAndRoute.route ? -1 : noteAndRoute.route.objId;
+		newNoteDialog ( noteAndRoute.note, routeObjId, false )
+		.show ( )
+		.then ( 
+			modifiedNote => {
+				let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
+				if ( noteAndRoute.note ) {
+					// it's an existing note. The note is changed on the map
+					g_MapEditor.redrawNote ( modifiedNote );
+					if ( ! noteAndRoute.route ) {
+						newDataPanesUI ( ).setTravelNotes ( );
+					}
+					else {
+						newDataPanesUI ( ).setItinerary ( );
+					}
+				}
+				g_TravelEditor.updateRoadBook ( );
+			}
+		)
+		.catch ( err => console.log ( err) );
 	}
 
 	/*
@@ -504,8 +521,6 @@ function newNoteEditor ( ) {
 			newManeuverNote : ( maneuverObjId, latLng ) => m_NewManeuverNote ( maneuverObjId, latLng ),
 		
 			newTravelNote : latLng => m_NewTravelNote ( latLng ),
-		
-			afterNoteDialog : ( note, routeObjId ) => m_AfterNoteDialog ( note, routeObjId ),	
 		
 			editNote : noteObjId =>	m_EditNote ( noteObjId ),
 		
