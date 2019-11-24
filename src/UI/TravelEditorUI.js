@@ -52,7 +52,7 @@ import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
 

@@ -40,7 +40,7 @@ export { newDataPanesUI };
 
 import { g_Translator } from '../UI/Translator.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';

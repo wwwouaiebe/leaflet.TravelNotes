@@ -47,7 +47,7 @@ import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
 import { newObjId } from '../data/ObjId.js';
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 
 var newHTMLViewsFactory = function ( ) {

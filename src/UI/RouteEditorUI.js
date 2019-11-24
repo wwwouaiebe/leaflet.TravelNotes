@@ -44,7 +44,7 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_WayPointEditor } from '../core/WayPointEditor.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 
 var m_WayPointsList = null;

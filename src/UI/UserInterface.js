@@ -37,7 +37,7 @@ Tests ...
 
 export { newUserInterface };
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newDataPanesUI } from '../UI/DataPanesUI.js';

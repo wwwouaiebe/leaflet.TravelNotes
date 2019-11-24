@@ -40,7 +40,7 @@ export { newErrorEditorUI };
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 var _TimerId = null;
 

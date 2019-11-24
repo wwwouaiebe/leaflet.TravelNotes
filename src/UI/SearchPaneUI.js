@@ -42,7 +42,7 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 

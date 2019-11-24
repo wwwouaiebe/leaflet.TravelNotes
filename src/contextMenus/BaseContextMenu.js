@@ -34,7 +34,7 @@ export { newBaseContextMenu };
 
 import { g_Config } from '../data/Config.js';
 import { g_Translator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 let s_Container = null;
 let s_TimerId = null;

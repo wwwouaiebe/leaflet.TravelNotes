@@ -40,7 +40,7 @@ export { newAboutDialog };
 
 import { g_Translator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { currentVersion } from '../data/Version.js';
 
 /*

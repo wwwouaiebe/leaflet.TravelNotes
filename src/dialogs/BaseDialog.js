@@ -41,7 +41,7 @@ Tests ...
 export { newBaseDialog };
 
 import { g_Translator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
 --- newBaseDialog function --------------------------------------------------------------------------------------------

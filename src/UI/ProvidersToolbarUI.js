@@ -40,7 +40,7 @@ export { newProvidersToolbarUI };
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
 --- providersToolbarUI function ---------------------------------------------------------------------------------------

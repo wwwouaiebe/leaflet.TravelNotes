@@ -26,7 +26,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -42,7 +42,38 @@ export { newHTMLElementsFactory };
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newHTMLElementsFactory = function ( ) {
+function newHTMLElementsFactory ( ) {
+	
+	/* 
+	--- m_Create function ---------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	
+	function m_Create  ( tagName, properties, parentNode ) {
+		var element;
+		if ( 'text' === tagName.toLowerCase ( ) ) {
+			element = document.createTextNode ( '' );
+		}
+		else {
+			element = document.createElement ( tagName );
+		}
+		if ( parentNode ) {
+			parentNode.appendChild ( element );
+		}
+		if ( properties )
+		{
+			for ( var property in properties ) {
+				try {
+					element [ property ] = properties [ property ];
+				}
+				catch ( e ) {
+					console.log ( "Invalid property : " + property );
+				}
+			}
+		}
+		return element;	
+	}
 
 	/* 
 	--- HTMLElementsFactory object ------------------------------------------------------------------------------------
@@ -52,33 +83,10 @@ var newHTMLElementsFactory = function ( ) {
 
 	return Object.seal (
 		{
-			create : function ( tagName, properties, parentNode ) {
-				var element;
-				if ( 'text' === tagName.toLowerCase ( ) ) {
-					element = document.createTextNode ( '' );
-				}
-				else {
-					element = document.createElement ( tagName );
-				}
-				if ( parentNode ) {
-					parentNode.appendChild ( element );
-				}
-				if ( properties )
-				{
-					for ( var property in properties ) {
-						try {
-							element [ property ] = properties [ property ];
-						}
-						catch ( e ) {
-							console.log ( "Invalid property : " + property );
-						}
-					}
-				}
-				return element;
-			}
+			create : ( tagName, properties, parentNode ) => { return m_Create ( tagName, properties, parentNode ); }
 		}
 	);	
-};
+}
 	
 /*
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------

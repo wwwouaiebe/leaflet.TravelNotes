@@ -46,7 +46,7 @@ export { newNoteDialog };
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 

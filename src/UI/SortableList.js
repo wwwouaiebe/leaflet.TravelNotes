@@ -35,7 +35,7 @@ export { newSortableList };
 
 import { g_Translator } from '../UI/Translator.js';
 
-import { newHTMLElementsFactory } from '../UI/HTMLElementsFactory.js';
+import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 var _DataObjId  = 0;
 
