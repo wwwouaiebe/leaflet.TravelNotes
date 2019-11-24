@@ -24,7 +24,7 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
-Doc reviewed ...
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------

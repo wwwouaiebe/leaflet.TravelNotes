@@ -24,7 +24,7 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
-Doc reviewed ...
+Doc reviewed 20191124
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -77,9 +77,9 @@ function newBaseContextMenu ( originalEvent ) {
 		document.removeEventListener ( 'keyup', m_OnKeyUp, true );
 		
 		// removing menu items
-		var childNodes = s_Container.childNodes;
+		let childNodes = s_Container.childNodes;
 		childNodes [ 0 ].firstChild.removeEventListener ( 'click', m_OnCloseMenu, false );
-		for ( var childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+		for ( let childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', m_OnClickItem, false );
 		}
 
@@ -239,8 +239,8 @@ function newBaseContextMenu ( originalEvent ) {
 		m_Body.removeChild ( dummyDiv );
 		
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
-		var menuTop = Math.min ( s_OriginalEvent.originalEvent.clientY, screenHeight - s_Container.clientHeight - 20 );
-		var menuLeft = Math.min ( s_OriginalEvent.originalEvent.clientX, screenWidth - s_Container.clientWidth - 20 );
+		let menuTop = Math.min ( s_OriginalEvent.originalEvent.clientY, screenHeight - s_Container.clientHeight - 20 );
+		let menuLeft = Math.min ( s_OriginalEvent.originalEvent.clientX, screenWidth - s_Container.clientWidth - 20 );
 		s_Container.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
 	}
 	
@@ -263,11 +263,11 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_AddMenuItems ( ) {
-		var menuItemCounter = 0;
+		let menuItemCounter = 0;
 		s_MenuItems.forEach ( 
 			menuItem => {
-				var itemContainer = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'}, s_Container);
-				var itemButton = m_htmlElementsFactory.create ( 
+				let itemContainer = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'}, s_Container);
+				let itemButton = m_htmlElementsFactory.create ( 
 					'button', 
 					{ 
 						innerHTML : menuItem.name,
