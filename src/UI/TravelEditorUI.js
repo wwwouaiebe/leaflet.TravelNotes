@@ -193,6 +193,7 @@ function newTravelEditorUI ( ) {
 			},
 			controlDiv 
 		);
+		dataDiv.addEventListener ( 'setrouteslist', ( ) => m_SetRoutesList ( ) , false );
 		
 		// Routes list
 		m_RoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );

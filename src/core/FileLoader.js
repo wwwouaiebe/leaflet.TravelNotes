@@ -49,7 +49,6 @@ import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
 import { newTravel } from '../data/Travel.js';
-import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
@@ -209,7 +208,8 @@ function newFileLoader ( ) {
 		// Editors and roadbook are filled
 		if ( ! m_IsFileReadOnly ) {
 		// Editors and HTML pages are filled
-			newTravelEditorUI ( ). setRoutesList ( );
+			let eventDispatcher = newEventDispatcher ( );
+			eventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
@@ -227,7 +227,6 @@ function newFileLoader ( ) {
 					}
 				}
 				g_RouteEditor.chainRoutes ( );
-				let eventDispatcher = newEventDispatcher ( );
 				eventDispatcher.dispatch ( 'expandrouteui' );
 				eventDispatcher.dispatch ( 'setwaypointslist' );
 				eventDispatcher.dispatch ( 'setitinerary' );

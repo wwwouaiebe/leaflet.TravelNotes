@@ -59,7 +59,6 @@ import { newUtilities } from './util/Utilities.js';
 import { newTravel } from './data/Travel.js';
 import { newRoute } from './data/Route.js';
 import { newUserInterface } from './UI/UserInterface.js';
-import { newTravelEditorUI } from './UI/TravelEditorUI.js';
 import { newFileLoader } from './core/FileLoader.js';
 import { newBaseDialog } from './dialogs/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
@@ -262,7 +261,7 @@ var travelNotesFactory = function ( ) {
 				g_TravelNotesData.travel.routes.add ( newRoute ( ) );
 				// user interface is added
 				document.getElementById ( divControlId ).appendChild ( newUserInterface ( ).UI );
-				newTravelEditorUI ( ).setRoutesList ( g_TravelNotesData.travel.routes );
+				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				g_TravelEditor.updateRoadBook ( true );
 
 				if ( _TravelUrl ) {

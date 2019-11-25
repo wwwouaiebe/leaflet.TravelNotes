@@ -55,7 +55,6 @@ import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 
-import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -78,7 +77,6 @@ Patterns : Closure and Singleton
 
 function newTravelEditor ( ) {
 
-	let m_TravelEditorUI = newTravelEditorUI ( );
 	let m_Utilities = newUtilities ( );
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
@@ -129,7 +127,7 @@ function newTravelEditor ( ) {
 	function m_AddRoute ( ) {
 		let route = newRoute ( );
 		g_TravelNotesData.travel.routes.add ( route );
-		m_TravelEditorUI.setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
 		m_UpdateRoadBook ( );
 		if ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) {
@@ -157,7 +155,7 @@ function newTravelEditor ( ) {
 
 		g_MapEditor.removeRoute ( m_DataSearchEngine.getRoute ( routeObjId ), true, true );
 		g_TravelNotesData.travel.routes.remove ( routeObjId );
-		m_TravelEditorUI.setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId  ) {
 			g_RouteEditor.cancelEdition ( );
 		}
@@ -232,7 +230,7 @@ function newTravelEditor ( ) {
 
 	function m_RenameRoute ( routeObjId, routeName ) {
 		m_DataSearchEngine.getRoute ( routeObjId ).name = routeName;
-		m_TravelEditorUI.setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId ) {
 			g_TravelNotesData.travel.editedRoute.name = routeName;
 		}
@@ -249,7 +247,7 @@ function newTravelEditor ( ) {
 
 	function m_SwapRoute ( routeObjId, swapUp ) {
 		g_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
-		m_TravelEditorUI.setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
 		m_UpdateRoadBook ( );
 	}
@@ -264,7 +262,7 @@ function newTravelEditor ( ) {
 	
 	function m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
 		g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-		m_TravelEditorUI.setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
 		m_UpdateRoadBook ( );
 	}
@@ -348,7 +346,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.editedRouteObjId = -1;
 		g_TravelNotesData.travel = newTravel ( );
 		g_TravelNotesData.travel.routes.add ( newRoute ( ) );
-		m_TravelEditorUI. setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_UpdateRoadBook ( true );

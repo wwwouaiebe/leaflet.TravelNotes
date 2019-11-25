@@ -60,6 +60,8 @@ function newEventDispatcher ( ) {
 				return 'TravelNotes-Control-RouteHeaderDiv';
 			case 'setwaypointslist':
 				return 'TravelNotes-Control-RouteDataDiv';
+			case 'setrouteslist':
+				return 'TravelNotes-Control-TravelDataDiv';
 			default:
 				return null;
 		}

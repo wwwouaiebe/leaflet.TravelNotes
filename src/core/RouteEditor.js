@@ -64,7 +64,6 @@ import { newRoute } from '../data/Route.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRouter } from '../core/Router.js';
-import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
@@ -418,7 +417,7 @@ function newRouteEditor ( ) {
 
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
 		g_TravelNotesData.editedRouteObjId = -1;
-		newTravelEditorUI ( ).setRoutesList ( );
+		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'reducerouteui' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
@@ -445,7 +444,7 @@ function newRouteEditor ( ) {
 			route => {
 				g_MapEditor.editRoute ( route );
 				g_RouteEditor.chainRoutes ( );
-				newTravelEditorUI ( ).setRoutesList ( );
+				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				g_TravelEditor.updateRoadBook ( );				
 			}		
 		).catch ( err => console.log ( err ? err : "an error occurs..." )  );
