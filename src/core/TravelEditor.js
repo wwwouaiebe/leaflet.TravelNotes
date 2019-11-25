@@ -56,7 +56,6 @@ import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
-import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -80,7 +79,6 @@ Patterns : Closure and Singleton
 function newTravelEditor ( ) {
 
 	let m_TravelEditorUI = newTravelEditorUI ( );
-	let m_RouteEditorUI = newRouteEditorUI ( );
 	let m_Utilities = newUtilities ( );
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
@@ -216,8 +214,8 @@ function newTravelEditor ( ) {
 		g_MapEditor.removeRoute ( initialRoute, true, false );
 		g_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 		g_RouteEditor.chainRoutes ( );
-		m_RouteEditorUI .expand ( );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'expandrouteui' );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 	}
 	
@@ -351,7 +349,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel = newTravel ( );
 		g_TravelNotesData.travel.routes.add ( newRoute ( ) );
 		m_TravelEditorUI. setRoutesList ( );
-		m_RouteEditorUI.setWayPointsList (  );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_UpdateRoadBook ( true );
 	}

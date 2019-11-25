@@ -55,6 +55,11 @@ function newEventDispatcher ( ) {
 			case 'setsearch':
 			case 'updatesearch':
 				return 'TravelNotes-Control-ItineraryDataDiv';
+			case 'expandrouteui':
+			case 'reducerouteui':
+				return 'TravelNotes-Control-RouteHeaderDiv';
+			case 'setwaypointslist':
+				return 'TravelNotes-Control-RouteDataDiv';
 			default:
 				return null;
 		}
@@ -68,7 +73,7 @@ function newEventDispatcher ( ) {
 
 	function m_Dispatch ( eventName ) {
 		let target = m_GetTarget ( eventName );
-		if (target ) {
+		if ( target ) {
 			let targetElement = document.getElementById ( target );
 			if ( targetElement ) {
 				let event = new Event ( eventName );

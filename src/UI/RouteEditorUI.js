@@ -84,6 +84,8 @@ function newRouteEditorUI ( ) {
 			},
 			controlDiv
 		);
+		headerDiv.addEventListener ( 'expandrouteui', ( ) => m_ExpandUI ( ), false );
+		headerDiv.addEventListener ( 'reducerouteui', ( ) => m_ReduceUI ( ), false );
 
 		// expand button
 		htmlElementsFactory.create ( 
@@ -133,6 +135,7 @@ function newRouteEditorUI ( ) {
 			},
 			controlDiv
 		);
+		dataDiv.addEventListener ( 'setwaypointslist', ( ) => m_SetWayPointsList ( ), false );
 		
 		// wayPoints list
 		m_WayPointsList = newSortableList ( 

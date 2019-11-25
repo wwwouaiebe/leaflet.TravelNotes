@@ -50,7 +50,6 @@ import { g_TravelEditor } from '../core/TravelEditor.js';
 
 import { newTravel } from '../data/Travel.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
-import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
@@ -228,10 +227,10 @@ function newFileLoader ( ) {
 					}
 				}
 				g_RouteEditor.chainRoutes ( );
-				let routeEditorUI = newRouteEditorUI ( );
-				routeEditorUI .expand ( );
-				routeEditorUI.setWayPointsList ( );
-				newEventDispatcher ( ).dispatch ( 'setitinerary' );
+				let eventDispatcher = newEventDispatcher ( );
+				eventDispatcher.dispatch ( 'expandrouteui' );
+				eventDispatcher.dispatch ( 'setwaypointslist' );
+				eventDispatcher.dispatch ( 'setitinerary' );
 			}
 			g_TravelEditor.updateRoadBook ( false );
 		}

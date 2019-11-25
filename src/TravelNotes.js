@@ -61,11 +61,11 @@ import { newRoute } from './data/Route.js';
 import { newUserInterface } from './UI/UserInterface.js';
 import { newTravelEditorUI } from './UI/TravelEditorUI.js';
 import { newFileLoader } from './core/FileLoader.js';
-import { newRouteEditorUI } from './UI/RouteEditorUI.js';
 import { newBaseDialog } from './dialogs/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
 import { currentVersion } from './data/Version.js';
+import { newEventDispatcher } from './util/EventDispatcher.js';
 
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 
@@ -88,6 +88,8 @@ var travelNotesFactory = function ( ) {
 	var _Langage = null;
 	
 	var _TravelUrl = null;
+	
+	var m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- _ReadURL function ---------------------------------------------------------------------------------------------
@@ -272,7 +274,7 @@ var travelNotesFactory = function ( ) {
 						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
 					}
 					else {
-						newRouteEditorUI ( ) .reduce ( );
+						m_EventDispatcher.dispatch ( 'reducerouteui' );
 					}	
 				}
 			}

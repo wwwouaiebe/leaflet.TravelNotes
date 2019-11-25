@@ -41,10 +41,10 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 
-import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newWayPoint } from '../data/WayPoint.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- newWayPointEditor function ----------------------------------------------------------------------------------------
@@ -56,9 +56,8 @@ Patterns : Closure and Singleton
 
 function newWayPointEditor ( ) {
 	
-	let m_RouteEditorUI = newRouteEditorUI ( );
 	let m_GeoCoder = newGeoCoder ( );
-
+	let m_EventDispatcher = newEventDispatcher ( );
 	/*
 	--- m_AddWayPoint function ----------------------------------------------------------------------------------------
 
@@ -97,7 +96,7 @@ function newWayPointEditor ( ) {
 		else {
 			g_TravelNotesData.travel.editedRoute.wayPoints.swap ( wayPoint.objId, true );
 		}
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 		
@@ -139,7 +138,7 @@ function newWayPointEditor ( ) {
 		while ( ! wayPointsIterator.done ) {
 			g_MapEditor.addWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index ) );
 		}
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 		
@@ -158,7 +157,7 @@ function newWayPointEditor ( ) {
 			g_MapEditor.removeObject ( wayPointsIterator.value.objId );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.removeAll ( true );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 	
@@ -177,7 +176,7 @@ function newWayPointEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		g_MapEditor.removeObject ( wayPointObjId );
 		g_TravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 
@@ -196,7 +195,7 @@ function newWayPointEditor ( ) {
 	function m_RenameWayPoint ( wayPointName, wayPointObjId ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 	}
 	
 	/*
@@ -251,7 +250,7 @@ function newWayPointEditor ( ) {
 	function m_SwapWayPoints ( wayPointObjId, swapUp ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		g_TravelNotesData.travel.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
-		m_RouteEditorUI.setWayPointsList (  );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 		
@@ -276,7 +275,7 @@ function newWayPointEditor ( ) {
 			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
 		}
 		g_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.first, 'A' );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 		
@@ -302,7 +301,7 @@ function newWayPointEditor ( ) {
 			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
 		}
 		g_MapEditor.addWayPoint ( g_TravelNotesData.travel.editedRoute.wayPoints.last, 'B' );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 		
@@ -323,7 +322,7 @@ function newWayPointEditor ( ) {
 			let latLng = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
 			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
 		}
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
 	
@@ -344,7 +343,7 @@ function newWayPointEditor ( ) {
 			return;
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 				g_MapEditor.removeObject ( wayPointsIterator.value.objId );

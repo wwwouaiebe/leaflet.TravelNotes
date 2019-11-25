@@ -60,7 +60,6 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { newRoute } from '../data/Route.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -82,7 +81,6 @@ Patterns : Closure and Singleton
 function newRouteEditor ( ) {
 	
 	let m_DataSearchEngine  = newDataSearchEngine ( );
-	let m_RouteEditorUI = newRouteEditorUI ( );
 	let m_Utilities = newUtilities ( );
 	let m_EventDispatcher = newEventDispatcher ( );
 
@@ -378,7 +376,7 @@ function newRouteEditor ( ) {
 		
 		// and the itinerary and waypoints are displayed
 		m_EventDispatcher.dispatch ( 'setitinerary' );
-		m_RouteEditorUI.setWayPointsList ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		// the HTML page is adapted ( depending of the config.... )
 		m_ChainRoutes ( );
 		g_TravelEditor.updateRoadBook ( );
@@ -421,8 +419,8 @@ function newRouteEditor ( ) {
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
 		g_TravelNotesData.editedRouteObjId = -1;
 		newTravelEditorUI ( ).setRoutesList ( );
-		m_RouteEditorUI.setWayPointsList ( );
-		m_RouteEditorUI .reduce ( );
+		m_EventDispatcher.dispatch ( 'setwaypointslist' );
+		m_EventDispatcher.dispatch ( 'reducerouteui' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_ChainRoutes ( );
 		g_TravelEditor.updateRoadBook ( );
