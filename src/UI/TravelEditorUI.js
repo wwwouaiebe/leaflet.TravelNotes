@@ -370,7 +370,7 @@ function newTravelEditorUI ( ) {
 		.addEventListener ( 
 			'click' , 
 			( ) => { 
-				if ( ! g_TravelEditor.confirmClose ( ) )
+				if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) )
 				{
 					return;
 				}

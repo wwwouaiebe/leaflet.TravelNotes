@@ -46,8 +46,7 @@ export { g_NoteEditor };
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
-
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
@@ -114,7 +113,7 @@ function newNoteEditor ( ) {
 			m_EventDispatcher.dispatch ( 'updateitinerary' );
 			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 			// and the HTML page is adapted
-			g_TravelEditor.updateRoadBook ( );
+			newRoadbookUpdate ( );
 		}
 	}
 
@@ -140,7 +139,7 @@ function newNoteEditor ( ) {
 		m_EventDispatcher.dispatch ( 'updateitinerary' );
 		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		// and the HTML page is adapted
-		g_TravelEditor.updateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -197,7 +196,7 @@ function newNoteEditor ( ) {
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 				m_EventDispatcher.dispatch ( 'setitinerary' );
 				g_MapEditor.addNote ( newNote );
-				g_TravelEditor.updateRoadBook ( );
+				newRoadbookUpdate ( );
 			}
 		)
 		.catch ( err => console.log ( err ) );
@@ -233,7 +232,7 @@ function newNoteEditor ( ) {
 				g_TravelNotesData.travel.notes.add ( newNote );
 				m_EventDispatcher.dispatch ( 'settravelnotes' );
 				g_MapEditor.addNote ( newNote );
-				g_TravelEditor.updateRoadBook ( );
+				newRoadbookUpdate ( );
 			}
 		)
 		.catch ( err => console.log ( err) );
@@ -279,7 +278,7 @@ function newNoteEditor ( ) {
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 				m_EventDispatcher.dispatch ( 'setitinerary' );
 				g_MapEditor.addNote ( newNote );
-				g_TravelEditor.updateRoadBook ( );
+				newRoadbookUpdate ( );
 			}
 		)
 		.catch ( err => console.log ( err) );
@@ -309,7 +308,7 @@ function newNoteEditor ( ) {
 				g_TravelNotesData.travel.notes.add ( newNote );
 				m_EventDispatcher.dispatch ( 'settravelnotes' );
 				g_MapEditor.addNote ( newNote );
-				g_TravelEditor.updateRoadBook ( );
+				newRoadbookUpdate ( );
 			}
 		)
 		.catch ( err => console.log ( err) );
@@ -344,7 +343,7 @@ function newNoteEditor ( ) {
 						m_EventDispatcher.dispatch ( 'setitinerary' );
 					}
 				}
-				g_TravelEditor.updateRoadBook ( );
+				newRoadbookUpdate ( );
 			}
 		)
 		.catch ( err => console.log ( err) );
@@ -377,7 +376,7 @@ function newNoteEditor ( ) {
 			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		}
 		// and the HTML page is adapted
-		g_TravelEditor.updateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 	
 	/*
@@ -448,7 +447,7 @@ function newNoteEditor ( ) {
 	function m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore ) {
 		g_TravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
 		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
-		g_TravelEditor.updateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 		
 	/*

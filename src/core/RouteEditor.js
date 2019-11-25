@@ -54,11 +54,10 @@ Tests ...
 
 export { g_RouteEditor };
 
-import { g_TravelEditor } from '../core/TravelEditor.js';
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
-
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
@@ -378,7 +377,7 @@ function newRouteEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		// the HTML page is adapted ( depending of the config.... )
 		m_ChainRoutes ( );
-		g_TravelEditor.updateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -422,7 +421,7 @@ function newRouteEditor ( ) {
 		m_EventDispatcher.dispatch ( 'reducerouteui' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_ChainRoutes ( );
-		g_TravelEditor.updateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 	
 	/*
@@ -445,7 +444,7 @@ function newRouteEditor ( ) {
 				g_MapEditor.editRoute ( route );
 				g_RouteEditor.chainRoutes ( );
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
-				g_TravelEditor.updateRoadBook ( );				
+				newRoadbookUpdate ( );			
 			}		
 		).catch ( err => console.log ( err ? err : "an error occurs..." )  );
 	}

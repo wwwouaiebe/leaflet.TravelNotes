@@ -53,7 +53,6 @@ import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_WayPointEditor } from '../core/WayPointEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
@@ -61,6 +60,7 @@ import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -633,7 +633,7 @@ function newMapEditor ( ) {
 					// in all cases, the polyline is updated
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 					// and the HTML page is adapted
-					g_TravelEditor.updateRoadBook ( );
+					newRoadbookUpdate ( );
 				}
 			);
 			// event listener for the drag event

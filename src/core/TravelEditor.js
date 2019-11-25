@@ -48,27 +48,21 @@ export { g_TravelEditor };
 
 import { polyline } from '../polyline/Polyline.js';
 
-import { g_Config } from '../data/Config.js';
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-
-import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-
-
-let s_haveBeforeUnloadWarning = false;
-let s_haveUnloadCleanStorage = false;
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 /*
---- travelEditor function ---------------------------------------------------------------------------------------------
+--- newTravelEditor function ------------------------------------------------------------------------------------------
 
 Patterns : Closure and Singleton
 
@@ -82,41 +76,6 @@ function newTravelEditor ( ) {
 	let m_EventDispatcher = newEventDispatcher ( );
 	
 	/*
-	--- m_UpdateRoadBook function -------------------------------------------------------------------------------------
-
-	This function changes the HTML page content
-	
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_UpdateRoadBook ( isNewTravel ) {
-
-		if ( ! s_haveUnloadCleanStorage ) {
-			window.addEventListener( 
-				'unload', 
-				( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
-			);
-			s_haveUnloadCleanStorage = true;
-		}
-
-		if ( ! isNewTravel && ! s_haveBeforeUnloadWarning && g_Config.haveBeforeUnloadWarning ) {
-			window.addEventListener( 
-				'beforeunload', 
-				event => {
-					event.returnValue = 'x';
-					return 'x'; 
-				}
-			);
-			s_haveBeforeUnloadWarning = true;
-		}
-		
-		if ( m_Utilities.storageAvailable ( 'localStorage' ) ) {
-			let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
-			localStorage.setItem ( g_TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
-		}
-	}
-
-	/*
 	--- m_AddRoute function -------------------------------------------------------------------------------------------
 
 	This function add a new route
@@ -129,7 +88,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel.routes.add ( route );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
-		m_UpdateRoadBook ( );
+		newRoadbookUpdate ( );
 		if ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) {
 			m_EditRoute ( route.objId );
 		}
@@ -160,7 +119,7 @@ function newTravelEditor ( ) {
 			g_RouteEditor.cancelEdition ( );
 		}
 		g_RouteEditor.chainRoutes ( );
-		m_UpdateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 	
 	/*
@@ -234,7 +193,7 @@ function newTravelEditor ( ) {
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId ) {
 			g_TravelNotesData.travel.editedRoute.name = routeName;
 		}
-		m_UpdateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 	
 	/*
@@ -249,7 +208,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
-		m_UpdateRoadBook ( );
+		newRoadbookUpdate ( );
 	}
 	
 	/*
@@ -264,7 +223,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
-		m_UpdateRoadBook ( );
+newRoadbookUpdate ( );
 	}
 
 	/*
@@ -315,20 +274,6 @@ function newTravelEditor ( ) {
 	}
 	
 	/*
-	--- m_ConfirmClose function ---------------------------------------------------------------------------------------
-
-	This function ask a confirmation to the user
-	
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-	function m_ConfirmClose ( ) {
-		if ( s_haveBeforeUnloadWarning ) {
-			return window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) );
-		}
-		return true;
-	}
-	
-	/*
 	--- m_Clear function ----------------------------------------------------------------------------------------------
 
 	This function remove completely the current travel
@@ -337,7 +282,7 @@ function newTravelEditor ( ) {
 	*/
 
 	function m_Clear ( ) {
-		if ( ! m_ConfirmClose ( ) )
+		if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) )
 		{
 			return;
 		}
@@ -349,7 +294,7 @@ function newTravelEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
-		m_UpdateRoadBook ( true );
+		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -360,8 +305,6 @@ function newTravelEditor ( ) {
 
 	return Object.seal (
 		{
-
-			updateRoadBook : isNewTravel => m_UpdateRoadBook ( isNewTravel ),
 
 			addRoute : ( ) => m_AddRoute ( ),
 
@@ -376,8 +319,6 @@ function newTravelEditor ( ) {
 			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ),
 			
 			saveTravel : ( ) => m_SaveTravel ( ),
-
-			confirmClose : ( ) => { return m_ConfirmClose ( ); },
 
 			clear : ( ) => m_Clear ( )
 

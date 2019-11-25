@@ -46,11 +46,10 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
-
 import { newTravel } from '../data/Travel.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
@@ -231,7 +230,7 @@ function newFileLoader ( ) {
 				eventDispatcher.dispatch ( 'setwaypointslist' );
 				eventDispatcher.dispatch ( 'setitinerary' );
 			}
-			g_TravelEditor.updateRoadBook ( false );
+			newRoadbookUpdate ( );
 		}
 		else {
 			// control is hidden

@@ -67,6 +67,7 @@ import { currentVersion } from './data/Version.js';
 import { newEventDispatcher } from './util/EventDispatcher.js';
 
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
+import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
 
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -89,6 +90,19 @@ var travelNotesFactory = function ( ) {
 	var _TravelUrl = null;
 	
 	var m_EventDispatcher = newEventDispatcher ( );
+	
+	window.addEventListener( 
+		'unload', 
+		( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
+	);
+
+	window.addEventListener( 
+		'beforeunload', 
+		event => {
+			event.returnValue = 'x';
+			return 'x'; 
+		}
+	);
 
 	/*
 	--- _ReadURL function ---------------------------------------------------------------------------------------------
@@ -262,7 +276,7 @@ var travelNotesFactory = function ( ) {
 				// user interface is added
 				document.getElementById ( divControlId ).appendChild ( newUserInterface ( ).UI );
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
-				g_TravelEditor.updateRoadBook ( true );
+				newRoadbookUpdate ( );
 
 				if ( _TravelUrl ) {
 					// loading travel...
