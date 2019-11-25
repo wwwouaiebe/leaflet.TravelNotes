@@ -23,7 +23,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -37,145 +37,200 @@ import { g_Translator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-var _DataObjId  = 0;
-
-var htmlElementsFactory = newHTMLElementsFactory ( ) ;
-
-var onDragStart = function  ( dragEvent ) {
-	dragEvent.stopPropagation ( ); 
-	try {
-		dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
-		dragEvent.dataTransfer.dropEffect = "move";
-	}
-	catch ( e ) {
-		console.log ( e );
-	}
-	// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
-	// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
-	_DataObjId = dragEvent.target.dataObjId - 1;
-};
-
-var onDragOver = function ( event ) {
-	event.preventDefault ( );
-};
-
-var onDrop = function ( dragEvent ) { 
-	dragEvent.preventDefault ( );
-	var element = dragEvent.target;
-	while ( ! element.dataObjId ) {
-		element = element.parentElement;
-	}
-	var clientRect = element.getBoundingClientRect ( );
-	var event = new Event ( 'SortableListDrop' );
-	
-	// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
-	//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-	event.draggedObjId = _DataObjId + 1;
-
-	event.targetObjId = element.dataObjId;
-	event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
-	element.parentNode.dispatchEvent ( event );
-};
-
-var onDeleteButtonClick = function ( ClickEvent ) {
-	var event = new Event ( 'SortableListDelete' );
-	event.itemNode = ClickEvent.target.parentNode;
-	ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-	ClickEvent.stopPropagation();
-};
-
-var onUpArrowButtonClick = function ( ClickEvent ) {
-	var event = new Event ( 'SortableListUpArrow' );
-	event.itemNode = ClickEvent.target.parentNode;
-	ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-	ClickEvent.stopPropagation();
-};
-
-var onDownArrowButtonClick = function ( ClickEvent ) {
-	var event = new Event ( 'SortableListDownArrow' );
-	event.itemNode = ClickEvent.target.parentNode;
-	ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-	ClickEvent.stopPropagation();
-};
-
-var onRightArrowButtonClick = function ( ClickEvent ) {
-	var event = new Event ( 'SortableListRightArrow' );
-	event.itemNode = ClickEvent.target.parentNode;
-	ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-	ClickEvent.stopPropagation();
-};
-
-var onChange = function ( changeEvent ) {
-	var event = new Event ( 'SortableListChange' );
-	event.dataObjId = changeEvent.target.parentNode.dataObjId;
-	event.changeValue = changeEvent.target.value;
-	changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
-	changeEvent.stopPropagation();
-};
-
-var onWheel = function ( wheelEvent ) { 
-	if ( wheelEvent.deltaY ) {
-		wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
-	}
-	wheelEvent.stopPropagation ( );
-};
 /* 
---- SortableList object -----------------------------------------------------------------------------------------------
+--- newSortableList function ------------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var SortableList = function ( options, parentNode ) {
+function newSortableList ( options, parentNode ) {
 	
+	let m_DataObjId  = 0;
+	
+	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
+
 	/*
-	--- removeAllItems method -----------------------------------------------------------------------------------------
-	This method ...
+	--- m_OnDragStart function ----------------------------------------------------------------------------------------
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_RemoveAllItems = function ( ) {
-		for ( var ItemCounter = 0; ItemCounter < m_Items.length; ItemCounter ++ ) {
+	function m_OnDragStart ( dragEvent ) {
+		dragEvent.stopPropagation ( ); 
+		try {
+			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
+			dragEvent.dataTransfer.dropEffect = "move";
+		}
+		catch ( e ) {
+			console.log ( e );
+		}
+		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
+		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
+		m_DataObjId = dragEvent.target.dataObjId - 1;
+	}
+
+	/*
+	--- m_OnDragOver function -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnDragOver ( event ) {
+		event.preventDefault ( );
+	}
+
+	/*
+	--- m_OnDrop function ---------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnDrop ( dragEvent ) { 
+		dragEvent.preventDefault ( );
+		let element = dragEvent.target;
+		while ( ! element.dataObjId ) {
+			element = element.parentElement;
+		}
+		let clientRect = element.getBoundingClientRect ( );
+		let event = new Event ( 'SortableListDrop' );
+		
+		// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
+		//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		event.draggedObjId = m_DataObjId + 1;
+
+		event.targetObjId = element.dataObjId;
+		event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
+		element.parentNode.dispatchEvent ( event );
+	}
+
+	/*
+	--- m_OnDeleteButtonClick function --------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnDeleteButtonClick ( ClickEvent ) {
+		let event = new Event ( 'SortableListDelete' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		ClickEvent.stopPropagation();
+	}
+
+	/*
+	--- m_OnUpArrowButtonClick function -------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnUpArrowButtonClick ( ClickEvent ) {
+		let event = new Event ( 'SortableListUpArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		ClickEvent.stopPropagation();
+	}
+
+	/*
+	--- m_OnDownArrowButtonClick function -----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnDownArrowButtonClick ( ClickEvent ) {
+		let event = new Event ( 'SortableListDownArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		ClickEvent.stopPropagation();
+	}
+
+	/*
+	--- m_OnRightArrowButtonClick function ----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnRightArrowButtonClick ( ClickEvent ) {
+		let event = new Event ( 'SortableListRightArrow' );
+		event.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		ClickEvent.stopPropagation();
+	}
+
+	/*
+	--- m_OnChange function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnChange ( changeEvent ) {
+		let event = new Event ( 'SortableListChange' );
+		event.dataObjId = changeEvent.target.parentNode.dataObjId;
+		event.changeValue = changeEvent.target.value;
+		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		changeEvent.stopPropagation();
+	}
+
+	/*
+	--- m_OnWheel function --------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnWheel ( wheelEvent ) { 
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+		}
+		wheelEvent.stopPropagation ( );
+	}
+		
+	/*
+	--- removeAllItems function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_RemoveAllItems ( ) {
+		for ( let ItemCounter = 0; ItemCounter < m_Items.length; ItemCounter ++ ) {
 			m_Container.removeChild ( m_Items [ ItemCounter ] );
 		}
 		m_Items.length = 0;
-	};
+	}
 	
 	/*
-	--- addItem method ------------------------------------------------------------------------------------------------
-	This method ...
+	--- addItem function ----------------------------------------------------------------------------------------------
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_AddItem = function ( name, indexName, placeholder, dataObjId, isLastItem  ) {
+	function m_AddItem ( name, indexName, placeholder, dataObjId, isLastItem  ) {
 
 		name = name || '';
 		indexName = indexName || '';
 		placeholder = placeholder || '';
 		dataObjId = dataObjId || -1;
 		
-		var item = htmlElementsFactory.create ( 'div', { draggable : false , className : 'TravelNotes-SortableList-Item' } );
+		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false , className : 'TravelNotes-SortableList-Item' } );
 
-		htmlElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
-		var inputElement = htmlElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
-		inputElement.addEventListener ( 'change' , onChange, false );
+		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
+		let inputElement = m_HTMLElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
+		inputElement.addEventListener ( 'change' , m_OnChange, false );
 
 		//Workaround for issue #8
 		inputElement.addEventListener ( 
 			'focus',
-			function ( event ) {
+			event => {
 				event.target.parentElement.draggable = false;
 			},
 			false
 		);
 		inputElement.addEventListener ( 
 			'blur',
-			function ( event ) {
+			event => {
 				event.target.parentElement.draggable = event.target.parentElement.canDrag;
 			},
 			false
 		);
 			
-		var upArrowButton = htmlElementsFactory.create ( 
+		let upArrowButton = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				className : 'TravelNotes-SortableList-ItemUpArrowButton', 
@@ -184,8 +239,8 @@ var SortableList = function ( options, parentNode ) {
 			}, 
 			item
 		);
-		upArrowButton.addEventListener ( 'click', onUpArrowButtonClick, false );
-		var downArrowButton = htmlElementsFactory.create (
+		upArrowButton.addEventListener ( 'click', m_OnUpArrowButtonClick, false );
+		let downArrowButton = m_HTMLElementsFactory.create (
 			'div', 
 			{ 
 				className : 'TravelNotes-SortableList-ItemDownArrowButton', 
@@ -194,8 +249,8 @@ var SortableList = function ( options, parentNode ) {
 			},
 			item 
 		);
-		downArrowButton.addEventListener ( 'click', onDownArrowButtonClick, false );
-		var rightArrowButton = htmlElementsFactory.create ( 
+		downArrowButton.addEventListener ( 'click', m_OnDownArrowButtonClick, false );
+		let rightArrowButton = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				className : 'TravelNotes-SortableList-ItemRightArrowButton', 
@@ -204,9 +259,9 @@ var SortableList = function ( options, parentNode ) {
 			},
 		item );
 		if ( 'AllSort' === m_Options.listStyle ) {
-			rightArrowButton.addEventListener ( 'click', onRightArrowButtonClick, false );
+			rightArrowButton.addEventListener ( 'click', m_OnRightArrowButtonClick, false );
 		}
-		var deleteButton = htmlElementsFactory.create ( 
+		let deleteButton = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				className : 'TravelNotes-SortableList-ItemDeleteButton', 
@@ -215,13 +270,13 @@ var SortableList = function ( options, parentNode ) {
 			},
 			item 
 		);
-		deleteButton.addEventListener ( 'click', onDeleteButtonClick, false );
+		deleteButton.addEventListener ( 'click', m_OnDeleteButtonClick, false );
 		item.dataObjId = dataObjId; 
 
 		item.canDrag = false;
 		if ( ( ( 'LimitedSort' !== m_Options.listStyle ) || ( 1 < m_Items.length ) ) && ( ! isLastItem  ) ){
 			item.draggable = true;
-			item.addEventListener ( 'dragstart', onDragStart, false );	
+			item.addEventListener ( 'dragstart', m_OnDragStart, false );	
 			item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
 			item.canDrag = true;
 		}
@@ -229,49 +284,51 @@ var SortableList = function ( options, parentNode ) {
 		m_Items.push ( item );
 
 		m_Container.appendChild ( item );
-	};
+	}
 		
-	var m_Items = [];
+	let m_Items = [];
 	
 	// m_Options.listStyle = 'AllSort' : all items can be sorted or deleted
 	// m_Options.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 	
-	var m_Options = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' } ;
-	for ( var option in options ) {
+	let m_Options = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' } ;
+	for ( let option in options ) {
 		m_Options [ option ] = options [ option ];
 	}
 	if ( ( 'LimitedSort' === m_Options.listStyle ) && ( 2 > m_Options.minSize ) )
 	{
 		m_Options.minSize = 0;
 	}
-	var m_Container = htmlElementsFactory.create ( 'div', { id : m_Options.id, className : 'TravelNotes-SortableList-Container' } );
+	let m_Container = m_HTMLElementsFactory.create ( 'div', { id : m_Options.id, className : 'TravelNotes-SortableList-Container' } );
 	m_Container.classList.add ( m_Options.listStyle );
-	m_Container.addEventListener ( 'drop', onDrop, false );
-	m_Container.addEventListener ( 'dragover', onDragOver, false );
-	m_Container.addEventListener ( 'wheel', onWheel, false );
+	m_Container.addEventListener ( 'drop', m_OnDrop, false );
+	m_Container.addEventListener ( 'dragover', m_OnDragOver, false );
+	m_Container.addEventListener ( 'wheel', m_OnWheel, false );
 
 	if ( parentNode ) {
 		parentNode.appendChild ( m_Container );
 	}
 	
-	for ( var itemCounter = 0; itemCounter < m_Options.minSize; itemCounter++ )
+	for ( let itemCounter = 0; itemCounter < m_Options.minSize; itemCounter++ )
 	{
 		m_AddItem ( );
 	}
 	
+	/*
+	--- SortableList object -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	return Object.seal (
 		{
-			removeAllItems : function ( ) { m_RemoveAllItems ( ) ;},
-			addItem : function ( name, indexName, placeholder, dataObjId, isLastItem ) { m_AddItem ( name, indexName, placeholder, dataObjId, isLastItem  );},
+			removeAllItems : ( ) => m_RemoveAllItems ( ),
+			addItem : ( name, indexName, placeholder, dataObjId, isLastItem ) => m_AddItem ( name, indexName, placeholder, dataObjId, isLastItem  ),
 			get container ( ) { return m_Container; }
 		}
 	);
 	
-};
-
-var newSortableList = function ( options, parentNode ) {
-	return SortableList ( options, parentNode );
-};
+}
 
 /*
 --- End of SortableList.js file ---------------------------------------------------------------------------------------

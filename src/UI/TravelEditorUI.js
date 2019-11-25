@@ -34,7 +34,7 @@ Changes:
 		- Issue #60 : Add translations for roadbook
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
 
-var m_RoutesList = null;
+let m_RoutesList = null;
 
 /*
 --- travelEditorUI function -------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ This function creates the UI
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newTravelEditorUI = function ( ) {
+function newTravelEditorUI ( ) {
 			
 	/*
 	--- event listeners for mouse on the control ----------------------------------------------------------------------
@@ -74,199 +74,27 @@ var newTravelEditorUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var m_TimerId = null;
+	let m_TimerId = null;
 	
-	var onMouseEnterControl = function ( ) {
+	function m_OnMouseEnterControl ( ) {
 		if ( m_TimerId ) {
 			clearTimeout ( m_TimerId );
 			m_TimerId = null;
 		}
 		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
-	};
+	}
 	
-	var onTimeOut = function ( ) {
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
-	};
-	
-	var onMouseLeaveControl =function ( ) {
-		m_TimerId = setTimeout(onTimeOut, g_Config.travelEditor.timeout );
-	};
+	function m_OnMouseLeaveControl ( ) {
+		m_TimerId = setTimeout (
+			( ) => {
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
+				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+			},
+			g_Config.travelEditor.timeout
+		);
+	}
 
-	/*
-	--- event listener for Expand button ------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickExpandButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-		var hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-		document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = hiddenList ? g_Translator.getText ( 'TravelEditorUI - Show' ) : g_Translator.getText ( 'TravelEditorUI - Hide' );
-		clickEvent.stopPropagation ( );
-	};
-	
-	/*
-	--- event listener for Pin button ---------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickPinButton = function ( event ) {
-		var control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
-		if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
-			event.target.innerHTML = '&#x1f4cc;';
-			control.addEventListener ( 'mouseenter', onMouseEnterControl, false );
-			control.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
-		}
-		else
-		{
-			event.target.innerHTML = '&#x274c;';
-			control.removeEventListener ( 'mouseenter', onMouseEnterControl, false );
-			control.removeEventListener ( 'mouseleave', onMouseLeaveControl, false );
-		}
-	};
-
-	/*
-	--- event listeners for sortableList ------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onSortableListDelete = function ( event ) {
-		event.stopPropagation ( );
-		g_TravelEditor.removeRoute ( event.itemNode.dataObjId );
-	};
-
-	var onSortableListUpArrow = function ( event ) {
-		event.stopPropagation ( );
-		g_TravelEditor.swapRoute ( event.itemNode.dataObjId, true );
-	};
-	
-	var onSortableListDownArrow = function ( event ) {
-		event.stopPropagation ( );
-		g_TravelEditor.swapRoute ( event.itemNode.dataObjId, false );
-	};
-	
-	var onSortableListRightArrow = function ( event ) {
-		event.stopPropagation ( );
-		g_TravelEditor.editRoute ( event.itemNode.dataObjId );
-	};
-
-	var onSortableListChange = function ( event ) {
-		event.stopPropagation();
-		g_TravelEditor.renameRoute ( event.dataObjId, event.changeValue );
-	};
-
-	var onSortableListDrop = function ( event ) {
-		event.stopPropagation ( );
-		g_TravelEditor.routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
-	}; 
-	
-	/*
-	--- event listener for Expand list button -------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickExpandListButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-		var expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
-		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-		document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? g_Translator.getText ( 'TravelEditorUI - Reduce the list' ) : g_Translator.getText ( 'TravelEditorUI - Expand the list' );		
-	};
-	
-	/*
-	--- event listener for Cancel travel button -----------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-	
-	var onCancelTravelClick = function ( clickEvent ) {
-		clickEvent.stopPropagation();
-		g_TravelEditor.clear ( );
-		if ( g_Config.travelEditor.startupRouteEdition ) {
-			g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
-		}
-		g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
-	};
-				
-	/*
-	--- event listener for save travel button -------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickSaveTravelButton = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		g_TravelEditor.saveTravel ( );
-	};
-
-	/*
-	--- event listener for open travel input  -------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onChangeOpenTravelInput = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		g_RouteEditor.cancelEdition ( );
-		newFileLoader ( ).openLocalFile ( clickEvent );
-	};
-	
-	/*
-	--- event listener for open travel  button ------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickOpenTravelButton = function ( ) 
-	{ 
-		if ( ! g_TravelEditor.confirmClose ( ) )
-		{
-			return;
-		}
-		document.getElementById ( 'TravelNotes-Control-OpenTravelInput' ).click ( );
-	};
-	
-	/*
-	--- event listeners for import travel input and button ------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onChangeImportTravelInput = function ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		newFileLoader ( ).mergeLocalFile ( clickEvent );
-	};
-	
-	var onClickImportTravelButton = function ( ) 
-	{ 
-		if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
-			g_ErrorEditor.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
-		}
-		else {
-			document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
-		}
-	};
-
-	/*
-	--- _event listeners for add route button -------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	var onClickAddRouteButton = function ( event ) {
-		event.stopPropagation();
-		g_TravelEditor.addRoute ( );
-	};
-	
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
@@ -275,16 +103,16 @@ var newTravelEditorUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_CreateUI = function ( controlDiv ){ 
+	function m_CreateUI ( controlDiv ){ 
 	
 		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
 			return;
 		}
 
-		var htmlElementsFactory = newHTMLElementsFactory ( ) ;
+		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
 		
 		// header
-		var headerDiv = htmlElementsFactory.create ( 
+		let headerDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-TravelHeaderDiv', 
@@ -303,7 +131,19 @@ var newTravelEditorUI = function ( ) {
 			},
 			headerDiv
 		)
-		.addEventListener ( 'click' , onClickExpandButton, false );
+		.addEventListener ( 
+			'click' , 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+				document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+				document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+				let hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+				document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+				document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = hiddenList ? g_Translator.getText ( 'TravelEditorUI - Show' ) : g_Translator.getText ( 'TravelEditorUI - Hide' );
+				clickEvent.stopPropagation ( );
+			}, 
+			false );
 
 		// title
 		htmlElementsFactory.create ( 
@@ -317,7 +157,7 @@ var newTravelEditorUI = function ( ) {
 		);
 	
 		// pin button
-		var pinButton = htmlElementsFactory.create (
+		let pinButton = htmlElementsFactory.create (
 			'span',
 			{ 
 				innerHTML : '&#x274c;', 
@@ -325,10 +165,27 @@ var newTravelEditorUI = function ( ) {
 			},
 			headerDiv
 		);
-		pinButton.addEventListener ( 'click', onClickPinButton, false );
+		pinButton.addEventListener ( 
+			'click', 
+			event => {
+				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+				if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
+					event.target.innerHTML = '&#x1f4cc;';
+					control.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
+					control.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+				}
+				else
+				{
+					event.target.innerHTML = '&#x274c;';
+					control.removeEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
+					control.removeEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+				}
+			}, 
+			false 
+		);
 
 		// data div
-		var dataDiv = htmlElementsFactory.create ( 
+		let dataDiv = htmlElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-Control-TravelDataDiv', 
@@ -339,15 +196,57 @@ var newTravelEditorUI = function ( ) {
 		
 		// Routes list
 		m_RoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
-		m_RoutesList.container.addEventListener ( 'SortableListDelete', onSortableListDelete, false );
-		m_RoutesList.container.addEventListener ( 'SortableListUpArrow', onSortableListUpArrow, false );
-		m_RoutesList.container.addEventListener ( 'SortableListDownArrow', onSortableListDownArrow, false );
-		m_RoutesList.container.addEventListener ( 'SortableListRightArrow', onSortableListRightArrow, false );
-		m_RoutesList.container.addEventListener ( 'SortableListChange', onSortableListChange, false );
-		m_RoutesList.container.addEventListener ( 'SortableListDrop', onSortableListDrop, false );
+		m_RoutesList.container.addEventListener ( 
+			'SortableListDelete', 
+			event => {
+				event.stopPropagation ( );
+				g_TravelEditor.removeRoute ( event.itemNode.dataObjId );
+			}, 
+			false 
+		);
+		m_RoutesList.container.addEventListener ( 
+			'SortableListUpArrow', 
+			event => {
+				event.stopPropagation ( );
+				g_TravelEditor.swapRoute ( event.itemNode.dataObjId, true );
+			}, 
+			false
+		);
+		m_RoutesList.container.addEventListener ( 
+			'SortableListDownArrow', 
+			event => {
+				event.stopPropagation ( );
+				g_TravelEditor.swapRoute ( event.itemNode.dataObjId, false );
+			}, 
+			false 
+		);
+		m_RoutesList.container.addEventListener ( 
+			'SortableListRightArrow', 
+			event => {
+				event.stopPropagation ( );
+				g_TravelEditor.editRoute ( event.itemNode.dataObjId );
+			}, 
+			false 
+		);
+		m_RoutesList.container.addEventListener ( 
+			'SortableListChange', 
+			event => {
+				event.stopPropagation();
+				g_TravelEditor.renameRoute ( event.dataObjId, event.changeValue );
+			}, 
+			false 
+		);
+		m_RoutesList.container.addEventListener ( 
+			'SortableListDrop', 
+			event => {
+				event.stopPropagation ( );
+				g_TravelEditor.routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+			}, 
+			false 
+		);
 		
 		// buttons div
-		var buttonsDiv = htmlElementsFactory.create ( 
+		let buttonsDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-ControlTravelButtonsDiv', 
@@ -367,7 +266,17 @@ var newTravelEditorUI = function ( ) {
 			}, 
 			buttonsDiv 
 		)
-		.addEventListener ( 'click' , onClickExpandListButton, false );
+		.addEventListener ( 
+			'click' , 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+				let expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
+				document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
+				document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? g_Translator.getText ( 'TravelEditorUI - Reduce the list' ) : g_Translator.getText ( 'TravelEditorUI - Expand the list' );		
+			}, 
+			false 
+		);
 		
 		// cancel travel button
 		htmlElementsFactory.create (
@@ -380,7 +289,18 @@ var newTravelEditorUI = function ( ) {
 			},
 			buttonsDiv 
 		)
-		.addEventListener ( 'click', onCancelTravelClick, false );
+		.addEventListener ( 
+			'click', 
+			clickEvent => {
+				clickEvent.stopPropagation();
+				g_TravelEditor.clear ( );
+				if ( g_Config.travelEditor.startupRouteEdition ) {
+					g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
+				}
+				g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+			}, 
+			false 
+		);
 
 		// save travel button
 		htmlElementsFactory.create ( 
@@ -393,11 +313,18 @@ var newTravelEditorUI = function ( ) {
 			}, 
 			buttonsDiv 
 		)
-		.addEventListener ( 'click', onClickSaveTravelButton, false );
+		.addEventListener ( 
+			'click', 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				g_TravelEditor.saveTravel ( );
+			}, 
+			false 
+		);
 
 		// open travel button with the well know hack....
 		// See also UserInterface.js. Click events are first going to the interface div...
-		var openTravelDiv = htmlElementsFactory.create ( 
+		let openTravelDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-OpenTravelDiv'
@@ -413,8 +340,16 @@ var newTravelEditorUI = function ( ) {
 			},
 			openTravelDiv
 		)
-		.addEventListener ( 'change', onChangeOpenTravelInput, false );
-		var openTravelFakeDiv = htmlElementsFactory.create ( 
+		.addEventListener ( 
+			'change', 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				g_RouteEditor.cancelEdition ( );
+				newFileLoader ( ).openLocalFile ( clickEvent );
+			}, 
+			false
+		);
+		let openTravelFakeDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-OpenTravelFakeDiv'
@@ -431,10 +366,20 @@ var newTravelEditorUI = function ( ) {
 			}, 
 			openTravelFakeDiv 
 		)
-		.addEventListener ( 'click' , onClickOpenTravelButton, false );
+		.addEventListener ( 
+			'click' , 
+			( ) => { 
+				if ( ! g_TravelEditor.confirmClose ( ) )
+				{
+					return;
+				}
+				document.getElementById ( 'TravelNotes-Control-OpenTravelInput' ).click ( );
+			}, 
+			false 
+		);
 
 		// import travel button with the well know hack....
-		var importTravelDiv = htmlElementsFactory.create ( 
+		let importTravelDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-ImportTravelDiv'
@@ -450,8 +395,15 @@ var newTravelEditorUI = function ( ) {
 			},
 			importTravelDiv
 		)
-		.addEventListener ( 'change', onChangeImportTravelInput, false );
-		var importTravelFakeDiv = htmlElementsFactory.create ( 
+		.addEventListener ( 
+			'change', 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				newFileLoader ( ).mergeLocalFile ( clickEvent );
+			}, 
+			false 
+		);
+		let importTravelFakeDiv = htmlElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-ImportTravelFakeDiv'
@@ -468,7 +420,18 @@ var newTravelEditorUI = function ( ) {
 			}, 
 			importTravelFakeDiv 
 		)
-		.addEventListener ( 'click' , onClickImportTravelButton, false );
+		.addEventListener ( 
+			'click' , 
+			( ) => { 
+				if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
+					g_ErrorEditor.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
+				}
+				else {
+					document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+				}
+			},
+			false 
+		);
 
 		// roadbook button
 		htmlElementsFactory.create ( 
@@ -494,17 +457,24 @@ var newTravelEditorUI = function ( ) {
 			}, 
 			buttonsDiv 
 		)
-		.addEventListener ( 'click' , onClickAddRouteButton, false );
+		.addEventListener ( 
+			'click' , 
+			event => {
+				event.stopPropagation();
+				g_TravelEditor.addRoute ( );
+			}, 
+			false 
+		);
 		if ( g_Config.travelEditor.startMinimized ) {
 			pinButton.innerHTML = '&#x1f4cc;';
-			controlDiv.addEventListener ( 'mouseenter', onMouseEnterControl, false );
-			controlDiv.addEventListener ( 'mouseleave', onMouseLeaveControl, false );
+			controlDiv.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
+			controlDiv.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
 			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		else {
 			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
 		}
-	};	
+	}
 	
 	/*
 	--- m_SetRoutesList function --------------------------------------------------------------------------------------
@@ -514,13 +484,13 @@ var newTravelEditorUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_SetRoutesList = function (  ) {
+	function m_SetRoutesList (  ) {
 		m_RoutesList.removeAllItems ( );
-		var routesIterator = g_TravelNotesData.travel.routes.iterator;
+		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			m_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', g_Translator.getText ( 'TravelEditorUI - Route' ) ,routesIterator.value.objId, false );
 		}
-	};
+	}
 
 	/*
 	--- travelEditorUI object -----------------------------------------------------------------------------------------
@@ -530,12 +500,11 @@ var newTravelEditorUI = function ( ) {
 
 	return Object.seal (
 		{
-			createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
-			
-			setRoutesList : function (  ) { m_SetRoutesList ( );	}
+			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			setRoutesList : (  ) => m_SetRoutesList ( )
 		}
 	);
-};
+}
 	
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------

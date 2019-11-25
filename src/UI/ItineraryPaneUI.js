@@ -25,7 +25,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -40,72 +40,6 @@ import { g_MapEditor } from '../core/MapEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
 /*
---- onInstructionClick function ---------------------------------------------------------------------------------------
-
-click event listener for the instruction
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onInstructionClick = function ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	var element = clickEvent.target;
-	while ( ! element.latLng ) {
-		element = element.parentNode;
-	}
-	g_MapEditor.zoomToPoint ( element.latLng );
-};
-
-/*
---- onInstructionContextMenu function ---------------------------------------------------------------------------------
-
-contextmenu event listener for the instruction
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onInstructionContextMenu = function ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	clickEvent.preventDefault ( );
-	var element = clickEvent.target;
-	while ( ! element.latLng ) {
-		element = element.parentNode;
-	}
-	if ( element.maneuverObjId ) {
-		g_NoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
-	} 
-	else if ( element.noteObjId ) {
-		g_NoteEditor.editNote ( element.noteObjId );
-	}
-};
-
-/*
---- onInstructionMouseEnter function ----------------------------------------------------------------------------------
-
-mouseenter event listener for the instruction
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onInstructionMouseEnter = function ( mouseEvent ) {
-	mouseEvent.stopPropagation ( );
-	g_MapEditor.addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
-};
-
-/*
---- onInstructionMouseLeave function ----------------------------------------------------------------------------------
-
-mouseleave event listener for the instruction
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onInstructionMouseLeave = function ( mouseEvent ) {
-	mouseEvent.stopPropagation ( );
-	g_MapEditor.removeObject ( mouseEvent.target.objId );
-};
-
-/*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
 
 This function returns the itineraryPaneUI object
@@ -113,7 +47,73 @@ This function returns the itineraryPaneUI object
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newItineraryPaneUI = function ( ) {
+function newItineraryPaneUI ( ) {
+
+	/*
+	--- m_OnInstructionClick function ---------------------------------------------------------------------------------
+
+	click event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnInstructionClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		g_MapEditor.zoomToPoint ( element.latLng );
+	}
+
+	/*
+	--- m_OnInstructionContextMenu function ---------------------------------------------------------------------------
+
+	contextmenu event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnInstructionContextMenu ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
+		let element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		if ( element.maneuverObjId ) {
+			g_NoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
+		} 
+		else if ( element.noteObjId ) {
+			g_NoteEditor.editNote ( element.noteObjId );
+		}
+	}
+
+	/*
+	--- m_OnInstructionMouseEnter function ----------------------------------------------------------------------------
+
+	mouseenter event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnInstructionMouseEnter ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		g_MapEditor.addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
+	}
+
+	/*
+	--- m_OnInstructionMouseLeave function ----------------------------------------------------------------------------
+
+	mouseleave event listener for the instruction
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnInstructionMouseLeave ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		g_MapEditor.removeObject ( mouseEvent.target.objId );
+	}
 
 	/*
 	--- m_Remove function ---------------------------------------------------------------------------------------------
@@ -123,36 +123,36 @@ var newItineraryPaneUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var m_Remove = function ( ) {
+	function m_Remove ( ) {
 		
-		var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
 		
 		// removing previous header 
-		var routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
+		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
 		if ( routeHeader ) {
 			dataDiv.removeChild ( routeHeader );
 		}
 		
 		// removing previous itinerary
-		var childCounter;
-		var childNodes;
-		var childNode;			
-		var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+		let childCounter;
+		let childNodes;
+		let childNode;			
+		let routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.removeEventListener ( 'click' , onInstructionClick, false );
-				childNode.removeEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-				childNode.removeEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-				childNode.removeEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
+				childNode.removeEventListener ( 'click' , m_OnInstructionClick, false );
+				childNode.removeEventListener ( 'contextmenu' , m_OnInstructionContextMenu, false );
+				childNode.removeEventListener ( 'mouseenter' , m_OnInstructionMouseEnter, false );
+				childNode.removeEventListener ( 'mouseleave' , m_OnInstructionMouseLeave, false );
 			}
 			dataDiv.removeChild ( routeManeuversNotesList );
 		}
-	};
+	}
 			
 	/*
 	--- m_Add function ------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ var newItineraryPaneUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Add = function ( ) {
+	function m_Add ( ) {
 		
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
@@ -170,9 +170,9 @@ var newItineraryPaneUI = function ( ) {
 			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		}
 		
-		var htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
+		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
 		
-		var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -185,21 +185,21 @@ var newItineraryPaneUI = function ( ) {
 		dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 		
 		// adding event listeners 
-		var childCounter;
-		var childNodes;
-		var childNode;			
-		var routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+		let childCounter;
+		let childNodes;
+		let childNode;			
+		let routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.addEventListener ( 'click' , onInstructionClick, false );
-				childNode.addEventListener ( 'contextmenu' , onInstructionContextMenu, false );
-				childNode.addEventListener ( 'mouseenter' , onInstructionMouseEnter, false );
-				childNode.addEventListener ( 'mouseleave' , onInstructionMouseLeave, false );
+				childNode.addEventListener ( 'click' , m_OnInstructionClick, false );
+				childNode.addEventListener ( 'contextmenu' , m_OnInstructionContextMenu, false );
+				childNode.addEventListener ( 'mouseenter' , m_OnInstructionMouseEnter, false );
+				childNode.addEventListener ( 'mouseleave' , m_OnInstructionMouseLeave, false );
 			}
 		}
-	};
+	}
 
 	/*
 	--- itineraryPaneUI object ----------------------------------------------------------------------------------------
@@ -209,11 +209,11 @@ var newItineraryPaneUI = function ( ) {
 
 	return Object.seal (
 		{
-			remove : function ( ) { m_Remove ( ); },
-			add : function ( ) { m_Add ( ); }
+			remove : ( ) => m_Remove ( ),
+			add : ( ) => m_Add ( )
 		}
 	);
-};
+}
 	
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------

@@ -27,7 +27,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -42,60 +42,59 @@ import { g_Config } from '../data/Config.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-var _TimerId = null;
+let g_TimerId = null;
 
-var newErrorEditorUI = function ( ) {
+function newErrorEditorUI ( ) {
 			
 	/*
-	--- _ReduceUI function --------------------------------------------------------------------------------------------
+	--- m_ReduceUI function -------------------------------------------------------------------------------------------
 
 	This function reduces the UI
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _ReduceUI = function ( ) {
+	function m_ReduceUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML = '';
-	};
+	}
 	
 	/*
-	--- _SetMessage function ------------------------------------------------------------------------------------------
+	--- m_SetMessage function -----------------------------------------------------------------------------------------
 
 	This function add a message, expand the UI and start a timer
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _SetMessage = function ( message ) {
-		if ( _TimerId ) {
-			clearTimeout ( _TimerId );
-			_TimerId = null;
+	function m_SetMessage ( message ) {
+		if ( g_TimerId ) {
+			clearTimeout ( g_TimerId );
+			g_TimerId = null;
 		}
 		document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML = message;
 		document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-		//document.getElementById ( 'TravelNotes-Control-ErrorHeaderDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
-		_TimerId = setTimeout ( _ReduceUI, g_Config.errorMessages.timeout );
-	};
+		g_TimerId = setTimeout ( m_ReduceUI, g_Config.errorMessages.timeout );
+	}
 	
 	/*
-	--- _CreateUI function --------------------------------------------------------------------------------------------
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _CreateUI = function ( controlDiv ){ 
+	function m_CreateUI ( controlDiv ){ 
 	
 		if ( document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ) ) {
 			return;
 		}
 
-		var htmlElementsFactory = newHTMLElementsFactory ( ) ;
-		var dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
-		var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv TravelNotes-Control-HiddenList'}, dataDiv );
-		var expandButton = htmlElementsFactory.create (
+		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
+		let dataDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorDataDiv', className : 'TravelNotes-Control-DataDiv TravelNotes-Control-HiddenList'}, controlDiv );
+		let headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorHeaderDiv', className : 'TravelNotes-Control-HeaderDiv TravelNotes-Control-HiddenList'}, dataDiv );
+		let expandButton = htmlElementsFactory.create (
 			'span',
 			{ 
 				innerHTML : '&#x274c',
@@ -107,17 +106,17 @@ var newErrorEditorUI = function ( ) {
 		);
 		expandButton.addEventListener ( 
 			'click' ,
-			function ( clickEvent ) {
+			clickEvent => {
 				clickEvent.stopPropagation ( );
 				if ( ! document.getElementById ( 'TravelNotes-Control-ErrorMessageDiv' ).innerHTML.length ) {
 					return;
 				}	
-				_ReduceUI ( );
+				m_ReduceUI ( );
 			},
 			false 
 		);
 		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ErrorMessageDiv'}, dataDiv );
-	};
+	}
 			
 	/*
 	--- ErrorEditorUI object ------------------------------------------------------------------------------------------
@@ -127,13 +126,13 @@ var newErrorEditorUI = function ( ) {
 
 	return {
 		
-		createUI : function ( controlDiv ) { _CreateUI ( controlDiv ); },
+		createUI : controlDiv => m_CreateUI ( controlDiv ),
 
-		set message ( message ) { _SetMessage ( message );	},
+		set message ( message ) { m_SetMessage ( message );	},
 		
 		get message (  ) { return document.getElementById ( 'TravelNotes-Control-ErrorDataDiv' ).innerHTML; }		
 	};
-};
+}
 	
 /*
 --- End of ErrorEditorUI.js file --------------------------------------------------------------------------------------

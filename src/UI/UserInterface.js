@@ -27,7 +27,7 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -44,12 +44,26 @@ import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
 
-var newUserInterface = function ( ) {
+/*
+--- newUserInterface function -----------------------------------------------------------------------------------------
 
-	var m_MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+This function returns the UserInterface object
 
-	var m_CreateUI = function ( ){ 
-		var htmlElementsFactory = newHTMLElementsFactory ( );
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function newUserInterface ( ) {
+
+	let m_MainDiv = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateUI( ){ 
+		let htmlElementsFactory = newHTMLElementsFactory ( );
 		m_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' } );
 		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
 		newTravelEditorUI ( ).createUI ( m_MainDiv ); 
@@ -91,16 +105,22 @@ var newUserInterface = function ( ) {
 			},
 			false
 		);
-	};
+	}
 	
 	if ( ! m_MainDiv ) {
 		m_CreateUI ( );
 	}
 	
+	/*
+	--- UserInterface object --------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	return {
 		get UI ( ) { return m_MainDiv; }
 	};
-};
+}
 
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------

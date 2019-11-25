@@ -25,7 +25,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -46,120 +46,114 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 
-var s_OsmSearchEngine = newOsmSearchEngine ( );
-var s_SearchInputValue = '';
-
-var onKeyDownInputChange = function ( keyBoardEvent ) {
-	if ( 'Enter' === keyBoardEvent.key ) {
-		onSearchInputChange ( keyBoardEvent );
-	}
-};
+let s_OsmSearchEngine = newOsmSearchEngine ( );
+let s_SearchInputValue = '';
 
 /*
---- onSearchInputChange function ----------------------------------------------------------------------------------
-
-change event listener for the search input
-
--------------------------------------------------------------------------------------------------------------------
-*/
-
-var onSearchInputChange = function ( ) {
-	// saving the search phrase
-	s_SearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
-
-	var searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
-	// removing previous search results
-	var searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
-	while ( 0 !== searchResultsElements.length ) {
-		// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-		searchResultsElements [ 0 ].removeEventListener ( 'click' , onSearchResultClick, false );
-		searchResultsElements [ 0 ].removeEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
-		searchResultsElements [ 0 ].removeEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
-		searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
-		searchDiv.removeChild ( searchResultsElements [ 0 ] );
-	}
-	if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
-		// adding wait animation
-		var htmlElementsFactory = newHTMLElementsFactory ( );
-		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
-	}
-	// search...
-	s_OsmSearchEngine.search ( );
-};
-
-/*
---- onSearchResultClick function --------------------------------------------------------------------------------------
-
-click event listener for the search
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onSearchResultClick = function ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	var element = clickEvent.target;
-	while ( ! element.latLng ) {
-		element = element.parentNode;
-	}
-	g_MapEditor.zoomToSearchResult ( element.latLng, element.geometry );
-};
-
-/*
---- onSearchResultContextMenu function --------------------------------------------------------------------------------
-
-contextmenu event listener for the search
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onSearchResultContextMenu = function ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	clickEvent.preventDefault ( );
-	var element = clickEvent.target;
-	while ( ! element.latLng ) {
-		element = element.parentNode;
-	}
-	g_NoteEditor.newSearchNote ( element.searchResult );
-};
-
-/*
---- onSearchResultMouseEnter function ---------------------------------------------------------------------------------
-
-mouseenter event listener for the search
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onSearchResultMouseEnter = function ( mouseEvent ) {
-	mouseEvent.stopPropagation ( );
-	g_MapEditor.addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
-};
-
-/*
---- onSearchResultMouseLeave function ---------------------------------------------------------------------------------
-
-mouseleave event listener for the search
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onSearchResultMouseLeave = function ( mouseEvent ) {
-	mouseEvent.stopPropagation ( );
-	g_MapEditor.removeObject ( mouseEvent.target.objId );
-};
-
-/*
---- searchPaneUI function ---------------------------------------------------------------------------------------------
+--- newSearchPaneUI function ------------------------------------------------------------------------------------------
 
 This function returns the searchPaneUI object
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newSearchPaneUI = function ( ) {
+function newSearchPaneUI ( ) {
 	
-	var m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
+	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
 	
+	/*
+	--- m_OnSearchInputChange function --------------------------------------------------------------------------------
+
+	change event listener for the search input
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnSearchInputChange ( ) {
+		// saving the search phrase
+		s_SearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
+
+		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+		// removing previous search results
+		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		while ( 0 !== searchResultsElements.length ) {
+			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
+			searchResultsElements [ 0 ].removeEventListener ( 'click' , m_OnSearchResultClick, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
+			searchDiv.removeChild ( searchResultsElements [ 0 ] );
+		}
+		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+			// adding wait animation
+			let htmlElementsFactory = newHTMLElementsFactory ( );
+			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
+		}
+		// search...
+		s_OsmSearchEngine.search ( );
+	}
+
+	/*
+	--- m_OnSearchResultClick function --------------------------------------------------------------------------------
+
+	click event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnSearchResultClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		g_MapEditor.zoomToSearchResult ( element.latLng, element.geometry );
+	}
+
+	/*
+	--- m_OnSearchResultContextMenu function --------------------------------------------------------------------------
+
+	contextmenu event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnSearchResultContextMenu ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.preventDefault ( );
+		let element = clickEvent.target;
+		while ( ! element.latLng ) {
+			element = element.parentNode;
+		}
+		g_NoteEditor.newSearchNote ( element.searchResult );
+	}
+
+	/*
+	--- m_OnSearchResultMouseEnter function ---------------------------------------------------------------------------
+
+	mouseenter event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnSearchResultMouseEnter ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		g_MapEditor.addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
+	}
+
+	/*
+	--- m_OnSearchResultMouseLeave function ---------------------------------------------------------------------------
+
+	mouseleave event listener for the search
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnSearchResultMouseLeave ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		g_MapEditor.removeObject ( mouseEvent.target.objId );
+	}
+
 	/*
 	--- m_Remove function ---------------------------------------------------------------------------------------------
 
@@ -168,42 +162,42 @@ var newSearchPaneUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_Remove = function ( ) {
+	function m_Remove ( ) {
 		
-		var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
 		
 		s_OsmSearchEngine.hide ( );
 		
-		var searchButton = document.getElementById ( 'TravelNotes-Control-SearchButton' );
+		let searchButton = document.getElementById ( 'TravelNotes-Control-SearchButton' );
 		if ( searchButton ) {
-			searchButton.removeEventListener ( 'click', onSearchInputChange, false );
+			searchButton.removeEventListener ( 'click', m_OnSearchInputChange, false );
 		}
 		
-		var searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
+		let searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
 		if ( searchInputElement ) {
-			searchInputElement.removeEventListener ( 'change', onSearchInputChange, false );
+			searchInputElement.removeEventListener ( 'change', m_OnSearchInputChange, false );
 		}
-		var searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
 		
-		var searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
 		
 		Array.prototype.forEach.call ( 
 			searchResultsElements,
-			function ( searchResultsElement ) {
-				searchResultsElement.removeEventListener ( 'click' , onSearchResultClick, false );
-				searchResultsElement.removeEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
-				searchResultsElement.removeEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
-				searchResultsElement.removeEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
+			searchResultsElement => {
+				searchResultsElement.removeEventListener ( 'click' , m_OnSearchResultClick, false );
+				searchResultsElement.removeEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
+				searchResultsElement.removeEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
+				searchResultsElement.removeEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
 			}
 		);
 		
 		if ( searchDiv ) {
 			dataDiv.removeChild ( searchDiv );
 		}
-	};
+	}
 	
 	/*
 	--- m_Add function ------------------------------------------------------------------------------------------------
@@ -213,27 +207,27 @@ var newSearchPaneUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var m_Add = function ( ) {
+	function m_Add ( ) {
 		
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 
-		var dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
 		
 		s_OsmSearchEngine.show ( );
 		
-		var searchDiv = m_HtmlElementsFactory.create (
+		let searchDiv = m_HtmlElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-SearchDiv'
 			},
 			dataDiv
 		);
-		var searchButton = m_HtmlElementsFactory.create (
+		let searchButton = m_HtmlElementsFactory.create (
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SearchButton',
@@ -243,9 +237,9 @@ var newSearchPaneUI = function ( ) {
 			},
 			searchDiv 
 		);
-		searchButton.addEventListener ( 'click', onSearchInputChange, false );
+		searchButton.addEventListener ( 'click', m_OnSearchInputChange, false );
 
-		var searchInput = m_HtmlElementsFactory.create ( 
+		let searchInput = m_HtmlElementsFactory.create ( 
 			'input', 
 			{ 
 				type : 'text', 
@@ -255,13 +249,20 @@ var newSearchPaneUI = function ( ) {
 			},
 			searchDiv 
 		);
-		searchInput.addEventListener ( 'change', onSearchInputChange, false );
-		searchInput.addEventListener ( 'keydown', onKeyDownInputChange, false );
+		searchInput.addEventListener ( 'change', m_OnSearchInputChange, false );
+		searchInput.addEventListener ( 
+			'keydown', 
+			keyBoardEvent => {
+				if ( 'Enter' === keyBoardEvent.key ) {
+					m_OnSearchInputChange ( keyBoardEvent );
+				} 
+			},
+			false );
 		searchInput.focus ( );
-		var resultsCounter = 0;
+		let resultsCounter = 0;
 		g_TravelNotesData.searchData.forEach ( 
-			function ( searchResult ) {
-				var searchResultDiv = m_HtmlElementsFactory.create (
+			searchResult => {
+				let searchResultDiv = m_HtmlElementsFactory.create (
 					'div',
 					{
 						id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
@@ -282,27 +283,27 @@ var newSearchPaneUI = function ( ) {
 				searchResultDiv.osmId = searchResult.id;
 				searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
 				searchResultDiv.geometry = searchResult.geometry;
-				searchResultDiv.addEventListener ( 'click' , onSearchResultClick, false );
-				searchResultDiv.addEventListener ( 'contextmenu' , onSearchResultContextMenu, false );
-				searchResultDiv.addEventListener ( 'mouseenter' , onSearchResultMouseEnter, false );
-				searchResultDiv.addEventListener ( 'mouseleave' , onSearchResultMouseLeave, false );
+				searchResultDiv.addEventListener ( 'click' , m_OnSearchResultClick, false );
+				searchResultDiv.addEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
+				searchResultDiv.addEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
+				searchResultDiv.addEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
 			}
 		);	
-	};
+	}
 
 	/*
-	--- SearcgPaneUI object -------------------------------------------------------------------------------------------
+	--- SearchPaneUI object -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	return Object.seal ( 
 		{
-			remove : function ( ) { m_Remove ( ); },
-			add : function ( ) { m_Add ( ); },
+			remove : ( ) => m_Remove ( ),
+			add : ( ) => m_Add ( )
 		}
 	);
-};
+}
 	
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------

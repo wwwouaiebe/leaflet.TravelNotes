@@ -28,7 +28,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed ...
+Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -39,67 +39,12 @@ Tests ...
 export { newDataPanesUI };
 
 import { g_Translator } from '../UI/Translator.js';
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
-var s_ActivePaneIndex = -1;
-
-/*
---- onWheel function --------------------------------------------------------------------------------------------------
-
-wheel event listener for the data div
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onWheel = function ( wheelEvent ) { 
-	if ( wheelEvent.deltaY ) {
-		wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
-	}
-	wheelEvent.stopPropagation ( );
-};
-
-/*
---- onClickItineraryPaneButton function -------------------------------------------------------------------------------
-
-click event listener for the itinerary pane button
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-
-var onClickItineraryPaneButton = function ( ) {
-	newDataPanesUI ( ).setItinerary ( );
-};
-
-
-/*
---- onClickTravelNotesPaneButton function -----------------------------------------------------------------------------
-
-click event listener for the travel notes pane button
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onClickTravelNotesPaneButton = function ( ) {
-	newDataPanesUI ( ).setTravelNotes ( );
-};
-
-/*
---- onClickSearchPaneButton function ----------------------------------------------------------------------------------
-
-click event listener for the search pane button
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-var onClickSearchPaneButton = function ( ) {
-	newDataPanesUI ( ).setSearch ( );
-};
-
+let s_ActivePaneIndex = -1;
 
 /*
 --- dataPanesUI function ----------------------------------------------------------------------------------------------
@@ -109,11 +54,11 @@ This function returns the dataPanesUI object
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newDataPanesUI = function ( ) {
+function newDataPanesUI ( ) {
 
-	var m_TravelNotesPaneUI = newTravelNotesPaneUI ( );
-	var m_SearchPaneUI = newSearchPaneUI ( );
-	var m_ItineraryPaneUI = newItineraryPaneUI ( );
+	let m_TravelNotesPaneUI = newTravelNotesPaneUI ( );
+	let m_SearchPaneUI = newSearchPaneUI ( );
+	let m_ItineraryPaneUI = newItineraryPaneUI ( );
 
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
@@ -123,15 +68,15 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_CreateUI = function ( controlDiv ) {
+	function m_CreateUI ( controlDiv ) {
 		
 		if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
 			return;
 		}
 
-		var htmlElementsFactory = newHTMLElementsFactory ( ) ;
+		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
 
-		var headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+		let headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
 		
 		htmlElementsFactory.create ( 
 			'div', 
@@ -141,7 +86,7 @@ var newDataPanesUI = function ( ) {
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv 
-		).addEventListener ( 'click', onClickItineraryPaneButton, false );
+		).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setItinerary ( ), false );
 		
 		htmlElementsFactory.create ( 
 			'div', 
@@ -151,7 +96,7 @@ var newDataPanesUI = function ( ) {
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv 
-		).addEventListener ( 'click', onClickTravelNotesPaneButton, false );
+		).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setTravelNotes ( ), false );
 		
 		if ( window.osmSearch ) {
 			htmlElementsFactory.create ( 
@@ -162,7 +107,7 @@ var newDataPanesUI = function ( ) {
 					className : 'TravelNotes-Control-PaneButton'
 				},
 				headerDiv 
-			).addEventListener ( 'click', onClickSearchPaneButton, false );
+			).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setSearch ( ), false );
 		}
 		
 		htmlElementsFactory.create ( 
@@ -171,8 +116,16 @@ var newDataPanesUI = function ( ) {
 				id : 'TravelNotes-Control-ItineraryDataDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
-		controlDiv ).addEventListener ( 'wheel', onWheel, false );
-	};
+		controlDiv ).addEventListener ( 
+			'wheel', 
+			wheelEvent => { 
+				if ( wheelEvent.deltaY ) {
+					wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + wheelEvent.deltaY * 10 ;
+				}
+				wheelEvent.stopPropagation ( );
+			}, 
+			false );
+	}
 
 	/*
 	--- m_RemoveActivePane function -----------------------------------------------------------------------------------
@@ -182,7 +135,7 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_RemoveActivePane = function ( ) {
+	function m_RemoveActivePane ( ) {
 		switch ( s_ActivePaneIndex ) {
 			case 0:
 				m_ItineraryPaneUI.remove ( );
@@ -198,7 +151,7 @@ var newDataPanesUI = function ( ) {
 			default:
 				break;
 		}
-	};
+	}
 
 	/*
 	--- m_SetItinerary function ---------------------------------------------------------------------------------------
@@ -208,12 +161,12 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_SetItinerary = function ( ) { 
+	function m_SetItinerary ( ) { 
 		m_RemoveActivePane ( );
 		m_ItineraryPaneUI.add ( );
 
 		s_ActivePaneIndex = 0;
-	};
+	}
 
 	/*
 	--- m_UpdateItinerary function ------------------------------------------------------------------------------------
@@ -223,12 +176,12 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_UpdateItinerary = function ( ) {
+	function m_UpdateItinerary ( ) {
 		if ( 0 === s_ActivePaneIndex ) {
 			m_ItineraryPaneUI.remove ( );
 			m_ItineraryPaneUI.add ( );
 		}
-	};
+	}
 	
 	/*
 	--- m_SetItinerary function ---------------------------------------------------------------------------------------
@@ -238,11 +191,11 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_SetTravelNotes = function ( ) { 
+	function m_SetTravelNotes ( ) { 
 		m_RemoveActivePane ( );
 		m_TravelNotesPaneUI.add ( );
 		s_ActivePaneIndex = 1;
-	};
+	}
 	
 	/*
 	--- m_UpdateTravelNotes function ----------------------------------------------------------------------------------
@@ -252,12 +205,12 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_UpdateTravelNotes = function ( ) {
+	function m_UpdateTravelNotes ( ) {
 		if ( 1 === s_ActivePaneIndex ) {
 			m_TravelNotesPaneUI.remove ( );
 			m_TravelNotesPaneUI.add ( );
 		}
-	};
+	}
 	
 	/*
 	--- m_SetSearch function ------------------------------------------------------------------------------------------
@@ -267,13 +220,13 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_SetSearch = function ( ) { 
+	function m_SetSearch ( ) { 
 		m_RemoveActivePane ( );
 		m_SearchPaneUI.add ( );
 
 		s_ActivePaneIndex = 2;
 
-	};
+	}
 	
 	/*
 	--- m_UpdateSearch function ---------------------------------------------------------------------------------------
@@ -283,12 +236,12 @@ var newDataPanesUI = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var m_UpdateSearch = function ( ) {
+	function m_UpdateSearch ( ) {
 		if ( 2 === s_ActivePaneIndex ) {
 			m_SearchPaneUI.remove ( );
 			m_SearchPaneUI.add ( );
 		}
-	};
+	}
 	
 	/* 
 	--- dataPanesUI object --------------------------------------------------------------------------------------------
@@ -299,20 +252,20 @@ var newDataPanesUI = function ( ) {
 	return Object.seal (
 		{
 			
-			createUI : function ( controlDiv ) { m_CreateUI ( controlDiv ); },
+			createUI : controlDiv => m_CreateUI ( controlDiv ),
 			
-			setItinerary : function ( ) { m_SetItinerary ( ); },
-			updateItinerary : function ( ) { m_UpdateItinerary ( ); },
+			setItinerary : ( ) => m_SetItinerary ( ),
+			updateItinerary : ( ) => m_UpdateItinerary ( ),
 
-			setTravelNotes : function ( ) { m_SetTravelNotes ( ); },
-			updateTravelNotes : function ( ) { m_UpdateTravelNotes ( ); },
+			setTravelNotes : ( ) => m_SetTravelNotes ( ),
+			updateTravelNotes : ( ) => m_UpdateTravelNotes ( ),
 			
-			setSearch : function ( ) { m_SetSearch ( ); },
-			updateSearch : function ( ) { m_UpdateSearch ( ); }
+			setSearch : ( ) => m_SetSearch ( ),
+			updateSearch : ( ) => m_UpdateSearch ( )
 			
 		}
 	);
-};
+}
 	
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
