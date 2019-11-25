@@ -45,6 +45,7 @@ import { newGeoCoder } from '../core/GeoCoder.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newGeometry } from '../util/Geometry.js';
 
 /*
 --- newWayPointEditor function ----------------------------------------------------------------------------------------
@@ -58,6 +59,8 @@ function newWayPointEditor ( ) {
 	
 	let m_GeoCoder = newGeoCoder ( );
 	let m_EventDispatcher = newEventDispatcher ( );
+	let m_Geometry = newGeometry ( );
+
 	/*
 	--- m_AddWayPoint function ----------------------------------------------------------------------------------------
 
@@ -83,7 +86,7 @@ function newWayPointEditor ( ) {
 		if ( distance ) {
 			let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( 
+				let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 					g_TravelNotesData.travel.editedRoute,
 					wayPointsIterator.value.latLng 
 				);
@@ -112,7 +115,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function m_AddWayPointOnRoute ( routeObjId, event ) {
-		let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 			newDataSearchEngine ( ).getRoute ( routeObjId ),
 			[ event.latlng.lat, event.latlng.lng ] 
 		);

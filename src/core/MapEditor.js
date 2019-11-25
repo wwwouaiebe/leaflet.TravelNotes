@@ -52,7 +52,6 @@ export { g_MapEditor };
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_WayPointEditor } from '../core/WayPointEditor.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
@@ -61,6 +60,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
+import { newGeometry } from '../util/Geometry.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ This function updates the route tooltip with the distance
 function onMouseOverOrMoveOnRoute ( event ) { 
 	let dataSearchEngine  = newDataSearchEngine ( );
 	let route = dataSearchEngine.getRoute (  event.target.objId );
-	let distance = g_RouteEditor.getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
+	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
 	let polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
@@ -100,6 +100,7 @@ function newMapEditor ( ) {
 
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
+	let m_Geometry = newGeometry ( );
 
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
@@ -615,7 +616,7 @@ function newMapEditor ( ) {
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
 					if ( null != route ) {
 						// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
-						let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+						let latLngDistance = m_Geometry.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
 						// coordinates and distance are changed in the note
 						note.latLng = latLngDistance.latLng;
 						note.distance = latLngDistance.distance;

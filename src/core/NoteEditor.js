@@ -45,12 +45,12 @@ export { g_NoteEditor };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newGeometry } from '../util/Geometry.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -64,6 +64,7 @@ function newNoteEditor ( ) {
 	
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
+	let m_Geometry = newGeometry ( );
 
 	/*
 	--- m_AttachNoteToRoute function ----------------------------------------------------------------------------------
@@ -85,7 +86,7 @@ function newNoteEditor ( ) {
 
 		g_TravelNotesData.travel.routes.forEach ( 
 			route => {
-				let pointAndDistance = g_RouteEditor.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
+				let pointAndDistance = m_Geometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
 					let distanceToRoute = L.latLng ( noteAndRoute.note.latLng ).distanceTo ( L.latLng ( pointAndDistance.latLng ) );
 					if ( distanceToRoute < distance ) {
@@ -176,7 +177,7 @@ function newNoteEditor ( ) {
 
 	function m_NewRouteNote ( routeObjId, event ) {
 		// the nearest point and distance on the route is searched
-		let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 			m_DataSearchEngine.getRoute ( routeObjId ),
 			[ event.latlng.lat, event.latlng.lng ] 
 		);
@@ -252,7 +253,7 @@ function newNoteEditor ( ) {
 
 	function m_NewManeuverNote ( maneuverObjId, latLng ) {
 		// the nearest point and distance on the route is searched
-		let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 			g_TravelNotesData.travel.editedRoute,
 			latLng
 		);

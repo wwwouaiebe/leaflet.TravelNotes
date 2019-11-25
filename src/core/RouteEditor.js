@@ -65,6 +65,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { newRouter } from '../core/Router.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newGeometry } from '../util/Geometry.js';
 
 var s_ZoomToRoute = false;
 	
@@ -81,6 +82,7 @@ function newRouteEditor ( ) {
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_Utilities = newUtilities ( );
 	let m_EventDispatcher = newEventDispatcher ( );
+	let m_Geometry = newGeometry ( );
 
 	/*
 	--- m_CutRoute function -------------------------------------------------------------------------------------------
@@ -103,7 +105,7 @@ function newRouteEditor ( ) {
 		routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
 		
 		// the distance between the origin and the cutting point is computed
-		let cuttingPointLatLngDistance = m_GetClosestLatLngDistance ( route, latLng );
+		let cuttingPointLatLngDistance = m_Geometry.getClosestLatLngDistance ( route, latLng );
 
 		// iteration on the itineraryPoints
 		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
@@ -180,60 +182,6 @@ function newRouteEditor ( ) {
 			previousManeuver.distance += previousItineraryPoint.distance;
 			previousItineraryPoint = itineraryPointsIterator.value;
 		}
-	}
-
-	/*
-	--- m_GetClosestLatLngDistance function ---------------------------------------------------------------------------
-
-	This function search the nearest point on a route from a given point and compute the distance
-	between the beginning of the route and the nearest point
-	
-	parameters:
-	- route : the TravelNotes route object to be used
-	- latLng : the coordinates of the point
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_GetClosestLatLngDistance ( route, latLng ) {
-		
-		if ( 0 === route.itinerary.itineraryPoints.length ) {
-			return null;
-		}
-		// an iterator on the route points is created...
-		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-		// ... and placed on the first point
-		itineraryPointIterator.done;
-		// the smallest distance is initialized ...
-		let minDistance = Number.MAX_VALUE;
-		// projections of points are made
-		let point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
-		let point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-		// variables initialization
-		let closestLatLng = null;
-		let closestDistance = 0;
-		let endSegmentDistance = itineraryPointIterator.value.distance;
-		// iteration on the route points
-		while ( ! itineraryPointIterator.done ) {
-			// projection of the second point...
-			let point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-			// and distance is computed
-			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-			if ( distance < minDistance )
-			{
-				// we have found the smallest distance ... till now :-)
-				minDistance = distance;
-				// the nearest point is computed
-				closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
-				// and the distance also
-				closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
-			}
-			// we prepare the iteration for the next point...
-			endSegmentDistance += itineraryPointIterator.value.distance;
-			point1 = point2;
-		}
-		
-		return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
 	}
 
 	/*
@@ -358,7 +306,7 @@ function newRouteEditor ( ) {
 		// the position of the notes linked to the route is recomputed
 		let notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
 		while ( ! notesIterator.done ) {
-			let latLngDistance = m_GetClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, notesIterator.value.latLng );
+			let latLngDistance = m_Geometry.getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, notesIterator.value.latLng );
 			notesIterator.value.latLng = latLngDistance.latLng;
 			notesIterator.value.distance = latLngDistance.distance;
 		}
@@ -497,8 +445,6 @@ function newRouteEditor ( ) {
 			cutRoute : ( route, latLng ) => { return m_CutRoute ( route, latLng ); },
 			
 			computeRouteDistances : route => m_ComputeRouteDistances ( route ),
-
-			getClosestLatLngDistance : ( route, latLng ) => { return m_GetClosestLatLngDistance ( route, latLng ); },
 
 			saveGpx : ( ) => m_SaveGpx ( ),
 			

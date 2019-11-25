@@ -47,6 +47,7 @@ export { newRouter };
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
+import { newGeometry } from '../util/Geometry.js';
 
 var s_RequestStarted = false;
 
@@ -124,7 +125,7 @@ function newRouter ( ) {
 				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 			}
 			else{
-				wayPointsIterator.value.latLng = g_RouteEditor.getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
+				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
 			}
 		}	
 		
