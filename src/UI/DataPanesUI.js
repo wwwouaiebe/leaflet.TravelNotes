@@ -47,7 +47,7 @@ import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 let s_ActivePaneIndex = -1;
 
 /*
---- dataPanesUI function ----------------------------------------------------------------------------------------------
+--- newDataPanesUI function -------------------------------------------------------------------------------------------
 
 This function returns the dataPanesUI object
 
@@ -86,7 +86,7 @@ function newDataPanesUI ( ) {
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv 
-		).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setItinerary ( ), false );
+		).addEventListener ( 'click', ( ) => m_SetItinerary ( ), false );
 		
 		htmlElementsFactory.create ( 
 			'div', 
@@ -96,7 +96,7 @@ function newDataPanesUI ( ) {
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv 
-		).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setTravelNotes ( ), false );
+		).addEventListener ( 'click', ( ) => m_SetTravelNotes ( ), false );
 		
 		if ( window.osmSearch ) {
 			htmlElementsFactory.create ( 
@@ -107,16 +107,17 @@ function newDataPanesUI ( ) {
 					className : 'TravelNotes-Control-PaneButton'
 				},
 				headerDiv 
-			).addEventListener ( 'click', ( ) => newDataPanesUI ( ).setSearch ( ), false );
+			).addEventListener ( 'click', ( ) => m_SetSearch ( ), false );
 		}
 		
-		htmlElementsFactory.create ( 
+		let dataDiv = htmlElementsFactory.create ( 
 			'div', 
 			{
 				id : 'TravelNotes-Control-ItineraryDataDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
-		controlDiv ).addEventListener ( 
+		controlDiv );
+		dataDiv.addEventListener ( 
 			'wheel', 
 			wheelEvent => { 
 				if ( wheelEvent.deltaY ) {
@@ -124,7 +125,14 @@ function newDataPanesUI ( ) {
 				}
 				wheelEvent.stopPropagation ( );
 			}, 
-			false );
+			false 
+		);
+		dataDiv.addEventListener ( 'setitinerary', ( ) => m_UpdateTravelNotes ( ), false );
+		dataDiv.addEventListener ( 'updateitinerary', ( ) => m_UpdateTravelNotes ( ), false );
+		dataDiv.addEventListener ( 'settravelnotes', ( ) => m_UpdateTravelNotes ( ), false );
+		dataDiv.addEventListener ( 'updatetravelnotes', ( ) => m_UpdateTravelNotes ( ), false );
+		dataDiv.addEventListener ( 'setsearch', ( ) => m_UpdateTravelNotes ( ), false );
+		dataDiv.addEventListener ( 'updatesearch', ( ) => m_UpdateTravelNotes ( ), false );
 	}
 
 	/*
@@ -262,7 +270,7 @@ function newDataPanesUI ( ) {
 			
 			setSearch : ( ) => m_SetSearch ( ),
 			updateSearch : ( ) => m_UpdateSearch ( )
-			
+
 		}
 	);
 }

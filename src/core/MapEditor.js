@@ -58,9 +58,9 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -99,6 +99,7 @@ Patterns : Closure and Singleton
 function newMapEditor ( ) {
 
 	let m_DataSearchEngine  = newDataSearchEngine ( );
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
@@ -612,7 +613,6 @@ function newMapEditor ( ) {
 					let route = noteAndRoute.route;
 					// ... then the layerGroup is searched...
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
-					let dataPanesUI = newDataPanesUI ( );
 					if ( null != route ) {
 						// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
 						let latLngDistance = g_RouteEditor.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
@@ -623,12 +623,12 @@ function newMapEditor ( ) {
 						route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
-						dataPanesUI.updateItinerary ( );
+						m_EventDispatcher.dispatch ( 'updateitinerary' );
 					}
 					else {
 						// the note is not attached to a route, so the coordinates of the note can be directly changed
 						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-						dataPanesUI.updateTravelNotes ( );
+						m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 					}
 					// in all cases, the polyline is updated
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );

@@ -48,10 +48,10 @@ import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -64,6 +64,7 @@ Patterns : Closure and Singleton
 function newNoteEditor ( ) {
 	
 	let m_DataSearchEngine  = newDataSearchEngine ( );
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_AttachNoteToRoute function ----------------------------------------------------------------------------------
@@ -110,8 +111,8 @@ function newNoteEditor ( ) {
 			selectedRoute.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 
 			g_MapEditor.redrawNote ( noteAndRoute.note );
-			newDataPanesUI ( ).updateItinerary ( );
-			newDataPanesUI ( ).updateTravelNotes ( );
+			m_EventDispatcher.dispatch ( 'updateitinerary' );
+			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 			// and the HTML page is adapted
 			g_TravelEditor.updateRoadBook ( );
 		}
@@ -136,8 +137,8 @@ function newNoteEditor ( ) {
 		noteAndRoute.note.chainedDistance = 0;
 		g_TravelNotesData.travel.notes.add ( noteAndRoute.note );
 		
-		newDataPanesUI ( ).updateItinerary ( );
-		newDataPanesUI ( ).updateTravelNotes ( );
+		m_EventDispatcher.dispatch ( 'updateitinerary' );
+		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		// and the HTML page is adapted
 		g_TravelEditor.updateRoadBook ( );
 	}
@@ -194,7 +195,7 @@ function newNoteEditor ( ) {
 				route.notes.add ( newNote );
 				newNote.chainedDistance = route.chainedDistance;
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
-				newDataPanesUI ( ).setItinerary ( );
+				m_EventDispatcher.dispatch ( 'setitinerary' );
 				g_MapEditor.addNote ( newNote );
 				g_TravelEditor.updateRoadBook ( );
 			}
@@ -230,7 +231,7 @@ function newNoteEditor ( ) {
 		.then ( 
 			newNote => {
 				g_TravelNotesData.travel.notes.add ( newNote );
-				newDataPanesUI ( ).setTravelNotes ( );
+				m_EventDispatcher.dispatch ( 'settravelnotes' );
 				g_MapEditor.addNote ( newNote );
 				g_TravelEditor.updateRoadBook ( );
 			}
@@ -276,7 +277,7 @@ function newNoteEditor ( ) {
 				route.notes.add ( newNote );
 				newNote.chainedDistance = route.chainedDistance;
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
-				newDataPanesUI ( ).setItinerary ( );
+				m_EventDispatcher.dispatch ( 'setitinerary' );
 				g_MapEditor.addNote ( newNote );
 				g_TravelEditor.updateRoadBook ( );
 			}
@@ -306,7 +307,7 @@ function newNoteEditor ( ) {
 			newNote => 
 			{
 				g_TravelNotesData.travel.notes.add ( newNote );
-				newDataPanesUI ( ).setTravelNotes ( );
+				m_EventDispatcher.dispatch ( 'settravelnotes' );
 				g_MapEditor.addNote ( newNote );
 				g_TravelEditor.updateRoadBook ( );
 			}
@@ -337,10 +338,10 @@ function newNoteEditor ( ) {
 					// it's an existing note. The note is changed on the map
 					g_MapEditor.redrawNote ( modifiedNote );
 					if ( ! noteAndRoute.route ) {
-						newDataPanesUI ( ).setTravelNotes ( );
+						m_EventDispatcher.dispatch ( 'settravelnotes' );
 					}
 					else {
-						newDataPanesUI ( ).setItinerary ( );
+						m_EventDispatcher.dispatch ( 'setitinerary' );
 					}
 				}
 				g_TravelEditor.updateRoadBook ( );
@@ -368,12 +369,12 @@ function newNoteEditor ( ) {
 		if ( noteAndRoute.route ) {
 			// it's a route note
 			noteAndRoute.route.notes.remove ( noteObjId );
-			newDataPanesUI ( ).updateItinerary ( );
+			m_EventDispatcher.dispatch ( 'updateitinerary' );
 		}
 		else {
 			// it's a travel note
 			g_TravelNotesData.travel.notes.remove ( noteObjId );
-			newDataPanesUI ( ).updateTravelNotes( );
+			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		}
 		// and the HTML page is adapted
 		g_TravelEditor.updateRoadBook ( );
@@ -446,7 +447,7 @@ function newNoteEditor ( ) {
 
 	function m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore ) {
 		g_TravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
-		newDataPanesUI ( ).updateTravelNotes( );
+		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		g_TravelEditor.updateRoadBook ( );
 	}
 		

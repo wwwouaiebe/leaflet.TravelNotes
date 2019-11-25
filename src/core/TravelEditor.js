@@ -57,13 +57,13 @@ import { g_RouteEditor } from '../core/RouteEditor.js';
 
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 
 let s_haveBeforeUnloadWarning = false;
@@ -83,7 +83,7 @@ function newTravelEditor ( ) {
 	let m_RouteEditorUI = newRouteEditorUI ( );
 	let m_Utilities = newUtilities ( );
 	let m_DataSearchEngine  = newDataSearchEngine ( );
-	let m_DataPanesUIFactory = newDataPanesUI ( );
+	let m_EventDispatcher = newEventDispatcher ( );
 	
 	/*
 	--- m_UpdateRoadBook function -------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ function newTravelEditor ( ) {
 		g_RouteEditor.chainRoutes ( );
 		m_RouteEditorUI .expand ( );
 		m_RouteEditorUI.setWayPointsList ( );
-		m_DataPanesUIFactory.setItinerary ( );
+		m_EventDispatcher.dispatch ( 'setitinerary' );
 	}
 	
 	/*
@@ -352,7 +352,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel.routes.add ( newRoute ( ) );
 		m_TravelEditorUI. setRoutesList ( );
 		m_RouteEditorUI.setWayPointsList (  );
-		m_DataPanesUIFactory.setItinerary ( );
+		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_UpdateRoadBook ( true );
 	}
 

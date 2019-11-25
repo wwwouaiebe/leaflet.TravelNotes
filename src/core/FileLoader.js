@@ -51,8 +51,8 @@ import { g_TravelEditor } from '../core/TravelEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRouteEditorUI } from '../UI/RouteEditorUI.js';
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ function newFileLoader ( ) {
 				let routeEditorUI = newRouteEditorUI ( );
 				routeEditorUI .expand ( );
 				routeEditorUI.setWayPointsList ( );
-				newDataPanesUI ( ).setItinerary ( );
+				newEventDispatcher ( ).dispatch ( 'setitinerary' );
 			}
 			g_TravelEditor.updateRoadBook ( false );
 		}

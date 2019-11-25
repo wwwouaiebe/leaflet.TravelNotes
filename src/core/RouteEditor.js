@@ -65,9 +65,9 @@ import { newRoute } from '../data/Route.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRouter } from '../core/Router.js';
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
 import { newTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 var s_ZoomToRoute = false;
 	
@@ -84,7 +84,7 @@ function newRouteEditor ( ) {
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_RouteEditorUI = newRouteEditorUI ( );
 	let m_Utilities = newUtilities ( );
-	let m_DataPanesUI = newDataPanesUI ( );
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_CutRoute function -------------------------------------------------------------------------------------------
@@ -377,9 +377,8 @@ function newRouteEditor ( ) {
 		}
 		
 		// and the itinerary and waypoints are displayed
-		m_DataPanesUI.setItinerary ( );
+		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_RouteEditorUI.setWayPointsList ( );
-		
 		// the HTML page is adapted ( depending of the config.... )
 		m_ChainRoutes ( );
 		g_TravelEditor.updateRoadBook ( );
@@ -424,7 +423,7 @@ function newRouteEditor ( ) {
 		newTravelEditorUI ( ).setRoutesList ( );
 		m_RouteEditorUI.setWayPointsList ( );
 		m_RouteEditorUI .reduce ( );
-		m_DataPanesUI.setItinerary ( );
+		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_ChainRoutes ( );
 		g_TravelEditor.updateRoadBook ( );
 	}

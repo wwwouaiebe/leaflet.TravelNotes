@@ -40,7 +40,7 @@ import { g_Config } from '../data/Config.js';
 import { newObjId } from '../data/ObjId.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
-import { newDataPanesUI } from '../UI/DataPanesUI.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 var s_OsmSearchStarted = false;
 var s_SearchParameters = { searchPhrase : '', bbox : null };
@@ -85,7 +85,7 @@ function onSearchSuccess ( searchData ) {
 	g_TravelNotesData.searchData = searchData;
 	s_OsmSearchStarted = false;
 	s_DrawSearchRectangle ( );
-	newDataPanesUI ( ).updateSearch ( );
+	newEventDispatcher ( ).dispatch ( 'updatesearch' );
 }
 
 /*
