@@ -380,12 +380,6 @@ function newRouteEditorUI ( ) {
 	return  Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ) ,
-	
-			expand : ( ) => m_ExpandUI ( ),
-			
-			reduce : ( ) => m_ReduceUI ( ),
-
-			setWayPointsList : ( ) => m_SetWayPointsList ( )
 		}
 	);
 }

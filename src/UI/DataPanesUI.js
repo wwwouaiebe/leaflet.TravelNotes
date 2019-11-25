@@ -184,12 +184,14 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
+	/*
 	function m_UpdateItinerary ( ) {
 		if ( 0 === s_ActivePaneIndex ) {
 			m_ItineraryPaneUI.remove ( );
 			m_ItineraryPaneUI.add ( );
 		}
 	}
+	*/
 	
 	/*
 	--- m_SetItinerary function ---------------------------------------------------------------------------------------
@@ -244,12 +246,14 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
+	/*
 	function m_UpdateSearch ( ) {
 		if ( 2 === s_ActivePaneIndex ) {
 			m_SearchPaneUI.remove ( );
 			m_SearchPaneUI.add ( );
 		}
 	}
+	*/
 	
 	/* 
 	--- dataPanesUI object --------------------------------------------------------------------------------------------
@@ -259,18 +263,7 @@ function newDataPanesUI ( ) {
 	
 	return Object.seal (
 		{
-			
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
-			
-			setItinerary : ( ) => m_SetItinerary ( ),
-			updateItinerary : ( ) => m_UpdateItinerary ( ),
-
-			setTravelNotes : ( ) => m_SetTravelNotes ( ),
-			updateTravelNotes : ( ) => m_UpdateTravelNotes ( ),
-			
-			setSearch : ( ) => m_SetSearch ( ),
-			updateSearch : ( ) => m_UpdateSearch ( )
-
 		}
 	);
 }

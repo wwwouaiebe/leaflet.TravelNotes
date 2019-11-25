@@ -502,7 +502,6 @@ function newTravelEditorUI ( ) {
 	return Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
-			setRoutesList : (  ) => m_SetRoutesList ( )
 		}
 	);
 }
