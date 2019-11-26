@@ -39,7 +39,6 @@ export { newOsmSearchEngine };
 import { g_Config } from '../data/Config.js';
 import { newObjId } from '../data/ObjId.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 var s_OsmSearchStarted = false;
@@ -61,16 +60,20 @@ function s_DrawSearchRectangle ( ) {
 		return;
 	}
 	if ( -1 !== s_PreviousSearchRectangleObjId ) {
-		g_MapEditor.removeObject ( s_PreviousSearchRectangleObjId );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId: s_PreviousSearchRectangleObjId } );
 	}
 	else {
 		s_PreviousSearchRectangleObjId = newObjId ( );
 	}
-	g_MapEditor.addRectangle ( 
-		s_PreviousSearchRectangleObjId, 
-		L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) , 
-		g_Config.previousSearchLimit 
+	newEventDispatcher ( ).dispatch ( 
+		'addrectangle', 
+		{ 
+			objId : s_PreviousSearchRectangleObjId,
+			bounds : L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) ,
+			properties : g_Config.previousSearchLimit 
+		}
 	);
+	
 }
 
 /*
@@ -112,15 +115,19 @@ change event listener for the map
 function onMapChange ( ) {
 	let mapCenter = g_TravelNotesData.map.getCenter ( );
 	if ( -1 !== s_NextSearchRectangleObjId ) {
-		g_MapEditor.removeObject ( s_NextSearchRectangleObjId );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId: s_NextSearchRectangleObjId } );
 	}
 	else {
 		s_NextSearchRectangleObjId = newObjId ( );
 	}
-	g_MapEditor.addRectangle ( 
-		s_NextSearchRectangleObjId, 
-		L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ), 
-		g_Config.nextSearchLimit );
+	newEventDispatcher ( ).dispatch ( 
+		'addrectangle', 
+		{ 
+			objId : s_NextSearchRectangleObjId,
+			bounds : L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ),
+			properties : g_Config.nextSearchLimit
+		}
+	);
 }
 
 /*
@@ -133,6 +140,8 @@ This function returns the osmSearchEngine object
 
 function newOsmSearchEngine ( ) {
 	
+	let m_EventDispatcher = newEventDispatcher ( );
+
 	/*
 	--- m_Search function -----------------------------------------------------------------------------------------
 
@@ -184,11 +193,11 @@ function newOsmSearchEngine ( ) {
 		g_TravelNotesData.map.off ( 'zoom', onMapChange );
 		g_TravelNotesData.map.off ( 'move', onMapChange );
 		if ( -1 !== s_NextSearchRectangleObjId ) {
-			g_MapEditor.removeObject ( s_NextSearchRectangleObjId );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId: s_NextSearchRectangleObjId } );
 			s_NextSearchRectangleObjId = -1;
 		}
 		if ( -1 !== s_PreviousSearchRectangleObjId ) {
-			g_MapEditor.removeObject ( s_PreviousSearchRectangleObjId );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId: s_PreviousSearchRectangleObjId } );
 			s_PreviousSearchRectangleObjId = -1;
 		}
 	}

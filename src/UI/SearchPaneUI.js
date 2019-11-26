@@ -39,12 +39,12 @@ export { newSearchPaneUI };
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 let s_OsmSearchEngine = newOsmSearchEngine ( );
 let s_SearchInputValue = '';
@@ -60,6 +60,7 @@ This function returns the searchPaneUI object
 function newSearchPaneUI ( ) {
 	
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
+	let m_EventDispatcher = newEventDispatcher ( );
 	
 	/*
 	--- m_OnSearchInputChange function --------------------------------------------------------------------------------
@@ -107,7 +108,13 @@ function newSearchPaneUI ( ) {
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		g_MapEditor.zoomToSearchResult ( element.latLng, element.geometry );
+		m_EventDispatcher.dispatch ( 
+			'zoomtosearchresult', 
+			{ 
+				latLng : element.latLng,
+				geometry : element.geometry
+			}
+		);
 	}
 
 	/*
@@ -138,7 +145,14 @@ function newSearchPaneUI ( ) {
 
 	function m_OnSearchResultMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		g_MapEditor.addSearchPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng, mouseEvent.target.geometry );
+		m_EventDispatcher.dispatch ( 
+			'addsearchpointmarker', 
+			{ 
+				objId : mouseEvent.target.objId,
+				latLng : mouseEvent.target.latLng,
+				geometry : mouseEvent.target.geometry
+			}
+		);
 	}
 
 	/*
@@ -151,7 +165,7 @@ function newSearchPaneUI ( ) {
 
 	function m_OnSearchResultMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		g_MapEditor.removeObject ( mouseEvent.target.objId );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId: mouseEvent.target.objId } );
 	}
 
 	/*

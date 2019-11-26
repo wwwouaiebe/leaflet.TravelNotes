@@ -101,7 +101,179 @@ function newMapEditor ( ) {
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
-
+	
+	function m_loadEvents ( ) {
+		document.addEventListener (
+			'removeroute',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.removeRoute (
+						event.data.route,
+						event.data.RemoveNotes,
+						event.data.removeWayPoints 
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addroute',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addRoute (
+						event.data.route,
+						event.data.addNotes,
+						event.data.addWayPoints,
+						event.data.readOnly 
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'editroute',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.editRoute (
+						event.data.route
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'removeobject',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.removeObject (
+						event.data.objId
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener ( 'removeallobjects',	( ) => g_MapEditor.removeAllObjects ( ), false );
+		document.addEventListener (
+			'zoomtopoint',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.zoomToPoint (
+						event.data.latLng
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtosearchresult',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.zoomToSearchResult (
+						event.data.latLng,
+						event.data.geometry
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtonote',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.zoomToNote (
+						event.data.noteObjId
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtoroute',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.zoomToRoute (
+						event.data.routeObjId
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener ( 'zoomtotravel',	( ) => g_MapEditor.zoomToTravel ( ), false );
+		document.addEventListener (
+			'additinerarypointmarker',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addItineraryPointMarker (
+						event.data.objId,
+						event.data.latLng
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addsearchpointmarker',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addSearchPointMarker (
+						event.data.objId,
+						event.data.latLng,
+						event.data.geometry
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addrectangle',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addRectangle (
+						event.data.objId,
+						event.data.bounds,
+						event.data.properties
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addwaypoint',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addWayPoint (
+						event.data.wayPoint,
+						event.data.letter
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'redrawnote',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.redrawNote (
+						event.data.note
+					)
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addnote',
+			event => {
+				if ( event.data ) {
+					g_MapEditor.addNote (
+						event.data.note,
+						event.data.readOnly
+					)
+				}
+			},
+			false
+		);
+	}
+	
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
 
@@ -247,7 +419,6 @@ function newMapEditor ( ) {
 	*/
 
 	function m_AddRoute ( route, addNotes, addWayPoints, readOnly ) {
-		readOnly = readOnly || false;
 		
 		// an array of points is created
 		let latLng = [];
@@ -575,8 +746,6 @@ function newMapEditor ( ) {
 
 	function m_AddNote ( note, readOnly ) {
 		
-		readOnly = readOnly || false;
-		
 		// first a marker is created at the note position. This marker is empty and transparent, so 
 		// not visible on the map but the marker can be dragged
 		let bullet = L.marker ( 
@@ -731,46 +900,6 @@ function newMapEditor ( ) {
 		// and the layerGroup added to the leaflet map and JavaScript map
 		m_AddTo ( note.objId, layerGroup );
 	}
-
-	/*
-	--- m_EditNote function -------------------------------------------------------------------------------------------
-
-	This function changes a note after edition by the user
-
-	parameters:
-	- note : the TravelNotes note object modified by the user
-	
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_EditNote ( note ) {
-		
-		// a new icon is created
-		let icon = L.divIcon (
-			{ 
-				iconSize: [ note.iconWidth, note.iconHeight ], 
-				iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
-				popupAnchor: [ 0, -note.iconHeight / 2 ], 
-				html : note.iconContent,
-				className : g_Config.note.style
-			}
-		);
-		// and the marker icon replaced by the new one
-		let layerGroup = g_TravelNotesData.mapObjects.get ( note.objId );
-		let marker = layerGroup.getLayer ( layerGroup.markerId );
-		marker.setIcon ( icon );
-		
-		// then, the tooltip is changed
-		marker.unbindTooltip ( );
-		if ( 0 !== note.tooltipContent.length ) {
-			marker.bindTooltip ( layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
-			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
-		}
-		if ( marker.isPopupOpen( ) ) {
-			marker.closePopup ( );
-			marker.openPopup ( );
-		}
-	}
 	
 	/*
 	--- MapEditor object ----------------------------------------------------------------------------------------------
@@ -813,7 +942,8 @@ function newMapEditor ( ) {
 			
 			addNote : ( note, readOnly ) => m_AddNote ( note, readOnly ),
 			
-			editNote : note => m_EditNote ( note )
+			loadEvents : ( ) => m_loadEvents ( ) 
+			
 		}
 	);
 }

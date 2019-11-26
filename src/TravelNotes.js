@@ -54,6 +54,7 @@ import { g_Translator } from './UI/Translator.js';
 import { g_Config } from './data/Config.js';
 import { g_TravelNotesData } from './data/TravelNotesData.js';
 import { g_TravelEditor } from './core/TravelEditor.js';
+import { g_MapEditor } from './core/MapEditor.js';
 
 import { newUtilities } from './util/Utilities.js';
 import { newTravel } from './data/Travel.js';
@@ -229,6 +230,7 @@ var travelNotesFactory = function ( ) {
 		
 		g_TravelNotesData.map = map;
 		_ReadURL ( );
+		g_MapEditor.loadEvents ( );
 		
 		var promises = [];
 		// loading config

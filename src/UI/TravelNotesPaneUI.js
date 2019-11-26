@@ -34,9 +34,9 @@ Tests ...
 
 export { newTravelNotesPaneUI };
 
-import { g_MapEditor } from '../core/MapEditor.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 let s_NoteObjId  = 0;
 
@@ -49,6 +49,8 @@ This function returns the travelNotesPaneUI object
 */
 
 function newTravelNotesPaneUI ( ) {
+
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_OnDragStart function ----------------------------------------------------------------------------------------
@@ -124,7 +126,12 @@ function newTravelNotesPaneUI ( ) {
 		while ( ! element.noteObjId ) {
 			element = element.parentNode;
 		}
-		g_MapEditor.zoomToNote ( element.noteObjId );
+		m_EventDispatcher.dispatch ( 
+			'zoomtonote', 
+			{ 
+				noteObjId : element.noteObjId
+			}
+		);
 	}
 
 	/*

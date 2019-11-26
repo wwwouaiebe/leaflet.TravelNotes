@@ -36,7 +36,7 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { g_WayPointEditor} from '../core/WayPointEditor.js';
 import { g_NoteEditor} from '../core/NoteEditor.js';
 import { g_RouteEditor} from '../core/RouteEditor.js';
-import { g_MapEditor} from '../core/MapEditor.js';
+import { g_TravelEditor} from '../core/TravelEditor.js';
 import { g_TravelNotesData} from '../data/TravelNotesData.js';
 import { g_Translator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
@@ -99,9 +99,9 @@ function newMapContextMenu ( event ) {
 				action : g_RouteEditor.showRoutes
 			}, 
 			{ 
-				context : g_MapEditor, 
+				context : g_TravelEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Zoom to travel" ), 
-				action : g_MapEditor.zoomToTravel
+				action : g_TravelEditor.zoomToTravel
 			},
 			{ 
 				context : null,

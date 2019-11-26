@@ -51,7 +51,6 @@ import { polyline } from '../polyline/Polyline.js';
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
@@ -111,7 +110,14 @@ function newTravelEditor ( ) {
 			return;
 		}
 
-		g_MapEditor.removeRoute ( m_DataSearchEngine.getRoute ( routeObjId ), true, true );
+		m_EventDispatcher.dispatch ( 
+			'removeroute', 
+			{ 
+				route: m_DataSearchEngine.getRoute ( routeObjId ),
+				removeNotes: true, 
+				removeWayPoints : true
+			}
+		);
 		g_TravelNotesData.travel.routes.remove ( routeObjId );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId  ) {
@@ -166,8 +172,23 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.editedRouteObjId = initialRoute.objId;
 		g_TravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
-		g_MapEditor.removeRoute ( initialRoute, true, false );
-		g_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+		m_EventDispatcher.dispatch ( 
+			'removeroute', 
+			{ 
+				route: initialRoute,
+				removeNotes: true, 
+				removeWayPoints : true
+			}
+		);
+		m_EventDispatcher.dispatch ( 
+			'addroute', 
+			{
+				route : g_TravelNotesData.travel.editedRoute,
+				addNotes : true,
+				addWayPoints : true,
+				readOnly : false
+			}
+		);
 		g_RouteEditor.chainRoutes ( );
 		m_EventDispatcher.dispatch ( 'expandrouteui' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
@@ -284,7 +305,7 @@ newRoadbookUpdate ( );
 		{
 			return;
 		}
-		g_MapEditor.removeAllObjects ( );
+		m_EventDispatcher.dispatch ( 'removeallobjects' );
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
 		g_TravelNotesData.editedRouteObjId = -1;
 		g_TravelNotesData.travel = newTravel ( );
@@ -293,6 +314,19 @@ newRoadbookUpdate ( );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		newRoadbookUpdate ( );
+	}
+	
+	
+	/*
+	--- m_ZoomToTravel function ---------------------------------------------------------------------------------------
+
+	This function zoom on the entire travel
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_ZoomToTravel ( ) {
+		m_EventDispatcher.dispatch ( 'zoomtotravel' );
 	}
 
 	/*
@@ -318,7 +352,9 @@ newRoadbookUpdate ( );
 			
 			saveTravel : ( ) => m_SaveTravel ( ),
 
-			clear : ( ) => m_Clear ( )
+			clear : ( ) => m_Clear ( ),
+			
+			zoomToTravel : ( ) => m_ZoomToTravel ( )
 
 		}
 	);

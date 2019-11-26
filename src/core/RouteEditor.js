@@ -56,7 +56,6 @@ export { g_RouteEditor };
 
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
@@ -384,7 +383,14 @@ function newRouteEditor ( ) {
 		}	
 		
 		// the previous route is removed from the leaflet map
-		g_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+		m_EventDispatcher.dispatch ( 
+			'removeroute', 
+			{ 
+				route: g_TravelNotesData.travel.editedRoute,
+				removeNotes: true, 
+				removeWayPoints : true
+			}
+		);
 		
 		// the position of the notes linked to the route is recomputed
 		let notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
@@ -398,9 +404,17 @@ function newRouteEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 		
 		// the new route is added to the map
-		g_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+		m_EventDispatcher.dispatch ( 
+			'addroute', 
+			{
+				route : g_TravelNotesData.travel.editedRoute,
+				addNotes : true,
+				addWayPoints : true,
+				readOnly : false
+			}
+		);
 		if ( s_ZoomToRoute ) {
-			g_MapEditor.zoomToRoute ( g_TravelNotesData.travel.editedRoute.objId );
+			m_ZoomToRoute ( g_TravelNotesData.travel.editedRoute.objId );
 		}
 		
 		// and the itinerary and waypoints are displayed
@@ -438,11 +452,26 @@ function newRouteEditor ( ) {
 	*/
 
 	function m_CancelEdition ( ) {
-		g_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
+		m_EventDispatcher.dispatch ( 
+			'removeroute', 
+			{ 
+				route: g_TravelNotesData.travel.editedRoute,
+				removeNotes: true, 
+				removeWayPoints : true
+			}
+		);
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 			let editedRoute = m_DataSearchEngine.getRoute ( g_TravelNotesData.editedRouteObjId );
 			editedRoute.edited = 0;
-			g_MapEditor.addRoute ( editedRoute , true, false );
+			m_EventDispatcher.dispatch ( 
+				'addroute', 
+				{
+					route : editedRoute,
+					addNotes : true,
+					addWayPoints : false,
+					readOnly : false
+				}
+			);
 		}
 
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
@@ -472,7 +501,12 @@ function newRouteEditor ( ) {
 		
 		routePropertiesDialog.show ( ).then ( 
 			route => {
-				g_MapEditor.editRoute ( route );
+				m_EventDispatcher.dispatch ( 
+					'editroute', 
+					{ 
+						route: route
+					}
+				);
 				g_RouteEditor.chainRoutes ( );
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );			
@@ -494,7 +528,14 @@ function newRouteEditor ( ) {
 	function m_HideRoute ( routeObjId ) {
 		let route = m_DataSearchEngine.getRoute ( routeObjId );
 		if ( route ) {
-			g_MapEditor.removeRoute ( route, true, true );
+			m_EventDispatcher.dispatch ( 
+				'removeroute', 
+				{ 
+					route: route,
+					removeNotes: true, 
+					removeWayPoints : true
+				}
+			);
 			route.hidden = true;
 		}
 	}
@@ -511,9 +552,34 @@ function newRouteEditor ( ) {
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.hidden ) {
-				g_MapEditor.addRoute ( routesIterator.value, true, true, false );
+				m_EventDispatcher.dispatch ( 
+					'addroute', 
+					{
+						route : routesIterator.value,
+						addNotes : true,
+						addWayPoints : true,
+						readOnly : false
+					}
+				);
 			}
 		}
+	}
+	
+	/*
+	--- m_ShowRoutes function -----------------------------------------------------------------------------------------
+
+	This function zoom on a route
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	
+	function m_ZoomToRoute ( routeObjId ) {
+		m_EventDispatcher.dispatch ( 
+			'zoomtoroute', 
+			{ 
+				routeObjId : routeObjId
+			}
+		);
 	}
 
 	/*
@@ -543,7 +609,10 @@ function newRouteEditor ( ) {
 		
 			hideRoute : routeObjId => m_HideRoute ( routeObjId ),
 
-			showRoutes : ( ) => m_ShowRoutes ( )
+			showRoutes : ( ) => m_ShowRoutes ( ),
+
+			zoomToRoute : routeObjId => m_ZoomToRoute ( routeObjId )
+			
 		}
 	);
 }

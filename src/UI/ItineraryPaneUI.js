@@ -36,8 +36,8 @@ Tests ...
 export { newItineraryPaneUI };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { g_NoteEditor } from '../core/NoteEditor.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
@@ -48,6 +48,8 @@ This function returns the itineraryPaneUI object
 */
 
 function newItineraryPaneUI ( ) {
+
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_OnInstructionClick function ---------------------------------------------------------------------------------
@@ -63,7 +65,12 @@ function newItineraryPaneUI ( ) {
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		g_MapEditor.zoomToPoint ( element.latLng );
+		m_EventDispatcher.dispatch ( 
+			'zoomtopoint', 
+			{ 
+				latLng : element.latLng
+			}
+		);
 	}
 
 	/*
@@ -99,7 +106,13 @@ function newItineraryPaneUI ( ) {
 
 	function m_OnInstructionMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		g_MapEditor.addItineraryPointMarker ( mouseEvent.target.objId, mouseEvent.target.latLng  );
+		m_EventDispatcher.dispatch ( 
+			'additinerarypointmarker', 
+			{ 
+				objId : mouseEvent.target.objId,
+				latLng : mouseEvent.target.latLng
+			}
+		);
 	}
 
 	/*
@@ -112,7 +125,7 @@ function newItineraryPaneUI ( ) {
 
 	function m_OnInstructionMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		g_MapEditor.removeObject ( mouseEvent.target.objId );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId: mouseEvent.target.objId } );
 	}
 
 	/*

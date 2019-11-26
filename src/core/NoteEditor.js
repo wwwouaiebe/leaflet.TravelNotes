@@ -44,7 +44,6 @@ Tests ...
 export { g_NoteEditor };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
@@ -110,7 +109,12 @@ function newNoteEditor ( ) {
 			// and the notes sorted
 			selectedRoute.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 
-			g_MapEditor.redrawNote ( noteAndRoute.note );
+			m_EventDispatcher.dispatch ( 
+				'redrawnote', 
+				{ 
+					note : noteAndRoute.note
+				}
+			);
 			m_EventDispatcher.dispatch ( 'updateitinerary' );
 			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 			// and the HTML page is adapted
@@ -196,7 +200,13 @@ function newNoteEditor ( ) {
 				newNote.chainedDistance = route.chainedDistance;
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 				m_EventDispatcher.dispatch ( 'setitinerary' );
-				g_MapEditor.addNote ( newNote );
+				m_EventDispatcher.dispatch ( 
+					'addnote', 
+					{ 
+						note : newNote,
+						readOnly : false
+					}
+				);
 				newRoadbookUpdate ( );
 			}
 		)
@@ -232,7 +242,13 @@ function newNoteEditor ( ) {
 			newNote => {
 				g_TravelNotesData.travel.notes.add ( newNote );
 				m_EventDispatcher.dispatch ( 'settravelnotes' );
-				g_MapEditor.addNote ( newNote );
+				m_EventDispatcher.dispatch ( 
+					'addnote', 
+					{ 
+						note : newNote,
+						readOnly : false
+					}
+				);
 				newRoadbookUpdate ( );
 			}
 		)
@@ -278,7 +294,13 @@ function newNoteEditor ( ) {
 				newNote.chainedDistance = route.chainedDistance;
 				route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
 				m_EventDispatcher.dispatch ( 'setitinerary' );
-				g_MapEditor.addNote ( newNote );
+				m_EventDispatcher.dispatch ( 
+					'addnote', 
+					{ 
+						note : newNote,
+						readOnly : false
+					}
+				);
 				newRoadbookUpdate ( );
 			}
 		)
@@ -308,7 +330,13 @@ function newNoteEditor ( ) {
 			{
 				g_TravelNotesData.travel.notes.add ( newNote );
 				m_EventDispatcher.dispatch ( 'settravelnotes' );
-				g_MapEditor.addNote ( newNote );
+				m_EventDispatcher.dispatch ( 
+					'addnote', 
+					{ 
+						note : newNote,
+						readOnly : false
+					}
+				);
 				newRoadbookUpdate ( );
 			}
 		)
@@ -336,7 +364,12 @@ function newNoteEditor ( ) {
 				let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
 				if ( noteAndRoute.note ) {
 					// it's an existing note. The note is changed on the map
-					g_MapEditor.redrawNote ( modifiedNote );
+					m_EventDispatcher.dispatch ( 
+						'redrawnote', 
+						{ 
+							note : modifiedNote
+						}
+					);
 					if ( ! noteAndRoute.route ) {
 						m_EventDispatcher.dispatch ( 'settravelnotes' );
 					}
@@ -363,7 +396,7 @@ function newNoteEditor ( ) {
 
 	function m_RemoveNote ( noteObjId ) {
 		// the note is removed from the leaflet map
-		g_MapEditor.removeObject ( noteObjId );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId: noteObjId } );
 		// the note and the route are searched
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 		if ( noteAndRoute.route ) {
@@ -391,13 +424,13 @@ function newNoteEditor ( ) {
 	function m_HideNotes ( ) {
 		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			g_MapEditor.removeObject ( notesIterator.value.objId );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId: notesIterator.value.objId } );
 		}
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
-				g_MapEditor.removeObject ( notesIterator.value.objId );					
+				m_EventDispatcher.dispatch ( 'removeobject', { objId: notesIterator.value.objId } );
 			}
 		}
 	}
@@ -414,13 +447,25 @@ function newNoteEditor ( ) {
 		m_HideNotes ( );
 		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			g_MapEditor.addNote ( notesIterator.value );
+			m_EventDispatcher.dispatch ( 
+				'addnote', 
+				{ 
+					note : notesIterator.value,
+					readOnly : false
+				}
+			);
 		}
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
-				g_MapEditor.addNote ( notesIterator.value );					
+				m_EventDispatcher.dispatch ( 
+					'addnote', 
+					{ 
+						note : notesIterator.value,
+						readOnly : false
+					}
+				);
 			}
 		}
 	}
@@ -434,7 +479,12 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_ZoomToNote ( noteObjId ) {
-		g_MapEditor.zoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng );
+		m_EventDispatcher.dispatch ( 
+			'zoomtopoint', 
+			{ 
+				latLng : m_DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng
+			}
+		);
 	}
 	
 	/*

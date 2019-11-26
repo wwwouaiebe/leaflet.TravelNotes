@@ -60,7 +60,24 @@ function newEventDispatcher ( ) {
 			case 'setrouteslist':
 			case 'setprovider':
 			case 'settransitmode':
-				return 'TravelNotes-Control-MainDiv';
+				return document.getElementById ( 'TravelNotes-Control-MainDiv' );
+			case 'removeroute':
+			case 'addroute':
+			case 'editroute':
+			case 'removeobject':
+			case 'removeallobjects':
+			case 'zoomtopoint':
+			case 'zoomtosearchresult':
+			case 'zoomtonote':
+			case 'zoomtoroute':
+			case 'zoomtotravel':
+			case 'additinerarypointmarker':
+			case 'addsearchpointmarker':
+			case 'addrectangle':
+			case 'addwaypoint':
+			case 'redrawnote':
+			case 'addnote':
+				return document;
 			default:
 				return null;
 		}
@@ -75,14 +92,11 @@ function newEventDispatcher ( ) {
 	function m_Dispatch ( eventName, eventData ) {
 		let target = m_GetTarget ( eventName );
 		if ( target ) {
-			let targetElement = document.getElementById ( target );
-			if ( targetElement ) {
-				let event = new Event ( eventName );
-				if ( eventData ) {
-					event.data = eventData;
-				}
-				targetElement.dispatchEvent ( event );
+			let event = new Event ( eventName );
+			if ( eventData ) {
+				event.data = eventData;
 			}
+			target.dispatchEvent ( event );
 		}
 	}
 	

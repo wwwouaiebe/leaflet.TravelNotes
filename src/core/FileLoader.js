@@ -44,7 +44,6 @@ import { polyline } from '../polyline/Polyline.js';
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
-import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -64,6 +63,7 @@ function newFileLoader ( ) {
 	let m_FileName = '';
 	let m_IsFileReadOnly = false;
 	let m_FileContent = {};
+	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
 	--- m_DecompressRoute function ------------------------------------------------------------------------------------
@@ -181,33 +181,54 @@ function newFileLoader ( ) {
 	function m_Display ( ) {
 
 		// the map is cleaned
-		g_MapEditor.removeAllObjects ( );
+		m_EventDispatcher.dispatch ( 'removeallobjects' );
 		// routes are added with their notes
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( 0 === routesIterator.value.edited ) {
-				g_MapEditor.addRoute ( routesIterator.value, true, false, m_IsFileReadOnly );
+				m_EventDispatcher.dispatch ( 
+					'addroute', 
+					{
+						route : routesIterator.value,
+						addNotes : true,
+						addWayPoints : false,
+						readOnly : m_IsFileReadOnly
+					}
+				);
 			}
 		}
 		// edited route is added with notes and , depending of read only, waypoints
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
-			g_MapEditor.addRoute ( g_TravelNotesData.travel.editedRoute, true, ! m_IsFileReadOnly, m_IsFileReadOnly );
+			m_EventDispatcher.dispatch ( 
+				'addroute', 
+				{
+					route : g_TravelNotesData.travel.editedRoute,
+					addNotes : true,
+					addWayPoints : ! m_IsFileReadOnly,
+					readOnly : m_IsFileReadOnly
+				}
+			);
 		}
 		
 		// travel notes are added
 		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			g_MapEditor.addNote ( notesIterator.value, m_IsFileReadOnly );
+			m_EventDispatcher.dispatch ( 
+				'addnote', 
+				{ 
+					note : notesIterator.value,
+					readOnly : m_IsFileReadOnly
+				}
+			);
 		}
 		
 		// zoom on the travel
-		g_MapEditor.zoomToTravel ( );
+		m_EventDispatcher.dispatch ( 'zoomtotravel' );
 
 		// Editors and roadbook are filled
 		if ( ! m_IsFileReadOnly ) {
 		// Editors and HTML pages are filled
-			let eventDispatcher = newEventDispatcher ( );
-			eventDispatcher.dispatch ( 'setrouteslist' );
+			m_EventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
@@ -217,16 +238,16 @@ function newFileLoader ( ) {
 				else {
 					// Provider and transit mode are changed in the itinerary editor
 					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
-					eventDispatcher.dispatch ( 'setprovider', { 'provider' : providerName } );
+					m_EventDispatcher.dispatch ( 'setprovider', { 'provider' : providerName } );
 					
 					if ( transitMode && '' !== transitMode ) {
-						eventDispatcher.dispatch ( 'settransitmode', { 'transitMode' : transitMode } );
+						m_EventDispatcher.dispatch ( 'settransitmode', { 'transitMode' : transitMode } );
 					}
 				}
 				g_RouteEditor.chainRoutes ( );
-				eventDispatcher.dispatch ( 'expandrouteui' );
-				eventDispatcher.dispatch ( 'setwaypointslist' );
-				eventDispatcher.dispatch ( 'setitinerary' );
+				m_EventDispatcher.dispatch ( 'expandrouteui' );
+				m_EventDispatcher.dispatch ( 'setwaypointslist' );
+				m_EventDispatcher.dispatch ( 'setitinerary' );
 			}
 			newRoadbookUpdate ( );
 		}
