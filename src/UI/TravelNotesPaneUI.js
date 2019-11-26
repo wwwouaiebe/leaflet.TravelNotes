@@ -155,7 +155,7 @@ function newTravelNotesPaneUI ( ) {
 
 	function m_Remove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -190,7 +190,7 @@ function newTravelNotesPaneUI ( ) {
 		}
 		
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );		
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}

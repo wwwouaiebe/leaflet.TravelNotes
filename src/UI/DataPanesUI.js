@@ -36,7 +36,7 @@ Tests ...
 
 'use strict';
 
-export { newDataPanesUI };
+export { gc_DataPanesUI };
 
 import { g_Translator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -70,7 +70,7 @@ function newDataPanesUI ( ) {
 
 	function m_CreateUI ( controlDiv ) {
 		
-		if ( document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' ) ) {
+		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
 			return;
 		}
 
@@ -113,7 +113,7 @@ function newDataPanesUI ( ) {
 		let dataDiv = htmlElementsFactory.create ( 
 			'div', 
 			{
-				id : 'TravelNotes-Control-ItineraryDataDiv', 
+				id : 'TravelNotes-Control-DataPanesDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
 		controlDiv );
@@ -127,12 +127,6 @@ function newDataPanesUI ( ) {
 			}, 
 			false 
 		);
-		dataDiv.addEventListener ( 'setitinerary', ( ) => m_UpdateTravelNotes ( ), false );
-		dataDiv.addEventListener ( 'updateitinerary', ( ) => m_UpdateTravelNotes ( ), false );
-		dataDiv.addEventListener ( 'settravelnotes', ( ) => m_UpdateTravelNotes ( ), false );
-		dataDiv.addEventListener ( 'updatetravelnotes', ( ) => m_UpdateTravelNotes ( ), false );
-		dataDiv.addEventListener ( 'setsearch', ( ) => m_UpdateTravelNotes ( ), false );
-		dataDiv.addEventListener ( 'updatesearch', ( ) => m_UpdateTravelNotes ( ), false );
 	}
 
 	/*
@@ -184,14 +178,12 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	/*
 	function m_UpdateItinerary ( ) {
 		if ( 0 === s_ActivePaneIndex ) {
 			m_ItineraryPaneUI.remove ( );
 			m_ItineraryPaneUI.add ( );
 		}
 	}
-	*/
 	
 	/*
 	--- m_SetItinerary function ---------------------------------------------------------------------------------------
@@ -246,14 +238,12 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	/*
 	function m_UpdateSearch ( ) {
 		if ( 2 === s_ActivePaneIndex ) {
 			m_SearchPaneUI.remove ( );
 			m_SearchPaneUI.add ( );
 		}
 	}
-	*/
 	
 	/* 
 	--- dataPanesUI object --------------------------------------------------------------------------------------------
@@ -264,9 +254,29 @@ function newDataPanesUI ( ) {
 	return Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
+
+			setItinerary : ( ) =>  m_SetItinerary ( ),
+			updateItinerary : ( ) =>  m_UpdateItinerary ( ),
+
+			setTravelNotes : ( ) =>  m_SetTravelNotes ( ),
+			updateTravelNotes : ( ) =>  m_UpdateTravelNotes ( ),
+			
+			setSearch : ( ) =>  m_SetSearch ( ),
+			updateSearch : ( ) =>  m_UpdateSearch ( )
+
 		}
 	);
 }
+	
+/* 
+--- g_DataPaneUI object -----------------------------------------------------------------------------------------------
+
+The one and only one dataPanesUI
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+const gc_DataPanesUI = newDataPanesUI ( );
 	
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------

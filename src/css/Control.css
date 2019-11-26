@@ -65,7 +65,7 @@ Changes:
 	max-height: 7em;
 	overflow: auto;
 }
-#TravelNotes-Control-MainDiv > #TravelNotes-Control-ItineraryDataDiv
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-DataPanesDiv
 {
 	margin-bottom: auto;
 }
@@ -334,7 +334,7 @@ Changes:
 {
 	overflow: auto;
 }
-#TravelNotes-Control-ItineraryDataDiv
+#TravelNotes-Control-DataPanesDiv
 {
 	max-height: none;
 	overflow: auto;

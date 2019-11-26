@@ -37,7 +37,7 @@ Tests ...
 
 'use strict';
 
-export { newRouteEditorUI };
+export { gc_RouteEditorUI };
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
@@ -84,8 +84,6 @@ function newRouteEditorUI ( ) {
 			},
 			controlDiv
 		);
-		headerDiv.addEventListener ( 'expandrouteui', ( ) => m_ExpandUI ( ), false );
-		headerDiv.addEventListener ( 'reducerouteui', ( ) => m_ReduceUI ( ), false );
 
 		// expand button
 		htmlElementsFactory.create ( 
@@ -135,7 +133,6 @@ function newRouteEditorUI ( ) {
 			},
 			controlDiv
 		);
-		dataDiv.addEventListener ( 'setwaypointslist', ( ) => m_SetWayPointsList ( ), false );
 		
 		// wayPoints list
 		m_WayPointsList = newSortableList ( 
@@ -379,10 +376,23 @@ function newRouteEditorUI ( ) {
 
 	return  Object.seal (
 		{
-			createUI : controlDiv => m_CreateUI ( controlDiv ) ,
+			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			expandUI : ( ) => m_ExpandUI ( ),
+			reduceUI : ( ) => m_ReduceUI ( ),
+			setWayPointsList : ( ) => m_SetWayPointsList ( )
 		}
 	);
 }
+
+/* 
+--- gc_RouteEditorUI object --------------------------------------------------------------------------------------------
+
+The one and only one routeEditorUI
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+const gc_RouteEditorUI = newRouteEditorUI ( );
 
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------

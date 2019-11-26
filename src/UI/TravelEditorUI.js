@@ -43,7 +43,7 @@ Tests ...
 'use strict';
 
 
-export { newTravelEditorUI };
+export { gc_TravelEditorUI };
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
@@ -193,7 +193,6 @@ function newTravelEditorUI ( ) {
 			},
 			controlDiv 
 		);
-		dataDiv.addEventListener ( 'setrouteslist', ( ) => m_SetRoutesList ( ) , false );
 		
 		// Routes list
 		m_RoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
@@ -502,10 +501,22 @@ function newTravelEditorUI ( ) {
 	return Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			
+			setRoutesList : (  ) => m_SetRoutesList ( )
 		}
 	);
 }
-	
+
+/* 
+--- gc_TravelEditorUI object -----------------------------------------------------------------------------------------------
+
+The one and only one travelEditorUI
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+const gc_TravelEditorUI = newTravelEditorUI ( );	
+
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
 */

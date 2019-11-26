@@ -54,14 +54,13 @@ function newEventDispatcher ( ) {
 			case 'updatetravelnotes':
 			case 'setsearch':
 			case 'updatesearch':
-				return 'TravelNotes-Control-ItineraryDataDiv';
 			case 'expandrouteui':
 			case 'reducerouteui':
-				return 'TravelNotes-Control-RouteHeaderDiv';
 			case 'setwaypointslist':
-				return 'TravelNotes-Control-RouteDataDiv';
 			case 'setrouteslist':
-				return 'TravelNotes-Control-TravelDataDiv';
+			case 'setprovider':
+			case 'settransitmode':
+				return 'TravelNotes-Control-MainDiv';
 			default:
 				return null;
 		}
@@ -73,12 +72,15 @@ function newEventDispatcher ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Dispatch ( eventName ) {
+	function m_Dispatch ( eventName, eventData ) {
 		let target = m_GetTarget ( eventName );
 		if ( target ) {
 			let targetElement = document.getElementById ( target );
 			if ( targetElement ) {
 				let event = new Event ( eventName );
+				if ( eventData ) {
+					event.data = eventData;
+				}
 				targetElement.dispatchEvent ( event );
 			}
 		}
@@ -92,7 +94,7 @@ function newEventDispatcher ( ) {
 
 	return Object.seal ( 
 		{
-			dispatch: eventName => m_Dispatch ( eventName )
+			dispatch: ( eventName, eventData ) => m_Dispatch ( eventName, eventData )
 		}
 	);
 	

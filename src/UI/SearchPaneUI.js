@@ -164,7 +164,7 @@ function newSearchPaneUI ( ) {
 
 	function m_Remove ( ) {
 		
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -213,7 +213,7 @@ function newSearchPaneUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-ItineraryDataDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}

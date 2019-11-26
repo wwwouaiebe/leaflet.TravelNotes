@@ -35,7 +35,7 @@ Tests ...
 
 'use strict';
 
-export { newProvidersToolbarUI };
+export { gc_ProvidesToolbarUI };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
@@ -294,7 +294,13 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function m_CreateUI ( controlDiv ) {
-
+		
+		/*
+		if ( m_ButtonsDiv ) {
+			return;
+		}
+		*/
+		
 		m_ButtonsDiv = m_HtmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 
 		m_createTransitModesButtons ( );
@@ -321,6 +327,16 @@ function newProvidersToolbarUI ( ) {
 		}
 	);
 }
+
+/* 
+--- gc_ProvidesToolbarUI object ---------------------------------------------------------------------------------------
+
+The one and only one providesToolbarUI
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+const gc_ProvidesToolbarUI = newProvidersToolbarUI ( );
 	
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------

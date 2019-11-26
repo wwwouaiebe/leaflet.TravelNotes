@@ -47,7 +47,6 @@ import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newTravel } from '../data/Travel.js';
-import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
@@ -218,11 +217,10 @@ function newFileLoader ( ) {
 				else {
 					// Provider and transit mode are changed in the itinerary editor
 					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
-					let providersToolbarUI = newProvidersToolbarUI ( );
-					providersToolbarUI.provider = providerName;
+					eventDispatcher.dispatch ( 'setprovider', { 'provider' : providerName } );
 					
 					if ( transitMode && '' !== transitMode ) {
-						providersToolbarUI.transitMode = transitMode;
+						eventDispatcher.dispatch ( 'settransitmode', { 'transitMode' : transitMode } );
 					}
 				}
 				g_RouteEditor.chainRoutes ( );

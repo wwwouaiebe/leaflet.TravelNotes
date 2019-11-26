@@ -53,7 +53,6 @@ import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { g_MapEditor } from '../core/MapEditor.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
-import { newProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
@@ -152,13 +151,12 @@ function newTravelEditor ( ) {
 			return;
 		}
 		// Provider and transit mode are changed in the itinerary editor
-		let providersToolbarUI = newProvidersToolbarUI ( );
 		if ( providerName && '' !== providerName ) {
-			providersToolbarUI.provider = providerName;
+			m_EventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 		}
 		let transitMode = initialRoute.itinerary.transitMode;
 		if ( transitMode && '' !== transitMode ) {
-			providersToolbarUI.transitMode = transitMode;
+			m_EventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 		}
 		// The edited route is pushed in the editors
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
