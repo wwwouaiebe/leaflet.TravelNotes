@@ -31,6 +31,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+
 'use strict';
 
 export { newTravel };
@@ -66,6 +68,50 @@ function newTravel ( ) {
 	
 	let m_UserData = {};
 
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw 'No objType for ' + s_ObjType.name;
+		}
+		s_ObjType.validate ( something.objType );
+		if ( s_ObjType.version !== something.objType.version ) {
+			switch ( something.objType.version ) {
+				case '1.0.0':
+				case '1.1.0':
+				case '1.2.0':
+				case '1.3.0':
+				case '1.4.0':
+					something.editedRoute = newRoute ( );
+					// eslint break omitted intentionally
+				case '1.5.0':
+					something.objType.version = '1.6.0';
+					break;
+				default:
+					throw 'invalid version for ' + s_ObjType.name;
+			}
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		['name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw 'No ' + property + ' for ' + s_ObjType.name;
+				}
+			}
+		)
+		return something;
+	}
+
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			editedRoute : m_EditedRoute.object,
@@ -79,9 +125,15 @@ function newTravel ( ) {
 		};
 	}
 	
+	/*
+	--- m_SetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_SetObject ( something ) {
-		something = s_ObjType.validate ( something );
-		m_EditedRoute.object = something.editedRoute || newRoute ( );
+		something = m_Validate ( something );
+		m_EditedRoute.object = something.editedRoute;
 		m_Name = something.name || '';
 		m_UserData = something.userData || {};
 		m_ReadOnly = something.readOnly || false;

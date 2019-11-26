@@ -34,6 +34,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+
 'use strict';
 
 export { newRoute };
@@ -103,6 +105,56 @@ function newRoute ( ) {
 	
 	let m_ObjId = newObjId ( );
 
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw 'No objType for ' + s_ObjType.name;
+		}
+		s_ObjType.validate ( something.objType );
+		if ( s_ObjType.version !== something.objType.version ) {
+			switch ( something.objType.version ) {
+				case '1.0.0':
+					something.dashArray = 0;
+					something.hidden = false;
+					// eslint break omitted intentionally
+				case '1.1.0':
+					// eslint break omitted intentionally
+				case '1.2.0':
+					// eslint break omitted intentionally
+				case '1.3.0':
+					// eslint break omitted intentionally
+				case '1.4.0':
+					something.edited = 0;
+					// eslint break omitted intentionally
+				case '1.5.0':
+					something.objType.version = '1.6.0';
+					break;
+				default:
+					throw 'invalid version for ' + s_ObjType.name;
+			}
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		['name', 'wayPoints', 'notes', 'itinerary', 'width', 'color', 'dashArray', 'chain', 'distance', 'duration', 'edited', 'hidden', 'chainedDistance', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw 'No ' + property + ' for ' + s_ObjType.name;
+				}
+			}
+		)
+		return something;
+	}
+
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			name : m_Name,
@@ -123,8 +175,14 @@ function newRoute ( ) {
 		};
 	}
 	
+	/*
+	--- m_SetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_SetObject ( something ) {
-		something = s_ObjType.validate ( something );
+		something = m_Validate ( something );
 		m_Name = something.name || '';
 		m_WayPoints.object = something.wayPoints || [];
 		m_Notes.object = something.notes || [];

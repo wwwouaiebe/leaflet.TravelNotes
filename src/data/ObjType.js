@@ -35,8 +35,6 @@ export { newObjType };
 
 import { currentVersion } from '../data/Version.js';
 
-import { newRoute } from '../data/Route.js';
-
 /*
 --- newObjType function -------------------------------------------------------------------------------------------
 
@@ -51,70 +49,36 @@ function newObjType ( name ) {
 
 	const m_Version = currentVersion;
 	
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			name : m_Name,
 			version : m_Version
 		};
 	}
-	
+		
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_Validate ( something ) {
-		if ( ! something.objType ) {
-			throw 'No objType for ' + m_Name;
-		}
-		if ( ! something.objType.name ) {
+		
+		if ( ! Object.getOwnPropertyNames ( something ).includes( 'name' ) ) {
 			throw 'No name for ' + m_Name;
 		}
-		if ( m_Name !== something.objType.name ) {
+		if ( m_Name !== something.name ) {
 			throw 'Invalid name for ' + m_Name;
 		}
-		if ( ! something.objType.version ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes( 'version' ) ) {
 			throw 'No version for ' + m_Name;
 		}
-		if ( m_Version !== something.objType.version ) {
-			if ( '1.0.0' === something.objType.version ) {
-				//start upgrade from 1.0.0 to 1.1.0
-				if ( 'Route' === something.objType.name ) {
-					something.dashArray = 0;
-					something.hidden = false;
-				}
-				something.objType.version = '1.1.0';
-				//end upgrade from 1.0.0 to 1.1.0
-			}
-			if ( '1.1.0' === something.objType.version ) {
-				something.objType.version = '1.2.0';
-				//end upgrade from 1.1.0 to 1.2.0
-			}
-			if ( '1.2.0' === something.objType.version ) {
-				something.objType.version = '1.3.0';
-				//end upgrade from 1.2.0 to 1.3.0
-			}
-			if ( '1.3.0' === something.objType.version ) {
-				something.objType.version = '1.4.0';
-				//end upgrade from 1.3.0 to 1.4.0
-			}
-			if ( '1.4.0' === something.objType.version ) {
-				if ( 'Route' === something.objType.name ) {
-					something.edited = 0;
-				}
-				if ( 'Travel' === something.objType.name ) {
-					something.editedRoute = newRoute ( );
-				}
-				something.objType.version = '1.5.0';
-				//end upgrade from 1.4.0 to 1.5.0
-			}
-			if ( '1.5.0' === something.objType.version ) {
-				something.objType.version = '1.6.0';
-				//end upgrade from 1.5.0 to 1.6.0
-			}
-			if ( m_Version !== something.objType.version ) {
-				throw 'invalid version for ' + m_Name;
-			}
-		}
-		if ( ! something.objId ) {
-			throw 'No objId for ' + m_Name;
-		}
-		return something;
 	}
 
 	/*
@@ -132,7 +96,8 @@ function newObjType ( name ) {
 
 			get object ( ) { return m_GetObject ( ); },
 
-			validate : something => { return m_Validate ( something ); }
+			validate : something => { return m_Validate ( something ); },
+			
 		}
 	);
 }

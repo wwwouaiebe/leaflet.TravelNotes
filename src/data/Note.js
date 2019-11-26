@@ -78,6 +78,51 @@ function newNote ( ) {
 
 	let m_ChainedDistance = 0;
 
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw 'No objType for ' + s_ObjType.name;
+		}
+		s_ObjType.validate ( something.objType );
+		if ( s_ObjType.version !== something.objType.version ) {
+			switch ( something.objType.version ) {
+				case '1.0.0':
+				case '1.1.0':
+				case '1.2.0':
+				case '1.3.0':
+				case '1.4.0':
+				case '1.5.0':
+					something.objType.version = '1.6.0';
+					break;
+				default:
+					throw 'invalid version for ' + s_ObjType.name;
+			}
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		['iconHeight', 'iconWidth', 'iconContent', 'popupContent',
+		'tooltipContent', 'phone', 'url', 'address',
+		'iconLat', 'iconLng', 'lat', 'lng',
+		'distance', 'chainedDistance', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw 'No ' + property + ' for ' + s_ObjType.name;
+				}
+			}
+		)
+		return something;
+	}
+
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			iconHeight : m_IconHeight,
@@ -99,8 +144,14 @@ function newNote ( ) {
 		};
 	}
 	
+	/*
+	--- m_SetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_SetObject ( something ) {
-		something = s_ObjType.validate ( something );
+		something = m_Validate ( something );
 		m_IconHeight = something.iconHeight || 40;
 		m_IconWidth = something.iconWidth || 40;
 		m_IconContent = something.iconContent || '';

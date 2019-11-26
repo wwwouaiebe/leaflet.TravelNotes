@@ -36,6 +36,8 @@ export { newWayPoint };
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+const s_ObjType = newObjType ( 'WayPoint' );
+
 /*
 --- newWayPoint function ------------------------------------------------------------------------------------------
 
@@ -45,8 +47,6 @@ Patterns : Closure
 */
 
 function newWayPoint ( ) {
-
-	const s_ObjType = newObjType ( 'WayPoint' );
 	
 	let m_Name = '';
 
@@ -66,6 +66,48 @@ function newWayPoint ( ) {
 		return '';
 	}
 	
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw 'No objType for ' + s_ObjType.name;
+		}
+		s_ObjType.validate ( something.objType );
+		if ( s_ObjType.version !== something.objType.version ) {
+			switch ( something.objType.version ) {
+				case '1.0.0':
+				case '1.1.0':
+				case '1.2.0':
+				case '1.3.0':
+				case '1.4.0':
+				case '1.5.0':
+					something.objType.version = '1.6.0';
+					break;
+				default:
+					throw 'invalid version for ' + s_ObjType.name;
+			}
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		['name', 'lat', 'lng', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw 'No ' + property + ' for ' + s_ObjType.name;
+				}
+			}
+		)
+		return something;
+	}
+		
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			name : m_Name,
@@ -76,8 +118,14 @@ function newWayPoint ( ) {
 		};
 	}
 	
+	/*
+	--- m_SetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_SetObject ( something ) {
-		something = s_ObjType.validate ( something );
+		something = m_Validate ( something );
 		m_Name = something.name || '';
 		m_Lat = something.lat || 0;
 		m_Lng = something.lng || 0;

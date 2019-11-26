@@ -57,6 +57,48 @@ function newItineraryPoint ( ) {
 
 	let m_ObjId = newObjId ( );
 
+	/*
+	--- m_Validate function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw 'No objType for ' + s_ObjType.name;
+		}
+		s_ObjType.validate ( something.objType );
+		if ( s_ObjType.version !== something.objType.version ) {
+			switch ( something.objType.version ) {
+				case '1.0.0':
+				case '1.1.0':
+				case '1.2.0':
+				case '1.3.0':
+				case '1.4.0':
+				case '1.5.0':
+					something.objType.version = '1.6.0';
+					break;
+				default:
+					throw 'invalid version for ' + s_ObjType.name;
+			}
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		['lat', 'lng', 'distance', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw 'No ' + property + ' for ' + s_ObjType.name;
+				}
+			}
+		)
+		return something;
+	}
+
+	/*
+	--- m_GetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_GetObject ( ) {
 		return {
 			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
@@ -67,8 +109,14 @@ function newItineraryPoint ( ) {
 		};
 	}
 	
+	/*
+	--- m_SetObject function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_SetObject ( something ) {
-		something = s_ObjType.validate ( something );
+		something = m_Validate ( something );
 		m_Lat = something.lat || 0;
 		m_Lng = something.lng || 0;
 		m_Distance = something.distance || 0;
