@@ -57,17 +57,19 @@ export { g_RouteEditor };
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_MapEditor } from '../core/MapEditor.js';
+import { g_ErrorEditor } from '../core/ErrorEditor.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newUtilities } from '../util/Utilities.js';
-import { newRouter } from '../core/Router.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
 var s_ZoomToRoute = false;
+var s_RequestStarted = false;
+
 	
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
@@ -275,31 +277,112 @@ function newRouteEditor ( ) {
 	}
 		
 	/*
+	--- m_HaveValidWayPoints function ---------------------------------------------------------------------------------
+
+	This function verify that the waypoints have coordinates
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_HaveValidWayPoints ( ) {
+		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
+			function ( wayPoint, result ) {
+				if ( null === result ) { 
+					result = true;
+				}
+				result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
+				return result;
+			}
+		);
+	}
+	
+	/*
+	--- m_EndError function -------------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_EndError ( message ) {
+
+		s_RequestStarted = false;
+
+		g_ErrorEditor ( ).showError ( message );
+	}
+
+	/*
 	--- m_StartRouting function ---------------------------------------------------------------------------------------
 
-	This function start the router
-	
+		This function start the routing :-)
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_StartRouting ( ) {
+
 		if ( ! g_Config.routing.auto ) {
 			return;
 		}
+
+		// We verify that another request is not loaded
+		if ( s_RequestStarted ) {
+			return false;
+		}
+		
+		// Control of the wayPoints
+		if ( ! m_HaveValidWayPoints ( ) ) {
+			return false;
+		}
+
 		s_ZoomToRoute = 0 === g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
-		newRouter ( ).startRouting ( g_TravelNotesData.travel.editedRoute );
+		s_RequestStarted = true;
+
+		// Choosing the correct route provider
+		let routeProvider = g_TravelNotesData.providers.get ( g_TravelNotesData.routing.provider.toLowerCase ( ) );
+
+		// provider name and transit mode are added to the road
+		g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+		g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
+
+		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndRoutingOk, m_EndError  );
+
+		return true;
 	}
 		
-		
 	/*
-	--- m_EndRouting function -----------------------------------------------------------------------------------------
+	--- m_EndRoutingOk function -----------------------------------------------------------------------------------------
 
 	This function is called by the router when a routing operation is successfully finished
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EndRouting ( ) {
+	function m_EndRoutingOk ( ) {
+
+		s_RequestStarted = false;
+
+		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
+		// valid function to compute the distances. So all distances are always 
+		// recomputed with this function.
+		
+		g_RouteEditor.computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
+
+		// Placing the waypoints on the itinerary
+		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
+		while ( ! wayPointsIterator.done )
+		{
+			if ( wayPointsIterator.first ) {
+				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
+			}
+			else if ( wayPointsIterator.last ) {
+				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
+			}
+			else{
+				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
+			}
+		}	
+		
 		// the previous route is removed from the leaflet map
 		g_MapEditor.removeRoute ( g_TravelNotesData.travel.editedRoute, true, true );
 		
@@ -452,8 +535,6 @@ function newRouteEditor ( ) {
 			
 			startRouting : ( ) => m_StartRouting ( ),
 			
-			endRouting : ( ) => m_EndRouting ( ),
-
 			saveEdition : ( ) => m_SaveEdition ( ),
 			
 			cancelEdition : ( ) => m_CancelEdition ( ),
