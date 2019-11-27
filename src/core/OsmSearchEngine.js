@@ -175,6 +175,7 @@ function newOsmSearchEngine ( ) {
 	*/
 
 	function m_Show ( ) {
+		
 		g_TravelNotesData.map.on ( 'zoom', onMapChange );
 		g_TravelNotesData.map.on ( 'move', onMapChange );
 		onMapChange ( );

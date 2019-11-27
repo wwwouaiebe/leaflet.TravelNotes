@@ -50,8 +50,6 @@ Tests ...
 
 'use strict';
 
-/* global L */
-
 export { g_RouteEditor };
 
 import { g_Config } from '../data/Config.js';
@@ -120,7 +118,7 @@ function newRouteEditor ( ) {
 			itineraryPoint.object = itineraryPointIterator.value.object;
 			if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
 				// we have passed the cutting point...
-				let removedDistance = L.latLng ( cuttingPointLatLngDistance.latLng ).distanceTo ( L.latLng ( itineraryPointIterator.value.latLng ) );
+				let removedDistance = m_Geometry.pointsDistance ( cuttingPointLatLngDistance.latLng, itineraryPointIterator.value.latLng );
 				// a new point is created at the cutting point position and added to the first route.
 				let cuttingPoint = newItineraryPoint ( );
 				cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
@@ -172,7 +170,7 @@ function newRouteEditor ( ) {
 		route.distance = 0;
 		route.duration = 0;
 		while ( ! itineraryPointsIterator.done ) {
-			previousItineraryPoint.distance = L.latLng ( previousItineraryPoint.latLng ).distanceTo ( L.latLng ( itineraryPointsIterator.value.latLng ));
+			previousItineraryPoint.distance = m_Geometry.pointsDistance ( previousItineraryPoint.latLng, itineraryPointsIterator.value.latLng );
 			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
 				previousManeuver =  maneuverIterator.value;
@@ -360,10 +358,6 @@ function newRouteEditor ( ) {
 	function m_EndRoutingOk ( ) {
 
 		s_RequestStarted = false;
-
-		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
-		// valid function to compute the distances. So all distances are always 
-		// recomputed with this function.
 		
 		g_RouteEditor.computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
 

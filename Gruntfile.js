@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 						'\nbuild <%= pkg.buildNumber %> - ' + 
 						'<%= grunt.template.today("isoDateTime") %> ' + 
 						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
-						'\nContact: http//www.ouaie.be/' + 
+						'\nContact: http://www.ouaie.be/' + 
 						'\nSources: <%= pkg.sources %> ' + 
 						'\nLicense: <%= pkg.license %>\n*/\n\n',
 					mangle: true,
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 						'\nbuild <%= pkg.buildNumber %> - ' + 
 						'<%= grunt.template.today("isoDateTime") %> ' + 
 						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
-						'\nContact: http//www.ouaie.be/' + 
+						'\nContact: http://www.ouaie.be/' + 
 						'\nSources: <%= pkg.sources %> ' + 
 						'\nLicense: <%= pkg.license %>\n*/\n\n',
 					mangle: true,

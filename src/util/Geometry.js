@@ -31,6 +31,7 @@ Tests ...
 /* global L */
 
 export { newGeometry };
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
 
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
@@ -97,6 +98,65 @@ function newGeometry  ( ) {
 	}
 	
 	/*
+	--- m_PointsDistance function -------------------------------------------------------------------------------------
+
+	This function returns the distance between two points
+	
+	parameters:
+	- latLngStartPoint and  latLngEndPoint: the coordinates of the two points. Must be an array of two numbers
+			with the lat and lng of the points
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_PointsDistance ( latLngStartPoint, latLngEndPoint ) {
+		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
+		// valid function to compute the distances. So all distances are always 
+		// recomputed with this function.
+		return L.latLng ( latLngStartPoint ).distanceTo ( L.latLng ( latLngEndPoint ) );
+	}
+	
+	/*
+	--- m_Project function --------------------------------------------------------------------------------------------
+
+	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
+	
+	parameters:
+	- latLng: the coordinates of the two points. Must be an array of two numbers
+			with the lat and lng of the point
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Project ( latLng, zoom ) {
+		let projection = g_TravelNotesData.map.project ( L.latLng ( latLng ), zoom );
+		return [ projection.x, projection.y ];
+	}
+	
+	/*
+	--- m_AddPoint function -------------------------------------------------------------------------------------------
+
+	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
+	
+	parameters:
+	- latLng: the coordinates of the two points. Must be an array of two numbers
+			with the lat and lng of the point
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_AddPoint ( point1, point2 ) {
+		return [ point1 [ 0 ] + point2 [ 0 ],   point1 [ 1 ] + point2 [ 1 ] ];
+	}
+
+	/*
+	--- m_SubtrackPoint function --------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_SubtrackPoints ( point1, point2 ) {
+		return [ point1 [ 0 ] - point2 [ 0 ],   point1 [ 1 ] - point2 [ 1 ] ];
+	}
+	
+	/*
 	--- Geometry object -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -104,7 +164,11 @@ function newGeometry  ( ) {
 
 	return Object.seal (
 		{
-			getClosestLatLngDistance : ( route, latLng ) => { return m_GetClosestLatLngDistance ( route, latLng ); }
+			getClosestLatLngDistance : ( route, latLng ) => { return m_GetClosestLatLngDistance ( route, latLng ); },
+			pointsDistance : ( latLngStartPoint, latLngEndPoint ) => { return m_PointsDistance ( latLngStartPoint, latLngEndPoint ); },
+			project : ( latLng, zoom ) => { return m_Project ( latLng, zoom ); },
+			addPoints : ( point1, point2 ) => { return  m_AddPoint ( point1, point2 ); },
+			subtrackPoints : ( point1, point2 ) => { return  m_SubtrackPoints ( point1, point2 ); }
 		}
 	);
 }

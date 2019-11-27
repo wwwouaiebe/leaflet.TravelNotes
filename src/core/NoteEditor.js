@@ -39,8 +39,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L */
-
 export { g_NoteEditor };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
@@ -87,7 +85,7 @@ function newNoteEditor ( ) {
 			route => {
 				let pointAndDistance = m_Geometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = L.latLng ( noteAndRoute.note.latLng ).distanceTo ( L.latLng ( pointAndDistance.latLng ) );
+					let distanceToRoute = m_Geometry.pointsDistance ( noteAndRoute.note.latLng, pointAndDistance.latLng );
 					if ( distanceToRoute < distance ) {
 						distance = distanceToRoute;
 						selectedRoute = route;

@@ -48,8 +48,6 @@ Tests ...
 
 'use strict';
 
-/* global L */
-
 import { g_Translator } from './UI/Translator.js';
 import { g_Config } from './data/Config.js';
 import { g_TravelNotesData } from './data/TravelNotesData.js';
@@ -424,7 +422,7 @@ var travelNotesFactory = function ( ) {
 	};
 };
 
-L.travelNotes = travelNotesFactory ( );
+window.L.travelNotes = travelNotesFactory ( );
 
 /*
 --- End of L.TravelNotes.js file --------------------------------------------------------------------------------------

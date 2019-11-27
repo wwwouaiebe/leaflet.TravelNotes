@@ -233,7 +233,6 @@ function newSearchPaneUI ( ) {
 		}
 		
 		s_OsmSearchEngine.show ( );
-		
 		let searchDiv = m_HtmlElementsFactory.create (
 			'div',
 			{

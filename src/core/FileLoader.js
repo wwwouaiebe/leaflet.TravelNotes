@@ -35,8 +35,6 @@ Tests ...
 
 'use strict';
 
-/* global L */
-
 export { newFileLoader };
 
 import { polyline } from '../polyline/Polyline.js';
@@ -322,7 +320,7 @@ function newFileLoader ( ) {
 	*/
 
 	function m_OpenDistantFile ( fileContent ) {
-		L.travelNotes.rightContextMenu = false;
+		window.L.travelNotes.rightContextMenu = false;
 		m_IsFileReadOnly = true;
 		m_FileContent = fileContent;
 		m_DecompressFileContent ( );
