@@ -28,6 +28,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191124
 Tests ...
 
@@ -75,7 +76,7 @@ var newAboutDialog = function ( ) {
 		" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>Project-OSRM/osrm-text-instructions</a> and " +
 		" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
 	
-	aboutDialog.show ( ).then ( ).catch ( err => console.log ( err) );
+	aboutDialog.show ( ).then ( ).catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 
 };
 

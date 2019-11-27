@@ -25,6 +25,7 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191122
 Tests ...
 
@@ -598,7 +599,7 @@ function newSvgIconFromOsmFactory ( ) {
 			return Promise.reject ( );
 		}
 		s_RequestStarted = true;
-		
+
 		m_IconLatLngDistance.latLng = iconLatLng;
 		m_Route = newDataSearchEngine ( ).getRoute ( routeObjId );
 		m_Response = {};

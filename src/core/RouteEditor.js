@@ -42,6 +42,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #70 : Put the get...HTML functions outside of the editors
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191122
 Tests ...
 
@@ -301,11 +302,13 @@ function newRouteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EndError ( message ) {
+	function m_EndError ( err ) {
 
 		s_RequestStarted = false;
 
-		g_ErrorEditor.showError ( message );
+		g_ErrorEditor.showError ( err );
+		
+		console.log ( err ? err : 'An error occurs when asking the route to the provider' ) 
 	}
 
 	/*
@@ -342,7 +345,7 @@ function newRouteEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
 		g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndRoutingOk, m_EndError  );
+		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndRoutingOk, m_EndError  ).catch ( m_EndError );
 
 		return true;
 	}
@@ -505,7 +508,7 @@ function newRouteEditor ( ) {
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );			
 			}		
-		).catch ( err => console.log ( err ? err : "an error occurs..." )  );
+		).catch ( err => console.log ( err ? err : 'An error occurs in the dialog' )  );
 	}
 		
 	/*

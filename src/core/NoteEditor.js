@@ -33,6 +33,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #70 : Put the get...HTML functions outside of the editors
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191121
 Tests ...
 
@@ -208,7 +209,7 @@ function newNoteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-		.catch ( err => console.log ( err ) );
+		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -250,7 +251,7 @@ function newNoteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-		.catch ( err => console.log ( err) );
+		.catch (  err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -302,7 +303,7 @@ function newNoteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-		.catch ( err => console.log ( err) );
+		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*
@@ -338,7 +339,7 @@ function newNoteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-		.catch ( err => console.log ( err) );
+		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -378,7 +379,7 @@ function newNoteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-		.catch ( err => console.log ( err) );
+		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*

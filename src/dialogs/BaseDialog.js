@@ -30,6 +30,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191124
 Tests ...
 
@@ -98,6 +99,7 @@ let newBaseDialog = function ( ) {
 
 			document.removeEventListener ( 'keydown', m_onKeyDown, true );
 			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
+			m_OnCancel ( 'Canceled by user' );
 		}
 	}
 	
@@ -175,7 +177,7 @@ let newBaseDialog = function ( ) {
 				}
 				document.removeEventListener ( 'keydown', m_onKeyDown, true );
 				document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
-				m_OnCancel ( );
+				m_OnCancel ( 'Canceled by user' );
 			},
 			false
 		);

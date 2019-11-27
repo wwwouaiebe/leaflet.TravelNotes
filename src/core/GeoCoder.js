@@ -29,6 +29,7 @@ Changes:
 		- returning the complete Nominatim responce in place of a computed address
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191122
 Tests ...
 

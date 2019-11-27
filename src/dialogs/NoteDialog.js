@@ -33,6 +33,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191124
 Tests ...
 
@@ -169,7 +170,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 
 	function m_OnGeocoderError ( err ) {
 		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
-		console.log ( err ? err : "an error occurs..." );
+		console.log ( err ? err : "an error occurs when searching the adress." );
 	}
 
 	/*
@@ -278,8 +279,9 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	function m_OnErrorSvgIcon ( err ) {
+		document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
 		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
-		console.log ( err ? err : "an error occurs..." )
+		console.log ( err ? err : "an error occurs when creating the SVG icon." )
 	}
 
 	/*
@@ -299,7 +301,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		let preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 		if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
 			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'hidden';
-			newSvgIconFromOsmFactory ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( m_OnSvgIcon, m_OnErrorSvgIcon ).catch ( m_OnErrorSvgIcon );
+			newSvgIconFromOsmFactory ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( m_OnSvgIcon ).catch ( m_OnErrorSvgIcon );
 		}
 		else{
 			m_WidthInput.value = preDefinedIcon.width ;
