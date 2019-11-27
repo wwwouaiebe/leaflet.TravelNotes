@@ -33,8 +33,6 @@ Tests ...
 
 'use strict';
 
-/* global L */
-
 export { newSearchPaneUI };
 
 import { g_Translator } from '../UI/Translator.js';
@@ -294,7 +292,7 @@ function newSearchPaneUI ( ) {
 				searchResultDiv.searchResult = searchResult;
 				searchResultDiv.objId = newObjId ( );
 				searchResultDiv.osmId = searchResult.id;
-				searchResultDiv.latLng = L.latLng ( [ searchResult.lat, searchResult.lon ] );
+				searchResultDiv.latLng = [ searchResult.lat, searchResult.lon ];
 				searchResultDiv.geometry = searchResult.geometry;
 				searchResultDiv.addEventListener ( 'click' , m_OnSearchResultClick, false );
 				searchResultDiv.addEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );

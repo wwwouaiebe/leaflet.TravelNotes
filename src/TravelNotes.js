@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- L.TravelNotes.js file ---------------------------------------------------------------------------------------------
+--- TravelNotes.js file -----------------------------------------------------------------------------------------------
 This file contains:
 	- the travelNotesFactory function
 	- global variables needed for TravelNotes
@@ -27,7 +27,7 @@ Changes:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
 	- v1.3.0:
-		- Improved _ReadURL method
+		- Improved m_ReadURL method
 		- Working with Promise at startup
 		- Added baseDialog property
 	- v1.4.0:
@@ -40,7 +40,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
-Doc reviewed ...
+Doc reviewed 20191127
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -77,18 +77,21 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var travelNotesFactory = function ( ) {
+function travelNotesFactory ( ) {
 
-	var _LeftUserContextMenuData = [];
-	var _RightUserContextMenuData = [];
-	var _HaveLeftContextMenu = false;
-	var _HaveRightContextMenu = false;
+	let m_LeftUserContextMenuData = [];
+	let m_RightUserContextMenuData = [];
+	let m_HaveLeftContextMenu = false;
+	let m_HaveRightContextMenu = false;
 	
-	var _Langage = null;
+	let m_Langage = null;
 	
-	var _TravelUrl = null;
+	let m_TravelUrl = null;
 	
-	var m_EventDispatcher = newEventDispatcher ( );
+	let m_EventDispatcher = newEventDispatcher ( );
+
+	let m_XMLHttpRequestUrl = '';
+
 	
 	window.addEventListener( 
 		'unload', 
@@ -104,30 +107,30 @@ var travelNotesFactory = function ( ) {
 	);
 
 	/*
-	--- _ReadURL function ---------------------------------------------------------------------------------------------
+	--- m_ReadURL function --------------------------------------------------------------------------------------------
 
 	This function extract the route providers API key from the url
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _ReadURL = function ( ) {
-		var newUrlSearch = '?' ;
+	function m_ReadURL ( ) {
+		let newUrlSearch = '?' ;
 		( decodeURI ( window.location.search ).substr ( 1 ).split ( '&' ) ).forEach ( 
-			function ( urlSearchSubString ){
+			urlSearchSubString =>{
 				if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
 					// Needed to first extract the file name because the file name 
 					// can contains some = chars (see base64 specs)
-					_TravelUrl = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+					m_TravelUrl = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 					newUrlSearch += urlSearchSubString;
 				}
 				else {
-					var param = urlSearchSubString.split ( '=' );
+					let param = urlSearchSubString.split ( '=' );
 					if ( 2 === param.length ) {
 						if ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' )  ) {
-							var providerName = param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( );
-							var provider = g_TravelNotesData.providers.get ( providerName );
+							let providerName = param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( );
+							let provider = g_TravelNotesData.providers.get ( providerName );
 							if ( provider && provider.providerKeyNeeded ) {
 								provider.providerKey = param [ 1 ];
 							}
@@ -137,20 +140,20 @@ var travelNotesFactory = function ( ) {
 							newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 							newUrlSearch += urlSearchSubString;
 							if ( 'lng' === param [ 0 ].toLowerCase ( ) ) {
-								_Langage = param [ 1 ].toLowerCase ( );
+								m_Langage = param [ 1 ].toLowerCase ( );
 							}
 						}
 					}
 				}
 			}
 		);
-		var stateObj = { index: "bar" };
+		let stateObj = { index: "bar" };
 		history.replaceState ( stateObj, "page", newUrlSearch );
 		
 		g_TravelNotesData.providers.forEach (
-			function ( provider ) {
+			provider => {
 				if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
-					var providerKey = null;
+					let providerKey = null;
 					if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
 						providerKey = sessionStorage.getItem ( provider.name.toLowerCase ( ) ) ;
 					}
@@ -163,25 +166,23 @@ var travelNotesFactory = function ( ) {
 				}
 			}
 		);
-	};
+	}
 
 	/*
-	--- End of _ReadURL function ---
+	--- End of m_ReadURL function ---
 	*/
 	
 	/*
-	--- _StartXMLHttpRequest function ---------------------------------------------------------------------------------
+	--- m_StartXMLHttpRequest function --------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	var _XMLHttpRequestUrl = '';
-
-	var _StartXMLHttpRequest = function ( returnOnOk, returnOnError ) {
+	function m_StartXMLHttpRequest ( returnOnOk, returnOnError ) {
 		
-		var xmlHttpRequest = new XMLHttpRequest ( );
+		let xmlHttpRequest = new XMLHttpRequest ( );
 		xmlHttpRequest.timeout = 20000;
 		
 		xmlHttpRequest.ontimeout = function ( ) {
@@ -191,7 +192,7 @@ var travelNotesFactory = function ( ) {
 		xmlHttpRequest.onreadystatechange = function ( ) {
 			if ( xmlHttpRequest.readyState === 4 ) {
 				if ( xmlHttpRequest.status === 200 ) {
-					var response;
+					let response;
 					try {
 						response = JSON.parse ( xmlHttpRequest.responseText );
 					}
@@ -206,57 +207,59 @@ var travelNotesFactory = function ( ) {
 			}
 		};
 		
-		xmlHttpRequest.open ( "GET", _XMLHttpRequestUrl, true );
+		xmlHttpRequest.open ( "GET", m_XMLHttpRequestUrl, true );
 		xmlHttpRequest.overrideMimeType ( 'application/json' );
 		xmlHttpRequest.send ( null );
 		
-	};
+	}
 	
 	/*
-	--- End of _StartXMLHttpRequest function ---
+	--- End of m_StartXMLHttpRequest function ---
 	*/
 
 	/*
-	--- _AddControl function ------------------------------------------------------------------------------------------
+	--- m_AddControl function -----------------------------------------------------------------------------------------
 
 	This function add the control on the HTML page
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _AddControl = function ( map, divControlId ) {
+	function m_AddControl ( map, divControlId ) {
 		
 		g_TravelNotesData.map = map;
-		_ReadURL ( );
+		
+		m_ReadURL ( );
+		
 		g_MapEditor.loadEvents ( );
 		
-		var promises = [];
+		let promises = [];
 		// loading config
-		_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
-		promises.push ( new Promise ( _StartXMLHttpRequest ) );
+		m_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
+		promises.push ( new Promise ( m_StartXMLHttpRequest ) );
 		// loading translations
-		_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + ( _Langage || g_Config.language).toUpperCase ( )  + '.json';
-		promises.push ( new Promise ( _StartXMLHttpRequest ) );
+		m_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + ( m_Langage || g_Config.language).toUpperCase ( )  + '.json';
+		promises.push ( new Promise ( m_StartXMLHttpRequest ) );
 		// loading travel
-		if ( _TravelUrl ) {
-			_XMLHttpRequestUrl = _TravelUrl;
-			promises.push (  new Promise ( _StartXMLHttpRequest ) );
+		if ( m_TravelUrl ) {
+			m_XMLHttpRequestUrl = m_TravelUrl;
+			promises.push (  new Promise ( m_StartXMLHttpRequest ) );
 		}
 		
 		Promise.all ( promises ).then ( 
 			// promises succeeded
-			function ( values ) {
+			values => {
 				// config adaptation
-				if ( _Langage ) {
-					values [ 0 ].language = _Langage;
+				if ( m_Langage ) {
+					values [ 0 ].language = m_Langage;
 				}
 				g_Config.overload ( values [ 0 ] );
 				
 				if ( window.osmSearch ) {
 					window.osmSearch.getDictionaryPromise ( g_Config.language, 'travelNotes' )
 					.then ( 
-						function ( ) { console.log ( 'Dictionary loaded' ); },
-						function ( error ) { console.log ( error ); }
+						( ) => console.log ( 'osmSearch dictionary loaded' ),
+						err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
 					);
 				}
 				else {
@@ -264,10 +267,11 @@ var travelNotesFactory = function ( ) {
 				}
 
 				g_TravelNotesData.providers.forEach (
-					function ( provider ) {
+					provider => {
 						provider.userLanguage =  g_Config.language;
 					}
 				);
+				
 				// translations adaptation
 				g_Translator.setTranslations ( values [ 1 ] );
 				// loading new travel
@@ -278,7 +282,7 @@ var travelNotesFactory = function ( ) {
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );
 
-				if ( _TravelUrl ) {
+				if ( m_TravelUrl ) {
 					// loading travel...
 					newFileLoader ( ).openDistantFile ( values [ 2 ] );
 				}
@@ -292,45 +296,41 @@ var travelNotesFactory = function ( ) {
 				}
 			}
 		).catch ( 
-			// promises failed
-			function ( error ) {
-				console.log ( error );
-				//document.getElementsByTagName ( 'body' )[0].innerHTML = error;
-			}
+			err => console.log ( err ? err : 'An error occurs when loading translations or config' )
 		);
-	};
+	}
 	
 	/*
-	--- End of _AddControl function ---
+	--- End of m_AddControl function ---
 	*/
 	
 	/*
-	--- _OnMapClick function ------------------------------------------------------------------------------------------
+	--- m_OnMapClick function ------------------------------------------------------------------------------------------
 
 	Map click event handler
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _OnMapClick = function ( /*event*/ ) {
+	function m_OnMapClick ( ) {
 		if ( ! g_TravelNotesData.travel.readOnly ) {
 			newMapContextMenu ( event ).show ( );
 		}
-	};
+	}
 	
 	/*
-	--- _OnMapContextMenu function ------------------------------------------------------------------------------------
+	--- m_OnMapContextMenu function ------------------------------------------------------------------------------------
 
 	Map context menu event handler
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	var _OnMapContextMenu = function ( event ) {
+	function m_OnMapContextMenu ( event ) {
 		if ( ! g_TravelNotesData.travel.readOnly ) {
 			newMapContextMenu ( event ).show ( );
 		}
-	};
+	}
 
 	return {
 
@@ -342,7 +342,7 @@ var travelNotesFactory = function ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addControl : function ( map, divControlId ) { return _AddControl ( map, divControlId );}, 
+		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId );}, 
 		
 		/*
 		--- addProvider method ----------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ var travelNotesFactory = function ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		addProvider : function ( provider ) { g_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider ); },
+		addProvider : provider => g_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider ),
 		
 		/*
 		--- addMapContextMenu method ----------------------------------------------------------------------------------
@@ -362,14 +362,14 @@ var travelNotesFactory = function ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addMapContextMenu : function ( leftButton, rightButton ) {
+		addMapContextMenu : ( leftButton, rightButton ) => {
 			if ( leftButton ) {
-				g_TravelNotesData.map.on ( 'click', _OnMapClick );
-				_HaveLeftContextMenu = true;
+				g_TravelNotesData.map.on ( 'click', m_OnMapClick );
+				m_HaveLeftContextMenu = true;
 			}
 			if ( rightButton ) {
-				g_TravelNotesData.map.on ( 'contextmenu', _OnMapClick );
-				_HaveRightContextMenu = true;
+				g_TravelNotesData.map.on ( 'contextmenu', m_OnMapClick );
+				m_HaveRightContextMenu = true;
 			}
 		},
 
@@ -384,35 +384,35 @@ var travelNotesFactory = function ( ) {
 		get userData ( ) { return g_TravelNotesData.travel.userData;},
 		set userData ( userData ) { g_TravelNotesData.travel.userData = userData;},
 		
-		get rightContextMenu ( ) { return _HaveRightContextMenu; },
+		get rightContextMenu ( ) { return m_HaveRightContextMenu; },
 		set rightContextMenu ( RightContextMenu ) { 
-			if  ( ( RightContextMenu ) && ( ! _HaveRightContextMenu ) ) {
-				g_TravelNotesData.map.on ( 'contextmenu', _OnMapContextMenu );
-				_HaveRightContextMenu = true;
+			if  ( ( RightContextMenu ) && ( ! m_HaveRightContextMenu ) ) {
+				g_TravelNotesData.map.on ( 'contextmenu', m_OnMapContextMenu );
+				m_HaveRightContextMenu = true;
 			}
-			else if ( ( ! RightContextMenu ) && ( _HaveRightContextMenu ) ) {
-				g_TravelNotesData.map.off ( 'contextmenu', _OnMapContextMenu );
-				_HaveRightContextMenu = false;
+			else if ( ( ! RightContextMenu ) && ( m_HaveRightContextMenu ) ) {
+				g_TravelNotesData.map.off ( 'contextmenu', m_OnMapContextMenu );
+				m_HaveRightContextMenu = false;
 			}
 		},
 		
-		get leftContextMenu ( ) { return _HaveLeftContextMenu; },
+		get leftContextMenu ( ) { return m_HaveLeftContextMenu; },
 		set leftContextMenu ( LeftContextMenu ) { 
-			if  ( ( LeftContextMenu ) && ( ! _HaveLeftContextMenu ) ) {
-				g_TravelNotesData.map.on ( 'click', _OnMapClick );
-				_HaveLeftContextMenu = true;
+			if  ( ( LeftContextMenu ) && ( ! m_HaveLeftContextMenu ) ) {
+				g_TravelNotesData.map.on ( 'click', m_OnMapClick );
+				m_HaveLeftContextMenu = true;
 			}
-			else if ( ( ! LeftContextMenu ) && ( _HaveLeftContextMenu ) ) {
-				g_TravelNotesData.map.off ( 'click', _OnMapClick );
-				_HaveLeftContextMenu = false;
+			else if ( ( ! LeftContextMenu ) && ( m_HaveLeftContextMenu ) ) {
+				g_TravelNotesData.map.off ( 'click', m_OnMapClick );
+				m_HaveLeftContextMenu = false;
 			}
 		},
 		
-		get leftUserContextMenu ( ) { return _LeftUserContextMenuData; },
-		set leftUserContextMenu ( LeftUserContextMenu ) {_LeftUserContextMenuData = LeftUserContextMenu; },
+		get leftUserContextMenu ( ) { return m_LeftUserContextMenuData; },
+		set leftUserContextMenu ( LeftUserContextMenu ) {m_LeftUserContextMenuData = LeftUserContextMenu; },
 		
-		get rightUserContextMenu ( ) { return _RightUserContextMenuData; },
-		set rightUserContextMenu ( RightUserContextMenu ) {_RightUserContextMenuData = RightUserContextMenu; },
+		get rightUserContextMenu ( ) { return m_RightUserContextMenuData; },
+		set rightUserContextMenu ( RightUserContextMenu ) {m_RightUserContextMenuData = RightUserContextMenu; },
 		
 		get maneuver ( ) { return newManeuver ( ); },
 		
@@ -420,10 +420,15 @@ var travelNotesFactory = function ( ) {
 		
 		get version ( ) { return currentVersion; }
 	};
-};
+}
 
-window.L.travelNotes = travelNotesFactory ( );
+try {
+	window.L.travelNotes = travelNotesFactory ( );
+}
+catch ( err ) {
+	console.log ( err ? err : 'An error occurs when loading TravelNotes' );
+}
 
 /*
---- End of L.TravelNotes.js file --------------------------------------------------------------------------------------
+--- End of TravelNotes.js file ----------------------------------------------------------------------------------------
 */

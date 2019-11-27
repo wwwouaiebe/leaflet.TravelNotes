@@ -32,8 +32,6 @@ Tests ...
 	
 'use strict';
 
-/* global L */
-
 export { newOsmSearchEngine };
 
 import { g_Config } from '../data/Config.js';
@@ -69,7 +67,7 @@ function s_DrawSearchRectangle ( ) {
 		'addrectangle', 
 		{ 
 			objId : s_PreviousSearchRectangleObjId,
-			bounds : L.latLngBounds ( s_SearchParameters.bbox.southWest, s_SearchParameters.bbox.northEast ) ,
+			bounds : [ [ s_SearchParameters.bbox.southWest.lat,s_SearchParameters.bbox.southWest.lng], [ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng, ] ] ,
 			properties : g_Config.previousSearchLimit 
 		}
 	);
@@ -124,7 +122,7 @@ function onMapChange ( ) {
 		'addrectangle', 
 		{ 
 			objId : s_NextSearchRectangleObjId,
-			bounds : L.latLngBounds ( L.latLng ( mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ), L.latLng (  mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ) ),
+			bounds : [ [ mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ], [ mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ] ],
 			properties : g_Config.nextSearchLimit
 		}
 	);
@@ -159,7 +157,16 @@ function newOsmSearchEngine ( ) {
 		
 		let mapBounds =  g_TravelNotesData.map.getBounds ( );
 		s_SearchParameters = {
-			bbox : { southWest : mapBounds.getSouthWest ( ), northEast : mapBounds.getNorthEast ( ) },
+			bbox : { 
+				southWest : {
+					lat:  mapBounds.getSouthWest ( ).lat,
+					lng : mapBounds.getSouthWest ( ).lng 
+				},
+				northEast : {
+					lat : mapBounds.getNorthEast ( ).lat,
+					lng : mapBounds.getNorthEast ( ).lng
+				},
+			},
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};
 		g_TravelNotesData.searchData = [];

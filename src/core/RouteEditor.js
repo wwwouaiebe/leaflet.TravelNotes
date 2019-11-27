@@ -305,7 +305,7 @@ function newRouteEditor ( ) {
 
 		s_RequestStarted = false;
 
-		g_ErrorEditor ( ).showError ( message );
+		g_ErrorEditor.showError ( message );
 	}
 
 	/*
