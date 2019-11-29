@@ -27,6 +27,7 @@ Changes:
 		- Issue #31 : Add a command to import from others maps
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191125
 Tests ...
 
@@ -41,7 +42,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { gc_TravelEditorUI } from '../UI/TravelEditorUI.js';
 import { gc_RouteEditorUI } from '../UI/RouteEditorUI.js';
 import { gc_DataPanesUI } from '../UI/DataPanesUI.js';
-import { gc_ProvidesToolbarUI } from '../UI/ProvidersToolbarUI.js';
+import { gc_ProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
 
 /*
@@ -74,7 +75,7 @@ function newUI ( ) {
 		gc_RouteEditorUI.createUI ( m_MainDiv ); 
 		gc_DataPanesUI.createUI ( m_MainDiv ); 
 		
-		gc_ProvidesToolbarUI.createUI ( m_MainDiv ); 
+		gc_ProvidersToolbarUI.createUI ( m_MainDiv ); 
 		newErrorEditorUI ( ).createUI ( m_MainDiv ); 
 
 		m_MainDiv.addEventListener ( 'setrouteslist', ( ) => gc_TravelEditorUI.setRoutesList ( ) , false );
@@ -89,12 +90,13 @@ function newUI ( ) {
 		m_MainDiv.addEventListener ( 'updatetravelnotes', ( ) => gc_DataPanesUI.updateTravelNotes ( ), false );
 		m_MainDiv.addEventListener ( 'setsearch', ( ) => gc_DataPanesUI.setSearch ( ), false );
 		m_MainDiv.addEventListener ( 'updatesearch', ( ) => gc_DataPanesUI.updateSearch ( ), false );
+		m_MainDiv.addEventListener ( 'providersadded', ( ) => gc_ProvidersToolbarUI.providersAdded ( ), false );
 
 		m_MainDiv.addEventListener ( 
 			'setprovider',
 			event => {
 				if ( event.data && event.data.provider ) {
-					gc_ProvidesToolbarUI.provider = event.data.provider;
+					gc_ProvidersToolbarUI.provider = event.data.provider;
 				}
 			},
 			false 
@@ -103,7 +105,7 @@ function newUI ( ) {
 			'settransitmode',
 			event => {
 				if ( event.data && event.data.provider ) {
-					gc_ProvidesToolbarUI.transitMode = event.data.transitMode;
+					gc_ProvidersToolbarUI.transitMode = event.data.transitMode;
 				}
 			},
 			false 

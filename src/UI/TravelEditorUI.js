@@ -34,6 +34,7 @@ Changes:
 		- Issue #60 : Add translations for roadbook
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191125
 Tests ...
 
@@ -55,7 +56,7 @@ import { g_TravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
-
+import { g_APIKeysManager } from '../core/APIKeysManager.js';
 let m_RoutesList = null;
 
 /*
@@ -444,6 +445,26 @@ function newTravelEditorUI ( ) {
 					'&page=' + g_TravelNotesData.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 			}, 
 			buttonsDiv
+		);
+		
+		//API keys button
+		htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-Control-ApiKeysButton', 
+				className: 'TravelNotes-Control-Button', 
+				title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
+				innerHTML : '&#x1f511;'
+			}, 
+			buttonsDiv 
+		)
+		.addEventListener ( 
+			'click', 
+			clickEvent => {
+				clickEvent.stopPropagation ( );
+				g_APIKeysManager.dialog ( );
+			}, 
+			false 
 		);
 
 		// add route button

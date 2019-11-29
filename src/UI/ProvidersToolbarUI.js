@@ -27,6 +27,7 @@ Changes:
 		- code review		
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191125
 Tests ...
 
@@ -35,7 +36,7 @@ Tests ...
 
 'use strict';
 
-export { gc_ProvidesToolbarUI };
+export { gc_ProvidersToolbarUI };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
@@ -59,6 +60,7 @@ function newProvidersToolbarUI ( ) {
 	let m_PedestrianButton = null;
 	let m_CarButton = null;
 	let m_TrainButton = null;
+	let m_ParentDiv = null;
 	
 	/*
 	--- m_OnClickTransitModeButton function ---------------------------------------------------------------------------
@@ -154,6 +156,12 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function m_createProviderButton ( provider ) {
+
+console.log ( provider.name + ' ' + provider.providerKey );
+
+		if ( 0 === provider.providerKey ) {
+			return;
+		}
 		
 		let providerButton = m_HtmlElementsFactory.create (
 			'img',
@@ -284,6 +292,19 @@ function newProvidersToolbarUI ( ) {
 		m_TrainButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
 
 	}
+	
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	This function refresh the UI
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	function m_ProvidersAdded ( ) {
+		
+		m_ParentDiv.removeChild ( m_ButtonsDiv );
+		m_CreateUI ( m_ParentDiv );
+	}
 
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
@@ -295,11 +316,7 @@ function newProvidersToolbarUI ( ) {
 
 	function m_CreateUI ( controlDiv ) {
 		
-		/*
-		if ( m_ButtonsDiv ) {
-			return;
-		}
-		*/
+		m_ParentDiv = controlDiv;
 		
 		m_ButtonsDiv = m_HtmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
 
@@ -323,20 +340,22 @@ function newProvidersToolbarUI ( ) {
 			set provider ( providerName ) { m_SetProvider ( providerName ); },
 			
 			get transitMode ( ) { return g_TravelNotesData.routing.transitMode; },
-			set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); }
+			set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); },
+			
+			providersAdded : ( ) => m_ProvidersAdded ( )
 		}
 	);
 }
 
 /* 
---- gc_ProvidesToolbarUI object ---------------------------------------------------------------------------------------
+--- gc_ProvidersToolbarUI object ---------------------------------------------------------------------------------------
 
 The one and only one providesToolbarUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_ProvidesToolbarUI = newProvidersToolbarUI ( );
+const gc_ProvidersToolbarUI = newProvidersToolbarUI ( );
 	
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------

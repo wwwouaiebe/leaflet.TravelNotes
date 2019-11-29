@@ -40,6 +40,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191127
 Tests ...
 
@@ -54,7 +55,6 @@ import { g_TravelNotesData } from './data/TravelNotesData.js';
 import { g_TravelEditor } from './core/TravelEditor.js';
 import { g_MapEditor } from './core/MapEditor.js';
 
-import { newUtilities } from './util/Utilities.js';
 import { newTravel } from './data/Travel.js';
 import { newRoute } from './data/Route.js';
 import { gc_UI } from './UI/UI.js';
@@ -67,6 +67,7 @@ import { newEventDispatcher } from './util/EventDispatcher.js';
 
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
+import { g_APIKeysManager } from './core/APIKeysManager.js';
 
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -118,54 +119,23 @@ function travelNotesFactory ( ) {
 		let newUrlSearch = '?' ;
 		( decodeURI ( window.location.search ).substr ( 1 ).split ( '&' ) ).forEach ( 
 			urlSearchSubString =>{
-				if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-					// Needed to first extract the file name because the file name 
-					// can contains some = chars (see base64 specs)
-					m_TravelUrl = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearchSubString;
+				if ( -1 !== urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+					g_APIKeysManager.fromUrl ( urlSearchSubString )
 				}
 				else {
-					let param = urlSearchSubString.split ( '=' );
-					if ( 2 === param.length ) {
-						if ( -1 !== param [ 0 ].indexOf ( 'ProviderKey' )  ) {
-							let providerName = param [ 0 ].substr ( 0, param [ 0 ].length - 11 ).toLowerCase ( );
-							let provider = g_TravelNotesData.providers.get ( providerName );
-							if ( provider && provider.providerKeyNeeded ) {
-								provider.providerKey = param [ 1 ];
-							}
-							sessionStorage.setItem ( providerName, btoa ( param [ 1 ] ) );
-						}
-						else {
-							newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-							newUrlSearch += urlSearchSubString;
-							if ( 'lng' === param [ 0 ].toLowerCase ( ) ) {
-								m_Langage = param [ 1 ].toLowerCase ( );
-							}
-						}
+					if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+						m_TravelUrl = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 					}
+					else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+						m_Langage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
+					}
+					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+					newUrlSearch += urlSearchSubString;
 				}
 			}
 		);
 		let stateObj = { index: "bar" };
 		history.replaceState ( stateObj, "page", newUrlSearch );
-		
-		g_TravelNotesData.providers.forEach (
-			provider => {
-				if ( provider.providerKeyNeeded && 0 === provider.providerKey ) {
-					let providerKey = null;
-					if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
-						providerKey = sessionStorage.getItem ( provider.name.toLowerCase ( ) ) ;
-					}
-					if ( providerKey ) {
-						provider.providerKey = atob ( providerKey );
-					}
-					else {
-						g_TravelNotesData.providers.delete ( provider.name.toLowerCase( ) );
-					}
-				}
-			}
-		);
 	}
 
 	/*
@@ -230,6 +200,7 @@ function travelNotesFactory ( ) {
 		g_TravelNotesData.map = map;
 		
 		m_ReadURL ( );
+		g_APIKeysManager.fromSessionStorage ( );
 		
 		g_MapEditor.loadEvents ( );
 		
@@ -279,6 +250,7 @@ function travelNotesFactory ( ) {
 				g_TravelNotesData.travel.routes.add ( newRoute ( ) );
 				// user interface is added
 				gc_UI.createUI ( document.getElementById ( divControlId ) );
+
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );
 
@@ -331,6 +303,17 @@ function travelNotesFactory ( ) {
 			newMapContextMenu ( event ).show ( );
 		}
 	}
+	
+	/*
+	--- m_AddProvider function ----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_AddProvider ( provider ) {
+		g_APIKeysManager.addProvider ( provider );
+		console.log ( 'm_AddProvider' );
+	}
 
 	return {
 
@@ -352,7 +335,7 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 		
-		addProvider : provider => g_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider ),
+		addProvider : provider => m_AddProvider ( provider ),
 		
 		/*
 		--- addMapContextMenu method ----------------------------------------------------------------------------------

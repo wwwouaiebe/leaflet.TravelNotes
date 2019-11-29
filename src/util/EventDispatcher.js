@@ -59,6 +59,7 @@ function newEventDispatcher ( ) {
 			case 'setwaypointslist':
 			case 'setrouteslist':
 			case 'setprovider':
+			case 'providersadded':
 			case 'settransitmode':
 				return document.getElementById ( 'TravelNotes-Control-MainDiv' );
 			case 'removeroute':

@@ -29,6 +29,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191124
 Tests ...
 
@@ -58,6 +59,7 @@ function newRoutePropertiesDialog ( route ) {
 	let m_WidthInput = null;
 	let m_ChainInput = null;
 	let m_DashSelect = null;
+	
 	/*
 	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
 
