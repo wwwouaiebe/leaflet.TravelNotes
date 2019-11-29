@@ -31,6 +31,7 @@ Tests ...
 export { newAPIKeysDialog };
 
 import { g_Translator } from '../UI/Translator.js';
+import { g_Config } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -109,7 +110,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 		var blobUrl = URL.createObjectURL ( data );
 		var element = document.createElement ( 'a' );
 		element.setAttribute( 'href', blobUrl );
-		element.setAttribute( 'download', 'encodedAPIKeys' );
+		element.setAttribute( 'download', 'APIKeys' );
 		element.style.display = 'none';
 		document.body.appendChild ( element );
 		element.click ( );
@@ -358,7 +359,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
 				value : APIKeyValue,
 				placeholder : g_Translator.getText ( 'APIKeysDialog - API key' ),
-				type: 'text'  //'password'
+				type: g_Config.APIKeys.showAPIKeysInDialog ? 'text' : 'password'
 			},
 			APIKeyRow
 		);

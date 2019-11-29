@@ -39,9 +39,9 @@ Patterns : Closure
 export { g_APIKeysManager };
 
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
-
 import { newUtilities } from '../util/Utilities.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { g_Config } from '../data/Config.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 let s_KeysMap = new Map;
@@ -79,7 +79,7 @@ function newAPIKeysManager ( ) {
 		if ( 2 === urlSubStrings.length ) {
 			let providerName = urlSubStrings [ 0 ].substr ( 0, urlSubStrings [ 0 ].length - 11 ).toLowerCase ( );
 			let providerKey = urlSubStrings [ 1 ] ;
-			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
+			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa (providerKey ) );
 			}
 			s_KeysMap.set ( providerName, providerKey );
@@ -138,9 +138,12 @@ function newAPIKeysManager ( ) {
 	function m_EndDialog ( APIKeys ) {
 		sessionStorage.clear ( );
 		s_KeysMap.clear ( );
+		let saveToSessionStorage = newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage;
 		APIKeys.forEach (
 			APIKey => {
-				sessionStorage.setItem ( ( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey', btoa ( APIKey.providerKey ) );
+				if ( saveToSessionStorage ) {
+					sessionStorage.setItem ( ( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey', btoa ( APIKey.providerKey ) );
+				}
 				m_SetKey ( APIKey.providerName, APIKey.providerKey );
 			}
 		);

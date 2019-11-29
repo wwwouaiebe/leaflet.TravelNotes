@@ -447,26 +447,28 @@ function newTravelEditorUI ( ) {
 			buttonsDiv
 		);
 		
-		//API keys button
-		htmlElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-ApiKeysButton', 
-				className: 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
-				innerHTML : '&#x1f511;'
-			}, 
-			buttonsDiv 
-		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				g_APIKeysManager.dialog ( );
-			}, 
-			false 
-		);
-
+		if ( g_Config.APIKeys.showDialogButton ) {
+			//API keys button
+			htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-ApiKeysButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
+					innerHTML : '&#x1f511;'
+				}, 
+				buttonsDiv 
+			)
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					g_APIKeysManager.dialog ( );
+				}, 
+				false 
+			);
+		}
+		
 		// add route button
 		htmlElementsFactory.create ( 
 			'div', 

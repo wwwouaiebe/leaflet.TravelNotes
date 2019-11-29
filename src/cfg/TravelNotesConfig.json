@@ -1,4 +1,10 @@
 {
+	"APIKeys":
+	{
+		"showDialogButton":true,
+		"saveToSessionStorage":true,
+		"showAPIKeysInDialog":true
+	},
 	"contextMenu":
 	{
 		"timeout": 1500

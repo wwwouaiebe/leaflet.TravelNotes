@@ -46,6 +46,11 @@ Patterns : Closure and Singleton
 function newConfig ( ) {
 
 	let m_Config = {
+		APIKeys : {
+			showDialogButton : true,
+			saveToSessionStorage : true,
+			showAPIKeysInDialog : true
+		},
 		contextMenu : {
 			timeout : 1500
 		},
@@ -252,7 +257,7 @@ function newConfig ( ) {
 	*/
 
 	return {
-		
+		get APIKeys ( ) { return m_Config.APIKeys; },
 		get contextMenu ( ) { return m_Config.contextMenu; },
 		get errorMessages ( ) { return m_Config.errorMessages; },
 		get routing ( ) { return m_Config.routing; },
