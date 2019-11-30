@@ -26,6 +26,7 @@ Changes:
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191121
 Tests ...
 
@@ -290,7 +291,7 @@ The one and only one config
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_Config = newConfig ( );
+let g_Config = newConfig ( );
 
 /*
 --- End of Config.js file ---------------------------------------------------------------------------------------------

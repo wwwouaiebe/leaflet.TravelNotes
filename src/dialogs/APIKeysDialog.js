@@ -97,6 +97,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 
 	function m_OnErrorEncrypt ( ) {
 		m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - An error occurs when saving the keys' ) );
+		m_APIKeysDialog.hideWait ( );
 	}
 
 	/*
@@ -107,6 +108,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 
 	function m_OnOkEncrypt ( data ) {
 		m_APIKeysDialog.hideError ( );
+		m_APIKeysDialog.hideWait ( );
 		var blobUrl = URL.createObjectURL ( data );
 		var element = document.createElement ( 'a' );
 		element.setAttribute( 'href', blobUrl );
@@ -146,7 +148,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 		if ( ! m_VerifyKeys ( ) ) {
 			return;
 		}
-
+		m_APIKeysDialog.showWait ( );
 		newDataEncryptor ( ).encryptData ( 
 			new window.TextEncoder ( ).encode ( JSON.stringify ( m_GetAPIKeys ( ) ) ), 
 			m_OnOkEncrypt, 
@@ -176,6 +178,8 @@ function newAPIKeysDialog ( APIkeysMap ) {
 		}	
 		
 		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey.providerKey, APIKey.providerName ) );
+		m_APIKeysDialog.hideWait ( );
+		m_APIKeysDialog.hideError ( );
 	}
 	
 	/*
@@ -185,6 +189,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 	*/
 
 	function  m_OnErrorDecrypt (  ) {
+		m_APIKeysDialog.hideWait ( );
 		m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );		
 	}
 
@@ -195,6 +200,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 	*/
 
 	function m_OnOpenFileInputChange ( event ) {
+		m_APIKeysDialog.showWait ( );
 		event.stopPropagation ( );
 		var fileReader = new FileReader( );
 		fileReader.onload = function ( ) {

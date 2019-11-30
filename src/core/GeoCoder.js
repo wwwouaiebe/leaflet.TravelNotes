@@ -39,76 +39,10 @@ Tests ...
 'use strict';
 
 export { newGeoCoder };
-
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { g_Config } from '../data/Config.js';
 
-var s_RequestStarted = false;
-
 let newGeoCoder = function ( ) {
-
-	let m_ObjId = -1;
-	let m_Lat = 0;
-	let m_Lng = 0;
-
-	/*
-	--- m_StartXMLHttpRequest function --------------------------------------------------------------------------------
-
-	This function start the http request to OSM
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_StartXMLHttpRequest ( returnOnOk, returnOnError ) {
-
-		let xmlHttpRequest = new XMLHttpRequest ( );
-		xmlHttpRequest.timeout = g_Config.note.svgTimeOut;
-		
-		xmlHttpRequest.ontimeout = function ( ) {
-			returnOnError ( 'TimeOut error' );
-		};
-
-		xmlHttpRequest.onreadystatechange = function ( ) { 
-			if ( xmlHttpRequest.readyState == 4 ) {
-				if ( xmlHttpRequest.status == 200 ) {
-					s_RequestStarted = false;
-					let response;
-					try {
-						response = JSON.parse( this.responseText );
-					}
-					catch ( e ) {
-						s_RequestStarted = false;
-						returnOnError ( 'Parsing error' );
-					}
-					s_RequestStarted = false;
-					response.objId = m_ObjId;
-					returnOnOk ( response );	
-				}
-				else {
-					s_RequestStarted = false;
-					returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
-				}
-			}
-		};  
-		
-		let NominatimUrl = 
-			g_Config.nominatim.url + 'reverse?format=json&lat=' + 
-			m_Lat + '&lon=' + m_Lng + 
-			'&zoom=18&addressdetails=1';
-		let nominatimLanguage = g_Config.nominatim.language;
-		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
-			NominatimUrl += '&accept-language=' + nominatimLanguage;
-		}
-		xmlHttpRequest.open ( "GET", NominatimUrl, true );
-		if (  nominatimLanguage && nominatimLanguage === '*' ) {
-			xmlHttpRequest.setRequestHeader ( 'accept-language', '' );
-		}
-		xmlHttpRequest.overrideMimeType ( 'application/json' );
-		xmlHttpRequest.send ( null );
-	}
-
-	/*
-	--- End of _StartXMLHttpRequest function ---
-	*/
 
 	/*
 	--- m_GetPromiseAddress function ----------------------------------------------------------------------------------
@@ -118,17 +52,23 @@ let newGeoCoder = function ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	function m_GetPromiseAddress ( lat, lng, objId ) {
-		if ( s_RequestStarted ) {
-			return Promise.reject ( );
+	function m_GetPromiseAddress ( latLng ) {
+	
+		let NominatimUrl = 
+			g_Config.nominatim.url + 'reverse?format=json&lat=' + 
+			latLng [ 0 ] + '&lon=' + latLng [ 1 ] + 
+			'&zoom=18&addressdetails=1';
+		let nominatimLanguage = g_Config.nominatim.language;
+		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
+			NominatimUrl += '&accept-language=' + nominatimLanguage;
 		}
-		s_RequestStarted = true;
-		
-		m_ObjId = objId || -1;
-		m_Lat = lat;
-		m_Lng = lng;
-		
-		return new Promise ( m_StartXMLHttpRequest );
+		let requestHeaders = null;
+
+		if (  nominatimLanguage && nominatimLanguage === '*' ) {
+			requestHeaders = [ { headerName :'accept-language', headerValue : ''} ];
+		}
+
+		return newHttpRequestBuilder ( ).getJsonPromise ( NominatimUrl, requestHeaders ); 
 	}
 	
 	/*
@@ -143,7 +83,7 @@ let newGeoCoder = function ( ) {
 	
 	return Object.seal (
 		{
-			getPromiseAddress : ( lat, lng, objId ) => { return m_GetPromiseAddress ( lat, lng, objId ); }				
+			getPromiseAddress : ( latLng ) => { return m_GetPromiseAddress ( latLng ); }				
 		}
 	);
 		

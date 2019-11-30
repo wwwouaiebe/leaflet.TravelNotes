@@ -50,7 +50,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
-
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
 let g_UserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 let g_TravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
@@ -263,7 +263,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		}
 		m_AdressInput.value = address;
 		
-		document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
+		m_NoteDialog.hideWait ( );
 		m_LatLng = data.latLng;
 	}
 	
@@ -279,7 +279,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	function m_OnErrorSvgIcon ( err ) {
-		document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'visible';
+		m_NoteDialog.hideWait ( );
 		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
 		console.log ( err ? err : "an error occurs when creating the SVG icon." )
 	}
@@ -300,8 +300,8 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 
 		let preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 		if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
-			document.getElementById ( 'TravelNotes-BaseDialog-OkButton' ).style.visibility = 'hidden';
-			newSvgIconFromOsmFactory ( ).getPromiseSvgIcon ( note.latLng, routeObjId).then ( m_OnSvgIcon ).catch ( m_OnErrorSvgIcon );
+			m_NoteDialog.showWait ( );
+			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId).then ( m_OnSvgIcon ).catch ( m_OnErrorSvgIcon );
 		}
 		else{
 			m_WidthInput.value = preDefinedIcon.width ;
@@ -759,7 +759,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		m_AdressInput.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_AdressInput.value = note.address;
 		// geolocalization
-		newGeoCoder ( ).getPromiseAddress ( note.lat, note.lng ).then ( m_OnGeocoderResponse ).catch ( m_OnGeocoderError );
+		newGeoCoder ( ).getPromiseAddress ( note.latLng ).then ( m_OnGeocoderResponse ).catch ( m_OnGeocoderError );
 		
 	}
 	
@@ -850,34 +850,21 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 	*/
 
 	function m_LoadIconsAndButtons ( ) {
-		if ( 0 === g_TravelNotesButtonsAndIcons.preDefinedIconsList.length ) {
-			let buttonsHttpRequest = new XMLHttpRequest ( );
-			buttonsHttpRequest.onreadystatechange = function ( ) {
-				if ( this.readyState === buttonsHttpRequest.DONE ) {
-					if ( this.status === 200 ) {
-						try {
-							g_TravelNotesButtonsAndIcons = JSON.parse ( this.responseText );
-							m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
-							g_TravelNotesButtonsAndIcons.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
-							m_AddPreDefinedIconsList ( );
-						}
-						catch ( e )
-						{
-							console.log ( 'Error reading TravelNotesNoteDialog.json' );
-						}
-					} 
-					else {
-						console.log ( 'Error sending request for TravelNotesNoteDialog' + g_Config.language.toUpperCase ( ) + '.json' );
-					}
-				}
-			};
-			buttonsHttpRequest.open ( 
-				'GET',
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesNoteDialog' + g_Config.language.toUpperCase ( ) + '.json',
-				true
-			);
-			buttonsHttpRequest.send ( null );
+		
+		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
+			g_TravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
+			m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
+			g_TravelNotesButtonsAndIcons.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+			m_AddPreDefinedIconsList ( );
 		}
+		
+		newHttpRequestBuilder ( ).getJsonPromise ( 
+			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+			'TravelNotesNoteDialog' + 
+			g_Config.language.toUpperCase ( ) + 
+			'.json'
+		)
+		.then ( loadIconsAndButtons ).catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
 	}
 	
 	/*

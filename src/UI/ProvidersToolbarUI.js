@@ -157,8 +157,6 @@ function newProvidersToolbarUI ( ) {
 
 	function m_createProviderButton ( provider ) {
 
-console.log ( provider.name + ' ' + provider.providerKey );
-
 		if ( 0 === provider.providerKey ) {
 			return;
 		}

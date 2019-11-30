@@ -28,6 +28,7 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+		- Issue #68 : Review all existing promises.
 Doc reviewed 20191121
 Tests ...
 
@@ -56,7 +57,6 @@ Patterns : Closure and Singleton
 
 function newWayPointEditor ( ) {
 	
-	let m_GeoCoder = newGeoCoder ( );
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
 
@@ -76,9 +76,7 @@ function newWayPointEditor ( ) {
 		let wayPoint = newWayPoint ( );
 		if ( latLng ) {
 			wayPoint.latLng = latLng;
-			if ( g_Config.wayPoint.reverseGeocoding ) {
-				m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPoint.objId ).then ( m_GeocoderRenameWayPoint );
-			}
+			m_RenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
 		m_EventDispatcher.dispatch ( 
@@ -213,40 +211,44 @@ function newWayPointEditor ( ) {
 	}
 	
 	/*
-	--- m_GeocoderRenameWayPoint function -----------------------------------------------------------------------------
-
-	This function rename a wayPoint with the geoCoder response
-	
-	parameters:
-	- geoCoderData : data returned by the geoCoder
+	--- m_RenameWayPointWithGeocoder function -----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+	
+	function m_RenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
+		
+		if ( ! g_Config.wayPoint.reverseGeocoding ) {
+			return;
+		}
 
-	function m_GeocoderRenameWayPoint ( geoCoderData ) {
-		let address = '';
-		if ( geoCoderData.address.house_number ) {
-			address += geoCoderData.address.house_number + ' ';
+		function setAdressFromGeocoder ( geoCoderData ) {
+			let address = '';
+			if ( geoCoderData.address.house_number ) {
+				address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				address += geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				address += geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				address += geoCoderData.address.city;
+			}
+			if ( 0 === address.length ) {
+				address += geoCoderData.address.country;
+			}
+			m_RenameWayPoint ( address, wayPointObjId );
 		}
-		if ( geoCoderData.address.road ) {
-			address += geoCoderData.address.road + ' ';
-		}
-		else if ( geoCoderData.address.pedestrian ) {
-			address += geoCoderData.address.pedestrian + ' ';
-		}
-		if (  geoCoderData.address.village ) {
-			address += geoCoderData.address.village;
-		}
-		else if ( geoCoderData.address.town ) {
-			address += geoCoderData.address.town;
-		}
-		else if ( geoCoderData.address.city ) {
-			address += geoCoderData.address.city;
-		}
-		if ( 0 === address.length ) {
-			address += geoCoderData.address.country;
-		}
-		m_RenameWayPoint ( address, geoCoderData.objId );
+		
+		newGeoCoder ( ).getPromiseAddress ( latLng ).then ( setAdressFromGeocoder ).catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 	}
 	
 	/*
@@ -286,7 +288,7 @@ function newWayPointEditor ( ) {
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
-			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.first.objId ).then ( m_GeocoderRenameWayPoint );
+			m_RenameWayPointWithGeocoder ( latLng, g_TravelNotesData.travel.editedRoute.wayPoints.first.objId );
 		}
 		m_EventDispatcher.dispatch ( 
 			'addwaypoint', 
@@ -318,7 +320,7 @@ function newWayPointEditor ( ) {
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
-			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], g_TravelNotesData.travel.editedRoute.wayPoints.last.objId ).then ( m_GeocoderRenameWayPoint );
+			m_RenameWayPointWithGeocoder ( latLng, g_TravelNotesData.travel.editedRoute.wayPoints.last.objId );
 		}
 		m_EventDispatcher.dispatch ( 
 			'addwaypoint', 
@@ -345,8 +347,7 @@ function newWayPointEditor ( ) {
 	function m_WayPointDragEnd ( wayPointObjId ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
-			let latLng = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng;
-			m_GeoCoder.getPromiseAddress ( latLng [ 0 ], latLng [ 1 ], wayPointObjId ).then ( m_GeocoderRenameWayPoint );
+			m_RenameWayPointWithGeocoder ( g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId );
 		}
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );

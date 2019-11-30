@@ -31,6 +31,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #68 : Review all existing promises.
+		- Issue #63 : Find a better solution for provider keys upload
 Doc reviewed 20191124
 Tests ...
 
@@ -68,6 +69,9 @@ let newBaseDialog = function ( ) {
 	let m_ContentDiv = null;
 	let m_ErrorDiv = null;
 	let m_FooterDiv = null;
+	let m_SearchWaitDiv = null;
+	let m_SearchWaitBulletDiv = null;
+	let m_OkButton = null;
 	
 	// Utilities
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
@@ -276,16 +280,16 @@ let newBaseDialog = function ( ) {
 			},
 			m_DialogDiv
 		);
-		let okButton = m_HTMLElementsFactory.create ( 
+		m_OkButton = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
 				innerHTML: '&#x1f4be;', 
 				id : 'TravelNotes-BaseDialog-OkButton',
-				className : 'TravelNotes-BaseDialog-Button'
+				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton-Visible'
 			},
 			m_FooterDiv
 		);
-		okButton.addEventListener ( 
+		m_OkButton.addEventListener ( 
 			'click',
 			( ) => {
 				let returnValue = null;
@@ -301,6 +305,23 @@ let newBaseDialog = function ( ) {
 			},
 			false
 		);			
+		
+		// you understand?
+		m_SearchWaitBulletDiv = m_HTMLElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-BaseDialog-SearchWaitBullet',
+				className: 'TravelNotes-BaseDialog-SearchWait-Hidden'
+			}, 
+			m_SearchWaitDiv = m_HTMLElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-BaseDialog-SearchWait', 
+					className: 'TravelNotes-BaseDialog-SearchWait-Hidden'
+				},
+				m_FooterDiv 
+			)
+		);
 	}
 	
 	/*
@@ -361,6 +382,36 @@ let newBaseDialog = function ( ) {
 	}
 	
 	/*
+	--- m_Display function --------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_ShowWait ( ) {
+		m_SearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
+		m_SearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
+		m_SearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
+		m_SearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
+		m_OkButton.classList.remove ( 'TravelNotes-BaseDialog-OkButton-Visible' );
+		m_OkButton.classList.add ( 'TravelNotes-BaseDialog-OkButton-Hidden' );
+	}
+	
+	/*
+	--- m_Display function --------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_HideWait ( ) {
+		m_SearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
+		m_SearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
+		m_SearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
+		m_SearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
+		m_OkButton.classList.remove ( 'TravelNotes-BaseDialog-OkButton-Hidden' );
+		m_OkButton.classList.add ( 'TravelNotes-BaseDialog-OkButton-Visible' );
+	}
+	
+	/*
 	--- m_Show function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -395,6 +446,9 @@ let newBaseDialog = function ( ) {
 					
 			showError : errorText => m_ShowError ( errorText ),
 			hideError : ( ) => m_HideError ( ),
+			
+			showWait : ( ) => m_ShowWait ( ),
+			hideWait : ( ) =>m_HideWait ( ),
 
 			get title ( ) { return m_HeaderDiv.innerHTML; },
 			set title ( Title ) { m_HeaderDiv.innerHTML = Title; },

@@ -54,20 +54,20 @@ import { g_Config } from './data/Config.js';
 import { g_TravelNotesData } from './data/TravelNotesData.js';
 import { g_TravelEditor } from './core/TravelEditor.js';
 import { g_MapEditor } from './core/MapEditor.js';
+import { g_APIKeysManager } from './core/APIKeysManager.js';
+import { gc_UI } from './UI/UI.js';
 
 import { newTravel } from './data/Travel.js';
 import { newRoute } from './data/Route.js';
-import { gc_UI } from './UI/UI.js';
 import { newFileLoader } from './core/FileLoader.js';
 import { newBaseDialog } from './dialogs/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
 import { currentVersion } from './data/Version.js';
 import { newEventDispatcher } from './util/EventDispatcher.js';
-
+import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
-import { g_APIKeysManager } from './core/APIKeysManager.js';
 
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -91,9 +91,6 @@ function travelNotesFactory ( ) {
 	
 	let m_EventDispatcher = newEventDispatcher ( );
 
-	let m_XMLHttpRequestUrl = '';
-
-	
 	window.addEventListener( 
 		'unload', 
 		( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
@@ -141,51 +138,6 @@ function travelNotesFactory ( ) {
 	/*
 	--- End of m_ReadURL function ---
 	*/
-	
-	/*
-	--- m_StartXMLHttpRequest function --------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-	
-	function m_StartXMLHttpRequest ( returnOnOk, returnOnError ) {
-		
-		let xmlHttpRequest = new XMLHttpRequest ( );
-		xmlHttpRequest.timeout = 20000;
-		
-		xmlHttpRequest.ontimeout = function ( ) {
-			returnOnError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
-		};
-		
-		xmlHttpRequest.onreadystatechange = function ( ) {
-			if ( xmlHttpRequest.readyState === 4 ) {
-				if ( xmlHttpRequest.status === 200 ) {
-					let response;
-					try {
-						response = JSON.parse ( xmlHttpRequest.responseText );
-					}
-					catch ( e ) {
-						returnOnError ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL );
-					}
-					returnOnOk ( response );
-				}
-				else {
-					returnOnError ( 'Error XMLHttpRequest - Status : ' + xmlHttpRequest.status + ' - StatusText : ' + xmlHttpRequest.statusText + ' - File : ' + xmlHttpRequest.responseURL );
-				}
-			}
-		};
-		
-		xmlHttpRequest.open ( "GET", m_XMLHttpRequestUrl, true );
-		xmlHttpRequest.overrideMimeType ( 'application/json' );
-		xmlHttpRequest.send ( null );
-		
-	}
-	
-	/*
-	--- End of m_StartXMLHttpRequest function ---
-	*/
 
 	/*
 	--- m_AddControl function -----------------------------------------------------------------------------------------
@@ -203,20 +155,23 @@ function travelNotesFactory ( ) {
 		g_APIKeysManager.fromSessionStorage ( );
 		
 		g_MapEditor.loadEvents ( );
-		
-		let promises = [];
-		// loading config
-		m_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +'TravelNotesConfig.json';
-		promises.push ( new Promise ( m_StartXMLHttpRequest ) );
-		// loading translations
-		m_XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + ( m_Langage || g_Config.language).toUpperCase ( )  + '.json';
-		promises.push ( new Promise ( m_StartXMLHttpRequest ) );
-		// loading travel
+		let requestBuilder = newHttpRequestBuilder ( );
+		let promises = [
+			requestBuilder.getJsonPromise ( 
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+				'TravelNotesConfig.json' 
+			),
+			requestBuilder.getJsonPromise ( 
+				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 
+				'TravelNotes' + 
+				( m_Langage || g_Config.language).toUpperCase ( )  +
+				'.json'
+			)
+		];
 		if ( m_TravelUrl ) {
-			m_XMLHttpRequestUrl = m_TravelUrl;
-			promises.push (  new Promise ( m_StartXMLHttpRequest ) );
+			promises.push ( requestBuilder.getJsonPromise ( m_TravelUrl ) );
 		}
-		
+
 		Promise.all ( promises ).then ( 
 			// promises succeeded
 			values => {
@@ -226,6 +181,15 @@ function travelNotesFactory ( ) {
 				}
 				g_Config.overload ( values [ 0 ] );
 				
+				// translations adaptation
+				g_Translator.setTranslations ( values [ 1 ] );
+				g_TravelNotesData.providers.forEach (
+					provider => {
+						provider.userLanguage =  g_Config.language;
+					}
+				);
+				
+				// osmSearch 
 				if ( window.osmSearch ) {
 					window.osmSearch.getDictionaryPromise ( g_Config.language, 'travelNotes' )
 					.then ( 
@@ -237,14 +201,6 @@ function travelNotesFactory ( ) {
 					console.log ( 'osmSearch not found' );
 				}
 
-				g_TravelNotesData.providers.forEach (
-					provider => {
-						provider.userLanguage =  g_Config.language;
-					}
-				);
-				
-				// translations adaptation
-				g_Translator.setTranslations ( values [ 1 ] );
 				// loading new travel
 				g_TravelNotesData.travel = newTravel ( );
 				g_TravelNotesData.travel.routes.add ( newRoute ( ) );

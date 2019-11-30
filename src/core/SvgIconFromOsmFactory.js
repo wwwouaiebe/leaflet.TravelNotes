@@ -41,6 +41,7 @@ import { g_Config } from '../data/Config.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newGeometry } from '../util/Geometry.js';
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
 var s_RequestStarted = false;
 
@@ -516,102 +517,120 @@ function newSvgIconFromOsmFactory ( ) {
 	/*
 	--- End of m_createSvg function ---
 	*/
-	
-	/*
-	--- m_StartXMLHttpRequest function --------------------------------------------------------------------------------
 
-	This function start the http request to OSM
+	/*
+	--- m_GetUrl function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-
-	function m_StartXMLHttpRequest ( returnOnOk, returnOnError ) {
-
-		let xmlHttpRequest = new XMLHttpRequest ( );
-		xmlHttpRequest.timeout = g_Config.note.svgTimeOut;
 		
-		xmlHttpRequest.ontimeout = function ( ) {
-			returnOnError ( 'TimeOut error' );
-		};
-		
-		xmlHttpRequest.onreadystatechange = function ( ) {
-			if ( xmlHttpRequest.readyState === 4 ) {
-				if ( xmlHttpRequest.status === 200 ) {
-					try {
-						m_Response = JSON.parse ( xmlHttpRequest.responseText );
-					}
-					catch ( e ) {
-						s_RequestStarted = false;
-						returnOnError ( 'Parsing error' );
-					}
-					m_createSvg ( );
-					s_RequestStarted = false;
-					returnOnOk ( { svg : m_Svg, direction : m_Direction, startStop: m_StartStop, city : m_City, place: m_Place, streets: m_PassingStreets, latLng : m_IconItineraryPoint.latLng } );
-				}
-				else {
-					s_RequestStarted = false;
-					returnOnError ( 'Status : ' + this.status + ' statusText : ' + this.statusText );
-				}
-			}
-		};
-
+	function m_GetUrl ( ) {
 		let requestLatLng = m_IconLatLngDistance.lat.toFixed ( 6 ) + ',' + m_IconLatLngDistance.lng.toFixed ( 6 );
 
-		let requestUrl = g_Config.overpassApiUrl + '?data=[out:json][timeout:' + g_Config.note.svgTimeOut + '];' +
-			'way[highway](around:' + ( m_SvgIconSize * 1.5 ).toFixed ( 0 ) + ',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
-			'is_in(' + requestLatLng + ')->.e;' +
+		let requestUrl = g_Config.overpassApiUrl + 
+			'?data=[out:json][timeout:' + 
+			g_Config.note.svgTimeOut + '];' +
+			'way[highway](around:' + 
+			( g_Config.note.svgIconWidth * 1.5 ).toFixed ( 0 ) + 
+			',' + 
+			requestLatLng + 
+			')->.a;(.a >;.a;)->.a;.a out;' +
+			'is_in(' + 
+			requestLatLng + 
+			')->.e;' +
 			'area.e[admin_level="2"][name="United Kingdom"]->.f;' +
 			'area.e[admin_level="8"]->.g;' +
 			'area.e[admin_level="10"]->.h;' +
 			'if(f.count(deriveds)==0){.g->.i;}else{if(h.count(deriveds)==0){.g->.i;}else{.h->.i;}}.i out;' +
 			'(node(area.i)[place="village"];node(area.i)[place="hamlet"];node(area.i)[place="city"];node(area.i)[place="town"];)->.k;' +
 			'( ' +
-			'node(around:' + g_Config.note.svgHamletDistance + ',' + requestLatLng + ')[place="hamlet"];' +
-			'node(around:' + g_Config.note.svgVillageDistance + ',' + requestLatLng + ')[place="village"];' +
-			'node(around:' + g_Config.note.svgCityDistance + ',' + requestLatLng + ')[place="city"];' +
-			'node(around:' + g_Config.note.svgTownDistance + ',' + requestLatLng + ')[place="town"];' +
+			'node(around:' + 
+			g_Config.note.svgHamletDistance + 
+			',' + 
+			requestLatLng + 
+			')[place="hamlet"];' +
+			'node(around:' + 
+			g_Config.note.svgVillageDistance + 
+			',' + 
+			requestLatLng + 
+			')[place="village"];' +
+			'node(around:' + 
+			g_Config.note.svgCityDistance + 
+			',' + 
+			requestLatLng + 
+			')[place="city"];' +
+			'node(around:' + 
+			g_Config.note.svgTownDistance + 
+			',' + 
+			requestLatLng + 
+			')[place="town"];' +
 			')->.l;' +
 			'node.k.l->.m;' +
 			'.m out;';
-
-		xmlHttpRequest.open ( "GET", requestUrl, true);
-		xmlHttpRequest.overrideMimeType ( 'application/json' );
-		xmlHttpRequest.send ( null );
-	
+			
+		return requestUrl;
 	}
-	
-	/*
-	--- End of _StartXMLHttpRequest function ---
-	*/
 
 	/*
-	--- m_GetPromiseSvgIcon function ----------------------------------------------------------------------------------
-
-	This function creates the SVG promise
+	--- m_GetIconAndAdress function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
+	function m_GetIconAndAdress ( onOk, onError ) {
 	
-	function m_GetPromiseSvgIcon ( iconLatLng, routeObjId ) {
-		
-		// We verify that another request is not loaded
+		function BuildIconAndAdress ( response ) {
+			m_Response = response;
+			m_createSvg ( );
+			s_RequestStarted = false;
+
+			onOk ( 
+				{ 
+					svg : m_Svg, 
+					direction : m_Direction, 
+					startStop: m_StartStop, 
+					city : m_City, 
+					place: m_Place, 
+					streets: m_PassingStreets, 
+					latLng : m_IconItineraryPoint.latLng
+				} 
+			);
+		}
+	
 		if ( s_RequestStarted ) {
-			return Promise.reject ( );
+			onError ( 'A request is already running' );
+			return;
 		}
 		s_RequestStarted = true;
+		
 
-		m_IconLatLngDistance.latLng = iconLatLng;
-		m_Route = newDataSearchEngine ( ).getRoute ( routeObjId );
 		m_Response = {};
 		m_Svg = null;
 		m_City = null;
 		
-		return new Promise ( m_StartXMLHttpRequest );
+		newHttpRequestBuilder ( ).getJsonPromise ( m_GetUrl ( ) )
+		.then ( BuildIconAndAdress  )
+		.catch ( 
+			err => { 
+				s_RequestStarted = false;
+				onError (err );
+			}
+		);
 	}
-	
+
 	/*
-	--- End of m_GetPromiseSvgIcon function ---
+	--- m_GetPromiseIconAndAdress function ----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
 	*/
+
+	function m_GetPromiseIconAndAdress ( iconLatLng, routeObjId ) {
+
+		m_IconLatLngDistance.latLng = iconLatLng;
+		m_Route = newDataSearchEngine ( ).getRoute ( routeObjId );
+		
+		return new Promise ( m_GetIconAndAdress );
+	}
 	
 	/*
 	--- svgIconFromOsmFactory object ----------------------------------------------------------------------------------
@@ -621,7 +640,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 	return Object.seal (
 		{
-			getPromiseSvgIcon : ( iconLatLng, routeObjId ) => { return m_GetPromiseSvgIcon ( iconLatLng, routeObjId ); }				
+			getPromiseIconAndAdress : ( iconLatLng, routeObjId ) => m_GetPromiseIconAndAdress ( iconLatLng, routeObjId )
 		}
 	);
 }
