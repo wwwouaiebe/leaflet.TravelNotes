@@ -85,7 +85,7 @@ function newAPIKeysManager ( ) {
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa (providerKey ) );
 			}
-			s_KeysMap.set ( providerName, providerKey );
+			m_SetKey ( providerName, providerKey );
 			let provider = g_TravelNotesData.providers.get ( providerName );
 			if ( provider ) {
 				provider.providerKey = providerKey;
@@ -120,7 +120,7 @@ function newAPIKeysManager ( ) {
 
 	function m_AddProvider ( provider ) { 
 		let providerName = provider.name.toLowerCase ( );
-		let providerKey = s_KeysMap.get ( providerName );
+		let providerKey = m_GetKey ( providerName );
 		
 		if ( provider.providerKeyNeeded && ! providerKey ) {
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
@@ -166,7 +166,12 @@ function newAPIKeysManager ( ) {
 	*/
 	
 	function m_Dialog ( ) {
-		newAPIKeysDialog ( s_KeysMap )
+		let ApiKeys = [];
+		s_KeysMap.forEach (
+			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
+		)
+		ApiKeys.sort ( function ( a, b ) { return a.providerName.localeCompare ( b.providerName ); } );
+		newAPIKeysDialog ( ApiKeys )
 		.show ( )
 		.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
 		.catch ( err => console.log ( err ? err : 'canceled by user' )); 
@@ -235,7 +240,6 @@ function newAPIKeysManager ( ) {
 	return Object.seal (
 		{
 			fromServerFile : ( ) => m_FromServerFile ( ),
-			fromSessionStorage : ( ) => m_FromSessionStorage ( ),
 			fromUrl : ( urlString ) => m_FromUrl ( urlString ),
 			dialog : ( )=> m_Dialog ( ),
 			getKey : providerName => { return m_GetKey ( providerName ); },

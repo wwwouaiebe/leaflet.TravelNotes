@@ -44,7 +44,7 @@ import { newDataEncryptor } from '../util/DataEncryptor.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newAPIKeysDialog ( APIkeysMap ) {
+function newAPIKeysDialog ( APIKeys ) {
 	
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_APIKeysDialog = null;
@@ -178,7 +178,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 			m_APIKeysDiv.removeChild( m_APIKeysDiv.firstChild );
 		}	
 		
-		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey.providerKey, APIKey.providerName ) );
+		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey ) );
 		m_APIKeysDialog.hideWait ( );
 		m_APIKeysDialog.hideError ( );
 	}
@@ -330,7 +330,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 			'click', 
 			clickEvent => {
 				clickEvent.stopPropagation ( );
-				m_CreateAPIKeyRow ( '', '' );
+				m_CreateAPIKeyRow ( { providerName : '', providerKey : ''} );
 			}, 
 			false 
 		);
@@ -343,7 +343,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateAPIKeyRow ( APIKeyValue, APIKeyName ) {
+	function m_CreateAPIKeyRow ( APIKey ) {
 		let APIKeyRow = m_HTMLElementsFactory.create ( 
 			'div',
 			{
@@ -355,7 +355,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyName TravelNotes-APIKeysDialog-Input',
-				value : APIKeyName,
+				value : APIKey.providerName,
 				placeholder : g_Translator.getText ( 'APIKeysDialog - provider name' )
 			},
 			APIKeyRow
@@ -364,7 +364,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
-				value : APIKeyValue,
+				value : APIKey.providerKey,
 				placeholder : g_Translator.getText ( 'APIKeysDialog - API key' ),
 				type: g_Config.APIKeys.showAPIKeysInDialog ? 'text' : 'password'
 			},
@@ -398,7 +398,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 	*/
 
 	function m_CreateContent ( ) {
-		APIkeysMap.forEach ( ( APIKeyValue, APIKeyName ) => m_CreateAPIKeyRow ( APIKeyValue, APIKeyName  ) );
+		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey ) );
 	}
 
 	/*

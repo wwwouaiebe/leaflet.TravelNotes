@@ -453,6 +453,8 @@ let newBaseDialog = function ( ) {
 			get footer ( ) { return m_FooterDiv;},
 			set footer ( Footer ) { m_FooterDiv = Footer; },
 			
+			get okButton ( ) { return m_OkButton; },
+			
 			show : ( ) => { return m_Show ( ) ; }
 		}
 	);

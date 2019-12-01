@@ -56,30 +56,28 @@ function newPasswordDialog ( verifyPassword ) {
 	*/
 
 	function m_OnOkButtonClick ( ) {
-		
 		m_PasswordDialog.hideError ( );
 		if ( verifyPassword ) {
 			if ( ( m_PasswordInput.value.length < 12 ) || ! m_PasswordInput.value.match ( RegExp( '[0-9]+' ) )|| ! m_PasswordInput.value.match ( RegExp( '[a-z]+' ) )|| ! m_PasswordInput.value.match ( RegExp( '[A-Z]+' ) ) || ! m_PasswordInput.value.match ( RegExp( '[^0-9a-zA-Z]' ) ) ) {
 				m_PasswordDialog.showError ( g_Translator.getText ( 'PasswordDialog - Password rules' )); 
 				m_PasswordInput.focus ( );
-				
 				return;
 			}
 		}
 		
-		document.removeEventListener ( 'keydown', m_onKeyDown, false );
+		document.removeEventListener ( 'keydown', m_OnKeyDown, false );
 		return new window.TextEncoder ( ).encode ( m_PasswordInput.value );
 	}
 	
 	/*
-	--- m_onKeyDown function ------------------------------------------------------------------------------------------
+	--- m_OnKeyDown function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_onKeyDown ( keyBoardEvent ) {
+	function m_OnKeyDown ( keyBoardEvent ) {
 		if ( 'Enter' === keyBoardEvent.key  ) {
-			m_OnOkButtonClick ( );
+			m_PasswordDialog.okButton.click ( );
 		}
 	}
 	
@@ -90,7 +88,7 @@ function newPasswordDialog ( verifyPassword ) {
 	*/
 
 	function m_OnEscape ( ) {
-		document.removeEventListener ( 'keydown', m_onKeyDown, false );
+		document.removeEventListener ( 'keydown', m_OnKeyDown, false );
 		return true;
 	}
 	
@@ -112,7 +110,7 @@ function newPasswordDialog ( verifyPassword ) {
 			},
 			m_PasswordDialog.content
 		);
-		document.addEventListener ( 'keydown', m_onKeyDown, false );
+		document.addEventListener ( 'keydown', m_OnKeyDown, false );
 		m_PasswordDialog.escapeKeyListener = m_OnEscape;
 	}
 	
