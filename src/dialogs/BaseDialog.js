@@ -102,7 +102,7 @@ let newBaseDialog = function ( ) {
 			}
 
 			document.removeEventListener ( 'keydown', m_onKeyDown, true );
-			document.getElementsByTagName('body') [0].removeChild ( document.getElementById ( "TravelNotes-BaseDialog-BackgroundDiv" ) );
+			document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
 			m_OnCancel ( 'Canceled by user' );
 		}
 	}
@@ -115,7 +115,7 @@ let newBaseDialog = function ( ) {
 
 	function m_CreateBackgroundDiv ( ) {
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', { id: 'TravelNotes-BaseDialog-BackgroundDiv', className : 'TravelNotes-BaseDialog-BackgroundDiv'} );
+		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', {  className : 'TravelNotes-BaseDialog-BackgroundDiv'} );
 		m_BackgroundDiv.addEventListener ( 
 			'dragover', 
 			( ) => { return; },
@@ -139,7 +139,6 @@ let newBaseDialog = function ( ) {
 		m_DialogDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-BaseDialog-Container',
 				className : 'TravelNotes-BaseDialog-Container',
 			},
 			m_BackgroundDiv
@@ -156,7 +155,6 @@ let newBaseDialog = function ( ) {
 		let topBar = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				id : 'TravelNotes-BaseDialog-TopBar',
 				className : 'TravelNotes-BaseDialog-TopBar',
 				draggable : true
 			},
@@ -166,7 +164,7 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				innerHTML: '&#x274c', 
-				id : 'TravelNotes-BaseDialog-CancelButton',
+				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : g_Translator.getText ( "BaseDialog - Cancel" )
 			},
 			topBar
@@ -225,7 +223,6 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-HeaderDiv',
-				id : 'TravelNotes-BaseDialog-HeaderDiv'
 			},
 			m_DialogDiv
 		);		
@@ -242,7 +239,6 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-ContentDiv',
-				id : 'TravelNotes-BaseDialog-ContentDiv'
 			},
 			m_DialogDiv
 		);
@@ -259,7 +255,6 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden',
-				id : 'TravelNotes-BaseDialog-ErrorDiv',
 			},
 			m_DialogDiv
 		);
@@ -276,7 +271,6 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				className : 'TravelNotes-BaseDialog-FooterDiv',
-				id : 'TravelNotes-BaseDialog-FooterDiv',
 			},
 			m_DialogDiv
 		);
@@ -284,8 +278,7 @@ let newBaseDialog = function ( ) {
 			'div',
 			{ 
 				innerHTML: '&#x1f4be;', 
-				id : 'TravelNotes-BaseDialog-OkButton',
-				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton-Visible'
+				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
 			},
 			m_FooterDiv
 		);
@@ -310,14 +303,12 @@ let newBaseDialog = function ( ) {
 		m_SearchWaitBulletDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id : 'TravelNotes-BaseDialog-SearchWaitBullet',
-				className: 'TravelNotes-BaseDialog-SearchWait-Hidden'
+				className: 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
 			}, 
 			m_SearchWaitDiv = m_HTMLElementsFactory.create ( 
 				'div', 
 				{ 
-					id : 'TravelNotes-BaseDialog-SearchWait', 
-					className: 'TravelNotes-BaseDialog-SearchWait-Hidden'
+					className: 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
 				},
 				m_FooterDiv 
 			)

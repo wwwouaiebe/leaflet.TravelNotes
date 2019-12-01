@@ -62,12 +62,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	cursor: grab;
 }
-#TravelNotes-BaseDialog-CancelButton
+.TravelNotes-BaseDialog-CancelButton
 {
 	background-color : white;
 	width: 1em;
 }
-#TravelNotes-BaseDialog-CancelButton:hover
+.TravelNotes-BaseDialog-CancelButton:hover
 {
 	color:red;
 }
@@ -120,11 +120,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	visibility : visible;
 }
-#TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Visible
+.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Visible
 {
 	visibility: visible;
 }
-#TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Hidden
+.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Hidden
 {
 	width : 0;
 	height : 0;
@@ -133,7 +133,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	visibility: hidden;
 	border-width: 0;
 }
-#TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Visible
+.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Visible
 {
 	margin : 1em;
 	height: 1em;
@@ -141,7 +141,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	overflow: hidden;
 	visibility: visible;
 }
-#TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Visible
+.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Visible
 {
 	background-color: red;
 	height: 100%;
@@ -153,14 +153,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 {
 	from { margin-left: 0%; } to { margin-left: calc(100% - 1em); }
 }
-#TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Hidden
+.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Hidden
 {
 	margin : 0;
 	height: 0;
 	width: 0;
 	visibility: hidden;
 }
-#TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Hidden
+.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Hidden
 {
 	height: 0;
 	width: 0;

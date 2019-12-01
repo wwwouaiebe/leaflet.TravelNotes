@@ -97,8 +97,8 @@ Promise error function for osmSearch
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function onSearchError ( error ) {
-	console.log ( error );
+function onSearchError ( err ) {
+	console.log ( err ? err : 'An error occurs in the search' );
 	s_OsmSearchStarted = false;
 }
 

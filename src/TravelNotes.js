@@ -152,7 +152,6 @@ function travelNotesFactory ( ) {
 		g_TravelNotesData.map = map;
 		
 		m_ReadURL ( );
-		g_APIKeysManager.fromSessionStorage ( );
 		
 		g_MapEditor.loadEvents ( );
 		let requestBuilder = newHttpRequestBuilder ( );
@@ -215,6 +214,7 @@ function travelNotesFactory ( ) {
 					newFileLoader ( ).openDistantFile ( values [ 2 ] );
 				}
 				else {
+					g_APIKeysManager.fromServerFile ( );
 					if ( g_Config.travelEditor.startupRouteEdition ) {
 						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
 					}
@@ -268,7 +268,6 @@ function travelNotesFactory ( ) {
 
 	function m_AddProvider ( provider ) {
 		g_APIKeysManager.addProvider ( provider );
-		console.log ( 'm_AddProvider' );
 	}
 
 	return {

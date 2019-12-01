@@ -50,6 +50,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 	let m_APIKeysDialog = null;
 	let m_ToolbarDiv = null;
 	let m_APIKeysDiv = null;
+	let m_OpenFileInput = null;
 
 	
 	/*
@@ -279,15 +280,15 @@ function newAPIKeysDialog ( APIkeysMap ) {
 			}, 
 			m_ToolbarDiv 
 		);
-		m_HTMLElementsFactory.create ( 
+		m_OpenFileInput = m_HTMLElementsFactory.create ( 
 			'input',
 			{
 				id : 'TravelNotes-APIKeysDialog-OpenFileInput', 
 				type : 'file'
 			},
 			openFileDiv
-		)
-		.addEventListener ( 
+		);
+		m_OpenFileInput.addEventListener ( 
 			'change', 
 			event => { m_OnOpenFileInputChange ( event ) }, 
 			false
@@ -311,7 +312,7 @@ function newAPIKeysDialog ( APIkeysMap ) {
 		)
 		.addEventListener ( 
 			'click' , 
-			( ) => { document.getElementById ( 'TravelNotes-APIKeysDialog-OpenFileInput' ).click ( ); }, 
+			( ) => { m_OpenFileInput.click ( ); }, 
 			false 
 		);
 		

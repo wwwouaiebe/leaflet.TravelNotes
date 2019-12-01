@@ -43,6 +43,9 @@ import { newUtilities } from '../util/Utilities.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_Config } from '../data/Config.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { newDataEncryptor } from '../util/DataEncryptor.js';
+import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 
 let s_KeysMap = new Map;
 
@@ -97,12 +100,16 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function m_FromSessionStorage ( ) {
+		let APIKeysCounter = 0;
 		for ( let counter  = 0; counter < sessionStorage.length ; counter ++ ) {
 			var keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 11 ) ) {
 				m_SetKey ( keyName.substr ( 0, keyName.length - 11), atob ( sessionStorage.getItem ( keyName ) ) );
+				APIKeysCounter ++;
 			}
 		}
+		g_TravelNotesData.providers.forEach ( provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } );
+		return APIKeysCounter;
 	}
 
 	/*
@@ -130,12 +137,12 @@ function newAPIKeysManager ( ) {
 	}
 
 	/*
-	--- m_Dialog function ---------------------------------------------------------------------------------------------
+	--- m_resetAPIKeys function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EndDialog ( APIKeys ) {
+	function m_resetAPIKeys ( APIKeys ) {
 		sessionStorage.clear ( );
 		s_KeysMap.clear ( );
 		let saveToSessionStorage = newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage;
@@ -161,10 +168,65 @@ function newAPIKeysManager ( ) {
 	function m_Dialog ( ) {
 		newAPIKeysDialog ( s_KeysMap )
 		.show ( )
-		.then ( APIKeys => m_EndDialog ( APIKeys ) )
+		.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
 		.catch ( err => console.log ( err ? err : 'canceled by user' )); 
 	}
+	
+	/*
+	--- m_OnOkDecrypt function ----------------------------------------------------------------------------------------
 
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnOkDecrypt ( data ) {
+		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) )
+		m_resetAPIKeys ( APIKeys );
+	}
+	
+	/*
+	--- m_OnErrorDecrypt function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnErrorDecrypt ( err ) {
+		console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
+	}
+
+	/*
+	--- m_OnServerFile function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnServerFile ( data ) {
+		newDataEncryptor ( ).decryptData (
+			data,		
+			m_OnOkDecrypt,
+			m_OnErrorDecrypt,
+			newPasswordDialog ( false ).show ( ) 
+		);
+	}
+	
+	/*
+	--- m_FromServerFile function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_FromServerFile ( ) {
+		if ( 0 !== m_FromSessionStorage ( ) ) {
+			newEventDispatcher ( ).dispatch ( 'providersadded' );
+			return;
+		}
+		newHttpRequestBuilder ( ).getBinaryPromise (
+			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+				'APIKeys' 
+		)
+		.then ( m_OnServerFile )
+		.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
+	}
+	
 	/*
 	--- APIKeysManager object -----------------------------------------------------------------------------------------
 
@@ -172,6 +234,7 @@ function newAPIKeysManager ( ) {
 	*/
 	return Object.seal (
 		{
+			fromServerFile : ( ) => m_FromServerFile ( ),
 			fromSessionStorage : ( ) => m_FromSessionStorage ( ),
 			fromUrl : ( urlString ) => m_FromUrl ( urlString ),
 			dialog : ( )=> m_Dialog ( ),

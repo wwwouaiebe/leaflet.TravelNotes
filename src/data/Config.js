@@ -217,9 +217,8 @@ function newConfig ( ) {
 				}
 			}
 		}
-		catch ( e ) {
-			console.log ( e );
-			console.log ( 'Not possible to overload Config' );
+		catch ( err ) {
+			console.log ( err ? err : 'Not possible to overload Config' );
 		}
 	}
 	
