@@ -1,0 +1,45 @@
+#TravelNotes-LayersToolbar
+{
+	position: absolute;
+	width: 3em;
+	top: 0px;
+	left: 0px;
+	z-index: 1200;
+}
+#TravelNotes-LayersToolbar-Header
+{
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateY(-6em) translateX(4em);
+	text-align:center;
+	width: 8em;
+	height: 2em;
+	font-size: 1em;
+	font-weight: bold;
+	color: white;
+	background-color: black;
+	padding: 0.5em;
+	margin:0;
+}
+#TravelNotes-LayersToolbar-Buttons
+{
+	margin-top: 5em;
+	background-color : white;
+	color: black;
+}
+.TravelNotes-LayersToolbar-Button
+{
+	padding: 0.5em;
+	text-align:center;
+	margin:0;
+	font-weight: bold;
+	border: 0.1em solid white;
+}
+.TravelNotes-LayersToolbar-Button > a
+{
+	text-decoration: none;
+}
+.TravelNotes-LayersToolbar-Button:hover
+{
+	cursor: pointer;
+	border: 0.1em solid black;
+}

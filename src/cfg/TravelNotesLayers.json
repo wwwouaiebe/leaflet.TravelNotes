@@ -1,0 +1,452 @@
+[
+	{
+		"service":"wmts",
+		"url":"http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png",
+		"name":"OSM - Black and White",
+		"toolbar":
+		{
+			"text":"OSM",
+			"color":"black",
+			"backgroundColor":"lightgray"
+		},
+		"providerName":"OSM",
+		"providerKeyNeeded":false,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - Transport",
+		"toolbar":
+		{
+			"text":"&#x1f686;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	},		
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - OpenCycleMap",
+		"toolbar":
+		{
+			"text":"&#x1f6b2;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - Outdoors",
+		"toolbar":
+		{
+			"text":"&#x1f6b6;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - Landscape",
+		"toolbar":
+		{
+			"text":"&#x26f0;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+		"name":"Esri - Aerial view",
+		"toolbar":
+		{
+			"text":"ESRI",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Arcgis",
+		"providerKeyNeeded":false,
+		"attribution":"| Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community "
+	},
+	{
+		"service":"wms",
+		"url":"http://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer",
+		"wmsOptions":
+		{
+			"layers":"0",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.15, 2.56 ], [ 50.95, 6.49 ] ],
+		"name":"Service Public de Wallonie - Ferraris map 1770 - 1776",
+		"toolbar":
+		{
+			"text":"1771",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"SPW",
+		"providerKeyNeeded":true,
+		"attribution":"| <a href='http://geoportail.wallonie.be/home.html' target='_blank'>Service public de Wallonie (SPW)</a>",
+		"getCapabilitiesUrl":"https://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/VDML/MapServer/WMSServer",
+		"wmsOptions":
+		{
+			"layers":"0",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.48, 2.77 ], [ 50.85, 6.15 ] ],
+		"name":"Service Public de Wallonie - Vander Maelen map - 1850",
+		"toolbar":
+		{
+			"text":"1850",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"SPW",
+		"providerKeyNeeded":true,
+		"attribution":"| <a href='http://geoportail.wallonie.be/home.html' target='_blank'>Service public de Wallonie (SPW)</a>",
+		"getCapabilitiesUrl":"https://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/VDML/MapServer/WMSServer?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://geoservices.wallonie.be/arcgis/services/PLAN_REGLEMENT/ATLAS_VV_MODIF/MapServer/WMSServer",
+		"wmsOptions":
+		{
+			"layers":"3",
+			"format":"image/png",
+			"transparent":true
+		},
+		"minZoom":14,
+		"maxZoom":18,
+		"bounds":[ [ 49.42, 2.65 ], [ 51.11, 6.65 ] ],
+		"name":"Service Public de Wallonie - Atlas de la voirie vicinale - 1841",
+		"toolbar":
+		{
+			"text":"1841",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"SPW",
+		"providerKeyNeeded":true,
+		"attribution":"| <a href='http://geoportail.wallonie.be/home.html' target='_blank'>Service public de Wallonie (SPW)</a>",
+		"getCapabilitiesUrl":"http://geoservices.wallonie.be/arcgis/services/PLAN_REGLEMENT/ATLAS_VV_MODIF/MapServer/WMSServer?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"https://geoservices.informatievlaanderen.be/raadpleegdiensten/histcart/wms",
+		"wmsOptions": 
+		{
+			"layers":"ferraris",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 51.51, 5.94 ], [ 50.64, 2.52 ] ],
+		"name":"Informatie Vlaanderen - Ferraris kaart - 1770 - 1776",
+		"toolbar":
+		{
+			"text":"1771",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IVL",
+		"providerKeyNeeded":true,
+		"attribution":"| <a href='https://overheid.vlaanderen.be/Webdiensten-Ons-GIS-aanbod' target=_blank'>Informatie Vlaanderen</a>",
+		"getCapabilitiesUrl":"https://geoservices.informatievlaanderen.be/raadpleegdiensten/histcart/wms?request=getcapabilities&version=1.3.0&service=wms"
+	},
+	{
+		"service":"wms",
+		"url":"https://geoservices.informatievlaanderen.be/raadpleegdiensten/histcart/wms",
+		"wmsOptions":
+		{
+			"layers":"vandermaelen",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 51.51, 5.94 ], [ 50.64, 2.52 ] ],
+		"name":"Informatie Vlaanderen - Vander Maelen kaart - 1850",
+		"toolbar":
+		{
+			"text":"1850",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IVL",
+		"providerKeyNeeded":true,
+		"attribution":"| <a href='https://overheid.vlaanderen.be/Webdiensten-Ons-GIS-aanbod' target=_blank'>Informatie Vlaanderen</a>",
+		"getCapabilitiesUrl":"https://geoservices.informatievlaanderen.be/raadpleegdiensten/histcart/wms?request=getcapabilities&version=1.3.0&service=wms"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service",
+		"wmsOptions": 
+		{
+			"layers":"map1873",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1873",
+		"toolbar":
+		{
+			"text":"1873",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service",
+		"wmsOptions":
+		{
+			"layers":"map1904",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1904",
+		"toolbar":
+		{
+			"text":"1904",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service", 
+		"wmsOptions":
+		{
+			"layers":"map1939",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1939",
+		"toolbar":
+		{
+			"text":"1939",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service",
+		"wmsOptions":
+		{
+			"layers":"map1969",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1969",
+		"toolbar":
+		{
+			"text":"1969",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service",
+		"wmsOptions":
+		{
+			"layers":"map1981",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1981",
+		"toolbar":
+		{
+			"text":"1981",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wms",
+		"url":"http://wms.ngi.be/inspire/cartesius/service",
+		"wmsOptions":
+		{
+			"layers":"map1989",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.43, 2.44 ], [ 51.55, 6.45 ] ],
+		"name":"IGN-NGI - Belgium 1989",
+		"toolbar":
+		{
+			"text":"1989",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"https://wms.ngi.be/inspire/cartesius/service?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wmts",
+		"url":"https://www.ngi.be/cartoweb/1.0.0/topo/default/3857/{z}/{y}/{x}.png",
+		"minZoom":7,
+		"maxZoom":17,
+		"bounds":[ [ 49.49, 2.54 ], [ 51.51, 6.41 ] ],
+		"name":"IGN-NGI - Belgium now",
+		"toolbar":
+		{
+			"text":"2019",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"IGN",
+		"providerKeyNeeded":true,
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"getCapabilitiesUrl":"http://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
+	},
+	{
+		"service":"wmts",
+		"url":"https://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg", 
+		"bounds":[ [ 59.44507, 19.08325 ], [ 70.0988, 31.62826 ] ],
+		"name":"Maanmittauslaitos - Finland",
+		"minZoom":2,
+		"maxZoom":19,
+		"toolbar":
+		{
+			"text":"FI",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Maanmittauslaitos",
+		"providerKeyNeeded":false,
+		"attribution":"| <a href='https://www.maanmittauslaitos.fi/en/' target='_blank'>Maanmittauslaitos</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?SERVICE=WMS&srs=epsg:3857&layers=norgeskart_bakgrunn&zoom={z}&x={x}&y={y}", 
+		"bounds":[ [ 56.84, 1.40 ], [ 82.00, 40.00 ] ],
+		"name":"Kartverket - Norway",
+		"toolbar":
+		{
+			"text":"N",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Kartverket",
+		"providerKeyNeeded":false,
+		"attribution":"| <a href='https://kartverket.no/' target='_blank'>Kartverket</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/{providerKey}/1.0.0/topowebb/default/3857/{z}/{y}/{x}.png",
+		"maxZoom":15,
+		"bounds":[ [ 53.9061, 6.31918 ], [ 72.0992, 29.2857 ] ],
+		"name":"Lantmäteriet - Sweden",
+		"toolbar":
+		{
+			"text":"SE",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Lantmateriet",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='https://www.lantmateriet.se/' target='_blank'>Lantmäteriet</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token={providerKey}",
+		"name":"Mapbox - Streets",
+		"toolbar":
+		{
+			"text":"M",
+			"color":"lightblue",
+			"backgroundColor":"white"
+		},
+		"providerName":"Mapbox",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token={providerKey}",
+		"name":"Mapbox - Outdoors",
+		"toolbar":
+		{
+			"text":"M",
+			"color":"lightblue",
+			"backgroundColor":"lightyellow"
+		},
+		"providerName":"Mapbox",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={providerKey}",
+		"name":"Mapbox - Light",
+		"toolbar":
+		{
+			"text":"M",
+			"color":"lightblue",
+			"backgroundColor":"lightgray"
+		},
+		"providerName":"Mapbox",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+	},
+	{
+		"service":"wmts",
+		"url":"https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token={providerKey}",
+		"name":"Mapbox - Dark",
+		"toolbar":
+		{
+			"text":"M",
+			"color":"lightblue",
+			"backgroundColor":"black"
+		},
+		"providerName":"Mapbox",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+	}
+]

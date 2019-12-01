@@ -41,6 +41,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 		- Issue #63 : Find a better solution for provider keys upload
+		- Issue #75 : Merge Maps and TravelNotes
 Doc reviewed 20191127
 Tests ...
 
@@ -68,7 +69,8 @@ import { newEventDispatcher } from './util/EventDispatcher.js';
 import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
-
+import { newAutoLoader } from './UI/AutoLoader.js';
+import { newLayersToolbarUI } from './UI/LayersToolbarUI.js';
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
@@ -178,7 +180,7 @@ function travelNotesFactory ( ) {
 				if ( m_Langage ) {
 					values [ 0 ].language = m_Langage;
 				}
-				g_Config.overload ( values [ 0 ] );
+				//g_Config.overload ( values [ 0 ] );
 				
 				// translations adaptation
 				g_Translator.setTranslations ( values [ 1 ] );
@@ -215,6 +217,10 @@ function travelNotesFactory ( ) {
 				}
 				else {
 					g_APIKeysManager.fromServerFile ( );
+					if ( g_Config.layersToolbarUI.haveLayersToolbarUI ) {
+						newLayersToolbarUI ( ).createUI ( );
+					}
+
 					if ( g_Config.travelEditor.startupRouteEdition ) {
 						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
 					}
@@ -366,6 +372,17 @@ try {
 catch ( err ) {
 	console.log ( err ? err : 'An error occurs when loading TravelNotes' );
 }
+
+newHttpRequestBuilder ( ).getJsonPromise ( 
+	window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+	'TravelNotesConfig.json' 
+)
+.then ( 
+	config => {
+		g_Config.overload ( config );
+		newAutoLoader ( );
+	}
+);
 
 /*
 --- End of TravelNotes.js file ----------------------------------------------------------------------------------------

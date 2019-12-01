@@ -27,6 +27,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
+		- Issue #75 : Merge Maps and TravelNotes
 Doc reviewed 20191121
 Tests ...
 
@@ -47,6 +48,22 @@ Patterns : Closure and Singleton
 function newConfig ( ) {
 
 	let m_Config = {
+		autoLoad : false,
+		map :
+		{
+			center: {
+				lat: 50.50923,
+				lng: 5.49542
+			},
+			zoom: 12
+		},
+		layersToolbarUI : {
+			haveLayersToolbarUI : true,
+			toolbarTimeOut : 1500
+		},
+		mouseUI : {
+			haveMouseUI : true
+		},
 		APIKeys : {
 			showDialogButton : true,
 			saveToSessionStorage : true,
@@ -257,6 +274,10 @@ function newConfig ( ) {
 	*/
 
 	return {
+		get autoLoad ( ) { return m_Config.autoLoad; },
+		get map ( ) { return m_Config.map; },
+		get layersToolbarUI ( ) { return m_Config.layersToolbarUI; },
+		get mouseUI ( ) { return m_Config.mouseUI; },
 		get APIKeys ( ) { return m_Config.APIKeys; },
 		get contextMenu ( ) { return m_Config.contextMenu; },
 		get errorMessages ( ) { return m_Config.errorMessages; },

@@ -1,4 +1,20 @@
 {
+	"autoLoad":true,
+	"map":
+	{
+		"center": {
+			"lat":50.50923,
+			"lng":5.49542
+		},
+		"zoom":12
+	},
+	"layersToolbarUI": {
+		"haveLayersToolbarUI":true,
+		"toolbarTimeOut":1500
+	},
+	"mouseUI": {
+		"haveMouseUI":true
+	},
 	"APIKeys":
 	{
 		"showDialogButton":true,
