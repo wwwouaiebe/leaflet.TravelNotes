@@ -59,7 +59,13 @@ function newConfig ( ) {
 		},
 		layersToolbarUI : {
 			haveLayersToolbarUI : true,
-			toolbarTimeOut : 1500
+			toolbarTimeOut : 1500,
+			contactMail : "https://github.com/wwwouaiebe",
+			theDevil: {
+				addButton: false,
+				title: "Reminder! The devil will know everything about you",
+				text: "&#x1f47f;"
+			}
 		},
 		mouseUI : {
 			haveMouseUI : true

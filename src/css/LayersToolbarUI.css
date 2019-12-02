@@ -5,6 +5,10 @@
 	top: 0px;
 	left: 0px;
 	z-index: 1200;
+	display: flex;
+	flex-direction:column;
+	height: auto;
+	max-height :100vh;
 }
 #TravelNotes-LayersToolbar-Header
 {
@@ -19,12 +23,16 @@
 	background-color: black;
 	padding: 0.5em;
 	margin:0;
+	flex-shrink : 0;
 }
 #TravelNotes-LayersToolbar-Buttons
 {
-	margin-top: 5em;
+	/*margin-top: 5em;*/
 	background-color : white;
 	color: black;
+	flex-shrink:2;
+	flex-grow: 2;
+	overflow: hidden;
 }
 .TravelNotes-LayersToolbar-Button
 {
@@ -32,11 +40,17 @@
 	text-align:center;
 	margin:0;
 	font-weight: bold;
+	height: 1.1em;
 }
 .TravelNotes-LayersToolbar-Button > a
 {
 	text-decoration: none;
 }
+.TravelNotes-LayersToolbar-Button > a:hover
+{
+	text-decoration: none;
+}
+
 .TravelNotes-LayersToolbar-Button:hover
 {
 	cursor: pointer;

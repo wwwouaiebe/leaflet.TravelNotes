@@ -232,6 +232,10 @@
 		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2019</a>"
 	},
 	{
+		"msgid" : "LayersToolbarUI - Layers",
+		"msgstr" : "Maps"
+	},
+	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
 		"msgstr" : "Address&nbsp;:"
 	},
