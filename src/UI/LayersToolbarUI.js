@@ -30,12 +30,12 @@ Tests ...
 
 export { newLayersToolbarUI };
 
-//import { g_Config } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
 import { g_APIKeysManager } from '../core/APIKeysManager.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------
@@ -63,30 +63,98 @@ let s_Layers = [
 
 let s_TimerId = null;
 
+/*
+--- newLayersToolbarUI function ---------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 function newLayersToolbarUI ( ) {
 
 	let m_LayersToolbar = null;
 	let m_LayersToolbarButtonsDiv = null;
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( );
+	let m_EventDispatcher = newEventDispatcher ( );
+
+	/*
+	--- m_OnMouseEnterLayerButton function ----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnMouseEnterLayerButton ( event ) {
+		event.target.setAttribute ( 'style', "color:" + event.target.layer.toolbar.backgroundColor + ";background-color:" + event.target.layer.toolbar.color ); 
+	}
 	
+	/*
+	--- m_OnMouseLeaveLayerButton function ----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnMouseLeaveLayerButton ( event ) {
+		event.target.setAttribute ( 'style', "color:" + event.target.layer.toolbar.color + ";background-color:" + event.target.layer.toolbar.backgroundColor ); 
+	}
+	
+	/*
+	--- m_OnClickLayerButton function ---------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnClickLayerButton ( event ) {
+		m_EventDispatcher.dispatch ( 'layerchange', { layer : event.target.layer } );
+	}
+	
+	/*
+	--- m_CreateLayerButton function ----------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
  
 	function m_CreateLayerButton ( layer ) {
 		if ( layer.providerKeyNeeded && ! g_APIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
 			return;
 		}
-		m_HtmlElementsFactory.create ( 
+		let layerButton = m_HtmlElementsFactory.create ( 
 			'div',
 			{
 				className : 'TravelNotes-LayersToolbar-Button',
 				title : layer.name,
-				name : layer.name,
+				layer : layer,
 				innerHTML : layer.toolbar.text,
 				style : "color:" + layer.toolbar.color + ";background-color:" + layer.toolbar.backgroundColor
 			},
 			m_LayersToolbarButtonsDiv
 		);
+		layerButton.addEventListener ( 'mouseenter', m_OnMouseEnterLayerButton, false );
+		layerButton.addEventListener ( 'mouseleave', m_OnMouseLeaveLayerButton, false );
+		layerButton.addEventListener ( 'click', m_OnClickLayerButton, false );
 	}
 	
+	/*
+	--- m_OnTimeOutToolbar function -----------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnTimeOutToolbar ( ) {
+		let buttons = m_LayersToolbarButtonsDiv.childNodes;
+		for ( let counter = 0; counter < buttons.length; counter++ ) {
+			buttons [ counter ].removeEventListener ( 'mouseenter', m_OnMouseEnterLayerButton, false ); 
+			buttons [ counter ].removeEventListener ( 'mouseleave', m_OnMouseLeaveLayerButton, false );
+			buttons [ counter ].removeEventListener ( 'click', m_OnClickLayerButton, false );
+		}
+		m_LayersToolbar.removeChild ( m_LayersToolbarButtonsDiv );
+		s_TimerId = null;
+	}
+	
+	/*
+	--- m_CreateLayersToolbar function --------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_CreateLayersToolbar ( ) {
 		m_LayersToolbar = m_HtmlElementsFactory.create ( 
 			'div',
@@ -103,7 +171,6 @@ function newLayersToolbarUI ( ) {
 			},
 			m_LayersToolbar
 		);
-		
 		m_LayersToolbar.addEventListener (
 			'mouseenter',
 			( ) => {
@@ -125,21 +192,20 @@ function newLayersToolbarUI ( ) {
 		);
 		m_LayersToolbar.addEventListener (
 			'mouseleave',
-			( ) => {
-				s_TimerId = setTimeout (
-					( ) => {
-						m_LayersToolbar.removeChild ( m_LayersToolbarButtonsDiv );
-						s_TimerId = null;
-					},
-					g_Config.layersToolbarUI.toolbarTimeOut || 1500
-				);
-			},
+			( ) => { s_TimerId = setTimeout ( m_OnTimeOutToolbar, g_Config.layersToolbarUI.toolbarTimeOut || 1500 ); },
 			false
 		);
 		
-		
+		m_EventDispatcher.dispatch ( 'layerchange', { layer : s_Layers [ 0 ] } );
+
 	}
 	
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_CreateUI ( ) {
 		
 		newHttpRequestBuilder ( ).getJsonPromise ( 
@@ -151,6 +217,12 @@ function newLayersToolbarUI ( ) {
 		.finally ( m_CreateLayersToolbar );
 	}
 	
+	/*
+	--- LayersToolbarUI object ----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	return Object.seal (
 		{
 			createUI : ( ) => m_CreateUI ( )

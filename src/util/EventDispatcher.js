@@ -78,6 +78,7 @@ function newEventDispatcher ( ) {
 			case 'addwaypoint':
 			case 'redrawnote':
 			case 'addnote':
+			case 'layerchange':
 				return document;
 			default:
 				return null;

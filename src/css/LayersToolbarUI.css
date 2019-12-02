@@ -32,7 +32,6 @@
 	text-align:center;
 	margin:0;
 	font-weight: bold;
-	border: 0.1em solid white;
 }
 .TravelNotes-LayersToolbar-Button > a
 {
@@ -41,5 +40,4 @@
 .TravelNotes-LayersToolbar-Button:hover
 {
 	cursor: pointer;
-	border: 0.1em solid black;
 }

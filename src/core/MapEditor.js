@@ -61,6 +61,8 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
+import { g_APIKeysManager } from '../core/APIKeysManager.js';
+
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -101,6 +103,7 @@ function newMapEditor ( ) {
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
+	let m_CurrentLayer = null;
 	
 	function m_loadEvents ( ) {
 		document.addEventListener (
@@ -272,6 +275,67 @@ function newMapEditor ( ) {
 			},
 			false
 		);
+		document.addEventListener (
+			'layerchange',
+			event => {if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ) } }
+		);
+	}
+	
+	/*
+	--- m_SetLayer function -------------------------------------------------------------------------------------------
+
+	This function add a leaflet object to the leaflet map and to the JavaScript map
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_SetLayer ( layer ) {
+
+		let url = layer.url;
+		if ( layer.providerKeyNeeded ) {
+			let providerKey = g_APIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
+			if ( providerKey ) {
+				url = url.replace ( '{providerKey}', providerKey );
+			}
+			else{
+				return;
+			}
+		}
+		
+		let leafletLayer = null;
+		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
+			leafletLayer = L.tileLayer ( url );
+		}
+		else{
+			leafletLayer = L.tileLayer.wms( url, layer.wmsOptions );
+		}
+		
+		if ( m_CurrentLayer ) {
+			g_TravelNotesData.map.removeLayer ( m_CurrentLayer );
+		}
+		g_TravelNotesData.map.addLayer ( leafletLayer );
+		m_CurrentLayer = leafletLayer;
+		
+		if ( g_TravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
+			g_TravelNotesData.map.setZoom ( layer.minZoom || 0 )
+		}
+		g_TravelNotesData.map.setMinZoom ( layer.minZoom || 0 );
+		if ( g_TravelNotesData.map.getZoom ( ) > ( layer.maxZoom || 18 ) ) {
+			g_TravelNotesData.map.setZoom ( layer.maxZoom || 18 )
+		}
+		g_TravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
+		if ( layer.bounds ) {
+			if ( ! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds ) || g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds ) ) {
+				g_TravelNotesData.map.setMaxBounds ( null );
+				g_TravelNotesData.map.fitBounds ( layer.bounds );
+				g_TravelNotesData.map.setZoom ( layer.minZoom || 0 );
+			}
+			g_TravelNotesData.map.setMaxBounds ( layer.bounds );
+		}
+		else {
+			g_TravelNotesData.map.setMaxBounds ( null );
+		}
+		g_TravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
 	}
 	
 	/*
@@ -942,7 +1006,9 @@ function newMapEditor ( ) {
 			
 			addNote : ( note, readOnly ) => m_AddNote ( note, readOnly ),
 			
-			loadEvents : ( ) => m_loadEvents ( ) 
+			loadEvents : ( ) => m_loadEvents ( ),
+			
+			setLayer : ( layer ) => m_SetLayer ( layer )
 			
 		}
 	);
