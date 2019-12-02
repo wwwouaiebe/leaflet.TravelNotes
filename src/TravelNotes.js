@@ -70,7 +70,8 @@ import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
 import { newAutoLoader } from './UI/AutoLoader.js';
-import { newLayersToolbarUI } from './UI/LayersToolbarUI.js';
+import { gc_LayersToolbarUI } from './UI/LayersToolbarUI.js';
+import { gc_MouseUI } from './UI/MouseUI.js';
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
@@ -218,9 +219,11 @@ function travelNotesFactory ( ) {
 				else {
 					g_APIKeysManager.fromServerFile ( );
 					if ( g_Config.layersToolbarUI.haveLayersToolbarUI ) {
-						newLayersToolbarUI ( ).createUI ( );
+						gc_LayersToolbarUI.createUI ( );
 					}
-
+					if ( g_Config.mouseUI.haveMouseUI ) {
+						gc_MouseUI.createUI ( );
+					}
 					if ( g_Config.travelEditor.startupRouteEdition ) {
 						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
 					}

@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- LayersToolbarUI.js file -------------------------------------------------------------------------------------------
 This file contains:
 	- the newLayersToolbarUI function
+	- the gc_LayersToolbarUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -28,7 +29,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newLayersToolbarUI };
+export { gc_LayersToolbarUI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
@@ -229,6 +230,8 @@ function newLayersToolbarUI ( ) {
 		}
 	);
 }
+
+const gc_LayersToolbarUI = newLayersToolbarUI ( );
 
 	
 /*
