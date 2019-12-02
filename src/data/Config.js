@@ -60,7 +60,7 @@ function newConfig ( ) {
 		layersToolbarUI : {
 			haveLayersToolbarUI : true,
 			toolbarTimeOut : 1500,
-			contactMail : "https://github.com/wwwouaiebe",
+			contactMail : "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues",
 			theDevil: {
 				addButton: false,
 				title: "Reminder! The devil will know everything about you",

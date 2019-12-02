@@ -38,12 +38,7 @@ import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_APIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-
-/*
---- newLayersToolbarUI function ---------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------------------------------
-*/
+import { gc_AttributionsUI } from '../UI/AttributionsUI.js';
 
 let s_Layers = [
 	{
@@ -117,6 +112,7 @@ function newLayersToolbarUI ( ) {
 
 	function m_OnClickLayerButton ( event ) {
 		m_EventDispatcher.dispatch ( 'layerchange', { layer : event.target.layer } );
+		gc_AttributionsUI.attributions = event.target.layer.attribution;
 	}
 	
 	/*
@@ -294,6 +290,7 @@ function newLayersToolbarUI ( ) {
 		);
 		
 		m_EventDispatcher.dispatch ( 'layerchange', { layer : s_Layers [ 0 ] } );
+		gc_AttributionsUI.attributions = s_Layers [ 0 ].attribution;
 
 	}
 	

@@ -72,6 +72,9 @@ import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
 import { newAutoLoader } from './UI/AutoLoader.js';
 import { gc_LayersToolbarUI } from './UI/LayersToolbarUI.js';
 import { gc_MouseUI } from './UI/MouseUI.js';
+import { gc_AttributionsUI } from './UI/AttributionsUI.js';
+
+gc_AttributionsUI
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
@@ -212,6 +215,8 @@ function travelNotesFactory ( ) {
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );
 
+				gc_AttributionsUI.createUI ( );
+				
 				if ( m_TravelUrl ) {
 					// loading travel...
 					newFileLoader ( ).openDistantFile ( values [ 2 ] );
