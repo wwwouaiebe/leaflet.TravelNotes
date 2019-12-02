@@ -1,4 +1,4 @@
-#TravelNotes-LayersToolbar
+#TravelNotes-LayersToolbarUI
 {
 	position: absolute;
 	width: 3em;
@@ -10,7 +10,7 @@
 	height: auto;
 	max-height :100vh;
 }
-#TravelNotes-LayersToolbar-Header
+#TravelNotes-LayersToolbarUI-Header
 {
 	transform-origin: bottom right;
 	transform: rotateZ(-90deg) translateY(-6em) translateX(4em);
@@ -25,7 +25,7 @@
 	margin:0;
 	flex-shrink : 0;
 }
-#TravelNotes-LayersToolbar-Buttons
+#TravelNotes-LayersToolbarUI-Buttons
 {
 	/*margin-top: 5em;*/
 	background-color : white;
@@ -34,7 +34,7 @@
 	flex-grow: 2;
 	overflow: hidden;
 }
-.TravelNotes-LayersToolbar-Button
+.TravelNotes-LayersToolbarUI-Button
 {
 	padding: 0.5em;
 	text-align:center;
@@ -42,16 +42,26 @@
 	font-weight: bold;
 	height: 1.1em;
 }
-.TravelNotes-LayersToolbar-Button > a
+.TravelNotes-LayersToolbarUI-LinkButton-Enter
+{
+	color: white;
+	background-color: black;
+}
+.TravelNotes-LayersToolbarUI-LinkButton-Leave
+{
+	color: black;
+	background-color: white;
+}
+.TravelNotes-LayersToolbarUI-Button > a
 {
 	text-decoration: none;
 }
-.TravelNotes-LayersToolbar-Button > a:hover
+.TravelNotes-LayersToolbarUI-Button > a:hover
 {
 	text-decoration: none;
 }
 
-.TravelNotes-LayersToolbar-Button:hover
+.TravelNotes-LayersToolbarUI-Button:hover
 {
 	cursor: pointer;
 }

@@ -101,6 +101,14 @@ function newLayersToolbarUI ( ) {
 		event.target.setAttribute ( 'style', "color:" + event.target.layer.toolbar.color + ";background-color:" + event.target.layer.toolbar.backgroundColor ); 
 	}
 	
+	function m_OnMouseEnterLinkButton ( event ) {
+		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
+		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
+	}
+	function m_OnMouseLeaveLinkButton ( event ) {
+		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
+		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
+	}
 	/*
 	--- m_OnClickLayerButton function ---------------------------------------------------------------------------------
 
@@ -125,7 +133,7 @@ function newLayersToolbarUI ( ) {
 			'div',
 			{
 				type: 'layer',
-				className : 'TravelNotes-LayersToolbar-Button',
+				className : 'TravelNotes-LayersToolbarUI-Button',
 				title : layer.name,
 				layer : layer,
 				innerHTML : layer.toolbar.text,
@@ -151,11 +159,13 @@ function newLayersToolbarUI ( ) {
 			'div',
 			{
 				type : 'link',
-				className : 'TravelNotes-LayersToolbar-Button',
+				className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave',
 				innerHTML : '<a href="' + href + '" title="' + title + '" target="_blank">' + text + '</a>',
 			},
 			m_LayersToolbarButtonsDiv
 		);
+		linkButton.addEventListener ( 'mouseenter', m_OnMouseEnterLinkButton, false );
+		linkButton.addEventListener ( 'mouseleave', m_OnMouseLeaveLinkButton, false );
 		m_ButtonsHeight += linkButton.clientHeight;
 	}
 	
@@ -172,6 +182,10 @@ function newLayersToolbarUI ( ) {
 				buttons [ counter ].removeEventListener ( 'mouseenter', m_OnMouseEnterLayerButton, false ); 
 				buttons [ counter ].removeEventListener ( 'mouseleave', m_OnMouseLeaveLayerButton, false );
 				buttons [ counter ].removeEventListener ( 'click', m_OnClickLayerButton, false );
+			}
+			else {
+				buttons [ counter ].removeEventListener ( 'mouseenter', m_OnMouseEnterLinkButton, false );
+				buttons [ counter ].removeEventListener ( 'mouseleave', m_OnMouseEnterLinkButton, false );
 			}
 		}
 		m_LayersToolbarButtonsDiv.removeEventListener ( 'wheel', m_OnWheelToolbar, false );
@@ -210,7 +224,7 @@ function newLayersToolbarUI ( ) {
 		m_LayersToolbarButtonsDiv = m_HtmlElementsFactory.create ( 
 			'div',
 			{
-				id : 'TravelNotes-LayersToolbar-Buttons'
+				id : 'TravelNotes-LayersToolbarUI-Buttons'
 			},
 			m_LayersToolbar
 		);
@@ -256,14 +270,14 @@ function newLayersToolbarUI ( ) {
 		m_LayersToolbar = m_HtmlElementsFactory.create ( 
 			'div',
 			{
-				id : 'TravelNotes-LayersToolbar'
+				id : 'TravelNotes-LayersToolbarUI'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
 		m_HtmlElementsFactory.create ( 
 			'div',
 			{
-				id : 'TravelNotes-LayersToolbar-Header',
+				id : 'TravelNotes-LayersToolbarUI-Header',
 				innerHTML : g_Translator.getText ( 'LayersToolbarUI - Layers' )
 			},
 			m_LayersToolbar
