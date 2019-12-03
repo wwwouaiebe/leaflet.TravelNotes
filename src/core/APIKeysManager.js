@@ -22,20 +22,13 @@ This file contains:
 	- the g_APIKeysManager object
 Changes:
 	- v1.6.0:
-		- created from TravelEditor
+		- created
 Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-/*
---- newAPIKeysManager function ----------------------------------------------------------------------------------------
-
-Patterns : Closure
-
------------------------------------------------------------------------------------------------------------------------
-*/
 export { g_APIKeysManager };
 
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
@@ -48,6 +41,14 @@ import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 
 let s_KeysMap = new Map;
+
+/*
+--- newAPIKeysManager function ----------------------------------------------------------------------------------------
+
+Patterns : Closure
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
 
 function newAPIKeysManager ( ) {
 	

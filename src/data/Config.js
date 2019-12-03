@@ -70,6 +70,17 @@ function newConfig ( ) {
 		mouseUI : {
 			haveMouseUI : true
 		},
+		geoLocation : {
+				color : "red",
+				radius : 11,
+				zoomToPosition : true,
+				zoomFactor : 17,
+				options : {
+					enableHighAccuracy : false, 
+					maximumAge : 0, 
+					timeout : Infinity 
+				}
+		},
 		APIKeys : {
 			showDialogButton : true,
 			saveToSessionStorage : true,

@@ -8,7 +8,8 @@
 		},
 		"zoom":12
 	},
-	"layersToolbarUI": {
+	"layersToolbarUI":
+	{
 		"haveLayersToolbarUI":true,
 		"toolbarTimeOut":1500,
 		"contactMail":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues",
@@ -18,8 +19,20 @@
 			"text": "&#x1f47f;"
 		}
 	},
-	"mouseUI": {
+	"mouseUI":
+	{
 		"haveMouseUI":true
+	},
+	"geoLocation":{
+			"color":"red",
+			"radius":10,
+			"zoomToPosition":true,
+			"zoomFactor":17,
+			"options":{
+				"enableHighAccuracy":false, 
+				"maximumAge":0, 
+				"timeout":Infinity
+			}
 	},
 	"APIKeys":
 	{
