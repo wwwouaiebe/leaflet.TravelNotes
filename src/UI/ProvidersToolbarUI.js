@@ -34,8 +34,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { gc_ProvidersToolbarUI };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';

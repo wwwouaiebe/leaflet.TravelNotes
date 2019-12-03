@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newAboutDialog };
 
 import { g_Translator } from '../UI/Translator.js';

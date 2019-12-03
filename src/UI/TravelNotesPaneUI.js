@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newTravelNotesPaneUI };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';

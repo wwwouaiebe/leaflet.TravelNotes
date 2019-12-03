@@ -33,8 +33,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newErrorEditorUI };
 
 import { g_Translator } from '../UI/Translator.js';

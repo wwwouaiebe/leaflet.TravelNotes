@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { gc_UI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';

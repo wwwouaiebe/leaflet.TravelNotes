@@ -48,8 +48,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 import { g_Translator } from './UI/Translator.js';
 import { g_Config } from './data/Config.js';
 import { g_TravelNotesData } from './data/TravelNotesData.js';

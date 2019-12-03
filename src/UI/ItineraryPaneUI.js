@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newItineraryPaneUI };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';

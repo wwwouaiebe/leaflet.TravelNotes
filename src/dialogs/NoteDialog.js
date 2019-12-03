@@ -41,8 +41,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newNoteDialog };
 
 import { g_Translator } from '../UI/Translator.js';

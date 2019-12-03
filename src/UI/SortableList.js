@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 	
-'use strict';
-
 export { newSortableList };
 
 import { g_Translator } from '../UI/Translator.js';

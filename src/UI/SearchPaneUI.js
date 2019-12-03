@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newSearchPaneUI };
 
 import { g_Translator } from '../UI/Translator.js';

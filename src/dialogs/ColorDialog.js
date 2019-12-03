@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newColorDialog };
 
 import { g_Translator } from '../UI/Translator.js';

@@ -36,8 +36,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newGeoCoder };
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { g_Config } from '../data/Config.js';

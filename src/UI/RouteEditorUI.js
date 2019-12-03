@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { gc_RouteEditorUI };
 
 import { g_Translator } from '../UI/Translator.js';

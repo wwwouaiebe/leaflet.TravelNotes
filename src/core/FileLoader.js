@@ -33,8 +33,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newFileLoader };
 
 import { polyline } from '../polyline/Polyline.js';

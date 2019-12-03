@@ -37,8 +37,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newHTMLViewsFactory };
 
 import { g_Translator } from '../UI/Translator.js';

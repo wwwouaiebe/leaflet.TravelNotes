@@ -33,8 +33,6 @@ Tests ...
 
 /*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-'use strict';
-
 export { newTravel };
 
 import { newObjId } from '../data/ObjId.js';

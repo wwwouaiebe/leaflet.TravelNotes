@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newDataSearchEngine };
 
 import { g_TravelNotesData } from '../data/TravelNotesData.js';

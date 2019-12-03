@@ -36,8 +36,6 @@ Tests ...
 
 /*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-'use strict';
-
 export { newRoute };
 import { g_Config } from '../data/Config.js';
 

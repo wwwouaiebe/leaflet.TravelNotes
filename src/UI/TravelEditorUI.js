@@ -42,9 +42,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
-
 export { gc_TravelEditorUI };
 
 import { g_Translator } from '../UI/Translator.js';

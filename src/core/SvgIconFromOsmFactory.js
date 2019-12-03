@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-'use strict';
-
 export { newSvgIconFromOsmFactory };
 
 import { g_Config } from '../data/Config.js';

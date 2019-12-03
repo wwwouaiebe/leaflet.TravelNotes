@@ -36,8 +36,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 	
-'use strict';
-
 export { newRoutePropertiesDialog };
 
 import { g_Translator } from '../UI/Translator.js';
