@@ -34,6 +34,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #68 : Review all existing promises.
+		- Issue #76 : Add a devil button in the noteDialog.
 Doc reviewed 20191124
 Tests ...
 
@@ -780,7 +781,20 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : g_Translator.getText ( 'NoteDialog - Link' )
+				innerHTML : ( g_Config.layersToolbarUI.theDevil.addButton ?
+					( '<a href="https://www.google.com/maps/@' +
+					note.lat.toFixed ( 6 ) +
+					',' +
+					note.lng.toFixed ( 6 ) + 
+					',' + 
+					17 + 
+					'z" target="_blank" title="' + 
+					g_Config.layersToolbarUI.theDevil.title +
+					'" >' +
+					g_Config.layersToolbarUI.theDevil.text +
+					'</a> ' )
+					: '' ) +
+					g_Translator.getText ( 'NoteDialog - Link' )
 			},
 			m_NoteDataDiv
 		);

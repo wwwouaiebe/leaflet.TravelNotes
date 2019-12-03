@@ -277,7 +277,7 @@ let newBaseDialog = function ( ) {
 		m_OkButton = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				innerHTML: '&#x1f4be;', 
+				innerHTML: '&#x1f197;', 
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
 			},
 			m_FooterDiv
