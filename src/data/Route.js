@@ -137,7 +137,7 @@ function newRoute ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['name', 'wayPoints', 'notes', 'itinerary', 'width', 'color', 'dashArray', 'chain', 'distance', 'duration', 'edited', 'hidden', 'chainedDistance', 'objId' ].forEach (
+		[ 'name', 'wayPoints', 'notes', 'itinerary', 'width', 'color', 'dashArray', 'chain', 'distance', 'duration', 'edited', 'hidden', 'chainedDistance', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -213,7 +213,7 @@ function newRoute ( ) {
 			get notes ( ) { return m_Notes; },
 
 			get name ( ) { return m_Name; },
-			set name ( Name ) { m_Name = Name;},
+			set name ( Name ) { m_Name = Name; },
 
 			get width ( ) { return m_Width; },
 			set width ( Width ) { m_Width = Width; },

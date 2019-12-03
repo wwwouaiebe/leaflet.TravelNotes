@@ -13,5 +13,9 @@
         "sourceType": "module"
     },
     "rules": {
+		"array-bracket-newline" : [ "error" , "consistent" ],
+		"array-bracket-spacing" : [ "error" , "always" ],
+		"array-element-newline" : [ "error" , "consistent" ],
+		"block-spacing" : [ "error" , "always" ]
     }
 }

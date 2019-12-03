@@ -81,7 +81,7 @@ function newItineraryPoint ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['lat', 'lng', 'distance', 'objId' ].forEach (
+		[ 'lat', 'lng', 'distance', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -130,16 +130,16 @@ function newItineraryPoint ( ) {
 	return Object.seal (
 		{
 
-			get lat ( ) { return m_Lat;},
+			get lat ( ) { return m_Lat; },
 			set lat ( Lat ) { m_Lat = Lat; },
 
-			get lng ( ) { return m_Lng;},
+			get lng ( ) { return m_Lng; },
 			set lng ( Lng ) { m_Lng = Lng; },
 
-			get latLng ( ) { return [ m_Lat, m_Lng ];},
+			get latLng ( ) { return [ m_Lat, m_Lng ]; },
 			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
 
-			get distance ( ) { return m_Distance;},
+			get distance ( ) { return m_Distance; },
 			set distance ( Distance ) { m_Distance = Distance; },
 
 			get objId ( ) { return m_ObjId; },

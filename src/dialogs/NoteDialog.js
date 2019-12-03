@@ -408,7 +408,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 			g_AllButtonsAndIcons.preDefinedIconsList.push ( { name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), icon : '', tooltip : '', width : 40, height : 40 } );
 		}
 
-		g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name );} );
+		g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name ); } );
 		let elementCounter = 0;
 		for ( elementCounter = m_PredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
 			m_PredefinedIconsSelect.remove ( elementCounter );

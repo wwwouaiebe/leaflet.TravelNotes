@@ -86,7 +86,7 @@ function newManeuver ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
+		[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -139,19 +139,19 @@ function newManeuver ( ) {
 	return Object.seal (
 		{
 			
-			get iconName ( ) { return m_IconName;},
+			get iconName ( ) { return m_IconName; },
 			set iconName ( IconName ) { m_IconName = IconName; },
 
-			get instruction ( ) { return m_Instruction;},
+			get instruction ( ) { return m_Instruction; },
 			set instruction ( Instruction ) { m_Instruction = Instruction; },
 
-			get itineraryPointObjId ( ) { return m_ItineraryPointObjId;},
+			get itineraryPointObjId ( ) { return m_ItineraryPointObjId; },
 			set itineraryPointObjId ( ItineraryPointObjId ) { m_ItineraryPointObjId = ItineraryPointObjId; },
 
-			get distance ( ) { return m_Distance;},
+			get distance ( ) { return m_Distance; },
 			set distance ( Distance ) { m_Distance = Distance; },
 
-			get duration ( ) { return m_Duration;},
+			get duration ( ) { return m_Duration; },
 			set duration ( Duration ) { m_Duration = Duration; },
 
 			get objId ( ) { return m_ObjId; },

@@ -102,10 +102,23 @@ function newNote ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['iconHeight', 'iconWidth', 'iconContent', 'popupContent',
-		'tooltipContent', 'phone', 'url', 'address',
-		'iconLat', 'iconLng', 'lat', 'lng',
-		'distance', 'chainedDistance', 'objId' ].forEach (
+		[ 
+			'iconHeight',
+			'iconWidth',
+			'iconContent',
+			'popupContent',
+			'tooltipContent',
+			'phone',
+			'url',
+			'address',
+			'iconLat',
+			'iconLng',
+			'lat',
+			'lng',
+			'distance',
+			'chainedDistance',
+			'objId'
+		].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -178,46 +191,46 @@ function newNote ( ) {
 
 			get isRouteNote ( ) { return m_Distance !== -1; },
 
-			get iconHeight ( ) { return m_IconHeight;},
+			get iconHeight ( ) { return m_IconHeight; },
 			set iconHeight ( IconHeight ) { m_IconHeight = IconHeight; },
 
-			get iconWidth ( ) { return m_IconWidth;},
+			get iconWidth ( ) { return m_IconWidth; },
 			set iconWidth ( IconWidth ) { m_IconWidth = IconWidth; },
 
-			get iconContent ( ) { return m_IconContent;},
+			get iconContent ( ) { return m_IconContent; },
 			set iconContent ( IconContent ) { m_IconContent = IconContent; },
 
-			get popupContent ( ) { return m_PopupContent;},
+			get popupContent ( ) { return m_PopupContent; },
 			set popupContent ( PopupContent ) { m_PopupContent = PopupContent; },
 
-			get tooltipContent ( ) { return m_TooltipContent;},
+			get tooltipContent ( ) { return m_TooltipContent; },
 			set tooltipContent ( TooltipContent ) { m_TooltipContent = TooltipContent; },
 
-			get phone ( ) { return m_Phone;},
+			get phone ( ) { return m_Phone; },
 			set phone ( Phone ) { m_Phone = Phone; },
 
-			get url ( ) { return m_Url;},
+			get url ( ) { return m_Url; },
 			set url ( Url ) { m_Url = Url; },
 
-			get address ( ) { return m_Address;},
+			get address ( ) { return m_Address; },
 			set address ( Address ) { m_Address = Address; },
 
-			get iconLat ( ) { return m_IconLat;},
+			get iconLat ( ) { return m_IconLat; },
 			set iconLat ( IconLat ) { m_IconLat = IconLat; },
 
-			get iconLng ( ) { return m_IconLng;},
+			get iconLng ( ) { return m_IconLng; },
 			set iconLng ( IconLng ) { m_IconLng = IconLng; },
 
-			get iconLatLng ( ) { return [ m_IconLat, m_IconLng ];},
+			get iconLatLng ( ) { return [ m_IconLat, m_IconLng ]; },
 			set iconLatLng ( IconLatLng ) { m_IconLat = IconLatLng [ 0 ]; m_IconLng = IconLatLng [ 1 ]; },
 
-			get lat ( ) { return m_Lat;},
+			get lat ( ) { return m_Lat; },
 			set lat ( Lat ) { m_Lat = Lat; },
 
-			get lng ( ) { return m_Lng;},
+			get lng ( ) { return m_Lng; },
 			set lng ( Lng ) { m_Lng = Lng; },
 
-			get latLng ( ) { return [ m_Lat, m_Lng ];},
+			get latLng ( ) { return [ m_Lat, m_Lng ]; },
 			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
 
 			get distance ( ) { return m_Distance; },

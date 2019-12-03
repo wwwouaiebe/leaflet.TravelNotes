@@ -144,7 +144,7 @@ function newDataEncryptor ( ) {
 		function returnValue ( cipherText ) {
 			onOk ( 
 				new Blob(
-					[ivBytes, new Uint8Array ( cipherText ) ],
+					[ ivBytes, new Uint8Array ( cipherText ) ],
 					{type: "application/octet-stream"}
 				)
 			);

@@ -283,7 +283,7 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'layerchange',
-			event => {if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ); } }
+			event => { if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ); } }
 		);
 		document.addEventListener ( 
 			'geolocationpositionchanged',
@@ -394,7 +394,7 @@ function newMapEditor ( ) {
 	*/
 
 	function m_GetLatLngBounds ( latLngs ) {
-		let sw = L.latLng ( [ 90, 180] );
+		let sw = L.latLng ( [ 90, 180 ] );
 		let ne = L.latLng ( [ -90, -180 ] );
 		latLngs.forEach ( 
 			latLng => {
@@ -865,7 +865,7 @@ function newMapEditor ( ) {
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
 					if ( null != route ) {
 						// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
-						let latLngDistance = m_Geometry.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng] );
+						let latLngDistance = m_Geometry.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ] );
 						// coordinates and distance are changed in the note
 						note.latLng = latLngDistance.latLng;
 						note.distance = latLngDistance.distance;
@@ -902,7 +902,7 @@ function newMapEditor ( ) {
 		let icon = L.divIcon (
 			{ 
 				iconSize: [ note.iconWidth, note.iconHeight ], 
-				iconAnchor: [note.iconWidth / 2, note.iconHeight / 2 ],
+				iconAnchor: [ note.iconWidth / 2, note.iconHeight / 2 ],
 				popupAnchor: [ 0, - note.iconHeight / 2 ], 
 				html : note.iconContent,
 				className : g_Config.note.style

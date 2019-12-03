@@ -94,7 +94,7 @@ function newTravel ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
+		[ 'name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -162,7 +162,7 @@ function newTravel ( ) {
 			set readOnly ( ReadOnly ) { m_ReadOnly = ReadOnly; },
 
 			get userData ( ) { return m_UserData; },
-			set userData ( UserData ) { m_UserData = UserData;},
+			set userData ( UserData ) { m_UserData = UserData; },
 
 			get objId ( ) { return m_ObjId; },
 

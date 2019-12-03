@@ -83,7 +83,7 @@ function newItinerary ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		['itineraryPoints', 'maneuvers', 'provider', 'transitMode', 'objId' ].forEach (
+		[ 'itineraryPoints', 'maneuvers', 'provider', 'transitMode', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw 'No ' + property + ' for ' + s_ObjType.name;
@@ -161,7 +161,7 @@ function newItinerary ( ) {
 
 			get objType ( ) { return s_ObjType; },
 
-			get object ( ) { return m_GetObject ( );},
+			get object ( ) { return m_GetObject ( ); },
 			set object ( something ) { m_SetObject ( something ); }
 			
 		}

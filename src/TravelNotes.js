@@ -292,7 +292,7 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId );}, 
+		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId ); }, 
 		
 		/*
 		--- addProvider method ----------------------------------------------------------------------------------------
@@ -331,8 +331,8 @@ function travelNotesFactory ( ) {
 
 		get baseDialog ( ) { return newBaseDialog ( ); },
 
-		get userData ( ) { return g_TravelNotesData.travel.userData;},
-		set userData ( userData ) { g_TravelNotesData.travel.userData = userData;},
+		get userData ( ) { return g_TravelNotesData.travel.userData; },
+		set userData ( userData ) { g_TravelNotesData.travel.userData = userData; },
 		
 		get rightContextMenu ( ) { return m_HaveRightContextMenu; },
 		set rightContextMenu ( RightContextMenu ) { 
@@ -359,14 +359,14 @@ function travelNotesFactory ( ) {
 		},
 		
 		get leftUserContextMenu ( ) { return m_LeftUserContextMenuData; },
-		set leftUserContextMenu ( LeftUserContextMenu ) {m_LeftUserContextMenuData = LeftUserContextMenu; },
+		set leftUserContextMenu ( LeftUserContextMenu ) { m_LeftUserContextMenuData = LeftUserContextMenu; },
 		
 		get rightUserContextMenu ( ) { return m_RightUserContextMenuData; },
-		set rightUserContextMenu ( RightUserContextMenu ) {m_RightUserContextMenuData = RightUserContextMenu; },
+		set rightUserContextMenu ( RightUserContextMenu ) { m_RightUserContextMenuData = RightUserContextMenu; },
 		
 		get maneuver ( ) { return newManeuver ( ); },
 		
-		get itineraryPoint ( ) { return newItineraryPoint ( );},
+		get itineraryPoint ( ) { return newItineraryPoint ( ); },
 		
 		get version ( ) { return currentVersion; }
 	};

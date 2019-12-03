@@ -442,13 +442,13 @@ let newBaseDialog = function ( ) {
 			get title ( ) { return m_HeaderDiv.innerHTML; },
 			set title ( Title ) { m_HeaderDiv.innerHTML = Title; },
 
-			get header ( ) { return m_HeaderDiv;},
+			get header ( ) { return m_HeaderDiv; },
 			set header ( Header ) { m_HeaderDiv = Header; },
 			
-			get content ( ) { return m_ContentDiv;},
+			get content ( ) { return m_ContentDiv; },
 			set content ( Content ) { m_ContentDiv = Content; },
 
-			get footer ( ) { return m_FooterDiv;},
+			get footer ( ) { return m_FooterDiv; },
 			set footer ( Footer ) { m_FooterDiv = Footer; },
 			
 			get okButton ( ) { return m_OkButton; },
