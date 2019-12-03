@@ -480,6 +480,10 @@
 		"msgstr" : "Déplacer vers le haut"
 	},
 	{
+		"msgid" : "TravelEditorUI - API keys",
+		"msgstr" : "Gestion des clés d'accès"
+	},
+	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
@@ -498,6 +502,10 @@
 	{
 		"msgid" : "TravelEditorUI - Expand the list",
 		"msgstr" : "Étendre"
+	},
+	{
+		"msgid" : "TravelEditorUI - Geo location",
+		"msgstr" : "Localisation"
 	},
 	{
 		"msgid" : "TravelEditorUI - Hide",

@@ -28,6 +28,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
+		- Issue #75 : Merge Maps and TravelNotes
 Doc reviewed 20191125
 Tests ...
 
@@ -113,8 +114,7 @@ function newUI ( ) {
 		
 		m_MainDiv.addEventListener ( 
 			'click',
-			function ( event ) {
-
+			event => {
 				if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
 					return; 
 				}
@@ -129,7 +129,7 @@ function newUI ( ) {
 		
 		m_MainDiv.addEventListener ( 
 			'dblclick',
-			function ( event ) {
+			event => {
 				event.stopPropagation ( );
 				event.preventDefault ( );
 			},
@@ -138,9 +138,16 @@ function newUI ( ) {
 		
 		m_MainDiv.addEventListener ( 
 			'wheel',
-			function ( event ) {
+			event => {
 				event.stopPropagation ( );
 				event.preventDefault ( );
+			},
+			false
+		);
+		document.addEventListener ( 
+			'geolocationstatuschanged',
+			event => {
+				gc_TravelEditorUI.geoLocationStatusChanged ( event.data.status );
 			},
 			false
 		);

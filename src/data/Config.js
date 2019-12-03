@@ -314,6 +314,7 @@ function newConfig ( ) {
 		get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
 		get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
 		get nominatim ( ) { return m_Config.nominatim; },
+		get geoLocation ( ) { return m_Config.geoLocation },
 		
 		overload : newConfig => m_Overload ( newConfig )
 		

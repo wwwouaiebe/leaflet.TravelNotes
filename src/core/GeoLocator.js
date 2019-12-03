@@ -35,8 +35,8 @@ Patterns : Closure
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-export { newGeoLocator };
-//import { newEventDispatcher } from '../util/EventDispatcher.js';
+export { gc_GeoLocator };
+import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { g_Config } from '../data/Config.js';
 
 /*
@@ -49,8 +49,9 @@ Patterns : Closure
 
 function newGeoLocator ( ) {
 
-	let m_Status = 0; // ( 0 unknown or disabled, 1 available but not working, 2 working )
+	let m_Status = 0; // ( -1 refused by user, 0 disabled (http or not working ), 1 available but not working, 2 working )
 	let m_WatchId = null;
+	let m_EventDispatcher = newEventDispatcher ( );
 	
 	/*
 	--- m_ShowPosition function ---------------------------------------------------------------------------------------
@@ -59,7 +60,20 @@ function newGeoLocator ( ) {
 	*/
 
 	function m_ShowPosition ( position ) {
-		console.log ( position );
+		m_EventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } )
+	}
+	
+	/*
+	--- m_Error function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_Error ( positionError ) {
+		if ( 1 === positionError.code ) { // access not allowed by user
+			m_Status = -1;
+		}
+		m_Stop ( );
 	}
 	
 	/*
@@ -70,9 +84,9 @@ function newGeoLocator ( ) {
 
 	function m_Start ( ) {
 		m_Status = 2;
-		navigator.geolocation.getCurrentPosition ( m_ShowPosition , m_Stop, g_Config.options );
-		m_WatchId = navigator.geolocation.watchPosition ( m_ShowPosition, m_Stop );
-		
+		m_EventDispatcher.dispatch ( 'geolocationstatuschanged', { status : m_Status } );
+		navigator.geolocation.getCurrentPosition ( m_ShowPosition, m_Error, g_Config.geoLocation.options );
+		m_WatchId = navigator.geolocation.watchPosition ( m_ShowPosition, m_Error, g_Config.geoLocation.options );
 	}
 	
 	/*
@@ -82,10 +96,12 @@ function newGeoLocator ( ) {
 	*/
 
 	function m_Stop ( ) {
-		m_Status = 1;
-		if ( m_WatchId ) {
-			navigator.geolocation.clearWatch ( m_WatchId );
+		if ( 2 === m_Status ) {
+			m_Status = 1;
 		}
+		//if ( m_WatchId ) FF: the m_WatchId is always 0 so we cannot use m_WatchId to see if the geolocation is running
+		m_EventDispatcher.dispatch ( 'geolocationstatuschanged', { status : m_Status } );
+		navigator.geolocation.clearWatch ( m_WatchId );
 		m_WatchId = null;
 	}
 
@@ -96,11 +112,8 @@ function newGeoLocator ( ) {
 	*/
 
 	function m_Switch ( ) {
-		
 		switch ( m_Status )
 		{
-			case 0:
-				break;
 			case 1:
 				m_Start ( );
 				break;
@@ -114,7 +127,7 @@ function newGeoLocator ( ) {
 		return m_Status;
 	}
 	
-	m_Status = ( "geolocation" in navigator ) ? 0 : 1;
+	m_Status = ( "geolocation" in navigator ) ? 1 : 0;
 	
 	/*
 	--- GeoLocator object ---------------------------------------------------------------------------------------------
@@ -129,6 +142,8 @@ function newGeoLocator ( ) {
 		}
 	);
 }
+
+const gc_GeoLocator = newGeoLocator ( );
 
 /*
 --- End of GeoLocator.js file -----------------------------------------------------------------------------------------

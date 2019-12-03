@@ -480,6 +480,10 @@
 		"msgstr" : "Move up"
 	},
 	{
+		"msgid" : "TravelEditorUI - API keys",
+		"msgstr" : "API keys management"
+	},
+	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "It's impossible to remove an edited route"
 	},
@@ -498,6 +502,10 @@
 	{
 		"msgid" : "TravelEditorUI - Expand the list",
 		"msgstr" : "Expand"
+	},
+	{
+		"msgid" : "TravelEditorUI - Geo location",
+		"msgstr" : "Localisation"
 	},
 	{
 		"msgid" : "TravelEditorUI - Hide",

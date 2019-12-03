@@ -35,6 +35,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
+		- Issue #75 : Merge Maps and TravelNotes
 Doc reviewed 20191125
 Tests ...
 
@@ -57,6 +58,8 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
 import { g_APIKeysManager } from '../core/APIKeysManager.js';
+import { gc_GeoLocator } from '../core/GeoLocator.js';
+
 let m_RoutesList = null;
 
 /*
@@ -76,6 +79,7 @@ function newTravelEditorUI ( ) {
 	*/
 	
 	let m_TimerId = null;
+	let m_GeoLocationButton = null;
 	
 	function m_OnMouseEnterControl ( ) {
 		if ( m_TimerId ) {
@@ -94,6 +98,23 @@ function newTravelEditorUI ( ) {
 			},
 			g_Config.travelEditor.timeout
 		);
+	}
+	
+	function m_OnGeoLocationStatusChanged ( status ) {
+		switch ( status ) {
+			case 1:
+				m_GeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
+				break;
+			case 2:
+				m_GeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
+				break;
+			default:
+				if ( m_GeoLocationButton ) {
+					m_GeoLocationButton.parentNode.removeChild ( m_GeoLocationButton );
+					m_GeoLocationButton = null;
+				}
+				break;
+		}
 	}
 
 	/*
@@ -468,6 +489,27 @@ function newTravelEditorUI ( ) {
 				false 
 			);
 		}
+		if ( 0 < gc_GeoLocator.status ) {
+			//GeoLocator button
+			m_GeoLocationButton = htmlElementsFactory.create ( 
+				'div', 
+				{ 
+					id : 'TravelNotes-Control-GeoLocatorButton', 
+					className: 'TravelNotes-Control-Button', 
+					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ), 
+					innerHTML : '&#x1f310;'
+				}, 
+				buttonsDiv 
+			);
+			m_GeoLocationButton.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					gc_GeoLocator.switch ( );
+				}, 
+				false 
+			);
+		}
 		
 		// add route button
 		htmlElementsFactory.create ( 
@@ -525,7 +567,9 @@ function newTravelEditorUI ( ) {
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
 			
-			setRoutesList : (  ) => m_SetRoutesList ( )
+			setRoutesList : (  ) => m_SetRoutesList ( ),
+			
+			geoLocationStatusChanged : ( status ) => m_OnGeoLocationStatusChanged ( status )
 		}
 	);
 }

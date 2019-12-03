@@ -79,6 +79,8 @@ function newEventDispatcher ( ) {
 			case 'redrawnote':
 			case 'addnote':
 			case 'layerchange':
+			case 'geolocationstatuschanged':
+			case 'geolocationpositionchanged':
 				return document;
 			default:
 				return null;

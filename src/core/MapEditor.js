@@ -37,6 +37,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 		- Issue #70 : Put the get...HTML functions outside of the editors
+		- Issue #75 : Merge Maps and TravelNotes
 Doc reviewed 20191121
 Tests ...
 
@@ -104,6 +105,13 @@ function newMapEditor ( ) {
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
 	let m_CurrentLayer = null;
+	let m_GeolocationCircle = null;
+	
+	/*
+	--- m_loadEvents function -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 	
 	function m_loadEvents ( ) {
 		document.addEventListener (
@@ -277,8 +285,18 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'layerchange',
-			event => {if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ) } }
+			event => {if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ); } }
 		);
+		document.addEventListener ( 
+			'geolocationpositionchanged',
+			event => { if ( event.data ) { g_MapEditor.onGeolocationPositionChanged ( event.data.position ); } },
+			false
+		)
+		document.addEventListener ( 
+			'geolocationstatuschanged',
+			event => { if ( event.data ) { g_MapEditor.onGeolocationStatusChanged ( event.data.status ); } },
+			false
+		)
 	}
 	
 	/*
@@ -966,6 +984,52 @@ function newMapEditor ( ) {
 	}
 	
 	/*
+	--- m_OnGeolocationStatusChanged function -----------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_OnGeolocationStatusChanged ( status ) {
+		if ( 2 === status ) {
+			return;
+		}
+		if ( m_GeolocationCircle ) {
+			g_TravelNotesData.map.removeLayer ( m_GeolocationCircle );
+			m_GeolocationCircle = null;
+		}
+	}
+	
+	/*
+	--- m_OnGeolocationPositionChanged function -----------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+	
+	function m_OnGeolocationPositionChanged ( position ) {
+		let zoomToPosition = g_Config.geoLocation.zoomToPosition;
+		if ( m_GeolocationCircle ) {
+			g_TravelNotesData.map.removeLayer ( m_GeolocationCircle );
+			zoomToPosition = false;
+		}
+
+		m_GeolocationCircle = L.circleMarker ( 
+			L.latLng( position.coords.latitude, position.coords.longitude ),
+			{
+				radius : g_Config.geoLocation.radius,
+				color : g_Config.geoLocation.color
+			}
+		)
+		.bindTooltip (
+				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
+		)
+		.addTo ( g_TravelNotesData.map );
+		
+		if ( zoomToPosition ) {
+			g_TravelNotesData.map.setView ( L.latLng( position.coords.latitude, position.coords.longitude ), g_Config.geoLocation.zoomFactor );
+		}
+	}
+	
+	/*
 	--- MapEditor object ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -1008,7 +1072,11 @@ function newMapEditor ( ) {
 			
 			loadEvents : ( ) => m_loadEvents ( ),
 			
-			setLayer : ( layer ) => m_SetLayer ( layer )
+			setLayer : ( layer ) => m_SetLayer ( layer ),
+			
+			onGeolocationStatusChanged : ( status ) => m_OnGeolocationStatusChanged ( status ),
+			
+			onGeolocationPositionChanged : ( position ) => m_OnGeolocationPositionChanged ( position )
 			
 		}
 	);

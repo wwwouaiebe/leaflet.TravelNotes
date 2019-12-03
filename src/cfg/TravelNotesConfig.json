@@ -31,7 +31,7 @@
 			"options":{
 				"enableHighAccuracy":false, 
 				"maximumAge":0, 
-				"timeout":Infinity
+				"timeout":3600000
 			}
 	},
 	"APIKeys":
