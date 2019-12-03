@@ -91,6 +91,10 @@ Changes:
 {
 	margin-left: auto;
 }
+#TravelNotes-Control-TravelNotesToolbarDiv
+{
+	margin-top: 0.5em;
+}
 
 /* --- buttons ---*/
 
@@ -108,6 +112,16 @@ Changes:
 .TravelNotes-Control-Button:hover
 {
 	border-color: black;
+}
+
+.TravelNotes-Control-Button > a
+{
+	text-decoration: none;
+	color: black;
+}
+.TravelNotes-Control-Button > a:visited
+{
+	color: black;
 }
 .TravelNotes-Control-ExpandButton
 {

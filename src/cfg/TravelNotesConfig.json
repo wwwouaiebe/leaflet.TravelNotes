@@ -8,11 +8,14 @@
 		},
 		"zoom":12
 	},
+	"travelNotesToolbarUI":
+	{
+		"contactMail":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+	},
 	"layersToolbarUI":
 	{
 		"haveLayersToolbarUI":true,
 		"toolbarTimeOut":1500,
-		"contactMail":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues",
 		"theDevil": {
 			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",

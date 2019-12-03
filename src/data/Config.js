@@ -57,6 +57,10 @@ function newConfig ( ) {
 			},
 			zoom: 12
 		},
+		travelNotesToolbarUI:
+		{
+			contactMail:"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+		},
 		layersToolbarUI : {
 			haveLayersToolbarUI : true,
 			toolbarTimeOut : 1500,
@@ -293,6 +297,7 @@ function newConfig ( ) {
 	return {
 		get autoLoad ( ) { return m_Config.autoLoad; },
 		get map ( ) { return m_Config.map; },
+		get travelNotesToolbarUI ( ) { return m_Config.travelNotesToolbarUI; },
 		get layersToolbarUI ( ) { return m_Config.layersToolbarUI; },
 		get mouseUI ( ) { return m_Config.mouseUI; },
 		get APIKeys ( ) { return m_Config.APIKeys; },

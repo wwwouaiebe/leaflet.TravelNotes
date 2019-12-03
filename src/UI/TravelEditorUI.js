@@ -57,8 +57,6 @@ import { g_TravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
-import { g_APIKeysManager } from '../core/APIKeysManager.js';
-import { gc_GeoLocator } from '../core/GeoLocator.js';
 
 let m_RoutesList = null;
 
@@ -78,64 +76,9 @@ function newTravelEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	let m_TimerId = null;
-	let m_GeoLocationButton = null;
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_ControlDiv = null;
-	let m_PinButton = null;
-	/*
-	--- m_OnMouseEnterControl function -------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_OnMouseEnterControl ( ) {
-		if ( m_TimerId ) {
-			clearTimeout ( m_TimerId );
-			m_TimerId = null;
-		}
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
-	}
-	
-	/*
-	--- m_CreateUIm_OnMouseLeaveControlfunction -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_OnMouseLeaveControl ( ) {
-		m_TimerId = setTimeout (
-			( ) => {
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
-			},
-			g_Config.travelEditor.timeout
-		);
-	}
-	
-	/*
-	--- m_OnGeoLocationStatusChanged function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function m_OnGeoLocationStatusChanged ( status ) {
-		switch ( status ) {
-			case 1:
-				m_GeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
-				break;
-			case 2:
-				m_GeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
-				break;
-			default:
-				if ( m_GeoLocationButton ) {
-					m_GeoLocationButton.parentNode.removeChild ( m_GeoLocationButton );
-					m_GeoLocationButton = null;
-				}
-				break;
-		}
-	}
 	
 	/*
 	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------
@@ -186,34 +129,6 @@ function newTravelEditorUI ( ) {
 				className : 'TravelNotes-Control-HeaderText'
 			},
 			headerDiv 
-		);
-	
-		// pin button
-		m_PinButton = m_HTMLElementsFactory.create (
-			'span',
-			{ 
-				innerHTML : '&#x274c;', 
-				id : 'TravelNotes-Control-PinButton', 
-			},
-			headerDiv
-		);
-		m_PinButton.addEventListener ( 
-			'click', 
-			event => {
-				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
-				if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
-					event.target.innerHTML = '&#x1f4cc;';
-					control.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-					control.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
-				}
-				else
-				{
-					event.target.innerHTML = '&#x274c;';
-					control.removeEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-					control.removeEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
-				}
-			}, 
-			false 
 		);
 	}
 	
@@ -486,55 +401,12 @@ function newTravelEditorUI ( ) {
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 				className: 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-				innerHTML : '<a id="TravelNotes-Control-OpenTravelRoadbookLink" href="TravelNotesRoadbook.html?lng=' + g_Config.language +
+				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' + g_Config.language +
 					'&page=' + g_TravelNotesData.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
 			}, 
 			buttonsDiv
 		);
-		
-		if ( g_Config.APIKeys.showDialogButton ) {
-			//API keys button
-			m_HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-ApiKeysButton', 
-					className: 'TravelNotes-Control-Button', 
-					title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
-					innerHTML : '&#x1f511;'
-				}, 
-				buttonsDiv 
-			)
-			.addEventListener ( 
-				'click', 
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					g_APIKeysManager.dialog ( );
-				}, 
-				false 
-			);
-		}
-		if ( 0 < gc_GeoLocator.status ) {
-			//GeoLocator button
-			m_GeoLocationButton = m_HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-GeoLocatorButton', 
-					className: 'TravelNotes-Control-Button', 
-					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ), 
-					innerHTML : '&#x1f310;'
-				}, 
-				buttonsDiv 
-			);
-			m_GeoLocationButton.addEventListener ( 
-				'click', 
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					gc_GeoLocator.switch ( );
-				}, 
-				false 
-			);
-		}
-		
+				
 		// add route button
 		m_HTMLElementsFactory.create ( 
 			'div', 
@@ -578,15 +450,6 @@ function newTravelEditorUI ( ) {
 		
 		m_CreateButtonsDiv ( )
 		
-		if ( g_Config.travelEditor.startMinimized ) {
-			m_PinButton.innerHTML = '&#x1f4cc;';
-			m_ControlDiv.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-			m_ControlDiv.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
-			m_ControlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
-		}
-		else {
-			m_ControlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
-		}
 	}
 	
 	/*
@@ -615,9 +478,7 @@ function newTravelEditorUI ( ) {
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
 			
-			setRoutesList : (  ) => m_SetRoutesList ( ),
-			
-			geoLocationStatusChanged : ( status ) => m_OnGeoLocationStatusChanged ( status )
+			setRoutesList : (  ) => m_SetRoutesList ( )
 		}
 	);
 }

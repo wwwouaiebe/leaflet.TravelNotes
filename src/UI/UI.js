@@ -45,6 +45,7 @@ import { gc_RouteEditorUI } from '../UI/RouteEditorUI.js';
 import { gc_DataPanesUI } from '../UI/DataPanesUI.js';
 import { gc_ProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
+import { gc_TravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js'
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------
@@ -72,6 +73,7 @@ function newUI ( ) {
 		m_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
 		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
 		
+		gc_TravelNotesToolbarUI.createUI ( m_MainDiv );
 		gc_TravelEditorUI.createUI ( m_MainDiv ); 
 		gc_RouteEditorUI.createUI ( m_MainDiv ); 
 		gc_DataPanesUI.createUI ( m_MainDiv ); 
@@ -118,7 +120,17 @@ function newUI ( ) {
 				if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
 					return; 
 				}
-				if ( event.target.id && -1 !== [ "TravelNotes-Control-OpenTravelInput", "TravelNotes-Control-OpenTravelButton", "TravelNotes-Control-ImportTravelInput", "TravelNotes-Control-ImportTravelButton", "TravelNotes-Control-OpenTravelRoadbookLink" ].indexOf ( event.target.id ) ) {
+				if  ( event.target.classList.contains (  "TravelNotes-Control-LinkButton" ) ) {
+					return; 
+				}
+				if ( event.target.id && -1 !== 
+					[ 
+						"TravelNotes-Control-OpenTravelInput", 
+						"TravelNotes-Control-OpenTravelButton", 
+						"TravelNotes-Control-ImportTravelInput", 
+						"TravelNotes-Control-ImportTravelButton", 
+					].indexOf ( event.target.id ) 
+				) {
 					return;
 				}
 				event.stopPropagation ( );
@@ -147,7 +159,7 @@ function newUI ( ) {
 		document.addEventListener ( 
 			'geolocationstatuschanged',
 			event => {
-				gc_TravelEditorUI.geoLocationStatusChanged ( event.data.status );
+				gc_TravelNotesToolbarUI.geoLocationStatusChanged ( event.data.status );
 			},
 			false
 		);

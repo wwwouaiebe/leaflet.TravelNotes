@@ -241,9 +241,6 @@ function newLayersToolbarUI ( ) {
 				g_Config.layersToolbarUI.theDevil.text
 			);
 		}
-		m_CreateLinkButton ( 'https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides', 'TravelNotes help', '?');
-		m_CreateLinkButton ( g_Config.layersToolbarUI.contactMail || window.location.origin, 'Contact', '&#x1f4e7;');
-		m_CreateLinkButton ( window.location.origin, 'Home', '&#x1f3e0;');
 
 		m_ButtonTop += m_ButtonHeight;
 		m_MarginTop = m_ButtonTop;
