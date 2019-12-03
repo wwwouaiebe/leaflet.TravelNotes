@@ -58,35 +58,28 @@ This function creates the UI
 */
 
 function newRouteEditorUI ( ) {
-			
-	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
 	
+	let m_ControlDiv = null;
+	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	
+	/*
+	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){ 
-
-		if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
-			return;
-		}
-		
-		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
-		
-		// header div
-		let headerDiv = htmlElementsFactory.create (
+	function m_CreateHeaderDiv ( ) {
+		let headerDiv = m_HTMLElementsFactory.create (
 			'div',
 			{ 
 				id : 'TravelNotes-Control-RouteHeaderDiv',
 				className : 'TravelNotes-Control-HeaderDiv'
 			},
-			controlDiv
+			m_ControlDiv
 		);
 
 		// expand button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'span', 
 			{ 
 				innerHTML : '&#x25bc;',
@@ -113,7 +106,7 @@ function newRouteEditorUI ( ) {
 		);
 		
 		// title
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'span', 
 			{ 
 				innerHTML : 
@@ -123,15 +116,22 @@ function newRouteEditorUI ( ) {
 			},
 			headerDiv 
 		);
+	}
+	
+	/*
+	--- m_CreateDataDiv function --------------------------------------------------------------------------------------
 
-		// data div
-		let dataDiv = htmlElementsFactory.create ( 
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateDataDiv ( ) {
+		let dataDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-Control-RouteDataDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
-			controlDiv
+			m_ControlDiv
 		);
 		
 		// wayPoints list
@@ -183,19 +183,27 @@ function newRouteEditorUI ( ) {
 			}, 
 			false 
 		);
+	}
+	
+	/*
+	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
 
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateButtonsDiv ( ) {
 		// buttons div
-		let buttonsDiv = htmlElementsFactory.create ( 
+		let buttonsDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-RouteButtonsDiv', 
 				className : 'TravelNotes-Control-ButtonsDiv'
 			},
-			controlDiv
+			m_ControlDiv
 		);
 		
 		// expand list button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ExpandWayPointsListButton', 
@@ -218,7 +226,7 @@ function newRouteEditorUI ( ) {
 		);
 
 		// cancel route button
-		htmlElementsFactory.create (
+		m_HTMLElementsFactory.create (
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-CancelRouteButton',
@@ -238,7 +246,7 @@ function newRouteEditorUI ( ) {
 		);
 		
 		// save route button
-		htmlElementsFactory.create (
+		m_HTMLElementsFactory.create (
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SaveRouteButton',
@@ -257,7 +265,7 @@ function newRouteEditorUI ( ) {
 			false );
 		
 		// gpx button
-		htmlElementsFactory.create (
+		m_HTMLElementsFactory.create (
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-gpxButton',
@@ -277,7 +285,7 @@ function newRouteEditorUI ( ) {
 		);
 		
 		// reverse wayPoints button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-Control-ReverseWayPointsButton', 
@@ -297,7 +305,7 @@ function newRouteEditorUI ( ) {
 		);
 				
 		// remove all wayPoints button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-RemoveAllWayPointsButton', 
@@ -315,6 +323,27 @@ function newRouteEditorUI ( ) {
 			}, 
 			false
 		);
+	}
+			
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	This function creates the UI
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateUI ( controlDiv ){ 
+
+		if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
+			return;
+		}
+		
+		m_ControlDiv = controlDiv;
+		
+		m_CreateHeaderDiv ( );
+		m_CreateDataDiv ( );
+		m_CreateButtonsDiv ( );
 	}
 
 	/*

@@ -80,7 +80,15 @@ function newTravelEditorUI ( ) {
 	
 	let m_TimerId = null;
 	let m_GeoLocationButton = null;
-	
+	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let m_ControlDiv = null;
+	let m_PinButton = null;
+	/*
+	--- m_OnMouseEnterControl function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_OnMouseEnterControl ( ) {
 		if ( m_TimerId ) {
 			clearTimeout ( m_TimerId );
@@ -90,6 +98,12 @@ function newTravelEditorUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
 	}
 	
+	/*
+	--- m_CreateUIm_OnMouseLeaveControlfunction -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_OnMouseLeaveControl ( ) {
 		m_TimerId = setTimeout (
 			( ) => {
@@ -100,6 +114,12 @@ function newTravelEditorUI ( ) {
 		);
 	}
 	
+	/*
+	--- m_OnGeoLocationStatusChanged function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_OnGeoLocationStatusChanged ( status ) {
 		switch ( status ) {
 			case 1:
@@ -116,35 +136,25 @@ function newTravelEditorUI ( ) {
 				break;
 		}
 	}
-
-	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
 	
+	/*
+	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){ 
-	
-		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
-			return;
-		}
-
-		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
-		
-		// header
-		let headerDiv = htmlElementsFactory.create ( 
+	function m_CreateHeaderDiv ( ) {
+		let headerDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-TravelHeaderDiv', 
 				className : 'TravelNotes-Control-HeaderDiv'
 			},
-			controlDiv
+			m_ControlDiv
 		);
 
 		// expand button
-		htmlElementsFactory.create (
+		m_HTMLElementsFactory.create (
 			'span',
 			{ 
 				innerHTML : '&#x25bc;', 
@@ -168,7 +178,7 @@ function newTravelEditorUI ( ) {
 			false );
 
 		// title
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'span', 
 			{ 
 				innerHTML : g_Translator.getText ( 'TravelEditorUI - Travel routes' ), 
@@ -179,7 +189,7 @@ function newTravelEditorUI ( ) {
 		);
 	
 		// pin button
-		let pinButton = htmlElementsFactory.create (
+		m_PinButton = m_HTMLElementsFactory.create (
 			'span',
 			{ 
 				innerHTML : '&#x274c;', 
@@ -187,7 +197,7 @@ function newTravelEditorUI ( ) {
 			},
 			headerDiv
 		);
-		pinButton.addEventListener ( 
+		m_PinButton.addEventListener ( 
 			'click', 
 			event => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
@@ -205,15 +215,22 @@ function newTravelEditorUI ( ) {
 			}, 
 			false 
 		);
+	}
+	
+	/*
+	--- m_CreateDataDiv function --------------------------------------------------------------------------------------
 
-		// data div
-		let dataDiv = htmlElementsFactory.create ( 
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateDataDiv ( ) {
+		let dataDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
 				id : 'TravelNotes-Control-TravelDataDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
-			controlDiv 
+			m_ControlDiv 
 		);
 		
 		// Routes list
@@ -266,19 +283,26 @@ function newTravelEditorUI ( ) {
 			}, 
 			false 
 		);
-		
-		// buttons div
-		let buttonsDiv = htmlElementsFactory.create ( 
+	}
+
+	/*
+	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateButtonsDiv ( ) {
+		let buttonsDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-ControlTravelButtonsDiv', 
 				className : 'TravelNotes-Control-ButtonsDiv'
 			}, 
-			controlDiv
+			m_ControlDiv
 		);
 
 		// expand list button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ExpandRoutesListButton', 
@@ -301,7 +325,7 @@ function newTravelEditorUI ( ) {
 		);
 		
 		// cancel travel button
-		htmlElementsFactory.create (
+		m_HTMLElementsFactory.create (
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-CancelTravelButton',
@@ -325,7 +349,7 @@ function newTravelEditorUI ( ) {
 		);
 
 		// save travel button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SaveTravelButton', 
@@ -346,14 +370,14 @@ function newTravelEditorUI ( ) {
 
 		// open travel button with the well know hack....
 		// See also UserInterface.js. Click events are first going to the interface div...
-		let openTravelDiv = htmlElementsFactory.create ( 
+		let openTravelDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-OpenTravelDiv'
 			}, 
 			buttonsDiv 
 		);
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'input',
 			{
 				id : 'TravelNotes-Control-OpenTravelInput', 
@@ -371,14 +395,14 @@ function newTravelEditorUI ( ) {
 			}, 
 			false
 		);
-		let openTravelFakeDiv = htmlElementsFactory.create ( 
+		let openTravelFakeDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-OpenTravelFakeDiv'
 			}, 
 			openTravelDiv 
 		);
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-OpenTravelButton', 
@@ -401,14 +425,14 @@ function newTravelEditorUI ( ) {
 		);
 
 		// import travel button with the well know hack....
-		let importTravelDiv = htmlElementsFactory.create ( 
+		let importTravelDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-ImportTravelDiv'
 			}, 
 			buttonsDiv 
 		);
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'input',
 			{
 				id : 'TravelNotes-Control-ImportTravelInput', 
@@ -425,14 +449,14 @@ function newTravelEditorUI ( ) {
 			}, 
 			false 
 		);
-		let importTravelFakeDiv = htmlElementsFactory.create ( 
+		let importTravelFakeDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id: 'TravelNotes-Control-ImportTravelFakeDiv'
 			}, 
 			importTravelDiv 
 		);
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ImportTravelButton', 
@@ -456,7 +480,7 @@ function newTravelEditorUI ( ) {
 		);
 
 		// roadbook button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
@@ -470,7 +494,7 @@ function newTravelEditorUI ( ) {
 		
 		if ( g_Config.APIKeys.showDialogButton ) {
 			//API keys button
-			htmlElementsFactory.create ( 
+			m_HTMLElementsFactory.create ( 
 				'div', 
 				{ 
 					id : 'TravelNotes-Control-ApiKeysButton', 
@@ -491,7 +515,7 @@ function newTravelEditorUI ( ) {
 		}
 		if ( 0 < gc_GeoLocator.status ) {
 			//GeoLocator button
-			m_GeoLocationButton = htmlElementsFactory.create ( 
+			m_GeoLocationButton = m_HTMLElementsFactory.create ( 
 				'div', 
 				{ 
 					id : 'TravelNotes-Control-GeoLocatorButton', 
@@ -512,7 +536,7 @@ function newTravelEditorUI ( ) {
 		}
 		
 		// add route button
-		htmlElementsFactory.create ( 
+		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-AddRoutesButton', 
@@ -530,14 +554,38 @@ function newTravelEditorUI ( ) {
 			}, 
 			false 
 		);
+	}
+
+	/*
+	--- m_CreateUI function -------------------------------------------------------------------------------------------
+
+	This function creates the UI
+	
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function m_CreateUI ( controlDiv ){ 
+	
+		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
+			return;
+		}
+		
+		m_ControlDiv = controlDiv;
+
+		m_CreateHeaderDiv ( );
+		
+		m_CreateDataDiv ( );
+		
+		m_CreateButtonsDiv ( )
+		
 		if ( g_Config.travelEditor.startMinimized ) {
-			pinButton.innerHTML = '&#x1f4cc;';
-			controlDiv.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-			controlDiv.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
-			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+			m_PinButton.innerHTML = '&#x1f4cc;';
+			m_ControlDiv.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
+			m_ControlDiv.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+			m_ControlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		else {
-			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
+			m_ControlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
 		}
 	}
 	
