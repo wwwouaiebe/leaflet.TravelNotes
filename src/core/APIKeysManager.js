@@ -39,6 +39,8 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
+import { g_Translator } from '../UI/Translator.js';
+import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
 
 let s_KeysMap = new Map;
 
@@ -206,6 +208,7 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function m_OnServerFile ( data ) {
+		gc_ErrorsUI.showHelp ( g_Translator.getText ( 'Help - gives a password for the APIKeys file or cancel' ) );
 		newDataEncryptor ( ).decryptData (
 			data,		
 			m_OnOkDecrypt,

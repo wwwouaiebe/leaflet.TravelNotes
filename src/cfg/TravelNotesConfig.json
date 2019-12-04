@@ -26,6 +26,14 @@
 	{
 		"haveMouseUI":true
 	},
+	"errorUI":
+	{
+		"timeOut":10000,
+		"showError":true,
+		"showWarning":true,
+		"showInfo":true,
+		"showHelp":true
+	},
 	"geoLocation":{
 			"color":"red",
 			"radius":10,

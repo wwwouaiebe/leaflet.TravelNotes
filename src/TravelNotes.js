@@ -71,6 +71,7 @@ import { newAutoLoader } from './UI/AutoLoader.js';
 import { gc_LayersToolbarUI } from './UI/LayersToolbarUI.js';
 import { gc_MouseUI } from './UI/MouseUI.js';
 import { gc_AttributionsUI } from './UI/AttributionsUI.js';
+import { gc_ErrorsUI } from './UI/ErrorsUI.js';
 
 gc_AttributionsUI
 /* 
@@ -214,6 +215,7 @@ function travelNotesFactory ( ) {
 				newRoadbookUpdate ( );
 
 				gc_AttributionsUI.createUI ( );
+				gc_ErrorsUI.createUI ( );
 				
 				if ( m_TravelUrl ) {
 					// loading travel...

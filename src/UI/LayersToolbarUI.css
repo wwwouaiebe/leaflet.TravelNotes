@@ -4,7 +4,7 @@
 	width: 3em;
 	top: 0px;
 	left: 0px;
-	z-index: 1200;
+	z-index: 1000;
 	display: flex;
 	flex-direction:column;
 	height: auto;

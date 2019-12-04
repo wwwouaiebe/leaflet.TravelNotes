@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		eslint: {
 			options: {
-				fix: true
+				fix: false
 			},				
 			target: ['src/**/*.js']
 		},	
@@ -37,12 +37,12 @@ module.exports = function(grunt) {
 			},
 			TravelNotes: {
 				files: {
-					'tmp/TravelNotes.min.css': [ 'src/css/*.css']
+					'tmp/TravelNotes.min.css': [ 'src/**/*.css']
 				}
 			},
 			Roadbook: {
 				files: {
-					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/css/Roadbook.css']
+					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/roadbook/Roadbook.css']
 				}
 			}
 		},

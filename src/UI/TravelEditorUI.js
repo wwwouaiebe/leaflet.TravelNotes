@@ -47,7 +47,7 @@ export { gc_TravelEditorUI };
 import { g_Translator } from '../UI/Translator.js';
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_ErrorEditor } from '../core/ErrorEditor.js';
+import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { g_TravelEditor } from '../core/TravelEditor.js';
 
@@ -382,7 +382,7 @@ function newTravelEditorUI ( ) {
 			'click' , 
 			( ) => { 
 				if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
-					g_ErrorEditor.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
+					gc_ErrorsUI.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
 				}
 				else {
 					document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );

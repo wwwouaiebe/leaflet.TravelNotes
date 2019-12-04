@@ -74,6 +74,14 @@ function newConfig ( ) {
 		mouseUI : {
 			haveMouseUI : true
 		},
+		errorUI :
+		{
+			timeOut : 10000,
+			showError : true,
+			showWarning : true,
+			showInfo : true,
+			showHelp : true
+		},
 		geoLocation : {
 				color : "red",
 				radius : 11,
@@ -300,6 +308,7 @@ function newConfig ( ) {
 		get travelNotesToolbarUI ( ) { return m_Config.travelNotesToolbarUI; },
 		get layersToolbarUI ( ) { return m_Config.layersToolbarUI; },
 		get mouseUI ( ) { return m_Config.mouseUI; },
+		get errorUI ( ) { return m_Config.errorUI; },
 		get APIKeys ( ) { return m_Config.APIKeys; },
 		get contextMenu ( ) { return m_Config.contextMenu; },
 		get errorMessages ( ) { return m_Config.errorMessages; },

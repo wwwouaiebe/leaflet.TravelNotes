@@ -42,7 +42,6 @@ import { gc_TravelEditorUI } from '../UI/TravelEditorUI.js';
 import { gc_RouteEditorUI } from '../UI/RouteEditorUI.js';
 import { gc_DataPanesUI } from '../UI/DataPanesUI.js';
 import { gc_ProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
-import { newErrorEditorUI } from '../UI/ErrorEditorUI.js';
 import { gc_TravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js'
 
 /*
@@ -77,7 +76,6 @@ function newUI ( ) {
 		gc_DataPanesUI.createUI ( m_MainDiv ); 
 		
 		gc_ProvidersToolbarUI.createUI ( m_MainDiv ); 
-		newErrorEditorUI ( ).createUI ( m_MainDiv ); 
 
 		m_MainDiv.addEventListener ( 'setrouteslist', ( ) => gc_TravelEditorUI.setRoutesList ( ) , false );
 

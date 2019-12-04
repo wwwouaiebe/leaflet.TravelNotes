@@ -1,0 +1,45 @@
+#TravelNotes-ErrorUI
+{
+	position: absolute;
+	bottom : 10em;
+	left: calc(50% - 25em);
+	width : 50em;
+	color: transparent,
+	background-color: transparent;
+	z-index : 1300;
+}
+#TravelNotes-ErrorUI-CancelButton
+{
+	background-color: white;
+}
+#TravelNotes-ErrorUI-Message,
+#TravelNotes-ErrorUI-HelpInputDiv
+{
+	margin: 0.5em;
+}
+#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Hidden
+{
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Error
+{
+	color: white;
+	background-color: red;
+}
+#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Warning
+{
+	color: black;
+	background-color: orange;
+}
+#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Info
+{
+	color: black;
+	background-color: white;
+}
+#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Help
+{
+	color: black;
+	background-color: white;
+}

@@ -39,7 +39,7 @@ import { polyline } from '../polyline/Polyline.js';
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_ErrorEditor } from '../core/ErrorEditor.js';
+import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -229,7 +229,7 @@ function newFileLoader ( ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
 				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
 				{
-					g_ErrorEditor.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
+					gc_ErrorsUI.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
 				}
 				else {
 					// Provider and transit mode are changed in the itinerary editor

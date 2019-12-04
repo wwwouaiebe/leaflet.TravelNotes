@@ -53,7 +53,7 @@ export { g_RouteEditor };
 
 import { g_Config } from '../data/Config.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_ErrorEditor } from '../core/ErrorEditor.js';
+import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
@@ -304,7 +304,7 @@ function newRouteEditor ( ) {
 
 		s_RequestStarted = false;
 
-		g_ErrorEditor.showError ( err );
+		gc_ErrorsUI.showError ( err );
 		
 		console.log ( err ? err : 'An error occurs when asking the route to the provider' ) 
 	}

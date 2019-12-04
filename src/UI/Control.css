@@ -69,12 +69,7 @@ Changes:
 {
 	margin-bottom: auto;
 }
-#TravelNotes-Control-MainDiv > #TravelNotes-Control-ErrorDataDiv
-{
-	flex-shrink: 0;
-	max-height: 7em;
-	overflow: auto;
-}
+
 /* --- flex row ---*/
 
 
@@ -137,8 +132,7 @@ Changes:
 #TravelNotes-Control-CancelTravelButton:hover,
 #TravelNotes-Control-RemoveAllWayPointsButton:hover,
 #TravelNotes-Control-CancelRouteButton:hover,
-#TravelNotes-Control-PinButton:hover,
-#TravelNotes-Control-ErrorExpandButton:hover
+#TravelNotes-Control-PinButton:hover
 {
 	color: red;
 }
@@ -239,15 +233,12 @@ Changes:
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-HeaderDiv,
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-ErrorDataDiv
 {
 	padding-top: 0.5em;
 }
 
 		/* --- padding-bottom --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ErrorDataDiv,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ErrorHeaderDiv,
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
 {
 	padding-bottom: 0.5em;
@@ -280,7 +271,6 @@ Changes:
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv.TravelNotes-Control-HiddenList,
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-ErrorDataDiv.TravelNotes-Control-HiddenList
 {
 	transform : scale(0);
 	margin: 0;
@@ -446,12 +436,6 @@ Changes:
 {
 	font-weight: bold;
 }
-.TravelNotes-Control-Error
-{
-	color: red;
-	font-weight: bold;
-}
-
 
 
 

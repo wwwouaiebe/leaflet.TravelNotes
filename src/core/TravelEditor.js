@@ -50,7 +50,7 @@ import { polyline } from '../polyline/Polyline.js';
 
 import { g_Translator } from '../UI/Translator.js';
 import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_ErrorEditor } from '../core/ErrorEditor.js';
+import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
 import { g_RouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
@@ -106,7 +106,7 @@ function newTravelEditor ( ) {
 	function m_RemoveRoute ( routeObjId ) {
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId && 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 			// cannot remove the route currently edited
-			g_ErrorEditor.showError ( g_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+			gc_ErrorsUI.showError ( g_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 			return;
 		}
 
@@ -141,7 +141,7 @@ function newTravelEditor ( ) {
 	function m_EditRoute ( routeObjId ) { 
 		if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 			// not possible to edit - the current edited route is not saved or cancelled
-			g_ErrorEditor.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
+			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 			return;
 		}
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
@@ -153,7 +153,7 @@ function newTravelEditor ( ) {
 		let providerName = initialRoute.itinerary.provider;
 		if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
 		{
-			g_ErrorEditor.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
+			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
 			return;
 		}
 		// Provider and transit mode are changed in the itinerary editor
