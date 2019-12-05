@@ -105,6 +105,7 @@ function newTravelEditor ( ) {
 
 	function m_RemoveRoute ( routeObjId ) {
 		if ( routeObjId === g_TravelNotesData.editedRouteObjId && 2 === g_TravelNotesData.travel.editedRoute.edited ) {
+
 			// cannot remove the route currently edited
 			gc_ErrorsUI.showError ( g_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 			return;
@@ -140,14 +141,17 @@ function newTravelEditor ( ) {
 
 	function m_EditRoute ( routeObjId ) { 
 		if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
+
 			// not possible to edit - the current edited route is not saved or cancelled
 			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
 			return;
 		}
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+
 			// the current edited route is not changed. Cleaning the editors
 			g_RouteEditor.cancelEdition ( );
 		}
+
 		// We verify that the provider  for this route is available
 		let initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
@@ -155,6 +159,7 @@ function newTravelEditor ( ) {
 			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
 			return;
 		}
+
 		// Provider and transit mode are changed in the itinerary editor
 		if ( providerName && '' !== providerName ) {
 			m_EventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
@@ -163,9 +168,11 @@ function newTravelEditor ( ) {
 		if ( transitMode && '' !== transitMode ) {
 			m_EventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 		}
+
 		// The edited route is pushed in the editors
 		g_TravelNotesData.travel.editedRoute = newRoute ( );
 		initialRoute.edited = 1;
+
 		// Route is cloned, so we can have a cancel button in the editor
 		g_TravelNotesData.travel.editedRoute.object = initialRoute.object;
 		g_TravelNotesData.editedRouteObjId = initialRoute.objId;
@@ -287,6 +294,7 @@ function newTravelEditor ( ) {
 		let compressedTravel = g_TravelNotesData.travel.object;
 		compressedTravel.routes.forEach ( m_CompressRoute );
 		m_CompressRoute ( compressedTravel.editedRoute );
+
 		// save file
 		m_Utilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 	}

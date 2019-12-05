@@ -35,6 +35,7 @@ Patterns : Closure
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
 export { gc_GeoLocator };
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { g_Config } from '../data/Config.js';
@@ -99,6 +100,7 @@ function newGeoLocator ( ) {
 		if ( 2 === m_Status ) {
 			m_Status = 1;
 		}
+
 		//if ( m_WatchId ) FF: the m_WatchId is always 0 so we cannot use m_WatchId to see if the geolocation is running
 		m_EventDispatcher.dispatch ( 'geolocationstatuschanged', { status : m_Status } );
 		navigator.geolocation.clearWatch ( m_WatchId );
@@ -133,6 +135,7 @@ function newGeoLocator ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	return Object.seal (
 		{
 			get status ( ) { return m_Status; },

@@ -103,6 +103,7 @@ The one and only one translator
 */
 
 const g_TravelNotesData = newTravelNotesData ( );
+
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------
 */

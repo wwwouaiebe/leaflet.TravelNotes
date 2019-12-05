@@ -158,6 +158,7 @@ function newTravelNotesToolbarUI ( ) {
 			buttonsDiv
 		);
 		if ( g_Config.APIKeys.showDialogButton ) {
+
 			//API keys button
 			m_HTMLElementsFactory.create ( 
 				'div', 
@@ -179,6 +180,7 @@ function newTravelNotesToolbarUI ( ) {
 				);
 		}
 		if ( 0 < gc_GeoLocator.status ) {
+
 			//GeoLocator button
 			m_GeoLocationButton = m_HTMLElementsFactory.create ( 
 				'div', 

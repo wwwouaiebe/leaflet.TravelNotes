@@ -99,6 +99,7 @@ function newPasswordDialog ( verifyPassword ) {
 	*/
 
 	function m_CreateDialog ( ) {
+
 		// the dialog base is created
 		m_PasswordDialog = newBaseDialog ( );
 		m_PasswordDialog.title = g_Translator.getText ( 'PasswordDialog - password' );
@@ -137,6 +138,7 @@ function newPasswordDialog ( verifyPassword ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	m_CreateDialog ( );
 	m_CreateContent ( );
 	

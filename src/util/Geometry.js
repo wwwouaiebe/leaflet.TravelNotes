@@ -61,33 +61,45 @@ function newGeometry  ( ) {
 		if ( 0 === route.itinerary.itineraryPoints.length ) {
 			return null;
 		}
+
 		// an iterator on the route points is created...
 		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+
 		// ... and placed on the first point
 		itineraryPointIterator.done;
+
 		// the smallest distance is initialized ...
 		let minDistance = Number.MAX_VALUE;
+
 		// projections of points are made
 		let point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
 		let point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+
 		// variables initialization
 		let closestLatLng = null;
 		let closestDistance = 0;
 		let endSegmentDistance = itineraryPointIterator.value.distance;
+
 		// iteration on the route points
 		while ( ! itineraryPointIterator.done ) {
+
 			// projection of the second point...
 			let point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+
 			// and distance is computed
 			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
 			if ( distance < minDistance ) {
+
 				// we have found the smallest distance ... till now :-)
 				minDistance = distance;
+
 				// the nearest point is computed
 				closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+
 				// and the distance also
 				closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
 			}
+
 			// we prepare the iteration for the next point...
 			endSegmentDistance += itineraryPointIterator.value.distance;
 			point1 = point2;
@@ -108,6 +120,7 @@ function newGeometry  ( ) {
 	*/
 
 	function m_PointsDistance ( latLngStartPoint, latLngEndPoint ) {
+
 		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
 		// valid function to compute the distances. So all distances are always 
 		// recomputed with this function.

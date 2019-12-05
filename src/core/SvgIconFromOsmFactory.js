@@ -94,6 +94,7 @@ function newSvgIconFromOsmFactory ( ) {
 	function m_CreateNodesAndWaysMaps ( ) {
 		m_WaysMap.clear ( );
 		m_NodesMap.clear ( );
+
 		// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
 		m_Response.elements.forEach (
 			element => {
@@ -104,6 +105,7 @@ function newSvgIconFromOsmFactory ( ) {
 					}
 					break;
 				case 'way' :
+
 					// replacing the nodes property with the nodesId property to 
 					// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
 					element.nodesIds = element.nodes;
@@ -148,6 +150,7 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function m_SearchItineraryPoints ( ) {
+
 		// Searching the nearest itinerary point
 		let minDistance = Number.MAX_VALUE;
 		let distance = 0;
@@ -310,6 +313,7 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function m_ComputeRotationAndDirection ( ) {
+
 		// searching points at least at 10 m ( m_SvgAngleDistance ) from the icon point, one for rotation and one for direction
 		let distance = 0;
 		let rotationItineraryPoint = m_Route.itinerary.itineraryPoints.first;
@@ -330,6 +334,7 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 		
 		let iconPoint = m_Geometry.addPoints ( m_Geometry.project ( m_IconLatLngDistance.latLng, m_SvgZoom ), m_Translation );
+
 		// computing rotation... if possible
 		if ( m_IconItineraryPoint.objId !== m_Route.itinerary.itineraryPoints.first.objId  ) {
 			let rotationPoint = m_Geometry.addPoints ( m_Geometry.project ( rotationItineraryPoint.latLng, m_SvgZoom ), m_Translation );
@@ -344,16 +349,19 @@ function newSvgIconFromOsmFactory ( ) {
 				m_Rotation += 180;
 			}
 		}
+
 		//computing direction ... if possible
 
 		if ( m_IconItineraryPoint.objId !== m_Route.itinerary.itineraryPoints.last.objId  ) {
 			let directionPoint = m_Geometry.addPoints ( m_Geometry.project ( directionItineraryPoint.latLng, m_SvgZoom ), m_Translation );
 			m_Direction = Math.atan (  ( iconPoint [ 1 ] - directionPoint [ 1 ] ) / ( directionPoint [ 0 ] - iconPoint [ 0 ] ) ) * 180 / Math.PI;
+
 			// point 0,0 of the svg is the UPPER left corner
 			if ( 0 > directionPoint [ 0 ] - iconPoint [ 0 ] ) {
 				m_Direction += 180;
 			}
 			m_Direction -= m_Rotation;
+
 			// setting direction between 0 and 360
 			while ( 0 > m_Direction ) {
 				m_Direction += 360;
@@ -387,6 +395,7 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function m_CreateRoute ( ) {
+
 		// to avoid a big svg, all points outside the svg viewBox are not added
 		let index = -1;
 		let firstPointIndex = -1;
@@ -439,6 +448,7 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function m_CreateWays ( ) {
+
 		// to avoid a big svg, all points outside the svg viewBox are not added
 		m_WaysMap.forEach ( 
 			way => {

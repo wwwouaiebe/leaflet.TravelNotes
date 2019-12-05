@@ -82,6 +82,7 @@ function newRoutePropertiesDialog ( route ) {
 	*/
 
 	function m_CreateDialog ( ) {
+
 		// the dialog base is created
 		m_RoutePropertiesDialog = newColorDialog ( route.color );
 		m_RoutePropertiesDialog.title = g_Translator.getText ( 'RoutePropertiesDialog - Route properties' );

@@ -83,13 +83,15 @@ function newUtilities ( ) {
 
 	function m_fileAPIAvailable ( ) {
 		try {
+
 			// FF...
 			new File ( [ 'testdata' ], { type : 'text/plain' } );
 			return true;
 		}
 		catch ( Error ) {
 			if (window.navigator.msSaveOrOpenBlob ) {
-			//edge IE 11...
+
+				//edge IE 11...
 				return true;
 			}
 			else {
@@ -113,6 +115,7 @@ function newUtilities ( ) {
 			type = 'text/plain';
 		}
 		if ( window.navigator.msSaveOrOpenBlob ) {
+
 			//https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
 			//edge IE 11...
 			try {
@@ -123,6 +126,7 @@ function newUtilities ( ) {
 			}
 		}
 		else {
+
 			// FF...
 			// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
 			try {
@@ -260,6 +264,7 @@ function newUtilities ( ) {
 		}
 	);
 }
+
 /*
 --- End of Utilities.js file ------------------------------------------------------------------------------------------
 */	

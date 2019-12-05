@@ -126,6 +126,7 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	function m_GetAPIKeys ( ) {
 		let APIKeys = [];
 		let rows = m_APIKeysDiv.childNodes;
@@ -139,6 +140,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		}
 		return APIKeys;
 	}
+
 	/*
 	--- m_SaveKeysToFile function -------------------------------------------------------------------------------------
 
@@ -223,6 +225,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function m_CreateDialog ( ) {
+
 		// the dialog base is created
 		m_APIKeysDialog = newBaseDialog ( );
 		m_APIKeysDialog.title = g_Translator.getText ( 'APIKeysDialog - API keys' );
@@ -406,6 +409,7 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	m_CreateDialog ( );
 	m_CreateToolbar ( );
 	m_CreateContent ( );

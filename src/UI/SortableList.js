@@ -62,6 +62,7 @@ function newSortableList ( options, parentNode ) {
 		catch ( err ) {
 			console.log ( err );
 		}
+
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
 		m_DataObjId = dragEvent.target.dataObjId - 1;

@@ -81,6 +81,7 @@ function newColorDialog ( color ) {
 	*/
 	
 	function m_NumbersToColor ( red, green, blue ) {
+
 		// MS Edge do't know padStart...
 		if ( ! String.prototype.padStart ) {
 			String.prototype.padStart = function padStart ( targetLength, padString ) {
@@ -170,6 +171,7 @@ function newColorDialog ( color ) {
 	*/
 
 	function m_CreateDialog ( ) {		
+
 		// the dialog base is created
 		m_ColorDialog = newBaseDialog ( );
 		m_ColorDialog.title = g_Translator.getText ( 'ColorDialog - Colors' );

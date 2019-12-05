@@ -116,8 +116,10 @@ function newRouteEditor ( ) {
 			itineraryPoint = newItineraryPoint ( );
 			itineraryPoint.object = itineraryPointIterator.value.object;
 			if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+
 				// we have passed the cutting point...
 				let removedDistance = m_Geometry.pointsDistance ( cuttingPointLatLngDistance.latLng, itineraryPointIterator.value.latLng );
+
 				// a new point is created at the cutting point position and added to the first route.
 				let cuttingPoint = newItineraryPoint ( );
 				cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
@@ -157,6 +159,7 @@ function newRouteEditor ( ) {
 	*/
 
 	function m_ComputeRouteDistances ( route ) {
+
 		// Computing the distance between itineraryPoints
 		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
@@ -191,6 +194,7 @@ function newRouteEditor ( ) {
 	*/
 
 	function m_SaveGpx ( ) {
+
 		// initializations...
 		let tab0 = "\n";
 		let tab1 = "\n\t";
@@ -413,6 +417,7 @@ function newRouteEditor ( ) {
 		// and the itinerary and waypoints are displayed
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
+
 		// the HTML page is adapted ( depending of the config.... )
 		m_ChainRoutes ( );
 		newRoadbookUpdate ( );
@@ -427,9 +432,11 @@ function newRouteEditor ( ) {
 	*/
 
 	function m_SaveEdition ( ) {
+
 		// the edited route is cloned
 		let clonedRoute = newRoute ( );
 		clonedRoute.object = g_TravelNotesData.travel.editedRoute.object;
+
 		// and the initial route replaced with the clone
 		g_TravelNotesData.travel.routes.replace ( g_TravelNotesData.editedRouteObjId, clonedRoute );
 		g_TravelNotesData.editedRouteObjId = clonedRoute.objId;

@@ -510,6 +510,7 @@ function newMapEditor ( ) {
 		// the leaflet polyline is created and added to the map
 		let polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
 		m_AddTo ( route.objId, polyline );
+
 		// tooltip and popup are created
 		polyline.bindTooltip ( 
 			route.name,
@@ -527,6 +528,7 @@ function newMapEditor ( ) {
 		
 		// left click event
 		L.DomEvent.on ( polyline, 'click', event => event.target.openPopup ( event.latlng ) );
+
 		// right click event
 		if ( ! readOnly ) {
 			L.DomEvent.on ( 
@@ -851,40 +853,51 @@ function newMapEditor ( ) {
 		bullet.objId = note.objId;
 		
 		if ( ! readOnly ) {
+
 			// event listener for the dragend event
 			L.DomEvent.on ( 
 				bullet, 
 				'dragend', 
 				event => {
+
 					// the TravelNotes note and route are searched...
 					let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( event.target.objId );
 					let note = noteAndRoute.note;
 					let route = noteAndRoute.route;
+
 					// ... then the layerGroup is searched...
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
 					if ( null != route ) {
+
 						// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
 						let latLngDistance = m_Geometry.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ] );
+
 						// coordinates and distance are changed in the note
 						note.latLng = latLngDistance.latLng;
 						note.distance = latLngDistance.distance;
+
 						// notes are sorted on the distance
 						route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
 						m_EventDispatcher.dispatch ( 'updateitinerary' );
 					}
 					else {
+
 						// the note is not attached to a route, so the coordinates of the note can be directly changed
 						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 						m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 					}
+
 					// in all cases, the polyline is updated
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+
 					// and the HTML page is adapted
 					newRoadbookUpdate ( );
 				}
 			);
+
 			// event listener for the drag event
 			L.DomEvent.on ( 
 				bullet, 
@@ -930,36 +943,46 @@ function newMapEditor ( ) {
 			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 		}
 		if ( ! readOnly ) {
+
 			// event listener for the contextmenu event
 			L.DomEvent.on ( 
 				marker, 
 				'contextmenu', 
 				event => newNoteContextMenu ( event ).show ( )
 			);
+
 			// event listener for the dragend event
 			L.DomEvent.on ( 
 				marker, 
 				'dragend',
 				event => {
+
 					// The TravelNotes note linked to the marker is searched...
 					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+
 					// ... new coordinates are saved in the TravelNotes note...
 					note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+
 					// ... then the layerGroup is searched...
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+
 					// ... and finally the polyline is updated with the new coordinates
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
 				}
 			);
+
 			// event listener for the drag event
 			L.DomEvent.on ( 
 				marker, 
 				'drag',
 				event => {
+
 					// The TravelNotes note linked to the marker is searched...
 					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+
 					// ... then the layerGroup is searched...
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+
 					// ... and finally the polyline is updated with the new coordinates
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
 				}

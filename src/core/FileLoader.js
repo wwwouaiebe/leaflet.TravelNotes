@@ -100,6 +100,7 @@ function newFileLoader ( ) {
 		
 		m_FileContent.routes.forEach ( m_DecompressRoute );
 		if ( m_FileContent.editedRoute ) {
+
 			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
 			m_DecompressRoute ( m_FileContent.editedRoute );
 		}
@@ -120,6 +121,7 @@ function newFileLoader ( ) {
 	*/
 
 	function m_Merge ( ) {
+
 		// ... and transform the data in the correct format
 		let travel = newTravel ( );
 		travel.object = m_FileContent;
@@ -129,6 +131,7 @@ function newFileLoader ( ) {
 		while ( ! routesIterator.done ) {
 			g_TravelNotesData.travel.routes.add ( routesIterator.value );
 		}
+
 		// travel notes are added
 		let notesIterator = travel.notes.iterator;
 		while ( ! notesIterator.done ) {
@@ -178,6 +181,7 @@ function newFileLoader ( ) {
 
 		// the map is cleaned
 		m_EventDispatcher.dispatch ( 'removeallobjects' );
+
 		// routes are added with their notes
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
@@ -193,6 +197,7 @@ function newFileLoader ( ) {
 				);
 			}
 		}
+
 		// edited route is added with notes and , depending of read only, waypoints
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 			m_EventDispatcher.dispatch ( 
@@ -223,7 +228,8 @@ function newFileLoader ( ) {
 
 		// Editors and roadbook are filled
 		if ( ! m_IsFileReadOnly ) {
-		// Editors and HTML pages are filled
+
+			// Editors and HTML pages are filled
 			m_EventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
@@ -231,6 +237,7 @@ function newFileLoader ( ) {
 					gc_ErrorsUI.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
 				}
 				else {
+
 					// Provider and transit mode are changed in the itinerary editor
 					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
 					m_EventDispatcher.dispatch ( 'setprovider', { 'provider' : providerName } );
@@ -247,6 +254,7 @@ function newFileLoader ( ) {
 			newRoadbookUpdate ( );
 		}
 		else {
+
 			// control is hidden
 			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
 			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );

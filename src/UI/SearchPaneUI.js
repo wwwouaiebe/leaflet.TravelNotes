@@ -67,13 +67,16 @@ function newSearchPaneUI ( ) {
 	*/
 
 	function m_OnSearchInputChange ( ) {
+
 		// saving the search phrase
 		s_SearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
 
 		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+
 		// removing previous search results
 		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
 		while ( 0 !== searchResultsElements.length ) {
+
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
 			searchResultsElements [ 0 ].removeEventListener ( 'click', m_OnSearchResultClick, false );
 			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu', m_OnSearchResultContextMenu, false );
@@ -82,10 +85,12 @@ function newSearchPaneUI ( ) {
 			searchDiv.removeChild ( searchResultsElements [ 0 ] );
 		}
 		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+
 			// adding wait animation
 			let htmlElementsFactory = newHTMLElementsFactory ( );
 			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
 		}
+
 		// search...
 		s_OsmSearchEngine.search ( );
 	}

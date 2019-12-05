@@ -104,6 +104,7 @@ function newLayersToolbarUI ( ) {
 		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 	}
+
 	/*
 	--- m_OnClickLayerButton function ---------------------------------------------------------------------------------
 

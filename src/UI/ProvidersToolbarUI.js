@@ -138,6 +138,7 @@ function newProvidersToolbarUI ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	function m_SetTransitMode ( transitMode ) {
 		
 		g_TravelNotesData.routing.transitMode = transitMode;
@@ -178,6 +179,7 @@ function newProvidersToolbarUI ( ) {
 				g_RouteEditor.startRouting ( );
 			},
 			false );
+
 		// when loading the control, the first provider will be the active provider
 		if ( ! m_activeButton ) {
 			providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
@@ -299,6 +301,7 @@ function newProvidersToolbarUI ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	function m_ProvidersAdded ( ) {
 		
 		m_ParentDiv.removeChild ( m_ButtonsDiv );

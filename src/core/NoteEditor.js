@@ -105,6 +105,7 @@ function newNoteEditor ( ) {
 
 			// ... the chainedDistance is adapted...
 			selectedRoute.notes.add ( noteAndRoute.note );
+
 			// and the notes sorted
 			selectedRoute.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
 
@@ -116,6 +117,7 @@ function newNoteEditor ( ) {
 			);
 			m_EventDispatcher.dispatch ( 'updateitinerary' );
 			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
+
 			// and the HTML page is adapted
 			newRoadbookUpdate ( );
 		}
@@ -133,6 +135,7 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_DetachNoteFromRoute ( noteObjId ) {
+
 		// the note and the route are searched
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
@@ -142,6 +145,7 @@ function newNoteEditor ( ) {
 		
 		m_EventDispatcher.dispatch ( 'updateitinerary' );
 		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
+
 		// and the HTML page is adapted
 		newRoadbookUpdate ( );
 	}
@@ -179,6 +183,7 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_NewRouteNote ( routeObjId, event ) {
+
 		// the nearest point and distance on the route is searched
 		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 			m_DataSearchEngine.getRoute ( routeObjId ),
@@ -267,11 +272,13 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_NewManeuverNote ( maneuverObjId, latLng ) {
+
 		// the nearest point and distance on the route is searched
 		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
 			g_TravelNotesData.travel.editedRoute,
 			latLng
 		);
+
 		// the maneuver is searched
 		let maneuver = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
 
@@ -318,6 +325,7 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_NewTravelNote ( latLng ) {
+
 		// the note is created
 		let note = m_NewNote ( latLng );
 
@@ -361,7 +369,8 @@ function newNoteEditor ( ) {
 				modifiedNote => {
 					let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
 					if ( noteAndRoute.note ) {
-					// it's an existing note. The note is changed on the map
+
+						// it's an existing note. The note is changed on the map
 						m_EventDispatcher.dispatch ( 
 							'redrawnote', 
 							{ 
@@ -393,20 +402,25 @@ function newNoteEditor ( ) {
 	*/
 
 	function m_RemoveNote ( noteObjId ) {
+
 		// the note is removed from the leaflet map
 		m_EventDispatcher.dispatch ( 'removeobject', { objId : noteObjId } );
+
 		// the note and the route are searched
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 		if ( noteAndRoute.route ) {
+
 			// it's a route note
 			noteAndRoute.route.notes.remove ( noteObjId );
 			m_EventDispatcher.dispatch ( 'updateitinerary' );
 		}
 		else {
+
 			// it's a travel note
 			g_TravelNotesData.travel.notes.remove ( noteObjId );
 			m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		}
+
 		// and the HTML page is adapted
 		newRoadbookUpdate ( );
 	}

@@ -92,11 +92,13 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function m_OnOkButtonClick ( ) {
+
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
 		if ( 0 === m_IconHtmlContent.value.length ) {
 			m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 		}
+
 		// saving values in the note.
 		note.iconWidth = m_WidthInput.value;
 		note.iconHeight = m_HeightInput.value;
@@ -277,6 +279,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	function m_OnErrorSvgIcon ( err ) {
 		m_NoteDialog.hideWait ( );
 		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
@@ -568,6 +571,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	
 	-------------------------------------------------------------------------------------------------------------------
 	*/
+
 	function m_CreateIconDimensions ( ) {
 		let iconDimensionsDiv = m_HtmlElementsFactory.create (
 			'div',
@@ -756,6 +760,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 		m_AdressInput.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_AdressInput.value = note.address;
+
 		// geolocalization
 		newGeoCoder ( ).getPromiseAddress ( note.latLng ).then ( m_OnGeocoderResponse ).catch ( m_OnGeocoderError );
 		

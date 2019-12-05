@@ -32,6 +32,6 @@
 		"indent": ["warn", "tab"],
 		"key-spacing" : [ "warn", { "beforeColon": true , "afterColon": true , "mode": "strict" } ],
 		"keyword-spacing" : [ "warn" ],
-		"line-comment-position" : [ "warn", "beside" ]
+		"lines-around-comment" : [ "warn", { "beforeBlockComment": true , "afterBlockComment": true , "beforeLineComment": true , "afterLineComment": false} ]
     }
 }

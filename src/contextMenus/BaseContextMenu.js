@@ -190,6 +190,7 @@ function newBaseContextMenu ( originalEvent ) {
 	
 	function m_BuildContainer ( ) {
 		s_Container = m_htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container', className : 'TravelNotes-ContextMenu-Container'}, m_Body );
+
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
 		s_Container.addEventListener ( 
 			'mouseenter',
@@ -231,6 +232,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_MoveContainer ( ) {
+
 		// a dummy div is created to find the screen width and height
 		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'}, m_Body );
 		let screenWidth = dummyDiv.clientWidth;
@@ -307,7 +309,8 @@ function newBaseContextMenu ( originalEvent ) {
 		}
 		
 		if ( s_Container ) {
-		// the menu is already opened, so we suppose the user will close the menu by clicking outside...
+
+			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
 			m_OnCloseMenu ( );
 			return;
 		}
@@ -321,6 +324,7 @@ function newBaseContextMenu ( originalEvent ) {
 
 	function m_init ( menuItems ) {
 		s_MenuItems = menuItems; 
+
 		// completely crazy...
 		delete m_BaseContextMenu.init;
 	}

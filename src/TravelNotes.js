@@ -74,6 +74,7 @@ import { gc_AttributionsUI } from './UI/AttributionsUI.js';
 import { gc_ErrorsUI } from './UI/ErrorsUI.js';
 
 gc_AttributionsUI
+
 /* 
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
@@ -177,12 +178,15 @@ function travelNotesFactory ( ) {
 		}
 
 		Promise.all ( promises ).then ( 
+
 			// promises succeeded
 			values => {
+
 				// config adaptation
 				if ( m_Langage ) {
 					values [ 0 ].language = m_Langage;
 				}
+
 				//g_Config.overload ( values [ 0 ] );
 				
 				// translations adaptation
@@ -208,6 +212,7 @@ function travelNotesFactory ( ) {
 				// loading new travel
 				g_TravelNotesData.travel = newTravel ( );
 				g_TravelNotesData.travel.routes.add ( newRoute ( ) );
+
 				// user interface is added
 				gc_UI.createUI ( document.getElementById ( divControlId ) );
 
@@ -218,6 +223,7 @@ function travelNotesFactory ( ) {
 				gc_ErrorsUI.createUI ( );
 				
 				if ( m_TravelUrl ) {
+
 					// loading travel...
 					newFileLoader ( ).openDistantFile ( values [ 2 ] );
 				}

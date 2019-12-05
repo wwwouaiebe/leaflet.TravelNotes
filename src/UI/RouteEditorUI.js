@@ -190,6 +190,7 @@ function newRouteEditorUI ( ) {
 	*/
 
 	function m_CreateButtonsDiv ( ) {
+
 		// buttons div
 		let buttonsDiv = m_HTMLElementsFactory.create ( 
 			'div', 
