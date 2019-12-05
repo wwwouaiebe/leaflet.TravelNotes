@@ -801,7 +801,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		m_AdressInput.value = note.address;
 
 		// geolocalization
-		newGeoCoder ( ).getPromiseAddress ( note.latLng ).then ( m_OnGeocoderResponse ).catch ( m_OnGeocoderError );
+		newGeoCoder ( ).getPromiseAddress ( note.latLng )
+			.then ( m_OnGeocoderResponse )
+			.catch ( m_OnGeocoderError );
 		
 	}
 	

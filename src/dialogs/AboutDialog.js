@@ -78,7 +78,8 @@ function newAboutDialog ( ) {
 		"Project-OSRM/osrm-text-instructions</a> and " +
 		" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
 	
-	aboutDialog.show ( ).then ( ).catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+	aboutDialog.show ( ).then ( )
+		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 
 }
 

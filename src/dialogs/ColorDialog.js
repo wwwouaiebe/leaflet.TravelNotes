@@ -82,30 +82,13 @@ function newColorDialog ( color ) {
 	
 	function m_NumbersToColor ( red, green, blue ) {
 
-		// MS Edge do't know padStart...
-		if ( ! String.prototype.padStart ) {
-			String.prototype.padStart = function padStart ( targetLength, padString ) {
-				targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
-				padString = String ( padString || ' ' );
-				if ( this.length > targetLength ) {
-					return String ( this );
-				}
-				else {
-					targetLength = targetLength - this.length;
-					if ( targetLength > padString.length ) {
-
-						//append to original to ensure we are longer than needed
-						padString += padString.repeat ( targetLength / padString.length ); 
-					}
-					return padString.slice ( 0, targetLength ) + String ( this );
-				}
-			};
-		}			
-		
 		return '#' + 
-			parseInt ( red ).toString (16).padStart ( 2, '0' ) + 
-			parseInt ( green ).toString (16).padStart ( 2, '0' ) + 
-			parseInt ( blue ).toString (16).padStart ( 2, '0' ) ;
+			parseInt ( red ).toString (16)
+				.padStart ( 2, '0' ) + 
+			parseInt ( green ).toString (16)
+				.padStart ( 2, '0' ) + 
+			parseInt ( blue ).toString (16)
+				.padStart ( 2, '0' ) ;
 	}
 
 	/*

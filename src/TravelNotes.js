@@ -120,23 +120,25 @@ function travelNotesFactory ( ) {
 
 	function m_ReadURL ( ) {
 		let newUrlSearch = '?' ;
-		( decodeURI ( window.location.search ).substr ( 1 ).split ( '&' ) ).forEach ( 
-			urlSearchSubString =>{
-				if ( -1 !== urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-					g_APIKeysManager.fromUrl ( urlSearchSubString )
-				}
-				else {
-					if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-						m_TravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+		( decodeURI ( window.location.search ).substr ( 1 )
+			.split ( '&' ) )
+			.forEach ( 
+				urlSearchSubString =>{
+					if ( -1 !== urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+						g_APIKeysManager.fromUrl ( urlSearchSubString )
 					}
-					else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-						m_Langage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
+					else {
+						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+							m_TravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+						}
+						else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
+							m_Langage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
+						}
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += urlSearchSubString;
 					}
-					newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
-					newUrlSearch += urlSearchSubString;
 				}
-			}
-		);
+			);
 		let stateObj = { index : "bar" };
 		history.replaceState ( stateObj, "page", newUrlSearch );
 	}
@@ -243,9 +245,10 @@ function travelNotesFactory ( ) {
 					}	
 				}
 			}
-		).catch ( 
-			err => console.log ( err ? err : 'An error occurs when loading translations or config' )
-		);
+		)
+			.catch ( 
+				err => console.log ( err ? err : 'An error occurs when loading translations or config' )
+			);
 	}
 	
 	/*

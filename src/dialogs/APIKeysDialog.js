@@ -81,8 +81,8 @@ function newAPIKeysDialog ( APIKeys ) {
 		m_APIKeysDialog.hideError ( );
 		let rows = m_APIKeysDiv.childNodes;
 		for ( let counter = 0; counter < rows.length; counter ++ ) {
-			returnValue &= '' !== rows [ counter ].childNodes [ 0 ].value; 
-			returnValue &= '' !== rows [ counter ].childNodes [ 1 ].value;		
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 0 ].value; 
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 1 ].value;		
 		}
 		if ( ! returnValue ) {
 			m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - empty API key name or value' ) );

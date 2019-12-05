@@ -38,6 +38,9 @@
 		"max-nested-callbacks" : [ "warn" , { "max" : 2 } ],
 		"max-params" : [ "warn" , { "max" : 5 } ],
 		"max-statements" : [ "warn", 51 ],
-		"max-statements-per-line" : [ "warn" ]
+		"max-statements-per-line" : [ "warn" ],
+		"newline-per-chained-call" : [ "warn" ],
+		"no-array-constructor" : [ "warn" ],
+		"no-bitwise" : [ "warn" ]
     }
 }

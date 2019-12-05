@@ -316,11 +316,11 @@ function newRouteEditor ( ) {
 
 	function m_HaveValidWayPoints ( ) {
 		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
-			function ( wayPoint, result ) {
+			( wayPoint, result ) => {
 				if ( null === result ) { 
 					result = true;
 				}
-				result &= ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
+				result = result && ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
 				return result;
 			}
 		);
@@ -552,7 +552,8 @@ function newRouteEditor ( ) {
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );			
 			}		
-		).catch ( err => console.log ( err ? err : 'An error occurs in the dialog' )  );
+		)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' )  );
 	}
 		
 	/*

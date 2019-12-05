@@ -42,7 +42,8 @@ function newUtilities ( ) {
 
 	function m_getUUID ( ) { 
 		function Random4 ( ) {
-			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 ).substring ( 1 );
+			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 )
+				.substring ( 1 );
 		}
 		return Random4 ( ) + 
 			Random4 ( ) + '-' + 
@@ -216,7 +217,9 @@ function newUtilities ( ) {
 		else {
 			return Math.floor ( distance / 1000 ) +
 				',' + 
-				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 ).padStart ( 2, '0' ).padEnd ( 3, '0') + 
+				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 )
+					.padStart ( 2, '0' )
+					.padEnd ( 3, '0') + 
 				'&nbsp;km';
 		}
 	}
