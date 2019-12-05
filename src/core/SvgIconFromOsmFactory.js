@@ -91,8 +91,7 @@ function newSvgIconFromOsmFactory ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateNodesAndWaysMaps ( )
-	{
+	function m_CreateNodesAndWaysMaps ( ) {
 		m_WaysMap.clear ( );
 		m_NodesMap.clear ( );
 		// Elements are pushed in 2 maps: 1 for nodes and 1 for ways

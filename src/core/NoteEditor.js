@@ -325,8 +325,7 @@ function newNoteEditor ( ) {
 		newNoteDialog ( note, -1, true )
 		.show ( )
 		.then ( 
-			newNote => 
-			{
+			newNote => {
 				g_TravelNotesData.travel.notes.add ( newNote );
 				m_EventDispatcher.dispatch ( 'settravelnotes' );
 				m_EventDispatcher.dispatch ( 

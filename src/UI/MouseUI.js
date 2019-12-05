@@ -56,8 +56,7 @@ function newMouseUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Update ( )
-	{
+	function m_Update ( ) {
 		m_MouseDiv.innerHTML = '<span>' + 
 		m_MousePos + 
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' + 

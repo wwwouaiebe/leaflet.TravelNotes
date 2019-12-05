@@ -112,8 +112,7 @@ function newGeoLocator ( ) {
 	*/
 
 	function m_Switch ( ) {
-		switch ( m_Status )
-		{
+		switch ( m_Status ) {
 			case 1:
 				m_Start ( );
 				break;

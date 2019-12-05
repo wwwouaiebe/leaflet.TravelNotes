@@ -293,8 +293,7 @@ function newSortableList ( options, parentNode ) {
 	for ( let option in options ) {
 		m_Options [ option ] = options [ option ];
 	}
-	if ( ( 'LimitedSort' === m_Options.listStyle ) && ( 2 > m_Options.minSize ) )
-	{
+	if ( ( 'LimitedSort' === m_Options.listStyle ) && ( 2 > m_Options.minSize ) ) {
 		m_Options.minSize = 0;
 	}
 	let m_Container = m_HTMLElementsFactory.create ( 'div', { id : m_Options.id, className : 'TravelNotes-SortableList-Container' } );
@@ -307,8 +306,7 @@ function newSortableList ( options, parentNode ) {
 		parentNode.appendChild ( m_Container );
 	}
 	
-	for ( let itemCounter = 0; itemCounter < m_Options.minSize; itemCounter++ )
-	{
+	for ( let itemCounter = 0; itemCounter < m_Options.minSize; itemCounter++ ) {
 		m_AddItem ( );
 	}
 	

@@ -40,8 +40,7 @@ Event listener for show/ hide travel notes checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-function showTravelNotes ( )
-{
+function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
 	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
@@ -64,8 +63,7 @@ Event listener for show/ hide route notes checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-function showRouteNotes ( )
-{
+function showRouteNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
 	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
@@ -88,8 +86,7 @@ Event listener for show/ hide route maneuvers checkbox
 -------------------------------------------------------------------------------------------------------------------
 */
 
-function showRouteManeuvers ( )
-{
+function showRouteManeuvers ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
 	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
 	for ( let maneuversCounter = 0; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
@@ -116,8 +113,7 @@ let pageId = params.get("page");
 
 if ( pageId ) {
 	
-	let saveFile = function ( )
-	{
+	let saveFile = function ( ) {
 		try {
 			let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
 			let element = document.createElement ( 'a' );

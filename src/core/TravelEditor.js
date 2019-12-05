@@ -151,8 +151,7 @@ function newTravelEditor ( ) {
 		// We verify that the provider  for this route is available
 		let initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
-		if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
-		{
+		if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) ) {
 			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
 			return;
 		}
@@ -301,8 +300,7 @@ newRoadbookUpdate ( );
 	*/
 
 	function m_Clear ( ) {
-		if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) )
-		{
+		if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 			return;
 		}
 		m_EventDispatcher.dispatch ( 'removeallobjects' );

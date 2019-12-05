@@ -613,8 +613,7 @@ function newMapEditor ( ) {
 			geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
 			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
 		}
-		else
-		{
+		else {
 			m_ZoomToPoint ( latLng );
 		}
 	}

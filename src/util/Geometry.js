@@ -80,8 +80,7 @@ function newGeometry  ( ) {
 			let point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
 			// and distance is computed
 			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-			if ( distance < minDistance )
-			{
+			if ( distance < minDistance ) {
 				// we have found the smallest distance ... till now :-)
 				minDistance = distance;
 				// the nearest point is computed

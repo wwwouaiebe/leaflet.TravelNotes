@@ -218,8 +218,7 @@ function newTravelNotesToolbarUI ( ) {
 					control.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
 					control.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
 				}
-				else
-				{
+				else {
 					event.target.innerHTML = '&#x274c;';
 					control.removeEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
 					control.removeEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );

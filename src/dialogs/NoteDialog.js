@@ -365,8 +365,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 				m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
 				m_AddPreDefinedIconsList ( );
 			}
-			catch ( e )
-			{
+			catch ( e ) {
 				console.log ( e );
 			}
 		};

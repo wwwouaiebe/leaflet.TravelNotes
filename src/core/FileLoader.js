@@ -227,8 +227,7 @@ function newFileLoader ( ) {
 			m_EventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
-				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) )
-				{
+				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) ) {
 					gc_ErrorsUI.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
 				}
 				else {

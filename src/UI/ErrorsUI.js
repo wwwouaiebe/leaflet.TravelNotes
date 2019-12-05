@@ -122,8 +122,7 @@ function newErrorsUI ( ) {
 				( 'Help' === errorLevel && ! g_Config.errorUI.showHelp ) 
 				|| 
 				( 'Help' === errorLevel && ! m_ShowHelp ) 
-			)
-		{
+			) {
 			return;
 		}
 		if ( m_TimerId ) {

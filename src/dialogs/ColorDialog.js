@@ -243,8 +243,7 @@ function newColorDialog ( color ) {
 					colorButtonCellDiv.addEventListener ( 'click', m_OnColorClick, false );
 					g -= 51;
 				}
-				else
-				{
+				else {
 					r = ( cellCounter - 1 ) * 51;
 					let buttonColor = m_NumbersToColor ( 255, r, r );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );

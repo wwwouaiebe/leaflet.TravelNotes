@@ -204,8 +204,7 @@ function newRouteEditor ( ) {
 
 		// waypoints
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done )
-		{
+		while ( ! wayPointsIterator.done ) {
 			gpxString += 
 				tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
 				timeStamp + "/>";
@@ -364,8 +363,7 @@ function newRouteEditor ( ) {
 
 		// Placing the waypoints on the itinerary
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done )
-		{
+		while ( ! wayPointsIterator.done ) {
 			if ( wayPointsIterator.first ) {
 				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
 			}

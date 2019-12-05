@@ -188,8 +188,7 @@ function newBaseContextMenu ( originalEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	function m_BuildContainer ( ) 
-	{
+	function m_BuildContainer ( ) {
 		s_Container = m_htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, m_Body );
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
 		s_Container.addEventListener ( 
@@ -302,8 +301,7 @@ function newBaseContextMenu ( originalEvent ) {
 		if  ( ( s_OriginalEvent.latlng.lat === s_Lat ) && ( s_OriginalEvent.latlng.lng === s_Lng ) ) {
 			return;
 		}
-		else
-		{
+		else {
 			s_Lat = s_OriginalEvent.latlng.lat;
 			s_Lng = s_OriginalEvent.latlng.lng;
 		}

@@ -327,8 +327,7 @@ function newTravelEditorUI ( ) {
 		.addEventListener ( 
 			'click' , 
 			( ) => { 
-				if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) )
-				{
+				if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 					return;
 				}
 				document.getElementById ( 'TravelNotes-Control-OpenTravelInput' ).click ( );

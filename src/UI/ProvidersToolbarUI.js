@@ -188,13 +188,16 @@ function newProvidersToolbarUI ( ) {
 			if ( provider.transitModes.bike ) {
 				m_BikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				g_TravelNotesData.routing.transitMode = 'bike';
-			} else if ( provider.transitModes.pedestrian ) {
+			}
+ else if ( provider.transitModes.pedestrian ) {
 				m_PedestrianButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				g_TravelNotesData.routing.transitMode = 'pedestrian';
-			} else if ( provider.transitModes.car ) {
+			}
+ else if ( provider.transitModes.car ) {
 				m_CarButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				g_TravelNotesData.routing.transitMode = 'car';
-			} else if ( provider.transitModes.train ) {
+			}
+ else if ( provider.transitModes.train ) {
 				m_TrainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				g_TravelNotesData.routing.transitMode = 'train';
 			} 

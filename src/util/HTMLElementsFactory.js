@@ -59,8 +59,7 @@ function newHTMLElementsFactory ( ) {
 		if ( parentNode ) {
 			parentNode.appendChild ( element );
 		}
-		if ( properties )
-		{
+		if ( properties ) {
 			for ( var property in properties ) {
 				try {
 					element [ property ] = properties [ property ];
