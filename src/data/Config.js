@@ -124,7 +124,7 @@ function newConfig ( ) {
 			color : 'green',
 			weight : 4,
 			radius : 20,
-			fill : false,
+			fill : false
 		},
 		previousSearchLimit : {
 			color : "green",

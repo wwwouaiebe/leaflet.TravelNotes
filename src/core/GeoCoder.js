@@ -40,7 +40,7 @@ export { newGeoCoder };
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { g_Config } from '../data/Config.js';
 
-let newGeoCoder = function ( ) {
+function newGeoCoder ( ) {
 
 	/*
 	--- m_GetPromiseAddress function ----------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ let newGeoCoder = function ( ) {
 		}
 	);
 		
-};
+}
 
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------

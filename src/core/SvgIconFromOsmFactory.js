@@ -127,6 +127,18 @@ function newSvgIconFromOsmFactory ( ) {
 	--- End of m_CreateNodesAndWaysMaps function ---
 	*/
 
+	function m_LatLngCompare ( itineraryPoint ) {
+		let isntWayPoint = true;
+		m_Route.wayPoints.forEach ( 
+			wayPoint => {
+				if ( ( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < 0.00001 ) && ( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < 0.00001 ) ) {
+					isntWayPoint = false;
+				}
+			}
+		);
+		return  isntWayPoint && ( m_IconItineraryPoint.lat !== itineraryPoint.lat || m_IconItineraryPoint.lng !== itineraryPoint.lng );
+	}
+
 	/*
 	--- m_SearchItineraryPoints function ------------------------------------------------------------------------------
 
@@ -155,20 +167,9 @@ function newSvgIconFromOsmFactory ( ) {
 		
 		// The coordinates of the nearest point are used as position of the icon
 		m_IconLatLngDistance.latLng = m_IconItineraryPoint.latLng;
-		let latLngCompare = function ( itineraryPoint ) {
-			let isntWayPoint = true;
-			m_Route.wayPoints.forEach ( 
-				wayPoint => {
-					if ( ( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < 0.00001 ) && ( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < 0.00001 ) ) {
-						isntWayPoint = false;
-					}
-				}
-			);
-			return  isntWayPoint && ( m_IconItineraryPoint.lat !== itineraryPoint.lat || m_IconItineraryPoint.lng !== itineraryPoint.lng );
-		};
 		
-		m_IncomingPoint = m_Route.itinerary.itineraryPoints.previous ( m_IconItineraryPoint.objId, latLngCompare );
-		m_OutgoingPoint = m_Route.itinerary.itineraryPoints.next ( m_IconItineraryPoint.objId, latLngCompare );
+		m_IncomingPoint = m_Route.itinerary.itineraryPoints.previous ( m_IconItineraryPoint.objId, m_LatLngCompare );
+		m_OutgoingPoint = m_Route.itinerary.itineraryPoints.next ( m_IconItineraryPoint.objId, m_LatLngCompare );
 	}
 	
 	/*
@@ -328,7 +329,7 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		);
 		
-		let iconPoint = m_Geometry.addPoints ( m_Geometry.project ( m_IconLatLngDistance.latLng , m_SvgZoom ), m_Translation );
+		let iconPoint = m_Geometry.addPoints ( m_Geometry.project ( m_IconLatLngDistance.latLng, m_SvgZoom ), m_Translation );
 		// computing rotation... if possible
 		if ( m_IconItineraryPoint.objId !== m_Route.itinerary.itineraryPoints.first.objId  ) {
 			let rotationPoint = m_Geometry.addPoints ( m_Geometry.project ( rotationItineraryPoint.latLng, m_SvgZoom ), m_Translation );
@@ -469,7 +470,7 @@ function newSvgIconFromOsmFactory ( ) {
 					}
 					let pointsAttribute = '';
 					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-							pointsAttribute += points[ index ] [ 0].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
+							pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 					}
 
 					let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );

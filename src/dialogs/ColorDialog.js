@@ -59,16 +59,16 @@ function newColorDialog ( color ) {
 	/*
 	--- m_ColorToNumbers function -------------------------------------------------------------------------------------
 
-	This function transforms a css color into an object { r : xx, g : xx, b : xx}
+	This function transforms a css color into an object { red : xx, green : xx, blue : xx}
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_ColorToNumbers ( color ) {
 		return {
-			r : parseInt ( color.substr ( 1, 2 ), 16 ),
-			g : parseInt ( color.substr ( 3, 2 ), 16 ), 
-			b : parseInt ( color.substr ( 5, 2 ), 16 ), 
+			red : parseInt ( color.substr ( 1, 2 ), 16 ),
+			green : parseInt ( color.substr ( 3, 2 ), 16 ), 
+			blue : parseInt ( color.substr ( 5, 2 ), 16 ) 
 		};
 	}
 	
@@ -80,7 +80,7 @@ function newColorDialog ( color ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
-	function m_NumbersToColor ( r, g, b ) {
+	function m_NumbersToColor ( red, green, blue ) {
 		// MS Edge do't know padStart...
 		if ( ! String.prototype.padStart ) {
 			String.prototype.padStart = function padStart ( targetLength, padString ) {
@@ -100,9 +100,9 @@ function newColorDialog ( color ) {
 		}			
 		
 		return '#' + 
-			parseInt ( r ).toString(16).padStart ( 2, '0' ) + 
-			parseInt ( g ).toString(16).padStart ( 2, '0' ) + 
-			parseInt ( b ).toString(16).padStart ( 2, '0' ) ;
+			parseInt ( red ).toString (16).padStart ( 2, '0' ) + 
+			parseInt ( green ).toString (16).padStart ( 2, '0' ) + 
+			parseInt ( blue ).toString (16).padStart ( 2, '0' ) ;
 	}
 
 	/*
@@ -116,9 +116,9 @@ function newColorDialog ( color ) {
 	function m_OnColorClick ( event ) {
 		m_NewColor = event.target.colorValue;
 		let numbers = m_ColorToNumbers ( m_NewColor );
-		m_RedInput.value = numbers.r;
-		m_GreenInput.value = numbers.g;
-		m_BlueInput.value = numbers.b;
+		m_RedInput.value = numbers.red;
+		m_GreenInput.value = numbers.green;
+		m_BlueInput.value = numbers.blue;
 		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
 		m_ColorSampleDiv.color = m_NewColor;
 	}
@@ -132,20 +132,20 @@ function newColorDialog ( color ) {
 	*/
 
 	function m_OnRedColorClick ( event ) {
-		let r = event.target.redValue;
-		let g = 255;
-		let b = 255;
+		let red = event.target.redValue;
+		let green = 255;
+		let blue = 255;
 		let rowCounter = 0;
 		while ( ++ rowCounter < 7 ) {
 			let cellCounter = 0;
-			g = 255;
+			green = 255;
 			while ( ++ cellCounter < 7 ) {
 				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-				button.colorValue = m_NumbersToColor ( r, g, b );
-				button.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( r, g, b ) );
-				g -= 51;
+				button.colorValue = m_NumbersToColor ( red, green, blue );
+				button.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( red, green, blue ) );
+				green -= 51;
 			}
-			b -= 51;
+			blue -= 51;
 		}
 	}
 
@@ -208,9 +208,9 @@ function newColorDialog ( color ) {
 			m_ColorDiv
 		);
 
-		let r = 255;
-		let g = 255;
-		let b = 255;		
+		let red = 255;
+		let green = 255;
+		let blue = 255;		
 		let rowCounter = 0;
 		
 		// loop on the 7 rows
@@ -225,7 +225,7 @@ function newColorDialog ( color ) {
 			);
 			
 			let cellCounter = 0;
-			g = 255;
+			green = 255;
 			
 			// loop on the 6 cells
 			while ( ++ cellCounter < 7 ) {
@@ -238,20 +238,20 @@ function newColorDialog ( color ) {
 					colorButtonsRowDiv
 				);
 				if ( rowCounter < 7 ) {
-					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( r, g, b ) );
-					colorButtonCellDiv.colorValue = m_NumbersToColor ( r, g, b );
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( red, green, blue ) );
+					colorButtonCellDiv.colorValue = m_NumbersToColor ( red, green, blue );
 					colorButtonCellDiv.addEventListener ( 'click', m_OnColorClick, false );
-					g -= 51;
+					green -= 51;
 				}
 				else {
-					r = ( cellCounter - 1 ) * 51;
-					let buttonColor = m_NumbersToColor ( 255, r, r );
+					red = ( cellCounter - 1 ) * 51;
+					let buttonColor = m_NumbersToColor ( 255, red, red );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
-					colorButtonCellDiv.redValue = 255 - r;
+					colorButtonCellDiv.redValue = 255 - red;
 					colorButtonCellDiv.addEventListener ( 'click', m_OnRedColorClick, false );
 				}
 			}
-			b -= 51;
+			blue -= 51;
 		}
 	}
 	
@@ -275,7 +275,7 @@ function newColorDialog ( color ) {
 		m_HTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Red'),
+				data : g_Translator.getText ( 'ColorDialog - Red')
 			},
 			rvbDiv
 		);
@@ -289,7 +289,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_RedInput.value = m_ColorToNumbers ( m_NewColor ).r;
+		m_RedInput.value = m_ColorToNumbers ( m_NewColor ).red;
 		m_RedInput.min = 0;
 		m_RedInput.max = 255;
 		
@@ -299,7 +299,7 @@ function newColorDialog ( color ) {
 		m_HTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Green'),
+				data : g_Translator.getText ( 'ColorDialog - Green')
 			},
 			rvbDiv
 		);
@@ -312,7 +312,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_GreenInput.value = m_ColorToNumbers ( m_NewColor ).g;
+		m_GreenInput.value = m_ColorToNumbers ( m_NewColor ).green;
 		m_GreenInput.min = 0;
 		m_GreenInput.max = 255;
 		m_GreenInput.addEventListener ( 'input', m_OnColorInput, false );
@@ -321,7 +321,7 @@ function newColorDialog ( color ) {
 		m_HTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Blue'),
+				data : g_Translator.getText ( 'ColorDialog - Blue')
 			},
 			rvbDiv
 		);
@@ -334,7 +334,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_BlueInput.value = m_ColorToNumbers ( m_NewColor ).b;
+		m_BlueInput.value = m_ColorToNumbers ( m_NewColor ).blue;
 		m_BlueInput.min = 0;
 		m_BlueInput.max = 255;
 		m_BlueInput.addEventListener ( 'input', m_OnColorInput, false );

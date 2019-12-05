@@ -413,7 +413,7 @@ function newWayPointEditor ( ) {
 
 			wayPointDragEnd : wayPointObjId => m_WayPointDragEnd ( wayPointObjId ),
 
-			wayPointDropped : ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) => m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ),
+			wayPointDropped : ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) => m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore )
 		}
 	);
 }

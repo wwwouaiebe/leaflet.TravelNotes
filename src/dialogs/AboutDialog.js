@@ -49,7 +49,7 @@ import { currentVersion } from '../data/Version.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-var newAboutDialog = function ( ) {
+function newAboutDialog ( ) {
 	
 	var aboutDialog = newBaseDialog ( );
 	aboutDialog.title = g_Translator.getText ( 'AboutDialog - About Travel & Notes' );
@@ -76,7 +76,7 @@ var newAboutDialog = function ( ) {
 	
 	aboutDialog.show ( ).then ( ).catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 
-};
+}
 
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------

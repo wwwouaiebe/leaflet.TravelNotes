@@ -125,7 +125,7 @@ function newDataEncryptor ( ) {
 		*/
 		
 		function encrypt ( encryptKey ) {
-			return window.crypto.subtle.encrypt(
+			return window.crypto.subtle.encrypt (
 				{
 					name: "AES-GCM", 
 					iv: ivBytes
@@ -143,7 +143,7 @@ function newDataEncryptor ( ) {
 
 		function returnValue ( cipherText ) {
 			onOk ( 
-				new Blob(
+				new Blob (
 					[ ivBytes, new Uint8Array ( cipherText ) ],
 					{type: "application/octet-stream"}
 				)

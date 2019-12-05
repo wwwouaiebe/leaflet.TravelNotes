@@ -64,8 +64,8 @@ function newTravelNotesPaneUI ( ) {
 			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
 			dragEvent.dataTransfer.dropEffect = "move";
 		}
-		catch ( e ) {
-			console.log ( e );
+		catch ( err ) {
+			console.log ( err );
 		}
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
@@ -169,8 +169,8 @@ function newTravelNotesPaneUI ( ) {
 		if ( travelNotesDiv ) {
 			travelNotesDiv.childNodes.forEach (
 				childNode => {
-					childNode.removeEventListener ( 'click' , m_OnTravelNoteClick, false );
-					childNode.removeEventListener ( 'contextmenu' , m_OnTravelNoteContextMenu, false );
+					childNode.removeEventListener ( 'click', m_OnTravelNoteClick, false );
+					childNode.removeEventListener ( 'contextmenu', m_OnTravelNoteContextMenu, false );
 					childNode.removeEventListener ( 'dragstart', m_OnDragStart, false );	
 				}
 			);
@@ -207,8 +207,8 @@ function newTravelNotesPaneUI ( ) {
 		dataDiv.appendChild ( travelNotesDiv );
 		travelNotesDiv.childNodes.forEach (
 			childNode => {
-				childNode.addEventListener ( 'click' , m_OnTravelNoteClick, false );
-				childNode.addEventListener ( 'contextmenu' , m_OnTravelNoteContextMenu, false );
+				childNode.addEventListener ( 'click', m_OnTravelNoteClick, false );
+				childNode.addEventListener ( 'contextmenu', m_OnTravelNoteContextMenu, false );
 				childNode.draggable = true;
 				childNode.addEventListener ( 'dragstart', m_OnDragStart, false );	
 				childNode.classList.add ( 'TravelNotes-SortableList-MoveCursor' );				

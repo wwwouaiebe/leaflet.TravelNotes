@@ -54,7 +54,7 @@ function newBaseContextMenu ( originalEvent ) {
 	let s_MenuItems = [];
 	
 	let m_htmlElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_Body = document.getElementsByTagName('body') [0];
+	let m_Body = document.getElementsByTagName ('body') [ 0 ];
 		
 	/*
 	--- m_OnCloseMenu function ----------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ function newBaseContextMenu ( originalEvent ) {
 		}
 
 		// removing the menu container
-		document.getElementsByTagName('body') [0].removeChild ( s_Container );
+		document.getElementsByTagName ('body') [ 0 ].removeChild ( s_Container );
 		s_Container = null;
 		s_FocusIsOnItem = 0;
 		s_MenuItems = [];
@@ -189,7 +189,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 	
 	function m_BuildContainer ( ) {
-		s_Container = m_htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container',className : 'TravelNotes-ContextMenu-Container'}, m_Body );
+		s_Container = m_htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container', className : 'TravelNotes-ContextMenu-Container'}, m_Body );
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
 		s_Container.addEventListener ( 
 			'mouseenter',
@@ -232,7 +232,7 @@ function newBaseContextMenu ( originalEvent ) {
 
 	function m_MoveContainer ( ) {
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'} , m_Body );
+		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'}, m_Body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
 		m_Body.removeChild ( dummyDiv );

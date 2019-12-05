@@ -59,8 +59,8 @@ function newSortableList ( options, parentNode ) {
 			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
 			dragEvent.dataTransfer.dropEffect = "move";
 		}
-		catch ( e ) {
-			console.log ( e );
+		catch ( err ) {
+			console.log ( err );
 		}
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
@@ -111,7 +111,7 @@ function newSortableList ( options, parentNode ) {
 		let event = new Event ( 'SortableListDelete' );
 		event.itemNode = ClickEvent.target.parentNode;
 		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		ClickEvent.stopPropagation();
+		ClickEvent.stopPropagation ();
 	}
 
 	/*
@@ -124,7 +124,7 @@ function newSortableList ( options, parentNode ) {
 		let event = new Event ( 'SortableListUpArrow' );
 		event.itemNode = ClickEvent.target.parentNode;
 		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		ClickEvent.stopPropagation();
+		ClickEvent.stopPropagation ();
 	}
 
 	/*
@@ -137,7 +137,7 @@ function newSortableList ( options, parentNode ) {
 		let event = new Event ( 'SortableListDownArrow' );
 		event.itemNode = ClickEvent.target.parentNode;
 		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		ClickEvent.stopPropagation();
+		ClickEvent.stopPropagation ();
 	}
 
 	/*
@@ -150,7 +150,7 @@ function newSortableList ( options, parentNode ) {
 		let event = new Event ( 'SortableListRightArrow' );
 		event.itemNode = ClickEvent.target.parentNode;
 		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		ClickEvent.stopPropagation();
+		ClickEvent.stopPropagation ();
 	}
 
 	/*
@@ -164,7 +164,7 @@ function newSortableList ( options, parentNode ) {
 		event.dataObjId = changeEvent.target.parentNode.dataObjId;
 		event.changeValue = changeEvent.target.value;
 		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
-		changeEvent.stopPropagation();
+		changeEvent.stopPropagation ();
 	}
 
 	/*
@@ -206,11 +206,11 @@ function newSortableList ( options, parentNode ) {
 		placeholder = placeholder || '';
 		dataObjId = dataObjId || -1;
 		
-		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false , className : 'TravelNotes-SortableList-Item' } );
+		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
-		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex' , innerHTML : indexName }, item );
+		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex', innerHTML : indexName }, item );
 		let inputElement = m_HTMLElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
-		inputElement.addEventListener ( 'change' , m_OnChange, false );
+		inputElement.addEventListener ( 'change', m_OnChange, false );
 
 		//Workaround for issue #8
 		inputElement.addEventListener ( 
@@ -233,7 +233,7 @@ function newSortableList ( options, parentNode ) {
 			{ 
 				className : 'TravelNotes-SortableList-ItemUpArrowButton', 
 				title : g_Translator.getText ('SortableList - Move up' ),
-				innerHTML : String.fromCharCode( 8679 )
+				innerHTML : String.fromCharCode ( 8679 )
 			}, 
 			item
 		);
@@ -243,7 +243,7 @@ function newSortableList ( options, parentNode ) {
 			{ 
 				className : 'TravelNotes-SortableList-ItemDownArrowButton', 
 				title : g_Translator.getText ('SortableList - Move down' ), 
-				innerHTML : String.fromCharCode( 8681 ) 
+				innerHTML : String.fromCharCode ( 8681 ) 
 			},
 			item 
 		);
@@ -253,7 +253,7 @@ function newSortableList ( options, parentNode ) {
 			{ 
 				className : 'TravelNotes-SortableList-ItemRightArrowButton', 
 				title : g_Translator.getText ('SortableList - Edit' ), 
-				innerHTML : String.fromCharCode( 8688 ) 
+				innerHTML : String.fromCharCode ( 8688 ) 
 			},
 		item );
 		if ( 'AllSort' === m_Options.listStyle ) {

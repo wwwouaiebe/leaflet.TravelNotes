@@ -61,7 +61,7 @@ let g_AllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteDialog ( note, routeObjId , newNote ) {
+function newNoteDialog ( note, routeObjId, newNote ) {
 	
 	let m_FocusControl = null;
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
@@ -356,7 +356,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 	*/
 
 	function m_OnOpenUserDataFileInputChange ( event ) {
-		let fileReader = new FileReader( );
+		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
 				let newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
@@ -365,8 +365,8 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 				m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
 				m_AddPreDefinedIconsList ( );
 			}
-			catch ( e ) {
-				console.log ( e );
+			catch ( err ) {
+				console.log ( err ? err : 'An error occurs when opening the file' );
 			}
 		};
 		fileReader.readAsText ( event.target.files [ 0 ] );
@@ -407,7 +407,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 			g_AllButtonsAndIcons.preDefinedIconsList.push ( { name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), icon : '', tooltip : '', width : 40, height : 40 } );
 		}
 
-		g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( a, b ) { return a.name.localeCompare ( b.name ); } );
+		g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( first, second ) { return first.name.localeCompare ( second.name ); } );
 		let elementCounter = 0;
 		for ( elementCounter = m_PredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
 			m_PredefinedIconsSelect.remove ( elementCounter );
@@ -548,7 +548,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 			openUserDataFileFakeDiv 
 		);
 		
-		openUserDataFileButton.addEventListener ( 'click' , function ( ) { openUserDataFileInput.click ( ); }, false );
+		openUserDataFileButton.addEventListener ( 'click', function ( ) { openUserDataFileInput.click ( ); }, false );
 		
 		// personnalised buttons from server file are restored
 		m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
@@ -582,7 +582,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		m_HtmlElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'NoteDialog - Icon width'),
+				data : g_Translator.getText ( 'NoteDialog - Icon width')
 			},
 			iconDimensionsDiv
 		);
@@ -602,7 +602,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		m_HtmlElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'NoteDialog - Icon height'),
+				data : g_Translator.getText ( 'NoteDialog - Icon height')
 			},
 			iconDimensionsDiv
 		);
@@ -870,7 +870,7 @@ function newNoteDialog ( note, routeObjId , newNote ) {
 		}
 		
 		newHttpRequestBuilder ( ).getJsonPromise ( 
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 			'TravelNotesNoteDialog' + 
 			g_Config.language.toUpperCase ( ) + 
 			'.json'

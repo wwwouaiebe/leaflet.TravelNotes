@@ -46,7 +46,7 @@ function newAutoLoader ( ) {
 	newHTMLElementsFactory ( ).create ( 'div', { id : 'Map' },  document.getElementsByTagName ( 'body' ) [ 0 ] );
 	newHTMLElementsFactory ( ).create ( 'div', { id : 'TravelNotes' }, document.getElementsByTagName ( 'body' ) [ 0 ] );
 
-	let _Map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } ).setView( [ g_Config.map.center.lat,g_Config.map.center.lng ], g_Config.map.zoom );
+	let _Map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } ).setView ( [ g_Config.map.center.lat, g_Config.map.center.lng ], g_Config.map.zoom );
 	window.L.travelNotes.addControl ( _Map, "TravelNotes" );
 	window.L.travelNotes.rightContextMenu = true;
 }

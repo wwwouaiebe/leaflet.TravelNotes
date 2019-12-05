@@ -49,11 +49,11 @@ function newTranslator ( ) {
 		);
 	}
 	
-	function m_GetText ( msgid , params ) { 
+	function m_GetText ( msgid, params ) { 
 		let translation = m_translations.get ( msgid );
 		if ( params && translation ) {
 			Object.getOwnPropertyNames ( params ).forEach (
-				propertyName => translation = translation.replace ( '{' + propertyName + '}' , params [ propertyName ] )
+				propertyName => translation = translation.replace ( '{' + propertyName + '}', params [ propertyName ] )
 			);
 		}
 		
@@ -62,7 +62,7 @@ function newTranslator ( ) {
 	
 	return {
 		setTranslations : translations => m_SetTranslations ( translations ),
-		getText : ( msgid , params ) => { return m_GetText ( msgid , params ); }
+		getText : ( msgid, params ) => { return m_GetText ( msgid, params ); }
 	};
 }
 

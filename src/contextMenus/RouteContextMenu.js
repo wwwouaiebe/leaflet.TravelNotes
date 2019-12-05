@@ -103,7 +103,7 @@ function newRouteContextMenu ( event ) {
 			{ 
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Save modifications on this route" ), 
-				action : ( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId ) ? g_RouteEditor.saveEdition : null,
+				action : ( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId ) ? g_RouteEditor.saveEdition : null
 			},
 			{ 
 				context : g_RouteEditor, 

@@ -68,13 +68,13 @@ function newObjType ( name ) {
 
 	function m_Validate ( something ) {
 		
-		if ( ! Object.getOwnPropertyNames ( something ).includes( 'name' ) ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
 			throw 'No name for ' + m_Name;
 		}
 		if ( m_Name !== something.name ) {
 			throw 'Invalid name for ' + m_Name;
 		}
-		if ( ! Object.getOwnPropertyNames ( something ).includes( 'version' ) ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
 			throw 'No version for ' + m_Name;
 		}
 	}
@@ -94,7 +94,7 @@ function newObjType ( name ) {
 
 			get object ( ) { return m_GetObject ( ); },
 
-			validate : something => { return m_Validate ( something ); },
+			validate : something => { return m_Validate ( something ); }
 			
 		}
 	);

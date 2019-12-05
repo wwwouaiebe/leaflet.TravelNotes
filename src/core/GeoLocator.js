@@ -136,7 +136,7 @@ function newGeoLocator ( ) {
 	return Object.seal (
 		{
 			get status ( ) { return m_Status; },
-			switch : ( ) => { return m_Switch ( ); },
+			switch : ( ) => { return m_Switch ( ); }
 			
 		}
 	);
@@ -147,4 +147,3 @@ const gc_GeoLocator = newGeoLocator ( );
 /*
 --- End of GeoLocator.js file -----------------------------------------------------------------------------------------
 */	
-

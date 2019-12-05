@@ -54,7 +54,7 @@ let s_Layers = [
 		providerName:"OSM",
 		providerKeyNeeded:false,
 		attribution:"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
-	},
+	}
 ];
 
 let s_TimerId = null;
@@ -156,7 +156,7 @@ function newLayersToolbarUI ( ) {
 			{
 				type : 'link',
 				className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave',
-				innerHTML : '<a href="' + href + '" title="' + title + '" target="_blank">' + text + '</a>',
+				innerHTML : '<a href="' + href + '" title="' + title + '" target="_blank">' + text + '</a>'
 			},
 			m_LayersToolbarButtonsDiv
 		);
@@ -300,7 +300,7 @@ function newLayersToolbarUI ( ) {
 	function m_CreateUI ( ) {
 		
 		newHttpRequestBuilder ( ).getJsonPromise ( 
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 			'TravelNotesLayers.json' 
 		)
 		.then ( layers => { s_Layers = s_Layers.concat (layers ); } )

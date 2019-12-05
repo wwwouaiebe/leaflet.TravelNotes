@@ -87,7 +87,7 @@ function newRouteEditorUI ( ) {
 			headerDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			clickEvent => {
 				clickEvent.stopPropagation ( );
 				if ( -1 === g_TravelNotesData.editedRouteObjId ) {
@@ -294,7 +294,7 @@ function newRouteEditorUI ( ) {
 			buttonsDiv
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.reverseWayPoints ( );
@@ -314,7 +314,7 @@ function newRouteEditorUI ( ) {
 			buttonsDiv
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.removeAllWayPoints ( );

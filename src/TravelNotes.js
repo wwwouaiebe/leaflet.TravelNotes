@@ -96,12 +96,12 @@ function travelNotesFactory ( ) {
 	
 	let m_EventDispatcher = newEventDispatcher ( );
 
-	window.addEventListener( 
+	window.addEventListener ( 
 		'unload', 
 		( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
 	);
 
-	window.addEventListener( 
+	window.addEventListener ( 
 		'beforeunload', 
 		event => {
 			event.returnValue = 'x';
@@ -126,7 +126,7 @@ function travelNotesFactory ( ) {
 				}
 				else {
 					if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-						m_TravelUrl = decodeURIComponent ( escape( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+						m_TravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
 						m_Langage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
@@ -162,11 +162,11 @@ function travelNotesFactory ( ) {
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise ( 
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 				'TravelNotesConfig.json' 
 			),
 			requestBuilder.getJsonPromise ( 
-				window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 
+				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 
 				'TravelNotes' + 
 				( m_Langage || g_Config.language).toUpperCase ( )  +
 				'.json'
@@ -382,7 +382,7 @@ catch ( err ) {
 }
 
 newHttpRequestBuilder ( ).getJsonPromise ( 
-	window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+	window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 	'TravelNotesConfig.json' 
 )
 .then ( 

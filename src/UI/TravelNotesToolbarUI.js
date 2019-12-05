@@ -205,7 +205,7 @@ function newTravelNotesToolbarUI ( ) {
 			'span',
 			{ 
 				innerHTML : '&#x274c;', 
-				id : 'TravelNotes-Control-PinButton', 
+				id : 'TravelNotes-Control-PinButton' 
 			},
 			buttonsDiv
 		);

@@ -136,7 +136,7 @@ function newAPIKeysManager ( ) {
 		if ( provider.providerKeyNeeded && providerKey ) {
 			provider.providerKey = providerKey;
 		}
-		g_TravelNotesData.providers.set ( provider.name.toLowerCase( ), provider );
+		g_TravelNotesData.providers.set ( provider.name.toLowerCase ( ), provider );
 	}
 
 	/*
@@ -173,7 +173,7 @@ function newAPIKeysManager ( ) {
 		s_KeysMap.forEach (
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
 		)
-		ApiKeys.sort ( function ( a, b ) { return a.providerName.localeCompare ( b.providerName ); } );
+		ApiKeys.sort ( function ( first, second ) { return first.providerName.localeCompare ( second.providerName ); } );
 		newAPIKeysDialog ( ApiKeys )
 		.show ( )
 		.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
@@ -229,7 +229,7 @@ function newAPIKeysManager ( ) {
 			return;
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) +
+			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 				'APIKeys' 
 		)
 		.then ( m_OnServerFile )
@@ -267,4 +267,3 @@ const g_APIKeysManager = newAPIKeysManager ( );
 /*
 --- End of APIKeysManager.js file -------------------------------------------------------------------------------------
 */	
-

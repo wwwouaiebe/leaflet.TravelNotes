@@ -53,7 +53,7 @@ function showTravelNotes ( ) {
 	}
 }
 
-document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change',showTravelNotes );
+document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', showTravelNotes );
 
 /*
 --- showRouteNotes function ---------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ function showRouteNotes ( ) {
 	}
 }
 
-document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change',showRouteNotes );
+document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', showRouteNotes );
 
 /*
 --- showRouteManeuvers function -----------------------------------------------------------------------------------
@@ -107,33 +107,34 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 -------------------------------------------------------------------------------------------------------------------
 */
 
-let params = new URLSearchParams(document.location.search.substring(1));
-let language = params.get("lng"); 
-let pageId = params.get("page");
+let params = new URLSearchParams (document.location.search.substring (1));
+let language = params.get ("lng"); 
+let pageId = params.get ("page");
+
+function saveFile ( ) {
+	try {
+		let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
+		let element = document.createElement ( 'a' );
+		element.setAttribute ( 'href', mapFile );
+		element.setAttribute ( 'download', document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ].innerHTML + '-Roadbook.html' );
+		element.style.display = 'none';
+		document.body.appendChild ( element );
+		element.click ( );
+		document.body.removeChild ( element );
+		window.URL.revokeObjectURL ( mapFile );
+	}
+	catch ( Error ) {
+		console.log ( Error );
+	}				
+}
 
 if ( pageId ) {
 	
-	let saveFile = function ( ) {
-		try {
-			let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
-			let element = document.createElement ( 'a' );
-			element.setAttribute( 'href', mapFile );
-			element.setAttribute( 'download', document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ].innerHTML + '-Roadbook.html' );
-			element.style.display = 'none';
-			document.body.appendChild ( element );
-			element.click ( );
-			document.body.removeChild ( element );
-			window.URL.revokeObjectURL ( mapFile );
-		}
-		catch ( Error ) {
-			console.log ( Error );
-		}				
-	};
 	
 	document.getElementById ( "TravelNotes-SaveFile" ).addEventListener ( 'click', saveFile );
 	
 	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" ); 
-	window.addEventListener(
+	window.addEventListener (
 		'storage', 
 		function ( ) { 
 			document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" );
@@ -166,7 +167,7 @@ if ( language ) {
 						saveButton.value = g_Translator.getText ( "Roadbook - Save" );
 					}
 				}
-				catch ( e ) {
+				catch ( err ) {
 					console.log ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL );
 				}
 			}
@@ -176,7 +177,7 @@ if ( language ) {
 		}
 	};
 	
-	let XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf( '/') + 1 ) + 'TravelNotes' + language.toUpperCase ( ) +'.json';
+	let XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 'TravelNotes' + language.toUpperCase ( ) +'.json';
 	xmlHttpRequest.open ( "GET", XMLHttpRequestUrl, true );
 	xmlHttpRequest.overrideMimeType ( 'application/json' );
 	xmlHttpRequest.send ( null );

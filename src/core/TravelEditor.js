@@ -257,7 +257,7 @@ newRoadbookUpdate ( );
 		if ( 0 !== route.itinerary.itineraryPoints.length ) {
 			objType = route.itinerary.itineraryPoints [ 0 ].objType;
 		}
-		let compressedItineraryPoints = { latLngs : [] , distances : [], objIds : [],objType : objType  };
+		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType  };
 		route.itinerary.itineraryPoints.forEach ( 
 			itineraryPoint => {
 				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );

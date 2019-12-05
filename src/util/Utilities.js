@@ -61,12 +61,12 @@ function newUtilities ( ) {
 	function m_storageAvailable ( type ) {
 		try {
 			let storage = window [ type ];
-			let	x = '__storage_test__';
-			storage.setItem ( x, x );
-			storage.removeItem ( x );
+			let	testString = '__storage_test__';
+			storage.setItem ( testString, testString );
+			storage.removeItem ( testString );
 			return true;
 		}
-		catch ( e ) {
+		catch ( err ) {
 			return false;
 		}				
 	}
@@ -118,8 +118,8 @@ function newUtilities ( ) {
 			try {
 				window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename ); 
 			}
-			catch ( e ) {
-				console.log ( e );
+			catch ( err ) {
+				console.log ( err ? err : 'An error occurs when saving file' );
 			}
 		}
 		else {
@@ -128,16 +128,16 @@ function newUtilities ( ) {
 			try {
 				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type: type } ) );
 				let element = document.createElement ( 'a' );
-				element.setAttribute( 'href', mapFile );
-				element.setAttribute( 'download', filename );
+				element.setAttribute ( 'href', mapFile );
+				element.setAttribute ( 'download', filename );
 				element.style.display = 'none';
 				document.body.appendChild ( element );
 				element.click ( );
 				document.body.removeChild ( element );
 				window.URL.revokeObjectURL ( mapFile );
 			}
-			catch ( e ) {
-				console.log ( e );
+			catch ( err ) {
+				console.log ( err ? err : 'An error occurs when saving file' );
 			}				
 		}
 	}
@@ -246,7 +246,7 @@ function newUtilities ( ) {
 
 			fileAPIAvailable : ( ) => { return m_fileAPIAvailable ( ); },
 			
-			saveFile : ( filename, text, type ) => m_saveFile ( filename, text, type ) ,
+			saveFile : ( filename, text, type ) => m_saveFile ( filename, text, type ),
 
 			formatTime : time => { return m_formatTime ( time ); },
 			
@@ -263,4 +263,3 @@ function newUtilities ( ) {
 /*
 --- End of Utilities.js file ------------------------------------------------------------------------------------------
 */	
-

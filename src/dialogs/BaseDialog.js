@@ -50,7 +50,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let newBaseDialog = function ( ) {
+function newBaseDialog ( ) {
 
 	// variables initialization for drag and drop
 	let m_StartDragX = 0;
@@ -100,7 +100,7 @@ let newBaseDialog = function ( ) {
 			}
 
 			document.removeEventListener ( 'keydown', m_onKeyDown, true );
-			document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
+			document.getElementsByTagName ('body') [ 0 ].removeChild ( m_BackgroundDiv );
 			m_OnCancel ( 'Canceled by user' );
 		}
 	}
@@ -137,7 +137,7 @@ let newBaseDialog = function ( ) {
 		m_DialogDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-BaseDialog-Container',
+				className : 'TravelNotes-BaseDialog-Container'
 			},
 			m_BackgroundDiv
 		);
@@ -176,7 +176,7 @@ let newBaseDialog = function ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', m_onKeyDown, true );
-				document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
+				document.getElementsByTagName ('body') [ 0 ].removeChild ( m_BackgroundDiv );
 				m_OnCancel ( 'Canceled by user' );
 			},
 			false
@@ -188,8 +188,8 @@ let newBaseDialog = function ( ) {
 				try {
 					event.dataTransfer.setData ( 'Text', '1' );
 				}
-				catch ( e ) {
-					console.log ( e );
+				catch ( err ) {
+					console.log ( err );
 				}
 				m_StartDragX = event.screenX;
 				m_StartDragY = event.screenY;
@@ -201,7 +201,7 @@ let newBaseDialog = function ( ) {
 			( event ) => {
 				m_DialogX += event.screenX - m_StartDragX;
 				m_DialogY += event.screenY - m_StartDragY;
-				m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ),m_ScreenWidth - m_DialogDiv.clientWidth -20 );
+				m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ), m_ScreenWidth - m_DialogDiv.clientWidth -20 );
 				m_DialogY = Math.max ( m_DialogY, 20 );
 				let dialogMaxHeight = m_ScreenHeight - Math.max ( m_DialogY, 0 ) - 20;
 				m_DialogDiv.setAttribute ( "style", "top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" );
@@ -220,7 +220,7 @@ let newBaseDialog = function ( ) {
 		m_HeaderDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-BaseDialog-HeaderDiv',
+				className : 'TravelNotes-BaseDialog-HeaderDiv'
 			},
 			m_DialogDiv
 		);		
@@ -236,7 +236,7 @@ let newBaseDialog = function ( ) {
 		m_ContentDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-BaseDialog-ContentDiv',
+				className : 'TravelNotes-BaseDialog-ContentDiv'
 			},
 			m_DialogDiv
 		);
@@ -252,7 +252,7 @@ let newBaseDialog = function ( ) {
 		m_ErrorDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden',
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden'
 			},
 			m_DialogDiv
 		);
@@ -268,7 +268,7 @@ let newBaseDialog = function ( ) {
 		m_FooterDiv = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				className : 'TravelNotes-BaseDialog-FooterDiv',
+				className : 'TravelNotes-BaseDialog-FooterDiv'
 			},
 			m_DialogDiv
 		);
@@ -291,7 +291,7 @@ let newBaseDialog = function ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', m_onKeyDown, true );
-				document.getElementsByTagName('body') [0].removeChild ( m_BackgroundDiv );
+				document.getElementsByTagName ('body') [ 0 ].removeChild ( m_BackgroundDiv );
 				m_OnOk ( returnValue );
 			},
 			false
@@ -346,7 +346,7 @@ let newBaseDialog = function ( ) {
 	function m_Center ( ) {
 		m_DialogX = ( m_ScreenWidth - m_DialogDiv.clientWidth ) / 2;
 		m_DialogY = ( m_ScreenHeight - m_DialogDiv.clientHeight ) / 2;
-		m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ),m_ScreenWidth - m_DialogDiv.clientWidth -20 );
+		m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ), m_ScreenWidth - m_DialogDiv.clientWidth -20 );
 		m_DialogY = Math.max ( m_DialogY, 20 );
 		let dialogMaxHeight = m_ScreenHeight - Math.max ( m_DialogY, 0 ) - 20;
 		m_DialogDiv.setAttribute ( "style", "top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" );
@@ -362,7 +362,7 @@ let newBaseDialog = function ( ) {
 		m_OnOk = onOk;
 		m_OnCancel = onCancel;
 		
-		document.getElementsByTagName('body') [0].appendChild ( m_BackgroundDiv );
+		document.getElementsByTagName ('body') [ 0 ].appendChild ( m_BackgroundDiv );
 		document.addEventListener ( 'keydown', m_onKeyDown, true );
 		
 		m_ScreenWidth = m_BackgroundDiv.clientWidth;
@@ -456,7 +456,7 @@ let newBaseDialog = function ( ) {
 			show : ( ) => { return m_Show ( ) ; }
 		}
 	);
-};
+}
 
 /*
 --- End of BaseDialog.js file -----------------------------------------------------------------------------------------

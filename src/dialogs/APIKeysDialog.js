@@ -112,8 +112,8 @@ function newAPIKeysDialog ( APIKeys ) {
 		m_APIKeysDialog.hideWait ( );
 		var blobUrl = URL.createObjectURL ( data );
 		var element = document.createElement ( 'a' );
-		element.setAttribute( 'href', blobUrl );
-		element.setAttribute( 'download', 'APIKeys' );
+		element.setAttribute ( 'href', blobUrl );
+		element.setAttribute ( 'download', 'APIKeys' );
 		element.style.display = 'none';
 		document.body.appendChild ( element );
 		element.click ( );
@@ -175,7 +175,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		}
 		
 		while ( m_APIKeysDiv.firstChild ) {
-			m_APIKeysDiv.removeChild( m_APIKeysDiv.firstChild );
+			m_APIKeysDiv.removeChild ( m_APIKeysDiv.firstChild );
 		}	
 		
 		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey ) );
@@ -203,7 +203,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	function m_OnOpenFileInputChange ( event ) {
 		m_APIKeysDialog.showWait ( );
 		event.stopPropagation ( );
-		var fileReader = new FileReader( );
+		var fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			newDataEncryptor ( ).decryptData (
 				fileReader.result,		
@@ -311,7 +311,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			openFileFakeDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			( ) => { m_OpenFileInput.click ( ); }, 
 			false 
 		);

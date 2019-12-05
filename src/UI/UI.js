@@ -77,7 +77,7 @@ function newUI ( ) {
 		
 		gc_ProvidersToolbarUI.createUI ( m_MainDiv ); 
 
-		m_MainDiv.addEventListener ( 'setrouteslist', ( ) => gc_TravelEditorUI.setRoutesList ( ) , false );
+		m_MainDiv.addEventListener ( 'setrouteslist', ( ) => gc_TravelEditorUI.setRoutesList ( ), false );
 
 		m_MainDiv.addEventListener ( 'expandrouteui', ( ) => gc_RouteEditorUI.expandUI ( ), false );
 		m_MainDiv.addEventListener ( 'reducerouteui', ( ) => gc_RouteEditorUI.reduceUI ( ), false );
@@ -124,7 +124,7 @@ function newUI ( ) {
 						"TravelNotes-Control-OpenTravelInput", 
 						"TravelNotes-Control-OpenTravelButton", 
 						"TravelNotes-Control-ImportTravelInput", 
-						"TravelNotes-Control-ImportTravelButton", 
+						"TravelNotes-Control-ImportTravelButton" 
 					].indexOf ( event.target.id ) 
 				) {
 					return;

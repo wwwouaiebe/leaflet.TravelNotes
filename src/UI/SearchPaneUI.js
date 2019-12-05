@@ -75,10 +75,10 @@ function newSearchPaneUI ( ) {
 		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
 		while ( 0 !== searchResultsElements.length ) {
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-			searchResultsElements [ 0 ].removeEventListener ( 'click' , m_OnSearchResultClick, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'click', m_OnSearchResultClick, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu', m_OnSearchResultContextMenu, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter', m_OnSearchResultMouseEnter, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave', m_OnSearchResultMouseLeave, false );
 			searchDiv.removeChild ( searchResultsElements [ 0 ] );
 		}
 		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
@@ -197,10 +197,10 @@ function newSearchPaneUI ( ) {
 		Array.prototype.forEach.call ( 
 			searchResultsElements,
 			searchResultsElement => {
-				searchResultsElement.removeEventListener ( 'click' , m_OnSearchResultClick, false );
-				searchResultsElement.removeEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
-				searchResultsElement.removeEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
-				searchResultsElement.removeEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
+				searchResultsElement.removeEventListener ( 'click', m_OnSearchResultClick, false );
+				searchResultsElement.removeEventListener ( 'contextmenu', m_OnSearchResultContextMenu, false );
+				searchResultsElement.removeEventListener ( 'mouseenter', m_OnSearchResultMouseEnter, false );
+				searchResultsElement.removeEventListener ( 'mouseleave', m_OnSearchResultMouseLeave, false );
 			}
 		);
 		
@@ -292,10 +292,10 @@ function newSearchPaneUI ( ) {
 				searchResultDiv.osmId = searchResult.id;
 				searchResultDiv.latLng = [ searchResult.lat, searchResult.lon ];
 				searchResultDiv.geometry = searchResult.geometry;
-				searchResultDiv.addEventListener ( 'click' , m_OnSearchResultClick, false );
-				searchResultDiv.addEventListener ( 'contextmenu' , m_OnSearchResultContextMenu, false );
-				searchResultDiv.addEventListener ( 'mouseenter' , m_OnSearchResultMouseEnter, false );
-				searchResultDiv.addEventListener ( 'mouseleave' , m_OnSearchResultMouseLeave, false );
+				searchResultDiv.addEventListener ( 'click', m_OnSearchResultClick, false );
+				searchResultDiv.addEventListener ( 'contextmenu', m_OnSearchResultContextMenu, false );
+				searchResultDiv.addEventListener ( 'mouseenter', m_OnSearchResultMouseEnter, false );
+				searchResultDiv.addEventListener ( 'mouseleave', m_OnSearchResultMouseLeave, false );
 			}
 		);	
 	}

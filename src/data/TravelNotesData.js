@@ -55,7 +55,7 @@ function newTravelNotesData ( ) {
 		editedRouteObjId : -1,
 		routing : Object.seal ( { provider : '', transitMode : ''} ),
 		searchData : [],
-		UUID : newUtilities ( ).UUID,
+		UUID : newUtilities ( ).UUID
 	};
 	
 	/*

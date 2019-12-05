@@ -92,7 +92,7 @@ function newErrorsUI ( ) {
 			},
 			m_ShowHelpDiv
 		);
-		m_ShowHelpInput.addEventListener ( 'change',( ) => { m_ShowHelp = m_ShowHelpInput.checked; } , false );
+		m_ShowHelpInput.addEventListener ( 'change', ( ) => { m_ShowHelp = m_ShowHelpInput.checked; }, false );
 		m_HTMLElementsFactory.create (
 			'label',
 			{
@@ -140,16 +140,16 @@ function newErrorsUI ( ) {
 			'span',
 			{
 				id : 'TravelNotes-ErrorUI-CancelButton',
-				innerHTML : '&#x274c',
+				innerHTML : '&#x274c'
 			},
 			headerDiv
 		);
-		m_CancelButton.addEventListener ( 'click', m_OnTimer , false );
+		m_CancelButton.addEventListener ( 'click', m_OnTimer, false );
 		m_HTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI-Message',
-				innerHTML : message,
+				innerHTML : message
 			},
 			m_ErrorDiv
 		);

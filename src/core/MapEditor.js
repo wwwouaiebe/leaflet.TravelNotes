@@ -323,7 +323,7 @@ function newMapEditor ( ) {
 			leafletLayer = L.tileLayer ( url );
 		}
 		else{
-			leafletLayer = L.tileLayer.wms( url, layer.wmsOptions );
+			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 		
 		if ( m_CurrentLayer ) {
@@ -404,7 +404,7 @@ function newMapEditor ( ) {
 				ne.lng = Math.max ( ne.lng, latLng [ 1 ] );
 			}
 		);
-		return L.latLngBounds( sw, ne );
+		return L.latLngBounds ( sw, ne );
 	}
 	
 	/*
@@ -515,8 +515,8 @@ function newMapEditor ( ) {
 			route.name,
 			{ sticky : true, direction : 'right' }
 		);
-		polyline.on ( 'mouseover' , onMouseOverOrMoveOnRoute );
-		polyline.on ( 'mousemove' , onMouseOverOrMoveOnRoute );
+		polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );
+		polyline.on ( 'mousemove', onMouseOverOrMoveOnRoute );
 		
 		polyline.bindPopup ( 
 			layer => {
@@ -566,7 +566,7 @@ function newMapEditor ( ) {
 
 	function m_EditRoute ( route ) {
 		let polyline = g_TravelNotesData.mapObjects.get ( route.objId );
-		polyline.setStyle( { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
+		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
 	}
 		
 	/*
@@ -765,7 +765,7 @@ function newMapEditor ( ) {
 		let marker = L.marker ( 
 			wayPoint.latLng,
 			{ 
-				icon : L.divIcon ( { iconSize: [ 40 , 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
+				icon : L.divIcon ( { iconSize: [ 40, 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
 				draggable : true
 			} 
 		);	
@@ -833,7 +833,7 @@ function newMapEditor ( ) {
 				icon : L.divIcon ( 
 					{ 
 						iconSize: [ 
-							g_Config.note.grip.size , 
+							g_Config.note.grip.size, 
 							g_Config.note.grip.size
 						], 
 						iconAnchor: [ 
@@ -843,7 +843,7 @@ function newMapEditor ( ) {
 						html : '<div></div>'
 					}
 				),
-				zIndexOffset : -1000 ,
+				zIndexOffset : -1000,
 				opacity : g_Config.note.grip.opacity,
 				draggable : ! readOnly
 			} 
@@ -869,7 +869,7 @@ function newMapEditor ( ) {
 						note.latLng = latLngDistance.latLng;
 						note.distance = latLngDistance.distance;
 						// notes are sorted on the distance
-						route.notes.sort ( ( a, b ) => { return a.distance - b.distance; } );
+						route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
 						m_EventDispatcher.dispatch ( 'updateitinerary' );
@@ -1010,7 +1010,7 @@ function newMapEditor ( ) {
 		}
 
 		m_GeolocationCircle = L.circleMarker ( 
-			L.latLng( position.coords.latitude, position.coords.longitude ),
+			L.latLng ( position.coords.latitude, position.coords.longitude ),
 			{
 				radius : g_Config.geoLocation.radius,
 				color : g_Config.geoLocation.color
@@ -1022,7 +1022,7 @@ function newMapEditor ( ) {
 		.addTo ( g_TravelNotesData.map );
 		
 		if ( zoomToPosition ) {
-			g_TravelNotesData.map.setView ( L.latLng( position.coords.latitude, position.coords.longitude ), g_Config.geoLocation.zoomFactor );
+			g_TravelNotesData.map.setView ( L.latLng ( position.coords.latitude, position.coords.longitude ), g_Config.geoLocation.zoomFactor );
 		}
 	}
 	

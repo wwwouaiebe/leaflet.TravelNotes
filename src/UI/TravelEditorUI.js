@@ -104,7 +104,7 @@ function newTravelEditorUI ( ) {
 			headerDiv
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			clickEvent => {
 				clickEvent.stopPropagation ( );
 				document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
@@ -182,7 +182,7 @@ function newTravelEditorUI ( ) {
 		m_RoutesList.container.addEventListener ( 
 			'SortableListChange', 
 			event => {
-				event.stopPropagation();
+				event.stopPropagation ();
 				g_TravelEditor.renameRoute ( event.dataObjId, event.changeValue );
 			}, 
 			false 
@@ -225,7 +225,7 @@ function newTravelEditorUI ( ) {
 			buttonsDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			clickEvent => {
 				clickEvent.stopPropagation ( );
 				document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
@@ -250,7 +250,7 @@ function newTravelEditorUI ( ) {
 		.addEventListener ( 
 			'click', 
 			clickEvent => {
-				clickEvent.stopPropagation();
+				clickEvent.stopPropagation ();
 				g_TravelEditor.clear ( );
 				if ( g_Config.travelEditor.startupRouteEdition ) {
 					g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
@@ -325,7 +325,7 @@ function newTravelEditorUI ( ) {
 			openTravelFakeDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			( ) => { 
 				if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 					return;
@@ -378,7 +378,7 @@ function newTravelEditorUI ( ) {
 			importTravelFakeDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			( ) => { 
 				if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
 					gc_ErrorsUI.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
@@ -415,9 +415,9 @@ function newTravelEditorUI ( ) {
 			buttonsDiv 
 		)
 		.addEventListener ( 
-			'click' , 
+			'click', 
 			event => {
-				event.stopPropagation();
+				event.stopPropagation ();
 				g_TravelEditor.addRoute ( );
 			}, 
 			false 
@@ -460,7 +460,7 @@ function newTravelEditorUI ( ) {
 		m_RoutesList.removeAllItems ( );
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			m_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', g_Translator.getText ( 'TravelEditorUI - Route' ) ,routesIterator.value.objId, false );
+			m_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', g_Translator.getText ( 'TravelEditorUI - Route' ), routesIterator.value.objId, false );
 		}
 	}
 

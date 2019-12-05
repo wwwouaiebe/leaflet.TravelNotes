@@ -212,7 +212,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					m_HTMLElementsFactory.create (
 						'div',
 						{ 
-							className : m_ClassNamePrefix + 'Route-ManeuversAndNotes-IconCell ' + 'TravelNotes-ManeuverNote-' + maneuversIterator.value.iconName,
+							className : m_ClassNamePrefix + 'Route-ManeuversAndNotes-IconCell ' + 'TravelNotes-ManeuverNote-' + maneuversIterator.value.iconName
 						}, 
 						rowDiv
 					);

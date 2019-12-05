@@ -17,6 +17,16 @@
 		"array-bracket-spacing" : [ "warn" , "always" ],
 		"array-element-newline" : [ "warn" , "consistent" ],
 		"block-spacing" : [ "warn" , "always" ],
-		"brace-style" : [ "warn" , "stroustrup" , { "allowSingleLine" :true } ]
+		"brace-style" : [ "warn" , "stroustrup" , { "allowSingleLine" :true } ],
+		"comma-dangle" : [ "warn" , "never" ],
+		"comma-spacing" : [ "warn" ],
+		"comma-style" : [ "warn" ],
+		"computed-property-spacing" : [ "warn" , "always" ],
+		"consistent-this" : [ "warn" ],
+		"eol-last" : [ "warn" , "never" ],
+		"func-call-spacing" : [ "warn" , "always" ],
+		"func-style" : [ "warn" , "declaration" ],
+		"function-call-argument-newline" : [ "warn" , "consistent" ],
+		"id-length" : [ "warn", { "min" : 2 } ] 
     }
 }

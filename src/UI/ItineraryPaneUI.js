@@ -156,10 +156,10 @@ function newItineraryPaneUI ( ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.removeEventListener ( 'click' , m_OnInstructionClick, false );
-				childNode.removeEventListener ( 'contextmenu' , m_OnInstructionContextMenu, false );
-				childNode.removeEventListener ( 'mouseenter' , m_OnInstructionMouseEnter, false );
-				childNode.removeEventListener ( 'mouseleave' , m_OnInstructionMouseLeave, false );
+				childNode.removeEventListener ( 'click', m_OnInstructionClick, false );
+				childNode.removeEventListener ( 'contextmenu', m_OnInstructionContextMenu, false );
+				childNode.removeEventListener ( 'mouseenter', m_OnInstructionMouseEnter, false );
+				childNode.removeEventListener ( 'mouseleave', m_OnInstructionMouseLeave, false );
 			}
 			dataDiv.removeChild ( routeManeuversNotesList );
 		}
@@ -204,10 +204,10 @@ function newItineraryPaneUI ( ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.addEventListener ( 'click' , m_OnInstructionClick, false );
-				childNode.addEventListener ( 'contextmenu' , m_OnInstructionContextMenu, false );
-				childNode.addEventListener ( 'mouseenter' , m_OnInstructionMouseEnter, false );
-				childNode.addEventListener ( 'mouseleave' , m_OnInstructionMouseLeave, false );
+				childNode.addEventListener ( 'click', m_OnInstructionClick, false );
+				childNode.addEventListener ( 'contextmenu', m_OnInstructionContextMenu, false );
+				childNode.addEventListener ( 'mouseenter', m_OnInstructionMouseEnter, false );
+				childNode.addEventListener ( 'mouseleave', m_OnInstructionMouseLeave, false );
 			}
 		}
 	}

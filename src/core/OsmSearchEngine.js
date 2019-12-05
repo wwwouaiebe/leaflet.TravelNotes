@@ -65,7 +65,7 @@ function s_DrawSearchRectangle ( ) {
 		'addrectangle', 
 		{ 
 			objId : s_PreviousSearchRectangleObjId,
-			bounds : [ [ s_SearchParameters.bbox.southWest.lat,s_SearchParameters.bbox.southWest.lng ], [ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng, ] ] ,
+			bounds : [ [ s_SearchParameters.bbox.southWest.lat, s_SearchParameters.bbox.southWest.lng ], [ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng ] ],
 			properties : g_Config.previousSearchLimit 
 		}
 	);
@@ -163,7 +163,7 @@ function newOsmSearchEngine ( ) {
 				northEast : {
 					lat : mapBounds.getNorthEast ( ).lat,
 					lng : mapBounds.getNorthEast ( ).lng
-				},
+				}
 			},
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};

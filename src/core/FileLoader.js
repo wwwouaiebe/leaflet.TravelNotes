@@ -266,14 +266,14 @@ function newFileLoader ( ) {
 	function m_OpenFile ( event ) {
 		m_FileName = event.target.files [ 0 ].name;
 		
-		let fileReader = new FileReader( );
+		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
 				m_FileContent =  JSON.parse ( fileReader.result );
 				m_DecompressFileContent ( );
 			}
-			catch ( e ) {
-				console.log ( e);
+			catch ( err ) {
+				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
 		};
 		fileReader.readAsText ( event.target.files [ 0 ] );
