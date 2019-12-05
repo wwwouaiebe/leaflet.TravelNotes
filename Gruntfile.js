@@ -3,7 +3,8 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		eslint: {
 			options: {
-				fix: false
+				fix: false,
+				configFile: '.eslintrcNofix.json'
 			},				
 			target: ['src/**/*.js']
 		},	

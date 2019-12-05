@@ -1,0 +1,22 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+		"array-bracket-newline" : [ "warn" , "consistent" ],
+		"array-bracket-spacing" : [ "warn" , "always" ],
+		"array-element-newline" : [ "warn" , "consistent" ],
+		"block-spacing" : [ "warn" , "always" ],
+		"brace-style" : [ "warn" , "stroustrup" , { "allowSingleLine" :true } ]
+    }
+}
