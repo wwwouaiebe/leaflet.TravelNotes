@@ -36,7 +36,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 
 /*
---- newItinerary function -----------------------------------------------------------------------------------------
+--- newItinerary function ---------------------------------------------------------------------------------------------
 
 Patterns : Closure
 
@@ -134,7 +134,8 @@ function newItinerary ( ) {
 		}
 		let maneuverIterator = m_Maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			maneuverIterator.value.itineraryPointObjId = itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
+			maneuverIterator.value.itineraryPointObjId = 
+				itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
 		}
 	}
 	

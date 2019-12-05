@@ -94,7 +94,9 @@ function newWayPointEditor ( ) {
 					wayPointsIterator.value.latLng 
 				);
 				if ( distance < latLngDistance.distance ) {
-					g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( wayPoint.objId, wayPointsIterator.value.objId, true );
+					g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( 
+						wayPoint.objId, wayPointsIterator.value.objId, true
+					);
 					break;
 				}
 			}
@@ -146,7 +148,8 @@ function newWayPointEditor ( ) {
 				'addwaypoint', 
 				{ 
 					wayPoint : wayPointsIterator.value, 
-					letter : wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
+					letter :
+						wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
 				}
 			);
 		}
@@ -248,7 +251,9 @@ function newWayPointEditor ( ) {
 			m_RenameWayPoint ( address, wayPointObjId );
 		}
 		
-		newGeoCoder ( ).getPromiseAddress ( latLng ).then ( setAdressFromGeocoder ).catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
+		newGeoCoder ( ).getPromiseAddress ( latLng )
+			.then ( setAdressFromGeocoder )
+			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 	}
 	
 	/*
@@ -284,7 +289,10 @@ function newWayPointEditor ( ) {
 	function m_SetStartPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId : g_TravelNotesData.travel.editedRoute.wayPoints.first.objId } );
+			m_EventDispatcher.dispatch ( 
+				'removeobject', 
+				{ objId : g_TravelNotesData.travel.editedRoute.wayPoints.first.objId } 
+			);
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
@@ -316,7 +324,10 @@ function newWayPointEditor ( ) {
 	function m_SetEndPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId : g_TravelNotesData.travel.editedRoute.wayPoints.last.objId } );
+			m_EventDispatcher.dispatch ( 
+				'removeobject', 
+				{ objId : g_TravelNotesData.travel.editedRoute.wayPoints.last.objId }
+			);
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
@@ -347,7 +358,9 @@ function newWayPointEditor ( ) {
 	function m_WayPointDragEnd ( wayPointObjId ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
-			m_RenameWayPointWithGeocoder ( g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId );
+			m_RenameWayPointWithGeocoder ( 
+				g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
+			);
 		}
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
@@ -369,7 +382,9 @@ function newWayPointEditor ( ) {
 		if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
 			return;
 		}
-		g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( draggedWayPointObjId, targetWayPointObjId, draggedBefore );
+		g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( 
+			draggedWayPointObjId, targetWayPointObjId, draggedBefore 
+		);
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
@@ -413,7 +428,12 @@ function newWayPointEditor ( ) {
 
 			wayPointDragEnd : wayPointObjId => m_WayPointDragEnd ( wayPointObjId ),
 
-			wayPointDropped : ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) => m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore )
+			wayPointDropped : 
+				( 
+					draggedWayPointObjId, 
+					targetWayPointObjId, 
+					draggedBefore 
+				) => m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore )
 		}
 	);
 }

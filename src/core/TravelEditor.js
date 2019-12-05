@@ -354,7 +354,11 @@ function newTravelEditor ( ) {
 
 			swapRoute : ( routeObjId, swapUp ) => m_SwapRoute  ( routeObjId, swapUp ),
 
-			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ),
+			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped ( 
+				draggedRouteObjId, 
+				targetRouteObjId, 
+				draggedBefore 
+			),
 			
 			saveTravel : ( ) => m_SaveTravel ( ),
 

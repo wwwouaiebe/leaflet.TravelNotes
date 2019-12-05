@@ -73,7 +73,9 @@ function newGeometry  ( ) {
 
 		// projections of points are made
 		let point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
-		let point1 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+		let point1 = L.Projection.SphericalMercator.project ( 
+			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+		);
 
 		// variables initialization
 		let closestLatLng = null;
@@ -84,7 +86,9 @@ function newGeometry  ( ) {
 		while ( ! itineraryPointIterator.done ) {
 
 			// projection of the second point...
-			let point2 = L.Projection.SphericalMercator.project ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+			let point2 = L.Projection.SphericalMercator.project ( 
+				L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+			);
 
 			// and distance is computed
 			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
@@ -94,10 +98,16 @@ function newGeometry  ( ) {
 				minDistance = distance;
 
 				// the nearest point is computed
-				closestLatLng = L.Projection.SphericalMercator.unproject ( L.LineUtil.closestPointOnSegment ( point, point1, point2 ) );
+				closestLatLng = L.Projection.SphericalMercator.unproject ( 
+					L.LineUtil.closestPointOnSegment ( point, point1, point2 )
+				);
 
 				// and the distance also
-				closestDistance = endSegmentDistance - closestLatLng.distanceTo ( L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) );
+				closestDistance = 
+					endSegmentDistance - 
+					closestLatLng.distanceTo ( 
+						L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng ) 
+					);
 			}
 
 			// we prepare the iteration for the next point...
@@ -177,7 +187,8 @@ function newGeometry  ( ) {
 	return Object.seal (
 		{
 			getClosestLatLngDistance : ( route, latLng ) => { return m_GetClosestLatLngDistance ( route, latLng ); },
-			pointsDistance : ( latLngStartPoint, latLngEndPoint ) => { return m_PointsDistance ( latLngStartPoint, latLngEndPoint ); },
+			pointsDistance : 
+				( latLngStartPoint, latLngEndPoint ) => { return m_PointsDistance ( latLngStartPoint, latLngEndPoint ); },
 			project : ( latLng, zoom ) => { return m_Project ( latLng, zoom ); },
 			addPoints : ( point1, point2 ) => { return  m_AddPoint ( point1, point2 ); },
 			subtrackPoints : ( point1, point2 ) => { return  m_SubtrackPoints ( point1, point2 ); }

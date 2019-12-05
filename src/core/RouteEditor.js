@@ -25,7 +25,8 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #28 : Disable "select this point as start point " and "select this point as end point" when a start point or end point is already present
+		- Issue #28 : Disable "select this point as start point " and "select this point as end point" 
+			when a start point or end point is already present
 		- Issue #30 : Add a context menu with delete command to the waypoints
 		- Issue #33 : Add a command to hide a route
 		- Issue #34 : Add a command to show all routes
@@ -118,7 +119,10 @@ function newRouteEditor ( ) {
 			if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
 
 				// we have passed the cutting point...
-				let removedDistance = m_Geometry.pointsDistance ( cuttingPointLatLngDistance.latLng, itineraryPointIterator.value.latLng );
+				let removedDistance = m_Geometry.pointsDistance ( 
+					cuttingPointLatLngDistance.latLng, 
+					itineraryPointIterator.value.latLng 
+				);
 
 				// a new point is created at the cutting point position and added to the first route.
 				let cuttingPoint = newItineraryPoint ( );
@@ -172,7 +176,10 @@ function newRouteEditor ( ) {
 		route.distance = 0;
 		route.duration = 0;
 		while ( ! itineraryPointsIterator.done ) {
-			previousItineraryPoint.distance = m_Geometry.pointsDistance ( previousItineraryPoint.latLng, itineraryPointsIterator.value.latLng );
+			previousItineraryPoint.distance = m_Geometry.pointsDistance ( 
+				previousItineraryPoint.latLng, 
+				itineraryPointsIterator.value.latLng 
+			);
 			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
 				previousManeuver =  maneuverIterator.value;
@@ -219,10 +226,25 @@ function newRouteEditor ( ) {
 		gpxString += tab1 + "<rte>";
 		let maneuverIterator = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			let wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId );
-			let instruction = maneuverIterator.value.instruction.replace ( '&', '&amp;' ).replace ( '\'', '&apos;' ).replace ('"', '&quote;').replace ( '>', '&gt;' ).replace ( '<', '&lt;');
+			let wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( 
+				maneuverIterator.value.itineraryPointObjId 
+			);
+			let instruction = maneuverIterator.value.instruction
+				.replace ( '&', '&amp;' )
+				.replace ( '\'', '&apos;' )
+				.replace ('"', '&quote;')
+				.replace ( '>', '&gt;' )
+				.replace ( '<', '&lt;');
 			gpxString +=
-				tab2 + "<rtept lat='" + wayPoint.lat + "' lon='" + wayPoint.lng +"' " + timeStamp + "desc='" + instruction + "' />" ;
+				tab2 + 
+				"<rtept lat='" + 
+				wayPoint.lat + 
+				"' lon='" + 
+				wayPoint.lng +
+				"' " + 
+				timeStamp + 
+				"desc='" + 
+				instruction + "' />" ;
 		}
 		gpxString += tab1 + "</rte>";
 		
@@ -232,7 +254,13 @@ function newRouteEditor ( ) {
 		let itineraryPointsIterator = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
 			gpxString +=
-				tab3 + "<trkpt lat='" + itineraryPointsIterator.value.lat + "' lon='" + itineraryPointsIterator.value.lng + "' " + timeStamp + " />";
+				tab3 + 
+				"<trkpt lat='" + itineraryPointsIterator.value.lat + 
+				"' lon='" + 
+				itineraryPointsIterator.value.lng + 
+				"' " + 
+				timeStamp + 
+				" />";
 		}
 		gpxString += tab2 + "</trkseg>";				
 		gpxString += tab1 + "</trk>";
@@ -346,7 +374,9 @@ function newRouteEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
 		g_TravelNotesData.travel.editedRoute.itinerary.transitMode = g_TravelNotesData.routing.transitMode;
 
-		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null ).then (  m_EndRoutingOk, m_EndError  ).catch ( m_EndError );
+		routeProvider.getPromiseRoute ( g_TravelNotesData.travel.editedRoute, null )
+			.then (  m_EndRoutingOk, m_EndError  )
+			.catch ( m_EndError );
 
 		return true;
 	}
@@ -375,7 +405,10 @@ function newRouteEditor ( ) {
 				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 			}
 			else {
-				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
+				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( 
+					g_TravelNotesData.travel.editedRoute, 
+					wayPointsIterator.value.latLng 
+				).latLng;
 			}
 		}	
 		
@@ -392,7 +425,10 @@ function newRouteEditor ( ) {
 		// the position of the notes linked to the route is recomputed
 		let notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
 		while ( ! notesIterator.done ) {
-			let latLngDistance = m_Geometry.getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, notesIterator.value.latLng );
+			let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+				g_TravelNotesData.travel.editedRoute, 
+				notesIterator.value.latLng 
+			);
 			notesIterator.value.latLng = latLngDistance.latLng;
 			notesIterator.value.distance = latLngDistance.distance;
 		}

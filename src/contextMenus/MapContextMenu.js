@@ -62,7 +62,14 @@ function newMapContextMenu ( event ) {
 			{ 
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Select this point as start point" ), 
-				action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) ? g_WayPointEditor.setStartPoint : null,
+				action : 
+					( -1 !== g_TravelNotesData.editedRouteObjId )
+					&& 
+					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) 
+						? 
+						g_WayPointEditor.setStartPoint 
+						: 
+						null,
 				param : m_LatLng
 			},
 			{
@@ -74,7 +81,14 @@ function newMapContextMenu ( event ) {
 			{ 
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Select this point as end point" ), 
-				action : ( -1 !== g_TravelNotesData.editedRouteObjId ) && ( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) ? g_WayPointEditor.setEndPoint : null,
+				action : 
+					( -1 !== g_TravelNotesData.editedRouteObjId ) 
+					&& 
+					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) 
+						? 
+						g_WayPointEditor.setEndPoint 
+						:
+						null,
 				param : m_LatLng
 			},
 			{ 

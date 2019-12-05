@@ -79,8 +79,20 @@ function newNoteContextMenu ( event ) {
 			},
 			{ 
 				context : g_NoteEditor, 
-				name : route ?  g_Translator.getText ( "ContextMenuFactory - Detach note from route" ) : g_Translator.getText ( "ContextMenuFactory - Attach note to route" ), 
-				action : ( ( g_TravelNotesData.travel.routes.length !== 0 &&  -1 === g_TravelNotesData.editedRouteObjId ) ? ( route ? g_NoteEditor.detachNoteFromRoute : g_NoteEditor.attachNoteToRoute ) : null ),
+				name : 
+					route 
+						?  
+						g_Translator.getText ( "ContextMenuFactory - Detach note from route" ) 
+						: 
+						g_Translator.getText ( "ContextMenuFactory - Attach note to route" ), 
+				action :  
+					g_TravelNotesData.travel.routes.length !== 0 
+					&&  
+					-1 === g_TravelNotesData.editedRouteObjId  
+						? 
+						( route ? g_NoteEditor.detachNoteFromRoute : g_NoteEditor.attachNoteToRoute ) 
+						: 
+						null,
 				param : m_NoteObjId
 			} 
 		];

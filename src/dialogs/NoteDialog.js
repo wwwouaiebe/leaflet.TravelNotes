@@ -303,7 +303,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 		if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
 			m_NoteDialog.showWait ( );
-			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId).then ( m_OnSvgIcon ).catch ( m_OnErrorSvgIcon );
+			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId)
+				.then ( m_OnSvgIcon )
+				.catch ( m_OnErrorSvgIcon );
 		}
 		else {
 			m_WidthInput.value = preDefinedIcon.width ;
@@ -337,12 +339,24 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let selectionStart = m_FocusControl.selectionStart;
 		let selectionEnd = m_FocusControl.selectionEnd;
 		let oldText = m_FocusControl.value;
-		m_FocusControl.value = oldText.substring ( 0, selectionStart ) + 
-			( bInsertBeforeAndAfter ? button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter : button.htmlBefore ) + 
+		m_FocusControl.value = 
+			oldText.substring ( 0, selectionStart ) + 
+			( 
+				bInsertBeforeAndAfter 
+					? 
+					button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter 
+					:
+					button.htmlBefore
+			) + 
 			oldText.substring ( selectionEnd );
 		m_FocusControl.setSelectionRange ( 
-			bInsertBeforeAndAfter || selectionStart === selectionEnd ? selectionStart + button.htmlBefore.length : selectionStart,
-			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length );
+			bInsertBeforeAndAfter || selectionStart === selectionEnd 
+				? 
+				selectionStart + button.htmlBefore.length 
+				: 
+				selectionStart,
+			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length 
+		);
 		m_FocusControl.focus ( );
 	}
 
@@ -363,8 +377,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		fileReader.onload = function ( ) {
 			try {
 				let newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
-				g_UserButtonsAndIcons.editionButtons = g_UserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
-				g_UserButtonsAndIcons.preDefinedIconsList = g_UserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
+				g_UserButtonsAndIcons.editionButtons = 
+					g_UserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
+				g_UserButtonsAndIcons.preDefinedIconsList = 
+					g_UserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
 				m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
 				m_AddPreDefinedIconsList ( );
 			}
@@ -404,20 +420,37 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function m_AddPreDefinedIconsList ( ) {
-		g_AllButtonsAndIcons.preDefinedIconsList = g_TravelNotesButtonsAndIcons.preDefinedIconsList.concat ( g_UserButtonsAndIcons.preDefinedIconsList );
+		g_AllButtonsAndIcons.preDefinedIconsList = 
+			g_TravelNotesButtonsAndIcons.preDefinedIconsList.concat ( g_UserButtonsAndIcons.preDefinedIconsList );
 
 		if ( -1 < routeObjId ) {
-			g_AllButtonsAndIcons.preDefinedIconsList.push ( { name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), icon : '', tooltip : '', width : 40, height : 40 } );
+			g_AllButtonsAndIcons.preDefinedIconsList.push ( 
+				{ 
+					name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), 
+					icon : '', 
+					tooltip : '', 
+					width : 40, 
+					height : 40 
+				}
+			);
 		}
 
-		g_AllButtonsAndIcons.preDefinedIconsList.sort ( function ( first, second ) { return first.name.localeCompare ( second.name ); } );
+		g_AllButtonsAndIcons.preDefinedIconsList.sort ( 
+			( first, second ) => { return first.name.localeCompare ( second.name ); } 
+		);
 		let elementCounter = 0;
 		for ( elementCounter = m_PredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
 			m_PredefinedIconsSelect.remove ( elementCounter );
 		}
 		for ( elementCounter = 0; elementCounter < g_AllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
-			let option = m_HtmlElementsFactory.create ( 'option', { text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name } );
-			m_PredefinedIconsSelect.add ( option );
+			m_PredefinedIconsSelect.add ( 
+				m_HtmlElementsFactory.create ( 
+					'option', 
+					{ 
+						text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name 
+					}
+				)
+			);
 		}
 	}
 
@@ -740,7 +773,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'div',
 			{ 
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : '<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + g_Translator.getText ( 'NoteDialog - Address&nbsp;:' )
+				innerHTML : 
+					'<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + 
+					g_Translator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			m_NoteDataDiv
 		);
@@ -870,7 +905,15 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
 			g_TravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
 			m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
-			g_TravelNotesButtonsAndIcons.preDefinedIconsList.push ( { name : '', icon : '', tooltip : '', width : 40, height : 40 } );
+			g_TravelNotesButtonsAndIcons.preDefinedIconsList.push (
+				{
+					name : '', 
+					icon : '', 
+					tooltip : '', 
+					width : 40, 
+					height : 40
+				} 
+			);
 			m_AddPreDefinedIconsList ( );
 		}
 		
@@ -880,7 +923,8 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			g_Config.language.toUpperCase ( ) + 
 			'.json'
 		)
-			.then ( loadIconsAndButtons ).catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
+			.then ( loadIconsAndButtons )
+			.catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
 	}
 	
 	/*

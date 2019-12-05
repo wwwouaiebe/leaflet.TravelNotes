@@ -93,7 +93,9 @@ function newColorDialog ( color ) {
 				else {
 					targetLength = targetLength - this.length;
 					if ( targetLength > padString.length ) {
-						padString += padString.repeat ( targetLength / padString.length ); //append to original to ensure we are longer than needed
+
+						//append to original to ensure we are longer than needed
+						padString += padString.repeat ( targetLength / padString.length ); 
 					}
 					return padString.slice ( 0, targetLength ) + String ( this );
 				}

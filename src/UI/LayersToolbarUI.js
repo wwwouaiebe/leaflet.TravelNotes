@@ -83,7 +83,13 @@ function newLayersToolbarUI ( ) {
 	*/
 
 	function m_OnMouseEnterLayerButton ( event ) {
-		event.target.setAttribute ( 'style', "color:" + event.target.layer.toolbar.backgroundColor + ";background-color:" + event.target.layer.toolbar.color ); 
+		event.target.setAttribute ( 
+			'style', 
+			"color:" + 
+				event.target.layer.toolbar.backgroundColor + 
+				";background-color:" + 
+				event.target.layer.toolbar.color 
+		); 
 	}
 	
 	/*
@@ -93,7 +99,13 @@ function newLayersToolbarUI ( ) {
 	*/
 
 	function m_OnMouseLeaveLayerButton ( event ) {
-		event.target.setAttribute ( 'style', "color:" + event.target.layer.toolbar.color + ";background-color:" + event.target.layer.toolbar.backgroundColor ); 
+		event.target.setAttribute ( 
+			'style', 
+			"color:" + 
+				event.target.layer.toolbar.color + 
+				";background-color:" + 
+				event.target.layer.toolbar.backgroundColor
+		); 
 	}
 	
 	function m_OnMouseEnterLinkButton ( event ) {
@@ -200,7 +212,12 @@ function newLayersToolbarUI ( ) {
 		if ( wheelEvent.deltaY ) {
 			m_MarginTop -= wheelEvent.deltaY * 10;
 			m_MarginTop = m_MarginTop > m_ButtonTop ? m_ButtonTop : m_MarginTop;
-			m_MarginTop = m_MarginTop < m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight ? m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight : m_MarginTop;
+			m_MarginTop = 
+				m_MarginTop < m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight 
+					? 
+					m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight 
+					: 
+					m_MarginTop;
 			m_LayersToolbarButtonsDiv.style.marginTop = '' + m_MarginTop + 'px';
 		}
 		wheelEvent.stopPropagation ( );

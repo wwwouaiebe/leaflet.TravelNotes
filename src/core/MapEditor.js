@@ -341,7 +341,11 @@ function newMapEditor ( ) {
 		}
 		g_TravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
 		if ( layer.bounds ) {
-			if ( ! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds ) || g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds ) ) {
+			if ( 
+				! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds ) 
+				|| 
+				g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds ) 
+			) {
 				g_TravelNotesData.map.setMaxBounds ( null );
 				g_TravelNotesData.map.fitBounds ( layer.bounds );
 				g_TravelNotesData.map.setZoom ( layer.minZoom || 0 );
@@ -508,7 +512,14 @@ function newMapEditor ( ) {
 		}
 		
 		// the leaflet polyline is created and added to the map
-		let polyline = L.polyline ( latLng, { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
+		let polyline = L.polyline ( 
+			latLng,
+			{ 
+				color : route.color, 
+				weight : route.width, 
+				dashArray : m_getDashArray ( route )
+			} 
+		);
 		m_AddTo ( route.objId, polyline );
 
 		// tooltip and popup are created
@@ -550,7 +561,10 @@ function newMapEditor ( ) {
 		if ( addWayPoints ) {
 			let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				m_AddWayPoint ( wayPointsIterator.value, wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) );
+				m_AddWayPoint ( 
+					wayPointsIterator.value, 
+					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) 
+				);
 			}
 		}
 	}
@@ -663,9 +677,13 @@ function newMapEditor ( ) {
 
 	function m_ZoomToTravel ( ) {				
 		let latLngs = [];
-		g_TravelNotesData.travel.routes.forEach (  route => { latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) ); } );
+		g_TravelNotesData.travel.routes.forEach (  
+			route => { latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) ); } 
+		);
 		latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
-		g_TravelNotesData.travel.notes.forEach ( note => { latLngs.push ( note.latLng ); latLngs.push ( note.iconLatLng ); } );
+		g_TravelNotesData.travel.notes.forEach ( 
+			note => { latLngs.push ( note.latLng ); latLngs.push ( note.iconLatLng ); } 
+		);
 		if ( 0 !== latLngs.length ) {
 			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
 		}
@@ -710,8 +728,18 @@ function newMapEditor ( ) {
 			geometry.forEach ( geometryPart => { latLngs = latLngs.concat ( geometryPart );	} );
 			let geometryBounds = m_GetLatLngBounds ( latLngs );
 			let mapBounds = g_TravelNotesData.map.getBounds ( );
-			showGeometry = ( ( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) ) / (  mapBounds.getEast ( ) - mapBounds.getWest ( ) ) ) > 0.01 &&
-				( ( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) ) / (  mapBounds.getNorth ( ) - mapBounds.getSouth ( ) ) ) > 0.01;
+			showGeometry = 
+				( 
+					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
+					/ 
+					( mapBounds.getEast ( ) - mapBounds.getWest ( ) ) 
+				) > 0.01 
+				&&
+				( 
+					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
+					/ 
+					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
+				) > 0.01;
 		}
 		if ( showGeometry ) {
 			m_AddTo ( objId, L.polyline ( geometry, g_Config.searchPointPolyline ) );
@@ -767,12 +795,19 @@ function newMapEditor ( ) {
 		let marker = L.marker ( 
 			wayPoint.latLng,
 			{ 
-				icon : L.divIcon ( { iconSize : [ 40, 40 ], iconAnchor : [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
+				icon : L.divIcon ( 
+					{ 
+						iconSize : [ 40, 40 ], 
+						iconAnchor : [ 20, 40 ], 
+						html : iconHtml, 
+						className : 'TravelNotes-WayPointStyle'
+					} 
+				),
 				draggable : true
 			} 
 		);	
 
-		marker.bindTooltip ( function ( wayPoint ) { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
+		marker.bindTooltip ( wayPoint => { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
 		L.DomEvent.on ( 
@@ -869,8 +904,12 @@ function newMapEditor ( ) {
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
 					if ( null != route ) {
 
-						// the note is attached to the route, so we have to find the nearest point on the route and the distance since the start of the route
-						let latLngDistance = m_Geometry.getClosestLatLngDistance ( route, [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ] );
+						// the note is attached to the route, so we have to find the nearest point on the route 
+						// and the distance since the start of the route
+						let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+							route,
+							[ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ] 
+						);
 
 						// coordinates and distance are changed in the note
 						note.latLng = latLngDistance.latLng;
@@ -905,7 +944,8 @@ function newMapEditor ( ) {
 				event => {
 					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
-					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
+					layerGroup.getLayer ( layerGroup.polylineId )
+						.setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 				}
 			);
 		}
@@ -939,7 +979,9 @@ function newMapEditor ( ) {
 		
 		// ... and also a tooltip
 		if ( 0 !== note.tooltipContent.length ) {
-			marker.bindTooltip ( layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } );
+			marker.bindTooltip ( 
+				layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } 
+			);
 			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 		}
 		if ( ! readOnly ) {
@@ -984,7 +1026,8 @@ function newMapEditor ( ) {
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
 
 					// ... and finally the polyline is updated with the new coordinates
-					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+					layerGroup.getLayer ( layerGroup.polylineId )
+						.setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
 				}
 			);
 		}
@@ -1045,7 +1088,10 @@ function newMapEditor ( ) {
 			.addTo ( g_TravelNotesData.map );
 		
 		if ( zoomToPosition ) {
-			g_TravelNotesData.map.setView ( L.latLng ( position.coords.latitude, position.coords.longitude ), g_Config.geoLocation.zoomFactor );
+			g_TravelNotesData.map.setView ( 
+				L.latLng ( position.coords.latitude, position.coords.longitude ), 
+				g_Config.geoLocation.zoomFactor
+			);
 		}
 	}
 	

@@ -473,7 +473,8 @@ function newCollection ( objName ) {
 			Returns an iterator on the collection.
 			The iterator have the following properties:
 			value : the object pointed by the iterator
-			done : true when the iterator is at the end of the collection. Each time this property is called, the iterator move to the next object
+			done : true when the iterator is at the end of the collection. 
+				Each time this property is called, the iterator move to the next object
 			first : true when the iterator is on the first object
 			last : true when the iterator is on the last object
 			index : the current position of the iterator in the collection

@@ -61,19 +61,40 @@ function newRouteContextMenu ( event ) {
 			{ 
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Edit this route" ), 
-				action : ( ( g_TravelNotesData.editedRouteObjId !== m_RouteObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? g_TravelEditor.editRoute : null,
+				action :
+					( 
+						( g_TravelNotesData.editedRouteObjId !== m_RouteObjId ) 
+						&& ( 2 !== g_TravelNotesData.travel.editedRoute.edited )
+					) ? 
+						g_TravelEditor.editRoute 
+						:
+						null,
 				param : m_RouteObjId
 			},
 			{
 				context : g_TravelEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Delete this route" ), 
-				action : ( (m_RouteObjId) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? g_TravelEditor.removeRoute : null,
+				action : 
+					( 
+						( m_RouteObjId ) 
+						&& 
+						( 2 !== g_TravelNotesData.travel.editedRoute.edited )
+					) 
+						? 
+						g_TravelEditor.removeRoute 
+						:
+						null,
 				param : m_RouteObjId
 			},
 			{
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
-				action : ( g_TravelNotesData.travel.editedRoute.objId !== m_RouteObjId ) ? g_RouteEditor.hideRoute : null,
+				action : 
+					( g_TravelNotesData.travel.editedRoute.objId !== m_RouteObjId )
+						? 
+						g_RouteEditor.hideRoute
+						:
+						null,
 				param : m_RouteObjId
 			},
 			{

@@ -84,38 +84,49 @@ function newProvidersToolbarUI ( ) {
 
 	function m_SetProvider ( providerName ) {
 		g_TravelNotesData.routing.provider = providerName;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
-		document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ]
+			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
+		document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' )
+			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
 
 		// activating the transit mode buttons, depending of the capabilities of the provider
 		let provider = g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) );
 		if ( provider.transitModes.car ) {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-carImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		else {
-			document.getElementById ( 'TravelNotes-Control-carImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-carImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		if ( provider.transitModes.bike ) {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-bikeImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		else {
-			document.getElementById ( 'TravelNotes-Control-bikeImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-bikeImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		if ( provider.transitModes.pedestrian ) {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		else {
-			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-pedestrianImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		if ( provider.transitModes.train ) {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-trainImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 		else {
-			document.getElementById ( 'TravelNotes-Control-trainImgButton' ).classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			document.getElementById ( 'TravelNotes-Control-trainImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
 
 		// changing the transitMode if the provider don't have the active transit mode
-		if ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
+		if ( ! g_TravelNotesData.providers.get ( 
+			providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
 			if ( provider.transitModes.bike ) {
 				m_SetTransitMode ( 'bike' );
 			}
@@ -142,8 +153,10 @@ function newProvidersToolbarUI ( ) {
 	function m_SetTransitMode ( transitMode ) {
 		
 		g_TravelNotesData.routing.transitMode = transitMode;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ].classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' ).classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ]
+			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
+			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 	}
 	
 	/*
@@ -320,7 +333,14 @@ function newProvidersToolbarUI ( ) {
 		
 		m_ParentDiv = controlDiv;
 		
-		m_ButtonsDiv = m_HtmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryButtonsDiv', className : 'TravelNotes-Control-ButtonsDiv' }, controlDiv );
+		m_ButtonsDiv = m_HtmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-Control-ItineraryButtonsDiv', 
+				className : 'TravelNotes-Control-ButtonsDiv' 
+			},
+			controlDiv 
+		);
 
 		m_createTransitModesButtons ( );
 		m_createProvidersButtons ( );

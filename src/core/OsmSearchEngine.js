@@ -65,7 +65,10 @@ function s_DrawSearchRectangle ( ) {
 		'addrectangle', 
 		{ 
 			objId : s_PreviousSearchRectangleObjId,
-			bounds : [ [ s_SearchParameters.bbox.southWest.lat, s_SearchParameters.bbox.southWest.lng ], [ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng ] ],
+			bounds : [ 
+				[ s_SearchParameters.bbox.southWest.lat, s_SearchParameters.bbox.southWest.lng ], 
+				[ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng ] 
+			],
 			properties : g_Config.previousSearchLimit 
 		}
 	);
@@ -120,18 +123,21 @@ function onMapChange ( ) {
 		'addrectangle', 
 		{ 
 			objId : s_NextSearchRectangleObjId,
-			bounds : [ [ mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ], [ mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ] ],
+			bounds : [ 
+				[ mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ], 
+				[ mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ]
+			],
 			properties : g_Config.nextSearchLimit
 		}
 	);
 }
 
 /*
---- osmSearchEngine function --------------------------------------------------------------------------------------
+--- osmSearchEngine function ------------------------------------------------------------------------------------------
 
 This function returns the osmSearchEngine object
 
--------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
 */
 
 function newOsmSearchEngine ( ) {
@@ -139,11 +145,11 @@ function newOsmSearchEngine ( ) {
 	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
-	--- m_Search function -----------------------------------------------------------------------------------------
+	--- m_Search function ---------------------------------------------------------------------------------------------
 
 	This function start the search
 
-	---------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_Search ( ) {
@@ -172,11 +178,11 @@ function newOsmSearchEngine ( ) {
 	}
 	
 	/*
-	--- m_Show function -------------------------------------------------------------------------------------------
+	--- m_Show function -----------------------------------------------------------------------------------------------
 
 	This function enable maps event and draw the search limits
 
-	---------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_Show ( ) {
@@ -188,11 +194,11 @@ function newOsmSearchEngine ( ) {
 	}
 	
 	/*
-	--- m_Show function -------------------------------------------------------------------------------------------
+	--- m_Show function -----------------------------------------------------------------------------------------------
 
 	This function disable maps event and remove the search limits
 
-	---------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_Hide ( ) {
@@ -209,9 +215,9 @@ function newOsmSearchEngine ( ) {
 	}
 	
 	/*
-	--- osmSearchEngine object ------------------------------------------------------------------------------------
+	--- osmSearchEngine object ----------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------
 	*/
 	
 	return Object.seal (

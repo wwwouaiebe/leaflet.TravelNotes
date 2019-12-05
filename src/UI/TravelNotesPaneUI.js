@@ -69,7 +69,8 @@ function newTravelNotesPaneUI ( ) {
 		}
 
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
-		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
+		// MS Edge know the dataTransfer object, but the objects linked to the event are 
+		// different in the drag event and the drop event
 		s_NoteObjId = dragEvent.target.noteObjId - 1;
 	}
 

@@ -93,12 +93,23 @@ function newRouteEditorUI ( ) {
 					if ( -1 === g_TravelNotesData.editedRouteObjId ) {
 						return;
 					}
-					document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					let hiddenList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = hiddenList ? g_Translator.getText ( 'RouteEditorUI - Show' ) : g_Translator.getText ( 'RouteEditorUI - Hide' );
+					document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' )
+						.classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
+						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' )
+						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					let hiddenList = 
+						document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
+							.classList.contains ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = 
+						hiddenList ? '&#x25b6;' : '&#x25bc;';
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 
+						hiddenList 
+							? 
+							g_Translator.getText ( 'RouteEditorUI - Show' ) 
+							: 
+							g_Translator.getText ( 'RouteEditorUI - Hide' );
 				}, 
 				false 
 			);
@@ -217,9 +228,17 @@ function newRouteEditorUI ( ) {
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-					let expandedList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
-					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = expandedList ? g_Translator.getText ( 'RouteEditorUI - Reduce the list' ) : g_Translator.getText ( 'RouteEditorUI - Expand the list' );		
+					let expandedList = 
+						document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
+							.classList.contains ( 'TravelNotes-Control-ExpandedList' );
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = 
+						expandedList ? '&#x25b3;' : '&#x25bd;';
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = 
+						expandedList 
+							? 
+							g_Translator.getText ( 'RouteEditorUI - Reduce the list' ) 
+							: 
+							g_Translator.getText ( 'RouteEditorUI - Expand the list' );		
 				},
 				false 
 			);
@@ -391,8 +410,25 @@ function newRouteEditorUI ( ) {
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			let indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
-			let placeholder = wayPointsIterator.first ? g_Translator.getText ( 'RouteEditorUI - Start' ) : ( wayPointsIterator.last ? g_Translator.getText ( 'RouteEditorUI - End' ) : g_Translator.getText ( 'RouteEditorUI - Via' ) );
-			m_WayPointsList.addItem ( wayPointsIterator.value.UIName, indexName, placeholder, wayPointsIterator.value.objId, wayPointsIterator.last );
+			let placeholder = 
+				wayPointsIterator.first 
+					? 
+					g_Translator.getText ( 'RouteEditorUI - Start' ) 
+					: 
+					( 
+						wayPointsIterator.last 
+							? 
+							g_Translator.getText ( 'RouteEditorUI - End' ) 
+							: 
+							g_Translator.getText ( 'RouteEditorUI - Via' )
+					);
+			m_WayPointsList.addItem ( 
+				wayPointsIterator.value.UIName, 
+				indexName, 
+				placeholder, 
+				wayPointsIterator.value.objId, 
+				wayPointsIterator.last 
+			);
 		}
 	}
 	

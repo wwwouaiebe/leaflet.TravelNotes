@@ -86,7 +86,10 @@ function newNoteEditor ( ) {
 			route => {
 				let pointAndDistance = m_Geometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = m_Geometry.pointsDistance ( noteAndRoute.note.latLng, pointAndDistance.latLng );
+					let distanceToRoute = m_Geometry.pointsDistance ( 
+						noteAndRoute.note.latLng, 
+						pointAndDistance.latLng 
+					);
 					if ( distanceToRoute < distance ) {
 						distance = distanceToRoute;
 						selectedRoute = route;
@@ -231,7 +234,8 @@ function newNoteEditor ( ) {
 	function m_NewSearchNote ( searchResult ) {
 		let note = m_NewNote ( [ searchResult.lat, searchResult.lon ] );
 		
-		note.address = ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+		note.address = 
+			( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
 			( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
 			( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
 		
@@ -285,7 +289,9 @@ function newNoteEditor ( ) {
 		// the note is created
 		let note = m_NewNote ( latLng );
 		note.distance = latLngDistance.distance;
-		note.iconContent = "<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + maneuver.iconName + "'></div>";
+		note.iconContent = 
+			"<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + 
+			maneuver.iconName + "'></div>";
 		note.popupContent = maneuver.instruction;
 		note.iconWidth = 40;
 		note.iconHeight = 40;
@@ -544,7 +550,11 @@ function newNoteEditor ( ) {
 			
 			detachNoteFromRoute : noteObjId => m_DetachNoteFromRoute ( noteObjId ),
 			
-			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore )
+			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped ( 
+				draggedNoteObjId, 
+				targetNoteObjId, 
+				draggedBefore
+			)
 		}
 	);
 }

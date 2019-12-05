@@ -115,7 +115,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'div',
 				{ 
 					className : m_ClassNamePrefix + 'Travel-Header-RouteName',
-					innerHTML : '<a href="#route' +  travelRoutesIterator.value.objId + '">' + travelRoutesIterator.value.name + '</a>' + '&nbsp;:&nbsp;' + m_Utilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
+					innerHTML : 
+						'<a href="#route' + 
+						travelRoutesIterator.value.objId + 
+						'">' + travelRoutesIterator.value.name + 
+						'</a>' + '&nbsp;:&nbsp;' + 
+						m_Utilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
 				},
 				travelHeaderHTML
 			); 
@@ -128,7 +133,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			'div',
 			{ 
 				className : m_ClassNamePrefix + 'Travel-Header-TravelDistance',
-				innerHTML : g_Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', { distance : m_Utilities.formatDistance ( travelDistance ) } )
+				innerHTML : 
+					g_Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', 
+						{ 
+							distance : m_Utilities.formatDistance ( travelDistance ) 
+						} 
+					)
 			},
 			travelHeaderHTML
 		); 
@@ -187,7 +197,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function m_GetRouteManeuversAndNotesHTML ( route ) {
-		let routeManeuversAndNotesHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Route-ManeuversAndNotes' } ); 
+		let routeManeuversAndNotesHTML = m_HTMLElementsFactory.create ( 
+			'div', 
+			{ 
+				className : m_ClassNamePrefix + 'Route-ManeuversAndNotes' 
+			}
+		); 
 		
 		let notesIterator = route.notes.iterator;
 		let notesDone =  notesIterator.done;
@@ -212,7 +227,11 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					m_HTMLElementsFactory.create (
 						'div',
 						{ 
-							className : m_ClassNamePrefix + 'Route-ManeuversAndNotes-IconCell ' + 'TravelNotes-ManeuverNote-' + maneuversIterator.value.iconName
+							className : 
+								m_ClassNamePrefix + 
+								'Route-ManeuversAndNotes-IconCell ' + 
+								'TravelNotes-ManeuverNote-' + 
+								maneuversIterator.value.iconName
 						}, 
 						rowDiv
 					);
@@ -240,7 +259,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					);
 					
 					rowDiv.objId= newObjId ( );
-					rowDiv.latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
+					rowDiv.latLng = 
+						route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 					rowDiv.maneuverObjId = maneuversIterator.value.objId;
 					
 					maneuversDistance +=  maneuversIterator.value.distance;
@@ -269,7 +289,11 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 								'div',
 								{ 
 									className : m_ClassNamePrefix + 'NoteHtml-NextDistance',
-									innerHTML : g_Translator.getText ( 'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}', { distance : m_Utilities.formatDistance ( nextDistance ) } )
+									innerHTML : 
+										g_Translator.getText ( 
+											'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}', 
+											{ distance : m_Utilities.formatDistance ( nextDistance ) }
+										)
 								}, 
 								rowDiv.lastChild
 							);	
@@ -340,10 +364,37 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		
 		let travelRoutesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! travelRoutesIterator.done ) {
-			let useEditedRoute = g_Config.routeEditor.displayEditionInHTMLPage && travelRoutesIterator.value.objId === g_TravelNotesData.editedRouteObjId;
-			travelHTML.appendChild ( m_GetRouteHeaderHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
-			travelHTML.appendChild ( m_GetRouteManeuversAndNotesHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute :travelRoutesIterator.value ) );
-			travelHTML.appendChild ( m_GetRouteFooterHTML ( useEditedRoute ? g_TravelNotesData.travel.editedRoute : travelRoutesIterator.value ) );
+			let useEditedRoute = 
+				g_Config.routeEditor.displayEditionInHTMLPage 
+				&& 
+				travelRoutesIterator.value.objId === g_TravelNotesData.editedRouteObjId;
+			travelHTML.appendChild ( 
+				m_GetRouteHeaderHTML ( 
+					useEditedRoute 
+						? 
+						g_TravelNotesData.travel.editedRoute 
+						: 
+						travelRoutesIterator.value 
+				)
+			);
+			travelHTML.appendChild ( 
+				m_GetRouteManeuversAndNotesHTML ( 
+					useEditedRoute 
+						? 
+						g_TravelNotesData.travel.editedRoute
+						:
+						travelRoutesIterator.value 
+				)
+			);
+			travelHTML.appendChild ( 
+				m_GetRouteFooterHTML ( 
+					useEditedRoute 
+						? 
+						g_TravelNotesData.travel.editedRoute 
+						: 
+						travelRoutesIterator.value 
+				)
+			);
 		}
 		
 		travelHTML.appendChild ( m_GetTravelFooterHTML ( ) );
@@ -369,12 +420,26 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			route.name + 
 			'</div>';
 		if ( 0 !== route.distance ) {
-			returnValue += '<div class="' + m_ClassNamePrefix + 'Route-Header-Distance">' +
-				g_Translator.getText ( 'RouteEditor - Distance', { distance : m_Utilities.formatDistance ( route.distance ) } ) + '</div>';
+			returnValue += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'Route-Header-Distance">' +
+				g_Translator.getText ( 
+					'RouteEditor - Distance', 
+					{ distance : m_Utilities.formatDistance ( route.distance ) }
+				) + 
+				'</div>';
 		}
 		if ( ! g_TravelNotesData.travel.readOnly ) {
-			returnValue += '<div class="' + m_ClassNamePrefix + 'Route-Header-Duration">' +
-				g_Translator.getText ( 'RouteEditor - Duration', { duration : m_Utilities.formatTime ( route.duration ) } ) + '</div>';
+			returnValue += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'Route-Header-Duration">' +
+				g_Translator.getText ( 
+					'RouteEditor - Duration', 
+					{ duration : m_Utilities.formatTime ( route.duration ) } 
+				) + 
+				'</div>';
 		}
 		
 		return returnValue;
@@ -396,19 +461,49 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	
 		let noteText = '';
 		if ( 0 !== note.tooltipContent.length ) {
-			noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-TooltipContent">' + note.tooltipContent + '</div>';
+			noteText += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'NoteHtml-TooltipContent">' + 
+				note.tooltipContent + 
+				'</div>';
 		}
 		if ( 0 !== note.popupContent.length ) {
-			noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-PopupContent">' + note.popupContent + '</div>';
+			noteText += 
+				'<div class="' +
+				m_ClassNamePrefix + 
+				'NoteHtml-PopupContent">' +
+				note.popupContent + 
+				'</div>';
 		}
 		if ( 0 !== note.address.length ) {
-			noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-Address">' + g_Translator.getText ( 'NoteEditor - Address' )  + note.address + '</div>';
+			noteText += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'NoteHtml-Address">' + 
+				g_Translator.getText ( 'NoteEditor - Address' ) + 
+				note.address + '</div>';
 		}
 		if ( 0 !== note.phone.length ) {
-			noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-Phone">' + g_Translator.getText ( 'NoteEditor - Phone' )  + note.phone + '</div>';
+			noteText += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'NoteHtml-Phone">' + 
+				g_Translator.getText ( 'NoteEditor - Phone' )  
+				+ note.phone + '</div>';
 		}
 		if ( 0 !== note.url.length ) {
-			noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-Url">' + g_Translator.getText ( 'NoteEditor - Link' ) + '<a href="' + note.url + '" target="_blank">' + note.url.substr ( 0, 40 ) + '...' +'</a></div>';
+			noteText += 
+				'<div class="' + 
+				m_ClassNamePrefix + 
+				'NoteHtml-Url">' + 
+				g_Translator.getText ( 'NoteEditor - Link' ) + 
+				'<a href="' + 
+				note.url + 
+				'" target="_blank">' + 
+				note.url.substr ( 0, 40 ) + 
+				'...' +
+				'</a></div>';
 		}
 		let utilities = newUtilities ( );
 		noteText += '<div class="' + m_ClassNamePrefix + 'NoteHtml-LatLng">' + 
@@ -448,7 +543,9 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			
 			get routeHeaderHTML ( )  { return m_GetRouteHeaderHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			
-			get routeManeuversAndNotesHTML ( )  { return m_GetRouteManeuversAndNotesHTML ( g_TravelNotesData.travel.editedRoute ); }, 
+			get routeManeuversAndNotesHTML ( ) {
+				return m_GetRouteManeuversAndNotesHTML ( g_TravelNotesData.travel.editedRoute ); 
+			}, 
 			
 			get routeFooterHTML ( )  { return m_GetRouteFooterHTML ( g_TravelNotesData.travel.editedRoute ); }, 
 			

@@ -64,7 +64,8 @@ function newSortableList ( options, parentNode ) {
 		}
 
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
-		// MS Edge know the dataTransfer object, but the objects linked to the event are different in the drag event and the drop event
+		// MS Edge know the dataTransfer object, but the objects linked to the event are 
+		//different in the drag event and the drop event
 		m_DataObjId = dragEvent.target.dataObjId - 1;
 	}
 
@@ -210,7 +211,16 @@ function newSortableList ( options, parentNode ) {
 		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
 		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex', innerHTML : indexName }, item );
-		let inputElement = m_HTMLElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value : name}, item );
+		let inputElement = m_HTMLElementsFactory.create ( 
+			'input', 
+			{ 
+				type : 'text', 
+				className : 'TravelNotes-SortableList-ItemInput', 
+				placeholder : placeholder, 
+				value : name
+			}, 
+			item
+		);
 		inputElement.addEventListener ( 'change', m_OnChange, false );
 
 		//Workaround for issue #8
@@ -320,7 +330,13 @@ function newSortableList ( options, parentNode ) {
 	return Object.seal (
 		{
 			removeAllItems : ( ) => m_RemoveAllItems ( ),
-			addItem : ( name, indexName, placeholder, dataObjId, isLastItem ) => m_AddItem ( name, indexName, placeholder, dataObjId, isLastItem  ),
+			addItem : 
+				( 
+					name, 
+					indexName, 
+					placeholder, 
+					dataObjId, 
+					isLastItem ) => m_AddItem ( name, indexName, placeholder, dataObjId, isLastItem ),
 			get container ( ) { return m_Container; }
 		}
 	);

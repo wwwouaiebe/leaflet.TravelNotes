@@ -51,7 +51,7 @@ function newTravelNotesToolbarUI ( ) {
 	let m_TimerId = null;
 
 	/*
-	--- m_OnMouseEnterControl function -------------------------------------------------------------------------------------------
+	--- m_OnMouseEnterControl function --------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -82,7 +82,7 @@ function newTravelNotesToolbarUI ( ) {
 	}
 
 	/*
-	--- m_OnGeoLocationStatusChanged function -------------------------------------------------------------------------------------------
+	--- m_OnGeoLocationStatusChanged function -------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -153,7 +153,10 @@ function newTravelNotesToolbarUI ( ) {
 				id : 'TravelNotes-Control-ContactButton', 
 				className : 'TravelNotes-Control-Button', 
 				title : 'Contact',
-				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="' + ( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) + '" target="_blank">@</a>' //'&#x23CD;'
+				innerHTML : 
+					'<a class="TravelNotes-Control-LinkButton" href="' + 
+					( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) + 
+					'" target="_blank">@</a>'
 			}, 
 			buttonsDiv
 		);
