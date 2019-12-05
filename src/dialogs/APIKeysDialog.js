@@ -258,7 +258,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-APIKeysDialog-SaveToFileButton', 
-				className: 'TravelNotes-APIKeysDialog-Button', 
+				className : 'TravelNotes-APIKeysDialog-Button', 
 				title : g_Translator.getText ( 'APIKeysDialog - Save to file' ), 
 				innerHTML : '&#x1f4be;'
 			}, 
@@ -276,7 +276,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		let openFileDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-APIKeysDialog-OpenFileDiv'
+				id : 'TravelNotes-APIKeysDialog-OpenFileDiv'
 			}, 
 			m_ToolbarDiv 
 		);
@@ -296,7 +296,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		let openFileFakeDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
+				id : 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
 			}, 
 			openFileDiv 
 		);
@@ -304,7 +304,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-APIKeysDialog-OpenFileButton', 
-				className: 'TravelNotes-APIKeysDialog-Button', 
+				className : 'TravelNotes-APIKeysDialog-Button', 
 				title : g_Translator.getText ( 'APIKeysDialog - Open file' ), 
 				innerHTML : '&#x1F4C2;'
 			}, 
@@ -320,7 +320,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-APIKeysDialog-NewKeyButton', 
-				className: 'TravelNotes-APIKeysDialog-Button', 
+				className : 'TravelNotes-APIKeysDialog-Button', 
 				title : g_Translator.getText ( 'APIKeysDialog - new API key' ), 
 				innerHTML : '+'
 			}, 
@@ -366,7 +366,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
 				value : APIKey.providerKey,
 				placeholder : g_Translator.getText ( 'APIKeysDialog - API key' ),
-				type: g_Config.APIKeys.showAPIKeysInDialog ? 'text' : 'password'
+				type : g_Config.APIKeys.showAPIKeysInDialog ? 'text' : 'password'
 			},
 			APIKeyRow
 		);
@@ -374,7 +374,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				className: 'TravelNotes-APIKeysDialog-Button TravelNotes-APIKeysDialog-DeleteButton', 
+				className : 'TravelNotes-APIKeysDialog-Button TravelNotes-APIKeysDialog-DeleteButton', 
 				title : g_Translator.getText ( 'APIKeysDialog - delete API key' ), 
 				innerHTML : '&#x274c'
 			}, 

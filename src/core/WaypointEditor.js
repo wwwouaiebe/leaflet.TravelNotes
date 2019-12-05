@@ -137,7 +137,7 @@ function newWayPointEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointsIterator.value.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.reverse ( );
 		wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
@@ -166,7 +166,7 @@ function newWayPointEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointsIterator.value.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.removeAll ( true );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
@@ -186,7 +186,7 @@ function newWayPointEditor ( ) {
 
 	function m_RemoveWayPoint ( wayPointObjId ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
-		m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointObjId } );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		g_TravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
@@ -284,7 +284,7 @@ function newWayPointEditor ( ) {
 	function m_SetStartPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: g_TravelNotesData.travel.editedRoute.wayPoints.first.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : g_TravelNotesData.travel.editedRoute.wayPoints.first.objId } );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
@@ -316,7 +316,7 @@ function newWayPointEditor ( ) {
 	function m_SetEndPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: g_TravelNotesData.travel.editedRoute.wayPoints.last.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : g_TravelNotesData.travel.editedRoute.wayPoints.last.objId } );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
@@ -373,7 +373,7 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointsIterator.value.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
 			m_EventDispatcher.dispatch ( 
 				'addwaypoint', 
 				{ 

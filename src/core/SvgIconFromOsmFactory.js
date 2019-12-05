@@ -586,10 +586,10 @@ function newSvgIconFromOsmFactory ( ) {
 				{ 
 					svg : m_Svg, 
 					direction : m_Direction, 
-					startStop: m_StartStop, 
+					startStop : m_StartStop, 
 					city : m_City, 
-					place: m_Place, 
-					streets: m_PassingStreets, 
+					place : m_Place, 
+					streets : m_PassingStreets, 
 					latLng : m_IconItineraryPoint.latLng
 				} 
 			);

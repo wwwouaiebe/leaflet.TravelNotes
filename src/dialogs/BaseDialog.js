@@ -161,7 +161,7 @@ function newBaseDialog ( ) {
 		let cancelButton = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				innerHTML: '&#x274c', 
+				innerHTML : '&#x274c', 
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : g_Translator.getText ( "BaseDialog - Cancel" )
 			},
@@ -275,7 +275,7 @@ function newBaseDialog ( ) {
 		m_OkButton = m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
-				innerHTML: '&#x1f197;', 
+				innerHTML : '&#x1f197;', 
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
 			},
 			m_FooterDiv
@@ -301,12 +301,12 @@ function newBaseDialog ( ) {
 		m_SearchWaitBulletDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				className: 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
+				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
 			}, 
 			m_SearchWaitDiv = m_HTMLElementsFactory.create ( 
 				'div', 
 				{ 
-					className: 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
+					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
 				},
 				m_FooterDiv 
 			)

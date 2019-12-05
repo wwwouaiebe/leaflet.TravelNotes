@@ -60,7 +60,7 @@ function newWayPointContextMenu ( event ) {
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ), 
 				action : isMidWayPoint ? g_WayPointEditor.removeWayPoint : null,
-				param: m_WayPointObjId
+				param : m_WayPointObjId
 			} 
 		];
 	}

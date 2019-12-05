@@ -413,7 +413,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			m_PredefinedIconsSelect.remove ( elementCounter );
 		}
 		for ( elementCounter = 0; elementCounter < g_AllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
-			let option = m_HtmlElementsFactory.create ( 'option', { text :  g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name } );
+			let option = m_HtmlElementsFactory.create ( 'option', { text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name } );
 			m_PredefinedIconsSelect.add ( option );
 		}
 	}
@@ -516,7 +516,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let openUserDataFileDiv = m_HtmlElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-NoteDialog-OpenEditorFileDiv'
+				id : 'TravelNotes-NoteDialog-OpenEditorFileDiv'
 			}, 
 			m_ToolbarDiv 
 		);
@@ -533,7 +533,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let openUserDataFileFakeDiv = m_HtmlElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
+				id : 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
 			}, 
 			openUserDataFileDiv 
 		);
@@ -541,7 +541,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'button', 
 			{ 
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
-				className: 'TravelNotes-NoteDialog-EditorButton', 
+				className : 'TravelNotes-NoteDialog-EditorButton', 
 				title : g_Translator.getText ( 'NoteDialog - Open a configuration file' ), 
 				innerHTML : '&#x23CD;'
 			}, 
@@ -644,7 +644,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'textarea',
 			{ 
 				className : 'TravelNotes-NoteDialog-TextArea',
-				id: 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
+				id : 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
 			m_NoteDataDiv
 		);
@@ -677,7 +677,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'textarea',
 			{ 
 				className : 'TravelNotes-NoteDialog-TextArea',
-				id: 'TravelNotes-NoteDialog-TextArea-PopupContent'
+				id : 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
 			m_NoteDataDiv
 		);
@@ -711,7 +711,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Tooltip'
+				id : 'TravelNotes-NoteDialog-InputText-Tooltip'
 			},
 			m_NoteDataDiv
 		);
@@ -750,7 +750,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Adress'
+				id : 'TravelNotes-NoteDialog-InputText-Adress'
 			},
 			m_NoteDataDiv
 		);
@@ -800,7 +800,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Link'
+				id : 'TravelNotes-NoteDialog-InputText-Link'
 			},
 			m_NoteDataDiv
 		);
@@ -840,7 +840,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{ 
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id: 'TravelNotes-NoteDialog-InputText-Phone'
+				id : 'TravelNotes-NoteDialog-InputText-Phone'
 			},
 			m_NoteDataDiv
 		);

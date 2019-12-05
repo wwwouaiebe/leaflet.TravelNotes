@@ -29,6 +29,8 @@
 		"function-call-argument-newline" : [ "warn" , "consistent" ],
 		"id-length" : [ "warn", { "min" : 2 } ],
 		"implicit-arrow-linebreak" : [ "warn", "beside" ],
-		"indent": ["warn", "tab"]
+		"indent": ["warn", "tab"],
+		"key-spacing" : [ "warn", { "beforeColon": true , "afterColon": true , "mode": "strict" } ],
+		"keyword-spacing" : [ "warn" ]
     }
 }

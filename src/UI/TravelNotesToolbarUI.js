@@ -131,7 +131,7 @@ function newTravelNotesToolbarUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-HomeButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : 'Help',
 				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="' + window.location.origin + '" target="_blank">&#x1f3e0;</a>' 
 			}, 
@@ -141,7 +141,7 @@ function newTravelNotesToolbarUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-HelpButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : 'Help',
 				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" target="_blank">?</a>' 
 			}, 
@@ -151,7 +151,7 @@ function newTravelNotesToolbarUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ContactButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : 'Contact',
 				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="' + ( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) + '" target="_blank">@</a>' //'&#x23CD;'
 			}, 
@@ -163,7 +163,7 @@ function newTravelNotesToolbarUI ( ) {
 				'div', 
 				{ 
 					id : 'TravelNotes-Control-ApiKeysButton', 
-					className: 'TravelNotes-Control-Button', 
+					className : 'TravelNotes-Control-Button', 
 					title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
 					innerHTML : '&#x1f511;'
 				}, 
@@ -184,7 +184,7 @@ function newTravelNotesToolbarUI ( ) {
 				'div', 
 				{ 
 					id : 'TravelNotes-Control-GeoLocatorButton', 
-					className: 'TravelNotes-Control-Button', 
+					className : 'TravelNotes-Control-Button', 
 					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ), 
 					innerHTML : '&#x1f310;'
 				}, 

@@ -765,7 +765,7 @@ function newMapEditor ( ) {
 		let marker = L.marker ( 
 			wayPoint.latLng,
 			{ 
-				icon : L.divIcon ( { iconSize: [ 40, 40 ], iconAnchor: [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
+				icon : L.divIcon ( { iconSize : [ 40, 40 ], iconAnchor : [ 20, 40 ], html : iconHtml, className : 'TravelNotes-WayPointStyle' } ),
 				draggable : true
 			} 
 		);	
@@ -832,11 +832,11 @@ function newMapEditor ( ) {
 			{ 
 				icon : L.divIcon ( 
 					{ 
-						iconSize: [ 
+						iconSize : [ 
 							g_Config.note.grip.size, 
 							g_Config.note.grip.size
 						], 
-						iconAnchor: [ 
+						iconAnchor : [ 
 							g_Config.note.grip.size / 2,
 							g_Config.note.grip.size / 2 
 						],
@@ -900,9 +900,9 @@ function newMapEditor ( ) {
 		// a second marker is now created. The icon created by the user is used for this marker
 		let icon = L.divIcon (
 			{ 
-				iconSize: [ note.iconWidth, note.iconHeight ], 
-				iconAnchor: [ note.iconWidth / 2, note.iconHeight / 2 ],
-				popupAnchor: [ 0, - note.iconHeight / 2 ], 
+				iconSize : [ note.iconWidth, note.iconHeight ], 
+				iconAnchor : [ note.iconWidth / 2, note.iconHeight / 2 ],
+				popupAnchor : [ 0, - note.iconHeight / 2 ], 
 				html : note.iconContent,
 				className : g_Config.note.style
 			}

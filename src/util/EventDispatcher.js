@@ -112,7 +112,7 @@ function newEventDispatcher ( ) {
 
 	return Object.seal ( 
 		{
-			dispatch: ( eventName, eventData ) => m_Dispatch ( eventName, eventData )
+			dispatch : ( eventName, eventData ) => m_Dispatch ( eventName, eventData )
 		}
 	);
 	

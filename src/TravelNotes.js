@@ -136,7 +136,7 @@ function travelNotesFactory ( ) {
 				}
 			}
 		);
-		let stateObj = { index: "bar" };
+		let stateObj = { index : "bar" };
 		history.replaceState ( stateObj, "page", newUrlSearch );
 	}
 

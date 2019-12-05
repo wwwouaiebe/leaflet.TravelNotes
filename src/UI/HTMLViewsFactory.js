@@ -98,12 +98,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function m_GetTravelHeaderHTML ( ) {
-		let travelHeaderHTML = m_HTMLElementsFactory.create ( 'div', { className :  m_ClassNamePrefix + 'Travel-Header' } ); 
+		let travelHeaderHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel-Header' } ); 
 		m_HTMLElementsFactory.create ( 
 			'div',
 			{ 
 				className : m_ClassNamePrefix + 'Travel-Header-Name',
-				innerHTML: g_TravelNotesData.travel.name
+				innerHTML : g_TravelNotesData.travel.name
 			},
 			travelHeaderHTML
 		); 
@@ -115,7 +115,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'div',
 				{ 
 					className : m_ClassNamePrefix + 'Travel-Header-RouteName',
-					innerHTML: '<a href="#route' +  travelRoutesIterator.value.objId + '">' + travelRoutesIterator.value.name + '</a>' + '&nbsp;:&nbsp;' + m_Utilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
+					innerHTML : '<a href="#route' +  travelRoutesIterator.value.objId + '">' + travelRoutesIterator.value.name + '</a>' + '&nbsp;:&nbsp;' + m_Utilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
 				},
 				travelHeaderHTML
 			); 
@@ -128,7 +128,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			'div',
 			{ 
 				className : m_ClassNamePrefix + 'Travel-Header-TravelDistance',
-				innerHTML:  g_Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', { distance : m_Utilities.formatDistance ( travelDistance ) } )
+				innerHTML : g_Translator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}', { distance : m_Utilities.formatDistance ( travelDistance ) } )
 			},
 			travelHeaderHTML
 		); 
@@ -145,7 +145,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function m_GetTravelNotesHTML ( ) {
-		let travelNotesHTML = m_HTMLElementsFactory.create ( 'div', { className :  m_ClassNamePrefix + 'Travel-Notes'} ); 
+		let travelNotesHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel-Notes'} ); 
 		let travelNotesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! travelNotesIterator.done ) {
 			let rowDiv = m_HTMLElementsFactory.create ( 
@@ -173,7 +173,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			{ 
 				className : m_ClassNamePrefix + 'Route-Header',
 				id : 'route' + route.objId,
-				innerHTML: m_GetRouteHTML ( route )
+				innerHTML : m_GetRouteHTML ( route )
 			}
 		); 
 	}
@@ -296,7 +296,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			innerHTML = g_Translator.getText ( 
 				'HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}', 
 				{
-					provider: route.itinerary.provider, 
+					provider : route.itinerary.provider, 
 					transitMode : g_Translator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
 				} 
 			);
@@ -425,7 +425,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				g_Translator.getText ( 
 					'NoteEditor - Distance', 
 					{ 
-						distance: utilities.formatDistance ( note.chainedDistance + note.distance )
+						distance : utilities.formatDistance ( note.chainedDistance + note.distance )
 					}
 				) + '</div>';
 		}

@@ -62,43 +62,43 @@ function newRouteContextMenu ( event ) {
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Edit this route" ), 
 				action : ( ( g_TravelNotesData.editedRouteObjId !== m_RouteObjId ) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? g_TravelEditor.editRoute : null,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_TravelEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Delete this route" ), 
 				action : ( (m_RouteObjId) && ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) ) ? g_TravelEditor.removeRoute : null,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
 				action : ( g_TravelNotesData.travel.editedRoute.objId !== m_RouteObjId ) ? g_RouteEditor.hideRoute : null,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ), 
 				action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? g_WayPointEditor.addWayPointOnRoute : null,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_NoteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Add a note on the route" ), 
 				action : g_NoteEditor.newRouteNote,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Properties" ), 
 				action : g_RouteEditor.routeProperties,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Zoom to route" ), 
 				action : g_RouteEditor.zoomToRoute,
-				param: m_RouteObjId
+				param : m_RouteObjId
 			},
 			{ 
 				context : g_RouteEditor, 

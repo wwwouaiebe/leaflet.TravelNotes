@@ -209,7 +209,7 @@ function newSortableList ( options, parentNode ) {
 		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
 		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex', innerHTML : indexName }, item );
-		let inputElement = m_HTMLElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value: name}, item );
+		let inputElement = m_HTMLElementsFactory.create ( 'input', { type : 'text', className : 'TravelNotes-SortableList-ItemInput', placeholder : placeholder, value : name}, item );
 		inputElement.addEventListener ( 'change', m_OnChange, false );
 
 		//Workaround for issue #8

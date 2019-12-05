@@ -113,8 +113,8 @@ function newTravelEditor ( ) {
 		m_EventDispatcher.dispatch ( 
 			'removeroute', 
 			{ 
-				route: m_DataSearchEngine.getRoute ( routeObjId ),
-				removeNotes: true, 
+				route : m_DataSearchEngine.getRoute ( routeObjId ),
+				removeNotes : true, 
 				removeWayPoints : true
 			}
 		);
@@ -174,8 +174,8 @@ function newTravelEditor ( ) {
 		m_EventDispatcher.dispatch ( 
 			'removeroute', 
 			{ 
-				route: initialRoute,
-				removeNotes: true, 
+				route : initialRoute,
+				removeNotes : true, 
 				removeWayPoints : true
 			}
 		);

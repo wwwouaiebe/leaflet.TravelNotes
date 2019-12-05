@@ -123,7 +123,7 @@ function newItineraryPaneUI ( ) {
 
 	function m_OnInstructionMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch ( 'removeobject', { objId: mouseEvent.target.objId } );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
 	}
 
 	/*

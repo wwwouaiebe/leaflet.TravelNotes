@@ -42,18 +42,18 @@ import { gc_AttributionsUI } from '../UI/AttributionsUI.js';
 
 let s_Layers = [
 	{
-		service:"wmts",
-		url:"https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-		name:"OSM - Color",
-		toolbar:
+		service : "wmts",
+		url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+		name : "OSM - Color",
+		toolbar :
 		{
-			text:"OSM",
-			color:"red",
-			backgroundColor:"white"
+			text : "OSM",
+			color : "red",
+			backgroundColor : "white"
 		},
-		providerName:"OSM",
-		providerKeyNeeded:false,
-		attribution:"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
+		providerName : "OSM",
+		providerKeyNeeded : false,
+		attribution : "| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
 	}
 ];
 
@@ -128,7 +128,7 @@ function newLayersToolbarUI ( ) {
 		let layerButton = m_HtmlElementsFactory.create ( 
 			'div',
 			{
-				type: 'layer',
+				type : 'layer',
 				className : 'TravelNotes-LayersToolbarUI-Button',
 				title : layer.name,
 				layer : layer,

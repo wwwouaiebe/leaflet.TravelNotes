@@ -125,7 +125,7 @@ function newPasswordDialog ( verifyPassword ) {
 			'input', 
 			{
 				id : 'TravelNotes-PasswordDialog-PasswordInput',
-				type: 'password'
+				type : 'password'
 			},
 			m_PasswordDiv
 		);

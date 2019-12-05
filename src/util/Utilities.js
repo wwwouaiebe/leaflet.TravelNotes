@@ -84,7 +84,7 @@ function newUtilities ( ) {
 	function m_fileAPIAvailable ( ) {
 		try {
 			// FF...
-			new File ( [ 'testdata' ], { type: 'text/plain' } );
+			new File ( [ 'testdata' ], { type : 'text/plain' } );
 			return true;
 		}
 		catch ( Error ) {
@@ -126,7 +126,7 @@ function newUtilities ( ) {
 			// FF...
 			// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
 			try {
-				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type: type } ) );
+				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type : type } ) );
 				let element = document.createElement ( 'a' );
 				element.setAttribute ( 'href', mapFile );
 				element.setAttribute ( 'download', filename );
@@ -242,7 +242,7 @@ function newUtilities ( ) {
 		{
 			get UUID ( ) { return m_getUUID ( ) },
 						
-			storageAvailable: type =>  m_storageAvailable ( type ),
+			storageAvailable : type =>  m_storageAvailable ( type ),
 
 			fileAPIAvailable : ( ) => { return m_fileAPIAvailable ( ); },
 			

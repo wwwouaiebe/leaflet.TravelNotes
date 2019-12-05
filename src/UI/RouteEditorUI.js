@@ -205,7 +205,7 @@ function newRouteEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ExpandWayPointsListButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'RouteEditorUI - Expand the list' ), 
 				innerHTML : '&#x25bd;'
 			}, 
@@ -228,7 +228,7 @@ function newRouteEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-CancelRouteButton',
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'RouteEditorUI - Cancel' ), 
 				innerHTML : '&#x274c'
 			},
@@ -248,7 +248,7 @@ function newRouteEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SaveRouteButton',
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'RouteEditorUI - Save' ), 
 				innerHTML : '&#x1f4be;'
 			},
@@ -267,7 +267,7 @@ function newRouteEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-gpxButton',
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'RouteEditorUI - Save the route in a gpx file' ), 
 				innerHTML : 'gpx'
 			},
@@ -287,7 +287,7 @@ function newRouteEditorUI ( ) {
 			'div',
 			{ 
 				id : 'TravelNotes-Control-ReverseWayPointsButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'RouteEditorUI - Invert waypoints' ),  
 				innerHTML : '&#x21C5;'
 			},
@@ -307,8 +307,8 @@ function newRouteEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-RemoveAllWayPointsButton', 
-				className: 'TravelNotes-Control-Button',
-				title: g_Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
 				innerHTML : '&#x267b;'
 			}, 
 			buttonsDiv

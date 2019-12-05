@@ -215,7 +215,7 @@ function newBaseContextMenu ( originalEvent ) {
 		m_htmlElementsFactory.create ( 
 			'div',
 			{ 
-				innerHTML: '&#x274c', 
+				innerHTML : '&#x274c', 
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : g_Translator.getText ( "ContextMenu - Close" )
 			},

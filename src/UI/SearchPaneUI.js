@@ -161,7 +161,7 @@ function newSearchPaneUI ( ) {
 
 	function m_OnSearchResultMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch ( 'removeobject', { objId: mouseEvent.target.objId } );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
 	}
 
 	/*
@@ -240,7 +240,7 @@ function newSearchPaneUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SearchButton',
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'SearchPaneUI - Search OpenStreetMap' ), 
 				innerHTML : '&#x1f50e'
 			},
@@ -254,7 +254,7 @@ function newSearchPaneUI ( ) {
 				type : 'text', 
 				id : 'TravelNotes-Control-SearchInput', 
 				placeholder : g_Translator.getText ( 'SearchPaneUI - Search phrase' ),
-				value: s_SearchInputValue
+				value : s_SearchInputValue
 			},
 			searchDiv 
 		);

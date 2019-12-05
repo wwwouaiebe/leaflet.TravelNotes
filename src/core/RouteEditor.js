@@ -379,8 +379,8 @@ function newRouteEditor ( ) {
 		m_EventDispatcher.dispatch ( 
 			'removeroute', 
 			{ 
-				route: g_TravelNotesData.travel.editedRoute,
-				removeNotes: true, 
+				route : g_TravelNotesData.travel.editedRoute,
+				removeNotes : true, 
 				removeWayPoints : true
 			}
 		);
@@ -448,8 +448,8 @@ function newRouteEditor ( ) {
 		m_EventDispatcher.dispatch ( 
 			'removeroute', 
 			{ 
-				route: g_TravelNotesData.travel.editedRoute,
-				removeNotes: true, 
+				route : g_TravelNotesData.travel.editedRoute,
+				removeNotes : true, 
 				removeWayPoints : true
 			}
 		);
@@ -497,7 +497,7 @@ function newRouteEditor ( ) {
 				m_EventDispatcher.dispatch ( 
 					'editroute', 
 					{ 
-						route: route
+						route : route
 					}
 				);
 				g_RouteEditor.chainRoutes ( );
@@ -524,8 +524,8 @@ function newRouteEditor ( ) {
 			m_EventDispatcher.dispatch ( 
 				'removeroute', 
 				{ 
-					route: route,
-					removeNotes: true, 
+					route : route,
+					removeNotes : true, 
 					removeWayPoints : true
 				}
 			);

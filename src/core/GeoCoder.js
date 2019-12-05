@@ -63,7 +63,7 @@ function newGeoCoder ( ) {
 		let requestHeaders = null;
 
 		if (  nominatimLanguage && nominatimLanguage === '*' ) {
-			requestHeaders = [ { headerName :'accept-language', headerValue : ''} ];
+			requestHeaders = [ { headerName : 'accept-language', headerValue : ''} ];
 		}
 
 		return newHttpRequestBuilder ( ).getJsonPromise ( NominatimUrl, requestHeaders ); 

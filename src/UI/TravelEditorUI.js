@@ -218,7 +218,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ExpandRoutesListButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Expand the list' ), 
 				innerHTML : '&#x25bd;'
 			}, 
@@ -241,7 +241,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-CancelTravelButton',
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Cancel travel' ), 
 				innerHTML : '&#x274c'
 			},
@@ -265,7 +265,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-SaveTravelButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Save travel' ), 
 				innerHTML : '&#x1f4be;'
 			}, 
@@ -285,7 +285,7 @@ function newTravelEditorUI ( ) {
 		let openTravelDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-Control-OpenTravelDiv'
+				id : 'TravelNotes-Control-OpenTravelDiv'
 			}, 
 			buttonsDiv 
 		);
@@ -310,7 +310,7 @@ function newTravelEditorUI ( ) {
 		let openTravelFakeDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-Control-OpenTravelFakeDiv'
+				id : 'TravelNotes-Control-OpenTravelFakeDiv'
 			}, 
 			openTravelDiv 
 		);
@@ -318,7 +318,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-OpenTravelButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Open travel' ), 
 				innerHTML : '&#x1F4C2;'
 			}, 
@@ -339,7 +339,7 @@ function newTravelEditorUI ( ) {
 		let importTravelDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-Control-ImportTravelDiv'
+				id : 'TravelNotes-Control-ImportTravelDiv'
 			}, 
 			buttonsDiv 
 		);
@@ -363,7 +363,7 @@ function newTravelEditorUI ( ) {
 		let importTravelFakeDiv = m_HTMLElementsFactory.create ( 
 			'div', 
 			{ 
-				id: 'TravelNotes-Control-ImportTravelFakeDiv'
+				id : 'TravelNotes-Control-ImportTravelFakeDiv'
 			}, 
 			importTravelDiv 
 		);
@@ -371,7 +371,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-ImportTravelButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Import travel' ), 
 				innerHTML : '&#x1F30F;'
 			}, 
@@ -395,7 +395,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
 				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' + g_Config.language +
 					'&page=' + g_TravelNotesData.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
@@ -408,7 +408,7 @@ function newTravelEditorUI ( ) {
 			'div', 
 			{ 
 				id : 'TravelNotes-Control-AddRoutesButton', 
-				className: 'TravelNotes-Control-Button', 
+				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - New route' ), 
 				innerHTML : '+'
 			}, 

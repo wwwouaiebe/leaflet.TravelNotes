@@ -45,7 +45,7 @@ function newDataEncryptor ( ) {
 		return window.crypto.subtle.importKey (
 			"raw", 
 			pswd, 
-			{ name: "PBKDF2" }, 
+			{ name : "PBKDF2" }, 
 			false, 
 			[ "deriveKey" ]
 		);
@@ -60,15 +60,15 @@ function newDataEncryptor ( ) {
 	function m_DeriveKey ( deriveKey ) {
 		return window.crypto.subtle.deriveKey (
 			{
-				name: "PBKDF2", 
-				salt: new window.TextEncoder ( ).encode ( "Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette." ), 
-				iterations: 1000000, 
-				hash: "SHA-256"
+				name : "PBKDF2", 
+				salt : new window.TextEncoder ( ).encode ( "Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette." ), 
+				iterations : 1000000, 
+				hash : "SHA-256"
 			},
 			deriveKey,
 			{
-				name: "AES-GCM", 
-				length: 256
+				name : "AES-GCM", 
+				length : 256
 			},
 			false,
 			[ "encrypt", "decrypt" ]
@@ -92,8 +92,8 @@ function newDataEncryptor ( ) {
 		function decrypt ( decryptKey ) {
 			return window.crypto.subtle.decrypt (
 				{
-					name: "AES-GCM", 
-					iv: new Uint8Array ( data.slice ( 0, 16 ) )
+					name : "AES-GCM", 
+					iv : new Uint8Array ( data.slice ( 0, 16 ) )
 				}, 
 				decryptKey, 
 				new Uint8Array ( data.slice ( 16 ) )
@@ -127,8 +127,8 @@ function newDataEncryptor ( ) {
 		function encrypt ( encryptKey ) {
 			return window.crypto.subtle.encrypt (
 				{
-					name: "AES-GCM", 
-					iv: ivBytes
+					name : "AES-GCM", 
+					iv : ivBytes
 				},
 				encryptKey,
 				data
@@ -145,7 +145,7 @@ function newDataEncryptor ( ) {
 			onOk ( 
 				new Blob (
 					[ ivBytes, new Uint8Array ( cipherText ) ],
-					{type: "application/octet-stream"}
+					{type : "application/octet-stream"}
 				)
 			);
 		}

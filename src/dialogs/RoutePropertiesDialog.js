@@ -161,7 +161,7 @@ function newRoutePropertiesDialog ( route ) {
 
 		let dashChoices = g_Config.route.dashChoices;
 		for ( let optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
-			m_DashSelect.add ( m_HTMLElementsFactory.create ( 'option', { text :  dashChoices [ optionsCounter ].text } ) );
+			m_DashSelect.add ( m_HTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
 		m_DashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
 	}

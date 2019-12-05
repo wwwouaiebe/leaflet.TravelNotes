@@ -113,7 +113,7 @@ let pageId = params.get ("page");
 
 function saveFile ( ) {
 	try {
-		let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type: 'text/plain' } ) );
+		let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type : 'text/plain' } ) );
 		let element = document.createElement ( 'a' );
 		element.setAttribute ( 'href', mapFile );
 		element.setAttribute ( 'download', document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ].innerHTML + '-Roadbook.html' );

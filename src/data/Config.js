@@ -51,24 +51,24 @@ function newConfig ( ) {
 		autoLoad : false,
 		map :
 		{
-			center: {
-				lat: 50.50923,
-				lng: 5.49542
+			center : {
+				lat : 50.50923,
+				lng : 5.49542
 			},
-			zoom: 12
+			zoom : 12
 		},
-		travelNotesToolbarUI:
+		travelNotesToolbarUI :
 		{
-			contactMail:"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+			contactMail : "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
 		},
 		layersToolbarUI : {
 			haveLayersToolbarUI : true,
 			toolbarTimeOut : 1500,
 			contactMail : "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues",
-			theDevil: {
-				addButton: false,
-				title: "Reminder! The devil will know everything about you",
-				text: "&#x1f47f;"
+			theDevil : {
+				addButton : false,
+				title : "Reminder! The devil will know everything about you",
+				text : "&#x1f47f;"
 			}
 		},
 		mouseUI : {
@@ -166,7 +166,7 @@ function newConfig ( ) {
 			reverseGeocoding : false,
 			grip : { 
 				size : 10,
-				opacity: 0 
+				opacity : 0 
 			},
 			polyline : {
 				color : 'gray',
@@ -174,15 +174,15 @@ function newConfig ( ) {
 			},
 			style : 'TravelNotes-NotesStyle',
 			svgIconWidth : 200,
-			svgAnleMaxDirection:
+			svgAnleMaxDirection :
 			{
-				right:35,
-				slightRight:80,
-				continue:100,
-				slightLeft:145,
-				left:200,
-				sharpLeft:270,
-				sharpRight:340
+				right : 35,
+				slightRight : 80,
+				continue : 100,
+				slightLeft : 145,
+				left : 200,
+				sharpLeft : 270,
+				sharpRight : 340
 			},
 			svgZoom : 17,
 			svgAngleDistance : 10,
@@ -194,7 +194,7 @@ function newConfig ( ) {
 			cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
 			cityPostfix : "</span>"
 		},
-		itineraryPointZoom: 17,
+		itineraryPointZoom : 17,
 		routeEditor : {
 			displayEditionInHTMLPage : true
 		},
@@ -202,14 +202,14 @@ function newConfig ( ) {
 			clearAfterSave : true,
 			startMinimized : true,
 			timeout : 1000,
-			startupRouteEdition:true
+			startupRouteEdition : true
 		},
 		haveBeforeUnloadWarning : true,
 		overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter",
-		nominatim:
+		nominatim :
 		{
-			url: "https://nominatim.openstreetmap.org/",
-			language :"*"
+			url : "https://nominatim.openstreetmap.org/",
+			language : "*"
 		}
 	};		
 

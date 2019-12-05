@@ -56,7 +56,7 @@ function s_DrawSearchRectangle ( ) {
 		return;
 	}
 	if ( -1 !== s_PreviousSearchRectangleObjId ) {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId: s_PreviousSearchRectangleObjId } );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_PreviousSearchRectangleObjId } );
 	}
 	else {
 		s_PreviousSearchRectangleObjId = newObjId ( );
@@ -111,7 +111,7 @@ change event listener for the map
 function onMapChange ( ) {
 	let mapCenter = g_TravelNotesData.map.getCenter ( );
 	if ( -1 !== s_NextSearchRectangleObjId ) {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId: s_NextSearchRectangleObjId } );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_NextSearchRectangleObjId } );
 	}
 	else {
 		s_NextSearchRectangleObjId = newObjId ( );
@@ -157,7 +157,7 @@ function newOsmSearchEngine ( ) {
 		s_SearchParameters = {
 			bbox : { 
 				southWest : {
-					lat:  mapBounds.getSouthWest ( ).lat,
+					lat : mapBounds.getSouthWest ( ).lat,
 					lng : mapBounds.getSouthWest ( ).lng 
 				},
 				northEast : {
@@ -199,11 +199,11 @@ function newOsmSearchEngine ( ) {
 		g_TravelNotesData.map.off ( 'zoom', onMapChange );
 		g_TravelNotesData.map.off ( 'move', onMapChange );
 		if ( -1 !== s_NextSearchRectangleObjId ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: s_NextSearchRectangleObjId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : s_NextSearchRectangleObjId } );
 			s_NextSearchRectangleObjId = -1;
 		}
 		if ( -1 !== s_PreviousSearchRectangleObjId ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: s_PreviousSearchRectangleObjId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : s_PreviousSearchRectangleObjId } );
 			s_PreviousSearchRectangleObjId = -1;
 		}
 	}

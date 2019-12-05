@@ -394,7 +394,7 @@ function newNoteEditor ( ) {
 
 	function m_RemoveNote ( noteObjId ) {
 		// the note is removed from the leaflet map
-		m_EventDispatcher.dispatch ( 'removeobject', { objId: noteObjId } );
+		m_EventDispatcher.dispatch ( 'removeobject', { objId : noteObjId } );
 		// the note and the route are searched
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 		if ( noteAndRoute.route ) {
@@ -422,13 +422,13 @@ function newNoteEditor ( ) {
 	function m_HideNotes ( ) {
 		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			m_EventDispatcher.dispatch ( 'removeobject', { objId: notesIterator.value.objId } );
+			m_EventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 		}
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
-				m_EventDispatcher.dispatch ( 'removeobject', { objId: notesIterator.value.objId } );
+				m_EventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 			}
 		}
 	}
