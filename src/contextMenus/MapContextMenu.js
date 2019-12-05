@@ -75,7 +75,7 @@ function newMapContextMenu ( event ) {
 			{
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Select this point as way point" ), 
-				action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? g_WayPointEditor.addWayPoint : null,
+				action : ( -1 === g_TravelNotesData.editedRouteObjId ) ? null : g_WayPointEditor.addWayPoint,
 				param : m_LatLng
 			},
 			{ 

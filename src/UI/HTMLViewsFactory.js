@@ -205,7 +205,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		
 		let notesIterator = route.notes.iterator;
 		let notesDone =  notesIterator.done;
-		let notesDistance = ! notesDone ? notesIterator.value.distance : Number.MAX_VALUE;
+		let notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance ;
 		let previousNotesDistance = notesDistance;
 		
 		let maneuversIterator = route.itinerary.maneuvers.iterator;

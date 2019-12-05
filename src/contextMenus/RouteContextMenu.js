@@ -90,17 +90,16 @@ function newRouteContextMenu ( event ) {
 				context : g_RouteEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Hide this route" ), 
 				action : 
-					( g_TravelNotesData.travel.editedRoute.objId !== m_RouteObjId )
+					( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId )
 						? 
-						g_RouteEditor.hideRoute
-						:
-						null,
+						null:
+						g_RouteEditor.hideRoute,
 				param : m_RouteObjId
 			},
 			{
 				context : g_WayPointEditor, 
 				name : g_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ), 
-				action : ( -1 !== g_TravelNotesData.editedRouteObjId ) ? g_WayPointEditor.addWayPointOnRoute : null,
+				action : ( -1 === g_TravelNotesData.editedRouteObjId ) ? null : g_WayPointEditor.addWayPointOnRoute,
 				param : m_RouteObjId
 			},
 			{

@@ -46,6 +46,7 @@
 		"no-lonely-if" : [ "warn" ],
 		"no-mixed-operators" : [ "warn" ],
 		"no-multi-assign" : [ "warn" ],
-		"no-multiple-empty-lines" : [ "warn", { "max" : 1 } ]
+		"no-multiple-empty-lines" : [ "warn", { "max" : 1 } ],
+		"no-negated-condition": [ "warn" ]
     }
 }

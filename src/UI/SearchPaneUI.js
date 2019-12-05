@@ -296,13 +296,13 @@ function newSearchPaneUI ( ) {
 						className :	'TravelNotes-Control-SearchResult',
 						innerHTML : 
 							( 
-								searchResult.description != '' 
+								searchResult.description === '' 
 									? 
+									''
+									:
 									'<p class=\'TravelNotes-Control-SearchResultDescription\'>' + 
 									searchResult.description + 
 									'</p>' 
-									:
-									'' 
 							) +
 							( 
 								searchResult.tags.name 

@@ -389,11 +389,11 @@ function newNoteEditor ( ) {
 								note : modifiedNote
 							}
 						);
-						if ( ! noteAndRoute.route ) {
-							m_EventDispatcher.dispatch ( 'settravelnotes' );
+						if ( noteAndRoute.route ) {
+							m_EventDispatcher.dispatch ( 'setitinerary' );
 						}
 						else {
-							m_EventDispatcher.dispatch ( 'setitinerary' );
+							m_EventDispatcher.dispatch ( 'settravelnotes' );
 						}
 					}
 					newRoadbookUpdate ( );

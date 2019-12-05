@@ -55,11 +55,11 @@ function s_DrawSearchRectangle ( ) {
 	if ( ! s_SearchParameters.bbox ) {
 		return;
 	}
-	if ( -1 !== s_PreviousSearchRectangleObjId ) {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_PreviousSearchRectangleObjId } );
+	if ( -1 === s_PreviousSearchRectangleObjId ) {
+		s_PreviousSearchRectangleObjId = newObjId ( );
 	}
 	else {
-		s_PreviousSearchRectangleObjId = newObjId ( );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_PreviousSearchRectangleObjId } );
 	}
 	newEventDispatcher ( ).dispatch ( 
 		'addrectangle', 
@@ -113,11 +113,11 @@ change event listener for the map
 
 function onMapChange ( ) {
 	let mapCenter = g_TravelNotesData.map.getCenter ( );
-	if ( -1 !== s_NextSearchRectangleObjId ) {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_NextSearchRectangleObjId } );
+	if ( -1 === s_NextSearchRectangleObjId ) {
+		s_NextSearchRectangleObjId = newObjId ( );
 	}
 	else {
-		s_NextSearchRectangleObjId = newObjId ( );
+		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_NextSearchRectangleObjId } );
 	}
 	newEventDispatcher ( ).dispatch ( 
 		'addrectangle', 

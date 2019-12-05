@@ -124,10 +124,7 @@ function travelNotesFactory ( ) {
 			.split ( '&' ) )
 			.forEach ( 
 				urlSearchSubString =>{
-					if ( -1 !== urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						g_APIKeysManager.fromUrl ( urlSearchSubString )
-					}
-					else {
+					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ){
 						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
 							m_TravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 						}
@@ -136,6 +133,9 @@ function travelNotesFactory ( ) {
 						}
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 						newUrlSearch += urlSearchSubString;
+					}
+					else {
+						g_APIKeysManager.fromUrl ( urlSearchSubString )
 					}
 				}
 			);

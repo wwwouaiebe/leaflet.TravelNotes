@@ -227,8 +227,18 @@ function newFileLoader ( ) {
 		m_EventDispatcher.dispatch ( 'zoomtotravel' );
 
 		// Editors and roadbook are filled
-		if ( ! m_IsFileReadOnly ) {
+		if ( m_IsFileReadOnly ) {
 
+			// control is hidden
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+		}
+		else {
+			
 			// Editors and HTML pages are filled
 			m_EventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
@@ -263,16 +273,6 @@ function newFileLoader ( ) {
 				m_EventDispatcher.dispatch ( 'setitinerary' );
 			}
 			newRoadbookUpdate ( );
-		}
-		else {
-
-			// control is hidden
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		g_TravelNotesData.map.fire ( 
 			'travelnotesfileloaded', 

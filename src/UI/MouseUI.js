@@ -61,7 +61,7 @@ function newMouseUI ( ) {
 		m_MousePos + 
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' + 
 		m_Zoom + 
-		( m_FileName !=='' ? '&nbsp;-&nbsp;' + m_FileName : '' ) + 
+		( m_FileName === '' ? '' : '&nbsp;-&nbsp;' + m_FileName  ) + 
 		'</span>';
 	}
 	

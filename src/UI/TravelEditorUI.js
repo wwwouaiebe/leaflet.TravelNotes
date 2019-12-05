@@ -400,13 +400,13 @@ function newTravelEditorUI ( ) {
 			.addEventListener ( 
 				'click', 
 				( ) => { 
-					if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
+					if ( -1 === g_TravelNotesData.editedRouteObjId  ) {
+						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
+					}
+					else {
 						gc_ErrorsUI.showError ( 
 							g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) 
 						);
-					}
-					else {
-						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
 					}
 				},
 				false 

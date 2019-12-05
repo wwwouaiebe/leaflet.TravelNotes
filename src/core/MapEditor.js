@@ -920,7 +920,13 @@ function newMapEditor ( ) {
 
 					// ... then the layerGroup is searched...
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
-					if ( null != route ) {
+					if ( null === route ) {
+
+						// the note is not attached to a route, so the coordinates of the note can be directly changed
+						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+						m_EventDispatcher.dispatch ( 'updatetravelnotes' );
+					}
+					else {
 
 						// the note is attached to the route, so we have to find the nearest point on the route 
 						// and the distance since the start of the route
@@ -941,12 +947,6 @@ function newMapEditor ( ) {
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
 						m_EventDispatcher.dispatch ( 'updateitinerary' );
-					}
-					else {
-
-						// the note is not attached to a route, so the coordinates of the note can be directly changed
-						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-						m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 					}
 
 					// in all cases, the polyline is updated
