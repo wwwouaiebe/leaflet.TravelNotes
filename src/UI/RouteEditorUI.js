@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -56,10 +56,10 @@ This function creates the UI
 */
 
 function newRouteEditorUI ( ) {
-	
+
 	let m_ControlDiv = null;
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	
+
 	/*
 	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ function newRouteEditorUI ( ) {
 	function m_CreateHeaderDiv ( ) {
 		let headerDiv = m_HTMLElementsFactory.create (
 			'div',
-			{ 
+			{
 				id : 'TravelNotes-Control-RouteHeaderDiv',
 				className : 'TravelNotes-Control-HeaderDiv'
 			},
@@ -77,17 +77,17 @@ function newRouteEditorUI ( ) {
 		);
 
 		// expand button
-		m_HTMLElementsFactory.create ( 
-			'span', 
-			{ 
+		m_HTMLElementsFactory.create (
+			'span',
+			{
 				innerHTML : '&#x25bc;',
 				id : 'TravelNotes-Control-RouteExpandButton',
 				className : 'TravelNotes-Control-ExpandButton'
 			},
-			headerDiv 
+			headerDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					if ( -1 === g_TravelNotesData.editedRouteObjId ) {
@@ -99,34 +99,34 @@ function newRouteEditorUI ( ) {
 						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
 					document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' )
 						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					let hiddenList = 
+					let hiddenList =
 						document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
 							.classList.contains ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = 
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML =
 						hiddenList ? '&#x25b6;' : '&#x25bc;';
-					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = 
-						hiddenList 
-							? 
-							g_Translator.getText ( 'RouteEditorUI - Show' ) 
-							: 
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title =
+						hiddenList
+							?
+							g_Translator.getText ( 'RouteEditorUI - Show' )
+							:
 							g_Translator.getText ( 'RouteEditorUI - Hide' );
-				}, 
-				false 
+				},
+				false
 			);
-		
+
 		// title
-		m_HTMLElementsFactory.create ( 
-			'span', 
-			{ 
-				innerHTML : 
-				g_Translator.getText ( 'RouteEditorUI - Waypoints' ), 
+		m_HTMLElementsFactory.create (
+			'span',
+			{
+				innerHTML :
+				g_Translator.getText ( 'RouteEditorUI - Waypoints' ),
 				id : 'TravelNotes-Control-RouteHeaderText',
 				className : 'TravelNotes-Control-HeaderText'
 			},
-			headerDiv 
+			headerDiv
 		);
 	}
-	
+
 	/*
 	--- m_CreateDataDiv function --------------------------------------------------------------------------------------
 
@@ -134,66 +134,66 @@ function newRouteEditorUI ( ) {
 	*/
 
 	function m_CreateDataDiv ( ) {
-		let dataDiv = m_HTMLElementsFactory.create ( 
+		let dataDiv = m_HTMLElementsFactory.create (
 			'div',
-			{ 
-				id : 'TravelNotes-Control-RouteDataDiv', 
+			{
+				id : 'TravelNotes-Control-RouteDataDiv',
 				className : 'TravelNotes-Control-DataDiv'
 			},
 			m_ControlDiv
 		);
-		
+
 		// wayPoints list
-		m_WayPointsList = newSortableList ( 
+		m_WayPointsList = newSortableList (
 			{
 				minSize : 0,
 				listStyle : 'LimitedSort',
 				id : 'TravelNotes-Control-RouteWaypointsList'
-			}, 
+			},
 			dataDiv
 		);
-		m_WayPointsList.container.addEventListener ( 
-			'SortableListDelete', 
+		m_WayPointsList.container.addEventListener (
+			'SortableListDelete',
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.removeWayPoint ( event.itemNode.dataObjId );
-			}, 
-			false 
+			},
+			false
 		);
-		m_WayPointsList.container.addEventListener ( 
-			'SortableListUpArrow', 
+		m_WayPointsList.container.addEventListener (
+			'SortableListUpArrow',
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.swapWayPoints ( event.itemNode.dataObjId, true );
-			}, 
+			},
 			false
 		);
-		m_WayPointsList.container.addEventListener ( 
-			'SortableListDownArrow', 
+		m_WayPointsList.container.addEventListener (
+			'SortableListDownArrow',
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.swapWayPoints ( event.itemNode.dataObjId, false );
-			}, 
-			false 
+			},
+			false
 		);
-		m_WayPointsList.container.addEventListener ( 
-			'SortableListChange', 
+		m_WayPointsList.container.addEventListener (
+			'SortableListChange',
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.renameWayPoint ( event.dataObjId, event.changeValue );
-			}, 
-			false 
+			},
+			false
 		);
-		m_WayPointsList.container.addEventListener ( 
-			'SortableListDrop', 
+		m_WayPointsList.container.addEventListener (
+			'SortableListDrop',
 			event => {
 				event.stopPropagation ( );
 				g_WayPointEditor.wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
-			}, 
-			false 
+			},
+			false
 		);
 	}
-	
+
 	/*
 	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
 
@@ -203,163 +203,163 @@ function newRouteEditorUI ( ) {
 	function m_CreateButtonsDiv ( ) {
 
 		// buttons div
-		let buttonsDiv = m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-RouteButtonsDiv', 
+		let buttonsDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-RouteButtonsDiv',
 				className : 'TravelNotes-Control-ButtonsDiv'
 			},
 			m_ControlDiv
 		);
-		
+
 		// expand list button
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-ExpandWayPointsListButton', 
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'RouteEditorUI - Expand the list' ), 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-ExpandWayPointsListButton',
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Expand the list' ),
 				innerHTML : '&#x25bd;'
-			}, 
-			buttonsDiv 
+			},
+			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
 						.classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-					let expandedList = 
+					let expandedList =
 						document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
 							.classList.contains ( 'TravelNotes-Control-ExpandedList' );
-					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = 
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML =
 						expandedList ? '&#x25b3;' : '&#x25bd;';
-					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = 
-						expandedList 
-							? 
-							g_Translator.getText ( 'RouteEditorUI - Reduce the list' ) 
-							: 
-							g_Translator.getText ( 'RouteEditorUI - Expand the list' );		
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title =
+						expandedList
+							?
+							g_Translator.getText ( 'RouteEditorUI - Reduce the list' )
+							:
+							g_Translator.getText ( 'RouteEditorUI - Expand the list' );
 				},
-				false 
+				false
 			);
 
 		// cancel route button
 		m_HTMLElementsFactory.create (
-			'div', 
-			{ 
+			'div',
+			{
 				id : 'TravelNotes-Control-CancelRouteButton',
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'RouteEditorUI - Cancel' ), 
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Cancel' ),
 				innerHTML : '&#x274c'
 			},
-			buttonsDiv 
+			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				event => {
 					event.stopPropagation ( );
 					g_RouteEditor.cancelEdition ( );
-				}, 
-				false 
+				},
+				false
 			);
-		
+
 		// save route button
 		m_HTMLElementsFactory.create (
-			'div', 
-			{ 
+			'div',
+			{
 				id : 'TravelNotes-Control-SaveRouteButton',
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'RouteEditorUI - Save' ), 
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Save' ),
 				innerHTML : '&#x1f4be;'
 			},
-			buttonsDiv 
+			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				event => {
 					event.stopPropagation ( );
 					g_RouteEditor.saveEdition ( );
-				}, 
+				},
 				false );
-		
+
 		// gpx button
 		m_HTMLElementsFactory.create (
-			'div', 
-			{ 
+			'div',
+			{
 				id : 'TravelNotes-Control-gpxButton',
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'RouteEditorUI - Save the route in a gpx file' ), 
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Save the route in a gpx file' ),
 				innerHTML : 'gpx'
 			},
-			buttonsDiv 
+			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				event => {
 					event.stopPropagation ( );
 					g_RouteEditor.saveGpx ( );
-				}, 
+				},
 				false
 			);
-		
+
 		// reverse wayPoints button
-		m_HTMLElementsFactory.create ( 
+		m_HTMLElementsFactory.create (
 			'div',
-			{ 
-				id : 'TravelNotes-Control-ReverseWayPointsButton', 
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'RouteEditorUI - Invert waypoints' ),  
+			{
+				id : 'TravelNotes-Control-ReverseWayPointsButton',
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'RouteEditorUI - Invert waypoints' ),
 				innerHTML : '&#x21C5;'
 			},
 			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				event => {
 					event.stopPropagation ( );
 					g_WayPointEditor.reverseWayPoints ( );
-				}, 
-				false 
+				},
+				false
 			);
-				
+
 		// remove all wayPoints button
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-RemoveAllWayPointsButton', 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-RemoveAllWayPointsButton',
 				className : 'TravelNotes-Control-Button',
 				title : g_Translator.getText ( 'RouteEditorUI - Delete all waypoints' ),
 				innerHTML : '&#x267b;'
-			}, 
+			},
 			buttonsDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				event => {
 					event.stopPropagation ( );
 					g_WayPointEditor.removeAllWayPoints ( );
-				}, 
+				},
 				false
 			);
 	}
-			
+
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){ 
+	function m_CreateUI ( controlDiv ){
 
 		if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
 			return;
 		}
-		
+
 		m_ControlDiv = controlDiv;
-		
+
 		m_CreateHeaderDiv ( );
 		m_CreateDataDiv ( );
 		m_CreateButtonsDiv ( );
@@ -369,7 +369,7 @@ function newRouteEditorUI ( ) {
 	--- m_ExpandUI function -------------------------------------------------------------------------------------------
 
 	This function expands the UI
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -379,12 +379,12 @@ function newRouteEditorUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.remove ( 'TravelNotes-Control-HiddenList' );
 	}
-	
+
 	/*
 	--- m_ReduceUI function -------------------------------------------------------------------------------------------
 
 	This function reduces the UI
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -394,12 +394,12 @@ function newRouteEditorUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 		document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.add ( 'TravelNotes-Control-HiddenList' );
 	}
-	
+
 	/*
 	--- m_SetWayPointsList function -----------------------------------------------------------------------------------
 
 	This function fill the wayPoints list
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -411,28 +411,28 @@ function newRouteEditorUI ( ) {
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			let indexName = wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? ' B' : wayPointsIterator.index );
-			let placeholder = 
-				wayPointsIterator.first 
-					? 
-					g_Translator.getText ( 'RouteEditorUI - Start' ) 
-					: 
-					( 
-						wayPointsIterator.last 
-							? 
-							g_Translator.getText ( 'RouteEditorUI - End' ) 
-							: 
+			let placeholder =
+				wayPointsIterator.first
+					?
+					g_Translator.getText ( 'RouteEditorUI - Start' )
+					:
+					(
+						wayPointsIterator.last
+							?
+							g_Translator.getText ( 'RouteEditorUI - End' )
+							:
 							g_Translator.getText ( 'RouteEditorUI - Via' )
 					);
-			m_WayPointsList.addItem ( 
-				wayPointsIterator.value.UIName, 
-				indexName, 
-				placeholder, 
-				wayPointsIterator.value.objId, 
-				wayPointsIterator.last 
+			m_WayPointsList.addItem (
+				wayPointsIterator.value.UIName,
+				indexName,
+				placeholder,
+				wayPointsIterator.value.objId,
+				wayPointsIterator.last
 			);
 		}
 	}
-	
+
 	/*
 	--- routeEditorUI object ------------------------------------------------------------------------------------------
 
@@ -449,7 +449,7 @@ function newRouteEditorUI ( ) {
 	);
 }
 
-/* 
+/*
 --- gc_RouteEditorUI object --------------------------------------------------------------------------------------------
 
 The one and only one routeEditorUI

@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -19,12 +19,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- roadbook.js file --------------------------------------------------------------------------------------------------
 This file contains:
-	- 
+	-
 Changes:
 	- v1.5.0:
 		- created
 
-Doc reviewed 
+Doc reviewed
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -108,21 +108,21 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 */
 
 let params = new URLSearchParams (document.location.search.substring (1));
-let language = params.get ("lng"); 
+let language = params.get ("lng");
 let pageId = params.get ("page");
 
 function saveFile ( ) {
 	try {
-		let mapFile = window.URL.createObjectURL ( 
-			new File ( 
+		let mapFile = window.URL.createObjectURL (
+			new File (
 				[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
 				{ type : 'text/plain' }
-			) 
+			)
 		);
 		let element = document.createElement ( 'a' );
 		element.setAttribute ( 'href', mapFile );
-		element.setAttribute ( 
-			'download', 
+		element.setAttribute (
+			'download',
 			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ]
 				.innerHTML + '-Roadbook.html'
 		);
@@ -134,17 +134,17 @@ function saveFile ( ) {
 	}
 	catch ( Error ) {
 		console.log ( Error );
-	}				
+	}
 }
 
 if ( pageId ) {
-	
+
 	document.getElementById ( "TravelNotes-SaveFile" ).addEventListener ( 'click', saveFile );
-	
-	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" ); 
+
+	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" );
 	window.addEventListener (
-		'storage', 
-		function ( ) { 
+		'storage',
+		function ( ) {
 			document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" );
 			showTravelNotes ( );
 			showRouteNotes ( );
@@ -160,7 +160,7 @@ else {
 if ( language ) {
 	let xmlHttpRequest = new XMLHttpRequest ( );
 	xmlHttpRequest.timeout = 20000;
-	
+
 	xmlHttpRequest.onreadystatechange = function ( ) {
 		if ( xmlHttpRequest.readyState === 4 ) {
 			if ( xmlHttpRequest.status === 200 ) {
@@ -168,11 +168,11 @@ if ( language ) {
 				try {
 					response = JSON.parse ( xmlHttpRequest.responseText );
 					g_Translator. setTranslations ( response );
-					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML = 
+					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML =
 						g_Translator.getText ( "Roadbook - show travel notes" );
-					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML = 
+					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML =
 						g_Translator.getText ( "Roadbook - show maneuver" );
-					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML = 
+					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML =
 						g_Translator.getText ( "Roadbook - show routes notes" );
 					let saveButton = document.getElementById ( "TravelNotes-SaveFile" );
 					if ( saveButton ) {
@@ -184,27 +184,27 @@ if ( language ) {
 				}
 			}
 			else {
-				console.log ( 
-					'Error XMLHttpRequest - Status : ' + 
-					xmlHttpRequest.status + 
-					' - StatusText : ' + 
-					xmlHttpRequest.statusText + 
-					' - File : ' + 
+				console.log (
+					'Error XMLHttpRequest - Status : ' +
+					xmlHttpRequest.status +
+					' - StatusText : ' +
+					xmlHttpRequest.statusText +
+					' - File : ' +
 					xmlHttpRequest.responseURL
 				);
 			}
 		}
 	};
-	
-	let XMLHttpRequestUrl = 
-		window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 
-		'TravelNotes' + 
+
+	let XMLHttpRequestUrl =
+		window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json';
 	xmlHttpRequest.open ( "GET", XMLHttpRequestUrl, true );
 	xmlHttpRequest.overrideMimeType ( 'application/json' );
 	xmlHttpRequest.send ( null );
-	
+
 }
 
 showTravelNotes ( );

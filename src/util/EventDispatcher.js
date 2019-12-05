@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -39,7 +39,7 @@ This function returns the eventDispatcher object
 */
 
 function newEventDispatcher ( ) {
-	
+
 	/*
 	--- m_GetTarget function ------------------------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ function newEventDispatcher ( ) {
 			return null;
 		}
 	}
-	
+
 	/*
 	--- m_Dispatch function -------------------------------------------------------------------------------------------
 
@@ -103,21 +103,21 @@ function newEventDispatcher ( ) {
 			target.dispatchEvent ( event );
 		}
 	}
-	
-	/* 
+
+	/*
 	--- eventDispatcher object ----------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal ( 
+	return Object.seal (
 		{
 			dispatch : ( eventName, eventData ) => m_Dispatch ( eventName, eventData )
 		}
 	);
-	
+
 }
-	
+
 /*
 --- End of EventDispatcher.js file ------------------------------------------------------------------------------------
-*/	
+*/

@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- BaseContextMenu.js file -------------------------------------------------------------------------------------------
 This file contains:
-	- 
+	-
 Changes:
 	- v1.6.0:
 		- created
@@ -50,12 +50,12 @@ let s_Lng = 0;
 */
 
 function newBaseContextMenu ( originalEvent ) {
-	
+
 	let s_MenuItems = [];
-	
+
 	let m_htmlElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_Body = document.getElementsByTagName ('body') [ 0 ];
-		
+
 	/*
 	--- m_OnCloseMenu function ----------------------------------------------------------------------------------------
 
@@ -65,17 +65,17 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_OnCloseMenu ( ) {
-		
+
 		if ( s_TimerId ) {
 			clearTimeout ( s_TimerId );
 			s_TimerId = null;
 		}
-		
+
 		// removing event listeners
 		document.removeEventListener ( 'keydown', m_OnKeyDown, true );
 		document.removeEventListener ( 'keypress', m_OnKeyPress, true );
 		document.removeEventListener ( 'keyup', m_OnKeyUp, true );
-		
+
 		// removing menu items
 		let childNodes = s_Container.childNodes;
 		childNodes [ 0 ].firstChild.removeEventListener ( 'click', m_OnCloseMenu, false );
@@ -91,7 +91,7 @@ function newBaseContextMenu ( originalEvent ) {
 		s_Lat = 0;
 		s_Lng = 0;
 	}
-	
+
 	/*
 	--- m_OnKeyDown function ------------------------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_OnKeyDown ( keyBoardEvent ) {
-		
+
 		if ( s_Container ) {
 			keyBoardEvent.preventDefault ( );
 			keyBoardEvent.stopPropagation ( );
@@ -167,41 +167,41 @@ function newBaseContextMenu ( originalEvent ) {
 	function m_OnClickItem ( event ) {
 		event.stopPropagation ( );
 		if ( s_MenuItems[ event.target.menuItem ].param ) {
-			s_MenuItems[ event.target.menuItem ].action.call ( 
+			s_MenuItems[ event.target.menuItem ].action.call (
 				s_MenuItems[ event.target.menuItem ].context,
 				s_MenuItems[ event.target.menuItem ].param,
 				s_OriginalEvent
 			);
 		}
 		else {
-			s_MenuItems[ event.target.menuItem ].action.call ( 
+			s_MenuItems[ event.target.menuItem ].action.call (
 				s_MenuItems[ event.target.menuItem ].context,
 				s_OriginalEvent
 			);
 		}
 		m_OnCloseMenu ( );
 	}
-	
+
 	/*
 	--- m_BuildContainer function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_BuildContainer ( ) {
-		s_Container = m_htmlElementsFactory.create ( 
-			'div', 
+		s_Container = m_htmlElementsFactory.create (
+			'div',
 			{
-				id : 'TravelNotes-ContextMenu-Container', 
+				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
-			m_Body 
+			m_Body
 		);
 
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
-		s_Container.addEventListener ( 
+		s_Container.addEventListener (
 			'mouseenter',
-			( ) => { 
+			( ) => {
 				if ( s_TimerId ) {
 					clearTimeout ( s_TimerId );
 					s_TimerId = null;
@@ -209,12 +209,12 @@ function newBaseContextMenu ( originalEvent ) {
 			},
 			false
 		);
-		s_Container.addEventListener ( 
-			'mouseleave', 
+		s_Container.addEventListener (
+			'mouseleave',
 			( ) => { s_TimerId = setTimeout ( m_OnCloseMenu, g_Config.contextMenu.timeout ); },
-			false 
+			false
 		);
-		
+
 	}
 
 	/*
@@ -224,10 +224,10 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_AddCloseButton ( ) {
-		m_htmlElementsFactory.create ( 
+		m_htmlElementsFactory.create (
 			'div',
-			{ 
-				innerHTML : '&#x274c', 
+			{
+				innerHTML : '&#x274c',
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : g_Translator.getText ( "ContextMenu - Close" )
 			},
@@ -249,13 +249,13 @@ function newBaseContextMenu ( originalEvent ) {
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
 		m_Body.removeChild ( dummyDiv );
-		
+
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min ( s_OriginalEvent.originalEvent.clientY, screenHeight - s_Container.clientHeight - 20 );
 		let menuLeft = Math.min ( s_OriginalEvent.originalEvent.clientX, screenWidth - s_Container.clientWidth - 20 );
 		s_Container.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
 	}
-	
+
 	/*
 	--- m_AddKeyboardEvents function ----------------------------------------------------------------------------------
 
@@ -267,7 +267,7 @@ function newBaseContextMenu ( originalEvent ) {
 		document.addEventListener ( 'keypress', m_OnKeyPress, true );
 		document.addEventListener ( 'keyup', m_OnKeyUp, true );
 	}
-	
+
 	/*
 	--- m_AddMenuItems function ----------------------------------------------------------------------------------
 
@@ -276,24 +276,24 @@ function newBaseContextMenu ( originalEvent ) {
 
 	function m_AddMenuItems ( ) {
 		let menuItemCounter = 0;
-		s_MenuItems.forEach ( 
+		s_MenuItems.forEach (
 			menuItem => {
-				let itemContainer = m_htmlElementsFactory.create ( 
-					'div', 
+				let itemContainer = m_htmlElementsFactory.create (
+					'div',
 					{
 						className : 'TravelNotes-ContextMenu-ItemContainer'
 					},
 					s_Container
 				);
-				let itemButton = m_htmlElementsFactory.create ( 
-					'button', 
-					{ 
+				let itemButton = m_htmlElementsFactory.create (
+					'button',
+					{
 						innerHTML : menuItem.name,
 						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-						className : 
-							menuItem.action 
-								? 
-								'TravelNotes-ContextMenu-Item' 
+						className :
+							menuItem.action
+								?
+								'TravelNotes-ContextMenu-Item'
 								:
 								'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
 					},
@@ -307,7 +307,7 @@ function newBaseContextMenu ( originalEvent ) {
 			}
 		);
 	}
-	
+
 	/*
 	--- m_Show function -----------------------------------------------------------------------------------------------
 
@@ -315,13 +315,13 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function m_Show ( ) {
-		
-		s_OriginalEvent = originalEvent; 
-		
+
+		s_OriginalEvent = originalEvent;
+
 		// when clicking on a leaflet polyline, a route event AND a map event are generated
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
-		
+
 		if  ( ( s_OriginalEvent.latlng.lat === s_Lat ) && ( s_OriginalEvent.latlng.lng === s_Lng ) ) {
 			return;
 		}
@@ -329,7 +329,7 @@ function newBaseContextMenu ( originalEvent ) {
 			s_Lat = s_OriginalEvent.latlng.lat;
 			s_Lng = s_OriginalEvent.latlng.lng;
 		}
-		
+
 		if ( s_Container ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
@@ -340,23 +340,23 @@ function newBaseContextMenu ( originalEvent ) {
 		m_BuildContainer ( );
 		m_AddCloseButton ( );
 		m_AddMenuItems ( );
-		m_MoveContainer ( );	
+		m_MoveContainer ( );
 		m_AddKeyboardEvents ( );
 	}
 
 	function m_init ( menuItems ) {
-		s_MenuItems = menuItems; 
+		s_MenuItems = menuItems;
 
 		// completely crazy...
 		delete m_BaseContextMenu.init;
 	}
-	
+
 	/*
 	--- BaseContextMenu object ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	let m_BaseContextMenu = {
 		init : ( menuItems ) => m_init ( menuItems ),
 		show : ( ) => m_Show ( )
@@ -367,4 +367,4 @@ function newBaseContextMenu ( originalEvent ) {
 
 /*
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
-*/		
+*/

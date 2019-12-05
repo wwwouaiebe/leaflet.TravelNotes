@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -71,7 +71,7 @@ This function updates the route tooltip with the distance
 -------------------------------------------------------------------------------------------------------------------
 */
 
-function onMouseOverOrMoveOnRoute ( event ) { 
+function onMouseOverOrMoveOnRoute ( event ) {
 	let dataSearchEngine  = newDataSearchEngine ( );
 	let route = dataSearchEngine.getRoute (  event.target.objId );
 	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
@@ -103,13 +103,13 @@ function newMapEditor ( ) {
 	let m_Geometry = newGeometry ( );
 	let m_CurrentLayer = null;
 	let m_GeolocationCircle = null;
-	
+
 	/*
 	--- m_loadEvents function -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_loadEvents ( ) {
 		document.addEventListener (
 			'removeroute',
@@ -118,7 +118,7 @@ function newMapEditor ( ) {
 					g_MapEditor.removeRoute (
 						event.data.route,
 						event.data.RemoveNotes,
-						event.data.removeWayPoints 
+						event.data.removeWayPoints
 					)
 				}
 			},
@@ -132,7 +132,7 @@ function newMapEditor ( ) {
 						event.data.route,
 						event.data.addNotes,
 						event.data.addWayPoints,
-						event.data.readOnly 
+						event.data.readOnly
 					)
 				}
 			},
@@ -282,32 +282,32 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'layerchange',
-			event => { 
-				if ( event.data ) { 
-					g_MapEditor.setLayer ( event.data.layer ); 
+			event => {
+				if ( event.data ) {
+					g_MapEditor.setLayer ( event.data.layer );
 				}
 			}
 		);
-		document.addEventListener ( 
+		document.addEventListener (
 			'geolocationpositionchanged',
-			event => { 
-				if ( event.data ) { 
+			event => {
+				if ( event.data ) {
 					g_MapEditor.onGeolocationPositionChanged ( event.data.position );
 				}
 			},
 			false
 		)
-		document.addEventListener ( 
+		document.addEventListener (
 			'geolocationstatuschanged',
-			event => { 
-				if ( event.data ) { 
+			event => {
+				if ( event.data ) {
 					g_MapEditor.onGeolocationStatusChanged ( event.data.status );
-				} 
+				}
 			},
 			false
 		)
 	}
-	
+
 	/*
 	--- m_SetLayer function -------------------------------------------------------------------------------------------
 
@@ -328,7 +328,7 @@ function newMapEditor ( ) {
 				return;
 			}
 		}
-		
+
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
 			leafletLayer = L.tileLayer ( url );
@@ -336,13 +336,13 @@ function newMapEditor ( ) {
 		else {
 			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
-		
+
 		if ( m_CurrentLayer ) {
 			g_TravelNotesData.map.removeLayer ( m_CurrentLayer );
 		}
 		g_TravelNotesData.map.addLayer ( leafletLayer );
 		m_CurrentLayer = leafletLayer;
-		
+
 		if ( g_TravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
 			g_TravelNotesData.map.setZoom ( layer.minZoom || 0 )
 		}
@@ -352,10 +352,10 @@ function newMapEditor ( ) {
 		}
 		g_TravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
 		if ( layer.bounds ) {
-			if ( 
-				! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds ) 
-				|| 
-				g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds ) 
+			if (
+				! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
+				||
+				g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds )
 			) {
 				g_TravelNotesData.map.setMaxBounds ( null );
 				g_TravelNotesData.map.fitBounds ( layer.bounds );
@@ -368,7 +368,7 @@ function newMapEditor ( ) {
 		}
 		g_TravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
 	}
-	
+
 	/*
 	--- m_AddTo function ----------------------------------------------------------------------------------------------
 
@@ -382,7 +382,7 @@ function newMapEditor ( ) {
 		object.addTo ( g_TravelNotesData.map );
 		g_TravelNotesData.mapObjects.set ( objId, object );
 	}
-	
+
 	/*
 	--- m_RemoveObject function ---------------------------------------------------------------------------------------
 
@@ -399,7 +399,7 @@ function newMapEditor ( ) {
 			g_TravelNotesData.mapObjects.delete ( objId );
 		}
 	}
-	
+
 	/*
 	--- m_GetLatLngBounds function ------------------------------------------------------------------------------------
 
@@ -411,7 +411,7 @@ function newMapEditor ( ) {
 	function m_GetLatLngBounds ( latLngs ) {
 		let sw = L.latLng ( [ 90, 180 ] );
 		let ne = L.latLng ( [ -90, -180 ] );
-		latLngs.forEach ( 
+		latLngs.forEach (
 			latLng => {
 				sw.lat = Math.min ( sw.lat, latLng [ 0 ] );
 				sw.lng = Math.min ( sw.lng, latLng [ 1 ] );
@@ -421,7 +421,7 @@ function newMapEditor ( ) {
 		);
 		return L.latLngBounds ( sw, ne );
 	}
-	
+
 	/*
 	--- m_GetRouteLatLng function -------------------------------------------------------------------------------------
 
@@ -433,7 +433,7 @@ function newMapEditor ( ) {
 	function m_GetRouteLatLng ( route ) {
 		let latLngs = [];
 		route.itinerary.itineraryPoints.forEach ( itineraryPoint => latLngs.push ( itineraryPoint.latLng ) );
-		route.notes.forEach ( 
+		route.notes.forEach (
 			note => {
 				latLngs.push ( note.latLng );
 				latLngs.push ( note.iconLatLng );
@@ -441,7 +441,7 @@ function newMapEditor ( ) {
 		);
 		return latLngs;
 	}
-	
+
 	/*
 	--- m_getDashArray function ---------------------------------------------------------------------------------------
 
@@ -462,7 +462,7 @@ function newMapEditor ( ) {
 				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
 			dashArray += iDashArray [ dashCounter ] * route.width ;
-			
+
 			return dashArray;
 		}
 		return null;
@@ -471,9 +471,9 @@ function newMapEditor ( ) {
 	/*
 	--- m_RemoveRoute function ------------------------------------------------------------------------------------
 
-	This function remove a route and eventually the attached notes and waypoints 
+	This function remove a route and eventually the attached notes and waypoints
 	from the leaflet map and the JavaScript map
-	
+
 	parameters:
 	- route : a TravelNotes route object.
 	- removeNotes : a boolean. Linked notes are removed when true
@@ -481,7 +481,7 @@ function newMapEditor ( ) {
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_RemoveRoute ( route, removeNotes, removeWayPoints ) {
 		m_RemoveObject ( route.objId );
 		if ( removeNotes ) {
@@ -497,11 +497,11 @@ function newMapEditor ( ) {
 			}
 		}
 	}
-			
+
 	/*
 	--- m_AddRoute function ---------------------------------------------------------------------------------------
 
-	This function add a route and eventually the attached notes and waypoints 
+	This function add a route and eventually the attached notes and waypoints
 	to the leaflet map and the JavaScript map
 
 	parameters:
@@ -514,52 +514,52 @@ function newMapEditor ( ) {
 	*/
 
 	function m_AddRoute ( route, addNotes, addWayPoints, readOnly ) {
-		
+
 		// an array of points is created
 		let latLng = [];
 		let pointsIterator = route.itinerary.itineraryPoints.iterator;
 		while ( ! pointsIterator.done ) {
 			latLng.push ( pointsIterator.value.latLng );
 		}
-		
+
 		// the leaflet polyline is created and added to the map
-		let polyline = L.polyline ( 
+		let polyline = L.polyline (
 			latLng,
-			{ 
-				color : route.color, 
-				weight : route.width, 
+			{
+				color : route.color,
+				weight : route.width,
 				dashArray : m_getDashArray ( route )
-			} 
+			}
 		);
 		m_AddTo ( route.objId, polyline );
 
 		// tooltip and popup are created
-		polyline.bindTooltip ( 
+		polyline.bindTooltip (
 			route.name,
 			{ sticky : true, direction : 'right' }
 		);
 		polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );
 		polyline.on ( 'mousemove', onMouseOverOrMoveOnRoute );
-		
-		polyline.bindPopup ( 
+
+		polyline.bindPopup (
 			layer => {
 				let route = m_DataSearchEngine.getRoute ( layer.objId );
 				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( route );
 			}
 		);
-		
+
 		// left click event
 		L.DomEvent.on ( polyline, 'click', event => event.target.openPopup ( event.latlng ) );
 
 		// right click event
 		if ( ! readOnly ) {
-			L.DomEvent.on ( 
-				polyline, 
-				'contextmenu', 
+			L.DomEvent.on (
+				polyline,
+				'contextmenu',
 				event => newRouteContextMenu ( event ).show ( )
 			);
 		}
-		
+
 		// notes are added
 		if ( addNotes ) {
 			let notesIterator = route.notes.iterator;
@@ -572,14 +572,14 @@ function newMapEditor ( ) {
 		if ( addWayPoints ) {
 			let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				m_AddWayPoint ( 
-					wayPointsIterator.value, 
-					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index ) 
+				m_AddWayPoint (
+					wayPointsIterator.value,
+					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
 				);
 			}
 		}
 	}
-		
+
 	/*
 	--- m_EditRoute function ------------------------------------------------------------------------------------------
 
@@ -595,7 +595,7 @@ function newMapEditor ( ) {
 		let polyline = g_TravelNotesData.mapObjects.get ( route.objId );
 		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
 	}
-		
+
 	/*
 	--- m_RemoveAllObjects function -----------------------------------------------------------------------------------
 
@@ -605,7 +605,7 @@ function newMapEditor ( ) {
 	*/
 
 	function m_RemoveAllObjects ( ) {
-		g_TravelNotesData.mapObjects.forEach ( 
+		g_TravelNotesData.mapObjects.forEach (
 			travelObjectValue => {
 				L.DomEvent.off ( travelObjectValue );
 				g_TravelNotesData.map.removeLayer ( travelObjectValue );
@@ -613,7 +613,7 @@ function newMapEditor ( ) {
 		);
 		g_TravelNotesData.mapObjects.clear ( );
 	}
-	
+
 	/*
 	--- m_ZoomToPoint function ----------------------------------------------------------------------------------------
 
@@ -644,7 +644,7 @@ function newMapEditor ( ) {
 			m_ZoomToPoint ( latLng );
 		}
 	}
-	
+
 	/*
 	--- m_ZoomToNote function -----------------------------------------------------------------------------------------
 
@@ -659,7 +659,7 @@ function newMapEditor ( ) {
 	function m_ZoomToNote ( noteObjId ) {
 		m_ZoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
 	}
-		
+
 	/*
 	--- m_ZoomToRoute function ----------------------------------------------------------------------------------------
 
@@ -686,28 +686,28 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToTravel ( ) {				
+	function m_ZoomToTravel ( ) {
 		let latLngs = [];
-		g_TravelNotesData.travel.routes.forEach (  
-			route => { latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) ); } 
+		g_TravelNotesData.travel.routes.forEach (
+			route => { latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) ); }
 		);
 		latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
-		g_TravelNotesData.travel.notes.forEach ( 
-			note => { 
-				latLngs.push ( note.latLng ); 
+		g_TravelNotesData.travel.notes.forEach (
+			note => {
+				latLngs.push ( note.latLng );
 				latLngs.push ( note.iconLatLng );
-			} 
+			}
 		);
 		if ( 0 !== latLngs.length ) {
 			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
 		}
 	}
-		
+
 	/*
 	--- m_AddItineraryPointMarker function ----------------------------------------------------------------------------
 
 	This function add a leaflet circleMarker at a given point
-	
+
 	parameters:
 	- objId : a unique identifier to attach to the circleMarker
 	- latLng : the center of the circleMarker
@@ -716,7 +716,7 @@ function newMapEditor ( ) {
 	*/
 
 	function m_AddItineraryPointMarker ( objId, latLng ) {
-		m_AddTo ( 
+		m_AddTo (
 			objId,
 			L.circleMarker ( latLng, g_Config.itineraryPointMarker )
 		);
@@ -726,34 +726,34 @@ function newMapEditor ( ) {
 	--- m_AddSearchPointMarker function -------------------------------------------------------------------------------
 
 	This function add a leaflet circleMarker at a given point
-	
+
 	parameters:
 	- objId : a unique identifier to attach to the circleMarker
 	- latLng : the center of the circleMarker
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_AddSearchPointMarker ( objId, latLng, geometry ) {
 
 		let showGeometry = false;
 		if ( geometry ) {
 			let latLngs = [];
-			geometry.forEach ( 
+			geometry.forEach (
 				geometryPart => { latLngs = latLngs.concat ( geometryPart ); }
 			);
 			let geometryBounds = m_GetLatLngBounds ( latLngs );
 			let mapBounds = g_TravelNotesData.map.getBounds ( );
-			showGeometry = 
-				( 
+			showGeometry =
+				(
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
-					/ 
-					( mapBounds.getEast ( ) - mapBounds.getWest ( ) ) 
-				) > 0.01 
+					/
+					( mapBounds.getEast ( ) - mapBounds.getWest ( ) )
+				) > 0.01
 				&&
-				( 
+				(
 					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
-					/ 
+					/
 					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
 				) > 0.01;
 		}
@@ -764,16 +764,16 @@ function newMapEditor ( ) {
 			m_AddTo ( objId, L.circleMarker ( latLng, g_Config.searchPointMarker ) );
 		}
 	}
-		
+
 	/*
 	--- m_AddRectangle method -----------------------------------------------------------------------------------------
 
 	This method draw a rectangle on the map
-	
+
 	parameters:
 	- objId : a unique identifier to attach to the rectangle
 	- bounds : the lower left and upper right corner of the rectangle ( see leaflet docs )
-	- properties : the properties of the rectangle 
+	- properties : the properties of the rectangle
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -784,7 +784,7 @@ function newMapEditor ( ) {
 			L.rectangle ( bounds, properties )
 		);
 	}
-	
+
 	/*
 	--- m_AddWayPoint function ----------------------------------------------------------------------------------------
 
@@ -801,47 +801,47 @@ function newMapEditor ( ) {
 		if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
 			return;
 		}
-		
+
 		// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
-		let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' + 
-		( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) + 
+		let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' +
+		( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) +
 		'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
-		
+
 		// a leaflet marker is created...
-		let marker = L.marker ( 
+		let marker = L.marker (
 			wayPoint.latLng,
-			{ 
-				icon : L.divIcon ( 
-					{ 
-						iconSize : [ 40, 40 ], 
-						iconAnchor : [ 20, 40 ], 
-						html : iconHtml, 
+			{
+				icon : L.divIcon (
+					{
+						iconSize : [ 40, 40 ],
+						iconAnchor : [ 20, 40 ],
+						html : iconHtml,
 						className : 'TravelNotes-WayPointStyle'
-					} 
+					}
 				),
 				draggable : true
-			} 
-		);	
+			}
+		);
 
-		marker.bindTooltip ( 
+		marker.bindTooltip (
 			wayPoint => { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; }
 		);
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
-		L.DomEvent.on ( 
-			marker, 
-			'contextmenu', 
+		L.DomEvent.on (
+			marker,
+			'contextmenu',
 			event => newWayPointContextMenu ( event ).show ( )
 		);
-		
+
 		// ... and added to the map...
 		marker.objId = wayPoint.objId;
 		m_AddTo ( wayPoint.objId, marker );
-		
+
 		// ... and a dragend event listener is created
 		L.DomEvent.on (
 			marker,
-			'dragend', 
+			'dragend',
 			event => {
 				let wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
 				wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
@@ -865,7 +865,7 @@ function newMapEditor ( ) {
 		m_RemoveObject ( note.objId );
 		m_AddNote ( note );
 	}
-		
+
 	/*
 	--- m_AddNote function --------------------------------------------------------------------------------------------
 
@@ -879,21 +879,21 @@ function newMapEditor ( ) {
 	*/
 
 	function m_AddNote ( note, readOnly ) {
-		
-		// first a marker is created at the note position. This marker is empty and transparent, so 
+
+		// first a marker is created at the note position. This marker is empty and transparent, so
 		// not visible on the map but the marker can be dragged
-		let bullet = L.marker ( 
+		let bullet = L.marker (
 			note.latLng,
-			{ 
-				icon : L.divIcon ( 
-					{ 
-						iconSize : [ 
-							g_Config.note.grip.size, 
+			{
+				icon : L.divIcon (
+					{
+						iconSize : [
+							g_Config.note.grip.size,
 							g_Config.note.grip.size
-						], 
-						iconAnchor : [ 
+						],
+						iconAnchor : [
 							g_Config.note.grip.size / 2,
-							g_Config.note.grip.size / 2 
+							g_Config.note.grip.size / 2
 						],
 						html : '<div></div>'
 					}
@@ -901,16 +901,16 @@ function newMapEditor ( ) {
 				zIndexOffset : -1000,
 				opacity : g_Config.note.grip.opacity,
 				draggable : ! readOnly
-			} 
-		);	
+			}
+		);
 		bullet.objId = note.objId;
-		
+
 		if ( ! readOnly ) {
 
 			// event listener for the dragend event
-			L.DomEvent.on ( 
-				bullet, 
-				'dragend', 
+			L.DomEvent.on (
+				bullet,
+				'dragend',
 				event => {
 
 					// the TravelNotes note and route are searched...
@@ -928,11 +928,11 @@ function newMapEditor ( ) {
 					}
 					else {
 
-						// the note is attached to the route, so we have to find the nearest point on the route 
+						// the note is attached to the route, so we have to find the nearest point on the route
 						// and the distance since the start of the route
-						let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+						let latLngDistance = m_Geometry.getClosestLatLngDistance (
 							route,
-							[ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ] 
+							[ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ]
 						);
 
 						// coordinates and distance are changed in the note
@@ -941,7 +941,7 @@ function newMapEditor ( ) {
 
 						// notes are sorted on the distance
 						route.notes.sort (
-							( first, second ) => { return first.distance - second.distance; } 
+							( first, second ) => { return first.distance - second.distance; }
 						);
 
 						// the coordinates of the bullet are adapted
@@ -958,9 +958,9 @@ function newMapEditor ( ) {
 			);
 
 			// event listener for the drag event
-			L.DomEvent.on ( 
-				bullet, 
-				'drag', 
+			L.DomEvent.on (
+				bullet,
+				'drag',
 				event => {
 					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
@@ -969,53 +969,53 @@ function newMapEditor ( ) {
 				}
 			);
 		}
-		
+
 		// a second marker is now created. The icon created by the user is used for this marker
 		let icon = L.divIcon (
-			{ 
-				iconSize : [ note.iconWidth, note.iconHeight ], 
+			{
+				iconSize : [ note.iconWidth, note.iconHeight ],
 				iconAnchor : [ note.iconWidth / 2, note.iconHeight / 2 ],
-				popupAnchor : [ 0, - note.iconHeight / 2 ], 
+				popupAnchor : [ 0, - note.iconHeight / 2 ],
 				html : note.iconContent,
 				className : g_Config.note.style
 			}
 		);
-		let marker = L.marker ( 
+		let marker = L.marker (
 			note.iconLatLng,
 			{
 				icon : icon,
 				draggable : ! readOnly
 			}
-		);	
+		);
 		marker.objId = note.objId;
-		
+
 		// a popup is binded to the the marker...
 		marker.bindPopup (
 			layer => {
 				let note = m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
 				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( note );
-			}			
+			}
 		);
-		
+
 		// ... and also a tooltip
 		if ( 0 !== note.tooltipContent.length ) {
-			marker.bindTooltip ( 
-				layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; } 
+			marker.bindTooltip (
+				layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; }
 			);
 			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 		}
 		if ( ! readOnly ) {
 
 			// event listener for the contextmenu event
-			L.DomEvent.on ( 
-				marker, 
-				'contextmenu', 
+			L.DomEvent.on (
+				marker,
+				'contextmenu',
 				event => newNoteContextMenu ( event ).show ( )
 			);
 
 			// event listener for the dragend event
-			L.DomEvent.on ( 
-				marker, 
+			L.DomEvent.on (
+				marker,
 				'dragend',
 				event => {
 
@@ -1034,8 +1034,8 @@ function newMapEditor ( ) {
 			);
 
 			// event listener for the drag event
-			L.DomEvent.on ( 
-				marker, 
+			L.DomEvent.on (
+				marker,
 				'drag',
 				event => {
 
@@ -1051,21 +1051,21 @@ function newMapEditor ( ) {
 				}
 			);
 		}
-		
+
 		// Finally a polyline is created between the 2 markers
 		let polyline = L.polyline ( [ note.latLng, note.iconLatLng ], g_Config.note.polyline );
 		polyline.objId = note.objId;
-		
+
 		// The 3 objects are added to a layerGroup
 		let layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
 		layerGroup.markerId = L.Util.stamp ( marker );
 		layerGroup.polylineId = L.Util.stamp ( polyline );
 		layerGroup.bulletId = L.Util.stamp ( bullet );
-		
+
 		// and the layerGroup added to the leaflet map and JavaScript map
 		m_AddTo ( note.objId, layerGroup );
 	}
-	
+
 	/*
 	--- m_OnGeolocationStatusChanged function -----------------------------------------------------------------------
 
@@ -1081,13 +1081,13 @@ function newMapEditor ( ) {
 			m_GeolocationCircle = null;
 		}
 	}
-	
+
 	/*
 	--- m_OnGeolocationPositionChanged function -----------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_OnGeolocationPositionChanged ( position ) {
 		let zoomToPosition = g_Config.geoLocation.zoomToPosition;
 		if ( m_GeolocationCircle ) {
@@ -1095,7 +1095,7 @@ function newMapEditor ( ) {
 			zoomToPosition = false;
 		}
 
-		m_GeolocationCircle = L.circleMarker ( 
+		m_GeolocationCircle = L.circleMarker (
 			L.latLng ( position.coords.latitude, position.coords.longitude ),
 			{
 				radius : g_Config.geoLocation.radius,
@@ -1106,15 +1106,15 @@ function newMapEditor ( ) {
 				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
 			)
 			.addTo ( g_TravelNotesData.map );
-		
+
 		if ( zoomToPosition ) {
-			g_TravelNotesData.map.setView ( 
-				L.latLng ( position.coords.latitude, position.coords.longitude ), 
+			g_TravelNotesData.map.setView (
+				L.latLng ( position.coords.latitude, position.coords.longitude ),
 				g_Config.geoLocation.zoomFactor
 			);
 		}
 	}
-	
+
 	/*
 	--- MapEditor object ----------------------------------------------------------------------------------------------
 
@@ -1123,52 +1123,52 @@ function newMapEditor ( ) {
 
 	return Object.seal (
 		{
-			
+
 			removeRoute : ( route, removeNotes, removeWayPoints ) => m_RemoveRoute ( route, removeNotes, removeWayPoints ),
-			
+
 			addRoute : ( route, addNotes, addWayPoints, readOnly ) => m_AddRoute ( route, addNotes, addWayPoints, readOnly ),
-			
+
 			editRoute : route => m_EditRoute ( route ),
-			
+
 			removeObject : objId => m_RemoveObject ( objId ),
-			
+
 			removeAllObjects : ( ) => m_RemoveAllObjects ( ),
-			
+
 			zoomToPoint : latLng => m_ZoomToPoint ( latLng ),
-			
+
 			zoomToSearchResult : ( latLng, geometry ) => m_ZoomToSearchResult ( latLng, geometry ),
-			
+
 			zoomToNote : noteObjId => m_ZoomToNote ( noteObjId ),
-			
+
 			zoomToRoute : routeObjId => m_ZoomToRoute ( routeObjId ),
-			
+
 			zoomToTravel : ( ) => m_ZoomToTravel ( ),
 
 			addItineraryPointMarker : ( objId, latLng ) => m_AddItineraryPointMarker ( objId, latLng ),
-			
+
 			addSearchPointMarker : ( objId, latLng, geometry ) => m_AddSearchPointMarker ( objId, latLng, geometry ),
 
 			addRectangle : ( objId, bounds, properties ) => m_AddRectangle ( objId, bounds, properties ),
-			
+
 			addWayPoint : ( wayPoint, letter ) => m_AddWayPoint  ( wayPoint, letter ),
 
 			redrawNote : note => m_RedrawNote ( note ),
-			
+
 			addNote : ( note, readOnly ) => m_AddNote ( note, readOnly ),
-			
+
 			loadEvents : ( ) => m_loadEvents ( ),
-			
+
 			setLayer : ( layer ) => m_SetLayer ( layer ),
-			
+
 			onGeolocationStatusChanged : ( status ) => m_OnGeolocationStatusChanged ( status ),
-			
+
 			onGeolocationPositionChanged : ( position ) => m_OnGeolocationPositionChanged ( position )
-			
+
 		}
 	);
 }
 
-/* 
+/*
 --- g_MapEditor object ------------------------------------------------------------------------------------------------
 
 The one and only one mapEditor

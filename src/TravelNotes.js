@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -75,7 +75,7 @@ import { gc_ErrorsUI } from './UI/ErrorsUI.js';
 
 gc_AttributionsUI
 
-/* 
+/*
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
 This function returns all you need to use TravelNotes :-)
@@ -90,23 +90,23 @@ function travelNotesFactory ( ) {
 	let m_RightUserContextMenuData = [];
 	let m_HaveLeftContextMenu = false;
 	let m_HaveRightContextMenu = false;
-	
+
 	let m_Langage = null;
-	
+
 	let m_TravelUrl = null;
-	
+
 	let m_EventDispatcher = newEventDispatcher ( );
 
-	window.addEventListener ( 
-		'unload', 
+	window.addEventListener (
+		'unload',
 		( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
 	);
 
-	window.addEventListener ( 
-		'beforeunload', 
+	window.addEventListener (
+		'beforeunload',
 		event => {
 			event.returnValue = 'x';
-			return 'x'; 
+			return 'x';
 		}
 	);
 
@@ -122,7 +122,7 @@ function travelNotesFactory ( ) {
 		let newUrlSearch = '?' ;
 		( decodeURI ( window.location.search ).substr ( 1 )
 			.split ( '&' ) )
-			.forEach ( 
+			.forEach (
 				urlSearchSubString =>{
 					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ){
 						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
@@ -156,21 +156,21 @@ function travelNotesFactory ( ) {
 	*/
 
 	function m_AddControl ( map, divControlId ) {
-		
+
 		g_TravelNotesData.map = map;
-		
+
 		m_ReadURL ( );
-		
+
 		g_MapEditor.loadEvents ( );
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
-			requestBuilder.getJsonPromise ( 
+			requestBuilder.getJsonPromise (
 				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
-				'TravelNotesConfig.json' 
+				'TravelNotesConfig.json'
 			),
-			requestBuilder.getJsonPromise ( 
-				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 
-				'TravelNotes' + 
+			requestBuilder.getJsonPromise (
+				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+				'TravelNotes' +
 				( m_Langage || g_Config.language).toUpperCase ( )  +
 				'.json'
 			)
@@ -179,7 +179,7 @@ function travelNotesFactory ( ) {
 			promises.push ( requestBuilder.getJsonPromise ( m_TravelUrl ) );
 		}
 
-		Promise.all ( promises ).then ( 
+		Promise.all ( promises ).then (
 
 			// promises succeeded
 			values => {
@@ -190,7 +190,7 @@ function travelNotesFactory ( ) {
 				}
 
 				//g_Config.overload ( values [ 0 ] );
-				
+
 				// translations adaptation
 				g_Translator.setTranslations ( values [ 1 ] );
 				g_TravelNotesData.providers.forEach (
@@ -198,11 +198,11 @@ function travelNotesFactory ( ) {
 						provider.userLanguage =  g_Config.language;
 					}
 				);
-				
-				// osmSearch 
+
+				// osmSearch
 				if ( window.osmSearch ) {
 					window.osmSearch.getDictionaryPromise ( g_Config.language, 'travelNotes' )
-						.then ( 
+						.then (
 							( ) => console.log ( 'osmSearch dictionary loaded' ),
 							err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
 						);
@@ -223,7 +223,7 @@ function travelNotesFactory ( ) {
 
 				gc_AttributionsUI.createUI ( );
 				gc_ErrorsUI.createUI ( );
-				
+
 				if ( m_TravelUrl ) {
 
 					// loading travel...
@@ -242,24 +242,24 @@ function travelNotesFactory ( ) {
 					}
 					else {
 						m_EventDispatcher.dispatch ( 'reducerouteui' );
-					}	
+					}
 				}
 			}
 		)
-			.catch ( 
+			.catch (
 				err => console.log ( err ? err : 'An error occurs when loading translations or config' )
 			);
 	}
-	
+
 	/*
 	--- End of m_AddControl function ---
 	*/
-	
+
 	/*
 	--- m_OnMapClick function ------------------------------------------------------------------------------------------
 
 	Map click event handler
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -268,12 +268,12 @@ function travelNotesFactory ( ) {
 			newMapContextMenu ( event ).show ( );
 		}
 	}
-	
+
 	/*
 	--- m_OnMapContextMenu function ------------------------------------------------------------------------------------
 
 	Map context menu event handler
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -282,7 +282,7 @@ function travelNotesFactory ( ) {
 			newMapContextMenu ( event ).show ( );
 		}
 	}
-	
+
 	/*
 	--- m_AddProvider function ----------------------------------------------------------------------------------------
 
@@ -303,8 +303,8 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId ); }, 
-		
+		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId ); },
+
 		/*
 		--- addProvider method ----------------------------------------------------------------------------------------
 
@@ -312,9 +312,9 @@ function travelNotesFactory ( ) {
 
 		---------------------------------------------------------------------------------------------------------------
 		*/
-		
+
 		addProvider : provider => m_AddProvider ( provider ),
-		
+
 		/*
 		--- addMapContextMenu method ----------------------------------------------------------------------------------
 
@@ -344,9 +344,9 @@ function travelNotesFactory ( ) {
 
 		get userData ( ) { return g_TravelNotesData.travel.userData; },
 		set userData ( userData ) { g_TravelNotesData.travel.userData = userData; },
-		
+
 		get rightContextMenu ( ) { return m_HaveRightContextMenu; },
-		set rightContextMenu ( RightContextMenu ) { 
+		set rightContextMenu ( RightContextMenu ) {
 			if  ( ( RightContextMenu ) && ( ! m_HaveRightContextMenu ) ) {
 				g_TravelNotesData.map.on ( 'contextmenu', m_OnMapContextMenu );
 				m_HaveRightContextMenu = true;
@@ -356,9 +356,9 @@ function travelNotesFactory ( ) {
 				m_HaveRightContextMenu = false;
 			}
 		},
-		
+
 		get leftContextMenu ( ) { return m_HaveLeftContextMenu; },
-		set leftContextMenu ( LeftContextMenu ) { 
+		set leftContextMenu ( LeftContextMenu ) {
 			if  ( ( LeftContextMenu ) && ( ! m_HaveLeftContextMenu ) ) {
 				g_TravelNotesData.map.on ( 'click', m_OnMapClick );
 				m_HaveLeftContextMenu = true;
@@ -368,17 +368,17 @@ function travelNotesFactory ( ) {
 				m_HaveLeftContextMenu = false;
 			}
 		},
-		
+
 		get leftUserContextMenu ( ) { return m_LeftUserContextMenuData; },
 		set leftUserContextMenu ( LeftUserContextMenu ) { m_LeftUserContextMenuData = LeftUserContextMenu; },
-		
+
 		get rightUserContextMenu ( ) { return m_RightUserContextMenuData; },
 		set rightUserContextMenu ( RightUserContextMenu ) { m_RightUserContextMenuData = RightUserContextMenu; },
-		
+
 		get maneuver ( ) { return newManeuver ( ); },
-		
+
 		get itineraryPoint ( ) { return newItineraryPoint ( ); },
-		
+
 		get version ( ) { return currentVersion; }
 	};
 }
@@ -390,11 +390,11 @@ catch ( err ) {
 	console.log ( err ? err : 'An error occurs when loading TravelNotes' );
 }
 
-newHttpRequestBuilder ( ).getJsonPromise ( 
+newHttpRequestBuilder ( ).getJsonPromise (
 	window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
-	'TravelNotesConfig.json' 
+	'TravelNotesConfig.json'
 )
-	.then ( 
+	.then (
 		config => {
 			g_Config.overload ( config );
 			newAutoLoader ( );

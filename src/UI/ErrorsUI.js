@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -24,7 +24,7 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 
+Doc reviewed
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ import { g_Translator } from '../UI/Translator.js';
 */
 
 function newErrorsUI ( ) {
-	
+
 	let m_ErrorDiv = null;
 	let m_TimerId = null;
 	let m_ShowHelpInput = null;
@@ -50,7 +50,7 @@ function newErrorsUI ( ) {
 	let m_CancelButton = null;
 	let m_ShowHelp = g_Config.errorUI.showHelp;
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( );
-	
+
 	/*
 	--- m_OnTimer function --------------------------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ function newErrorsUI ( ) {
 		m_ShowHelpDiv = null;
 		m_ErrorDiv.innerHTML = '';
 	}
-	
+
 	/*
 	--- m_AddHelpCheckbox function ------------------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ function newErrorsUI ( ) {
 		m_ShowHelpDiv = m_HTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI-HelpInputDiv'				
+				id : 'TravelNotes-ErrorUI-HelpInputDiv'
 			},
 			m_ErrorDiv
 		);
@@ -92,10 +92,10 @@ function newErrorsUI ( ) {
 			},
 			m_ShowHelpDiv
 		);
-		m_ShowHelpInput.addEventListener ( 
-			'change', 
+		m_ShowHelpInput.addEventListener (
+			'change',
 			( ) => { m_ShowHelp = m_ShowHelpInput.checked; },
-			false 
+			false
 		);
 		m_HTMLElementsFactory.create (
 			'label',
@@ -115,25 +115,25 @@ function newErrorsUI ( ) {
 	*/
 
 	function m_Show ( message, errorLevel ) {
-		
+
 		if (
-			( 'Error' === errorLevel && ! g_Config.errorUI.showError ) 
+			( 'Error' === errorLevel && ! g_Config.errorUI.showError )
 				||
-				( 'Warning' === errorLevel && ! g_Config.errorUI.showWarning ) 
+				( 'Warning' === errorLevel && ! g_Config.errorUI.showWarning )
 				||
-				( 'Info' === errorLevel && ! g_Config.errorUI.showInfo ) 
+				( 'Info' === errorLevel && ! g_Config.errorUI.showInfo )
 				||
-				( 'Help' === errorLevel && ! g_Config.errorUI.showHelp ) 
-				|| 
-				( 'Help' === errorLevel && ! m_ShowHelp ) 
+				( 'Help' === errorLevel && ! g_Config.errorUI.showHelp )
+				||
+				( 'Help' === errorLevel && ! m_ShowHelp )
 		) {
 			return;
 		}
 		if ( m_TimerId ) {
 			m_OnTimer ( );
 		}
-		
-		let headerDiv = m_HTMLElementsFactory.create ( 
+
+		let headerDiv = m_HTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI-Header'
@@ -157,9 +157,9 @@ function newErrorsUI ( ) {
 			},
 			m_ErrorDiv
 		);
-	
+
 		m_ErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
-		
+
 		if ( 'Help' === errorLevel ) {
 			m_AddHelpCheckbox ( );
 		}
@@ -167,32 +167,32 @@ function newErrorsUI ( ) {
 		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
 		m_TimerId = setTimeout ( m_OnTimer, g_Config.errorUI.timeOut );
 	}
-	
+
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateUI ( ) {
-		
+
 		if ( document.getElementById ( 'TravelNotes-ErrorUI' ) ) {
 			return;
 		}
 
-		m_ErrorDiv = m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-ErrorUI', 
+		m_ErrorDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-ErrorUI',
 				className : 'TravelNotes-ErrorUI-Hidden'
-			}, 
+			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		)
-		
+
 	}
-			
+
 	/*
 	--- ErrorsUI object ------------------------------------------------------------------------------------------
 
@@ -200,22 +200,22 @@ function newErrorsUI ( ) {
 	*/
 
 	return {
-		
+
 		createUI : ( ) => m_CreateUI ( ),
 
 		showError : error  => m_Show ( error, 'Error' ),
-		
+
 		showWarning : warning  => m_Show ( warning, 'Warning' ),
-		
+
 		showInfo : info  => m_Show ( info, 'Info' ),
-		
+
 		showHelp : help  => m_Show ( help, 'Help' )
-		
+
 	};
 }
 
 const gc_ErrorsUI = newErrorsUI ( );
-	
+
 /*
 --- End of ErrorsUI.js file --------------------------------------------------------------------------------------
-*/	
+*/

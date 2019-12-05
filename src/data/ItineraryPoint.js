@@ -46,7 +46,7 @@ Patterns : Closure
 function newItineraryPoint ( ) {
 
 	const s_ObjType = newObjType ( 'ItineraryPoint' );
-	
+
 	let m_Lat = 0;
 
 	let m_Lng = 0;
@@ -106,7 +106,7 @@ function newItineraryPoint ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -120,13 +120,13 @@ function newItineraryPoint ( ) {
 		m_Distance = something.distance || 0;
 		m_ObjId = newObjId ( );
 	}
-	
+
 	/*
 	--- itineraryPoint object -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
 
@@ -137,9 +137,9 @@ function newItineraryPoint ( ) {
 			set lng ( Lng ) { m_Lng = Lng; },
 
 			get latLng ( ) { return [ m_Lat, m_Lng ]; },
-			set latLng ( LatLng ) { 
-				m_Lat = LatLng [ 0 ]; 
-				m_Lng = LatLng [ 1 ]; 
+			set latLng ( LatLng ) {
+				m_Lat = LatLng [ 0 ];
+				m_Lng = LatLng [ 1 ];
 			},
 
 			get distance ( ) { return m_Distance; },

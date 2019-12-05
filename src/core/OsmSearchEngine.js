@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -29,7 +29,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-	
+
 export { newOsmSearchEngine };
 
 import { g_Config } from '../data/Config.js';
@@ -61,18 +61,18 @@ function s_DrawSearchRectangle ( ) {
 	else {
 		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_PreviousSearchRectangleObjId } );
 	}
-	newEventDispatcher ( ).dispatch ( 
-		'addrectangle', 
-		{ 
+	newEventDispatcher ( ).dispatch (
+		'addrectangle',
+		{
 			objId : s_PreviousSearchRectangleObjId,
-			bounds : [ 
-				[ s_SearchParameters.bbox.southWest.lat, s_SearchParameters.bbox.southWest.lng ], 
-				[ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng ] 
+			bounds : [
+				[ s_SearchParameters.bbox.southWest.lat, s_SearchParameters.bbox.southWest.lng ],
+				[ s_SearchParameters.bbox.northEast.lat, s_SearchParameters.bbox.northEast.lng ]
 			],
-			properties : g_Config.previousSearchLimit 
+			properties : g_Config.previousSearchLimit
 		}
 	);
-	
+
 }
 
 /*
@@ -119,12 +119,12 @@ function onMapChange ( ) {
 	else {
 		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : s_NextSearchRectangleObjId } );
 	}
-	newEventDispatcher ( ).dispatch ( 
-		'addrectangle', 
-		{ 
+	newEventDispatcher ( ).dispatch (
+		'addrectangle',
+		{
 			objId : s_NextSearchRectangleObjId,
-			bounds : [ 
-				[ mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ], 
+			bounds : [
+				[ mapCenter.lat - s_SearchLimits.lat, mapCenter.lng - s_SearchLimits.lng ],
 				[ mapCenter.lat + s_SearchLimits.lat, mapCenter.lng + s_SearchLimits.lng ]
 			],
 			properties : g_Config.nextSearchLimit
@@ -141,7 +141,7 @@ This function returns the osmSearchEngine object
 */
 
 function newOsmSearchEngine ( ) {
-	
+
 	let m_EventDispatcher = newEventDispatcher ( );
 
 	/*
@@ -156,15 +156,15 @@ function newOsmSearchEngine ( ) {
 		if ( s_OsmSearchStarted ) {
 			return;
 		}
-		
+
 		s_OsmSearchStarted = true;
-		
+
 		let mapBounds =  g_TravelNotesData.map.getBounds ( );
 		s_SearchParameters = {
-			bbox : { 
+			bbox : {
 				southWest : {
 					lat : mapBounds.getSouthWest ( ).lat,
-					lng : mapBounds.getSouthWest ( ).lng 
+					lng : mapBounds.getSouthWest ( ).lng
 				},
 				northEast : {
 					lat : mapBounds.getNorthEast ( ).lat,
@@ -176,7 +176,7 @@ function newOsmSearchEngine ( ) {
 		g_TravelNotesData.searchData = [];
 		window.osmSearch.getSearchPromise ( s_SearchParameters ).then (  onSearchSuccess, onSearchError  );
 	}
-	
+
 	/*
 	--- m_Show function -----------------------------------------------------------------------------------------------
 
@@ -186,13 +186,13 @@ function newOsmSearchEngine ( ) {
 	*/
 
 	function m_Show ( ) {
-		
+
 		g_TravelNotesData.map.on ( 'zoom', onMapChange );
 		g_TravelNotesData.map.on ( 'move', onMapChange );
 		onMapChange ( );
 		s_DrawSearchRectangle ( );
 	}
-	
+
 	/*
 	--- m_Show function -----------------------------------------------------------------------------------------------
 
@@ -213,19 +213,19 @@ function newOsmSearchEngine ( ) {
 			s_PreviousSearchRectangleObjId = -1;
 		}
 	}
-	
+
 	/*
 	--- osmSearchEngine object ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
 			search : ( ) => m_Search ( ),
-			
+
 			show : ( ) => m_Show ( ),
-			
+
 			hide : ( ) => m_Hide ( )
 		}
 	);
@@ -233,4 +233,4 @@ function newOsmSearchEngine ( ) {
 
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------
-*/		
+*/

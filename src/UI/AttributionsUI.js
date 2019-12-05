@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -50,7 +50,7 @@ function newAttributionsUI ( ) {
 	*/
 
 	function m_SetAttributions ( attributions ) {
-		m_AttributionsUIDiv.innerHTML = 
+		m_AttributionsUIDiv.innerHTML =
 			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
@@ -72,7 +72,7 @@ function newAttributionsUI ( ) {
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
 		m_SetAttributions ( '' );
-		
+
 	}
 
 	/*
@@ -90,7 +90,7 @@ function newAttributionsUI ( ) {
 }
 
 const gc_AttributionsUI = newAttributionsUI ( );
-	
+
 /*
 --- End of AttributionsUI.js file -------------------------------------------------------------------------------------
 */

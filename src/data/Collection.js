@@ -56,7 +56,7 @@ function newCollection ( objName ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_Add ( object ) {
 		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== m_ObjName ) ) {
 			throw 'invalid object name for add function';
@@ -71,7 +71,7 @@ function newCollection ( objName ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_First ( ) {
 		return m_Array [ 0 ];
 	}
@@ -120,7 +120,7 @@ function newCollection ( objName ) {
 
 		return array;
 	}
-	
+
 	/*
 	--- m_MoveTo function ---------------------------------------------------------------------------------------------
 
@@ -147,7 +147,7 @@ function newCollection ( objName ) {
 	*/
 
 	function m_IndexOfObjId ( objId ) {
-		let index = m_Array.findIndex ( 
+		let index = m_Array.findIndex (
 			element => { return element.objId === objId; }
 		);
 		return index;
@@ -185,30 +185,30 @@ function newCollection ( objName ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_NextOrPrevious ( objId, condition, direction ) {
 		let index = m_IndexOfObjId ( objId );
 		if ( -1 === index ) {
 			throw 'invalid objId for next or previous function';
 		}
-		
+
 		if ( ! condition ) {
-			condition = ( ) => { 
-				return true; 
+			condition = ( ) => {
+				return true;
 			};
 		}
 		index += direction;
-		
+
 		while ( ( -1 < index ) && ( index < m_Array.length ) && ! condition ( m_Array [ index ] ) ) {
 			index += direction;
 		}
 		if ( -1 === index || m_Array.length === index ) {
 			return null;
 		}
-		
+
 		return m_Array [ index ];
 	}
-	
+
 	/*
 	--- m_Remove function ---------------------------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ function newCollection ( objName ) {
 			}
 		);
 	}
-	
+
 	/*
 	--- m_Sort function -----------------------------------------------------------------------------------------------
 
@@ -358,7 +358,7 @@ function newCollection ( objName ) {
 			--- getAt function ----------------------------------------------------------------------------------------
 
 			This function returns the object with the given objId or null when the object is not found
-			
+
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
@@ -368,33 +368,33 @@ function newCollection ( objName ) {
 			--- moveTo function ---------------------------------------------------------------------------------------
 
 			This function move the object identified by objId to the position ocuped by the object
-			identified by targetObjId 
+			identified by targetObjId
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
-			
+
 			moveTo : ( objId, targetObjId, moveBefore ) => m_MoveTo ( objId, targetObjId, moveBefore ),
-			
+
 			/*
 			--- next function -----------------------------------------------------------------------------------------
 
-			This function 
+			This function
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			next : ( objId, condition ) => { return m_NextOrPrevious ( objId, condition, 1 ); },
-			
+
 			/*
 			--- previous function -------------------------------------------------------------------------------------
 
-			This function 
+			This function
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			previous : ( objId, condition ) => { return m_NextOrPrevious ( objId, condition, -1 ); },
-			
+
 			/*
 			--- remove function ---------------------------------------------------------------------------------------
 
@@ -477,7 +477,7 @@ function newCollection ( objName ) {
 			Returns an iterator on the collection.
 			The iterator have the following properties:
 			value : the object pointed by the iterator
-			done : true when the iterator is at the end of the collection. 
+			done : true when the iterator is at the end of the collection.
 				Each time this property is called, the iterator move to the next object
 			first : true when the iterator is on the first object
 			last : true when the iterator is on the last object
@@ -485,7 +485,7 @@ function newCollection ( objName ) {
 
 			-----------------------------------------------------------------------------------------------------------
 			*/
-			
+
 			get iterator ( ) {
 				return m_Iterator ( );
 			},

@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -42,7 +42,7 @@ function newDataSearchEngine ( ) {
 	--- m_getRoute function -------------------------------------------------------------------------------------------
 
 	This function returns a route when giving the routeObjId
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -62,7 +62,7 @@ function newDataSearchEngine ( ) {
 	--- m_GetNoteAndRoute method --------------------------------------------------------------------------------------
 
 	This function returns a note and a route ( when the note is linked to a route ) from the noteObjId
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -86,12 +86,12 @@ function newDataSearchEngine ( ) {
 
 		return { note : note, route : g_TravelNotesData.travel.editedRoute };
 	}
-	
+
 	/*
 	--- m_GetWayPoint method ------------------------------------------------------------------------------------------
 
 	This function returns a wayPoint from the wayPointObjId
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -111,13 +111,13 @@ function newDataSearchEngine ( ) {
 		return wayPoint;
 	}
 
-	/* 
+	/*
 	--- dataSearchEngine object ---------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
-	return Object.seal ( 
+
+	return Object.seal (
 		{
 			getRoute : routeObjId => { return m_GetRoute ( routeObjId ); },
 			getNoteAndRoute : noteObjId => { return m_GetNoteAndRoute ( noteObjId ); },

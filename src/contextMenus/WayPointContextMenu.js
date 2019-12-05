@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- WayPointContextMenu.js file ---------------------------------------------------------------------------------------
 This file contains:
-	- 
+	-
 Changes:
 	- v1.6.0:
 		- created
@@ -44,7 +44,7 @@ import { g_Translator } from '../UI/Translator.js';
 */
 
 function newWayPointContextMenu ( event ) {
-	
+
 	let m_WayPointObjId = event.target.objId;
 
 	/*
@@ -54,32 +54,32 @@ function newWayPointContextMenu ( event ) {
 	*/
 
 	function m_GetMenuItems ( ) {
-		let isMidWayPoint = 
-			g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== m_WayPointObjId  
-			&&  
+		let isMidWayPoint =
+			g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== m_WayPointObjId
+			&&
 			g_TravelNotesData.travel.editedRoute.wayPoints.last.objId !== m_WayPointObjId ;
 		return [
-			{ 
-				context : g_WayPointEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ), 
+			{
+				context : g_WayPointEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ),
 				action : isMidWayPoint ? g_WayPointEditor.removeWayPoint : null,
 				param : m_WayPointObjId
-			} 
+			}
 		];
 	}
-	
+
 	/*
 	--- WayPointContextMenu object function ---------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let wayPointContextMenu = newBaseContextMenu ( event );
 	wayPointContextMenu.init ( m_GetMenuItems ( ) );
-	
+
 	return Object.seal ( wayPointContextMenu );
 }
 
 /*
 --- End of WayPointContextMenu.js file ------------------------------------------------------------------------------------
-*/		
+*/

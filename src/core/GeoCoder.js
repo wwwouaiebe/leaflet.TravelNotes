@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -49,12 +49,12 @@ function newGeoCoder ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_GetPromiseAddress ( latLng ) {
-	
-		let NominatimUrl = 
-			g_Config.nominatim.url + 'reverse?format=json&lat=' + 
-			latLng [ 0 ] + '&lon=' + latLng [ 1 ] + 
+
+		let NominatimUrl =
+			g_Config.nominatim.url + 'reverse?format=json&lat=' +
+			latLng [ 0 ] + '&lon=' + latLng [ 1 ] +
 			'&zoom=18&addressdetails=1';
 		let nominatimLanguage = g_Config.nominatim.language;
 		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
@@ -66,9 +66,9 @@ function newGeoCoder ( ) {
 			requestHeaders = [ { headerName : 'accept-language', headerValue : ''} ];
 		}
 
-		return newHttpRequestBuilder ( ).getJsonPromise ( NominatimUrl, requestHeaders ); 
+		return newHttpRequestBuilder ( ).getJsonPromise ( NominatimUrl, requestHeaders );
 	}
-	
+
 	/*
 	--- End of m_GetPromiseAddress function ---
 	*/
@@ -78,13 +78,13 @@ function newGeoCoder ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
-			getPromiseAddress : ( latLng ) => { return m_GetPromiseAddress ( latLng ); }				
+			getPromiseAddress : ( latLng ) => { return m_GetPromiseAddress ( latLng ); }
 		}
 	);
-		
+
 }
 
 /*

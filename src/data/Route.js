@@ -56,7 +56,7 @@ Patterns : Closure
 function newRoute ( ) {
 
 	const s_ObjType = newObjType ( 'Route' );
-	
+
 	let m_Name = '';
 
 	let m_WayPoints = newCollection ( 'WayPoint' );
@@ -66,17 +66,17 @@ function newRoute ( ) {
 	let m_Notes = newCollection ( 'Note' );
 
 	let m_Itinerary = newItinerary ( );
-	
+
 	let m_Width = 5;
 
 	let m_Color = '#ff0000';
-	
+
 	let m_DashArray = 0;
-	
+
 	if ( g_Config ) {
 		m_Width = g_Config.route.width;
-		m_Color = g_Config.route.color;			
-		m_DashArray = g_Config.route.dashArray;			
+		m_Color = g_Config.route.color;
+		m_DashArray = g_Config.route.dashArray;
 	}
 
 	let m_Chain = false;
@@ -86,9 +86,9 @@ function newRoute ( ) {
 	let m_Distance = 0;
 
 	let m_Duration = 0;
-	
+
 	let m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
-	
+
 	function m_SetEdited ( edited ) {
 		if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
 			throw 'Invalid value for Route.edited : ' + edited;
@@ -99,7 +99,7 @@ function newRoute ( ) {
 	}
 
 	let m_Hidden = false;
-	
+
 	let m_ObjId = newObjId ( );
 
 	/*
@@ -136,20 +136,20 @@ function newRoute ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		[ 
-			'name', 
-			'wayPoints', 
-			'notes', 
-			'itinerary', 
-			'width', 
-			'color', 
-			'dashArray', 
-			'chain', 
-			'distance', 
-			'duration', 
-			'edited', 
-			'hidden', 
-			'chainedDistance', 
+		[
+			'name',
+			'wayPoints',
+			'notes',
+			'itinerary',
+			'width',
+			'color',
+			'dashArray',
+			'chain',
+			'distance',
+			'duration',
+			'edited',
+			'hidden',
+			'chainedDistance',
 			'objId'
 		].forEach (
 			property => {
@@ -186,7 +186,7 @@ function newRoute ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -217,7 +217,7 @@ function newRoute ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal ( 
+	return Object.seal (
 		{
 
 			get wayPoints ( ) { return m_WayPoints; },
@@ -249,7 +249,7 @@ function newRoute ( ) {
 
 			get duration ( ) { return m_Duration; },
 			set duration ( Duration ) { m_Duration = Duration; },
-			
+
 			get edited ( ) { return m_Edited; },
 			set edited ( Edited ) { m_SetEdited ( Edited ); },
 

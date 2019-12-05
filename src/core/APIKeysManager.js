@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -53,17 +53,17 @@ Patterns : Closure
 */
 
 function newAPIKeysManager ( ) {
-	
+
 	/*
 	--- m_GetKey function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_GetKey ( providerName ) {
 		return s_KeysMap.get ( providerName.toLowerCase ( ) );
 	}
-	
+
 	/*
 	--- m_SetKey function ---------------------------------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ function newAPIKeysManager ( ) {
 	function m_SetKey ( providerName, key ) {
 		s_KeysMap.set ( providerName.toLowerCase ( ), key );
 	}
-	
+
 	/*
 	--- m_FromUrl function --------------------------------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ function newAPIKeysManager ( ) {
 			}
 		}
 	}
-	
+
 	/*
 	--- m_FromSessionStorage function ---------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ function newAPIKeysManager ( ) {
 			}
 		}
 		g_TravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } 
+			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); }
 		);
 		return APIKeysCounter;
 	}
@@ -123,10 +123,10 @@ function newAPIKeysManager ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddProvider ( provider ) { 
+	function m_AddProvider ( provider ) {
 		let providerName = provider.name.toLowerCase ( );
 		let providerKey = m_GetKey ( providerName );
-		
+
 		if ( provider.providerKeyNeeded && ! providerKey ) {
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
 				providerKey = sessionStorage.getItem ( providerName );
@@ -150,14 +150,14 @@ function newAPIKeysManager ( ) {
 	function m_resetAPIKeys ( APIKeys ) {
 		sessionStorage.clear ( );
 		s_KeysMap.clear ( );
-		let saveToSessionStorage = 
-			newUtilities ( ).storageAvailable ( 'sessionStorage' ) 
-			&& 
+		let saveToSessionStorage =
+			newUtilities ( ).storageAvailable ( 'sessionStorage' )
+			&&
 			g_Config.APIKeys.saveToSessionStorage;
 		APIKeys.forEach (
 			APIKey => {
 				if ( saveToSessionStorage ) {
-					sessionStorage.setItem ( 
+					sessionStorage.setItem (
 						( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey',
 						btoa ( APIKey.providerKey )
 					);
@@ -165,10 +165,10 @@ function newAPIKeysManager ( ) {
 				m_SetKey ( APIKey.providerName, APIKey.providerKey );
 			}
 		);
-		g_TravelNotesData.providers.forEach ( 
-			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } 
+		g_TravelNotesData.providers.forEach (
+			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); }
 		);
-		
+
 		newEventDispatcher ( ).dispatch ( 'providersadded' );
 	}
 
@@ -177,21 +177,21 @@ function newAPIKeysManager ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_Dialog ( ) {
 		let ApiKeys = [];
 		s_KeysMap.forEach (
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
 		)
-		ApiKeys.sort ( 
-			( first, second ) =>{ return first.providerName.localeCompare ( second.providerName ); } 
+		ApiKeys.sort (
+			( first, second ) =>{ return first.providerName.localeCompare ( second.providerName ); }
 		);
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
 			.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
-			.catch ( err => console.log ( err ? err : 'canceled by user' )); 
+			.catch ( err => console.log ( err ? err : 'canceled by user' ));
 	}
-	
+
 	/*
 	--- m_OnOkDecrypt function ----------------------------------------------------------------------------------------
 
@@ -202,7 +202,7 @@ function newAPIKeysManager ( ) {
 		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) )
 		m_resetAPIKeys ( APIKeys );
 	}
-	
+
 	/*
 	--- m_OnErrorDecrypt function -------------------------------------------------------------------------------------
 
@@ -222,13 +222,13 @@ function newAPIKeysManager ( ) {
 	function m_OnServerFile ( data ) {
 		gc_ErrorsUI.showHelp ( g_Translator.getText ( 'Help - gives a password for the APIKeys file or cancel' ) );
 		newDataEncryptor ( ).decryptData (
-			data,		
+			data,
 			m_OnOkDecrypt,
 			m_OnErrorDecrypt,
-			newPasswordDialog ( false ).show ( ) 
+			newPasswordDialog ( false ).show ( )
 		);
 	}
-	
+
 	/*
 	--- m_FromServerFile function -------------------------------------------------------------------------------------
 
@@ -242,12 +242,12 @@ function newAPIKeysManager ( ) {
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
-				'APIKeys' 
+				'APIKeys'
 		)
 			.then ( m_OnServerFile )
 			.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
 	}
-	
+
 	/*
 	--- APIKeysManager object -----------------------------------------------------------------------------------------
 
@@ -266,7 +266,7 @@ function newAPIKeysManager ( ) {
 	);
 }
 
-/* 
+/*
 --- g_APIKeysManager object -------------------------------------------------------------------------------------------
 
 The one and only one noteEditor
@@ -275,7 +275,7 @@ The one and only one noteEditor
 */
 
 const g_APIKeysManager = newAPIKeysManager ( );
-	
+
 /*
 --- End of APIKeysManager.js file -------------------------------------------------------------------------------------
-*/	
+*/

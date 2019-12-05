@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- SearchPaneUI.js file ----------------------------------------------------------------------------------------------
 This file contains:
-	- 
+	-
 Changes:
 	- v1.4.0:
 		- created
@@ -54,10 +54,10 @@ This function returns the searchPaneUI object
 */
 
 function newSearchPaneUI ( ) {
-	
+
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_EventDispatcher = newEventDispatcher ( );
-	
+
 	/*
 	--- m_OnSearchInputChange function --------------------------------------------------------------------------------
 
@@ -88,12 +88,12 @@ function newSearchPaneUI ( ) {
 
 			// adding wait animation
 			let htmlElementsFactory = newHTMLElementsFactory ( );
-			htmlElementsFactory.create ( 
-				'div', 
+			htmlElementsFactory.create (
+				'div',
 				{
-					id : 'TravelNotes-Control-SearchWaitBullet' 
+					id : 'TravelNotes-Control-SearchWaitBullet'
 				},
-				htmlElementsFactory.create ( 
+				htmlElementsFactory.create (
 					'div',
 					{ id : 'TravelNotes-Control-SearchWait' },
 					searchDiv
@@ -119,9 +119,9 @@ function newSearchPaneUI ( ) {
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		m_EventDispatcher.dispatch ( 
-			'zoomtosearchresult', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'zoomtosearchresult',
+			{
 				latLng : element.latLng,
 				geometry : element.geometry
 			}
@@ -156,9 +156,9 @@ function newSearchPaneUI ( ) {
 
 	function m_OnSearchResultMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch ( 
-			'addsearchpointmarker', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'addsearchpointmarker',
+			{
 				objId : mouseEvent.target.objId,
 				latLng : mouseEvent.target.latLng,
 				geometry : mouseEvent.target.geometry
@@ -188,28 +188,28 @@ function newSearchPaneUI ( ) {
 	*/
 
 	function m_Remove ( ) {
-		
+
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
-		
+
 		s_OsmSearchEngine.hide ( );
-		
+
 		let searchButton = document.getElementById ( 'TravelNotes-Control-SearchButton' );
 		if ( searchButton ) {
 			searchButton.removeEventListener ( 'click', m_OnSearchInputChange, false );
 		}
-		
+
 		let searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
 		if ( searchInputElement ) {
 			searchInputElement.removeEventListener ( 'change', m_OnSearchInputChange, false );
 		}
 		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
-		
+
 		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
-		
-		Array.prototype.forEach.call ( 
+
+		Array.prototype.forEach.call (
 			searchResultsElements,
 			searchResultsElement => {
 				searchResultsElement.removeEventListener ( 'click', m_OnSearchResultClick, false );
@@ -218,12 +218,12 @@ function newSearchPaneUI ( ) {
 				searchResultsElement.removeEventListener ( 'mouseleave', m_OnSearchResultMouseLeave, false );
 			}
 		);
-		
+
 		if ( searchDiv ) {
 			dataDiv.removeChild ( searchDiv );
 		}
 	}
-	
+
 	/*
 	--- m_Add function ------------------------------------------------------------------------------------------------
 
@@ -231,9 +231,9 @@ function newSearchPaneUI ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_Add ( ) {
-		
+
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
 			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
@@ -245,7 +245,7 @@ function newSearchPaneUI ( ) {
 		if ( ! dataDiv ) {
 			return;
 		}
-		
+
 		s_OsmSearchEngine.show ( );
 		let searchDiv = m_HtmlElementsFactory.create (
 			'div',
@@ -255,135 +255,135 @@ function newSearchPaneUI ( ) {
 			dataDiv
 		);
 		let searchButton = m_HtmlElementsFactory.create (
-			'div', 
-			{ 
+			'div',
+			{
 				id : 'TravelNotes-Control-SearchButton',
-				className : 'TravelNotes-Control-Button', 
-				title : g_Translator.getText ( 'SearchPaneUI - Search OpenStreetMap' ), 
+				className : 'TravelNotes-Control-Button',
+				title : g_Translator.getText ( 'SearchPaneUI - Search OpenStreetMap' ),
 				innerHTML : '&#x1f50e'
 			},
-			searchDiv 
+			searchDiv
 		);
 		searchButton.addEventListener ( 'click', m_OnSearchInputChange, false );
 
-		let searchInput = m_HtmlElementsFactory.create ( 
-			'input', 
-			{ 
-				type : 'text', 
-				id : 'TravelNotes-Control-SearchInput', 
+		let searchInput = m_HtmlElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				id : 'TravelNotes-Control-SearchInput',
 				placeholder : g_Translator.getText ( 'SearchPaneUI - Search phrase' ),
 				value : s_SearchInputValue
 			},
-			searchDiv 
+			searchDiv
 		);
 		searchInput.addEventListener ( 'change', m_OnSearchInputChange, false );
-		searchInput.addEventListener ( 
-			'keydown', 
+		searchInput.addEventListener (
+			'keydown',
 			keyBoardEvent => {
 				if ( 'Enter' === keyBoardEvent.key ) {
 					m_OnSearchInputChange ( keyBoardEvent );
-				} 
+				}
 			},
 			false );
 		searchInput.focus ( );
 		let resultsCounter = 0;
-		g_TravelNotesData.searchData.forEach ( 
+		g_TravelNotesData.searchData.forEach (
 			searchResult => {
 				let searchResultDiv = m_HtmlElementsFactory.create (
 					'div',
 					{
 						id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
 						className :	'TravelNotes-Control-SearchResult',
-						innerHTML : 
-							( 
-								searchResult.description === '' 
-									? 
+						innerHTML :
+							(
+								searchResult.description === ''
+									?
 									''
 									:
-									'<p class=\'TravelNotes-Control-SearchResultDescription\'>' + 
-									searchResult.description + 
-									'</p>' 
+									'<p class=\'TravelNotes-Control-SearchResultDescription\'>' +
+									searchResult.description +
+									'</p>'
 							) +
-							( 
-								searchResult.tags.name 
-									? 
+							(
+								searchResult.tags.name
+									?
 									'<p>' +
-									searchResult.tags.name + 
-									'</p>' 
-									: 
-									'' 
+									searchResult.tags.name +
+									'</p>'
+									:
+									''
 							) +
-							( 
-								searchResult.tags [ 'addr:street' ] 
-									? 
-									'<p>' + 
-									searchResult.tags [ 'addr:street' ] + 
-									' ' + 
-									( 
-										searchResult.tags [ 'addr:housenumber' ] 
-											? 
-											searchResult.tags [ 'addr:housenumber' ] 
+							(
+								searchResult.tags [ 'addr:street' ]
+									?
+									'<p>' +
+									searchResult.tags [ 'addr:street' ] +
+									' ' +
+									(
+										searchResult.tags [ 'addr:housenumber' ]
+											?
+											searchResult.tags [ 'addr:housenumber' ]
 											:
-											'' 
+											''
 									) +
 									'</p>'
-									: 
+									:
 									''
 							) +
-							( 
-								searchResult.tags [ 'addr:city' ] 
-									? 
-									'<p>' + 
+							(
+								searchResult.tags [ 'addr:city' ]
+									?
+									'<p>' +
 									(
-										searchResult.tags [ 'addr:postcode' ] 
-											? 
-											searchResult.tags [ 'addr:postcode' ] + 
-											' ' 
-											: 
+										searchResult.tags [ 'addr:postcode' ]
+											?
+											searchResult.tags [ 'addr:postcode' ] +
+											' '
+											:
 											''
-									) + 
-									searchResult.tags [ 'addr:city' ] + 
-									'</p>' 
-									: 
+									) +
+									searchResult.tags [ 'addr:city' ] +
+									'</p>'
+									:
 									''
 							) +
-							( 
+							(
 								searchResult.tags.phone
-									? 
-									'<p>' + 
-									searchResult.tags.phone + 
-									'</p>' 
-									: 
+									?
+									'<p>' +
+									searchResult.tags.phone +
+									'</p>'
+									:
 									''
 							) +
-							( 
-								searchResult.tags.email 
-									? 
-									'<p><a href=\'mailto:' + 
-									searchResult.tags.email + 
-									'\'>' + 
-									searchResult.tags.email + 
+							(
+								searchResult.tags.email
+									?
+									'<p><a href=\'mailto:' +
+									searchResult.tags.email +
+									'\'>' +
+									searchResult.tags.email +
 									'</a></p>'
-									: 
+									:
 									''
 							) +
-							( 
-								searchResult.tags.website 
-									? 
-									'<p><a href=\''+ 
+							(
+								searchResult.tags.website
+									?
+									'<p><a href=\''+
 									searchResult.tags.website +
-									'\' target=\'_blank\'>' + 
-									searchResult.tags.website + 
+									'\' target=\'_blank\'>' +
+									searchResult.tags.website +
 									'</a></p>'
-									: 
-									'' 
+									:
+									''
 							) +
-							( 
-								searchResult.ranking 
-									? 
-									'<p>&#x26ab;' + 
-									searchResult.ranking + 
-									'</p>' 
+							(
+								searchResult.ranking
+									?
+									'<p>&#x26ab;' +
+									searchResult.ranking +
+									'</p>'
 									:
 									''
 							)
@@ -400,7 +400,7 @@ function newSearchPaneUI ( ) {
 				searchResultDiv.addEventListener ( 'mouseenter', m_OnSearchResultMouseEnter, false );
 				searchResultDiv.addEventListener ( 'mouseleave', m_OnSearchResultMouseLeave, false );
 			}
-		);	
+		);
 	}
 
 	/*
@@ -409,14 +409,14 @@ function newSearchPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal ( 
+	return Object.seal (
 		{
 			remove : ( ) => m_Remove ( ),
 			add : ( ) => m_Add ( )
 		}
 	);
 }
-	
+
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------
-*/		
+*/

@@ -57,13 +57,13 @@ function newTravel ( ) {
 	let m_Name = 'TravelNotes';
 
 	let m_Routes = newCollection ( 'Route' );
-	
+
 	let m_Notes = newCollection ( 'Note' );
 
 	let m_ObjId = newObjId ( );
 
 	let m_ReadOnly = false;
-	
+
 	let m_UserData = {};
 
 	/*
@@ -122,7 +122,7 @@ function newTravel ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -139,13 +139,13 @@ function newTravel ( ) {
 		m_Notes.object = something.notes || [];
 		m_ObjId = newObjId ( );
 	}
-	
+
 	/*
 	--- travel object -------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
 			get editedRoute ( ) { return m_EditedRoute; },
@@ -157,7 +157,7 @@ function newTravel ( ) {
 
 			get name ( ) { return m_Name; },
 			set name ( Name ) { m_Name = Name; },
-			
+
 			get readOnly ( ) { return m_ReadOnly; },
 			set readOnly ( ReadOnly ) { m_ReadOnly = ReadOnly; },
 

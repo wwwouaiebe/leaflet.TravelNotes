@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -62,13 +62,13 @@ let g_AllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 */
 
 function newNoteDialog ( note, routeObjId, newNote ) {
-	
+
 	let m_FocusControl = null;
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_LatLng = note.latLng;
 	let m_Address = '';
 	let m_City = '';
-	
+
 	let m_NoteDialog = null;
 	let m_NoteDataDiv = null;
 	let m_IconHtmlContent = null;
@@ -116,12 +116,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- End of m_OnOkButtonClick function ---
 	*/
-	
+
 	/*
 	--- m_OnGeocoderResponse function ---------------------------------------------------------------------------------
 
 	Handler for the geoCoder call
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -165,7 +165,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_OnGeocoderError function -------------------------------------------------------------------------------------
 
 	Error handler for the geoCoder call
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -177,12 +177,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- End of m_OnGeocoderError function ---
 	*/
-	
+
 	/*
 	--- m_OnSvgIcon function ------------------------------------------------------------------------------------------
 
 	event handler for predefined icons list
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -230,7 +230,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		else if ( 1 === data.startStop ) {
 			m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Stop');
 		}
-		
+
 		let address = '';
 		let showPlace = 0;
 		for ( let counter = 0; counter < data.streets.length; counter ++ ) {
@@ -263,11 +263,11 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			address += ' (' + data.place + ')';
 		}
 		m_AdressInput.value = address;
-		
+
 		m_NoteDialog.hideWait ( );
 		m_LatLng = data.latLng;
 	}
-	
+
 	/*
 	--- End of m_OnSvgIcon function ---
 	*/
@@ -276,7 +276,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_OnErrorSvgIcon function -------------------------------------------------------------------------------------
 
 	event handler for predefined icons list
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -294,7 +294,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_OnPredefinedIconListSelectChange function -------------------------------------------------------------------
 
 	event handler for predefined icons list
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -323,7 +323,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_OnClickEditionButton function -------------------------------------------------------------------------------
 
 	event handler for edition with the styles buttons
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -339,23 +339,23 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let selectionStart = m_FocusControl.selectionStart;
 		let selectionEnd = m_FocusControl.selectionEnd;
 		let oldText = m_FocusControl.value;
-		m_FocusControl.value = 
-			oldText.substring ( 0, selectionStart ) + 
-			( 
-				bInsertBeforeAndAfter 
-					? 
-					button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter 
+		m_FocusControl.value =
+			oldText.substring ( 0, selectionStart ) +
+			(
+				bInsertBeforeAndAfter
+					?
+					button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter
 					:
 					button.htmlBefore
-			) + 
+			) +
 			oldText.substring ( selectionEnd );
-		m_FocusControl.setSelectionRange ( 
-			bInsertBeforeAndAfter || selectionStart === selectionEnd 
-				? 
-				selectionStart + button.htmlBefore.length 
-				: 
+		m_FocusControl.setSelectionRange (
+			bInsertBeforeAndAfter || selectionStart === selectionEnd
+				?
+				selectionStart + button.htmlBefore.length
+				:
 				selectionStart,
-			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length 
+			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length
 		);
 		m_FocusControl.focus ( );
 	}
@@ -367,8 +367,8 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- m_OnOpenUserDataFileInputChange function ------------------------------------------------------------------------
 
-	event handler for 
-	
+	event handler for
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -377,9 +377,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		fileReader.onload = function ( ) {
 			try {
 				let newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
-				g_UserButtonsAndIcons.editionButtons = 
+				g_UserButtonsAndIcons.editionButtons =
 					g_UserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
-				g_UserButtonsAndIcons.preDefinedIconsList = 
+				g_UserButtonsAndIcons.preDefinedIconsList =
 					g_UserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
 				m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
 				m_AddPreDefinedIconsList ( );
@@ -398,15 +398,15 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- m_OnFocusControl function ---------------------------------------------------------------------------------------
 
-	event handler for 
-	
+	event handler for
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_OnFocusControl ( event ) {
 		m_FocusControl = event.target;
 	}
-	
+
 	/*
 	--- End of m_OnFocusControl function ---
 	*/
@@ -420,34 +420,34 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function m_AddPreDefinedIconsList ( ) {
-		g_AllButtonsAndIcons.preDefinedIconsList = 
+		g_AllButtonsAndIcons.preDefinedIconsList =
 			g_TravelNotesButtonsAndIcons.preDefinedIconsList.concat ( g_UserButtonsAndIcons.preDefinedIconsList );
 
 		if ( -1 < routeObjId ) {
-			g_AllButtonsAndIcons.preDefinedIconsList.push ( 
-				{ 
-					name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'), 
-					icon : '', 
-					tooltip : '', 
-					width : 40, 
-					height : 40 
+			g_AllButtonsAndIcons.preDefinedIconsList.push (
+				{
+					name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'),
+					icon : '',
+					tooltip : '',
+					width : 40,
+					height : 40
 				}
 			);
 		}
 
-		g_AllButtonsAndIcons.preDefinedIconsList.sort ( 
-			( first, second ) => { return first.name.localeCompare ( second.name ); } 
+		g_AllButtonsAndIcons.preDefinedIconsList.sort (
+			( first, second ) => { return first.name.localeCompare ( second.name ); }
 		);
 		let elementCounter = 0;
 		for ( elementCounter = m_PredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
 			m_PredefinedIconsSelect.remove ( elementCounter );
 		}
 		for ( elementCounter = 0; elementCounter < g_AllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
-			m_PredefinedIconsSelect.add ( 
-				m_HtmlElementsFactory.create ( 
-					'option', 
-					{ 
-						text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name 
+			m_PredefinedIconsSelect.add (
+				m_HtmlElementsFactory.create (
+					'option',
+					{
+						text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
 					}
 				)
 			);
@@ -466,9 +466,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function m_AddEditionButtons ( editionButtons ) {
-		editionButtons.forEach ( 
+		editionButtons.forEach (
 			function ( editionButton ) {
-				let newButton = m_HtmlElementsFactory.create ( 
+				let newButton = m_HtmlElementsFactory.create (
 					'button',
 					{
 						type : 'button',
@@ -487,17 +487,17 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- End of m_AddEditionButtons function ---
 	*/
-	
+
 	/*
 	--- m_CreateDialog function ---------------------------------------------------------------------------------------
 
 	Creation of the base dialog
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateDialog ( ) {
-	
+
 		// the dialog base is created
 		m_NoteDialog = newBaseDialog ( );
 		m_NoteDialog.title = g_Translator.getText ( 'NoteDialog - Note' );
@@ -511,7 +511,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			m_NoteDialog.content
 		);
 	}
-	
+
 	/*
 	--- End of m_CreateBaseDialog function ---
 	*/
@@ -519,21 +519,21 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	/*
 	--- m_CreateToolbar function --------------------------------------------------------------------------------------
 
-	Creation of the toolbar 
-	
+	Creation of the toolbar
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateToolbar ( ) {
-		m_ToolbarDiv = m_HtmlElementsFactory.create ( 
+		m_ToolbarDiv = m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			},
 			m_NoteDataDiv
 		);
-		
+
 		// a select is added for the predefined icons
 		m_PredefinedIconsSelect = m_HtmlElementsFactory.create (
 			'select',
@@ -543,59 +543,59 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			m_ToolbarDiv
 		);
-		
+
 		// change event listener on the select
 		m_PredefinedIconsSelect.addEventListener ( 'change', m_OnPredefinedIconListSelectChange, false );
 
 		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		let openUserDataFileDiv = m_HtmlElementsFactory.create ( 
-			'div', 
-			{ 
+		let openUserDataFileDiv = m_HtmlElementsFactory.create (
+			'div',
+			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileDiv'
-			}, 
-			m_ToolbarDiv 
+			},
+			m_ToolbarDiv
 		);
-		let openUserDataFileInput = m_HtmlElementsFactory.create ( 
+		let openUserDataFileInput = m_HtmlElementsFactory.create (
 			'input',
 			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileInput', 
+				id : 'TravelNotes-NoteDialog-OpenEditorFileInput',
 				type : 'file',
 				accept : '.json'
 			},
 			openUserDataFileDiv
 		);
 		openUserDataFileInput.addEventListener ( 'change', m_OnOpenUserDataFileInputChange, false );
-		let openUserDataFileFakeDiv = m_HtmlElementsFactory.create ( 
-			'div', 
-			{ 
+		let openUserDataFileFakeDiv = m_HtmlElementsFactory.create (
+			'div',
+			{
 				id : 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
-			}, 
-			openUserDataFileDiv 
+			},
+			openUserDataFileDiv
 		);
-		let openUserDataFileButton = m_HtmlElementsFactory.create ( 
-			'button', 
-			{ 
-				id : 'TravelNotes-NoteDialog-OpenEditorFileButton', 
-				className : 'TravelNotes-NoteDialog-EditorButton', 
-				title : g_Translator.getText ( 'NoteDialog - Open a configuration file' ), 
+		let openUserDataFileButton = m_HtmlElementsFactory.create (
+			'button',
+			{
+				id : 'TravelNotes-NoteDialog-OpenEditorFileButton',
+				className : 'TravelNotes-NoteDialog-EditorButton',
+				title : g_Translator.getText ( 'NoteDialog - Open a configuration file' ),
 				innerHTML : '&#x23CD;'
-			}, 
-			openUserDataFileFakeDiv 
+			},
+			openUserDataFileFakeDiv
 		);
-		
-		openUserDataFileButton.addEventListener ( 
-			'click', 
+
+		openUserDataFileButton.addEventListener (
+			'click',
 			( ) => openUserDataFileInput.click ( ),
 			false
 		);
-		
+
 		// personnalised buttons from server file are restored
 		m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
-		
+
 		// personnalised buttons from local file are restored
 		m_AddEditionButtons ( g_UserButtonsAndIcons.editionButtons );
 	}
-	
+
 	/*
 	--- End of m_CreateToolbar function ---
 	*/
@@ -604,7 +604,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreateIconDimensions function -------------------------------------------------------------------------------
 
 	Creation of icon dimensions...
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -617,7 +617,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			m_NoteDataDiv
 		);
-		
+
 		// ... width ...
 		m_HtmlElementsFactory.create (
 			'text',
@@ -632,12 +632,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
 				id : 'TravelNotes-NoteDialog-WidthNumberInput'
-				
+
 			},
 			iconDimensionsDiv
 		);
 		m_WidthInput.value = note.iconWidth;
-		
+
 		// ... and height
 		m_HtmlElementsFactory.create (
 			'text',
@@ -666,23 +666,23 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreateIconContent function ----------------------------------------------------------------------------------
 
 	Creation of icon content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateIconContent ( ) {
-		m_HtmlElementsFactory.create ( 
+		m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
 				innerHTML : g_Translator.getText ( 'NoteDialog - Icon content' )
 			},
 			m_NoteDataDiv
 		);
-		m_IconHtmlContent = m_HtmlElementsFactory.create ( 
+		m_IconHtmlContent = m_HtmlElementsFactory.create (
 			'textarea',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id : 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
@@ -691,7 +691,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		m_IconHtmlContent.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_IconHtmlContent.value = note.iconContent;
 	}
-	
+
 	/*
 	--- End of m_CreateIconContent function ---
 	*/
@@ -700,22 +700,22 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreatePopupContent function ---------------------------------------------------------------------------------
 
 	Creation of popup content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreatePopupContent ( ) {
-		m_HtmlElementsFactory.create ( 
+		m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : g_Translator.getText ( 'NoteDialog - Text' )
 			},
 			m_NoteDataDiv
 		);
-		m_PopupContent = m_HtmlElementsFactory.create ( 
+		m_PopupContent = m_HtmlElementsFactory.create (
 			'textarea',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id : 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
@@ -724,7 +724,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		m_PopupContent.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_PopupContent.value = note.popupContent;
 	}
-	
+
 	/*
 	--- End of m_CreatePopupContent function ---
 	*/
@@ -733,22 +733,22 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreateTooltipContent function -------------------------------------------------------------------------------
 
 	Creation of tooltip content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateTooltipContent ( ) {
-		m_HtmlElementsFactory.create ( 
+		m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : g_Translator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			m_NoteDataDiv
 		);
-		m_TooltipContent = m_HtmlElementsFactory.create ( 
+		m_TooltipContent = m_HtmlElementsFactory.create (
 			'input',
-			{ 
+			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Tooltip'
@@ -758,7 +758,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		m_TooltipContent.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_TooltipContent.value = note.tooltipContent;
 	}
-	
+
 	/*
 	--- End of m_CreateTooltipContent function ---
 	*/
@@ -767,29 +767,29 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreateAddressContent function -------------------------------------------------------------------------------
 
 	Creation of address content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateAddressContent ( ) {
-		m_ResetAdressButton = m_HtmlElementsFactory.create ( 
+		m_ResetAdressButton = m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : 
-					'<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' + 
+				innerHTML :
+					'<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' +
 					g_Translator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			m_NoteDataDiv
 		);
-		m_ResetAdressButton.addEventListener ( 
-			'click', 
+		m_ResetAdressButton.addEventListener (
+			'click',
 			function ( ) { m_AdressInput.value = m_Address; },
-			false 
+			false
 		);
-		m_AdressInput = m_HtmlElementsFactory.create ( 
+		m_AdressInput = m_HtmlElementsFactory.create (
 			'input',
-			{ 
+			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Adress'
@@ -803,9 +803,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		newGeoCoder ( ).getPromiseAddress ( note.latLng )
 			.then ( m_OnGeocoderResponse )
 			.catch ( m_OnGeocoderError );
-		
+
 	}
-	
+
 	/*
 	--- End of m_CreateAddressContent function ---
 	*/
@@ -814,23 +814,23 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreateLinkContent function ----------------------------------------------------------------------------------
 
 	Creation of link content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreateLinkContent ( ) {
-		m_HtmlElementsFactory.create ( 
+		m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : ( g_Config.layersToolbarUI.theDevil.addButton ?
 					( '<a href="https://www.google.com/maps/@' +
 					note.lat.toFixed ( 6 ) +
 					',' +
-					note.lng.toFixed ( 6 ) + 
-					',' + 
-					17 + 
-					'z" target="_blank" title="' + 
+					note.lng.toFixed ( 6 ) +
+					',' +
+					17 +
+					'z" target="_blank" title="' +
 					g_Config.layersToolbarUI.theDevil.title +
 					'" >' +
 					g_Config.layersToolbarUI.theDevil.text +
@@ -840,9 +840,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			m_NoteDataDiv
 		);
-		m_UrlInput = m_HtmlElementsFactory.create ( 
+		m_UrlInput = m_HtmlElementsFactory.create (
 			'input',
-			{ 
+			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Link'
@@ -858,7 +858,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 		m_UrlInput.value = note.url;
 	}
-	
+
 	/*
 	--- End of m_CreateLinkContent function ---
 	*/
@@ -867,22 +867,22 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_CreatePhoneContent function ---------------------------------------------------------------------------------
 
 	Creation of phone content
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CreatePhoneContent ( ) {
-		m_HtmlElementsFactory.create ( 
+		m_HtmlElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : g_Translator.getText ( 'NoteDialog - Phone' )
 			},
 			m_NoteDataDiv
 		);
-		m_PhoneInput = m_HtmlElementsFactory.create ( 
+		m_PhoneInput = m_HtmlElementsFactory.create (
 			'input',
-			{ 
+			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Phone'
@@ -892,7 +892,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		m_PhoneInput.addEventListener ( 'focus', m_OnFocusControl, false );
 		m_PhoneInput.value = note.phone;
 	}
-	
+
 	/*
 	--- End of m_CreatePhoneContent function ---
 	*/
@@ -901,37 +901,37 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	--- m_LoadIconsAndButtons function --------------------------------------------------------------------------------
 
 	loading predefined icons and buttons
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_LoadIconsAndButtons ( ) {
-		
+
 		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
 			g_TravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
 			m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
 			g_TravelNotesButtonsAndIcons.preDefinedIconsList.push (
 				{
-					name : '', 
-					icon : '', 
-					tooltip : '', 
-					width : 40, 
+					name : '',
+					icon : '',
+					tooltip : '',
+					width : 40,
 					height : 40
-				} 
+				}
 			);
 			m_AddPreDefinedIconsList ( );
 		}
-		
-		newHttpRequestBuilder ( ).getJsonPromise ( 
+
+		newHttpRequestBuilder ( ).getJsonPromise (
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
-			'TravelNotesNoteDialog' + 
-			g_Config.language.toUpperCase ( ) + 
+			'TravelNotesNoteDialog' +
+			g_Config.language.toUpperCase ( ) +
 			'.json'
 		)
 			.then ( loadIconsAndButtons )
 			.catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
 	}
-	
+
 	/*
 	--- End of m_LoadIconsAndButtons function ---
 	*/
@@ -956,7 +956,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	return m_NoteDialog;
 }
-	
+
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------
-*/	
+*/

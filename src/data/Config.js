@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -36,12 +36,12 @@ Tests ...
 
 export { g_Config };
 
-/* 
+/*
 --- newConfig funtion -------------------------------------------------------------------------------------------------
 
 This function returns a config object
 
-Patterns : Closure and Singleton 
+Patterns : Closure and Singleton
 -----------------------------------------------------------------------------------------------------------------------
 */
 
@@ -88,9 +88,9 @@ function newConfig ( ) {
 			zoomToPosition : true,
 			zoomFactor : 17,
 			options : {
-				enableHighAccuracy : false, 
-				maximumAge : 0, 
-				timeout : Infinity 
+				enableHighAccuracy : false,
+				maximumAge : 0,
+				timeout : Infinity
 			}
 		},
 		APIKeys : {
@@ -144,29 +144,29 @@ function newConfig ( ) {
 			width : 3,
 			dashArray : 0,
 			dashChoices : [
-				{ 
+				{
 					text : "——————",
 					iDashArray : null
-				}, 
+				},
 				{
 					text : "— — — — —",
-					iDashArray : [ 4, 2 ] 
-				}, 
+					iDashArray : [ 4, 2 ]
+				},
 				{
 					text : "—‧—‧—‧—‧—",
-					iDashArray : [ 4, 2, 0, 2 ] 
-				}, 
+					iDashArray : [ 4, 2, 0, 2 ]
+				},
 				{
 					text : "················",
-					iDashArray : [ 0, 2 ] 
+					iDashArray : [ 0, 2 ]
 				}
 			]
 		},
 		note : {
 			reverseGeocoding : false,
-			grip : { 
+			grip : {
 				size : 10,
-				opacity : 0 
+				opacity : 0
 			},
 			polyline : {
 				color : 'gray',
@@ -211,7 +211,7 @@ function newConfig ( ) {
 			url : "https://nominatim.openstreetmap.org/",
 			language : "*"
 		}
-	};		
+	};
 
 	/*
 	--- m_CopyObjectTo function -----------------------------------------------------------------------------------
@@ -223,13 +223,13 @@ function newConfig ( ) {
 		- search recursively all sources properties
 		- foreach found property search the same property in dest
 		- copy the property value from source to dest
-		
-		So: 
+
+		So:
 			- if a property is missing in the user config, the property is selected from the default config
 			- if a property is in the user config but missing in the default config, the property is also added (and reminder
 			  that the user can have more dashChoices than the default config )
 			- if a property is changed in the user config, the property is adapted
-	
+
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -267,7 +267,7 @@ function newConfig ( ) {
 			console.log ( err ? err : 'Not possible to overload Config' );
 		}
 	}
-	
+
 	/*
 	--- m_Freeze function -----------------------------------------------------------------------------------------
 
@@ -281,10 +281,10 @@ function newConfig ( ) {
 				object [ property ] = m_Freeze (  object [ property ] );
 			}
 		}
-		
+
 		return Object.freeze (object );
 	}
-	
+
 	/*
 	--- m_Overload function ---------------------------------------------------------------------------------------
 
@@ -296,9 +296,9 @@ function newConfig ( ) {
 		m_Config = m_Freeze ( m_Config );
 	}
 
-	/* 
+	/*
 	--- config object ---------------------------------------------------------------------------------------------
-	
+
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -329,13 +329,13 @@ function newConfig ( ) {
 		get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
 		get nominatim ( ) { return m_Config.nominatim; },
 		get geoLocation ( ) { return m_Config.geoLocation },
-		
+
 		overload : newConfig => m_Overload ( newConfig )
-		
+
 	}
 }
 
-/* 
+/*
 --- g_Config object ---------------------------------------------------------------------------------------------------
 
 The one and only one config

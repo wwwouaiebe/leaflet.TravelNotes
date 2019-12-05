@@ -1,7 +1,7 @@
 /*
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 This program is distributed in the hope that it will be useful,
@@ -24,42 +24,42 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-	
+
 export { newUtilities };
 
 import { g_Translator } from '../UI/Translator.js';
 
 function newUtilities ( ) {
 
-	/* 
+	/*
 	--- m_getUUID function --------------------------------------------------------------------------------------------
-	
+
 	This function test if the storage API is available ( the API can be deactived by user....)
 	Adapted from MDN :-)
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_getUUID ( ) { 
+	function m_getUUID ( ) {
 		function Random4 ( ) {
 			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 )
 				.substring ( 1 );
 		}
-		return Random4 ( ) + 
-			Random4 ( ) + '-' + 
-			Random4 ( ) + '-' + 
+		return Random4 ( ) +
 			Random4 ( ) + '-' +
-			Random4 ( ) + '-' + 
-			Random4 ( ) + 
-			Random4 ( ) + 
+			Random4 ( ) + '-' +
+			Random4 ( ) + '-' +
+			Random4 ( ) + '-' +
+			Random4 ( ) +
+			Random4 ( ) +
 			Random4 ( ) ;
 	}
 
-	/* --- End of m_getUUID function --- */		
+	/* --- End of m_getUUID function --- */
 
-	/* 
+	/*
 	--- m_storageAvailable function -----------------------------------------------------------------------------------
-	
+
 	This function test if the storage API is available ( the API can be deactived by user....)
 	Adapted from MDN :-)
 
@@ -76,15 +76,15 @@ function newUtilities ( ) {
 		}
 		catch ( err ) {
 			return false;
-		}				
+		}
 	}
 
-	/* --- End of storageAvailable function --- */		
-		
-	/* 
+	/* --- End of storageAvailable function --- */
+
+	/*
 	--- m_fileAPIAvailable function -----------------------------------------------------------------------------------
-	
-	This function test if the File API is available 
+
+	This function test if the File API is available
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -108,11 +108,11 @@ function newUtilities ( ) {
 		}
 	}
 
-	/* --- End of m_fileAPIAvailable function --- */		
+	/* --- End of m_fileAPIAvailable function --- */
 
-	/* 
+	/*
 	--- m_saveFile function -------------------------------------------------------------------------------------------
-	
+
 	This function save data to a local file
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ function newUtilities ( ) {
 			//https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
 			//edge IE 11...
 			try {
-				window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename ); 
+				window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename );
 			}
 			catch ( err ) {
 				console.log ( err ? err : 'An error occurs when saving file' );
@@ -150,15 +150,15 @@ function newUtilities ( ) {
 			}
 			catch ( err ) {
 				console.log ( err ? err : 'An error occurs when saving file' );
-			}				
+			}
 		}
 	}
 
-	/* --- End of m_saveFile function --- */		
+	/* --- End of m_saveFile function --- */
 
-	/* 
+	/*
 	--- m_formatTime function -----------------------------------------------------------------------------------------
-	
+
 	This function save data to a local file
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -174,38 +174,38 @@ function newUtilities ( ) {
 		let minutes = Math.floor ( time % 3600 / 60 );
 		let seconds = Math.floor ( time % 60 );
 		if ( 0 < days ) {
-			return days + 
-				'&nbsp;' 
-				+ g_Translator.getText ( 'Utilities - Day' ) + 
-				'&nbsp;' + 
-				hours + 
-				'&nbsp;' + 
+			return days +
+				'&nbsp;'
+				+ g_Translator.getText ( 'Utilities - Day' ) +
+				'&nbsp;' +
+				hours +
+				'&nbsp;' +
 				g_Translator.getText ( 'Utilities - Hour' );
 		}
 		else if ( 0 < hours ) {
-			return hours + 
-				'&nbsp;' 
-				+ g_Translator.getText ( 'Utilities - Hour' ) 
-				+'&nbsp;' + 
-				minutes + 
-				'&nbsp;' 
+			return hours +
+				'&nbsp;'
+				+ g_Translator.getText ( 'Utilities - Hour' )
+				+'&nbsp;' +
+				minutes +
+				'&nbsp;'
 				+ g_Translator.getText ( 'Utilities - Minute' );
 		}
 		else if ( 0 < minutes ) {
-			return minutes + 
-				'&nbsp;' + 
+			return minutes +
+				'&nbsp;' +
 				g_Translator.getText ( 'Utilities - Minute' );
 		}
 		else {
 			return seconds + '&nbsp;' + g_Translator.getText ( 'Utilities - Second' );
 		}
 	}
-	
-	/* --- End of m_formatTime function --- */		
 
-	/* 
+	/* --- End of m_formatTime function --- */
+
+	/*
 	--- m_formatDistance function -------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -213,46 +213,46 @@ function newUtilities ( ) {
 		distance = Math.floor ( distance );
 		if ( 0 === distance ) {
 			return '';
-		} 
+		}
 		else {
 			return Math.floor ( distance / 1000 ) +
-				',' + 
+				',' +
 				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 )
 					.padStart ( 2, '0' )
-					.padEnd ( 3, '0') + 
+					.padEnd ( 3, '0') +
 				'&nbsp;km';
 		}
 	}
-	
-	/* --- End of m_formatDistance function --- */		
 
-	/* 
+	/* --- End of m_formatDistance function --- */
+
+	/*
 	--- m_formatLat function ------------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_formatLat ( lat ) {
 		return ( lat > 0 ? lat.toFixed ( 6 ) + '&nbsp;N' : ( -lat ).toFixed ( 6 ) + '&nbsp;S' );
 	}
-	
-	/* --- End of m_formatLat function --- */		
 
-	/* 
+	/* --- End of m_formatLat function --- */
+
+	/*
 	--- m_formatLng function ------------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_formatLng ( lng ) {
 		return ( lng > 0 ? lng.toFixed ( 6 ) + '&nbsp;E' : ( -lng ).toFixed ( 6 ) + '&nbsp;W' );
 	}
-	
-	/* --- End of m_formatLng function --- */		
 
-	/* 
+	/* --- End of m_formatLng function --- */
+
+	/*
 	--- m_formatLatLng function ---------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -260,9 +260,9 @@ function newUtilities ( ) {
 		return m_formatLat ( latLng [ 0 ] ) + '&nbsp;-&nbsp;' + m_formatLng ( latLng [ 1 ] );
 	}
 
-	/* --- End of m_formatLatLng function --- */		
+	/* --- End of m_formatLatLng function --- */
 
-	/* 
+	/*
 	--- Utilities object ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -271,21 +271,21 @@ function newUtilities ( ) {
 	return Object.seal (
 		{
 			get UUID ( ) { return m_getUUID ( ) },
-						
+
 			storageAvailable : type =>  m_storageAvailable ( type ),
 
 			fileAPIAvailable : ( ) => { return m_fileAPIAvailable ( ); },
-			
+
 			saveFile : ( filename, text, type ) => m_saveFile ( filename, text, type ),
 
 			formatTime : time => { return m_formatTime ( time ); },
-			
+
 			formatDistance : distance => { return m_formatDistance ( distance ); },
-			
+
 			formatLat : lat => { return m_formatLat ( lat ); },
 
 			formatLng : lng => { return m_formatLng ( lng ); },
-			
+
 			formatLatLng : latLng => { return m_formatLatLng ( latLng ); }
 		}
 	);
@@ -293,4 +293,4 @@ function newUtilities ( ) {
 
 /*
 --- End of Utilities.js file ------------------------------------------------------------------------------------------
-*/	
+*/

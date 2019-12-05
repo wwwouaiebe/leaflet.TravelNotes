@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -49,10 +49,10 @@ import { currentVersion } from '../data/Version.js';
 */
 
 function newAboutDialog ( ) {
-	
+
 	var aboutDialog = newBaseDialog ( );
 	aboutDialog.title = g_Translator.getText ( 'AboutDialog - About Travel & Notes' );
-	
+
 	var aboutDiv = newHTMLElementsFactory ( ).create (
 		'div',
 		{
@@ -60,23 +60,23 @@ function newAboutDialog ( ) {
 		},
 		aboutDialog.content
 	);
-	
-	aboutDiv.innerHTML = 
-		"<p>This  program is free software; you can redistribute it and/or modify it under the terms of the " + 
-		"GNU General Public License as published by the Free Software Foundation; either version 3 of the License, " + 
+
+	aboutDiv.innerHTML =
+		"<p>This  program is free software; you can redistribute it and/or modify it under the terms of the " +
+		"GNU General Public License as published by the Free Software Foundation; either version 3 of the License, " +
 		"or any later version.</p>" +
 		"<p>Copyright - 2017 2019 - wwwouaiebe</p>" +
 		"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
-		"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>" + 
+		"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>" +
 		"https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
 		"<p>Version : " + currentVersion +'.' +
 		"<p>This program uses:" +
 		" <a href='https://leafletjs.com/' target='_blank'>leaflet</a>," +
 		" <a href='https://github.com/mapbox/polyline' target='_blank'>mapbox/polyline</a>," +
-		" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>" + 
+		" <a href='https://github.com/Project-OSRM/osrm-text-instructions' target='_blank'>" +
 		"Project-OSRM/osrm-text-instructions</a> and " +
 		" <a href='https://github.com/drolbr/Overpass-API' target='_blank'>the Overpass API</a></p>";
-	
+
 	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 
@@ -84,4 +84,4 @@ function newAboutDialog ( ) {
 
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------
-*/	
+*/

@@ -109,7 +109,7 @@ function newItinerary ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ function newItinerary ( ) {
 		m_Provider = something.provider || '';
 		m_TransitMode = something.transitMode || '';
 		m_ObjId = newObjId ( );
-		
+
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
 		let sourceCounter = 0;
@@ -134,17 +134,17 @@ function newItinerary ( ) {
 		}
 		let maneuverIterator = m_Maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			maneuverIterator.value.itineraryPointObjId = 
+			maneuverIterator.value.itineraryPointObjId =
 				itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
 		}
 	}
-	
+
 	/*
 	--- itinerary object ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
 
@@ -164,7 +164,7 @@ function newItinerary ( ) {
 
 			get object ( ) { return m_GetObject ( ); },
 			set object ( something ) { m_SetObject ( something ); }
-			
+
 		}
 	);
 }

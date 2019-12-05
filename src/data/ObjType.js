@@ -46,7 +46,7 @@ function newObjType ( name ) {
 	const m_Name = name;
 
 	const m_Version = currentVersion;
-	
+
 	/*
 	--- m_GetObject function ------------------------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ function newObjType ( name ) {
 			version : m_Version
 		};
 	}
-		
+
 	/*
 	--- m_Validate function -------------------------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ function newObjType ( name ) {
 	*/
 
 	function m_Validate ( something ) {
-		
+
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
 			throw 'No name for ' + m_Name;
 		}
@@ -95,7 +95,7 @@ function newObjType ( name ) {
 			get object ( ) { return m_GetObject ( ); },
 
 			validate : something => { return m_Validate ( something ); }
-			
+
 		}
 	);
 }

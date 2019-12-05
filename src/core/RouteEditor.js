@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -25,7 +25,7 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #28 : Disable "select this point as start point " and "select this point as end point" 
+		- Issue #28 : Disable "select this point as start point " and "select this point as end point"
 			when a start point or end point is already present
 		- Issue #30 : Add a context menu with delete command to the waypoints
 		- Issue #33 : Add a command to hide a route
@@ -66,7 +66,7 @@ import { newGeometry } from '../util/Geometry.js';
 
 var s_ZoomToRoute = false;
 var s_RequestStarted = false;
-	
+
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ Patterns : Closure and Singleton
 */
 
 function newRouteEditor ( ) {
-	
+
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_Utilities = newUtilities ( );
 	let m_EventDispatcher = newEventDispatcher ( );
@@ -87,7 +87,7 @@ function newRouteEditor ( ) {
 
 	This function cut a route at a given point
 	Warning: not tested, not used!!!
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -97,11 +97,11 @@ function newRouteEditor ( ) {
 		let routes = [ newRoute ( ), newRoute ( ) ];
 		routes [ 0 ].object = route.object;
 		routes [ 1 ].object = route.object;
-		
+
 		// and the itineraryPoints are removed
 		routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
 		routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
-		
+
 		// the distance between the origin and the cutting point is computed
 		let cuttingPointLatLngDistance = m_Geometry.getClosestLatLngDistance ( route, latLng );
 
@@ -110,7 +110,7 @@ function newRouteEditor ( ) {
 		let iterationDistance = 0;
 		let itineraryPoint;
 		let previousItineraryPoint = null;
-		
+
 		let routeCounter = 0;
 		while ( ! itineraryPointIterator.done ) {
 			itineraryPoint = newItineraryPoint ( );
@@ -118,9 +118,9 @@ function newRouteEditor ( ) {
 			if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
 
 				// we have passed the cutting point...
-				let removedDistance = m_Geometry.pointsDistance ( 
-					cuttingPointLatLngDistance.latLng, 
-					itineraryPointIterator.value.latLng 
+				let removedDistance = m_Geometry.pointsDistance (
+					cuttingPointLatLngDistance.latLng,
+					itineraryPointIterator.value.latLng
 				);
 
 				// a new point is created at the cutting point position and added to the first route.
@@ -133,7 +133,7 @@ function newRouteEditor ( ) {
 				}
 
 				routeCounter = 1;
-				
+
 				// a new point is created at the cutting point position and added to the second route.
 				cuttingPoint = newItineraryPoint ( );
 				cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
@@ -154,7 +154,7 @@ function newRouteEditor ( ) {
 	--- m_ComputeRouteDistances function ------------------------------------------------------------------------------
 
 	This function compute the route, itineraryPoints and maneuvers distances
-	
+
 	parameters:
 	- route : the TravelNotes route object to be used
 
@@ -175,9 +175,9 @@ function newRouteEditor ( ) {
 		route.distance = 0;
 		route.duration = 0;
 		while ( ! itineraryPointsIterator.done ) {
-			previousItineraryPoint.distance = m_Geometry.pointsDistance ( 
-				previousItineraryPoint.latLng, 
-				itineraryPointsIterator.value.latLng 
+			previousItineraryPoint.distance = m_Geometry.pointsDistance (
+				previousItineraryPoint.latLng,
+				itineraryPointsIterator.value.latLng
 			);
 			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
@@ -195,7 +195,7 @@ function newRouteEditor ( ) {
 	--- m_SaveGpx function --------------------------------------------------------------------------------------------
 
 	This function save the currently edited route to a GPX file
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -207,10 +207,10 @@ function newRouteEditor ( ) {
 		let tab2 = "\n\t\t";
 		let tab3 = "\n\t\t\t";
 		let timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
-		
+
 		// header
 		let gpxString = "<?xml version='1.0'?>" + tab0;
-		gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' " + 
+		gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' " +
 		"xmlns:xsd='http://www.w3.org/2001/XMLSchema' " +
 		"xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' " +
 		"version='1.1' creator='leaflet.TravelNotes'>";
@@ -218,18 +218,18 @@ function newRouteEditor ( ) {
 		// waypoints
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			gpxString += 
+			gpxString +=
 				tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
 				timeStamp + "/>";
-			
+
 		}
-		
+
 		// route
 		gpxString += tab1 + "<rte>";
 		let maneuverIterator = g_TravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			let wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( 
-				maneuverIterator.value.itineraryPointObjId 
+			let wayPoint = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt (
+				maneuverIterator.value.itineraryPointObjId
 			);
 			let instruction = maneuverIterator.value.instruction
 				.replace ( '&', '&amp;' )
@@ -238,38 +238,38 @@ function newRouteEditor ( ) {
 				.replace ( '>', '&gt;' )
 				.replace ( '<', '&lt;');
 			gpxString +=
-				tab2 + 
-				"<rtept lat='" + 
-				wayPoint.lat + 
-				"' lon='" + 
+				tab2 +
+				"<rtept lat='" +
+				wayPoint.lat +
+				"' lon='" +
 				wayPoint.lng +
-				"' " + 
-				timeStamp + 
-				"desc='" + 
+				"' " +
+				timeStamp +
+				"desc='" +
 				instruction + "' />" ;
 		}
 		gpxString += tab1 + "</rte>";
-		
+
 		// track
 		gpxString += tab1 + "<trk>";
 		gpxString += tab2 + "<trkseg>";
 		let itineraryPointsIterator = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
 			gpxString +=
-				tab3 + 
-				"<trkpt lat='" + itineraryPointsIterator.value.lat + 
-				"' lon='" + 
-				itineraryPointsIterator.value.lng + 
-				"' " + 
-				timeStamp + 
+				tab3 +
+				"<trkpt lat='" + itineraryPointsIterator.value.lat +
+				"' lon='" +
+				itineraryPointsIterator.value.lng +
+				"' " +
+				timeStamp +
 				" />";
 		}
-		gpxString += tab2 + "</trkseg>";				
+		gpxString += tab2 + "</trkseg>";
 		gpxString += tab1 + "</trk>";
-		
+
 		// eof
 		gpxString += tab0 + "</gpx>";
-		
+
 		// file is saved
 		let fileName = g_TravelNotesData.travel.editedRoute.name;
 		if ( '' === fileName ) {
@@ -278,12 +278,12 @@ function newRouteEditor ( ) {
 		fileName += '.gpx';
 		m_Utilities.saveFile ( fileName, gpxString );
 	}
-	
+
 	/*
 	--- m_ChainRoutes function ----------------------------------------------------------------------------------------
 
 	This function recompute the distances when routes are chained
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -304,7 +304,7 @@ function newRouteEditor ( ) {
 			}
 		}
 	}
-		
+
 	/*
 	--- m_HaveValidWayPoints function ---------------------------------------------------------------------------------
 
@@ -314,9 +314,9 @@ function newRouteEditor ( ) {
 	*/
 
 	function m_HaveValidWayPoints ( ) {
-		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach ( 
+		return g_TravelNotesData.travel.editedRoute.wayPoints.forEach (
 			( wayPoint, result ) => {
-				if ( null === result ) { 
+				if ( null === result ) {
 					result = true;
 				}
 				result = result && ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
@@ -324,7 +324,7 @@ function newRouteEditor ( ) {
 			}
 		);
 	}
-	
+
 	/*
 	--- m_EndError function -------------------------------------------------------------------------------------------
 
@@ -338,8 +338,8 @@ function newRouteEditor ( ) {
 		s_RequestStarted = false;
 
 		gc_ErrorsUI.showError ( err );
-		
-		console.log ( err ? err : 'An error occurs when asking the route to the provider' ) 
+
+		console.log ( err ? err : 'An error occurs when asking the route to the provider' )
 	}
 
 	/*
@@ -360,7 +360,7 @@ function newRouteEditor ( ) {
 		if ( s_RequestStarted ) {
 			return false;
 		}
-		
+
 		// Control of the wayPoints
 		if ( ! m_HaveValidWayPoints ( ) ) {
 			return false;
@@ -382,19 +382,19 @@ function newRouteEditor ( ) {
 
 		return true;
 	}
-		
+
 	/*
 	--- m_EndRoutingOk function -----------------------------------------------------------------------------------------
 
 	This function is called by the router when a routing operation is successfully finished
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_EndRoutingOk ( ) {
 
 		s_RequestStarted = false;
-		
+
 		g_RouteEditor.computeRouteDistances ( g_TravelNotesData.travel.editedRoute );
 
 		// Placing the waypoints on the itinerary
@@ -407,42 +407,42 @@ function newRouteEditor ( ) {
 				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 			}
 			else {
-				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( 
-					g_TravelNotesData.travel.editedRoute, 
-					wayPointsIterator.value.latLng 
+				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance (
+					g_TravelNotesData.travel.editedRoute,
+					wayPointsIterator.value.latLng
 				).latLng;
 			}
-		}	
-		
+		}
+
 		// the previous route is removed from the leaflet map
-		m_EventDispatcher.dispatch ( 
-			'removeroute', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'removeroute',
+			{
 				route : g_TravelNotesData.travel.editedRoute,
-				removeNotes : true, 
+				removeNotes : true,
 				removeWayPoints : true
 			}
 		);
-		
+
 		// the position of the notes linked to the route is recomputed
 		let notesIterator = g_TravelNotesData.travel.editedRoute.notes.iterator;
 		while ( ! notesIterator.done ) {
-			let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
-				g_TravelNotesData.travel.editedRoute, 
-				notesIterator.value.latLng 
+			let latLngDistance = m_Geometry.getClosestLatLngDistance (
+				g_TravelNotesData.travel.editedRoute,
+				notesIterator.value.latLng
 			);
 			notesIterator.value.latLng = latLngDistance.latLng;
 			notesIterator.value.distance = latLngDistance.distance;
 		}
-		
+
 		// and the notes sorted
-		g_TravelNotesData.travel.editedRoute.notes.sort ( 
+		g_TravelNotesData.travel.editedRoute.notes.sort (
 			( first, second ) => { return first.distance - second.distance; }
 		);
-		
+
 		// the new route is added to the map
-		m_EventDispatcher.dispatch ( 
-			'addroute', 
+		m_EventDispatcher.dispatch (
+			'addroute',
 			{
 				route : g_TravelNotesData.travel.editedRoute,
 				addNotes : true,
@@ -453,7 +453,7 @@ function newRouteEditor ( ) {
 		if ( s_ZoomToRoute ) {
 			m_ZoomToRoute ( g_TravelNotesData.travel.editedRoute.objId );
 		}
-		
+
 		// and the itinerary and waypoints are displayed
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
@@ -467,7 +467,7 @@ function newRouteEditor ( ) {
 	--- m_SaveEdition function ----------------------------------------------------------------------------------------
 
 	This function save the current edited route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -482,29 +482,29 @@ function newRouteEditor ( ) {
 		g_TravelNotesData.editedRouteObjId = clonedRoute.objId;
 		m_CancelEdition ( );
 	}
-		
+
 	/*
 	--- m_CancelEdition function --------------------------------------------------------------------------------------
 
 	This function cancel the current edited route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_CancelEdition ( ) {
-		m_EventDispatcher.dispatch ( 
-			'removeroute', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'removeroute',
+			{
 				route : g_TravelNotesData.travel.editedRoute,
-				removeNotes : true, 
+				removeNotes : true,
 				removeWayPoints : true
 			}
 		);
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 			let editedRoute = m_DataSearchEngine.getRoute ( g_TravelNotesData.editedRouteObjId );
 			editedRoute.edited = 0;
-			m_EventDispatcher.dispatch ( 
-				'addroute', 
+			m_EventDispatcher.dispatch (
+				'addroute',
 				{
 					route : editedRoute,
 					addNotes : true,
@@ -523,14 +523,14 @@ function newRouteEditor ( ) {
 		m_ChainRoutes ( );
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_RouteProperties function ------------------------------------------------------------------------------------
 
 	This function opens the RouteProperties dialog
-	
+
 	parameters:
-	- routeObjId : 
+	- routeObjId :
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -538,28 +538,28 @@ function newRouteEditor ( ) {
 	function m_RouteProperties ( routeObjId ) {
 		let route = m_DataSearchEngine.getRoute ( routeObjId );
 		let routePropertiesDialog = newRoutePropertiesDialog ( route );
-		
-		routePropertiesDialog.show ( ).then ( 
+
+		routePropertiesDialog.show ( ).then (
 			route => {
-				m_EventDispatcher.dispatch ( 
-					'editroute', 
-					{ 
+				m_EventDispatcher.dispatch (
+					'editroute',
+					{
 						route : route
 					}
 				);
 				g_RouteEditor.chainRoutes ( );
 				m_EventDispatcher.dispatch ( 'setrouteslist' );
-				newRoadbookUpdate ( );			
-			}		
+				newRoadbookUpdate ( );
+			}
 		)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' )  );
 	}
-		
+
 	/*
 	--- m_HideRoute function ------------------------------------------------------------------------------------------
 
 	This function hide a route on the map
-	
+
 	parameters:
 	- routeObjId : the route objId that was clicked
 
@@ -569,23 +569,23 @@ function newRouteEditor ( ) {
 	function m_HideRoute ( routeObjId ) {
 		let route = m_DataSearchEngine.getRoute ( routeObjId );
 		if ( route ) {
-			m_EventDispatcher.dispatch ( 
-				'removeroute', 
-				{ 
+			m_EventDispatcher.dispatch (
+				'removeroute',
+				{
 					route : route,
-					removeNotes : true, 
+					removeNotes : true,
 					removeWayPoints : true
 				}
 			);
 			route.hidden = true;
 		}
 	}
-		
+
 	/*
 	--- m_ShowRoutes function -----------------------------------------------------------------------------------------
 
 	This function show all the hidden routes
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -593,8 +593,8 @@ function newRouteEditor ( ) {
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.hidden ) {
-				m_EventDispatcher.dispatch ( 
-					'addroute', 
+				m_EventDispatcher.dispatch (
+					'addroute',
 					{
 						route : routesIterator.value,
 						addNotes : true,
@@ -605,19 +605,19 @@ function newRouteEditor ( ) {
 			}
 		}
 	}
-	
+
 	/*
 	--- m_ShowRoutes function -----------------------------------------------------------------------------------------
 
 	This function zoom on a route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_ZoomToRoute ( routeObjId ) {
-		m_EventDispatcher.dispatch ( 
-			'zoomtoroute', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'zoomtoroute',
+			{
 				routeObjId : routeObjId
 			}
 		);
@@ -631,34 +631,34 @@ function newRouteEditor ( ) {
 
 	return Object.seal (
 		{
-			
+
 			cutRoute : ( route, latLng ) => { return m_CutRoute ( route, latLng ); },
-			
+
 			computeRouteDistances : route => m_ComputeRouteDistances ( route ),
 
 			saveGpx : ( ) => m_SaveGpx ( ),
-			
+
 			chainRoutes : ( ) => m_ChainRoutes ( ),
-			
+
 			startRouting : ( ) => m_StartRouting ( ),
-			
+
 			saveEdition : ( ) => m_SaveEdition ( ),
-			
+
 			cancelEdition : ( ) => m_CancelEdition ( ),
-			
+
 			routeProperties : routeObjId => m_RouteProperties ( routeObjId ),
-		
+
 			hideRoute : routeObjId => m_HideRoute ( routeObjId ),
 
 			showRoutes : ( ) => m_ShowRoutes ( ),
 
 			zoomToRoute : routeObjId => m_ZoomToRoute ( routeObjId )
-			
+
 		}
 	);
 }
 
-/* 
+/*
 --- g_RouteEditor object ----------------------------------------------------------------------------------------------
 
 The one and only one routeEditor

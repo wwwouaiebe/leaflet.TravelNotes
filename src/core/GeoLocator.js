@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -53,7 +53,7 @@ function newGeoLocator ( ) {
 	let m_Status = 0; // ( -1 refused by user, 0 disabled (http or not working ), 1 available but not working, 2 working )
 	let m_WatchId = null;
 	let m_EventDispatcher = newEventDispatcher ( );
-	
+
 	/*
 	--- m_ShowPosition function ---------------------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ function newGeoLocator ( ) {
 	function m_ShowPosition ( position ) {
 		m_EventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } )
 	}
-	
+
 	/*
 	--- m_Error function ---------------------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ function newGeoLocator ( ) {
 		}
 		m_Stop ( );
 	}
-	
+
 	/*
 	--- m_Start function ----------------------------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ function newGeoLocator ( ) {
 		navigator.geolocation.getCurrentPosition ( m_ShowPosition, m_Error, g_Config.geoLocation.options );
 		m_WatchId = navigator.geolocation.watchPosition ( m_ShowPosition, m_Error, g_Config.geoLocation.options );
 	}
-	
+
 	/*
 	--- m_Stop function -----------------------------------------------------------------------------------------------
 
@@ -124,12 +124,12 @@ function newGeoLocator ( ) {
 		default:
 			break;
 		}
-		
+
 		return m_Status;
 	}
-	
+
 	m_Status = ( "geolocation" in navigator ) ? 1 : 0;
-	
+
 	/*
 	--- GeoLocator object ---------------------------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ function newGeoLocator ( ) {
 		{
 			get status ( ) { return m_Status; },
 			switch : ( ) => { return m_Switch ( ); }
-			
+
 		}
 	);
 }
@@ -149,4 +149,4 @@ const gc_GeoLocator = newGeoLocator ( );
 
 /*
 --- End of GeoLocator.js file -----------------------------------------------------------------------------------------
-*/	
+*/

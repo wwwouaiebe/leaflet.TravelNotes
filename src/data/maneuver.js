@@ -113,7 +113,7 @@ function newManeuver ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ function newManeuver ( ) {
 
 	return Object.seal (
 		{
-			
+
 			get iconName ( ) { return m_IconName; },
 			set iconName ( IconName ) { m_IconName = IconName; },
 

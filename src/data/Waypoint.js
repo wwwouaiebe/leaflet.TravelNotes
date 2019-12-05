@@ -45,7 +45,7 @@ Patterns : Closure
 */
 
 function newWayPoint ( ) {
-	
+
 	let m_Name = '';
 
 	let m_Lat = 0;
@@ -63,7 +63,7 @@ function newWayPoint ( ) {
 		}
 		return '';
 	}
-	
+
 	/*
 	--- m_Validate function -------------------------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ function newWayPoint ( ) {
 		)
 		return something;
 	}
-		
+
 	/*
 	--- m_GetObject function ------------------------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ function newWayPoint ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ function newWayPoint ( ) {
 		m_Lng = something.lng || 0;
 		m_ObjId = newObjId ( );
 	}
-	
+
 	/*
 	--- wayPoint object -----------------------------------------------------------------------------------------------
 
@@ -151,9 +151,9 @@ function newWayPoint ( ) {
 			set lng ( Lng ) { m_Lng = Lng; },
 
 			get latLng ( ) { return [ m_Lat, m_Lng ]; },
-			set latLng ( LatLng ) { 
-				m_Lat = LatLng [ 0 ]; 
-				m_Lng = LatLng [ 1 ]; 
+			set latLng ( LatLng ) {
+				m_Lat = LatLng [ 0 ];
+				m_Lng = LatLng [ 1 ];
 			},
 
 			get objId ( ) { return m_ObjId; },

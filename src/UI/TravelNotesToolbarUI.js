@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -66,7 +66,7 @@ function newTravelNotesToolbarUI ( ) {
 		document.getElementById ( 'TravelNotes-Control-MainDiv' )
 			.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
 	}
-	
+
 	/*
 	--- m_OnMouseLeaveControlfunction ---------------------------------------------------------------------------------
 
@@ -107,125 +107,125 @@ function newTravelNotesToolbarUI ( ) {
 			break;
 		}
 	}
-	
+
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){ 
-	
+	function m_CreateUI ( controlDiv ){
+
 		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
 			return;
 		}
-		
-		let buttonsDiv = m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-TravelNotesToolbarDiv', 
+
+		let buttonsDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-TravelNotesToolbarDiv',
 				className : 'TravelNotes-Control-ButtonsDiv'
-			}, 
+			},
 			controlDiv
 		);
-		
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-HomeButton', 
-				className : 'TravelNotes-Control-Button', 
+
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-HomeButton',
+				className : 'TravelNotes-Control-Button',
 				title : 'Help',
-				innerHTML : 
-					'<a class="TravelNotes-Control-LinkButton" href="' + 
-					window.location.origin + 
-					'" target="_blank">&#x1f3e0;</a>' 
-			}, 
+				innerHTML :
+					'<a class="TravelNotes-Control-LinkButton" href="' +
+					window.location.origin +
+					'" target="_blank">&#x1f3e0;</a>'
+			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-HelpButton', 
-				className : 'TravelNotes-Control-Button', 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-HelpButton',
+				className : 'TravelNotes-Control-Button',
 				title : 'Help',
-				innerHTML : 
-					'<a class="TravelNotes-Control-LinkButton" ' + 
-					'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' + 
-					'target="_blank">?</a>' 
-			}, 
+				innerHTML :
+					'<a class="TravelNotes-Control-LinkButton" ' +
+					'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' +
+					'target="_blank">?</a>'
+			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-ContactButton', 
-				className : 'TravelNotes-Control-Button', 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-ContactButton',
+				className : 'TravelNotes-Control-Button',
 				title : 'Contact',
-				innerHTML : 
-					'<a class="TravelNotes-Control-LinkButton" href="' + 
-					( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) + 
+				innerHTML :
+					'<a class="TravelNotes-Control-LinkButton" href="' +
+					( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) +
 					'" target="_blank">@</a>'
-			}, 
+			},
 			buttonsDiv
 		);
 		if ( g_Config.APIKeys.showDialogButton ) {
 
 			//API keys button
-			m_HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-ApiKeysButton', 
-					className : 'TravelNotes-Control-Button', 
-					title : g_Translator.getText ( 'TravelEditorUI - API keys' ), 
+			m_HTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-Control-ApiKeysButton',
+					className : 'TravelNotes-Control-Button',
+					title : g_Translator.getText ( 'TravelEditorUI - API keys' ),
 					innerHTML : '&#x1f511;'
-				}, 
-				buttonsDiv 
+				},
+				buttonsDiv
 			)
-				.addEventListener ( 
-					'click', 
+				.addEventListener (
+					'click',
 					clickEvent => {
 						clickEvent.stopPropagation ( );
 						g_APIKeysManager.dialog ( );
-					}, 
-					false 
+					},
+					false
 				);
 		}
 		if ( 0 < gc_GeoLocator.status ) {
 
 			//GeoLocator button
-			m_GeoLocationButton = m_HTMLElementsFactory.create ( 
-				'div', 
-				{ 
-					id : 'TravelNotes-Control-GeoLocatorButton', 
-					className : 'TravelNotes-Control-Button', 
-					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ), 
+			m_GeoLocationButton = m_HTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-Control-GeoLocatorButton',
+					className : 'TravelNotes-Control-Button',
+					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ),
 					innerHTML : '&#x1f310;'
-				}, 
-				buttonsDiv 
+				},
+				buttonsDiv
 			);
-			m_GeoLocationButton.addEventListener ( 
-				'click', 
+			m_GeoLocationButton.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					gc_GeoLocator.switch ( );
-				}, 
-				false 
+				},
+				false
 			);
 		}
-		
+
 		// pin button
 		m_PinButton = m_HTMLElementsFactory.create (
 			'span',
-			{ 
-				innerHTML : '&#x274c;', 
-				id : 'TravelNotes-Control-PinButton' 
+			{
+				innerHTML : '&#x274c;',
+				id : 'TravelNotes-Control-PinButton'
 			},
 			buttonsDiv
 		);
-		m_PinButton.addEventListener ( 
-			'click', 
+		m_PinButton.addEventListener (
+			'click',
 			event => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 				if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
@@ -238,8 +238,8 @@ function newTravelNotesToolbarUI ( ) {
 					control.removeEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
 					control.removeEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
 				}
-			}, 
-			false 
+			},
+			false
 		);
 		if ( g_Config.travelEditor.startMinimized ) {
 			m_PinButton.innerHTML = '&#x1f4cc;';
@@ -261,13 +261,13 @@ function newTravelNotesToolbarUI ( ) {
 	return Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
-			
+
 			geoLocationStatusChanged : ( status ) => m_OnGeoLocationStatusChanged ( status )
 		}
 	);
 }
 
-/* 
+/*
 --- gc_TravelNotesToolbarUI object ------------------------------------------------------------------------------------
 
 The one and only one TravelNotesToolbarUI
@@ -275,7 +275,7 @@ The one and only one TravelNotesToolbarUI
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_TravelNotesToolbarUI = newTravelNotesToolbarUI ( );	
+const gc_TravelNotesToolbarUI = newTravelNotesToolbarUI ( );
 
 /*
 --- End of TravelNotesToolbarUI.js file -------------------------------------------------------------------------------

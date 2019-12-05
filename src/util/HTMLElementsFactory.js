@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -34,20 +34,20 @@ Tests ...
 
 export { newHTMLElementsFactory };
 
-/* 
+/*
 --- newHTMLElementsFactory function -----------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
 function newHTMLElementsFactory ( ) {
-	
-	/* 
+
+	/*
 	--- m_Create function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_Create  ( tagName, properties, parentNode ) {
 		var element;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
@@ -69,12 +69,12 @@ function newHTMLElementsFactory ( ) {
 				}
 			}
 		}
-		return element;	
+		return element;
 	}
 
-	/* 
+	/*
 	--- HTMLElementsFactory object ------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -82,9 +82,9 @@ function newHTMLElementsFactory ( ) {
 		{
 			create : ( tagName, properties, parentNode ) => { return m_Create ( tagName, properties, parentNode ); }
 		}
-	);	
+	);
 }
-	
+
 /*
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------
-*/	
+*/

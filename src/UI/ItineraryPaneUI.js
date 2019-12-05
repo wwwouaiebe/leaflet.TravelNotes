@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -63,9 +63,9 @@ function newItineraryPaneUI ( ) {
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		m_EventDispatcher.dispatch ( 
-			'zoomtopoint', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'zoomtopoint',
+			{
 				latLng : element.latLng
 			}
 		);
@@ -88,7 +88,7 @@ function newItineraryPaneUI ( ) {
 		}
 		if ( element.maneuverObjId ) {
 			g_NoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
-		} 
+		}
 		else if ( element.noteObjId ) {
 			g_NoteEditor.editNote ( element.noteObjId );
 		}
@@ -104,9 +104,9 @@ function newItineraryPaneUI ( ) {
 
 	function m_OnInstructionMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch ( 
-			'additinerarypointmarker', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'additinerarypointmarker',
+			{
 				objId : mouseEvent.target.objId,
 				latLng : mouseEvent.target.latLng
 			}
@@ -133,25 +133,25 @@ function newItineraryPaneUI ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_Remove ( ) {
-		
+
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
-		
-		// removing previous header 
+
+		// removing previous header
 		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
 		if ( routeHeader ) {
 			dataDiv.removeChild ( routeHeader );
 		}
-		
+
 		// removing previous itinerary
 		let childCounter;
 		let childNodes;
-		let childNode;			
-		let routeManeuversNotesList = 
+		let childNode;
+		let routeManeuversNotesList =
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
@@ -165,7 +165,7 @@ function newItineraryPaneUI ( ) {
 			dataDiv.removeChild ( routeManeuversNotesList );
 		}
 	}
-			
+
 	/*
 	--- m_Add function ------------------------------------------------------------------------------------------------
 
@@ -175,7 +175,7 @@ function newItineraryPaneUI ( ) {
 	*/
 
 	function m_Add ( ) {
-		
+
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
 			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
@@ -184,25 +184,25 @@ function newItineraryPaneUI ( ) {
 			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
 				.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		}
-		
+
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
-		
+
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
-		
+
 		// adding new header
 		dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
-		
+
 		// adding new itinerary
 		dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
-		
-		// adding event listeners 
+
+		// adding event listeners
 		let childCounter;
 		let childNodes;
-		let childNode;			
-		let routeManeuversNotesList = 
+		let childNode;
+		let routeManeuversNotesList =
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
@@ -229,7 +229,7 @@ function newItineraryPaneUI ( ) {
 		}
 	);
 }
-	
+
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------
-*/		
+*/

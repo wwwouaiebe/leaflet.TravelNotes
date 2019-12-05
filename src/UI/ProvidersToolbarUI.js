@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -24,7 +24,7 @@ Changes:
 	- v1.4.0:
 		- created
 	- v1.5.0:
-		- code review		
+		- code review
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
@@ -50,7 +50,7 @@ This function returns the providersToolbarUI object
 */
 
 function newProvidersToolbarUI ( ) {
-	
+
 	let m_ButtonsDiv = null;
 	let m_HtmlElementsFactory = newHTMLElementsFactory ( );
 	let m_activeButton = false;
@@ -59,7 +59,7 @@ function newProvidersToolbarUI ( ) {
 	let m_CarButton = null;
 	let m_TrainButton = null;
 	let m_ParentDiv = null;
-	
+
 	/*
 	--- m_OnClickTransitModeButton function ---------------------------------------------------------------------------
 
@@ -67,13 +67,13 @@ function newProvidersToolbarUI ( ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_OnClickTransitModeButton ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		m_SetTransitMode ( clickEvent.target.transitMode );
 		g_RouteEditor.startRouting ( );
 	}
-	
+
 	/*
 	--- m_SetProvider function ----------------------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ function newProvidersToolbarUI ( ) {
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ]
 			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' )
-			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' ); 
+			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 
 		// activating the transit mode buttons, depending of the capabilities of the provider
 		let provider = g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) );
@@ -125,7 +125,7 @@ function newProvidersToolbarUI ( ) {
 		}
 
 		// changing the transitMode if the provider don't have the active transit mode
-		if ( ! g_TravelNotesData.providers.get ( 
+		if ( ! g_TravelNotesData.providers.get (
 			providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
 			if ( provider.transitModes.bike ) {
 				m_SetTransitMode ( 'bike' );
@@ -141,7 +141,7 @@ function newProvidersToolbarUI ( ) {
 			}
 		}
 	}
-	
+
 	/*
 	--- m_SetTransitMode function -------------------------------------------------------------------------------------
 
@@ -151,14 +151,14 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function m_SetTransitMode ( transitMode ) {
-		
+
 		g_TravelNotesData.routing.transitMode = transitMode;
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ]
 			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 	}
-	
+
 	/*
 	--- m_createProviderButton function -------------------------------------------------------------------------------
 
@@ -172,20 +172,20 @@ function newProvidersToolbarUI ( ) {
 		if ( 0 === provider.providerKey ) {
 			return;
 		}
-		
+
 		let providerButton = m_HtmlElementsFactory.create (
 			'img',
-			{ 
+			{
 				src : "data:image/png;base64," + provider.icon,
-				id : 'TravelNotes-Control-'+ provider.name + 'ImgButton', 
+				id : 'TravelNotes-Control-'+ provider.name + 'ImgButton',
 				className : 'TravelNotes-Control-ImgButton',
 				title : provider.name
 			},
 			m_ButtonsDiv
 		);
 		providerButton.provider = provider.name;
-		providerButton.addEventListener ( 
-			'click', 
+		providerButton.addEventListener (
+			'click',
 			clickEvent => {
 				clickEvent.stopPropagation ( );
 				m_SetProvider ( clickEvent.target.provider );
@@ -198,7 +198,7 @@ function newProvidersToolbarUI ( ) {
 			providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 			g_TravelNotesData.routing.provider = providerButton.provider;
 			m_activeButton = true;
-			
+
 			// ... and the first possible transit mode will be the active transit mode
 			if ( provider.transitModes.bike ) {
 				m_BikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
@@ -215,8 +215,8 @@ function newProvidersToolbarUI ( ) {
 			else if ( provider.transitModes.train ) {
 				m_TrainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				g_TravelNotesData.routing.transitMode = 'train';
-			} 
-			
+			}
+
 			// deactivating transit mode buttons if not supported by the provider
 			if ( ! provider.transitModes.car ) {
 				m_CarButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
@@ -247,7 +247,7 @@ function newProvidersToolbarUI ( ) {
 			g_TravelNotesData.providers.forEach ( m_createProviderButton );
 		}
 	}
-	
+
 	/*
 	--- m_createTransitModesButtons function ----------------------------------------------------------------------
 
@@ -259,8 +259,8 @@ function newProvidersToolbarUI ( ) {
 	function m_createTransitModesButtons ( ) {
 		m_BikeButton = m_HtmlElementsFactory.create (
 			'img',
-			{ 
-				src : 
+			{
+				src :
 					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
 					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoaESkaC0SxrgAABMdJREFUSMfNl1loVGcYhp//n+WcZmbiJE4WjVKVaLWOGxglilFTSm\
 					YUF1ILKiIILSjplQiKS65EXG4UvBGrQvVCUAdjoRrEGmtwjQbtWKlpEsTGGDMxkzKTzHr+XiRucbK4ts/lOd/5X853vuU9gj4YN+\
@@ -280,18 +280,18 @@ function newProvidersToolbarUI ( ) {
 					UiEmVl9rL/3gh4vdW0t5ec0XXp+1iiui597e0lZ7zeal4YgZecky6XOvKhfZfLJX8KBMQa8BgpXabbjREIiDW6LnxCvL+gEKDrwh\
 					cIiDVuN8b/wtCnXJ4FBRfp6PBU1NaO0h0OeUBKmgeTASFASpodDnmgtnaU3tHhqSgouDj4f6dP8dP2L6C7Ld6Z4dDBAAAAAElFTk\
 					SuQmCC',
-				id : 'TravelNotes-Control-bikeImgButton', 
+				id : 'TravelNotes-Control-bikeImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
 			m_ButtonsDiv
 		);
 		m_BikeButton.transitMode = 'bike';
 		m_BikeButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
-		
+
 		m_PedestrianButton = m_HtmlElementsFactory.create (
 			'img',
-			{ 
-				src : 
+			{
+				src :
 					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
 					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoaESo7bADyMwAABNlJREFUSMe1V19oU1cY/52Te5Ob3DR/SfzTNNCufxRXxmarONCnPb\
 					i+ykYrFdRSkeJLX5ykZcKcFfG5oIJ2Y2sVFZQ+iPoiUhC128OIiJrUlgQTm9o0t23SJufmnj2k2ura5syx7ynknu/7nd93vr8E6w\
@@ -311,18 +311,18 @@ function newProvidersToolbarUI ( ) {
 					W/jD7iIklauqpqf834+Eejz7tBLBaDpij3myRJS4sNBeXzXpK0tKLcbxofh+Z0tq0/3tbWwhmLDYww5vv/x9vlDaIV0Sg0jye03W\
 					YbPSxJ0xBJtQ8H+mlus412eDwntkej0Fyu1k9dYX7uW1ioX3OFoZQB4HOEsEmr9RNXmLWWtspKWDRt9aVN1z1jsryQcjh6komE2N\
 					L2N0SHF0QJfjNNAAAAAElFTkSuQmCC',
-				id : 'TravelNotes-Control-pedestrianImgButton', 
+				id : 'TravelNotes-Control-pedestrianImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
 			m_ButtonsDiv
 		);
 		m_PedestrianButton.transitMode = 'pedestrian';
 		m_PedestrianButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
-		
+
 		m_CarButton = m_HtmlElementsFactory.create (
 			'img',
-			{ 
-				src : 
+			{
+				src :
 					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
 					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoaESgBmDpJAwAABQBJREFUSMe9V09MFFcY/703szOz7PLP2WVBV6rtdm21HqhG2wiCh8\
 					bL2jWhsl71IhqJJ4oHL4RIxKP1HzESLh4MEGPkoAeNYRWtGkPShGRF+aeFld2psd0BZnZmXg+LW4SdrW3EX/Iub775fe/7977vEd\
@@ -342,17 +342,17 @@ function newProvidersToolbarUI ( ) {
 					hO1BNirphSQkyI4nh9IAArOwh4vV7MzCQ+7egDAIlEAoQAra0H9wnCRM/HVioIEz2trQf3EYLsjP1eFrS3N7Pjx49ERPF138dwe8\
 					a9r/va2o5E2tub2QcO9B0hTVv3aQb6d/B4ZKhqS/+tWxGnJL3opFSLE2IsOifJcXYCQgxQqsUl6UXn4GDEqaot/V6v58PfTpmECy\
 					ORWPpo4/dYlrvGMLggz3OrFh5tf1BqPuO4VNSyjBsuVzymKB3/+mj7G1dPIltjqpC6AAAAAElFTkSuQmCC',
-				id : 'TravelNotes-Control-carImgButton', 
+				id : 'TravelNotes-Control-carImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
 			m_ButtonsDiv
 		);
 		m_CarButton.transitMode = 'car';
 		m_CarButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
-		
+
 		m_TrainButton = m_HtmlElementsFactory.create (
 			'img',
-			{ 
+			{
 				src :
 					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
 					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4goTCiEjvCsRvgAABXRJREFUSMe9V11MFFcU/u7MsDPLrgvu7A80BEhLsRIxEFIlcSXBF4\
@@ -375,7 +375,7 @@ function newProvidersToolbarUI ( ) {
 					tL/R6T6fGl901qMj2+1NJSv4cQLM3Yy8bbtrZGduRIQ60oBvvfh9sT7g32t7Y21La1NbJ3HOjbq1Q1/8MM9K+avwxFabp640atWZ\
 					Ie9nKcGiBEf01PkkR3AkJ0cJwakKSHvbdv15oVpemq0+l497dTIuG8CIXefLQJuwzDulXX+UJB4O2LTeQvjqMTPB8dNgz9isUSGI\
 					9E2t/6aPsbwfNWty4y/a8AAAAASUVORK5CYII=',
-				id : 'TravelNotes-Control-trainImgButton', 
+				id : 'TravelNotes-Control-trainImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
 			m_ButtonsDiv
@@ -384,7 +384,7 @@ function newProvidersToolbarUI ( ) {
 		m_TrainButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
 
 	}
-	
+
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
@@ -394,7 +394,7 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function m_ProvidersAdded ( ) {
-		
+
 		m_ParentDiv.removeChild ( m_ButtonsDiv );
 		m_CreateUI ( m_ParentDiv );
 	}
@@ -408,46 +408,46 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function m_CreateUI ( controlDiv ) {
-		
+
 		m_ParentDiv = controlDiv;
-		
-		m_ButtonsDiv = m_HtmlElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-Control-ItineraryButtonsDiv', 
-				className : 'TravelNotes-Control-ButtonsDiv' 
+
+		m_ButtonsDiv = m_HtmlElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-ItineraryButtonsDiv',
+				className : 'TravelNotes-Control-ButtonsDiv'
 			},
-			controlDiv 
+			controlDiv
 		);
 
 		m_createTransitModesButtons ( );
 		m_createProvidersButtons ( );
-	
+
 	}
-	
-	/* 
+
+	/*
 	--- providersToolbarUI object -------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
-			
+
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
-			
+
 			get provider ( ) { return g_TravelNotesData.routing.provider; },
 			set provider ( providerName ) { m_SetProvider ( providerName ); },
-			
+
 			get transitMode ( ) { return g_TravelNotesData.routing.transitMode; },
 			set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); },
-			
+
 			providersAdded : ( ) => m_ProvidersAdded ( )
 		}
 	);
 }
 
-/* 
+/*
 --- gc_ProvidersToolbarUI object ---------------------------------------------------------------------------------------
 
 The one and only one providesToolbarUI
@@ -456,7 +456,7 @@ The one and only one providesToolbarUI
 */
 
 const gc_ProvidersToolbarUI = newProvidersToolbarUI ( );
-	
+
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------
-*/	
+*/

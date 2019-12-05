@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -27,7 +27,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-	
+
 export { newAPIKeysDialog };
 
 import { g_Translator } from '../UI/Translator.js';
@@ -44,13 +44,13 @@ import { newDataEncryptor } from '../util/DataEncryptor.js';
 */
 
 function newAPIKeysDialog ( APIKeys ) {
-	
+
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_APIKeysDialog = null;
 	let m_ToolbarDiv = null;
 	let m_APIKeysDiv = null;
 	let m_OpenFileInput = null;
-	
+
 	/*
 	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
 
@@ -64,10 +64,10 @@ function newAPIKeysDialog ( APIKeys ) {
 		if ( ! m_VerifyKeys ( ) ) {
 			return;
 		}
-		
+
 		return m_GetAPIKeys ( );
 	}
-	
+
 	/*
 	--- m_VerifyKeys function ------------------------------------------------------------------------------------
 
@@ -79,13 +79,13 @@ function newAPIKeysDialog ( APIKeys ) {
 		m_APIKeysDialog.hideError ( );
 		let rows = m_APIKeysDiv.childNodes;
 		for ( let counter = 0; counter < rows.length; counter ++ ) {
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 0 ].value; 
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 1 ].value;		
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 0 ].value;
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 1 ].value;
 		}
 		if ( ! returnValue ) {
 			m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - empty API key name or value' ) );
 		}
-		
+
 		return returnValue;
 	}
 
@@ -117,7 +117,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		document.body.appendChild ( element );
 		element.click ( );
 		document.body.removeChild ( element );
-		window.URL.revokeObjectURL ( blobUrl );		
+		window.URL.revokeObjectURL ( blobUrl );
 	}
 
 	/*
@@ -130,8 +130,8 @@ function newAPIKeysDialog ( APIKeys ) {
 		let APIKeys = [];
 		let rows = m_APIKeysDiv.childNodes;
 		for ( let counter = 0; counter < rows.length; counter ++ ) {
-			APIKeys.push ( 
-				{ 
+			APIKeys.push (
+				{
 					providerName : rows [ counter ].childNodes [ 0 ].value,
 					providerKey : rows [ counter ].childNodes [ 1 ].value
 				}
@@ -145,20 +145,20 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_SaveKeysToFile ( ) {
 		if ( ! m_VerifyKeys ( ) ) {
 			return;
 		}
 		m_APIKeysDialog.showWait ( );
-		newDataEncryptor ( ).encryptData ( 
-			new window.TextEncoder ( ).encode ( JSON.stringify ( m_GetAPIKeys ( ) ) ), 
-			m_OnOkEncrypt, 
-			m_OnErrorEncrypt, 
-			newPasswordDialog ( true ).show ( ) 
-		);		
+		newDataEncryptor ( ).encryptData (
+			new window.TextEncoder ( ).encode ( JSON.stringify ( m_GetAPIKeys ( ) ) ),
+			m_OnOkEncrypt,
+			m_OnErrorEncrypt,
+			newPasswordDialog ( true ).show ( )
+		);
 	}
-	
+
 	/*
 	--- m_OnOkDecrypt function ------------------------------------------------------------------------------
 
@@ -174,16 +174,16 @@ function newAPIKeysDialog ( APIKeys ) {
 			m_OnErrorDecrypt ( );
 			return;
 		}
-		
+
 		while ( m_APIKeysDiv.firstChild ) {
 			m_APIKeysDiv.removeChild ( m_APIKeysDiv.firstChild );
-		}	
-		
+		}
+
 		APIKeys.forEach ( APIKey => m_CreateAPIKeyRow ( APIKey ) );
 		m_APIKeysDialog.hideWait ( );
 		m_APIKeysDialog.hideError ( );
 	}
-	
+
 	/*
 	--- m_OnErrorDecrypt function ------------------------------------------------------------------------------
 
@@ -192,7 +192,7 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	function  m_OnErrorDecrypt (  ) {
 		m_APIKeysDialog.hideWait ( );
-		m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );		
+		m_APIKeysDialog.showError ( g_Translator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );
 	}
 
 	/*
@@ -207,16 +207,16 @@ function newAPIKeysDialog ( APIKeys ) {
 		var fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			newDataEncryptor ( ).decryptData (
-				fileReader.result,		
+				fileReader.result,
 				m_OnOkDecrypt,
 				m_OnErrorDecrypt,
-				newPasswordDialog ( false ).show ( ) 
+				newPasswordDialog ( false ).show ( )
 			);
 		};
 		fileReader.readAsArrayBuffer ( event.target.files [ 0 ] );
 
 	}
-	
+
 	/*
 	--- m_CreateDialog function ---------------------------------------------------------------------------------------
 
@@ -229,23 +229,23 @@ function newAPIKeysDialog ( APIKeys ) {
 		m_APIKeysDialog = newBaseDialog ( );
 		m_APIKeysDialog.title = g_Translator.getText ( 'APIKeysDialog - API keys' );
 		m_APIKeysDialog.okButtonListener = m_OnOkButtonClick;
-		m_ToolbarDiv = m_HTMLElementsFactory.create ( 
+		m_ToolbarDiv = m_HTMLElementsFactory.create (
 			'div',
-			{ 
+			{
 				className : 'TravelNotes-APIKeysDialog-ToolbarDiv',
 				id : 'TravelNotes-APIKeysDialog-ToolbarDiv'
 			},
 			m_APIKeysDialog.content
 		);
-		m_APIKeysDiv = m_HTMLElementsFactory.create ( 
-			'div', 
+		m_APIKeysDiv = m_HTMLElementsFactory.create (
+			'div',
 			{
 				id : 'TravelNotes-APIKeysDialog-DataDiv'
 			},
 			m_APIKeysDialog.content
 		);
 	}
-	
+
 	/*
 	--- m_CreateToolbar function --------------------------------------------------------------------------------------
 
@@ -255,89 +255,89 @@ function newAPIKeysDialog ( APIKeys ) {
 	function m_CreateToolbar ( ) {
 
 		// save button
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-APIKeysDialog-SaveToFileButton', 
-				className : 'TravelNotes-APIKeysDialog-Button', 
-				title : g_Translator.getText ( 'APIKeysDialog - Save to file' ), 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-APIKeysDialog-SaveToFileButton',
+				className : 'TravelNotes-APIKeysDialog-Button',
+				title : g_Translator.getText ( 'APIKeysDialog - Save to file' ),
 				innerHTML : '&#x1f4be;'
-			}, 
-			m_ToolbarDiv 
+			},
+			m_ToolbarDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					m_SaveKeysToFile ( );
-				}, 
-				false 
+				},
+				false
 			);
 
-		let openFileDiv = m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
+		let openFileDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
 				id : 'TravelNotes-APIKeysDialog-OpenFileDiv'
-			}, 
-			m_ToolbarDiv 
+			},
+			m_ToolbarDiv
 		);
-		m_OpenFileInput = m_HTMLElementsFactory.create ( 
+		m_OpenFileInput = m_HTMLElementsFactory.create (
 			'input',
 			{
-				id : 'TravelNotes-APIKeysDialog-OpenFileInput', 
+				id : 'TravelNotes-APIKeysDialog-OpenFileInput',
 				type : 'file'
 			},
 			openFileDiv
 		);
-		m_OpenFileInput.addEventListener ( 
-			'change', 
-			event => { m_OnOpenFileInputChange ( event ) }, 
+		m_OpenFileInput.addEventListener (
+			'change',
+			event => { m_OnOpenFileInputChange ( event ) },
 			false
 		);
-		let openFileFakeDiv = m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
+		let openFileFakeDiv = m_HTMLElementsFactory.create (
+			'div',
+			{
 				id : 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
-			}, 
-			openFileDiv 
+			},
+			openFileDiv
 		);
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-APIKeysDialog-OpenFileButton', 
-				className : 'TravelNotes-APIKeysDialog-Button', 
-				title : g_Translator.getText ( 'APIKeysDialog - Open file' ), 
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-APIKeysDialog-OpenFileButton',
+				className : 'TravelNotes-APIKeysDialog-Button',
+				title : g_Translator.getText ( 'APIKeysDialog - Open file' ),
 				innerHTML : '&#x1F4C2;'
-			}, 
-			openFileFakeDiv 
+			},
+			openFileFakeDiv
 		)
-			.addEventListener ( 
-				'click', 
-				( ) => { m_OpenFileInput.click ( ); }, 
-				false 
+			.addEventListener (
+				'click',
+				( ) => { m_OpenFileInput.click ( ); },
+				false
 			);
-		
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				id : 'TravelNotes-APIKeysDialog-NewKeyButton', 
-				className : 'TravelNotes-APIKeysDialog-Button', 
-				title : g_Translator.getText ( 'APIKeysDialog - new API key' ), 
+
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-APIKeysDialog-NewKeyButton',
+				className : 'TravelNotes-APIKeysDialog-Button',
+				title : g_Translator.getText ( 'APIKeysDialog - new API key' ),
 				innerHTML : '+'
-			}, 
-			m_ToolbarDiv 
+			},
+			m_ToolbarDiv
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					m_CreateAPIKeyRow ( { providerName : '', providerKey : ''} );
-				}, 
-				false 
+				},
+				false
 			);
-		
+
 	}
-	
+
 	/*
 	--- m_CreateAPIKeyRow function ------------------------------------------------------------------------------------
 
@@ -345,7 +345,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function m_CreateAPIKeyRow ( APIKey ) {
-		let APIKeyRow = m_HTMLElementsFactory.create ( 
+		let APIKeyRow = m_HTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyRow'
@@ -371,25 +371,25 @@ function newAPIKeysDialog ( APIKeys ) {
 			},
 			APIKeyRow
 		);
-		
-		m_HTMLElementsFactory.create ( 
-			'div', 
-			{ 
-				className : 'TravelNotes-APIKeysDialog-Button TravelNotes-APIKeysDialog-DeleteButton', 
-				title : g_Translator.getText ( 'APIKeysDialog - delete API key' ), 
+
+		m_HTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-APIKeysDialog-Button TravelNotes-APIKeysDialog-DeleteButton',
+				title : g_Translator.getText ( 'APIKeysDialog - delete API key' ),
 				innerHTML : '&#x274c'
-			}, 
-			APIKeyRow 
+			},
+			APIKeyRow
 		)
-			.addEventListener ( 
-				'click', 
+			.addEventListener (
+				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
 					clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
-				}, 
-				false 
+				},
+				false
 			);
-		
+
 	}
 
 	/*
@@ -411,10 +411,10 @@ function newAPIKeysDialog ( APIKeys ) {
 	m_CreateDialog ( );
 	m_CreateToolbar ( );
 	m_CreateContent ( );
-	
+
 	return m_APIKeysDialog;
 }
 
 /*
 --- End of APIKeysDialog.js file --------------------------------------------------------------------------------------
-*/	
+*/

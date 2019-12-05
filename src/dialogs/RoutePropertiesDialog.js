@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -35,7 +35,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-	
+
 export { newRoutePropertiesDialog };
 
 import { g_Translator } from '../UI/Translator.js';
@@ -50,14 +50,14 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function newRoutePropertiesDialog ( route ) {
-	
+
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_RoutePropertiesDialog = null;
 	let m_RoutePropertiesDiv = null;
 	let m_WidthInput = null;
 	let m_ChainInput = null;
 	let m_DashSelect = null;
-	
+
 	/*
 	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ function newRoutePropertiesDialog ( route ) {
 			m_RoutePropertiesDialog.content
 		);
 	}
-	
+
 	/*
 	--- m_CreateDialog function ---------------------------------------------------------------------------------------
 
@@ -126,7 +126,7 @@ function newRoutePropertiesDialog ( route ) {
 			{
 				type : 'number',
 				id : 'TravelNotes-RoutePropertiesDialog-WidthInput'
-				
+
 			},
 			widthDiv
 		);
@@ -166,7 +166,7 @@ function newRoutePropertiesDialog ( route ) {
 		}
 		m_DashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
 	}
-	
+
 	/*
 	--- m_CreateDialog function ---------------------------------------------------------------------------------------
 
@@ -187,22 +187,22 @@ function newRoutePropertiesDialog ( route ) {
 			'input',
 			{
 				type : 'checkbox',
-				id : 'TravelNotes-RoutePropertiesDialog-ChainInput'			
+				id : 'TravelNotes-RoutePropertiesDialog-ChainInput'
 			},
 			chainDiv
 		);
 		m_ChainInput.checked = route.chain;
 	}
-	
+
 	m_CreateDialog ( );
 	m_CreateRoutePropertiesDiv ( );
 	m_CreateWidthDiv ( );
 	m_CreateDashDiv ( );
 	m_CreateChainDiv ( );
-	
+
 	return m_RoutePropertiesDialog;
 }
 
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
-*/	
+*/

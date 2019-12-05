@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -59,7 +59,7 @@ Patterns : Closure and Singleton
 */
 
 function newNoteEditor ( ) {
-	
+
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
@@ -68,7 +68,7 @@ function newNoteEditor ( ) {
 	--- m_AttachNoteToRoute function ----------------------------------------------------------------------------------
 
 	This function transform a travel note into a route note ( when possible )
-	
+
 	parameters:
 	- noteObjId : the objId of the note to transform
 
@@ -82,13 +82,13 @@ function newNoteEditor ( ) {
 		let newNoteLatLng = null;
 		let newNoteDistance = null;
 
-		g_TravelNotesData.travel.routes.forEach ( 
+		g_TravelNotesData.travel.routes.forEach (
 			route => {
 				let pointAndDistance = m_Geometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = m_Geometry.pointsDistance ( 
-						noteAndRoute.note.latLng, 
-						pointAndDistance.latLng 
+					let distanceToRoute = m_Geometry.pointsDistance (
+						noteAndRoute.note.latLng,
+						pointAndDistance.latLng
 					);
 					if ( distanceToRoute < distance ) {
 						distance = distanceToRoute;
@@ -99,7 +99,7 @@ function newNoteEditor ( ) {
 				}
 			}
 		);
-		
+
 		if ( selectedRoute ) {
 			g_TravelNotesData.travel.notes.remove (  noteObjId );
 			noteAndRoute.note.distance = newNoteDistance;
@@ -110,13 +110,13 @@ function newNoteEditor ( ) {
 			selectedRoute.notes.add ( noteAndRoute.note );
 
 			// and the notes sorted
-			selectedRoute.notes.sort ( 
+			selectedRoute.notes.sort (
 				( first, second ) => { return first.distance - second.distance; }
 			);
 
-			m_EventDispatcher.dispatch ( 
-				'redrawnote', 
-				{ 
+			m_EventDispatcher.dispatch (
+				'redrawnote',
+				{
 					note : noteAndRoute.note
 				}
 			);
@@ -132,7 +132,7 @@ function newNoteEditor ( ) {
 	--- m_DetachNoteFromRoute function --------------------------------------------------------------------------------
 
 	This function transform a route note into a travel note
-	
+
 	parameters:
 	- noteObjId : the objId of the note to transform
 
@@ -147,7 +147,7 @@ function newNoteEditor ( ) {
 		noteAndRoute.note.distance = -1;
 		noteAndRoute.note.chainedDistance = 0;
 		g_TravelNotesData.travel.notes.add ( noteAndRoute.note );
-		
+
 		m_EventDispatcher.dispatch ( 'updateitinerary' );
 		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 
@@ -159,7 +159,7 @@ function newNoteEditor ( ) {
 	--- m_NewNote function --------------------------------------------------------------------------------------------
 
 	This function create a new TravelNotes note object
-	
+
 	parameters:
 	- latLng : the coordinates of the new note
 
@@ -170,18 +170,18 @@ function newNoteEditor ( ) {
 		let note = newNote ( );
 		note.latLng = latLng;
 		note.iconLatLng = latLng;
-		
+
 		return note;
 	}
-	
+
 	/*
 	--- m_NewRouteNote function ---------------------------------------------------------------------------------------
 
 	This function start the creation of a TravelNotes note object linked with a route
-	
+
 	parameters:
 	- routeObjId : the objId of the route to witch the note will be linked
-	- event : the event that have triggered the method ( a right click on the 
+	- event : the event that have triggered the method ( a right click on the
 	route polyline and then a choice in a context menu)
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -190,30 +190,30 @@ function newNoteEditor ( ) {
 	function m_NewRouteNote ( routeObjId, event ) {
 
 		// the nearest point and distance on the route is searched
-		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance (
 			m_DataSearchEngine.getRoute ( routeObjId ),
-			[ event.latlng.lat, event.latlng.lng ] 
+			[ event.latlng.lat, event.latlng.lng ]
 		);
-		
+
 		// the note is created
 		let note = m_NewNote ( latLngDistance.latLng );
 		note.distance = latLngDistance.distance;
-		
+
 		// and displayed in a dialog box
 		newNoteDialog ( note, routeObjId, true )
 			.show ( )
-			.then ( 
+			.then (
 				newNote => {
 					let route = m_DataSearchEngine.getRoute ( routeObjId );
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
-						( first, second ) => { return first.distance - second.distance; } 
+						( first, second ) => { return first.distance - second.distance; }
 					);
 					m_EventDispatcher.dispatch ( 'setitinerary' );
-					m_EventDispatcher.dispatch ( 
-						'addnote', 
-						{ 
+					m_EventDispatcher.dispatch (
+						'addnote',
+						{
 							note : newNote,
 							readOnly : false
 						}
@@ -223,12 +223,12 @@ function newNoteEditor ( ) {
 			)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
-	
+
 	/*
 	--- m_NewSearchNote function --------------------------------------------------------------------------------------
 
 	This function start the creation of a TravelNotes note object linked to a search
-	
+
 	parameters:
 	- searchResult : the search results with witch the note will be created
 
@@ -237,26 +237,26 @@ function newNoteEditor ( ) {
 
 	function m_NewSearchNote ( searchResult ) {
 		let note = m_NewNote ( [ searchResult.lat, searchResult.lon ] );
-		
-		note.address = 
+
+		note.address =
 			( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
 			( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
 			( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
-		
+
 		note.url = searchResult.tags.website || '';
 		note.phone = searchResult.tags.phone || '';
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
-		
+
 		newNoteDialog ( note, -1, true )
 			.show ( )
-			.then ( 
+			.then (
 				newNote => {
 					g_TravelNotesData.travel.notes.add ( newNote );
 					m_EventDispatcher.dispatch ( 'settravelnotes' );
-					m_EventDispatcher.dispatch ( 
-						'addnote', 
-						{ 
+					m_EventDispatcher.dispatch (
+						'addnote',
+						{
 							note : newNote,
 							readOnly : false
 						}
@@ -266,12 +266,12 @@ function newNoteEditor ( ) {
 			)
 			.catch (  err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
-	
+
 	/*
 	--- m_NewManeuverNote function ------------------------------------------------------------------------------------
 
 	This function start the creation of a TravelNotes note object linked to a maneuver
-	
+
 	parameters:
 	- maneuverObjId : the objId of the maneuver
 	- latLng : the coordinates of the maneuver
@@ -282,7 +282,7 @@ function newNoteEditor ( ) {
 	function m_NewManeuverNote ( maneuverObjId, latLng ) {
 
 		// the nearest point and distance on the route is searched
-		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance (
 			g_TravelNotesData.travel.editedRoute,
 			latLng
 		);
@@ -293,8 +293,8 @@ function newNoteEditor ( ) {
 		// the note is created
 		let note = m_NewNote ( latLng );
 		note.distance = latLngDistance.distance;
-		note.iconContent = 
-			"<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" + 
+		note.iconContent =
+			"<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" +
 			maneuver.iconName + "'></div>";
 		note.popupContent = maneuver.instruction;
 		note.iconWidth = 40;
@@ -303,18 +303,18 @@ function newNoteEditor ( ) {
 		// and displayed in a dialog box
 		newNoteDialog ( note, g_TravelNotesData.travel.editedRoute.objId, true )
 			.show ( )
-			.then ( 
+			.then (
 				newNote => {
 					let route = m_DataSearchEngine.getRoute ( g_TravelNotesData.travel.editedRoute.objId );
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
-						( first, second ) => { return first.distance - second.distance; } 
+						( first, second ) => { return first.distance - second.distance; }
 					);
 					m_EventDispatcher.dispatch ( 'setitinerary' );
-					m_EventDispatcher.dispatch ( 
-						'addnote', 
-						{ 
+					m_EventDispatcher.dispatch (
+						'addnote',
+						{
 							note : newNote,
 							readOnly : false
 						}
@@ -329,7 +329,7 @@ function newNoteEditor ( ) {
 	--- m_NewTravelNote function --------------------------------------------------------------------------------------
 
 	This function start the creation f a TravelNotes note object
-	
+
 	parameters:
 	- latLng : the coordinates of the new note
 
@@ -344,13 +344,13 @@ function newNoteEditor ( ) {
 		// and displayed in a dialog box
 		newNoteDialog ( note, -1, true )
 			.show ( )
-			.then ( 
+			.then (
 				newNote => {
 					g_TravelNotesData.travel.notes.add ( newNote );
 					m_EventDispatcher.dispatch ( 'settravelnotes' );
-					m_EventDispatcher.dispatch ( 
-						'addnote', 
-						{ 
+					m_EventDispatcher.dispatch (
+						'addnote',
+						{
 							note : newNote,
 							readOnly : false
 						}
@@ -360,12 +360,12 @@ function newNoteEditor ( ) {
 			)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
-	
+
 	/*
 	--- m_EditNote function -------------------------------------------------------------------------------------------
 
 	This function start the modification of a note
-	
+
 	parameters:
 	- noteObjId : the objId of the edited note
 
@@ -377,15 +377,15 @@ function newNoteEditor ( ) {
 		let routeObjId = null === noteAndRoute.route ? -1 : noteAndRoute.route.objId;
 		newNoteDialog ( noteAndRoute.note, routeObjId, false )
 			.show ( )
-			.then ( 
+			.then (
 				modifiedNote => {
 					let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
 					if ( noteAndRoute.note ) {
 
 						// it's an existing note. The note is changed on the map
-						m_EventDispatcher.dispatch ( 
-							'redrawnote', 
-							{ 
+						m_EventDispatcher.dispatch (
+							'redrawnote',
+							{
 								note : modifiedNote
 							}
 						);
@@ -406,7 +406,7 @@ function newNoteEditor ( ) {
 	--- m_RemoveNote function -----------------------------------------------------------------------------------------
 
 	This function removes a note
-	
+
 	parameters:
 	- noteObjId : the objId of the note to remove
 
@@ -436,12 +436,12 @@ function newNoteEditor ( ) {
 		// and the HTML page is adapted
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_HideNotes function ------------------------------------------------------------------------------------------
 
 	This function hide the notes on the map
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -458,12 +458,12 @@ function newNoteEditor ( ) {
 			}
 		}
 	}
-		
+
 	/*
 	--- m_ShowNotes function ------------------------------------------------------------------------------------------
 
 	This function show the notes on the map
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -471,9 +471,9 @@ function newNoteEditor ( ) {
 		m_HideNotes ( );
 		let notesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			m_EventDispatcher.dispatch ( 
-				'addnote', 
-				{ 
+			m_EventDispatcher.dispatch (
+				'addnote',
+				{
 					note : notesIterator.value,
 					readOnly : false
 				}
@@ -483,9 +483,9 @@ function newNoteEditor ( ) {
 		while ( ! routesIterator.done ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
-				m_EventDispatcher.dispatch ( 
-					'addnote', 
-					{ 
+				m_EventDispatcher.dispatch (
+					'addnote',
+					{
 						note : notesIterator.value,
 						readOnly : false
 					}
@@ -493,29 +493,29 @@ function newNoteEditor ( ) {
 			}
 		}
 	}
-		
+
 	/*
 	--- m_ZoomToNote function -----------------------------------------------------------------------------------------
 
 	This function zoom to a given note
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_ZoomToNote ( noteObjId ) {
-		m_EventDispatcher.dispatch ( 
-			'zoomtopoint', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'zoomtopoint',
+			{
 				latLng : m_DataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng
 			}
 		);
 	}
-	
+
 	/*
 	--- m_NoteDropped function ----------------------------------------------------------------------------------------
 
 	This function changes the position of a note after a drag and drop
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -524,7 +524,7 @@ function newNoteEditor ( ) {
 		m_EventDispatcher.dispatch ( 'updatetravelnotes' );
 		newRoadbookUpdate ( );
 	}
-		
+
 	/*
 	--- noteEditor object ---------------------------------------------------------------------------------------------
 
@@ -532,40 +532,40 @@ function newNoteEditor ( ) {
 	*/
 
 	return Object.seal (
-		{	
-		
+		{
+
 			newRouteNote : ( routeObjId, event ) => m_NewRouteNote ( routeObjId, event ),
-			
+
 			newSearchNote : searchResult => m_NewSearchNote ( searchResult ),
-		
+
 			newManeuverNote : ( maneuverObjId, latLng ) => m_NewManeuverNote ( maneuverObjId, latLng ),
-		
+
 			newTravelNote : latLng => m_NewTravelNote ( latLng ),
-		
+
 			editNote : noteObjId =>	m_EditNote ( noteObjId ),
-		
+
 			removeNote : noteObjId => m_RemoveNote ( noteObjId ),
-		
+
 			hideNotes : ( ) => m_HideNotes ( ),
-			
+
 			showNotes : ( ) => m_ShowNotes ( ),
-			
+
 			zoomToNote : noteObjId => m_ZoomToNote ( noteObjId ),
-						
+
 			attachNoteToRoute : noteObjId => m_AttachNoteToRoute ( noteObjId ),
-			
+
 			detachNoteFromRoute : noteObjId => m_DetachNoteFromRoute ( noteObjId ),
-			
-			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped ( 
-				draggedNoteObjId, 
-				targetNoteObjId, 
+
+			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => m_NoteDropped (
+				draggedNoteObjId,
+				targetNoteObjId,
 				draggedBefore
 			)
 		}
 	);
 }
 
-/* 
+/*
 --- g_NoteEditor object -----------------------------------------------------------------------------------------------
 
 The one and only one noteEditor

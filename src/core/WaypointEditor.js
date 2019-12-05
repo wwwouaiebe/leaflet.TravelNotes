@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -56,17 +56,17 @@ Patterns : Closure and Singleton
 */
 
 function newWayPointEditor ( ) {
-	
+
 	let m_EventDispatcher = newEventDispatcher ( );
 	let m_Geometry = newGeometry ( );
 
 	/*
 	--- m_AddWayPoint function ----------------------------------------------------------------------------------------
 
-	This function add a waypoint 
-	
+	This function add a waypoint
+
 	parameters:
-	- latLng : 
+	- latLng :
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -79,9 +79,9 @@ function newWayPointEditor ( ) {
 			m_RenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
-		m_EventDispatcher.dispatch ( 
-			'addwaypoint', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'addwaypoint',
+			{
 				wayPoint : g_TravelNotesData.travel.editedRoute.wayPoints.last,
 				letter : g_TravelNotesData.travel.editedRoute.wayPoints.length - 2
 			}
@@ -89,12 +89,12 @@ function newWayPointEditor ( ) {
 		if ( distance ) {
 			let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+				let latLngDistance = m_Geometry.getClosestLatLngDistance (
 					g_TravelNotesData.travel.editedRoute,
-					wayPointsIterator.value.latLng 
+					wayPointsIterator.value.latLng
 				);
 				if ( distance < latLngDistance.distance ) {
-					g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( 
+					g_TravelNotesData.travel.editedRoute.wayPoints.moveTo (
 						wayPoint.objId, wayPointsIterator.value.objId, true
 					);
 					break;
@@ -107,31 +107,31 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-		
+
 	/*
 	--- m_AddWayPointOnRoute function ---------------------------------------------------------------------------------
 
 	This function add a waypoint at a given position on the edited route
-	
+
 	parameters:
-	- latLng : 
+	- latLng :
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_AddWayPointOnRoute ( routeObjId, event ) {
-		let latLngDistance = m_Geometry.getClosestLatLngDistance ( 
+		let latLngDistance = m_Geometry.getClosestLatLngDistance (
 			newDataSearchEngine ( ).getRoute ( routeObjId ),
-			[ event.latlng.lat, event.latlng.lng ] 
+			[ event.latlng.lat, event.latlng.lng ]
 		);
 		m_AddWayPoint ( latLngDistance.latLng, latLngDistance.distance );
 	}
-	
+
 	/*
 	--- m_ReverseWayPoints function -----------------------------------------------------------------------------------
 
 	This function reverse the waypoints order
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -144,10 +144,10 @@ function newWayPointEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.wayPoints.reverse ( );
 		wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			m_EventDispatcher.dispatch ( 
-				'addwaypoint', 
-				{ 
-					wayPoint : wayPointsIterator.value, 
+			m_EventDispatcher.dispatch (
+				'addwaypoint',
+				{
+					wayPoint : wayPointsIterator.value,
 					letter :
 						wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
 				}
@@ -156,12 +156,12 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-		
+
 	/*
 	--- m_RemoveAllWayPoints function ---------------------------------------------------------------------------------
 
 	This function remove all waypoints except the first and last ( see also Collection ...)
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -175,12 +175,12 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-	
+
 	/*
 	--- m_RemoveWayPoint function -------------------------------------------------------------------------------------
 
 	This function remove a waypoint
-	
+
 	parameters:
 	- wayPointObjId : the waypoint objId to remove
 
@@ -199,7 +199,7 @@ function newWayPointEditor ( ) {
 	--- m_RenameWayPoint function -------------------------------------------------------------------------------------
 
 	This function rename a wayPoint
-	
+
 	parameters:
 	- wayPointObjId : the waypoint objId to rename
 	- wayPointName : the new name
@@ -212,15 +212,15 @@ function newWayPointEditor ( ) {
 		g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 	}
-	
+
 	/*
 	--- m_RenameWayPointWithGeocoder function -----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_RenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
-		
+
 		if ( ! g_Config.wayPoint.reverseGeocoding ) {
 			return;
 		}
@@ -250,17 +250,17 @@ function newWayPointEditor ( ) {
 			}
 			m_RenameWayPoint ( address, wayPointObjId );
 		}
-		
+
 		newGeoCoder ( ).getPromiseAddress ( latLng )
 			.then ( setAdressFromGeocoder )
 			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 	}
-	
+
 	/*
 	--- m_SwapWayPoints function --------------------------------------------------------------------------------------
 
 	This function change the order of two waypoints
-	
+
 	parameters:
 	- wayPointObjId : the waypoint objId to swap
 	- swapUp : when true the waypoint is swapped with the previous one, otherwise with the next
@@ -274,12 +274,12 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-		
+
 	/*
 	--- m_SetStartPoint function --------------------------------------------------------------------------------------
 
 	This function set the start waypoint
-	
+
 	parameters:
 	- latLng : the coordinates of the start waypoint
 
@@ -289,18 +289,18 @@ function newWayPointEditor ( ) {
 	function m_SetStartPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
-			m_EventDispatcher.dispatch ( 
-				'removeobject', 
-				{ objId : g_TravelNotesData.travel.editedRoute.wayPoints.first.objId } 
+			m_EventDispatcher.dispatch (
+				'removeobject',
+				{ objId : g_TravelNotesData.travel.editedRoute.wayPoints.first.objId }
 			);
 		}
 		g_TravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
 			m_RenameWayPointWithGeocoder ( latLng, g_TravelNotesData.travel.editedRoute.wayPoints.first.objId );
 		}
-		m_EventDispatcher.dispatch ( 
-			'addwaypoint', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'addwaypoint',
+			{
 				wayPoint : g_TravelNotesData.travel.editedRoute.wayPoints.first,
 				letter : 'A'
 			}
@@ -308,12 +308,12 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-		
+
 	/*
 	--- m_SetEndPoint function ----------------------------------------------------------------------------------------
 
 	This function set the end waypoint
-	
+
 	parameters:
 	- latLng : the coordinates of the end waypoint
 
@@ -323,8 +323,8 @@ function newWayPointEditor ( ) {
 	function m_SetEndPoint ( latLng ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( 0 !== g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
-			m_EventDispatcher.dispatch ( 
-				'removeobject', 
+			m_EventDispatcher.dispatch (
+				'removeobject',
 				{ objId : g_TravelNotesData.travel.editedRoute.wayPoints.last.objId }
 			);
 		}
@@ -332,9 +332,9 @@ function newWayPointEditor ( ) {
 		if ( g_Config.wayPoint.reverseGeocoding ) {
 			m_RenameWayPointWithGeocoder ( latLng, g_TravelNotesData.travel.editedRoute.wayPoints.last.objId );
 		}
-		m_EventDispatcher.dispatch ( 
-			'addwaypoint', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'addwaypoint',
+			{
 				wayPoint : g_TravelNotesData.travel.editedRoute.wayPoints.last,
 				letter : 'B'
 			}
@@ -342,12 +342,12 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-		
+
 	/*
 	--- m_WayPointDragEnd function ------------------------------------------------------------------------------------
 
 	This function is called when the dragend event is fired on a waypoint
-	
+
 	parameters:
 	- wayPointObjId : the TravelNotes waypoint objId
 
@@ -357,19 +357,19 @@ function newWayPointEditor ( ) {
 	function m_WayPointDragEnd ( wayPointObjId ) {
 		g_TravelNotesData.travel.editedRoute.edited = 2;
 		if ( g_Config.wayPoint.reverseGeocoding ) {
-			m_RenameWayPointWithGeocoder ( 
+			m_RenameWayPointWithGeocoder (
 				g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
 			);
 		}
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		g_RouteEditor.startRouting ( );
 	}
-	
+
 	/*
 	--- m_WayPointDropped function ------------------------------------------------------------------------------------
 
 	This function is called when the drop event is fired on a waypoint
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -381,16 +381,16 @@ function newWayPointEditor ( ) {
 		if ( targetWayPointObjId === g_TravelNotesData.travel.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
 			return;
 		}
-		g_TravelNotesData.travel.editedRoute.wayPoints.moveTo ( 
-			draggedWayPointObjId, targetWayPointObjId, draggedBefore 
+		g_TravelNotesData.travel.editedRoute.wayPoints.moveTo (
+			draggedWayPointObjId, targetWayPointObjId, draggedBefore
 		);
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			m_EventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
-			m_EventDispatcher.dispatch ( 
-				'addwaypoint', 
-				{ 
+			m_EventDispatcher.dispatch (
+				'addwaypoint',
+				{
 					wayPoint : wayPointsIterator.value,
 					letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
 				}
@@ -398,7 +398,7 @@ function newWayPointEditor ( ) {
 		}
 		g_RouteEditor.startRouting ( );
 	}
-	
+
 	/*
 	--- wayPointEditor object -----------------------------------------------------------------------------------------
 
@@ -408,36 +408,36 @@ function newWayPointEditor ( ) {
 	return Object.seal (
 		{
 			addWayPoint : latLng => m_AddWayPoint ( latLng ),
-			
+
 			addWayPointOnRoute : ( routeObjId, event ) => m_AddWayPointOnRoute ( routeObjId, event ),
-			
+
 			reverseWayPoints : ( ) => m_ReverseWayPoints ( ),
-		
+
 			removeAllWayPoints : ( ) => m_RemoveAllWayPoints ( ),
-			
+
 			removeWayPoint : wayPointObjId => m_RemoveWayPoint ( wayPointObjId ),
-			
+
 			renameWayPoint : ( wayPointName, wayPointObjId ) => m_RenameWayPoint ( wayPointName, wayPointObjId ),
-			
+
 			swapWayPoints : ( wayPointObjId, swapUp ) => m_SwapWayPoints ( wayPointObjId, swapUp ),
-			
+
 			setStartPoint : latLng => m_SetStartPoint ( latLng ),
 
 			setEndPoint : latLng  => m_SetEndPoint ( latLng ),
 
 			wayPointDragEnd : wayPointObjId => m_WayPointDragEnd ( wayPointObjId ),
 
-			wayPointDropped : 
-				( 
-					draggedWayPointObjId, 
-					targetWayPointObjId, 
-					draggedBefore 
+			wayPointDropped :
+				(
+					draggedWayPointObjId,
+					targetWayPointObjId,
+					draggedBefore
 				) => m_WayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore )
 		}
 	);
 }
 
-/* 
+/*
 --- g_WayPointEditor object -------------------------------------------------------------------------------------------
 
 The one and only one wayPointEditor

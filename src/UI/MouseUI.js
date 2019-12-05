@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -42,14 +42,14 @@ import { newUtilities } from '../util/Utilities.js';
 */
 
 function newMouseUI ( ) {
-	
+
 	let m_MouseDiv = null;
-	
+
 	let m_MousePos = null;
 	let m_Zoom = null;
 	let m_FileName = '';
 	let m_Utilities = newUtilities ( );
-	
+
 	/*
 	--- m_Update function ---------------------------------------------------------------------------------------------
 
@@ -57,14 +57,14 @@ function newMouseUI ( ) {
 	*/
 
 	function m_Update ( ) {
-		m_MouseDiv.innerHTML = '<span>' + 
-		m_MousePos + 
-		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' + 
-		m_Zoom + 
-		( m_FileName === '' ? '' : '&nbsp;-&nbsp;' + m_FileName  ) + 
+		m_MouseDiv.innerHTML = '<span>' +
+		m_MousePos +
+		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
+		m_Zoom +
+		( m_FileName === '' ? '' : '&nbsp;-&nbsp;' + m_FileName  ) +
 		'</span>';
 	}
-	
+
 	/*
 	--- m_SetMousePos function ----------------------------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ function newMouseUI ( ) {
 		m_MousePos = m_Utilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + m_Utilities.formatLng ( mousePos.lng );
 		m_Update ( );
 	}
-	
+
 	/*
 	--- m_SetZoom function --------------------------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ function newMouseUI ( ) {
 		m_Zoom = zoom;
 		m_Update ( );
 	}
-	
+
 	/*
 	--- m_SetFileName function ----------------------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ function newMouseUI ( ) {
 		m_FileName = fileName;
 		m_Update ( );
 	}
-	
+
 	/*
 	--- m_CreateUI function -------------------------------------------------------------------------------------------
 
@@ -105,32 +105,32 @@ function newMouseUI ( ) {
 	*/
 
 	function m_CreateUI ( ) {
-		
+
 		m_Zoom = g_TravelNotesData.map.getZoom ( );
 		let mousePos = g_TravelNotesData.map.getCenter ( );
 		m_MousePos = m_Utilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + m_Utilities.formatLng ( mousePos.lng );
-		m_MouseDiv = newHTMLElementsFactory ( ).create ( 
+		m_MouseDiv = newHTMLElementsFactory ( ).create (
 			'div',
 			{
 				id : 'TravelNotes-MouseControl'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
-		g_TravelNotesData.map.on ( 
+		g_TravelNotesData.map.on (
 			'mousemove',
 			event => { gc_MouseUI.mousePos = event.latlng; }
 		);
-		g_TravelNotesData.map.on ( 
-			'zoomend', 
+		g_TravelNotesData.map.on (
+			'zoomend',
 			( ) => { gc_MouseUI.zoom = g_TravelNotesData.map.getZoom ( ); }
 		);
-		g_TravelNotesData.map.on ( 
+		g_TravelNotesData.map.on (
 			'travelnotesfileloaded',
 			event => { gc_MouseUI.fileName = event.name || ''; }
 		);
 
 	}
-	
+
 	/*
 	--- MouseUI object ------------------------------------------------------------------------------------------------
 
@@ -148,7 +148,7 @@ function newMouseUI ( ) {
 }
 
 const gc_MouseUI = newMouseUI ( );
-	
+
 /*
 --- End of MouseUI.js file --------------------------------------------------------------------------------------------
-*/		
+*/

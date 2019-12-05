@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -72,15 +72,15 @@ function newTravelEditor ( ) {
 	let m_Utilities = newUtilities ( );
 	let m_DataSearchEngine  = newDataSearchEngine ( );
 	let m_EventDispatcher = newEventDispatcher ( );
-	
+
 	/*
 	--- m_AddRoute function -------------------------------------------------------------------------------------------
 
 	This function add a new route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_AddRoute ( ) {
 		let route = newRoute ( );
 		g_TravelNotesData.travel.routes.add ( route );
@@ -91,7 +91,7 @@ function newTravelEditor ( ) {
 			m_EditRoute ( route.objId );
 		}
 	}
-	
+
 	/*
 	--- m_RemoveRoute function ----------------------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ function newTravelEditor ( ) {
 
 	parameters :
 	- routeObjId : the TravelNotes route objId to remove
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -111,11 +111,11 @@ function newTravelEditor ( ) {
 			return;
 		}
 
-		m_EventDispatcher.dispatch ( 
-			'removeroute', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'removeroute',
+			{
 				route : m_DataSearchEngine.getRoute ( routeObjId ),
-				removeNotes : true, 
+				removeNotes : true,
 				removeWayPoints : true
 			}
 		);
@@ -127,24 +127,24 @@ function newTravelEditor ( ) {
 		g_RouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_EditRoute function ------------------------------------------------------------------------------------------
 
 	This function start the edition of a route
-	
+
 	parameters:
 	- routeObjId : the TravelNotes route objId to edit
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EditRoute ( routeObjId ) { 
+	function m_EditRoute ( routeObjId ) {
 		if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
-			gc_ErrorsUI.showError ( 
-				g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) 
+			gc_ErrorsUI.showError (
+				g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" )
 			);
 			return;
 		}
@@ -157,17 +157,17 @@ function newTravelEditor ( ) {
 		// We verify that the provider  for this route is available
 		let initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
-		if ( 
-			providerName 
-				&& 
-				( '' !== providerName ) 
-				&& 
+		if (
+			providerName
+				&&
+				( '' !== providerName )
+				&&
 				( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) )
 		) {
-			gc_ErrorsUI.showError ( 
-				g_Translator.getText ( 
+			gc_ErrorsUI.showError (
+				g_Translator.getText (
 					"RouteEditor - Not possible to edit a route created with this provider",
-					{provider : providerName } 
+					{provider : providerName }
 				)
 			);
 			return;
@@ -191,16 +191,16 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.editedRouteObjId = initialRoute.objId;
 		g_TravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
-		m_EventDispatcher.dispatch ( 
-			'removeroute', 
-			{ 
+		m_EventDispatcher.dispatch (
+			'removeroute',
+			{
 				route : initialRoute,
-				removeNotes : true, 
+				removeNotes : true,
 				removeWayPoints : true
 			}
 		);
-		m_EventDispatcher.dispatch ( 
-			'addroute', 
+		m_EventDispatcher.dispatch (
+			'addroute',
 			{
 				route : g_TravelNotesData.travel.editedRoute,
 				addNotes : true,
@@ -213,7 +213,7 @@ function newTravelEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 	}
-	
+
 	/*
 	--- m_RenameRoute function ----------------------------------------------------------------------------------------
 
@@ -221,7 +221,7 @@ function newTravelEditor ( ) {
 	parameters :
 	- routeObjId : the TravelNotes route objId to remove
 	- routeName: the new name
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -233,12 +233,12 @@ function newTravelEditor ( ) {
 		}
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_SwapRoute function ------------------------------------------------------------------------------------------
 
 	This function changes the position of a route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -248,15 +248,15 @@ function newTravelEditor ( ) {
 		g_RouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_RouteDropped function ---------------------------------------------------------------------------------------
 
 	This function changes the position of a route after a drag and drop
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
 		g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
@@ -268,7 +268,7 @@ function newTravelEditor ( ) {
 	--- m_CompressRoute function --------------------------------------------------------------------------------------
 
 	This function compress the itinerary points of a route
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -278,7 +278,7 @@ function newTravelEditor ( ) {
 			objType = route.itinerary.itineraryPoints [ 0 ].objType;
 		}
 		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType  };
-		route.itinerary.itineraryPoints.forEach ( 
+		route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
 				compressedItineraryPoints.distances.push ( itineraryPoint.distance );
@@ -293,7 +293,7 @@ function newTravelEditor ( ) {
 	--- m_SaveTravel function -----------------------------------------------------------------------------------------
 
 	This function save a travel to a local file
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -302,7 +302,7 @@ function newTravelEditor ( ) {
 		while ( ! routesIterator.done ) {
 			routesIterator.value.hidden = false;
 		}
-		
+
 		// compressing the itineraryPoints
 		let compressedTravel = g_TravelNotesData.travel.object;
 		compressedTravel.routes.forEach ( m_CompressRoute );
@@ -311,17 +311,17 @@ function newTravelEditor ( ) {
 		// save file
 		m_Utilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 	}
-	
+
 	/*
 	--- m_Clear function ----------------------------------------------------------------------------------------------
 
 	This function remove completely the current travel
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function m_Clear ( ) {
-		if ( ! window.confirm ( g_Translator.getText ( 
+		if ( ! window.confirm ( g_Translator.getText (
 			"TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 			return;
 		}
@@ -335,7 +335,7 @@ function newTravelEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setitinerary' );
 		newRoadbookUpdate ( );
 	}
-	
+
 	/*
 	--- m_ZoomToTravel function ---------------------------------------------------------------------------------------
 
@@ -362,28 +362,28 @@ function newTravelEditor ( ) {
 			removeRoute : routeObjId => m_RemoveRoute ( routeObjId ),
 
 			editRoute : routeObjId => m_EditRoute ( routeObjId ),
-			
+
 			renameRoute : ( routeObjId, routeName ) => m_RenameRoute ( routeObjId, routeName ),
 
 			swapRoute : ( routeObjId, swapUp ) => m_SwapRoute  ( routeObjId, swapUp ),
 
-			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped ( 
-				draggedRouteObjId, 
-				targetRouteObjId, 
-				draggedBefore 
+			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped (
+				draggedRouteObjId,
+				targetRouteObjId,
+				draggedBefore
 			),
-			
+
 			saveTravel : ( ) => m_SaveTravel ( ),
 
 			clear : ( ) => m_Clear ( ),
-			
+
 			zoomToTravel : ( ) => m_ZoomToTravel ( )
 
 		}
 	);
 }
 
-/* 
+/*
 --- g_TravelEditor object ---------------------------------------------------------------------------------------------
 
 The one and only one TravelEditor

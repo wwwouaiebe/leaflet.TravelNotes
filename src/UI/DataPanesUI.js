@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -67,70 +67,70 @@ function newDataPanesUI ( ) {
 	*/
 
 	function m_CreateUI ( controlDiv ) {
-		
+
 		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
 			return;
 		}
 
 		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
 
-		let headerDiv = htmlElementsFactory.create ( 
-			'div', 
+		let headerDiv = htmlElementsFactory.create (
+			'div',
 			{
 				id : 'TravelNotes-Control-ItineraryHeaderDiv',
 				className : 'TravelNotes-Control-HeaderDiv'
 			},
 			controlDiv
 		);
-		
-		htmlElementsFactory.create ( 
-			'div', 
-			{ 
-				innerHTML : g_Translator.getText ( 'DataPanesUI - Itinerary' ), 
-				id : 'TravelNotes-Control-ItineraryPaneButton', 
+
+		htmlElementsFactory.create (
+			'div',
+			{
+				innerHTML : g_Translator.getText ( 'DataPanesUI - Itinerary' ),
+				id : 'TravelNotes-Control-ItineraryPaneButton',
 				className : 'TravelNotes-Control-PaneButton'
 			},
-			headerDiv 
+			headerDiv
 		).addEventListener ( 'click', ( ) => m_SetItinerary ( ), false );
-		
-		htmlElementsFactory.create ( 
-			'div', 
-			{ 
-				innerHTML : g_Translator.getText ( 'DataPanesUI - Travel notes' ), 
-				id : 'TravelNotes-Control-TravelNotesPaneButton', 
+
+		htmlElementsFactory.create (
+			'div',
+			{
+				innerHTML : g_Translator.getText ( 'DataPanesUI - Travel notes' ),
+				id : 'TravelNotes-Control-TravelNotesPaneButton',
 				className : 'TravelNotes-Control-PaneButton'
 			},
-			headerDiv 
+			headerDiv
 		).addEventListener ( 'click', ( ) => m_SetTravelNotes ( ), false );
-		
+
 		if ( window.osmSearch ) {
-			htmlElementsFactory.create ( 
-				'div', 
-				{ 
-					innerHTML : g_Translator.getText ( 'DataPanesUI - Search' ), 
-					id : 'TravelNotes-Control-SearchPaneButton', 
+			htmlElementsFactory.create (
+				'div',
+				{
+					innerHTML : g_Translator.getText ( 'DataPanesUI - Search' ),
+					id : 'TravelNotes-Control-SearchPaneButton',
 					className : 'TravelNotes-Control-PaneButton'
 				},
-				headerDiv 
+				headerDiv
 			).addEventListener ( 'click', ( ) => m_SetSearch ( ), false );
 		}
-		
-		let dataDiv = htmlElementsFactory.create ( 
-			'div', 
+
+		let dataDiv = htmlElementsFactory.create (
+			'div',
 			{
-				id : 'TravelNotes-Control-DataPanesDiv', 
+				id : 'TravelNotes-Control-DataPanesDiv',
 				className : 'TravelNotes-Control-DataDiv'
 			},
 			controlDiv );
-		dataDiv.addEventListener ( 
-			'wheel', 
-			wheelEvent => { 
+		dataDiv.addEventListener (
+			'wheel',
+			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
 					wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + ( wheelEvent.deltaY * 10 ) ;
 				}
 				wheelEvent.stopPropagation ( );
-			}, 
-			false 
+			},
+			false
 		);
 	}
 
@@ -168,7 +168,7 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetItinerary ( ) { 
+	function m_SetItinerary ( ) {
 		m_RemoveActivePane ( );
 		m_ItineraryPaneUI.add ( );
 
@@ -189,7 +189,7 @@ function newDataPanesUI ( ) {
 			m_ItineraryPaneUI.add ( );
 		}
 	}
-	
+
 	/*
 	--- m_SetItinerary function ---------------------------------------------------------------------------------------
 
@@ -198,12 +198,12 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetTravelNotes ( ) { 
+	function m_SetTravelNotes ( ) {
 		m_RemoveActivePane ( );
 		m_TravelNotesPaneUI.add ( );
 		s_ActivePaneIndex = 1;
 	}
-	
+
 	/*
 	--- m_UpdateTravelNotes function ----------------------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ function newDataPanesUI ( ) {
 			m_TravelNotesPaneUI.add ( );
 		}
 	}
-	
+
 	/*
 	--- m_SetSearch function ------------------------------------------------------------------------------------------
 
@@ -227,14 +227,14 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetSearch ( ) { 
+	function m_SetSearch ( ) {
 		m_RemoveActivePane ( );
 		m_SearchPaneUI.add ( );
 
 		s_ActivePaneIndex = 2;
 
 	}
-	
+
 	/*
 	--- m_UpdateSearch function ---------------------------------------------------------------------------------------
 
@@ -249,13 +249,13 @@ function newDataPanesUI ( ) {
 			m_SearchPaneUI.add ( );
 		}
 	}
-	
-	/* 
+
+	/*
 	--- dataPanesUI object --------------------------------------------------------------------------------------------
-	
+
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	return Object.seal (
 		{
 			createUI : controlDiv => m_CreateUI ( controlDiv ),
@@ -265,15 +265,15 @@ function newDataPanesUI ( ) {
 
 			setTravelNotes : ( ) =>  m_SetTravelNotes ( ),
 			updateTravelNotes : ( ) =>  m_UpdateTravelNotes ( ),
-			
+
 			setSearch : ( ) =>  m_SetSearch ( ),
 			updateSearch : ( ) =>  m_UpdateSearch ( )
 
 		}
 	);
 }
-	
-/* 
+
+/*
 --- g_DataPaneUI object -----------------------------------------------------------------------------------------------
 
 The one and only one dataPanesUI
@@ -282,7 +282,7 @@ The one and only one dataPanesUI
 */
 
 const gc_DataPanesUI = newDataPanesUI ( );
-	
+
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
-*/	
+*/

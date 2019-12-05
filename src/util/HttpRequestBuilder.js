@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -27,7 +27,7 @@ Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-	
+
 export { newHttpRequestBuilder };
 
 /*
@@ -37,7 +37,7 @@ export { newHttpRequestBuilder };
 */
 
 function newHttpRequestBuilder ( ) {
-	
+
 	/*
 	--- m_GetJsonPromise function -------------------------------------------------------------------------------------
 
@@ -150,4 +150,4 @@ function newHttpRequestBuilder ( ) {
 
 /*
 --- End of HttpRequestBuilder.js file ---------------------------------------------------------------------------------
-*/	
+*/

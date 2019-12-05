@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- MapContextMenu.js file --------------------------------------------------------------------------------------------
 This file contains:
-	- 
+	-
 Changes:
 	- v1.6.0:
 		- created
@@ -48,7 +48,7 @@ import { newAboutDialog } from '../dialogs/AboutDialog.js';
 */
 
 function newMapContextMenu ( event ) {
-	
+
 	let m_LatLng = [ event.latlng.lat, event.latlng.lng ];
 
 	/*
@@ -56,75 +56,75 @@ function newMapContextMenu ( event ) {
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
-	
+
 	function m_GetMenuItems ( ) {
 		return [
-			{ 
-				context : g_WayPointEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Select this point as start point" ), 
-				action : 
-					( -1 !== g_TravelNotesData.editedRouteObjId )
-					&& 
-					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat ) 
-						? 
-						g_WayPointEditor.setStartPoint 
-						: 
-						null,
-				param : m_LatLng
-			},
 			{
-				context : g_WayPointEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Select this point as way point" ), 
-				action : ( -1 === g_TravelNotesData.editedRouteObjId ) ? null : g_WayPointEditor.addWayPoint,
-				param : m_LatLng
-			},
-			{ 
-				context : g_WayPointEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Select this point as end point" ), 
-				action : 
-					( -1 !== g_TravelNotesData.editedRouteObjId ) 
-					&& 
-					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat ) 
-						? 
-						g_WayPointEditor.setEndPoint 
+				context : g_WayPointEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Select this point as start point" ),
+				action :
+					( -1 !== g_TravelNotesData.editedRouteObjId )
+					&&
+					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.first.lat )
+						?
+						g_WayPointEditor.setStartPoint
 						:
 						null,
 				param : m_LatLng
 			},
-			{ 
-				context : g_NoteEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - New travel note" ), 
+			{
+				context : g_WayPointEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Select this point as way point" ),
+				action : ( -1 === g_TravelNotesData.editedRouteObjId ) ? null : g_WayPointEditor.addWayPoint,
+				param : m_LatLng
+			},
+			{
+				context : g_WayPointEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Select this point as end point" ),
+				action :
+					( -1 !== g_TravelNotesData.editedRouteObjId )
+					&&
+					( 0 === g_TravelNotesData.travel.editedRoute.wayPoints.last.lat )
+						?
+						g_WayPointEditor.setEndPoint
+						:
+						null,
+				param : m_LatLng
+			},
+			{
+				context : g_NoteEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - New travel note" ),
 				action : g_NoteEditor.newTravelNote,
 				param : m_LatLng
 			},
-			{ 
-				context : g_NoteEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Hide notes" ), 
+			{
+				context : g_NoteEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Hide notes" ),
 				action : g_NoteEditor.hideNotes
 			},
-			{ 
-				context : g_NoteEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Show notes" ), 
+			{
+				context : g_NoteEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Show notes" ),
 				action : g_NoteEditor.showNotes
 			},
-			{ 
-				context : g_RouteEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Show all routes" ), 
+			{
+				context : g_RouteEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Show all routes" ),
 				action : g_RouteEditor.showRoutes
-			}, 
-			{ 
-				context : g_TravelEditor, 
-				name : g_Translator.getText ( "ContextMenuFactory - Zoom to travel" ), 
+			},
+			{
+				context : g_TravelEditor,
+				name : g_Translator.getText ( "ContextMenuFactory - Zoom to travel" ),
 				action : g_TravelEditor.zoomToTravel
 			},
-			{ 
+			{
 				context : null,
-				name : g_Translator.getText ( "ContextMenuFactory - About Travel & Notes" ), 
+				name : g_Translator.getText ( "ContextMenuFactory - About Travel & Notes" ),
 				action : newAboutDialog
-			} 
+			}
 		];
 	}
-	
+
 	/*
 	--- MapContextMenu object function --------------------------------------------------------------------------------
 
@@ -132,12 +132,12 @@ function newMapContextMenu ( event ) {
 	*/
 
 	let mapContextMenu = newBaseContextMenu ( event );
-	
+
 	mapContextMenu.init ( m_GetMenuItems ( ) );
-	
+
 	return Object.seal ( mapContextMenu );
 }
 
 /*
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
-*/		
+*/

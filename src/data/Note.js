@@ -45,7 +45,7 @@ Patterns : Closure
 function newNote ( ) {
 
 	const s_ObjType = newObjType ( 'Note' );
-	
+
 	let m_ObjId = newObjId ( );
 
 	let m_IconHeight = 40;
@@ -102,7 +102,7 @@ function newNote ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		[ 
+		[
 			'iconHeight',
 			'iconWidth',
 			'iconContent',
@@ -154,7 +154,7 @@ function newNote ( ) {
 			objType : s_ObjType.object
 		};
 	}
-	
+
 	/*
 	--- m_SetObject function ------------------------------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ function newNote ( ) {
 		m_ChainedDistance = something.chainedDistance;
 		m_ObjId = newObjId ( );
 	}
-	
+
 	/*
 	--- note object ---------------------------------------------------------------------------------------------------
 
@@ -222,8 +222,8 @@ function newNote ( ) {
 			set iconLng ( IconLng ) { m_IconLng = IconLng; },
 
 			get iconLatLng ( ) { return [ m_IconLat, m_IconLng ]; },
-			set iconLatLng ( IconLatLng ) { 
-				m_IconLat = IconLatLng [ 0 ]; 
+			set iconLatLng ( IconLatLng ) {
+				m_IconLat = IconLatLng [ 0 ];
 				m_IconLng = IconLatLng [ 1 ];
 			},
 
@@ -234,9 +234,9 @@ function newNote ( ) {
 			set lng ( Lng ) { m_Lng = Lng; },
 
 			get latLng ( ) { return [ m_Lat, m_Lng ]; },
-			set latLng ( LatLng ) { 
-				m_Lat = LatLng [ 0 ]; 
-				m_Lng = LatLng [ 1 ]; 
+			set latLng ( LatLng ) {
+				m_Lat = LatLng [ 0 ];
+				m_Lng = LatLng [ 1 ];
 			},
 
 			get distance ( ) { return m_Distance; },

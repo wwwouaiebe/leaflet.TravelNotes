@@ -2,7 +2,7 @@
 Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -40,7 +40,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function newAutoLoader ( ) {
-	
+
 	if ( ! g_Config.autoLoad ) {
 		return;
 	}
@@ -52,7 +52,7 @@ function newAutoLoader ( ) {
 	window.L.travelNotes.addControl ( _Map, "TravelNotes" );
 	window.L.travelNotes.rightContextMenu = true;
 }
-	
+
 /*
 --- End of AutoLoader.js file -----------------------------------------------------------------------------------------
-*/	
+*/
