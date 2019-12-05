@@ -88,7 +88,17 @@ function newSearchPaneUI ( ) {
 
 			// adding wait animation
 			let htmlElementsFactory = newHTMLElementsFactory ( );
-			htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWaitBullet' }, htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-SearchWait' }, searchDiv ) );
+			htmlElementsFactory.create ( 
+				'div', 
+				{
+					id : 'TravelNotes-Control-SearchWaitBullet' 
+				},
+				htmlElementsFactory.create ( 
+					'div',
+					{ id : 'TravelNotes-Control-SearchWait' },
+					searchDiv
+				)
+			);
 		}
 
 		// search...
@@ -224,9 +234,12 @@ function newSearchPaneUI ( ) {
 	
 	function m_Add ( ) {
 		
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
+			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
+			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
+			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
@@ -281,14 +294,99 @@ function newSearchPaneUI ( ) {
 					{
 						id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
 						className :	'TravelNotes-Control-SearchResult',
-						innerHTML : ( searchResult.description != '' ? '<p class=\'TravelNotes-Control-SearchResultDescription\'>' + searchResult.description + '</p>' : '' ) +
-							( searchResult.tags.name ?  '<p>' + searchResult.tags.name + '</p>' : '' ) +
-							( searchResult.tags [ 'addr:street' ] ? '<p>' + searchResult.tags [ 'addr:street' ] + ' ' + ( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] : '' ) +'</p>' : '' ) +
-							( searchResult.tags [ 'addr:city' ] ? '<p>' + ( searchResult.tags [ 'addr:postcode' ] ? searchResult.tags [ 'addr:postcode' ] + ' ' : '' ) + searchResult.tags [ 'addr:city' ] + '</p>' : '' ) +
-							( searchResult.tags.phone ? '<p>' + searchResult.tags.phone + '</p>' : '' ) +
-							( searchResult.tags.email ? '<p><a href=\'mailto:' + searchResult.tags.email + '\'>' + searchResult.tags.email + '</a></p>' : '' ) +
-							( searchResult.tags.website ? '<p><a href=\''+ searchResult.tags.website +'\' target=\'_blank\'>' + searchResult.tags.website + '</a></p>' : '' ) +
-							( searchResult.ranking ? '<p>&#x26ab;' + searchResult.ranking + '</p>' : '' )
+						innerHTML : 
+							( 
+								searchResult.description != '' 
+									? 
+									'<p class=\'TravelNotes-Control-SearchResultDescription\'>' + 
+									searchResult.description + 
+									'</p>' 
+									:
+									'' 
+							) +
+							( 
+								searchResult.tags.name 
+									? 
+									'<p>' +
+									searchResult.tags.name + 
+									'</p>' 
+									: 
+									'' 
+							) +
+							( 
+								searchResult.tags [ 'addr:street' ] 
+									? 
+									'<p>' + 
+									searchResult.tags [ 'addr:street' ] + 
+									' ' + 
+									( 
+										searchResult.tags [ 'addr:housenumber' ] 
+											? 
+											searchResult.tags [ 'addr:housenumber' ] 
+											:
+											'' 
+									) +
+									'</p>'
+									: 
+									''
+							) +
+							( 
+								searchResult.tags [ 'addr:city' ] 
+									? 
+									'<p>' + 
+									(
+										searchResult.tags [ 'addr:postcode' ] 
+											? 
+											searchResult.tags [ 'addr:postcode' ] + 
+											' ' 
+											: 
+											''
+									) + 
+									searchResult.tags [ 'addr:city' ] + 
+									'</p>' 
+									: 
+									''
+							) +
+							( 
+								searchResult.tags.phone
+									? 
+									'<p>' + 
+									searchResult.tags.phone + 
+									'</p>' 
+									: 
+									''
+							) +
+							( 
+								searchResult.tags.email 
+									? 
+									'<p><a href=\'mailto:' + 
+									searchResult.tags.email + 
+									'\'>' + 
+									searchResult.tags.email + 
+									'</a></p>'
+									: 
+									''
+							) +
+							( 
+								searchResult.tags.website 
+									? 
+									'<p><a href=\''+ 
+									searchResult.tags.website +
+									'\' target=\'_blank\'>' + 
+									searchResult.tags.website + 
+									'</a></p>'
+									: 
+									'' 
+							) +
+							( 
+								searchResult.ranking 
+									? 
+									'<p>&#x26ab;' + 
+									searchResult.ranking + 
+									'</p>' 
+									:
+									''
+							)
 					},
 					searchDiv
 				);

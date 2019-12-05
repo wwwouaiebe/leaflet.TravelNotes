@@ -148,16 +148,24 @@ function newAPIKeysManager ( ) {
 	function m_resetAPIKeys ( APIKeys ) {
 		sessionStorage.clear ( );
 		s_KeysMap.clear ( );
-		let saveToSessionStorage = newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage;
+		let saveToSessionStorage = 
+			newUtilities ( ).storageAvailable ( 'sessionStorage' ) 
+			&& 
+			g_Config.APIKeys.saveToSessionStorage;
 		APIKeys.forEach (
 			APIKey => {
 				if ( saveToSessionStorage ) {
-					sessionStorage.setItem ( ( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey', btoa ( APIKey.providerKey ) );
+					sessionStorage.setItem ( 
+						( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey',
+						btoa ( APIKey.providerKey )
+					);
 				}
 				m_SetKey ( APIKey.providerName, APIKey.providerKey );
 			}
 		);
-		g_TravelNotesData.providers.forEach ( provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } );
+		g_TravelNotesData.providers.forEach ( 
+			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } 
+		);
 		
 		newEventDispatcher ( ).dispatch ( 'providersadded' );
 	}

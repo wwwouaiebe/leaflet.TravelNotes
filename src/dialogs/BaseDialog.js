@@ -206,7 +206,10 @@ function newBaseDialog ( ) {
 				m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ), m_ScreenWidth - m_DialogDiv.clientWidth -20 );
 				m_DialogY = Math.max ( m_DialogY, 20 );
 				let dialogMaxHeight = m_ScreenHeight - Math.max ( m_DialogY, 0 ) - 20;
-				m_DialogDiv.setAttribute ( "style", "top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" );
+				m_DialogDiv.setAttribute ( 
+					"style", 
+					"top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" 
+				);
 			},
 			false 
 		);
@@ -278,7 +281,8 @@ function newBaseDialog ( ) {
 			'div',
 			{ 
 				innerHTML : '&#x1f197;', 
-				className : 'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
+				className : 
+					'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
 			},
 			m_FooterDiv
 		);
@@ -351,7 +355,10 @@ function newBaseDialog ( ) {
 		m_DialogX = Math.min ( Math.max ( m_DialogX, 20 ), m_ScreenWidth - m_DialogDiv.clientWidth -20 );
 		m_DialogY = Math.max ( m_DialogY, 20 );
 		let dialogMaxHeight = m_ScreenHeight - Math.max ( m_DialogY, 0 ) - 20;
-		m_DialogDiv.setAttribute ( "style", "top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" );
+		m_DialogDiv.setAttribute ( 
+			"style", 
+			"top:" + m_DialogY + "px;left:" + m_DialogX +"px;max-height:" + dialogMaxHeight +"px;" 
+		);
 	}
 
 	/*

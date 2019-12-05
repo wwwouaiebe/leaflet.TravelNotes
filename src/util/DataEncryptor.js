@@ -61,7 +61,9 @@ function newDataEncryptor ( ) {
 		return window.crypto.subtle.deriveKey (
 			{
 				name : "PBKDF2", 
-				salt : new window.TextEncoder ( ).encode ( "Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette." ), 
+				salt : new window.TextEncoder ( ).encode ( 
+					"Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette." 
+				), 
 				iterations : 1000000, 
 				hash : "SHA-256"
 			},

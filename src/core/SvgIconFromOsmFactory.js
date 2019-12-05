@@ -555,7 +555,8 @@ function newSvgIconFromOsmFactory ( ) {
 					}
 					let pointsAttribute = '';
 					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-						pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
+						pointsAttribute += 
+							points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 					}
 
 					let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );

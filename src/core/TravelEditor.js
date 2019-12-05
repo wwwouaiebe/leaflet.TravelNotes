@@ -143,7 +143,9 @@ function newTravelEditor ( ) {
 		if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
-			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) );
+			gc_ErrorsUI.showError ( 
+				g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" ) 
+			);
 			return;
 		}
 		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
@@ -155,8 +157,19 @@ function newTravelEditor ( ) {
 		// We verify that the provider  for this route is available
 		let initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
-		if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) ) {
-			gc_ErrorsUI.showError ( g_Translator.getText ( "RouteEditor - Not possible to edit a route created with this provider", {provider : providerName } ) );
+		if ( 
+			providerName 
+				&& 
+				( '' !== providerName ) 
+				&& 
+				( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) )
+		) {
+			gc_ErrorsUI.showError ( 
+				g_Translator.getText ( 
+					"RouteEditor - Not possible to edit a route created with this provider",
+					{provider : providerName } 
+				)
+			);
 			return;
 		}
 
@@ -308,7 +321,8 @@ function newTravelEditor ( ) {
 	*/
 
 	function m_Clear ( ) {
-		if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
+		if ( ! window.confirm ( g_Translator.getText ( 
+			"TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 			return;
 		}
 		m_EventDispatcher.dispatch ( 'removeallobjects' );

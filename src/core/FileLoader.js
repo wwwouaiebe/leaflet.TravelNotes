@@ -233,8 +233,19 @@ function newFileLoader ( ) {
 			m_EventDispatcher.dispatch ( 'setrouteslist' );
 			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
 				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
-				if ( providerName && ( '' !== providerName ) && ( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) ) ) {
-					gc_ErrorsUI.showError ( g_Translator.getText ( "FileLoader - Not possible to select as provider", {provider : providerName } ) );
+				if ( 
+					providerName 
+					&& 
+					( '' !== providerName ) 
+					&& 
+					! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) )
+				) {
+					gc_ErrorsUI.showError ( 
+						g_Translator.getText ( 
+							"FileLoader - Not possible to select as provider",
+							{provider : providerName } 
+						)
+					);
 				}
 				else {
 
@@ -256,11 +267,20 @@ function newFileLoader ( ) {
 		else {
 
 			// control is hidden
-			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
+			document.getElementById ( 'TravelNotes-Control-MainDiv' )
+				.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
-		g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : m_IsFileReadOnly, name : g_TravelNotesData.travel.name } );
+		g_TravelNotesData.map.fire ( 
+			'travelnotesfileloaded', 
+			{ 
+				readOnly : m_IsFileReadOnly, 
+				name : g_TravelNotesData.travel.name
+			} 
+		);
 	}
 		
 	/*

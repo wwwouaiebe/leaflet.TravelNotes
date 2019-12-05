@@ -74,7 +74,14 @@ function newDataPanesUI ( ) {
 
 		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
 
-		let headerDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-ItineraryHeaderDiv', className : 'TravelNotes-Control-HeaderDiv'}, controlDiv );
+		let headerDiv = htmlElementsFactory.create ( 
+			'div', 
+			{
+				id : 'TravelNotes-Control-ItineraryHeaderDiv',
+				className : 'TravelNotes-Control-HeaderDiv'
+			},
+			controlDiv
+		);
 		
 		htmlElementsFactory.create ( 
 			'div', 

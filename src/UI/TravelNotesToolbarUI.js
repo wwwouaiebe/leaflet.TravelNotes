@@ -61,8 +61,10 @@ function newTravelNotesToolbarUI ( ) {
 			clearTimeout ( m_TimerId );
 			m_TimerId = null;
 		}
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
-		document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
+		document.getElementById ( 'TravelNotes-Control-MainDiv' )
+			.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
+		document.getElementById ( 'TravelNotes-Control-MainDiv' )
+			.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
 	}
 	
 	/*
@@ -74,8 +76,10 @@ function newTravelNotesToolbarUI ( ) {
 	function m_OnMouseLeaveControl ( ) {
 		m_TimerId = setTimeout (
 			( ) => {
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' ).classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+				document.getElementById ( 'TravelNotes-Control-MainDiv' )
+					.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
+				document.getElementById ( 'TravelNotes-Control-MainDiv' )
+					.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 			},
 			g_Config.travelEditor.timeout
 		);
@@ -133,7 +137,10 @@ function newTravelNotesToolbarUI ( ) {
 				id : 'TravelNotes-Control-HomeButton', 
 				className : 'TravelNotes-Control-Button', 
 				title : 'Help',
-				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="' + window.location.origin + '" target="_blank">&#x1f3e0;</a>' 
+				innerHTML : 
+					'<a class="TravelNotes-Control-LinkButton" href="' + 
+					window.location.origin + 
+					'" target="_blank">&#x1f3e0;</a>' 
 			}, 
 			buttonsDiv
 		);
@@ -143,7 +150,10 @@ function newTravelNotesToolbarUI ( ) {
 				id : 'TravelNotes-Control-HelpButton', 
 				className : 'TravelNotes-Control-Button', 
 				title : 'Help',
-				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" target="_blank">?</a>' 
+				innerHTML : 
+					'<a class="TravelNotes-Control-LinkButton" ' + 
+					'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' + 
+					'target="_blank">?</a>' 
 			}, 
 			buttonsDiv
 		);

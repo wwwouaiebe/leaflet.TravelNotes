@@ -227,7 +227,8 @@ function newRouteEditorUI ( ) {
 				'click', 
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
+						.classList.toggle ( 'TravelNotes-Control-ExpandedList' );
 					let expandedList = 
 						document.getElementById ( 'TravelNotes-Control-RouteDataDiv' )
 							.classList.contains ( 'TravelNotes-Control-ExpandedList' );

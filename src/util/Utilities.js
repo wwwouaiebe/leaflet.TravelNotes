@@ -44,7 +44,14 @@ function newUtilities ( ) {
 		function Random4 ( ) {
 			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 ).substring ( 1 );
 		}
-		return Random4 ( ) + Random4 ( ) + '-' + Random4 ( ) + '-' + Random4 ( ) + '-' +Random4 ( ) + '-' + Random4 ( ) + Random4 ( ) + Random4 ( ) ;
+		return Random4 ( ) + 
+			Random4 ( ) + '-' + 
+			Random4 ( ) + '-' + 
+			Random4 ( ) + '-' +
+			Random4 ( ) + '-' + 
+			Random4 ( ) + 
+			Random4 ( ) + 
+			Random4 ( ) ;
 	}
 
 	/* --- End of m_getUUID function --- */		
@@ -166,13 +173,27 @@ function newUtilities ( ) {
 		let minutes = Math.floor ( time % 3600 / 60 );
 		let seconds = Math.floor ( time % 60 );
 		if ( 0 < days ) {
-			return days + '&nbsp;' + g_Translator.getText ( 'Utilities - Day' ) + '&nbsp;' + hours + '&nbsp;' + g_Translator.getText ( 'Utilities - Hour' );
+			return days + 
+				'&nbsp;' 
+				+ g_Translator.getText ( 'Utilities - Day' ) + 
+				'&nbsp;' + 
+				hours + 
+				'&nbsp;' + 
+				g_Translator.getText ( 'Utilities - Hour' );
 		}
 		else if ( 0 < hours ) {
-			return hours + '&nbsp;' + g_Translator.getText ( 'Utilities - Hour' ) +'&nbsp;' + minutes + '&nbsp;' + g_Translator.getText ( 'Utilities - Minute' );
+			return hours + 
+				'&nbsp;' 
+				+ g_Translator.getText ( 'Utilities - Hour' ) 
+				+'&nbsp;' + 
+				minutes + 
+				'&nbsp;' 
+				+ g_Translator.getText ( 'Utilities - Minute' );
 		}
 		else if ( 0 < minutes ) {
-			return minutes + '&nbsp;' + g_Translator.getText ( 'Utilities - Minute' );
+			return minutes + 
+				'&nbsp;' + 
+				g_Translator.getText ( 'Utilities - Minute' );
 		}
 		else {
 			return seconds + '&nbsp;' + g_Translator.getText ( 'Utilities - Second' );
@@ -193,7 +214,10 @@ function newUtilities ( ) {
 			return '';
 		} 
 		else {
-			return Math.floor ( distance / 1000 ) +',' + Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 ).padStart ( 2, '0' ).padEnd ( 3, '0') + '&nbsp;km';
+			return Math.floor ( distance / 1000 ) +
+				',' + 
+				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 ).padStart ( 2, '0' ).padEnd ( 3, '0') + 
+				'&nbsp;km';
 		}
 	}
 	

@@ -107,12 +107,22 @@ function newTravelEditorUI ( ) {
 				'click', 
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					let hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = hiddenList ? g_Translator.getText ( 'TravelEditorUI - Show' ) : g_Translator.getText ( 'TravelEditorUI - Hide' );
+					document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' )
+						.classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
+						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' )
+						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					let hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
+						.classList.contains ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML = 
+						hiddenList ? '&#x25b6;' : '&#x25bc;';
+					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title = 
+						hiddenList 
+							? 
+							g_Translator.getText ( 'TravelEditorUI - Show' ) 
+							:
+							g_Translator.getText ( 'TravelEditorUI - Hide' );
 					clickEvent.stopPropagation ( );
 				}, 
 				false );
@@ -228,10 +238,18 @@ function newTravelEditorUI ( ) {
 				'click', 
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-					let expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
-					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = expandedList ? g_Translator.getText ( 'TravelEditorUI - Reduce the list' ) : g_Translator.getText ( 'TravelEditorUI - Expand the list' );		
+					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
+						.classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+					let expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
+						.classList.contains ( 'TravelNotes-Control-ExpandedList' );
+					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML = 
+						expandedList ? '&#x25b3;' : '&#x25bd;';
+					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title = 
+						expandedList 
+							? 
+							g_Translator.getText ( 'TravelEditorUI - Reduce the list' )
+							: 
+							g_Translator.getText ( 'TravelEditorUI - Expand the list' );		
 				}, 
 				false 
 			);
@@ -327,7 +345,10 @@ function newTravelEditorUI ( ) {
 			.addEventListener ( 
 				'click', 
 				( ) => { 
-					if ( ! window.confirm ( g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
+					if ( ! window.confirm ( 
+						g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." )
+					) 
+					) {
 						return;
 					}
 					document.getElementById ( 'TravelNotes-Control-OpenTravelInput' ).click ( );
@@ -381,7 +402,9 @@ function newTravelEditorUI ( ) {
 				'click', 
 				( ) => { 
 					if ( g_TravelNotesData.editedRouteObjId !== -1 ) {
-						gc_ErrorsUI.showError ( g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) );
+						gc_ErrorsUI.showError ( 
+							g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" ) 
+						);
 					}
 					else {
 						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
@@ -397,8 +420,12 @@ function newTravelEditorUI ( ) {
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton', 
 				className : 'TravelNotes-Control-Button', 
 				title : g_Translator.getText ( 'TravelEditorUI - Open travel roadbook' ), 
-				innerHTML : '<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' + g_Config.language +
-					'&page=' + g_TravelNotesData.UUID + '" target="_blank">&#x1F4CB;</a>' //'&#x23CD;'
+				innerHTML : 
+					'<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' + 
+					g_Config.language +
+					'&page=' + 
+					g_TravelNotesData.UUID + 
+					'" target="_blank">&#x1F4CB;</a>'
 			}, 
 			buttonsDiv
 		);
@@ -460,7 +487,13 @@ function newTravelEditorUI ( ) {
 		m_RoutesList.removeAllItems ( );
 		let routesIterator = g_TravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			m_RoutesList.addItem ( routesIterator.value.name, routesIterator.value.chain ? '&#x26d3;' : '', g_Translator.getText ( 'TravelEditorUI - Route' ), routesIterator.value.objId, false );
+			m_RoutesList.addItem ( 
+				routesIterator.value.name, 
+				routesIterator.value.chain ? '&#x26d3;' : '',
+				g_Translator.getText ( 'TravelEditorUI - Route' ), 
+				routesIterator.value.objId, 
+				false 
+			);
 		}
 	}
 
@@ -480,7 +513,7 @@ function newTravelEditorUI ( ) {
 }
 
 /* 
---- gc_TravelEditorUI object -----------------------------------------------------------------------------------------------
+--- gc_TravelEditorUI object ------------------------------------------------------------------------------------------
 
 The one and only one travelEditorUI
 

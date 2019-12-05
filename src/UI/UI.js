@@ -68,7 +68,14 @@ function newUI ( ) {
 		}
 		let htmlElementsFactory = newHTMLElementsFactory ( );
 		m_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
-		htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv-Title', innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' }, m_MainDiv);
+		htmlElementsFactory.create ( 
+			'div', 
+			{ 
+				id : 'TravelNotes-Control-MainDiv-Title', 
+				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes' 
+			},
+			m_MainDiv
+		);
 		
 		gc_TravelNotesToolbarUI.createUI ( m_MainDiv );
 		gc_TravelEditorUI.createUI ( m_MainDiv ); 

@@ -34,6 +34,6 @@
 		"keyword-spacing" : [ "warn" ],
 		"lines-around-comment" : [ "warn", { "beforeBlockComment": true , "afterBlockComment": true , "beforeLineComment": true , "afterLineComment": false} ],
 		"max-depth" : [ "warn" , { "max" : 5 } ],
-		"max-len" : [ "warn" , { "code" : 128 , "ignoreStrings": true } ]
+		"max-len" : [ "warn" , { "code" : 128 } ]
     }
 }

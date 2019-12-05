@@ -326,7 +326,13 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			);
 		}
 		
-		return m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'RouteFooter',	innerHTML : innerHTML } ); 
+		return m_HTMLElementsFactory.create (
+			'div', 
+			{
+				className : m_ClassNamePrefix + 'RouteFooter',	
+				innerHTML : innerHTML
+			} 
+		); 
 	}
 			
 	/*

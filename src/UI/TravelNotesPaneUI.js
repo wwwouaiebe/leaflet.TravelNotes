@@ -190,10 +190,13 @@ function newTravelNotesPaneUI ( ) {
 	
 	function m_Add ( ) {
 
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
+			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
+			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
 		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
+				.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		}
 		
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );		

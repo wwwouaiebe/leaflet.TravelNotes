@@ -58,7 +58,17 @@ function newPasswordDialog ( verifyPassword ) {
 	function m_OnOkButtonClick ( ) {
 		m_PasswordDialog.hideError ( );
 		if ( verifyPassword ) {
-			if ( ( m_PasswordInput.value.length < 12 ) || ! m_PasswordInput.value.match ( RegExp ( '[0-9]+' ) )|| ! m_PasswordInput.value.match ( RegExp ( '[a-z]+' ) )|| ! m_PasswordInput.value.match ( RegExp ( '[A-Z]+' ) ) || ! m_PasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) ) ) {
+			if ( 
+				( m_PasswordInput.value.length < 12 )
+				|| 
+				! m_PasswordInput.value.match ( RegExp ( '[0-9]+' ) )
+				|| 
+				! m_PasswordInput.value.match ( RegExp ( '[a-z]+' ) )
+				||
+				! m_PasswordInput.value.match ( RegExp ( '[A-Z]+' ) )
+				||
+				! m_PasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
+			) {
 				m_PasswordDialog.showError ( g_Translator.getText ( 'PasswordDialog - Password rules' )); 
 				m_PasswordInput.focus ( );
 				return;

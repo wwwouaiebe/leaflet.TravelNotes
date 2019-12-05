@@ -189,7 +189,14 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 	
 	function m_BuildContainer ( ) {
-		s_Container = m_htmlElementsFactory.create ( 'div', { id : 'TravelNotes-ContextMenu-Container', className : 'TravelNotes-ContextMenu-Container'}, m_Body );
+		s_Container = m_htmlElementsFactory.create ( 
+			'div', 
+			{
+				id : 'TravelNotes-ContextMenu-Container', 
+				className : 'TravelNotes-ContextMenu-Container'
+			},
+			m_Body 
+		);
 
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
 		s_Container.addEventListener ( 
@@ -202,7 +209,11 @@ function newBaseContextMenu ( originalEvent ) {
 			},
 			false
 		);
-		s_Container.addEventListener ( 'mouseleave', function ( ) { s_TimerId = setTimeout ( m_OnCloseMenu, g_Config.contextMenu.timeout ); }, false );
+		s_Container.addEventListener ( 
+			'mouseleave', 
+			( ) => { s_TimerId = setTimeout ( m_OnCloseMenu, g_Config.contextMenu.timeout ); },
+			false 
+		);
 		
 	}
 
@@ -267,13 +278,24 @@ function newBaseContextMenu ( originalEvent ) {
 		let menuItemCounter = 0;
 		s_MenuItems.forEach ( 
 			menuItem => {
-				let itemContainer = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-ItemContainer'}, s_Container);
+				let itemContainer = m_htmlElementsFactory.create ( 
+					'div', 
+					{
+						className : 'TravelNotes-ContextMenu-ItemContainer'
+					},
+					s_Container
+				);
 				let itemButton = m_htmlElementsFactory.create ( 
 					'button', 
 					{ 
 						innerHTML : menuItem.name,
 						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-						className : menuItem.action ? 'TravelNotes-ContextMenu-Item' : 'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
+						className : 
+							menuItem.action 
+								? 
+								'TravelNotes-ContextMenu-Item' 
+								:
+								'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
 					},
 					itemContainer
 				);

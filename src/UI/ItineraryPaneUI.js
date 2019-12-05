@@ -151,7 +151,8 @@ function newItineraryPaneUI ( ) {
 		let childCounter;
 		let childNodes;
 		let childNode;			
-		let routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+		let routeManeuversNotesList = 
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
@@ -175,10 +176,13 @@ function newItineraryPaneUI ( ) {
 
 	function m_Add ( ) {
 		
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' ).classList.add ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
+			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
+			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' ).classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
+				.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
 		}
 		
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
@@ -199,7 +203,8 @@ function newItineraryPaneUI ( ) {
 		let childCounter;
 		let childNodes;
 		let childNode;			
-		let routeManeuversNotesList = document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+		let routeManeuversNotesList = 
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {

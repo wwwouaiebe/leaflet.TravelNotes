@@ -113,10 +113,19 @@ let pageId = params.get ("page");
 
 function saveFile ( ) {
 	try {
-		let mapFile = window.URL.createObjectURL ( new File ( [ '<!DOCTYPE html>', document.documentElement.outerHTML ], { type : 'text/plain' } ) );
+		let mapFile = window.URL.createObjectURL ( 
+			new File ( 
+				[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
+				{ type : 'text/plain' }
+			) 
+		);
 		let element = document.createElement ( 'a' );
 		element.setAttribute ( 'href', mapFile );
-		element.setAttribute ( 'download', document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ].innerHTML + '-Roadbook.html' );
+		element.setAttribute ( 
+			'download', 
+			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ]
+				.innerHTML + '-Roadbook.html'
+		);
 		element.style.display = 'none';
 		document.body.appendChild ( element );
 		element.click ( );
@@ -145,7 +154,8 @@ if ( pageId ) {
 	);
 }
 else {
-	document.getElementById ( 'TravelNotes-Menu' ).removeChild ( document.getElementById ( "TravelNotes-ButtonContainer" ) );
+	document.getElementById ( 'TravelNotes-Menu' )
+		.removeChild ( document.getElementById ( "TravelNotes-ButtonContainer" ) );
 }
 
 if ( language ) {
@@ -159,9 +169,12 @@ if ( language ) {
 				try {
 					response = JSON.parse ( xmlHttpRequest.responseText );
 					g_Translator. setTranslations ( response );
-					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show travel notes" );
-					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show maneuver" );
-					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML = g_Translator.getText ( "Roadbook - show routes notes" );
+					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML = 
+						g_Translator.getText ( "Roadbook - show travel notes" );
+					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML = 
+						g_Translator.getText ( "Roadbook - show maneuver" );
+					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML = 
+						g_Translator.getText ( "Roadbook - show routes notes" );
 					let saveButton = document.getElementById ( "TravelNotes-SaveFile" );
 					if ( saveButton ) {
 						saveButton.value = g_Translator.getText ( "Roadbook - Save" );
@@ -172,12 +185,23 @@ if ( language ) {
 				}
 			}
 			else {
-				console.log ( 'Error XMLHttpRequest - Status : ' + xmlHttpRequest.status + ' - StatusText : ' + xmlHttpRequest.statusText + ' - File : ' + xmlHttpRequest.responseURL );
+				console.log ( 
+					'Error XMLHttpRequest - Status : ' + 
+					xmlHttpRequest.status + 
+					' - StatusText : ' + 
+					xmlHttpRequest.statusText + 
+					' - File : ' + 
+					xmlHttpRequest.responseURL
+				);
 			}
 		}
 	};
 	
-	let XMLHttpRequestUrl = window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 'TravelNotes' + language.toUpperCase ( ) +'.json';
+	let XMLHttpRequestUrl = 
+		window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) + 
+		'TravelNotes' + 
+		language.toUpperCase ( ) +
+		'.json';
 	xmlHttpRequest.open ( "GET", XMLHttpRequestUrl, true );
 	xmlHttpRequest.overrideMimeType ( 'application/json' );
 	xmlHttpRequest.send ( null );

@@ -210,7 +210,14 @@ function newSortableList ( options, parentNode ) {
 		
 		let item = m_HTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
-		m_HTMLElementsFactory.create ( 'div', { className : 'TravelNotes-SortableList-ItemTextIndex', innerHTML : indexName }, item );
+		m_HTMLElementsFactory.create ( 
+			'div', 
+			{
+				className : 'TravelNotes-SortableList-ItemTextIndex', 
+				innerHTML : indexName 
+			},
+			item
+		);
 		let inputElement = m_HTMLElementsFactory.create ( 
 			'input', 
 			{ 
@@ -307,7 +314,13 @@ function newSortableList ( options, parentNode ) {
 	if ( ( 'LimitedSort' === m_Options.listStyle ) && ( 2 > m_Options.minSize ) ) {
 		m_Options.minSize = 0;
 	}
-	let m_Container = m_HTMLElementsFactory.create ( 'div', { id : m_Options.id, className : 'TravelNotes-SortableList-Container' } );
+	let m_Container = m_HTMLElementsFactory.create ( 
+		'div', 
+		{
+			id : m_Options.id,
+			className : 'TravelNotes-SortableList-Container'
+		} 
+	);
 	m_Container.classList.add ( m_Options.listStyle );
 	m_Container.addEventListener ( 'drop', m_OnDrop, false );
 	m_Container.addEventListener ( 'dragover', m_OnDragOver, false );
