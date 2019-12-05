@@ -109,10 +109,23 @@ function newLayersToolbarUI ( ) {
 		);
 	}
 
+	/*
+	--- m_OnMouseEnterLinkButton function -----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_OnMouseEnterLinkButton ( event ) {
 		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 	}
+
+	/*
+	--- m_OnMouseLeaveLinkButton function -----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function m_OnMouseLeaveLinkButton ( event ) {
 		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );

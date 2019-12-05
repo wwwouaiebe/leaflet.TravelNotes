@@ -60,10 +60,7 @@
 		"object-property-newline" : [ "warn" , { "allowAllPropertiesOnSameLine" : true } ],
 		"one-var-declaration-per-line" : [ "warn" ],
 		"operator-assignment" : [ "warn", "always" ],
-		"operator-linebreak" : [ "warn" , "before" ]
-		
-		
-		
+		"quote-props" : [ "warn" , "as-needed" ]
 		
 		
 		

@@ -261,10 +261,10 @@ function newFileLoader ( ) {
 
 					// Provider and transit mode are changed in the itinerary editor
 					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
-					m_EventDispatcher.dispatch ( 'setprovider', { 'provider' : providerName } );
+					m_EventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 
 					if ( transitMode && '' !== transitMode ) {
-						m_EventDispatcher.dispatch ( 'settransitmode', { 'transitMode' : transitMode } );
+						m_EventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 					}
 				}
 				g_RouteEditor.chainRoutes ( );
