@@ -116,9 +116,18 @@ function newMouseUI ( ) {
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
-		g_TravelNotesData.map.on ( 'mousemove', event => { gc_MouseUI.mousePos = event.latlng; } );
-		g_TravelNotesData.map.on ( 'zoomend', ( ) => { gc_MouseUI.zoom = g_TravelNotesData.map.getZoom ( ); }	);
-		g_TravelNotesData.map.on ( 'travelnotesfileloaded', event => { gc_MouseUI.fileName = event.name || ''; } );
+		g_TravelNotesData.map.on ( 
+			'mousemove',
+			event => { gc_MouseUI.mousePos = event.latlng; }
+		);
+		g_TravelNotesData.map.on ( 
+			'zoomend', 
+			( ) => { gc_MouseUI.zoom = g_TravelNotesData.map.getZoom ( ); }
+		);
+		g_TravelNotesData.map.on ( 
+			'travelnotesfileloaded',
+			event => { gc_MouseUI.fileName = event.name || ''; }
+		);
 
 	}
 	

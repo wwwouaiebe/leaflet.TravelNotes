@@ -437,7 +437,9 @@ function newRouteEditor ( ) {
 		}
 		
 		// and the notes sorted
-		g_TravelNotesData.travel.editedRoute.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+		g_TravelNotesData.travel.editedRoute.notes.sort ( 
+			( first, second ) => { return first.distance - second.distance; }
+		);
 		
 		// the new route is added to the map
 		m_EventDispatcher.dispatch ( 

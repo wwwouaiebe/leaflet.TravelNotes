@@ -40,7 +40,10 @@ var g_TravelNotesObjId = 0;
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newObjId ( ) { return ++ g_TravelNotesObjId; }
+function newObjId ( ) {
+	++ g_TravelNotesObjId;
+	return  g_TravelNotesObjId;
+}
 
 /*
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------

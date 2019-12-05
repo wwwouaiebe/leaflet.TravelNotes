@@ -151,7 +151,10 @@ function newWayPoint ( ) {
 			set lng ( Lng ) { m_Lng = Lng; },
 
 			get latLng ( ) { return [ m_Lat, m_Lng ]; },
-			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+			set latLng ( LatLng ) { 
+				m_Lat = LatLng [ 0 ]; 
+				m_Lng = LatLng [ 1 ]; 
+			},
 
 			get objId ( ) { return m_ObjId; },
 

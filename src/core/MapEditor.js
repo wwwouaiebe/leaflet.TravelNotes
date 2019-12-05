@@ -283,16 +283,28 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'layerchange',
-			event => { if ( event.data ) { g_MapEditor.setLayer ( event.data.layer ); } }
+			event => { 
+				if ( event.data ) { 
+					g_MapEditor.setLayer ( event.data.layer ); 
+				}
+			}
 		);
 		document.addEventListener ( 
 			'geolocationpositionchanged',
-			event => { if ( event.data ) { g_MapEditor.onGeolocationPositionChanged ( event.data.position ); } },
+			event => { 
+				if ( event.data ) { 
+					g_MapEditor.onGeolocationPositionChanged ( event.data.position );
+				}
+			},
 			false
 		)
 		document.addEventListener ( 
 			'geolocationstatuschanged',
-			event => { if ( event.data ) { g_MapEditor.onGeolocationStatusChanged ( event.data.status ); } },
+			event => { 
+				if ( event.data ) { 
+					g_MapEditor.onGeolocationStatusChanged ( event.data.status );
+				} 
+			},
 			false
 		)
 	}
@@ -682,7 +694,10 @@ function newMapEditor ( ) {
 		);
 		latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
 		g_TravelNotesData.travel.notes.forEach ( 
-			note => { latLngs.push ( note.latLng ); latLngs.push ( note.iconLatLng ); } 
+			note => { 
+				latLngs.push ( note.latLng ); 
+				latLngs.push ( note.iconLatLng );
+			} 
 		);
 		if ( 0 !== latLngs.length ) {
 			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
@@ -725,7 +740,9 @@ function newMapEditor ( ) {
 		let showGeometry = false;
 		if ( geometry ) {
 			let latLngs = [];
-			geometry.forEach ( geometryPart => { latLngs = latLngs.concat ( geometryPart );	} );
+			geometry.forEach ( 
+				geometryPart => { latLngs = latLngs.concat ( geometryPart ); }
+			);
 			let geometryBounds = m_GetLatLngBounds ( latLngs );
 			let mapBounds = g_TravelNotesData.map.getBounds ( );
 			showGeometry = 
@@ -807,7 +824,9 @@ function newMapEditor ( ) {
 			} 
 		);	
 
-		marker.bindTooltip ( wayPoint => { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; } );
+		marker.bindTooltip ( 
+			wayPoint => { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; }
+		);
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
 		L.DomEvent.on ( 
@@ -916,7 +935,9 @@ function newMapEditor ( ) {
 						note.distance = latLngDistance.distance;
 
 						// notes are sorted on the distance
-						route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+						route.notes.sort (
+							( first, second ) => { return first.distance - second.distance; } 
+						);
 
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );

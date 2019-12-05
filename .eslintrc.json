@@ -34,6 +34,10 @@
 		"keyword-spacing" : [ "warn" ],
 		"lines-around-comment" : [ "warn", { "beforeBlockComment": true , "afterBlockComment": true , "beforeLineComment": true , "afterLineComment": false} ],
 		"max-depth" : [ "warn" , { "max" : 5 } ],
-		"max-len" : [ "warn" , { "code" : 128 } ]
+		"max-len" : [ "warn" , { "code" : 128 } ],
+		"max-nested-callbacks" : [ "warn" , { "max" : 2 } ],
+		"max-params" : [ "warn" , { "max" : 5 } ],
+		"max-statements" : [ "warn", 51 ],
+		"max-statements-per-line" : [ "warn" ]
     }
 }

@@ -92,7 +92,11 @@ function newErrorsUI ( ) {
 			},
 			m_ShowHelpDiv
 		);
-		m_ShowHelpInput.addEventListener ( 'change', ( ) => { m_ShowHelp = m_ShowHelpInput.checked; }, false );
+		m_ShowHelpInput.addEventListener ( 
+			'change', 
+			( ) => { m_ShowHelp = m_ShowHelpInput.checked; },
+			false 
+		);
 		m_HTMLElementsFactory.create (
 			'label',
 			{

@@ -584,7 +584,11 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			openUserDataFileFakeDiv 
 		);
 		
-		openUserDataFileButton.addEventListener ( 'click', function ( ) { openUserDataFileInput.click ( ); }, false );
+		openUserDataFileButton.addEventListener ( 
+			'click', 
+			( ) => openUserDataFileInput.click ( ),
+			false
+		);
 		
 		// personnalised buttons from server file are restored
 		m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );

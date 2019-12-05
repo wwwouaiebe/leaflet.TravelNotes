@@ -111,7 +111,9 @@ function newAPIKeysManager ( ) {
 				APIKeysCounter ++;
 			}
 		}
-		g_TravelNotesData.providers.forEach ( provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } );
+		g_TravelNotesData.providers.forEach (
+			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); } 
+		);
 		return APIKeysCounter;
 	}
 
@@ -181,7 +183,9 @@ function newAPIKeysManager ( ) {
 		s_KeysMap.forEach (
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
 		)
-		ApiKeys.sort ( function ( first, second ) { return first.providerName.localeCompare ( second.providerName ); } );
+		ApiKeys.sort ( 
+			( first, second ) =>{ return first.providerName.localeCompare ( second.providerName ); } 
+		);
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
 			.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )

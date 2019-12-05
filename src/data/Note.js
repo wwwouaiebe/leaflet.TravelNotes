@@ -222,7 +222,10 @@ function newNote ( ) {
 			set iconLng ( IconLng ) { m_IconLng = IconLng; },
 
 			get iconLatLng ( ) { return [ m_IconLat, m_IconLng ]; },
-			set iconLatLng ( IconLatLng ) { m_IconLat = IconLatLng [ 0 ]; m_IconLng = IconLatLng [ 1 ]; },
+			set iconLatLng ( IconLatLng ) { 
+				m_IconLat = IconLatLng [ 0 ]; 
+				m_IconLng = IconLatLng [ 1 ];
+			},
 
 			get lat ( ) { return m_Lat; },
 			set lat ( Lat ) { m_Lat = Lat; },
@@ -231,7 +234,10 @@ function newNote ( ) {
 			set lng ( Lng ) { m_Lng = Lng; },
 
 			get latLng ( ) { return [ m_Lat, m_Lng ]; },
-			set latLng ( LatLng ) { m_Lat = LatLng [ 0 ]; m_Lng = LatLng [ 1 ]; },
+			set latLng ( LatLng ) { 
+				m_Lat = LatLng [ 0 ]; 
+				m_Lng = LatLng [ 1 ]; 
+			},
 
 			get distance ( ) { return m_Distance; },
 			set distance ( Distance ) { m_Distance = Distance; },

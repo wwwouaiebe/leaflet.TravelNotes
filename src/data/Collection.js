@@ -148,7 +148,10 @@ function newCollection ( objName ) {
 	*/
 
 	function m_IndexOfObjId ( objId ) {
-		return m_Array.findIndex ( element => { return element.objId === objId; } );
+		let index = m_Array.findIndex ( 
+			element => { return element.objId === objId; }
+		);
+		return index;
 	}
 
 	/*
@@ -191,7 +194,9 @@ function newCollection ( objName ) {
 		}
 		
 		if ( ! condition ) {
-			condition = function ( ) { return true; };
+			condition = ( ) => { 
+				return true; 
+			};
 		}
 		index += direction;
 		

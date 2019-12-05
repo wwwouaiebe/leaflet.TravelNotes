@@ -110,7 +110,9 @@ function newNoteEditor ( ) {
 			selectedRoute.notes.add ( noteAndRoute.note );
 
 			// and the notes sorted
-			selectedRoute.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+			selectedRoute.notes.sort ( 
+				( first, second ) => { return first.distance - second.distance; }
+			);
 
 			m_EventDispatcher.dispatch ( 
 				'redrawnote', 
@@ -205,7 +207,9 @@ function newNoteEditor ( ) {
 					let route = m_DataSearchEngine.getRoute ( routeObjId );
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
-					route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+					route.notes.sort (
+						( first, second ) => { return first.distance - second.distance; } 
+					);
 					m_EventDispatcher.dispatch ( 'setitinerary' );
 					m_EventDispatcher.dispatch ( 
 						'addnote', 
@@ -304,7 +308,9 @@ function newNoteEditor ( ) {
 					let route = m_DataSearchEngine.getRoute ( g_TravelNotesData.travel.editedRoute.objId );
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
-					route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+					route.notes.sort (
+						( first, second ) => { return first.distance - second.distance; } 
+					);
 					m_EventDispatcher.dispatch ( 'setitinerary' );
 					m_EventDispatcher.dispatch ( 
 						'addnote', 
