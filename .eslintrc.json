@@ -31,6 +31,7 @@
 		"implicit-arrow-linebreak" : [ "warn", "beside" ],
 		"indent": ["warn", "tab"],
 		"key-spacing" : [ "warn", { "beforeColon": true , "afterColon": true , "mode": "strict" } ],
-		"keyword-spacing" : [ "warn" ]
+		"keyword-spacing" : [ "warn" ],
+		"line-comment-position" : [ "warn", "beside" ]
     }
 }

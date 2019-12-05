@@ -313,7 +313,7 @@ function newMapEditor ( ) {
 			if ( providerKey ) {
 				url = url.replace ( '{providerKey}', providerKey );
 			}
-			else{
+			else {
 				return;
 			}
 		}
@@ -322,7 +322,7 @@ function newMapEditor ( ) {
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
 			leafletLayer = L.tileLayer ( url );
 		}
-		else{
+		else {
 			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 		

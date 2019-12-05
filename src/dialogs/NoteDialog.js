@@ -302,7 +302,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			m_NoteDialog.showWait ( );
 			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId).then ( m_OnSvgIcon ).catch ( m_OnErrorSvgIcon );
 		}
-		else{
+		else {
 			m_WidthInput.value = preDefinedIcon.width ;
 			m_HeightInput = preDefinedIcon.height ;
 			m_IconHtmlContent.value = preDefinedIcon.icon ;

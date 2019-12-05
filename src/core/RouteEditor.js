@@ -370,7 +370,7 @@ function newRouteEditor ( ) {
 			else if ( wayPointsIterator.last ) {
 				wayPointsIterator.value.latLng = g_TravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 			}
-			else{
+			else {
 				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance ( g_TravelNotesData.travel.editedRoute, wayPointsIterator.value.latLng ).latLng;
 			}
 		}	
