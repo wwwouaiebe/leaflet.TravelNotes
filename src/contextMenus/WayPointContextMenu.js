@@ -33,8 +33,8 @@ Tests ...
 export { newWayPointContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { g_WayPointEditor} from '../core/WayPointEditor.js';
-import { g_TravelNotesData} from '../data/TravelNotesData.js';
+import { g_WayPointEditor } from '../core/WayPointEditor.js';
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_Translator } from '../UI/Translator.js';
 
 /*

@@ -53,7 +53,7 @@ function newTravelNotesData ( ) {
 		mapObjects : new Map ( ),
 		travel : newTravel ( ),
 		editedRouteObjId : -1,
-		routing : Object.seal ( { provider : '', transitMode : ''} ),
+		routing : Object.seal ( { provider : '', transitMode : '' } ),
 		searchData : [],
 		UUID : newUtilities ( ).UUID
 	};

@@ -331,7 +331,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					m_CreateAPIKeyRow ( { providerName : '', providerKey : ''} );
+					m_CreateAPIKeyRow ( { providerName : '', providerKey : '' } );
 				},
 				false
 			);

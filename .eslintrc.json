@@ -13,6 +13,8 @@
         "sourceType": "module"
     },
     "rules": {
+		"curly" : [ "warn" ],
+	
 		"array-bracket-newline" : [ "warn" , "consistent" ],
 		"array-bracket-spacing" : [ "warn" , "always" ],
 		"array-element-newline" : [ "warn" , "consistent" ],
@@ -49,6 +51,11 @@
 		"no-multiple-empty-lines" : [ "warn", { "max" : 1 } ],
 		"no-negated-condition" : [ "warn" ],
 		"no-new-object" : [ "warn" ],
-		"no-trailing-spaces" : [ "warn" ]
+		"no-trailing-spaces" : [ "warn" ],
+		"no-underscore-dangle" : [ "warn" ],
+		"no-unneeded-ternary" : [ "warn" ],
+		"default-case" : [ "warn" ],
+		"object-curly-newline" : [ "warn" , { "consistent" : true } ],
+		"object-curly-spacing" : [ "warn" , "always", { "arraysInObjects": true , "objectsInObjects": true } ]
     }
 }

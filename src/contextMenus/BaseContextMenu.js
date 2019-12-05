@@ -245,7 +245,7 @@ function newBaseContextMenu ( originalEvent ) {
 	function m_MoveContainer ( ) {
 
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel'}, m_Body );
+		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, m_Body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
 		m_Body.removeChild ( dummyDiv );

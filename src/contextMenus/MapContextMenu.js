@@ -33,11 +33,11 @@ Tests ...
 export { newMapContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { g_WayPointEditor} from '../core/WayPointEditor.js';
-import { g_NoteEditor} from '../core/NoteEditor.js';
-import { g_RouteEditor} from '../core/RouteEditor.js';
-import { g_TravelEditor} from '../core/TravelEditor.js';
-import { g_TravelNotesData} from '../data/TravelNotesData.js';
+import { g_WayPointEditor } from '../core/WayPointEditor.js';
+import { g_NoteEditor } from '../core/NoteEditor.js';
+import { g_RouteEditor } from '../core/RouteEditor.js';
+import { g_TravelEditor } from '../core/TravelEditor.js';
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_Translator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 

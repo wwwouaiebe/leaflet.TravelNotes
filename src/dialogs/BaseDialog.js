@@ -112,7 +112,7 @@ function newBaseDialog ( ) {
 	function m_CreateBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', {  className : 'TravelNotes-BaseDialog-BackgroundDiv'} );
+		m_BackgroundDiv = m_HTMLElementsFactory.create ( 'div', {  className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
 		m_BackgroundDiv.addEventListener (
 			'dragover',
 			( ) => { return; },

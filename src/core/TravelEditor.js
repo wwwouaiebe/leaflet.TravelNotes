@@ -167,7 +167,7 @@ function newTravelEditor ( ) {
 			gc_ErrorsUI.showError (
 				g_Translator.getText (
 					"RouteEditor - Not possible to edit a route created with this provider",
-					{provider : providerName }
+					{ provider : providerName }
 				)
 			);
 			return;

@@ -154,12 +154,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function m_GetTravelNotesHTML ( ) {
-		let travelNotesHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel-Notes'} );
+		let travelNotesHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel-Notes' } );
 		let travelNotesIterator = g_TravelNotesData.travel.notes.iterator;
 		while ( ! travelNotesIterator.done ) {
 			let rowDiv = m_HTMLElementsFactory.create (
 				'div',
-				{ className : m_ClassNamePrefix + 'Travel-Notes-Row'},
+				{ className : m_ClassNamePrefix + 'Travel-Notes-Row' },
 				travelNotesHTML
 			);
 			m_AddNoteHTML ( travelNotesIterator.value, rowDiv ) ;
@@ -359,7 +359,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 	function m_GetTravelHTML ( ) {
 
-		let travelHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel'} );
+		let travelHTML = m_HTMLElementsFactory.create ( 'div', { className : m_ClassNamePrefix + 'Travel' } );
 
 		travelHTML.appendChild ( m_GetTravelHeaderHTML ( ) );
 		travelHTML.appendChild ( m_GetTravelNotesHTML ( ) );

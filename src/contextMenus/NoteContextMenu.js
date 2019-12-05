@@ -34,8 +34,8 @@ export { newNoteContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { g_NoteEditor} from '../core/NoteEditor.js';
-import { g_TravelNotesData} from '../data/TravelNotesData.js';
+import { g_NoteEditor } from '../core/NoteEditor.js';
+import { g_TravelNotesData } from '../data/TravelNotesData.js';
 import { g_Translator } from '../UI/Translator.js';
 
 /*

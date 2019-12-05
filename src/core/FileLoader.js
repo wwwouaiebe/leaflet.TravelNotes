@@ -253,7 +253,7 @@ function newFileLoader ( ) {
 					gc_ErrorsUI.showError (
 						g_Translator.getText (
 							"FileLoader - Not possible to select as provider",
-							{provider : providerName }
+							{ provider : providerName }
 						)
 					);
 				}
