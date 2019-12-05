@@ -214,9 +214,9 @@ function newLayersToolbarUI ( ) {
 			m_MarginTop -= wheelEvent.deltaY * 10;
 			m_MarginTop = m_MarginTop > m_ButtonTop ? m_ButtonTop : m_MarginTop;
 			m_MarginTop = 
-				m_MarginTop < m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight 
+				m_MarginTop < m_ButtonTop - m_ButtonsHeight + ( 3 * m_ButtonHeight )
 					? 
-					m_ButtonTop - m_ButtonsHeight + 3 * m_ButtonHeight 
+					m_ButtonTop - m_ButtonsHeight + ( 3 * m_ButtonHeight )
 					: 
 					m_MarginTop;
 			m_LayersToolbarButtonsDiv.style.marginTop = '' + m_MarginTop + 'px';
@@ -341,7 +341,6 @@ function newLayersToolbarUI ( ) {
 }
 
 const gc_LayersToolbarUI = newLayersToolbarUI ( );
-
 	
 /*
 --- End of LayersToolbarUI.js file ------------------------------------------------------------------------------------

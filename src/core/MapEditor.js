@@ -62,7 +62,6 @@ import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { g_APIKeysManager } from '../core/APIKeysManager.js';
 
-
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
 
@@ -460,7 +459,7 @@ function newMapEditor ( ) {
 			let dashArray = '';
 			let dashCounter = 0;
 			for ( dashCounter = 0; dashCounter < iDashArray.length - 1; dashCounter ++ ) {
-				dashArray += iDashArray [ dashCounter ] * route.width + ',';
+				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
 			dashArray += iDashArray [ dashCounter ] * route.width ;
 			

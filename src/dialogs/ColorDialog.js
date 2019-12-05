@@ -41,7 +41,6 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 /*
 --- newColorDialog function -------------------------------------------------------------------------------------------
 
-
 -----------------------------------------------------------------------------------------------------------------------
 */
 
@@ -345,9 +344,6 @@ function newColorDialog ( color ) {
 		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ m_NewColor +';' );
 		m_ColorSampleDiv.color = m_NewColor;
 	}
-
-
-
 
 	m_CreateDialog ( );
 	m_CreateColorDiv ( );

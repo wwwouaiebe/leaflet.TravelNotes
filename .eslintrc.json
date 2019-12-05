@@ -41,6 +41,11 @@
 		"max-statements-per-line" : [ "warn" ],
 		"newline-per-chained-call" : [ "warn" ],
 		"no-array-constructor" : [ "warn" ],
-		"no-bitwise" : [ "warn" ]
+		"no-bitwise" : [ "warn" ],
+		"no-continue" : [ "warn" ],
+		"no-lonely-if" : [ "warn" ],
+		"no-mixed-operators" : [ "warn" ],
+		"no-multi-assign" : [ "warn" ],
+		"no-multiple-empty-lines" : [ "warn", { "max" : 1 } ]
     }
 }

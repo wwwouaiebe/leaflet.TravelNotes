@@ -47,7 +47,6 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
-	
 
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( );
 	
@@ -213,7 +212,6 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		let maneuversDone = maneuversIterator.done;
 		let maneuversDistance = 0;
 		
-		
 		while ( ! ( maneuversDone && notesDone ) ) {
 			let rowDiv = m_HTMLElementsFactory.create ( 
 				'div', 
@@ -270,34 +268,32 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					}
 				}
 			}
-			else {
-				if ( ! notesDone ) {
-					rowDiv.className = m_ClassNamePrefix + 'Route-Notes-Row';
+			else if ( ! notesDone ) {
+				rowDiv.className = m_ClassNamePrefix + 'Route-Notes-Row';
 
-					m_AddNoteHTML ( notesIterator.value, rowDiv );
+				m_AddNoteHTML ( notesIterator.value, rowDiv );
 
-					rowDiv.objId= newObjId ( );
-					rowDiv.latLng = notesIterator.value.latLng;
-					rowDiv.noteObjId = notesIterator.value.objId;
-					previousNotesDistance = notesIterator.value.distance;
-					notesDone = notesIterator.done;
-					notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
-					if ( ! notesDone  ) {
-						let nextDistance = notesIterator.value.distance - previousNotesDistance;
-						if ( 9 < nextDistance ) {
-							m_HTMLElementsFactory.create (
-								'div',
-								{ 
-									className : m_ClassNamePrefix + 'NoteHtml-NextDistance',
-									innerHTML : 
-										g_Translator.getText ( 
-											'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}', 
-											{ distance : m_Utilities.formatDistance ( nextDistance ) }
-										)
-								}, 
-								rowDiv.lastChild
-							);	
-						}
+				rowDiv.objId= newObjId ( );
+				rowDiv.latLng = notesIterator.value.latLng;
+				rowDiv.noteObjId = notesIterator.value.objId;
+				previousNotesDistance = notesIterator.value.distance;
+				notesDone = notesIterator.done;
+				notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
+				if ( ! notesDone  ) {
+					let nextDistance = notesIterator.value.distance - previousNotesDistance;
+					if ( 9 < nextDistance ) {
+						m_HTMLElementsFactory.create (
+							'div',
+							{ 
+								className : m_ClassNamePrefix + 'NoteHtml-NextDistance',
+								innerHTML : 
+									g_Translator.getText ( 
+										'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}', 
+										{ distance : m_Utilities.formatDistance ( nextDistance ) }
+									)
+							}, 
+							rowDiv.lastChild
+						);	
 					}
 				}
 			}	

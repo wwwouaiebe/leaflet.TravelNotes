@@ -52,7 +52,6 @@ function newAutoLoader ( ) {
 	window.L.travelNotes.addControl ( _Map, "TravelNotes" );
 	window.L.travelNotes.rightContextMenu = true;
 }
-
 	
 /*
 --- End of AutoLoader.js file -----------------------------------------------------------------------------------------

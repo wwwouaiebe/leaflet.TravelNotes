@@ -546,7 +546,6 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		
 		// change event listener on the select
 		m_PredefinedIconsSelect.addEventListener ( 'change', m_OnPredefinedIconListSelectChange, false );
-		
 
 		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
 		let openUserDataFileDiv = m_HtmlElementsFactory.create ( 

@@ -336,7 +336,6 @@ function newTravelEditor ( ) {
 		newRoadbookUpdate ( );
 	}
 	
-	
 	/*
 	--- m_ZoomToTravel function ---------------------------------------------------------------------------------------
 

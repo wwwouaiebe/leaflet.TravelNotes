@@ -66,7 +66,6 @@ import { newGeometry } from '../util/Geometry.js';
 
 var s_ZoomToRoute = false;
 var s_RequestStarted = false;
-
 	
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------

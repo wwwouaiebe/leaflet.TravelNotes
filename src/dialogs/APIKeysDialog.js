@@ -37,7 +37,6 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 
-
 /*
 --- newAPIKeysDialog function -----------------------------------------------------------------------------------------
 
@@ -51,7 +50,6 @@ function newAPIKeysDialog ( APIKeys ) {
 	let m_ToolbarDiv = null;
 	let m_APIKeysDiv = null;
 	let m_OpenFileInput = null;
-
 	
 	/*
 	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
@@ -247,7 +245,6 @@ function newAPIKeysDialog ( APIKeys ) {
 			m_APIKeysDialog.content
 		);
 	}
-	
 	
 	/*
 	--- m_CreateToolbar function --------------------------------------------------------------------------------------

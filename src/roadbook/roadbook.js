@@ -139,7 +139,6 @@ function saveFile ( ) {
 
 if ( pageId ) {
 	
-	
 	document.getElementById ( "TravelNotes-SaveFile" ).addEventListener ( 'click', saveFile );
 	
 	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" ); 

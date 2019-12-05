@@ -90,7 +90,6 @@ function newAttributionsUI ( ) {
 }
 
 const gc_AttributionsUI = newAttributionsUI ( );
-
 	
 /*
 --- End of AttributionsUI.js file -------------------------------------------------------------------------------------

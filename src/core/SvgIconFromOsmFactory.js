@@ -46,7 +46,6 @@ var s_RequestStarted = false;
 /*
 --- newSvgIconFromOsmFactory function ---------------------------------------------------------------------------------
 
-
 -----------------------------------------------------------------------------------------------------------------------
 */
 
@@ -493,7 +492,7 @@ function newSvgIconFromOsmFactory ( ) {
 			polyline.setAttributeNS ( 
 				null, 
 				"transform", 
-				"rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")" 
+				"rotate(" + m_Rotation + "," + ( m_SvgIconSize / 2 ) + "," + ( m_SvgIconSize / 2 ) + ")" 
 			);
 			m_Svg.appendChild ( polyline );
 		}
@@ -569,7 +568,7 @@ function newSvgIconFromOsmFactory ( ) {
 					polyline.setAttributeNS ( 
 						null, 
 						"transform", 
-						"rotate(" + m_Rotation + "," + m_SvgIconSize / 2 + "," + m_SvgIconSize / 2 + ")"
+						"rotate(" + m_Rotation + "," + ( m_SvgIconSize / 2 ) + "," + ( m_SvgIconSize / 2 ) + ")"
 					);
 					
 					m_Svg.appendChild ( polyline );
@@ -597,7 +596,11 @@ function newSvgIconFromOsmFactory ( ) {
 		m_Svg.setAttributeNS ( 
 			null, 
 			"viewBox", 
-			"" + m_SvgIconSize / 4 + " " + m_SvgIconSize / 4 + " " + m_SvgIconSize / 2 + " " + m_SvgIconSize / 2 
+			"" + 
+			( m_SvgIconSize / 4 ) + " " + 
+			( m_SvgIconSize / 4 ) + " " + 
+			( m_SvgIconSize / 2 ) + " " + 
+			( m_SvgIconSize / 2 ) 
 		);
 		m_Svg.setAttributeNS ( null, "class", "TravelNotes-SvgIcon" );
 		
@@ -701,7 +704,6 @@ function newSvgIconFromOsmFactory ( ) {
 			return;
 		}
 		s_RequestStarted = true;
-		
 
 		m_Response = {};
 		m_Svg = null;

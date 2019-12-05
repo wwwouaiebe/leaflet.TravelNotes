@@ -117,7 +117,6 @@ function newEventDispatcher ( ) {
 	);
 	
 }
-
 	
 /*
 --- End of EventDispatcher.js file ------------------------------------------------------------------------------------

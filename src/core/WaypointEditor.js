@@ -317,7 +317,6 @@ function newWayPointEditor ( ) {
 	parameters:
 	- latLng : the coordinates of the end waypoint
 
-
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 

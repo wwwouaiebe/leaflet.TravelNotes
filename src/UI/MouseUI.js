@@ -148,7 +148,6 @@ function newMouseUI ( ) {
 }
 
 const gc_MouseUI = newMouseUI ( );
-
 	
 /*
 --- End of MouseUI.js file --------------------------------------------------------------------------------------------

@@ -191,7 +191,6 @@ function newErrorsUI ( ) {
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		)
 		
-		
 	}
 			
 	/*

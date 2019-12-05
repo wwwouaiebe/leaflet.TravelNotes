@@ -275,7 +275,6 @@ The one and only one noteEditor
 */
 
 const g_APIKeysManager = newAPIKeysManager ( );
-
 	
 /*
 --- End of APIKeysManager.js file -------------------------------------------------------------------------------------

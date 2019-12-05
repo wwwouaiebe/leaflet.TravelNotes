@@ -29,7 +29,6 @@ export { currentVersion };
 
 const currentVersion = '1.6.0';
 
-
 /*
 --- End of Version.js file --------------------------------------------------------------------------------------------
 */

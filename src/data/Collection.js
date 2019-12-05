@@ -37,7 +37,6 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 
-
 /*
 --- newCollection function ----------------------------------------------------------------------------------------
 

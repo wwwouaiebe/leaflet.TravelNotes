@@ -75,7 +75,6 @@ function newTravelEditorUI ( ) {
 	
 	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let m_ControlDiv = null;
-
 	
 	/*
 	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------

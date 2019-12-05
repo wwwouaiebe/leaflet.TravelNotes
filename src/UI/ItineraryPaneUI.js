@@ -195,7 +195,6 @@ function newItineraryPaneUI ( ) {
 		// adding new header
 		dataDiv.appendChild ( htmlViewsFactory.routeHeaderHTML );
 		
-		
 		// adding new itinerary
 		dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 		

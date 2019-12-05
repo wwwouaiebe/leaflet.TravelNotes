@@ -193,8 +193,6 @@ The one and only one UI object
 
 const gc_UI = newUI ( );	
 
-
-
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------
 */	

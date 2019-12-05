@@ -72,7 +72,6 @@ function newRoute ( ) {
 	let m_Color = '#ff0000';
 	
 	let m_DashArray = 0;
-
 	
 	if ( g_Config ) {
 		m_Width = g_Config.route.width;

@@ -193,8 +193,6 @@ function newRoutePropertiesDialog ( route ) {
 		);
 		m_ChainInput.checked = route.chain;
 	}
-
-
 	
 	m_CreateDialog ( );
 	m_CreateRoutePropertiesDiv ( );
