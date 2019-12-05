@@ -177,7 +177,7 @@ function newSortableList ( options, parentNode ) {
 
 	function m_OnWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + ( wheelEvent.deltaY * 10 ) ;
+			wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
 		}
 		wheelEvent.stopPropagation ( );
 	}

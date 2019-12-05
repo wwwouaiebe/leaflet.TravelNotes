@@ -126,7 +126,7 @@ function newDataPanesUI ( ) {
 			'wheel',
 			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop = wheelEvent.target.scrollTop + ( wheelEvent.deltaY * 10 ) ;
+					wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
 				}
 				wheelEvent.stopPropagation ( );
 			},
