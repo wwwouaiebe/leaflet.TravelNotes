@@ -87,7 +87,7 @@ function newCollection ( objName ) {
 		let result = null;
 		let iterator = m_Iterator ( );
 		while ( ! iterator.done ) {
-				result = funct ( iterator.value, result );
+			result = funct ( iterator.value, result );
 		}
 		return result;
 	}
@@ -196,7 +196,7 @@ function newCollection ( objName ) {
 		index += direction;
 		
 		while ( ( -1 < index ) && ( index < m_Array.length ) && ! condition ( m_Array [ index ] ) ) {
-						index += direction;
+			index += direction;
 		}
 		if ( -1 === index || m_Array.length === index ) {
 			return null;
@@ -270,22 +270,22 @@ function newCollection ( objName ) {
 		something.forEach (
 			arrayObject => {
 				switch ( m_ObjName ) {
-					case 'Route' :
+				case 'Route' :
 					newObject = newRoute ( );
 					break;
-					case 'Note' :
+				case 'Note' :
 					newObject = newNote ( );
 					break;
-					case 'WayPoint' :
+				case 'WayPoint' :
 					newObject = newWayPoint ( );
 					break;
-					case 'Maneuver' :
+				case 'Maneuver' :
 					newObject = newManeuver ( );
 					break;
-					case 'ItineraryPoint' :
+				case 'ItineraryPoint' :
 					newObject = newItineraryPoint ( );
 					break;
-					default:
+				default:
 					throw ( 'invalid ObjName ( ' + m_ObjName +' ) in Collection.m_SetObject' );
 				}
 				newObject.object = arrayObject;

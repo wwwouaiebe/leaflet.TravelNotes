@@ -221,7 +221,7 @@ function newBaseContextMenu ( originalEvent ) {
 			},
 			s_Container
 		)
-		.addEventListener ( 'click', m_OnCloseMenu, false );
+			.addEventListener ( 'click', m_OnCloseMenu, false );
 	}
 
 	/*

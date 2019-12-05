@@ -241,7 +241,7 @@ function newTravelEditor ( ) {
 		g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 		m_EventDispatcher.dispatch ( 'setrouteslist' );
 		g_RouteEditor.chainRoutes ( );
-newRoadbookUpdate ( );
+		newRoadbookUpdate ( );
 	}
 
 	/*

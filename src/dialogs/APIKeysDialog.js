@@ -264,14 +264,14 @@ function newAPIKeysDialog ( APIKeys ) {
 			}, 
 			m_ToolbarDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				m_SaveKeysToFile ( );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					m_SaveKeysToFile ( );
+				}, 
+				false 
+			);
 
 		let openFileDiv = m_HTMLElementsFactory.create ( 
 			'div', 
@@ -310,11 +310,11 @@ function newAPIKeysDialog ( APIKeys ) {
 			}, 
 			openFileFakeDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			( ) => { m_OpenFileInput.click ( ); }, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				( ) => { m_OpenFileInput.click ( ); }, 
+				false 
+			);
 		
 		m_HTMLElementsFactory.create ( 
 			'div', 
@@ -326,14 +326,14 @@ function newAPIKeysDialog ( APIKeys ) {
 			}, 
 			m_ToolbarDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				m_CreateAPIKeyRow ( { providerName : '', providerKey : ''} );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					m_CreateAPIKeyRow ( { providerName : '', providerKey : ''} );
+				}, 
+				false 
+			);
 		
 	}
 	
@@ -380,14 +380,14 @@ function newAPIKeysDialog ( APIKeys ) {
 			}, 
 			APIKeyRow 
 		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
+				}, 
+				false 
+			);
 		
 	}
 

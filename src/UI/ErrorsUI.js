@@ -113,7 +113,7 @@ function newErrorsUI ( ) {
 	function m_Show ( message, errorLevel ) {
 		
 		if (
-				( 'Error' === errorLevel && ! g_Config.errorUI.showError ) 
+			( 'Error' === errorLevel && ! g_Config.errorUI.showError ) 
 				||
 				( 'Warning' === errorLevel && ! g_Config.errorUI.showWarning ) 
 				||
@@ -122,7 +122,7 @@ function newErrorsUI ( ) {
 				( 'Help' === errorLevel && ! g_Config.errorUI.showHelp ) 
 				|| 
 				( 'Help' === errorLevel && ! m_ShowHelp ) 
-			) {
+		) {
 			return;
 		}
 		if ( m_TimerId ) {
@@ -157,7 +157,7 @@ function newErrorsUI ( ) {
 		m_ErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
 		
 		if ( 'Help' === errorLevel ) {
-				m_AddHelpCheckbox ( );
+			m_AddHelpCheckbox ( );
 		}
 
 		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );

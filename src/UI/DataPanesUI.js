@@ -114,7 +114,7 @@ function newDataPanesUI ( ) {
 				id : 'TravelNotes-Control-DataPanesDiv', 
 				className : 'TravelNotes-Control-DataDiv'
 			},
-		controlDiv );
+			controlDiv );
 		dataDiv.addEventListener ( 
 			'wheel', 
 			wheelEvent => { 
@@ -137,19 +137,19 @@ function newDataPanesUI ( ) {
 
 	function m_RemoveActivePane ( ) {
 		switch ( s_ActivePaneIndex ) {
-			case 0:
-				m_ItineraryPaneUI.remove ( );
-				break;
-			case 1:
-				m_TravelNotesPaneUI.remove ( );
-				break;
-			case 2 :
-				if ( window.osmSearch ) {
-					m_SearchPaneUI.remove ( );
-				}
-				break;
-			default:
-				break;
+		case 0:
+			m_ItineraryPaneUI.remove ( );
+			break;
+		case 1:
+			m_TravelNotesPaneUI.remove ( );
+			break;
+		case 2 :
+			if ( window.osmSearch ) {
+				m_SearchPaneUI.remove ( );
+			}
+			break;
+		default:
+			break;
 		}
 	}
 

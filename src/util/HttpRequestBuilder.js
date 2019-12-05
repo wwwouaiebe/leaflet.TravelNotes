@@ -117,7 +117,7 @@ function newHttpRequestBuilder ( ) {
 						onOk ( arrayBuffer );
 					}
 					else {
-					onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
+						onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
 					}
 				}
 				else {

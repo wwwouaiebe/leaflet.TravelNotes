@@ -101,11 +101,11 @@ function newDataEncryptor ( ) {
 		}
 
 		pswdPromise
-		.then ( m_ImportKey )
-		.then ( m_DeriveKey )
-		.then ( decrypt )
-		.then ( onOk )
-		.catch ( onError );
+			.then ( m_ImportKey )
+			.then ( m_DeriveKey )
+			.then ( decrypt )
+			.then ( onOk )
+			.catch ( onError );
 	}
 	
 	/*
@@ -150,11 +150,11 @@ function newDataEncryptor ( ) {
 			);
 		}
 		pswdPromise
-		.then ( m_ImportKey )
-		.then ( m_DeriveKey )
-		.then ( encrypt )
-		.then ( returnValue )
-		.catch ( onError );
+			.then ( m_ImportKey )
+			.then ( m_DeriveKey )
+			.then ( encrypt )
+			.then ( returnValue )
+			.catch ( onError );
 	}
 	
 	/*

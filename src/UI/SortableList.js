@@ -255,7 +255,7 @@ function newSortableList ( options, parentNode ) {
 				title : g_Translator.getText ('SortableList - Edit' ), 
 				innerHTML : String.fromCharCode ( 8688 ) 
 			},
-		item );
+			item );
 		if ( 'AllSort' === m_Options.listStyle ) {
 			rightArrowButton.addEventListener ( 'click', m_OnRightArrowButtonClick, false );
 		}

@@ -191,25 +191,25 @@ function newNoteEditor ( ) {
 		
 		// and displayed in a dialog box
 		newNoteDialog ( note, routeObjId, true )
-		.show ( )
-		.then ( 
-			newNote => {
-				let route = m_DataSearchEngine.getRoute ( routeObjId );
-				route.notes.add ( newNote );
-				newNote.chainedDistance = route.chainedDistance;
-				route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
-				m_EventDispatcher.dispatch ( 'setitinerary' );
-				m_EventDispatcher.dispatch ( 
-					'addnote', 
-					{ 
-						note : newNote,
-						readOnly : false
-					}
-				);
-				newRoadbookUpdate ( );
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.show ( )
+			.then ( 
+				newNote => {
+					let route = m_DataSearchEngine.getRoute ( routeObjId );
+					route.notes.add ( newNote );
+					newNote.chainedDistance = route.chainedDistance;
+					route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+					m_EventDispatcher.dispatch ( 'setitinerary' );
+					m_EventDispatcher.dispatch ( 
+						'addnote', 
+						{ 
+							note : newNote,
+							readOnly : false
+						}
+					);
+					newRoadbookUpdate ( );
+				}
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -236,22 +236,22 @@ function newNoteEditor ( ) {
 		note.popupContent = searchResult.tags.name || '';
 		
 		newNoteDialog ( note, -1, true )
-		.show ( )
-		.then ( 
-			newNote => {
-				g_TravelNotesData.travel.notes.add ( newNote );
-				m_EventDispatcher.dispatch ( 'settravelnotes' );
-				m_EventDispatcher.dispatch ( 
-					'addnote', 
-					{ 
-						note : newNote,
-						readOnly : false
-					}
-				);
-				newRoadbookUpdate ( );
-			}
-		)
-		.catch (  err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.show ( )
+			.then ( 
+				newNote => {
+					g_TravelNotesData.travel.notes.add ( newNote );
+					m_EventDispatcher.dispatch ( 'settravelnotes' );
+					m_EventDispatcher.dispatch ( 
+						'addnote', 
+						{ 
+							note : newNote,
+							readOnly : false
+						}
+					);
+					newRoadbookUpdate ( );
+				}
+			)
+			.catch (  err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -285,25 +285,25 @@ function newNoteEditor ( ) {
 
 		// and displayed in a dialog box
 		newNoteDialog ( note, g_TravelNotesData.travel.editedRoute.objId, true )
-		.show ( )
-		.then ( 
-			newNote => {
-				let route = m_DataSearchEngine.getRoute ( g_TravelNotesData.travel.editedRoute.objId );
-				route.notes.add ( newNote );
-				newNote.chainedDistance = route.chainedDistance;
-				route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
-				m_EventDispatcher.dispatch ( 'setitinerary' );
-				m_EventDispatcher.dispatch ( 
-					'addnote', 
-					{ 
-						note : newNote,
-						readOnly : false
-					}
-				);
-				newRoadbookUpdate ( );
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.show ( )
+			.then ( 
+				newNote => {
+					let route = m_DataSearchEngine.getRoute ( g_TravelNotesData.travel.editedRoute.objId );
+					route.notes.add ( newNote );
+					newNote.chainedDistance = route.chainedDistance;
+					route.notes.sort ( ( first, second ) => { return first.distance - second.distance; } );
+					m_EventDispatcher.dispatch ( 'setitinerary' );
+					m_EventDispatcher.dispatch ( 
+						'addnote', 
+						{ 
+							note : newNote,
+							readOnly : false
+						}
+					);
+					newRoadbookUpdate ( );
+				}
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*
@@ -323,22 +323,22 @@ function newNoteEditor ( ) {
 
 		// and displayed in a dialog box
 		newNoteDialog ( note, -1, true )
-		.show ( )
-		.then ( 
-			newNote => {
-				g_TravelNotesData.travel.notes.add ( newNote );
-				m_EventDispatcher.dispatch ( 'settravelnotes' );
-				m_EventDispatcher.dispatch ( 
-					'addnote', 
-					{ 
-						note : newNote,
-						readOnly : false
-					}
-				);
-				newRoadbookUpdate ( );
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.show ( )
+			.then ( 
+				newNote => {
+					g_TravelNotesData.travel.notes.add ( newNote );
+					m_EventDispatcher.dispatch ( 'settravelnotes' );
+					m_EventDispatcher.dispatch ( 
+						'addnote', 
+						{ 
+							note : newNote,
+							readOnly : false
+						}
+					);
+					newRoadbookUpdate ( );
+				}
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 	
 	/*
@@ -356,29 +356,29 @@ function newNoteEditor ( ) {
 		let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( noteObjId );
 		let routeObjId = null === noteAndRoute.route ? -1 : noteAndRoute.route.objId;
 		newNoteDialog ( noteAndRoute.note, routeObjId, false )
-		.show ( )
-		.then ( 
-			modifiedNote => {
-				let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
-				if ( noteAndRoute.note ) {
+			.show ( )
+			.then ( 
+				modifiedNote => {
+					let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
+					if ( noteAndRoute.note ) {
 					// it's an existing note. The note is changed on the map
-					m_EventDispatcher.dispatch ( 
-						'redrawnote', 
-						{ 
-							note : modifiedNote
+						m_EventDispatcher.dispatch ( 
+							'redrawnote', 
+							{ 
+								note : modifiedNote
+							}
+						);
+						if ( ! noteAndRoute.route ) {
+							m_EventDispatcher.dispatch ( 'settravelnotes' );
 						}
-					);
-					if ( ! noteAndRoute.route ) {
-						m_EventDispatcher.dispatch ( 'settravelnotes' );
+						else {
+							m_EventDispatcher.dispatch ( 'setitinerary' );
+						}
 					}
-					else {
-						m_EventDispatcher.dispatch ( 'setitinerary' );
-					}
+					newRoadbookUpdate ( );
 				}
-				newRoadbookUpdate ( );
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*

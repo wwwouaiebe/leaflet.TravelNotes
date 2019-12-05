@@ -98,26 +98,26 @@ function newSvgIconFromOsmFactory ( ) {
 		m_Response.elements.forEach (
 			element => {
 				switch ( element.type ) {
-					case 'area' :
-						if ( element.tags && element.tags.boundary && element.tags.name ) {
-							m_City = element.tags.name;
-						}
-						break;
-					case 'way' :
-						// replacing the nodes property with the nodesId property to 
-						// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
-						element.nodesIds = element.nodes;
-						delete element.nodes;
-						m_WaysMap.set ( element.id, element );
-						break;
-					case 'node' :
-						m_NodesMap.set ( element.id, element );
-						if ( element.tags && element.tags.place && [ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place ) ) {
-							m_Places.push ( element );
-						}
-						break;
-					default:
-						break;
+				case 'area' :
+					if ( element.tags && element.tags.boundary && element.tags.name ) {
+						m_City = element.tags.name;
+					}
+					break;
+				case 'way' :
+					// replacing the nodes property with the nodesId property to 
+					// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
+					element.nodesIds = element.nodes;
+					delete element.nodes;
+					m_WaysMap.set ( element.id, element );
+					break;
+				case 'node' :
+					m_NodesMap.set ( element.id, element );
+					if ( element.tags && element.tags.place && [ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place ) ) {
+						m_Places.push ( element );
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		);
@@ -188,7 +188,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let minDistance = Number.MAX_VALUE;
 		m_Places.forEach (
 			place => {
-			let placeDistance = m_Geometry.pointsDistance ( m_IconItineraryPoint.latLng, [ place.lat, place.lon ] );
+				let placeDistance = m_Geometry.pointsDistance ( m_IconItineraryPoint.latLng, [ place.lat, place.lon ] );
 				if ( minDistance > placeDistance ) {
 					minDistance = placeDistance;
 					m_Place = place.tags.name;
@@ -415,7 +415,7 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 			let pointsAttribute = '';
 			for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-					pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
+				pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 			}
 			let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
 			polyline.setAttributeNS ( null, "points", pointsAttribute );
@@ -470,7 +470,7 @@ function newSvgIconFromOsmFactory ( ) {
 					}
 					let pointsAttribute = '';
 					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-							pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
+						pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 					}
 
 					let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
@@ -607,13 +607,13 @@ function newSvgIconFromOsmFactory ( ) {
 		m_City = null;
 		
 		newHttpRequestBuilder ( ).getJsonPromise ( m_GetUrl ( ) )
-		.then ( BuildIconAndAdress  )
-		.catch ( 
-			err => { 
-				s_RequestStarted = false;
-				onError (err );
-			}
-		);
+			.then ( BuildIconAndAdress  )
+			.catch ( 
+				err => { 
+					s_RequestStarted = false;
+					onError (err );
+				}
+			);
 	}
 
 	/*

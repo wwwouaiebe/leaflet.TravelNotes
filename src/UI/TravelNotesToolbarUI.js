@@ -89,18 +89,18 @@ function newTravelNotesToolbarUI ( ) {
 
 	function m_OnGeoLocationStatusChanged ( status ) {
 		switch ( status ) {
-			case 1:
-				m_GeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
-				break;
-			case 2:
-				m_GeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
-				break;
-			default:
-				if ( m_GeoLocationButton ) {
-					m_GeoLocationButton.parentNode.removeChild ( m_GeoLocationButton );
-					m_GeoLocationButton = null;
-				}
-				break;
+		case 1:
+			m_GeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
+			break;
+		case 2:
+			m_GeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
+			break;
+		default:
+			if ( m_GeoLocationButton ) {
+				m_GeoLocationButton.parentNode.removeChild ( m_GeoLocationButton );
+				m_GeoLocationButton = null;
+			}
+			break;
 		}
 	}
 	
@@ -169,14 +169,14 @@ function newTravelNotesToolbarUI ( ) {
 				}, 
 				buttonsDiv 
 			)
-			.addEventListener ( 
-				'click', 
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					g_APIKeysManager.dialog ( );
-				}, 
-				false 
-			);
+				.addEventListener ( 
+					'click', 
+					clickEvent => {
+						clickEvent.stopPropagation ( );
+						g_APIKeysManager.dialog ( );
+					}, 
+					false 
+				);
 		}
 		if ( 0 < gc_GeoLocator.status ) {
 			//GeoLocator button

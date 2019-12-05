@@ -113,14 +113,14 @@ function newGeoLocator ( ) {
 
 	function m_Switch ( ) {
 		switch ( m_Status ) {
-			case 1:
-				m_Start ( );
-				break;
-			case 2:
-				m_Stop ( );
-				break;
-			default:
-				break;
+		case 1:
+			m_Start ( );
+			break;
+		case 2:
+			m_Stop ( );
+			break;
+		default:
+			break;
 		}
 		
 		return m_Status;

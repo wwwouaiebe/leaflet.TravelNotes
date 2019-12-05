@@ -196,10 +196,10 @@ function travelNotesFactory ( ) {
 				// osmSearch 
 				if ( window.osmSearch ) {
 					window.osmSearch.getDictionaryPromise ( g_Config.language, 'travelNotes' )
-					.then ( 
-						( ) => console.log ( 'osmSearch dictionary loaded' ),
-						err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
-					);
+						.then ( 
+							( ) => console.log ( 'osmSearch dictionary loaded' ),
+							err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
+						);
 				}
 				else {
 					console.log ( 'osmSearch not found' );
@@ -385,12 +385,12 @@ newHttpRequestBuilder ( ).getJsonPromise (
 	window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 	'TravelNotesConfig.json' 
 )
-.then ( 
-	config => {
-		g_Config.overload ( config );
-		newAutoLoader ( );
-	}
-);
+	.then ( 
+		config => {
+			g_Config.overload ( config );
+			newAutoLoader ( );
+		}
+	);
 
 /*
 --- End of TravelNotes.js file ----------------------------------------------------------------------------------------

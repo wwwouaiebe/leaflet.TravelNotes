@@ -373,14 +373,14 @@ function newWayPointEditor ( ) {
 		m_EventDispatcher.dispatch ( 'setwaypointslist' );
 		let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-				m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointsIterator.value.objId } );
-				m_EventDispatcher.dispatch ( 
-					'addwaypoint', 
-					{ 
-						wayPoint : wayPointsIterator.value,
-						letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
-					}
-				);
+			m_EventDispatcher.dispatch ( 'removeobject', { objId: wayPointsIterator.value.objId } );
+			m_EventDispatcher.dispatch ( 
+				'addwaypoint', 
+				{ 
+					wayPoint : wayPointsIterator.value,
+					letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
+				}
+			);
 		}
 		g_RouteEditor.startRouting ( );
 	}

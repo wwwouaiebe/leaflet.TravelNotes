@@ -1016,10 +1016,10 @@ function newMapEditor ( ) {
 				color : g_Config.geoLocation.color
 			}
 		)
-		.bindTooltip (
+			.bindTooltip (
 				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
-		)
-		.addTo ( g_TravelNotesData.map );
+			)
+			.addTo ( g_TravelNotesData.map );
 		
 		if ( zoomToPosition ) {
 			g_TravelNotesData.map.setView ( L.latLng ( position.coords.latitude, position.coords.longitude ), g_Config.geoLocation.zoomFactor );

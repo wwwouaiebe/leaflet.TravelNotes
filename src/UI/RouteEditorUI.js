@@ -86,22 +86,22 @@ function newRouteEditorUI ( ) {
 			},
 			headerDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				if ( -1 === g_TravelNotesData.editedRouteObjId ) {
-					return;
-				}
-				document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-				document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-				document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
-				let hiddenList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
-				document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
-				document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = hiddenList ? g_Translator.getText ( 'RouteEditorUI - Show' ) : g_Translator.getText ( 'RouteEditorUI - Hide' );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					if ( -1 === g_TravelNotesData.editedRouteObjId ) {
+						return;
+					}
+					document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' ).classList.toggle ( 'TravelNotes-Control-SmallHeader' );
+					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-Control-RouteButtonsDiv' ).classList.toggle ( 'TravelNotes-Control-HiddenList' );
+					let hiddenList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-HiddenList' );
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).innerHTML = hiddenList ? '&#x25b6;' : '&#x25bc;';
+					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title = hiddenList ? g_Translator.getText ( 'RouteEditorUI - Show' ) : g_Translator.getText ( 'RouteEditorUI - Hide' );
+				}, 
+				false 
+			);
 		
 		// title
 		m_HTMLElementsFactory.create ( 
@@ -211,17 +211,17 @@ function newRouteEditorUI ( ) {
 			}, 
 			buttonsDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-				let expandedList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
-				document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
-				document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = expandedList ? g_Translator.getText ( 'RouteEditorUI - Reduce the list' ) : g_Translator.getText ( 'RouteEditorUI - Expand the list' );		
-			},
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				clickEvent => {
+					clickEvent.stopPropagation ( );
+					document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.toggle ( 'TravelNotes-Control-ExpandedList' );
+					let expandedList = document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ).classList.contains ( 'TravelNotes-Control-ExpandedList' );
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).innerHTML = expandedList ? '&#x25b3;' : '&#x25bd;';
+					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title = expandedList ? g_Translator.getText ( 'RouteEditorUI - Reduce the list' ) : g_Translator.getText ( 'RouteEditorUI - Expand the list' );		
+				},
+				false 
+			);
 
 		// cancel route button
 		m_HTMLElementsFactory.create (
@@ -234,14 +234,14 @@ function newRouteEditorUI ( ) {
 			},
 			buttonsDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			event => {
-				event.stopPropagation ( );
-				g_RouteEditor.cancelEdition ( );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				event => {
+					event.stopPropagation ( );
+					g_RouteEditor.cancelEdition ( );
+				}, 
+				false 
+			);
 		
 		// save route button
 		m_HTMLElementsFactory.create (
@@ -254,13 +254,13 @@ function newRouteEditorUI ( ) {
 			},
 			buttonsDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			event => {
-				event.stopPropagation ( );
-				g_RouteEditor.saveEdition ( );
-			}, 
-			false );
+			.addEventListener ( 
+				'click', 
+				event => {
+					event.stopPropagation ( );
+					g_RouteEditor.saveEdition ( );
+				}, 
+				false );
 		
 		// gpx button
 		m_HTMLElementsFactory.create (
@@ -273,14 +273,14 @@ function newRouteEditorUI ( ) {
 			},
 			buttonsDiv 
 		)
-		.addEventListener ( 
-			'click', 
-			event => {
-				event.stopPropagation ( );
-				g_RouteEditor.saveGpx ( );
-			}, 
-			false
-		);
+			.addEventListener ( 
+				'click', 
+				event => {
+					event.stopPropagation ( );
+					g_RouteEditor.saveGpx ( );
+				}, 
+				false
+			);
 		
 		// reverse wayPoints button
 		m_HTMLElementsFactory.create ( 
@@ -293,14 +293,14 @@ function newRouteEditorUI ( ) {
 			},
 			buttonsDiv
 		)
-		.addEventListener ( 
-			'click', 
-			event => {
-				event.stopPropagation ( );
-				g_WayPointEditor.reverseWayPoints ( );
-			}, 
-			false 
-		);
+			.addEventListener ( 
+				'click', 
+				event => {
+					event.stopPropagation ( );
+					g_WayPointEditor.reverseWayPoints ( );
+				}, 
+				false 
+			);
 				
 		// remove all wayPoints button
 		m_HTMLElementsFactory.create ( 
@@ -313,14 +313,14 @@ function newRouteEditorUI ( ) {
 			}, 
 			buttonsDiv
 		)
-		.addEventListener ( 
-			'click', 
-			event => {
-				event.stopPropagation ( );
-				g_WayPointEditor.removeAllWayPoints ( );
-			}, 
-			false
-		);
+			.addEventListener ( 
+				'click', 
+				event => {
+					event.stopPropagation ( );
+					g_WayPointEditor.removeAllWayPoints ( );
+				}, 
+				false
+			);
 	}
 			
 	/*

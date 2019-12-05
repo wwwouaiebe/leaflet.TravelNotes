@@ -175,9 +175,9 @@ function newAPIKeysManager ( ) {
 		)
 		ApiKeys.sort ( function ( first, second ) { return first.providerName.localeCompare ( second.providerName ); } );
 		newAPIKeysDialog ( ApiKeys )
-		.show ( )
-		.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
-		.catch ( err => console.log ( err ? err : 'canceled by user' )); 
+			.show ( )
+			.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
+			.catch ( err => console.log ( err ? err : 'canceled by user' )); 
 	}
 	
 	/*
@@ -232,8 +232,8 @@ function newAPIKeysManager ( ) {
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 				'APIKeys' 
 		)
-		.then ( m_OnServerFile )
-		.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
+			.then ( m_OnServerFile )
+			.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
 	}
 	
 	/*

@@ -212,7 +212,7 @@ function newTravelNotesPaneUI ( ) {
 				childNode.draggable = true;
 				childNode.addEventListener ( 'dragstart', m_OnDragStart, false );	
 				childNode.classList.add ( 'TravelNotes-SortableList-MoveCursor' );				
-}
+			}
 		);
 	}
 

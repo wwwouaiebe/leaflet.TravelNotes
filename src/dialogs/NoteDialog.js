@@ -241,14 +241,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				showPlace --;
 			}
 			switch ( counter ) {
-				case data.streets.length - 2:
-					address += directionArrow;
-					break;
-				case data.streets.length - 1:
-					break;
-				default:
+			case data.streets.length - 2:
+				address += directionArrow;
+				break;
+			case data.streets.length - 1:
+				break;
+			default:
 				address += String.fromCodePoint ( 0x2AA5 );
-					break;
+				break;
 			}
 		}
 		if ( ! data.city && '' !== m_City ) {
@@ -875,7 +875,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			g_Config.language.toUpperCase ( ) + 
 			'.json'
 		)
-		.then ( loadIconsAndButtons ).catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
+			.then ( loadIconsAndButtons ).catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
 	}
 	
 	/*

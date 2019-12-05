@@ -303,9 +303,9 @@ function newLayersToolbarUI ( ) {
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 			'TravelNotesLayers.json' 
 		)
-		.then ( layers => { s_Layers = s_Layers.concat (layers ); } )
-		.catch ( err => console.log ( err? err : 'An error occurs when loading TravelNotesLayers.json' ) )
-		.finally ( m_CreateLayersToolbar );
+			.then ( layers => { s_Layers = s_Layers.concat (layers ); } )
+			.catch ( err => console.log ( err? err : 'An error occurs when loading TravelNotesLayers.json' ) )
+			.finally ( m_CreateLayersToolbar );
 	}
 	
 	/*
