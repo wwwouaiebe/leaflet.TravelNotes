@@ -47,44 +47,44 @@ Patterns : Closure
 
 function newCollection ( objName ) {
 
-	let m_Array = [];
+	let myArray = [];
 
-	let m_ObjName = objName;
+	let myObjName = objName;
 
 	/*
-	--- m_Add function ------------------------------------------------------------------------------------------------
+	--- myAdd function ------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Add ( object ) {
-		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== m_ObjName ) ) {
+	function myAdd ( object ) {
+		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== myObjName ) ) {
 			throw 'invalid object name for add function';
 		}
-		m_Array.push ( object );
+		myArray.push ( object );
 
 		return;
 	}
 
 	/*
-	--- m_First function ----------------------------------------------------------------------------------------------
+	--- myFirst function ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_First ( ) {
-		return m_Array [ 0 ];
+	function myFirst ( ) {
+		return myArray [ 0 ];
 	}
 
 	/*
-	--- m_ForEach function --------------------------------------------------------------------------------------------
+	--- myForEach function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ForEach ( funct ) {
+	function myForEach ( funct ) {
 		let result = null;
-		let iterator = m_Iterator ( );
+		let iterator = myIterator ( );
 		while ( ! iterator.done ) {
 			result = funct ( iterator.value, result );
 		}
@@ -92,28 +92,28 @@ function newCollection ( objName ) {
 	}
 
 	/*
-	--- m_GetAt function ----------------------------------------------------------------------------------------------
+	--- myGetAt function ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetAt ( objId ) {
-		let index = m_IndexOfObjId ( objId );
+	function myGetAt ( objId ) {
+		let index = myIndexOfObjId ( objId );
 		if ( -1 === index ) {
 			return null;
 		}
-		return m_Array [ index ];
+		return myArray [ index ];
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		let array = [ ];
-		let iterator = m_Iterator ( );
+		let iterator = myIterator ( );
 		while ( ! iterator.done ) {
 			array.push ( iterator.value.object );
 		}
@@ -122,72 +122,72 @@ function newCollection ( objName ) {
 	}
 
 	/*
-	--- m_MoveTo function ---------------------------------------------------------------------------------------------
+	--- myMoveTo function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_MoveTo ( objId, targetObjId, moveBefore ) {
-		let oldPosition = m_IndexOfObjId ( objId );
-		let newPosition = m_IndexOfObjId ( targetObjId );
+	function myMoveTo ( objId, targetObjId, moveBefore ) {
+		let oldPosition = myIndexOfObjId ( objId );
+		let newPosition = myIndexOfObjId ( targetObjId );
 		if ( ! moveBefore ) {
 			newPosition ++;
 		}
-		m_Array.splice ( newPosition, 0, m_Array [ oldPosition ] );
+		myArray.splice ( newPosition, 0, myArray [ oldPosition ] );
 		if ( newPosition < oldPosition ) {
 			oldPosition ++ ;
 		}
-		m_Array.splice ( oldPosition, 1 );
+		myArray.splice ( oldPosition, 1 );
 	}
 
 	/*
-	--- m_IndexOfObjId function ---------------------------------------------------------------------------------------
+	--- myIndexOfObjId function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_IndexOfObjId ( objId ) {
-		let index = m_Array.findIndex (
+	function myIndexOfObjId ( objId ) {
+		let index = myArray.findIndex (
 			element => { return element.objId === objId; }
 		);
 		return index;
 	}
 
 	/*
-	--- m_Iterator function -------------------------------------------------------------------------------------------
+	--- myIterator function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Iterator ( ) {
+	function myIterator ( ) {
 		let nextIndex = -1;
 		return {
-			get value ( ) { return nextIndex < m_Array.length ?  m_Array [ nextIndex ] : null; },
-			get done ( ) { return ++ nextIndex  >= m_Array.length; },
+			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
+			get done ( ) { return ++ nextIndex  >= myArray.length; },
 			get first ( ) { return 0 === nextIndex; },
-			get last ( ) { return nextIndex  >= m_Array.length - 1; },
+			get last ( ) { return nextIndex  >= myArray.length - 1; },
 			get index ( ) { return nextIndex; }
 		};
 	}
 
 	/*
-	--- m_Last function -----------------------------------------------------------------------------------------------
+	--- myLast function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Last ( ) {
-		return m_Array [ m_Array.length - 1 ];
+	function myLast ( ) {
+		return myArray [ myArray.length - 1 ];
 	}
 
 	/*
-	--- m_NextOrPrevious function -------------------------------------------------------------------------------------
+	--- myNextOrPrevious function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_NextOrPrevious ( objId, condition, direction ) {
-		let index = m_IndexOfObjId ( objId );
+	function myNextOrPrevious ( objId, condition, direction ) {
+		let index = myIndexOfObjId ( objId );
 		if ( -1 === index ) {
 			throw 'invalid objId for next or previous function';
 		}
@@ -199,81 +199,81 @@ function newCollection ( objName ) {
 		}
 		index += direction;
 
-		while ( ( -1 < index ) && ( index < m_Array.length ) && ! condition ( m_Array [ index ] ) ) {
+		while ( ( -1 < index ) && ( index < myArray.length ) && ! condition ( myArray [ index ] ) ) {
 			index += direction;
 		}
-		if ( -1 === index || m_Array.length === index ) {
+		if ( -1 === index || myArray.length === index ) {
 			return null;
 		}
 
-		return m_Array [ index ];
+		return myArray [ index ];
 	}
 
 	/*
-	--- m_Remove function ---------------------------------------------------------------------------------------------
+	--- myRemove function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Remove ( objId ) {
-		let index = m_IndexOfObjId ( objId );
+	function myRemove ( objId ) {
+		let index = myIndexOfObjId ( objId );
 		if ( -1 === index ) {
 			throw 'invalid objId for remove function';
 		}
-		m_Array.splice ( m_IndexOfObjId ( objId ), 1 );
+		myArray.splice ( myIndexOfObjId ( objId ), 1 );
 	}
 
 	/*
-	--- m_RemoveAll function ------------------------------------------------------------------------------------------
+	--- myRemoveAll function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveAll ( ExceptFirstLast ) {
+	function myRemoveAll ( ExceptFirstLast ) {
 		if ( ExceptFirstLast ) {
-			m_Array.splice ( 1, m_Array.length - 2 );
+			myArray.splice ( 1, myArray.length - 2 );
 		}
 		else {
-			m_Array.length = 0;
+			myArray.length = 0;
 		}
 	}
 
 	/*
-	--- m_Replace function --------------------------------------------------------------------------------------------
+	--- myReplace function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Replace ( oldObjId, object ) {
-		let index = m_IndexOfObjId ( oldObjId );
+	function myReplace ( oldObjId, object ) {
+		let index = myIndexOfObjId ( oldObjId );
 		if ( -1 === index ) {
 			throw 'invalid objId for replace function';
 		}
-		m_Array [ index ] = object;
+		myArray [ index ] = object;
 	}
 
 	/*
-	--- m_Reverse function --------------------------------------------------------------------------------------------
+	--- myReverse function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Reverse ( ) {
-		m_Array.reverse ( );
+	function myReverse ( ) {
+		myArray.reverse ( );
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		m_Array.length = 0;
+	function mySetObject ( something ) {
+		myArray.length = 0;
 		let newObject;
 		something.forEach (
 			arrayObject => {
-				switch ( m_ObjName ) {
+				switch ( myObjName ) {
 				case 'Route' :
 					newObject = newRoute ( );
 					break;
@@ -290,38 +290,38 @@ function newCollection ( objName ) {
 					newObject = newItineraryPoint ( );
 					break;
 				default:
-					throw ( 'invalid ObjName ( ' + m_ObjName +' ) in Collection.m_SetObject' );
+					throw ( 'invalid ObjName ( ' + myObjName +' ) in Collection.mySetObject' );
 				}
 				newObject.object = arrayObject;
-				m_Add ( newObject );
+				myAdd ( newObject );
 			}
 		);
 	}
 
 	/*
-	--- m_Sort function -----------------------------------------------------------------------------------------------
+	--- mySort function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Sort ( compareFunction ) {
-		m_Array.sort ( compareFunction );
+	function mySort ( compareFunction ) {
+		myArray.sort ( compareFunction );
 	}
 
 	/*
-	--- m_Swap function -----------------------------------------------------------------------------------------------
+	--- mySwap function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Swap ( objId, swapUp ) {
-		let index = m_IndexOfObjId ( objId );
-		if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( m_Array.length - 1 === index ) && ( ! swapUp ) ) ) {
+	function mySwap ( objId, swapUp ) {
+		let index = myIndexOfObjId ( objId );
+		if ( ( -1 === index ) || ( ( 0 === index ) && swapUp ) || ( ( myArray.length - 1 === index ) && ( ! swapUp ) ) ) {
 			throw 'invalid objId for swap function';
 		}
-		let tmp = m_Array [ index ];
-		m_Array [ index ] = m_Array [ index + ( swapUp ? -1 : 1  ) ];
-		m_Array [ index + ( swapUp ? -1 : 1  ) ] = tmp;
+		let tmp = myArray [ index ];
+		myArray [ index ] = myArray [ index + ( swapUp ? -1 : 1  ) ];
+		myArray [ index + ( swapUp ? -1 : 1  ) ] = tmp;
 	}
 
 	/*
@@ -342,7 +342,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			add : object => m_Add ( object ),
+			add : object => myAdd ( object ),
 
 			/*
 			--- forEach function --------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			forEach : funct => { return m_ForEach ( funct ); },
+			forEach : funct => { return myForEach ( funct ); },
 
 			/*
 			--- getAt function ----------------------------------------------------------------------------------------
@@ -362,7 +362,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			getAt : ( objId ) => { return m_GetAt ( objId ); },
+			getAt : ( objId ) => { return myGetAt ( objId ); },
 
 			/*
 			--- moveTo function ---------------------------------------------------------------------------------------
@@ -373,7 +373,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			moveTo : ( objId, targetObjId, moveBefore ) => m_MoveTo ( objId, targetObjId, moveBefore ),
+			moveTo : ( objId, targetObjId, moveBefore ) => myMoveTo ( objId, targetObjId, moveBefore ),
 
 			/*
 			--- next function -----------------------------------------------------------------------------------------
@@ -383,7 +383,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			next : ( objId, condition ) => { return m_NextOrPrevious ( objId, condition, 1 ); },
+			next : ( objId, condition ) => { return myNextOrPrevious ( objId, condition, 1 ); },
 
 			/*
 			--- previous function -------------------------------------------------------------------------------------
@@ -393,7 +393,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			previous : ( objId, condition ) => { return m_NextOrPrevious ( objId, condition, -1 ); },
+			previous : ( objId, condition ) => { return myNextOrPrevious ( objId, condition, -1 ); },
 
 			/*
 			--- remove function ---------------------------------------------------------------------------------------
@@ -404,7 +404,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			remove : objId => m_Remove ( objId ),
+			remove : objId => myRemove ( objId ),
 
 			/*
 			--- removeAll function ------------------------------------------------------------------------------------
@@ -415,7 +415,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			removeAll : exceptFirstLast => m_RemoveAll ( exceptFirstLast ),
+			removeAll : exceptFirstLast => myRemoveAll ( exceptFirstLast ),
 
 			/*
 			--- replace function --------------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			replace : ( oldObjId, object ) => m_Replace ( oldObjId, object ),
+			replace : ( oldObjId, object ) => myReplace ( oldObjId, object ),
 
 			/*
 			--- reverse function --------------------------------------------------------------------------------------
@@ -436,7 +436,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			reverse : ( ) => m_Reverse ( ),
+			reverse : ( ) => myReverse ( ),
 
 			/*
 			--- sort function -----------------------------------------------------------------------------------------
@@ -446,7 +446,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			sort : compareFunction => m_Sort ( compareFunction ),
+			sort : compareFunction => mySort ( compareFunction ),
 
 			/*
 			--- swap function -----------------------------------------------------------------------------------------
@@ -457,7 +457,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			swap : ( objId, swapUp ) =>	m_Swap ( objId, swapUp ),
+			swap : ( objId, swapUp ) =>	mySwap ( objId, swapUp ),
 
 			/*
 			--- first getter ------------------------------------------------------------------------------------------
@@ -468,7 +468,7 @@ function newCollection ( objName ) {
 			*/
 
 			get first ( ) {
-				return m_First ( );
+				return myFirst ( );
 			},
 
 			/*
@@ -487,7 +487,7 @@ function newCollection ( objName ) {
 			*/
 
 			get iterator ( ) {
-				return m_Iterator ( );
+				return myIterator ( );
 			},
 
 			/*
@@ -499,7 +499,7 @@ function newCollection ( objName ) {
 			*/
 
 			get last ( ) {
-				return m_Last ( );
+				return myLast ( );
 			},
 
 			/*
@@ -511,7 +511,7 @@ function newCollection ( objName ) {
 			*/
 
 			get length ( ) {
-				return m_Array.length;
+				return myArray.length;
 			},
 
 			/*
@@ -523,7 +523,7 @@ function newCollection ( objName ) {
 			*/
 
 			get object ( ) {
-				return m_GetObject ( );
+				return myGetObject ( );
 			},
 
 			/*
@@ -536,7 +536,7 @@ function newCollection ( objName ) {
 			*/
 
 			set object ( something ) {
-				m_SetObject ( something );
+				mySetObject ( something );
 			}
 
 		}

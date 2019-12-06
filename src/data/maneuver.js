@@ -34,6 +34,8 @@ export { newManeuver };
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+const ourObjType = newObjType ( 'Maneuver' );
+
 /*
 --- newManeuver function ------------------------------------------------------------------------------------------
 
@@ -46,32 +48,30 @@ function newManeuver ( ) {
 
 	// Private variables
 
-	const s_ObjType = newObjType ( 'Maneuver' );
+	let myObjId = newObjId ( );
 
-	let m_ObjId = newObjId ( );
+	let myIconName = '';
 
-	let m_IconName = '';
+	let myInstruction = '';
 
-	let m_Instruction = '';
+	let myItineraryPointObjId = -1;
 
-	let m_ItineraryPointObjId = -1;
+	let myDistance = 0;
 
-	let m_Distance = 0;
-
-	let m_Duration = 0;
+	let myDuration = 0;
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -82,14 +82,14 @@ function newManeuver ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -97,37 +97,37 @@ function newManeuver ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			iconName : m_IconName,
-			instruction : m_Instruction,
-			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-			duration : m_Duration,
-			itineraryPointObjId : m_ItineraryPointObjId,
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			iconName : myIconName,
+			instruction : myInstruction,
+			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			duration : myDuration,
+			itineraryPointObjId : myItineraryPointObjId,
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_IconName = something.iconName || '';
-		m_Instruction = something.instruction || '';
-		m_Distance = something.distance || 0;
-		m_Duration = something.duration || 0;
-		m_ItineraryPointObjId = something.itineraryPointObjId || -1;
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myIconName = something.iconName || '';
+		myInstruction = something.instruction || '';
+		myDistance = something.distance || 0;
+		myDuration = something.duration || 0;
+		myItineraryPointObjId = something.itineraryPointObjId || -1;
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -139,27 +139,27 @@ function newManeuver ( ) {
 	return Object.seal (
 		{
 
-			get iconName ( ) { return m_IconName; },
-			set iconName ( IconName ) { m_IconName = IconName; },
+			get iconName ( ) { return myIconName; },
+			set iconName ( IconName ) { myIconName = IconName; },
 
-			get instruction ( ) { return m_Instruction; },
-			set instruction ( Instruction ) { m_Instruction = Instruction; },
+			get instruction ( ) { return myInstruction; },
+			set instruction ( Instruction ) { myInstruction = Instruction; },
 
-			get itineraryPointObjId ( ) { return m_ItineraryPointObjId; },
-			set itineraryPointObjId ( ItineraryPointObjId ) { m_ItineraryPointObjId = ItineraryPointObjId; },
+			get itineraryPointObjId ( ) { return myItineraryPointObjId; },
+			set itineraryPointObjId ( ItineraryPointObjId ) { myItineraryPointObjId = ItineraryPointObjId; },
 
-			get distance ( ) { return m_Distance; },
-			set distance ( Distance ) { m_Distance = Distance; },
+			get distance ( ) { return myDistance; },
+			set distance ( Distance ) { myDistance = Distance; },
 
-			get duration ( ) { return m_Duration; },
-			set duration ( Duration ) { m_Duration = Duration; },
+			get duration ( ) { return myDuration; },
+			set duration ( Duration ) { myDuration = Duration; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

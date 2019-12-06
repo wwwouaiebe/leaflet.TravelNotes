@@ -34,7 +34,7 @@ export { newWayPoint };
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-const s_ObjType = newObjType ( 'WayPoint' );
+const ourObjType = newObjType ( 'WayPoint' );
 
 /*
 --- newWayPoint function ------------------------------------------------------------------------------------------
@@ -46,36 +46,36 @@ Patterns : Closure
 
 function newWayPoint ( ) {
 
-	let m_Name = '';
+	let myName = '';
 
-	let m_Lat = 0;
+	let myLat = 0;
 
-	let m_Lng = 0;
+	let myLng = 0;
 
-	let m_ObjId = newObjId ( );
+	let myObjId = newObjId ( );
 
-	function m_GetUIName ( ) {
-		if ( '' !== m_Name ) {
-			return m_Name;
+	function myGetUIName ( ) {
+		if ( '' !== myName ) {
+			return myName;
 		}
-		if ( ( 0 !== m_Lat ) && ( 0 !== m_Lng ) ) {
-			return m_Lat.toFixed ( 6 ) + ( 0 < m_Lat ? ' N - ' : ' S - ' ) + m_Lng.toFixed ( 6 )  + ( 0 < m_Lng ? ' E' : ' W' );
+		if ( ( 0 !== myLat ) && ( 0 !== myLng ) ) {
+			return myLat.toFixed ( 6 ) + ( 0 < myLat ? ' N - ' : ' S - ' ) + myLng.toFixed ( 6 )  + ( 0 < myLng ? ' E' : ' W' );
 		}
 		return '';
 	}
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -86,14 +86,14 @@ function newWayPoint ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'name', 'lat', 'lng', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -101,33 +101,33 @@ function newWayPoint ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			name : m_Name,
-			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
-			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			name : myName,
+			lat : parseFloat ( myLat.toFixed ( 6 ) ),
+			lng : parseFloat ( myLng.toFixed ( 6 ) ),
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_Name = something.name || '';
-		m_Lat = something.lat || 0;
-		m_Lng = something.lng || 0;
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myName = something.name || '';
+		myLat = something.lat || 0;
+		myLng = something.lng || 0;
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -139,29 +139,29 @@ function newWayPoint ( ) {
 	return Object.seal (
 		{
 
-			get name ( ) { return m_Name; },
-			set name ( Name ) { m_Name = Name; },
+			get name ( ) { return myName; },
+			set name ( Name ) { myName = Name; },
 
-			get UIName ( ) { return m_GetUIName ( ); },
+			get UIName ( ) { return myGetUIName ( ); },
 
-			get lat ( ) { return m_Lat; },
-			set lat ( Lat ) { m_Lat = Lat; },
+			get lat ( ) { return myLat; },
+			set lat ( Lat ) { myLat = Lat; },
 
-			get lng ( ) { return m_Lng; },
-			set lng ( Lng ) { m_Lng = Lng; },
+			get lng ( ) { return myLng; },
+			set lng ( Lng ) { myLng = Lng; },
 
-			get latLng ( ) { return [ m_Lat, m_Lng ]; },
+			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				m_Lat = LatLng [ 0 ];
-				m_Lng = LatLng [ 1 ];
+				myLat = LatLng [ 0 ];
+				myLng = LatLng [ 1 ];
 			},
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

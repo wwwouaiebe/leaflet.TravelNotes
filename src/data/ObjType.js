@@ -31,7 +31,7 @@ Tests ...
 
 export { newObjType };
 
-import { currentVersion } from '../data/Version.js';
+import { theCurrentVersion } from '../data/Version.js';
 
 /*
 --- newObjType function -------------------------------------------------------------------------------------------
@@ -43,39 +43,39 @@ Patterns : Closure
 
 function newObjType ( name ) {
 
-	const m_Name = name;
+	const myName = name;
 
-	const m_Version = currentVersion;
+	const myVersion = theCurrentVersion;
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			name : m_Name,
-			version : m_Version
+			name : myName,
+			version : myVersion
 		};
 	}
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
-			throw 'No name for ' + m_Name;
+			throw 'No name for ' + myName;
 		}
-		if ( m_Name !== something.name ) {
-			throw 'Invalid name for ' + m_Name;
+		if ( myName !== something.name ) {
+			throw 'Invalid name for ' + myName;
 		}
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
-			throw 'No version for ' + m_Name;
+			throw 'No version for ' + myName;
 		}
 	}
 
@@ -88,13 +88,13 @@ function newObjType ( name ) {
 	return Object.seal (
 		{
 
-			get name ( ) { return m_Name; },
+			get name ( ) { return myName; },
 
-			get version ( ) { return m_Version; },
+			get version ( ) { return myVersion; },
 
-			get object ( ) { return m_GetObject ( ); },
+			get object ( ) { return myGetObject ( ); },
 
-			validate : something => { return m_Validate ( something ); }
+			validate : something => { return myValidate ( something ); }
 
 		}
 	);

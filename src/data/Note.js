@@ -34,6 +34,8 @@ export { newNote };
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+const ourObjType = newObjType ( 'Note' );
+
 /*
 --- newNote function ----------------------------------------------------------------------------------------------
 
@@ -44,50 +46,48 @@ Patterns : Closure
 
 function newNote ( ) {
 
-	const s_ObjType = newObjType ( 'Note' );
+	let myObjId = newObjId ( );
 
-	let m_ObjId = newObjId ( );
+	let myIconHeight = 40;
 
-	let m_IconHeight = 40;
+	let myIconWidth = 40;
 
-	let m_IconWidth = 40;
+	let myIconContent = '';
 
-	let m_IconContent = '';
+	let myPopupContent = '';
 
-	let m_PopupContent = '';
+	let myTooltipContent = '';
 
-	let m_TooltipContent = '';
+	let myPhone = '';
 
-	let m_Phone = '';
+	let myUrl = '';
 
-	let m_Url = '';
+	let myAddress = '';
 
-	let m_Address = '';
+	let myIconLat = 0;
 
-	let m_IconLat = 0;
+	let myIconLng = 0;
 
-	let m_IconLng = 0;
+	let myLat = 0;
 
-	let m_Lat = 0;
+	let myLng = 0;
 
-	let m_Lng = 0;
+	let myDistance = -1;
 
-	let m_Distance = -1;
-
-	let m_ChainedDistance = 0;
+	let myChainedDistance = 0;
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -98,7 +98,7 @@ function newNote ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
@@ -121,7 +121,7 @@ function newNote ( ) {
 		].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -129,55 +129,55 @@ function newNote ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			iconHeight : m_IconHeight,
-			iconWidth : m_IconWidth,
-			iconContent : m_IconContent,
-			popupContent : m_PopupContent,
-			tooltipContent : m_TooltipContent,
-			phone : m_Phone,
-			url : m_Url,
-			address : m_Address,
-			iconLat : parseFloat ( m_IconLat.toFixed ( 6 ) ),
-			iconLng : parseFloat ( m_IconLng.toFixed ( 6 ) ),
-			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
-			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
-			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-			chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			iconHeight : myIconHeight,
+			iconWidth : myIconWidth,
+			iconContent : myIconContent,
+			popupContent : myPopupContent,
+			tooltipContent : myTooltipContent,
+			phone : myPhone,
+			url : myUrl,
+			address : myAddress,
+			iconLat : parseFloat ( myIconLat.toFixed ( 6 ) ),
+			iconLng : parseFloat ( myIconLng.toFixed ( 6 ) ),
+			lat : parseFloat ( myLat.toFixed ( 6 ) ),
+			lng : parseFloat ( myLng.toFixed ( 6 ) ),
+			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( 2 ) ),
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_IconHeight = something.iconHeight || 40;
-		m_IconWidth = something.iconWidth || 40;
-		m_IconContent = something.iconContent || '';
-		m_PopupContent = something.popupContent || '';
-		m_TooltipContent = something.tooltipContent || '';
-		m_Phone = something.phone || '';
-		m_Url = something.url || '';
-		m_Address = something.address || '';
-		m_IconLat = something.iconLat || 0;
-		m_IconLng = something.iconLng || 0;
-		m_Lat = something.lat || 0;
-		m_Lng = something.lng || 0;
-		m_Distance = something.distance || -1;
-		m_ChainedDistance = something.chainedDistance;
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myIconHeight = something.iconHeight || 40;
+		myIconWidth = something.iconWidth || 40;
+		myIconContent = something.iconContent || '';
+		myPopupContent = something.popupContent || '';
+		myTooltipContent = something.tooltipContent || '';
+		myPhone = something.phone || '';
+		myUrl = something.url || '';
+		myAddress = something.address || '';
+		myIconLat = something.iconLat || 0;
+		myIconLng = something.iconLng || 0;
+		myLat = something.lat || 0;
+		myLng = something.lng || 0;
+		myDistance = something.distance || -1;
+		myChainedDistance = something.chainedDistance;
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -189,68 +189,68 @@ function newNote ( ) {
 	return Object.seal (
 		{
 
-			get isRouteNote ( ) { return m_Distance !== -1; },
+			get isRouteNote ( ) { return myDistance !== -1; },
 
-			get iconHeight ( ) { return m_IconHeight; },
-			set iconHeight ( IconHeight ) { m_IconHeight = IconHeight; },
+			get iconHeight ( ) { return myIconHeight; },
+			set iconHeight ( IconHeight ) { myIconHeight = IconHeight; },
 
-			get iconWidth ( ) { return m_IconWidth; },
-			set iconWidth ( IconWidth ) { m_IconWidth = IconWidth; },
+			get iconWidth ( ) { return myIconWidth; },
+			set iconWidth ( IconWidth ) { myIconWidth = IconWidth; },
 
-			get iconContent ( ) { return m_IconContent; },
-			set iconContent ( IconContent ) { m_IconContent = IconContent; },
+			get iconContent ( ) { return myIconContent; },
+			set iconContent ( IconContent ) { myIconContent = IconContent; },
 
-			get popupContent ( ) { return m_PopupContent; },
-			set popupContent ( PopupContent ) { m_PopupContent = PopupContent; },
+			get popupContent ( ) { return myPopupContent; },
+			set popupContent ( PopupContent ) { myPopupContent = PopupContent; },
 
-			get tooltipContent ( ) { return m_TooltipContent; },
-			set tooltipContent ( TooltipContent ) { m_TooltipContent = TooltipContent; },
+			get tooltipContent ( ) { return myTooltipContent; },
+			set tooltipContent ( TooltipContent ) { myTooltipContent = TooltipContent; },
 
-			get phone ( ) { return m_Phone; },
-			set phone ( Phone ) { m_Phone = Phone; },
+			get phone ( ) { return myPhone; },
+			set phone ( Phone ) { myPhone = Phone; },
 
-			get url ( ) { return m_Url; },
-			set url ( Url ) { m_Url = Url; },
+			get url ( ) { return myUrl; },
+			set url ( Url ) { myUrl = Url; },
 
-			get address ( ) { return m_Address; },
-			set address ( Address ) { m_Address = Address; },
+			get address ( ) { return myAddress; },
+			set address ( Address ) { myAddress = Address; },
 
-			get iconLat ( ) { return m_IconLat; },
-			set iconLat ( IconLat ) { m_IconLat = IconLat; },
+			get iconLat ( ) { return myIconLat; },
+			set iconLat ( IconLat ) { myIconLat = IconLat; },
 
-			get iconLng ( ) { return m_IconLng; },
-			set iconLng ( IconLng ) { m_IconLng = IconLng; },
+			get iconLng ( ) { return myIconLng; },
+			set iconLng ( IconLng ) { myIconLng = IconLng; },
 
-			get iconLatLng ( ) { return [ m_IconLat, m_IconLng ]; },
+			get iconLatLng ( ) { return [ myIconLat, myIconLng ]; },
 			set iconLatLng ( IconLatLng ) {
-				m_IconLat = IconLatLng [ 0 ];
-				m_IconLng = IconLatLng [ 1 ];
+				myIconLat = IconLatLng [ 0 ];
+				myIconLng = IconLatLng [ 1 ];
 			},
 
-			get lat ( ) { return m_Lat; },
-			set lat ( Lat ) { m_Lat = Lat; },
+			get lat ( ) { return myLat; },
+			set lat ( Lat ) { myLat = Lat; },
 
-			get lng ( ) { return m_Lng; },
-			set lng ( Lng ) { m_Lng = Lng; },
+			get lng ( ) { return myLng; },
+			set lng ( Lng ) { myLng = Lng; },
 
-			get latLng ( ) { return [ m_Lat, m_Lng ]; },
+			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				m_Lat = LatLng [ 0 ];
-				m_Lng = LatLng [ 1 ];
+				myLat = LatLng [ 0 ];
+				myLng = LatLng [ 1 ];
 			},
 
-			get distance ( ) { return m_Distance; },
-			set distance ( Distance ) { m_Distance = Distance; },
+			get distance ( ) { return myDistance; },
+			set distance ( Distance ) { myDistance = Distance; },
 
-			get chainedDistance ( ) { return m_ChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+			get chainedDistance ( ) { return myChainedDistance; },
+			set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

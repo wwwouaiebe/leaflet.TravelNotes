@@ -16,7 +16,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- ItineraryPoint.js file --------------------------------------------------------------------------------------------
 This file contains:
 	- the newItineraryPoint function
-	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
@@ -35,6 +34,8 @@ export { newItineraryPoint };
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+const ourObjType = newObjType ( 'ItineraryPoint' );
+
 /*
 --- newItineraryPoint function ------------------------------------------------------------------------------------
 
@@ -45,28 +46,26 @@ Patterns : Closure
 
 function newItineraryPoint ( ) {
 
-	const s_ObjType = newObjType ( 'ItineraryPoint' );
+	let myLat = 0;
 
-	let m_Lat = 0;
+	let myLng = 0;
 
-	let m_Lng = 0;
+	let myDistance = 0;
 
-	let m_Distance = 0;
-
-	let m_ObjId = newObjId ( );
+	let myObjId = newObjId ( );
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -77,14 +76,14 @@ function newItineraryPoint ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'lat', 'lng', 'distance', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -92,33 +91,33 @@ function newItineraryPoint ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			lat : parseFloat ( m_Lat.toFixed ( 6 ) ),
-			lng : parseFloat ( m_Lng.toFixed ( 6 ) ),
-			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			lat : parseFloat ( myLat.toFixed ( 6 ) ),
+			lng : parseFloat ( myLng.toFixed ( 6 ) ),
+			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_Lat = something.lat || 0;
-		m_Lng = something.lng || 0;
-		m_Distance = something.distance || 0;
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myLat = something.lat || 0;
+		myLng = something.lng || 0;
+		myDistance = something.distance || 0;
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -130,27 +129,27 @@ function newItineraryPoint ( ) {
 	return Object.seal (
 		{
 
-			get lat ( ) { return m_Lat; },
-			set lat ( Lat ) { m_Lat = Lat; },
+			get lat ( ) { return myLat; },
+			set lat ( Lat ) { myLat = Lat; },
 
-			get lng ( ) { return m_Lng; },
-			set lng ( Lng ) { m_Lng = Lng; },
+			get lng ( ) { return myLng; },
+			set lng ( Lng ) { myLng = Lng; },
 
-			get latLng ( ) { return [ m_Lat, m_Lng ]; },
+			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				m_Lat = LatLng [ 0 ];
-				m_Lng = LatLng [ 1 ];
+				myLat = LatLng [ 0 ];
+				myLng = LatLng [ 1 ];
 			},
 
-			get distance ( ) { return m_Distance; },
-			set distance ( Distance ) { m_Distance = Distance; },
+			get distance ( ) { return myDistance; },
+			set distance ( Distance ) { myDistance = Distance; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

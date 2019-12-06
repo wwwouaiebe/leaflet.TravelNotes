@@ -38,8 +38,8 @@ Tests ...
 
 export { newRoutePropertiesDialog };
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_Config } from '../data/Config.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -51,77 +51,77 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newRoutePropertiesDialog ( route ) {
 
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_RoutePropertiesDialog = null;
-	let m_RoutePropertiesDiv = null;
-	let m_WidthInput = null;
-	let m_ChainInput = null;
-	let m_DashSelect = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myRoutePropertiesDialog = null;
+	let myRoutePropertiesDiv = null;
+	let myWidthInput = null;
+	let myChainInput = null;
+	let myDashSelect = null;
 
 	/*
-	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
+	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
 
 	click event listener for the ok button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnOkButtonClick ( ) {
+	function myOnOkButtonClick ( ) {
 		route.color = document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv' ).color;
-		route.width = parseInt ( m_WidthInput.value );
-		route.chain = m_ChainInput.checked;
-		route.dashArray = m_DashSelect.selectedIndex;
+		route.width = parseInt ( myWidthInput.value );
+		route.chain = myChainInput.checked;
+		route.dashArray = myDashSelect.selectedIndex;
 
 		return route;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDialog ( ) {
+	function myCreateDialog ( ) {
 
 		// the dialog base is created
-		m_RoutePropertiesDialog = newColorDialog ( route.color );
-		m_RoutePropertiesDialog.title = g_Translator.getText ( 'RoutePropertiesDialog - Route properties' );
-		m_RoutePropertiesDialog.okButtonListener = m_OnOkButtonClick;
+		myRoutePropertiesDialog = newColorDialog ( route.color );
+		myRoutePropertiesDialog.title = theTranslator.getText ( 'RoutePropertiesDialog - Route properties' );
+		myRoutePropertiesDialog.okButtonListener = myOnOkButtonClick;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateRoutePropertiesDiv ( ) {
-		m_RoutePropertiesDiv = m_HTMLElementsFactory.create (
+	function myCreateRoutePropertiesDiv ( ) {
+		myRoutePropertiesDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
 			},
-			m_RoutePropertiesDialog.content
+			myRoutePropertiesDialog.content
 		);
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateWidthDiv ( ) {
-		let widthDiv = m_HTMLElementsFactory.create (
+	function myCreateWidthDiv ( ) {
+		let widthDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
 				id : 'TravelNotes-RoutePropertiesDialog-WithDiv'
 			},
-			m_RoutePropertiesDiv
+			myRoutePropertiesDiv
 		);
-		widthDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
-		m_WidthInput =  m_HTMLElementsFactory.create (
+		widthDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
+		myWidthInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -130,28 +130,28 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			widthDiv
 		);
-		m_WidthInput.value = route.width;
-		m_WidthInput.min = 1;
-		m_WidthInput.max = 40;
+		myWidthInput.value = route.width;
+		myWidthInput.min = 1;
+		myWidthInput.max = 40;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDashDiv ( ) {
-		let dashDiv = m_HTMLElementsFactory.create (
+	function myCreateDashDiv ( ) {
+		let dashDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
 				id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
 			},
-			m_RoutePropertiesDiv
+			myRoutePropertiesDiv
 		);
-		dashDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
-		m_DashSelect = m_HTMLElementsFactory.create (
+		dashDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
+		myDashSelect = myHTMLElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-Select',
@@ -160,30 +160,30 @@ function newRoutePropertiesDialog ( route ) {
 			dashDiv
 		);
 
-		let dashChoices = g_Config.route.dashChoices;
+		let dashChoices = theConfig.route.dashChoices;
 		for ( let optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
-			m_DashSelect.add ( m_HTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
+			myDashSelect.add ( myHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
-		m_DashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateChainDiv ( ) {
-		let chainDiv = m_HTMLElementsFactory.create (
+	function myCreateChainDiv ( ) {
+		let chainDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
 				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'
 			},
-			m_RoutePropertiesDiv
+			myRoutePropertiesDiv
 		);
-		chainDiv.innerHTML = '<span>' + g_Translator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
-		m_ChainInput =  m_HTMLElementsFactory.create (
+		chainDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
+		myChainInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
@@ -191,16 +191,16 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			chainDiv
 		);
-		m_ChainInput.checked = route.chain;
+		myChainInput.checked = route.chain;
 	}
 
-	m_CreateDialog ( );
-	m_CreateRoutePropertiesDiv ( );
-	m_CreateWidthDiv ( );
-	m_CreateDashDiv ( );
-	m_CreateChainDiv ( );
+	myCreateDialog ( );
+	myCreateRoutePropertiesDiv ( );
+	myCreateWidthDiv ( );
+	myCreateDashDiv ( );
+	myCreateChainDiv ( );
 
-	return m_RoutePropertiesDialog;
+	return myRoutePropertiesDialog;
 }
 
 /*

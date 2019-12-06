@@ -34,15 +34,13 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_DataPanesUI };
+export { theDataPanesUI };
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
-
-let s_ActivePaneIndex = -1;
 
 /*
 --- newDataPanesUI function -------------------------------------------------------------------------------------------
@@ -54,19 +52,20 @@ This function returns the dataPanesUI object
 
 function newDataPanesUI ( ) {
 
-	let m_TravelNotesPaneUI = newTravelNotesPaneUI ( );
-	let m_SearchPaneUI = newSearchPaneUI ( );
-	let m_ItineraryPaneUI = newItineraryPaneUI ( );
+	let myActivePaneIndex = -1;
+	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
+	let mySearchPaneUI = newSearchPaneUI ( );
+	let myItineraryPaneUI = newItineraryPaneUI ( );
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ) {
+	function myCreateUI ( controlDiv ) {
 
 		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
 			return;
@@ -86,33 +85,33 @@ function newDataPanesUI ( ) {
 		htmlElementsFactory.create (
 			'div',
 			{
-				innerHTML : g_Translator.getText ( 'DataPanesUI - Itinerary' ),
+				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
 				id : 'TravelNotes-Control-ItineraryPaneButton',
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv
-		).addEventListener ( 'click', ( ) => m_SetItinerary ( ), false );
+		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
 
 		htmlElementsFactory.create (
 			'div',
 			{
-				innerHTML : g_Translator.getText ( 'DataPanesUI - Travel notes' ),
+				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
 				id : 'TravelNotes-Control-TravelNotesPaneButton',
 				className : 'TravelNotes-Control-PaneButton'
 			},
 			headerDiv
-		).addEventListener ( 'click', ( ) => m_SetTravelNotes ( ), false );
+		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
 
 		if ( window.osmSearch ) {
 			htmlElementsFactory.create (
 				'div',
 				{
-					innerHTML : g_Translator.getText ( 'DataPanesUI - Search' ),
+					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
 					id : 'TravelNotes-Control-SearchPaneButton',
 					className : 'TravelNotes-Control-PaneButton'
 				},
 				headerDiv
-			).addEventListener ( 'click', ( ) => m_SetSearch ( ), false );
+			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
 		}
 
 		let dataDiv = htmlElementsFactory.create (
@@ -135,24 +134,24 @@ function newDataPanesUI ( ) {
 	}
 
 	/*
-	--- m_RemoveActivePane function -----------------------------------------------------------------------------------
+	--- myRemoveActivePane function -----------------------------------------------------------------------------------
 
 	This function remove the active pane contents
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveActivePane ( ) {
-		switch ( s_ActivePaneIndex ) {
+	function myRemoveActivePane ( ) {
+		switch ( myActivePaneIndex ) {
 		case 0:
-			m_ItineraryPaneUI.remove ( );
+			myItineraryPaneUI.remove ( );
 			break;
 		case 1:
-			m_TravelNotesPaneUI.remove ( );
+			myTravelNotesPaneUI.remove ( );
 			break;
 		case 2 :
 			if ( window.osmSearch ) {
-				m_SearchPaneUI.remove ( );
+				mySearchPaneUI.remove ( );
 			}
 			break;
 		default:
@@ -161,92 +160,92 @@ function newDataPanesUI ( ) {
 	}
 
 	/*
-	--- m_SetItinerary function ---------------------------------------------------------------------------------------
+	--- mySetItinerary function ---------------------------------------------------------------------------------------
 
 	This function set the itinerary pane contents
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetItinerary ( ) {
-		m_RemoveActivePane ( );
-		m_ItineraryPaneUI.add ( );
+	function mySetItinerary ( ) {
+		myRemoveActivePane ( );
+		myItineraryPaneUI.add ( );
 
-		s_ActivePaneIndex = 0;
+		myActivePaneIndex = 0;
 	}
 
 	/*
-	--- m_UpdateItinerary function ------------------------------------------------------------------------------------
+	--- myUpdateItinerary function ------------------------------------------------------------------------------------
 
 	This function set the itinerary pane contents only when this pane is active
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_UpdateItinerary ( ) {
-		if ( 0 === s_ActivePaneIndex ) {
-			m_ItineraryPaneUI.remove ( );
-			m_ItineraryPaneUI.add ( );
+	function myUpdateItinerary ( ) {
+		if ( 0 === myActivePaneIndex ) {
+			myItineraryPaneUI.remove ( );
+			myItineraryPaneUI.add ( );
 		}
 	}
 
 	/*
-	--- m_SetItinerary function ---------------------------------------------------------------------------------------
+	--- mySetItinerary function ---------------------------------------------------------------------------------------
 
 	This function set the travel notes pane contents
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetTravelNotes ( ) {
-		m_RemoveActivePane ( );
-		m_TravelNotesPaneUI.add ( );
-		s_ActivePaneIndex = 1;
+	function mySetTravelNotes ( ) {
+		myRemoveActivePane ( );
+		myTravelNotesPaneUI.add ( );
+		myActivePaneIndex = 1;
 	}
 
 	/*
-	--- m_UpdateTravelNotes function ----------------------------------------------------------------------------------
+	--- myUpdateTravelNotes function ----------------------------------------------------------------------------------
 
 	This function set the travel notes pane contents only when this pane is active
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_UpdateTravelNotes ( ) {
-		if ( 1 === s_ActivePaneIndex ) {
-			m_TravelNotesPaneUI.remove ( );
-			m_TravelNotesPaneUI.add ( );
+	function myUpdateTravelNotes ( ) {
+		if ( 1 === myActivePaneIndex ) {
+			myTravelNotesPaneUI.remove ( );
+			myTravelNotesPaneUI.add ( );
 		}
 	}
 
 	/*
-	--- m_SetSearch function ------------------------------------------------------------------------------------------
+	--- mySetSearch function ------------------------------------------------------------------------------------------
 
 	This function set the search pane contents
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetSearch ( ) {
-		m_RemoveActivePane ( );
-		m_SearchPaneUI.add ( );
+	function mySetSearch ( ) {
+		myRemoveActivePane ( );
+		mySearchPaneUI.add ( );
 
-		s_ActivePaneIndex = 2;
+		myActivePaneIndex = 2;
 
 	}
 
 	/*
-	--- m_UpdateSearch function ---------------------------------------------------------------------------------------
+	--- myUpdateSearch function ---------------------------------------------------------------------------------------
 
 	This function set the travel notes pane contents only when this pane is active
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_UpdateSearch ( ) {
-		if ( 2 === s_ActivePaneIndex ) {
-			m_SearchPaneUI.remove ( );
-			m_SearchPaneUI.add ( );
+	function myUpdateSearch ( ) {
+		if ( 2 === myActivePaneIndex ) {
+			mySearchPaneUI.remove ( );
+			mySearchPaneUI.add ( );
 		}
 	}
 
@@ -258,30 +257,30 @@ function newDataPanesUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			setItinerary : ( ) =>  m_SetItinerary ( ),
-			updateItinerary : ( ) =>  m_UpdateItinerary ( ),
+			setItinerary : ( ) =>  mySetItinerary ( ),
+			updateItinerary : ( ) =>  myUpdateItinerary ( ),
 
-			setTravelNotes : ( ) =>  m_SetTravelNotes ( ),
-			updateTravelNotes : ( ) =>  m_UpdateTravelNotes ( ),
+			setTravelNotes : ( ) =>  mySetTravelNotes ( ),
+			updateTravelNotes : ( ) =>  myUpdateTravelNotes ( ),
 
-			setSearch : ( ) =>  m_SetSearch ( ),
-			updateSearch : ( ) =>  m_UpdateSearch ( )
+			setSearch : ( ) =>  mySetSearch ( ),
+			updateSearch : ( ) =>  myUpdateSearch ( )
 
 		}
 	);
 }
 
 /*
---- g_DataPaneUI object -----------------------------------------------------------------------------------------------
+--- theDataPaneUI object -----------------------------------------------------------------------------------------------
 
 The one and only one dataPanesUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_DataPanesUI = newDataPanesUI ( );
+const theDataPanesUI = newDataPanesUI ( );
 
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------

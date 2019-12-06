@@ -32,7 +32,7 @@ export { newRoadbookUpdate };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 /*
 --- newRoadbookUpdate function ----------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ function newRoadbookUpdate ( ) {
 
 	if ( newUtilities ( ).storageAvailable ( 'localStorage' ) ) {
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
-		localStorage.setItem ( g_TravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
+		localStorage.setItem ( theTravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
 	}
 }
 

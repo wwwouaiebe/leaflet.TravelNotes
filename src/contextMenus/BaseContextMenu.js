@@ -32,16 +32,16 @@ Tests ...
 
 export { newBaseContextMenu };
 
-import { g_Config } from '../data/Config.js';
-import { g_Translator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
+import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-let s_Container = null;
-let s_TimerId = null;
-let s_FocusIsOnItem = 0;
-let s_OriginalEvent = null;
-let s_Lat = 0;
-let s_Lng = 0;
+let ourContainer = null;
+let ourTimerId = null;
+let ourFocusIsOnItem = 0;
+let ourOriginalEvent = null;
+let ourLat = 0;
+let ourLng = 0;
 
 /*
 --- newBaseContextMenu function ---------------------------------------------------------------------------------------
@@ -51,107 +51,107 @@ let s_Lng = 0;
 
 function newBaseContextMenu ( originalEvent ) {
 
-	let s_MenuItems = [];
+	let myMenuItems = [];
 
-	let m_htmlElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_Body = document.getElementsByTagName ('body') [ 0 ];
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myBody = document.getElementsByTagName ('body') [ 0 ];
 
 	/*
-	--- m_OnCloseMenu function ----------------------------------------------------------------------------------------
+	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
 
 	event listener for the close button. Alson called from others events
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnCloseMenu ( ) {
+	function myOnCloseMenu ( ) {
 
-		if ( s_TimerId ) {
-			clearTimeout ( s_TimerId );
-			s_TimerId = null;
+		if ( ourTimerId ) {
+			clearTimeout ( ourTimerId );
+			ourTimerId = null;
 		}
 
 		// removing event listeners
-		document.removeEventListener ( 'keydown', m_OnKeyDown, true );
-		document.removeEventListener ( 'keypress', m_OnKeyPress, true );
-		document.removeEventListener ( 'keyup', m_OnKeyUp, true );
+		document.removeEventListener ( 'keydown', myOnKeyDown, true );
+		document.removeEventListener ( 'keypress', myOnKeyPress, true );
+		document.removeEventListener ( 'keyup', myOnKeyUp, true );
 
 		// removing menu items
-		let childNodes = s_Container.childNodes;
-		childNodes [ 0 ].firstChild.removeEventListener ( 'click', m_OnCloseMenu, false );
+		let childNodes = ourContainer.childNodes;
+		childNodes [ 0 ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
 		for ( let childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', m_OnClickItem, false );
+			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ('body') [ 0 ].removeChild ( s_Container );
-		s_Container = null;
-		s_FocusIsOnItem = 0;
-		s_MenuItems = [];
-		s_Lat = 0;
-		s_Lng = 0;
+		document.getElementsByTagName ('body') [ 0 ].removeChild ( ourContainer );
+		ourContainer = null;
+		ourFocusIsOnItem = 0;
+		myMenuItems = [];
+		ourLat = 0;
+		ourLng = 0;
 	}
 
 	/*
-	--- m_OnKeyDown function ------------------------------------------------------------------------------------------
+	--- myOnKeyDown function ------------------------------------------------------------------------------------------
 
 	Keyboard event listener
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnKeyDown ( keyBoardEvent ) {
+	function myOnKeyDown ( keyBoardEvent ) {
 
-		if ( s_Container ) {
+		if ( ourContainer ) {
 			keyBoardEvent.preventDefault ( );
 			keyBoardEvent.stopPropagation ( );
 		}
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			m_OnCloseMenu ( );
+			myOnCloseMenu ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
-			s_FocusIsOnItem = s_FocusIsOnItem >= s_MenuItems.length ? 1 : ++ s_FocusIsOnItem;
-			s_Container.childNodes [ s_FocusIsOnItem ].firstChild.focus ( );
+			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? 1 : ++ ourFocusIsOnItem;
+			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
-			s_FocusIsOnItem = s_FocusIsOnItem <= 1 ? s_MenuItems.length : -- s_FocusIsOnItem;
-			s_Container.childNodes [ s_FocusIsOnItem ].firstChild.focus ( );
+			ourFocusIsOnItem = ourFocusIsOnItem <= 1 ? myMenuItems.length : -- ourFocusIsOnItem;
+			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			s_FocusIsOnItem = 1;
-			s_Container.childNodes [ s_FocusIsOnItem ].firstChild.focus ( );
+			ourFocusIsOnItem = 1;
+			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
-			s_FocusIsOnItem = s_MenuItems.length;
-			s_Container.childNodes [ s_FocusIsOnItem ].firstChild.focus ( );
+			ourFocusIsOnItem = myMenuItems.length;
+			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( s_FocusIsOnItem > 0 ) && ( s_MenuItems[ s_FocusIsOnItem -1 ].action ) ) {
-			s_Container.childNodes[ s_FocusIsOnItem ].firstChild.click ( );
+		if ( ( 'Enter' === keyBoardEvent.key )  && ( ourFocusIsOnItem > 0 ) && ( myMenuItems[ ourFocusIsOnItem -1 ].action ) ) {
+			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
 	}
 
 	/*
-	--- m_OnKeyPress function -----------------------------------------------------------------------------------------
+	--- myOnKeyPress function -----------------------------------------------------------------------------------------
 
 	Keyboard event listener
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnKeyPress ( keyBoardEvent ) {
+	function myOnKeyPress ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	}
 
 	/*
-	--- m_OnKeyUp function --------------------------------------------------------------------------------------------
+	--- myOnKeyUp function --------------------------------------------------------------------------------------------
 
 	Keyboard event listener
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnKeyUp ( keyBoardEvent ) {
+	function myOnKeyUp ( keyBoardEvent ) {
 		keyBoardEvent.preventDefault ( );
 		keyBoardEvent.stopPropagation ( );
 	}
@@ -164,128 +164,128 @@ function newBaseContextMenu ( originalEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnClickItem ( event ) {
+	function myOnClickItem ( event ) {
 		event.stopPropagation ( );
-		if ( s_MenuItems[ event.target.menuItem ].param ) {
-			s_MenuItems[ event.target.menuItem ].action.call (
-				s_MenuItems[ event.target.menuItem ].context,
-				s_MenuItems[ event.target.menuItem ].param,
-				s_OriginalEvent
+		if ( myMenuItems[ event.target.menuItem ].param ) {
+			myMenuItems[ event.target.menuItem ].action.call (
+				myMenuItems[ event.target.menuItem ].context,
+				myMenuItems[ event.target.menuItem ].param,
+				ourOriginalEvent
 			);
 		}
 		else {
-			s_MenuItems[ event.target.menuItem ].action.call (
-				s_MenuItems[ event.target.menuItem ].context,
-				s_OriginalEvent
+			myMenuItems[ event.target.menuItem ].action.call (
+				myMenuItems[ event.target.menuItem ].context,
+				ourOriginalEvent
 			);
 		}
-		m_OnCloseMenu ( );
+		myOnCloseMenu ( );
 	}
 
 	/*
-	--- m_BuildContainer function -------------------------------------------------------------------------------------
+	--- myBuildContainer function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_BuildContainer ( ) {
-		s_Container = m_htmlElementsFactory.create (
+	function myBuildContainer ( ) {
+		ourContainer = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
-			m_Body
+			myBody
 		);
 
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
-		s_Container.addEventListener (
+		ourContainer.addEventListener (
 			'mouseenter',
 			( ) => {
-				if ( s_TimerId ) {
-					clearTimeout ( s_TimerId );
-					s_TimerId = null;
+				if ( ourTimerId ) {
+					clearTimeout ( ourTimerId );
+					ourTimerId = null;
 				}
 			},
 			false
 		);
-		s_Container.addEventListener (
+		ourContainer.addEventListener (
 			'mouseleave',
-			( ) => { s_TimerId = setTimeout ( m_OnCloseMenu, g_Config.contextMenu.timeout ); },
+			( ) => { ourTimerId = setTimeout ( myOnCloseMenu, theConfig.contextMenu.timeout ); },
 			false
 		);
 
 	}
 
 	/*
-	--- m_AddCloseButton function -------------------------------------------------------------------------------------
+	--- myAddCloseButton function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddCloseButton ( ) {
-		m_htmlElementsFactory.create (
+	function myAddCloseButton ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
 				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : g_Translator.getText ( "ContextMenu - Close" )
+				title : theTranslator.getText ( "ContextMenu - Close" )
 			},
-			s_Container
+			ourContainer
 		)
-			.addEventListener ( 'click', m_OnCloseMenu, false );
+			.addEventListener ( 'click', myOnCloseMenu, false );
 	}
 
 	/*
-	--- m_MoveContainer function --------------------------------------------------------------------------------------
+	--- myMoveContainer function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_MoveContainer ( ) {
+	function myMoveContainer ( ) {
 
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = m_htmlElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, m_Body );
+		let dummyDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, myBody );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
-		m_Body.removeChild ( dummyDiv );
+		myBody.removeChild ( dummyDiv );
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
-		let menuTop = Math.min ( s_OriginalEvent.originalEvent.clientY, screenHeight - s_Container.clientHeight - 20 );
-		let menuLeft = Math.min ( s_OriginalEvent.originalEvent.clientX, screenWidth - s_Container.clientWidth - 20 );
-		s_Container.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
+		let menuTop = Math.min ( ourOriginalEvent.originalEvent.clientY, screenHeight - ourContainer.clientHeight - 20 );
+		let menuLeft = Math.min ( ourOriginalEvent.originalEvent.clientX, screenWidth - ourContainer.clientWidth - 20 );
+		ourContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
 	}
 
 	/*
-	--- m_AddKeyboardEvents function ----------------------------------------------------------------------------------
+	--- myAddKeyboardEvents function ----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddKeyboardEvents ( ) {
-		document.addEventListener ( 'keydown', m_OnKeyDown, true );
-		document.addEventListener ( 'keypress', m_OnKeyPress, true );
-		document.addEventListener ( 'keyup', m_OnKeyUp, true );
+	function myAddKeyboardEvents ( ) {
+		document.addEventListener ( 'keydown', myOnKeyDown, true );
+		document.addEventListener ( 'keypress', myOnKeyPress, true );
+		document.addEventListener ( 'keyup', myOnKeyUp, true );
 	}
 
 	/*
-	--- m_AddMenuItems function ----------------------------------------------------------------------------------
+	--- myAddMenuItems function ----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddMenuItems ( ) {
+	function myAddMenuItems ( ) {
 		let menuItemCounter = 0;
-		s_MenuItems.forEach (
+		myMenuItems.forEach (
 			menuItem => {
-				let itemContainer = m_htmlElementsFactory.create (
+				let itemContainer = myHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-ContextMenu-ItemContainer'
 					},
-					s_Container
+					ourContainer
 				);
-				let itemButton = m_htmlElementsFactory.create (
+				let itemButton = myHTMLElementsFactory.create (
 					'button',
 					{
 						innerHTML : menuItem.name,
@@ -300,7 +300,7 @@ function newBaseContextMenu ( originalEvent ) {
 					itemContainer
 				);
 				if ( menuItem.action ) {
-					itemButton.addEventListener ( 'click', m_OnClickItem, false );
+					itemButton.addEventListener ( 'click', myOnClickItem, false );
 				}
 				itemButton.menuItem = menuItemCounter;
 				++ menuItemCounter;
@@ -309,46 +309,46 @@ function newBaseContextMenu ( originalEvent ) {
 	}
 
 	/*
-	--- m_Show function -----------------------------------------------------------------------------------------------
+	--- myShow function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Show ( ) {
+	function myShow ( ) {
 
-		s_OriginalEvent = originalEvent;
+		ourOriginalEvent = originalEvent;
 
 		// when clicking on a leaflet polyline, a route event AND a map event are generated
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
 
-		if  ( ( s_OriginalEvent.latlng.lat === s_Lat ) && ( s_OriginalEvent.latlng.lng === s_Lng ) ) {
+		if  ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
 			return;
 		}
 		else {
-			s_Lat = s_OriginalEvent.latlng.lat;
-			s_Lng = s_OriginalEvent.latlng.lng;
+			ourLat = ourOriginalEvent.latlng.lat;
+			ourLng = ourOriginalEvent.latlng.lng;
 		}
 
-		if ( s_Container ) {
+		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			m_OnCloseMenu ( );
+			myOnCloseMenu ( );
 			return;
 		}
 
-		m_BuildContainer ( );
-		m_AddCloseButton ( );
-		m_AddMenuItems ( );
-		m_MoveContainer ( );
-		m_AddKeyboardEvents ( );
+		myBuildContainer ( );
+		myAddCloseButton ( );
+		myAddMenuItems ( );
+		myMoveContainer ( );
+		myAddKeyboardEvents ( );
 	}
 
-	function m_init ( menuItems ) {
-		s_MenuItems = menuItems;
+	function myInit ( menuItems ) {
+		myMenuItems = menuItems;
 
 		// completely crazy...
-		delete m_BaseContextMenu.init;
+		delete myBaseContextMenu.init;
 	}
 
 	/*
@@ -357,12 +357,12 @@ function newBaseContextMenu ( originalEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let m_BaseContextMenu = {
-		init : ( menuItems ) => m_init ( menuItems ),
-		show : ( ) => m_Show ( )
+	let myBaseContextMenu = {
+		init : ( menuItems ) => myInit ( menuItems ),
+		show : ( ) => myShow ( )
 	};
 
-	return m_BaseContextMenu;
+	return myBaseContextMenu;
 }
 
 /*

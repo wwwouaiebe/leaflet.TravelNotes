@@ -34,7 +34,7 @@ Tests ...
 export { newItineraryPaneUI };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { g_NoteEditor } from '../core/NoteEditor.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
 /*
@@ -47,23 +47,23 @@ This function returns the itineraryPaneUI object
 
 function newItineraryPaneUI ( ) {
 
-	let m_EventDispatcher = newEventDispatcher ( );
+	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
-	--- m_OnInstructionClick function ---------------------------------------------------------------------------------
+	--- myOnInstructionClick function ---------------------------------------------------------------------------------
 
 	click event listener for the instruction
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnInstructionClick ( clickEvent ) {
+	function myOnInstructionClick ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		let element = clickEvent.target;
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'zoomtopoint',
 			{
 				latLng : element.latLng
@@ -72,14 +72,14 @@ function newItineraryPaneUI ( ) {
 	}
 
 	/*
-	--- m_OnInstructionContextMenu function ---------------------------------------------------------------------------
+	--- myOnInstructionContextMenu function ---------------------------------------------------------------------------
 
 	contextmenu event listener for the instruction
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnInstructionContextMenu ( clickEvent ) {
+	function myOnInstructionContextMenu ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		let element = clickEvent.target;
@@ -87,24 +87,24 @@ function newItineraryPaneUI ( ) {
 			element = element.parentNode;
 		}
 		if ( element.maneuverObjId ) {
-			g_NoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
+			theNoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
 		}
 		else if ( element.noteObjId ) {
-			g_NoteEditor.editNote ( element.noteObjId );
+			theNoteEditor.editNote ( element.noteObjId );
 		}
 	}
 
 	/*
-	--- m_OnInstructionMouseEnter function ----------------------------------------------------------------------------
+	--- myOnInstructionMouseEnter function ----------------------------------------------------------------------------
 
 	mouseenter event listener for the instruction
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnInstructionMouseEnter ( mouseEvent ) {
+	function myOnInstructionMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'additinerarypointmarker',
 			{
 				objId : mouseEvent.target.objId,
@@ -114,27 +114,27 @@ function newItineraryPaneUI ( ) {
 	}
 
 	/*
-	--- m_OnInstructionMouseLeave function ----------------------------------------------------------------------------
+	--- myOnInstructionMouseLeave function ----------------------------------------------------------------------------
 
 	mouseleave event listener for the instruction
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnInstructionMouseLeave ( mouseEvent ) {
+	function myOnInstructionMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		m_EventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
+		myEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
 	}
 
 	/*
-	--- m_Remove function ---------------------------------------------------------------------------------------------
+	--- myRemove function ---------------------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Remove ( ) {
+	function myRemove ( ) {
 
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
@@ -157,24 +157,24 @@ function newItineraryPaneUI ( ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.removeEventListener ( 'click', m_OnInstructionClick, false );
-				childNode.removeEventListener ( 'contextmenu', m_OnInstructionContextMenu, false );
-				childNode.removeEventListener ( 'mouseenter', m_OnInstructionMouseEnter, false );
-				childNode.removeEventListener ( 'mouseleave', m_OnInstructionMouseLeave, false );
+				childNode.removeEventListener ( 'click', myOnInstructionClick, false );
+				childNode.removeEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
+				childNode.removeEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );
+				childNode.removeEventListener ( 'mouseleave', myOnInstructionMouseLeave, false );
 			}
 			dataDiv.removeChild ( routeManeuversNotesList );
 		}
 	}
 
 	/*
-	--- m_Add function ------------------------------------------------------------------------------------------------
+	--- myAdd function ------------------------------------------------------------------------------------------------
 
 	This function add the itinerary to the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Add ( ) {
+	function myAdd ( ) {
 
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
 			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
@@ -208,10 +208,10 @@ function newItineraryPaneUI ( ) {
 			childNodes = routeManeuversNotesList.childNodes;
 			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
 				childNode = childNodes [ childCounter ];
-				childNode.addEventListener ( 'click', m_OnInstructionClick, false );
-				childNode.addEventListener ( 'contextmenu', m_OnInstructionContextMenu, false );
-				childNode.addEventListener ( 'mouseenter', m_OnInstructionMouseEnter, false );
-				childNode.addEventListener ( 'mouseleave', m_OnInstructionMouseLeave, false );
+				childNode.addEventListener ( 'click', myOnInstructionClick, false );
+				childNode.addEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
+				childNode.addEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );
+				childNode.addEventListener ( 'mouseleave', myOnInstructionMouseLeave, false );
 			}
 		}
 	}
@@ -224,8 +224,8 @@ function newItineraryPaneUI ( ) {
 
 	return Object.seal (
 		{
-			remove : ( ) => m_Remove ( ),
-			add : ( ) => m_Add ( )
+			remove : ( ) => myRemove ( ),
+			add : ( ) => myAdd ( )
 		}
 	);
 }

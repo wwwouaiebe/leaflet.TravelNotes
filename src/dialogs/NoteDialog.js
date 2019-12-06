@@ -43,17 +43,17 @@ Tests ...
 
 export { newNoteDialog };
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_Config } from '../data/Config.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-let g_UserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let g_TravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let g_AllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let theUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let theTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let theAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 
 /*
 --- newNoteDialog function --------------------------------------------------------------------------------------------
@@ -63,172 +63,172 @@ let g_AllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 
 function newNoteDialog ( note, routeObjId, newNote ) {
 
-	let m_FocusControl = null;
-	let m_HtmlElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_LatLng = note.latLng;
-	let m_Address = '';
-	let m_City = '';
+	let myFocusControl = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myLatLng = note.latLng;
+	let myAddress = '';
+	let myCity = '';
 
-	let m_NoteDialog = null;
-	let m_NoteDataDiv = null;
-	let m_IconHtmlContent = null;
-	let m_WidthInput = null;
-	let m_HeightInput = null;
-	let m_PopupContent = null;
-	let m_TooltipContent = null;
-	let m_AdressInput = null;
-	let m_UrlInput = null;
-	let m_PhoneInput = null;
-	let m_ResetAdressButton = null;
-	let m_PredefinedIconsSelect = null;
-	let m_ToolbarDiv = null;
+	let myNoteDialog = null;
+	let myNoteDataDiv = null;
+	let myIconHtmlContent = null;
+	let myWidthInput = null;
+	let myHeightInput = null;
+	let myPopupContent = null;
+	let myTooltipContent = null;
+	let myAdressInput = null;
+	let myUrlInput = null;
+	let myPhoneInput = null;
+	let myResetAdressButton = null;
+	let myPredefinedIconsSelect = null;
+	let myToolbarDiv = null;
 
 	/*
-	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
+	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
 
 	click event listener for the ok button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnOkButtonClick ( ) {
+	function myOnOkButtonClick ( ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( 0 === m_IconHtmlContent.value.length ) {
-			m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - The icon content cannot be empty' ) );
+		if ( 0 === myIconHtmlContent.value.length ) {
+			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 		}
 
 		// saving values in the note.
-		note.iconWidth = m_WidthInput.value;
-		note.iconHeight = m_HeightInput.value;
-		note.iconContent = m_IconHtmlContent.value;
-		note.popupContent = m_PopupContent.value;
-		note.tooltipContent = m_TooltipContent.value;
-		note.address = m_AdressInput.value;
-		note.url = m_UrlInput.value;
-		note.phone = m_PhoneInput.value;
-		note.latLng = m_LatLng;
+		note.iconWidth = myWidthInput.value;
+		note.iconHeight = myHeightInput.value;
+		note.iconContent = myIconHtmlContent.value;
+		note.popupContent = myPopupContent.value;
+		note.tooltipContent = myTooltipContent.value;
+		note.address = myAdressInput.value;
+		note.url = myUrlInput.value;
+		note.phone = myPhoneInput.value;
+		note.latLng = myLatLng;
 
 		return note;
 	}
 
 	/*
-	--- End of m_OnOkButtonClick function ---
+	--- End of myOnOkButtonClick function ---
 	*/
 
 	/*
-	--- m_OnGeocoderResponse function ---------------------------------------------------------------------------------
+	--- myOnGeocoderResponse function ---------------------------------------------------------------------------------
 
 	Handler for the geoCoder call
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnGeocoderResponse ( geoCoderData ) {
-		m_Address = '';
-		m_City = '';
+	function myOnGeocoderResponse ( geoCoderData ) {
+		myAddress = '';
+		myCity = '';
 		if ( geoCoderData.address.house_number ) {
-			m_Address += geoCoderData.address.house_number + ' ';
+			myAddress += geoCoderData.address.house_number + ' ';
 		}
 		if ( geoCoderData.address.road ) {
-			m_Address += geoCoderData.address.road + ' ';
+			myAddress += geoCoderData.address.road + ' ';
 		}
 		else if ( geoCoderData.address.pedestrian ) {
-			m_Address += geoCoderData.address.pedestrian + ' ';
+			myAddress += geoCoderData.address.pedestrian + ' ';
 		}
 		if (  geoCoderData.address.village ) {
-			m_City = geoCoderData.address.village;
+			myCity = geoCoderData.address.village;
 		}
 		else if ( geoCoderData.address.town ) {
-			m_City = geoCoderData.address.town;
+			myCity = geoCoderData.address.town;
 		}
 		else if ( geoCoderData.address.city ) {
-			m_City = geoCoderData.address.city;
+			myCity = geoCoderData.address.city;
 		}
-		if ( '' !== m_City ) {
-			m_Address += g_Config.note.cityPrefix + m_City + g_Config.note.cityPostfix;
+		if ( '' !== myCity ) {
+			myAddress += theConfig.note.cityPrefix + myCity + theConfig.note.cityPostfix;
 		}
-		if ( 0 === m_Address.length ) {
-			m_Address += geoCoderData.address.country;
+		if ( 0 === myAddress.length ) {
+			myAddress += geoCoderData.address.country;
 		}
-		if ( ( g_Config.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
-			m_AdressInput.value = m_Address;
+		if ( ( theConfig.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+			myAdressInput.value = myAddress;
 		}
 	}
 
 	/*
-	--- End of m_OnGeocoderResponse function ---
+	--- End of myOnGeocoderResponse function ---
 	*/
 
 	/*
-	--- m_OnGeocoderError function -------------------------------------------------------------------------------------
+	--- myOnGeocoderError function -------------------------------------------------------------------------------------
 
 	Error handler for the geoCoder call
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnGeocoderError ( err ) {
-		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
+	function myOnGeocoderError ( err ) {
+		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
 		console.log ( err ? err : "an error occurs when searching the adress." );
 	}
 
 	/*
-	--- End of m_OnGeocoderError function ---
+	--- End of myOnGeocoderError function ---
 	*/
 
 	/*
-	--- m_OnSvgIcon function ------------------------------------------------------------------------------------------
+	--- myOnSvgIcon function ------------------------------------------------------------------------------------------
 
 	event handler for predefined icons list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnSvgIcon ( data ) {
-		m_IconHtmlContent.value = data.svg.outerHTML;
+	function myOnSvgIcon ( data ) {
+		myIconHtmlContent.value = data.svg.outerHTML;
 		let directionArrow = '';
 		if ( null !== data.direction ) {
-			let cfgDirection = g_Config.note.svgAnleMaxDirection;
+			let cfgDirection = theConfig.note.svgAnleMaxDirection;
 			if ( data.direction < cfgDirection.right ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right');
 				directionArrow = String.fromCodePoint ( 0x1F882 );
 			}
 			else if ( data.direction < cfgDirection.slightRight ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn slight right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight right');
 				directionArrow = String.fromCodePoint ( 0x1F885 );
 			}
 			else if ( data.direction < cfgDirection.continue ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Continue');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Continue');
 				directionArrow = String.fromCodePoint ( 0x1F881 );
 			}
 			else if ( data.direction < cfgDirection.slightLeft ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn slight left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight left');
 				directionArrow = String.fromCodePoint ( 0x1F884 );
 			}
 			else if ( data.direction < cfgDirection.left ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn left');
 				directionArrow = String.fromCodePoint ( 0x1F880 );
 			}
 			else if ( data.direction < cfgDirection.sharpLeft ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn sharp left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp left');
 				directionArrow = String.fromCodePoint ( 0x1F887 );
 			}
 			else if ( data.direction < cfgDirection.sharpRight ) {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn sharp right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp right');
 				directionArrow = String.fromCodePoint ( 0x1F886 );
 			}
 			else {
-				m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Turn right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right');
 				directionArrow = String.fromCodePoint ( 0x1F882 );
 			}
 		}
 		if ( -1 === data.startStop ) {
-			m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Start');
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start');
 		}
 		else if ( 1 === data.startStop ) {
-			m_TooltipContent.value = g_Translator.getText ( 'NoteDialog - Stop');
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop');
 		}
 
 		let address = '';
@@ -253,82 +253,82 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				break;
 			}
 		}
-		if ( ! data.city && '' !== m_City ) {
-			data.city = m_City;
+		if ( ! data.city && '' !== myCity ) {
+			data.city = myCity;
 		}
 		if ( data.city ) {
-			address += ' ' + g_Config.note.cityPrefix + data.city + g_Config.note.cityPostfix;
+			address += ' ' + theConfig.note.cityPrefix + data.city + theConfig.note.cityPostfix;
 		}
 		if ( data.place && data.place !== data.city  && showPlace !== 2 ) {
 			address += ' (' + data.place + ')';
 		}
-		m_AdressInput.value = address;
+		myAdressInput.value = address;
 
-		m_NoteDialog.hideWait ( );
-		m_LatLng = data.latLng;
+		myNoteDialog.hideWait ( );
+		myLatLng = data.latLng;
 	}
 
 	/*
-	--- End of m_OnSvgIcon function ---
+	--- End of myOnSvgIcon function ---
 	*/
 
 	/*
-	--- m_OnErrorSvgIcon function -------------------------------------------------------------------------------------
+	--- myOnErrorSvgIcon function -------------------------------------------------------------------------------------
 
 	event handler for predefined icons list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnErrorSvgIcon ( err ) {
-		m_NoteDialog.hideWait ( );
-		m_NoteDialog.showError ( g_Translator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
+	function myOnErrorSvgIcon ( err ) {
+		myNoteDialog.hideWait ( );
+		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
 		console.log ( err ? err : "an error occurs when creating the SVG icon." )
 	}
 
 	/*
-	--- End of m_OnErrorSvgIcon function ---
+	--- End of myOnErrorSvgIcon function ---
 	*/
 
 	/*
-	--- m_OnPredefinedIconListSelectChange function -------------------------------------------------------------------
+	--- myOnPredefinedIconListSelectChange function -------------------------------------------------------------------
 
 	event handler for predefined icons list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnPredefinedIconListSelectChange ( changeEvent ) {
+	function myOnPredefinedIconListSelectChange ( changeEvent ) {
 
-		let preDefinedIcon = g_AllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
-		if ( preDefinedIcon.name === g_Translator.getText ( 'NoteDialog - SVG icon from OSM') ) {
-			m_NoteDialog.showWait ( );
+		let preDefinedIcon = theAllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
+		if ( preDefinedIcon.name === theTranslator.getText ( 'NoteDialog - SVG icon from OSM') ) {
+			myNoteDialog.showWait ( );
 			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId)
-				.then ( m_OnSvgIcon )
-				.catch ( m_OnErrorSvgIcon );
+				.then ( myOnSvgIcon )
+				.catch ( myOnErrorSvgIcon );
 		}
 		else {
-			m_WidthInput.value = preDefinedIcon.width ;
-			m_HeightInput = preDefinedIcon.height ;
-			m_IconHtmlContent.value = preDefinedIcon.icon ;
-			m_TooltipContent.value = preDefinedIcon.tooltip ;
+			myWidthInput.value = preDefinedIcon.width ;
+			myHeightInput = preDefinedIcon.height ;
+			myIconHtmlContent.value = preDefinedIcon.icon ;
+			myTooltipContent.value = preDefinedIcon.tooltip ;
 		}
 	}
 
 	/*
-	--- End of m_OnPredefinedIconListSelectChange function ---
+	--- End of myOnPredefinedIconListSelectChange function ---
 	*/
 
 	/*
-	--- m_OnClickEditionButton function -------------------------------------------------------------------------------
+	--- myOnClickEditionButton function -------------------------------------------------------------------------------
 
 	event handler for edition with the styles buttons
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnClickEditionButton ( event ) {
-		if ( ! m_FocusControl ) {
+	function myOnClickEditionButton ( event ) {
+		if ( ! myFocusControl ) {
 			return;
 		}
 		let button = event.target;
@@ -336,10 +336,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			button = button.parentNode;
 		}
 		let bInsertBeforeAndAfter = button.htmlAfter && 0 < button.htmlAfter.length;
-		let selectionStart = m_FocusControl.selectionStart;
-		let selectionEnd = m_FocusControl.selectionEnd;
-		let oldText = m_FocusControl.value;
-		m_FocusControl.value =
+		let selectionStart = myFocusControl.selectionStart;
+		let selectionEnd = myFocusControl.selectionEnd;
+		let oldText = myFocusControl.value;
+		myFocusControl.value =
 			oldText.substring ( 0, selectionStart ) +
 			(
 				bInsertBeforeAndAfter
@@ -349,7 +349,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 					button.htmlBefore
 			) +
 			oldText.substring ( selectionEnd );
-		m_FocusControl.setSelectionRange (
+		myFocusControl.setSelectionRange (
 			bInsertBeforeAndAfter || selectionStart === selectionEnd
 				?
 				selectionStart + button.htmlBefore.length
@@ -357,32 +357,32 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				selectionStart,
 			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length
 		);
-		m_FocusControl.focus ( );
+		myFocusControl.focus ( );
 	}
 
 	/*
-	--- End of m_OnClickEditionButton function ---
+	--- End of myOnClickEditionButton function ---
 	*/
 
 	/*
-	--- m_OnOpenUserDataFileInputChange function ------------------------------------------------------------------------
+	--- myOnOpenUserDataFileInputChange function ------------------------------------------------------------------------
 
 	event handler for
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnOpenUserDataFileInputChange ( event ) {
+	function myOnOpenUserDataFileInputChange ( event ) {
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
 				let newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
-				g_UserButtonsAndIcons.editionButtons =
-					g_UserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
-				g_UserButtonsAndIcons.preDefinedIconsList =
-					g_UserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
-				m_AddEditionButtons ( newUserButtonsAndIcons.editionButtons );
-				m_AddPreDefinedIconsList ( );
+				theUserButtonsAndIcons.editionButtons =
+					theUserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
+				theUserButtonsAndIcons.preDefinedIconsList =
+					theUserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
+				myAddEditionButtons ( newUserButtonsAndIcons.editionButtons );
+				myAddPreDefinedIconsList ( );
 			}
 			catch ( err ) {
 				console.log ( err ? err : 'An error occurs when opening the file' );
@@ -392,41 +392,41 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of m_OnOpenUserDataFileInputChange function ---
+	--- End of myOnOpenUserDataFileInputChange function ---
 	*/
 
 	/*
-	--- m_OnFocusControl function ---------------------------------------------------------------------------------------
+	--- myOnFocusControl function ---------------------------------------------------------------------------------------
 
 	event handler for
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnFocusControl ( event ) {
-		m_FocusControl = event.target;
+	function myOnFocusControl ( event ) {
+		myFocusControl = event.target;
 	}
 
 	/*
-	--- End of m_OnFocusControl function ---
+	--- End of myOnFocusControl function ---
 	*/
 
 	/*
-	--- m_AddPreDefinedIconsList function -----------------------------------------------------------------------------
+	--- myAddPreDefinedIconsList function -----------------------------------------------------------------------------
 
 	function to add the predefined icons to the select
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddPreDefinedIconsList ( ) {
-		g_AllButtonsAndIcons.preDefinedIconsList =
-			g_TravelNotesButtonsAndIcons.preDefinedIconsList.concat ( g_UserButtonsAndIcons.preDefinedIconsList );
+	function myAddPreDefinedIconsList ( ) {
+		theAllButtonsAndIcons.preDefinedIconsList =
+			theTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( theUserButtonsAndIcons.preDefinedIconsList );
 
 		if ( -1 < routeObjId ) {
-			g_AllButtonsAndIcons.preDefinedIconsList.push (
+			theAllButtonsAndIcons.preDefinedIconsList.push (
 				{
-					name : g_Translator.getText ( 'NoteDialog - SVG icon from OSM'),
+					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM'),
 					icon : '',
 					tooltip : '',
 					width : 40,
@@ -435,19 +435,19 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			);
 		}
 
-		g_AllButtonsAndIcons.preDefinedIconsList.sort (
+		theAllButtonsAndIcons.preDefinedIconsList.sort (
 			( first, second ) => { return first.name.localeCompare ( second.name ); }
 		);
 		let elementCounter = 0;
-		for ( elementCounter = m_PredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
-			m_PredefinedIconsSelect.remove ( elementCounter );
+		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
+			myPredefinedIconsSelect.remove ( elementCounter );
 		}
-		for ( elementCounter = 0; elementCounter < g_AllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
-			m_PredefinedIconsSelect.add (
-				m_HtmlElementsFactory.create (
+		for ( elementCounter = 0; elementCounter < theAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
+			myPredefinedIconsSelect.add (
+				myHTMLElementsFactory.create (
 					'option',
 					{
-						text : g_AllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
+						text : theAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
 					}
 				)
 			);
@@ -455,20 +455,20 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of m_AddPreDefinedIconsList function ---
+	--- End of myAddPreDefinedIconsList function ---
 	*/
 
 	/*
-	--- m_AddEditionButtons function ----------------------------------------------------------------------------------
+	--- myAddEditionButtons function ----------------------------------------------------------------------------------
 
 	function to add buttons on the toolbar
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddEditionButtons ( editionButtons ) {
+	function myAddEditionButtons ( editionButtons ) {
 		editionButtons.forEach (
 			function ( editionButton ) {
-				let newButton = m_HtmlElementsFactory.create (
+				let newButton = myHTMLElementsFactory.create (
 					'button',
 					{
 						type : 'button',
@@ -477,85 +477,85 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 						htmlAfter : editionButton.htmlAfter || '',
 						className : 'TravelNotes-NoteDialog-EditorButton'
 					},
-					m_ToolbarDiv
+					myToolbarDiv
 				);
-				newButton.addEventListener ( 'click', m_OnClickEditionButton, false );
+				newButton.addEventListener ( 'click', myOnClickEditionButton, false );
 			}
 		);
 	}
 
 	/*
-	--- End of m_AddEditionButtons function ---
+	--- End of myAddEditionButtons function ---
 	*/
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	Creation of the base dialog
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDialog ( ) {
+	function myCreateDialog ( ) {
 
 		// the dialog base is created
-		m_NoteDialog = newBaseDialog ( );
-		m_NoteDialog.title = g_Translator.getText ( 'NoteDialog - Note' );
-		m_NoteDialog.okButtonListener = m_OnOkButtonClick;
+		myNoteDialog = newBaseDialog ( );
+		myNoteDialog.title = theTranslator.getText ( 'NoteDialog - Note' );
+		myNoteDialog.okButtonListener = myOnOkButtonClick;
 
-		m_NoteDataDiv = m_HtmlElementsFactory.create (
+		myNoteDataDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-NoteDialog-MainDataDiv'
 			},
-			m_NoteDialog.content
+			myNoteDialog.content
 		);
 	}
 
 	/*
-	--- End of m_CreateBaseDialog function ---
+	--- End of myCreateBaseDialog function ---
 	*/
 
 	/*
-	--- m_CreateToolbar function --------------------------------------------------------------------------------------
+	--- myCreateToolbar function --------------------------------------------------------------------------------------
 
 	Creation of the toolbar
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateToolbar ( ) {
-		m_ToolbarDiv = m_HtmlElementsFactory.create (
+	function myCreateToolbar ( ) {
+		myToolbarDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
 
 		// a select is added for the predefined icons
-		m_PredefinedIconsSelect = m_HtmlElementsFactory.create (
+		myPredefinedIconsSelect = myHTMLElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-NoteDialog-Select',
 				id : 'TravelNotes-NoteDialog-IconSelect'
 			},
-			m_ToolbarDiv
+			myToolbarDiv
 		);
 
 		// change event listener on the select
-		m_PredefinedIconsSelect.addEventListener ( 'change', m_OnPredefinedIconListSelectChange, false );
+		myPredefinedIconsSelect.addEventListener ( 'change', myOnPredefinedIconListSelectChange, false );
 
 		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		let openUserDataFileDiv = m_HtmlElementsFactory.create (
+		let openUserDataFileDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileDiv'
 			},
-			m_ToolbarDiv
+			myToolbarDiv
 		);
-		let openUserDataFileInput = m_HtmlElementsFactory.create (
+		let openUserDataFileInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileInput',
@@ -564,20 +564,20 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			openUserDataFileDiv
 		);
-		openUserDataFileInput.addEventListener ( 'change', m_OnOpenUserDataFileInputChange, false );
-		let openUserDataFileFakeDiv = m_HtmlElementsFactory.create (
+		openUserDataFileInput.addEventListener ( 'change', myOnOpenUserDataFileInputChange, false );
+		let openUserDataFileFakeDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
 			},
 			openUserDataFileDiv
 		);
-		let openUserDataFileButton = m_HtmlElementsFactory.create (
+		let openUserDataFileButton = myHTMLElementsFactory.create (
 			'button',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton',
 				className : 'TravelNotes-NoteDialog-EditorButton',
-				title : g_Translator.getText ( 'NoteDialog - Open a configuration file' ),
+				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
 				innerHTML : '&#x23CD;'
 			},
 			openUserDataFileFakeDiv
@@ -590,43 +590,43 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 
 		// personnalised buttons from server file are restored
-		m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
+		myAddEditionButtons ( theTravelNotesButtonsAndIcons.editionButtons );
 
 		// personnalised buttons from local file are restored
-		m_AddEditionButtons ( g_UserButtonsAndIcons.editionButtons );
+		myAddEditionButtons ( theUserButtonsAndIcons.editionButtons );
 	}
 
 	/*
-	--- End of m_CreateToolbar function ---
+	--- End of myCreateToolbar function ---
 	*/
 
 	/*
-	--- m_CreateIconDimensions function -------------------------------------------------------------------------------
+	--- myCreateIconDimensions function -------------------------------------------------------------------------------
 
 	Creation of icon dimensions...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateIconDimensions ( ) {
-		let iconDimensionsDiv = m_HtmlElementsFactory.create (
+	function myCreateIconDimensions ( ) {
+		let iconDimensionsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
 				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
 
 		// ... width ...
-		m_HtmlElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'NoteDialog - Icon width')
+				data : theTranslator.getText ( 'NoteDialog - Icon width')
 			},
 			iconDimensionsDiv
 		);
-		m_WidthInput =  m_HtmlElementsFactory.create (
+		myWidthInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -636,17 +636,17 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		m_WidthInput.value = note.iconWidth;
+		myWidthInput.value = note.iconWidth;
 
 		// ... and height
-		m_HtmlElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'NoteDialog - Icon height')
+				data : theTranslator.getText ( 'NoteDialog - Icon height')
 			},
 			iconDimensionsDiv
 		);
-		m_HeightInput =  m_HtmlElementsFactory.create (
+		myHeightInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -655,175 +655,175 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		m_HeightInput.value = note.iconHeight;
+		myHeightInput.value = note.iconHeight;
 	}
 
 	/*
-	--- End of m_CreateIconDimensions function ---
+	--- End of myCreateIconDimensions function ---
 	*/
 
 	/*
-	--- m_CreateIconContent function ----------------------------------------------------------------------------------
+	--- myCreateIconContent function ----------------------------------------------------------------------------------
 
 	Creation of icon content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateIconContent ( ) {
-		m_HtmlElementsFactory.create (
+	function myCreateIconContent ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
-				innerHTML : g_Translator.getText ( 'NoteDialog - Icon content' )
+				innerHTML : theTranslator.getText ( 'NoteDialog - Icon content' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_IconHtmlContent = m_HtmlElementsFactory.create (
+		myIconHtmlContent = myHTMLElementsFactory.create (
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id : 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_IconHtmlContent.addEventListener ( 'focus', m_OnFocusControl, false );
-		m_IconHtmlContent.value = note.iconContent;
+		myIconHtmlContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myIconHtmlContent.value = note.iconContent;
 	}
 
 	/*
-	--- End of m_CreateIconContent function ---
+	--- End of myCreateIconContent function ---
 	*/
 
 	/*
-	--- m_CreatePopupContent function ---------------------------------------------------------------------------------
+	--- myCreatePopupContent function ---------------------------------------------------------------------------------
 
 	Creation of popup content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreatePopupContent ( ) {
-		m_HtmlElementsFactory.create (
+	function myCreatePopupContent ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : g_Translator.getText ( 'NoteDialog - Text' )
+				innerHTML : theTranslator.getText ( 'NoteDialog - Text' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_PopupContent = m_HtmlElementsFactory.create (
+		myPopupContent = myHTMLElementsFactory.create (
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				id : 'TravelNotes-NoteDialog-TextArea-PopupContent'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_PopupContent.addEventListener ( 'focus', m_OnFocusControl, false );
-		m_PopupContent.value = note.popupContent;
+		myPopupContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myPopupContent.value = note.popupContent;
 	}
 
 	/*
-	--- End of m_CreatePopupContent function ---
+	--- End of myCreatePopupContent function ---
 	*/
 
 	/*
-	--- m_CreateTooltipContent function -------------------------------------------------------------------------------
+	--- myCreateTooltipContent function -------------------------------------------------------------------------------
 
 	Creation of tooltip content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateTooltipContent ( ) {
-		m_HtmlElementsFactory.create (
+	function myCreateTooltipContent ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : g_Translator.getText ( 'NoteDialog - Tooltip content' )
+				innerHTML : theTranslator.getText ( 'NoteDialog - Tooltip content' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_TooltipContent = m_HtmlElementsFactory.create (
+		myTooltipContent = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Tooltip'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_TooltipContent.addEventListener ( 'focus', m_OnFocusControl, false );
-		m_TooltipContent.value = note.tooltipContent;
+		myTooltipContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myTooltipContent.value = note.tooltipContent;
 	}
 
 	/*
-	--- End of m_CreateTooltipContent function ---
+	--- End of myCreateTooltipContent function ---
 	*/
 
 	/*
-	--- m_CreateAddressContent function -------------------------------------------------------------------------------
+	--- myCreateAddressContent function -------------------------------------------------------------------------------
 
 	Creation of address content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateAddressContent ( ) {
-		m_ResetAdressButton = m_HtmlElementsFactory.create (
+	function myCreateAddressContent ( ) {
+		myResetAdressButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML :
 					'<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' +
-					g_Translator.getText ( 'NoteDialog - Address&nbsp;:' )
+					theTranslator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_ResetAdressButton.addEventListener (
+		myResetAdressButton.addEventListener (
 			'click',
-			function ( ) { m_AdressInput.value = m_Address; },
+			function ( ) { myAdressInput.value = myAddress; },
 			false
 		);
-		m_AdressInput = m_HtmlElementsFactory.create (
+		myAdressInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Adress'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_AdressInput.addEventListener ( 'focus', m_OnFocusControl, false );
-		m_AdressInput.value = note.address;
+		myAdressInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myAdressInput.value = note.address;
 
 		// geolocalization
 		newGeoCoder ( ).getPromiseAddress ( note.latLng )
-			.then ( m_OnGeocoderResponse )
-			.catch ( m_OnGeocoderError );
+			.then ( myOnGeocoderResponse )
+			.catch ( myOnGeocoderError );
 
 	}
 
 	/*
-	--- End of m_CreateAddressContent function ---
+	--- End of myCreateAddressContent function ---
 	*/
 
 	/*
-	--- m_CreateLinkContent function ----------------------------------------------------------------------------------
+	--- myCreateLinkContent function ----------------------------------------------------------------------------------
 
 	Creation of link content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateLinkContent ( ) {
-		m_HtmlElementsFactory.create (
+	function myCreateLinkContent ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : ( g_Config.layersToolbarUI.theDevil.addButton ?
+				innerHTML : ( theConfig.layersToolbarUI.theDevil.addButton ?
 					( '<a href="https://www.google.com/maps/@' +
 					note.lat.toFixed ( 6 ) +
 					',' +
@@ -831,86 +831,86 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 					',' +
 					17 +
 					'z" target="_blank" title="' +
-					g_Config.layersToolbarUI.theDevil.title +
+					theConfig.layersToolbarUI.theDevil.title +
 					'" >' +
-					g_Config.layersToolbarUI.theDevil.text +
+					theConfig.layersToolbarUI.theDevil.text +
 					'</a> ' )
 					: '' ) +
-					g_Translator.getText ( 'NoteDialog - Link' )
+					theTranslator.getText ( 'NoteDialog - Link' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_UrlInput = m_HtmlElementsFactory.create (
+		myUrlInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Link'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_UrlInput.addEventListener (
+		myUrlInput.addEventListener (
 			'focus',
 			function ( ) {
-				m_FocusControl = null;
+				myFocusControl = null;
 			},
 			false
 		);
-		m_UrlInput.value = note.url;
+		myUrlInput.value = note.url;
 	}
 
 	/*
-	--- End of m_CreateLinkContent function ---
+	--- End of myCreateLinkContent function ---
 	*/
 
 	/*
-	--- m_CreatePhoneContent function ---------------------------------------------------------------------------------
+	--- myCreatePhoneContent function ---------------------------------------------------------------------------------
 
 	Creation of phone content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreatePhoneContent ( ) {
-		m_HtmlElementsFactory.create (
+	function myCreatePhoneContent ( ) {
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : g_Translator.getText ( 'NoteDialog - Phone' )
+				innerHTML : theTranslator.getText ( 'NoteDialog - Phone' )
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_PhoneInput = m_HtmlElementsFactory.create (
+		myPhoneInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
 				id : 'TravelNotes-NoteDialog-InputText-Phone'
 			},
-			m_NoteDataDiv
+			myNoteDataDiv
 		);
-		m_PhoneInput.addEventListener ( 'focus', m_OnFocusControl, false );
-		m_PhoneInput.value = note.phone;
+		myPhoneInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myPhoneInput.value = note.phone;
 	}
 
 	/*
-	--- End of m_CreatePhoneContent function ---
+	--- End of myCreatePhoneContent function ---
 	*/
 
 	/*
-	--- m_LoadIconsAndButtons function --------------------------------------------------------------------------------
+	--- myLoadIconsAndButtons function --------------------------------------------------------------------------------
 
 	loading predefined icons and buttons
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_LoadIconsAndButtons ( ) {
+	function myLoadIconsAndButtons ( ) {
 
 		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
-			g_TravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
-			m_AddEditionButtons ( g_TravelNotesButtonsAndIcons.editionButtons );
-			g_TravelNotesButtonsAndIcons.preDefinedIconsList.push (
+			theTravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
+			myAddEditionButtons ( theTravelNotesButtonsAndIcons.editionButtons );
+			theTravelNotesButtonsAndIcons.preDefinedIconsList.push (
 				{
 					name : '',
 					icon : '',
@@ -919,13 +919,13 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 					height : 40
 				}
 			);
-			m_AddPreDefinedIconsList ( );
+			myAddPreDefinedIconsList ( );
 		}
 
 		newHttpRequestBuilder ( ).getJsonPromise (
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 			'TravelNotesNoteDialog' +
-			g_Config.language.toUpperCase ( ) +
+			theConfig.language.toUpperCase ( ) +
 			'.json'
 		)
 			.then ( loadIconsAndButtons )
@@ -933,7 +933,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of m_LoadIconsAndButtons function ---
+	--- End of myLoadIconsAndButtons function ---
 	*/
 
 	/*
@@ -942,19 +942,19 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	m_CreateDialog ( );
-	m_CreateToolbar ( );
-	m_CreateIconDimensions ( );
-	m_CreateIconContent ( );
-	m_CreatePopupContent ( );
-	m_CreateTooltipContent ( );
-	m_CreateAddressContent ( );
-	m_CreateLinkContent ( );
-	m_CreatePhoneContent ( );
-	m_LoadIconsAndButtons ( );
-	m_AddPreDefinedIconsList ( );
+	myCreateDialog ( );
+	myCreateToolbar ( );
+	myCreateIconDimensions ( );
+	myCreateIconContent ( );
+	myCreatePopupContent ( );
+	myCreateTooltipContent ( );
+	myCreateAddressContent ( );
+	myCreateLinkContent ( );
+	myCreatePhoneContent ( );
+	myLoadIconsAndButtons ( );
+	myAddPreDefinedIconsList ( );
 
-	return m_NoteDialog;
+	return myNoteDialog;
 }
 
 /*

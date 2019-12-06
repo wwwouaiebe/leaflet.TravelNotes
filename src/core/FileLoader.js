@@ -37,10 +37,10 @@ export { newFileLoader };
 
 import { polyline } from '../polyline/Polyline.js';
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
@@ -55,21 +55,21 @@ Patterns : Closure
 
 function newFileLoader ( ) {
 
-	let m_MergeContent = false;
-	let m_FileName = '';
-	let m_IsFileReadOnly = false;
-	let m_FileContent = {};
-	let m_EventDispatcher = newEventDispatcher ( );
+	let myMergeContent = false;
+	let myFileName = '';
+	let myIsFileReadOnly = false;
+	let myFileContent = {};
+	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
-	--- m_DecompressRoute function ------------------------------------------------------------------------------------
+	--- myDecompressRoute function ------------------------------------------------------------------------------------
 
 	This function decompress a route
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_DecompressRoute ( route ) {
+	function myDecompressRoute ( route ) {
 		route.itinerary.itineraryPoints.latLngs = polyline.decode ( route.itinerary.itineraryPoints.latLngs, 6 );
 		let decompressedItineraryPoints = [];
 		let latLngsCounter = 0;
@@ -89,145 +89,145 @@ function newFileLoader ( ) {
 	}
 
 	/*
-	--- m_DecompressFileContent function ------------------------------------------------------------------------------
+	--- myDecompressFileContent function ------------------------------------------------------------------------------
 
 	This function decompress the file data
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_DecompressFileContent ( ) {
+	function myDecompressFileContent ( ) {
 
-		m_FileContent.routes.forEach ( m_DecompressRoute );
-		if ( m_FileContent.editedRoute ) {
+		myFileContent.routes.forEach ( myDecompressRoute );
+		if ( myFileContent.editedRoute ) {
 
 			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
-			m_DecompressRoute ( m_FileContent.editedRoute );
+			myDecompressRoute ( myFileContent.editedRoute );
 		}
-		if ( m_MergeContent ) {
-			m_Merge ( );
+		if ( myMergeContent ) {
+			myMerge ( );
 		}
 		else {
-			m_Open ( );
+			myOpen ( );
 		}
 	}
 
 	/*
-	--- m_Merge function ----------------------------------------------------------------------------------------------
+	--- myMerge function ----------------------------------------------------------------------------------------------
 
-	This function merge the file data with the g_TravelNotesData.travel
+	This function merge the file data with the theTravelNotesData.travel
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Merge ( ) {
+	function myMerge ( ) {
 
 		// ... and transform the data in the correct format
 		let travel = newTravel ( );
-		travel.object = m_FileContent;
+		travel.object = myFileContent;
 
 		// routes are added with their notes
 		let routesIterator = travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			g_TravelNotesData.travel.routes.add ( routesIterator.value );
+			theTravelNotesData.travel.routes.add ( routesIterator.value );
 		}
 
 		// travel notes are added
 		let notesIterator = travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			g_TravelNotesData.travel.notes.add ( notesIterator.value );
+			theTravelNotesData.travel.notes.add ( notesIterator.value );
 		}
 
-		g_RouteEditor.chainRoutes ( );
+		theRouteEditor.chainRoutes ( );
 
-		m_Display ( );
+		myDisplay ( );
 	}
 
 	/*
-	--- m_Open function -----------------------------------------------------------------------------------------------
+	--- myOpen function -----------------------------------------------------------------------------------------------
 
-	This function load the file data within the g_TravelNotesData.travel
+	This function load the file data within the theTravelNotesData.travel
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Open ( ) {
-		g_TravelNotesData.travel.object = m_FileContent;
-		g_TravelNotesData.editedRouteObjId = -1;
+	function myOpen ( ) {
+		theTravelNotesData.travel.object = myFileContent;
+		theTravelNotesData.editedRouteObjId = -1;
 
-		if ( '' !== m_FileName ) {
-			g_TravelNotesData.travel.name = m_FileName.substr ( 0, m_FileName.lastIndexOf ( '.' ) ) ;
+		if ( '' !== myFileName ) {
+			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) ) ;
 		}
-		g_TravelNotesData.travel.readOnly = m_IsFileReadOnly;
-		g_TravelNotesData.travel.routes.forEach (
+		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
+		theTravelNotesData.travel.routes.forEach (
 			route => {
 				if ( 0 !== route.edited ) {
-					g_TravelNotesData.editedRouteObjId = route.objId;
+					theTravelNotesData.editedRouteObjId = route.objId;
 				}
 			}
 		);
-		m_Display ( );
+		myDisplay ( );
 	}
 
 	/*
-	--- m_Display function --------------------------------------------------------------------------------------------
+	--- myDisplay function --------------------------------------------------------------------------------------------
 
 	This function update the screen
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Display ( ) {
+	function myDisplay ( ) {
 
 		// the map is cleaned
-		m_EventDispatcher.dispatch ( 'removeallobjects' );
+		myEventDispatcher.dispatch ( 'removeallobjects' );
 
 		// routes are added with their notes
-		let routesIterator = g_TravelNotesData.travel.routes.iterator;
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( 0 === routesIterator.value.edited ) {
-				m_EventDispatcher.dispatch (
+				myEventDispatcher.dispatch (
 					'addroute',
 					{
 						route : routesIterator.value,
 						addNotes : true,
 						addWayPoints : false,
-						readOnly : m_IsFileReadOnly
+						readOnly : myIsFileReadOnly
 					}
 				);
 			}
 		}
 
 		// edited route is added with notes and , depending of read only, waypoints
-		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
-			m_EventDispatcher.dispatch (
+		if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+			myEventDispatcher.dispatch (
 				'addroute',
 				{
-					route : g_TravelNotesData.travel.editedRoute,
+					route : theTravelNotesData.travel.editedRoute,
 					addNotes : true,
-					addWayPoints : ! m_IsFileReadOnly,
-					readOnly : m_IsFileReadOnly
+					addWayPoints : ! myIsFileReadOnly,
+					readOnly : myIsFileReadOnly
 				}
 			);
 		}
 
 		// travel notes are added
-		let notesIterator = g_TravelNotesData.travel.notes.iterator;
+		let notesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			m_EventDispatcher.dispatch (
+			myEventDispatcher.dispatch (
 				'addnote',
 				{
 					note : notesIterator.value,
-					readOnly : m_IsFileReadOnly
+					readOnly : myIsFileReadOnly
 				}
 			);
 		}
 
 		// zoom on the travel
-		m_EventDispatcher.dispatch ( 'zoomtotravel' );
+		myEventDispatcher.dispatch ( 'zoomtotravel' );
 
 		// Editors and roadbook are filled
-		if ( m_IsFileReadOnly ) {
+		if ( myIsFileReadOnly ) {
 
 			// control is hidden
 			document.getElementById ( 'TravelNotes-Control-MainDiv' )
@@ -240,18 +240,18 @@ function newFileLoader ( ) {
 		else {
 
 			// Editors and HTML pages are filled
-			m_EventDispatcher.dispatch ( 'setrouteslist' );
-			if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
-				let providerName = g_TravelNotesData.travel.editedRoute.itinerary.provider;
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+			if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 				if (
 					providerName
 					&&
 					( '' !== providerName )
 					&&
-					! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) )
+					! theTravelNotesData.providers.get ( providerName.toLowerCase ( ) )
 				) {
-					gc_ErrorsUI.showError (
-						g_Translator.getText (
+					theErrorsUI.showError (
+						theTranslator.getText (
 							"FileLoader - Not possible to select as provider",
 							{ provider : providerName }
 						)
@@ -260,45 +260,45 @@ function newFileLoader ( ) {
 				else {
 
 					// Provider and transit mode are changed in the itinerary editor
-					let transitMode = g_TravelNotesData.travel.editedRoute.itinerary.transitMode;
-					m_EventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+					let transitMode = theTravelNotesData.travel.editedRoute.itinerary.transitMode;
+					myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 
 					if ( transitMode && '' !== transitMode ) {
-						m_EventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+						myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 					}
 				}
-				g_RouteEditor.chainRoutes ( );
-				m_EventDispatcher.dispatch ( 'expandrouteui' );
-				m_EventDispatcher.dispatch ( 'setwaypointslist' );
-				m_EventDispatcher.dispatch ( 'setitinerary' );
+				theRouteEditor.chainRoutes ( );
+				myEventDispatcher.dispatch ( 'expandrouteui' );
+				myEventDispatcher.dispatch ( 'setwaypointslist' );
+				myEventDispatcher.dispatch ( 'setitinerary' );
 			}
 			newRoadbookUpdate ( );
 		}
-		g_TravelNotesData.map.fire (
+		theTravelNotesData.map.fire (
 			'travelnotesfileloaded',
 			{
-				readOnly : m_IsFileReadOnly,
-				name : g_TravelNotesData.travel.name
+				readOnly : myIsFileReadOnly,
+				name : theTravelNotesData.travel.name
 			}
 		);
 	}
 
 	/*
-	--- m_OpenFile function -------------------------------------------------------------------------------------------
+	--- myOpenFile function -------------------------------------------------------------------------------------------
 
 	This function open a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OpenFile ( event ) {
-		m_FileName = event.target.files [ 0 ].name;
+	function myOpenFile ( event ) {
+		myFileName = event.target.files [ 0 ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
-				m_FileContent =  JSON.parse ( fileReader.result );
-				m_DecompressFileContent ( );
+				myFileContent =  JSON.parse ( fileReader.result );
+				myDecompressFileContent ( );
 			}
 			catch ( err ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
@@ -308,47 +308,47 @@ function newFileLoader ( ) {
 	}
 
 	/*
-	--- m_OpenLocalFile function --------------------------------------------------------------------------------------
+	--- myOpenLocalFile function --------------------------------------------------------------------------------------
 
 	This function open a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OpenLocalFile ( event ) {
-		m_MergeContent = false;
-		m_IsFileReadOnly = false;
-		m_OpenFile ( event );
+	function myOpenLocalFile ( event ) {
+		myMergeContent = false;
+		myIsFileReadOnly = false;
+		myOpenFile ( event );
 	}
 
 	/*
-	--- m_MergeLocalFile function -------------------------------------------------------------------------------------
+	--- myMergeLocalFile function -------------------------------------------------------------------------------------
 
 	This function open a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_MergeLocalFile ( event ) {
+	function myMergeLocalFile ( event ) {
 
-		m_MergeContent = true;
-		m_IsFileReadOnly = false;
-		m_OpenFile ( event );
+		myMergeContent = true;
+		myIsFileReadOnly = false;
+		myOpenFile ( event );
 	}
 
 	/*
-	--- m_OpenDistantFile function ------------------------------------------------------------------------------------
+	--- myOpenDistantFile function ------------------------------------------------------------------------------------
 
 	This function open a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OpenDistantFile ( fileContent ) {
+	function myOpenDistantFile ( fileContent ) {
 		window.L.travelNotes.rightContextMenu = false;
-		m_IsFileReadOnly = true;
-		m_FileContent = fileContent;
-		m_DecompressFileContent ( );
+		myIsFileReadOnly = true;
+		myFileContent = fileContent;
+		myDecompressFileContent ( );
 	}
 
 	/*
@@ -359,9 +359,9 @@ function newFileLoader ( ) {
 
 	return Object.seal (
 		{
-			openLocalFile : event => m_OpenLocalFile ( event ),
-			mergeLocalFile : event => m_MergeLocalFile ( event ),
-			openDistantFile : fileContent => m_OpenDistantFile ( fileContent )
+			openLocalFile : event => myOpenLocalFile ( event ),
+			mergeLocalFile : event => myMergeLocalFile ( event ),
+			openDistantFile : fileContent => myOpenDistantFile ( fileContent )
 		}
 	);
 }

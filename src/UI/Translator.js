@@ -16,7 +16,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- Translator.js file ------------------------------------------------------------------------------------------------
 This file contains:
 	- the newTranslator function
-	- the g_Translator object
+	- the theTranslator object
 Changes:
 	- v1.0.0:
 		- created
@@ -28,7 +28,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { g_Translator };
+export { theTranslator };
 
 /*
 --- newTranslator funtion ---------------------------------------------------------------------------------------------
@@ -41,16 +41,16 @@ Patterns : Closure and singleton
 
 function newTranslator ( ) {
 
-	let m_translations = new Map ( );
+	let myTranslations = new Map ( );
 
-	function m_SetTranslations ( translations ) {
+	function mySetTranslations ( translations ) {
 		translations.forEach (
-			translation => m_translations.set ( translation.msgid, translation.msgstr )
+			translation => myTranslations.set ( translation.msgid, translation.msgstr )
 		);
 	}
 
-	function m_GetText ( msgid, params ) {
-		let translation = m_translations.get ( msgid );
+	function myGetText ( msgid, params ) {
+		let translation = myTranslations.get ( msgid );
 		if ( params && translation ) {
 			Object.getOwnPropertyNames ( params ).forEach (
 				propertyName => translation = translation.replace ( '{' + propertyName + '}', params [ propertyName ] )
@@ -61,20 +61,20 @@ function newTranslator ( ) {
 	}
 
 	return {
-		setTranslations : translations => m_SetTranslations ( translations ),
-		getText : ( msgid, params ) => { return m_GetText ( msgid, params ); }
+		setTranslations : translations => mySetTranslations ( translations ),
+		getText : ( msgid, params ) => { return myGetText ( msgid, params ); }
 	};
 }
 
 /*
---- g_Translator object -----------------------------------------------------------------------------------------------
+--- theTranslator object -----------------------------------------------------------------------------------------------
 
 The one and only one translator
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_Translator = newTranslator ( );
+const theTranslator = newTranslator ( );
 
 /*
 --- End of Translator.js file -----------------------------------------------------------------------------------------

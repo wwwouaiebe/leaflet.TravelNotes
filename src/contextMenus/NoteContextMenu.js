@@ -34,9 +34,9 @@ export { newNoteContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { g_NoteEditor } from '../core/NoteEditor.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_Translator } from '../UI/Translator.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theTranslator } from '../UI/Translator.js';
 
 /*
 --- newNoteContextMenu function ---------------------------------------------------------------------------------------
@@ -46,54 +46,54 @@ import { g_Translator } from '../UI/Translator.js';
 
 function newNoteContextMenu ( event ) {
 
-	let m_NoteObjId = event.target.objId;
+	let myNoteObjId = event.target.objId;
 
 	/*
-	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
+	--- myGetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetMenuItems ( ) {
+	function myGetMenuItems ( ) {
 
-		let route = newDataSearchEngine ( ).getNoteAndRoute ( m_NoteObjId ).route;
+		let route = newDataSearchEngine ( ).getNoteAndRoute ( myNoteObjId ).route;
 
 		return [
 			{
-				context : g_NoteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Edit this note" ),
-				action : g_NoteEditor.editNote,
-				param : m_NoteObjId
+				context : theNoteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Edit this note" ),
+				action : theNoteEditor.editNote,
+				param : myNoteObjId
 			},
 			{
-				context : g_NoteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Delete this note" ),
-				action : g_NoteEditor.removeNote,
-				param : m_NoteObjId
+				context : theNoteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Delete this note" ),
+				action : theNoteEditor.removeNote,
+				param : myNoteObjId
 			},
 			{
-				context : g_NoteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Zoom to note" ),
-				action : g_NoteEditor.zoomToNote,
-				param : m_NoteObjId
+				context : theNoteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Zoom to note" ),
+				action : theNoteEditor.zoomToNote,
+				param : myNoteObjId
 			},
 			{
-				context : g_NoteEditor,
+				context : theNoteEditor,
 				name :
 					route
 						?
-						g_Translator.getText ( "ContextMenuFactory - Detach note from route" )
+						theTranslator.getText ( "ContextMenuFactory - Detach note from route" )
 						:
-						g_Translator.getText ( "ContextMenuFactory - Attach note to route" ),
+						theTranslator.getText ( "ContextMenuFactory - Attach note to route" ),
 				action :
-					g_TravelNotesData.travel.routes.length !== 0
+					theTravelNotesData.travel.routes.length !== 0
 					&&
-					-1 === g_TravelNotesData.editedRouteObjId
+					-1 === theTravelNotesData.editedRouteObjId
 						?
-						( route ? g_NoteEditor.detachNoteFromRoute : g_NoteEditor.attachNoteToRoute )
+						( route ? theNoteEditor.detachNoteFromRoute : theNoteEditor.attachNoteToRoute )
 						:
 						null,
-				param : m_NoteObjId
+				param : myNoteObjId
 			}
 		];
 	}
@@ -105,7 +105,7 @@ function newNoteContextMenu ( event ) {
 	*/
 
 	let noteContextMenu = newBaseContextMenu ( event );
-	noteContextMenu.init ( m_GetMenuItems ( ) );
+	noteContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( noteContextMenu );
 }

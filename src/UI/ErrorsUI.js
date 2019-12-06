@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- ErrorsUI.js file ---------------------------------------------------------------------------------------------
 This file contains:
 	- the newErrorsUI function
-	- the gc_ErrorsUI object
+	- the theErrorsUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -30,10 +30,10 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_ErrorsUI };
-import { g_Config } from '../data/Config.js';
+export { theErrorsUI };
+import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 
 /*
 --- newErrorsUI function ----------------------------------------------------------------------------------------------
@@ -43,104 +43,104 @@ import { g_Translator } from '../UI/Translator.js';
 
 function newErrorsUI ( ) {
 
-	let m_ErrorDiv = null;
-	let m_TimerId = null;
-	let m_ShowHelpInput = null;
-	let m_ShowHelpDiv = null;
-	let m_CancelButton = null;
-	let m_ShowHelp = g_Config.errorUI.showHelp;
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( );
+	let myErrorDiv = null;
+	let myTimerId = null;
+	let myShowHelpInput = null;
+	let myShowHelpDiv = null;
+	let myCancelButton = null;
+	let myShowHelp = theConfig.errorUI.showHelp;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
-	--- m_OnTimer function --------------------------------------------------------------------------------------------
+	--- myOnTimer function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnTimer ( ) {
-		m_TimerId = null;
-		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Error' );
-		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Warning' );
-		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );
-		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Help' );
-		m_ErrorDiv.classList.add ( 'TravelNotes-ErrorUI-Hidden' );
-		m_CancelButton.removeEventListener ( 'click', m_OnTimer, false );
-		m_CancelButton = null;
-		m_ShowHelpDiv = null;
-		m_ErrorDiv.innerHTML = '';
+	function myOnTimer ( ) {
+		myTimerId = null;
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Error' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Warning' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Help' );
+		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-Hidden' );
+		myCancelButton.removeEventListener ( 'click', myOnTimer, false );
+		myCancelButton = null;
+		myShowHelpDiv = null;
+		myErrorDiv.innerHTML = '';
 	}
 
 	/*
-	--- m_AddHelpCheckbox function ------------------------------------------------------------------------------------
+	--- myAddHelpCheckbox function ------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddHelpCheckbox ( ) {
-		m_ShowHelpDiv = m_HTMLElementsFactory.create (
+	function myAddHelpCheckbox ( ) {
+		myShowHelpDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI-HelpInputDiv'
 			},
-			m_ErrorDiv
+			myErrorDiv
 		);
-		m_ShowHelpInput = m_HTMLElementsFactory.create (
+		myShowHelpInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-ErrorUI-HelpInput',
 				type : 'checkbox'
 			},
-			m_ShowHelpDiv
+			myShowHelpDiv
 		);
-		m_ShowHelpInput.addEventListener (
+		myShowHelpInput.addEventListener (
 			'change',
-			( ) => { m_ShowHelp = m_ShowHelpInput.checked; },
+			( ) => { myShowHelp = myShowHelpInput.checked; },
 			false
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'label',
 			{
 				id : 'TravelNotes-ErrorUI-HelpInputLabel',
 				for : 'TravelNotes-ErrorUI-HelpInput',
-				innerHTML : g_Translator.getText ( 'ErrorUI - Dont show again' )
+				innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
 			},
-			m_ShowHelpDiv
+			myShowHelpDiv
 		);
 	}
 
 	/*
-	--- m_Show function -----------------------------------------------------------------------------------------------
+	--- myShow function -----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Show ( message, errorLevel ) {
+	function myShow ( message, errorLevel ) {
 
 		if (
-			( 'Error' === errorLevel && ! g_Config.errorUI.showError )
+			( 'Error' === errorLevel && ! theConfig.errorUI.showError )
 				||
-				( 'Warning' === errorLevel && ! g_Config.errorUI.showWarning )
+				( 'Warning' === errorLevel && ! theConfig.errorUI.showWarning )
 				||
-				( 'Info' === errorLevel && ! g_Config.errorUI.showInfo )
+				( 'Info' === errorLevel && ! theConfig.errorUI.showInfo )
 				||
-				( 'Help' === errorLevel && ! g_Config.errorUI.showHelp )
+				( 'Help' === errorLevel && ! theConfig.errorUI.showHelp )
 				||
-				( 'Help' === errorLevel && ! m_ShowHelp )
+				( 'Help' === errorLevel && ! myShowHelp )
 		) {
 			return;
 		}
-		if ( m_TimerId ) {
-			m_OnTimer ( );
+		if ( myTimerId ) {
+			myOnTimer ( );
 		}
 
-		let headerDiv = m_HTMLElementsFactory.create (
+		let headerDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI-Header'
 			},
-			m_ErrorDiv
+			myErrorDiv
 		);
-		m_CancelButton = m_HTMLElementsFactory.create (
+		myCancelButton = myHTMLElementsFactory.create (
 			'span',
 			{
 				id : 'TravelNotes-ErrorUI-CancelButton',
@@ -148,41 +148,41 @@ function newErrorsUI ( ) {
 			},
 			headerDiv
 		);
-		m_CancelButton.addEventListener ( 'click', m_OnTimer, false );
-		m_HTMLElementsFactory.create (
+		myCancelButton.addEventListener ( 'click', myOnTimer, false );
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI-Message',
 				innerHTML : message
 			},
-			m_ErrorDiv
+			myErrorDiv
 		);
 
-		m_ErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
+		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
 
 		if ( 'Help' === errorLevel ) {
-			m_AddHelpCheckbox ( );
+			myAddHelpCheckbox ( );
 		}
 
-		m_ErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
-		m_TimerId = setTimeout ( m_OnTimer, g_Config.errorUI.timeOut );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
+		myTimerId = setTimeout ( myOnTimer, theConfig.errorUI.timeOut );
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( ) {
+	function myCreateUI ( ) {
 
 		if ( document.getElementById ( 'TravelNotes-ErrorUI' ) ) {
 			return;
 		}
 
-		m_ErrorDiv = m_HTMLElementsFactory.create (
+		myErrorDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorUI',
@@ -201,20 +201,20 @@ function newErrorsUI ( ) {
 
 	return {
 
-		createUI : ( ) => m_CreateUI ( ),
+		createUI : ( ) => myCreateUI ( ),
 
-		showError : error  => m_Show ( error, 'Error' ),
+		showError : error  => myShow ( error, 'Error' ),
 
-		showWarning : warning  => m_Show ( warning, 'Warning' ),
+		showWarning : warning  => myShow ( warning, 'Warning' ),
 
-		showInfo : info  => m_Show ( info, 'Info' ),
+		showInfo : info  => myShow ( info, 'Info' ),
 
-		showHelp : help  => m_Show ( help, 'Help' )
+		showHelp : help  => myShow ( help, 'Help' )
 
 	};
 }
 
-const gc_ErrorsUI = newErrorsUI ( );
+const theErrorsUI = newErrorsUI ( );
 
 /*
 --- End of ErrorsUI.js file --------------------------------------------------------------------------------------

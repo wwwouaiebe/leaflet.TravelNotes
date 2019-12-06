@@ -33,9 +33,9 @@ Tests ...
 export { newWayPointContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { g_WayPointEditor } from '../core/WayPointEditor.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_Translator } from '../UI/Translator.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theTranslator } from '../UI/Translator.js';
 
 /*
 --- newWayPointContextMenu function -----------------------------------------------------------------------------------
@@ -45,25 +45,25 @@ import { g_Translator } from '../UI/Translator.js';
 
 function newWayPointContextMenu ( event ) {
 
-	let m_WayPointObjId = event.target.objId;
+	let myWayPointObjId = event.target.objId;
 
 	/*
-	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
+	--- myGetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetMenuItems ( ) {
+	function myGetMenuItems ( ) {
 		let isMidWayPoint =
-			g_TravelNotesData.travel.editedRoute.wayPoints.first.objId !== m_WayPointObjId
+			theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== myWayPointObjId
 			&&
-			g_TravelNotesData.travel.editedRoute.wayPoints.last.objId !== m_WayPointObjId ;
+			theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== myWayPointObjId ;
 		return [
 			{
-				context : g_WayPointEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Delete this waypoint" ),
-				action : isMidWayPoint ? g_WayPointEditor.removeWayPoint : null,
-				param : m_WayPointObjId
+				context : theWayPointEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Delete this waypoint" ),
+				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
+				param : myWayPointObjId
 			}
 		];
 	}
@@ -75,7 +75,7 @@ function newWayPointContextMenu ( event ) {
 	*/
 
 	let wayPointContextMenu = newBaseContextMenu ( event );
-	wayPointContextMenu.init ( m_GetMenuItems ( ) );
+	wayPointContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( wayPointContextMenu );
 }

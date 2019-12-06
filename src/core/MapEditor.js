@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- MapEditor.js file -------------------------------------------------------------------------------------------------
 This file contains:
 	- the newMapEditor function
-	- the g_MapEditor object
+	- the theMapEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -46,11 +46,11 @@ Tests ...
 
 /* global L  */
 
-export { g_MapEditor };
+export { theMapEditor };
 
-import { g_Config } from '../data/Config.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_WayPointEditor } from '../core/WayPointEditor.js';
+import { theConfig } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
@@ -60,7 +60,7 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
-import { g_APIKeysManager } from '../core/APIKeysManager.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -77,10 +77,10 @@ function onMouseOverOrMoveOnRoute ( event ) {
 	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
-	let polyline = g_TravelNotesData.mapObjects.get ( event.target.objId );
+	let polyline = theTravelNotesData.mapObjects.get ( event.target.objId );
 	polyline.closeTooltip ( );
 	let tooltipText = dataSearchEngine.getRoute ( event.target.objId ).name;
-	if ( ! g_TravelNotesData.travel.readOnly ) {
+	if ( ! theTravelNotesData.travel.readOnly ) {
 		tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
 	}
@@ -98,24 +98,24 @@ Patterns : Closure and Singleton
 
 function newMapEditor ( ) {
 
-	let m_DataSearchEngine  = newDataSearchEngine ( );
-	let m_EventDispatcher = newEventDispatcher ( );
-	let m_Geometry = newGeometry ( );
-	let m_CurrentLayer = null;
-	let m_GeolocationCircle = null;
+	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myEventDispatcher = newEventDispatcher ( );
+	let myGeometry = newGeometry ( );
+	let myCurrentLayer = null;
+	let myGeolocationCircle = null;
 
 	/*
-	--- m_loadEvents function -----------------------------------------------------------------------------------------
+	--- myLoadEvents function -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_loadEvents ( ) {
+	function myLoadEvents ( ) {
 		document.addEventListener (
 			'removeroute',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.removeRoute (
+					theMapEditor.removeRoute (
 						event.data.route,
 						event.data.RemoveNotes,
 						event.data.removeWayPoints
@@ -128,7 +128,7 @@ function newMapEditor ( ) {
 			'addroute',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addRoute (
+					theMapEditor.addRoute (
 						event.data.route,
 						event.data.addNotes,
 						event.data.addWayPoints,
@@ -142,7 +142,7 @@ function newMapEditor ( ) {
 			'editroute',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.editRoute (
+					theMapEditor.editRoute (
 						event.data.route
 					)
 				}
@@ -153,19 +153,19 @@ function newMapEditor ( ) {
 			'removeobject',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.removeObject (
+					theMapEditor.removeObject (
 						event.data.objId
 					)
 				}
 			},
 			false
 		);
-		document.addEventListener ( 'removeallobjects',	( ) => g_MapEditor.removeAllObjects ( ), false );
+		document.addEventListener ( 'removeallobjects',	( ) => theMapEditor.removeAllObjects ( ), false );
 		document.addEventListener (
 			'zoomtopoint',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.zoomToPoint (
+					theMapEditor.zoomToPoint (
 						event.data.latLng
 					)
 				}
@@ -176,7 +176,7 @@ function newMapEditor ( ) {
 			'zoomtosearchresult',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.zoomToSearchResult (
+					theMapEditor.zoomToSearchResult (
 						event.data.latLng,
 						event.data.geometry
 					)
@@ -188,7 +188,7 @@ function newMapEditor ( ) {
 			'zoomtonote',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.zoomToNote (
+					theMapEditor.zoomToNote (
 						event.data.noteObjId
 					)
 				}
@@ -199,19 +199,19 @@ function newMapEditor ( ) {
 			'zoomtoroute',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.zoomToRoute (
+					theMapEditor.zoomToRoute (
 						event.data.routeObjId
 					)
 				}
 			},
 			false
 		);
-		document.addEventListener ( 'zoomtotravel',	( ) => g_MapEditor.zoomToTravel ( ), false );
+		document.addEventListener ( 'zoomtotravel',	( ) => theMapEditor.zoomToTravel ( ), false );
 		document.addEventListener (
 			'additinerarypointmarker',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addItineraryPointMarker (
+					theMapEditor.addItineraryPointMarker (
 						event.data.objId,
 						event.data.latLng
 					)
@@ -223,7 +223,7 @@ function newMapEditor ( ) {
 			'addsearchpointmarker',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addSearchPointMarker (
+					theMapEditor.addSearchPointMarker (
 						event.data.objId,
 						event.data.latLng,
 						event.data.geometry
@@ -236,7 +236,7 @@ function newMapEditor ( ) {
 			'addrectangle',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addRectangle (
+					theMapEditor.addRectangle (
 						event.data.objId,
 						event.data.bounds,
 						event.data.properties
@@ -249,7 +249,7 @@ function newMapEditor ( ) {
 			'addwaypoint',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addWayPoint (
+					theMapEditor.addWayPoint (
 						event.data.wayPoint,
 						event.data.letter
 					)
@@ -261,7 +261,7 @@ function newMapEditor ( ) {
 			'redrawnote',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.redrawNote (
+					theMapEditor.redrawNote (
 						event.data.note
 					)
 				}
@@ -272,7 +272,7 @@ function newMapEditor ( ) {
 			'addnote',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.addNote (
+					theMapEditor.addNote (
 						event.data.note,
 						event.data.readOnly
 					)
@@ -284,7 +284,7 @@ function newMapEditor ( ) {
 			'layerchange',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.setLayer ( event.data.layer );
+					theMapEditor.setLayer ( event.data.layer );
 				}
 			}
 		);
@@ -292,7 +292,7 @@ function newMapEditor ( ) {
 			'geolocationpositionchanged',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.onGeolocationPositionChanged ( event.data.position );
+					theMapEditor.onGeolocationPositionChanged ( event.data.position );
 				}
 			},
 			false
@@ -301,7 +301,7 @@ function newMapEditor ( ) {
 			'geolocationstatuschanged',
 			event => {
 				if ( event.data ) {
-					g_MapEditor.onGeolocationStatusChanged ( event.data.status );
+					theMapEditor.onGeolocationStatusChanged ( event.data.status );
 				}
 			},
 			false
@@ -309,18 +309,18 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- m_SetLayer function -------------------------------------------------------------------------------------------
+	--- mySetLayer function -------------------------------------------------------------------------------------------
 
 	This function add a leaflet object to the leaflet map and to the JavaScript map
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetLayer ( layer ) {
+	function mySetLayer ( layer ) {
 
 		let url = layer.url;
 		if ( layer.providerKeyNeeded ) {
-			let providerKey = g_APIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
+			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
 			if ( providerKey ) {
 				url = url.replace ( '{providerKey}', providerKey );
 			}
@@ -337,78 +337,78 @@ function newMapEditor ( ) {
 			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
-		if ( m_CurrentLayer ) {
-			g_TravelNotesData.map.removeLayer ( m_CurrentLayer );
+		if ( myCurrentLayer ) {
+			theTravelNotesData.map.removeLayer ( myCurrentLayer );
 		}
-		g_TravelNotesData.map.addLayer ( leafletLayer );
-		m_CurrentLayer = leafletLayer;
+		theTravelNotesData.map.addLayer ( leafletLayer );
+		myCurrentLayer = leafletLayer;
 
-		if ( g_TravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
-			g_TravelNotesData.map.setZoom ( layer.minZoom || 0 )
+		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
+			theTravelNotesData.map.setZoom ( layer.minZoom || 0 )
 		}
-		g_TravelNotesData.map.setMinZoom ( layer.minZoom || 0 );
-		if ( g_TravelNotesData.map.getZoom ( ) > ( layer.maxZoom || 18 ) ) {
-			g_TravelNotesData.map.setZoom ( layer.maxZoom || 18 )
+		theTravelNotesData.map.setMinZoom ( layer.minZoom || 0 );
+		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || 18 ) ) {
+			theTravelNotesData.map.setZoom ( layer.maxZoom || 18 )
 		}
-		g_TravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
+		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
 		if ( layer.bounds ) {
 			if (
-				! g_TravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
+				! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
 				||
-				g_TravelNotesData.map.getBounds ( ).contains ( layer.bounds )
+				theTravelNotesData.map.getBounds ( ).contains ( layer.bounds )
 			) {
-				g_TravelNotesData.map.setMaxBounds ( null );
-				g_TravelNotesData.map.fitBounds ( layer.bounds );
-				g_TravelNotesData.map.setZoom ( layer.minZoom || 0 );
+				theTravelNotesData.map.setMaxBounds ( null );
+				theTravelNotesData.map.fitBounds ( layer.bounds );
+				theTravelNotesData.map.setZoom ( layer.minZoom || 0 );
 			}
-			g_TravelNotesData.map.setMaxBounds ( layer.bounds );
+			theTravelNotesData.map.setMaxBounds ( layer.bounds );
 		}
 		else {
-			g_TravelNotesData.map.setMaxBounds ( null );
+			theTravelNotesData.map.setMaxBounds ( null );
 		}
-		g_TravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
+		theTravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
 	}
 
 	/*
-	--- m_AddTo function ----------------------------------------------------------------------------------------------
+	--- myAddTo function ----------------------------------------------------------------------------------------------
 
 	This function add a leaflet object to the leaflet map and to the JavaScript map
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddTo ( objId, object ) {
+	function myAddTo ( objId, object ) {
 		object.objId = objId;
-		object.addTo ( g_TravelNotesData.map );
-		g_TravelNotesData.mapObjects.set ( objId, object );
+		object.addTo ( theTravelNotesData.map );
+		theTravelNotesData.mapObjects.set ( objId, object );
 	}
 
 	/*
-	--- m_RemoveObject function ---------------------------------------------------------------------------------------
+	--- myRemoveObject function ---------------------------------------------------------------------------------------
 
 	This function remove a leaflet object from the leaflet map and from the JavaScript map
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveObject ( objId ) {
-		let layer = g_TravelNotesData.mapObjects.get ( objId );
+	function myRemoveObject ( objId ) {
+		let layer = theTravelNotesData.mapObjects.get ( objId );
 		if ( layer ) {
 			L.DomEvent.off ( layer );
-			g_TravelNotesData.map.removeLayer ( layer );
-			g_TravelNotesData.mapObjects.delete ( objId );
+			theTravelNotesData.map.removeLayer ( layer );
+			theTravelNotesData.mapObjects.delete ( objId );
 		}
 	}
 
 	/*
-	--- m_GetLatLngBounds function ------------------------------------------------------------------------------------
+	--- myGetLatLngBounds function ------------------------------------------------------------------------------------
 
 	This function build a L.latLngBounds object from an array of points
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetLatLngBounds ( latLngs ) {
+	function myGetLatLngBounds ( latLngs ) {
 		let sw = L.latLng ( [ 90, 180 ] );
 		let ne = L.latLng ( [ -90, -180 ] );
 		latLngs.forEach (
@@ -423,14 +423,14 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- m_GetRouteLatLng function -------------------------------------------------------------------------------------
+	--- myGetRouteLatLng function -------------------------------------------------------------------------------------
 
 	This function returns an array of points from a route and the notes linked to the route
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetRouteLatLng ( route ) {
+	function myGetRouteLatLng ( route ) {
 		let latLngs = [];
 		route.itinerary.itineraryPoints.forEach ( itineraryPoint => latLngs.push ( itineraryPoint.latLng ) );
 		route.notes.forEach (
@@ -443,18 +443,18 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- m_getDashArray function ---------------------------------------------------------------------------------------
+	--- myGetDashArray function ---------------------------------------------------------------------------------------
 
 	This function returns the dashArray used for the polyline representation. See also leaflet docs
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_getDashArray ( route ) {
-		if ( route.dashArray >= g_Config.route.dashChoices.length ) {
+	function myGetDashArray ( route ) {
+		if ( route.dashArray >= theConfig.route.dashChoices.length ) {
 			route.dashArray = 0;
 		}
-		let iDashArray = g_Config.route.dashChoices [ route.dashArray ].iDashArray;
+		let iDashArray = theConfig.route.dashChoices [ route.dashArray ].iDashArray;
 		if ( iDashArray ) {
 			let dashArray = '';
 			let dashCounter = 0;
@@ -469,7 +469,7 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- m_RemoveRoute function ------------------------------------------------------------------------------------
+	--- myRemoveRoute function ------------------------------------------------------------------------------------
 
 	This function remove a route and eventually the attached notes and waypoints
 	from the leaflet map and the JavaScript map
@@ -482,24 +482,24 @@ function newMapEditor ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveRoute ( route, removeNotes, removeWayPoints ) {
-		m_RemoveObject ( route.objId );
+	function myRemoveRoute ( route, removeNotes, removeWayPoints ) {
+		myRemoveObject ( route.objId );
 		if ( removeNotes ) {
 			let notesIterator = route.notes.iterator;
 			while ( ! notesIterator.done ) {
-				m_RemoveObject ( notesIterator.value.objId );
+				myRemoveObject ( notesIterator.value.objId );
 			}
 		}
 		if ( removeWayPoints ) {
 			let wayPointsIterator = route.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				m_RemoveObject ( wayPointsIterator.value.objId );
+				myRemoveObject ( wayPointsIterator.value.objId );
 			}
 		}
 	}
 
 	/*
-	--- m_AddRoute function ---------------------------------------------------------------------------------------
+	--- myAddRoute function ---------------------------------------------------------------------------------------
 
 	This function add a route and eventually the attached notes and waypoints
 	to the leaflet map and the JavaScript map
@@ -513,7 +513,7 @@ function newMapEditor ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddRoute ( route, addNotes, addWayPoints, readOnly ) {
+	function myAddRoute ( route, addNotes, addWayPoints, readOnly ) {
 
 		// an array of points is created
 		let latLng = [];
@@ -528,10 +528,10 @@ function newMapEditor ( ) {
 			{
 				color : route.color,
 				weight : route.width,
-				dashArray : m_getDashArray ( route )
+				dashArray : myGetDashArray ( route )
 			}
 		);
-		m_AddTo ( route.objId, polyline );
+		myAddTo ( route.objId, polyline );
 
 		// tooltip and popup are created
 		polyline.bindTooltip (
@@ -543,7 +543,7 @@ function newMapEditor ( ) {
 
 		polyline.bindPopup (
 			layer => {
-				let route = m_DataSearchEngine.getRoute ( layer.objId );
+				let route = myDataSearchEngine.getRoute ( layer.objId );
 				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( route );
 			}
 		);
@@ -564,15 +564,15 @@ function newMapEditor ( ) {
 		if ( addNotes ) {
 			let notesIterator = route.notes.iterator;
 			while ( ! notesIterator.done ) {
-				m_AddNote ( notesIterator.value, readOnly );
+				myAddNote ( notesIterator.value, readOnly );
 			}
 		}
 
 		// waypoints are added
 		if ( addWayPoints ) {
-			let wayPointsIterator = g_TravelNotesData.travel.editedRoute.wayPoints.iterator;
+			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
-				m_AddWayPoint (
+				myAddWayPoint (
 					wayPointsIterator.value,
 					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
 				);
@@ -581,7 +581,7 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- m_EditRoute function ------------------------------------------------------------------------------------------
+	--- myEditRoute function ------------------------------------------------------------------------------------------
 
 	This function changes the color and width of a route
 
@@ -591,62 +591,62 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EditRoute ( route ) {
-		let polyline = g_TravelNotesData.mapObjects.get ( route.objId );
-		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : m_getDashArray ( route ) } );
+	function myEditRoute ( route ) {
+		let polyline = theTravelNotesData.mapObjects.get ( route.objId );
+		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : myGetDashArray ( route ) } );
 	}
 
 	/*
-	--- m_RemoveAllObjects function -----------------------------------------------------------------------------------
+	--- myRemoveAllObjects function -----------------------------------------------------------------------------------
 
 	This function remove all the objects from the leaflet map and from the JavaScript map
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveAllObjects ( ) {
-		g_TravelNotesData.mapObjects.forEach (
+	function myRemoveAllObjects ( ) {
+		theTravelNotesData.mapObjects.forEach (
 			travelObjectValue => {
 				L.DomEvent.off ( travelObjectValue );
-				g_TravelNotesData.map.removeLayer ( travelObjectValue );
+				theTravelNotesData.map.removeLayer ( travelObjectValue );
 			}
 		);
-		g_TravelNotesData.mapObjects.clear ( );
+		theTravelNotesData.mapObjects.clear ( );
 	}
 
 	/*
-	--- m_ZoomToPoint function ----------------------------------------------------------------------------------------
+	--- myZoomToPoint function ----------------------------------------------------------------------------------------
 
 	This function zoom on a given point
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToPoint ( latLng ) {
-		g_TravelNotesData.map.setView ( latLng, g_Config.itineraryPointZoom );
+	function myZoomToPoint ( latLng ) {
+		theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
 	}
 
 	/*
-	--- m_ZoomToSearchResult function ---------------------------------------------------------------------------------
+	--- myZoomToSearchResult function ---------------------------------------------------------------------------------
 
 	This function zoom on a search result
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToSearchResult ( latLng, geometry ) {
+	function myZoomToSearchResult ( latLng, geometry ) {
 		if ( geometry ) {
 			let latLngs = [];
 			geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
-			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 		else {
-			m_ZoomToPoint ( latLng );
+			myZoomToPoint ( latLng );
 		}
 	}
 
 	/*
-	--- m_ZoomToNote function -----------------------------------------------------------------------------------------
+	--- myZoomToNote function -----------------------------------------------------------------------------------------
 
 	This function zoom on a note
 
@@ -656,12 +656,12 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToNote ( noteObjId ) {
-		m_ZoomToPoint ( m_DataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
+	function myZoomToNote ( noteObjId ) {
+		myZoomToPoint ( myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
 	}
 
 	/*
-	--- m_ZoomToRoute function ----------------------------------------------------------------------------------------
+	--- myZoomToRoute function ----------------------------------------------------------------------------------------
 
 	This function zoom on a route
 
@@ -671,40 +671,40 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToRoute ( routeObjId ) {
-		let latLngs = m_GetRouteLatLng (  m_DataSearchEngine.getRoute ( routeObjId ) );
+	function myZoomToRoute ( routeObjId ) {
+		let latLngs = myGetRouteLatLng (  myDataSearchEngine.getRoute ( routeObjId ) );
 		if ( 0 !== latLngs.length ) {
-			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 	}
 
 	/*
-	--- m_ZoomToTravel function ---------------------------------------------------------------------------------------
+	--- myZoomToTravel function ---------------------------------------------------------------------------------------
 
 	This function zoom on the entire travel
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToTravel ( ) {
+	function myZoomToTravel ( ) {
 		let latLngs = [];
-		g_TravelNotesData.travel.routes.forEach (
-			route => { latLngs = latLngs.concat ( m_GetRouteLatLng ( route ) ); }
+		theTravelNotesData.travel.routes.forEach (
+			route => { latLngs = latLngs.concat ( myGetRouteLatLng ( route ) ); }
 		);
-		latLngs = latLngs.concat ( m_GetRouteLatLng ( g_TravelNotesData.travel.editedRoute ) );
-		g_TravelNotesData.travel.notes.forEach (
+		latLngs = latLngs.concat ( myGetRouteLatLng ( theTravelNotesData.travel.editedRoute ) );
+		theTravelNotesData.travel.notes.forEach (
 			note => {
 				latLngs.push ( note.latLng );
 				latLngs.push ( note.iconLatLng );
 			}
 		);
 		if ( 0 !== latLngs.length ) {
-			g_TravelNotesData.map.fitBounds ( m_GetLatLngBounds ( latLngs ) );
+			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 	}
 
 	/*
-	--- m_AddItineraryPointMarker function ----------------------------------------------------------------------------
+	--- myAddItineraryPointMarker function ----------------------------------------------------------------------------
 
 	This function add a leaflet circleMarker at a given point
 
@@ -715,15 +715,15 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddItineraryPointMarker ( objId, latLng ) {
-		m_AddTo (
+	function myAddItineraryPointMarker ( objId, latLng ) {
+		myAddTo (
 			objId,
-			L.circleMarker ( latLng, g_Config.itineraryPointMarker )
+			L.circleMarker ( latLng, theConfig.itineraryPointMarker )
 		);
 	}
 
 	/*
-	--- m_AddSearchPointMarker function -------------------------------------------------------------------------------
+	--- myAddSearchPointMarker function -------------------------------------------------------------------------------
 
 	This function add a leaflet circleMarker at a given point
 
@@ -734,7 +734,7 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddSearchPointMarker ( objId, latLng, geometry ) {
+	function myAddSearchPointMarker ( objId, latLng, geometry ) {
 
 		let showGeometry = false;
 		if ( geometry ) {
@@ -742,8 +742,8 @@ function newMapEditor ( ) {
 			geometry.forEach (
 				geometryPart => { latLngs = latLngs.concat ( geometryPart ); }
 			);
-			let geometryBounds = m_GetLatLngBounds ( latLngs );
-			let mapBounds = g_TravelNotesData.map.getBounds ( );
+			let geometryBounds = myGetLatLngBounds ( latLngs );
+			let mapBounds = theTravelNotesData.map.getBounds ( );
 			showGeometry =
 				(
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
@@ -758,15 +758,15 @@ function newMapEditor ( ) {
 				) > 0.01;
 		}
 		if ( showGeometry ) {
-			m_AddTo ( objId, L.polyline ( geometry, g_Config.searchPointPolyline ) );
+			myAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );
 		}
 		else {
-			m_AddTo ( objId, L.circleMarker ( latLng, g_Config.searchPointMarker ) );
+			myAddTo ( objId, L.circleMarker ( latLng, theConfig.searchPointMarker ) );
 		}
 	}
 
 	/*
-	--- m_AddRectangle method -----------------------------------------------------------------------------------------
+	--- myAddRectangle method -----------------------------------------------------------------------------------------
 
 	This method draw a rectangle on the map
 
@@ -778,15 +778,15 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddRectangle ( objId, bounds, properties ) {
-		m_AddTo (
+	function myAddRectangle ( objId, bounds, properties ) {
+		myAddTo (
 			objId,
 			L.rectangle ( bounds, properties )
 		);
 	}
 
 	/*
-	--- m_AddWayPoint function ----------------------------------------------------------------------------------------
+	--- myAddWayPoint function ----------------------------------------------------------------------------------------
 
 	This function add a TravelNotes waypoint object to the leaflet map
 
@@ -797,7 +797,7 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddWayPoint ( wayPoint, letter ) {
+	function myAddWayPoint ( wayPoint, letter ) {
 		if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
 			return;
 		}
@@ -824,7 +824,7 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			wayPoint => { return m_DataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; }
+			wayPoint => { return myDataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; }
 		);
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
@@ -836,22 +836,22 @@ function newMapEditor ( ) {
 
 		// ... and added to the map...
 		marker.objId = wayPoint.objId;
-		m_AddTo ( wayPoint.objId, marker );
+		myAddTo ( wayPoint.objId, marker );
 
 		// ... and a dragend event listener is created
 		L.DomEvent.on (
 			marker,
 			'dragend',
 			event => {
-				let wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
+				let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
 				wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-				g_WayPointEditor.wayPointDragEnd ( event.target.objId );
+				theWayPointEditor.wayPointDragEnd ( event.target.objId );
 			}
 		);
 	}
 
 	/*
-	--- m_RedrawNote function -----------------------------------------------------------------------------------------
+	--- myRedrawNote function -----------------------------------------------------------------------------------------
 
 	This function redraw a note object on the leaflet map
 
@@ -861,13 +861,13 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RedrawNote ( note ) {
-		m_RemoveObject ( note.objId );
-		m_AddNote ( note );
+	function myRedrawNote ( note ) {
+		myRemoveObject ( note.objId );
+		myAddNote ( note );
 	}
 
 	/*
-	--- m_AddNote function --------------------------------------------------------------------------------------------
+	--- myAddNote function --------------------------------------------------------------------------------------------
 
 	This function add a TravelNotes note object to the leaflet map
 
@@ -878,7 +878,7 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddNote ( note, readOnly ) {
+	function myAddNote ( note, readOnly ) {
 
 		// first a marker is created at the note position. This marker is empty and transparent, so
 		// not visible on the map but the marker can be dragged
@@ -888,18 +888,18 @@ function newMapEditor ( ) {
 				icon : L.divIcon (
 					{
 						iconSize : [
-							g_Config.note.grip.size,
-							g_Config.note.grip.size
+							theConfig.note.grip.size,
+							theConfig.note.grip.size
 						],
 						iconAnchor : [
-							g_Config.note.grip.size / 2,
-							g_Config.note.grip.size / 2
+							theConfig.note.grip.size / 2,
+							theConfig.note.grip.size / 2
 						],
 						html : '<div></div>'
 					}
 				),
 				zIndexOffset : -1000,
-				opacity : g_Config.note.grip.opacity,
+				opacity : theConfig.note.grip.opacity,
 				draggable : ! readOnly
 			}
 		);
@@ -914,23 +914,23 @@ function newMapEditor ( ) {
 				event => {
 
 					// the TravelNotes note and route are searched...
-					let noteAndRoute = m_DataSearchEngine.getNoteAndRoute ( event.target.objId );
+					let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( event.target.objId );
 					let note = noteAndRoute.note;
 					let route = noteAndRoute.route;
 
 					// ... then the layerGroup is searched...
-					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
 					if ( null === route ) {
 
 						// the note is not attached to a route, so the coordinates of the note can be directly changed
 						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-						m_EventDispatcher.dispatch ( 'updatetravelnotes' );
+						myEventDispatcher.dispatch ( 'updatetravelnotes' );
 					}
 					else {
 
 						// the note is attached to the route, so we have to find the nearest point on the route
 						// and the distance since the start of the route
-						let latLngDistance = m_Geometry.getClosestLatLngDistance (
+						let latLngDistance = myGeometry.getClosestLatLngDistance (
 							route,
 							[ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ]
 						);
@@ -946,7 +946,7 @@ function newMapEditor ( ) {
 
 						// the coordinates of the bullet are adapted
 						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
-						m_EventDispatcher.dispatch ( 'updateitinerary' );
+						myEventDispatcher.dispatch ( 'updateitinerary' );
 					}
 
 					// in all cases, the polyline is updated
@@ -962,8 +962,8 @@ function newMapEditor ( ) {
 				bullet,
 				'drag',
 				event => {
-					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
-					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
 					layerGroup.getLayer ( layerGroup.polylineId )
 						.setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
 				}
@@ -977,7 +977,7 @@ function newMapEditor ( ) {
 				iconAnchor : [ note.iconWidth / 2, note.iconHeight / 2 ],
 				popupAnchor : [ 0, - note.iconHeight / 2 ],
 				html : note.iconContent,
-				className : g_Config.note.style
+				className : theConfig.note.style
 			}
 		);
 		let marker = L.marker (
@@ -992,7 +992,7 @@ function newMapEditor ( ) {
 		// a popup is binded to the the marker...
 		marker.bindPopup (
 			layer => {
-				let note = m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note;
+				let note = myDataSearchEngine.getNoteAndRoute ( layer.objId ).note;
 				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( note );
 			}
 		);
@@ -1000,7 +1000,7 @@ function newMapEditor ( ) {
 		// ... and also a tooltip
 		if ( 0 !== note.tooltipContent.length ) {
 			marker.bindTooltip (
-				layer => { return m_DataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; }
+				layer => { return myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; }
 			);
 			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 		}
@@ -1020,13 +1020,13 @@ function newMapEditor ( ) {
 				event => {
 
 					// The TravelNotes note linked to the marker is searched...
-					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 
 					// ... new coordinates are saved in the TravelNotes note...
 					note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
 
 					// ... then the layerGroup is searched...
-					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
 
 					// ... and finally the polyline is updated with the new coordinates
 					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
@@ -1040,10 +1040,10 @@ function newMapEditor ( ) {
 				event => {
 
 					// The TravelNotes note linked to the marker is searched...
-					let note = m_DataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
 
 					// ... then the layerGroup is searched...
-					let layerGroup = g_TravelNotesData.mapObjects.get ( event.target.objId );
+					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
 
 					// ... and finally the polyline is updated with the new coordinates
 					layerGroup.getLayer ( layerGroup.polylineId )
@@ -1053,7 +1053,7 @@ function newMapEditor ( ) {
 		}
 
 		// Finally a polyline is created between the 2 markers
-		let polyline = L.polyline ( [ note.latLng, note.iconLatLng ], g_Config.note.polyline );
+		let polyline = L.polyline ( [ note.latLng, note.iconLatLng ], theConfig.note.polyline );
 		polyline.objId = note.objId;
 
 		// The 3 objects are added to a layerGroup
@@ -1063,54 +1063,54 @@ function newMapEditor ( ) {
 		layerGroup.bulletId = L.Util.stamp ( bullet );
 
 		// and the layerGroup added to the leaflet map and JavaScript map
-		m_AddTo ( note.objId, layerGroup );
+		myAddTo ( note.objId, layerGroup );
 	}
 
 	/*
-	--- m_OnGeolocationStatusChanged function -----------------------------------------------------------------------
+	--- myOnGeolocationStatusChanged function -----------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnGeolocationStatusChanged ( status ) {
+	function myOnGeolocationStatusChanged ( status ) {
 		if ( 2 === status ) {
 			return;
 		}
-		if ( m_GeolocationCircle ) {
-			g_TravelNotesData.map.removeLayer ( m_GeolocationCircle );
-			m_GeolocationCircle = null;
+		if ( myGeolocationCircle ) {
+			theTravelNotesData.map.removeLayer ( myGeolocationCircle );
+			myGeolocationCircle = null;
 		}
 	}
 
 	/*
-	--- m_OnGeolocationPositionChanged function -----------------------------------------------------------------------
+	--- myOnGeolocationPositionChanged function -----------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnGeolocationPositionChanged ( position ) {
-		let zoomToPosition = g_Config.geoLocation.zoomToPosition;
-		if ( m_GeolocationCircle ) {
-			g_TravelNotesData.map.removeLayer ( m_GeolocationCircle );
+	function myOnGeolocationPositionChanged ( position ) {
+		let zoomToPosition = theConfig.geoLocation.zoomToPosition;
+		if ( myGeolocationCircle ) {
+			theTravelNotesData.map.removeLayer ( myGeolocationCircle );
 			zoomToPosition = false;
 		}
 
-		m_GeolocationCircle = L.circleMarker (
+		myGeolocationCircle = L.circleMarker (
 			L.latLng ( position.coords.latitude, position.coords.longitude ),
 			{
-				radius : g_Config.geoLocation.radius,
-				color : g_Config.geoLocation.color
+				radius : theConfig.geoLocation.radius,
+				color : theConfig.geoLocation.color
 			}
 		)
 			.bindTooltip (
 				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
 			)
-			.addTo ( g_TravelNotesData.map );
+			.addTo ( theTravelNotesData.map );
 
 		if ( zoomToPosition ) {
-			g_TravelNotesData.map.setView (
+			theTravelNotesData.map.setView (
 				L.latLng ( position.coords.latitude, position.coords.longitude ),
-				g_Config.geoLocation.zoomFactor
+				theConfig.geoLocation.zoomFactor
 			);
 		}
 	}
@@ -1124,59 +1124,59 @@ function newMapEditor ( ) {
 	return Object.seal (
 		{
 
-			removeRoute : ( route, removeNotes, removeWayPoints ) => m_RemoveRoute ( route, removeNotes, removeWayPoints ),
+			removeRoute : ( route, removeNotes, removeWayPoints ) => myRemoveRoute ( route, removeNotes, removeWayPoints ),
 
-			addRoute : ( route, addNotes, addWayPoints, readOnly ) => m_AddRoute ( route, addNotes, addWayPoints, readOnly ),
+			addRoute : ( route, addNotes, addWayPoints, readOnly ) => myAddRoute ( route, addNotes, addWayPoints, readOnly ),
 
-			editRoute : route => m_EditRoute ( route ),
+			editRoute : route => myEditRoute ( route ),
 
-			removeObject : objId => m_RemoveObject ( objId ),
+			removeObject : objId => myRemoveObject ( objId ),
 
-			removeAllObjects : ( ) => m_RemoveAllObjects ( ),
+			removeAllObjects : ( ) => myRemoveAllObjects ( ),
 
-			zoomToPoint : latLng => m_ZoomToPoint ( latLng ),
+			zoomToPoint : latLng => myZoomToPoint ( latLng ),
 
-			zoomToSearchResult : ( latLng, geometry ) => m_ZoomToSearchResult ( latLng, geometry ),
+			zoomToSearchResult : ( latLng, geometry ) => myZoomToSearchResult ( latLng, geometry ),
 
-			zoomToNote : noteObjId => m_ZoomToNote ( noteObjId ),
+			zoomToNote : noteObjId => myZoomToNote ( noteObjId ),
 
-			zoomToRoute : routeObjId => m_ZoomToRoute ( routeObjId ),
+			zoomToRoute : routeObjId => myZoomToRoute ( routeObjId ),
 
-			zoomToTravel : ( ) => m_ZoomToTravel ( ),
+			zoomToTravel : ( ) => myZoomToTravel ( ),
 
-			addItineraryPointMarker : ( objId, latLng ) => m_AddItineraryPointMarker ( objId, latLng ),
+			addItineraryPointMarker : ( objId, latLng ) => myAddItineraryPointMarker ( objId, latLng ),
 
-			addSearchPointMarker : ( objId, latLng, geometry ) => m_AddSearchPointMarker ( objId, latLng, geometry ),
+			addSearchPointMarker : ( objId, latLng, geometry ) => myAddSearchPointMarker ( objId, latLng, geometry ),
 
-			addRectangle : ( objId, bounds, properties ) => m_AddRectangle ( objId, bounds, properties ),
+			addRectangle : ( objId, bounds, properties ) => myAddRectangle ( objId, bounds, properties ),
 
-			addWayPoint : ( wayPoint, letter ) => m_AddWayPoint  ( wayPoint, letter ),
+			addWayPoint : ( wayPoint, letter ) => myAddWayPoint  ( wayPoint, letter ),
 
-			redrawNote : note => m_RedrawNote ( note ),
+			redrawNote : note => myRedrawNote ( note ),
 
-			addNote : ( note, readOnly ) => m_AddNote ( note, readOnly ),
+			addNote : ( note, readOnly ) => myAddNote ( note, readOnly ),
 
-			loadEvents : ( ) => m_loadEvents ( ),
+			loadEvents : ( ) => myLoadEvents ( ),
 
-			setLayer : ( layer ) => m_SetLayer ( layer ),
+			setLayer : ( layer ) => mySetLayer ( layer ),
 
-			onGeolocationStatusChanged : ( status ) => m_OnGeolocationStatusChanged ( status ),
+			onGeolocationStatusChanged : ( status ) => myOnGeolocationStatusChanged ( status ),
 
-			onGeolocationPositionChanged : ( position ) => m_OnGeolocationPositionChanged ( position )
+			onGeolocationPositionChanged : ( position ) => myOnGeolocationPositionChanged ( position )
 
 		}
 	);
 }
 
 /*
---- g_MapEditor object ------------------------------------------------------------------------------------------------
+--- theMapEditor object ------------------------------------------------------------------------------------------------
 
 The one and only one mapEditor
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_MapEditor = newMapEditor ( );
+const theMapEditor = newMapEditor ( );
 
 /*
 --- End of MapEditor.js file ------------------------------------------------------------------------------------------

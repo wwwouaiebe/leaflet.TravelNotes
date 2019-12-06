@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- HTMLElementsFactory.js file ---------------------------------------------------------------------------------------
 This file contains:
 	- the newHTMLElementsFactory function
-	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
@@ -43,12 +42,12 @@ export { newHTMLElementsFactory };
 function newHTMLElementsFactory ( ) {
 
 	/*
-	--- m_Create function ---------------------------------------------------------------------------------------------
+	--- myCreate function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Create  ( tagName, properties, parentNode ) {
+	function myCreate  ( tagName, properties, parentNode ) {
 		var element;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
 			element = document.createTextNode ( '' );
@@ -80,7 +79,7 @@ function newHTMLElementsFactory ( ) {
 
 	return Object.seal (
 		{
-			create : ( tagName, properties, parentNode ) => { return m_Create ( tagName, properties, parentNode ); }
+			create : ( tagName, properties, parentNode ) => { return myCreate ( tagName, properties, parentNode ); }
 		}
 	);
 }

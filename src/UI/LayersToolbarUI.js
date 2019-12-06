@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- LayersToolbarUI.js file -------------------------------------------------------------------------------------------
 This file contains:
 	- the newLayersToolbarUI function
-	- the gc_LayersToolbarUI object
+	- the theLayersToolbarUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -29,36 +29,16 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_LayersToolbarUI };
+export { theLayersToolbarUI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { g_Translator } from '../UI/Translator.js';
-import { g_Config } from '../data/Config.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_APIKeysManager } from '../core/APIKeysManager.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { gc_AttributionsUI } from '../UI/AttributionsUI.js';
-
-let s_Layers = [
-	{
-		service : "wmts",
-		url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-		name : "OSM - Color",
-		toolbar :
-		{
-			text : "OSM",
-			color : "red",
-			backgroundColor : "white"
-		},
-		providerName : "OSM",
-		providerKeyNeeded : false,
-		attribution : "| &copy; <a href='http://www.openstreetmap.org/copyright' " +
-			"target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
-	}
-];
-
-let s_TimerId = null;
+import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------
@@ -68,22 +48,41 @@ let s_TimerId = null;
 
 function newLayersToolbarUI ( ) {
 
-	let m_LayersToolbar = null;
-	let m_LayersToolbarButtonsDiv = null;
-	let m_HtmlElementsFactory = newHTMLElementsFactory ( );
-	let m_EventDispatcher = newEventDispatcher ( );
-	let m_MarginTop = 0;
-	let m_ButtonHeight = 0;
-	let m_ButtonsHeight = 0;
-	let m_ButtonTop = 0;
+	let myLayers = [
+		{
+			service : "wmts",
+			url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+			name : "OSM - Color",
+			toolbar :
+			{
+				text : "OSM",
+				color : "red",
+				backgroundColor : "white"
+			},
+			providerName : "OSM",
+			providerKeyNeeded : false,
+			attribution : "| &copy; <a href='http://www.openstreetmap.org/copyright' " +
+				"target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
+		}
+	];
+
+	let myTimerId = null;
+	let myLayersToolbar = null;
+	let myLayersToolbarButtonsDiv = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	let myEventDispatcher = newEventDispatcher ( );
+	let myMarginTop = 0;
+	let myButtonHeight = 0;
+	let myButtonsHeight = 0;
+	let myButtonTop = 0;
 
 	/*
-	--- m_OnMouseEnterLayerButton function ----------------------------------------------------------------------------
+	--- myOnMouseEnterLayerButton function ----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseEnterLayerButton ( event ) {
+	function myOnMouseEnterLayerButton ( event ) {
 		event.target.setAttribute (
 			'style',
 			"color:" +
@@ -94,12 +93,12 @@ function newLayersToolbarUI ( ) {
 	}
 
 	/*
-	--- m_OnMouseLeaveLayerButton function ----------------------------------------------------------------------------
+	--- myOnMouseLeaveLayerButton function ----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseLeaveLayerButton ( event ) {
+	function myOnMouseLeaveLayerButton ( event ) {
 		event.target.setAttribute (
 			'style',
 			"color:" +
@@ -110,49 +109,49 @@ function newLayersToolbarUI ( ) {
 	}
 
 	/*
-	--- m_OnMouseEnterLinkButton function -----------------------------------------------------------------------------
+	--- myOnMouseEnterLinkButton function -----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseEnterLinkButton ( event ) {
+	function myOnMouseEnterLinkButton ( event ) {
 		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 	}
 
 	/*
-	--- m_OnMouseLeaveLinkButton function -----------------------------------------------------------------------------
+	--- myOnMouseLeaveLinkButton function -----------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseLeaveLinkButton ( event ) {
+	function myOnMouseLeaveLinkButton ( event ) {
 		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 	}
 
 	/*
-	--- m_OnClickLayerButton function ---------------------------------------------------------------------------------
+	--- myOnClickLayerButton function ---------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnClickLayerButton ( event ) {
-		m_EventDispatcher.dispatch ( 'layerchange', { layer : event.target.layer } );
-		gc_AttributionsUI.attributions = event.target.layer.attribution;
+	function myOnClickLayerButton ( event ) {
+		myEventDispatcher.dispatch ( 'layerchange', { layer : event.target.layer } );
+		theAttributionsUI.attributions = event.target.layer.attribution;
 	}
 
 	/*
-	--- m_CreateLayerButton function ----------------------------------------------------------------------------------
+	--- myCreateLayerButton function ----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateLayerButton ( layer ) {
-		if ( layer.providerKeyNeeded && ! g_APIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
+	function myCreateLayerButton ( layer ) {
+		if ( layer.providerKeyNeeded && ! theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
 			return;
 		}
-		let layerButton = m_HtmlElementsFactory.create (
+		let layerButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				type : 'layer',
@@ -162,182 +161,182 @@ function newLayersToolbarUI ( ) {
 				innerHTML : layer.toolbar.text,
 				style : "color:" + layer.toolbar.color + ";background-color:" + layer.toolbar.backgroundColor
 			},
-			m_LayersToolbarButtonsDiv
+			myLayersToolbarButtonsDiv
 		);
-		layerButton.addEventListener ( 'mouseenter', m_OnMouseEnterLayerButton, false );
-		layerButton.addEventListener ( 'mouseleave', m_OnMouseLeaveLayerButton, false );
-		layerButton.addEventListener ( 'click', m_OnClickLayerButton, false );
-		m_ButtonHeight = layerButton.clientHeight;
-		m_ButtonsHeight += m_ButtonHeight;
+		layerButton.addEventListener ( 'mouseenter', myOnMouseEnterLayerButton, false );
+		layerButton.addEventListener ( 'mouseleave', myOnMouseLeaveLayerButton, false );
+		layerButton.addEventListener ( 'click', myOnClickLayerButton, false );
+		myButtonHeight = layerButton.clientHeight;
+		myButtonsHeight += myButtonHeight;
 	}
 
 	/*
-	--- m_CreateLinkButton function -----------------------------------------------------------------------------------
+	--- myCreateLinkButton function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateLinkButton ( href, title, text ) {
-		let linkButton = m_HtmlElementsFactory.create (
+	function myCreateLinkButton ( href, title, text ) {
+		let linkButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				type : 'link',
 				className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave',
 				innerHTML : '<a href="' + href + '" title="' + title + '" target="_blank">' + text + '</a>'
 			},
-			m_LayersToolbarButtonsDiv
+			myLayersToolbarButtonsDiv
 		);
-		linkButton.addEventListener ( 'mouseenter', m_OnMouseEnterLinkButton, false );
-		linkButton.addEventListener ( 'mouseleave', m_OnMouseLeaveLinkButton, false );
-		m_ButtonsHeight += linkButton.clientHeight;
+		linkButton.addEventListener ( 'mouseenter', myOnMouseEnterLinkButton, false );
+		linkButton.addEventListener ( 'mouseleave', myOnMouseLeaveLinkButton, false );
+		myButtonsHeight += linkButton.clientHeight;
 	}
 
 	/*
-	--- m_OnTimeOutToolbar function -----------------------------------------------------------------------------------
+	--- myOnTimeOutToolbar function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnTimeOutToolbar ( ) {
-		let buttons = m_LayersToolbarButtonsDiv.childNodes;
+	function myOnTimeOutToolbar ( ) {
+		let buttons = myLayersToolbarButtonsDiv.childNodes;
 		for ( let counter = 0; counter < buttons.length; counter++ ) {
 			if ( 'layer' === buttons [ counter ].type ) {
-				buttons [ counter ].removeEventListener ( 'mouseenter', m_OnMouseEnterLayerButton, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', m_OnMouseLeaveLayerButton, false );
-				buttons [ counter ].removeEventListener ( 'click', m_OnClickLayerButton, false );
+				buttons [ counter ].removeEventListener ( 'mouseenter', myOnMouseEnterLayerButton, false );
+				buttons [ counter ].removeEventListener ( 'mouseleave', myOnMouseLeaveLayerButton, false );
+				buttons [ counter ].removeEventListener ( 'click', myOnClickLayerButton, false );
 			}
 			else {
-				buttons [ counter ].removeEventListener ( 'mouseenter', m_OnMouseEnterLinkButton, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', m_OnMouseEnterLinkButton, false );
+				buttons [ counter ].removeEventListener ( 'mouseenter', myOnMouseEnterLinkButton, false );
+				buttons [ counter ].removeEventListener ( 'mouseleave', myOnMouseEnterLinkButton, false );
 			}
 		}
-		m_LayersToolbarButtonsDiv.removeEventListener ( 'wheel', m_OnWheelToolbar, false );
-		m_LayersToolbar.removeChild ( m_LayersToolbarButtonsDiv );
-		s_TimerId = null;
+		myLayersToolbarButtonsDiv.removeEventListener ( 'wheel', myOnWheelToolbar, false );
+		myLayersToolbar.removeChild ( myLayersToolbarButtonsDiv );
+		myTimerId = null;
 	}
 
 	/*
-	--- m_OnWheelToolbar function -------------------------------------------------------------------------------------
+	--- myOnWheelToolbar function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnWheelToolbar ( wheelEvent ) {
+	function myOnWheelToolbar ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			m_MarginTop -= wheelEvent.deltaY * 10;
-			m_MarginTop = m_MarginTop > m_ButtonTop ? m_ButtonTop : m_MarginTop;
-			m_MarginTop =
-				m_MarginTop < m_ButtonTop - m_ButtonsHeight + ( 3 * m_ButtonHeight )
+			myMarginTop -= wheelEvent.deltaY * 10;
+			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
+			myMarginTop =
+				myMarginTop < myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
 					?
-					m_ButtonTop - m_ButtonsHeight + ( 3 * m_ButtonHeight )
+					myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
 					:
-					m_MarginTop;
-			m_LayersToolbarButtonsDiv.style.marginTop = '' + m_MarginTop + 'px';
+					myMarginTop;
+			myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
 		}
 		wheelEvent.stopPropagation ( );
 	}
 
 	/*
-	--- m_OnMouseEnterToolbar function --------------------------------------------------------------------------------
+	--- myOnMouseEnterToolbar function --------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseEnterToolbar ( ) {
-		if ( s_TimerId ) {
-			clearTimeout ( s_TimerId );
-			s_TimerId = null;
+	function myOnMouseEnterToolbar ( ) {
+		if ( myTimerId ) {
+			clearTimeout ( myTimerId );
+			myTimerId = null;
 			return;
 		}
-		m_LayersToolbarButtonsDiv = m_HtmlElementsFactory.create (
+		myLayersToolbarButtonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI-Buttons'
 			},
-			m_LayersToolbar
+			myLayersToolbar
 		);
-		m_ButtonTop = m_LayersToolbar.clientHeight;
-		m_ButtonsHeight = 0;
-		s_Layers.forEach ( layer => m_CreateLayerButton ( layer ) );
+		myButtonTop = myLayersToolbar.clientHeight;
+		myButtonsHeight = 0;
+		myLayers.forEach ( layer => myCreateLayerButton ( layer ) );
 
-		if ( g_Config.layersToolbarUI.theDevil && g_Config.layersToolbarUI.theDevil.addButton ) {
-			m_CreateLinkButton (
+		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
+			myCreateLinkButton (
 				'https://www.google.com/maps/@' +
-					g_TravelNotesData.map.getCenter ( ).lat +
+					theTravelNotesData.map.getCenter ( ).lat +
 					',' +
-					g_TravelNotesData.map.getCenter ( ).lng +
+					theTravelNotesData.map.getCenter ( ).lng +
 					',' +
-					g_TravelNotesData.map.getZoom ( ) +
+					theTravelNotesData.map.getZoom ( ) +
 					'z',
-				g_Config.layersToolbarUI.theDevil.title,
-				g_Config.layersToolbarUI.theDevil.text
+				theConfig.layersToolbarUI.theDevil.title,
+				theConfig.layersToolbarUI.theDevil.text
 			);
 		}
 
-		m_ButtonTop += m_ButtonHeight;
-		m_MarginTop = m_ButtonTop;
-		m_LayersToolbarButtonsDiv.style.marginTop = '' + m_MarginTop + 'px';
+		myButtonTop += myButtonHeight;
+		myMarginTop = myButtonTop;
+		myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
 
-		m_LayersToolbarButtonsDiv.addEventListener (
+		myLayersToolbarButtonsDiv.addEventListener (
 			'wheel',
-			m_OnWheelToolbar,
+			myOnWheelToolbar,
 			false
 		);
 	}
 
 	/*
-	--- m_CreateLayersToolbar function --------------------------------------------------------------------------------
+	--- myCreateLayersToolbar function --------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateLayersToolbar ( ) {
-		m_LayersToolbar = m_HtmlElementsFactory.create (
+	function myCreateLayersToolbar ( ) {
+		myLayersToolbar = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
-		m_HtmlElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI-Header',
-				innerHTML : g_Translator.getText ( 'LayersToolbarUI - Layers' )
+				innerHTML : theTranslator.getText ( 'LayersToolbarUI - Layers' )
 			},
-			m_LayersToolbar
+			myLayersToolbar
 		);
-		m_LayersToolbar.addEventListener (
+		myLayersToolbar.addEventListener (
 			'mouseenter',
-			m_OnMouseEnterToolbar,
+			myOnMouseEnterToolbar,
 			false
 		);
-		m_LayersToolbar.addEventListener (
+		myLayersToolbar.addEventListener (
 			'mouseleave',
-			( ) => { s_TimerId = setTimeout ( m_OnTimeOutToolbar, g_Config.layersToolbarUI.toolbarTimeOut || 1500 ); },
+			( ) => { myTimerId = setTimeout ( myOnTimeOutToolbar, theConfig.layersToolbarUI.toolbarTimeOut || 1500 ); },
 			false
 		);
 
-		m_EventDispatcher.dispatch ( 'layerchange', { layer : s_Layers [ 0 ] } );
-		gc_AttributionsUI.attributions = s_Layers [ 0 ].attribution;
+		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ 0 ] } );
+		theAttributionsUI.attributions = myLayers [ 0 ].attribution;
 
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( ) {
+	function myCreateUI ( ) {
 
 		newHttpRequestBuilder ( ).getJsonPromise (
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 			'TravelNotesLayers.json'
 		)
-			.then ( layers => { s_Layers = s_Layers.concat (layers ); } )
+			.then ( layers => { myLayers = myLayers.concat (layers ); } )
 			.catch ( err => console.log ( err? err : 'An error occurs when loading TravelNotesLayers.json' ) )
-			.finally ( m_CreateLayersToolbar );
+			.finally ( myCreateLayersToolbar );
 	}
 
 	/*
@@ -348,12 +347,12 @@ function newLayersToolbarUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : ( ) => m_CreateUI ( )
+			createUI : ( ) => myCreateUI ( )
 		}
 	);
 }
 
-const gc_LayersToolbarUI = newLayersToolbarUI ( );
+const theLayersToolbarUI = newLayersToolbarUI ( );
 
 /*
 --- End of LayersToolbarUI.js file ------------------------------------------------------------------------------------

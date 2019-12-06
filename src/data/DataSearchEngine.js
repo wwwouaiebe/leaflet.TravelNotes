@@ -34,24 +34,24 @@ Tests ...
 
 export { newDataSearchEngine };
 
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 function newDataSearchEngine ( ) {
 
 	/*
-	--- m_getRoute function -------------------------------------------------------------------------------------------
+	--- myGetRoute function -------------------------------------------------------------------------------------------
 
 	This function returns a route when giving the routeObjId
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetRoute ( routeObjId ) {
+	function myGetRoute ( routeObjId ) {
 		let route = null;
-		route = g_TravelNotesData.travel.routes.getAt ( routeObjId );
+		route = theTravelNotesData.travel.routes.getAt ( routeObjId );
 		if ( ! route ) {
-			if ( routeObjId === g_TravelNotesData.travel.editedRoute.objId ) {
-				route = g_TravelNotesData.travel.editedRoute;
+			if ( routeObjId === theTravelNotesData.travel.editedRoute.objId ) {
+				route = theTravelNotesData.travel.editedRoute;
 			}
 		}
 
@@ -59,52 +59,52 @@ function newDataSearchEngine ( ) {
 	}
 
 	/*
-	--- m_GetNoteAndRoute method --------------------------------------------------------------------------------------
+	--- myGetNoteAndRoute method --------------------------------------------------------------------------------------
 
 	This function returns a note and a route ( when the note is linked to a route ) from the noteObjId
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetNoteAndRoute ( noteObjId ) {
+	function myGetNoteAndRoute ( noteObjId ) {
 		let note = null;
-		note = g_TravelNotesData.travel.notes.getAt ( noteObjId );
+		note = theTravelNotesData.travel.notes.getAt ( noteObjId );
 		if ( note ) {
 			return { note : note, route : null };
 		}
-		let routeIterator = g_TravelNotesData.travel.routes.iterator;
+		let routeIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routeIterator.done ) {
 			note = routeIterator.value.notes.getAt ( noteObjId );
 			if ( note ) {
 				return { note : note, route : routeIterator.value };
 			}
 		}
-		note = g_TravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
+		note = theTravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
 		if ( ! note ) {
 			return { note : null, route : null };
 		}
 
-		return { note : note, route : g_TravelNotesData.travel.editedRoute };
+		return { note : note, route : theTravelNotesData.travel.editedRoute };
 	}
 
 	/*
-	--- m_GetWayPoint method ------------------------------------------------------------------------------------------
+	--- myGetWayPoint method ------------------------------------------------------------------------------------------
 
 	This function returns a wayPoint from the wayPointObjId
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetWayPoint ( wayPointObjId ) {
+	function myGetWayPoint ( wayPointObjId ) {
 		let wayPoint = null;
-		let routeIterator = g_TravelNotesData.travel.routes.iterator;
+		let routeIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routeIterator.done ) {
 			wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
 			if ( wayPoint ) {
 				return wayPoint;
 			}
 		}
-		wayPoint = g_TravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
+		wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		if ( ! wayPoint ) {
 			return null;
 		}
@@ -119,9 +119,9 @@ function newDataSearchEngine ( ) {
 
 	return Object.seal (
 		{
-			getRoute : routeObjId => { return m_GetRoute ( routeObjId ); },
-			getNoteAndRoute : noteObjId => { return m_GetNoteAndRoute ( noteObjId ); },
-			getWayPoint : wayPointObjId => { return m_GetWayPoint ( wayPointObjId ); }
+			getRoute : routeObjId => { return myGetRoute ( routeObjId ); },
+			getNoteAndRoute : noteObjId => { return myGetNoteAndRoute ( noteObjId ); },
+			getWayPoint : wayPointObjId => { return myGetWayPoint ( wayPointObjId ); }
 		}
 	);
 }

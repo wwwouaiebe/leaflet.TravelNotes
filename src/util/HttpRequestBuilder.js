@@ -39,14 +39,14 @@ export { newHttpRequestBuilder };
 function newHttpRequestBuilder ( ) {
 
 	/*
-	--- m_GetJsonPromise function -------------------------------------------------------------------------------------
+	--- myGetJsonPromise function -------------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetJsonPromise ( url, requestHeaders ) {
+	function myGetJsonPromise ( url, requestHeaders ) {
 
 		/*
 		--- jsonRequest function --------------------------------------------------------------------------------------
@@ -89,14 +89,14 @@ function newHttpRequestBuilder ( ) {
 	}
 
 	/*
-	--- m_GetBinaryPromise function -----------------------------------------------------------------------------------
+	--- myGetBinaryPromise function -----------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetBinaryPromise ( url, requestHeaders ) {
+	function myGetBinaryPromise ( url, requestHeaders ) {
 
 		/*
 		--- binaryRequest function ------------------------------------------------------------------------------------
@@ -142,8 +142,8 @@ function newHttpRequestBuilder ( ) {
 	*/
 
 	return {
-		getJsonPromise : ( url, requestHeaders ) => { return m_GetJsonPromise ( url, requestHeaders ) },
-		getBinaryPromise : ( url, requestHeaders ) => { return m_GetBinaryPromise ( url, requestHeaders ) }
+		getJsonPromise : ( url, requestHeaders ) => { return myGetJsonPromise ( url, requestHeaders ) },
+		getBinaryPromise : ( url, requestHeaders ) => { return myGetBinaryPromise ( url, requestHeaders ) }
 	}
 
 }

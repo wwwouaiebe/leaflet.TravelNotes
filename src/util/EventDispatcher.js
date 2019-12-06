@@ -41,12 +41,12 @@ This function returns the eventDispatcher object
 function newEventDispatcher ( ) {
 
 	/*
-	--- m_GetTarget function ------------------------------------------------------------------------------------------
+	--- myGetTarget function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetTarget ( eventName ) {
+	function myGetTarget ( eventName ) {
 		switch ( eventName ) {
 		case 'setitinerary':
 		case 'updateitinerary':
@@ -88,13 +88,13 @@ function newEventDispatcher ( ) {
 	}
 
 	/*
-	--- m_Dispatch function -------------------------------------------------------------------------------------------
+	--- myDispatch function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Dispatch ( eventName, eventData ) {
-		let target = m_GetTarget ( eventName );
+	function myDispatch ( eventName, eventData ) {
+		let target = myGetTarget ( eventName );
 		if ( target ) {
 			let event = new Event ( eventName );
 			if ( eventData ) {
@@ -112,7 +112,7 @@ function newEventDispatcher ( ) {
 
 	return Object.seal (
 		{
-			dispatch : ( eventName, eventData ) => m_Dispatch ( eventName, eventData )
+			dispatch : ( eventName, eventData ) => myDispatch ( eventName, eventData )
 		}
 	);
 

@@ -37,10 +37,10 @@ Tests ...
 
 export { newAboutDialog };
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { currentVersion } from '../data/Version.js';
+import { theCurrentVersion } from '../data/Version.js';
 
 /*
 --- newAboutDialog function -------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ import { currentVersion } from '../data/Version.js';
 function newAboutDialog ( ) {
 
 	var aboutDialog = newBaseDialog ( );
-	aboutDialog.title = g_Translator.getText ( 'AboutDialog - About Travel & Notes' );
+	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
 
 	var aboutDiv = newHTMLElementsFactory ( ).create (
 		'div',
@@ -69,7 +69,7 @@ function newAboutDialog ( ) {
 		"<p>Contact : <a href='http://www.ouaie.be/blog/pages/contact' target='_blank'>http://www.ouaie.be/</a></p>" +
 		"<p>GitHub : <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>" +
 		"https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>" +
-		"<p>Version : " + currentVersion +'.' +
+		"<p>Version : " + theCurrentVersion +'.' +
 		"<p>This program uses:" +
 		" <a href='https://leafletjs.com/' target='_blank'>leaflet</a>," +
 		" <a href='https://github.com/mapbox/polyline' target='_blank'>mapbox/polyline</a>," +

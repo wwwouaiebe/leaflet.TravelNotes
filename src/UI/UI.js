@@ -35,14 +35,14 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_UI };
+export { theUI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { gc_TravelEditorUI } from '../UI/TravelEditorUI.js';
-import { gc_RouteEditorUI } from '../UI/RouteEditorUI.js';
-import { gc_DataPanesUI } from '../UI/DataPanesUI.js';
-import { gc_ProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
-import { gc_TravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js'
+import { theTravelEditorUI } from '../UI/TravelEditorUI.js';
+import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
+import { theDataPanesUI } from '../UI/DataPanesUI.js';
+import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
+import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js'
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------
@@ -54,70 +54,70 @@ This function returns the UserInterface object
 
 function newUI ( ) {
 
-	let m_MainDiv = null;
+	let myMainDiv = null;
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI( controlDiv ){
+	function myCreateUI( controlDiv ){
 		if ( document.getElementById ( 'TravelNotes-Control-MainDiv' ) ) {
 			return;
 		}
 		let htmlElementsFactory = newHTMLElementsFactory ( );
-		m_MainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
+		myMainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
 		htmlElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-MainDiv-Title',
 				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
 			},
-			m_MainDiv
+			myMainDiv
 		);
 
-		gc_TravelNotesToolbarUI.createUI ( m_MainDiv );
-		gc_TravelEditorUI.createUI ( m_MainDiv );
-		gc_RouteEditorUI.createUI ( m_MainDiv );
-		gc_DataPanesUI.createUI ( m_MainDiv );
+		theTravelNotesToolbarUI.createUI ( myMainDiv );
+		theTravelEditorUI.createUI ( myMainDiv );
+		theRouteEditorUI.createUI ( myMainDiv );
+		theDataPanesUI.createUI ( myMainDiv );
 
-		gc_ProvidersToolbarUI.createUI ( m_MainDiv );
+		theProvidersToolbarUI.createUI ( myMainDiv );
 
-		m_MainDiv.addEventListener ( 'setrouteslist', ( ) => gc_TravelEditorUI.setRoutesList ( ), false );
+		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelEditorUI.setRoutesList ( ), false );
 
-		m_MainDiv.addEventListener ( 'expandrouteui', ( ) => gc_RouteEditorUI.expandUI ( ), false );
-		m_MainDiv.addEventListener ( 'reducerouteui', ( ) => gc_RouteEditorUI.reduceUI ( ), false );
-		m_MainDiv.addEventListener ( 'setwaypointslist', ( ) => gc_RouteEditorUI.setWayPointsList ( ), false );
+		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteEditorUI.expandUI ( ), false );
+		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteEditorUI.reduceUI ( ), false );
+		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteEditorUI.setWayPointsList ( ), false );
 
-		m_MainDiv.addEventListener ( 'setitinerary', ( ) => gc_DataPanesUI.setItinerary ( ), false );
-		m_MainDiv.addEventListener ( 'updateitinerary', ( ) => gc_DataPanesUI.updateItinerary ( ), false );
-		m_MainDiv.addEventListener ( 'settravelnotes', ( ) => gc_DataPanesUI.setTravelNotes ( ), false );
-		m_MainDiv.addEventListener ( 'updatetravelnotes', ( ) => gc_DataPanesUI.updateTravelNotes ( ), false );
-		m_MainDiv.addEventListener ( 'setsearch', ( ) => gc_DataPanesUI.setSearch ( ), false );
-		m_MainDiv.addEventListener ( 'updatesearch', ( ) => gc_DataPanesUI.updateSearch ( ), false );
-		m_MainDiv.addEventListener ( 'providersadded', ( ) => gc_ProvidersToolbarUI.providersAdded ( ), false );
+		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
+		myMainDiv.addEventListener ( 'updateitinerary', ( ) => theDataPanesUI.updateItinerary ( ), false );
+		myMainDiv.addEventListener ( 'settravelnotes', ( ) => theDataPanesUI.setTravelNotes ( ), false );
+		myMainDiv.addEventListener ( 'updatetravelnotes', ( ) => theDataPanesUI.updateTravelNotes ( ), false );
+		myMainDiv.addEventListener ( 'setsearch', ( ) => theDataPanesUI.setSearch ( ), false );
+		myMainDiv.addEventListener ( 'updatesearch', ( ) => theDataPanesUI.updateSearch ( ), false );
+		myMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
 
-		m_MainDiv.addEventListener (
+		myMainDiv.addEventListener (
 			'setprovider',
 			event => {
 				if ( event.data && event.data.provider ) {
-					gc_ProvidersToolbarUI.provider = event.data.provider;
+					theProvidersToolbarUI.provider = event.data.provider;
 				}
 			},
 			false
 		);
-		m_MainDiv.addEventListener (
+		myMainDiv.addEventListener (
 			'settransitmode',
 			event => {
 				if ( event.data && event.data.provider ) {
-					gc_ProvidersToolbarUI.transitMode = event.data.transitMode;
+					theProvidersToolbarUI.transitMode = event.data.transitMode;
 				}
 			},
 			false
 		);
 
-		m_MainDiv.addEventListener (
+		myMainDiv.addEventListener (
 			'click',
 			event => {
 				if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
@@ -142,7 +142,7 @@ function newUI ( ) {
 			false
 		);
 
-		m_MainDiv.addEventListener (
+		myMainDiv.addEventListener (
 			'dblclick',
 			event => {
 				event.stopPropagation ( );
@@ -151,7 +151,7 @@ function newUI ( ) {
 			false
 		);
 
-		m_MainDiv.addEventListener (
+		myMainDiv.addEventListener (
 			'wheel',
 			event => {
 				event.stopPropagation ( );
@@ -162,14 +162,14 @@ function newUI ( ) {
 		document.addEventListener (
 			'geolocationstatuschanged',
 			event => {
-				gc_TravelNotesToolbarUI.geoLocationStatusChanged ( event.data.status );
+				theTravelNotesToolbarUI.geoLocationStatusChanged ( event.data.status );
 			},
 			false
 		);
 	}
 
-	if ( ! m_MainDiv ) {
-		m_CreateUI ( );
+	if ( ! myMainDiv ) {
+		myCreateUI ( );
 	}
 
 	/*
@@ -179,19 +179,19 @@ function newUI ( ) {
 	*/
 
 	return {
-		createUI : controlDiv => m_CreateUI ( controlDiv )
+		createUI : controlDiv => myCreateUI ( controlDiv )
 	};
 }
 
 /*
---- gc_UI object ------------------------------------------------------------------------------------------------------
+--- theUI object ------------------------------------------------------------------------------------------------------
 
 The one and only one UI object
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_UI = newUI ( );
+const theUI = newUI ( );
 
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------

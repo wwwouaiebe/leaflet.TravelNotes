@@ -33,10 +33,8 @@ Tests ...
 export { newTravelNotesPaneUI };
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { g_NoteEditor } from '../core/NoteEditor.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-
-let s_NoteObjId  = 0;
 
 /*
 --- newTravelNotesPaneUI function -------------------------------------------------------------------------------------
@@ -48,17 +46,19 @@ This function returns the travelNotesPaneUI object
 
 function newTravelNotesPaneUI ( ) {
 
-	let m_EventDispatcher = newEventDispatcher ( );
+	let myNoteObjId  = 0;
+
+	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
-	--- m_OnDragStart function ----------------------------------------------------------------------------------------
+	--- myOnDragStart function ----------------------------------------------------------------------------------------
 
 	drag start event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnDragStart ( dragEvent ) {
+	function myOnDragStart ( dragEvent ) {
 		dragEvent.stopPropagation ( );
 		try {
 			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
@@ -71,30 +71,30 @@ function newTravelNotesPaneUI ( ) {
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
 		// different in the drag event and the drop event
-		s_NoteObjId = dragEvent.target.noteObjId - 1;
+		myNoteObjId = dragEvent.target.noteObjId - 1;
 	}
 
 	/*
-	--- m_OnDragOver function -----------------------------------------------------------------------------------------
+	--- myOnDragOver function -----------------------------------------------------------------------------------------
 
 	drag over event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnDragOver ( event ) {
+	function myOnDragOver ( event ) {
 		event.preventDefault ( );
 	}
 
 	/*
-	--- m_OnDrop function ---------------------------------------------------------------------------------------------
+	--- myOnDrop function ---------------------------------------------------------------------------------------------
 
 	drop listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnDrop ( dragEvent ) {
+	function myOnDrop ( dragEvent ) {
 		dragEvent.preventDefault ( );
 		let element = dragEvent.target;
 
@@ -104,29 +104,29 @@ function newTravelNotesPaneUI ( ) {
 		let clientRect = element.getBoundingClientRect ( );
 
 		// for this #@!& MS Edge... don't remove + 1 otherwise crazy things comes in FF
-		g_NoteEditor.noteDropped (
-			s_NoteObjId + 1,
+		theNoteEditor.noteDropped (
+			myNoteObjId + 1,
 			element.noteObjId,
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
 		);
 	}
 
 	/*
-	--- m_OnTravelNoteClick function ----------------------------------------------------------------------------------
+	--- myOnTravelNoteClick function ----------------------------------------------------------------------------------
 
 	click event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnTravelNoteClick ( clickEvent ) {
+	function myOnTravelNoteClick ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		let element = clickEvent.target;
 		while ( ! element.noteObjId ) {
 			element = element.parentNode;
 		}
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'zoomtonote',
 			{
 				noteObjId : element.noteObjId
@@ -135,32 +135,32 @@ function newTravelNotesPaneUI ( ) {
 	}
 
 	/*
-	--- m_OnTravelNoteContextMenu function ----------------------------------------------------------------------------
+	--- myOnTravelNoteContextMenu function ----------------------------------------------------------------------------
 
 	contextmenu event listener for the notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnTravelNoteContextMenu ( clickEvent ) {
+	function myOnTravelNoteContextMenu ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		clickEvent.preventDefault ( );
 		let element = clickEvent.target;
 		while ( ! element.noteObjId ) {
 			element = element.parentNode;
 		}
-		g_NoteEditor.editNote ( element.noteObjId );
+		theNoteEditor.editNote ( element.noteObjId );
 	}
 
 	/*
-	--- m_Remove function ---------------------------------------------------------------------------------------------
+	--- myRemove function ---------------------------------------------------------------------------------------------
 
 	This function removes the content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Remove ( ) {
+	function myRemove ( ) {
 
 		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
 		if ( ! dataDiv ) {
@@ -171,9 +171,9 @@ function newTravelNotesPaneUI ( ) {
 		if ( travelNotesDiv ) {
 			travelNotesDiv.childNodes.forEach (
 				childNode => {
-					childNode.removeEventListener ( 'click', m_OnTravelNoteClick, false );
-					childNode.removeEventListener ( 'contextmenu', m_OnTravelNoteContextMenu, false );
-					childNode.removeEventListener ( 'dragstart', m_OnDragStart, false );
+					childNode.removeEventListener ( 'click', myOnTravelNoteClick, false );
+					childNode.removeEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
+					childNode.removeEventListener ( 'dragstart', myOnDragStart, false );
 				}
 			);
 			dataDiv.removeChild ( travelNotesDiv );
@@ -181,14 +181,14 @@ function newTravelNotesPaneUI ( ) {
 	}
 
 	/*
-	--- m_Add function ------------------------------------------------------------------------------------------------
+	--- myAdd function ------------------------------------------------------------------------------------------------
 
 	This function adds the content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Add ( ) {
+	function myAdd ( ) {
 
 		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
 			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
@@ -206,16 +206,16 @@ function newTravelNotesPaneUI ( ) {
 		}
 
 		let travelNotesDiv = htmlViewsFactory.travelNotesHTML;
-		travelNotesDiv.addEventListener ( 'drop', m_OnDrop, false );
-		travelNotesDiv.addEventListener ( 'dragover', m_OnDragOver, false );
+		travelNotesDiv.addEventListener ( 'drop', myOnDrop, false );
+		travelNotesDiv.addEventListener ( 'dragover', myOnDragOver, false );
 
 		dataDiv.appendChild ( travelNotesDiv );
 		travelNotesDiv.childNodes.forEach (
 			childNode => {
-				childNode.addEventListener ( 'click', m_OnTravelNoteClick, false );
-				childNode.addEventListener ( 'contextmenu', m_OnTravelNoteContextMenu, false );
+				childNode.addEventListener ( 'click', myOnTravelNoteClick, false );
+				childNode.addEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
 				childNode.draggable = true;
-				childNode.addEventListener ( 'dragstart', m_OnDragStart, false );
+				childNode.addEventListener ( 'dragstart', myOnDragStart, false );
 				childNode.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
 			}
 		);
@@ -229,8 +229,8 @@ function newTravelNotesPaneUI ( ) {
 
 	return Object.seal (
 		{
-			remove : ( ) => m_Remove ( ),
-			add : ( ) => m_Add ( )
+			remove : ( ) => myRemove ( ),
+			add : ( ) => myAdd ( )
 		}
 	);
 }

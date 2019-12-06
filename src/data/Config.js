@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- Config.js file ----------------------------------------------------------------------------------------------------
 This file contains:
 	- the newConfig function
-	- the g_Config object
+	- the theConfig object
 Changes:
 	- v1.4.0:
 		- created from DataManager
@@ -34,7 +34,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { g_Config };
+export { theConfig };
 
 /*
 --- newConfig funtion -------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Patterns : Closure and Singleton
 
 function newConfig ( ) {
 
-	let m_Config = {
+	let myConfig = {
 		autoLoad : false,
 		map :
 		{
@@ -214,7 +214,7 @@ function newConfig ( ) {
 	};
 
 	/*
-	--- m_CopyObjectTo function -----------------------------------------------------------------------------------
+	--- myCopyObjectTo function -----------------------------------------------------------------------------------
 
 	This method:
 		- search recursively all dest properties
@@ -233,7 +233,7 @@ function newConfig ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CopyObjectTo ( source, dest ) {
+	function myCopyObjectTo ( source, dest ) {
 		if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
 			return;
 		}
@@ -241,7 +241,7 @@ function newConfig ( ) {
 			let property;
 			for ( property in dest ) {
 				if ( 'object' === typeof dest [ property ] ) {
-					m_CopyObjectTo ( source [ property ], dest [ property ] );
+					myCopyObjectTo ( source [ property ], dest [ property ] );
 				}
 				else {
 					dest [ property ] = source [ property ] || dest [ property ];
@@ -256,7 +256,7 @@ function newConfig ( ) {
 					else {
 						dest [ property ] = dest [ property ] || {};
 					}
-					m_CopyObjectTo ( source [ property ], dest [ property ] );
+					myCopyObjectTo ( source [ property ], dest [ property ] );
 				}
 				else {
 					dest [ property ] = source [ property ];
@@ -269,16 +269,16 @@ function newConfig ( ) {
 	}
 
 	/*
-	--- m_Freeze function -----------------------------------------------------------------------------------------
+	--- myFreeze function -----------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Freeze ( object ) {
+	function myFreeze ( object ) {
 		var property;
 		for ( property in object ) {
 			if ( 'object' === typeof object [ property ] ) {
-				object [ property ] = m_Freeze (  object [ property ] );
+				object [ property ] = myFreeze (  object [ property ] );
 			}
 		}
 
@@ -286,14 +286,14 @@ function newConfig ( ) {
 	}
 
 	/*
-	--- m_Overload function ---------------------------------------------------------------------------------------
+	--- myOverload function ---------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Overload ( source ) {
-		m_CopyObjectTo ( source, m_Config );
-		m_Config = m_Freeze ( m_Config );
+	function myOverload ( source ) {
+		myCopyObjectTo ( source, myConfig );
+		myConfig = myFreeze ( myConfig );
 	}
 
 	/*
@@ -303,47 +303,47 @@ function newConfig ( ) {
 	*/
 
 	return {
-		get autoLoad ( ) { return m_Config.autoLoad; },
-		get map ( ) { return m_Config.map; },
-		get travelNotesToolbarUI ( ) { return m_Config.travelNotesToolbarUI; },
-		get layersToolbarUI ( ) { return m_Config.layersToolbarUI; },
-		get mouseUI ( ) { return m_Config.mouseUI; },
-		get errorUI ( ) { return m_Config.errorUI; },
-		get APIKeys ( ) { return m_Config.APIKeys; },
-		get contextMenu ( ) { return m_Config.contextMenu; },
-		get errorMessages ( ) { return m_Config.errorMessages; },
-		get routing ( ) { return m_Config.routing; },
-		get language ( ) { return m_Config.language; },
-		get itineraryPointMarker ( ) { return m_Config.itineraryPointMarker; },
-		get searchPointMarker ( ) { return m_Config.searchPointMarker; },
-		get searchPointPolyline ( ) { return m_Config.searchPointPolyline; },
-		get previousSearchLimit ( ) { return m_Config.previousSearchLimit; },
-		get nextSearchLimit ( ) { return m_Config.nextSearchLimit; },
-		get wayPoint ( ) { return m_Config.wayPoint; },
-		get route ( ) { return m_Config.route; },
-		get note ( ) { return m_Config.note; },
-		get itineraryPointZoom ( ) { return m_Config.itineraryPointZoom; },
-		get routeEditor ( ) { return m_Config.routeEditor; },
-		get travelEditor ( ) { return m_Config.travelEditor; },
-		get haveBeforeUnloadWarning ( ) { return m_Config.haveBeforeUnloadWarning; },
-		get overpassApiUrl ( ) { return m_Config.overpassApiUrl; },
-		get nominatim ( ) { return m_Config.nominatim; },
-		get geoLocation ( ) { return m_Config.geoLocation },
+		get autoLoad ( ) { return myConfig.autoLoad; },
+		get map ( ) { return myConfig.map; },
+		get travelNotesToolbarUI ( ) { return myConfig.travelNotesToolbarUI; },
+		get layersToolbarUI ( ) { return myConfig.layersToolbarUI; },
+		get mouseUI ( ) { return myConfig.mouseUI; },
+		get errorUI ( ) { return myConfig.errorUI; },
+		get APIKeys ( ) { return myConfig.APIKeys; },
+		get contextMenu ( ) { return myConfig.contextMenu; },
+		get errorMessages ( ) { return myConfig.errorMessages; },
+		get routing ( ) { return myConfig.routing; },
+		get language ( ) { return myConfig.language; },
+		get itineraryPointMarker ( ) { return myConfig.itineraryPointMarker; },
+		get searchPointMarker ( ) { return myConfig.searchPointMarker; },
+		get searchPointPolyline ( ) { return myConfig.searchPointPolyline; },
+		get previousSearchLimit ( ) { return myConfig.previousSearchLimit; },
+		get nextSearchLimit ( ) { return myConfig.nextSearchLimit; },
+		get wayPoint ( ) { return myConfig.wayPoint; },
+		get route ( ) { return myConfig.route; },
+		get note ( ) { return myConfig.note; },
+		get itineraryPointZoom ( ) { return myConfig.itineraryPointZoom; },
+		get routeEditor ( ) { return myConfig.routeEditor; },
+		get travelEditor ( ) { return myConfig.travelEditor; },
+		get haveBeforeUnloadWarning ( ) { return myConfig.haveBeforeUnloadWarning; },
+		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; },
+		get nominatim ( ) { return myConfig.nominatim; },
+		get geoLocation ( ) { return myConfig.geoLocation },
 
-		overload : newConfig => m_Overload ( newConfig )
+		overload : newConfig => myOverload ( newConfig )
 
 	}
 }
 
 /*
---- g_Config object ---------------------------------------------------------------------------------------------------
+--- theConfig object ---------------------------------------------------------------------------------------------------
 
 The one and only one config
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-let g_Config = newConfig ( );
+let theConfig = newConfig ( );
 
 /*
 --- End of Config.js file ---------------------------------------------------------------------------------------------

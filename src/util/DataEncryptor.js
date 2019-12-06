@@ -36,12 +36,12 @@ export { newDataEncryptor };
 function newDataEncryptor ( ) {
 
 	/*
-	--- m_ImportKey function --------------------------------------------------------------------------------------
+	--- myImportKey function --------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ImportKey ( pswd ) {
+	function myImportKey ( pswd ) {
 		return window.crypto.subtle.importKey (
 			"raw",
 			pswd,
@@ -52,12 +52,12 @@ function newDataEncryptor ( ) {
 	}
 
 	/*
-	--- m_DeriveKey function --------------------------------------------------------------------------------------
+	--- myDeriveKey function --------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_DeriveKey ( deriveKey ) {
+	function myDeriveKey ( deriveKey ) {
 		return window.crypto.subtle.deriveKey (
 			{
 				name : "PBKDF2",
@@ -78,12 +78,12 @@ function newDataEncryptor ( ) {
 	}
 
 	/*
-	--- m_EncryptData object --------------------------------------------------------------------------------------
+	--- myEncryptData object --------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_DecryptData ( data, onOk, onError, pswdPromise ) {
+	function myDecryptData ( data, onOk, onError, pswdPromise ) {
 
 		/*
 		--- decrypt function --------------------------------------------------------------------------------------
@@ -103,20 +103,20 @@ function newDataEncryptor ( ) {
 		}
 
 		pswdPromise
-			.then ( m_ImportKey )
-			.then ( m_DeriveKey )
+			.then ( myImportKey )
+			.then ( myDeriveKey )
 			.then ( decrypt )
 			.then ( onOk )
 			.catch ( onError );
 	}
 
 	/*
-	--- m_EncryptData object --------------------------------------------------------------------------------------
+	--- myEncryptData object --------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EncryptData ( data, onOk, onError, pswdPromise ) {
+	function myEncryptData ( data, onOk, onError, pswdPromise ) {
 
 		var ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
 
@@ -152,8 +152,8 @@ function newDataEncryptor ( ) {
 			);
 		}
 		pswdPromise
-			.then ( m_ImportKey )
-			.then ( m_DeriveKey )
+			.then ( myImportKey )
+			.then ( myDeriveKey )
 			.then ( encrypt )
 			.then ( returnValue )
 			.catch ( onError );
@@ -167,8 +167,8 @@ function newDataEncryptor ( ) {
 
 	return Object.seal (
 		{
-			encryptData : function ( data, onOk, onError, pswdPromise ) { m_EncryptData ( data, onOk, onError, pswdPromise ); },
-			decryptData : function ( data, onOk, onError, pswdPromise ) { m_DecryptData ( data, onOk, onError, pswdPromise ); }
+			encryptData : function ( data, onOk, onError, pswdPromise ) { myEncryptData ( data, onOk, onError, pswdPromise ); },
+			decryptData : function ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
 		}
 	);
 }

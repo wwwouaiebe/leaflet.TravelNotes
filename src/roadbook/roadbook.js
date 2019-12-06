@@ -30,7 +30,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 
 /*
 --- showTravelNotes function --------------------------------------------------------------------------------------
@@ -167,16 +167,16 @@ if ( language ) {
 				let response;
 				try {
 					response = JSON.parse ( xmlHttpRequest.responseText );
-					g_Translator. setTranslations ( response );
+					theTranslator. setTranslations ( response );
 					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML =
-						g_Translator.getText ( "Roadbook - show travel notes" );
+						theTranslator.getText ( "Roadbook - show travel notes" );
 					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML =
-						g_Translator.getText ( "Roadbook - show maneuver" );
+						theTranslator.getText ( "Roadbook - show maneuver" );
 					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML =
-						g_Translator.getText ( "Roadbook - show routes notes" );
+						theTranslator.getText ( "Roadbook - show routes notes" );
 					let saveButton = document.getElementById ( "TravelNotes-SaveFile" );
 					if ( saveButton ) {
-						saveButton.value = g_Translator.getText ( "Roadbook - Save" );
+						saveButton.value = theTranslator.getText ( "Roadbook - Save" );
 					}
 				}
 				catch ( err ) {

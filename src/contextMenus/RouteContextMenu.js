@@ -33,12 +33,12 @@ Tests ...
 export { newRouteContextMenu };
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { g_WayPointEditor } from '../core/WayPointEditor.js';
-import { g_NoteEditor } from '../core/NoteEditor.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_Translator } from '../UI/Translator.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
+import { theTravelEditor } from '../core/TravelEditor.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theTranslator } from '../UI/Translator.js';
 
 /*
 --- newRouteContextMenu function --------------------------------------------------------------------------------------
@@ -48,87 +48,87 @@ import { g_Translator } from '../UI/Translator.js';
 
 function newRouteContextMenu ( event ) {
 
-	let m_RouteObjId = event.target.objId;
+	let myRouteObjId = event.target.objId;
 
 	/*
-	--- m_GetMenuItems function ---------------------------------------------------------------------------------------
+	--- myGetMenuItems function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetMenuItems ( ) {
+	function myGetMenuItems ( ) {
 		return [
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Edit this route" ),
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Edit this route" ),
 				action :
 					(
-						( g_TravelNotesData.editedRouteObjId !== m_RouteObjId )
-						&& ( 2 !== g_TravelNotesData.travel.editedRoute.edited )
+						( theTravelNotesData.editedRouteObjId !== myRouteObjId )
+						&& ( 2 !== theTravelNotesData.travel.editedRoute.edited )
 					) ?
-						g_TravelEditor.editRoute
+						theTravelEditor.editRoute
 						:
 						null,
-				param : m_RouteObjId
+				param : myRouteObjId
 			},
 			{
-				context : g_TravelEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Delete this route" ),
+				context : theTravelEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Delete this route" ),
 				action :
 					(
-						( m_RouteObjId )
+						( myRouteObjId )
 						&&
-						( 2 !== g_TravelNotesData.travel.editedRoute.edited )
+						( 2 !== theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
-						g_TravelEditor.removeRoute
+						theTravelEditor.removeRoute
 						:
 						null,
-				param : m_RouteObjId
+				param : myRouteObjId
 			},
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Hide this route" ),
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Hide this route" ),
 				action :
-					( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId )
+					( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
 						null:
-						g_RouteEditor.hideRoute,
-				param : m_RouteObjId
+						theRouteEditor.hideRoute,
+				param : myRouteObjId
 			},
 			{
-				context : g_WayPointEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Add a waypoint on the route" ),
-				action : ( -1 === g_TravelNotesData.editedRouteObjId ) ? null : g_WayPointEditor.addWayPointOnRoute,
-				param : m_RouteObjId
+				context : theWayPointEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Add a waypoint on the route" ),
+				action : ( -1 === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPointOnRoute,
+				param : myRouteObjId
 			},
 			{
-				context : g_NoteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Add a note on the route" ),
-				action : g_NoteEditor.newRouteNote,
-				param : m_RouteObjId
+				context : theNoteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Add a note on the route" ),
+				action : theNoteEditor.newRouteNote,
+				param : myRouteObjId
 			},
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Properties" ),
-				action : g_RouteEditor.routeProperties,
-				param : m_RouteObjId
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Properties" ),
+				action : theRouteEditor.routeProperties,
+				param : myRouteObjId
 			},
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Zoom to route" ),
-				action : g_RouteEditor.zoomToRoute,
-				param : m_RouteObjId
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Zoom to route" ),
+				action : theRouteEditor.zoomToRoute,
+				param : myRouteObjId
 			},
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Save modifications on this route" ),
-				action : ( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId ) ? g_RouteEditor.saveEdition : null
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Save modifications on this route" ),
+				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.saveEdition : null
 			},
 			{
-				context : g_RouteEditor,
-				name : g_Translator.getText ( "ContextMenuFactory - Cancel modifications on this route" ),
-				action : ( g_TravelNotesData.travel.editedRoute.objId === m_RouteObjId ) ? g_RouteEditor.cancelEdition : null
+				context : theRouteEditor,
+				name : theTranslator.getText ( "ContextMenuFactory - Cancel modifications on this route" ),
+				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.cancelEdition : null
 			}
 		];
 	}
@@ -139,7 +139,7 @@ function newRouteContextMenu ( event ) {
 	*/
 
 	let routeContextMenu = newBaseContextMenu ( event );
-	routeContextMenu.init ( m_GetMenuItems ( ) );
+	routeContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( routeContextMenu );
 }

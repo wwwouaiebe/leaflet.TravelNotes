@@ -30,7 +30,7 @@ Tests ...
 
 export { newAutoLoader };
 
-import { g_Config } from '../data/Config.js';
+import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
@@ -41,14 +41,14 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newAutoLoader ( ) {
 
-	if ( ! g_Config.autoLoad ) {
+	if ( ! theConfig.autoLoad ) {
 		return;
 	}
 	newHTMLElementsFactory ( ).create ( 'div', { id : 'Map' },  document.getElementsByTagName ( 'body' ) [ 0 ] );
 	newHTMLElementsFactory ( ).create ( 'div', { id : 'TravelNotes' }, document.getElementsByTagName ( 'body' ) [ 0 ] );
 
 	let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-		.setView ( [ g_Config.map.center.lat, g_Config.map.center.lng ], g_Config.map.zoom );
+		.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
 	window.L.travelNotes.addControl ( map, "TravelNotes" );
 	window.L.travelNotes.rightContextMenu = true;
 }

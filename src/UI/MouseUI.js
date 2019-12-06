@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- MouseUI.js file ---------------------------------------------------------------------------------------------------
 This file contains:
 	- the newMouseUI function
-	- the gc_MouseUI object
+	- the theMouseUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -29,10 +29,10 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_MouseUI };
+export { theMouseUI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
 
 /*
@@ -43,90 +43,90 @@ import { newUtilities } from '../util/Utilities.js';
 
 function newMouseUI ( ) {
 
-	let m_MouseDiv = null;
+	let myMouseDiv = null;
 
-	let m_MousePos = null;
-	let m_Zoom = null;
-	let m_FileName = '';
-	let m_Utilities = newUtilities ( );
+	let myMousePos = null;
+	let myZoom = null;
+	let myFileName = '';
+	let myUtilities = newUtilities ( );
 
 	/*
-	--- m_Update function ---------------------------------------------------------------------------------------------
+	--- myUpdate function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Update ( ) {
-		m_MouseDiv.innerHTML = '<span>' +
-		m_MousePos +
+	function myUpdate ( ) {
+		myMouseDiv.innerHTML = '<span>' +
+		myMousePos +
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
-		m_Zoom +
-		( m_FileName === '' ? '' : '&nbsp;-&nbsp;' + m_FileName  ) +
+		myZoom +
+		( myFileName === '' ? '' : '&nbsp;-&nbsp;' + myFileName  ) +
 		'</span>';
 	}
 
 	/*
-	--- m_SetMousePos function ----------------------------------------------------------------------------------------
+	--- mySetMousePos function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetMousePos ( mousePos ) {
-		m_MousePos = m_Utilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + m_Utilities.formatLng ( mousePos.lng );
-		m_Update ( );
+	function mySetMousePos ( mousePos ) {
+		myMousePos = myUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + myUtilities.formatLng ( mousePos.lng );
+		myUpdate ( );
 	}
 
 	/*
-	--- m_SetZoom function --------------------------------------------------------------------------------------------
+	--- mySetZoom function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetZoom ( zoom ) {
-		m_Zoom = zoom;
-		m_Update ( );
+	function mySetZoom ( zoom ) {
+		myZoom = zoom;
+		myUpdate ( );
 	}
 
 	/*
-	--- m_SetFileName function ----------------------------------------------------------------------------------------
+	--- mySetFileName function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetFileName ( fileName ) {
-		m_FileName = fileName;
-		m_Update ( );
+	function mySetFileName ( fileName ) {
+		myFileName = fileName;
+		myUpdate ( );
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( ) {
+	function myCreateUI ( ) {
 
-		m_Zoom = g_TravelNotesData.map.getZoom ( );
-		let mousePos = g_TravelNotesData.map.getCenter ( );
-		m_MousePos = m_Utilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + m_Utilities.formatLng ( mousePos.lng );
-		m_MouseDiv = newHTMLElementsFactory ( ).create (
+		myZoom = theTravelNotesData.map.getZoom ( );
+		let mousePos = theTravelNotesData.map.getCenter ( );
+		myMousePos = myUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + myUtilities.formatLng ( mousePos.lng );
+		myMouseDiv = newHTMLElementsFactory ( ).create (
 			'div',
 			{
 				id : 'TravelNotes-MouseControl'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
-		g_TravelNotesData.map.on (
+		theTravelNotesData.map.on (
 			'mousemove',
-			event => { gc_MouseUI.mousePos = event.latlng; }
+			event => { theMouseUI.mousePos = event.latlng; }
 		);
-		g_TravelNotesData.map.on (
+		theTravelNotesData.map.on (
 			'zoomend',
-			( ) => { gc_MouseUI.zoom = g_TravelNotesData.map.getZoom ( ); }
+			( ) => { theMouseUI.zoom = theTravelNotesData.map.getZoom ( ); }
 		);
-		g_TravelNotesData.map.on (
+		theTravelNotesData.map.on (
 			'travelnotesfileloaded',
-			event => { gc_MouseUI.fileName = event.name || ''; }
+			event => { theMouseUI.fileName = event.name || ''; }
 		);
 
 	}
@@ -139,15 +139,15 @@ function newMouseUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : ( ) => m_CreateUI ( ),
-			set mousePos ( MousePos ) { m_SetMousePos ( MousePos ) },
-			set zoom ( Zoom ) { m_SetZoom ( Zoom ) },
-			set fileName ( FileName ) { m_SetFileName ( FileName ) }
+			createUI : ( ) => myCreateUI ( ),
+			set mousePos ( MousePos ) { mySetMousePos ( MousePos ) },
+			set zoom ( Zoom ) { mySetZoom ( Zoom ) },
+			set fileName ( FileName ) { mySetFileName ( FileName ) }
 		}
 	);
 }
 
-const gc_MouseUI = newMouseUI ( );
+const theMouseUI = newMouseUI ( );
 
 /*
 --- End of MouseUI.js file --------------------------------------------------------------------------------------------

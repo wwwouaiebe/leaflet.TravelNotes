@@ -40,6 +40,8 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newRoute } from '../data/Route.js';
 
+const ourObjType = newObjType ( 'Travel' );
+
 /*
 --- newTravel function --------------------------------------------------------------------------------------------
 
@@ -50,34 +52,32 @@ Patterns : Closure
 
 function newTravel ( ) {
 
-	const s_ObjType = newObjType ( 'Travel' );
+	let myEditedRoute = newRoute ( );
 
-	let m_EditedRoute = newRoute ( );
+	let myName = 'TravelNotes';
 
-	let m_Name = 'TravelNotes';
+	let myRoutes = newCollection ( 'Route' );
 
-	let m_Routes = newCollection ( 'Route' );
+	let myNotes = newCollection ( 'Note' );
 
-	let m_Notes = newCollection ( 'Note' );
+	let myObjId = newObjId ( );
 
-	let m_ObjId = newObjId ( );
+	let myReadOnly = false;
 
-	let m_ReadOnly = false;
-
-	let m_UserData = {};
+	let myUserData = {};
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -90,14 +90,14 @@ function newTravel ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -105,39 +105,39 @@ function newTravel ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			editedRoute : m_EditedRoute.object,
-			name : m_Name,
-			routes : m_Routes.object,
-			notes : m_Notes.object,
-			userData : m_UserData,
-			readOnly : m_ReadOnly,
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			editedRoute : myEditedRoute.object,
+			name : myName,
+			routes : myRoutes.object,
+			notes : myNotes.object,
+			userData : myUserData,
+			readOnly : myReadOnly,
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_EditedRoute.object = something.editedRoute;
-		m_Name = something.name || '';
-		m_UserData = something.userData || {};
-		m_ReadOnly = something.readOnly || false;
-		m_Routes.object = something.routes || [];
-		m_Notes.object = something.notes || [];
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myEditedRoute.object = something.editedRoute;
+		myName = something.name || '';
+		myUserData = something.userData || {};
+		myReadOnly = something.readOnly || false;
+		myRoutes.object = something.routes || [];
+		myNotes.object = something.notes || [];
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -148,28 +148,28 @@ function newTravel ( ) {
 
 	return Object.seal (
 		{
-			get editedRoute ( ) { return m_EditedRoute; },
-			set editedRoute ( editedRoute ) { m_EditedRoute = editedRoute; },
+			get editedRoute ( ) { return myEditedRoute; },
+			set editedRoute ( editedRoute ) { myEditedRoute = editedRoute; },
 
-			get routes ( ) { return m_Routes; },
+			get routes ( ) { return myRoutes; },
 
-			get notes ( ) { return m_Notes; },
+			get notes ( ) { return myNotes; },
 
-			get name ( ) { return m_Name; },
-			set name ( Name ) { m_Name = Name; },
+			get name ( ) { return myName; },
+			set name ( Name ) { myName = Name; },
 
-			get readOnly ( ) { return m_ReadOnly; },
-			set readOnly ( ReadOnly ) { m_ReadOnly = ReadOnly; },
+			get readOnly ( ) { return myReadOnly; },
+			set readOnly ( ReadOnly ) { myReadOnly = ReadOnly; },
 
-			get userData ( ) { return m_UserData; },
-			set userData ( UserData ) { m_UserData = UserData; },
+			get userData ( ) { return myUserData; },
+			set userData ( UserData ) { myUserData = UserData; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

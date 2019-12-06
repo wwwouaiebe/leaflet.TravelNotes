@@ -34,10 +34,10 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_ProvidersToolbarUI };
+export { theProvidersToolbarUI };
 
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -51,46 +51,46 @@ This function returns the providersToolbarUI object
 
 function newProvidersToolbarUI ( ) {
 
-	let m_ButtonsDiv = null;
-	let m_HtmlElementsFactory = newHTMLElementsFactory ( );
-	let m_activeButton = false;
-	let m_BikeButton = null;
-	let m_PedestrianButton = null;
-	let m_CarButton = null;
-	let m_TrainButton = null;
-	let m_ParentDiv = null;
+	let myButtonsDiv = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	let myActiveButton = false;
+	let myBikeButton = null;
+	let myPedestrianButton = null;
+	let myCarButton = null;
+	let myTrainButton = null;
+	let myParentDiv = null;
 
 	/*
-	--- m_OnClickTransitModeButton function ---------------------------------------------------------------------------
+	--- myOnClickTransitModeButton function ---------------------------------------------------------------------------
 
 	click event listener  for the transit modes buttons
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnClickTransitModeButton ( clickEvent ) {
+	function myOnClickTransitModeButton ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		m_SetTransitMode ( clickEvent.target.transitMode );
-		g_RouteEditor.startRouting ( );
+		mySetTransitMode ( clickEvent.target.transitMode );
+		theRouteEditor.startRouting ( );
 	}
 
 	/*
-	--- m_SetProvider function ----------------------------------------------------------------------------------------
+	--- mySetProvider function ----------------------------------------------------------------------------------------
 
 	This function set the provider
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetProvider ( providerName ) {
-		g_TravelNotesData.routing.provider = providerName;
+	function mySetProvider ( providerName ) {
+		theTravelNotesData.routing.provider = providerName;
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ]
 			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 
 		// activating the transit mode buttons, depending of the capabilities of the provider
-		let provider = g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) );
+		let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
 		if ( provider.transitModes.car ) {
 			document.getElementById ( 'TravelNotes-Control-carImgButton' )
 				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
@@ -125,34 +125,34 @@ function newProvidersToolbarUI ( ) {
 		}
 
 		// changing the transitMode if the provider don't have the active transit mode
-		if ( ! g_TravelNotesData.providers.get (
-			providerName.toLowerCase ( ) ).transitModes [ g_TravelNotesData.routing.transitMode ] ) {
+		if ( ! theTravelNotesData.providers.get (
+			providerName.toLowerCase ( ) ).transitModes [ theTravelNotesData.routing.transitMode ] ) {
 			if ( provider.transitModes.bike ) {
-				m_SetTransitMode ( 'bike' );
+				mySetTransitMode ( 'bike' );
 			}
 			else if ( provider.transitModes.pedestrian )  {
-				m_SetTransitMode ( 'pedestrian' );
+				mySetTransitMode ( 'pedestrian' );
 			}
 			else if ( provider.transitModes.car )  {
-				m_SetTransitMode ( 'car' );
+				mySetTransitMode ( 'car' );
 			}
 			else if ( provider.transitModes.train )  {
-				m_SetTransitMode ( 'train' );
+				mySetTransitMode ( 'train' );
 			}
 		}
 	}
 
 	/*
-	--- m_SetTransitMode function -------------------------------------------------------------------------------------
+	--- mySetTransitMode function -------------------------------------------------------------------------------------
 
 	This function set the transit mode
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetTransitMode ( transitMode ) {
+	function mySetTransitMode ( transitMode ) {
 
-		g_TravelNotesData.routing.transitMode = transitMode;
+		theTravelNotesData.routing.transitMode = transitMode;
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ]
 			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
@@ -160,20 +160,20 @@ function newProvidersToolbarUI ( ) {
 	}
 
 	/*
-	--- m_createProviderButton function -------------------------------------------------------------------------------
+	--- myCreateProviderButton function -------------------------------------------------------------------------------
 
 	This function creates a provider button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_createProviderButton ( provider ) {
+	function myCreateProviderButton ( provider ) {
 
 		if ( 0 === provider.providerKey ) {
 			return;
 		}
 
-		let providerButton = m_HtmlElementsFactory.create (
+		let providerButton = myHTMLElementsFactory.create (
 			'img',
 			{
 				src : "data:image/png;base64," + provider.icon,
@@ -181,83 +181,83 @@ function newProvidersToolbarUI ( ) {
 				className : 'TravelNotes-Control-ImgButton',
 				title : provider.name
 			},
-			m_ButtonsDiv
+			myButtonsDiv
 		);
 		providerButton.provider = provider.name;
 		providerButton.addEventListener (
 			'click',
 			clickEvent => {
 				clickEvent.stopPropagation ( );
-				m_SetProvider ( clickEvent.target.provider );
-				g_RouteEditor.startRouting ( );
+				mySetProvider ( clickEvent.target.provider );
+				theRouteEditor.startRouting ( );
 			},
 			false );
 
 		// when loading the control, the first provider will be the active provider
-		if ( ! m_activeButton ) {
+		if ( ! myActiveButton ) {
 			providerButton.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
-			g_TravelNotesData.routing.provider = providerButton.provider;
-			m_activeButton = true;
+			theTravelNotesData.routing.provider = providerButton.provider;
+			myActiveButton = true;
 
 			// ... and the first possible transit mode will be the active transit mode
 			if ( provider.transitModes.bike ) {
-				m_BikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-				g_TravelNotesData.routing.transitMode = 'bike';
+				myBikeButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'bike';
 			}
 			else if ( provider.transitModes.pedestrian ) {
-				m_PedestrianButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-				g_TravelNotesData.routing.transitMode = 'pedestrian';
+				myPedestrianButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'pedestrian';
 			}
 			else if ( provider.transitModes.car ) {
-				m_CarButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-				g_TravelNotesData.routing.transitMode = 'car';
+				myCarButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'car';
 			}
 			else if ( provider.transitModes.train ) {
-				m_TrainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-				g_TravelNotesData.routing.transitMode = 'train';
+				myTrainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'train';
 			}
 
 			// deactivating transit mode buttons if not supported by the provider
 			if ( ! provider.transitModes.car ) {
-				m_CarButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+				myCarButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 			}
 			if ( ! provider.transitModes.pedestrian ) {
-				m_PedestrianButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+				myPedestrianButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 			}
 			if ( ! provider.transitModes.bike ) {
-				m_BikeButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+				myBikeButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 			}
 			if ( ! provider.transitModes.train ) {
-				m_TrainButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+				myTrainButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 			}
 		}
 	}
 
 	/*
-	--- m_createProvidersButtons function -----------------------------------------------------------------------------
+	--- myCreateProvidersButtons function -----------------------------------------------------------------------------
 
 	This function creates the providers buttons
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_createProvidersButtons ( ) {
-		if ( g_TravelNotesData.providers ) {
-			m_activeButton = false;
-			g_TravelNotesData.providers.forEach ( m_createProviderButton );
+	function myCreateProvidersButtons ( ) {
+		if ( theTravelNotesData.providers ) {
+			myActiveButton = false;
+			theTravelNotesData.providers.forEach ( myCreateProviderButton );
 		}
 	}
 
 	/*
-	--- m_createTransitModesButtons function ----------------------------------------------------------------------
+	--- myCreateTransitModesButtons function ----------------------------------------------------------------------
 
 	This function creates the transit modes buttons
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_createTransitModesButtons ( ) {
-		m_BikeButton = m_HtmlElementsFactory.create (
+	function myCreateTransitModesButtons ( ) {
+		myBikeButton = myHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -283,12 +283,12 @@ function newProvidersToolbarUI ( ) {
 				id : 'TravelNotes-Control-bikeImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
-			m_ButtonsDiv
+			myButtonsDiv
 		);
-		m_BikeButton.transitMode = 'bike';
-		m_BikeButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
+		myBikeButton.transitMode = 'bike';
+		myBikeButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		m_PedestrianButton = m_HtmlElementsFactory.create (
+		myPedestrianButton = myHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -314,12 +314,12 @@ function newProvidersToolbarUI ( ) {
 				id : 'TravelNotes-Control-pedestrianImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
-			m_ButtonsDiv
+			myButtonsDiv
 		);
-		m_PedestrianButton.transitMode = 'pedestrian';
-		m_PedestrianButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
+		myPedestrianButton.transitMode = 'pedestrian';
+		myPedestrianButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		m_CarButton = m_HtmlElementsFactory.create (
+		myCarButton = myHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -345,12 +345,12 @@ function newProvidersToolbarUI ( ) {
 				id : 'TravelNotes-Control-carImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
-			m_ButtonsDiv
+			myButtonsDiv
 		);
-		m_CarButton.transitMode = 'car';
-		m_CarButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
+		myCarButton.transitMode = 'car';
+		myCarButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		m_TrainButton = m_HtmlElementsFactory.create (
+		myTrainButton = myHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -378,40 +378,40 @@ function newProvidersToolbarUI ( ) {
 				id : 'TravelNotes-Control-trainImgButton',
 				className : 'TravelNotes-Control-ImgButton'
 			},
-			m_ButtonsDiv
+			myButtonsDiv
 		);
-		m_TrainButton.transitMode = 'train';
-		m_TrainButton.addEventListener ( 'click', m_OnClickTransitModeButton, false );
+		myTrainButton.transitMode = 'train';
+		myTrainButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function refresh the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ProvidersAdded ( ) {
+	function myProvidersAdded ( ) {
 
-		m_ParentDiv.removeChild ( m_ButtonsDiv );
-		m_CreateUI ( m_ParentDiv );
+		myParentDiv.removeChild ( myButtonsDiv );
+		myCreateUI ( myParentDiv );
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ) {
+	function myCreateUI ( controlDiv ) {
 
-		m_ParentDiv = controlDiv;
+		myParentDiv = controlDiv;
 
-		m_ButtonsDiv = m_HtmlElementsFactory.create (
+		myButtonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ItineraryButtonsDiv',
@@ -420,8 +420,8 @@ function newProvidersToolbarUI ( ) {
 			controlDiv
 		);
 
-		m_createTransitModesButtons ( );
-		m_createProvidersButtons ( );
+		myCreateTransitModesButtons ( );
+		myCreateProvidersButtons ( );
 
 	}
 
@@ -434,28 +434,28 @@ function newProvidersToolbarUI ( ) {
 	return Object.seal (
 		{
 
-			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			get provider ( ) { return g_TravelNotesData.routing.provider; },
-			set provider ( providerName ) { m_SetProvider ( providerName ); },
+			get provider ( ) { return theTravelNotesData.routing.provider; },
+			set provider ( providerName ) { mySetProvider ( providerName ); },
 
-			get transitMode ( ) { return g_TravelNotesData.routing.transitMode; },
-			set transitMode ( transitMode ) { m_SetTransitMode ( transitMode ); },
+			get transitMode ( ) { return theTravelNotesData.routing.transitMode; },
+			set transitMode ( transitMode ) { mySetTransitMode ( transitMode ); },
 
-			providersAdded : ( ) => m_ProvidersAdded ( )
+			providersAdded : ( ) => myProvidersAdded ( )
 		}
 	);
 }
 
 /*
---- gc_ProvidersToolbarUI object ---------------------------------------------------------------------------------------
+--- theProvidersToolbarUI object ---------------------------------------------------------------------------------------
 
 The one and only one providesToolbarUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_ProvidersToolbarUI = newProvidersToolbarUI ( );
+const theProvidersToolbarUI = newProvidersToolbarUI ( );
 
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------

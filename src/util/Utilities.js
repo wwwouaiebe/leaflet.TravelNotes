@@ -27,12 +27,12 @@ Tests ...
 
 export { newUtilities };
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 
 function newUtilities ( ) {
 
 	/*
-	--- m_getUUID function --------------------------------------------------------------------------------------------
+	--- myGetUUID function --------------------------------------------------------------------------------------------
 
 	This function test if the storage API is available ( the API can be deactived by user....)
 	Adapted from MDN :-)
@@ -40,7 +40,7 @@ function newUtilities ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_getUUID ( ) {
+	function myGetUUID ( ) {
 		function Random4 ( ) {
 			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 )
 				.substring ( 1 );
@@ -55,10 +55,10 @@ function newUtilities ( ) {
 			Random4 ( ) ;
 	}
 
-	/* --- End of m_getUUID function --- */
+	/* --- End of myGetUUID function --- */
 
 	/*
-	--- m_storageAvailable function -----------------------------------------------------------------------------------
+	--- myStorageAvailable function -----------------------------------------------------------------------------------
 
 	This function test if the storage API is available ( the API can be deactived by user....)
 	Adapted from MDN :-)
@@ -66,7 +66,7 @@ function newUtilities ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_storageAvailable ( type ) {
+	function myStorageAvailable ( type ) {
 		try {
 			let storage = window [ type ];
 			let	testString = '__storage_test__';
@@ -82,14 +82,14 @@ function newUtilities ( ) {
 	/* --- End of storageAvailable function --- */
 
 	/*
-	--- m_fileAPIAvailable function -----------------------------------------------------------------------------------
+	--- myFileAPIAvailable function -----------------------------------------------------------------------------------
 
 	This function test if the File API is available
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_fileAPIAvailable ( ) {
+	function myFileAPIAvailable ( ) {
 		try {
 
 			// FF...
@@ -108,17 +108,17 @@ function newUtilities ( ) {
 		}
 	}
 
-	/* --- End of m_fileAPIAvailable function --- */
+	/* --- End of myFileAPIAvailable function --- */
 
 	/*
-	--- m_saveFile function -------------------------------------------------------------------------------------------
+	--- mySaveFile function -------------------------------------------------------------------------------------------
 
 	This function save data to a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_saveFile ( filename, text, type ) {
+	function mySaveFile ( filename, text, type ) {
 		if ( ! type ) {
 			type = 'text/plain';
 		}
@@ -154,17 +154,17 @@ function newUtilities ( ) {
 		}
 	}
 
-	/* --- End of m_saveFile function --- */
+	/* --- End of mySaveFile function --- */
 
 	/*
-	--- m_formatTime function -----------------------------------------------------------------------------------------
+	--- myFormatTime function -----------------------------------------------------------------------------------------
 
 	This function save data to a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_formatTime ( time ) {
+	function myFormatTime ( time ) {
 		time = Math.floor ( time );
 		if ( 0 === time ) {
 			return '';
@@ -176,40 +176,40 @@ function newUtilities ( ) {
 		if ( 0 < days ) {
 			return days +
 				'&nbsp;'
-				+ g_Translator.getText ( 'Utilities - Day' ) +
+				+ theTranslator.getText ( 'Utilities - Day' ) +
 				'&nbsp;' +
 				hours +
 				'&nbsp;' +
-				g_Translator.getText ( 'Utilities - Hour' );
+				theTranslator.getText ( 'Utilities - Hour' );
 		}
 		else if ( 0 < hours ) {
 			return hours +
 				'&nbsp;'
-				+ g_Translator.getText ( 'Utilities - Hour' )
+				+ theTranslator.getText ( 'Utilities - Hour' )
 				+'&nbsp;' +
 				minutes +
 				'&nbsp;'
-				+ g_Translator.getText ( 'Utilities - Minute' );
+				+ theTranslator.getText ( 'Utilities - Minute' );
 		}
 		else if ( 0 < minutes ) {
 			return minutes +
 				'&nbsp;' +
-				g_Translator.getText ( 'Utilities - Minute' );
+				theTranslator.getText ( 'Utilities - Minute' );
 		}
 		else {
-			return seconds + '&nbsp;' + g_Translator.getText ( 'Utilities - Second' );
+			return seconds + '&nbsp;' + theTranslator.getText ( 'Utilities - Second' );
 		}
 	}
 
-	/* --- End of m_formatTime function --- */
+	/* --- End of myFormatTime function --- */
 
 	/*
-	--- m_formatDistance function -------------------------------------------------------------------------------------
+	--- myFormatDistance function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_formatDistance ( distance ) {
+	function myFormatDistance ( distance ) {
 		distance = Math.floor ( distance );
 		if ( 0 === distance ) {
 			return '';
@@ -224,43 +224,43 @@ function newUtilities ( ) {
 		}
 	}
 
-	/* --- End of m_formatDistance function --- */
+	/* --- End of myFormatDistance function --- */
 
 	/*
-	--- m_formatLat function ------------------------------------------------------------------------------------------
+	--- myFormatLat function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_formatLat ( lat ) {
+	function myFormatLat ( lat ) {
 		return ( lat > 0 ? lat.toFixed ( 6 ) + '&nbsp;N' : ( -lat ).toFixed ( 6 ) + '&nbsp;S' );
 	}
 
-	/* --- End of m_formatLat function --- */
+	/* --- End of myFormatLat function --- */
 
 	/*
-	--- m_formatLng function ------------------------------------------------------------------------------------------
+	--- myFormatLng function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_formatLng ( lng ) {
+	function myFormatLng ( lng ) {
 		return ( lng > 0 ? lng.toFixed ( 6 ) + '&nbsp;E' : ( -lng ).toFixed ( 6 ) + '&nbsp;W' );
 	}
 
-	/* --- End of m_formatLng function --- */
+	/* --- End of myFormatLng function --- */
 
 	/*
-	--- m_formatLatLng function ---------------------------------------------------------------------------------------
+	--- myFormatLatLng function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_formatLatLng ( latLng ) {
-		return m_formatLat ( latLng [ 0 ] ) + '&nbsp;-&nbsp;' + m_formatLng ( latLng [ 1 ] );
+	function myFormatLatLng ( latLng ) {
+		return myFormatLat ( latLng [ 0 ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ 1 ] );
 	}
 
-	/* --- End of m_formatLatLng function --- */
+	/* --- End of myFormatLatLng function --- */
 
 	/*
 	--- Utilities object ----------------------------------------------------------------------------------------------
@@ -270,23 +270,23 @@ function newUtilities ( ) {
 
 	return Object.seal (
 		{
-			get UUID ( ) { return m_getUUID ( ) },
+			get UUID ( ) { return myGetUUID ( ) },
 
-			storageAvailable : type =>  m_storageAvailable ( type ),
+			storageAvailable : type =>  myStorageAvailable ( type ),
 
-			fileAPIAvailable : ( ) => { return m_fileAPIAvailable ( ); },
+			fileAPIAvailable : ( ) => { return myFileAPIAvailable ( ); },
 
-			saveFile : ( filename, text, type ) => m_saveFile ( filename, text, type ),
+			saveFile : ( filename, text, type ) => mySaveFile ( filename, text, type ),
 
-			formatTime : time => { return m_formatTime ( time ); },
+			formatTime : time => { return myFormatTime ( time ); },
 
-			formatDistance : distance => { return m_formatDistance ( distance ); },
+			formatDistance : distance => { return myFormatDistance ( distance ); },
 
-			formatLat : lat => { return m_formatLat ( lat ); },
+			formatLat : lat => { return myFormatLat ( lat ); },
 
-			formatLng : lng => { return m_formatLng ( lng ); },
+			formatLng : lng => { return myFormatLng ( lng ); },
 
-			formatLatLng : latLng => { return m_formatLatLng ( latLng ); }
+			formatLatLng : latLng => { return myFormatLatLng ( latLng ); }
 		}
 	);
 }

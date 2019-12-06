@@ -30,7 +30,7 @@ Tests ...
 
 export { newPasswordDialog };
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -42,105 +42,105 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newPasswordDialog ( verifyPassword ) {
 
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_PasswordDialog = null;
-	let m_PasswordDiv = null;
-	let m_PasswordInput = null
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myPasswordDialog = null;
+	let myPasswordDiv = null;
+	let myPasswordInput = null
 
 	/*
-	--- m_OnOkButtonClick function ------------------------------------------------------------------------------------
+	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
 
 	click event listener for the ok button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnOkButtonClick ( ) {
-		m_PasswordDialog.hideError ( );
+	function myOnOkButtonClick ( ) {
+		myPasswordDialog.hideError ( );
 		if ( verifyPassword ) {
 			if (
-				( m_PasswordInput.value.length < 12 )
+				( myPasswordInput.value.length < 12 )
 				||
-				! m_PasswordInput.value.match ( RegExp ( '[0-9]+' ) )
+				! myPasswordInput.value.match ( RegExp ( '[0-9]+' ) )
 				||
-				! m_PasswordInput.value.match ( RegExp ( '[a-z]+' ) )
+				! myPasswordInput.value.match ( RegExp ( '[a-z]+' ) )
 				||
-				! m_PasswordInput.value.match ( RegExp ( '[A-Z]+' ) )
+				! myPasswordInput.value.match ( RegExp ( '[A-Z]+' ) )
 				||
-				! m_PasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
+				! myPasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
 			) {
-				m_PasswordDialog.showError ( g_Translator.getText ( 'PasswordDialog - Password rules' ));
-				m_PasswordInput.focus ( );
+				myPasswordDialog.showError ( theTranslator.getText ( 'PasswordDialog - Password rules' ));
+				myPasswordInput.focus ( );
 				return;
 			}
 		}
 
-		document.removeEventListener ( 'keydown', m_OnKeyDown, false );
-		return new window.TextEncoder ( ).encode ( m_PasswordInput.value );
+		document.removeEventListener ( 'keydown', myOnKeyDown, false );
+		return new window.TextEncoder ( ).encode ( myPasswordInput.value );
 	}
 
 	/*
-	--- m_OnKeyDown function ------------------------------------------------------------------------------------------
+	--- myOnKeyDown function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnKeyDown ( keyBoardEvent ) {
+	function myOnKeyDown ( keyBoardEvent ) {
 		if ( 'Enter' === keyBoardEvent.key  ) {
-			m_PasswordDialog.okButton.click ( );
+			myPasswordDialog.okButton.click ( );
 		}
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnEscape ( ) {
-		document.removeEventListener ( 'keydown', m_OnKeyDown, false );
+	function myOnEscape ( ) {
+		document.removeEventListener ( 'keydown', myOnKeyDown, false );
 		return true;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDialog ( ) {
+	function myCreateDialog ( ) {
 
 		// the dialog base is created
-		m_PasswordDialog = newBaseDialog ( );
-		m_PasswordDialog.title = g_Translator.getText ( 'PasswordDialog - password' );
-		m_PasswordDialog.okButtonListener = m_OnOkButtonClick;
-		m_PasswordDiv = m_HTMLElementsFactory.create (
+		myPasswordDialog = newBaseDialog ( );
+		myPasswordDialog.title = theTranslator.getText ( 'PasswordDialog - password' );
+		myPasswordDialog.okButtonListener = myOnOkButtonClick;
+		myPasswordDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PasswordDialog-DataDiv'
 			},
-			m_PasswordDialog.content
+			myPasswordDialog.content
 		);
-		document.addEventListener ( 'keydown', m_OnKeyDown, false );
-		m_PasswordDialog.escapeKeyListener = m_OnEscape;
+		document.addEventListener ( 'keydown', myOnKeyDown, false );
+		myPasswordDialog.escapeKeyListener = myOnEscape;
 	}
 
 	/*
-	--- m_CreateContent function --------------------------------------------------------------------------------------
+	--- myCreateContent function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateContent ( ) {
-		m_PasswordInput = m_HTMLElementsFactory.create (
+	function myCreateContent ( ) {
+		myPasswordInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-PasswordDialog-PasswordInput',
 				type : 'password'
 			},
-			m_PasswordDiv
+			myPasswordDiv
 		);
-		m_PasswordInput.focus ( );
+		myPasswordInput.focus ( );
 	}
 
 	/*
@@ -149,10 +149,10 @@ function newPasswordDialog ( verifyPassword ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	m_CreateDialog ( );
-	m_CreateContent ( );
+	myCreateDialog ( );
+	myCreateContent ( );
 
-	return m_PasswordDialog;
+	return myPasswordDialog;
 }
 
 /*

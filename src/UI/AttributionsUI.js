@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- AttributionsUI.js file --------------------------------------------------------------------------------------------
 This file contains:
 	- the newAttributionsUI function
-	- the gc_AttributionsUI object
+	- the theAttributionsUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -29,7 +29,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_AttributionsUI };
+export { theAttributionsUI };
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -41,16 +41,16 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newAttributionsUI ( ) {
 
-	let m_AttributionsUIDiv = null;
+	let myAttributionsUIDiv = null;
 
 	/*
-	--- m_SetAttributions function ------------------------------------------------------------------------------------
+	--- mySetAttributions function ------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetAttributions ( attributions ) {
-		m_AttributionsUIDiv.innerHTML =
+	function mySetAttributions ( attributions ) {
+		myAttributionsUIDiv.innerHTML =
 			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
@@ -58,20 +58,20 @@ function newAttributionsUI ( ) {
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( ) {
-		m_AttributionsUIDiv = newHTMLElementsFactory ( ).create (
+	function myCreateUI ( ) {
+		myAttributionsUIDiv = newHTMLElementsFactory ( ).create (
 			'div',
 			{
 				id : 'TravelNotes-AttributionsUI'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
 		);
-		m_SetAttributions ( '' );
+		mySetAttributions ( '' );
 
 	}
 
@@ -83,13 +83,13 @@ function newAttributionsUI ( ) {
 
 	return Object.seal (
 		{
-			set attributions ( Attributions ) { m_SetAttributions ( Attributions ); },
-			createUI : ( ) => m_CreateUI ( )
+			set attributions ( Attributions ) { mySetAttributions ( Attributions ); },
+			createUI : ( ) => myCreateUI ( )
 		}
 	);
 }
 
-const gc_AttributionsUI = newAttributionsUI ( );
+const theAttributionsUI = newAttributionsUI ( );
 
 /*
 --- End of AttributionsUI.js file -------------------------------------------------------------------------------------

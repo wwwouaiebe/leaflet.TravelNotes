@@ -16,7 +16,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- TravelNotesData.js file -------------------------------------------------------------------------------------------
 This file contains:
 	- the newTravelNotesData function
-	- the g_TravelNotesData object
+	- the theTravelNotesData object
 Changes:
 	- v1.4.0:
 		- created from DataManager
@@ -31,7 +31,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { g_TravelNotesData };
+export { theTravelNotesData };
 
 import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -47,7 +47,7 @@ Patterns : Closure and singleton
 
 function newTravelNotesData ( ) {
 
-	let m_TravelNotesData = {
+	let myTravelNotesData = {
 		map : null,
 		providers : new Map ( ),
 		mapObjects : new Map ( ),
@@ -67,42 +67,42 @@ function newTravelNotesData ( ) {
 	return Object.seal (
 		{
 
-			get map ( ) { return m_TravelNotesData.map; },
-			set map ( Map ) { m_TravelNotesData.map = Map; },
+			get map ( ) { return myTravelNotesData.map; },
+			set map ( Map ) { myTravelNotesData.map = Map; },
 
-			get providers ( ) { return m_TravelNotesData.providers; },
+			get providers ( ) { return myTravelNotesData.providers; },
 
-			get mapObjects ( ) { return m_TravelNotesData.mapObjects; },
+			get mapObjects ( ) { return myTravelNotesData.mapObjects; },
 
-			get travel ( ) { return m_TravelNotesData.travel; },
-			set travel ( Travel ) { m_TravelNotesData.travel = Travel; },
+			get travel ( ) { return myTravelNotesData.travel; },
+			set travel ( Travel ) { myTravelNotesData.travel = Travel; },
 
-			get editedRouteObjId ( ) { return m_TravelNotesData.editedRouteObjId; },
-			set editedRouteObjId ( EditedRouteObjId ) { m_TravelNotesData.editedRouteObjId = EditedRouteObjId; },
+			get editedRouteObjId ( ) { return myTravelNotesData.editedRouteObjId; },
+			set editedRouteObjId ( EditedRouteObjId ) { myTravelNotesData.editedRouteObjId = EditedRouteObjId; },
 
-			get routeEdition ( ) { return m_TravelNotesData.routeEdition; },
+			get routeEdition ( ) { return myTravelNotesData.routeEdition; },
 
-			get routing ( ) { return m_TravelNotesData.routing; },
+			get routing ( ) { return myTravelNotesData.routing; },
 
-			get searchData ( ) { return m_TravelNotesData.searchData; },
-			set searchData ( SearchData ) { m_TravelNotesData.searchData = SearchData; },
+			get searchData ( ) { return myTravelNotesData.searchData; },
+			set searchData ( SearchData ) { myTravelNotesData.searchData = SearchData; },
 
-			get translations ( ) { return m_TravelNotesData.translations; },
+			get translations ( ) { return myTravelNotesData.translations; },
 
-			get UUID ( ) { return m_TravelNotesData.UUID; }
+			get UUID ( ) { return myTravelNotesData.UUID; }
 		}
 	);
 }
 
 /*
---- g_TravelNotesData object ------------------------------------------------------------------------------------------
+--- theTravelNotesData object ------------------------------------------------------------------------------------------
 
 The one and only one translator
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_TravelNotesData = newTravelNotesData ( );
+const theTravelNotesData = newTravelNotesData ( );
 
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------

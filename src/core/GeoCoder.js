@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- GeoCoder.js file --------------------------------------------------------------------------------------------------
 This file contains:
 	- the GeoCoder object
-	- the module.exports implementation
 Changes:
 	- v1.0.0:
 		- created
@@ -38,25 +37,25 @@ Tests ...
 
 export { newGeoCoder };
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { g_Config } from '../data/Config.js';
+import { theConfig } from '../data/Config.js';
 
 function newGeoCoder ( ) {
 
 	/*
-	--- m_GetPromiseAddress function ----------------------------------------------------------------------------------
+	--- myGetPromiseAddress function ----------------------------------------------------------------------------------
 
 	This function creates the address promise
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetPromiseAddress ( latLng ) {
+	function myGetPromiseAddress ( latLng ) {
 
 		let NominatimUrl =
-			g_Config.nominatim.url + 'reverse?format=json&lat=' +
+			theConfig.nominatim.url + 'reverse?format=json&lat=' +
 			latLng [ 0 ] + '&lon=' + latLng [ 1 ] +
 			'&zoom=18&addressdetails=1';
-		let nominatimLanguage = g_Config.nominatim.language;
+		let nominatimLanguage = theConfig.nominatim.language;
 		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
 			NominatimUrl += '&accept-language=' + nominatimLanguage;
 		}
@@ -70,7 +69,7 @@ function newGeoCoder ( ) {
 	}
 
 	/*
-	--- End of m_GetPromiseAddress function ---
+	--- End of myGetPromiseAddress function ---
 	*/
 
 	/*
@@ -81,7 +80,7 @@ function newGeoCoder ( ) {
 
 	return Object.seal (
 		{
-			getPromiseAddress : ( latLng ) => { return m_GetPromiseAddress ( latLng ); }
+			getPromiseAddress : ( latLng ) => { return myGetPromiseAddress ( latLng ); }
 		}
 	);
 

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- TravelEditor.js file ----------------------------------------------------------------------------------------------
 This file contains:
 	- the newTravelEditor function
-	- the g_TravelEditor object
+	- the theTravelEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -44,14 +44,14 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { g_TravelEditor };
+export { theTravelEditor };
 
 import { polyline } from '../polyline/Polyline.js';
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
@@ -69,31 +69,31 @@ Patterns : Closure and Singleton
 
 function newTravelEditor ( ) {
 
-	let m_Utilities = newUtilities ( );
-	let m_DataSearchEngine  = newDataSearchEngine ( );
-	let m_EventDispatcher = newEventDispatcher ( );
+	let myUtilities = newUtilities ( );
+	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
-	--- m_AddRoute function -------------------------------------------------------------------------------------------
+	--- myAddRoute function -------------------------------------------------------------------------------------------
 
 	This function add a new route
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddRoute ( ) {
+	function myAddRoute ( ) {
 		let route = newRoute ( );
-		g_TravelNotesData.travel.routes.add ( route );
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		g_RouteEditor.chainRoutes ( );
+		theTravelNotesData.travel.routes.add ( route );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
-		if ( 2 !== g_TravelNotesData.travel.editedRoute.edited ) {
-			m_EditRoute ( route.objId );
+		if ( 2 !== theTravelNotesData.travel.editedRoute.edited ) {
+			myEditRoute ( route.objId );
 		}
 	}
 
 	/*
-	--- m_RemoveRoute function ----------------------------------------------------------------------------------------
+	--- myRemoveRoute function ----------------------------------------------------------------------------------------
 
 	This function remove a route
 
@@ -103,33 +103,33 @@ function newTravelEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RemoveRoute ( routeObjId ) {
-		if ( routeObjId === g_TravelNotesData.editedRouteObjId && 2 === g_TravelNotesData.travel.editedRoute.edited ) {
+	function myRemoveRoute ( routeObjId ) {
+		if ( routeObjId === theTravelNotesData.editedRouteObjId && 2 === theTravelNotesData.travel.editedRoute.edited ) {
 
 			// cannot remove the route currently edited
-			gc_ErrorsUI.showError ( g_Translator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 			return;
 		}
 
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'removeroute',
 			{
-				route : m_DataSearchEngine.getRoute ( routeObjId ),
+				route : myDataSearchEngine.getRoute ( routeObjId ),
 				removeNotes : true,
 				removeWayPoints : true
 			}
 		);
-		g_TravelNotesData.travel.routes.remove ( routeObjId );
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		if ( routeObjId === g_TravelNotesData.editedRouteObjId  ) {
-			g_RouteEditor.cancelEdition ( );
+		theTravelNotesData.travel.routes.remove ( routeObjId );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		if ( routeObjId === theTravelNotesData.editedRouteObjId  ) {
+			theRouteEditor.cancelEdition ( );
 		}
-		g_RouteEditor.chainRoutes ( );
+		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
 	}
 
 	/*
-	--- m_EditRoute function ------------------------------------------------------------------------------------------
+	--- myEditRoute function ------------------------------------------------------------------------------------------
 
 	This function start the edition of a route
 
@@ -139,33 +139,33 @@ function newTravelEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_EditRoute ( routeObjId ) {
-		if ( 2 === g_TravelNotesData.travel.editedRoute.edited ) {
+	function myEditRoute ( routeObjId ) {
+		if ( 2 === theTravelNotesData.travel.editedRoute.edited ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
-			gc_ErrorsUI.showError (
-				g_Translator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" )
+			theErrorsUI.showError (
+				theTranslator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" )
 			);
 			return;
 		}
-		if ( -1 !== g_TravelNotesData.editedRouteObjId ) {
+		if ( -1 !== theTravelNotesData.editedRouteObjId ) {
 
 			// the current edited route is not changed. Cleaning the editors
-			g_RouteEditor.cancelEdition ( );
+			theRouteEditor.cancelEdition ( );
 		}
 
 		// We verify that the provider  for this route is available
-		let initialRoute = m_DataSearchEngine.getRoute ( routeObjId );
+		let initialRoute = myDataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
 		if (
 			providerName
 				&&
 				( '' !== providerName )
 				&&
-				( ! g_TravelNotesData.providers.get ( providerName.toLowerCase ( ) ) )
+				( ! theTravelNotesData.providers.get ( providerName.toLowerCase ( ) ) )
 		) {
-			gc_ErrorsUI.showError (
-				g_Translator.getText (
+			theErrorsUI.showError (
+				theTranslator.getText (
 					"RouteEditor - Not possible to edit a route created with this provider",
 					{ provider : providerName }
 				)
@@ -175,23 +175,23 @@ function newTravelEditor ( ) {
 
 		// Provider and transit mode are changed in the itinerary editor
 		if ( providerName && '' !== providerName ) {
-			m_EventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+			myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 		}
 		let transitMode = initialRoute.itinerary.transitMode;
 		if ( transitMode && '' !== transitMode ) {
-			m_EventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+			myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 		}
 
 		// The edited route is pushed in the editors
-		g_TravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = newRoute ( );
 		initialRoute.edited = 1;
 
 		// Route is cloned, so we can have a cancel button in the editor
-		g_TravelNotesData.travel.editedRoute.object = initialRoute.object;
-		g_TravelNotesData.editedRouteObjId = initialRoute.objId;
-		g_TravelNotesData.travel.editedRoute.hidden = false;
+		theTravelNotesData.travel.editedRoute.object = initialRoute.object;
+		theTravelNotesData.editedRouteObjId = initialRoute.objId;
+		theTravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'removeroute',
 			{
 				route : initialRoute,
@@ -199,23 +199,23 @@ function newTravelEditor ( ) {
 				removeWayPoints : true
 			}
 		);
-		m_EventDispatcher.dispatch (
+		myEventDispatcher.dispatch (
 			'addroute',
 			{
-				route : g_TravelNotesData.travel.editedRoute,
+				route : theTravelNotesData.travel.editedRoute,
 				addNotes : true,
 				addWayPoints : true,
 				readOnly : false
 			}
 		);
-		g_RouteEditor.chainRoutes ( );
-		m_EventDispatcher.dispatch ( 'expandrouteui' );
-		m_EventDispatcher.dispatch ( 'setwaypointslist' );
-		m_EventDispatcher.dispatch ( 'setitinerary' );
+		theRouteEditor.chainRoutes ( );
+		myEventDispatcher.dispatch ( 'expandrouteui' );
+		myEventDispatcher.dispatch ( 'setwaypointslist' );
+		myEventDispatcher.dispatch ( 'setitinerary' );
 	}
 
 	/*
-	--- m_RenameRoute function ----------------------------------------------------------------------------------------
+	--- myRenameRoute function ----------------------------------------------------------------------------------------
 
 	This function rename a route
 	parameters :
@@ -225,54 +225,54 @@ function newTravelEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RenameRoute ( routeObjId, routeName ) {
-		m_DataSearchEngine.getRoute ( routeObjId ).name = routeName;
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		if ( routeObjId === g_TravelNotesData.editedRouteObjId ) {
-			g_TravelNotesData.travel.editedRoute.name = routeName;
+	function myRenameRoute ( routeObjId, routeName ) {
+		myDataSearchEngine.getRoute ( routeObjId ).name = routeName;
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
+			theTravelNotesData.travel.editedRoute.name = routeName;
 		}
 		newRoadbookUpdate ( );
 	}
 
 	/*
-	--- m_SwapRoute function ------------------------------------------------------------------------------------------
+	--- mySwapRoute function ------------------------------------------------------------------------------------------
 
 	This function changes the position of a route
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SwapRoute ( routeObjId, swapUp ) {
-		g_TravelNotesData.travel.routes.swap ( routeObjId, swapUp );
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		g_RouteEditor.chainRoutes ( );
+	function mySwapRoute ( routeObjId, swapUp ) {
+		theTravelNotesData.travel.routes.swap ( routeObjId, swapUp );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
 	}
 
 	/*
-	--- m_RouteDropped function ---------------------------------------------------------------------------------------
+	--- myRouteDropped function ---------------------------------------------------------------------------------------
 
 	This function changes the position of a route after a drag and drop
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_RouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
-		g_TravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		g_RouteEditor.chainRoutes ( );
+	function myRouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
+		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
 	}
 
 	/*
-	--- m_CompressRoute function --------------------------------------------------------------------------------------
+	--- myCompressRoute function --------------------------------------------------------------------------------------
 
 	This function compress the itinerary points of a route
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CompressRoute ( route ) {
+	function myCompressRoute ( route ) {
 		let objType = {};
 		if ( 0 !== route.itinerary.itineraryPoints.length ) {
 			objType = route.itinerary.itineraryPoints [ 0 ].objType;
@@ -290,62 +290,62 @@ function newTravelEditor ( ) {
 	}
 
 	/*
-	--- m_SaveTravel function -----------------------------------------------------------------------------------------
+	--- mySaveTravel function -----------------------------------------------------------------------------------------
 
 	This function save a travel to a local file
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SaveTravel ( ) {
-		let routesIterator = g_TravelNotesData.travel.routes.iterator;
+	function mySaveTravel ( ) {
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			routesIterator.value.hidden = false;
 		}
 
 		// compressing the itineraryPoints
-		let compressedTravel = g_TravelNotesData.travel.object;
-		compressedTravel.routes.forEach ( m_CompressRoute );
-		m_CompressRoute ( compressedTravel.editedRoute );
+		let compressedTravel = theTravelNotesData.travel.object;
+		compressedTravel.routes.forEach ( myCompressRoute );
+		myCompressRoute ( compressedTravel.editedRoute );
 
 		// save file
-		m_Utilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		myUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 	}
 
 	/*
-	--- m_Clear function ----------------------------------------------------------------------------------------------
+	--- myClear function ----------------------------------------------------------------------------------------------
 
 	This function remove completely the current travel
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Clear ( ) {
-		if ( ! window.confirm ( g_Translator.getText (
+	function myClear ( ) {
+		if ( ! window.confirm ( theTranslator.getText (
 			"TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
 			return;
 		}
-		m_EventDispatcher.dispatch ( 'removeallobjects' );
-		g_TravelNotesData.travel.editedRoute = newRoute ( );
-		g_TravelNotesData.editedRouteObjId = -1;
-		g_TravelNotesData.travel = newTravel ( );
-		g_TravelNotesData.travel.routes.add ( newRoute ( ) );
-		m_EventDispatcher.dispatch ( 'setrouteslist' );
-		m_EventDispatcher.dispatch ( 'setwaypointslist' );
-		m_EventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'removeallobjects' );
+		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.editedRouteObjId = -1;
+		theTravelNotesData.travel = newTravel ( );
+		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'setwaypointslist' );
+		myEventDispatcher.dispatch ( 'setitinerary' );
 		newRoadbookUpdate ( );
 	}
 
 	/*
-	--- m_ZoomToTravel function ---------------------------------------------------------------------------------------
+	--- myZoomToTravel function ---------------------------------------------------------------------------------------
 
 	This function zoom on the entire travel
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ZoomToTravel ( ) {
-		m_EventDispatcher.dispatch ( 'zoomtotravel' );
+	function myZoomToTravel ( ) {
+		myEventDispatcher.dispatch ( 'zoomtotravel' );
 	}
 
 	/*
@@ -357,41 +357,41 @@ function newTravelEditor ( ) {
 	return Object.seal (
 		{
 
-			addRoute : ( ) => m_AddRoute ( ),
+			addRoute : ( ) => myAddRoute ( ),
 
-			removeRoute : routeObjId => m_RemoveRoute ( routeObjId ),
+			removeRoute : routeObjId => myRemoveRoute ( routeObjId ),
 
-			editRoute : routeObjId => m_EditRoute ( routeObjId ),
+			editRoute : routeObjId => myEditRoute ( routeObjId ),
 
-			renameRoute : ( routeObjId, routeName ) => m_RenameRoute ( routeObjId, routeName ),
+			renameRoute : ( routeObjId, routeName ) => myRenameRoute ( routeObjId, routeName ),
 
-			swapRoute : ( routeObjId, swapUp ) => m_SwapRoute  ( routeObjId, swapUp ),
+			swapRoute : ( routeObjId, swapUp ) => mySwapRoute  ( routeObjId, swapUp ),
 
-			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => m_RouteDropped (
+			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => myRouteDropped (
 				draggedRouteObjId,
 				targetRouteObjId,
 				draggedBefore
 			),
 
-			saveTravel : ( ) => m_SaveTravel ( ),
+			saveTravel : ( ) => mySaveTravel ( ),
 
-			clear : ( ) => m_Clear ( ),
+			clear : ( ) => myClear ( ),
 
-			zoomToTravel : ( ) => m_ZoomToTravel ( )
+			zoomToTravel : ( ) => myZoomToTravel ( )
 
 		}
 	);
 }
 
 /*
---- g_TravelEditor object ---------------------------------------------------------------------------------------------
+--- theTravelEditor object ---------------------------------------------------------------------------------------------
 
 The one and only one TravelEditor
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_TravelEditor = newTravelEditor ( );
+const theTravelEditor = newTravelEditor ( );
 
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------

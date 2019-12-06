@@ -32,7 +32,7 @@ Tests ...
 
 export { newObjId };
 
-var g_TravelNotesObjId = 0;
+var theTravelNotesObjId = 0;
 
 /*
 --- newObjId function ---------------------------------------------------------------------------------------------
@@ -41,8 +41,8 @@ var g_TravelNotesObjId = 0;
 */
 
 function newObjId ( ) {
-	++ g_TravelNotesObjId;
-	return  g_TravelNotesObjId;
+	++ theTravelNotesObjId;
+	return  theTravelNotesObjId;
 }
 
 /*

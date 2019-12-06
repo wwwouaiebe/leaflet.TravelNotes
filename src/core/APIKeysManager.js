@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- APIKeysManager.js file --------------------------------------------------------------------------------------------
 This file contains:
 	- the newAPIKeysManager function
-	- the g_APIKeysManager object
+	- the theAPIKeysManager object
 Changes:
 	- v1.6.0:
 		- created
@@ -29,20 +29,20 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { g_APIKeysManager };
+export { theAPIKeysManager };
 
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
 import { newUtilities } from '../util/Utilities.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { g_Config } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theConfig } from '../data/Config.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
-import { g_Translator } from '../UI/Translator.js';
-import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-let s_KeysMap = new Map;
+let ourKeysMap = new Map;
 
 /*
 --- newAPIKeysManager function ----------------------------------------------------------------------------------------
@@ -55,41 +55,41 @@ Patterns : Closure
 function newAPIKeysManager ( ) {
 
 	/*
-	--- m_GetKey function ---------------------------------------------------------------------------------------------
+	--- myGetKey function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetKey ( providerName ) {
-		return s_KeysMap.get ( providerName.toLowerCase ( ) );
+	function myGetKey ( providerName ) {
+		return ourKeysMap.get ( providerName.toLowerCase ( ) );
 	}
 
 	/*
-	--- m_SetKey function ---------------------------------------------------------------------------------------------
+	--- mySetKey function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetKey ( providerName, key ) {
-		s_KeysMap.set ( providerName.toLowerCase ( ), key );
+	function mySetKey ( providerName, key ) {
+		ourKeysMap.set ( providerName.toLowerCase ( ), key );
 	}
 
 	/*
-	--- m_FromUrl function --------------------------------------------------------------------------------------------
+	--- myFromUrl function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_FromUrl ( urlString ) {
+	function myFromUrl ( urlString ) {
 		let urlSubStrings = urlString.split ( '=' );
 		if ( 2 === urlSubStrings.length ) {
 			let providerName = urlSubStrings [ 0 ].substr ( 0, urlSubStrings [ 0 ].length - 11 ).toLowerCase ( );
 			let providerKey = urlSubStrings [ 1 ] ;
-			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && g_Config.APIKeys.saveToSessionStorage ) {
+			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa (providerKey ) );
 			}
-			m_SetKey ( providerName, providerKey );
-			let provider = g_TravelNotesData.providers.get ( providerName );
+			mySetKey ( providerName, providerKey );
+			let provider = theTravelNotesData.providers.get ( providerName );
 			if ( provider ) {
 				provider.providerKey = providerKey;
 			}
@@ -97,35 +97,35 @@ function newAPIKeysManager ( ) {
 	}
 
 	/*
-	--- m_FromSessionStorage function ---------------------------------------------------------------------------------
+	--- myFromSessionStorage function ---------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_FromSessionStorage ( ) {
+	function myFromSessionStorage ( ) {
 		let APIKeysCounter = 0;
 		for ( let counter  = 0; counter < sessionStorage.length ; counter ++ ) {
 			var keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 11 ) ) {
-				m_SetKey ( keyName.substr ( 0, keyName.length - 11), atob ( sessionStorage.getItem ( keyName ) ) );
+				mySetKey ( keyName.substr ( 0, keyName.length - 11), atob ( sessionStorage.getItem ( keyName ) ) );
 				APIKeysCounter ++;
 			}
 		}
-		g_TravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); }
+		theTravelNotesData.providers.forEach (
+			provider => { provider.providerKey = ( myGetKey ( provider.name ) || '' ); }
 		);
 		return APIKeysCounter;
 	}
 
 	/*
-	--- m_AddProvider function ----------------------------------------------------------------------------------------
+	--- myAddProvider function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddProvider ( provider ) {
+	function myAddProvider ( provider ) {
 		let providerName = provider.name.toLowerCase ( );
-		let providerKey = m_GetKey ( providerName );
+		let providerKey = myGetKey ( providerName );
 
 		if ( provider.providerKeyNeeded && ! providerKey ) {
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
@@ -138,22 +138,22 @@ function newAPIKeysManager ( ) {
 		if ( provider.providerKeyNeeded && providerKey ) {
 			provider.providerKey = providerKey;
 		}
-		g_TravelNotesData.providers.set ( provider.name.toLowerCase ( ), provider );
+		theTravelNotesData.providers.set ( provider.name.toLowerCase ( ), provider );
 	}
 
 	/*
-	--- m_resetAPIKeys function ---------------------------------------------------------------------------------------
+	--- myResetAPIKeys function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_resetAPIKeys ( APIKeys ) {
+	function myResetAPIKeys ( APIKeys ) {
 		sessionStorage.clear ( );
-		s_KeysMap.clear ( );
+		ourKeysMap.clear ( );
 		let saveToSessionStorage =
 			newUtilities ( ).storageAvailable ( 'sessionStorage' )
 			&&
-			g_Config.APIKeys.saveToSessionStorage;
+			theConfig.APIKeys.saveToSessionStorage;
 		APIKeys.forEach (
 			APIKey => {
 				if ( saveToSessionStorage ) {
@@ -162,25 +162,25 @@ function newAPIKeysManager ( ) {
 						btoa ( APIKey.providerKey )
 					);
 				}
-				m_SetKey ( APIKey.providerName, APIKey.providerKey );
+				mySetKey ( APIKey.providerName, APIKey.providerKey );
 			}
 		);
-		g_TravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( m_GetKey ( provider.name ) || '' ); }
+		theTravelNotesData.providers.forEach (
+			provider => { provider.providerKey = ( myGetKey ( provider.name ) || '' ); }
 		);
 
 		newEventDispatcher ( ).dispatch ( 'providersadded' );
 	}
 
 	/*
-	--- m_Dialog function ---------------------------------------------------------------------------------------------
+	--- myDialog function ---------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Dialog ( ) {
+	function myDialog ( ) {
 		let ApiKeys = [];
-		s_KeysMap.forEach (
+		ourKeysMap.forEach (
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
 		)
 		ApiKeys.sort (
@@ -188,55 +188,55 @@ function newAPIKeysManager ( ) {
 		);
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
-			.then ( APIKeys => m_resetAPIKeys ( APIKeys ) )
+			.then ( APIKeys => myResetAPIKeys ( APIKeys ) )
 			.catch ( err => console.log ( err ? err : 'canceled by user' ));
 	}
 
 	/*
-	--- m_OnOkDecrypt function ----------------------------------------------------------------------------------------
+	--- myOnOkDecrypt function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnOkDecrypt ( data ) {
+	function myOnOkDecrypt ( data ) {
 		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) )
-		m_resetAPIKeys ( APIKeys );
+		myResetAPIKeys ( APIKeys );
 	}
 
 	/*
-	--- m_OnErrorDecrypt function -------------------------------------------------------------------------------------
+	--- myOnErrorDecrypt function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnErrorDecrypt ( err ) {
+	function myOnErrorDecrypt ( err ) {
 		console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
 	}
 
 	/*
-	--- m_OnServerFile function ---------------------------------------------------------------------------------------
+	--- myOnServerFile function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnServerFile ( data ) {
-		gc_ErrorsUI.showHelp ( g_Translator.getText ( 'Help - gives a password for the APIKeys file or cancel' ) );
+	function myOnServerFile ( data ) {
+		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - gives a password for the APIKeys file or cancel' ) );
 		newDataEncryptor ( ).decryptData (
 			data,
-			m_OnOkDecrypt,
-			m_OnErrorDecrypt,
+			myOnOkDecrypt,
+			myOnErrorDecrypt,
 			newPasswordDialog ( false ).show ( )
 		);
 	}
 
 	/*
-	--- m_FromServerFile function -------------------------------------------------------------------------------------
+	--- myFromServerFile function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_FromServerFile ( ) {
-		if ( 0 !== m_FromSessionStorage ( ) ) {
+	function myFromServerFile ( ) {
+		if ( 0 !== myFromSessionStorage ( ) ) {
 			newEventDispatcher ( ).dispatch ( 'providersadded' );
 			return;
 		}
@@ -244,7 +244,7 @@ function newAPIKeysManager ( ) {
 			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 				'APIKeys'
 		)
-			.then ( m_OnServerFile )
+			.then ( myOnServerFile )
 			.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
 	}
 
@@ -256,25 +256,25 @@ function newAPIKeysManager ( ) {
 
 	return Object.seal (
 		{
-			fromServerFile : ( ) => m_FromServerFile ( ),
-			fromUrl : ( urlString ) => m_FromUrl ( urlString ),
-			dialog : ( )=> m_Dialog ( ),
-			getKey : providerName => { return m_GetKey ( providerName ); },
-			setKey : ( providerName, key ) => m_SetKey ( providerName, key ),
-			addProvider : provider => m_AddProvider ( provider )
+			fromServerFile : ( ) => myFromServerFile ( ),
+			fromUrl : ( urlString ) => myFromUrl ( urlString ),
+			dialog : ( )=> myDialog ( ),
+			getKey : providerName => { return myGetKey ( providerName ); },
+			setKey : ( providerName, key ) => mySetKey ( providerName, key ),
+			addProvider : provider => myAddProvider ( provider )
 		}
 	);
 }
 
 /*
---- g_APIKeysManager object -------------------------------------------------------------------------------------------
+--- theAPIKeysManager object -------------------------------------------------------------------------------------------
 
 The one and only one noteEditor
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const g_APIKeysManager = newAPIKeysManager ( );
+const theAPIKeysManager = newAPIKeysManager ( );
 
 /*
 --- End of APIKeysManager.js file -------------------------------------------------------------------------------------

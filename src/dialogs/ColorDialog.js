@@ -34,7 +34,7 @@ Tests ...
 
 export { newColorDialog };
 
-import { g_Translator } from '../UI/Translator.js';
+import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -46,24 +46,24 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newColorDialog ( color ) {
 
-	let m_ColorDialog = null;
-	let m_ColorDiv = null;
-	let m_NewColor = color;
-	let m_RedInput = null;
-	let m_GreenInput = null;
-	let m_BlueInput = null;
-	let m_ColorSampleDiv = null;
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myColorDialog = null;
+	let myColorDiv = null;
+	let myNewColor = color;
+	let myRedInput = null;
+	let myGreenInput = null;
+	let myBlueInput = null;
+	let myColorSampleDiv = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
 
 	/*
-	--- m_ColorToNumbers function -------------------------------------------------------------------------------------
+	--- myColorToNumbers function -------------------------------------------------------------------------------------
 
 	This function transforms a css color into an object { red : xx, green : xx, blue : xx}
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ColorToNumbers ( color ) {
+	function myColorToNumbers ( color ) {
 		return {
 			red : parseInt ( color.substr ( 1, 2 ), 16 ),
 			green : parseInt ( color.substr ( 3, 2 ), 16 ),
@@ -72,14 +72,14 @@ function newColorDialog ( color ) {
 	}
 
 	/*
-	--- m_NumbersToColor function -------------------------------------------------------------------------------------
+	--- myNumbersToColor function -------------------------------------------------------------------------------------
 
 	This function transforms 3 numbers into a css color
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_NumbersToColor ( red, green, blue ) {
+	function myNumbersToColor ( red, green, blue ) {
 
 		return '#' +
 			parseInt ( red ).toString (16)
@@ -91,32 +91,32 @@ function newColorDialog ( color ) {
 	}
 
 	/*
-	--- m_OnColorClick function ---------------------------------------------------------------------------------------
+	--- myOnColorClick function ---------------------------------------------------------------------------------------
 
 	Click event handler on a color button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnColorClick ( event ) {
-		m_NewColor = event.target.colorValue;
-		let numbers = m_ColorToNumbers ( m_NewColor );
-		m_RedInput.value = numbers.red;
-		m_GreenInput.value = numbers.green;
-		m_BlueInput.value = numbers.blue;
-		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
-		m_ColorSampleDiv.color = m_NewColor;
+	function myOnColorClick ( event ) {
+		myNewColor = event.target.colorValue;
+		let numbers = myColorToNumbers ( myNewColor );
+		myRedInput.value = numbers.red;
+		myGreenInput.value = numbers.green;
+		myBlueInput.value = numbers.blue;
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		myColorSampleDiv.color = myNewColor;
 	}
 
 	/*
-	--- m_OnRedColorClick function ------------------------------------------------------------------------------------
+	--- myOnRedColorClick function ------------------------------------------------------------------------------------
 
 	Click event handler on a red color button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnRedColorClick ( event ) {
+	function myOnRedColorClick ( event ) {
 		let red = event.target.redValue;
 		let green = 255;
 		let blue = 255;
@@ -126,8 +126,8 @@ function newColorDialog ( color ) {
 			green = 255;
 			while ( ++ cellCounter < 7 ) {
 				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-				button.colorValue = m_NumbersToColor ( red, green, blue );
-				button.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( red, green, blue ) );
+				button.colorValue = myNumbersToColor ( red, green, blue );
+				button.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
 				green -= 51;
 			}
 			blue -= 51;
@@ -135,63 +135,63 @@ function newColorDialog ( color ) {
 	}
 
 	/*
-	--- m_OnColorInput function ------------------------------------------------------------------------------------
+	--- myOnColorInput function ------------------------------------------------------------------------------------
 
 	Red, green or blue input event handler
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnColorInput ( )  {
-		m_NewColor = m_NumbersToColor ( m_RedInput.value, m_GreenInput.value, m_BlueInput.value );
-		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:' + m_NewColor + ';' );
-		m_ColorSampleDiv.color = m_NewColor;
+	function myOnColorInput ( )  {
+		myNewColor = myNumbersToColor ( myRedInput.value, myGreenInput.value, myBlueInput.value );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor + ';' );
+		myColorSampleDiv.color = myNewColor;
 	}
 
 	/*
-	--- m_CreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDialog function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDialog ( ) {
+	function myCreateDialog ( ) {
 
 		// the dialog base is created
-		m_ColorDialog = newBaseDialog ( );
-		m_ColorDialog.title = g_Translator.getText ( 'ColorDialog - Colors' );
+		myColorDialog = newBaseDialog ( );
+		myColorDialog.title = theTranslator.getText ( 'ColorDialog - Colors' );
 	}
 
 	/*
-	--- m_CreateColorDiv function -------------------------------------------------------------------------------------
+	--- myCreateColorDiv function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateColorDiv ( ) {
-		m_ColorDiv = m_HTMLElementsFactory.create (
+	function myCreateColorDiv ( ) {
+		myColorDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-ColorDiv',
 				id : 'TravelNotes-ColorDialog-ColorDiv'
 			},
-			m_ColorDialog.content
+			myColorDialog.content
 		);
 	}
 
 	/*
-	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
+	--- myCreateButtonsDiv function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateButtonsDiv ( ) {
-		let buttonsDiv = m_HTMLElementsFactory.create (
+	function myCreateButtonsDiv ( ) {
+		let buttonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-ButtonsDiv',
 				id : 'TravelNotes-ColorDialog-ButtonsDiv'
 			},
-			m_ColorDiv
+			myColorDiv
 		);
 
 		let red = 255;
@@ -201,7 +201,7 @@ function newColorDialog ( color ) {
 
 		// loop on the 7 rows
 		while ( ++ rowCounter < 8 ) {
-			let colorButtonsRowDiv = m_HTMLElementsFactory.create (
+			let colorButtonsRowDiv = myHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-ColorDialog-RowColorDiv',
@@ -215,7 +215,7 @@ function newColorDialog ( color ) {
 
 			// loop on the 6 cells
 			while ( ++ cellCounter < 7 ) {
-				let colorButtonCellDiv = m_HTMLElementsFactory.create (
+				let colorButtonCellDiv = myHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-ColorDialog-CellColorDiv',
@@ -224,17 +224,17 @@ function newColorDialog ( color ) {
 					colorButtonsRowDiv
 				);
 				if ( rowCounter < 7 ) {
-					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + m_NumbersToColor ( red, green, blue ) );
-					colorButtonCellDiv.colorValue = m_NumbersToColor ( red, green, blue );
-					colorButtonCellDiv.addEventListener ( 'click', m_OnColorClick, false );
+					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
+					colorButtonCellDiv.colorValue = myNumbersToColor ( red, green, blue );
+					colorButtonCellDiv.addEventListener ( 'click', myOnColorClick, false );
 					green -= 51;
 				}
 				else {
 					red = ( cellCounter - 1 ) * 51;
-					let buttonColor = m_NumbersToColor ( 255, red, red );
+					let buttonColor = myNumbersToColor ( 255, red, red );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
 					colorButtonCellDiv.redValue = 255 - red;
-					colorButtonCellDiv.addEventListener ( 'click', m_OnRedColorClick, false );
+					colorButtonCellDiv.addEventListener ( 'click', myOnRedColorClick, false );
 				}
 			}
 			blue -= 51;
@@ -242,30 +242,30 @@ function newColorDialog ( color ) {
 	}
 
 	/*
-	--- m_CreateRvbDiv function ---------------------------------------------------------------------------------------
+	--- myCreateRvbDiv function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateRvbDiv ( ) {
-		let rvbDiv = m_HTMLElementsFactory.create (
+	function myCreateRvbDiv ( ) {
+		let rvbDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-DataDiv',
 				id : 'TravelNotes-ColorDialog-DataDiv'
 			},
-			m_ColorDiv
+			myColorDiv
 		);
 
 		// ... red ...
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Red')
+				data : theTranslator.getText ( 'ColorDialog - Red')
 			},
 			rvbDiv
 		);
-		m_RedInput =  m_HTMLElementsFactory.create (
+		myRedInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -275,21 +275,21 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_RedInput.value = m_ColorToNumbers ( m_NewColor ).red;
-		m_RedInput.min = 0;
-		m_RedInput.max = 255;
+		myRedInput.value = myColorToNumbers ( myNewColor ).red;
+		myRedInput.min = 0;
+		myRedInput.max = 255;
 
-		m_RedInput.addEventListener ( 'input', m_OnColorInput, false );
+		myRedInput.addEventListener ( 'input', myOnColorInput, false );
 
 		// ... and green...
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Green')
+				data : theTranslator.getText ( 'ColorDialog - Green')
 			},
 			rvbDiv
 		);
-		m_GreenInput =  m_HTMLElementsFactory.create (
+		myGreenInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -298,20 +298,20 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_GreenInput.value = m_ColorToNumbers ( m_NewColor ).green;
-		m_GreenInput.min = 0;
-		m_GreenInput.max = 255;
-		m_GreenInput.addEventListener ( 'input', m_OnColorInput, false );
+		myGreenInput.value = myColorToNumbers ( myNewColor ).green;
+		myGreenInput.min = 0;
+		myGreenInput.max = 255;
+		myGreenInput.addEventListener ( 'input', myOnColorInput, false );
 
 		// ... and blue
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : g_Translator.getText ( 'ColorDialog - Blue')
+				data : theTranslator.getText ( 'ColorDialog - Blue')
 			},
 			rvbDiv
 		);
-		m_BlueInput =  m_HTMLElementsFactory.create (
+		myBlueInput =  myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -320,38 +320,38 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		m_BlueInput.value = m_ColorToNumbers ( m_NewColor ).blue;
-		m_BlueInput.min = 0;
-		m_BlueInput.max = 255;
-		m_BlueInput.addEventListener ( 'input', m_OnColorInput, false );
+		myBlueInput.value = myColorToNumbers ( myNewColor ).blue;
+		myBlueInput.min = 0;
+		myBlueInput.max = 255;
+		myBlueInput.addEventListener ( 'input', myOnColorInput, false );
 	}
 
 	/*
-	--- m_CreateColorSampleDiv function -------------------------------------------------------------------------------
+	--- myCreateColorSampleDiv function -------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateColorSampleDiv ( ) {
-		m_ColorSampleDiv = m_HTMLElementsFactory.create (
+	function myCreateColorSampleDiv ( ) {
+		myColorSampleDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-ColorSampleDiv',
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
 			},
-			m_ColorDiv
+			myColorDiv
 		);
-		m_ColorSampleDiv.setAttribute ( 'style', 'background-color:'+ m_NewColor +';' );
-		m_ColorSampleDiv.color = m_NewColor;
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:'+ myNewColor +';' );
+		myColorSampleDiv.color = myNewColor;
 	}
 
-	m_CreateDialog ( );
-	m_CreateColorDiv ( );
-	m_CreateButtonsDiv ( );
-	m_CreateRvbDiv ( );
-	m_CreateColorSampleDiv ( );
+	myCreateDialog ( );
+	myCreateColorDiv ( );
+	myCreateButtonsDiv ( );
+	myCreateRvbDiv ( );
+	myCreateColorSampleDiv ( );
 
-	return m_ColorDialog;
+	return myColorDialog;
 }
 
 /*

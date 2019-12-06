@@ -37,13 +37,15 @@ Tests ...
 /*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 export { newRoute };
-import { g_Config } from '../data/Config.js';
+import { theConfig } from '../data/Config.js';
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
+
+const ourObjType = newObjType ( 'Route' );
 
 /*
 --- newRoute function ---------------------------------------------------------------------------------------------
@@ -55,65 +57,63 @@ Patterns : Closure
 
 function newRoute ( ) {
 
-	const s_ObjType = newObjType ( 'Route' );
+	let myName = '';
 
-	let m_Name = '';
+	let myWayPoints = newCollection ( 'WayPoint' );
+	myWayPoints.add ( newWayPoint ( ) );
+	myWayPoints.add ( newWayPoint ( ) );
 
-	let m_WayPoints = newCollection ( 'WayPoint' );
-	m_WayPoints.add ( newWayPoint ( ) );
-	m_WayPoints.add ( newWayPoint ( ) );
+	let myNotes = newCollection ( 'Note' );
 
-	let m_Notes = newCollection ( 'Note' );
+	let myItinerary = newItinerary ( );
 
-	let m_Itinerary = newItinerary ( );
+	let myWidth = 5;
 
-	let m_Width = 5;
+	let myColor = '#ff0000';
 
-	let m_Color = '#ff0000';
+	let myDashArray = 0;
 
-	let m_DashArray = 0;
-
-	if ( g_Config ) {
-		m_Width = g_Config.route.width;
-		m_Color = g_Config.route.color;
-		m_DashArray = g_Config.route.dashArray;
+	if ( theConfig ) {
+		myWidth = theConfig.route.width;
+		myColor = theConfig.route.color;
+		myDashArray = theConfig.route.dashArray;
 	}
 
-	let m_Chain = false;
+	let myChain = false;
 
-	let m_ChainedDistance = 0;
+	let myChainedDistance = 0;
 
-	let m_Distance = 0;
+	let myDistance = 0;
 
-	let m_Duration = 0;
+	let myDuration = 0;
 
-	let m_Edited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+	let myEdited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
 
-	function m_SetEdited ( edited ) {
+	function mySetEdited ( edited ) {
 		if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
 		else {
-			m_Edited = edited;
+			myEdited = edited;
 		}
 	}
 
-	let m_Hidden = false;
+	let myHidden = false;
 
-	let m_ObjId = newObjId ( );
+	let myObjId = newObjId ( );
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 				something.dashArray = 0;
@@ -132,7 +132,7 @@ function newRoute ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
@@ -154,7 +154,7 @@ function newRoute ( ) {
 		].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -162,53 +162,53 @@ function newRoute ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			name : m_Name,
-			wayPoints : m_WayPoints.object,
-			notes : m_Notes.object,
-			itinerary : m_Itinerary.object,
-			width : m_Width,
-			color : m_Color,
-			dashArray : m_DashArray,
-			chain : m_Chain,
-			distance : parseFloat ( m_Distance.toFixed ( 2 ) ),
-			duration : m_Duration,
-			edited : m_Edited,
-			hidden : m_Hidden,
-			chainedDistance : parseFloat ( m_ChainedDistance.toFixed ( 2 ) ),
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			name : myName,
+			wayPoints : myWayPoints.object,
+			notes : myNotes.object,
+			itinerary : myItinerary.object,
+			width : myWidth,
+			color : myColor,
+			dashArray : myDashArray,
+			chain : myChain,
+			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			duration : myDuration,
+			edited : myEdited,
+			hidden : myHidden,
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( 2 ) ),
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_Name = something.name || '';
-		m_WayPoints.object = something.wayPoints || [];
-		m_Notes.object = something.notes || [];
-		m_Itinerary.object = something.itinerary || newItinerary ( ).object;
-		m_Width = something.width || 5;
-		m_Color = something.color || '#000000';
-		m_DashArray = something.dashArray || 0;
-		m_Chain = something.chain || false;
-		m_Distance = something.distance;
-		m_Duration = something.duration;
-		m_Edited = something.edited || 0;
-		m_Hidden = something.hidden || false;
-		m_ChainedDistance = something.chainedDistance;
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myName = something.name || '';
+		myWayPoints.object = something.wayPoints || [];
+		myNotes.object = something.notes || [];
+		myItinerary.object = something.itinerary || newItinerary ( ).object;
+		myWidth = something.width || 5;
+		myColor = something.color || '#000000';
+		myDashArray = something.dashArray || 0;
+		myChain = something.chain || false;
+		myDistance = something.distance;
+		myDuration = something.duration;
+		myEdited = something.edited || 0;
+		myHidden = something.hidden || false;
+		myChainedDistance = something.chainedDistance;
+		myObjId = newObjId ( );
 	}
 
 	/*
@@ -220,48 +220,48 @@ function newRoute ( ) {
 	return Object.seal (
 		{
 
-			get wayPoints ( ) { return m_WayPoints; },
+			get wayPoints ( ) { return myWayPoints; },
 
-			get itinerary ( ) { return m_Itinerary; },
+			get itinerary ( ) { return myItinerary; },
 
-			get notes ( ) { return m_Notes; },
+			get notes ( ) { return myNotes; },
 
-			get name ( ) { return m_Name; },
-			set name ( Name ) { m_Name = Name; },
+			get name ( ) { return myName; },
+			set name ( Name ) { myName = Name; },
 
-			get width ( ) { return m_Width; },
-			set width ( Width ) { m_Width = Width; },
+			get width ( ) { return myWidth; },
+			set width ( Width ) { myWidth = Width; },
 
-			get color ( ) { return m_Color; },
-			set color ( Color ) { m_Color = Color; },
+			get color ( ) { return myColor; },
+			set color ( Color ) { myColor = Color; },
 
-			get dashArray ( ) { return m_DashArray; },
-			set dashArray ( DashArray ) { m_DashArray = DashArray; },
+			get dashArray ( ) { return myDashArray; },
+			set dashArray ( DashArray ) { myDashArray = DashArray; },
 
-			get chain ( ) { return m_Chain; },
-			set chain ( Chain ) { m_Chain = Chain; },
+			get chain ( ) { return myChain; },
+			set chain ( Chain ) { myChain = Chain; },
 
-			get chainedDistance ( ) { return m_ChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { m_ChainedDistance = ChainedDistance; },
+			get chainedDistance ( ) { return myChainedDistance; },
+			set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; },
 
-			get distance ( ) { return m_Distance; },
-			set distance ( Distance ) { m_Distance = Distance; },
+			get distance ( ) { return myDistance; },
+			set distance ( Distance ) { myDistance = Distance; },
 
-			get duration ( ) { return m_Duration; },
-			set duration ( Duration ) { m_Duration = Duration; },
+			get duration ( ) { return myDuration; },
+			set duration ( Duration ) { myDuration = Duration; },
 
-			get edited ( ) { return m_Edited; },
-			set edited ( Edited ) { m_SetEdited ( Edited ); },
+			get edited ( ) { return myEdited; },
+			set edited ( Edited ) { mySetEdited ( Edited ); },
 
-			get hidden ( ) { return m_Hidden; },
-			set hidden ( Hidden ) { m_Hidden = Hidden; },
+			get hidden ( ) { return myHidden; },
+			set hidden ( Hidden ) { myHidden = Hidden; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 		}
 	);
 }

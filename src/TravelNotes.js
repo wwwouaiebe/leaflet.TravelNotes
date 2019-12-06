@@ -27,7 +27,7 @@ Changes:
 		- Issue #26 : added confirmation message before leaving the page when data modified.
 		- Issue #27 : push directly the route in the editor when starting a new travel
 	- v1.3.0:
-		- Improved m_ReadURL method
+		- Improved myReadURL method
 		- Working with Promise at startup
 		- Added baseDialog property
 	- v1.4.0:
@@ -48,13 +48,13 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { g_Translator } from './UI/Translator.js';
-import { g_Config } from './data/Config.js';
-import { g_TravelNotesData } from './data/TravelNotesData.js';
-import { g_TravelEditor } from './core/TravelEditor.js';
-import { g_MapEditor } from './core/MapEditor.js';
-import { g_APIKeysManager } from './core/APIKeysManager.js';
-import { gc_UI } from './UI/UI.js';
+import { theTranslator } from './UI/Translator.js';
+import { theConfig } from './data/Config.js';
+import { theTravelNotesData } from './data/TravelNotesData.js';
+import { theTravelEditor } from './core/TravelEditor.js';
+import { theMapEditor } from './core/MapEditor.js';
+import { theAPIKeysManager } from './core/APIKeysManager.js';
+import { theUI } from './UI/UI.js';
 
 import { newTravel } from './data/Travel.js';
 import { newRoute } from './data/Route.js';
@@ -62,18 +62,18 @@ import { newFileLoader } from './core/FileLoader.js';
 import { newBaseDialog } from './dialogs/BaseDialog.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
-import { currentVersion } from './data/Version.js';
+import { theCurrentVersion } from './data/Version.js';
 import { newEventDispatcher } from './util/EventDispatcher.js';
 import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
 import { newAutoLoader } from './UI/AutoLoader.js';
-import { gc_LayersToolbarUI } from './UI/LayersToolbarUI.js';
-import { gc_MouseUI } from './UI/MouseUI.js';
-import { gc_AttributionsUI } from './UI/AttributionsUI.js';
-import { gc_ErrorsUI } from './UI/ErrorsUI.js';
+import { theLayersToolbarUI } from './UI/LayersToolbarUI.js';
+import { theMouseUI } from './UI/MouseUI.js';
+import { theAttributionsUI } from './UI/AttributionsUI.js';
+import { theErrorsUI } from './UI/ErrorsUI.js';
 
-gc_AttributionsUI
+theAttributionsUI
 
 /*
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -86,20 +86,20 @@ Patterns : Closure
 
 function travelNotesFactory ( ) {
 
-	let m_LeftUserContextMenuData = [];
-	let m_RightUserContextMenuData = [];
-	let m_HaveLeftContextMenu = false;
-	let m_HaveRightContextMenu = false;
+	let myLeftUserContextMenuData = [];
+	let myRightUserContextMenuData = [];
+	let myHaveLeftContextMenu = false;
+	let myHaveRightContextMenu = false;
 
-	let m_Langage = null;
+	let myLangage = null;
 
-	let m_TravelUrl = null;
+	let myTravelUrl = null;
 
-	let m_EventDispatcher = newEventDispatcher ( );
+	let myEventDispatcher = newEventDispatcher ( );
 
 	window.addEventListener (
 		'unload',
-		( ) => localStorage.removeItem ( g_TravelNotesData.UUID + "-TravelNotesHTML" )
+		( ) => localStorage.removeItem ( theTravelNotesData.UUID + "-TravelNotesHTML" )
 	);
 
 	window.addEventListener (
@@ -111,14 +111,14 @@ function travelNotesFactory ( ) {
 	);
 
 	/*
-	--- m_ReadURL function --------------------------------------------------------------------------------------------
+	--- myReadURL function --------------------------------------------------------------------------------------------
 
 	This function extract the route providers API key from the url
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_ReadURL ( ) {
+	function myReadURL ( ) {
 		let newUrlSearch = '?' ;
 		( decodeURI ( window.location.search ).substr ( 1 )
 			.split ( '&' ) )
@@ -126,16 +126,16 @@ function travelNotesFactory ( ) {
 				urlSearchSubString =>{
 					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ){
 						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-							m_TravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+							myTravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 						}
 						else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-							m_Langage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
+							myLangage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
 						}
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 						newUrlSearch += urlSearchSubString;
 					}
 					else {
-						g_APIKeysManager.fromUrl ( urlSearchSubString )
+						theAPIKeysManager.fromUrl ( urlSearchSubString )
 					}
 				}
 			);
@@ -144,24 +144,24 @@ function travelNotesFactory ( ) {
 	}
 
 	/*
-	--- End of m_ReadURL function ---
+	--- End of myReadURL function ---
 	*/
 
 	/*
-	--- m_AddControl function -----------------------------------------------------------------------------------------
+	--- myAddControl function -----------------------------------------------------------------------------------------
 
 	This function add the control on the HTML page
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddControl ( map, divControlId ) {
+	function myAddControl ( map, divControlId ) {
 
-		g_TravelNotesData.map = map;
+		theTravelNotesData.map = map;
 
-		m_ReadURL ( );
+		myReadURL ( );
 
-		g_MapEditor.loadEvents ( );
+		theMapEditor.loadEvents ( );
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
@@ -171,12 +171,12 @@ function travelNotesFactory ( ) {
 			requestBuilder.getJsonPromise (
 				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
 				'TravelNotes' +
-				( m_Langage || g_Config.language).toUpperCase ( )  +
+				( myLangage || theConfig.language).toUpperCase ( )  +
 				'.json'
 			)
 		];
-		if ( m_TravelUrl ) {
-			promises.push ( requestBuilder.getJsonPromise ( m_TravelUrl ) );
+		if ( myTravelUrl ) {
+			promises.push ( requestBuilder.getJsonPromise ( myTravelUrl ) );
 		}
 
 		Promise.all ( promises ).then (
@@ -185,23 +185,23 @@ function travelNotesFactory ( ) {
 			values => {
 
 				// config adaptation
-				if ( m_Langage ) {
-					values [ 0 ].language = m_Langage;
+				if ( myLangage ) {
+					values [ 0 ].language = myLangage;
 				}
 
-				//g_Config.overload ( values [ 0 ] );
+				//theConfig.overload ( values [ 0 ] );
 
 				// translations adaptation
-				g_Translator.setTranslations ( values [ 1 ] );
-				g_TravelNotesData.providers.forEach (
+				theTranslator.setTranslations ( values [ 1 ] );
+				theTravelNotesData.providers.forEach (
 					provider => {
-						provider.userLanguage =  g_Config.language;
+						provider.userLanguage =  theConfig.language;
 					}
 				);
 
 				// osmSearch
 				if ( window.osmSearch ) {
-					window.osmSearch.getDictionaryPromise ( g_Config.language, 'travelNotes' )
+					window.osmSearch.getDictionaryPromise ( theConfig.language, 'travelNotes' )
 						.then (
 							( ) => console.log ( 'osmSearch dictionary loaded' ),
 							err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
@@ -212,36 +212,36 @@ function travelNotesFactory ( ) {
 				}
 
 				// loading new travel
-				g_TravelNotesData.travel = newTravel ( );
-				g_TravelNotesData.travel.routes.add ( newRoute ( ) );
+				theTravelNotesData.travel = newTravel ( );
+				theTravelNotesData.travel.routes.add ( newRoute ( ) );
 
 				// user interface is added
-				gc_UI.createUI ( document.getElementById ( divControlId ) );
+				theUI.createUI ( document.getElementById ( divControlId ) );
 
-				m_EventDispatcher.dispatch ( 'setrouteslist' );
+				myEventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );
 
-				gc_AttributionsUI.createUI ( );
-				gc_ErrorsUI.createUI ( );
+				theAttributionsUI.createUI ( );
+				theErrorsUI.createUI ( );
 
-				if ( m_TravelUrl ) {
+				if ( myTravelUrl ) {
 
 					// loading travel...
 					newFileLoader ( ).openDistantFile ( values [ 2 ] );
 				}
 				else {
-					g_APIKeysManager.fromServerFile ( );
-					if ( g_Config.layersToolbarUI.haveLayersToolbarUI ) {
-						gc_LayersToolbarUI.createUI ( );
+					theAPIKeysManager.fromServerFile ( );
+					if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
+						theLayersToolbarUI.createUI ( );
 					}
-					if ( g_Config.mouseUI.haveMouseUI ) {
-						gc_MouseUI.createUI ( );
+					if ( theConfig.mouseUI.haveMouseUI ) {
+						theMouseUI.createUI ( );
 					}
-					if ( g_Config.travelEditor.startupRouteEdition ) {
-						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
+					if ( theConfig.travelEditor.startupRouteEdition ) {
+						theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 					}
 					else {
-						m_EventDispatcher.dispatch ( 'reducerouteui' );
+						myEventDispatcher.dispatch ( 'reducerouteui' );
 					}
 				}
 			}
@@ -252,45 +252,45 @@ function travelNotesFactory ( ) {
 	}
 
 	/*
-	--- End of m_AddControl function ---
+	--- End of myAddControl function ---
 	*/
 
 	/*
-	--- m_OnMapClick function ------------------------------------------------------------------------------------------
+	--- myOnMapClick function ------------------------------------------------------------------------------------------
 
 	Map click event handler
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMapClick ( ) {
-		if ( ! g_TravelNotesData.travel.readOnly ) {
+	function myOnMapClick ( ) {
+		if ( ! theTravelNotesData.travel.readOnly ) {
 			newMapContextMenu ( event ).show ( );
 		}
 	}
 
 	/*
-	--- m_OnMapContextMenu function ------------------------------------------------------------------------------------
+	--- myOnMapContextMenu function ------------------------------------------------------------------------------------
 
 	Map context menu event handler
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMapContextMenu ( event ) {
-		if ( ! g_TravelNotesData.travel.readOnly ) {
+	function myOnMapContextMenu ( event ) {
+		if ( ! theTravelNotesData.travel.readOnly ) {
 			newMapContextMenu ( event ).show ( );
 		}
 	}
 
 	/*
-	--- m_AddProvider function ----------------------------------------------------------------------------------------
+	--- myAddProvider function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddProvider ( provider ) {
-		g_APIKeysManager.addProvider ( provider );
+	function myAddProvider ( provider ) {
+		theAPIKeysManager.addProvider ( provider );
 	}
 
 	return {
@@ -303,7 +303,7 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addControl : ( map, divControlId ) => { return m_AddControl ( map, divControlId ); },
+		addControl : ( map, divControlId ) => { return myAddControl ( map, divControlId ); },
 
 		/*
 		--- addProvider method ----------------------------------------------------------------------------------------
@@ -313,7 +313,7 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addProvider : provider => m_AddProvider ( provider ),
+		addProvider : provider => myAddProvider ( provider ),
 
 		/*
 		--- addMapContextMenu method ----------------------------------------------------------------------------------
@@ -325,12 +325,12 @@ function travelNotesFactory ( ) {
 
 		addMapContextMenu : ( leftButton, rightButton ) => {
 			if ( leftButton ) {
-				g_TravelNotesData.map.on ( 'click', m_OnMapClick );
-				m_HaveLeftContextMenu = true;
+				theTravelNotesData.map.on ( 'click', myOnMapClick );
+				myHaveLeftContextMenu = true;
 			}
 			if ( rightButton ) {
-				g_TravelNotesData.map.on ( 'contextmenu', m_OnMapClick );
-				m_HaveRightContextMenu = true;
+				theTravelNotesData.map.on ( 'contextmenu', myOnMapClick );
+				myHaveRightContextMenu = true;
 			}
 		},
 
@@ -342,44 +342,44 @@ function travelNotesFactory ( ) {
 
 		get baseDialog ( ) { return newBaseDialog ( ); },
 
-		get userData ( ) { return g_TravelNotesData.travel.userData; },
-		set userData ( userData ) { g_TravelNotesData.travel.userData = userData; },
+		get userData ( ) { return theTravelNotesData.travel.userData; },
+		set userData ( userData ) { theTravelNotesData.travel.userData = userData; },
 
-		get rightContextMenu ( ) { return m_HaveRightContextMenu; },
+		get rightContextMenu ( ) { return myHaveRightContextMenu; },
 		set rightContextMenu ( RightContextMenu ) {
-			if  ( ( RightContextMenu ) && ( ! m_HaveRightContextMenu ) ) {
-				g_TravelNotesData.map.on ( 'contextmenu', m_OnMapContextMenu );
-				m_HaveRightContextMenu = true;
+			if  ( ( RightContextMenu ) && ( ! myHaveRightContextMenu ) ) {
+				theTravelNotesData.map.on ( 'contextmenu', myOnMapContextMenu );
+				myHaveRightContextMenu = true;
 			}
-			else if ( ( ! RightContextMenu ) && ( m_HaveRightContextMenu ) ) {
-				g_TravelNotesData.map.off ( 'contextmenu', m_OnMapContextMenu );
-				m_HaveRightContextMenu = false;
+			else if ( ( ! RightContextMenu ) && ( myHaveRightContextMenu ) ) {
+				theTravelNotesData.map.off ( 'contextmenu', myOnMapContextMenu );
+				myHaveRightContextMenu = false;
 			}
 		},
 
-		get leftContextMenu ( ) { return m_HaveLeftContextMenu; },
+		get leftContextMenu ( ) { return myHaveLeftContextMenu; },
 		set leftContextMenu ( LeftContextMenu ) {
-			if  ( ( LeftContextMenu ) && ( ! m_HaveLeftContextMenu ) ) {
-				g_TravelNotesData.map.on ( 'click', m_OnMapClick );
-				m_HaveLeftContextMenu = true;
+			if  ( ( LeftContextMenu ) && ( ! myHaveLeftContextMenu ) ) {
+				theTravelNotesData.map.on ( 'click', myOnMapClick );
+				myHaveLeftContextMenu = true;
 			}
-			else if ( ( ! LeftContextMenu ) && ( m_HaveLeftContextMenu ) ) {
-				g_TravelNotesData.map.off ( 'click', m_OnMapClick );
-				m_HaveLeftContextMenu = false;
+			else if ( ( ! LeftContextMenu ) && ( myHaveLeftContextMenu ) ) {
+				theTravelNotesData.map.off ( 'click', myOnMapClick );
+				myHaveLeftContextMenu = false;
 			}
 		},
 
-		get leftUserContextMenu ( ) { return m_LeftUserContextMenuData; },
-		set leftUserContextMenu ( LeftUserContextMenu ) { m_LeftUserContextMenuData = LeftUserContextMenu; },
+		get leftUserContextMenu ( ) { return myLeftUserContextMenuData; },
+		set leftUserContextMenu ( LeftUserContextMenu ) { myLeftUserContextMenuData = LeftUserContextMenu; },
 
-		get rightUserContextMenu ( ) { return m_RightUserContextMenuData; },
-		set rightUserContextMenu ( RightUserContextMenu ) { m_RightUserContextMenuData = RightUserContextMenu; },
+		get rightUserContextMenu ( ) { return myRightUserContextMenuData; },
+		set rightUserContextMenu ( RightUserContextMenu ) { myRightUserContextMenuData = RightUserContextMenu; },
 
 		get maneuver ( ) { return newManeuver ( ); },
 
 		get itineraryPoint ( ) { return newItineraryPoint ( ); },
 
-		get version ( ) { return currentVersion; }
+		get version ( ) { return theCurrentVersion; }
 	};
 }
 
@@ -396,7 +396,7 @@ newHttpRequestBuilder ( ).getJsonPromise (
 )
 	.then (
 		config => {
-			g_Config.overload ( config );
+			theConfig.overload ( config );
 			newAutoLoader ( );
 		}
 	);

@@ -35,6 +35,8 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 
+const ourObjType = newObjType ( 'Itinerary' );
+
 /*
 --- newItinerary function ---------------------------------------------------------------------------------------------
 
@@ -45,30 +47,28 @@ Patterns : Closure
 
 function newItinerary ( ) {
 
-	const s_ObjType = newObjType ( 'Itinerary' );
+	let myProvider = '';
 
-	let m_Provider = '';
+	let myTransitMode = '';
 
-	let m_TransitMode = '';
+	let myItineraryPoints = newCollection ( 'ItineraryPoint' );
 
-	let m_ItineraryPoints = newCollection ( 'ItineraryPoint' );
+	let myManeuvers = newCollection ( 'Maneuver' );
 
-	let m_Maneuvers = newCollection ( 'Maneuver' );
-
-	let m_ObjId = newObjId ( );
+	let myObjId = newObjId ( );
 
 	/*
-	--- m_Validate function -------------------------------------------------------------------------------------------
+	--- myValidate function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Validate ( something ) {
+	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + s_ObjType.name;
+			throw 'No objType for ' + ourObjType.name;
 		}
-		s_ObjType.validate ( something.objType );
-		if ( s_ObjType.version !== something.objType.version ) {
+		ourObjType.validate ( something.objType );
+		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0':
 			case '1.1.0':
@@ -79,14 +79,14 @@ function newItinerary ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default:
-				throw 'invalid version for ' + s_ObjType.name;
+				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'itineraryPoints', 'maneuvers', 'provider', 'transitMode', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + s_ObjType.name;
+					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
 		)
@@ -94,45 +94,45 @@ function newItinerary ( ) {
 	}
 
 	/*
-	--- m_GetObject function ------------------------------------------------------------------------------------------
+	--- myGetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetObject ( ) {
+	function myGetObject ( ) {
 		return {
-			itineraryPoints : m_ItineraryPoints.object,
-			maneuvers : m_Maneuvers.object,
-			provider : m_Provider,
-			transitMode : m_TransitMode,
-			objId : m_ObjId,
-			objType : s_ObjType.object
+			itineraryPoints : myItineraryPoints.object,
+			maneuvers : myManeuvers.object,
+			provider : myProvider,
+			transitMode : myTransitMode,
+			objId : myObjId,
+			objType : ourObjType.object
 		};
 	}
 
 	/*
-	--- m_SetObject function ------------------------------------------------------------------------------------------
+	--- mySetObject function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetObject ( something ) {
-		something = m_Validate ( something );
-		m_ItineraryPoints.object = something.itineraryPoints || [];
-		m_Maneuvers.object = something.maneuvers || [];
-		m_Provider = something.provider || '';
-		m_TransitMode = something.transitMode || '';
-		m_ObjId = newObjId ( );
+	function mySetObject ( something ) {
+		something = myValidate ( something );
+		myItineraryPoints.object = something.itineraryPoints || [];
+		myManeuvers.object = something.maneuvers || [];
+		myProvider = something.provider || '';
+		myTransitMode = something.transitMode || '';
+		myObjId = newObjId ( );
 
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
 		let sourceCounter = 0;
-		let targetIterator = m_ItineraryPoints.iterator;
+		let targetIterator = myItineraryPoints.iterator;
 		while ( ! targetIterator.done ) {
 			itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
 			sourceCounter ++;
 		}
-		let maneuverIterator = m_Maneuvers.iterator;
+		let maneuverIterator = myManeuvers.iterator;
 		while ( ! maneuverIterator.done ) {
 			maneuverIterator.value.itineraryPointObjId =
 				itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
@@ -148,22 +148,22 @@ function newItinerary ( ) {
 	return Object.seal (
 		{
 
-			get itineraryPoints ( ) { return m_ItineraryPoints; },
+			get itineraryPoints ( ) { return myItineraryPoints; },
 
-			get maneuvers ( ) { return m_Maneuvers; },
+			get maneuvers ( ) { return myManeuvers; },
 
-			get provider ( ) { return m_Provider; },
-			set provider ( Provider ) { m_Provider = Provider; },
+			get provider ( ) { return myProvider; },
+			set provider ( Provider ) { myProvider = Provider; },
 
-			get transitMode ( ) { return m_TransitMode; },
-			set transitMode ( TransitMode ) { m_TransitMode = TransitMode; },
+			get transitMode ( ) { return myTransitMode; },
+			set transitMode ( TransitMode ) { myTransitMode = TransitMode; },
 
-			get objId ( ) { return m_ObjId; },
+			get objId ( ) { return myObjId; },
 
-			get objType ( ) { return s_ObjType; },
+			get objType ( ) { return ourObjType; },
 
-			get object ( ) { return m_GetObject ( ); },
-			set object ( something ) { m_SetObject ( something ); }
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 
 		}
 	);

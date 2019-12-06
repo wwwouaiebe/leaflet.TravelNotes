@@ -42,20 +42,20 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_TravelEditorUI };
+export { theTravelEditorUI };
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_Config } from '../data/Config.js';
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
-import { gc_ErrorsUI } from '../UI/ErrorsUI.js';
-import { g_RouteEditor } from '../core/RouteEditor.js';
-import { g_TravelEditor } from '../core/TravelEditor.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
+import { theTravelEditor } from '../core/TravelEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
 
-let m_RoutesList = null;
+let myRoutesList = null;
 
 /*
 --- travelEditorUI function -------------------------------------------------------------------------------------------
@@ -73,27 +73,27 @@ function newTravelEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_ControlDiv = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myControlDiv = null;
 
 	/*
-	--- m_CreateHeaderDiv function ------------------------------------------------------------------------------------
+	--- myCreateHeaderDiv function ------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateHeaderDiv ( ) {
-		let headerDiv = m_HTMLElementsFactory.create (
+	function myCreateHeaderDiv ( ) {
+		let headerDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-TravelHeaderDiv',
 				className : 'TravelNotes-Control-HeaderDiv'
 			},
-			m_ControlDiv
+			myControlDiv
 		);
 
 		// expand button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x25bc;',
@@ -119,18 +119,18 @@ function newTravelEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title =
 						hiddenList
 							?
-							g_Translator.getText ( 'TravelEditorUI - Show' )
+							theTranslator.getText ( 'TravelEditorUI - Show' )
 							:
-							g_Translator.getText ( 'TravelEditorUI - Hide' );
+							theTranslator.getText ( 'TravelEditorUI - Hide' );
 					clickEvent.stopPropagation ( );
 				},
 				false );
 
 		// title
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'span',
 			{
-				innerHTML : g_Translator.getText ( 'TravelEditorUI - Travel routes' ),
+				innerHTML : theTranslator.getText ( 'TravelEditorUI - Travel routes' ),
 				id : 'TravelNotes-Control-TravelHeaderText',
 				className : 'TravelNotes-Control-HeaderText'
 			},
@@ -139,96 +139,96 @@ function newTravelEditorUI ( ) {
 	}
 
 	/*
-	--- m_CreateDataDiv function --------------------------------------------------------------------------------------
+	--- myCreateDataDiv function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateDataDiv ( ) {
-		let dataDiv = m_HTMLElementsFactory.create (
+	function myCreateDataDiv ( ) {
+		let dataDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-TravelDataDiv',
 				className : 'TravelNotes-Control-DataDiv'
 			},
-			m_ControlDiv
+			myControlDiv
 		);
 
 		// Routes list
-		m_RoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
-		m_RoutesList.container.addEventListener (
+		myRoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
+		myRoutesList.container.addEventListener (
 			'SortableListDelete',
 			event => {
 				event.stopPropagation ( );
-				g_TravelEditor.removeRoute ( event.itemNode.dataObjId );
+				theTravelEditor.removeRoute ( event.itemNode.dataObjId );
 			},
 			false
 		);
-		m_RoutesList.container.addEventListener (
+		myRoutesList.container.addEventListener (
 			'SortableListUpArrow',
 			event => {
 				event.stopPropagation ( );
-				g_TravelEditor.swapRoute ( event.itemNode.dataObjId, true );
+				theTravelEditor.swapRoute ( event.itemNode.dataObjId, true );
 			},
 			false
 		);
-		m_RoutesList.container.addEventListener (
+		myRoutesList.container.addEventListener (
 			'SortableListDownArrow',
 			event => {
 				event.stopPropagation ( );
-				g_TravelEditor.swapRoute ( event.itemNode.dataObjId, false );
+				theTravelEditor.swapRoute ( event.itemNode.dataObjId, false );
 			},
 			false
 		);
-		m_RoutesList.container.addEventListener (
+		myRoutesList.container.addEventListener (
 			'SortableListRightArrow',
 			event => {
 				event.stopPropagation ( );
-				g_TravelEditor.editRoute ( event.itemNode.dataObjId );
+				theTravelEditor.editRoute ( event.itemNode.dataObjId );
 			},
 			false
 		);
-		m_RoutesList.container.addEventListener (
+		myRoutesList.container.addEventListener (
 			'SortableListChange',
 			event => {
 				event.stopPropagation ();
-				g_TravelEditor.renameRoute ( event.dataObjId, event.changeValue );
+				theTravelEditor.renameRoute ( event.dataObjId, event.changeValue );
 			},
 			false
 		);
-		m_RoutesList.container.addEventListener (
+		myRoutesList.container.addEventListener (
 			'SortableListDrop',
 			event => {
 				event.stopPropagation ( );
-				g_TravelEditor.routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+				theTravelEditor.routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
 			},
 			false
 		);
 	}
 
 	/*
-	--- m_CreateButtonsDiv function -----------------------------------------------------------------------------------
+	--- myCreateButtonsDiv function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateButtonsDiv ( ) {
-		let buttonsDiv = m_HTMLElementsFactory.create (
+	function myCreateButtonsDiv ( ) {
+		let buttonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ControlTravelButtonsDiv',
 				className : 'TravelNotes-Control-ButtonsDiv'
 			},
-			m_ControlDiv
+			myControlDiv
 		);
 
 		// expand list button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ExpandRoutesListButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Expand the list' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Expand the list' ),
 				innerHTML : '&#x25bd;'
 			},
 			buttonsDiv
@@ -246,20 +246,20 @@ function newTravelEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title =
 						expandedList
 							?
-							g_Translator.getText ( 'TravelEditorUI - Reduce the list' )
+							theTranslator.getText ( 'TravelEditorUI - Reduce the list' )
 							:
-							g_Translator.getText ( 'TravelEditorUI - Expand the list' );
+							theTranslator.getText ( 'TravelEditorUI - Expand the list' );
 				},
 				false
 			);
 
 		// cancel travel button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-CancelTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Cancel travel' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Cancel travel' ),
 				innerHTML : '&#x274c'
 			},
 			buttonsDiv
@@ -268,22 +268,22 @@ function newTravelEditorUI ( ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ();
-					g_TravelEditor.clear ( );
-					if ( g_Config.travelEditor.startupRouteEdition ) {
-						g_TravelEditor.editRoute ( g_TravelNotesData.travel.routes.first.objId );
+					theTravelEditor.clear ( );
+					if ( theConfig.travelEditor.startupRouteEdition ) {
+						theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 					}
-					g_TravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+					theTravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				},
 				false
 			);
 
 		// save travel button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-SaveTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Save travel' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Save travel' ),
 				innerHTML : '&#x1f4be;'
 			},
 			buttonsDiv
@@ -292,21 +292,21 @@ function newTravelEditorUI ( ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					g_TravelEditor.saveTravel ( );
+					theTravelEditor.saveTravel ( );
 				},
 				false
 			);
 
 		// open travel button with the well know hack....
 		// See also UserInterface.js. Click events are first going to the interface div...
-		let openTravelDiv = m_HTMLElementsFactory.create (
+		let openTravelDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-OpenTravelDiv'
 			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-Control-OpenTravelInput',
@@ -319,24 +319,24 @@ function newTravelEditorUI ( ) {
 				'change',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					g_RouteEditor.cancelEdition ( );
+					theRouteEditor.cancelEdition ( );
 					newFileLoader ( ).openLocalFile ( clickEvent );
 				},
 				false
 			);
-		let openTravelFakeDiv = m_HTMLElementsFactory.create (
+		let openTravelFakeDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-OpenTravelFakeDiv'
 			},
 			openTravelDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-OpenTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Open travel' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Open travel' ),
 				innerHTML : '&#x1F4C2;'
 			},
 			openTravelFakeDiv
@@ -345,7 +345,7 @@ function newTravelEditorUI ( ) {
 				'click',
 				( ) => {
 					if ( ! window.confirm (
-						g_Translator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." )
+						theTranslator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." )
 					)
 					) {
 						return;
@@ -356,14 +356,14 @@ function newTravelEditorUI ( ) {
 			);
 
 		// import travel button with the well know hack....
-		let importTravelDiv = m_HTMLElementsFactory.create (
+		let importTravelDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ImportTravelDiv'
 			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-Control-ImportTravelInput',
@@ -380,19 +380,19 @@ function newTravelEditorUI ( ) {
 				},
 				false
 			);
-		let importTravelFakeDiv = m_HTMLElementsFactory.create (
+		let importTravelFakeDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ImportTravelFakeDiv'
 			},
 			importTravelDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ImportTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Import travel' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Import travel' ),
 				innerHTML : '&#x1F30F;'
 			},
 			importTravelFakeDiv
@@ -400,12 +400,12 @@ function newTravelEditorUI ( ) {
 			.addEventListener (
 				'click',
 				( ) => {
-					if ( -1 === g_TravelNotesData.editedRouteObjId  ) {
+					if ( -1 === theTravelNotesData.editedRouteObjId  ) {
 						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
 					}
 					else {
-						gc_ErrorsUI.showError (
-							g_Translator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" )
+						theErrorsUI.showError (
+							theTranslator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" )
 						);
 					}
 				},
@@ -413,29 +413,29 @@ function newTravelEditorUI ( ) {
 			);
 
 		// roadbook button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - Open travel roadbook' ),
+				title : theTranslator.getText ( 'TravelEditorUI - Open travel roadbook' ),
 				innerHTML :
 					'<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' +
-					g_Config.language +
+					theConfig.language +
 					'&page=' +
-					g_TravelNotesData.UUID +
+					theTravelNotesData.UUID +
 					'" target="_blank">&#x1F4CB;</a>'
 			},
 			buttonsDiv
 		);
 
 		// add route button
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-AddRoutesButton',
 				className : 'TravelNotes-Control-Button',
-				title : g_Translator.getText ( 'TravelEditorUI - New route' ),
+				title : theTranslator.getText ( 'TravelEditorUI - New route' ),
 				innerHTML : '+'
 			},
 			buttonsDiv
@@ -444,52 +444,52 @@ function newTravelEditorUI ( ) {
 				'click',
 				event => {
 					event.stopPropagation ();
-					g_TravelEditor.addRoute ( );
+					theTravelEditor.addRoute ( );
 				},
 				false
 			);
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){
+	function myCreateUI ( controlDiv ){
 
 		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
 			return;
 		}
 
-		m_ControlDiv = controlDiv;
+		myControlDiv = controlDiv;
 
-		m_CreateHeaderDiv ( );
+		myCreateHeaderDiv ( );
 
-		m_CreateDataDiv ( );
+		myCreateDataDiv ( );
 
-		m_CreateButtonsDiv ( )
+		myCreateButtonsDiv ( )
 
 	}
 
 	/*
-	--- m_SetRoutesList function --------------------------------------------------------------------------------------
+	--- mySetRoutesList function --------------------------------------------------------------------------------------
 
 	This function fill the routes list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SetRoutesList (  ) {
-		m_RoutesList.removeAllItems ( );
-		let routesIterator = g_TravelNotesData.travel.routes.iterator;
+	function mySetRoutesList (  ) {
+		myRoutesList.removeAllItems ( );
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			m_RoutesList.addItem (
+			myRoutesList.addItem (
 				routesIterator.value.name,
 				routesIterator.value.chain ? '&#x26d3;' : '',
-				g_Translator.getText ( 'TravelEditorUI - Route' ),
+				theTranslator.getText ( 'TravelEditorUI - Route' ),
 				routesIterator.value.objId,
 				false
 			);
@@ -504,22 +504,22 @@ function newTravelEditorUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			setRoutesList : (  ) => m_SetRoutesList ( )
+			setRoutesList : (  ) => mySetRoutesList ( )
 		}
 	);
 }
 
 /*
---- gc_TravelEditorUI object ------------------------------------------------------------------------------------------
+--- theTravelEditorUI object ------------------------------------------------------------------------------------------
 
 The one and only one travelEditorUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_TravelEditorUI = newTravelEditorUI ( );
+const theTravelEditorUI = newTravelEditorUI ( );
 
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------

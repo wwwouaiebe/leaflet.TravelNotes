@@ -31,7 +31,7 @@ Tests ...
 /* global L */
 
 export { newGeometry };
-import { g_TravelNotesData } from '../data/TravelNotesData.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ Patterns : Closure
 function newGeometry  ( ) {
 
 	/*
-	--- m_GetClosestLatLngDistance function ---------------------------------------------------------------------------
+	--- myGetClosestLatLngDistance function ---------------------------------------------------------------------------
 
 	This function search the nearest point on a route from a given point and compute the distance
 	between the beginning of the route and the nearest point
@@ -56,7 +56,7 @@ function newGeometry  ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_GetClosestLatLngDistance ( route, latLng ) {
+	function myGetClosestLatLngDistance ( route, latLng ) {
 
 		if ( 0 === route.itinerary.itineraryPoints.length ) {
 			return null;
@@ -119,7 +119,7 @@ function newGeometry  ( ) {
 	}
 
 	/*
-	--- m_PointsDistance function -------------------------------------------------------------------------------------
+	--- myPointsDistance function -------------------------------------------------------------------------------------
 
 	This function returns the distance between two points
 
@@ -129,7 +129,7 @@ function newGeometry  ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_PointsDistance ( latLngStartPoint, latLngEndPoint ) {
+	function myPointsDistance ( latLngStartPoint, latLngEndPoint ) {
 
 		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
 		// valid function to compute the distances. So all distances are always
@@ -138,7 +138,7 @@ function newGeometry  ( ) {
 	}
 
 	/*
-	--- m_Project function --------------------------------------------------------------------------------------------
+	--- myProject function --------------------------------------------------------------------------------------------
 
 	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
 
@@ -148,13 +148,13 @@ function newGeometry  ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_Project ( latLng, zoom ) {
-		let projection = g_TravelNotesData.map.project ( L.latLng ( latLng ), zoom );
+	function myProject ( latLng, zoom ) {
+		let projection = theTravelNotesData.map.project ( L.latLng ( latLng ), zoom );
 		return [ projection.x, projection.y ];
 	}
 
 	/*
-	--- m_AddPoint function -------------------------------------------------------------------------------------------
+	--- myAddPoint function -------------------------------------------------------------------------------------------
 
 	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
 
@@ -164,17 +164,17 @@ function newGeometry  ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_AddPoint ( point1, point2 ) {
+	function myAddPoint ( point1, point2 ) {
 		return [ point1 [ 0 ] + point2 [ 0 ],   point1 [ 1 ] + point2 [ 1 ] ];
 	}
 
 	/*
-	--- m_SubtrackPoint function --------------------------------------------------------------------------------------
+	--- mySubtrackPoint function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_SubtrackPoints ( point1, point2 ) {
+	function mySubtrackPoints ( point1, point2 ) {
 		return [ point1 [ 0 ] - point2 [ 0 ],   point1 [ 1 ] - point2 [ 1 ] ];
 	}
 
@@ -186,12 +186,12 @@ function newGeometry  ( ) {
 
 	return Object.seal (
 		{
-			getClosestLatLngDistance : ( route, latLng ) => { return m_GetClosestLatLngDistance ( route, latLng ); },
+			getClosestLatLngDistance : ( route, latLng ) => { return myGetClosestLatLngDistance ( route, latLng ); },
 			pointsDistance :
-				( latLngStartPoint, latLngEndPoint ) => { return m_PointsDistance ( latLngStartPoint, latLngEndPoint ); },
-			project : ( latLng, zoom ) => { return m_Project ( latLng, zoom ); },
-			addPoints : ( point1, point2 ) => { return  m_AddPoint ( point1, point2 ); },
-			subtrackPoints : ( point1, point2 ) => { return  m_SubtrackPoints ( point1, point2 ); }
+				( latLngStartPoint, latLngEndPoint ) => { return myPointsDistance ( latLngStartPoint, latLngEndPoint ); },
+			project : ( latLng, zoom ) => { return myProject ( latLng, zoom ); },
+			addPoints : ( point1, point2 ) => { return  myAddPoint ( point1, point2 ); },
+			subtrackPoints : ( point1, point2 ) => { return  mySubtrackPoints ( point1, point2 ); }
 		}
 	);
 }

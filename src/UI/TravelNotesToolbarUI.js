@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 --- TravelNotesToolbarUI.js file --------------------------------------------------------------------------------------
 This file contains:
 	- the TravelNotesToolbarUI function
-	- the gc_TravelNotesToolbarUI object
+	- the theTravelNotesToolbarUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -29,12 +29,12 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { gc_TravelNotesToolbarUI };
+export { theTravelNotesToolbarUI };
 
-import { g_Translator } from '../UI/Translator.js';
-import { g_Config } from '../data/Config.js';
-import { g_APIKeysManager } from '../core/APIKeysManager.js';
-import { gc_GeoLocator } from '../core/GeoLocator.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import { theGeoLocator } from '../core/GeoLocator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
@@ -45,21 +45,21 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newTravelNotesToolbarUI ( ) {
 
-	let m_GeoLocationButton = null;
-	let m_HTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	let m_PinButton = null;
-	let m_TimerId = null;
+	let myGeoLocationButton = null;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myPinButton = null;
+	let myTimerId = null;
 
 	/*
-	--- m_OnMouseEnterControl function --------------------------------------------------------------------------------
+	--- myOnMouseEnterControl function --------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseEnterControl ( ) {
-		if ( m_TimerId ) {
-			clearTimeout ( m_TimerId );
-			m_TimerId = null;
+	function myOnMouseEnterControl ( ) {
+		if ( myTimerId ) {
+			clearTimeout ( myTimerId );
+			myTimerId = null;
 		}
 		document.getElementById ( 'TravelNotes-Control-MainDiv' )
 			.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
@@ -68,61 +68,61 @@ function newTravelNotesToolbarUI ( ) {
 	}
 
 	/*
-	--- m_OnMouseLeaveControlfunction ---------------------------------------------------------------------------------
+	--- myOnMouseLeaveControlfunction ---------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnMouseLeaveControl ( ) {
-		m_TimerId = setTimeout (
+	function myOnMouseLeaveControl ( ) {
+		myTimerId = setTimeout (
 			( ) => {
 				document.getElementById ( 'TravelNotes-Control-MainDiv' )
 					.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
 				document.getElementById ( 'TravelNotes-Control-MainDiv' )
 					.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 			},
-			g_Config.travelEditor.timeout
+			theConfig.travelEditor.timeout
 		);
 	}
 
 	/*
-	--- m_OnGeoLocationStatusChanged function -------------------------------------------------------------------------
+	--- myOnGeoLocationStatusChanged function -------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_OnGeoLocationStatusChanged ( status ) {
+	function myOnGeoLocationStatusChanged ( status ) {
 		switch ( status ) {
 		case 1:
-			m_GeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
+			myGeoLocationButton.classList.remove ( "TravelNotes-Control-GeoLocationButton-Striked" );
 			break;
 		case 2:
-			m_GeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
+			myGeoLocationButton.classList.add ( "TravelNotes-Control-GeoLocationButton-Striked" );
 			break;
 		default:
-			if ( m_GeoLocationButton ) {
-				m_GeoLocationButton.parentNode.removeChild ( m_GeoLocationButton );
-				m_GeoLocationButton = null;
+			if ( myGeoLocationButton ) {
+				myGeoLocationButton.parentNode.removeChild ( myGeoLocationButton );
+				myGeoLocationButton = null;
 			}
 			break;
 		}
 	}
 
 	/*
-	--- m_CreateUI function -------------------------------------------------------------------------------------------
+	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function m_CreateUI ( controlDiv ){
+	function myCreateUI ( controlDiv ){
 
 		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
 			return;
 		}
 
-		let buttonsDiv = m_HTMLElementsFactory.create (
+		let buttonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-TravelNotesToolbarDiv',
@@ -131,7 +131,7 @@ function newTravelNotesToolbarUI ( ) {
 			controlDiv
 		);
 
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-HomeButton',
@@ -144,7 +144,7 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-HelpButton',
@@ -157,7 +157,7 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
-		m_HTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-Control-ContactButton',
@@ -165,20 +165,20 @@ function newTravelNotesToolbarUI ( ) {
 				title : 'Contact',
 				innerHTML :
 					'<a class="TravelNotes-Control-LinkButton" href="' +
-					( g_Config.travelNotesToolbarUI.contactMail || window.location.origin ) +
+					( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ) +
 					'" target="_blank">@</a>'
 			},
 			buttonsDiv
 		);
-		if ( g_Config.APIKeys.showDialogButton ) {
+		if ( theConfig.APIKeys.showDialogButton ) {
 
 			//API keys button
-			m_HTMLElementsFactory.create (
+			myHTMLElementsFactory.create (
 				'div',
 				{
 					id : 'TravelNotes-Control-ApiKeysButton',
 					className : 'TravelNotes-Control-Button',
-					title : g_Translator.getText ( 'TravelEditorUI - API keys' ),
+					title : theTranslator.getText ( 'TravelEditorUI - API keys' ),
 					innerHTML : '&#x1f511;'
 				},
 				buttonsDiv
@@ -187,36 +187,36 @@ function newTravelNotesToolbarUI ( ) {
 					'click',
 					clickEvent => {
 						clickEvent.stopPropagation ( );
-						g_APIKeysManager.dialog ( );
+						theAPIKeysManager.dialog ( );
 					},
 					false
 				);
 		}
-		if ( 0 < gc_GeoLocator.status ) {
+		if ( 0 < theGeoLocator.status ) {
 
 			//GeoLocator button
-			m_GeoLocationButton = m_HTMLElementsFactory.create (
+			myGeoLocationButton = myHTMLElementsFactory.create (
 				'div',
 				{
 					id : 'TravelNotes-Control-GeoLocatorButton',
 					className : 'TravelNotes-Control-Button',
-					title : g_Translator.getText ( 'TravelEditorUI - Geo location' ),
+					title : theTranslator.getText ( 'TravelEditorUI - Geo location' ),
 					innerHTML : '&#x1f310;'
 				},
 				buttonsDiv
 			);
-			m_GeoLocationButton.addEventListener (
+			myGeoLocationButton.addEventListener (
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					gc_GeoLocator.switch ( );
+					theGeoLocator.switch ( );
 				},
 				false
 			);
 		}
 
 		// pin button
-		m_PinButton = m_HTMLElementsFactory.create (
+		myPinButton = myHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x274c;',
@@ -224,27 +224,27 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
-		m_PinButton.addEventListener (
+		myPinButton.addEventListener (
 			'click',
 			event => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
 				if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
 					event.target.innerHTML = '&#x1f4cc;';
-					control.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-					control.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+					control.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
+					control.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
 				}
 				else {
 					event.target.innerHTML = '&#x274c;';
-					control.removeEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-					control.removeEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+					control.removeEventListener ( 'mouseenter', myOnMouseEnterControl, false );
+					control.removeEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
 				}
 			},
 			false
 		);
-		if ( g_Config.travelEditor.startMinimized ) {
-			m_PinButton.innerHTML = '&#x1f4cc;';
-			controlDiv.addEventListener ( 'mouseenter', m_OnMouseEnterControl, false );
-			controlDiv.addEventListener ( 'mouseleave', m_OnMouseLeaveControl, false );
+		if ( theConfig.travelEditor.startMinimized ) {
+			myPinButton.innerHTML = '&#x1f4cc;';
+			controlDiv.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
+			controlDiv.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
 			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		else {
@@ -260,22 +260,22 @@ function newTravelNotesToolbarUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : controlDiv => m_CreateUI ( controlDiv ),
+			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			geoLocationStatusChanged : ( status ) => m_OnGeoLocationStatusChanged ( status )
+			geoLocationStatusChanged : ( status ) => myOnGeoLocationStatusChanged ( status )
 		}
 	);
 }
 
 /*
---- gc_TravelNotesToolbarUI object ------------------------------------------------------------------------------------
+--- theTravelNotesToolbarUI object ------------------------------------------------------------------------------------
 
 The one and only one TravelNotesToolbarUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const gc_TravelNotesToolbarUI = newTravelNotesToolbarUI ( );
+const theTravelNotesToolbarUI = newTravelNotesToolbarUI ( );
 
 /*
 --- End of TravelNotesToolbarUI.js file -------------------------------------------------------------------------------
