@@ -42,7 +42,7 @@ import { theTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
-import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js'
+import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------

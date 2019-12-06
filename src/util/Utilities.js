@@ -270,7 +270,7 @@ function newUtilities ( ) {
 
 	return Object.seal (
 		{
-			get UUID ( ) { return myGetUUID ( ) },
+			get UUID ( ) { return myGetUUID ( ); },
 
 			storageAvailable : type =>  myStorageAvailable ( type ),
 

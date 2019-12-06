@@ -470,7 +470,7 @@ function newTravelEditorUI ( ) {
 
 		myCreateDataDiv ( );
 
-		myCreateButtonsDiv ( )
+		myCreateButtonsDiv ( );
 
 	}
 

@@ -189,7 +189,7 @@ function newErrorsUI ( ) {
 				className : 'TravelNotes-ErrorUI-Hidden'
 			},
 			document.getElementsByTagName ( 'body' ) [ 0 ]
-		)
+		);
 
 	}
 

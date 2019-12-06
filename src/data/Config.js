@@ -328,11 +328,11 @@ function newConfig ( ) {
 		get haveBeforeUnloadWarning ( ) { return myConfig.haveBeforeUnloadWarning; },
 		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; },
 		get nominatim ( ) { return myConfig.nominatim; },
-		get geoLocation ( ) { return myConfig.geoLocation },
+		get geoLocation ( ) { return myConfig.geoLocation; },
 
 		overload : newConfig => myOverload ( newConfig )
 
-	}
+	};
 }
 
 /*

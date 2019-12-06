@@ -140,9 +140,9 @@ function newMouseUI ( ) {
 	return Object.seal (
 		{
 			createUI : ( ) => myCreateUI ( ),
-			set mousePos ( MousePos ) { mySetMousePos ( MousePos ) },
-			set zoom ( Zoom ) { mySetZoom ( Zoom ) },
-			set fileName ( FileName ) { mySetFileName ( FileName ) }
+			set mousePos ( MousePos ) { mySetMousePos ( MousePos ); },
+			set zoom ( Zoom ) { mySetZoom ( Zoom ); },
+			set fileName ( FileName ) { mySetFileName ( FileName ); }
 		}
 	);
 }

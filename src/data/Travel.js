@@ -100,7 +100,7 @@ function newTravel ( ) {
 					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
-		)
+		);
 		return something;
 	}
 

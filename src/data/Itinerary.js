@@ -89,7 +89,7 @@ function newItinerary ( ) {
 					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
-		)
+		);
 		return something;
 	}
 

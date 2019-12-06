@@ -157,7 +157,7 @@ function newRoute ( ) {
 					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
-		)
+		);
 		return something;
 	}
 

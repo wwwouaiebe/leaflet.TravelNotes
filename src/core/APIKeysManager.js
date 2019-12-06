@@ -182,7 +182,7 @@ function newAPIKeysManager ( ) {
 		let ApiKeys = [];
 		ourKeysMap.forEach (
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
-		)
+		);
 		ApiKeys.sort (
 			( first, second ) =>{ return first.providerName.localeCompare ( second.providerName ); }
 		);
@@ -199,7 +199,7 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myOnOkDecrypt ( data ) {
-		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) )
+		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
 		myResetAPIKeys ( APIKeys );
 	}
 

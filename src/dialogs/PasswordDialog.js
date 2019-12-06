@@ -45,7 +45,7 @@ function newPasswordDialog ( verifyPassword ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
 	let myPasswordDialog = null;
 	let myPasswordDiv = null;
-	let myPasswordInput = null
+	let myPasswordInput = null;
 
 	/*
 	--- myOnOkButtonClick function ------------------------------------------------------------------------------------

@@ -338,7 +338,7 @@ function newRouteEditor ( ) {
 
 		theErrorsUI.showError ( err );
 
-		console.log ( err ? err : 'An error occurs when asking the route to the provider' )
+		console.log ( err ? err : 'An error occurs when asking the route to the provider' );
 	}
 
 	/*

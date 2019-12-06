@@ -119,7 +119,7 @@ function newMapEditor ( ) {
 						event.data.route,
 						event.data.RemoveNotes,
 						event.data.removeWayPoints
-					)
+					);
 				}
 			},
 			false
@@ -133,7 +133,7 @@ function newMapEditor ( ) {
 						event.data.addNotes,
 						event.data.addWayPoints,
 						event.data.readOnly
-					)
+					);
 				}
 			},
 			false
@@ -144,7 +144,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.editRoute (
 						event.data.route
-					)
+					);
 				}
 			},
 			false
@@ -155,7 +155,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.removeObject (
 						event.data.objId
-					)
+					);
 				}
 			},
 			false
@@ -167,7 +167,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.zoomToPoint (
 						event.data.latLng
-					)
+					);
 				}
 			},
 			false
@@ -179,7 +179,7 @@ function newMapEditor ( ) {
 					theMapEditor.zoomToSearchResult (
 						event.data.latLng,
 						event.data.geometry
-					)
+					);
 				}
 			},
 			false
@@ -190,7 +190,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.zoomToNote (
 						event.data.noteObjId
-					)
+					);
 				}
 			},
 			false
@@ -201,7 +201,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.zoomToRoute (
 						event.data.routeObjId
-					)
+					);
 				}
 			},
 			false
@@ -214,7 +214,7 @@ function newMapEditor ( ) {
 					theMapEditor.addItineraryPointMarker (
 						event.data.objId,
 						event.data.latLng
-					)
+					);
 				}
 			},
 			false
@@ -227,7 +227,7 @@ function newMapEditor ( ) {
 						event.data.objId,
 						event.data.latLng,
 						event.data.geometry
-					)
+					);
 				}
 			},
 			false
@@ -240,7 +240,7 @@ function newMapEditor ( ) {
 						event.data.objId,
 						event.data.bounds,
 						event.data.properties
-					)
+					);
 				}
 			},
 			false
@@ -252,7 +252,7 @@ function newMapEditor ( ) {
 					theMapEditor.addWayPoint (
 						event.data.wayPoint,
 						event.data.letter
-					)
+					);
 				}
 			},
 			false
@@ -263,7 +263,7 @@ function newMapEditor ( ) {
 				if ( event.data ) {
 					theMapEditor.redrawNote (
 						event.data.note
-					)
+					);
 				}
 			},
 			false
@@ -275,7 +275,7 @@ function newMapEditor ( ) {
 					theMapEditor.addNote (
 						event.data.note,
 						event.data.readOnly
-					)
+					);
 				}
 			},
 			false
@@ -296,7 +296,7 @@ function newMapEditor ( ) {
 				}
 			},
 			false
-		)
+		);
 		document.addEventListener (
 			'geolocationstatuschanged',
 			event => {
@@ -305,7 +305,7 @@ function newMapEditor ( ) {
 				}
 			},
 			false
-		)
+		);
 	}
 
 	/*
@@ -344,11 +344,11 @@ function newMapEditor ( ) {
 		myCurrentLayer = leafletLayer;
 
 		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
-			theTravelNotesData.map.setZoom ( layer.minZoom || 0 )
+			theTravelNotesData.map.setZoom ( layer.minZoom || 0 );
 		}
 		theTravelNotesData.map.setMinZoom ( layer.minZoom || 0 );
 		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || 18 ) ) {
-			theTravelNotesData.map.setZoom ( layer.maxZoom || 18 )
+			theTravelNotesData.map.setZoom ( layer.maxZoom || 18 );
 		}
 		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
 		if ( layer.bounds ) {

@@ -61,7 +61,7 @@ function newGeoLocator ( ) {
 	*/
 
 	function myShowPosition ( position ) {
-		myEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } )
+		myEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } );
 	}
 
 	/*

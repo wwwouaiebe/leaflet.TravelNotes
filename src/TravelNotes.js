@@ -73,7 +73,7 @@ import { theMouseUI } from './UI/MouseUI.js';
 import { theAttributionsUI } from './UI/AttributionsUI.js';
 import { theErrorsUI } from './UI/ErrorsUI.js';
 
-theAttributionsUI
+theAttributionsUI;
 
 /*
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ function travelNotesFactory ( ) {
 						newUrlSearch += urlSearchSubString;
 					}
 					else {
-						theAPIKeysManager.fromUrl ( urlSearchSubString )
+						theAPIKeysManager.fromUrl ( urlSearchSubString );
 					}
 				}
 			);

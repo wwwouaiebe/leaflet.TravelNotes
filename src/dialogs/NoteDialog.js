@@ -283,7 +283,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	function myOnErrorSvgIcon ( err ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
-		console.log ( err ? err : 'an error occurs when creating the SVG icon.' )
+		console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
 	}
 
 	/*

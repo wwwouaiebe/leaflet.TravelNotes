@@ -135,7 +135,7 @@ function newAPIKeysDialog ( APIKeys ) {
 					providerName : rows [ counter ].childNodes [ 0 ].value,
 					providerKey : rows [ counter ].childNodes [ 1 ].value
 				}
-			)
+			);
 		}
 		return APIKeys;
 	}
@@ -291,7 +291,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		);
 		myOpenFileInput.addEventListener (
 			'change',
-			event => { myOnOpenFileInputChange ( event ) },
+			event => { myOnOpenFileInputChange ( event ); },
 			false
 		);
 		let openFileFakeDiv = myHTMLElementsFactory.create (

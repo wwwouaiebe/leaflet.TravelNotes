@@ -92,7 +92,7 @@ function newManeuver ( ) {
 					throw 'No ' + property + ' for ' + ourObjType.name;
 				}
 			}
-		)
+		);
 		return something;
 	}
 
