@@ -282,7 +282,7 @@ function newConfig ( ) {
 			}
 		}
 
-		return Object.freeze (object );
+		return Object.freeze ( object );
 	}
 
 	/*

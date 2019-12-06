@@ -52,7 +52,7 @@ function newUtilities ( ) {
 			Random4 ( ) + '-' +
 			Random4 ( ) +
 			Random4 ( ) +
-			Random4 ( ) ;
+			Random4 ( );
 	}
 
 	/* --- End of myGetUUID function --- */
@@ -97,7 +97,7 @@ function newUtilities ( ) {
 			return true;
 		}
 		catch ( Error ) {
-			if (window.navigator.msSaveOrOpenBlob ) {
+			if ( window.navigator.msSaveOrOpenBlob ) {
 
 				//edge IE 11...
 				return true;
@@ -219,7 +219,7 @@ function newUtilities ( ) {
 				',' +
 				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 )
 					.padStart ( 2, '0' )
-					.padEnd ( 3, '0') +
+					.padEnd ( 3, '0' ) +
 				'&nbsp;km';
 		}
 	}

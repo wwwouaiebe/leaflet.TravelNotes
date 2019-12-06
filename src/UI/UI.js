@@ -62,7 +62,7 @@ function newUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI( controlDiv ){
+	function myCreateUI ( controlDiv ) {
 		if ( document.getElementById ( 'TravelNotes-Control-MainDiv' ) ) {
 			return;
 		}

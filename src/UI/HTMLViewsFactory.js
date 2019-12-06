@@ -74,7 +74,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			rowDiv
 		);
 		if ( ( 'svg' === iconCell.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === myClassNamePrefix ) ) {
-			iconCell.firstChild.setAttributeNS ( null, 'viewBox', '0 0 ' + mySvgIconSize + ' ' + mySvgIconSize);
+			iconCell.firstChild.setAttributeNS ( null, 'viewBox', '0 0 ' + mySvgIconSize + ' ' + mySvgIconSize );
 		}
 
 		myHTMLElementsFactory.create (
@@ -162,7 +162,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				{ className : myClassNamePrefix + 'Travel-Notes-Row' },
 				travelNotesHTML
 			);
-			myAddNoteHTML ( travelNotesIterator.value, rowDiv ) ;
+			myAddNoteHTML ( travelNotesIterator.value, rowDiv );
 		}
 
 		return travelNotesHTML;
@@ -205,7 +205,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 		let notesIterator = route.notes.iterator;
 		let notesDone =  notesIterator.done;
-		let notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance ;
+		let notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
 		let previousNotesDistance = notesDistance;
 
 		let maneuversIterator = route.itinerary.maneuvers.iterator;
@@ -243,7 +243,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 								'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}',
 								{
 									distance : myUtilities.formatDistance ( maneuversIterator.value.distance ),
-									duration : myUtilities.formatTime (maneuversIterator.value.duration )
+									duration : myUtilities.formatTime ( maneuversIterator.value.duration )
 								}
 							) + '</div>';
 					}

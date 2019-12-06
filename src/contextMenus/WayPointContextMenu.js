@@ -57,7 +57,7 @@ function newWayPointContextMenu ( event ) {
 		let isMidWayPoint =
 			theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== myWayPointObjId
 			&&
-			theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== myWayPointObjId ;
+			theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== myWayPointObjId;
 		return [
 			{
 				context : theWayPointEditor,

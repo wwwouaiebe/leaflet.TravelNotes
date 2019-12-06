@@ -461,7 +461,7 @@ function newMapEditor ( ) {
 			for ( dashCounter = 0; dashCounter < iDashArray.length - 1; dashCounter ++ ) {
 				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
-			dashArray += iDashArray [ dashCounter ] * route.width ;
+			dashArray += iDashArray [ dashCounter ] * route.width;
 
 			return dashArray;
 		}

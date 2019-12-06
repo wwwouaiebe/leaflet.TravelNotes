@@ -119,12 +119,12 @@ function travelNotesFactory ( ) {
 	*/
 
 	function myReadURL ( ) {
-		let newUrlSearch = '?' ;
+		let newUrlSearch = '?';
 		( decodeURI ( window.location.search ).substr ( 1 )
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString =>{
-					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ){
+					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
 						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
 							myTravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
 						}
@@ -165,13 +165,13 @@ function travelNotesFactory ( ) {
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
-				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 				'TravelNotesConfig.json'
 			),
 			requestBuilder.getJsonPromise (
-				window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 				'TravelNotes' +
-				( myLangage || theConfig.language).toUpperCase ( )  +
+				( myLangage || theConfig.language ).toUpperCase ( )  +
 				'.json'
 			)
 		];
@@ -391,7 +391,7 @@ catch ( err ) {
 }
 
 newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+	window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 	'TravelNotesConfig.json'
 )
 	.then (

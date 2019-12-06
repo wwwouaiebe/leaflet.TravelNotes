@@ -42,7 +42,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newPasswordDialog ( verifyPassword ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myPasswordDialog = null;
 	let myPasswordDiv = null;
 	let myPasswordInput = null;
@@ -69,7 +69,7 @@ function newPasswordDialog ( verifyPassword ) {
 				||
 				! myPasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
 			) {
-				myPasswordDialog.showError ( theTranslator.getText ( 'PasswordDialog - Password rules' ));
+				myPasswordDialog.showError ( theTranslator.getText ( 'PasswordDialog - Password rules' ) );
 				myPasswordInput.focus ( );
 				return;
 			}

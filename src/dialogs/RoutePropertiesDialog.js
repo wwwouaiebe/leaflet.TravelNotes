@@ -51,7 +51,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newRoutePropertiesDialog ( route ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myRoutePropertiesDialog = null;
 	let myRoutePropertiesDiv = null;
 	let myWidthInput = null;
@@ -120,7 +120,7 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		widthDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width') + '</span>';
+		widthDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>';
 		myWidthInput =  myHTMLElementsFactory.create (
 			'input',
 			{
@@ -150,7 +150,7 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		dashDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype') + '</span>';
+		dashDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype' ) + '</span>';
 		myDashSelect = myHTMLElementsFactory.create (
 			'select',
 			{
@@ -182,7 +182,7 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		chainDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route') + '</span>';
+		chainDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route' ) + '</span>';
 		myChainInput =  myHTMLElementsFactory.create (
 			'input',
 			{

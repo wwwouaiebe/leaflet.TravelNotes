@@ -58,7 +58,7 @@ This function creates the UI
 function newRouteEditorUI ( ) {
 
 	let myControlDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
 	--- myCreateHeaderDiv function ------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ function newRouteEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ){
+	function myCreateUI ( controlDiv ) {
 
 		if ( document.getElementById ( 'TravelNotes-Control-RouteDataDiv' ) ) {
 			return;

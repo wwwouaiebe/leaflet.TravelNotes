@@ -53,8 +53,8 @@ function newBaseContextMenu ( originalEvent ) {
 
 	let myMenuItems = [];
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
-	let myBody = document.getElementsByTagName ('body') [ 0 ];
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	let myBody = document.getElementsByTagName ( 'body' ) [ 0 ];
 
 	/*
 	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ function newBaseContextMenu ( originalEvent ) {
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ('body') [ 0 ].removeChild ( ourContainer );
+		document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( ourContainer );
 		ourContainer = null;
 		ourFocusIsOnItem = 0;
 		myMenuItems = [];
@@ -109,11 +109,11 @@ function newBaseContextMenu ( originalEvent ) {
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
 			myOnCloseMenu ( );
 		}
-		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ){
+		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ) {
 			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? 1 : ++ ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
-		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ){
+		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ) {
 			ourFocusIsOnItem = ourFocusIsOnItem <= 1 ? myMenuItems.length : -- ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}

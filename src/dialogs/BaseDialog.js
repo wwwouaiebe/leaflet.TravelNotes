@@ -70,7 +70,7 @@ function newBaseDialog ( ) {
 	let myOkButton = null;
 
 	// Utilities
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	// Listeners
 	let myOkButtonListener = null;
@@ -98,7 +98,7 @@ function newBaseDialog ( ) {
 			}
 
 			document.removeEventListener ( 'keydown', myOnKeyDown, true );
-			document.getElementsByTagName ('body') [ 0 ].removeChild ( myBackgroundDiv );
+			document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( myBackgroundDiv );
 			myOnCancel ( 'Canceled by user' );
 		}
 	}
@@ -176,7 +176,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ('body') [ 0 ].removeChild ( myBackgroundDiv );
+				document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( myBackgroundDiv );
 				myOnCancel ( 'Canceled by user' );
 			},
 			false
@@ -295,7 +295,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ('body') [ 0 ].removeChild ( myBackgroundDiv );
+				document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( myBackgroundDiv );
 				myOnOk ( returnValue );
 			},
 			false
@@ -369,7 +369,7 @@ function newBaseDialog ( ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
-		document.getElementsByTagName ('body') [ 0 ].appendChild ( myBackgroundDiv );
+		document.getElementsByTagName ( 'body' ) [ 0 ].appendChild ( myBackgroundDiv );
 		document.addEventListener ( 'keydown', myOnKeyDown, true );
 
 		myScreenWidth = myBackgroundDiv.clientWidth;
@@ -460,7 +460,7 @@ function newBaseDialog ( ) {
 
 			get okButton ( ) { return myOkButton; },
 
-			show : ( ) => { return myShow ( ) ; }
+			show : ( ) => { return myShow ( ); }
 		}
 	);
 }

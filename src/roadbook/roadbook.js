@@ -107,9 +107,9 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 -------------------------------------------------------------------------------------------------------------------
 */
 
-let params = new URLSearchParams (document.location.search.substring (1));
-let language = params.get ('lng');
-let pageId = params.get ('page');
+let params = new URLSearchParams ( document.location.search.substring ( 1 ) );
+let language = params.get ( 'lng' );
+let pageId = params.get ( 'page' );
 
 function saveFile ( ) {
 	try {
@@ -197,7 +197,7 @@ if ( language ) {
 	};
 
 	let XMLHttpRequestUrl =
-		window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+		window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json';

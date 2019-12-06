@@ -73,7 +73,7 @@ function newTravelEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myControlDiv = null;
 
 	/*
@@ -458,7 +458,7 @@ function newTravelEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ){
+	function myCreateUI ( controlDiv ) {
 
 		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
 			return;

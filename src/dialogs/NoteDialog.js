@@ -64,7 +64,7 @@ let theAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 function newNoteDialog ( note, routeObjId, newNote ) {
 
 	let myFocusControl = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myLatLng = note.latLng;
 	let myAddress = '';
 	let myCity = '';
@@ -192,43 +192,43 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( null !== data.direction ) {
 			let cfgDirection = theConfig.note.svgAnleMaxDirection;
 			if ( data.direction < cfgDirection.right ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right' );
 				directionArrow = String.fromCodePoint ( 0x1F882 );
 			}
 			else if ( data.direction < cfgDirection.slightRight ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight right' );
 				directionArrow = String.fromCodePoint ( 0x1F885 );
 			}
 			else if ( data.direction < cfgDirection.continue ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Continue');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Continue' );
 				directionArrow = String.fromCodePoint ( 0x1F881 );
 			}
 			else if ( data.direction < cfgDirection.slightLeft ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight left' );
 				directionArrow = String.fromCodePoint ( 0x1F884 );
 			}
 			else if ( data.direction < cfgDirection.left ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn left' );
 				directionArrow = String.fromCodePoint ( 0x1F880 );
 			}
 			else if ( data.direction < cfgDirection.sharpLeft ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp left');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp left' );
 				directionArrow = String.fromCodePoint ( 0x1F887 );
 			}
 			else if ( data.direction < cfgDirection.sharpRight ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp right' );
 				directionArrow = String.fromCodePoint ( 0x1F886 );
 			}
 			else {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right');
+				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right' );
 				directionArrow = String.fromCodePoint ( 0x1F882 );
 			}
 		}
 		if ( -1 === data.startStop ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start');
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start' );
 		}
 		else if ( 1 === data.startStop ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop');
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop' );
 		}
 
 		let address = '';
@@ -301,17 +301,17 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	function myOnPredefinedIconListSelectChange ( changeEvent ) {
 
 		let preDefinedIcon = theAllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
-		if ( preDefinedIcon.name === theTranslator.getText ( 'NoteDialog - SVG icon from OSM') ) {
+		if ( preDefinedIcon.name === theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ) ) {
 			myNoteDialog.showWait ( );
-			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId)
+			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
 				.then ( myOnSvgIcon )
 				.catch ( myOnErrorSvgIcon );
 		}
 		else {
-			myWidthInput.value = preDefinedIcon.width ;
-			myHeightInput = preDefinedIcon.height ;
-			myIconHtmlContent.value = preDefinedIcon.icon ;
-			myTooltipContent.value = preDefinedIcon.tooltip ;
+			myWidthInput.value = preDefinedIcon.width;
+			myHeightInput = preDefinedIcon.height;
+			myIconHtmlContent.value = preDefinedIcon.icon;
+			myTooltipContent.value = preDefinedIcon.tooltip;
 		}
 	}
 
@@ -376,7 +376,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
-				let newUserButtonsAndIcons = JSON.parse ( fileReader.result ) ;
+				let newUserButtonsAndIcons = JSON.parse ( fileReader.result );
 				theUserButtonsAndIcons.editionButtons =
 					theUserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
 				theUserButtonsAndIcons.preDefinedIconsList =
@@ -426,7 +426,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( -1 < routeObjId ) {
 			theAllButtonsAndIcons.preDefinedIconsList.push (
 				{
-					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM'),
+					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
 					icon : '',
 					tooltip : '',
 					width : 40,
@@ -622,7 +622,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'NoteDialog - Icon width')
+				data : theTranslator.getText ( 'NoteDialog - Icon width' )
 			},
 			iconDimensionsDiv
 		);
@@ -642,7 +642,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'NoteDialog - Icon height')
+				data : theTranslator.getText ( 'NoteDialog - Icon height' )
 			},
 			iconDimensionsDiv
 		);
@@ -923,7 +923,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		}
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 			'TravelNotesNoteDialog' +
 			theConfig.language.toUpperCase ( ) +
 			'.json'

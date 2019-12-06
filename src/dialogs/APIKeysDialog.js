@@ -45,7 +45,7 @@ import { newDataEncryptor } from '../util/DataEncryptor.js';
 
 function newAPIKeysDialog ( APIKeys ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myAPIKeysDialog = null;
 	let myToolbarDiv = null;
 	let myAPIKeysDiv = null;

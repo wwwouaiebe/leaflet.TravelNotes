@@ -156,7 +156,7 @@ function newFileLoader ( ) {
 		theTravelNotesData.editedRouteObjId = -1;
 
 		if ( '' !== myFileName ) {
-			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) ) ;
+			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) );
 		}
 		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
 		theTravelNotesData.travel.routes.forEach (

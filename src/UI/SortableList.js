@@ -45,7 +45,7 @@ function newSortableList ( options, parentNode ) {
 
 	let myDataObjId  = 0;
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
 	--- myOnDragStart function ----------------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemUpArrowButton',
-				title : theTranslator.getText ('SortableList - Move up' ),
+				title : theTranslator.getText ( 'SortableList - Move up' ),
 				innerHTML : String.fromCharCode ( 8679 )
 			},
 			item
@@ -260,7 +260,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemDownArrowButton',
-				title : theTranslator.getText ('SortableList - Move down' ),
+				title : theTranslator.getText ( 'SortableList - Move down' ),
 				innerHTML : String.fromCharCode ( 8681 )
 			},
 			item
@@ -270,7 +270,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemRightArrowButton',
-				title : theTranslator.getText ('SortableList - Edit' ),
+				title : theTranslator.getText ( 'SortableList - Edit' ),
 				innerHTML : String.fromCharCode ( 8688 )
 			},
 			item );
@@ -281,7 +281,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemDeleteButton',
-				title : theTranslator.getText ('SortableList - Delete' ),
+				title : theTranslator.getText ( 'SortableList - Delete' ),
 				innerHTML : '&#x267b;'
 			},
 			item
@@ -290,7 +290,7 @@ function newSortableList ( options, parentNode ) {
 		item.dataObjId = dataObjId;
 
 		item.canDrag = false;
-		if ( ( ( 'LimitedSort' !== myOptions.listStyle ) || ( 1 < myItems.length ) ) && ( ! isLastItem  ) ){
+		if ( ( ( 'LimitedSort' !== myOptions.listStyle ) || ( 1 < myItems.length ) ) && ( ! isLastItem  ) ) {
 			item.draggable = true;
 			item.addEventListener ( 'dragstart', myOnDragStart, false );
 			item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
@@ -307,7 +307,7 @@ function newSortableList ( options, parentNode ) {
 	// myOptions.listStyle = 'AllSort' : all items can be sorted or deleted
 	// myOptions.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 
-	let myOptions = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' } ;
+	let myOptions = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
 	for ( let option in options ) {
 		myOptions [ option ] = options [ option ];
 	}

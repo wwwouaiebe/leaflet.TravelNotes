@@ -55,7 +55,7 @@ function newSearchPaneUI ( ) {
 	let myOsmSearchEngine = newOsmSearchEngine ( );
 	let mySearchInputValue = '';
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
@@ -292,7 +292,7 @@ function newSearchPaneUI ( ) {
 				let searchResultDiv = myHTMLElementsFactory.create (
 					'div',
 					{
-						id : 'TravelNotes-Control-SearchResult'+ (resultsCounter ++ ),
+						id : 'TravelNotes-Control-SearchResult'+ ( resultsCounter ++ ),
 						className :	'TravelNotes-Control-SearchResult',
 						innerHTML :
 							(

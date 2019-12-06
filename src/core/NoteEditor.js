@@ -506,7 +506,7 @@ function newNoteEditor ( ) {
 		myEventDispatcher.dispatch (
 			'zoomtopoint',
 			{
-				latLng : myDataSearchEngine.getNoteAndRoute ( noteObjId).note.latLng
+				latLng : myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.latLng
 			}
 		);
 	}

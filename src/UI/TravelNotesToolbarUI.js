@@ -46,7 +46,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 function newTravelNotesToolbarUI ( ) {
 
 	let myGeoLocationButton = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myPinButton = null;
 	let myTimerId = null;
 
@@ -116,7 +116,7 @@ function newTravelNotesToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ){
+	function myCreateUI ( controlDiv ) {
 
 		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
 			return;

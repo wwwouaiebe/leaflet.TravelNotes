@@ -53,7 +53,7 @@ function newColorDialog ( color ) {
 	let myGreenInput = null;
 	let myBlueInput = null;
 	let myColorSampleDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( ) ;
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
 	--- myColorToNumbers function -------------------------------------------------------------------------------------
@@ -82,12 +82,12 @@ function newColorDialog ( color ) {
 	function myNumbersToColor ( red, green, blue ) {
 
 		return '#' +
-			parseInt ( red ).toString (16)
+			parseInt ( red ).toString ( 16 )
 				.padStart ( 2, '0' ) +
-			parseInt ( green ).toString (16)
+			parseInt ( green ).toString ( 16 )
 				.padStart ( 2, '0' ) +
-			parseInt ( blue ).toString (16)
-				.padStart ( 2, '0' ) ;
+			parseInt ( blue ).toString ( 16 )
+				.padStart ( 2, '0' );
 	}
 
 	/*
@@ -261,7 +261,7 @@ function newColorDialog ( color ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'ColorDialog - Red')
+				data : theTranslator.getText ( 'ColorDialog - Red' )
 			},
 			rvbDiv
 		);
@@ -285,7 +285,7 @@ function newColorDialog ( color ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'ColorDialog - Green')
+				data : theTranslator.getText ( 'ColorDialog - Green' )
 			},
 			rvbDiv
 		);
@@ -307,7 +307,7 @@ function newColorDialog ( color ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'ColorDialog - Blue')
+				data : theTranslator.getText ( 'ColorDialog - Blue' )
 			},
 			rvbDiv
 		);

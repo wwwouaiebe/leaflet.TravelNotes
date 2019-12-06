@@ -84,9 +84,9 @@ function newAPIKeysManager ( ) {
 		let urlSubStrings = urlString.split ( '=' );
 		if ( 2 === urlSubStrings.length ) {
 			let providerName = urlSubStrings [ 0 ].substr ( 0, urlSubStrings [ 0 ].length - 11 ).toLowerCase ( );
-			let providerKey = urlSubStrings [ 1 ] ;
+			let providerKey = urlSubStrings [ 1 ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
-				sessionStorage.setItem ( providerName + 'ProviderKey', btoa (providerKey ) );
+				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}
 			mySetKey ( providerName, providerKey );
 			let provider = theTravelNotesData.providers.get ( providerName );
@@ -104,10 +104,10 @@ function newAPIKeysManager ( ) {
 
 	function myFromSessionStorage ( ) {
 		let APIKeysCounter = 0;
-		for ( let counter  = 0; counter < sessionStorage.length ; counter ++ ) {
+		for ( let counter  = 0; counter < sessionStorage.length; counter ++ ) {
 			var keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 11 ) ) {
-				mySetKey ( keyName.substr ( 0, keyName.length - 11), atob ( sessionStorage.getItem ( keyName ) ) );
+				mySetKey ( keyName.substr ( 0, keyName.length - 11 ), atob ( sessionStorage.getItem ( keyName ) ) );
 				APIKeysCounter ++;
 			}
 		}
@@ -189,7 +189,7 @@ function newAPIKeysManager ( ) {
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
 			.then ( APIKeys => myResetAPIKeys ( APIKeys ) )
-			.catch ( err => console.log ( err ? err : 'canceled by user' ));
+			.catch ( err => console.log ( err ? err : 'canceled by user' ) );
 	}
 
 	/*
@@ -241,7 +241,7 @@ function newAPIKeysManager ( ) {
 			return;
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 				'APIKeys'
 		)
 			.then ( myOnServerFile )

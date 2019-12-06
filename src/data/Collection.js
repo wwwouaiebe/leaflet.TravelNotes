@@ -135,7 +135,7 @@ function newCollection ( objName ) {
 		}
 		myArray.splice ( newPosition, 0, myArray [ oldPosition ] );
 		if ( newPosition < oldPosition ) {
-			oldPosition ++ ;
+			oldPosition ++;
 		}
 		myArray.splice ( oldPosition, 1 );
 	}

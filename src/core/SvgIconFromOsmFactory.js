@@ -714,7 +714,7 @@ function newSvgIconFromOsmFactory ( ) {
 			.catch (
 				err => {
 					ourRequestStarted = false;
-					onError (err );
+					onError ( err );
 				}
 			);
 	}

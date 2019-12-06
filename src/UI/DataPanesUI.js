@@ -71,7 +71,7 @@ function newDataPanesUI ( ) {
 			return;
 		}
 
-		let htmlElementsFactory = newHTMLElementsFactory ( ) ;
+		let htmlElementsFactory = newHTMLElementsFactory ( );
 
 		let headerDiv = htmlElementsFactory.create (
 			'div',

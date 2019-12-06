@@ -331,10 +331,10 @@ function newLayersToolbarUI ( ) {
 	function myCreateUI ( ) {
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr (0, window.location.href.lastIndexOf ( '/') + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 			'TravelNotesLayers.json'
 		)
-			.then ( layers => { myLayers = myLayers.concat (layers ); } )
+			.then ( layers => { myLayers = myLayers.concat ( layers ); } )
 			.catch ( err => console.log ( err? err : 'An error occurs when loading TravelNotesLayers.json' ) )
 			.finally ( myCreateLayersToolbar );
 	}

@@ -233,9 +233,9 @@ function newRouteEditor ( ) {
 			let instruction = maneuverIterator.value.instruction
 				.replace ( '&', '&amp;' )
 				.replace ( '"', '&apos;' )
-				.replace ('"', '&quote;')
+				.replace ( '"', '&quote;' )
 				.replace ( '>', '&gt;' )
-				.replace ( '<', '&lt;');
+				.replace ( '<', '&lt;' );
 			gpxString +=
 				tab2 +
 				'<rtept lat="' +
@@ -245,7 +245,7 @@ function newRouteEditor ( ) {
 				'" ' +
 				timeStamp +
 				'desc="' +
-				instruction + '" />' ;
+				instruction + '" />';
 		}
 		gpxString += tab1 + '</rte>';
 
@@ -298,7 +298,7 @@ function newRouteEditor ( ) {
 				routesIterator.value.chainedDistance = 0;
 			}
 			let notesIterator = routesIterator.value.notes.iterator;
-			while (! notesIterator.done ) {
+			while ( ! notesIterator.done ) {
 				notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
 			}
 		}

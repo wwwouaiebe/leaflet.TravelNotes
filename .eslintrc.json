@@ -64,8 +64,12 @@
 		"operator-assignment" : [ "warn", "always" ],
 		"quote-props" : [ "warn" , "as-needed" ],
 		"quotes" : [ "warn" , "single" ],
-		"semi" : [ "error", "always" ]
-		
+		"semi" : [ "error", "always" ],
+		"semi-spacing": ["warn", {"before": false, "after": true} ],
+		"semi-style": ["error", "last"],
+		"space-before-blocks" : [ "warn", "always" ],
+		"space-before-function-paren": ["warn", "always"],
+		"space-in-parens": ["warn", "always"]
 		
 		
     }
