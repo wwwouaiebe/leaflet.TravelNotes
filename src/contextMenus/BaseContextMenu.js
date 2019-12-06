@@ -364,7 +364,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	let myBaseContextMenu = {
-		init : ( menuItems ) => myInit ( menuItems ),
+		init : menuItems => myInit ( menuItems ),
 		show : ( ) => myShow ( )
 	};
 

@@ -262,7 +262,7 @@ function newTravelNotesToolbarUI ( ) {
 		{
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			geoLocationStatusChanged : ( status ) => myOnGeoLocationStatusChanged ( status )
+			geoLocationStatusChanged : status => myOnGeoLocationStatusChanged ( status )
 		}
 	);
 }

@@ -115,12 +115,12 @@ function newBaseDialog ( ) {
 		myBackgroundDiv = myHTMLElementsFactory.create ( 'div', {  className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
 		myBackgroundDiv.addEventListener (
 			'dragover',
-			( ) => { return; },
+			( ) => null,
 			false
 		);
 		myBackgroundDiv.addEventListener (
 			'drop',
-			( ) => { return; },
+			( ) => null,
 			false
 		);
 	}
@@ -184,7 +184,7 @@ function newBaseDialog ( ) {
 
 		topBar.addEventListener (
 			'dragstart',
-			( event ) => {
+			event => {
 				try {
 					event.dataTransfer.setData ( 'Text', '1' );
 				}
@@ -198,7 +198,7 @@ function newBaseDialog ( ) {
 		);
 		topBar.addEventListener (
 			'dragend',
-			( event ) => {
+			event => {
 				myDialogX += event.screenX - myStartDragX;
 				myDialogY += event.screenY - myStartDragY;
 				myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth - 20 );
@@ -444,7 +444,7 @@ function newBaseDialog ( ) {
 			hideError : ( ) => myHideError ( ),
 
 			showWait : ( ) => myShowWait ( ),
-			hideWait : ( ) =>myHideWait ( ),
+			hideWait : ( ) => myHideWait ( ),
 
 			get title ( ) { return myHeaderDiv.innerHTML; },
 			set title ( Title ) { myHeaderDiv.innerHTML = Title; },

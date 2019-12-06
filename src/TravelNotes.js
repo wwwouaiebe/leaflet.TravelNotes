@@ -123,7 +123,7 @@ function travelNotesFactory ( ) {
 		( decodeURI ( window.location.search ).substr ( 1 )
 			.split ( '&' ) )
 			.forEach (
-				urlSearchSubString =>{
+				urlSearchSubString => {
 					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
 						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
 							myTravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );

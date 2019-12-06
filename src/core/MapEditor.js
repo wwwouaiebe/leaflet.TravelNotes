@@ -1158,11 +1158,11 @@ function newMapEditor ( ) {
 
 			loadEvents : ( ) => myLoadEvents ( ),
 
-			setLayer : ( layer ) => mySetLayer ( layer ),
+			setLayer : layer => mySetLayer ( layer ),
 
-			onGeolocationStatusChanged : ( status ) => myOnGeolocationStatusChanged ( status ),
+			onGeolocationStatusChanged : status => myOnGeolocationStatusChanged ( status ),
 
-			onGeolocationPositionChanged : ( position ) => myOnGeolocationPositionChanged ( position )
+			onGeolocationPositionChanged : position => myOnGeolocationPositionChanged ( position )
 
 		}
 	);

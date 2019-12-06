@@ -76,7 +76,9 @@
 		"switch-colon-spacing" : [ "warn" , {"after": true, "before": true}],
 		"wrap-regex" : [ "warn" ],
 		
-		"arrow-body-style" : [ "warn" , "as-needed" ]
+		"arrow-body-style" : [ "warn" , "as-needed" ],
+		"arrow-parens" : [ "warn" , "as-needed" ],
+		"arrow-spacing" : [ "warn", { "before": true, "after": true } ]
 		
     }
 }
