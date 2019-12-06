@@ -39,12 +39,12 @@ Tests ...
 
 export { newHTMLViewsFactory };
 
-import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newObjId } from '../data/ObjId.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { newObjId } from '../data/ObjId.js';
 import { newUtilities } from '../util/Utilities.js';
+import { theConfig } from '../data/Config.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
 

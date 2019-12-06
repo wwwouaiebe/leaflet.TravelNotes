@@ -100,18 +100,18 @@ function newUI ( ) {
 
 		myMainDiv.addEventListener (
 			'setprovider',
-			event => {
-				if ( event.data && event.data.provider ) {
-					theProvidersToolbarUI.provider = event.data.provider;
+			setProviderEvent => {
+				if ( setProviderEvent.data && setProviderEvent.data.provider ) {
+					theProvidersToolbarUI.provider = setProviderEvent.data.provider;
 				}
 			},
 			false
 		);
 		myMainDiv.addEventListener (
 			'settransitmode',
-			event => {
-				if ( event.data && event.data.provider ) {
-					theProvidersToolbarUI.transitMode = event.data.transitMode;
+			setTransitModeEvent => {
+				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
+					theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
 				}
 			},
 			false
@@ -119,50 +119,50 @@ function newUI ( ) {
 
 		myMainDiv.addEventListener (
 			'click',
-			event => {
-				if  ( event.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
+			ckickEvent => {
+				if  ( ckickEvent.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
 					return;
 				}
-				if  ( event.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
+				if  ( ckickEvent.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
 					return;
 				}
-				if ( event.target.id && -1 !==
+				if ( ckickEvent.target.id && -1 !==
 					[
 						'TravelNotes-Control-OpenTravelInput',
 						'TravelNotes-Control-OpenTravelButton',
 						'TravelNotes-Control-ImportTravelInput',
 						'TravelNotes-Control-ImportTravelButton'
-					].indexOf ( event.target.id )
+					].indexOf ( ckickEvent.target.id )
 				) {
 					return;
 				}
-				event.stopPropagation ( );
-				event.preventDefault ( );
+				ckickEvent.stopPropagation ( );
+				ckickEvent.preventDefault ( );
 			},
 			false
 		);
 
 		myMainDiv.addEventListener (
 			'dblclick',
-			event => {
-				event.stopPropagation ( );
-				event.preventDefault ( );
+			dblClickEvent => {
+				dblClickEvent.stopPropagation ( );
+				dblClickEvent.preventDefault ( );
 			},
 			false
 		);
 
 		myMainDiv.addEventListener (
 			'wheel',
-			event => {
-				event.stopPropagation ( );
-				event.preventDefault ( );
+			wheelEvent => {
+				wheelEvent.stopPropagation ( );
+				wheelEvent.preventDefault ( );
 			},
 			false
 		);
 		document.addEventListener (
 			'geolocationstatuschanged',
-			event => {
-				theTravelNotesToolbarUI.geoLocationStatusChanged ( event.data.status );
+			geoLocationStatusChangedEvent => {
+				theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 			},
 			false
 		);

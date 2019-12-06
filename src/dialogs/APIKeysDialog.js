@@ -109,8 +109,8 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myOnOkEncrypt ( data ) {
 		myAPIKeysDialog.hideError ( );
 		myAPIKeysDialog.hideWait ( );
-		var blobUrl = URL.createObjectURL ( data );
-		var element = document.createElement ( 'a' );
+		let blobUrl = URL.createObjectURL ( data );
+		let element = document.createElement ( 'a' );
 		element.setAttribute ( 'href', blobUrl );
 		element.setAttribute ( 'download', 'APIKeys' );
 		element.style.display = 'none';
@@ -127,17 +127,17 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myGetAPIKeys ( ) {
-		let APIKeys = [];
+		let dlgAPIKeys = [];
 		let rows = myAPIKeysDiv.childNodes;
 		for ( let counter = 0; counter < rows.length; counter ++ ) {
-			APIKeys.push (
+			dlgAPIKeys.push (
 				{
 					providerName : rows [ counter ].childNodes [ 0 ].value,
 					providerKey : rows [ counter ].childNodes [ 1 ].value
 				}
 			);
 		}
-		return APIKeys;
+		return dlgAPIKeys;
 	}
 
 	/*
@@ -166,9 +166,9 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myOnOkDecrypt ( data ) {
-		let APIKeys = null;
+		let decryptedAPIKeys = null;
 		try {
-			APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
+			decryptedAPIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
 		}
 		catch ( err ) {
 			myOnErrorDecrypt ( );
@@ -179,7 +179,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			myAPIKeysDiv.removeChild ( myAPIKeysDiv.firstChild );
 		}
 
-		APIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
+		decryptedAPIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
 		myAPIKeysDialog.hideWait ( );
 		myAPIKeysDialog.hideError ( );
 	}
@@ -201,10 +201,10 @@ function newAPIKeysDialog ( APIKeys ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOpenFileInputChange ( event ) {
+	function myOnOpenFileInputChange ( changeEvent ) {
 		myAPIKeysDialog.showWait ( );
-		event.stopPropagation ( );
-		var fileReader = new FileReader ( );
+		changeEvent.stopPropagation ( );
+		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			newDataEncryptor ( ).decryptData (
 				fileReader.result,
@@ -213,7 +213,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				newPasswordDialog ( false ).show ( )
 			);
 		};
-		fileReader.readAsArrayBuffer ( event.target.files [ 0 ] );
+		fileReader.readAsArrayBuffer ( changeEvent.target.files [ 0 ] );
 
 	}
 
@@ -291,7 +291,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		);
 		myOpenFileInput.addEventListener (
 			'change',
-			event => { myOnOpenFileInputChange ( event ); },
+			changeEvent => { myOnOpenFileInputChange ( changeEvent ); },
 			false
 		);
 		let openFileFakeDiv = myHTMLElementsFactory.create (

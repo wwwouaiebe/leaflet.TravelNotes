@@ -154,41 +154,48 @@ function newRouteEditorUI ( ) {
 		);
 		myWayPointsList.container.addEventListener (
 			'SortableListDelete',
-			event => {
-				event.stopPropagation ( );
-				theWayPointEditor.removeWayPoint ( event.itemNode.dataObjId );
+			sortableListDeleteEvent => {
+				sortableListDeleteEvent.stopPropagation ( );
+				theWayPointEditor.removeWayPoint ( sortableListDeleteEvent.itemNode.dataObjId );
 			},
 			false
 		);
 		myWayPointsList.container.addEventListener (
 			'SortableListUpArrow',
-			event => {
-				event.stopPropagation ( );
-				theWayPointEditor.swapWayPoints ( event.itemNode.dataObjId, true );
+			sortableListUpArrowEvent => {
+				sortableListUpArrowEvent.stopPropagation ( );
+				theWayPointEditor.swapWayPoints ( sortableListUpArrowEvent.itemNode.dataObjId, true );
 			},
 			false
 		);
 		myWayPointsList.container.addEventListener (
 			'SortableListDownArrow',
-			event => {
-				event.stopPropagation ( );
-				theWayPointEditor.swapWayPoints ( event.itemNode.dataObjId, false );
+			sortableListDownArrowEvent => {
+				sortableListDownArrowEvent.stopPropagation ( );
+				theWayPointEditor.swapWayPoints ( sortableListDownArrowEvent.itemNode.dataObjId, false );
 			},
 			false
 		);
 		myWayPointsList.container.addEventListener (
 			'SortableListChange',
-			event => {
-				event.stopPropagation ( );
-				theWayPointEditor.renameWayPoint ( event.dataObjId, event.changeValue );
+			SortableListChangeEvent => {
+				SortableListChangeEvent.stopPropagation ( );
+				theWayPointEditor.renameWayPoint (
+					SortableListChangeEvent.dataObjId,
+					SortableListChangeEvent.changeValue
+				);
 			},
 			false
 		);
 		myWayPointsList.container.addEventListener (
 			'SortableListDrop',
-			event => {
-				event.stopPropagation ( );
-				theWayPointEditor.wayPointDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+			sortableListDropEvent => {
+				sortableListDropEvent.stopPropagation ( );
+				theWayPointEditor.wayPointDropped (
+					sortableListDropEvent.draggedObjId,
+					sortableListDropEvent.targetObjId,
+					sortableListDropEvent.draggedBefore
+				);
 			},
 			false
 		);
@@ -257,8 +264,8 @@ function newRouteEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ( );
+				clickEvent => {
+					clickEvent.stopPropagation ( );
 					theRouteEditor.cancelEdition ( );
 				},
 				false
@@ -277,8 +284,8 @@ function newRouteEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ( );
+				clickEvent => {
+					clickEvent.stopPropagation ( );
 					theRouteEditor.saveEdition ( );
 				},
 				false );
@@ -296,8 +303,8 @@ function newRouteEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ( );
+				clickEvent => {
+					clickEvent.stopPropagation ( );
 					theRouteEditor.saveGpx ( );
 				},
 				false
@@ -316,8 +323,8 @@ function newRouteEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ( );
+				clickEvent => {
+					clickEvent.stopPropagation ( );
 					theWayPointEditor.reverseWayPoints ( );
 				},
 				false
@@ -336,8 +343,8 @@ function newRouteEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ( );
+				clickEvent => {
+					clickEvent.stopPropagation ( );
 					theWayPointEditor.removeAllWayPoints ( );
 				},
 				false

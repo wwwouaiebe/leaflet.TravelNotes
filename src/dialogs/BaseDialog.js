@@ -184,23 +184,23 @@ function newBaseDialog ( ) {
 
 		topBar.addEventListener (
 			'dragstart',
-			event => {
+			dragStartEvent => {
 				try {
-					event.dataTransfer.setData ( 'Text', '1' );
+					dragStartEvent.dataTransfer.setData ( 'Text', '1' );
 				}
 				catch ( err ) {
 					console.log ( err );
 				}
-				myStartDragX = event.screenX;
-				myStartDragY = event.screenY;
+				myStartDragX = dragStartEvent.screenX;
+				myStartDragY = dragStartEvent.screenY;
 			},
 			false
 		);
 		topBar.addEventListener (
 			'dragend',
-			event => {
-				myDialogX += event.screenX - myStartDragX;
-				myDialogY += event.screenY - myStartDragY;
+			dragEndEvent => {
+				myDialogX += dragEndEvent.screenX - myStartDragX;
+				myDialogY += dragEndEvent.screenY - myStartDragY;
 				myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth - 20 );
 				myDialogY = Math.max ( myDialogY, 20 );
 				let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, 0 ) - 20;

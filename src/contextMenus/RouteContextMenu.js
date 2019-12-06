@@ -46,9 +46,9 @@ import { theTranslator } from '../UI/Translator.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteContextMenu ( event ) {
+function newRouteContextMenu ( contextMenuEvent ) {
 
-	let myRouteObjId = event.target.objId;
+	let myRouteObjId = contextMenuEvent.target.objId;
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------

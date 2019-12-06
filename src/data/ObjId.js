@@ -32,7 +32,7 @@ Tests ...
 
 export { newObjId };
 
-var theTravelNotesObjId = 0;
+let theTravelNotesObjId = 0;
 
 /*
 --- newObjId function ---------------------------------------------------------------------------------------------

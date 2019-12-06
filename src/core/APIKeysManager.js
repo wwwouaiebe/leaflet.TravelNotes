@@ -105,7 +105,7 @@ function newAPIKeysManager ( ) {
 	function myFromSessionStorage ( ) {
 		let APIKeysCounter = 0;
 		for ( let counter  = 0; counter < sessionStorage.length; counter ++ ) {
-			var keyName = sessionStorage.key ( counter );
+			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 11 ) ) {
 				mySetKey ( keyName.substr ( 0, keyName.length - 11 ), atob ( sessionStorage.getItem ( keyName ) ) );
 				APIKeysCounter ++;

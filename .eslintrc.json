@@ -16,6 +16,16 @@
 	
 		"curly" : [ "warn" ],
 		"default-case" : [ "warn" ],
+		
+		
+		
+		
+		"init-declarations" : [ "warn", "always" ],
+		"no-shadow" : [ "error", { "builtinGlobals" : true, "hoist" : "all"} ],
+		
+		
+		
+		
 	
 		"array-bracket-newline" : [ "warn" , "consistent" ],
 		"array-bracket-spacing" : [ "warn" , "always" ],
@@ -78,7 +88,9 @@
 		
 		"arrow-body-style" : [ "warn" , "as-needed" ],
 		"arrow-parens" : [ "warn" , "as-needed" ],
-		"arrow-spacing" : [ "warn", { "before": true, "after": true } ]
+		"arrow-spacing" : [ "warn", { "before": true, "after": true } ],
+		"no-duplicate-imports" : [ "warn" ],
+		"no-var" : [ "error" ]
 		
     }
 }

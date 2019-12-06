@@ -91,8 +91,8 @@ function newTravelNotesToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnGeoLocationStatusChanged ( status ) {
-		switch ( status ) {
+	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
+		switch ( geoLocationStatus ) {
 		case 1 :
 			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
@@ -226,15 +226,15 @@ function newTravelNotesToolbarUI ( ) {
 		);
 		myPinButton.addEventListener (
 			'click',
-			event => {
+			clickEvent => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
-				if ( 10060 === event.target.innerHTML.charCodeAt ( 0 ) ) {
-					event.target.innerHTML = '&#x1f4cc;';
+				if ( 10060 === clickEvent.target.innerHTML.charCodeAt ( 0 ) ) {
+					clickEvent.target.innerHTML = '&#x1f4cc;';
 					control.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
 					control.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
 				}
 				else {
-					event.target.innerHTML = '&#x274c;';
+					clickEvent.target.innerHTML = '&#x274c;';
 					control.removeEventListener ( 'mouseenter', myOnMouseEnterControl, false );
 					control.removeEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
 				}
@@ -262,7 +262,7 @@ function newTravelNotesToolbarUI ( ) {
 		{
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			geoLocationStatusChanged : status => myOnGeoLocationStatusChanged ( status )
+			geoLocationStatusChanged : geoLocationStatus => myOnGeoLocationStatusChanged ( geoLocationStatus )
 		}
 	);
 }

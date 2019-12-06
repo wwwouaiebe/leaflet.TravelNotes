@@ -47,9 +47,9 @@ import { newAboutDialog } from '../dialogs/AboutDialog.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newMapContextMenu ( event ) {
+function newMapContextMenu ( contextMenuEvent ) {
 
-	let myLatLng = [ event.latlng.lat, event.latlng.lng ];
+	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------

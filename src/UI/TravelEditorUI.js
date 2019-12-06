@@ -158,49 +158,56 @@ function newTravelEditorUI ( ) {
 		myRoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
 		myRoutesList.container.addEventListener (
 			'SortableListDelete',
-			event => {
-				event.stopPropagation ( );
-				theTravelEditor.removeRoute ( event.itemNode.dataObjId );
+			sortableListDeleteEvent => {
+				sortableListDeleteEvent.stopPropagation ( );
+				theTravelEditor.removeRoute ( sortableListDeleteEvent.itemNode.dataObjId );
 			},
 			false
 		);
 		myRoutesList.container.addEventListener (
 			'SortableListUpArrow',
-			event => {
-				event.stopPropagation ( );
-				theTravelEditor.swapRoute ( event.itemNode.dataObjId, true );
+			sortableListUpArrowEvent => {
+				sortableListUpArrowEvent.stopPropagation ( );
+				theTravelEditor.swapRoute ( sortableListUpArrowEvent.itemNode.dataObjId, true );
 			},
 			false
 		);
 		myRoutesList.container.addEventListener (
 			'SortableListDownArrow',
-			event => {
-				event.stopPropagation ( );
-				theTravelEditor.swapRoute ( event.itemNode.dataObjId, false );
+			sortableListDownArrowEvent => {
+				sortableListDownArrowEvent.stopPropagation ( );
+				theTravelEditor.swapRoute ( sortableListDownArrowEvent.itemNode.dataObjId, false );
 			},
 			false
 		);
 		myRoutesList.container.addEventListener (
 			'SortableListRightArrow',
-			event => {
-				event.stopPropagation ( );
-				theTravelEditor.editRoute ( event.itemNode.dataObjId );
+			sortableListRightArrowEvent => {
+				sortableListRightArrowEvent.stopPropagation ( );
+				theTravelEditor.editRoute ( sortableListRightArrowEvent.itemNode.dataObjId );
 			},
 			false
 		);
 		myRoutesList.container.addEventListener (
 			'SortableListChange',
-			event => {
-				event.stopPropagation ();
-				theTravelEditor.renameRoute ( event.dataObjId, event.changeValue );
+			sortableListChangeEvent => {
+				sortableListChangeEvent.stopPropagation ();
+				theTravelEditor.renameRoute (
+					sortableListChangeEvent.dataObjId,
+					sortableListChangeEvent.changeValue
+				);
 			},
 			false
 		);
 		myRoutesList.container.addEventListener (
 			'SortableListDrop',
-			event => {
-				event.stopPropagation ( );
-				theTravelEditor.routeDropped ( event.draggedObjId, event.targetObjId, event.draggedBefore );
+			sortableListDropEvent => {
+				sortableListDropEvent.stopPropagation ( );
+				theTravelEditor.routeDropped (
+					sortableListDropEvent.draggedObjId,
+					sortableListDropEvent.targetObjId,
+					sortableListDropEvent.draggedBefore
+				);
 			},
 			false
 		);
@@ -317,10 +324,10 @@ function newTravelEditorUI ( ) {
 		)
 			.addEventListener (
 				'change',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
+				changeEvent => {
+					changeEvent.stopPropagation ( );
 					theRouteEditor.cancelEdition ( );
-					newFileLoader ( ).openLocalFile ( clickEvent );
+					newFileLoader ( ).openLocalFile ( changeEvent );
 				},
 				false
 			);
@@ -442,8 +449,8 @@ function newTravelEditorUI ( ) {
 		)
 			.addEventListener (
 				'click',
-				event => {
-					event.stopPropagation ();
+				clickEvent => {
+					clickEvent.stopPropagation ();
 					theTravelEditor.addRoute ( );
 				},
 				false

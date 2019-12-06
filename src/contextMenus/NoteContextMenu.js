@@ -44,9 +44,9 @@ import { theTranslator } from '../UI/Translator.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteContextMenu ( event ) {
+function newNoteContextMenu ( contextMenuEvent ) {
 
-	let myNoteObjId = event.target.objId;
+	let myNoteObjId = contextMenuEvent.target.objId;
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------

@@ -63,11 +63,11 @@ function newColorDialog ( color ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myColorToNumbers ( color ) {
+	function myColorToNumbers ( colorToNumbers ) {
 		return {
-			red : parseInt ( color.substr ( 1, 2 ), 16 ),
-			green : parseInt ( color.substr ( 3, 2 ), 16 ),
-			blue : parseInt ( color.substr ( 5, 2 ), 16 )
+			red : parseInt ( colorToNumbers.substr ( 1, 2 ), 16 ),
+			green : parseInt ( colorToNumbers.substr ( 3, 2 ), 16 ),
+			blue : parseInt ( colorToNumbers.substr ( 5, 2 ), 16 )
 		};
 	}
 
@@ -98,13 +98,13 @@ function newColorDialog ( color ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnColorClick ( event ) {
-		myNewColor = event.target.colorValue;
+	function myOnColorClick ( clickEvent ) {
+		myNewColor = clickEvent.target.colorValue;
 		let numbers = myColorToNumbers ( myNewColor );
 		myRedInput.value = numbers.red;
 		myGreenInput.value = numbers.green;
 		myBlueInput.value = numbers.blue;
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + event.target.colorValue + ';' );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + clickEvent.target.colorValue + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 
@@ -116,8 +116,8 @@ function newColorDialog ( color ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnRedColorClick ( event ) {
-		let red = event.target.redValue;
+	function myOnRedColorClick ( clickEvent ) {
+		let red = clickEvent.target.redValue;
 		let green = 255;
 		let blue = 255;
 		let rowCounter = 0;

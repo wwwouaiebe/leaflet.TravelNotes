@@ -187,12 +187,12 @@ function newNoteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNewRouteNote ( routeObjId, event ) {
+	function myNewRouteNote ( routeObjId, contextMenuEvent ) {
 
 		// the nearest point and distance on the route is searched
 		let latLngDistance = myGeometry.getClosestLatLngDistance (
 			myDataSearchEngine.getRoute ( routeObjId ),
-			[ event.latlng.lat, event.latlng.lng ]
+			[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
 		);
 
 		// the note is created
@@ -203,10 +203,10 @@ function newNoteEditor ( ) {
 		newNoteDialog ( note, routeObjId, true )
 			.show ( )
 			.then (
-				newNote => {
+				modifiedNote => {
 					let route = myDataSearchEngine.getRoute ( routeObjId );
-					route.notes.add ( newNote );
-					newNote.chainedDistance = route.chainedDistance;
+					route.notes.add ( modifiedNote );
+					modifiedNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
 						( first, second ) => first.distance - second.distance
 					);
@@ -214,7 +214,7 @@ function newNoteEditor ( ) {
 					myEventDispatcher.dispatch (
 						'addnote',
 						{
-							note : newNote,
+							note : modifiedNote,
 							readOnly : false
 						}
 					);
@@ -251,13 +251,13 @@ function newNoteEditor ( ) {
 		newNoteDialog ( note, -1, true )
 			.show ( )
 			.then (
-				newNote => {
-					theTravelNotesData.travel.notes.add ( newNote );
+				modifiedNote => {
+					theTravelNotesData.travel.notes.add ( modifiedNote );
 					myEventDispatcher.dispatch ( 'settravelnotes' );
 					myEventDispatcher.dispatch (
 						'addnote',
 						{
-							note : newNote,
+							note : modifiedNote,
 							readOnly : false
 						}
 					);
@@ -304,10 +304,10 @@ function newNoteEditor ( ) {
 		newNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true )
 			.show ( )
 			.then (
-				newNote => {
+				modifiedNote => {
 					let route = myDataSearchEngine.getRoute ( theTravelNotesData.travel.editedRoute.objId );
-					route.notes.add ( newNote );
-					newNote.chainedDistance = route.chainedDistance;
+					route.notes.add ( modifiedNote );
+					modifiedNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
 						( first, second ) => first.distance - second.distance
 					);
@@ -315,7 +315,7 @@ function newNoteEditor ( ) {
 					myEventDispatcher.dispatch (
 						'addnote',
 						{
-							note : newNote,
+							note : modifiedNote,
 							readOnly : false
 						}
 					);
@@ -345,13 +345,13 @@ function newNoteEditor ( ) {
 		newNoteDialog ( note, -1, true )
 			.show ( )
 			.then (
-				newNote => {
-					theTravelNotesData.travel.notes.add ( newNote );
+				modifiedNote => {
+					theTravelNotesData.travel.notes.add ( modifiedNote );
 					myEventDispatcher.dispatch ( 'settravelnotes' );
 					myEventDispatcher.dispatch (
 						'addnote',
 						{
-							note : newNote,
+							note : modifiedNote,
 							readOnly : false
 						}
 					);
@@ -379,7 +379,6 @@ function newNoteEditor ( ) {
 			.show ( )
 			.then (
 				modifiedNote => {
-					let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( modifiedNote.objId );
 					if ( noteAndRoute.note ) {
 
 						// it's an existing note. The note is changed on the map
@@ -534,7 +533,7 @@ function newNoteEditor ( ) {
 	return Object.seal (
 		{
 
-			newRouteNote : ( routeObjId, event ) => myNewRouteNote ( routeObjId, event ),
+			newRouteNote : ( routeObjId, contextMenuEvent ) => myNewRouteNote ( routeObjId, contextMenuEvent ),
 
 			newSearchNote : searchResult => myNewSearchNote ( searchResult ),
 

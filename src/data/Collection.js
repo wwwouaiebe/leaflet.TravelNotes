@@ -268,7 +268,7 @@ function newCollection ( objName ) {
 
 	function mySetObject ( something ) {
 		myArray.length = 0;
-		let newObject;
+		let newObject = null;
 		something.forEach (
 			arrayObject => {
 				switch ( myObjName ) {

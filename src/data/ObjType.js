@@ -41,9 +41,9 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newObjType ( name ) {
+function newObjType ( objTypeName ) {
 
-	const myName = name;
+	const myName = objTypeName;
 
 	const myVersion = theCurrentVersion;
 

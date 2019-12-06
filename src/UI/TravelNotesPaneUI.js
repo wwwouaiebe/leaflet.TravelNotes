@@ -82,8 +82,8 @@ function newTravelNotesPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnDragOver ( event ) {
-		event.preventDefault ( );
+	function myOnDragOver ( dragEvent ) {
+		dragEvent.preventDefault ( );
 	}
 
 	/*

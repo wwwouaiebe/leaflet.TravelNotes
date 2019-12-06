@@ -104,8 +104,8 @@ function travelNotesFactory ( ) {
 
 	window.addEventListener (
 		'beforeunload',
-		event => {
-			event.returnValue = 'x';
+		beforeUnloadEvent => {
+			beforeUnloadEvent.returnValue = 'x';
 			return 'x';
 		}
 	);
@@ -277,9 +277,9 @@ function travelNotesFactory ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMapContextMenu ( event ) {
+	function myOnMapContextMenu ( contextMenuEvent ) {
 		if ( ! theTravelNotesData.travel.readOnly ) {
-			newMapContextMenu ( event ).show ( );
+			newMapContextMenu ( contextMenuEvent ).show ( );
 		}
 	}
 

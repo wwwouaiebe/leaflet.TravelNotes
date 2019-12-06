@@ -50,10 +50,10 @@ import { theCurrentVersion } from '../data/Version.js';
 
 function newAboutDialog ( ) {
 
-	var aboutDialog = newBaseDialog ( );
+	let aboutDialog = newBaseDialog ( );
 	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
 
-	var aboutDiv = newHTMLElementsFactory ( ).create (
+	let aboutDiv = newHTMLElementsFactory ( ).create (
 		'div',
 		{
 			id : 'TravelNotes-AboutDialog-AboutDiv'

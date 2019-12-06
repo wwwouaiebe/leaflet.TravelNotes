@@ -75,8 +75,8 @@ function newSortableList ( options, parentNode ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnDragOver ( event ) {
-		event.preventDefault ( );
+	function myOnDragOver ( dragEvent ) {
+		dragEvent.preventDefault ( );
 	}
 
 	/*
@@ -92,15 +92,15 @@ function newSortableList ( options, parentNode ) {
 			element = element.parentElement;
 		}
 		let clientRect = element.getBoundingClientRect ( );
-		let event = new Event ( 'SortableListDrop' );
+		let sortableListDropEvent = new Event ( 'SortableListDrop' );
 
 		// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
 		// event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-		event.draggedObjId = myDataObjId + 1;
+		sortableListDropEvent.draggedObjId = myDataObjId + 1;
 
-		event.targetObjId = element.dataObjId;
-		event.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
-		element.parentNode.dispatchEvent ( event );
+		sortableListDropEvent.targetObjId = element.dataObjId;
+		sortableListDropEvent.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
+		element.parentNode.dispatchEvent ( sortableListDropEvent );
 	}
 
 	/*
@@ -110,9 +110,9 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myOnDeleteButtonClick ( ClickEvent ) {
-		let event = new Event ( 'SortableListDelete' );
-		event.itemNode = ClickEvent.target.parentNode;
-		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		let sortableListDeleteEvent = new Event ( 'SortableListDelete' );
+		sortableListDeleteEvent.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( sortableListDeleteEvent );
 		ClickEvent.stopPropagation ();
 	}
 
@@ -123,9 +123,9 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myOnUpArrowButtonClick ( ClickEvent ) {
-		let event = new Event ( 'SortableListUpArrow' );
-		event.itemNode = ClickEvent.target.parentNode;
-		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		let sortableListUpArrowEvent = new Event ( 'SortableListUpArrow' );
+		sortableListUpArrowEvent.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( sortableListUpArrowEvent );
 		ClickEvent.stopPropagation ();
 	}
 
@@ -136,9 +136,9 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myOnDownArrowButtonClick ( ClickEvent ) {
-		let event = new Event ( 'SortableListDownArrow' );
-		event.itemNode = ClickEvent.target.parentNode;
-		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		let sortableListDownArrowEvent = new Event ( 'SortableListDownArrow' );
+		sortableListDownArrowEvent.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( sortableListDownArrowEvent );
 		ClickEvent.stopPropagation ();
 	}
 
@@ -149,9 +149,9 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myOnRightArrowButtonClick ( ClickEvent ) {
-		let event = new Event ( 'SortableListRightArrow' );
-		event.itemNode = ClickEvent.target.parentNode;
-		ClickEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		let sortableListRightArrowEvent = new Event ( 'SortableListRightArrow' );
+		sortableListRightArrowEvent.itemNode = ClickEvent.target.parentNode;
+		ClickEvent.target.parentNode.parentNode.dispatchEvent ( sortableListRightArrowEvent );
 		ClickEvent.stopPropagation ();
 	}
 
@@ -162,10 +162,10 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myOnChange ( changeEvent ) {
-		let event = new Event ( 'SortableListChange' );
-		event.dataObjId = changeEvent.target.parentNode.dataObjId;
-		event.changeValue = changeEvent.target.value;
-		changeEvent.target.parentNode.parentNode.dispatchEvent ( event );
+		let sortableListChangeEvent = new Event ( 'SortableListChange' );
+		sortableListChangeEvent.dataObjId = changeEvent.target.parentNode.dataObjId;
+		sortableListChangeEvent.changeValue = changeEvent.target.value;
+		changeEvent.target.parentNode.parentNode.dispatchEvent ( sortableListChangeEvent );
 		changeEvent.stopPropagation ();
 	}
 
@@ -201,10 +201,10 @@ function newSortableList ( options, parentNode ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddItem ( name, indexName, placeholder, dataObjId, isLastItem  ) {
+	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem  ) {
 
-		name = name || '';
-		indexName = indexName || '';
+		itemValue = itemValue || '';
+		itemValue = indexName || '';
 		placeholder = placeholder || '';
 		dataObjId = dataObjId || -1;
 
@@ -224,7 +224,7 @@ function newSortableList ( options, parentNode ) {
 				type : 'text',
 				className : 'TravelNotes-SortableList-ItemInput',
 				placeholder : placeholder,
-				value : name
+				value : itemValue
 			},
 			item
 		);
@@ -233,15 +233,15 @@ function newSortableList ( options, parentNode ) {
 		// Workaround for issue #8
 		inputElement.addEventListener (
 			'focus',
-			event => {
-				event.target.parentElement.draggable = false;
+			focusEvent => {
+				focusEvent.target.parentElement.draggable = false;
 			},
 			false
 		);
 		inputElement.addEventListener (
 			'blur',
-			event => {
-				event.target.parentElement.draggable = event.target.parentElement.canDrag;
+			blurEvent => {
+				blurEvent.target.parentElement.draggable = blurEvent.target.parentElement.canDrag;
 			},
 			false
 		);
@@ -345,7 +345,7 @@ function newSortableList ( options, parentNode ) {
 			removeAllItems : ( ) => myRemoveAllItems ( ),
 			addItem :
 				(
-					name,
+					itemValue,
 					indexName,
 					placeholder,
 					dataObjId,

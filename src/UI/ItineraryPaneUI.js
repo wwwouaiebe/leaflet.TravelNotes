@@ -148,15 +148,12 @@ function newItineraryPaneUI ( ) {
 		}
 
 		// removing previous itinerary
-		let childCounter;
-		let childNodes;
-		let childNode;
 		let routeManeuversNotesList =
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
-			childNodes = routeManeuversNotesList.childNodes;
-			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-				childNode = childNodes [ childCounter ];
+			let childNodes = routeManeuversNotesList.childNodes;
+			for ( let childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+				let childNode = childNodes [ childCounter ];
 				childNode.removeEventListener ( 'click', myOnInstructionClick, false );
 				childNode.removeEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
 				childNode.removeEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );
@@ -199,15 +196,12 @@ function newItineraryPaneUI ( ) {
 		dataDiv.appendChild ( htmlViewsFactory.routeManeuversAndNotesHTML );
 
 		// adding event listeners
-		let childCounter;
-		let childNodes;
-		let childNode;
 		let routeManeuversNotesList =
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
-			childNodes = routeManeuversNotesList.childNodes;
-			for ( childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
-				childNode = childNodes [ childCounter ];
+			let childNodes = routeManeuversNotesList.childNodes;
+			for ( let childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+				let childNode = childNodes [ childCounter ];
 				childNode.addEventListener ( 'click', myOnInstructionClick, false );
 				childNode.addEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
 				childNode.addEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );

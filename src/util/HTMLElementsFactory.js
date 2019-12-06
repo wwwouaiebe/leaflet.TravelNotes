@@ -48,7 +48,7 @@ function newHTMLElementsFactory ( ) {
 	*/
 
 	function myCreate  ( tagName, properties, parentNode ) {
-		var element;
+		let element = null;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
 			element = document.createTextNode ( '' );
 		}
@@ -59,7 +59,7 @@ function newHTMLElementsFactory ( ) {
 			parentNode.appendChild ( element );
 		}
 		if ( properties ) {
-			for ( var property in properties ) {
+			for ( let property in properties ) {
 				try {
 					element [ property ] = properties [ property ];
 				}

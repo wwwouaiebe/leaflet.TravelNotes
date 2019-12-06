@@ -327,11 +327,11 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnClickEditionButton ( event ) {
+	function myOnClickEditionButton ( clickEvent ) {
 		if ( ! myFocusControl ) {
 			return;
 		}
-		let button = event.target;
+		let button = clickEvent.target;
 		while ( ! button.htmlBefore ) {
 			button = button.parentNode;
 		}
@@ -372,7 +372,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOpenUserDataFileInputChange ( event ) {
+	function myOnOpenUserDataFileInputChange ( changeEvent ) {
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
@@ -388,7 +388,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				console.log ( err ? err : 'An error occurs when opening the file' );
 			}
 		};
-		fileReader.readAsText ( event.target.files [ 0 ] );
+		fileReader.readAsText ( changeEvent.target.files [ 0 ] );
 	}
 
 	/*
@@ -403,8 +403,8 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnFocusControl ( event ) {
-		myFocusControl = event.target;
+	function myOnFocusControl ( focusEvent ) {
+		myFocusControl = focusEvent.target;
 	}
 
 	/*

@@ -170,18 +170,18 @@ function newBaseContextMenu ( originalEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnClickItem ( event ) {
-		event.stopPropagation ( );
-		if ( myMenuItems[ event.target.menuItem ].param ) {
-			myMenuItems[ event.target.menuItem ].action.call (
-				myMenuItems[ event.target.menuItem ].context,
-				myMenuItems[ event.target.menuItem ].param,
+	function myOnClickItem ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		if ( myMenuItems[ clickEvent.target.menuItem ].param ) {
+			myMenuItems[ clickEvent.target.menuItem ].action.call (
+				myMenuItems[ clickEvent.target.menuItem ].context,
+				myMenuItems[ clickEvent.target.menuItem ].param,
 				ourOriginalEvent
 			);
 		}
 		else {
-			myMenuItems[ event.target.menuItem ].action.call (
-				myMenuItems[ event.target.menuItem ].context,
+			myMenuItems[ clickEvent.target.menuItem ].action.call (
+				myMenuItems[ clickEvent.target.menuItem ].context,
 				ourOriginalEvent
 			);
 		}

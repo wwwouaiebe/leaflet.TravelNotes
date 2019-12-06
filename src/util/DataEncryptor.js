@@ -118,7 +118,7 @@ function newDataEncryptor ( ) {
 
 	function myEncryptData ( data, onOk, onError, pswdPromise ) {
 
-		var ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
+		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
 
 		/*
 		--- encrypt function --------------------------------------------------------------------------------------

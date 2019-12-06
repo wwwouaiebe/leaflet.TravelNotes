@@ -118,7 +118,7 @@ function newMouseUI ( ) {
 		);
 		theTravelNotesData.map.on (
 			'mousemove',
-			event => { theMouseUI.mousePos = event.latlng; }
+			mouseMoveEvent => { theMouseUI.mousePos = mouseMoveEvent.latlng; }
 		);
 		theTravelNotesData.map.on (
 			'zoomend',
@@ -126,7 +126,7 @@ function newMouseUI ( ) {
 		);
 		theTravelNotesData.map.on (
 			'travelnotesfileloaded',
-			event => { theMouseUI.fileName = event.name || ''; }
+			TravelNotesFileLoadedEvent => { theMouseUI.fileName = TravelNotesFileLoadedEvent.name || ''; }
 		);
 
 	}

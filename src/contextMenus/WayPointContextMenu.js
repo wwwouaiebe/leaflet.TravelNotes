@@ -43,9 +43,9 @@ import { theTranslator } from '../UI/Translator.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newWayPointContextMenu ( event ) {
+function newWayPointContextMenu ( contextMenuEvent ) {
 
-	let myWayPointObjId = event.target.objId;
+	let myWayPointObjId = contextMenuEvent.target.objId;
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------

@@ -68,7 +68,7 @@ function newTravelNotesData ( ) {
 		{
 
 			get map ( ) { return myTravelNotesData.map; },
-			set map ( Map ) { myTravelNotesData.map = Map; },
+			set map ( newMap ) { myTravelNotesData.map = newMap; },
 
 			get providers ( ) { return myTravelNotesData.providers; },
 

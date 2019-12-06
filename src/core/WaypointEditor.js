@@ -119,10 +119,10 @@ function newWayPointEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddWayPointOnRoute ( routeObjId, event ) {
+	function myAddWayPointOnRoute ( routeObjId, mapContextMenuEvent ) {
 		let latLngDistance = myGeometry.getClosestLatLngDistance (
 			newDataSearchEngine ( ).getRoute ( routeObjId ),
-			[ event.latlng.lat, event.latlng.lng ]
+			[ mapContextMenuEvent.latlng.lat, mapContextMenuEvent.latlng.lng ]
 		);
 		myAddWayPoint ( latLngDistance.latLng, latLngDistance.distance );
 	}
@@ -409,7 +409,13 @@ function newWayPointEditor ( ) {
 		{
 			addWayPoint : latLng => myAddWayPoint ( latLng ),
 
-			addWayPointOnRoute : ( routeObjId, event ) => myAddWayPointOnRoute ( routeObjId, event ),
+			addWayPointOnRoute : (
+				routeObjId,
+				mapContextMenuEvent
+			) => myAddWayPointOnRoute (
+				routeObjId,
+				mapContextMenuEvent
+			),
 
 			reverseWayPoints : ( ) => myReverseWayPoints ( ),
 
@@ -427,12 +433,15 @@ function newWayPointEditor ( ) {
 
 			wayPointDragEnd : wayPointObjId => myWayPointDragEnd ( wayPointObjId ),
 
-			wayPointDropped :
-				(
-					draggedWayPointObjId,
-					targetWayPointObjId,
-					draggedBefore
-				) => myWayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore )
+			wayPointDropped : (
+				draggedWayPointObjId,
+				targetWayPointObjId,
+				draggedBefore
+			) => myWayPointDropped (
+				draggedWayPointObjId,
+				targetWayPointObjId,
+				draggedBefore
+			)
 		}
 	);
 }

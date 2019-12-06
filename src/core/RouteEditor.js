@@ -107,7 +107,7 @@ function newRouteEditor ( ) {
 		// iteration on the itineraryPoints
 		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
 		let iterationDistance = 0;
-		let itineraryPoint;
+		let itineraryPoint = null;
 		let previousItineraryPoint = null;
 
 		let routeCounter = 0;
@@ -539,11 +539,11 @@ function newRouteEditor ( ) {
 		let routePropertiesDialog = newRoutePropertiesDialog ( route );
 
 		routePropertiesDialog.show ( ).then (
-			route => {
+			changedRoute => {
 				myEventDispatcher.dispatch (
 					'editroute',
 					{
-						route : route
+						route : changedRoute
 					}
 				);
 				theRouteEditor.chainRoutes ( );

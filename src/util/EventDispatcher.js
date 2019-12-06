@@ -96,11 +96,11 @@ function newEventDispatcher ( ) {
 	function myDispatch ( eventName, eventData ) {
 		let target = myGetTarget ( eventName );
 		if ( target ) {
-			let event = new Event ( eventName );
+			let dispatchedEvent = new Event ( eventName );
 			if ( eventData ) {
-				event.data = eventData;
+				dispatchedEvent.data = eventData;
 			}
-			target.dispatchEvent ( event );
+			target.dispatchEvent ( dispatchedEvent );
 		}
 	}
 

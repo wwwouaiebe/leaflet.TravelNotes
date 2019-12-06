@@ -238,8 +238,7 @@ function newConfig ( ) {
 			return;
 		}
 		try {
-			let property;
-			for ( property in dest ) {
+			for ( let property in dest ) {
 				if ( 'object' === typeof dest [ property ] ) {
 					myCopyObjectTo ( source [ property ], dest [ property ] );
 				}
@@ -248,7 +247,7 @@ function newConfig ( ) {
 				}
 			}
 
-			for ( property in source ) {
+			for ( let property in source ) {
 				if ( 'object' === typeof source [ property ] ) {
 					if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
 						dest [ property ] = dest [ property ] || [];
@@ -275,8 +274,7 @@ function newConfig ( ) {
 	*/
 
 	function myFreeze ( object ) {
-		var property;
-		for ( property in object ) {
+		for ( let property in object ) {
 			if ( 'object' === typeof object [ property ] ) {
 				object [ property ] = myFreeze (  object [ property ] );
 			}
@@ -330,7 +328,7 @@ function newConfig ( ) {
 		get nominatim ( ) { return myConfig.nominatim; },
 		get geoLocation ( ) { return myConfig.geoLocation; },
 
-		overload : newConfig => myOverload ( newConfig )
+		overload : source => myOverload ( source )
 
 	};
 }

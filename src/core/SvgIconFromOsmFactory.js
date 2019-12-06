@@ -41,7 +41,7 @@ import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-var ourRequestStarted = false;
+let ourRequestStarted = false;
 
 /*
 --- newSvgIconFromOsmFactory function ---------------------------------------------------------------------------------
@@ -270,9 +270,9 @@ function newSvgIconFromOsmFactory ( ) {
 		let outgoingStreet = '';
 		myWaysMap.forEach (
 			way => {
-				let name =
-					( way.tags.name ? way.tags.name : '' ) +
-					( way.tags.name && way.tags.ref ? ' '  : '' ) +
+				let wayName =
+					( way.tags.wayName ? way.tags.wayName : '' ) +
+					( way.tags.wayName && way.tags.ref ? ' '  : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
 				if ( way.nodesIds.includes ( iconPointId ) ) {
 					let isClosed = way.nodesIds [ 0 ] === way.nodesIds [ way.nodesIds.length - 1 ];
@@ -283,29 +283,29 @@ function newSvgIconFromOsmFactory ( ) {
 					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
-					let haveName = name !== '';
+					let haveName = wayName !== '';
 
 					if ( isSimpleStreet && haveName )  {
-						myPassingStreets.push ( name );
+						myPassingStreets.push ( wayName );
 					}
 					if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) )  {
 						if ( ! isIncomingStreet && ! isOutgoingStreet ) {
-							myPassingStreets.push ( name );
-							myPassingStreets.push ( name );
+							myPassingStreets.push ( wayName );
+							myPassingStreets.push ( wayName );
 						}
 						else if (
 							( isIncomingStreet && ! isOutgoingStreet )
 							||
 							( ! isIncomingStreet && isOutgoingStreet )
 						) {
-							myPassingStreets.push ( name );
+							myPassingStreets.push ( wayName );
 						}
 					}
 					if ( isIncomingStreet )  {
-						incomingStreet = haveName ? name : '???';
+						incomingStreet = haveName ? wayName : '???';
 					}
 					if ( isOutgoingStreet )  {
-						outgoingStreet =  haveName ? name : '???';
+						outgoingStreet =  haveName ? wayName : '???';
 					}
 				}
 			}

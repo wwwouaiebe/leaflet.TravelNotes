@@ -291,8 +291,8 @@ function newFileLoader ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOpenFile ( event ) {
-		myFileName = event.target.files [ 0 ].name;
+	function myOpenFile ( changeEvent ) {
+		myFileName = changeEvent.target.files [ 0 ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
@@ -304,7 +304,7 @@ function newFileLoader ( ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
 		};
-		fileReader.readAsText ( event.target.files [ 0 ] );
+		fileReader.readAsText ( changeEvent.target.files [ 0 ] );
 	}
 
 	/*
@@ -315,10 +315,10 @@ function newFileLoader ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOpenLocalFile ( event ) {
+	function myOpenLocalFile ( changeEvent ) {
 		myMergeContent = false;
 		myIsFileReadOnly = false;
-		myOpenFile ( event );
+		myOpenFile ( changeEvent );
 	}
 
 	/*
@@ -329,11 +329,11 @@ function newFileLoader ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myMergeLocalFile ( event ) {
+	function myMergeLocalFile ( changeEvent ) {
 
 		myMergeContent = true;
 		myIsFileReadOnly = false;
-		myOpenFile ( event );
+		myOpenFile ( changeEvent );
 	}
 
 	/*
@@ -359,8 +359,8 @@ function newFileLoader ( ) {
 
 	return Object.seal (
 		{
-			openLocalFile : event => myOpenLocalFile ( event ),
-			mergeLocalFile : event => myMergeLocalFile ( event ),
+			openLocalFile : changeEvent => myOpenLocalFile ( changeEvent ),
+			mergeLocalFile : changeEvent => myMergeLocalFile ( changeEvent ),
 			openDistantFile : fileContent => myOpenDistantFile ( fileContent )
 		}
 	);

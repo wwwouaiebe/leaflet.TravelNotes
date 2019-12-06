@@ -71,21 +71,21 @@ This function updates the route tooltip with the distance
 -------------------------------------------------------------------------------------------------------------------
 */
 
-function onMouseOverOrMoveOnRoute ( event ) {
+function onMouseOverOrMoveOnRoute ( mapEvent ) {
 	let dataSearchEngine  = newDataSearchEngine ( );
-	let route = dataSearchEngine.getRoute (  event.target.objId );
-	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ event.latlng.lat, event.latlng.lng ] ).distance;
+	let route = dataSearchEngine.getRoute (  mapEvent.target.objId );
+	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] ).distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
-	let polyline = theTravelNotesData.mapObjects.get ( event.target.objId );
+	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
 	polyline.closeTooltip ( );
-	let tooltipText = dataSearchEngine.getRoute ( event.target.objId ).name;
+	let tooltipText = dataSearchEngine.getRoute ( mapEvent.target.objId ).name;
 	if ( ! theTravelNotesData.travel.readOnly ) {
 		tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
 	}
 	polyline.setTooltipContent ( tooltipText );
-	polyline.openTooltip (  event.latlng );
+	polyline.openTooltip (  mapEvent.latlng );
 }
 
 /*
@@ -113,12 +113,12 @@ function newMapEditor ( ) {
 	function myLoadEvents ( ) {
 		document.addEventListener (
 			'removeroute',
-			event => {
-				if ( event.data ) {
+			removeRouteEvent => {
+				if ( removeRouteEvent.data ) {
 					theMapEditor.removeRoute (
-						event.data.route,
-						event.data.RemoveNotes,
-						event.data.removeWayPoints
+						removeRouteEvent.data.route,
+						removeRouteEvent.data.RemoveNotes,
+						removeRouteEvent.data.removeWayPoints
 					);
 				}
 			},
@@ -126,13 +126,13 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'addroute',
-			event => {
-				if ( event.data ) {
+			addRouteEvent => {
+				if ( addRouteEvent.data ) {
 					theMapEditor.addRoute (
-						event.data.route,
-						event.data.addNotes,
-						event.data.addWayPoints,
-						event.data.readOnly
+						addRouteEvent.data.route,
+						addRouteEvent.data.addNotes,
+						addRouteEvent.data.addWayPoints,
+						addRouteEvent.data.readOnly
 					);
 				}
 			},
@@ -140,10 +140,10 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'editroute',
-			event => {
-				if ( event.data ) {
+			editRouteEvent => {
+				if ( editRouteEvent.data ) {
 					theMapEditor.editRoute (
-						event.data.route
+						editRouteEvent.data.route
 					);
 				}
 			},
@@ -151,10 +151,10 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'removeobject',
-			event => {
-				if ( event.data ) {
+			removeObjectEvent => {
+				if ( removeObjectEvent.data ) {
 					theMapEditor.removeObject (
-						event.data.objId
+						removeObjectEvent.data.objId
 					);
 				}
 			},
@@ -163,10 +163,10 @@ function newMapEditor ( ) {
 		document.addEventListener ( 'removeallobjects',	( ) => theMapEditor.removeAllObjects ( ), false );
 		document.addEventListener (
 			'zoomtopoint',
-			event => {
-				if ( event.data ) {
+			zoomToPointEvent => {
+				if ( zoomToPointEvent.data ) {
 					theMapEditor.zoomToPoint (
-						event.data.latLng
+						zoomToPointEvent.data.latLng
 					);
 				}
 			},
@@ -174,11 +174,11 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'zoomtosearchresult',
-			event => {
-				if ( event.data ) {
+			zoomToSearchResultEvent => {
+				if ( zoomToSearchResultEvent.data ) {
 					theMapEditor.zoomToSearchResult (
-						event.data.latLng,
-						event.data.geometry
+						zoomToSearchResultEvent.data.latLng,
+						zoomToSearchResultEvent.data.geometry
 					);
 				}
 			},
@@ -186,10 +186,10 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'zoomtonote',
-			event => {
-				if ( event.data ) {
+			zoomToNoteEvent => {
+				if ( zoomToNoteEvent.data ) {
 					theMapEditor.zoomToNote (
-						event.data.noteObjId
+						zoomToNoteEvent.data.noteObjId
 					);
 				}
 			},
@@ -197,10 +197,10 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'zoomtoroute',
-			event => {
-				if ( event.data ) {
+			zoomToRouteEvent => {
+				if ( zoomToRouteEvent.data ) {
 					theMapEditor.zoomToRoute (
-						event.data.routeObjId
+						zoomToRouteEvent.data.routeObjId
 					);
 				}
 			},
@@ -209,11 +209,11 @@ function newMapEditor ( ) {
 		document.addEventListener ( 'zoomtotravel',	( ) => theMapEditor.zoomToTravel ( ), false );
 		document.addEventListener (
 			'additinerarypointmarker',
-			event => {
-				if ( event.data ) {
+			addItineraryPointMarkerEvent => {
+				if ( addItineraryPointMarkerEvent.data ) {
 					theMapEditor.addItineraryPointMarker (
-						event.data.objId,
-						event.data.latLng
+						addItineraryPointMarkerEvent.data.objId,
+						addItineraryPointMarkerEvent.data.latLng
 					);
 				}
 			},
@@ -221,12 +221,12 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'addsearchpointmarker',
-			event => {
-				if ( event.data ) {
+			addSearchPointMarkerEvent => {
+				if ( addSearchPointMarkerEvent.data ) {
 					theMapEditor.addSearchPointMarker (
-						event.data.objId,
-						event.data.latLng,
-						event.data.geometry
+						addSearchPointMarkerEvent.data.objId,
+						addSearchPointMarkerEvent.data.latLng,
+						addSearchPointMarkerEvent.data.geometry
 					);
 				}
 			},
@@ -234,12 +234,12 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'addrectangle',
-			event => {
-				if ( event.data ) {
+			addRectangleEvent => {
+				if ( addRectangleEvent.data ) {
 					theMapEditor.addRectangle (
-						event.data.objId,
-						event.data.bounds,
-						event.data.properties
+						addRectangleEvent.data.objId,
+						addRectangleEvent.data.bounds,
+						addRectangleEvent.data.properties
 					);
 				}
 			},
@@ -247,11 +247,11 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'addwaypoint',
-			event => {
-				if ( event.data ) {
+			addWayPointEvent => {
+				if ( addWayPointEvent.data ) {
 					theMapEditor.addWayPoint (
-						event.data.wayPoint,
-						event.data.letter
+						addWayPointEvent.data.wayPoint,
+						addWayPointEvent.data.letter
 					);
 				}
 			},
@@ -259,10 +259,10 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'redrawnote',
-			event => {
-				if ( event.data ) {
+			redrawNoteEvent => {
+				if ( redrawNoteEvent.data ) {
 					theMapEditor.redrawNote (
-						event.data.note
+						redrawNoteEvent.data.note
 					);
 				}
 			},
@@ -270,11 +270,11 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'addnote',
-			event => {
-				if ( event.data ) {
+			addNoteEvent => {
+				if ( addNoteEvent.data ) {
 					theMapEditor.addNote (
-						event.data.note,
-						event.data.readOnly
+						addNoteEvent.data.note,
+						addNoteEvent.data.readOnly
 					);
 				}
 			},
@@ -282,26 +282,26 @@ function newMapEditor ( ) {
 		);
 		document.addEventListener (
 			'layerchange',
-			event => {
-				if ( event.data ) {
-					theMapEditor.setLayer ( event.data.layer );
+			layerChangeEvent => {
+				if ( layerChangeEvent.data ) {
+					theMapEditor.setLayer ( layerChangeEvent.data.layer );
 				}
 			}
 		);
 		document.addEventListener (
 			'geolocationpositionchanged',
-			event => {
-				if ( event.data ) {
-					theMapEditor.onGeolocationPositionChanged ( event.data.position );
+			geoLocationPositionChangedEvent => {
+				if ( geoLocationPositionChangedEvent.data ) {
+					theMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
 				}
 			},
 			false
 		);
 		document.addEventListener (
 			'geolocationstatuschanged',
-			event => {
-				if ( event.data ) {
-					theMapEditor.onGeolocationStatusChanged ( event.data.status );
+			geoLocationStatusChangedEvent => {
+				if ( geoLocationStatusChangedEvent.data ) {
+					theMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 				}
 			},
 			false
@@ -543,20 +543,20 @@ function newMapEditor ( ) {
 
 		polyline.bindPopup (
 			layer => {
-				let route = myDataSearchEngine.getRoute ( layer.objId );
-				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( route );
+				let popupRoute = myDataSearchEngine.getRoute ( layer.objId );
+				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( popupRoute );
 			}
 		);
 
 		// left click event
-		L.DomEvent.on ( polyline, 'click', event => event.target.openPopup ( event.latlng ) );
+		L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
 
 		// right click event
 		if ( ! readOnly ) {
 			L.DomEvent.on (
 				polyline,
 				'contextmenu',
-				event => newRouteContextMenu ( event ).show ( )
+				contextMenuEvent => newRouteContextMenu ( contextMenuEvent ).show ( )
 			);
 		}
 
@@ -824,14 +824,14 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			wayPoint => myDataSearchEngine.getWayPoint ( wayPoint.objId ).UIName
+			tooltipWayPoint => myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).UIName
 		);
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
 		L.DomEvent.on (
 			marker,
 			'contextmenu',
-			event => newWayPointContextMenu ( event ).show ( )
+			contextMenuEvent => newWayPointContextMenu ( contextMenuEvent ).show ( )
 		);
 
 		// ... and added to the map...
@@ -842,10 +842,10 @@ function newMapEditor ( ) {
 		L.DomEvent.on (
 			marker,
 			'dragend',
-			event => {
-				let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( event.target.objId );
-				wayPoint.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
-				theWayPointEditor.wayPointDragEnd ( event.target.objId );
+			dragEndEvent => {
+				let draggedWayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( dragEndEvent.target.objId );
+				draggedWayPoint.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
+				theWayPointEditor.wayPointDragEnd ( dragEndEvent.target.objId );
 			}
 		);
 	}
@@ -911,19 +911,19 @@ function newMapEditor ( ) {
 			L.DomEvent.on (
 				bullet,
 				'dragend',
-				event => {
+				dragEndEvent => {
 
 					// the TravelNotes note and route are searched...
-					let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( event.target.objId );
-					let note = noteAndRoute.note;
+					let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
+					let draggedNote = noteAndRoute.note;
 					let route = noteAndRoute.route;
 
 					// ... then the layerGroup is searched...
-					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
+					let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
 					if ( null === route ) {
 
 						// the note is not attached to a route, so the coordinates of the note can be directly changed
-						note.latLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+						draggedNote.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
 						myEventDispatcher.dispatch ( 'updatetravelnotes' );
 					}
 					else {
@@ -932,12 +932,12 @@ function newMapEditor ( ) {
 						// and the distance since the start of the route
 						let latLngDistance = myGeometry.getClosestLatLngDistance (
 							route,
-							[ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ]
+							[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
 						);
 
 						// coordinates and distance are changed in the note
-						note.latLng = latLngDistance.latLng;
-						note.distance = latLngDistance.distance;
+						draggedNote.latLng = latLngDistance.latLng;
+						draggedNote.distance = latLngDistance.distance;
 
 						// notes are sorted on the distance
 						route.notes.sort (
@@ -945,12 +945,14 @@ function newMapEditor ( ) {
 						);
 
 						// the coordinates of the bullet are adapted
-						layerGroup.getLayer ( layerGroup.bulletId ).setLatLng ( latLngDistance.latLng );
+						draggedLayerGroup.getLayer ( draggedLayerGroup.bulletId )
+							.setLatLng ( latLngDistance.latLng );
 						myEventDispatcher.dispatch ( 'updateitinerary' );
 					}
 
 					// in all cases, the polyline is updated
-					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+					draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+						.setLatLngs ( [ draggedNote.latLng, draggedNote.iconLatLng ] );
 
 					// and the HTML page is adapted
 					newRoadbookUpdate ( );
@@ -961,11 +963,11 @@ function newMapEditor ( ) {
 			L.DomEvent.on (
 				bullet,
 				'drag',
-				event => {
-					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
-					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
-					layerGroup.getLayer ( layerGroup.polylineId )
-						.setLatLngs ( [ [ event.latlng.lat, event.latlng.lng ], note.iconLatLng ] );
+				dragEvent => {
+					let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
+					let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
+					draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+						.setLatLngs ( [ [ dragEvent.latlng.lat, dragEvent.latlng.lng ], draggedNote.iconLatLng ] );
 				}
 			);
 		}
@@ -992,8 +994,8 @@ function newMapEditor ( ) {
 		// a popup is binded to the the marker...
 		marker.bindPopup (
 			layer => {
-				let note = myDataSearchEngine.getNoteAndRoute ( layer.objId ).note;
-				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( note );
+				let popupNote = myDataSearchEngine.getNoteAndRoute ( layer.objId ).note;
+				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( popupNote );
 			}
 		);
 
@@ -1010,26 +1012,30 @@ function newMapEditor ( ) {
 			L.DomEvent.on (
 				marker,
 				'contextmenu',
-				event => newNoteContextMenu ( event ).show ( )
+				contextMenuEvent => newNoteContextMenu ( contextMenuEvent ).show ( )
 			);
 
 			// event listener for the dragend event
 			L.DomEvent.on (
 				marker,
 				'dragend',
-				event => {
+				dragEndEvent => {
 
 					// The TravelNotes note linked to the marker is searched...
-					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+					let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
 
 					// ... new coordinates are saved in the TravelNotes note...
-					note.iconLatLng = [ event.target.getLatLng ( ).lat, event.target.getLatLng ( ).lng ];
+					draggedNote.iconLatLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
 
 					// ... then the layerGroup is searched...
-					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
+					let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
 
 					// ... and finally the polyline is updated with the new coordinates
-					layerGroup.getLayer ( layerGroup.polylineId ).setLatLngs ( [ note.latLng, note.iconLatLng ] );
+					draggedLayerGroup.getLayer (
+						draggedLayerGroup.polylineId
+					).setLatLngs (
+						[ draggedNote.latLng, draggedNote.iconLatLng ]
+					);
 				}
 			);
 
@@ -1037,17 +1043,17 @@ function newMapEditor ( ) {
 			L.DomEvent.on (
 				marker,
 				'drag',
-				event => {
+				dragEvent => {
 
 					// The TravelNotes note linked to the marker is searched...
-					let note = myDataSearchEngine.getNoteAndRoute ( event.target.objId ).note;
+					let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
 
 					// ... then the layerGroup is searched...
-					let layerGroup = theTravelNotesData.mapObjects.get ( event.target.objId );
+					let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
 
 					// ... and finally the polyline is updated with the new coordinates
-					layerGroup.getLayer ( layerGroup.polylineId )
-						.setLatLngs ( [ note.latLng, [ event.latlng.lat, event.latlng.lng ] ] );
+					draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+						.setLatLngs ( [ draggedNote.latLng, [ dragEvent.latlng.lat, dragEvent.latlng.lng ] ] );
 				}
 			);
 		}
@@ -1072,8 +1078,8 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnGeolocationStatusChanged ( status ) {
-		if ( 2 === status ) {
+	function myOnGeolocationStatusChanged ( geoLocationStatus ) {
+		if ( 2 === geoLocationStatus ) {
 			return;
 		}
 		if ( myGeolocationCircle ) {
@@ -1160,7 +1166,7 @@ function newMapEditor ( ) {
 
 			setLayer : layer => mySetLayer ( layer ),
 
-			onGeolocationStatusChanged : status => myOnGeolocationStatusChanged ( status ),
+			onGeolocationStatusChanged : geoLocationStatus => myOnGeolocationStatusChanged ( geoLocationStatus ),
 
 			onGeolocationPositionChanged : position => myOnGeolocationPositionChanged ( position )
 

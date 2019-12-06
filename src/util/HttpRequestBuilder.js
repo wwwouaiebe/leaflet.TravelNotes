@@ -63,7 +63,7 @@ function newHttpRequestBuilder ( ) {
 			xmlHttpRequest.onreadystatechange = function ( ) {
 				if ( xmlHttpRequest.readyState === 4 ) {
 					if ( xmlHttpRequest.status === 200 ) {
-						let response;
+						let response = null;
 						try {
 							response = JSON.parse ( xmlHttpRequest.responseText );
 						}

@@ -96,7 +96,7 @@ function newUtilities ( ) {
 			new File ( [ 'testdata' ], { type : 'text/plain' } );
 			return true;
 		}
-		catch ( Error ) {
+		catch ( err ) {
 			if ( window.navigator.msSaveOrOpenBlob ) {
 
 				// edge IE 11...

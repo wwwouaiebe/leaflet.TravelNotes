@@ -82,13 +82,13 @@ function newLayersToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseEnterLayerButton ( event ) {
-		event.target.setAttribute (
+	function myOnMouseEnterLayerButton ( mouseEnterEvent ) {
+		mouseEnterEvent.target.setAttribute (
 			'style',
 			'color:' +
-				event.target.layer.toolbar.backgroundColor +
+				mouseEnterEvent.target.layer.toolbar.backgroundColor +
 				';background-color:' +
-				event.target.layer.toolbar.color
+				mouseEnterEvent.target.layer.toolbar.color
 		);
 	}
 
@@ -98,13 +98,13 @@ function newLayersToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseLeaveLayerButton ( event ) {
-		event.target.setAttribute (
+	function myOnMouseLeaveLayerButton ( mouseLeaveEvent ) {
+		mouseLeaveEvent.target.setAttribute (
 			'style',
 			'color:' +
-				event.target.layer.toolbar.color +
+				mouseLeaveEvent.target.layer.toolbar.color +
 				';background-color:' +
-				event.target.layer.toolbar.backgroundColor
+				mouseLeaveEvent.target.layer.toolbar.backgroundColor
 		);
 	}
 
@@ -114,9 +114,9 @@ function newLayersToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseEnterLinkButton ( event ) {
-		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
-		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
+	function myOnMouseEnterLinkButton ( mouseEnterEvent ) {
+		mouseEnterEvent.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
+		mouseEnterEvent.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
 	}
 
 	/*
@@ -125,9 +125,9 @@ function newLayersToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseLeaveLinkButton ( event ) {
-		event.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
-		event.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
+	function myOnMouseLeaveLinkButton ( mouseLeaveEvent ) {
+		mouseLeaveEvent.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
+		mouseLeaveEvent.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 	}
 
 	/*
@@ -136,9 +136,9 @@ function newLayersToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnClickLayerButton ( event ) {
-		myEventDispatcher.dispatch ( 'layerchange', { layer : event.target.layer } );
-		theAttributionsUI.attributions = event.target.layer.attribution;
+	function myOnClickLayerButton ( clickEvent ) {
+		myEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
+		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
 	}
 
 	/*

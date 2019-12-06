@@ -132,8 +132,8 @@ function saveFile ( ) {
 		document.body.removeChild ( element );
 		window.URL.revokeObjectURL ( mapFile );
 	}
-	catch ( Error ) {
-		console.log ( Error );
+	catch ( err ) {
+		console.log ( err ? err : 'An error occurs when saving the file' );
 	}
 }
 
@@ -164,9 +164,8 @@ if ( language ) {
 	xmlHttpRequest.onreadystatechange = function ( ) {
 		if ( xmlHttpRequest.readyState === 4 ) {
 			if ( xmlHttpRequest.status === 200 ) {
-				let response;
 				try {
-					response = JSON.parse ( xmlHttpRequest.responseText );
+					let response = JSON.parse ( xmlHttpRequest.responseText );
 					theTranslator. setTranslations ( response );
 					document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
 						theTranslator.getText ( 'Roadbook - show travel notes' );
