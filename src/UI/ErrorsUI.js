@@ -30,7 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theErrorsUI };
 import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -215,6 +214,8 @@ function newErrorsUI ( ) {
 }
 
 const theErrorsUI = newErrorsUI ( );
+
+export { theErrorsUI };
 
 /*
 --- End of ErrorsUI.js file --------------------------------------------------------------------------------------

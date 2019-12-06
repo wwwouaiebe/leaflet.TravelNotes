@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newTravelNotesPaneUI };
-
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -234,6 +232,8 @@ function newTravelNotesPaneUI ( ) {
 		}
 	);
 }
+
+export { newTravelNotesPaneUI };
 
 /*
 --- End of TravelNotesPaneUI.js file ----------------------------------------------------------------------------------

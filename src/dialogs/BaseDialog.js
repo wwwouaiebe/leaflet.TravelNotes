@@ -37,8 +37,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newBaseDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -464,6 +462,8 @@ function newBaseDialog ( ) {
 		}
 	);
 }
+
+export { newBaseDialog };
 
 /*
 --- End of BaseDialog.js file -----------------------------------------------------------------------------------------

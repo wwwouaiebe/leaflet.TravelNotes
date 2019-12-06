@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newWayPoint };
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
@@ -165,6 +163,8 @@ function newWayPoint ( ) {
 		}
 	);
 }
+
+export { newWayPoint };
 
 /*
 --- End of WayPoint.js file -------------------------------------------------------------------------------------------

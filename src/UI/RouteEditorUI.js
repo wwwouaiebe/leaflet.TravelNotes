@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theRouteEditorUI };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
@@ -465,6 +463,8 @@ The one and only one routeEditorUI
 */
 
 const theRouteEditorUI = newRouteEditorUI ( );
+
+export { theRouteEditorUI };
 
 /*
 --- End of RouteEditorUI.js file --------------------------------------------------------------------------------------

@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newBaseContextMenu };
-
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -55,6 +53,32 @@ function newBaseContextMenu ( originalEvent ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myBody = document.getElementsByTagName ( 'body' ) [ 0 ];
+
+	/*
+	--- myOnKeyPress function -----------------------------------------------------------------------------------------
+
+	Keyboard event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnKeyPress ( keyBoardEvent ) {
+		keyBoardEvent.preventDefault ( );
+		keyBoardEvent.stopPropagation ( );
+	}
+
+	/*
+	--- myOnKeyUp function --------------------------------------------------------------------------------------------
+
+	Keyboard event listener
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnKeyUp ( keyBoardEvent ) {
+		keyBoardEvent.preventDefault ( );
+		keyBoardEvent.stopPropagation ( );
+	}
 
 	/*
 	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
@@ -134,32 +158,6 @@ function newBaseContextMenu ( originalEvent ) {
 		) {
 			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
-	}
-
-	/*
-	--- myOnKeyPress function -----------------------------------------------------------------------------------------
-
-	Keyboard event listener
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyPress ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
-	}
-
-	/*
-	--- myOnKeyUp function --------------------------------------------------------------------------------------------
-
-	Keyboard event listener
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyUp ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
 	}
 
 	/*
@@ -354,7 +352,7 @@ function newBaseContextMenu ( originalEvent ) {
 		myMenuItems = menuItems;
 
 		// completely crazy...
-		delete myBaseContextMenu.init;
+		// delete myBaseContextMenu.init;
 	}
 
 	/*
@@ -370,6 +368,8 @@ function newBaseContextMenu ( originalEvent ) {
 
 	return myBaseContextMenu;
 }
+
+export { newBaseContextMenu };
 
 /*
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------

@@ -34,8 +34,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theProvidersToolbarUI };
-
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 
@@ -59,6 +57,23 @@ function newProvidersToolbarUI ( ) {
 	let myCarButton = null;
 	let myTrainButton = null;
 	let myParentDiv = null;
+
+	/*
+	--- mySetTransitMode function -------------------------------------------------------------------------------------
+
+	This function set the transit mode
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySetTransitMode ( transitMode ) {
+
+		theTravelNotesData.routing.transitMode = transitMode;
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ]
+			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
+			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+	}
 
 	/*
 	--- myOnClickTransitModeButton function ---------------------------------------------------------------------------
@@ -140,23 +155,6 @@ function newProvidersToolbarUI ( ) {
 				mySetTransitMode ( 'train' );
 			}
 		}
-	}
-
-	/*
-	--- mySetTransitMode function -------------------------------------------------------------------------------------
-
-	This function set the transit mode
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetTransitMode ( transitMode ) {
-
-		theTravelNotesData.routing.transitMode = transitMode;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ 0 ]
-			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
-		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
-			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 	}
 
 	/*
@@ -388,20 +386,6 @@ function newProvidersToolbarUI ( ) {
 	/*
 	--- myCreateUI function -------------------------------------------------------------------------------------------
 
-	This function refresh the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myProvidersAdded ( ) {
-
-		myParentDiv.removeChild ( myButtonsDiv );
-		myCreateUI ( myParentDiv );
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
 	This function creates the UI
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -423,6 +407,20 @@ function newProvidersToolbarUI ( ) {
 		myCreateTransitModesButtons ( );
 		myCreateProvidersButtons ( );
 
+	}
+
+	/*
+	--- myCreateUI function -------------------------------------------------------------------------------------------
+
+	This function refresh the UI
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myProvidersAdded ( ) {
+
+		myParentDiv.removeChild ( myButtonsDiv );
+		myCreateUI ( myParentDiv );
 	}
 
 	/*
@@ -456,6 +454,8 @@ The one and only one providesToolbarUI
 */
 
 const theProvidersToolbarUI = newProvidersToolbarUI ( );
+
+export { theProvidersToolbarUI };
 
 /*
 --- End of ProvidersToolbarUI.js file ---------------------------------------------------------------------------------

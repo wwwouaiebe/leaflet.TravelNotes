@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newSearchPaneUI };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
@@ -57,53 +55,6 @@ function newSearchPaneUI ( ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
-
-	/*
-	--- myOnSearchInputChange function --------------------------------------------------------------------------------
-
-	change event listener for the search input
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchInputChange ( ) {
-
-		// saving the search phrase
-		mySearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
-
-		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
-
-		// removing previous search results
-		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
-		while ( 0 !== searchResultsElements.length ) {
-
-			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-			searchResultsElements [ 0 ].removeEventListener ( 'click', myOnSearchResultClick, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-			searchDiv.removeChild ( searchResultsElements [ 0 ] );
-		}
-		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
-
-			// adding wait animation
-			let htmlElementsFactory = newHTMLElementsFactory ( );
-			htmlElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-Control-SearchWaitBullet'
-				},
-				htmlElementsFactory.create (
-					'div',
-					{ id : 'TravelNotes-Control-SearchWait' },
-					searchDiv
-				)
-			);
-		}
-
-		// search...
-		myOsmSearchEngine.search ( );
-	}
 
 	/*
 	--- myOnSearchResultClick function --------------------------------------------------------------------------------
@@ -177,6 +128,53 @@ function newSearchPaneUI ( ) {
 	function myOnSearchResultMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		myEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
+	}
+
+	/*
+	--- myOnSearchInputChange function --------------------------------------------------------------------------------
+
+	change event listener for the search input
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSearchInputChange ( ) {
+
+		// saving the search phrase
+		mySearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
+
+		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+
+		// removing previous search results
+		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		while ( 0 !== searchResultsElements.length ) {
+
+			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
+			searchResultsElements [ 0 ].removeEventListener ( 'click', myOnSearchResultClick, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
+			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
+			searchDiv.removeChild ( searchResultsElements [ 0 ] );
+		}
+		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+
+			// adding wait animation
+			let htmlElementsFactory = newHTMLElementsFactory ( );
+			htmlElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-Control-SearchWaitBullet'
+				},
+				htmlElementsFactory.create (
+					'div',
+					{ id : 'TravelNotes-Control-SearchWait' },
+					searchDiv
+				)
+			);
+		}
+
+		// search...
+		myOsmSearchEngine.search ( );
 	}
 
 	/*
@@ -416,6 +414,8 @@ function newSearchPaneUI ( ) {
 		}
 	);
 }
+
+export { newSearchPaneUI };
 
 /*
 --- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------

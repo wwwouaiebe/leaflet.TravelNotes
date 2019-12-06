@@ -44,8 +44,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theTravelEditor };
-
 import { polyline } from '../polyline/Polyline.js';
 
 import { theTranslator } from '../UI/Translator.js';
@@ -72,61 +70,6 @@ function newTravelEditor ( ) {
 	let myUtilities = newUtilities ( );
 	let myDataSearchEngine  = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
-
-	/*
-	--- myAddRoute function -------------------------------------------------------------------------------------------
-
-	This function add a new route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddRoute ( ) {
-		let route = newRoute ( );
-		theTravelNotesData.travel.routes.add ( route );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
-		if ( 2 !== theTravelNotesData.travel.editedRoute.edited ) {
-			myEditRoute ( route.objId );
-		}
-	}
-
-	/*
-	--- myRemoveRoute function ----------------------------------------------------------------------------------------
-
-	This function remove a route
-
-	parameters :
-	- routeObjId : the TravelNotes route objId to remove
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveRoute ( routeObjId ) {
-		if ( routeObjId === theTravelNotesData.editedRouteObjId && 2 === theTravelNotesData.travel.editedRoute.edited ) {
-
-			// cannot remove the route currently edited
-			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
-			return;
-		}
-
-		myEventDispatcher.dispatch (
-			'removeroute',
-			{
-				route : myDataSearchEngine.getRoute ( routeObjId ),
-				removeNotes : true,
-				removeWayPoints : true
-			}
-		);
-		theTravelNotesData.travel.routes.remove ( routeObjId );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( routeObjId === theTravelNotesData.editedRouteObjId  ) {
-			theRouteEditor.cancelEdition ( );
-		}
-		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
-	}
 
 	/*
 	--- myEditRoute function ------------------------------------------------------------------------------------------
@@ -212,6 +155,61 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'expandrouteui' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
+	}
+
+	/*
+	--- myAddRoute function -------------------------------------------------------------------------------------------
+
+	This function add a new route
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddRoute ( ) {
+		let route = newRoute ( );
+		theTravelNotesData.travel.routes.add ( route );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		theRouteEditor.chainRoutes ( );
+		newRoadbookUpdate ( );
+		if ( 2 !== theTravelNotesData.travel.editedRoute.edited ) {
+			myEditRoute ( route.objId );
+		}
+	}
+
+	/*
+	--- myRemoveRoute function ----------------------------------------------------------------------------------------
+
+	This function remove a route
+
+	parameters :
+	- routeObjId : the TravelNotes route objId to remove
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myRemoveRoute ( routeObjId ) {
+		if ( routeObjId === theTravelNotesData.editedRouteObjId && 2 === theTravelNotesData.travel.editedRoute.edited ) {
+
+			// cannot remove the route currently edited
+			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+			return;
+		}
+
+		myEventDispatcher.dispatch (
+			'removeroute',
+			{
+				route : myDataSearchEngine.getRoute ( routeObjId ),
+				removeNotes : true,
+				removeWayPoints : true
+			}
+		);
+		theTravelNotesData.travel.routes.remove ( routeObjId );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		if ( routeObjId === theTravelNotesData.editedRouteObjId  ) {
+			theRouteEditor.cancelEdition ( );
+		}
+		theRouteEditor.chainRoutes ( );
+		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -392,6 +390,8 @@ The one and only one TravelEditor
 */
 
 const theTravelEditor = newTravelEditor ( );
+
+export { theTravelEditor };
 
 /*
 --- End of TravelEditor.js file ---------------------------------------------------------------------------------------

@@ -50,8 +50,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theRouteEditor };
-
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
@@ -325,6 +323,23 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- myShowRoutes function -----------------------------------------------------------------------------------------
+
+	This function zoom on a route
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myZoomToRoute ( routeObjId ) {
+		myEventDispatcher.dispatch (
+			'zoomtoroute',
+			{
+				routeObjId : routeObjId
+			}
+		);
+	}
+
+	/*
 	--- myEndError function -------------------------------------------------------------------------------------------
 
 	This function ...
@@ -342,47 +357,6 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- myStartRouting function ---------------------------------------------------------------------------------------
-
-		This function start the routing :-)
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myStartRouting ( ) {
-
-		if ( ! theConfig.routing.auto ) {
-			return;
-		}
-
-		// We verify that another request is not loaded
-		if ( myRequestStarted ) {
-			return false;
-		}
-
-		// Control of the wayPoints
-		if ( ! myHaveValidWayPoints ( ) ) {
-			return false;
-		}
-
-		myMustZoomToRoute = 0 === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
-		myRequestStarted = true;
-
-		// Choosing the correct route provider
-		let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
-
-		// provider name and transit mode are added to the road
-		theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
-		theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
-
-		routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-			.then (  myEndRoutingOk, myEndError  )
-			.catch ( myEndError );
-
-		return true;
-	}
-
-	/*
 	--- myEndRoutingOk function -----------------------------------------------------------------------------------------
 
 	This function is called by the router when a routing operation is successfully finished
@@ -394,7 +368,7 @@ function newRouteEditor ( ) {
 
 		myRequestStarted = false;
 
-		theRouteEditor.computeRouteDistances ( theTravelNotesData.travel.editedRoute );
+		myComputeRouteDistances ( theTravelNotesData.travel.editedRoute );
 
 		// Placing the waypoints on the itinerary
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
@@ -463,23 +437,44 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- mySaveEdition function ----------------------------------------------------------------------------------------
+	--- myStartRouting function ---------------------------------------------------------------------------------------
 
-	This function save the current edited route
+		This function start the routing :-)
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySaveEdition ( ) {
+	function myStartRouting ( ) {
 
-		// the edited route is cloned
-		let clonedRoute = newRoute ( );
-		clonedRoute.object = theTravelNotesData.travel.editedRoute.object;
+		if ( ! theConfig.routing.auto ) {
+			return;
+		}
 
-		// and the initial route replaced with the clone
-		theTravelNotesData.travel.routes.replace ( theTravelNotesData.editedRouteObjId, clonedRoute );
-		theTravelNotesData.editedRouteObjId = clonedRoute.objId;
-		myCancelEdition ( );
+		// We verify that another request is not loaded
+		if ( myRequestStarted ) {
+			return false;
+		}
+
+		// Control of the wayPoints
+		if ( ! myHaveValidWayPoints ( ) ) {
+			return false;
+		}
+
+		myMustZoomToRoute = 0 === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+		myRequestStarted = true;
+
+		// Choosing the correct route provider
+		let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
+
+		// provider name and transit mode are added to the road
+		theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+		theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
+
+		routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
+			.then (  myEndRoutingOk, myEndError  )
+			.catch ( myEndError );
+
+		return true;
 	}
 
 	/*
@@ -524,6 +519,26 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- mySaveEdition function ----------------------------------------------------------------------------------------
+
+	This function save the current edited route
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySaveEdition ( ) {
+
+		// the edited route is cloned
+		let clonedRoute = newRoute ( );
+		clonedRoute.object = theTravelNotesData.travel.editedRoute.object;
+
+		// and the initial route replaced with the clone
+		theTravelNotesData.travel.routes.replace ( theTravelNotesData.editedRouteObjId, clonedRoute );
+		theTravelNotesData.editedRouteObjId = clonedRoute.objId;
+		myCancelEdition ( );
+	}
+
+	/*
 	--- myRouteProperties function ------------------------------------------------------------------------------------
 
 	This function opens the RouteProperties dialog
@@ -546,7 +561,7 @@ function newRouteEditor ( ) {
 						route : changedRoute
 					}
 				);
-				theRouteEditor.chainRoutes ( );
+				myChainRoutes ( );
 				myEventDispatcher.dispatch ( 'setrouteslist' );
 				newRoadbookUpdate ( );
 			}
@@ -606,23 +621,6 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- myShowRoutes function -----------------------------------------------------------------------------------------
-
-	This function zoom on a route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToRoute ( routeObjId ) {
-		myEventDispatcher.dispatch (
-			'zoomtoroute',
-			{
-				routeObjId : routeObjId
-			}
-		);
-	}
-
-	/*
 	--- routeEditor object --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -666,6 +664,8 @@ The one and only one routeEditor
 */
 
 const theRouteEditor = newRouteEditor ( );
+
+export { theRouteEditor };
 
 /*
 --- End of RouteEditor.js file ----------------------------------------------------------------------------------------

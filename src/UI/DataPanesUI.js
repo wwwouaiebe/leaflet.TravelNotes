@@ -34,8 +34,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theDataPanesUI };
-
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
@@ -56,82 +54,6 @@ function newDataPanesUI ( ) {
 	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
 	let mySearchPaneUI = newSearchPaneUI ( );
 	let myItineraryPaneUI = newItineraryPaneUI ( );
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( controlDiv ) {
-
-		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
-			return;
-		}
-
-		let htmlElementsFactory = newHTMLElementsFactory ( );
-
-		let headerDiv = htmlElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-ItineraryHeaderDiv',
-				className : 'TravelNotes-Control-HeaderDiv'
-			},
-			controlDiv
-		);
-
-		htmlElementsFactory.create (
-			'div',
-			{
-				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
-				id : 'TravelNotes-Control-ItineraryPaneButton',
-				className : 'TravelNotes-Control-PaneButton'
-			},
-			headerDiv
-		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
-
-		htmlElementsFactory.create (
-			'div',
-			{
-				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
-				id : 'TravelNotes-Control-TravelNotesPaneButton',
-				className : 'TravelNotes-Control-PaneButton'
-			},
-			headerDiv
-		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
-
-		if ( window.osmSearch ) {
-			htmlElementsFactory.create (
-				'div',
-				{
-					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
-					id : 'TravelNotes-Control-SearchPaneButton',
-					className : 'TravelNotes-Control-PaneButton'
-				},
-				headerDiv
-			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
-		}
-
-		let dataDiv = htmlElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-DataPanesDiv',
-				className : 'TravelNotes-Control-DataDiv'
-			},
-			controlDiv );
-		dataDiv.addEventListener (
-			'wheel',
-			wheelEvent => {
-				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
-				}
-				wheelEvent.stopPropagation ( );
-			},
-			false
-		);
-	}
 
 	/*
 	--- myRemoveActivePane function -----------------------------------------------------------------------------------
@@ -250,6 +172,82 @@ function newDataPanesUI ( ) {
 	}
 
 	/*
+	--- myCreateUI function -------------------------------------------------------------------------------------------
+
+	This function creates the UI
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateUI ( controlDiv ) {
+
+		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
+			return;
+		}
+
+		let htmlElementsFactory = newHTMLElementsFactory ( );
+
+		let headerDiv = htmlElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-ItineraryHeaderDiv',
+				className : 'TravelNotes-Control-HeaderDiv'
+			},
+			controlDiv
+		);
+
+		htmlElementsFactory.create (
+			'div',
+			{
+				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
+				id : 'TravelNotes-Control-ItineraryPaneButton',
+				className : 'TravelNotes-Control-PaneButton'
+			},
+			headerDiv
+		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
+
+		htmlElementsFactory.create (
+			'div',
+			{
+				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
+				id : 'TravelNotes-Control-TravelNotesPaneButton',
+				className : 'TravelNotes-Control-PaneButton'
+			},
+			headerDiv
+		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
+
+		if ( window.osmSearch ) {
+			htmlElementsFactory.create (
+				'div',
+				{
+					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
+					id : 'TravelNotes-Control-SearchPaneButton',
+					className : 'TravelNotes-Control-PaneButton'
+				},
+				headerDiv
+			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
+		}
+
+		let dataDiv = htmlElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-DataPanesDiv',
+				className : 'TravelNotes-Control-DataDiv'
+			},
+			controlDiv );
+		dataDiv.addEventListener (
+			'wheel',
+			wheelEvent => {
+				if ( wheelEvent.deltaY ) {
+					wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
+				}
+				wheelEvent.stopPropagation ( );
+			},
+			false
+		);
+	}
+
+	/*
 	--- dataPanesUI object --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -281,6 +279,8 @@ The one and only one dataPanesUI
 */
 
 const theDataPanesUI = newDataPanesUI ( );
+
+export { theDataPanesUI };
 
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------

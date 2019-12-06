@@ -33,8 +33,6 @@ Tests ...
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-export { newTravel };
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
@@ -173,6 +171,8 @@ function newTravel ( ) {
 		}
 	);
 }
+
+export { newTravel };
 
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------

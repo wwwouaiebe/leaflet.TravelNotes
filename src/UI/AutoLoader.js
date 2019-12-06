@@ -28,8 +28,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newAutoLoader };
-
 import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
@@ -52,6 +50,8 @@ function newAutoLoader ( ) {
 	window.L.travelNotes.addControl ( map, 'TravelNotes' );
 	window.L.travelNotes.rightContextMenu = true;
 }
+
+export { newAutoLoader };
 
 /*
 --- End of AutoLoader.js file -----------------------------------------------------------------------------------------

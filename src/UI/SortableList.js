@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newSortableList };
-
 import { theTranslator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -46,6 +44,18 @@ function newSortableList ( options, parentNode ) {
 	let myDataObjId  = 0;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+
+	let myItems = [];
+
+	let myOptions = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
+
+	let myContainer = myHTMLElementsFactory.create (
+		'div',
+		{
+			id : myOptions.id,
+			className : 'TravelNotes-SortableList-Container'
+		}
+	);
 
 	/*
 	--- myOnDragStart function ----------------------------------------------------------------------------------------
@@ -302,25 +312,15 @@ function newSortableList ( options, parentNode ) {
 		myContainer.appendChild ( item );
 	}
 
-	let myItems = [];
-
 	// myOptions.listStyle = 'AllSort' : all items can be sorted or deleted
 	// myOptions.listStyle = 'LimitedSort' : all items except first and last can be sorted or deleted
 
-	let myOptions = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
 	for ( let option in options ) {
 		myOptions [ option ] = options [ option ];
 	}
 	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( 2 > myOptions.minSize ) ) {
 		myOptions.minSize = 0;
 	}
-	let myContainer = myHTMLElementsFactory.create (
-		'div',
-		{
-			id : myOptions.id,
-			className : 'TravelNotes-SortableList-Container'
-		}
-	);
 	myContainer.classList.add ( myOptions.listStyle );
 	myContainer.addEventListener ( 'drop', myOnDrop, false );
 	myContainer.addEventListener ( 'dragover', myOnDragOver, false );
@@ -355,6 +355,8 @@ function newSortableList ( options, parentNode ) {
 	);
 
 }
+
+export { newSortableList };
 
 /*
 --- End of SortableList.js file ---------------------------------------------------------------------------------------

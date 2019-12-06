@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newDataSearchEngine };
-
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 function newDataSearchEngine ( ) {
@@ -125,6 +123,8 @@ function newDataSearchEngine ( ) {
 		}
 	);
 }
+
+export { newDataSearchEngine };
 
 /*
 --- End of DataSearchEngine.js file -----------------------------------------------------------------------------------

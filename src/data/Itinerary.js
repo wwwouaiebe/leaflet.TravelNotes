@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newItinerary };
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
@@ -168,6 +166,8 @@ function newItinerary ( ) {
 		}
 	);
 }
+
+export { newItinerary };
 
 /*
 --- End of Itinerary.js file ------------------------------------------------------------------------------------------

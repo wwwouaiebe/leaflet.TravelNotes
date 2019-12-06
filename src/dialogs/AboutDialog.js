@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newAboutDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -81,6 +79,8 @@ function newAboutDialog ( ) {
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 
 }
+
+export { newAboutDialog };
 
 /*
 --- End of AboutDialog.js file ----------------------------------------------------------------------------------------

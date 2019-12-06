@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newRouteContextMenu };
-
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
@@ -143,6 +141,8 @@ function newRouteContextMenu ( contextMenuEvent ) {
 
 	return Object.seal ( routeContextMenu );
 }
+
+export { newRouteContextMenu };
 
 /*
 --- End of RouteContextMenu.js file -----------------------------------------------------------------------------------

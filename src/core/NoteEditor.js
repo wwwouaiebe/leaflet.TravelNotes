@@ -40,8 +40,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theNoteEditor };
-
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
@@ -573,6 +571,8 @@ The one and only one noteEditor
 */
 
 const theNoteEditor = newNoteEditor ( );
+
+export { theNoteEditor };
 
 /*
 --- End of NoteEditor.js file -----------------------------------------------------------------------------------------

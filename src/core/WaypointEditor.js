@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theWayPointEditor };
-
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
@@ -59,6 +57,67 @@ function newWayPointEditor ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
+
+	/*
+	--- myRenameWayPoint function -------------------------------------------------------------------------------------
+
+	This function rename a wayPoint
+
+	parameters:
+	- wayPointObjId : the waypoint objId to rename
+	- wayPointName : the new name
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myRenameWayPoint ( wayPointName, wayPointObjId ) {
+		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
+		myEventDispatcher.dispatch ( 'setwaypointslist' );
+	}
+
+	/*
+	--- myRenameWayPointWithGeocoder function -----------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
+
+		if ( ! theConfig.wayPoint.reverseGeocoding ) {
+			return;
+		}
+
+		function setAdressFromGeocoder ( geoCoderData ) {
+			let address = '';
+			if ( geoCoderData.address.house_number ) {
+				address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				address += geoCoderData.address.pedestrian + ' ';
+			}
+			if (  geoCoderData.address.village ) {
+				address += geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				address += geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				address += geoCoderData.address.city;
+			}
+			if ( 0 === address.length ) {
+				address += geoCoderData.address.country;
+			}
+			myRenameWayPoint ( address, wayPointObjId );
+		}
+
+		newGeoCoder ( ).getPromiseAddress ( latLng )
+			.then ( setAdressFromGeocoder )
+			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
+	}
 
 	/*
 	--- myAddWayPoint function ----------------------------------------------------------------------------------------
@@ -193,67 +252,6 @@ function newWayPointEditor ( ) {
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
-	}
-
-	/*
-	--- myRenameWayPoint function -------------------------------------------------------------------------------------
-
-	This function rename a wayPoint
-
-	parameters:
-	- wayPointObjId : the waypoint objId to rename
-	- wayPointName : the new name
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRenameWayPoint ( wayPointName, wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
-		theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-	}
-
-	/*
-	--- myRenameWayPointWithGeocoder function -----------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
-
-		if ( ! theConfig.wayPoint.reverseGeocoding ) {
-			return;
-		}
-
-		function setAdressFromGeocoder ( geoCoderData ) {
-			let address = '';
-			if ( geoCoderData.address.house_number ) {
-				address += geoCoderData.address.house_number + ' ';
-			}
-			if ( geoCoderData.address.road ) {
-				address += geoCoderData.address.road + ' ';
-			}
-			else if ( geoCoderData.address.pedestrian ) {
-				address += geoCoderData.address.pedestrian + ' ';
-			}
-			if (  geoCoderData.address.village ) {
-				address += geoCoderData.address.village;
-			}
-			else if ( geoCoderData.address.town ) {
-				address += geoCoderData.address.town;
-			}
-			else if ( geoCoderData.address.city ) {
-				address += geoCoderData.address.city;
-			}
-			if ( 0 === address.length ) {
-				address += geoCoderData.address.country;
-			}
-			myRenameWayPoint ( address, wayPointObjId );
-		}
-
-		newGeoCoder ( ).getPromiseAddress ( latLng )
-			.then ( setAdressFromGeocoder )
-			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 	}
 
 	/*
@@ -455,6 +453,8 @@ The one and only one wayPointEditor
 */
 
 const theWayPointEditor = newWayPointEditor ( );
+
+export { theWayPointEditor };
 
 /*
 --- End of WayPointEditor.js file -------------------------------------------------------------------------------------

@@ -28,8 +28,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newRoadbookUpdate };
-
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -47,6 +45,8 @@ function newRoadbookUpdate ( ) {
 		localStorage.setItem ( theTravelNotesData.UUID + '-TravelNotesHTML', htmlViewsFactory.travelHTML.outerHTML );
 	}
 }
+
+export { newRoadbookUpdate };
 
 /*
 --- End of RoadbookUpdate.js file -------------------------------------------------------------------------------------

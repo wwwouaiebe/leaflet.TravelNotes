@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theTravelNotesToolbarUI };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
@@ -276,6 +274,8 @@ The one and only one TravelNotesToolbarUI
 */
 
 const theTravelNotesToolbarUI = newTravelNotesToolbarUI ( );
+
+export { theTravelNotesToolbarUI };
 
 /*
 --- End of TravelNotesToolbarUI.js file -------------------------------------------------------------------------------

@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newNoteContextMenu };
-
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
@@ -109,6 +107,8 @@ function newNoteContextMenu ( contextMenuEvent ) {
 
 	return Object.seal ( noteContextMenu );
 }
+
+export { newNoteContextMenu };
 
 /*
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------

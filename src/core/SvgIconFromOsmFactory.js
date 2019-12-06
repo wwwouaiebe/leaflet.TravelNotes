@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newSvgIconFromOsmFactory };
-
 import { theConfig } from '../data/Config.js';
 
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
@@ -745,6 +743,8 @@ function newSvgIconFromOsmFactory ( ) {
 		}
 	);
 }
+
+export { newSvgIconFromOsmFactory };
 
 /*
 --- End of svgIconFromOsmFactory.js file ------------------------------------------------------------------------------

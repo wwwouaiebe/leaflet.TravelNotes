@@ -28,8 +28,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newPasswordDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -46,6 +44,18 @@ function newPasswordDialog ( verifyPassword ) {
 	let myPasswordDialog = null;
 	let myPasswordDiv = null;
 	let myPasswordInput = null;
+
+	/*
+	--- myOnKeyDown function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnKeyDown ( keyBoardEvent ) {
+		if ( 'Enter' === keyBoardEvent.key  ) {
+			myPasswordDialog.okButton.click ( );
+		}
+	}
 
 	/*
 	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
@@ -77,18 +87,6 @@ function newPasswordDialog ( verifyPassword ) {
 
 		document.removeEventListener ( 'keydown', myOnKeyDown, false );
 		return new window.TextEncoder ( ).encode ( myPasswordInput.value );
-	}
-
-	/*
-	--- myOnKeyDown function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyDown ( keyBoardEvent ) {
-		if ( 'Enter' === keyBoardEvent.key  ) {
-			myPasswordDialog.okButton.click ( );
-		}
 	}
 
 	/*
@@ -154,6 +152,8 @@ function newPasswordDialog ( verifyPassword ) {
 
 	return myPasswordDialog;
 }
+
+export { newPasswordDialog };
 
 /*
 --- End of PasswordDialog.js file -------------------------------------------------------------------------------------

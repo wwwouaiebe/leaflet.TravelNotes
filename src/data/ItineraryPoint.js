@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newItineraryPoint };
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
@@ -153,6 +151,8 @@ function newItineraryPoint ( ) {
 		}
 	);
 }
+
+export { newItineraryPoint };
 
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------

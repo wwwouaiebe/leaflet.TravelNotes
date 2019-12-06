@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newHTMLElementsFactory };
-
 /*
 --- newHTMLElementsFactory function -----------------------------------------------------------------------------------
 
@@ -83,6 +81,8 @@ function newHTMLElementsFactory ( ) {
 		}
 	);
 }
+
+export { newHTMLElementsFactory };
 
 /*
 --- End of HTMLElementsFactory.js file --------------------------------------------------------------------------------

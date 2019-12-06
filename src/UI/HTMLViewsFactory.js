@@ -37,8 +37,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newHTMLViewsFactory };
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -55,6 +53,89 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	let mySvgIconSize = theConfig.note.svgIconWidth;
 
 	let myClassNamePrefix = classNamePrefix || 'TravelNotes-Control-';
+
+	/*
+	--- myGetNoteHTML function ----------------------------------------------------------------------------------------
+
+	This function returns an HTML string with the note contents. This string will be used in the
+	note popup and on the roadbook page
+
+	parameters:
+	- note : the TravelNotes object
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetNoteHTML ( note ) {
+
+		let noteText = '';
+		if ( 0 !== note.tooltipContent.length ) {
+			noteText +=
+				'<div class="' +
+				myClassNamePrefix +
+				'NoteHtml-TooltipContent">' +
+				note.tooltipContent +
+				'</div>';
+		}
+		if ( 0 !== note.popupContent.length ) {
+			noteText +=
+				'<div class="' +
+				myClassNamePrefix +
+				'NoteHtml-PopupContent">' +
+				note.popupContent +
+				'</div>';
+		}
+		if ( 0 !== note.address.length ) {
+			noteText +=
+				'<div class="' +
+				myClassNamePrefix +
+				'NoteHtml-Address">' +
+				theTranslator.getText ( 'NoteEditor - Address' ) +
+				note.address + '</div>';
+		}
+		if ( 0 !== note.phone.length ) {
+			noteText +=
+				'<div class="' +
+				myClassNamePrefix +
+				'NoteHtml-Phone">' +
+				theTranslator.getText ( 'NoteEditor - Phone' )
+				+ note.phone + '</div>';
+		}
+		if ( 0 !== note.url.length ) {
+			noteText +=
+				'<div class="' +
+				myClassNamePrefix +
+				'NoteHtml-Url">' +
+				theTranslator.getText ( 'NoteEditor - Link' ) +
+				'<a href="' +
+				note.url +
+				'" target="_blank">' +
+				note.url.substr ( 0, 40 ) +
+				'...' +
+				'</a></div>';
+		}
+		let utilities = newUtilities ( );
+		noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-LatLng">' +
+			theTranslator.getText (
+				'NoteEditor - Latitude Longitude',
+				{
+					lat : utilities.formatLat ( note.lat ),
+					lng : utilities.formatLng ( note.lng )
+				}
+			) + '</div>';
+
+		if ( -1 !== note.distance ) {
+			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
+				theTranslator.getText (
+					'NoteEditor - Distance',
+					{
+						distance : utilities.formatDistance ( note.chainedDistance + note.distance )
+					}
+				) + '</div>';
+		}
+
+		return noteText;
+	}
 
 	/*
 	--- myAddNoteHTML function ----------------------------------------------------------------------------------------
@@ -86,6 +167,49 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			rowDiv
 		);
 		rowDiv.noteObjId = note.objId;
+	}
+
+	/*
+	--- myGetRouteHTML function ---------------------------------------------------------------------------------------
+
+	This function returns an HTML string with the route contents. This string will be used in the
+	route popup and on the roadbook page
+
+	parameters:
+	- route : the TravelNotes route object
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetRouteHTML ( route ) {
+
+		let returnValue = '<div class="' + myClassNamePrefix + 'Route-Header-Name">' +
+			route.name +
+			'</div>';
+		if ( 0 !== route.distance ) {
+			returnValue +=
+				'<div class="' +
+				myClassNamePrefix +
+				'Route-Header-Distance">' +
+				theTranslator.getText (
+					'RouteEditor - Distance',
+					{ distance : myUtilities.formatDistance ( route.distance ) }
+				) +
+				'</div>';
+		}
+		if ( ! theTravelNotesData.travel.readOnly ) {
+			returnValue +=
+				'<div class="' +
+				myClassNamePrefix +
+				'Route-Header-Duration">' +
+				theTranslator.getText (
+					'RouteEditor - Duration',
+					{ duration : myUtilities.formatTime ( route.duration ) }
+				) +
+				'</div>';
+		}
+
+		return returnValue;
 	}
 
 	/*
@@ -405,132 +529,6 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	}
 
 	/*
-	--- myGetRouteHTML function ---------------------------------------------------------------------------------------
-
-	This function returns an HTML string with the route contents. This string will be used in the
-	route popup and on the roadbook page
-
-	parameters:
-	- route : the TravelNotes route object
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetRouteHTML ( route ) {
-
-		let returnValue = '<div class="' + myClassNamePrefix + 'Route-Header-Name">' +
-			route.name +
-			'</div>';
-		if ( 0 !== route.distance ) {
-			returnValue +=
-				'<div class="' +
-				myClassNamePrefix +
-				'Route-Header-Distance">' +
-				theTranslator.getText (
-					'RouteEditor - Distance',
-					{ distance : myUtilities.formatDistance ( route.distance ) }
-				) +
-				'</div>';
-		}
-		if ( ! theTravelNotesData.travel.readOnly ) {
-			returnValue +=
-				'<div class="' +
-				myClassNamePrefix +
-				'Route-Header-Duration">' +
-				theTranslator.getText (
-					'RouteEditor - Duration',
-					{ duration : myUtilities.formatTime ( route.duration ) }
-				) +
-				'</div>';
-		}
-
-		return returnValue;
-	}
-
-	/*
-	--- myGetNoteHTML function ----------------------------------------------------------------------------------------
-
-	This function returns an HTML string with the note contents. This string will be used in the
-	note popup and on the roadbook page
-
-	parameters:
-	- note : the TravelNotes object
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetNoteHTML ( note ) {
-
-		let noteText = '';
-		if ( 0 !== note.tooltipContent.length ) {
-			noteText +=
-				'<div class="' +
-				myClassNamePrefix +
-				'NoteHtml-TooltipContent">' +
-				note.tooltipContent +
-				'</div>';
-		}
-		if ( 0 !== note.popupContent.length ) {
-			noteText +=
-				'<div class="' +
-				myClassNamePrefix +
-				'NoteHtml-PopupContent">' +
-				note.popupContent +
-				'</div>';
-		}
-		if ( 0 !== note.address.length ) {
-			noteText +=
-				'<div class="' +
-				myClassNamePrefix +
-				'NoteHtml-Address">' +
-				theTranslator.getText ( 'NoteEditor - Address' ) +
-				note.address + '</div>';
-		}
-		if ( 0 !== note.phone.length ) {
-			noteText +=
-				'<div class="' +
-				myClassNamePrefix +
-				'NoteHtml-Phone">' +
-				theTranslator.getText ( 'NoteEditor - Phone' )
-				+ note.phone + '</div>';
-		}
-		if ( 0 !== note.url.length ) {
-			noteText +=
-				'<div class="' +
-				myClassNamePrefix +
-				'NoteHtml-Url">' +
-				theTranslator.getText ( 'NoteEditor - Link' ) +
-				'<a href="' +
-				note.url +
-				'" target="_blank">' +
-				note.url.substr ( 0, 40 ) +
-				'...' +
-				'</a></div>';
-		}
-		let utilities = newUtilities ( );
-		noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-LatLng">' +
-			theTranslator.getText (
-				'NoteEditor - Latitude Longitude',
-				{
-					lat : utilities.formatLat ( note.lat ),
-					lng : utilities.formatLng ( note.lng )
-				}
-			) + '</div>';
-
-		if ( -1 !== note.distance ) {
-			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
-				theTranslator.getText (
-					'NoteEditor - Distance',
-					{
-						distance : utilities.formatDistance ( note.chainedDistance + note.distance )
-					}
-				) + '</div>';
-		}
-
-		return noteText;
-	}
-
-	/*
 	--- HTMLViewsFactory object ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -562,6 +560,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		}
 	);
 }
+
+export { newHTMLViewsFactory };
 
 /*
 --- End of HTMLViewsFactory.js file -----------------------------------------------------------------------------------

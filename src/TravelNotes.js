@@ -161,7 +161,202 @@ function travelNotesFactory ( ) {
 
 		myReadURL ( );
 
-		theMapEditor.loadEvents ( );
+		document.addEventListener (
+			'removeroute',
+			removeRouteEvent => {
+				if ( removeRouteEvent.data ) {
+					theMapEditor.removeRoute (
+						removeRouteEvent.data.route,
+						removeRouteEvent.data.RemoveNotes,
+						removeRouteEvent.data.removeWayPoints
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addroute',
+			addRouteEvent => {
+				if ( addRouteEvent.data ) {
+					theMapEditor.addRoute (
+						addRouteEvent.data.route,
+						addRouteEvent.data.addNotes,
+						addRouteEvent.data.addWayPoints,
+						addRouteEvent.data.readOnly
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'editroute',
+			editRouteEvent => {
+				if ( editRouteEvent.data ) {
+					theMapEditor.editRoute (
+						editRouteEvent.data.route
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'removeobject',
+			removeObjectEvent => {
+				if ( removeObjectEvent.data ) {
+					theMapEditor.removeObject (
+						removeObjectEvent.data.objId
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener ( 'removeallobjects',	( ) => theMapEditor.removeAllObjects ( ), false );
+		document.addEventListener (
+			'zoomtopoint',
+			zoomToPointEvent => {
+				if ( zoomToPointEvent.data ) {
+					theMapEditor.zoomToPoint (
+						zoomToPointEvent.data.latLng
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtosearchresult',
+			zoomToSearchResultEvent => {
+				if ( zoomToSearchResultEvent.data ) {
+					theMapEditor.zoomToSearchResult (
+						zoomToSearchResultEvent.data.latLng,
+						zoomToSearchResultEvent.data.geometry
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtonote',
+			zoomToNoteEvent => {
+				if ( zoomToNoteEvent.data ) {
+					theMapEditor.zoomToNote (
+						zoomToNoteEvent.data.noteObjId
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'zoomtoroute',
+			zoomToRouteEvent => {
+				if ( zoomToRouteEvent.data ) {
+					theMapEditor.zoomToRoute (
+						zoomToRouteEvent.data.routeObjId
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener ( 'zoomtotravel',	( ) => theMapEditor.zoomToTravel ( ), false );
+		document.addEventListener (
+			'additinerarypointmarker',
+			addItineraryPointMarkerEvent => {
+				if ( addItineraryPointMarkerEvent.data ) {
+					theMapEditor.addItineraryPointMarker (
+						addItineraryPointMarkerEvent.data.objId,
+						addItineraryPointMarkerEvent.data.latLng
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addsearchpointmarker',
+			addSearchPointMarkerEvent => {
+				if ( addSearchPointMarkerEvent.data ) {
+					theMapEditor.addSearchPointMarker (
+						addSearchPointMarkerEvent.data.objId,
+						addSearchPointMarkerEvent.data.latLng,
+						addSearchPointMarkerEvent.data.geometry
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addrectangle',
+			addRectangleEvent => {
+				if ( addRectangleEvent.data ) {
+					theMapEditor.addRectangle (
+						addRectangleEvent.data.objId,
+						addRectangleEvent.data.bounds,
+						addRectangleEvent.data.properties
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addwaypoint',
+			addWayPointEvent => {
+				if ( addWayPointEvent.data ) {
+					theMapEditor.addWayPoint (
+						addWayPointEvent.data.wayPoint,
+						addWayPointEvent.data.letter
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'redrawnote',
+			redrawNoteEvent => {
+				if ( redrawNoteEvent.data ) {
+					theMapEditor.redrawNote (
+						redrawNoteEvent.data.note
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'addnote',
+			addNoteEvent => {
+				if ( addNoteEvent.data ) {
+					theMapEditor.addNote (
+						addNoteEvent.data.note,
+						addNoteEvent.data.readOnly
+					);
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'layerchange',
+			layerChangeEvent => {
+				if ( layerChangeEvent.data ) {
+					theMapEditor.setLayer ( layerChangeEvent.data.layer );
+				}
+			}
+		);
+		document.addEventListener (
+			'geolocationpositionchanged',
+			geoLocationPositionChangedEvent => {
+				if ( geoLocationPositionChangedEvent.data ) {
+					theMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'geolocationstatuschanged',
+			geoLocationStatusChangedEvent => {
+				if ( geoLocationStatusChangedEvent.data ) {
+					theMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+				}
+			},
+			false
+		);
+
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (

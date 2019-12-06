@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theMouseUI };
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -118,15 +116,27 @@ function newMouseUI ( ) {
 		);
 		theTravelNotesData.map.on (
 			'mousemove',
-			mouseMoveEvent => { theMouseUI.mousePos = mouseMoveEvent.latlng; }
+			mouseMoveEvent => {
+				myMousePos =
+					myUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
+					'&nbsp;-&nbsp;' +
+					myUtilities.formatLng ( mouseMoveEvent.latlng.lng );
+				myUpdate ( );
+			}
 		);
 		theTravelNotesData.map.on (
 			'zoomend',
-			( ) => { theMouseUI.zoom = theTravelNotesData.map.getZoom ( ); }
+			( ) => {
+				myZoom = theTravelNotesData.map.getZoom ( );
+				myUpdate ( );
+			}
 		);
 		theTravelNotesData.map.on (
 			'travelnotesfileloaded',
-			TravelNotesFileLoadedEvent => { theMouseUI.fileName = TravelNotesFileLoadedEvent.name || ''; }
+			TravelNotesFileLoadedEvent => {
+				myFileName = TravelNotesFileLoadedEvent.name || '';
+				myUpdate ( );
+			}
 		);
 
 	}
@@ -148,6 +158,8 @@ function newMouseUI ( ) {
 }
 
 const theMouseUI = newMouseUI ( );
+
+export { theMouseUI };
 
 /*
 --- End of MouseUI.js file --------------------------------------------------------------------------------------------

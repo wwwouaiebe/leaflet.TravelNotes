@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newMapContextMenu };
-
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
@@ -137,6 +135,8 @@ function newMapContextMenu ( contextMenuEvent ) {
 
 	return Object.seal ( mapContextMenu );
 }
+
+export { newMapContextMenu };
 
 /*
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------

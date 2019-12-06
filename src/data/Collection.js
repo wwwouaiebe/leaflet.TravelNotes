@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newCollection };
-
 import { newRoute } from '../data/Route.js';
 import { newNote } from '../data/Note.js';
 import { newWayPoint } from '../data/WayPoint.js';
@@ -77,6 +75,23 @@ function newCollection ( objName ) {
 	}
 
 	/*
+	--- myIterator function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myIterator ( ) {
+		let nextIndex = -1;
+		return {
+			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
+			get done ( ) { return ++ nextIndex  >= myArray.length; },
+			get first ( ) { return 0 === nextIndex; },
+			get last ( ) { return nextIndex  >= myArray.length - 1; },
+			get index ( ) { return nextIndex; }
+		};
+	}
+
+	/*
 	--- myForEach function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -89,6 +104,19 @@ function newCollection ( objName ) {
 			result = funct ( iterator.value, result );
 		}
 		return result;
+	}
+
+	/*
+	--- myIndexOfObjId function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myIndexOfObjId ( objId ) {
+		let index = myArray.findIndex (
+			element => element.objId === objId
+		);
+		return index;
 	}
 
 	/*
@@ -138,36 +166,6 @@ function newCollection ( objName ) {
 			oldPosition ++;
 		}
 		myArray.splice ( oldPosition, 1 );
-	}
-
-	/*
-	--- myIndexOfObjId function ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myIndexOfObjId ( objId ) {
-		let index = myArray.findIndex (
-			element => element.objId === objId
-		);
-		return index;
-	}
-
-	/*
-	--- myIterator function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myIterator ( ) {
-		let nextIndex = -1;
-		return {
-			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
-			get done ( ) { return ++ nextIndex  >= myArray.length; },
-			get first ( ) { return 0 === nextIndex; },
-			get last ( ) { return nextIndex  >= myArray.length - 1; },
-			get index ( ) { return nextIndex; }
-		};
 	}
 
 	/*
@@ -540,6 +538,8 @@ function newCollection ( objName ) {
 		}
 	);
 }
+
+export { newCollection };
 
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------

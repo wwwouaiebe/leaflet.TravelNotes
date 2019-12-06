@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theAPIKeysManager };
-
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -275,6 +273,8 @@ The one and only one noteEditor
 */
 
 const theAPIKeysManager = newAPIKeysManager ( );
+
+export { theAPIKeysManager };
 
 /*
 --- End of APIKeysManager.js file -------------------------------------------------------------------------------------

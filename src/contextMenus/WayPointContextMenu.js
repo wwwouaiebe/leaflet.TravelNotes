@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newWayPointContextMenu };
-
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -79,6 +77,8 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 
 	return Object.seal ( wayPointContextMenu );
 }
+
+export { newWayPointContextMenu };
 
 /*
 --- End of WayPointContextMenu.js file ------------------------------------------------------------------------------------

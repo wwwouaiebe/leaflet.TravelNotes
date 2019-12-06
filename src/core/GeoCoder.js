@@ -35,7 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newGeoCoder };
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 
@@ -85,6 +84,8 @@ function newGeoCoder ( ) {
 	);
 
 }
+
+export { newGeoCoder };
 
 /*
 --- End of GeoCoder.js file -------------------------------------------------------------------------------------------

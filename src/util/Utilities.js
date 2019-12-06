@@ -25,8 +25,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newUtilities };
-
 import { theTranslator } from '../UI/Translator.js';
 
 function newUtilities ( ) {
@@ -290,6 +288,8 @@ function newUtilities ( ) {
 		}
 	);
 }
+
+export { newUtilities };
 
 /*
 --- End of Utilities.js file ------------------------------------------------------------------------------------------

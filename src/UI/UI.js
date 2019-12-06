@@ -35,8 +35,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theUI };
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelEditorUI } from '../UI/TravelEditorUI.js';
 import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
@@ -192,6 +190,8 @@ The one and only one UI object
 */
 
 const theUI = newUI ( );
+
+export { theUI };
 
 /*
 --- End of UserInterface.js file --------------------------------------------------------------------------------------

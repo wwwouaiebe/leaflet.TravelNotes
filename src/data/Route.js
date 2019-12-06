@@ -36,7 +36,6 @@ Tests ...
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-export { newRoute };
 import { theConfig } from '../data/Config.js';
 
 import { newObjId } from '../data/ObjId.js';
@@ -265,6 +264,8 @@ function newRoute ( ) {
 		}
 	);
 }
+
+export { newRoute };
 
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------

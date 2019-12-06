@@ -36,8 +36,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newRoutePropertiesDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
@@ -202,6 +200,8 @@ function newRoutePropertiesDialog ( route ) {
 
 	return myRoutePropertiesDialog;
 }
+
+export { newRoutePropertiesDialog };
 
 /*
 --- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------

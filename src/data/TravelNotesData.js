@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theTravelNotesData };
-
 import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
 
@@ -103,6 +101,8 @@ The one and only one translator
 */
 
 const theTravelNotesData = newTravelNotesData ( );
+
+export { theTravelNotesData };
 
 /*
 --- End of TravelNotesData.js file ------------------------------------------------------------------------------------

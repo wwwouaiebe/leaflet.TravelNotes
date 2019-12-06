@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newObjId };
-
 let theTravelNotesObjId = 0;
 
 /*
@@ -44,6 +42,8 @@ function newObjId ( ) {
 	++ theTravelNotesObjId;
 	return  theTravelNotesObjId;
 }
+
+export { newObjId };
 
 /*
 --- End of ObjId.js file ----------------------------------------------------------------------------------------------

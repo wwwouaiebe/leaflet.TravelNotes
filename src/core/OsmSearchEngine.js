@@ -30,8 +30,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newOsmSearchEngine };
-
 import { theConfig } from '../data/Config.js';
 import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -230,6 +228,8 @@ function newOsmSearchEngine ( ) {
 		}
 	);
 }
+
+export { newOsmSearchEngine };
 
 /*
 --- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------

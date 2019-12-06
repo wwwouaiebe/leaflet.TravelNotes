@@ -22,6 +22,8 @@
 		
 		"init-declarations" : [ "warn", "always" ],
 		"no-shadow" : [ "error", { "builtinGlobals" : true, "hoist" : "all"} ],
+		"no-undef-init" : [ "warn" ],
+		"no-use-before-define": ["warn", { "functions": true, "classes": true }],
 		
 		
 		

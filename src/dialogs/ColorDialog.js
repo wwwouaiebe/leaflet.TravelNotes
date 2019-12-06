@@ -32,8 +32,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newColorDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -353,6 +351,8 @@ function newColorDialog ( color ) {
 
 	return myColorDialog;
 }
+
+export { newColorDialog };
 
 /*
 --- End of ColorDialog.js file ----------------------------------------------------------------------------------------

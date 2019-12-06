@@ -30,7 +30,6 @@ Tests ...
 
 /* global L */
 
-export { newGeometry };
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 /*
@@ -195,6 +194,8 @@ function newGeometry  ( ) {
 		}
 	);
 }
+
+export { newGeometry };
 
 /*
 --- End of Geometry.js file -------------------------------------------------------------------------------------------

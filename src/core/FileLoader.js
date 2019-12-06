@@ -33,8 +33,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newFileLoader };
-
 import { polyline } from '../polyline/Polyline.js';
 
 import { theTranslator } from '../UI/Translator.js';
@@ -86,87 +84,6 @@ function newFileLoader ( ) {
 			}
 		);
 		route.itinerary.itineraryPoints = decompressedItineraryPoints;
-	}
-
-	/*
-	--- myDecompressFileContent function ------------------------------------------------------------------------------
-
-	This function decompress the file data
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDecompressFileContent ( ) {
-
-		myFileContent.routes.forEach ( myDecompressRoute );
-		if ( myFileContent.editedRoute ) {
-
-			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
-			myDecompressRoute ( myFileContent.editedRoute );
-		}
-		if ( myMergeContent ) {
-			myMerge ( );
-		}
-		else {
-			myOpen ( );
-		}
-	}
-
-	/*
-	--- myMerge function ----------------------------------------------------------------------------------------------
-
-	This function merge the file data with the theTravelNotesData.travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myMerge ( ) {
-
-		// ... and transform the data in the correct format
-		let travel = newTravel ( );
-		travel.object = myFileContent;
-
-		// routes are added with their notes
-		let routesIterator = travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			theTravelNotesData.travel.routes.add ( routesIterator.value );
-		}
-
-		// travel notes are added
-		let notesIterator = travel.notes.iterator;
-		while ( ! notesIterator.done ) {
-			theTravelNotesData.travel.notes.add ( notesIterator.value );
-		}
-
-		theRouteEditor.chainRoutes ( );
-
-		myDisplay ( );
-	}
-
-	/*
-	--- myOpen function -----------------------------------------------------------------------------------------------
-
-	This function load the file data within the theTravelNotesData.travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOpen ( ) {
-		theTravelNotesData.travel.object = myFileContent;
-		theTravelNotesData.editedRouteObjId = -1;
-
-		if ( '' !== myFileName ) {
-			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) );
-		}
-		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
-		theTravelNotesData.travel.routes.forEach (
-			route => {
-				if ( 0 !== route.edited ) {
-					theTravelNotesData.editedRouteObjId = route.objId;
-				}
-			}
-		);
-		myDisplay ( );
 	}
 
 	/*
@@ -284,6 +201,87 @@ function newFileLoader ( ) {
 	}
 
 	/*
+	--- myMerge function ----------------------------------------------------------------------------------------------
+
+	This function merge the file data with the theTravelNotesData.travel
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myMerge ( ) {
+
+		// ... and transform the data in the correct format
+		let travel = newTravel ( );
+		travel.object = myFileContent;
+
+		// routes are added with their notes
+		let routesIterator = travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			theTravelNotesData.travel.routes.add ( routesIterator.value );
+		}
+
+		// travel notes are added
+		let notesIterator = travel.notes.iterator;
+		while ( ! notesIterator.done ) {
+			theTravelNotesData.travel.notes.add ( notesIterator.value );
+		}
+
+		theRouteEditor.chainRoutes ( );
+
+		myDisplay ( );
+	}
+
+	/*
+	--- myOpen function -----------------------------------------------------------------------------------------------
+
+	This function load the file data within the theTravelNotesData.travel
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOpen ( ) {
+		theTravelNotesData.travel.object = myFileContent;
+		theTravelNotesData.editedRouteObjId = -1;
+
+		if ( '' !== myFileName ) {
+			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) );
+		}
+		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
+		theTravelNotesData.travel.routes.forEach (
+			route => {
+				if ( 0 !== route.edited ) {
+					theTravelNotesData.editedRouteObjId = route.objId;
+				}
+			}
+		);
+		myDisplay ( );
+	}
+
+	/*
+	--- myDecompressFileContent function ------------------------------------------------------------------------------
+
+	This function decompress the file data
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myDecompressFileContent ( ) {
+
+		myFileContent.routes.forEach ( myDecompressRoute );
+		if ( myFileContent.editedRoute ) {
+
+			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
+			myDecompressRoute ( myFileContent.editedRoute );
+		}
+		if ( myMergeContent ) {
+			myMerge ( );
+		}
+		else {
+			myOpen ( );
+		}
+	}
+
+	/*
 	--- myOpenFile function -------------------------------------------------------------------------------------------
 
 	This function open a local file
@@ -365,6 +363,8 @@ function newFileLoader ( ) {
 		}
 	);
 }
+
+export { newFileLoader };
 
 /*
 --- End of FileLoader.js file -----------------------------------------------------------------------------------------

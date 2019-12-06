@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newObjType };
-
 import { theCurrentVersion } from '../data/Version.js';
 
 /*
@@ -99,6 +97,8 @@ function newObjType ( objTypeName ) {
 		}
 	);
 }
+
+export { newObjType };
 
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------

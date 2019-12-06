@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theLayersToolbarUI };
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -192,6 +190,27 @@ function newLayersToolbarUI ( ) {
 	}
 
 	/*
+	--- myOnWheelToolbar function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnWheelToolbar ( wheelEvent ) {
+		if ( wheelEvent.deltaY ) {
+			myMarginTop -= wheelEvent.deltaY * 10;
+			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
+			myMarginTop =
+				myMarginTop < myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
+					?
+					myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
+					:
+					myMarginTop;
+			myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
+		}
+		wheelEvent.stopPropagation ( );
+	}
+
+	/*
 	--- myOnTimeOutToolbar function -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -213,27 +232,6 @@ function newLayersToolbarUI ( ) {
 		myLayersToolbarButtonsDiv.removeEventListener ( 'wheel', myOnWheelToolbar, false );
 		myLayersToolbar.removeChild ( myLayersToolbarButtonsDiv );
 		myTimerId = null;
-	}
-
-	/*
-	--- myOnWheelToolbar function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnWheelToolbar ( wheelEvent ) {
-		if ( wheelEvent.deltaY ) {
-			myMarginTop -= wheelEvent.deltaY * 10;
-			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
-			myMarginTop =
-				myMarginTop < myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
-					?
-					myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
-					:
-					myMarginTop;
-			myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
-		}
-		wheelEvent.stopPropagation ( );
 	}
 
 	/*
@@ -353,6 +351,8 @@ function newLayersToolbarUI ( ) {
 }
 
 const theLayersToolbarUI = newLayersToolbarUI ( );
+
+export { theLayersToolbarUI };
 
 /*
 --- End of LayersToolbarUI.js file ------------------------------------------------------------------------------------

@@ -41,8 +41,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newNoteDialog };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
@@ -291,6 +289,53 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	/*
+	--- myAddPreDefinedIconsList function -----------------------------------------------------------------------------
+
+	function to add the predefined icons to the select
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddPreDefinedIconsList ( ) {
+		theAllButtonsAndIcons.preDefinedIconsList =
+			theTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( theUserButtonsAndIcons.preDefinedIconsList );
+
+		if ( -1 < routeObjId ) {
+			theAllButtonsAndIcons.preDefinedIconsList.push (
+				{
+					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
+					icon : '',
+					tooltip : '',
+					width : 40,
+					height : 40
+				}
+			);
+		}
+
+		theAllButtonsAndIcons.preDefinedIconsList.sort (
+			( first, second ) => first.name.localeCompare ( second.name )
+		);
+		let elementCounter = 0;
+		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter >= 0; elementCounter -- ) {
+			myPredefinedIconsSelect.remove ( elementCounter );
+		}
+		for ( elementCounter = 0; elementCounter < theAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
+			myPredefinedIconsSelect.add (
+				myHTMLElementsFactory.create (
+					'option',
+					{
+						text : theAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
+					}
+				)
+			);
+		}
+	}
+
+	/*
+	--- End of myAddPreDefinedIconsList function ---
+	*/
+
+	/*
 	--- myOnPredefinedIconListSelectChange function -------------------------------------------------------------------
 
 	event handler for predefined icons list
@@ -365,6 +410,36 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	/*
+	--- myAddEditionButtons function ----------------------------------------------------------------------------------
+
+	function to add buttons on the toolbar
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddEditionButtons ( editionButtons ) {
+		editionButtons.forEach (
+			function ( editionButton ) {
+				let newButton = myHTMLElementsFactory.create (
+					'button',
+					{
+						type : 'button',
+						innerHTML : editionButton.title || '?',
+						htmlBefore : editionButton.htmlBefore || '',
+						htmlAfter : editionButton.htmlAfter || '',
+						className : 'TravelNotes-NoteDialog-EditorButton'
+					},
+					myToolbarDiv
+				);
+				newButton.addEventListener ( 'click', myOnClickEditionButton, false );
+			}
+		);
+	}
+
+	/*
+	--- End of myAddEditionButtons function ---
+	*/
+
+	/*
 	--- myOnOpenUserDataFileInputChange function ------------------------------------------------------------------------
 
 	event handler for
@@ -409,83 +484,6 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	/*
 	--- End of myOnFocusControl function ---
-	*/
-
-	/*
-	--- myAddPreDefinedIconsList function -----------------------------------------------------------------------------
-
-	function to add the predefined icons to the select
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddPreDefinedIconsList ( ) {
-		theAllButtonsAndIcons.preDefinedIconsList =
-			theTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( theUserButtonsAndIcons.preDefinedIconsList );
-
-		if ( -1 < routeObjId ) {
-			theAllButtonsAndIcons.preDefinedIconsList.push (
-				{
-					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
-					icon : '',
-					tooltip : '',
-					width : 40,
-					height : 40
-				}
-			);
-		}
-
-		theAllButtonsAndIcons.preDefinedIconsList.sort (
-			( first, second ) => first.name.localeCompare ( second.name )
-		);
-		let elementCounter = 0;
-		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter >= 0; elementCounter -- ) {
-			myPredefinedIconsSelect.remove ( elementCounter );
-		}
-		for ( elementCounter = 0; elementCounter < theAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
-			myPredefinedIconsSelect.add (
-				myHTMLElementsFactory.create (
-					'option',
-					{
-						text : theAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
-					}
-				)
-			);
-		}
-	}
-
-	/*
-	--- End of myAddPreDefinedIconsList function ---
-	*/
-
-	/*
-	--- myAddEditionButtons function ----------------------------------------------------------------------------------
-
-	function to add buttons on the toolbar
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddEditionButtons ( editionButtons ) {
-		editionButtons.forEach (
-			function ( editionButton ) {
-				let newButton = myHTMLElementsFactory.create (
-					'button',
-					{
-						type : 'button',
-						innerHTML : editionButton.title || '?',
-						htmlBefore : editionButton.htmlBefore || '',
-						htmlAfter : editionButton.htmlAfter || '',
-						className : 'TravelNotes-NoteDialog-EditorButton'
-					},
-					myToolbarDiv
-				);
-				newButton.addEventListener ( 'click', myOnClickEditionButton, false );
-			}
-		);
-	}
-
-	/*
-	--- End of myAddEditionButtons function ---
 	*/
 
 	/*
@@ -956,6 +954,8 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	return myNoteDialog;
 }
+
+export { newNoteDialog };
 
 /*
 --- End of NoteDialog.js file -----------------------------------------------------------------------------------------

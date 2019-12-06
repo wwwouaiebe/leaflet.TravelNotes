@@ -36,7 +36,6 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theGeoLocator };
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theConfig } from '../data/Config.js';
 
@@ -65,6 +64,23 @@ function newGeoLocator ( ) {
 	}
 
 	/*
+	--- myStop function -----------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myStop ( ) {
+		if ( 2 === myStatus ) {
+			myStatus = 1;
+		}
+
+		// if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
+		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
+		navigator.geolocation.clearWatch ( myWatchId );
+		myWatchId = null;
+	}
+
+	/*
 	--- myError function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -88,23 +104,6 @@ function newGeoLocator ( ) {
 		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
 		navigator.geolocation.getCurrentPosition ( myShowPosition, myError, theConfig.geoLocation.options );
 		myWatchId = navigator.geolocation.watchPosition ( myShowPosition, myError, theConfig.geoLocation.options );
-	}
-
-	/*
-	--- myStop function -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myStop ( ) {
-		if ( 2 === myStatus ) {
-			myStatus = 1;
-		}
-
-		// if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
-		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
-		navigator.geolocation.clearWatch ( myWatchId );
-		myWatchId = null;
 	}
 
 	/*
@@ -146,6 +145,8 @@ function newGeoLocator ( ) {
 }
 
 const theGeoLocator = newGeoLocator ( );
+
+export { theGeoLocator };
 
 /*
 --- End of GeoLocator.js file -----------------------------------------------------------------------------------------

@@ -31,8 +31,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newItineraryPaneUI };
-
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -223,6 +221,8 @@ function newItineraryPaneUI ( ) {
 		}
 	);
 }
+
+export { newItineraryPaneUI };
 
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------

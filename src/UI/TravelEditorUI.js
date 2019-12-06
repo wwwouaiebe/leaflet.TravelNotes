@@ -42,8 +42,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theTravelEditorUI };
-
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -527,6 +525,8 @@ The one and only one travelEditorUI
 */
 
 const theTravelEditorUI = newTravelEditorUI ( );
+
+export { theTravelEditorUI };
 
 /*
 --- End of TravelEditorUI.js file -------------------------------------------------------------------------------------

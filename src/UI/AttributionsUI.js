@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { theAttributionsUI };
-
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
@@ -90,6 +88,8 @@ function newAttributionsUI ( ) {
 }
 
 const theAttributionsUI = newAttributionsUI ( );
+
+export { theAttributionsUI };
 
 /*
 --- End of AttributionsUI.js file -------------------------------------------------------------------------------------

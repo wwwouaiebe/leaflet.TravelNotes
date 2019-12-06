@@ -29,8 +29,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-export { newManeuver };
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
@@ -163,6 +161,8 @@ function newManeuver ( ) {
 		}
 	);
 }
+
+export { newManeuver };
 
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------
