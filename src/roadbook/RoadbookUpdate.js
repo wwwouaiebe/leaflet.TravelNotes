@@ -44,7 +44,7 @@ function newRoadbookUpdate ( ) {
 
 	if ( newUtilities ( ).storageAvailable ( 'localStorage' ) ) {
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
-		localStorage.setItem ( theTravelNotesData.UUID + "-TravelNotesHTML", htmlViewsFactory.travelHTML.outerHTML );
+		localStorage.setItem ( theTravelNotesData.UUID + '-TravelNotesHTML', htmlViewsFactory.travelHTML.outerHTML );
 	}
 }
 

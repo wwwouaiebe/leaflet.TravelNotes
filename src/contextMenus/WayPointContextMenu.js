@@ -61,7 +61,7 @@ function newWayPointContextMenu ( event ) {
 		return [
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Delete this waypoint" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Delete this waypoint' ),
 				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
 				param : myWayPointObjId
 			}

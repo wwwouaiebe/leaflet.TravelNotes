@@ -62,7 +62,7 @@ function newTravelNotesPaneUI ( ) {
 		dragEvent.stopPropagation ( );
 		try {
 			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
-			dragEvent.dataTransfer.dropEffect = "move";
+			dragEvent.dataTransfer.dropEffect = 'move';
 		}
 		catch ( err ) {
 			console.log ( err );

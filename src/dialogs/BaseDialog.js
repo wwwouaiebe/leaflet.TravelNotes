@@ -163,7 +163,7 @@ function newBaseDialog ( ) {
 			{
 				innerHTML : '&#x274c',
 				className : 'TravelNotes-BaseDialog-CancelButton',
-				title : theTranslator.getText ( "BaseDialog - Cancel" )
+				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
 			topBar
 		);
@@ -205,8 +205,8 @@ function newBaseDialog ( ) {
 				myDialogY = Math.max ( myDialogY, 20 );
 				let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, 0 ) - 20;
 				myDialogDiv.setAttribute (
-					"style",
-					"top:" + myDialogY + "px;left:" + myDialogX +"px;max-height:" + dialogMaxHeight +"px;"
+					'style',
+					'top:' + myDialogY + 'px;left:' + myDialogX +'px;max-height:' + dialogMaxHeight +'px;'
 				);
 			},
 			false
@@ -354,8 +354,8 @@ function newBaseDialog ( ) {
 		myDialogY = Math.max ( myDialogY, 20 );
 		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, 0 ) - 20;
 		myDialogDiv.setAttribute (
-			"style",
-			"top:" + myDialogY + "px;left:" + myDialogX +"px;max-height:" + dialogMaxHeight +"px;"
+			'style',
+			'top:' + myDialogY + 'px;left:' + myDialogX +'px;max-height:' + dialogMaxHeight +'px;'
 		);
 	}
 

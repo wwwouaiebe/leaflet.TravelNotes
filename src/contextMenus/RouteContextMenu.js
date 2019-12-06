@@ -60,7 +60,7 @@ function newRouteContextMenu ( event ) {
 		return [
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Edit this route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Edit this route' ),
 				action :
 					(
 						( theTravelNotesData.editedRouteObjId !== myRouteObjId )
@@ -73,7 +73,7 @@ function newRouteContextMenu ( event ) {
 			},
 			{
 				context : theTravelEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Delete this route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Delete this route' ),
 				action :
 					(
 						( myRouteObjId )
@@ -88,7 +88,7 @@ function newRouteContextMenu ( event ) {
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Hide this route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Hide this route' ),
 				action :
 					( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
@@ -98,36 +98,36 @@ function newRouteContextMenu ( event ) {
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Add a waypoint on the route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Add a waypoint on the route' ),
 				action : ( -1 === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPointOnRoute,
 				param : myRouteObjId
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Add a note on the route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Add a note on the route' ),
 				action : theNoteEditor.newRouteNote,
 				param : myRouteObjId
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Properties" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Properties' ),
 				action : theRouteEditor.routeProperties,
 				param : myRouteObjId
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Zoom to route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to route' ),
 				action : theRouteEditor.zoomToRoute,
 				param : myRouteObjId
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Save modifications on this route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Save modifications on this route' ),
 				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.saveEdition : null
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Cancel modifications on this route" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Cancel modifications on this route' ),
 				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.cancelEdition : null
 			}
 		];

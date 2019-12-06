@@ -345,7 +345,7 @@ function newTravelEditorUI ( ) {
 				'click',
 				( ) => {
 					if ( ! window.confirm (
-						theTranslator.getText ( "TravelEditor - This page ask to close; data are perhaps not saved." )
+						theTranslator.getText ( 'TravelEditor - This page ask to close; data are perhaps not saved.' )
 					)
 					) {
 						return;
@@ -405,7 +405,7 @@ function newTravelEditorUI ( ) {
 					}
 					else {
 						theErrorsUI.showError (
-							theTranslator.getText ( "TravelEditorUI - Not possible to merge a travel when a route is edited" )
+							theTranslator.getText ( 'TravelEditorUI - Not possible to merge a travel when a route is edited' )
 						);
 					}
 				},

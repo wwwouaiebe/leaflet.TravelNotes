@@ -486,13 +486,13 @@ function newSvgIconFromOsmFactory ( ) {
 			for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
 				pointsAttribute += points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 			}
-			let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
-			polyline.setAttributeNS ( null, "points", pointsAttribute );
-			polyline.setAttributeNS ( null, "class", "TravelNotes-OSM-Itinerary" );
+			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			polyline.setAttributeNS ( null, 'points', pointsAttribute );
+			polyline.setAttributeNS ( null, 'class', 'TravelNotes-OSM-Itinerary' );
 			polyline.setAttributeNS (
 				null,
-				"transform",
-				"rotate(" + myRotation + "," + ( mySvgIconSize / 2 ) + "," + ( mySvgIconSize / 2 ) + ")"
+				'transform',
+				'rotate(' + myRotation + ',' + ( mySvgIconSize / 2 ) + ',' + ( mySvgIconSize / 2 ) + ')'
 			);
 			mySvg.appendChild ( polyline );
 		}
@@ -558,17 +558,17 @@ function newSvgIconFromOsmFactory ( ) {
 							points[ index ] [ 0 ].toFixed ( 0 ) + ',' + points[ index ] [ 1 ].toFixed ( 0 ) + ' ';
 					}
 
-					let polyline = document.createElementNS ( "http://www.w3.org/2000/svg", "polyline" );
-					polyline.setAttributeNS ( null, "points", pointsAttribute );
+					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+					polyline.setAttributeNS ( null, 'points', pointsAttribute );
 					polyline.setAttributeNS (
 						null,
-						"class",
-						"TravelNotes-OSM-Highway TravelNotes-OSM-Highway-" + way.tags.highway
+						'class',
+						'TravelNotes-OSM-Highway TravelNotes-OSM-Highway-' + way.tags.highway
 					);
 					polyline.setAttributeNS (
 						null,
-						"transform",
-						"rotate(" + myRotation + "," + ( mySvgIconSize / 2 ) + "," + ( mySvgIconSize / 2 ) + ")"
+						'transform',
+						'rotate(' + myRotation + ',' + ( mySvgIconSize / 2 ) + ',' + ( mySvgIconSize / 2 ) + ')'
 					);
 
 					mySvg.appendChild ( polyline );
@@ -592,17 +592,17 @@ function newSvgIconFromOsmFactory ( ) {
 	function myCreateSvg ( ) {
 		myCreateNodesAndWaysMaps ( );
 
-		mySvg = document.createElementNS ( "http://www.w3.org/2000/svg", "svg" );
+		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
 		mySvg.setAttributeNS (
 			null,
-			"viewBox",
-			"" +
-			( mySvgIconSize / 4 ) + " " +
-			( mySvgIconSize / 4 ) + " " +
-			( mySvgIconSize / 2 ) + " " +
+			'viewBox',
+			'' +
+			( mySvgIconSize / 4 ) + ' ' +
+			( mySvgIconSize / 4 ) + ' ' +
+			( mySvgIconSize / 2 ) + ' ' +
 			( mySvgIconSize / 2 )
 		);
-		mySvg.setAttributeNS ( null, "class", "TravelNotes-SvgIcon" );
+		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
 
 		mySearchItineraryPoints ( );
 		mySearchPassingStreets ( );

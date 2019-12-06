@@ -201,30 +201,30 @@ function newRouteEditor ( ) {
 	function mySaveGpx ( ) {
 
 		// initializations...
-		let tab0 = "\n";
-		let tab1 = "\n\t";
-		let tab2 = "\n\t\t";
-		let tab3 = "\n\t\t\t";
-		let timeStamp = "time='" + new Date ( ).toISOString ( ) + "' ";
+		let tab0 = '\n';
+		let tab1 = '\n\t';
+		let tab2 = '\n\t\t';
+		let tab3 = '\n\t\t\t';
+		let timeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
 
 		// header
-		let gpxString = "<?xml version='1.0'?>" + tab0;
-		gpxString += "<gpx xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' " +
-		"xmlns:xsd='http://www.w3.org/2001/XMLSchema' " +
-		"xsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd' " +
-		"version='1.1' creator='leaflet.TravelNotes'>";
+		let gpxString = '<?xml version="1.0"?>' + tab0;
+		gpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+		'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
+		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
+		'version="1.1" creator="leaflet.TravelNotes">';
 
 		// waypoints
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			gpxString +=
-				tab1 + "<wpt lat='" + wayPointsIterator.value.lat + "' lon='" + wayPointsIterator.value.lng + "' " +
-				timeStamp + "/>";
+				tab1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
+				timeStamp + '/>';
 
 		}
 
 		// route
-		gpxString += tab1 + "<rte>";
+		gpxString += tab1 + '<rte>';
 		let maneuverIterator = theTravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
 			let wayPoint = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt (
@@ -232,42 +232,42 @@ function newRouteEditor ( ) {
 			);
 			let instruction = maneuverIterator.value.instruction
 				.replace ( '&', '&amp;' )
-				.replace ( '\'', '&apos;' )
+				.replace ( '"', '&apos;' )
 				.replace ('"', '&quote;')
 				.replace ( '>', '&gt;' )
 				.replace ( '<', '&lt;');
 			gpxString +=
 				tab2 +
-				"<rtept lat='" +
+				'<rtept lat="' +
 				wayPoint.lat +
-				"' lon='" +
+				'" lon="' +
 				wayPoint.lng +
-				"' " +
+				'" ' +
 				timeStamp +
-				"desc='" +
-				instruction + "' />" ;
+				'desc="' +
+				instruction + '" />' ;
 		}
-		gpxString += tab1 + "</rte>";
+		gpxString += tab1 + '</rte>';
 
 		// track
-		gpxString += tab1 + "<trk>";
-		gpxString += tab2 + "<trkseg>";
+		gpxString += tab1 + '<trk>';
+		gpxString += tab2 + '<trkseg>';
 		let itineraryPointsIterator = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
 			gpxString +=
 				tab3 +
-				"<trkpt lat='" + itineraryPointsIterator.value.lat +
-				"' lon='" +
+				'<trkpt lat="' + itineraryPointsIterator.value.lat +
+				'" lon="' +
 				itineraryPointsIterator.value.lng +
-				"' " +
+				'" ' +
 				timeStamp +
-				" />";
+				' />';
 		}
-		gpxString += tab2 + "</trkseg>";
-		gpxString += tab1 + "</trk>";
+		gpxString += tab2 + '</trkseg>';
+		gpxString += tab1 + '</trk>';
 
 		// eof
-		gpxString += tab0 + "</gpx>";
+		gpxString += tab0 + '</gpx>';
 
 		// file is saved
 		let fileName = theTravelNotesData.travel.editedRoute.name;

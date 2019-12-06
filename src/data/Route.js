@@ -90,7 +90,7 @@ function newRoute ( ) {
 	let myEdited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
 
 	function mySetEdited ( edited ) {
-		if ( typeof edited !== "number" || 0 > edited || 2 < edited ) {
+		if ( typeof edited !== 'number' || 0 > edited || 2 < edited ) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
 		else {

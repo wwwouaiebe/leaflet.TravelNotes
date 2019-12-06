@@ -61,7 +61,7 @@ function newMapContextMenu ( event ) {
 		return [
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Select this point as start point" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as start point' ),
 				action :
 					( -1 !== theTravelNotesData.editedRouteObjId )
 					&&
@@ -74,13 +74,13 @@ function newMapContextMenu ( event ) {
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Select this point as way point" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as way point' ),
 				action : ( -1 === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPoint,
 				param : myLatLng
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Select this point as end point" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as end point' ),
 				action :
 					( -1 !== theTravelNotesData.editedRouteObjId )
 					&&
@@ -93,33 +93,33 @@ function newMapContextMenu ( event ) {
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - New travel note" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - New travel note' ),
 				action : theNoteEditor.newTravelNote,
 				param : myLatLng
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Hide notes" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Hide notes' ),
 				action : theNoteEditor.hideNotes
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Show notes" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Show notes' ),
 				action : theNoteEditor.showNotes
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Show all routes" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Show all routes' ),
 				action : theRouteEditor.showRoutes
 			},
 			{
 				context : theTravelEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Zoom to travel" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to travel' ),
 				action : theTravelEditor.zoomToTravel
 			},
 			{
 				context : null,
-				name : theTranslator.getText ( "ContextMenuFactory - About Travel & Notes" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - About Travel & Notes' ),
 				action : newAboutDialog
 			}
 		];

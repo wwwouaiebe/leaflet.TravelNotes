@@ -61,19 +61,19 @@ function newNoteContextMenu ( event ) {
 		return [
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Edit this note" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Edit this note' ),
 				action : theNoteEditor.editNote,
 				param : myNoteObjId
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Delete this note" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Delete this note' ),
 				action : theNoteEditor.removeNote,
 				param : myNoteObjId
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( "ContextMenuFactory - Zoom to note" ),
+				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to note' ),
 				action : theNoteEditor.zoomToNote,
 				param : myNoteObjId
 			},
@@ -82,9 +82,9 @@ function newNoteContextMenu ( event ) {
 				name :
 					route
 						?
-						theTranslator.getText ( "ContextMenuFactory - Detach note from route" )
+						theTranslator.getText ( 'ContextMenuFactory - Detach note from route' )
 						:
-						theTranslator.getText ( "ContextMenuFactory - Attach note to route" ),
+						theTranslator.getText ( 'ContextMenuFactory - Attach note to route' ),
 				action :
 					theTravelNotesData.travel.routes.length !== 0
 					&&

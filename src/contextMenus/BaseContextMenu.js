@@ -229,7 +229,7 @@ function newBaseContextMenu ( originalEvent ) {
 			{
 				innerHTML : '&#x274c',
 				className : 'TravelNotes-ContextMenu-CloseButton',
-				title : theTranslator.getText ( "ContextMenu - Close" )
+				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
 			ourContainer
 		)
@@ -253,7 +253,7 @@ function newBaseContextMenu ( originalEvent ) {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min ( ourOriginalEvent.originalEvent.clientY, screenHeight - ourContainer.clientHeight - 20 );
 		let menuLeft = Math.min ( ourOriginalEvent.originalEvent.clientX, screenWidth - ourContainer.clientWidth - 20 );
-		ourContainer.setAttribute ( "style", "top:" + menuTop + "px;left:" + menuLeft +"px;" );
+		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft +'px;' );
 	}
 
 	/*

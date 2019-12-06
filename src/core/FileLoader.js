@@ -252,7 +252,7 @@ function newFileLoader ( ) {
 				) {
 					theErrorsUI.showError (
 						theTranslator.getText (
-							"FileLoader - Not possible to select as provider",
+							'FileLoader - Not possible to select as provider',
 							{ provider : providerName }
 						)
 					);

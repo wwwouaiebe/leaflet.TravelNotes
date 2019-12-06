@@ -13,13 +13,16 @@
         "sourceType": "module"
     },
     "rules": {
+	
 		"curly" : [ "warn" ],
+		"default-case" : [ "warn" ],
 	
 		"array-bracket-newline" : [ "warn" , "consistent" ],
 		"array-bracket-spacing" : [ "warn" , "always" ],
 		"array-element-newline" : [ "warn" , "consistent" ],
 		"block-spacing" : [ "warn" , "always" ],
 		"brace-style" : [ "warn" , "stroustrup" , { "allowSingleLine" :true } ],
+		"camelcase" : [ "error" ,  {"properties" : "always" } ],
 		"comma-dangle" : [ "warn" , "never" ],
 		"comma-spacing" : [ "warn" ],
 		"comma-style" : [ "warn" ],
@@ -54,13 +57,13 @@
 		"no-trailing-spaces" : [ "warn" ],
 		"no-underscore-dangle" : [ "warn" ],
 		"no-unneeded-ternary" : [ "warn" ],
-		"default-case" : [ "warn" ],
 		"object-curly-newline" : [ "warn" , { "consistent" : true } ],
 		"object-curly-spacing" : [ "warn" , "always", { "arraysInObjects": true , "objectsInObjects": true } ],
 		"object-property-newline" : [ "warn" , { "allowAllPropertiesOnSameLine" : true } ],
 		"one-var-declaration-per-line" : [ "warn" ],
 		"operator-assignment" : [ "warn", "always" ],
-		"quote-props" : [ "warn" , "as-needed" ]
+		"quote-props" : [ "warn" , "as-needed" ],
+		"quotes" : [ "warn" , "single" ]
 		
 		
 		

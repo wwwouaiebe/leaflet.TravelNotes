@@ -120,18 +120,18 @@ function newUI ( ) {
 		myMainDiv.addEventListener (
 			'click',
 			event => {
-				if  ( event.target.classList.contains (  "TravelNotes-SortableList-ItemInput" ) ) {
+				if  ( event.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
 					return;
 				}
-				if  ( event.target.classList.contains (  "TravelNotes-Control-LinkButton" ) ) {
+				if  ( event.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
 					return;
 				}
 				if ( event.target.id && -1 !==
 					[
-						"TravelNotes-Control-OpenTravelInput",
-						"TravelNotes-Control-OpenTravelButton",
-						"TravelNotes-Control-ImportTravelInput",
-						"TravelNotes-Control-ImportTravelButton"
+						'TravelNotes-Control-OpenTravelInput',
+						'TravelNotes-Control-OpenTravelButton',
+						'TravelNotes-Control-ImportTravelInput',
+						'TravelNotes-Control-ImportTravelButton'
 					].indexOf ( event.target.id )
 				) {
 					return;

@@ -128,7 +128,7 @@ function newGeoLocator ( ) {
 		return myStatus;
 	}
 
-	myStatus = ( "geolocation" in navigator ) ? 1 : 0;
+	myStatus = ( 'geolocation' in navigator ) ? 1 : 0;
 
 	/*
 	--- GeoLocator object ---------------------------------------------------------------------------------------------

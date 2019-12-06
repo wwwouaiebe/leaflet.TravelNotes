@@ -77,7 +77,7 @@ function newHttpRequestBuilder ( ) {
 					}
 				}
 			};
-			xmlHttpRequest.open ( "GET", url, true );
+			xmlHttpRequest.open ( 'GET', url, true );
 			if ( requestHeaders ) {
 				requestHeaders.forEach ( header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue ) );
 			}
@@ -124,11 +124,11 @@ function newHttpRequestBuilder ( ) {
 					onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
 				}
 			};
-			xmlHttpRequest.open ( "GET", url, true );
+			xmlHttpRequest.open ( 'GET', url, true );
 			if ( requestHeaders ) {
 				requestHeaders.forEach ( header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue ) );
 			}
-			xmlHttpRequest.responseType = "arraybuffer";
+			xmlHttpRequest.responseType = 'arraybuffer';
 			xmlHttpRequest.send ( null );
 		}
 

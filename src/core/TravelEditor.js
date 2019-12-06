@@ -144,7 +144,7 @@ function newTravelEditor ( ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
 			theErrorsUI.showError (
-				theTranslator.getText ( "RouteEditor - Not possible to edit a route without a save or cancel" )
+				theTranslator.getText ( 'RouteEditor - Not possible to edit a route without a save or cancel' )
 			);
 			return;
 		}
@@ -166,7 +166,7 @@ function newTravelEditor ( ) {
 		) {
 			theErrorsUI.showError (
 				theTranslator.getText (
-					"RouteEditor - Not possible to edit a route created with this provider",
+					'RouteEditor - Not possible to edit a route created with this provider',
 					{ provider : providerName }
 				)
 			);
@@ -322,7 +322,7 @@ function newTravelEditor ( ) {
 
 	function myClear ( ) {
 		if ( ! window.confirm ( theTranslator.getText (
-			"TravelEditor - This page ask to close; data are perhaps not saved." ) ) ) {
+			'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
 			return;
 		}
 		myEventDispatcher.dispatch ( 'removeallobjects' );

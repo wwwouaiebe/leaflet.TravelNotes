@@ -300,7 +300,7 @@ function newSearchPaneUI ( ) {
 									?
 									''
 									:
-									'<p class=\'TravelNotes-Control-SearchResultDescription\'>' +
+									'<p class="TravelNotes-Control-SearchResultDescription">' +
 									searchResult.description +
 									'</p>'
 							) +
@@ -359,9 +359,9 @@ function newSearchPaneUI ( ) {
 							(
 								searchResult.tags.email
 									?
-									'<p><a href=\'mailto:' +
+									'<p><a href="mailto:' +
 									searchResult.tags.email +
-									'\'>' +
+									'">' +
 									searchResult.tags.email +
 									'</a></p>'
 									:
@@ -370,9 +370,9 @@ function newSearchPaneUI ( ) {
 							(
 								searchResult.tags.website
 									?
-									'<p><a href=\''+
+									'<p><a href="'+
 									searchResult.tags.website +
-									'\' target=\'_blank\'>' +
+									'" target="_blank">' +
 									searchResult.tags.website +
 									'</a></p>'
 									:

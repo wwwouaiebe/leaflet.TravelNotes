@@ -99,7 +99,7 @@ function travelNotesFactory ( ) {
 
 	window.addEventListener (
 		'unload',
-		( ) => localStorage.removeItem ( theTravelNotesData.UUID + "-TravelNotesHTML" )
+		( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
 	);
 
 	window.addEventListener (
@@ -139,8 +139,8 @@ function travelNotesFactory ( ) {
 					}
 				}
 			);
-		let stateObj = { index : "bar" };
-		history.replaceState ( stateObj, "page", newUrlSearch );
+		let stateObj = { index : 'bar' };
+		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
 	/*

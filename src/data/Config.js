@@ -59,16 +59,16 @@ function newConfig ( ) {
 		},
 		travelNotesToolbarUI :
 		{
-			contactMail : "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+			contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
 		},
 		layersToolbarUI : {
 			haveLayersToolbarUI : true,
 			toolbarTimeOut : 1500,
-			contactMail : "https://github.com/wwwouaiebe/leaflet.TravelNotes/issues",
+			contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues',
 			theDevil : {
 				addButton : false,
-				title : "Reminder! The devil will know everything about you",
-				text : "&#x1f47f;"
+				title : 'Reminder! The devil will know everything about you',
+				text : '&#x1f47f;'
 			}
 		},
 		mouseUI : {
@@ -83,7 +83,7 @@ function newConfig ( ) {
 			showHelp : true
 		},
 		geoLocation : {
-			color : "red",
+			color : 'red',
 			radius : 11,
 			zoomToPosition : true,
 			zoomFactor : 17,
@@ -127,12 +127,12 @@ function newConfig ( ) {
 			fill : false
 		},
 		previousSearchLimit : {
-			color : "green",
+			color : 'green',
 			fill : false,
 			weight : 1
 		},
 		nextSearchLimit : {
-			color : "red",
+			color : 'red',
 			fill : false,
 			weight : 1
 		},
@@ -145,19 +145,19 @@ function newConfig ( ) {
 			dashArray : 0,
 			dashChoices : [
 				{
-					text : "——————",
+					text : '——————',
 					iDashArray : null
 				},
 				{
-					text : "— — — — —",
+					text : '— — — — —',
 					iDashArray : [ 4, 2 ]
 				},
 				{
-					text : "—‧—‧—‧—‧—",
+					text : '—‧—‧—‧—‧—',
 					iDashArray : [ 4, 2, 0, 2 ]
 				},
 				{
-					text : "················",
+					text : '················',
 					iDashArray : [ 0, 2 ]
 				}
 			]
@@ -191,8 +191,8 @@ function newConfig ( ) {
 			svgCityDistance : 1200,
 			svgTownDistance : 1500,
 			svgTimeOut : 15000,
-			cityPrefix : "<span class='TravelNotes-NoteHtml-Address-City'>",
-			cityPostfix : "</span>"
+			cityPrefix : '<span class="TravelNotes-NoteHtml-Address-City">',
+			cityPostfix : '</span>'
 		},
 		itineraryPointZoom : 17,
 		routeEditor : {
@@ -205,11 +205,11 @@ function newConfig ( ) {
 			startupRouteEdition : true
 		},
 		haveBeforeUnloadWarning : true,
-		overpassApiUrl : "https://lz4.overpass-api.de/api/interpreter",
+		overpassApiUrl : 'https://lz4.overpass-api.de/api/interpreter',
 		nominatim :
 		{
-			url : "https://nominatim.openstreetmap.org/",
-			language : "*"
+			url : 'https://nominatim.openstreetmap.org/',
+			language : '*'
 		}
 	};
 

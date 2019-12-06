@@ -74,7 +74,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			rowDiv
 		);
 		if ( ( 'svg' === iconCell.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === myClassNamePrefix ) ) {
-			iconCell.firstChild.setAttributeNS ( null, "viewBox", "0 0 " + mySvgIconSize + " " + mySvgIconSize);
+			iconCell.firstChild.setAttributeNS ( null, 'viewBox', '0 0 ' + mySvgIconSize + ' ' + mySvgIconSize);
 		}
 
 		myHTMLElementsFactory.create (

@@ -49,7 +49,7 @@ function newAutoLoader ( ) {
 
 	let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
 		.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
-	window.L.travelNotes.addControl ( map, "TravelNotes" );
+	window.L.travelNotes.addControl ( map, 'TravelNotes' );
 	window.L.travelNotes.rightContextMenu = true;
 }
 

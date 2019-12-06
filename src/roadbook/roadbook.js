@@ -108,8 +108,8 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 */
 
 let params = new URLSearchParams (document.location.search.substring (1));
-let language = params.get ("lng");
-let pageId = params.get ("page");
+let language = params.get ('lng');
+let pageId = params.get ('page');
 
 function saveFile ( ) {
 	try {
@@ -139,13 +139,13 @@ function saveFile ( ) {
 
 if ( pageId ) {
 
-	document.getElementById ( "TravelNotes-SaveFile" ).addEventListener ( 'click', saveFile );
+	document.getElementById ( 'TravelNotes-SaveFile' ).addEventListener ( 'click', saveFile );
 
-	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" );
+	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
 	window.addEventListener (
 		'storage',
 		function ( ) {
-			document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + "-TravelNotesHTML" );
+			document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
@@ -154,7 +154,7 @@ if ( pageId ) {
 }
 else {
 	document.getElementById ( 'TravelNotes-Menu' )
-		.removeChild ( document.getElementById ( "TravelNotes-ButtonContainer" ) );
+		.removeChild ( document.getElementById ( 'TravelNotes-ButtonContainer' ) );
 }
 
 if ( language ) {
@@ -168,15 +168,15 @@ if ( language ) {
 				try {
 					response = JSON.parse ( xmlHttpRequest.responseText );
 					theTranslator. setTranslations ( response );
-					document.getElementById ( "TravelNotes-Travel-ShowNotesLabel" ).innerHTML =
-						theTranslator.getText ( "Roadbook - show travel notes" );
-					document.getElementById ( "TravelNotes-Routes-ShowManeuversLabel" ).innerHTML =
-						theTranslator.getText ( "Roadbook - show maneuver" );
-					document.getElementById ( "TravelNotes-Routes-ShowNotesLabel" ).innerHTML =
-						theTranslator.getText ( "Roadbook - show routes notes" );
-					let saveButton = document.getElementById ( "TravelNotes-SaveFile" );
+					document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
+						theTranslator.getText ( 'Roadbook - show travel notes' );
+					document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).innerHTML =
+						theTranslator.getText ( 'Roadbook - show maneuver' );
+					document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).innerHTML =
+						theTranslator.getText ( 'Roadbook - show routes notes' );
+					let saveButton = document.getElementById ( 'TravelNotes-SaveFile' );
 					if ( saveButton ) {
-						saveButton.value = theTranslator.getText ( "Roadbook - Save" );
+						saveButton.value = theTranslator.getText ( 'Roadbook - Save' );
 					}
 				}
 				catch ( err ) {
@@ -201,7 +201,7 @@ if ( language ) {
 		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json';
-	xmlHttpRequest.open ( "GET", XMLHttpRequestUrl, true );
+	xmlHttpRequest.open ( 'GET', XMLHttpRequestUrl, true );
 	xmlHttpRequest.overrideMimeType ( 'application/json' );
 	xmlHttpRequest.send ( null );
 

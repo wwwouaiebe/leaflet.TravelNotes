@@ -50,19 +50,19 @@ function newLayersToolbarUI ( ) {
 
 	let myLayers = [
 		{
-			service : "wmts",
-			url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-			name : "OSM - Color",
+			service : 'wmts',
+			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+			name : 'OSM - Color',
 			toolbar :
 			{
-				text : "OSM",
-				color : "red",
-				backgroundColor : "white"
+				text : 'OSM',
+				color : 'red',
+				backgroundColor : 'white'
 			},
-			providerName : "OSM",
+			providerName : 'OSM',
 			providerKeyNeeded : false,
-			attribution : "| &copy; <a href='http://www.openstreetmap.org/copyright' " +
-				"target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
+			attribution : '| &copy; <a href="http://www.openstreetmap.org/copyright" ' +
+				'target="_blank" title="OpenStreetMap contributors">OpenStreetMap contributors</a> '
 		}
 	];
 
@@ -85,9 +85,9 @@ function newLayersToolbarUI ( ) {
 	function myOnMouseEnterLayerButton ( event ) {
 		event.target.setAttribute (
 			'style',
-			"color:" +
+			'color:' +
 				event.target.layer.toolbar.backgroundColor +
-				";background-color:" +
+				';background-color:' +
 				event.target.layer.toolbar.color
 		);
 	}
@@ -101,9 +101,9 @@ function newLayersToolbarUI ( ) {
 	function myOnMouseLeaveLayerButton ( event ) {
 		event.target.setAttribute (
 			'style',
-			"color:" +
+			'color:' +
 				event.target.layer.toolbar.color +
-				";background-color:" +
+				';background-color:' +
 				event.target.layer.toolbar.backgroundColor
 		);
 	}
@@ -159,7 +159,7 @@ function newLayersToolbarUI ( ) {
 				title : layer.name,
 				layer : layer,
 				innerHTML : layer.toolbar.text,
-				style : "color:" + layer.toolbar.color + ";background-color:" + layer.toolbar.backgroundColor
+				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
 			},
 			myLayersToolbarButtonsDiv
 		);

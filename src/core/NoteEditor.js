@@ -294,8 +294,8 @@ function newNoteEditor ( ) {
 		let note = myNewNote ( latLng );
 		note.distance = latLngDistance.distance;
 		note.iconContent =
-			"<div class='TravelNotes-ManeuverNote TravelNotes-ManeuverNote-" +
-			maneuver.iconName + "'></div>";
+			'<div class="TravelNotes-ManeuverNote TravelNotes-ManeuverNote-' +
+			maneuver.iconName + '"></div>';
 		note.popupContent = maneuver.instruction;
 		note.iconWidth = 40;
 		note.iconHeight = 40;

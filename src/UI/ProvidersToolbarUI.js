@@ -176,7 +176,7 @@ function newProvidersToolbarUI ( ) {
 		let providerButton = myHTMLElementsFactory.create (
 			'img',
 			{
-				src : "data:image/png;base64," + provider.icon,
+				src : 'data:image/png;base64,' + provider.icon,
 				id : 'TravelNotes-Control-'+ provider.name + 'ImgButton',
 				className : 'TravelNotes-Control-ImgButton',
 				title : provider.name

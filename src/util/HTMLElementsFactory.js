@@ -64,7 +64,7 @@ function newHTMLElementsFactory ( ) {
 					element [ property ] = properties [ property ];
 				}
 				catch ( err ) {
-					console.log ( "Invalid property : " + property );
+					console.log ( 'Invalid property : ' + property );
 				}
 			}
 		}

@@ -171,7 +171,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	function myOnGeocoderError ( err ) {
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
-		console.log ( err ? err : "an error occurs when searching the adress." );
+		console.log ( err ? err : 'an error occurs when searching the adress.' );
 	}
 
 	/*
@@ -283,7 +283,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	function myOnErrorSvgIcon ( err ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
-		console.log ( err ? err : "an error occurs when creating the SVG icon." )
+		console.log ( err ? err : 'an error occurs when creating the SVG icon.' )
 	}
 
 	/*
@@ -777,7 +777,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML :
-					'<span id=\'TravelNotes-NoteDialog-Reset-Address-Button\'>&#x1f504;</span>&nbsp;' +
+					'<span id="TravelNotes-NoteDialog-Reset-Address-Button">&#x1f504;</span>&nbsp;' +
 					theTranslator.getText ( 'NoteDialog - Address&nbsp;:' )
 			},
 			myNoteDataDiv
