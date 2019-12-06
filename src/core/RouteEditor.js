@@ -141,7 +141,7 @@ function newRouteEditor ( ) {
 				iterationDistance = removedDistance;
 			}
 			routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
-			iterationDistance +=itineraryPointIterator.value.distance;
+			iterationDistance += itineraryPointIterator.value.distance;
 			previousItineraryPoint = itineraryPoint;
 		}
 		routes [ routeCounter ].distance = iterationDistance;

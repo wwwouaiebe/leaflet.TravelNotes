@@ -69,7 +69,9 @@
 		"semi-style": ["error", "last"],
 		"space-before-blocks" : [ "warn", "always" ],
 		"space-before-function-paren": ["warn", "always"],
-		"space-in-parens": ["warn", "always"]
+		"space-in-parens": ["warn", "always"],
+		"space-infix-ops" : [ "warn" ],
+		"space-unary-ops": [ "warn" , { "words": true, "nonwords": true, "overrides": { "--": false, "++": false, "-": false, "+": false  } } ]
 		
 		
     }

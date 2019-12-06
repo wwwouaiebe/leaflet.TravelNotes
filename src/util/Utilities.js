@@ -186,7 +186,7 @@ function newUtilities ( ) {
 			return hours +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Hour' )
-				+'&nbsp;' +
+				+ '&nbsp;' +
 				minutes +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Minute' );

@@ -92,7 +92,7 @@ function newRouteContextMenu ( event ) {
 				action :
 					( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
-						null:
+						null :
 						theRouteEditor.hideRoute,
 				param : myRouteObjId
 			},

@@ -245,7 +245,7 @@ function newAPIKeysManager ( ) {
 				'APIKeys'
 		)
 			.then ( myOnServerFile )
-			.catch ( err => console.log ( err? err : 'APIKeys not found on server' ) );
+			.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
 	}
 
 	/*

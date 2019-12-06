@@ -439,7 +439,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			( first, second ) => { return first.name.localeCompare ( second.name ); }
 		);
 		let elementCounter = 0;
-		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter>= 0; elementCounter -- ) {
+		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter >= 0; elementCounter -- ) {
 			myPredefinedIconsSelect.remove ( elementCounter );
 		}
 		for ( elementCounter = 0; elementCounter < theAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
@@ -929,7 +929,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'.json'
 		)
 			.then ( loadIconsAndButtons )
-			.catch ( err => console.log ( err? err : 'An error occurs when loading icons and buttons' ) );
+			.catch ( err => console.log ( err ? err : 'An error occurs when loading icons and buttons' ) );
 	}
 
 	/*

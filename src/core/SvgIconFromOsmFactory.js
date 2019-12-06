@@ -283,7 +283,7 @@ function newSvgIconFromOsmFactory ( ) {
 					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
-					let haveName = name!== '';
+					let haveName = name !== '';
 
 					if ( isSimpleStreet && haveName )  {
 						myPassingStreets.push ( name );
@@ -479,7 +479,7 @@ function newSvgIconFromOsmFactory ( ) {
 			if ( 0 < firstPointIndex ) {
 				firstPointIndex --;
 			}
-			if ( myRoute.itinerary.itineraryPoints.length -1 > lastPointIndex ) {
+			if ( myRoute.itinerary.itineraryPoints.length - 1 > lastPointIndex ) {
 				lastPointIndex ++;
 			}
 			let pointsAttribute = '';
@@ -549,7 +549,7 @@ function newSvgIconFromOsmFactory ( ) {
 					if ( 0 < firstPointIndex ) {
 						firstPointIndex --;
 					}
-					if ( way.nodesIds.length -1 > lastPointIndex ) {
+					if ( way.nodesIds.length - 1 > lastPointIndex ) {
 						lastPointIndex ++;
 					}
 					let pointsAttribute = '';

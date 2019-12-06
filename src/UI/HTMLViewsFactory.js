@@ -256,7 +256,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 						rowDiv
 					);
 
-					rowDiv.objId= newObjId ( );
+					rowDiv.objId = newObjId ( );
 					rowDiv.latLng =
 						route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 					rowDiv.maneuverObjId = maneuversIterator.value.objId;
@@ -273,7 +273,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 				myAddNoteHTML ( notesIterator.value, rowDiv );
 
-				rowDiv.objId= newObjId ( );
+				rowDiv.objId = newObjId ( );
 				rowDiv.latLng = notesIterator.value.latLng;
 				rowDiv.noteObjId = notesIterator.value.objId;
 				previousNotesDistance = notesIterator.value.distance;

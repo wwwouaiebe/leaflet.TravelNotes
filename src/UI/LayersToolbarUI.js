@@ -335,7 +335,7 @@ function newLayersToolbarUI ( ) {
 			'TravelNotesLayers.json'
 		)
 			.then ( layers => { myLayers = myLayers.concat ( layers ); } )
-			.catch ( err => console.log ( err? err : 'An error occurs when loading TravelNotesLayers.json' ) )
+			.catch ( err => console.log ( err ? err : 'An error occurs when loading TravelNotesLayers.json' ) )
 			.finally ( myCreateLayersToolbar );
 	}
 

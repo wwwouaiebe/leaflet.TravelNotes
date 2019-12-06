@@ -86,7 +86,7 @@ function newProvidersToolbarUI ( ) {
 		theTravelNotesData.routing.provider = providerName;
 		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ 0 ]
 			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
-		document.getElementById ( 'TravelNotes-Control-'+ providerName + 'ImgButton' )
+		document.getElementById ( 'TravelNotes-Control-' + providerName + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 
 		// activating the transit mode buttons, depending of the capabilities of the provider
@@ -177,7 +177,7 @@ function newProvidersToolbarUI ( ) {
 			'img',
 			{
 				src : 'data:image/png;base64,' + provider.icon,
-				id : 'TravelNotes-Control-'+ provider.name + 'ImgButton',
+				id : 'TravelNotes-Control-' + provider.name + 'ImgButton',
 				className : 'TravelNotes-Control-ImgButton',
 				title : provider.name
 			},

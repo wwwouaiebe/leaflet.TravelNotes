@@ -104,7 +104,7 @@ function newColorDialog ( color ) {
 		myRedInput.value = numbers.red;
 		myGreenInput.value = numbers.green;
 		myBlueInput.value = numbers.blue;
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:'+ event.target.colorValue +';' );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + event.target.colorValue + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 
@@ -205,7 +205,7 @@ function newColorDialog ( color ) {
 				'div',
 				{
 					className : 'TravelNotes-ColorDialog-RowColorDiv',
-					id : 'TravelNotes-ColorDialog-RowColorDiv' +rowCounter
+					id : 'TravelNotes-ColorDialog-RowColorDiv' + rowCounter
 				},
 				buttonsDiv
 			);
@@ -341,7 +341,7 @@ function newColorDialog ( color ) {
 			},
 			myColorDiv
 		);
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:'+ myNewColor +';' );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 

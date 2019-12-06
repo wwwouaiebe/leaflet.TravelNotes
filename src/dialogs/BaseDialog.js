@@ -201,12 +201,12 @@ function newBaseDialog ( ) {
 			( event ) => {
 				myDialogX += event.screenX - myStartDragX;
 				myDialogY += event.screenY - myStartDragY;
-				myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth -20 );
+				myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth - 20 );
 				myDialogY = Math.max ( myDialogY, 20 );
 				let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, 0 ) - 20;
 				myDialogDiv.setAttribute (
 					'style',
-					'top:' + myDialogY + 'px;left:' + myDialogX +'px;max-height:' + dialogMaxHeight +'px;'
+					'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
 				);
 			},
 			false
@@ -350,12 +350,12 @@ function newBaseDialog ( ) {
 	function myCenter ( ) {
 		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / 2;
 		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / 2;
-		myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth -20 );
+		myDialogX = Math.min ( Math.max ( myDialogX, 20 ), myScreenWidth - myDialogDiv.clientWidth - 20 );
 		myDialogY = Math.max ( myDialogY, 20 );
 		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, 0 ) - 20;
 		myDialogDiv.setAttribute (
 			'style',
-			'top:' + myDialogY + 'px;left:' + myDialogX +'px;max-height:' + dialogMaxHeight +'px;'
+			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
 		);
 	}
 

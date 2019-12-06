@@ -292,7 +292,7 @@ function newSearchPaneUI ( ) {
 				let searchResultDiv = myHTMLElementsFactory.create (
 					'div',
 					{
-						id : 'TravelNotes-Control-SearchResult'+ ( resultsCounter ++ ),
+						id : 'TravelNotes-Control-SearchResult' + ( resultsCounter ++ ),
 						className :	'TravelNotes-Control-SearchResult',
 						innerHTML :
 							(
@@ -370,7 +370,7 @@ function newSearchPaneUI ( ) {
 							(
 								searchResult.tags.website
 									?
-									'<p><a href="'+
+									'<p><a href="' +
 									searchResult.tags.website +
 									'" target="_blank">' +
 									searchResult.tags.website +

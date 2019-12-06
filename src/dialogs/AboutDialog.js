@@ -69,7 +69,7 @@ function newAboutDialog ( ) {
 		'<p>Contact : <a href="http://www.ouaie.be/blog/pages/contact" target="_blank">http://www.ouaie.be/</a></p>' +
 		'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
 		'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-		'<p>Version : ' + theCurrentVersion +'.' +
+		'<p>Version : ' + theCurrentVersion + '.' +
 		'<p>This program uses:' +
 		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
 		' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +

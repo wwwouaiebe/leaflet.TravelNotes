@@ -290,7 +290,7 @@ function newCollection ( objName ) {
 					newObject = newItineraryPoint ( );
 					break;
 				default:
-					throw ( 'invalid ObjName ( ' + myObjName +' ) in Collection.mySetObject' );
+					throw ( 'invalid ObjName ( ' + myObjName + ' ) in Collection.mySetObject' );
 				}
 				newObject.object = arrayObject;
 				myAdd ( newObject );
