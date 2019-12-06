@@ -102,7 +102,7 @@ function newNoteContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let noteContextMenu = newBaseContextMenu ( event );
+	let noteContextMenu = newBaseContextMenu ( contextMenuEvent );
 	noteContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( noteContextMenu );

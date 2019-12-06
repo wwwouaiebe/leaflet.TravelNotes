@@ -136,7 +136,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let routeContextMenu = newBaseContextMenu ( event );
+	let routeContextMenu = newBaseContextMenu ( contextMenuEvent );
 	routeContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( routeContextMenu );

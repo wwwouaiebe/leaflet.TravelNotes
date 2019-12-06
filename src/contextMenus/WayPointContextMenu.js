@@ -72,7 +72,7 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let wayPointContextMenu = newBaseContextMenu ( event );
+	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent );
 	wayPointContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( wayPointContextMenu );

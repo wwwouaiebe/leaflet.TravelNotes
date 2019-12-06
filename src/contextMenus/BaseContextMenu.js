@@ -38,6 +38,7 @@ let ourContainer = null;
 let ourTimerId = null;
 let ourFocusIsOnItem = 0;
 let ourOriginalEvent = null;
+let ourCloseButton = null;
 let ourLat = 0;
 let ourLng = 0;
 
@@ -81,42 +82,6 @@ function newBaseContextMenu ( originalEvent ) {
 	}
 
 	/*
-	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
-
-	event listener for the close button. Alson called from others events
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnCloseMenu ( ) {
-
-		if ( ourTimerId ) {
-			clearTimeout ( ourTimerId );
-			ourTimerId = null;
-		}
-
-		// removing event listeners
-		document.removeEventListener ( 'keydown', myOnKeyDown, true );
-		document.removeEventListener ( 'keypress', myOnKeyPress, true );
-		document.removeEventListener ( 'keyup', myOnKeyUp, true );
-
-		// removing menu items
-		let childNodes = ourContainer.childNodes;
-		childNodes [ 0 ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
-		for ( let childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
-		}
-
-		// removing the menu container
-		document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( ourContainer );
-		ourContainer = null;
-		ourFocusIsOnItem = 0;
-		myMenuItems = [];
-		ourLat = 0;
-		ourLng = 0;
-	}
-
-	/*
 	--- myOnKeyDown function ------------------------------------------------------------------------------------------
 
 	Keyboard event listener
@@ -131,7 +96,7 @@ function newBaseContextMenu ( originalEvent ) {
 			keyBoardEvent.stopPropagation ( );
 		}
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			myOnCloseMenu ( );
+			ourCloseButton.click ( ) ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ) {
 			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? 1 : ++ ourFocusIsOnItem;
@@ -183,7 +148,43 @@ function newBaseContextMenu ( originalEvent ) {
 				ourOriginalEvent
 			);
 		}
-		myOnCloseMenu ( );
+		ourCloseButton.click ( );
+	}
+
+	/*
+	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
+
+	event listener for the close button. Alson called from others events
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnCloseMenu ( ) {
+
+		if ( ourTimerId ) {
+			clearTimeout ( ourTimerId );
+			ourTimerId = null;
+		}
+
+		// removing event listeners
+		document.removeEventListener ( 'keydown', myOnKeyDown, true );
+		document.removeEventListener ( 'keypress', myOnKeyPress, true );
+		document.removeEventListener ( 'keyup', myOnKeyUp, true );
+
+		// removing menu items
+		let childNodes = ourContainer.childNodes;
+		childNodes [ 0 ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
+		for ( let childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
+		}
+
+		// removing the menu container
+		document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( ourContainer );
+		ourContainer = null;
+		ourFocusIsOnItem = 0;
+		myMenuItems = [];
+		ourLat = 0;
+		ourLng = 0;
 	}
 
 	/*
@@ -228,7 +229,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function myAddCloseButton ( ) {
-		myHTMLElementsFactory.create (
+		ourCloseButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
@@ -236,8 +237,8 @@ function newBaseContextMenu ( originalEvent ) {
 				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
 			ourContainer
-		)
-			.addEventListener ( 'click', myOnCloseMenu, false );
+		);
+		ourCloseButton.addEventListener ( 'click', myOnCloseMenu, false );
 	}
 
 	/*

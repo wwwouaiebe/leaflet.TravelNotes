@@ -129,7 +129,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let mapContextMenu = newBaseContextMenu ( event );
+	let mapContextMenu = newBaseContextMenu ( contextMenuEvent );
 
 	mapContextMenu.init ( myGetMenuItems ( ) );
 
