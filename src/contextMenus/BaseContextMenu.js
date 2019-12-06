@@ -125,7 +125,13 @@ function newBaseContextMenu ( originalEvent ) {
 			ourFocusIsOnItem = myMenuItems.length;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
-		if ( ( 'Enter' === keyBoardEvent.key )  && ( ourFocusIsOnItem > 0 ) && ( myMenuItems[ ourFocusIsOnItem - 1 ].action ) ) {
+		if (
+			( 'Enter' === keyBoardEvent.key )
+			&&
+			( ourFocusIsOnItem > 0 )
+			&&
+			( myMenuItems[ ourFocusIsOnItem - 1 ].action )
+		) {
 			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
 	}

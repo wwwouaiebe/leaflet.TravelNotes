@@ -330,7 +330,7 @@ function newSortableList ( options, parentNode ) {
 		parentNode.appendChild ( myContainer );
 	}
 
-	for ( let itemCounter = 0; itemCounter < myOptions.minSize; itemCounter++ ) {
+	for ( let itemCounter = 0; itemCounter < myOptions.minSize; itemCounter ++ ) {
 		myAddItem ( );
 	}
 

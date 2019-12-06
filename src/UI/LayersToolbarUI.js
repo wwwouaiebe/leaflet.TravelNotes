@@ -199,7 +199,7 @@ function newLayersToolbarUI ( ) {
 
 	function myOnTimeOutToolbar ( ) {
 		let buttons = myLayersToolbarButtonsDiv.childNodes;
-		for ( let counter = 0; counter < buttons.length; counter++ ) {
+		for ( let counter = 0; counter < buttons.length; counter ++ ) {
 			if ( 'layer' === buttons [ counter ].type ) {
 				buttons [ counter ].removeEventListener ( 'mouseenter', myOnMouseEnterLayerButton, false );
 				buttons [ counter ].removeEventListener ( 'mouseleave', myOnMouseLeaveLayerButton, false );

@@ -420,7 +420,7 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		}
 		if ( myIconItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId  ) {
-			myRotation = - myDirection - 90;
+			myRotation = -myDirection - 90;
 			myDirection = null;
 			myStartStop = -1;
 		}
@@ -458,7 +458,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let points = [];
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				index++;
+				index ++;
 				let point = myGeometry.addPoints ( myGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
 				points.push ( point );
 				let pointIsInside =

@@ -975,7 +975,7 @@ function newMapEditor ( ) {
 			{
 				iconSize : [ note.iconWidth, note.iconHeight ],
 				iconAnchor : [ note.iconWidth / 2, note.iconHeight / 2 ],
-				popupAnchor : [ 0, - note.iconHeight / 2 ],
+				popupAnchor : [ 0, -note.iconHeight / 2 ],
 				html : note.iconContent,
 				className : theConfig.note.style
 			}
