@@ -99,7 +99,7 @@ function newUtilities ( ) {
 		catch ( Error ) {
 			if ( window.navigator.msSaveOrOpenBlob ) {
 
-				//edge IE 11...
+				// edge IE 11...
 				return true;
 			}
 			else {
@@ -124,8 +124,8 @@ function newUtilities ( ) {
 		}
 		if ( window.navigator.msSaveOrOpenBlob ) {
 
-			//https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
-			//edge IE 11...
+			// https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
+			// edge IE 11...
 			try {
 				window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename );
 			}

@@ -31,7 +31,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-/*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 export { newTravel };
 

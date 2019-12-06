@@ -394,7 +394,7 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		}
 
-		//computing direction ... if possible
+		// computing direction ... if possible
 
 		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId  ) {
 			let directionPoint = myGeometry.addPoints (
@@ -431,7 +431,7 @@ function newSvgIconFromOsmFactory ( ) {
 			myIconLatLngDistance.lng === myRoute.itinerary.itineraryPoints.last.lng
 		) {
 
-			//using lat & lng because last point is sometime duplicated
+			// using lat & lng because last point is sometime duplicated
 			myDirection = null;
 			myStartStop = 1;
 		}

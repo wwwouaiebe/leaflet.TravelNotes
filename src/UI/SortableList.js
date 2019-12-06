@@ -65,7 +65,7 @@ function newSortableList ( options, parentNode ) {
 
 		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
-		//different in the drag event and the drop event
+		// different in the drag event and the drop event
 		myDataObjId = dragEvent.target.dataObjId - 1;
 	}
 
@@ -95,7 +95,7 @@ function newSortableList ( options, parentNode ) {
 		let event = new Event ( 'SortableListDrop' );
 
 		// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
-		//event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
+		// event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
 		event.draggedObjId = myDataObjId + 1;
 
 		event.targetObjId = element.dataObjId;
@@ -230,7 +230,7 @@ function newSortableList ( options, parentNode ) {
 		);
 		inputElement.addEventListener ( 'change', myOnChange, false );
 
-		//Workaround for issue #8
+		// Workaround for issue #8
 		inputElement.addEventListener (
 			'focus',
 			event => {

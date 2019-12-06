@@ -34,7 +34,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-/*eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 export { newRoute };
 import { theConfig } from '../data/Config.js';

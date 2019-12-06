@@ -101,7 +101,7 @@ function newGeoLocator ( ) {
 			myStatus = 1;
 		}
 
-		//if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
+		// if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
 		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
 		navigator.geolocation.clearWatch ( myWatchId );
 		myWatchId = null;

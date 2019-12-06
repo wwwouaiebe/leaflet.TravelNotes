@@ -189,7 +189,7 @@ function travelNotesFactory ( ) {
 					values [ 0 ].language = myLangage;
 				}
 
-				//theConfig.overload ( values [ 0 ] );
+				// theConfig.overload ( values [ 0 ] );
 
 				// translations adaptation
 				theTranslator.setTranslations ( values [ 1 ] );

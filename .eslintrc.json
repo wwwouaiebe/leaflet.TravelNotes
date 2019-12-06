@@ -71,7 +71,9 @@
 		"space-before-function-paren": ["warn", "always"],
 		"space-in-parens": ["warn", "always"],
 		"space-infix-ops" : [ "warn" ],
-		"space-unary-ops": [ "warn" , { "words": true, "nonwords": true, "overrides": { "-": false  } } ]
+		"space-unary-ops": [ "warn" , { "words": true, "nonwords": true, "overrides": { "-": false  } } ],
+		"spaced-comment" : [ "warn" , "always" ],
+		"switch-colon-spacing" : [ "warn" , {"after": true, "before": true}]
 		
 		
     }
