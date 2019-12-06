@@ -94,7 +94,7 @@ function newObjType ( name ) {
 
 			get object ( ) { return myGetObject ( ); },
 
-			validate : something => { return myValidate ( something ); }
+			validate : something => myValidate ( something )
 
 		}
 	);

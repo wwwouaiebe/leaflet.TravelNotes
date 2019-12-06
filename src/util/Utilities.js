@@ -274,19 +274,19 @@ function newUtilities ( ) {
 
 			storageAvailable : type =>  myStorageAvailable ( type ),
 
-			fileAPIAvailable : ( ) => { return myFileAPIAvailable ( ); },
+			fileAPIAvailable : ( ) => myFileAPIAvailable ( ),
 
 			saveFile : ( filename, text, type ) => mySaveFile ( filename, text, type ),
 
-			formatTime : time => { return myFormatTime ( time ); },
+			formatTime : time => myFormatTime ( time ),
 
-			formatDistance : distance => { return myFormatDistance ( distance ); },
+			formatDistance : distance => myFormatDistance ( distance ),
 
-			formatLat : lat => { return myFormatLat ( lat ); },
+			formatLat : lat => myFormatLat ( lat ),
 
-			formatLng : lng => { return myFormatLng ( lng ); },
+			formatLng : lng => myFormatLng ( lng ),
 
-			formatLatLng : latLng => { return myFormatLatLng ( latLng ); }
+			formatLatLng : latLng => myFormatLatLng ( latLng )
 		}
 	);
 }

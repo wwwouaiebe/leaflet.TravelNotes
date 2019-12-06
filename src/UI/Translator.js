@@ -62,7 +62,7 @@ function newTranslator ( ) {
 
 	return {
 		setTranslations : translations => mySetTranslations ( translations ),
-		getText : ( msgid, params ) => { return myGetText ( msgid, params ); }
+		getText : ( msgid, params ) => myGetText ( msgid, params )
 	};
 }
 

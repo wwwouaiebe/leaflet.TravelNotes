@@ -148,7 +148,7 @@ function newCollection ( objName ) {
 
 	function myIndexOfObjId ( objId ) {
 		let index = myArray.findIndex (
-			element => { return element.objId === objId; }
+			element => element.objId === objId
 		);
 		return index;
 	}
@@ -193,9 +193,7 @@ function newCollection ( objName ) {
 		}
 
 		if ( ! condition ) {
-			condition = ( ) => {
-				return true;
-			};
+			condition = ( ) => true;
 		}
 		index += direction;
 
@@ -289,7 +287,7 @@ function newCollection ( objName ) {
 				case 'ItineraryPoint' :
 					newObject = newItineraryPoint ( );
 					break;
-				default:
+				default :
 					throw ( 'invalid ObjName ( ' + myObjName + ' ) in Collection.mySetObject' );
 				}
 				newObject.object = arrayObject;
@@ -352,7 +350,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			forEach : funct => { return myForEach ( funct ); },
+			forEach : funct => myForEach ( funct ),
 
 			/*
 			--- getAt function ----------------------------------------------------------------------------------------
@@ -362,7 +360,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			getAt : ( objId ) => { return myGetAt ( objId ); },
+			getAt : ( objId ) => myGetAt ( objId ),
 
 			/*
 			--- moveTo function ---------------------------------------------------------------------------------------
@@ -383,7 +381,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			next : ( objId, condition ) => { return myNextOrPrevious ( objId, condition, 1 ); },
+			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, 1 ),
 
 			/*
 			--- previous function -------------------------------------------------------------------------------------
@@ -393,7 +391,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			previous : ( objId, condition ) => { return myNextOrPrevious ( objId, condition, -1 ); },
+			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, -1 ),
 
 			/*
 			--- remove function ---------------------------------------------------------------------------------------

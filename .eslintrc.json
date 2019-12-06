@@ -73,8 +73,10 @@
 		"space-infix-ops" : [ "warn" ],
 		"space-unary-ops": [ "warn" , { "words": true, "nonwords": true, "overrides": { "-": false  } } ],
 		"spaced-comment" : [ "warn" , "always" ],
-		"switch-colon-spacing" : [ "warn" , {"after": true, "before": true}]
+		"switch-colon-spacing" : [ "warn" , {"after": true, "before": true}],
+		"wrap-regex" : [ "warn" ],
 		
+		"arrow-body-style" : [ "warn" , "as-needed" ]
 		
     }
 }

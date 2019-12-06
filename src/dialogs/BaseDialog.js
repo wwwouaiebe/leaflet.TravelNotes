@@ -460,7 +460,7 @@ function newBaseDialog ( ) {
 
 			get okButton ( ) { return myOkButton; },
 
-			show : ( ) => { return myShow ( ); }
+			show : ( ) => myShow ( )
 		}
 	);
 }

@@ -142,8 +142,8 @@ function newHttpRequestBuilder ( ) {
 	*/
 
 	return {
-		getJsonPromise : ( url, requestHeaders ) => { return myGetJsonPromise ( url, requestHeaders ); },
-		getBinaryPromise : ( url, requestHeaders ) => { return myGetBinaryPromise ( url, requestHeaders ); }
+		getJsonPromise : ( url, requestHeaders ) => myGetJsonPromise ( url, requestHeaders ),
+		getBinaryPromise : ( url, requestHeaders ) => myGetBinaryPromise ( url, requestHeaders )
 	};
 
 }

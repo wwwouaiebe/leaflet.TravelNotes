@@ -303,7 +303,7 @@ function travelNotesFactory ( ) {
 		---------------------------------------------------------------------------------------------------------------
 		*/
 
-		addControl : ( map, divControlId ) => { return myAddControl ( map, divControlId ); },
+		addControl : ( map, divControlId ) => myAddControl ( map, divControlId ),
 
 		/*
 		--- addProvider method ----------------------------------------------------------------------------------------

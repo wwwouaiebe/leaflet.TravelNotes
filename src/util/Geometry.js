@@ -186,12 +186,12 @@ function newGeometry  ( ) {
 
 	return Object.seal (
 		{
-			getClosestLatLngDistance : ( route, latLng ) => { return myGetClosestLatLngDistance ( route, latLng ); },
+			getClosestLatLngDistance : ( route, latLng ) => myGetClosestLatLngDistance ( route, latLng ),
 			pointsDistance :
-				( latLngStartPoint, latLngEndPoint ) => { return myPointsDistance ( latLngStartPoint, latLngEndPoint ); },
-			project : ( latLng, zoom ) => { return myProject ( latLng, zoom ); },
-			addPoints : ( point1, point2 ) => { return  myAddPoint ( point1, point2 ); },
-			subtrackPoints : ( point1, point2 ) => { return  mySubtrackPoints ( point1, point2 ); }
+				( latLngStartPoint, latLngEndPoint ) => myPointsDistance ( latLngStartPoint, latLngEndPoint ),
+			project : ( latLng, zoom ) => myProject ( latLng, zoom ),
+			addPoints : ( point1, point2 ) => myAddPoint ( point1, point2 ),
+			subtrackPoints : ( point1, point2 ) => mySubtrackPoints ( point1, point2 )
 		}
 	);
 }

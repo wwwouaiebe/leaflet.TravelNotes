@@ -123,7 +123,7 @@ function newSvgIconFromOsmFactory ( ) {
 						myPlaces.push ( element );
 					}
 					break;
-				default:
+				default :
 					break;
 				}
 			}

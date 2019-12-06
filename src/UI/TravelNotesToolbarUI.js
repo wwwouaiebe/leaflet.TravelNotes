@@ -93,13 +93,13 @@ function newTravelNotesToolbarUI ( ) {
 
 	function myOnGeoLocationStatusChanged ( status ) {
 		switch ( status ) {
-		case 1:
+		case 1 :
 			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
-		case 2:
+		case 2 :
 			myGeoLocationButton.classList.add ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
-		default:
+		default :
 			if ( myGeoLocationButton ) {
 				myGeoLocationButton.parentNode.removeChild ( myGeoLocationButton );
 				myGeoLocationButton = null;

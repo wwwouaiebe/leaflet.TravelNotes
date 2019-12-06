@@ -111,7 +111,7 @@ function newNoteEditor ( ) {
 
 			// and the notes sorted
 			selectedRoute.notes.sort (
-				( first, second ) => { return first.distance - second.distance; }
+				( first, second ) => first.distance - second.distance
 			);
 
 			myEventDispatcher.dispatch (
@@ -208,7 +208,7 @@ function newNoteEditor ( ) {
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
-						( first, second ) => { return first.distance - second.distance; }
+						( first, second ) => first.distance - second.distance
 					);
 					myEventDispatcher.dispatch ( 'setitinerary' );
 					myEventDispatcher.dispatch (
@@ -309,7 +309,7 @@ function newNoteEditor ( ) {
 					route.notes.add ( newNote );
 					newNote.chainedDistance = route.chainedDistance;
 					route.notes.sort (
-						( first, second ) => { return first.distance - second.distance; }
+						( first, second ) => first.distance - second.distance
 					);
 					myEventDispatcher.dispatch ( 'setitinerary' );
 					myEventDispatcher.dispatch (

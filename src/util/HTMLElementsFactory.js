@@ -79,7 +79,7 @@ function newHTMLElementsFactory ( ) {
 
 	return Object.seal (
 		{
-			create : ( tagName, properties, parentNode ) => { return myCreate ( tagName, properties, parentNode ); }
+			create : ( tagName, properties, parentNode ) => myCreate ( tagName, properties, parentNode )
 		}
 	);
 }

@@ -115,13 +115,13 @@ function newGeoLocator ( ) {
 
 	function mySwitch ( ) {
 		switch ( myStatus ) {
-		case 1:
+		case 1 :
 			myStart ( );
 			break;
-		case 2:
+		case 2 :
 			myStop ( );
 			break;
-		default:
+		default :
 			break;
 		}
 
@@ -139,7 +139,7 @@ function newGeoLocator ( ) {
 	return Object.seal (
 		{
 			get status ( ) { return myStatus; },
-			switch : ( ) => { return mySwitch ( ); }
+			switch : ( ) => mySwitch ( )
 
 		}
 	);

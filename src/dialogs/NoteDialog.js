@@ -243,12 +243,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				showPlace --;
 			}
 			switch ( counter ) {
-			case data.streets.length - 2:
+			case data.streets.length - 2 :
 				address += directionArrow;
 				break;
-			case data.streets.length - 1:
+			case data.streets.length - 1 :
 				break;
-			default:
+			default :
 				address += String.fromCodePoint ( 0x2AA5 );
 				break;
 			}
@@ -436,7 +436,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		}
 
 		theAllButtonsAndIcons.preDefinedIconsList.sort (
-			( first, second ) => { return first.name.localeCompare ( second.name ); }
+			( first, second ) => first.name.localeCompare ( second.name )
 		);
 		let elementCounter = 0;
 		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter >= 0; elementCounter -- ) {

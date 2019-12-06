@@ -143,10 +143,10 @@ function newDataPanesUI ( ) {
 
 	function myRemoveActivePane ( ) {
 		switch ( myActivePaneIndex ) {
-		case 0:
+		case 0 :
 			myItineraryPaneUI.remove ( );
 			break;
-		case 1:
+		case 1 :
 			myTravelNotesPaneUI.remove ( );
 			break;
 		case 2 :
@@ -154,7 +154,7 @@ function newDataPanesUI ( ) {
 				mySearchPaneUI.remove ( );
 			}
 			break;
-		default:
+		default :
 			break;
 		}
 	}

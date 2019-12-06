@@ -119,9 +119,9 @@ function newDataSearchEngine ( ) {
 
 	return Object.seal (
 		{
-			getRoute : routeObjId => { return myGetRoute ( routeObjId ); },
-			getNoteAndRoute : noteObjId => { return myGetNoteAndRoute ( noteObjId ); },
-			getWayPoint : wayPointObjId => { return myGetWayPoint ( wayPointObjId ); }
+			getRoute : routeObjId => myGetRoute ( routeObjId ),
+			getNoteAndRoute : noteObjId => myGetNoteAndRoute ( noteObjId ),
+			getWayPoint : wayPointObjId => myGetWayPoint ( wayPointObjId )
 		}
 	);
 }

@@ -555,9 +555,9 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 			get travelHTML ( ) { return  myGetTravelHTML ( ); },
 
-			getRouteHTML : ( route ) => { return myGetRouteHTML ( route ); },
+			getRouteHTML : ( route ) => myGetRouteHTML ( route ),
 
-			getNoteHTML : ( note ) => { return myGetNoteHTML ( note ); }
+			getNoteHTML : ( note ) => myGetNoteHTML ( note )
 
 		}
 	);

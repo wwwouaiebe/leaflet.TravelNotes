@@ -184,7 +184,7 @@ function newAPIKeysManager ( ) {
 			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
 		);
 		ApiKeys.sort (
-			( first, second ) =>{ return first.providerName.localeCompare ( second.providerName ); }
+			( first, second ) =>first.providerName.localeCompare ( second.providerName )
 		);
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
@@ -259,7 +259,7 @@ function newAPIKeysManager ( ) {
 			fromServerFile : ( ) => myFromServerFile ( ),
 			fromUrl : ( urlString ) => myFromUrl ( urlString ),
 			dialog : ( )=> myDialog ( ),
-			getKey : providerName => { return myGetKey ( providerName ); },
+			getKey : providerName => myGetKey ( providerName ),
 			setKey : ( providerName, key ) => mySetKey ( providerName, key ),
 			addProvider : provider => myAddProvider ( provider )
 		}

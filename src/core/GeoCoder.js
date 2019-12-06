@@ -80,7 +80,7 @@ function newGeoCoder ( ) {
 
 	return Object.seal (
 		{
-			getPromiseAddress : ( latLng ) => { return myGetPromiseAddress ( latLng ); }
+			getPromiseAddress : ( latLng ) => myGetPromiseAddress ( latLng )
 		}
 	);
 

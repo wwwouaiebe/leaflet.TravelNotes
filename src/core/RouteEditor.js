@@ -436,7 +436,7 @@ function newRouteEditor ( ) {
 
 		// and the notes sorted
 		theTravelNotesData.travel.editedRoute.notes.sort (
-			( first, second ) => { return first.distance - second.distance; }
+			( first, second ) => first.distance - second.distance
 		);
 
 		// the new route is added to the map
@@ -631,7 +631,7 @@ function newRouteEditor ( ) {
 	return Object.seal (
 		{
 
-			cutRoute : ( route, latLng ) => { return myCutRoute ( route, latLng ); },
+			cutRoute : ( route, latLng ) => myCutRoute ( route, latLng ),
 
 			computeRouteDistances : route => myComputeRouteDistances ( route ),
 

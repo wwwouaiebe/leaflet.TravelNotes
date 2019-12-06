@@ -48,41 +48,41 @@ function newEventDispatcher ( ) {
 
 	function myGetTarget ( eventName ) {
 		switch ( eventName ) {
-		case 'setitinerary':
-		case 'updateitinerary':
-		case 'settravelnotes':
-		case 'updatetravelnotes':
-		case 'setsearch':
-		case 'updatesearch':
-		case 'expandrouteui':
-		case 'reducerouteui':
-		case 'setwaypointslist':
-		case 'setrouteslist':
-		case 'setprovider':
-		case 'providersadded':
-		case 'settransitmode':
+		case 'setitinerary' :
+		case 'updateitinerary' :
+		case 'settravelnotes' :
+		case 'updatetravelnotes' :
+		case 'setsearch' :
+		case 'updatesearch' :
+		case 'expandrouteui' :
+		case 'reducerouteui' :
+		case 'setwaypointslist' :
+		case 'setrouteslist' :
+		case 'setprovider' :
+		case 'providersadded' :
+		case 'settransitmode' :
 			return document.getElementById ( 'TravelNotes-Control-MainDiv' );
-		case 'removeroute':
-		case 'addroute':
-		case 'editroute':
-		case 'removeobject':
-		case 'removeallobjects':
-		case 'zoomtopoint':
-		case 'zoomtosearchresult':
-		case 'zoomtonote':
-		case 'zoomtoroute':
-		case 'zoomtotravel':
-		case 'additinerarypointmarker':
-		case 'addsearchpointmarker':
-		case 'addrectangle':
-		case 'addwaypoint':
-		case 'redrawnote':
-		case 'addnote':
-		case 'layerchange':
-		case 'geolocationstatuschanged':
-		case 'geolocationpositionchanged':
+		case 'removeroute' :
+		case 'addroute' :
+		case 'editroute' :
+		case 'removeobject' :
+		case 'removeallobjects' :
+		case 'zoomtopoint' :
+		case 'zoomtosearchresult' :
+		case 'zoomtonote' :
+		case 'zoomtoroute' :
+		case 'zoomtotravel' :
+		case 'additinerarypointmarker' :
+		case 'addsearchpointmarker' :
+		case 'addrectangle' :
+		case 'addwaypoint' :
+		case 'redrawnote' :
+		case 'addnote' :
+		case 'layerchange' :
+		case 'geolocationstatuschanged' :
+		case 'geolocationpositionchanged' :
 			return document;
-		default:
+		default :
 			return null;
 		}
 	}

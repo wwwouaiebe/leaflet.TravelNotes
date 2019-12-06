@@ -824,7 +824,7 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			wayPoint => { return myDataSearchEngine.getWayPoint ( wayPoint.objId ).UIName; }
+			wayPoint => myDataSearchEngine.getWayPoint ( wayPoint.objId ).UIName
 		);
 		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
 
@@ -941,7 +941,7 @@ function newMapEditor ( ) {
 
 						// notes are sorted on the distance
 						route.notes.sort (
-							( first, second ) => { return first.distance - second.distance; }
+							( first, second ) => first.distance - second.distance
 						);
 
 						// the coordinates of the bullet are adapted
@@ -1000,7 +1000,7 @@ function newMapEditor ( ) {
 		// ... and also a tooltip
 		if ( 0 !== note.tooltipContent.length ) {
 			marker.bindTooltip (
-				layer => { return myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent; }
+				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
 			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
 		}

@@ -73,15 +73,15 @@ function newManeuver ( ) {
 		ourObjType.validate ( something.objType );
 		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
-			case '1.0.0':
-			case '1.1.0':
-			case '1.2.0':
-			case '1.3.0':
-			case '1.4.0':
-			case '1.5.0':
+			case '1.0.0' :
+			case '1.1.0' :
+			case '1.2.0' :
+			case '1.3.0' :
+			case '1.4.0' :
+			case '1.5.0' :
 				something.objType.version = '1.6.0';
 				break;
-			default:
+			default :
 				throw 'invalid version for ' + ourObjType.name;
 			}
 		}
