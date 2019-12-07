@@ -31,6 +31,8 @@ Tests ...
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newAttributionsUI function ----------------------------------------------------------------------------------------
 
@@ -67,7 +69,7 @@ function newAttributionsUI ( ) {
 			{
 				id : 'TravelNotes-AttributionsUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ 0 ]
+			document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
 		);
 		mySetAttributions ( '' );
 

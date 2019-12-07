@@ -77,8 +77,8 @@ function newFileLoader ( ) {
 		route.itinerary.itineraryPoints.latLngs.forEach (
 			latLng => {
 				let itineraryPoint = {};
-				itineraryPoint.lat = latLng [ 0 ];
-				itineraryPoint.lng = latLng [ 1 ];
+				itineraryPoint.lat = latLng [ OUR_CONST.zero ];
+				itineraryPoint.lng = latLng [ OUR_CONST.number1 ];
 				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
 				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
 				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
@@ -293,7 +293,7 @@ function newFileLoader ( ) {
 	*/
 
 	function myOpenFile ( changeEvent ) {
-		myFileName = changeEvent.target.files [ 0 ].name;
+		myFileName = changeEvent.target.files [ OUR_CONST.zero ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
@@ -305,7 +305,7 @@ function newFileLoader ( ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ 0 ] );
+		fileReader.readAsText ( changeEvent.target.files [ OUR_CONST.zero ] );
 	}
 
 	/*

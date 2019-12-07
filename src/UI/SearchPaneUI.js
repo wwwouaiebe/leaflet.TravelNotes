@@ -152,11 +152,11 @@ function newSearchPaneUI ( ) {
 		while ( OUR_CONST.zero !== searchResultsElements.length ) {
 
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-			searchResultsElements [ 0 ].removeEventListener ( 'click', myOnSearchResultClick, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-			searchResultsElements [ 0 ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-			searchDiv.removeChild ( searchResultsElements [ 0 ] );
+			searchResultsElements [ OUR_CONST.zero ].removeEventListener ( 'click', myOnSearchResultClick, false );
+			searchResultsElements [ OUR_CONST.zero ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
+			searchResultsElements [ OUR_CONST.zero ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
+			searchResultsElements [ OUR_CONST.zero ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
+			searchDiv.removeChild ( searchResultsElements [ OUR_CONST.zero ] );
 		}
 		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
 

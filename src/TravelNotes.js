@@ -384,13 +384,13 @@ function travelNotesFactory ( ) {
 
 				// config adaptation
 				if ( myLangage ) {
-					values [ 0 ].language = myLangage;
+					values [ OUR_CONST.zero ].language = myLangage;
 				}
 
-				// theConfig.overload ( values [ 0 ] );
+				// theConfig.overload ( values [ OUR_CONST.zero ] );
 
 				// translations adaptation
-				theTranslator.setTranslations ( values [ 1 ] );
+				theTranslator.setTranslations ( values [ OUR_CONST.number1 ] );
 				theTravelNotesData.providers.forEach (
 					provider => {
 						provider.userLanguage =  theConfig.language;
@@ -425,7 +425,7 @@ function travelNotesFactory ( ) {
 				if ( myTravelUrl ) {
 
 					// loading travel...
-					newFileLoader ( ).openDistantFile ( values [ 2 ] );
+					newFileLoader ( ).openDistantFile ( values [ OUR_CONST.number2 ] );
 				}
 				else {
 					theAPIKeysManager.fromServerFile ( );

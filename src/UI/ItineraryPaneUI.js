@@ -142,14 +142,14 @@ function newItineraryPaneUI ( ) {
 		}
 
 		// removing previous header
-		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ 0 ];
+		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ OUR_CONST.zero ];
 		if ( routeHeader ) {
 			dataDiv.removeChild ( routeHeader );
 		}
 
 		// removing previous itinerary
 		let routeManeuversNotesList =
-			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ OUR_CONST.zero ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
 			for ( let childCounter = OUR_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {
@@ -197,7 +197,7 @@ function newItineraryPaneUI ( ) {
 
 		// adding event listeners
 		let routeManeuversNotesList =
-			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ OUR_CONST.zero ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
 			for ( let childCounter = OUR_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {

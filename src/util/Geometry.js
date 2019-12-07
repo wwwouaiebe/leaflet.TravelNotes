@@ -73,7 +73,8 @@ function newGeometry  ( ) {
 		let minDistance = Number.MAX_VALUE;
 
 		// projections of points are made
-		let point = L.Projection.SphericalMercator.project ( L.latLng ( latLng [ 0 ], latLng [ 1 ] ) );
+		let point = L.Projection.SphericalMercator.project (
+			L.latLng ( latLng [ OUR_CONST.zero ], latLng [ OUR_CONST.number1 ] ) );
 		let point1 = L.Projection.SphericalMercator.project (
 			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 		);
@@ -166,7 +167,10 @@ function newGeometry  ( ) {
 	*/
 
 	function myAddPoint ( point1, point2 ) {
-		return [ point1 [ 0 ] + point2 [ 0 ],   point1 [ 1 ] + point2 [ 1 ] ];
+		return [
+			point1 [ OUR_CONST.zero ] + point2 [ OUR_CONST.zero ],
+			point1 [ OUR_CONST.number1 ] + point2 [ OUR_CONST.number1 ]
+		];
 	}
 
 	/*
@@ -176,7 +180,10 @@ function newGeometry  ( ) {
 	*/
 
 	function mySubtrackPoints ( point1, point2 ) {
-		return [ point1 [ 0 ] - point2 [ 0 ],   point1 [ 1 ] - point2 [ 1 ] ];
+		return [
+			point1 [ OUR_CONST.zero ] - point2 [ OUR_CONST.zero ],
+			point1 [ OUR_CONST.number1 ] - point2 [ OUR_CONST.number1 ]
+		];
 	}
 
 	/*

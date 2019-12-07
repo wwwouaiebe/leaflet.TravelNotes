@@ -272,7 +272,7 @@ function newSvgIconFromOsmFactory ( ) {
 					( way.tags.wayName && way.tags.ref ? ' '  : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
 				if ( way.nodesIds.includes ( iconPointId ) ) {
-					let isClosed = way.nodesIds [ 0 ] === way.nodesIds [ way.nodesIds.length - OUR_CONST.number1 ];
+					let isClosed = way.nodesIds [ OUR_CONST.zero ] === way.nodesIds [ way.nodesIds.length - OUR_CONST.number1 ];
 					let isInOutStreet =
 						( OUR_CONST.zero !== way.nodesIds.indexOf ( iconPointId ) )
 						&&
@@ -377,7 +377,11 @@ function newSvgIconFromOsmFactory ( ) {
 				myTranslation
 			);
 			myRotation =
-				Math.atan ( ( iconPoint [ 1 ] - rotationPoint [ 1 ] ) / ( rotationPoint [ 0 ] - iconPoint [ 0 ] ) )
+				Math.atan (
+					( iconPoint [ OUR_CONST.number1 ] - rotationPoint [ OUR_CONST.number1 ] )
+					/
+					( rotationPoint [ OUR_CONST.zero ] - iconPoint [ OUR_CONST.zero ] )
+				)
 				*
 				OUR_CONST.angle.degree180 / Math.PI;
 			if ( OUR_CONST.zero > myRotation ) {
@@ -386,7 +390,7 @@ function newSvgIconFromOsmFactory ( ) {
 			myRotation -= OUR_CONST.angle.degree270;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( OUR_CONST.zero > rotationPoint [ 0 ] - iconPoint [ 0 ] ) {
+			if ( OUR_CONST.zero > rotationPoint [ OUR_CONST.zero ] - iconPoint [ OUR_CONST.zero ] ) {
 				myRotation += OUR_CONST.angle.degree180;
 			}
 		}
@@ -398,12 +402,16 @@ function newSvgIconFromOsmFactory ( ) {
 				myGeometry.project ( directionItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
 			);
-			myDirection = Math.atan (  ( iconPoint [ 1 ] - directionPoint [ 1 ] ) / ( directionPoint [ 0 ] - iconPoint [ 0 ] ) )
+			myDirection = Math.atan (
+				( iconPoint [ OUR_CONST.number1 ] - directionPoint [ OUR_CONST.number1 ] )
+				/
+				( directionPoint [ OUR_CONST.zero ] - iconPoint [ OUR_CONST.zero ] )
+			)
 				*
 				OUR_CONST.angle.degree180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( OUR_CONST.zero > directionPoint [ 0 ] - iconPoint [ 0 ] ) {
+			if ( OUR_CONST.zero > directionPoint [ OUR_CONST.zero ] - iconPoint [ OUR_CONST.zero ] ) {
 				myDirection += OUR_CONST.angle.degree180;
 			}
 			myDirection -= myRotation;
@@ -459,11 +467,11 @@ function newSvgIconFromOsmFactory ( ) {
 				let point = myGeometry.addPoints ( myGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
 				points.push ( point );
 				let pointIsInside =
-					point [ 0 ] >= OUR_CONST.zero && point [ 1 ] >= OUR_CONST.zero
+					point [ OUR_CONST.zero ] >= OUR_CONST.zero && point [ OUR_CONST.number1 ] >= OUR_CONST.zero
 					&&
-					point [ 0 ] <=  theConfig.note.svgIconWidth
+					point [ OUR_CONST.zero ] <=  theConfig.note.svgIconWidth
 					&&
-					point [ 1 ] <= theConfig.note.svgIconWidth;
+					point [ OUR_CONST.number1 ] <= theConfig.note.svgIconWidth;
 				if ( pointIsInside ) {
 					if ( OUR_CONST.notFound === firstPointIndex )  {
 						firstPointIndex = index;
@@ -481,8 +489,8 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 			let pointsAttribute = '';
 			for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-				pointsAttribute += points[ index ] [ 0 ].toFixed ( OUR_CONST.zero ) + ',' +
-					points[ index ] [ 1 ].toFixed ( OUR_CONST.zero ) + ' ';
+				pointsAttribute += points[ index ] [ OUR_CONST.zero ].toFixed ( OUR_CONST.zero ) + ',' +
+					points[ index ] [ OUR_CONST.number1 ].toFixed ( OUR_CONST.zero ) + ' ';
 			}
 			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
 			polyline.setAttributeNS ( null, 'points', pointsAttribute );
@@ -531,13 +539,13 @@ function newSvgIconFromOsmFactory ( ) {
 						);
 						points.push ( point );
 						let pointIsInside =
-							point [ 0 ] >= OUR_CONST.zero
+							point [ OUR_CONST.zero ] >= OUR_CONST.zero
 							&&
-							point [ 1 ] >= OUR_CONST.zero
+							point [ OUR_CONST.number1 ] >= OUR_CONST.zero
 							&&
-							point [ 0 ] <= theConfig.note.svgIconWidth
+							point [ OUR_CONST.zero ] <= theConfig.note.svgIconWidth
 							&&
-							point [ 1 ] <= theConfig.note.svgIconWidth;
+							point [ OUR_CONST.number1 ] <= theConfig.note.svgIconWidth;
 						if ( pointIsInside ) {
 							if ( OUR_CONST.notFound === firstPointIndex )  {
 								firstPointIndex = index;
@@ -556,8 +564,8 @@ function newSvgIconFromOsmFactory ( ) {
 					let pointsAttribute = '';
 					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
 						pointsAttribute +=
-							points[ index ] [ 0 ].toFixed ( OUR_CONST.zero ) + ',' +
-							points[ index ] [ 1 ].toFixed ( OUR_CONST.zero ) + ' ';
+							points[ index ] [ OUR_CONST.zero ].toFixed ( OUR_CONST.zero ) + ',' +
+							points[ index ] [ OUR_CONST.number1 ].toFixed ( OUR_CONST.zero ) + ' ';
 					}
 
 					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );

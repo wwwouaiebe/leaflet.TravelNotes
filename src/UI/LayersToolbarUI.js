@@ -297,7 +297,7 @@ function newLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ 0 ]
+			document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
 		);
 		myHTMLElementsFactory.create (
 			'div',
@@ -322,8 +322,8 @@ function newLayersToolbarUI ( ) {
 			false
 		);
 
-		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ 0 ] } );
-		theAttributionsUI.attributions = myLayers [ 0 ].attribution;
+		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ OUR_CONST.zero ] } );
+		theAttributionsUI.attributions = myLayers [ OUR_CONST.zero ].attribution;
 
 	}
 

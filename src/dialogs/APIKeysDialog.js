@@ -63,8 +63,8 @@ function newAPIKeysDialog ( APIKeys ) {
 		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
 			dlgAPIKeys.push (
 				{
-					providerName : rows [ counter ].childNodes [ 0 ].value,
-					providerKey : rows [ counter ].childNodes [ 1 ].value
+					providerName : rows [ counter ].childNodes [ OUR_CONST.zero ].value,
+					providerKey : rows [ counter ].childNodes [ OUR_CONST.number1 ].value
 				}
 			);
 		}
@@ -82,8 +82,8 @@ function newAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog.hideError ( );
 		let rows = myAPIKeysDiv.childNodes;
 		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 0 ].value;
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 1 ].value;
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ OUR_CONST.zero ].value;
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ OUR_CONST.number1 ].value;
 		}
 		if ( ! returnValue ) {
 			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - empty API key name or value' ) );
@@ -267,7 +267,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				newPasswordDialog ( false ).show ( )
 			);
 		};
-		fileReader.readAsArrayBuffer ( changeEvent.target.files [ 0 ] );
+		fileReader.readAsArrayBuffer ( changeEvent.target.files [ OUR_CONST.zero ] );
 
 	}
 

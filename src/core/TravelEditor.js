@@ -279,7 +279,7 @@ function newTravelEditor ( ) {
 	function myCompressRoute ( route ) {
 		let objType = {};
 		if ( OUR_CONST.zero !== route.itinerary.itineraryPoints.length ) {
-			objType = route.itinerary.itineraryPoints [ 0 ].objType;
+			objType = route.itinerary.itineraryPoints [ OUR_CONST.zero ].objType;
 		}
 		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType  };
 		route.itinerary.itineraryPoints.forEach (

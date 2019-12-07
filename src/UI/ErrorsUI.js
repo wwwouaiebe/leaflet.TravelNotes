@@ -34,6 +34,8 @@ import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newErrorsUI function ----------------------------------------------------------------------------------------------
 
@@ -187,7 +189,7 @@ function newErrorsUI ( ) {
 				id : 'TravelNotes-ErrorUI',
 				className : 'TravelNotes-ErrorUI-Hidden'
 			},
-			document.getElementsByTagName ( 'body' ) [ 0 ]
+			document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
 		);
 
 	}

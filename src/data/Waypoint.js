@@ -140,8 +140,8 @@ function newWayPoint ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ 0 ];
-				myLng = LatLng [ 1 ];
+				myLat = LatLng [ OUR_CONST.zero ];
+				myLng = LatLng [ OUR_CONST.number1 ];
 			},
 
 			get objId ( ) { return myObjId; },

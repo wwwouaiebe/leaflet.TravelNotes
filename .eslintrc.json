@@ -30,7 +30,7 @@
 		"no-implicit-globals" :  [ "error" ],
 		"no-labels" : [ "error" ],
 		"no-lone-blocks" : [ "error" ],
-		"no-magic-numbers" : [ "warn", { "ignoreArrayIndexes" : true, "detectObjects" : true } ],
+		"no-magic-numbers" : [ "warn", { "ignoreArrayIndexes" : false, "detectObjects" : true } ],
 		
 		
 		

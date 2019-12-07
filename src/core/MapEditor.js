@@ -209,10 +209,10 @@ function newMapEditor ( ) {
 		let ne = L.latLng ( [ OUR_CONST.latLng.minLat, OUR_CONST.latLng.minLng ] );
 		latLngs.forEach (
 			latLng => {
-				sw.lat = Math.min ( sw.lat, latLng [ 0 ] );
-				sw.lng = Math.min ( sw.lng, latLng [ 1 ] );
-				ne.lat = Math.max ( ne.lat, latLng [ 0 ] );
-				ne.lng = Math.max ( ne.lng, latLng [ 1 ] );
+				sw.lat = Math.min ( sw.lat, latLng [ OUR_CONST.zero ] );
+				sw.lng = Math.min ( sw.lng, latLng [ OUR_CONST.number1 ] );
+				ne.lat = Math.max ( ne.lat, latLng [ OUR_CONST.zero ] );
+				ne.lng = Math.max ( ne.lng, latLng [ OUR_CONST.number1 ] );
 			}
 		);
 		return L.latLngBounds ( sw, ne );
@@ -431,7 +431,7 @@ function newMapEditor ( ) {
 			marker.bindTooltip (
 				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
-			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / OUR_CONST.number2;
+			marker.getTooltip ( ).options.offset [ OUR_CONST.zero ] = note.iconWidth / OUR_CONST.number2;
 		}
 		if ( ! readOnly ) {
 

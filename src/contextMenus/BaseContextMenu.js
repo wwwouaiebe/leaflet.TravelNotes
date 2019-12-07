@@ -55,7 +55,7 @@ function newBaseContextMenu ( originalEvent ) {
 	let myMenuItems = [];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myBody = document.getElementsByTagName ( 'body' ) [ 0 ];
+	let myBody = document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ];
 
 	/*
 	--- myOnKeyPress function -----------------------------------------------------------------------------------------
@@ -175,13 +175,13 @@ function newBaseContextMenu ( originalEvent ) {
 
 		// removing menu items
 		let childNodes = ourContainer.childNodes;
-		childNodes [ 0 ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
+		childNodes [ OUR_CONST.zero ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
 		for ( let childNodesCounter = OUR_CONST.number1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( ourContainer );
+		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].removeChild ( ourContainer );
 		ourContainer = null;
 		ourFocusIsOnItem = OUR_CONST.zero;
 		myMenuItems = [];

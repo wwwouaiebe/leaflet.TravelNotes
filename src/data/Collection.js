@@ -73,7 +73,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myFirst ( ) {
-		return myArray [ 0 ];
+		return myArray [ OUR_CONST.zero ];
 	}
 
 	/*

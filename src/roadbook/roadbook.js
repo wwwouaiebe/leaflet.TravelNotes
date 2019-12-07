@@ -126,7 +126,7 @@ function saveFile ( ) {
 		element.setAttribute ( 'href', mapFile );
 		element.setAttribute (
 			'download',
-			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ 0 ]
+			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ OUR_CONST.zero ]
 				.innerHTML + '-Roadbook.html'
 		);
 		element.style.display = 'none';

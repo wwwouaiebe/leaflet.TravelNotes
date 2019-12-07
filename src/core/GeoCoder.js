@@ -38,6 +38,8 @@ Tests ...
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 function newGeoCoder ( ) {
 
 	/*
@@ -52,7 +54,7 @@ function newGeoCoder ( ) {
 
 		let NominatimUrl =
 			theConfig.nominatim.url + 'reverse?format=json&lat=' +
-			latLng [ 0 ] + '&lon=' + latLng [ 1 ] +
+			latLng [ OUR_CONST.zero ] + '&lon=' + latLng [ OUR_CONST.number1 ] +
 			'&zoom=18&addressdetails=1';
 		let nominatimLanguage = theConfig.nominatim.language;
 		if (  nominatimLanguage && nominatimLanguage !== '*' ) {

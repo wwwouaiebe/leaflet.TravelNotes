@@ -223,8 +223,8 @@ function newNote ( ) {
 
 			get iconLatLng ( ) { return [ myIconLat, myIconLng ]; },
 			set iconLatLng ( IconLatLng ) {
-				myIconLat = IconLatLng [ 0 ];
-				myIconLng = IconLatLng [ 1 ];
+				myIconLat = IconLatLng [ OUR_CONST.zero ];
+				myIconLng = IconLatLng [ OUR_CONST.number1 ];
 			},
 
 			get lat ( ) { return myLat; },
@@ -235,8 +235,8 @@ function newNote ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ 0 ];
-				myLng = LatLng [ 1 ];
+				myLat = LatLng [ OUR_CONST.zero ];
+				myLng = LatLng [ OUR_CONST.number1 ];
 			},
 
 			get distance ( ) { return myDistance; },

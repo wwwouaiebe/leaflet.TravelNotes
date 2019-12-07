@@ -513,7 +513,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				console.log ( err ? err : 'An error occurs when opening the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ 0 ] );
+		fileReader.readAsText ( changeEvent.target.files [ OUR_CONST.zero ] );
 	}
 
 	/*

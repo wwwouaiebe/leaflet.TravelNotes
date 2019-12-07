@@ -228,7 +228,9 @@ function newTravelNotesToolbarUI ( ) {
 			'click',
 			clickEvent => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
-				if ( 10060 === clickEvent.target.innerHTML.charCodeAt ( OUR_CONST.zero ) ) {
+				let tmp = document.createElement ( 'div' );
+				tmp.innerHTML = '&#x274c;';
+				if ( tmp.innerHTML === clickEvent.target.innerHTML ) {
 					clickEvent.target.innerHTML = '&#x1f4cc;';
 					control.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
 					control.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );

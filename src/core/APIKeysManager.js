@@ -84,10 +84,10 @@ function newAPIKeysManager ( ) {
 		let urlSubStrings = urlString.split ( '=' );
 		if ( OUR_CONST.number2 === urlSubStrings.length ) {
 			let providerName =
-				urlSubStrings [ 0 ]
-					.substr ( OUR_CONST.zero, urlSubStrings [ 0 ].length - 'ProviderKey'.length )
+				urlSubStrings [ OUR_CONST.zero ]
+					.substr ( OUR_CONST.zero, urlSubStrings [ OUR_CONST.zero ].length - 'ProviderKey'.length )
 					.toLowerCase ( );
-			let providerKey = urlSubStrings [ 1 ];
+			let providerKey = urlSubStrings [ OUR_CONST.number1 ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}

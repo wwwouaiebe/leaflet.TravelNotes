@@ -31,6 +31,8 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newAutoLoader function --------------------------------------------------------------------------------------------
 
@@ -42,8 +44,16 @@ function newAutoLoader ( ) {
 	if ( ! theConfig.autoLoad ) {
 		return;
 	}
-	newHTMLElementsFactory ( ).create ( 'div', { id : 'Map' },  document.getElementsByTagName ( 'body' ) [ 0 ] );
-	newHTMLElementsFactory ( ).create ( 'div', { id : 'TravelNotes' }, document.getElementsByTagName ( 'body' ) [ 0 ] );
+	newHTMLElementsFactory ( ).create (
+		'div',
+		{ id : 'Map' },
+		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
+	);
+	newHTMLElementsFactory ( ).create (
+		'div',
+		{ id : 'TravelNotes' },
+		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
+	);
 
 	let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
 		.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );

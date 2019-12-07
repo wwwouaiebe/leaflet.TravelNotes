@@ -262,7 +262,7 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLatLng ( latLng ) {
-		return myFormatLat ( latLng [ 0 ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ 1 ] );
+		return myFormatLat ( latLng [ OUR_CONST.zero ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ OUR_CONST.number1 ] );
 	}
 
 	/* --- End of myFormatLatLng function --- */
