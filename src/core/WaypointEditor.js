@@ -110,7 +110,7 @@ function newWayPointEditor ( ) {
 			else if ( geoCoderData.address.city ) {
 				address += geoCoderData.address.city;
 			}
-			if ( 0 === address.length ) {
+			if ( OUR_CONST.zero === address.length ) {
 				address += geoCoderData.address.country;
 			}
 			myRenameWayPoint ( address, wayPointObjId );
@@ -288,7 +288,7 @@ function newWayPointEditor ( ) {
 
 	function mySetStartPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
-		if ( 0 !== theTravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
+		if ( OUR_CONST.latLng.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
 				{ objId : theTravelNotesData.travel.editedRoute.wayPoints.first.objId }
@@ -322,7 +322,7 @@ function newWayPointEditor ( ) {
 
 	function mySetEndPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
-		if ( 0 !== theTravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
+		if ( OUR_CONST.latLng.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
 				{ objId : theTravelNotesData.travel.editedRoute.wayPoints.last.objId }

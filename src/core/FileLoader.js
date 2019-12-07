@@ -73,7 +73,7 @@ function newFileLoader ( ) {
 		route.itinerary.itineraryPoints.latLngs =
 			polyline.decode ( route.itinerary.itineraryPoints.latLngs, OUR_CONST.polylinePrecision );
 		let decompressedItineraryPoints = [];
-		let latLngsCounter = 0;
+		let latLngsCounter = OUR_CONST.zero;
 		route.itinerary.itineraryPoints.latLngs.forEach (
 			latLng => {
 				let itineraryPoint = {};
@@ -105,7 +105,7 @@ function newFileLoader ( ) {
 		// routes are added with their notes
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			if ( 0 === routesIterator.value.edited ) {
+			if ( OUR_CONST.route.edited.notEdited === routesIterator.value.edited ) {
 				myEventDispatcher.dispatch (
 					'addroute',
 					{
@@ -247,12 +247,12 @@ function newFileLoader ( ) {
 		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
 
 		if ( '' !== myFileName ) {
-			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) );
+			theTravelNotesData.travel.name = myFileName.substr ( OUR_CONST.zero, myFileName.lastIndexOf ( '.' ) );
 		}
 		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
 		theTravelNotesData.travel.routes.forEach (
 			route => {
-				if ( 0 !== route.edited ) {
+				if ( OUR_CONST.route.edited.notEdited !== route.edited ) {
 					theTravelNotesData.editedRouteObjId = route.objId;
 				}
 			}

@@ -95,7 +95,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( 0 === myIconHtmlContent.value.length ) {
+		if ( OUR_CONST.zero === myIconHtmlContent.value.length ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 		}
 
@@ -149,7 +149,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( '' !== myCity ) {
 			myAddress += theConfig.note.cityPrefix + myCity + theConfig.note.cityPostfix;
 		}
-		if ( 0 === myAddress.length ) {
+		if ( OUR_CONST.zero === myAddress.length ) {
 			myAddress += geoCoderData.address.country;
 		}
 		if ( ( theConfig.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
@@ -245,10 +245,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	function myGetSvgAddress ( svgData, arrow ) {
 		let address = '';
-		let showPlace = 0;
-		for ( let counter = 0; counter < svgData.streets.length; counter ++ ) {
+		let showPlace = OUR_CONST.zero;
+		for ( let counter = OUR_CONST.zero; counter < svgData.streets.length; counter ++ ) {
 			if (
-				( 0 === counter  || svgData.streets.length - OUR_CONST.number1 === counter )
+				( OUR_CONST.zero === counter  || svgData.streets.length - OUR_CONST.number1 === counter )
 				&&
 				svgData.streets [ counter ] === ''
 			) {
@@ -358,11 +358,18 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		ourAllButtonsAndIcons.preDefinedIconsList.sort (
 			( first, second ) => first.name.localeCompare ( second.name )
 		);
-		let elementCounter = 0;
-		for ( elementCounter = myPredefinedIconsSelect.length - OUR_CONST.number1; elementCounter >= 0; elementCounter -- ) {
+		let elementCounter = OUR_CONST.zero;
+		for (
+			elementCounter = myPredefinedIconsSelect.length - OUR_CONST.number1;
+			elementCounter >= OUR_CONST.zero;
+			elementCounter --
+		) {
 			myPredefinedIconsSelect.remove ( elementCounter );
 		}
-		for ( elementCounter = 0; elementCounter < ourAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
+		for (
+			elementCounter = OUR_CONST.zero;
+			elementCounter < ourAllButtonsAndIcons.preDefinedIconsList.length;
+			elementCounter ++ ) {
 			myPredefinedIconsSelect.add (
 				myHTMLElementsFactory.create (
 					'option',
@@ -423,12 +430,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		while ( ! button.htmlBefore ) {
 			button = button.parentNode;
 		}
-		let bInsertBeforeAndAfter = button.htmlAfter && 0 < button.htmlAfter.length;
+		let bInsertBeforeAndAfter = button.htmlAfter && OUR_CONST.zero < button.htmlAfter.length;
 		let selectionStart = myFocusControl.selectionStart;
 		let selectionEnd = myFocusControl.selectionEnd;
 		let oldText = myFocusControl.value;
 		myFocusControl.value =
-			oldText.substring ( 0, selectionStart ) +
+			oldText.substring ( OUR_CONST.zero, selectionStart ) +
 			(
 				bInsertBeforeAndAfter
 					?
@@ -964,7 +971,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		}
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 			'TravelNotesNoteDialog' +
 			theConfig.language.toUpperCase ( ) +
 			'.json'

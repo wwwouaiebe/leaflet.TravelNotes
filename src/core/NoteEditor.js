@@ -145,7 +145,7 @@ function newNoteEditor ( ) {
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
 		noteAndRoute.note.distance = OUR_CONST.distance.invalid;
-		noteAndRoute.note.chainedDistance = 0;
+		noteAndRoute.note.chainedDistance = OUR_CONST.distance.defaultValue;
 		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
 
 		myEventDispatcher.dispatch ( 'updateitinerary' );

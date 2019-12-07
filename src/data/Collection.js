@@ -87,7 +87,7 @@ function newCollection ( objName ) {
 		return {
 			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
 			get done ( ) { return ++ nextIndex  >= myArray.length; },
-			get first ( ) { return 0 === nextIndex; },
+			get first ( ) { return OUR_CONST.zero === nextIndex; },
 			get last ( ) { return nextIndex  >= myArray.length - OUR_CONST.number1; },
 			get index ( ) { return nextIndex; }
 		};
@@ -163,7 +163,7 @@ function newCollection ( objName ) {
 		if ( ! moveBefore ) {
 			newPosition ++;
 		}
-		myArray.splice ( newPosition, 0, myArray [ oldPosition ] );
+		myArray.splice ( newPosition, OUR_CONST.zero, myArray [ oldPosition ] );
 		if ( newPosition < oldPosition ) {
 			oldPosition ++;
 		}
@@ -232,7 +232,7 @@ function newCollection ( objName ) {
 			myArray.splice ( OUR_CONST.number1, myArray.length - OUR_CONST.number2 );
 		}
 		else {
-			myArray.length = 0;
+			myArray.length = OUR_CONST.zero;
 		}
 	}
 
@@ -267,7 +267,7 @@ function newCollection ( objName ) {
 	*/
 
 	function mySetObject ( something ) {
-		myArray.length = 0;
+		myArray.length = OUR_CONST.zero;
 		let newObject = null;
 		something.forEach (
 			arrayObject => {
@@ -317,7 +317,7 @@ function newCollection ( objName ) {
 		if (
 			( OUR_CONST.notFound === index )
 			||
-			( ( 0 === index ) && swapUp )
+			( ( OUR_CONST.zero === index ) && swapUp )
 			||
 			( ( myArray.length - OUR_CONST.number1 === index ) && ( ! swapUp ) )
 		) {

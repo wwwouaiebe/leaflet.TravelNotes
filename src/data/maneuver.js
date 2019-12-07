@@ -56,9 +56,9 @@ function newManeuver ( ) {
 
 	let myItineraryPointObjId = -1;
 
-	let myDistance = 0;
+	let myDistance = OUR_CONST.distance.defaultValue;
 
-	let myDuration = 0;
+	let myDuration = OUR_CONST.distance.defaultValue;
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -124,8 +124,8 @@ function newManeuver ( ) {
 		something = myValidate ( something );
 		myIconName = something.iconName || '';
 		myInstruction = something.instruction || '';
-		myDistance = something.distance || 0;
-		myDuration = something.duration || 0;
+		myDistance = something.distance || OUR_CONST.distance.defaultValue;
+		myDuration = something.duration || OUR_CONST.distance.defaultValue;
 		myItineraryPointObjId = something.itineraryPointObjId || OUR_CONST.invalidObjId;
 		myObjId = newObjId ( );
 	}

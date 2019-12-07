@@ -38,11 +38,11 @@ import  { OUR_CONST } from '../util/Constants.js';
 
 let ourContainer = null;
 let ourTimerId = null;
-let ourFocusIsOnItem = 0;
+let ourFocusIsOnItem = OUR_CONST.zero;
 let ourOriginalEvent = null;
 let ourCloseButton = null;
-let ourLat = 0;
-let ourLng = 0;
+let ourLat = OUR_CONST.latLng.defaultValue;
+let ourLng = OUR_CONST.latLng.defaultValue;
 
 /*
 --- newBaseContextMenu function ---------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ function newBaseContextMenu ( originalEvent ) {
 		if (
 			( 'Enter' === keyBoardEvent.key )
 			&&
-			( ourFocusIsOnItem > 0 )
+			( ourFocusIsOnItem > OUR_CONST.zero )
 			&&
 			( myMenuItems[ ourFocusIsOnItem - OUR_CONST.number1 ].action )
 		) {
@@ -176,17 +176,17 @@ function newBaseContextMenu ( originalEvent ) {
 		// removing menu items
 		let childNodes = ourContainer.childNodes;
 		childNodes [ 0 ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
-		for ( let childNodesCounter = 1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+		for ( let childNodesCounter = OUR_CONST.number1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
 		}
 
 		// removing the menu container
 		document.getElementsByTagName ( 'body' ) [ 0 ].removeChild ( ourContainer );
 		ourContainer = null;
-		ourFocusIsOnItem = 0;
+		ourFocusIsOnItem = OUR_CONST.zero;
 		myMenuItems = [];
-		ourLat = 0;
-		ourLng = 0;
+		ourLat = OUR_CONST.latLng.defaultValue;
+		ourLng = OUR_CONST.latLng.defaultValue;
 	}
 
 	/*
@@ -288,7 +288,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function myAddMenuItems ( ) {
-		let menuItemCounter = 0;
+		let menuItemCounter = OUR_CONST.zero;
 		myMenuItems.forEach (
 			menuItem => {
 				let itemContainer = myHTMLElementsFactory.create (

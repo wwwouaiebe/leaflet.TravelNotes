@@ -71,10 +71,10 @@ function newLayersToolbarUI ( ) {
 	let myLayersToolbarButtonsDiv = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
-	let myMarginTop = 0;
-	let myButtonHeight = 0;
-	let myButtonsHeight = 0;
-	let myButtonTop = 0;
+	let myMarginTop = OUR_CONST.zero;
+	let myButtonHeight = OUR_CONST.zero;
+	let myButtonsHeight = OUR_CONST.zero;
+	let myButtonTop = OUR_CONST.zero;
 
 	/*
 	--- myOnMouseEnterLayerButton function ----------------------------------------------------------------------------
@@ -257,7 +257,7 @@ function newLayersToolbarUI ( ) {
 			myLayersToolbar
 		);
 		myButtonTop = myLayersToolbar.clientHeight;
-		myButtonsHeight = 0;
+		myButtonsHeight = OUR_CONST.zero;
 		myLayers.forEach ( layer => myCreateLayerButton ( layer ) );
 
 		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
@@ -336,7 +336,7 @@ function newLayersToolbarUI ( ) {
 	function myCreateUI ( ) {
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 			'TravelNotesLayers.json'
 		)
 			.then ( layers => { myLayers = myLayers.concat ( layers ); } )

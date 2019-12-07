@@ -46,7 +46,7 @@ Event listener for show/ hide travel notes checkbox
 function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
-	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+	for ( let notesCounter = OUR_CONST.zero; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -69,7 +69,7 @@ Event listener for show/ hide route notes checkbox
 function showRouteNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
-	for ( let notesCounter = 0; notesCounter < notes.length; notesCounter ++ ) {
+	for ( let notesCounter = OUR_CONST.zero; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -92,7 +92,7 @@ Event listener for show/ hide route maneuvers checkbox
 function showRouteManeuvers ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
 	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
-	for ( let maneuversCounter = 0; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
+	for ( let maneuversCounter = OUR_CONST.zero; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
 		if ( show ) {
 			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -162,7 +162,7 @@ else {
 
 if ( language ) {
 	newHttpRequestBuilder ( ).getJsonPromise (
-		window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+		window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json'

@@ -46,7 +46,7 @@ This function returns the travelNotesPaneUI object
 
 function newTravelNotesPaneUI ( ) {
 
-	let myNoteObjId  = 0;
+	let myNoteObjId  = OUR_CONST.zero;
 
 	let myEventDispatcher = newEventDispatcher ( );
 

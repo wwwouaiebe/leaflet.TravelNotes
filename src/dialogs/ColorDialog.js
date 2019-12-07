@@ -120,9 +120,9 @@ function newColorDialog ( color ) {
 		let red = clickEvent.target.redValue;
 		let green = OUR_CONST.colorDialog.maxColorValue;
 		let blue = OUR_CONST.colorDialog.maxColorValue;
-		let rowCounter = 0;
+		let rowCounter = OUR_CONST.zero;
 		while ( ++ rowCounter <= OUR_CONST.colorDialog.colorRowsNumber ) {
-			let cellCounter = 0;
+			let cellCounter = OUR_CONST.zero;
 			green = OUR_CONST.colorDialog.maxColorValue;
 			while ( ++ cellCounter <= OUR_CONST.colorDialog.colorRowsNumber ) {
 				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
@@ -197,7 +197,7 @@ function newColorDialog ( color ) {
 		let red = OUR_CONST.colorDialog.maxColorValue;
 		let green = OUR_CONST.colorDialog.maxColorValue;
 		let blue = OUR_CONST.colorDialog.maxColorValue;
-		let rowCounter = 0;
+		let rowCounter = OUR_CONST.zero;
 
 		// loop on the 7 rows
 		while ( ++ rowCounter <= OUR_CONST.colorDialog.colorRowsNumber + OUR_CONST.number1 ) {
@@ -210,7 +210,7 @@ function newColorDialog ( color ) {
 				buttonsDiv
 			);
 
-			let cellCounter = 0;
+			let cellCounter = OUR_CONST.zero;
 			green = OUR_CONST.colorDialog.maxColorValue;
 
 			// loop on the 6 cells

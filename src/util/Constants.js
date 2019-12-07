@@ -32,7 +32,8 @@ const OUR_CONST = {
 		mInKm : 1000,
 		round : 10,
 		fixed : 2,
-		invalid : -1
+		invalid : -1,
+		defaultValue : 0
 	},
 	dataPanesUI : {
 		invalidPane : -1,
@@ -58,6 +59,7 @@ const OUR_CONST = {
 		buttonsAlwaysVisible : 3
 	},
 	latLng : {
+		defaultValue : 0,
 		fixed : 6,
 		maxLat : 90,
 		minLat : -90,

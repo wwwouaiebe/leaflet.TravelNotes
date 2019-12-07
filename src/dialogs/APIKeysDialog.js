@@ -35,6 +35,8 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newAPIKeysDialog function -----------------------------------------------------------------------------------------
 
@@ -58,7 +60,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myGetAPIKeys ( ) {
 		let dlgAPIKeys = [];
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = 0; counter < rows.length; counter ++ ) {
+		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
 			dlgAPIKeys.push (
 				{
 					providerName : rows [ counter ].childNodes [ 0 ].value,
@@ -79,7 +81,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		let returnValue = true;
 		myAPIKeysDialog.hideError ( );
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = 0; counter < rows.length; counter ++ ) {
+		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
 			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 0 ].value;
 			returnValue = returnValue && '' !== rows [ counter ].childNodes [ 1 ].value;
 		}

@@ -51,12 +51,12 @@ import  { OUR_CONST } from '../util/Constants.js';
 function newBaseDialog ( ) {
 
 	// variables initialization for drag and drop
-	let myStartDragX = 0;
-	let myStartDragY = 0;
-	let myDialogX = 0;
-	let myDialogY = 0;
-	let myScreenWidth = 0;
-	let myScreenHeight = 0;
+	let myStartDragX = OUR_CONST.zero;
+	let myStartDragY = OUR_CONST.zero;
+	let myDialogX = OUR_CONST.zero;
+	let myDialogY = OUR_CONST.zero;
+	let myScreenWidth = OUR_CONST.zero;
+	let myScreenHeight = OUR_CONST.zero;
 
 	// Div
 	let myBackgroundDiv = null;

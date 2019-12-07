@@ -39,6 +39,8 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- providersToolbarUI function ---------------------------------------------------------------------------------------
 
@@ -167,7 +169,7 @@ function newProvidersToolbarUI ( ) {
 
 	function myCreateProviderButton ( provider ) {
 
-		if ( 0 === provider.providerKey ) {
+		if ( OUR_CONST.zero === provider.providerKey ) {
 			return;
 		}
 

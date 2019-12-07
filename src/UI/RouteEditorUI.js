@@ -147,7 +147,7 @@ function newRouteEditorUI ( ) {
 		// wayPoints list
 		myWayPointsList = newSortableList (
 			{
-				minSize : 0,
+				minSize : OUR_CONST.zero,
 				listStyle : 'LimitedSort',
 				id : 'TravelNotes-Control-RouteWaypointsList'
 			},

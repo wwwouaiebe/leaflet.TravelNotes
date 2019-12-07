@@ -85,7 +85,7 @@ function newAPIKeysManager ( ) {
 		if ( OUR_CONST.number2 === urlSubStrings.length ) {
 			let providerName =
 				urlSubStrings [ 0 ]
-					.substr ( 0, urlSubStrings [ 0 ].length - 'ProviderKey'.length )
+					.substr ( OUR_CONST.zero, urlSubStrings [ 0 ].length - 'ProviderKey'.length )
 					.toLowerCase ( );
 			let providerKey = urlSubStrings [ 1 ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
@@ -106,12 +106,12 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromSessionStorage ( ) {
-		let APIKeysCounter = 0;
-		for ( let counter  = 0; counter < sessionStorage.length; counter ++ ) {
+		let APIKeysCounter = OUR_CONST.zero;
+		for ( let counter  = OUR_CONST.zero; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
 				mySetKey (
-					keyName.substr ( 0, keyName.length - 'ProviderKey'.length ),
+					keyName.substr ( OUR_CONST.zero, keyName.length - 'ProviderKey'.length ),
 					atob ( sessionStorage.getItem ( keyName ) )
 				);
 				APIKeysCounter ++;
@@ -242,12 +242,12 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromServerFile ( ) {
-		if ( 0 !== myFromSessionStorage ( ) ) {
+		if ( OUR_CONST.zero !== myFromSessionStorage ( ) ) {
 			newEventDispatcher ( ).dispatch ( 'providersadded' );
 			return;
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'APIKeys'
 		)
 			.then ( myOnServerFile )

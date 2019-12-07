@@ -40,6 +40,8 @@ import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newSearchPaneUI function ------------------------------------------------------------------------------------------
 
@@ -147,7 +149,7 @@ function newSearchPaneUI ( ) {
 
 		// removing previous search results
 		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
-		while ( 0 !== searchResultsElements.length ) {
+		while ( OUR_CONST.zero !== searchResultsElements.length ) {
 
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
 			searchResultsElements [ 0 ].removeEventListener ( 'click', myOnSearchResultClick, false );
@@ -284,7 +286,7 @@ function newSearchPaneUI ( ) {
 			},
 			false );
 		searchInput.focus ( );
-		let resultsCounter = 0;
+		let resultsCounter = OUR_CONST.zero;
 		theTravelNotesData.searchData.forEach (
 			searchResult => {
 				let searchResultDiv = myHTMLElementsFactory.create (

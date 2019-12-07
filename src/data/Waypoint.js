@@ -48,9 +48,9 @@ function newWayPoint ( ) {
 
 	let myName = '';
 
-	let myLat = 0;
+	let myLat = OUR_CONST.latLng.defaultValue;
 
-	let myLng = 0;
+	let myLng = OUR_CONST.latLng.defaultValue;
 
 	let myObjId = newObjId ( );
 
@@ -115,8 +115,8 @@ function newWayPoint ( ) {
 	function mySetObject ( something ) {
 		something = myValidate ( something );
 		myName = something.name || '';
-		myLat = something.lat || 0;
-		myLng = something.lng || 0;
+		myLat = something.lat || OUR_CONST.latLng.defaultValue;
+		myLng = something.lng || OUR_CONST.latLng.defaultValue;
 		myObjId = newObjId ( );
 	}
 

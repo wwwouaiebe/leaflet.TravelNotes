@@ -76,11 +76,11 @@ function newRoute ( ) {
 
 	let myChain = false;
 
-	let myChainedDistance = 0;
+	let myChainedDistance = OUR_CONST.distance.defaultValue;
 
-	let myDistance = 0;
+	let myDistance = OUR_CONST.distance.defaultValue;
 
-	let myDuration = 0;
+	let myDuration = OUR_CONST.distance.defaultValue;
 
 	let myEdited = OUR_CONST.route.edited.notEdited;
 
@@ -117,7 +117,7 @@ function newRoute ( ) {
 		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0' :
-				something.dashArray = 0;
+				something.dashArray = OUR_CONST.zero;
 				something.hidden = false;
 				// eslint break omitted intentionally
 			case '1.1.0' :
@@ -127,7 +127,7 @@ function newRoute ( ) {
 			case '1.3.0' :
 				// eslint break omitted intentionally
 			case '1.4.0' :
-				something.edited = 0;
+				something.edited = OUR_CONST.route.edited.notEdited;
 				// eslint break omitted intentionally
 			case '1.5.0' :
 				something.objType.version = '1.6.0';
@@ -202,11 +202,11 @@ function newRoute ( ) {
 		myItinerary.object = something.itinerary || newItinerary ( ).object;
 		myWidth = something.width || theConfig.route.width;
 		myColor = something.color || '#000000';
-		myDashArray = something.dashArray || 0;
+		myDashArray = something.dashArray || OUR_CONST.zero;
 		myChain = something.chain || false;
 		myDistance = something.distance;
 		myDuration = something.duration;
-		myEdited = something.edited || 0;
+		myEdited = something.edited || OUR_CONST.route.edited.notEdited;
 		myHidden = something.hidden || false;
 		myChainedDistance = something.chainedDistance;
 		myObjId = newObjId ( );

@@ -35,6 +35,8 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
 
@@ -150,7 +152,7 @@ function newItineraryPaneUI ( ) {
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
-			for ( let childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+			for ( let childCounter = OUR_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {
 				let childNode = childNodes [ childCounter ];
 				childNode.removeEventListener ( 'click', myOnInstructionClick, false );
 				childNode.removeEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
@@ -198,7 +200,7 @@ function newItineraryPaneUI ( ) {
 			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ 0 ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
-			for ( let childCounter = 0; childCounter < childNodes.length; childCounter ++ ) {
+			for ( let childCounter = OUR_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {
 				let childNode = childNodes [ childCounter ];
 				childNode.addEventListener ( 'click', myOnInstructionClick, false );
 				childNode.addEventListener ( 'contextmenu', myOnInstructionContextMenu, false );

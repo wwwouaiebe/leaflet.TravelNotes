@@ -43,7 +43,7 @@ import  { OUR_CONST } from '../util/Constants.js';
 
 function newSortableList ( options, parentNode ) {
 
-	let myDataObjId  = 0;
+	let myDataObjId  = OUR_CONST.zero;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
@@ -204,7 +204,7 @@ function newSortableList ( options, parentNode ) {
 		for ( let ItemCounter = 0; ItemCounter < myItems.length; ItemCounter ++ ) {
 			myContainer.removeChild ( myItems [ ItemCounter ] );
 		}
-		myItems.length = 0;
+		myItems.length = OUR_CONST.zero;
 	}
 
 	/*
@@ -325,7 +325,7 @@ function newSortableList ( options, parentNode ) {
 		myOptions [ option ] = options [ option ];
 	}
 	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( OUR_CONST.number2 > myOptions.minSize ) ) {
-		myOptions.minSize = 0;
+		myOptions.minSize = OUR_CONST.zero;
 	}
 	myContainer.classList.add ( myOptions.listStyle );
 	myContainer.addEventListener ( 'drop', myOnDrop, false );

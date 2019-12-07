@@ -161,10 +161,10 @@ function newRoutePropertiesDialog ( route ) {
 		);
 
 		let dashChoices = theConfig.route.dashChoices;
-		for ( let optionsCounter = 0; optionsCounter < dashChoices.length; optionsCounter ++ ) {
+		for ( let optionsCounter = OUR_CONST.zero; optionsCounter < dashChoices.length; optionsCounter ++ ) {
 			myDashSelect.add ( myHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
-		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : 0;
+		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : OUR_CONST.zero;
 	}
 
 	/*

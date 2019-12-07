@@ -65,7 +65,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 				action :
 					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
-					( 0 === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+					( OUR_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
 						?
 						theWayPointEditor.setStartPoint
 						:
@@ -89,7 +89,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 				action :
 					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
-					( 0 === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+					( OUR_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
 						?
 						theWayPointEditor.setEndPoint
 						:

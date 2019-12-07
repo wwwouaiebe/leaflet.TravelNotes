@@ -64,17 +64,17 @@ function newNote ( ) {
 
 	let myAddress = '';
 
-	let myIconLat = 0;
+	let myIconLat = OUR_CONST.latLng.defaultValue;
 
-	let myIconLng = 0;
+	let myIconLng = OUR_CONST.latLng.defaultValue;
 
-	let myLat = 0;
+	let myLat = OUR_CONST.latLng.defaultValue;
 
-	let myLng = 0;
+	let myLng = OUR_CONST.latLng.defaultValue;
 
 	let myDistance = OUR_CONST.distance.invalid;
 
-	let myChainedDistance = 0;
+	let myChainedDistance = OUR_CONST.distance.defaultValue;
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -171,10 +171,10 @@ function newNote ( ) {
 		myPhone = something.phone || '';
 		myUrl = something.url || '';
 		myAddress = something.address || '';
-		myIconLat = something.iconLat || 0;
-		myIconLng = something.iconLng || 0;
-		myLat = something.lat || 0;
-		myLng = something.lng || 0;
+		myIconLat = something.iconLat || OUR_CONST.latLng.defaultValue;
+		myIconLng = something.iconLng || OUR_CONST.latLng.defaultValue;
+		myLat = something.lat || OUR_CONST.latLng.defaultValue;
+		myLng = something.lng || OUR_CONST.latLng.defaultValue;
 		myDistance = something.distance || OUR_CONST.distance.invalid;
 		myChainedDistance = something.chainedDistance;
 		myObjId = newObjId ( );

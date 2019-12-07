@@ -100,10 +100,10 @@ function newRouteEditor ( ) {
 		maneuverIterator.done;
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		let previousManeuver = maneuverIterator.value;
-		previousManeuver.distance = 0;
+		previousManeuver.distance = OUR_CONST.distance.defaultValue;
 		maneuverIterator.done;
-		route.distance = 0;
-		route.duration = 0;
+		route.distance = OUR_CONST.distance.defaultValue;
+		route.duration = OUR_CONST.distance.defaultValue;
 		while ( ! itineraryPointsIterator.done ) {
 			previousItineraryPoint.distance = myGeometry.pointsDistance (
 				previousItineraryPoint.latLng,
@@ -112,7 +112,7 @@ function newRouteEditor ( ) {
 			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
 				previousManeuver =  maneuverIterator.value;
-				maneuverIterator.value.distance = 0;
+				maneuverIterator.value.distance = OUR_CONST.distance.defaultValue;
 				maneuverIterator.done;
 			}
 			route.distance += previousItineraryPoint.distance;
@@ -219,14 +219,14 @@ function newRouteEditor ( ) {
 
 	function myChainRoutes ( ) {
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		let chainedDistance = 0;
+		let chainedDistance = OUR_CONST.distance.defaultValue;
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.chain ) {
 				routesIterator.value.chainedDistance = chainedDistance;
 				chainedDistance += routesIterator.value.distance;
 			}
 			else {
-				routesIterator.value.chainedDistance = 0;
+				routesIterator.value.chainedDistance = OUR_CONST.distance.defaultValue;
 			}
 			let notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
@@ -249,7 +249,12 @@ function newRouteEditor ( ) {
 				if ( null === result ) {
 					result = true;
 				}
-				result = result && ( ( 0 !== wayPoint.lat ) &&  ( 0 !== wayPoint.lng ) );
+				result =
+					result
+					&&
+					OUR_CONST.latLng.defaultValue !== wayPoint.lat
+					&&
+					OUR_CONST.latLng.defaultValue !== wayPoint.lng;
 				return result;
 			}
 		);
@@ -393,7 +398,7 @@ function newRouteEditor ( ) {
 			return false;
 		}
 
-		myMustZoomToRoute = 0 === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+		myMustZoomToRoute = OUR_CONST.zero === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
 		myRequestStarted = true;
 
 		// Choosing the correct route provider
@@ -429,7 +434,7 @@ function newRouteEditor ( ) {
 		);
 		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-			editedRoute.edited = 0;
+			editedRoute.edited = OUR_CONST.route.edited.notEdited;
 			myEventDispatcher.dispatch (
 				'addroute',
 				{

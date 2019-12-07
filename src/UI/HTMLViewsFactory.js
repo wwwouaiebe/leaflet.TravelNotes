@@ -71,7 +71,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	function myGetNoteHTML ( note ) {
 
 		let noteText = '';
-		if ( 0 !== note.tooltipContent.length ) {
+		if ( OUR_CONST.zero !== note.tooltipContent.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -79,7 +79,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				note.tooltipContent +
 				'</div>';
 		}
-		if ( 0 !== note.popupContent.length ) {
+		if ( OUR_CONST.zero !== note.popupContent.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -87,7 +87,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				note.popupContent +
 				'</div>';
 		}
-		if ( 0 !== note.address.length ) {
+		if ( OUR_CONST.zero !== note.address.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -95,7 +95,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				theTranslator.getText ( 'NoteEditor - Address' ) +
 				note.address + '</div>';
 		}
-		if ( 0 !== note.phone.length ) {
+		if ( OUR_CONST.zero !== note.phone.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -103,7 +103,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				theTranslator.getText ( 'NoteEditor - Phone' )
 				+ note.phone + '</div>';
 		}
-		if ( 0 !== note.url.length ) {
+		if ( OUR_CONST.zero !== note.url.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -112,7 +112,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<a href="' +
 				note.url +
 				'" target="_blank">' +
-				note.url.substr ( 0, OUR_CONST.htmlViewsFactory.linksMaxLength ) +
+				note.url.substr ( OUR_CONST.zero, OUR_CONST.htmlViewsFactory.linksMaxLength ) +
 				'...' +
 				'</a></div>';
 		}
@@ -188,7 +188,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		let returnValue = '<div class="' + myClassNamePrefix + 'Route-Header-Name">' +
 			route.name +
 			'</div>';
-		if ( 0 !== route.distance ) {
+		if ( OUR_CONST.zero !== route.distance ) {
 			returnValue +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -233,7 +233,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			travelHeaderHTML
 		);
 
-		let travelDistance = 0;
+		let travelDistance = OUR_CONST.distance.defaultValue;
 		let travelRoutesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! travelRoutesIterator.done ) {
 			myHTMLElementsFactory.create (
@@ -336,7 +336,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 		let maneuversIterator = route.itinerary.maneuvers.iterator;
 		let maneuversDone = maneuversIterator.done;
-		let maneuversDistance = 0;
+		let maneuversDistance = OUR_CONST.distance.defaultValue;
 
 		while ( ! ( maneuversDone && notesDone ) ) {
 			let rowDiv = myHTMLElementsFactory.create (
@@ -363,7 +363,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					let maneuverText =
 						'<div>' +  maneuversIterator.value.instruction + '</div>';
 
-					if ( 0 < maneuversIterator.value.distance ) {
+					if ( OUR_CONST.zero < maneuversIterator.value.distance ) {
 						maneuverText +=	'<div>' +
 							theTranslator.getText (
 								'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}',

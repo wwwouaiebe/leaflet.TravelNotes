@@ -192,7 +192,7 @@ function newTravelNotesToolbarUI ( ) {
 					false
 				);
 		}
-		if ( 0 < theGeoLocator.status ) {
+		if ( OUR_CONST.geoLocation.status.disabled < theGeoLocator.status ) {
 
 			// GeoLocator button
 			myGeoLocationButton = myHTMLElementsFactory.create (
@@ -228,7 +228,7 @@ function newTravelNotesToolbarUI ( ) {
 			'click',
 			clickEvent => {
 				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
-				if ( 10060 === clickEvent.target.innerHTML.charCodeAt ( 0 ) ) {
+				if ( 10060 === clickEvent.target.innerHTML.charCodeAt ( OUR_CONST.zero ) ) {
 					clickEvent.target.innerHTML = '&#x1f4cc;';
 					control.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
 					control.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );

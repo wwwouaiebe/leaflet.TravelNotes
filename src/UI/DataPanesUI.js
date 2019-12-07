@@ -67,13 +67,13 @@ function newDataPanesUI ( ) {
 
 	function myRemoveActivePane ( ) {
 		switch ( myActivePaneIndex ) {
-		case OUR_CONST.dataPaneUI.itineraryPane :
+		case OUR_CONST.dataPanesUI.itineraryPane :
 			myItineraryPaneUI.remove ( );
 			break;
-		case OUR_CONST.dataPaneUI.travelNotesPane :
+		case OUR_CONST.dataPanesUI.travelNotesPane :
 			myTravelNotesPaneUI.remove ( );
 			break;
-		case OUR_CONST.dataPaneUI.searchPane :
+		case OUR_CONST.dataPanesUI.searchPane :
 			if ( window.osmSearch ) {
 				mySearchPaneUI.remove ( );
 			}
@@ -95,7 +95,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		myItineraryPaneUI.add ( );
 
-		myActivePaneIndex = OUR_CONST.dataPaneUI.itineraryPane;
+		myActivePaneIndex = OUR_CONST.dataPanesUI.itineraryPane;
 	}
 
 	/*
@@ -107,7 +107,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateItinerary ( ) {
-		if ( OUR_CONST.dataPaneUI.itineraryPane === myActivePaneIndex ) {
+		if ( OUR_CONST.dataPanesUI.itineraryPane === myActivePaneIndex ) {
 			myItineraryPaneUI.remove ( );
 			myItineraryPaneUI.add ( );
 		}
@@ -124,7 +124,7 @@ function newDataPanesUI ( ) {
 	function mySetTravelNotes ( ) {
 		myRemoveActivePane ( );
 		myTravelNotesPaneUI.add ( );
-		myActivePaneIndex = OUR_CONST.dataPaneUI.travelNotesPane;
+		myActivePaneIndex = OUR_CONST.dataPanesUI.travelNotesPane;
 	}
 
 	/*
@@ -136,7 +136,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateTravelNotes ( ) {
-		if ( OUR_CONST.dataPaneUI.travelNotesPane === myActivePaneIndex ) {
+		if ( OUR_CONST.dataPanesUI.travelNotesPane === myActivePaneIndex ) {
 			myTravelNotesPaneUI.remove ( );
 			myTravelNotesPaneUI.add ( );
 		}
@@ -154,7 +154,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		mySearchPaneUI.add ( );
 
-		myActivePaneIndex = OUR_CONST.dataPaneUI.searchPane;
+		myActivePaneIndex = OUR_CONST.dataPanesUI.searchPane;
 
 	}
 
@@ -167,7 +167,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateSearch ( ) {
-		if ( OUR_CONST.dataPaneUI.searchPane === myActivePaneIndex ) {
+		if ( OUR_CONST.dataPanesUI.searchPane === myActivePaneIndex ) {
 			mySearchPaneUI.remove ( );
 			mySearchPaneUI.add ( );
 		}

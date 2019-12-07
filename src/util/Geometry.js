@@ -32,6 +32,8 @@ Tests ...
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
 
@@ -57,7 +59,7 @@ function newGeometry  ( ) {
 
 	function myGetClosestLatLngDistance ( route, latLng ) {
 
-		if ( 0 === route.itinerary.itineraryPoints.length ) {
+		if ( OUR_CONST.zero === route.itinerary.itineraryPoints.length ) {
 			return null;
 		}
 

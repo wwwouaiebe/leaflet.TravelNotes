@@ -163,14 +163,14 @@ function newUtilities ( ) {
 
 	function myFormatTime ( time ) {
 		time = Math.floor ( time );
-		if ( 0 === time ) {
+		if ( OUR_CONST.zero === time ) {
 			return '';
 		}
 		let days = Math.floor ( time / OUR_CONST.time.secondInDay );
 		let hours = Math.floor ( time % OUR_CONST.time.secondInDay / OUR_CONST.time.secondInHour );
 		let minutes = Math.floor ( time % OUR_CONST.time.secondInHour / OUR_CONST.time.secondInMinut );
 		let seconds = Math.floor ( time % OUR_CONST.time.secondInMinut );
-		if ( 0 < days ) {
+		if ( OUR_CONST.zero < days ) {
 			return days +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Day' ) +
@@ -179,7 +179,7 @@ function newUtilities ( ) {
 				'&nbsp;' +
 				theTranslator.getText ( 'Utilities - Hour' );
 		}
-		else if ( 0 < hours ) {
+		else if ( OUR_CONST.zero < hours ) {
 			return hours +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Hour' )
@@ -188,7 +188,7 @@ function newUtilities ( ) {
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Minute' );
 		}
-		else if ( 0 < minutes ) {
+		else if ( OUR_CONST.zero < minutes ) {
 			return minutes +
 				'&nbsp;' +
 				theTranslator.getText ( 'Utilities - Minute' );
@@ -206,12 +206,12 @@ function newUtilities ( ) {
 
 	function myFormatDistance ( distance ) {
 		distance = Math.floor ( distance );
-		if ( 0 === distance ) {
+		if ( OUR_CONST.zero === distance ) {
 			return '';
 		}
 		return Math.floor ( distance / OUR_CONST.distance.mInKm ) +
 			',' +
-			Math.floor ( ( distance % OUR_CONST.distance.mInKm ) / OUR_CONST.distance.round ).toFixed ( 0 )
+			Math.floor ( ( distance % OUR_CONST.distance.mInKm ) / OUR_CONST.distance.round ).toFixed ( OUR_CONST.zero )
 				.padStart ( OUR_CONST.number2, '0' )
 				.padEnd ( OUR_CONST.number3, '0' ) +
 			'&nbsp;km';
@@ -227,7 +227,7 @@ function newUtilities ( ) {
 
 	function myFormatLat ( lat ) {
 		return (
-			lat > 0
+			lat > OUR_CONST.zero
 				?
 				lat.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;N'
 				:
@@ -245,7 +245,7 @@ function newUtilities ( ) {
 
 	function myFormatLng ( lng ) {
 		return (
-			lng > 0
+			lng > OUR_CONST.zero
 				?
 				lng.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;E'
 				:

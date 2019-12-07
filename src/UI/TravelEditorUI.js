@@ -154,7 +154,7 @@ function newTravelEditorUI ( ) {
 		);
 
 		// Routes list
-		myRoutesList = newSortableList ( { minSize : 0, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
+		myRoutesList = newSortableList ( { minSize : OUR_CONST.zero, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
 		myRoutesList.container.addEventListener (
 			'SortableListDelete',
 			sortableListDeleteEvent => {

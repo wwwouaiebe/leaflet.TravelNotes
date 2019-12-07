@@ -33,6 +33,8 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'Itinerary' );
 
 /*
@@ -124,7 +126,7 @@ function newItinerary ( ) {
 
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
-		let sourceCounter = 0;
+		let sourceCounter = OUR_CONST.zero;
 		let targetIterator = myItineraryPoints.iterator;
 		while ( ! targetIterator.done ) {
 			itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );

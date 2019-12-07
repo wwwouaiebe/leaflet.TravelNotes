@@ -127,11 +127,11 @@ function travelNotesFactory ( ) {
 			.forEach (
 				urlSearchSubString => {
 					if ( OUR_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( 0, OUR_CONST.number4 ).toLowerCase ( ) ) {
+						if ( 'fil=' === urlSearchSubString.substr ( OUR_CONST.zero, OUR_CONST.number4 ).toLowerCase ( ) ) {
 							myTravelUrl = decodeURIComponent (
 								escape ( atob ( urlSearchSubString.substr ( OUR_CONST.number4 ) ) ) );
 						}
-						else if ( 'lng=' === urlSearchSubString.substr ( 0, OUR_CONST.number4 ).toLowerCase ( ) ) {
+						else if ( 'lng=' === urlSearchSubString.substr ( OUR_CONST.zero, OUR_CONST.number4 ).toLowerCase ( ) ) {
 							myLangage = urlSearchSubString.substr ( OUR_CONST.number4 ).toLowerCase ( );
 						}
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
@@ -363,11 +363,11 @@ function travelNotesFactory ( ) {
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+				window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'TravelNotesConfig.json'
 			),
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+				window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'TravelNotes' +
 				( myLangage || theConfig.language ).toUpperCase ( )  +
 				'.json'
@@ -589,7 +589,7 @@ catch ( err ) {
 }
 
 newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+	window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 	'TravelNotesConfig.json'
 )
 	.then (

@@ -46,11 +46,11 @@ Patterns : Closure
 
 function newItineraryPoint ( ) {
 
-	let myLat = 0;
+	let myLat = OUR_CONST.latLng.defaultValue;
 
-	let myLng = 0;
+	let myLng = OUR_CONST.latLng.defaultValue;
 
-	let myDistance = 0;
+	let myDistance = OUR_CONST.distance.defaultValue;
 
 	let myObjId = newObjId ( );
 
@@ -114,9 +114,9 @@ function newItineraryPoint ( ) {
 
 	function mySetObject ( something ) {
 		something = myValidate ( something );
-		myLat = something.lat || 0;
-		myLng = something.lng || 0;
-		myDistance = something.distance || 0;
+		myLat = something.lat || OUR_CONST.latLng.defaultValue;
+		myLng = something.lng || OUR_CONST.latLng.defaultValue;
+		myDistance = something.distance || OUR_CONST.distance.defaultValue;
 		myObjId = newObjId ( );
 	}
 

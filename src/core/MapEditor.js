@@ -81,7 +81,7 @@ function onMouseOverOrMoveOnRoute ( mapEvent ) {
 	polyline.closeTooltip ( );
 	let tooltipText = dataSearchEngine.getRoute ( mapEvent.target.objId ).name;
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		tooltipText += ( 0 === tooltipText.length ? '' : ' - ' );
+		tooltipText += ( OUR_CONST.zero === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
 	}
 	polyline.setTooltipContent ( tooltipText );
@@ -248,13 +248,13 @@ function newMapEditor ( ) {
 
 	function myGetDashArray ( route ) {
 		if ( route.dashArray >= theConfig.route.dashChoices.length ) {
-			route.dashArray = 0;
+			route.dashArray = OUR_CONST.zero;
 		}
 		let iDashArray = theConfig.route.dashChoices [ route.dashArray ].iDashArray;
 		if ( iDashArray ) {
 			let dashArray = '';
-			let dashCounter = 0;
-			for ( dashCounter = 0; dashCounter < iDashArray.length - OUR_CONST.number1; dashCounter ++ ) {
+			let dashCounter = OUR_CONST.zero;
+			for ( dashCounter = OUR_CONST.zero; dashCounter < iDashArray.length - OUR_CONST.number1; dashCounter ++ ) {
 				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
 			dashArray += iDashArray [ dashCounter ] * route.width;
@@ -404,7 +404,7 @@ function newMapEditor ( ) {
 			{
 				iconSize : [ note.iconWidth, note.iconHeight ],
 				iconAnchor : [ note.iconWidth / OUR_CONST.number2, note.iconHeight / OUR_CONST.number2 ],
-				popupAnchor : [ 0, -note.iconHeight / OUR_CONST.number2 ],
+				popupAnchor : [ OUR_CONST.zero, -note.iconHeight / OUR_CONST.number2 ],
 				html : note.iconContent,
 				className : theConfig.note.style
 			}
@@ -427,7 +427,7 @@ function newMapEditor ( ) {
 		);
 
 		// ... and also a tooltip
-		if ( 0 !== note.tooltipContent.length ) {
+		if ( OUR_CONST.zero !== note.tooltipContent.length ) {
 			marker.bindTooltip (
 				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
@@ -512,7 +512,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myAddWayPoint ( wayPoint, letter ) {
-		if ( ( 0 === wayPoint.lat ) && ( 0 === wayPoint.lng  ) ) {
+		if ( ( OUR_CONST.latLng.defaultValue === wayPoint.lat ) && ( OUR_CONST.latLng.defaultValue === wayPoint.lng  ) ) {
 			return;
 		}
 
@@ -747,7 +747,7 @@ function newMapEditor ( ) {
 
 	function myZoomToRoute ( routeObjId ) {
 		let latLngs = myGetRouteLatLng (  myDataSearchEngine.getRoute ( routeObjId ) );
-		if ( 0 !== latLngs.length ) {
+		if ( OUR_CONST.zero !== latLngs.length ) {
 			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 	}
@@ -772,7 +772,7 @@ function newMapEditor ( ) {
 				latLngs.push ( note.iconLatLng );
 			}
 		);
-		if ( 0 !== latLngs.length ) {
+		if ( OUR_CONST.zero !== latLngs.length ) {
 			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 	}

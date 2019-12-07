@@ -86,7 +86,7 @@ function newNoteContextMenu ( contextMenuEvent ) {
 						:
 						theTranslator.getText ( 'ContextMenuFactory - Attach note to route' ),
 				action :
-					theTravelNotesData.travel.routes.length !== 0
+					theTravelNotesData.travel.routes.length !== OUR_CONST.zero
 					&&
 					OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId
 						?
