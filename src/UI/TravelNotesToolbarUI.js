@@ -35,6 +35,8 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newTravelNotesToolbarUI function ----------------------------------------------------------------------------------
 
@@ -91,10 +93,10 @@ function newTravelNotesToolbarUI ( ) {
 
 	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
 		switch ( geoLocationStatus ) {
-		case 1 :
+		case OUR_CONST.geoLocation.status.inactive :
 			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
-		case 2 :
+		case OUR_CONST.geoLocation.status.active :
 			myGeoLocationButton.classList.add ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
 		default :

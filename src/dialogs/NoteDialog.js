@@ -49,6 +49,8 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 let theUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 let theTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 let theAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
@@ -177,93 +179,130 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	/*
-	--- myOnSvgIcon function ------------------------------------------------------------------------------------------
-
-	event handler for predefined icons list
+	--- getDirectionArrowAndTextTooltip function ----------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnSvgIcon ( data ) {
-		myIconHtmlContent.value = data.svg.outerHTML;
-		let directionArrow = '';
-		if ( null !== data.direction ) {
-			let cfgDirection = theConfig.note.svgAnleMaxDirection;
-			if ( data.direction < cfgDirection.right ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right' );
-				directionArrow = String.fromCodePoint ( 0x1F882 );
+	function getDirectionArrowAndTextTooltip ( direction ) {
+		if ( null !== direction ) {
+			if ( direction < theConfig.note.svgAnleMaxDirection.right ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn right' ),
+					arrow : '&#x1f882;'
+				};
 			}
-			else if ( data.direction < cfgDirection.slightRight ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight right' );
-				directionArrow = String.fromCodePoint ( 0x1F885 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.slightRight ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn slight right' ),
+					arrow : '&#x1f885;'
+				};
 			}
-			else if ( data.direction < cfgDirection.continue ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Continue' );
-				directionArrow = String.fromCodePoint ( 0x1F881 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.continue ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Continue' ),
+					arrow : '&#x1f881;'
+				};
 			}
-			else if ( data.direction < cfgDirection.slightLeft ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn slight left' );
-				directionArrow = String.fromCodePoint ( 0x1F884 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.slightLeft ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn slight left' ),
+					arrow : '&#x1f884;'
+				};
 			}
-			else if ( data.direction < cfgDirection.left ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn left' );
-				directionArrow = String.fromCodePoint ( 0x1F880 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.left ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn left' ),
+					arrow : '&#x1f880;'
+				};
 			}
-			else if ( data.direction < cfgDirection.sharpLeft ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp left' );
-				directionArrow = String.fromCodePoint ( 0x1F887 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn sharp left' ),
+					arrow : '&#x1f887;'
+				};
 			}
-			else if ( data.direction < cfgDirection.sharpRight ) {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn sharp right' );
-				directionArrow = String.fromCodePoint ( 0x1F886 );
+			else if ( direction < theConfig.note.svgAnleMaxDirection.sharpRight ) {
+				return {
+					text : theTranslator.getText ( 'NoteDialog - Turn sharp right' ),
+					arrow : '&#x1f886;'
+				};
 			}
-			else {
-				myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Turn right' );
-				directionArrow = String.fromCodePoint ( 0x1F882 );
-			}
-		}
-		if ( -1 === data.startStop ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start' );
-		}
-		else if ( 1 === data.startStop ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop' );
+			return {
+				text : theTranslator.getText ( 'NoteDialog - Turn right' ),
+				arrow : '&#x1f882;'
+			};
 		}
 
+		return { text : '', arrow : '' };
+	}
+
+	/*
+	--- myGetSvgAddress function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetSvgAddress ( svgData, arrow ) {
 		let address = '';
 		let showPlace = 0;
-		for ( let counter = 0; counter < data.streets.length; counter ++ ) {
-			if ( ( 0 === counter  || data.streets.length - 1 === counter ) && data.streets [ counter ] === '' ) {
+		for ( let counter = 0; counter < svgData.streets.length; counter ++ ) {
+			if ( ( 0 === counter  || svgData.streets.length - 1 === counter ) && svgData.streets [ counter ] === '' ) {
 				address += '???';
 				showPlace ++;
 			}
 			else {
-				address += data.streets [ counter ];
+				address += svgData.streets [ counter ];
 				showPlace --;
 			}
 			switch ( counter ) {
-			case data.streets.length - 2 :
-				address += directionArrow;
+			case svgData.streets.length - OUR_CONST.number2 :
+				address += arrow;
 				break;
-			case data.streets.length - 1 :
+			case svgData.streets.length - OUR_CONST.number1 :
 				break;
 			default :
-				address += String.fromCodePoint ( 0x2AA5 );
+				address += '&#x2AA5;';
 				break;
 			}
 		}
-		if ( ! data.city && '' !== myCity ) {
-			data.city = myCity;
+		if ( ! svgData.city && '' !== myCity ) {
+			svgData.city = myCity;
 		}
-		if ( data.city ) {
-			address += ' ' + theConfig.note.cityPrefix + data.city + theConfig.note.cityPostfix;
+		if ( svgData.city ) {
+			address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
 		}
-		if ( data.place && data.place !== data.city  && showPlace !== 2 ) {
-			address += ' (' + data.place + ')';
+		if ( svgData.place && svgData.place !== svgData.city  && showPlace !== OUR_CONST.number2 ) {
+			address += ' (' + svgData.place + ')';
 		}
-		myAdressInput.value = address;
+
+		return address;
+	}
+
+	/*
+	--- myOnSvgIcon function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSvgIcon ( svgData ) {
+		myIconHtmlContent.value = svgData.svg.outerHTML;
+		let directionArrowAndTextTooltip = getDirectionArrowAndTextTooltip ( svgData.direction );
+
+		if ( OUR_CONST.svgIcon.positionOnRoute.atStart === svgData.positionOnRoute ) {
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start' );
+		}
+		else if ( OUR_CONST.svgIcon.positionOnRoute.onRoute === svgData.positionOnRoute ) {
+			myTooltipContent.value = directionArrowAndTextTooltip.text;
+		}
+		else if ( OUR_CONST.svgIcon.positionOnRoute.atEnd === svgData.positionOnRoute ) {
+			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop' );
+		}
+
+		myAdressInput.value = myGetSvgAddress ( svgData, directionArrowAndTextTooltip.arrow );
 
 		myNoteDialog.hideWait ( );
-		myLatLng = data.latLng;
+		myLatLng = svgData.latLng;
 	}
 
 	/*
@@ -300,7 +339,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		theAllButtonsAndIcons.preDefinedIconsList =
 			theTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( theUserButtonsAndIcons.preDefinedIconsList );
 
-		if ( -1 < routeObjId ) {
+		if ( OUR_CONST.invalidObjId < routeObjId ) {
 			theAllButtonsAndIcons.preDefinedIconsList.push (
 				{
 					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
@@ -823,11 +862,11 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : ( theConfig.layersToolbarUI.theDevil.addButton ?
 					( '<a href="https://www.google.com/maps/@' +
-					note.lat.toFixed ( 6 ) +
+					note.lat.toFixed ( OUR_CONST.latLng.fixed ) +
 					',' +
-					note.lng.toFixed ( 6 ) +
+					note.lng.toFixed ( OUR_CONST.latLng.fixed ) +
 					',' +
-					17 +
+					theConfig.layersToolbarUI.theDevil.noteZoom +
 					'z" target="_blank" title="' +
 					theConfig.layersToolbarUI.theDevil.title +
 					'" >' +

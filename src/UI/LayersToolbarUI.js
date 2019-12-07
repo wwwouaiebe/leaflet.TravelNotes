@@ -38,6 +38,8 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------
 
@@ -45,6 +47,8 @@ import { theAttributionsUI } from '../UI/AttributionsUI.js';
 */
 
 function newLayersToolbarUI ( ) {
+
+	const MY_CONST = { buttonsAlwaysVisible : 3 };
 
 	let myLayers = [
 		{
@@ -197,15 +201,15 @@ function newLayersToolbarUI ( ) {
 
 	function myOnWheelToolbar ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			myMarginTop -= wheelEvent.deltaY * 10;
+			myMarginTop -= wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
-				myMarginTop < myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
+				myMarginTop < myButtonTop - myButtonsHeight + ( MY_CONST.buttonsAlwaysVisible * myButtonHeight )
 					?
-					myButtonTop - myButtonsHeight + ( 3 * myButtonHeight )
+					myButtonTop - myButtonsHeight + ( MY_CONST.buttonsAlwaysVisible * myButtonHeight )
 					:
 					myMarginTop;
-			myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
+			myLayersToolbarButtonsDiv.style.marginTop = String ( myMarginTop ) + 'px';
 		}
 		wheelEvent.stopPropagation ( );
 	}
@@ -273,7 +277,7 @@ function newLayersToolbarUI ( ) {
 
 		myButtonTop += myButtonHeight;
 		myMarginTop = myButtonTop;
-		myLayersToolbarButtonsDiv.style.marginTop = '' + myMarginTop + 'px';
+		myLayersToolbarButtonsDiv.style.marginTop = String ( myMarginTop ) + 'px';
 
 		myLayersToolbarButtonsDiv.addEventListener (
 			'wheel',
@@ -311,7 +315,11 @@ function newLayersToolbarUI ( ) {
 		);
 		myLayersToolbar.addEventListener (
 			'mouseleave',
-			( ) => { myTimerId = setTimeout ( myOnTimeOutToolbar, theConfig.layersToolbarUI.toolbarTimeOut || 1500 ); },
+			( ) => {
+				myTimerId = setTimeout (
+					myOnTimeOutToolbar,
+					theConfig.layersToolbarUI.toolbarTimeOut );
+			},
 			false
 		);
 

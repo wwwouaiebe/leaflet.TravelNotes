@@ -28,6 +28,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newEventDispatcher function ---------------------------------------------------------------------------------------
 
@@ -45,44 +47,50 @@ function newEventDispatcher ( ) {
 	*/
 
 	function myGetTarget ( eventName ) {
-		switch ( eventName ) {
-		case 'setitinerary' :
-		case 'updateitinerary' :
-		case 'settravelnotes' :
-		case 'updatetravelnotes' :
-		case 'setsearch' :
-		case 'updatesearch' :
-		case 'expandrouteui' :
-		case 'reducerouteui' :
-		case 'setwaypointslist' :
-		case 'setrouteslist' :
-		case 'setprovider' :
-		case 'providersadded' :
-		case 'settransitmode' :
+		if ( OUR_CONST.notFound <
+		[
+			'setitinerary',
+			'updateitinerary',
+			'settravelnotes',
+			'updatetravelnotes',
+			'setsearch',
+			'updatesearch',
+			'expandrouteui',
+			'reducerouteui',
+			'setwaypointslist',
+			'setrouteslist',
+			'setprovider',
+			'providersadded',
+			'settransitmode'
+		].indexOf ( eventName )
+		) {
 			return document.getElementById ( 'TravelNotes-Control-MainDiv' );
-		case 'removeroute' :
-		case 'addroute' :
-		case 'editroute' :
-		case 'removeobject' :
-		case 'removeallobjects' :
-		case 'zoomtopoint' :
-		case 'zoomtosearchresult' :
-		case 'zoomtonote' :
-		case 'zoomtoroute' :
-		case 'zoomtotravel' :
-		case 'additinerarypointmarker' :
-		case 'addsearchpointmarker' :
-		case 'addrectangle' :
-		case 'addwaypoint' :
-		case 'redrawnote' :
-		case 'addnote' :
-		case 'layerchange' :
-		case 'geolocationstatuschanged' :
-		case 'geolocationpositionchanged' :
-			return document;
-		default :
-			return null;
 		}
+		else if ( OUR_CONST.notFound <
+		[
+			'removeroute',
+			'addroute',
+			'editroute',
+			'removeobject',
+			'removeallobjects',
+			'zoomtopoint',
+			'zoomtosearchresult',
+			'zoomtonote',
+			'zoomtoroute',
+			'zoomtotravel',
+			'additinerarypointmarker',
+			'addsearchpointmarker',
+			'addrectangle',
+			'addwaypoint',
+			'redrawnote',
+			'addnote',
+			'layerchange',
+			'geolocationstatuschanged',
+			'geolocationpositionchanged'
+		].indexOf ( eventName ) ) {
+			return document;
+		}
+		return null;
 	}
 
 	/*

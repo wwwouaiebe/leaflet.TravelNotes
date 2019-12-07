@@ -36,6 +36,8 @@ import { theNoteEditor } from '../core/NoteEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newNoteContextMenu function ---------------------------------------------------------------------------------------
 
@@ -86,7 +88,7 @@ function newNoteContextMenu ( contextMenuEvent ) {
 				action :
 					theTravelNotesData.travel.routes.length !== 0
 					&&
-					-1 === theTravelNotesData.editedRouteObjId
+					OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId
 						?
 						( route ? theNoteEditor.detachNoteFromRoute : theNoteEditor.attachNoteToRoute )
 						:

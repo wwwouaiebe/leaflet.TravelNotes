@@ -50,6 +50,10 @@ let ourLng = 0;
 
 function newBaseContextMenu ( originalEvent ) {
 
+	const MY_CONST = {
+		menuMargin : 20
+	};
+
 	let myMenuItems = [];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -256,8 +260,14 @@ function newBaseContextMenu ( originalEvent ) {
 		myBody.removeChild ( dummyDiv );
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
-		let menuTop = Math.min ( ourOriginalEvent.originalEvent.clientY, screenHeight - ourContainer.clientHeight - 20 );
-		let menuLeft = Math.min ( ourOriginalEvent.originalEvent.clientX, screenWidth - ourContainer.clientWidth - 20 );
+		let menuTop = Math.min (
+			ourOriginalEvent.originalEvent.clientY,
+			screenHeight - ourContainer.clientHeight - MY_CONST.menuMargin
+		);
+		let menuLeft = Math.min (
+			ourOriginalEvent.originalEvent.clientX,
+			screenWidth - ourContainer.clientWidth - MY_CONST.menuMargin
+		);
 		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
 	}
 
@@ -330,10 +340,9 @@ function newBaseContextMenu ( originalEvent ) {
 		if  ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
 			return;
 		}
-		else {
-			ourLat = ourOriginalEvent.latlng.lat;
-			ourLng = ourOriginalEvent.latlng.lng;
-		}
+
+		ourLat = ourOriginalEvent.latlng.lat;
+		ourLng = ourOriginalEvent.latlng.lng;
 
 		if ( ourContainer ) {
 

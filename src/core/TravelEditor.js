@@ -57,6 +57,8 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newTravelEditor function ------------------------------------------------------------------------------------------
 
@@ -83,7 +85,7 @@ function newTravelEditor ( ) {
 	*/
 
 	function myEditRoute ( routeObjId ) {
-		if ( 2 === theTravelNotesData.travel.editedRoute.edited ) {
+		if ( OUR_CONST.route.editedChanged === theTravelNotesData.travel.editedRoute.edited ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
 			theErrorsUI.showError (
@@ -91,7 +93,7 @@ function newTravelEditor ( ) {
 			);
 			return;
 		}
-		if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 
 			// the current edited route is not changed. Cleaning the editors
 			theRouteEditor.cancelEdition ( );
@@ -171,7 +173,7 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
-		if ( 2 !== theTravelNotesData.travel.editedRoute.edited ) {
+		if ( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited ) {
 			myEditRoute ( route.objId );
 		}
 	}
@@ -188,7 +190,11 @@ function newTravelEditor ( ) {
 	*/
 
 	function myRemoveRoute ( routeObjId ) {
-		if ( routeObjId === theTravelNotesData.editedRouteObjId && 2 === theTravelNotesData.travel.editedRoute.edited ) {
+		if (
+			routeObjId === theTravelNotesData.editedRouteObjId
+			&&
+			OUR_CONST.route.editedChanged === theTravelNotesData.travel.editedRoute.edited
+		) {
 
 			// cannot remove the route currently edited
 			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
@@ -283,7 +289,8 @@ function newTravelEditor ( ) {
 				compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
 			}
 		);
-		compressedItineraryPoints.latLngs = polyline.encode ( compressedItineraryPoints.latLngs, 6 );
+		compressedItineraryPoints.latLngs =
+			polyline.encode ( compressedItineraryPoints.latLngs, OUR_CONST.polylinePrecision );
 		route.itinerary.itineraryPoints = compressedItineraryPoints;
 	}
 

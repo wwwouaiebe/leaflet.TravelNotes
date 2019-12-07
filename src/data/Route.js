@@ -44,6 +44,8 @@ import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'Route' );
 
 /*
@@ -66,17 +68,11 @@ function newRoute ( ) {
 
 	let myItinerary = newItinerary ( );
 
-	let myWidth = 5;
+	let myWidth = theConfig.route.width;
 
-	let myColor = '#ff0000';
+	let myColor = theConfig.route.color;
 
-	let myDashArray = 0;
-
-	if ( theConfig ) {
-		myWidth = theConfig.route.width;
-		myColor = theConfig.route.color;
-		myDashArray = theConfig.route.dashArray;
-	}
+	let myDashArray = theConfig.route.dashArray;
 
 	let myChain = false;
 
@@ -86,10 +82,10 @@ function newRoute ( ) {
 
 	let myDuration = 0;
 
-	let myEdited = 0; // possible values: 0 not edited; 1 in the editor without changes; 2 in the editor with changes
+	let myEdited = OUR_CONST.route.notEdited;
 
 	function mySetEdited ( edited ) {
-		if ( typeof edited !== 'number' || 0 > edited || 2 < edited ) {
+		if ( typeof edited !== 'number' || OUR_CONST.route.notEdited > edited || OUR_CONST.route.editedChanged < edited ) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
 		else {
@@ -176,11 +172,11 @@ function newRoute ( ) {
 			color : myColor,
 			dashArray : myDashArray,
 			chain : myChain,
-			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
 			duration : myDuration,
 			edited : myEdited,
 			hidden : myHidden,
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( 2 ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( OUR_CONST.distance.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -198,7 +194,7 @@ function newRoute ( ) {
 		myWayPoints.object = something.wayPoints || [];
 		myNotes.object = something.notes || [];
 		myItinerary.object = something.itinerary || newItinerary ( ).object;
-		myWidth = something.width || 5;
+		myWidth = something.width || theConfig.route.width;
 		myColor = something.color || '#000000';
 		myDashArray = something.dashArray || 0;
 		myChain = something.chain || false;

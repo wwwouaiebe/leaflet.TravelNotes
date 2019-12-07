@@ -35,10 +35,12 @@ import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 let ourOsmSearchStarted = false;
 let ourSearchParameters = { searchPhrase : '', bbox : null };
-let ourPreviousSearchRectangleObjId = -1;
-let ourNextSearchRectangleObjId = -1;
+let ourPreviousSearchRectangleObjId = OUR_CONST.invalidObjId;
+let ourNextSearchRectangleObjId = OUR_CONST.invalidObjId;
 let ourSearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 
 /*
@@ -53,7 +55,7 @@ function ourDrawSearchRectangle ( ) {
 	if ( ! ourSearchParameters.bbox ) {
 		return;
 	}
-	if ( -1 === ourPreviousSearchRectangleObjId ) {
+	if ( OUR_CONST.invalidObjId === ourPreviousSearchRectangleObjId ) {
 		ourPreviousSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -111,7 +113,7 @@ change event listener for the map
 
 function ourOnMapChange ( ) {
 	let mapCenter = theTravelNotesData.map.getCenter ( );
-	if ( -1 === ourNextSearchRectangleObjId ) {
+	if ( OUR_CONST.invalidObjId === ourNextSearchRectangleObjId ) {
 		ourNextSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -202,13 +204,13 @@ function newOsmSearchEngine ( ) {
 	function myHide ( ) {
 		theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
 		theTravelNotesData.map.off ( 'move', ourOnMapChange );
-		if ( -1 !== ourNextSearchRectangleObjId ) {
+		if ( OUR_CONST.invalidObjId !== ourNextSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
-			ourNextSearchRectangleObjId = -1;
+			ourNextSearchRectangleObjId = OUR_CONST.invalidObjId;
 		}
-		if ( -1 !== ourPreviousSearchRectangleObjId ) {
+		if ( OUR_CONST.invalidObjId !== ourPreviousSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
-			ourPreviousSearchRectangleObjId = -1;
+			ourPreviousSearchRectangleObjId = OUR_CONST.invalidObjId;
 		}
 	}
 

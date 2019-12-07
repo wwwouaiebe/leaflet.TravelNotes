@@ -44,7 +44,11 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 function newHTMLViewsFactory ( classNamePrefix ) {
+
+	const MY_CONST = { linksMaxLength : 40, minNotesDistance : 9 };
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
@@ -110,7 +114,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<a href="' +
 				note.url +
 				'" target="_blank">' +
-				note.url.substr ( 0, 40 ) +
+				note.url.substr ( 0, MY_CONST.linksMaxLength ) +
 				'...' +
 				'</a></div>';
 		}
@@ -124,7 +128,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				}
 			) + '</div>';
 
-		if ( -1 !== note.distance ) {
+		if ( OUR_CONST.distance.invalid !== note.distance ) {
 			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
 				theTranslator.getText (
 					'NoteEditor - Distance',
@@ -405,7 +409,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
 				if ( ! notesDone  ) {
 					let nextDistance = notesIterator.value.distance - previousNotesDistance;
-					if ( 9 < nextDistance ) {
+					if ( MY_CONST.minNotesDistance < nextDistance ) {
 						myHTMLElementsFactory.create (
 							'div',
 							{

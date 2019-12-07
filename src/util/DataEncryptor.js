@@ -25,6 +25,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- dataEncryptor function ----------------------------------------------------------------------------------------
 
@@ -93,10 +95,10 @@ function newDataEncryptor ( ) {
 			return window.crypto.subtle.decrypt (
 				{
 					name : 'AES-GCM',
-					iv : new Uint8Array ( data.slice ( 0, 16 ) )
+					iv : new Uint8Array ( data.slice ( 0, OUR_CONST.crypto.ivLength ) )
 				},
 				decryptKey,
-				new Uint8Array ( data.slice ( 16 ) )
+				new Uint8Array ( data.slice ( OUR_CONST.crypto.ivLength ) )
 			);
 		}
 
@@ -116,7 +118,7 @@ function newDataEncryptor ( ) {
 
 	function myEncryptData ( data, onOk, onError, pswdPromise ) {
 
-		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
+		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( OUR_CONST.crypto.ivLength ) );
 
 		/*
 		--- encrypt function --------------------------------------------------------------------------------------

@@ -52,8 +52,7 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
-
-let myRoutesList = null;
+import  { OUR_CONST } from '../util/Constants.js';
 
 /*
 --- travelEditorUI function -------------------------------------------------------------------------------------------
@@ -64,6 +63,8 @@ This function creates the UI
 */
 
 function newTravelEditorUI ( ) {
+
+	let myRoutesList = null;
 
 	/*
 	--- event listeners for mouse on the control ----------------------------------------------------------------------
@@ -405,7 +406,7 @@ function newTravelEditorUI ( ) {
 			.addEventListener (
 				'click',
 				( ) => {
-					if ( -1 === theTravelNotesData.editedRouteObjId  ) {
+					if ( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId  ) {
 						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
 					}
 					else {

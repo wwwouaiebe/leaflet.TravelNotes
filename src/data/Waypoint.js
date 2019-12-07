@@ -32,6 +32,8 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'WayPoint' );
 
 /*
@@ -51,16 +53,6 @@ function newWayPoint ( ) {
 	let myLng = 0;
 
 	let myObjId = newObjId ( );
-
-	function myGetUIName ( ) {
-		if ( '' !== myName ) {
-			return myName;
-		}
-		if ( ( 0 !== myLat ) && ( 0 !== myLng ) ) {
-			return myLat.toFixed ( 6 ) + ( 0 < myLat ? ' N - ' : ' S - ' ) + myLng.toFixed ( 6 )  + ( 0 < myLng ? ' E' : ' W' );
-		}
-		return '';
-	}
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -107,8 +99,8 @@ function newWayPoint ( ) {
 	function myGetObject ( ) {
 		return {
 			name : myName,
-			lat : parseFloat ( myLat.toFixed ( 6 ) ),
-			lng : parseFloat ( myLng.toFixed ( 6 ) ),
+			lat : parseFloat ( myLat.toFixed ( OUR_CONST.latLng.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( OUR_CONST.latLng.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -139,8 +131,6 @@ function newWayPoint ( ) {
 
 			get name ( ) { return myName; },
 			set name ( Name ) { myName = Name; },
-
-			get UIName ( ) { return myGetUIName ( ); },
 
 			get lat ( ) { return myLat; },
 			set lat ( Lat ) { myLat = Lat; },

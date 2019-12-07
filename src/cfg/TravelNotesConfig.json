@@ -19,7 +19,8 @@
 		"theDevil": {
 			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",
-			"text": "&#x1f47f;"
+			"text": "&#x1f47f;",
+			"noteZoom" : 17
 		}
 	},
 	"mouseUI":

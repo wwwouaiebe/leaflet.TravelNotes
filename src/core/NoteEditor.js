@@ -48,6 +48,8 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
 
@@ -246,7 +248,7 @@ function newNoteEditor ( ) {
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
 
-		newNoteDialog ( note, -1, true )
+		newNoteDialog ( note, OUR_CONST.invalidObjId, true )
 			.show ( )
 			.then (
 				modifiedNote => {
@@ -340,7 +342,7 @@ function newNoteEditor ( ) {
 		let note = myNewNote ( latLng );
 
 		// and displayed in a dialog box
-		newNoteDialog ( note, -1, true )
+		newNoteDialog ( note, OUR_CONST.invalidObjId, true )
 			.show ( )
 			.then (
 				modifiedNote => {
@@ -372,7 +374,7 @@ function newNoteEditor ( ) {
 
 	function myEditNote ( noteObjId ) {
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let routeObjId = null === noteAndRoute.route ? -1 : noteAndRoute.route.objId;
+		let routeObjId = null === noteAndRoute.route ? OUR_CONST.invalidObjId : noteAndRoute.route.objId;
 		newNoteDialog ( noteAndRoute.note, routeObjId, false )
 			.show ( )
 			.then (

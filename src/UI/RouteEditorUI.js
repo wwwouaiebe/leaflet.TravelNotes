@@ -42,6 +42,9 @@ import { theWayPointEditor } from '../core/WayPointEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
+import { newUtilities } from '../util/Utilities.js';
+
+import  { OUR_CONST } from '../util/Constants.js';
 
 let myWayPointsList = null;
 
@@ -88,7 +91,7 @@ function newRouteEditorUI ( ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					if ( -1 === theTravelNotesData.editedRouteObjId ) {
+					if ( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
 						return;
 					}
 					document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' )
@@ -410,7 +413,7 @@ function newRouteEditorUI ( ) {
 
 	function mySetWayPointsList ( ) {
 		myWayPointsList.removeAllItems ( );
-		if ( -1 === theTravelNotesData.editedRouteObjId ) {
+		if ( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
 			return;
 		}
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
@@ -429,7 +432,7 @@ function newRouteEditorUI ( ) {
 							theTranslator.getText ( 'RouteEditorUI - Via' )
 					);
 			myWayPointsList.addItem (
-				wayPointsIterator.value.UIName,
+				newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng ),
 				indexName,
 				placeholder,
 				wayPointsIterator.value.objId,

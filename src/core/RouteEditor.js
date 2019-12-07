@@ -62,6 +62,8 @@ import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
 
@@ -112,7 +114,7 @@ function newRouteEditor ( ) {
 		while ( ! itineraryPointIterator.done ) {
 			itineraryPoint = newItineraryPoint ( );
 			itineraryPoint.object = itineraryPointIterator.value.object;
-			if ( 0 === routeCounter && 0 != iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
+			if ( 0 === routeCounter && 0 !== iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
 
 				// we have passed the cutting point...
 				let removedDistance = myGeometry.pointsDistance (
@@ -494,7 +496,7 @@ function newRouteEditor ( ) {
 				removeWayPoints : true
 			}
 		);
-		if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
 			editedRoute.edited = 0;
 			myEventDispatcher.dispatch (

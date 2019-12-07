@@ -33,6 +33,8 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newSortableList function ------------------------------------------------------------------------------------------
 
@@ -187,7 +189,7 @@ function newSortableList ( options, parentNode ) {
 
 	function myOnWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
+			wheelEvent.target.scrollTop += wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
 		}
 		wheelEvent.stopPropagation ( );
 	}
@@ -216,7 +218,7 @@ function newSortableList ( options, parentNode ) {
 		itemValue = itemValue || '';
 		itemValue = indexName || '';
 		placeholder = placeholder || '';
-		dataObjId = dataObjId || -1;
+		dataObjId = dataObjId || OUR_CONST.invalidObjId;
 
 		let item = myHTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
@@ -261,7 +263,7 @@ function newSortableList ( options, parentNode ) {
 			{
 				className : 'TravelNotes-SortableList-ItemUpArrowButton',
 				title : theTranslator.getText ( 'SortableList - Move up' ),
-				innerHTML : String.fromCharCode ( 8679 )
+				innerHTML : '&#x21e7;'
 			},
 			item
 		);
@@ -271,7 +273,7 @@ function newSortableList ( options, parentNode ) {
 			{
 				className : 'TravelNotes-SortableList-ItemDownArrowButton',
 				title : theTranslator.getText ( 'SortableList - Move down' ),
-				innerHTML : String.fromCharCode ( 8681 )
+				innerHTML : '&#x21e8;'
 			},
 			item
 		);
@@ -281,7 +283,7 @@ function newSortableList ( options, parentNode ) {
 			{
 				className : 'TravelNotes-SortableList-ItemRightArrowButton',
 				title : theTranslator.getText ( 'SortableList - Edit' ),
-				innerHTML : String.fromCharCode ( 8688 )
+				innerHTML : '&#x21f0;'
 			},
 			item );
 		if ( 'AllSort' === myOptions.listStyle ) {
@@ -318,7 +320,7 @@ function newSortableList ( options, parentNode ) {
 	for ( let option in options ) {
 		myOptions [ option ] = options [ option ];
 	}
-	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( 2 > myOptions.minSize ) ) {
+	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( OUR_CONST.number2 > myOptions.minSize ) ) {
 		myOptions.minSize = 0;
 	}
 	myContainer.classList.add ( myOptions.listStyle );

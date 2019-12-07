@@ -60,6 +60,8 @@ import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
 
@@ -95,6 +97,13 @@ Patterns : Closure and Singleton
 */
 
 function newMapEditor ( ) {
+
+	const MY_CONST = {
+		defaultMaxZoom : 18,
+		defaultMinZoom : 0,
+		wayPointIconSize : 40,
+		markerBoundsPrecision : 0.01
+	};
 
 	let myDataSearchEngine  = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
@@ -137,14 +146,14 @@ function newMapEditor ( ) {
 		theTravelNotesData.map.addLayer ( leafletLayer );
 		myCurrentLayer = leafletLayer;
 
-		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || 0 ) ) {
-			theTravelNotesData.map.setZoom ( layer.minZoom || 0 );
+		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || MY_CONST.defaultMinZoom ) ) {
+			theTravelNotesData.map.setZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
 		}
-		theTravelNotesData.map.setMinZoom ( layer.minZoom || 0 );
-		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || 18 ) ) {
-			theTravelNotesData.map.setZoom ( layer.maxZoom || 18 );
+		theTravelNotesData.map.setMinZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
+		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || MY_CONST.defaultMaxZoom ) ) {
+			theTravelNotesData.map.setZoom ( layer.maxZoom || MY_CONST.defaultMaxZoom );
 		}
-		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || 18 );
+		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || MY_CONST.defaultMaxZoom );
 		if ( layer.bounds ) {
 			if (
 				! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
@@ -153,7 +162,7 @@ function newMapEditor ( ) {
 			) {
 				theTravelNotesData.map.setMaxBounds ( null );
 				theTravelNotesData.map.fitBounds ( layer.bounds );
-				theTravelNotesData.map.setZoom ( layer.minZoom || 0 );
+				theTravelNotesData.map.setZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
 			}
 			theTravelNotesData.map.setMaxBounds ( layer.bounds );
 		}
@@ -203,8 +212,8 @@ function newMapEditor ( ) {
 	*/
 
 	function myGetLatLngBounds ( latLngs ) {
-		let sw = L.latLng ( [ 90, 180 ] );
-		let ne = L.latLng ( [ -90, -180 ] );
+		let sw = L.latLng ( [ OUR_CONST.latLng.maxLat, OUR_CONST.latLng.maxLng ] );
+		let ne = L.latLng ( [ OUR_CONST.latLng.minLat, OUR_CONST.latLng.minLng ] );
 		latLngs.forEach (
 			latLng => {
 				sw.lat = Math.min ( sw.lat, latLng [ 0 ] );
@@ -318,8 +327,8 @@ function newMapEditor ( ) {
 							theConfig.note.grip.size
 						],
 						iconAnchor : [
-							theConfig.note.grip.size / 2,
-							theConfig.note.grip.size / 2
+							theConfig.note.grip.size / OUR_CONST.number2,
+							theConfig.note.grip.size / OUR_CONST.number2
 						],
 						html : '<div></div>'
 					}
@@ -402,8 +411,8 @@ function newMapEditor ( ) {
 		let icon = L.divIcon (
 			{
 				iconSize : [ note.iconWidth, note.iconHeight ],
-				iconAnchor : [ note.iconWidth / 2, note.iconHeight / 2 ],
-				popupAnchor : [ 0, -note.iconHeight / 2 ],
+				iconAnchor : [ note.iconWidth / OUR_CONST.number2, note.iconHeight / OUR_CONST.number2 ],
+				popupAnchor : [ 0, -note.iconHeight / OUR_CONST.number2 ],
 				html : note.iconContent,
 				className : theConfig.note.style
 			}
@@ -430,7 +439,7 @@ function newMapEditor ( ) {
 			marker.bindTooltip (
 				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
-			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / 2;
+			marker.getTooltip ( ).options.offset [ 0 ] = note.iconWidth / OUR_CONST.number2;
 		}
 		if ( ! readOnly ) {
 
@@ -526,8 +535,8 @@ function newMapEditor ( ) {
 			{
 				icon : L.divIcon (
 					{
-						iconSize : [ 40, 40 ],
-						iconAnchor : [ 20, 40 ],
+						iconSize : [ MY_CONST.wayPointIconSize, MY_CONST.wayPointIconSize ],
+						iconAnchor : [ MY_CONST.wayPointIconSize / OUR_CONST.number2, MY_CONST.wayPointIconSize ],
 						html : iconHtml,
 						className : 'TravelNotes-WayPointStyle'
 					}
@@ -537,9 +546,14 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			tooltipWayPoint => myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).UIName
+			tooltipWayPoint => newUtilities ( ).formatLatLng (
+				myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).latLng
+			)
 		);
-		marker.getTooltip ( ).options.offset  = [ 20, -20 ];
+		marker.getTooltip ( ).options.offset  = [
+			MY_CONST.wayPointIconSize / OUR_CONST.number2,
+			-MY_CONST.wayPointIconSize / OUR_CONST.number2
+		];
 
 		L.DomEvent.on (
 			marker,
@@ -814,13 +828,13 @@ function newMapEditor ( ) {
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
 					/
 					( mapBounds.getEast ( ) - mapBounds.getWest ( ) )
-				) > 0.01
+				) > MY_CONST.markerBoundsPrecision
 				&&
 				(
 					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
 					/
 					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
-				) > 0.01;
+				) > MY_CONST.markerBoundsPrecision;
 		}
 		if ( showGeometry ) {
 			myAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );
@@ -873,7 +887,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myOnGeolocationStatusChanged ( geoLocationStatus ) {
-		if ( 2 === geoLocationStatus ) {
+		if ( OUR_CONST.geoLocation.status.active === geoLocationStatus ) {
 			return;
 		}
 		if ( myGeolocationCircle ) {

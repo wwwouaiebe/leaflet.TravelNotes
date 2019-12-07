@@ -27,20 +27,21 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 function newUtilities ( ) {
 
 	/*
 	--- myGetUUID function --------------------------------------------------------------------------------------------
-
-	This function test if the storage API is available ( the API can be deactived by user....)
-	Adapted from MDN :-)
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUUID ( ) {
 		function Random4 ( ) {
-			return Math.floor ( ( 1 + Math.random ( ) ) * 0x10000 ).toString ( 16 )
+			return Math
+				.floor ( ( 1 + Math.random ( ) ) * OUR_CONST.number65536 )
+				.toString ( OUR_CONST.hexadecimal )
 				.substring ( 1 );
 		}
 		return Random4 ( ) +
@@ -100,9 +101,7 @@ function newUtilities ( ) {
 				// edge IE 11...
 				return true;
 			}
-			else {
-				return false;
-			}
+			return false;
 		}
 	}
 
@@ -167,10 +166,10 @@ function newUtilities ( ) {
 		if ( 0 === time ) {
 			return '';
 		}
-		let days = Math.floor ( time / 86400 );
-		let hours = Math.floor ( time % 86400 / 3600 );
-		let minutes = Math.floor ( time % 3600 / 60 );
-		let seconds = Math.floor ( time % 60 );
+		let days = Math.floor ( time / OUR_CONST.time.secondInDay );
+		let hours = Math.floor ( time % OUR_CONST.time.secondInDay / OUR_CONST.time.secondInHour );
+		let minutes = Math.floor ( time % OUR_CONST.time.secondInHour / OUR_CONST.time.secondInMinut );
+		let seconds = Math.floor ( time % OUR_CONST.time.secondInMinut );
 		if ( 0 < days ) {
 			return days +
 				'&nbsp;'
@@ -194,9 +193,7 @@ function newUtilities ( ) {
 				'&nbsp;' +
 				theTranslator.getText ( 'Utilities - Minute' );
 		}
-		else {
-			return seconds + '&nbsp;' + theTranslator.getText ( 'Utilities - Second' );
-		}
+		return seconds + '&nbsp;' + theTranslator.getText ( 'Utilities - Second' );
 	}
 
 	/* --- End of myFormatTime function --- */
@@ -212,14 +209,12 @@ function newUtilities ( ) {
 		if ( 0 === distance ) {
 			return '';
 		}
-		else {
-			return Math.floor ( distance / 1000 ) +
-				',' +
-				Math.floor ( ( distance % 1000 ) / 10 ).toFixed ( 0 )
-					.padStart ( 2, '0' )
-					.padEnd ( 3, '0' ) +
-				'&nbsp;km';
-		}
+		return Math.floor ( distance / OUR_CONST.distance.mInKm ) +
+			',' +
+			Math.floor ( ( distance % OUR_CONST.distance.mInKm ) / OUR_CONST.distance.round ).toFixed ( 0 )
+				.padStart ( OUR_CONST.number2, '0' )
+				.padEnd ( OUR_CONST.number3, '0' ) +
+			'&nbsp;km';
 	}
 
 	/* --- End of myFormatDistance function --- */
@@ -231,7 +226,13 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLat ( lat ) {
-		return ( lat > 0 ? lat.toFixed ( 6 ) + '&nbsp;N' : ( -lat ).toFixed ( 6 ) + '&nbsp;S' );
+		return (
+			lat > 0
+				?
+				lat.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;N'
+				:
+				( -lat ).toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;S'
+		);
 	}
 
 	/* --- End of myFormatLat function --- */
@@ -243,7 +244,13 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLng ( lng ) {
-		return ( lng > 0 ? lng.toFixed ( 6 ) + '&nbsp;E' : ( -lng ).toFixed ( 6 ) + '&nbsp;W' );
+		return (
+			lng > 0
+				?
+				lng.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;E'
+				:
+				( -lng ).toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;W'
+		);
 	}
 
 	/* --- End of myFormatLng function --- */

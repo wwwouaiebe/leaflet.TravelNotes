@@ -32,6 +32,8 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'Note' );
 
 /*
@@ -44,11 +46,15 @@ Patterns : Closure
 
 function newNote ( ) {
 
+	const MY_CONST = {
+		defaultIconSize : 40
+	};
+
 	let myObjId = newObjId ( );
 
-	let myIconHeight = 40;
+	let myIconHeight = MY_CONST.defaultIconSize;
 
-	let myIconWidth = 40;
+	let myIconWidth = MY_CONST.defaultIconSize;
 
 	let myIconContent = '';
 
@@ -70,7 +76,7 @@ function newNote ( ) {
 
 	let myLng = 0;
 
-	let myDistance = -1;
+	let myDistance = OUR_CONST.distance.invalid;
 
 	let myChainedDistance = 0;
 
@@ -142,12 +148,12 @@ function newNote ( ) {
 			phone : myPhone,
 			url : myUrl,
 			address : myAddress,
-			iconLat : parseFloat ( myIconLat.toFixed ( 6 ) ),
-			iconLng : parseFloat ( myIconLng.toFixed ( 6 ) ),
-			lat : parseFloat ( myLat.toFixed ( 6 ) ),
-			lng : parseFloat ( myLng.toFixed ( 6 ) ),
-			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( 2 ) ),
+			iconLat : parseFloat ( myIconLat.toFixed ( OUR_CONST.latLng.fixed ) ),
+			iconLng : parseFloat ( myIconLng.toFixed ( OUR_CONST.latLng.fixed ) ),
+			lat : parseFloat ( myLat.toFixed ( OUR_CONST.latLng.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( OUR_CONST.latLng.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( OUR_CONST.distance.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -161,8 +167,8 @@ function newNote ( ) {
 
 	function mySetObject ( something ) {
 		something = myValidate ( something );
-		myIconHeight = something.iconHeight || 40;
-		myIconWidth = something.iconWidth || 40;
+		myIconHeight = something.iconHeight || MY_CONST.defaultIconSize;
+		myIconWidth = something.iconWidth || MY_CONST.defaultIconSize;
 		myIconContent = something.iconContent || '';
 		myPopupContent = something.popupContent || '';
 		myTooltipContent = something.tooltipContent || '';
@@ -173,7 +179,7 @@ function newNote ( ) {
 		myIconLng = something.iconLng || 0;
 		myLat = something.lat || 0;
 		myLng = something.lng || 0;
-		myDistance = something.distance || -1;
+		myDistance = something.distance || OUR_CONST.distance.invalid;
 		myChainedDistance = something.chainedDistance;
 		myObjId = newObjId ( );
 	}
@@ -187,7 +193,7 @@ function newNote ( ) {
 	return Object.seal (
 		{
 
-			get isRouteNote ( ) { return myDistance !== -1; },
+			get isRouteNote ( ) { return myDistance !== OUR_CONST.distance.invalid; },
 
 			get iconHeight ( ) { return myIconHeight; },
 			set iconHeight ( IconHeight ) { myIconHeight = IconHeight; },

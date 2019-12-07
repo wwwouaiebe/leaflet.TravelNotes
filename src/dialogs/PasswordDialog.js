@@ -40,6 +40,8 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 function newPasswordDialog ( verifyPassword ) {
 
+	const MY_CONST = { pswdMinLength : 12 };
+
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myPasswordDialog = null;
 	let myPasswordDiv = null;
@@ -69,7 +71,7 @@ function newPasswordDialog ( verifyPassword ) {
 		myPasswordDialog.hideError ( );
 		if ( verifyPassword ) {
 			if (
-				( myPasswordInput.value.length < 12 )
+				( myPasswordInput.value.length < MY_CONST.pswdMinLength )
 				||
 				! myPasswordInput.value.match ( RegExp ( '[0-9]+' ) )
 				||

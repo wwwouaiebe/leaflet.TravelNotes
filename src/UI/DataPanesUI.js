@@ -40,6 +40,8 @@ import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newDataPanesUI function -------------------------------------------------------------------------------------------
 
@@ -50,7 +52,15 @@ This function returns the dataPanesUI object
 
 function newDataPanesUI ( ) {
 
-	let myActivePaneIndex = -1;
+	const MY_CONST =
+	{
+		invalidPane : -1,
+		itineraryPane : 0,
+		travelNotesPane : 1,
+		searchPane : 2
+	};
+
+	let myActivePaneIndex = MY_CONST.invalidPane;
 	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
 	let mySearchPaneUI = newSearchPaneUI ( );
 	let myItineraryPaneUI = newItineraryPaneUI ( );
@@ -65,13 +75,13 @@ function newDataPanesUI ( ) {
 
 	function myRemoveActivePane ( ) {
 		switch ( myActivePaneIndex ) {
-		case 0 :
+		case MY_CONST.itineraryPane :
 			myItineraryPaneUI.remove ( );
 			break;
-		case 1 :
+		case MY_CONST.travelNotesPane :
 			myTravelNotesPaneUI.remove ( );
 			break;
-		case 2 :
+		case MY_CONST.searchPane :
 			if ( window.osmSearch ) {
 				mySearchPaneUI.remove ( );
 			}
@@ -93,7 +103,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		myItineraryPaneUI.add ( );
 
-		myActivePaneIndex = 0;
+		myActivePaneIndex = MY_CONST.itineraryPane;
 	}
 
 	/*
@@ -105,7 +115,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateItinerary ( ) {
-		if ( 0 === myActivePaneIndex ) {
+		if ( MY_CONST.itineraryPane === myActivePaneIndex ) {
 			myItineraryPaneUI.remove ( );
 			myItineraryPaneUI.add ( );
 		}
@@ -122,7 +132,7 @@ function newDataPanesUI ( ) {
 	function mySetTravelNotes ( ) {
 		myRemoveActivePane ( );
 		myTravelNotesPaneUI.add ( );
-		myActivePaneIndex = 1;
+		myActivePaneIndex = MY_CONST.travelNotesPane;
 	}
 
 	/*
@@ -134,7 +144,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateTravelNotes ( ) {
-		if ( 1 === myActivePaneIndex ) {
+		if ( MY_CONST.travelNotesPane === myActivePaneIndex ) {
 			myTravelNotesPaneUI.remove ( );
 			myTravelNotesPaneUI.add ( );
 		}
@@ -152,7 +162,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		mySearchPaneUI.add ( );
 
-		myActivePaneIndex = 2;
+		myActivePaneIndex = MY_CONST.searchPane;
 
 	}
 
@@ -165,7 +175,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateSearch ( ) {
-		if ( 2 === myActivePaneIndex ) {
+		if ( MY_CONST.searchPane === myActivePaneIndex ) {
 			mySearchPaneUI.remove ( );
 			mySearchPaneUI.add ( );
 		}
@@ -239,7 +249,7 @@ function newDataPanesUI ( ) {
 			'wheel',
 			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop += wheelEvent.deltaY * 10;
+					wheelEvent.target.scrollTop += wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
 				}
 				wheelEvent.stopPropagation ( );
 			},

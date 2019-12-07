@@ -38,6 +38,8 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newRouteContextMenu function --------------------------------------------------------------------------------------
 
@@ -62,7 +64,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				action :
 					(
 						( theTravelNotesData.editedRouteObjId !== myRouteObjId )
-						&& ( 2 !== theTravelNotesData.travel.editedRoute.edited )
+						&& ( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
 					) ?
 						theTravelEditor.editRoute
 						:
@@ -76,7 +78,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 					(
 						( myRouteObjId )
 						&&
-						( 2 !== theTravelNotesData.travel.editedRoute.edited )
+						( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
 						theTravelEditor.removeRoute
@@ -97,7 +99,12 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			{
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Add a waypoint on the route' ),
-				action : ( -1 === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPointOnRoute,
+				action :
+					( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId )
+						?
+						null
+						:
+						theWayPointEditor.addWayPointOnRoute,
 				param : myRouteObjId
 			},
 			{

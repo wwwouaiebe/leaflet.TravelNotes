@@ -32,6 +32,8 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'ItineraryPoint' );
 
 /*
@@ -96,9 +98,9 @@ function newItineraryPoint ( ) {
 
 	function myGetObject ( ) {
 		return {
-			lat : parseFloat ( myLat.toFixed ( 6 ) ),
-			lng : parseFloat ( myLng.toFixed ( 6 ) ),
-			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			lat : parseFloat ( myLat.toFixed ( OUR_CONST.latLng.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( OUR_CONST.latLng.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};

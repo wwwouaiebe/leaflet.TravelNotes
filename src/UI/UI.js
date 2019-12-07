@@ -41,6 +41,7 @@ import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
+import  { OUR_CONST } from '../util/Constants.js';
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------
@@ -117,25 +118,27 @@ function newUI ( ) {
 
 		myMainDiv.addEventListener (
 			'click',
-			ckickEvent => {
-				if  ( ckickEvent.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
+			clickEvent => {
+				if  ( clickEvent.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
 					return;
 				}
-				if  ( ckickEvent.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
+				if  ( clickEvent.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
 					return;
 				}
-				if ( ckickEvent.target.id && -1 !==
+				if (
+					clickEvent.target.id &&
+				OUR_CONST.invalidObjId !==
 					[
 						'TravelNotes-Control-OpenTravelInput',
 						'TravelNotes-Control-OpenTravelButton',
 						'TravelNotes-Control-ImportTravelInput',
 						'TravelNotes-Control-ImportTravelButton'
-					].indexOf ( ckickEvent.target.id )
+					].indexOf ( clickEvent.target.id )
 				) {
 					return;
 				}
-				ckickEvent.stopPropagation ( );
-				ckickEvent.preventDefault ( );
+				clickEvent.stopPropagation ( );
+				clickEvent.preventDefault ( );
 			},
 			false
 		);

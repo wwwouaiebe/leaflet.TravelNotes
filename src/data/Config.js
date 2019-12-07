@@ -34,6 +34,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newConfig funtion -------------------------------------------------------------------------------------------------
 
@@ -148,15 +150,15 @@ function newConfig ( ) {
 				},
 				{
 					text : '— — — — —',
-					iDashArray : [ 4, 2 ]
+					iDashArray : [ OUR_CONST.number4, OUR_CONST.number2 ]
 				},
 				{
 					text : '—‧—‧—‧—‧—',
-					iDashArray : [ 4, 2, 0, 2 ]
+					iDashArray : [ OUR_CONST.number4, OUR_CONST.number2, OUR_CONST.zero, OUR_CONST.number2 ]
 				},
 				{
 					text : '················',
-					iDashArray : [ 0, 2 ]
+					iDashArray : [ OUR_CONST.zero, OUR_CONST.number2 ]
 				}
 			]
 		},
@@ -247,7 +249,7 @@ function newConfig ( ) {
 
 			for ( let property in source ) {
 				if ( 'object' === typeof source [ property ] ) {
-					if ( Object.prototype.toString.call ( source [ property ] ) == '[object Array]' ) {
+					if ( Object.prototype.toString.call ( source [ property ] ) === '[object Array]' ) {
 						dest [ property ] = dest [ property ] || [];
 					}
 					else {

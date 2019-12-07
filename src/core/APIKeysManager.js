@@ -40,6 +40,8 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 let ourKeysMap = new Map;
 
 /*
@@ -80,8 +82,11 @@ function newAPIKeysManager ( ) {
 
 	function myFromUrl ( urlString ) {
 		let urlSubStrings = urlString.split ( '=' );
-		if ( 2 === urlSubStrings.length ) {
-			let providerName = urlSubStrings [ 0 ].substr ( 0, urlSubStrings [ 0 ].length - 11 ).toLowerCase ( );
+		if ( OUR_CONST.number2 === urlSubStrings.length ) {
+			let providerName =
+				urlSubStrings [ 0 ]
+					.substr ( 0, urlSubStrings [ 0 ].length - 'ProviderKey'.length )
+					.toLowerCase ( );
 			let providerKey = urlSubStrings [ 1 ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
@@ -104,8 +109,11 @@ function newAPIKeysManager ( ) {
 		let APIKeysCounter = 0;
 		for ( let counter  = 0; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
-			if ( 'ProviderKey' === keyName.substr ( keyName.length - 11 ) ) {
-				mySetKey ( keyName.substr ( 0, keyName.length - 11 ), atob ( sessionStorage.getItem ( keyName ) ) );
+			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
+				mySetKey (
+					keyName.substr ( 0, keyName.length - 'ProviderKey'.length ),
+					atob ( sessionStorage.getItem ( keyName ) )
+				);
 				APIKeysCounter ++;
 			}
 		}

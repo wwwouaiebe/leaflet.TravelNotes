@@ -45,6 +45,8 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newWayPointEditor function ----------------------------------------------------------------------------------------
 
@@ -131,7 +133,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myAddWayPoint ( latLng, distance ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.editedChanged;
 		let wayPoint = newWayPoint ( );
 		if ( latLng ) {
 			wayPoint.latLng = latLng;
@@ -142,7 +144,7 @@ function newWayPointEditor ( ) {
 			'addwaypoint',
 			{
 				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
-				letter : theTravelNotesData.travel.editedRoute.wayPoints.length - 2
+				letter : theTravelNotesData.travel.editedRoute.wayPoints.length - OUR_CONST.number2
 			}
 		);
 		if ( distance ) {

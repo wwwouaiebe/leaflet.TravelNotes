@@ -73,6 +73,8 @@ import { theMouseUI } from './UI/MouseUI.js';
 import { theAttributionsUI } from './UI/AttributionsUI.js';
 import { theErrorsUI } from './UI/ErrorsUI.js';
 
+import  { OUR_CONST } from './util/Constants.js';
+
 theAttributionsUI;
 
 /*
@@ -124,12 +126,13 @@ function travelNotesFactory ( ) {
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString => {
-					if ( -1 === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-							myTravelUrl = decodeURIComponent ( escape ( atob ( urlSearchSubString.substr ( 4 ) ) ) );
+					if ( OUR_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+						if ( 'fil=' === urlSearchSubString.substr ( 0, OUR_CONST.number4 ).toLowerCase ( ) ) {
+							myTravelUrl = decodeURIComponent (
+								escape ( atob ( urlSearchSubString.substr ( OUR_CONST.number4 ) ) ) );
 						}
-						else if ( 'lng=' === urlSearchSubString.substr ( 0, 4 ).toLowerCase ( ) ) {
-							myLangage = urlSearchSubString.substr ( 4 ).toLowerCase ( );
+						else if ( 'lng=' === urlSearchSubString.substr ( 0, OUR_CONST.number4 ).toLowerCase ( ) ) {
+							myLangage = urlSearchSubString.substr ( OUR_CONST.number4 ).toLowerCase ( );
 						}
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 						newUrlSearch += urlSearchSubString;

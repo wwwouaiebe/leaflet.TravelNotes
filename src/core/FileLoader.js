@@ -43,6 +43,8 @@ import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
 
@@ -68,7 +70,8 @@ function newFileLoader ( ) {
 	*/
 
 	function myDecompressRoute ( route ) {
-		route.itinerary.itineraryPoints.latLngs = polyline.decode ( route.itinerary.itineraryPoints.latLngs, 6 );
+		route.itinerary.itineraryPoints.latLngs =
+			polyline.decode ( route.itinerary.itineraryPoints.latLngs, OUR_CONST.polylinePrecision );
 		let decompressedItineraryPoints = [];
 		let latLngsCounter = 0;
 		route.itinerary.itineraryPoints.latLngs.forEach (
@@ -116,7 +119,7 @@ function newFileLoader ( ) {
 		}
 
 		// edited route is added with notes and , depending of read only, waypoints
-		if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			myEventDispatcher.dispatch (
 				'addroute',
 				{
@@ -158,7 +161,7 @@ function newFileLoader ( ) {
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );
-			if ( -1 !== theTravelNotesData.editedRouteObjId ) {
+			if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 				if (
 					providerName

@@ -39,6 +39,8 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newMapContextMenu function ----------------------------------------------------------------------------------------
 
@@ -61,7 +63,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as start point' ),
 				action :
-					( -1 !== theTravelNotesData.editedRouteObjId )
+					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
 					( 0 === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
 						?
@@ -73,14 +75,14 @@ function newMapContextMenu ( contextMenuEvent ) {
 			{
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as way point' ),
-				action : ( -1 === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPoint,
+				action : ( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) ? null : theWayPointEditor.addWayPoint,
 				param : myLatLng
 			},
 			{
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as end point' ),
 				action :
-					( -1 !== theTravelNotesData.editedRouteObjId )
+					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
 					( 0 === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
 						?

@@ -32,6 +32,8 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 const ourObjType = newObjType ( 'Maneuver' );
 
 /*
@@ -104,7 +106,7 @@ function newManeuver ( ) {
 		return {
 			iconName : myIconName,
 			instruction : myInstruction,
-			distance : parseFloat ( myDistance.toFixed ( 2 ) ),
+			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
 			duration : myDuration,
 			itineraryPointObjId : myItineraryPointObjId,
 			objId : myObjId,
@@ -124,7 +126,7 @@ function newManeuver ( ) {
 		myInstruction = something.instruction || '';
 		myDistance = something.distance || 0;
 		myDuration = something.duration || 0;
-		myItineraryPointObjId = something.itineraryPointObjId || -1;
+		myItineraryPointObjId = something.itineraryPointObjId || OUR_CONST.invalidObjId;
 		myObjId = newObjId ( );
 	}
 

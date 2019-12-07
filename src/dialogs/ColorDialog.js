@@ -35,6 +35,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import  { OUR_CONST } from '../util/Constants.js';
 
 /*
 --- newColorDialog function -------------------------------------------------------------------------------------------
@@ -43,6 +44,12 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function newColorDialog ( color ) {
+	const MY_CONST = {
+		maxColorValue : 255,
+		linColorValue : 0,
+		colorRowsNumber : 6,
+		deltaColor : this.maxColorValue / ( this.colorRowsNumber - 1 )
+	};
 
 	let myColorDialog = null;
 	let myColorDiv = null;
@@ -63,9 +70,9 @@ function newColorDialog ( color ) {
 
 	function myColorToNumbers ( colorToNumbers ) {
 		return {
-			red : parseInt ( colorToNumbers.substr ( 1, 2 ), 16 ),
-			green : parseInt ( colorToNumbers.substr ( 3, 2 ), 16 ),
-			blue : parseInt ( colorToNumbers.substr ( 5, 2 ), 16 )
+			red : parseInt ( colorToNumbers.substr ( OUR_CONST.number1, OUR_CONST.number2 ), OUR_CONST.hexadecimal ),
+			green : parseInt ( colorToNumbers.substr ( OUR_CONST.number3, OUR_CONST.number2 ), OUR_CONST.hexadecimal ),
+			blue : parseInt ( colorToNumbers.substr ( OUR_CONST.number5, OUR_CONST.number2 ), OUR_CONST.hexadecimal )
 		};
 	}
 
@@ -80,12 +87,12 @@ function newColorDialog ( color ) {
 	function myNumbersToColor ( red, green, blue ) {
 
 		return '#' +
-			parseInt ( red ).toString ( 16 )
-				.padStart ( 2, '0' ) +
-			parseInt ( green ).toString ( 16 )
-				.padStart ( 2, '0' ) +
-			parseInt ( blue ).toString ( 16 )
-				.padStart ( 2, '0' );
+			parseInt ( red ).toString ( OUR_CONST.hexadecimal )
+				.padStart ( OUR_CONST.number2, '0' ) +
+			parseInt ( green ).toString ( OUR_CONST.hexadecimal )
+				.padStart ( OUR_CONST.number2, '0' ) +
+			parseInt ( blue ).toString ( OUR_CONST.hexadecimal )
+				.padStart ( OUR_CONST.number2, '0' );
 	}
 
 	/*
@@ -116,19 +123,19 @@ function newColorDialog ( color ) {
 
 	function myOnRedColorClick ( clickEvent ) {
 		let red = clickEvent.target.redValue;
-		let green = 255;
-		let blue = 255;
+		let green = MY_CONST.maxColorValue;
+		let blue = MY_CONST.maxColorValue;
 		let rowCounter = 0;
-		while ( ++ rowCounter < 7 ) {
+		while ( ++ rowCounter <= MY_CONST.colorRowsNumber ) {
 			let cellCounter = 0;
-			green = 255;
-			while ( ++ cellCounter < 7 ) {
+			green = MY_CONST.maxColorValue;
+			while ( ++ cellCounter <= MY_CONST.colorRowsNumber ) {
 				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
 				button.colorValue = myNumbersToColor ( red, green, blue );
 				button.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
-				green -= 51;
+				green -= MY_CONST.deltaColor;
 			}
-			blue -= 51;
+			blue -= MY_CONST.deltaColor;
 		}
 	}
 
@@ -192,13 +199,13 @@ function newColorDialog ( color ) {
 			myColorDiv
 		);
 
-		let red = 255;
-		let green = 255;
-		let blue = 255;
+		let red = MY_CONST.maxColorValue;
+		let green = MY_CONST.maxColorValue;
+		let blue = MY_CONST.maxColorValue;
 		let rowCounter = 0;
 
 		// loop on the 7 rows
-		while ( ++ rowCounter < 8 ) {
+		while ( ++ rowCounter <= MY_CONST.colorRowsNumber + 1 ) {
 			let colorButtonsRowDiv = myHTMLElementsFactory.create (
 				'div',
 				{
@@ -209,10 +216,10 @@ function newColorDialog ( color ) {
 			);
 
 			let cellCounter = 0;
-			green = 255;
+			green = MY_CONST.maxColorValue;
 
 			// loop on the 6 cells
-			while ( ++ cellCounter < 7 ) {
+			while ( ++ cellCounter <= MY_CONST.colorRowsNumber ) {
 				let colorButtonCellDiv = myHTMLElementsFactory.create (
 					'div',
 					{
@@ -221,21 +228,21 @@ function newColorDialog ( color ) {
 					},
 					colorButtonsRowDiv
 				);
-				if ( rowCounter < 7 ) {
+				if ( rowCounter <= MY_CONST.colorRowsNumber ) {
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
 					colorButtonCellDiv.colorValue = myNumbersToColor ( red, green, blue );
 					colorButtonCellDiv.addEventListener ( 'click', myOnColorClick, false );
-					green -= 51;
+					green -= MY_CONST.deltaColor;
 				}
 				else {
-					red = ( cellCounter - 1 ) * 51;
-					let buttonColor = myNumbersToColor ( 255, red, red );
+					red = ( cellCounter - 1 ) * MY_CONST.deltaColor;
+					let buttonColor = myNumbersToColor ( MY_CONST.maxColorValue, red, red );
 					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
-					colorButtonCellDiv.redValue = 255 - red;
+					colorButtonCellDiv.redValue = MY_CONST.maxColorValue - red;
 					colorButtonCellDiv.addEventListener ( 'click', myOnRedColorClick, false );
 				}
 			}
-			blue -= 51;
+			blue -= MY_CONST.deltaColor;
 		}
 	}
 
@@ -274,8 +281,8 @@ function newColorDialog ( color ) {
 			rvbDiv
 		);
 		myRedInput.value = myColorToNumbers ( myNewColor ).red;
-		myRedInput.min = 0;
-		myRedInput.max = 255;
+		myRedInput.min = MY_CONST.minColorValue;
+		myRedInput.max = MY_CONST.maxColorValue;
 
 		myRedInput.addEventListener ( 'input', myOnColorInput, false );
 
@@ -297,8 +304,8 @@ function newColorDialog ( color ) {
 			rvbDiv
 		);
 		myGreenInput.value = myColorToNumbers ( myNewColor ).green;
-		myGreenInput.min = 0;
-		myGreenInput.max = 255;
+		myGreenInput.min = MY_CONST.minColorValue;
+		myGreenInput.max = MY_CONST.maxColorValue;
 		myGreenInput.addEventListener ( 'input', myOnColorInput, false );
 
 		// ... and blue
@@ -319,8 +326,8 @@ function newColorDialog ( color ) {
 			rvbDiv
 		);
 		myBlueInput.value = myColorToNumbers ( myNewColor ).blue;
-		myBlueInput.min = 0;
-		myBlueInput.max = 255;
+		myBlueInput.min = MY_CONST.minColorValue;
+		myBlueInput.max = MY_CONST.maxColorValue;
 		myBlueInput.addEventListener ( 'input', myOnColorInput, false );
 	}
 
