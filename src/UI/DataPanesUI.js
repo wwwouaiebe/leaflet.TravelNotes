@@ -52,8 +52,7 @@ This function returns the dataPanesUI object
 
 function newDataPanesUI ( ) {
 
-	const MY_CONST =
-	{
+	const MY_CONST = {
 		invalidPane : -1,
 		itineraryPane : 0,
 		travelNotesPane : 1,

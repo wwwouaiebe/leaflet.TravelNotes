@@ -31,6 +31,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
 /*
 --- showTravelNotes function --------------------------------------------------------------------------------------
@@ -158,52 +159,14 @@ else {
 }
 
 if ( language ) {
-	let xmlHttpRequest = new XMLHttpRequest ( );
-	xmlHttpRequest.timeout = 20000;
-
-	xmlHttpRequest.onreadystatechange = function ( ) {
-		if ( xmlHttpRequest.readyState === 4 ) {
-			if ( xmlHttpRequest.status === 200 ) {
-				try {
-					let response = JSON.parse ( xmlHttpRequest.responseText );
-					theTranslator. setTranslations ( response );
-					document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
-						theTranslator.getText ( 'Roadbook - show travel notes' );
-					document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).innerHTML =
-						theTranslator.getText ( 'Roadbook - show maneuver' );
-					document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).innerHTML =
-						theTranslator.getText ( 'Roadbook - show routes notes' );
-					let saveButton = document.getElementById ( 'TravelNotes-SaveFile' );
-					if ( saveButton ) {
-						saveButton.value = theTranslator.getText ( 'Roadbook - Save' );
-					}
-				}
-				catch ( err ) {
-					console.log ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL );
-				}
-			}
-			else {
-				console.log (
-					'Error XMLHttpRequest - Status : ' +
-					xmlHttpRequest.status +
-					' - StatusText : ' +
-					xmlHttpRequest.statusText +
-					' - File : ' +
-					xmlHttpRequest.responseURL
-				);
-			}
-		}
-	};
-
-	let XMLHttpRequestUrl =
+	newHttpRequestBuilder ( ).getJsonPromise (
 		window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
-		'.json';
-	xmlHttpRequest.open ( 'GET', XMLHttpRequestUrl, true );
-	xmlHttpRequest.overrideMimeType ( 'application/json' );
-	xmlHttpRequest.send ( null );
-
+		'.json'
+	)
+		.then ( response => theTranslator.setTranslations ( response ) )
+		.catch ( err => console.log ( err ? err : 'An error occurs when loading translation' ) );
 }
 
 showTravelNotes ( );

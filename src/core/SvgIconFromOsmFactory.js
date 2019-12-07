@@ -51,7 +51,7 @@ let ourRequestStarted = false;
 
 function newSvgIconFromOsmFactory ( ) {
 
-	let MY_CONST = {
+	const MY_CONST = {
 		comparePrecision : 0.00001,
 		searchAroundFactor : 1.5
 	};

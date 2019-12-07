@@ -17,7 +17,7 @@
 	
 	
 		"curly" : [ "warn" ],
-		"complexity" : [ "warn", 20 ],
+		"complexity" : [ "warn", 25 ],
 		"default-case" : [ "warn" ],
 		"dot-location" : [ "warn", "property" ],
 		"eqeqeq" : [ "warn", "always" ],
@@ -30,7 +30,7 @@
 		"no-implicit-globals" :  [ "error" ],
 		"no-labels" : [ "error" ],
 		"no-lone-blocks" : [ "error" ],
-		"no-magic-numbers" : [ "warn", { "ignore" : [ 0, 1 ] , "ignoreArrayIndexes" : true, "detectObjects" : false } ],
+		"no-magic-numbers" : [ "warn", { "ignore" : [ 0, 1 ] , "ignoreArrayIndexes" : true, "detectObjects" : true } ],
 		
 		
 		

@@ -1,3 +1,5 @@
+/* eslint no-magic-numbers: "off" */
+
 const OUR_CONST = {
 	angle : {
 		degree0 : 0,
@@ -5,9 +7,6 @@ const OUR_CONST = {
 		degree180 : 180,
 		degree270 : 270,
 		degree360 : 360
-	},
-	crypto : {
-		ivLength : 16
 	},
 	distance : {
 		mInKm : 1000,
