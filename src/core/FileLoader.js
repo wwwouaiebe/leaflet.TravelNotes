@@ -244,7 +244,7 @@ function newFileLoader ( ) {
 
 	function myOpen ( ) {
 		theTravelNotesData.travel.object = myFileContent;
-		theTravelNotesData.editedRouteObjId = -1;
+		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
 
 		if ( '' !== myFileName ) {
 			theTravelNotesData.travel.name = myFileName.substr ( 0, myFileName.lastIndexOf ( '.' ) );

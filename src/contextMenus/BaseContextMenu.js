@@ -34,6 +34,8 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 let ourContainer = null;
 let ourTimerId = null;
 let ourFocusIsOnItem = 0;
@@ -49,10 +51,6 @@ let ourLng = 0;
 */
 
 function newBaseContextMenu ( originalEvent ) {
-
-	const MY_CONST = {
-		menuMargin : 20
-	};
 
 	let myMenuItems = [];
 
@@ -103,15 +101,15 @@ function newBaseContextMenu ( originalEvent ) {
 			ourCloseButton.click ( ) ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? 1 : ++ ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? OUR_CONST.number1 : ++ ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem <= 1 ? myMenuItems.length : -- ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem <= OUR_CONST.number1 ? myMenuItems.length : -- ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = 1;
+			ourFocusIsOnItem = OUR_CONST.number1;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
@@ -123,7 +121,7 @@ function newBaseContextMenu ( originalEvent ) {
 			&&
 			( ourFocusIsOnItem > 0 )
 			&&
-			( myMenuItems[ ourFocusIsOnItem - 1 ].action )
+			( myMenuItems[ ourFocusIsOnItem - OUR_CONST.number1 ].action )
 		) {
 			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
@@ -262,11 +260,11 @@ function newBaseContextMenu ( originalEvent ) {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
 			ourOriginalEvent.originalEvent.clientY,
-			screenHeight - ourContainer.clientHeight - MY_CONST.menuMargin
+			screenHeight - ourContainer.clientHeight - OUR_CONST.baseContextMenu.menuMargin
 		);
 		let menuLeft = Math.min (
 			ourOriginalEvent.originalEvent.clientX,
-			screenWidth - ourContainer.clientWidth - MY_CONST.menuMargin
+			screenWidth - ourContainer.clientWidth - OUR_CONST.baseContextMenu.menuMargin
 		);
 		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
 	}

@@ -50,10 +50,6 @@ import  { OUR_CONST } from '../util/Constants.js';
 
 function newBaseDialog ( ) {
 
-	const MY_CONST = {
-		dragMargin : 20
-	};
-
 	// variables initialization for drag and drop
 	let myStartDragX = 0;
 	let myStartDragY = 0;
@@ -206,12 +202,12 @@ function newBaseDialog ( ) {
 				myDialogX += dragEndEvent.screenX - myStartDragX;
 				myDialogY += dragEndEvent.screenY - myStartDragY;
 				myDialogX = Math.min (
-					Math.max ( myDialogX, MY_CONST.dragMargin ),
-					myScreenWidth - myDialogDiv.clientWidth - MY_CONST.dragMargin
+					Math.max ( myDialogX, OUR_CONST.baseDialog.dragMargin ),
+					myScreenWidth - myDialogDiv.clientWidth - OUR_CONST.baseDialog.dragMargin
 				);
-				myDialogY = Math.max ( myDialogY, MY_CONST.dragMargin );
+				myDialogY = Math.max ( myDialogY, OUR_CONST.baseDialog.dragMargin );
 				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - MY_CONST.dragMargin;
+					myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - OUR_CONST.baseDialog.dragMargin;
 				myDialogDiv.setAttribute (
 					'style',
 					'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
@@ -359,11 +355,11 @@ function newBaseDialog ( ) {
 		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / OUR_CONST.number2;
 		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / OUR_CONST.number2;
 		myDialogX = Math.min (
-			Math.max ( myDialogX, MY_CONST.dragMargin ),
-			myScreenWidth - myDialogDiv.clientWidth - MY_CONST.dragMargin
+			Math.max ( myDialogX, OUR_CONST.baseDialog.dragMargin ),
+			myScreenWidth - myDialogDiv.clientWidth - OUR_CONST.baseDialog.dragMargin
 		);
-		myDialogY = Math.max ( myDialogY, MY_CONST.dragMargin );
-		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - MY_CONST.dragMargin;
+		myDialogY = Math.max ( myDialogY, OUR_CONST.baseDialog.dragMargin );
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - OUR_CONST.baseDialog.dragMargin;
 		myDialogDiv.setAttribute (
 			'style',
 			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'

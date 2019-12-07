@@ -47,14 +47,6 @@ Patterns : Closure
 
 function newCollection ( objName ) {
 
-	const MY_CONST = {
-		swapUp : -1,
-		swapDown : 1,
-		direction : {
-			next : 1,
-			previous : -1
-		}
-	};
 	let myArray = [];
 
 	let myObjName = objName;
@@ -96,7 +88,7 @@ function newCollection ( objName ) {
 			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
 			get done ( ) { return ++ nextIndex  >= myArray.length; },
 			get first ( ) { return 0 === nextIndex; },
-			get last ( ) { return nextIndex  >= myArray.length - 1; },
+			get last ( ) { return nextIndex  >= myArray.length - OUR_CONST.number1; },
 			get index ( ) { return nextIndex; }
 		};
 	}
@@ -175,7 +167,7 @@ function newCollection ( objName ) {
 		if ( newPosition < oldPosition ) {
 			oldPosition ++;
 		}
-		myArray.splice ( oldPosition, 1 );
+		myArray.splice ( oldPosition, OUR_CONST.number1 );
 	}
 
 	/*
@@ -185,7 +177,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myLast ( ) {
-		return myArray [ myArray.length - 1 ];
+		return myArray [ myArray.length - OUR_CONST.number1 ];
 	}
 
 	/*
@@ -226,7 +218,7 @@ function newCollection ( objName ) {
 		if ( OUR_CONST.notFound === index ) {
 			throw 'invalid objId for remove function';
 		}
-		myArray.splice ( myIndexOfObjId ( objId ), 1 );
+		myArray.splice ( myIndexOfObjId ( objId ), OUR_CONST.number1 );
 	}
 
 	/*
@@ -327,13 +319,13 @@ function newCollection ( objName ) {
 			||
 			( ( 0 === index ) && swapUp )
 			||
-			( ( myArray.length - 1 === index ) && ( ! swapUp ) )
+			( ( myArray.length - OUR_CONST.number1 === index ) && ( ! swapUp ) )
 		) {
 			throw 'invalid objId for swap function';
 		}
 		let tmp = myArray [ index ];
-		myArray [ index ] = myArray [ index + ( swapUp ? MY_CONST.swapUp : MY_CONST.swapDown  ) ];
-		myArray [ index + ( swapUp ? MY_CONST.swapUp : MY_CONST.swapDown  ) ] = tmp;
+		myArray [ index ] = myArray [ index + ( swapUp ? OUR_CONST.collection.swapUp : OUR_CONST.collection.swapDown  ) ];
+		myArray [ index + ( swapUp ? OUR_CONST.collection.swapUp : OUR_CONST.collection.swapDown  ) ] = tmp;
 	}
 
 	/*
@@ -393,7 +385,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, MY_CONST.direction.next ),
+			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, OUR_CONST.collection.direction.next ),
 
 			/*
 			--- previous function -------------------------------------------------------------------------------------
@@ -401,7 +393,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, MY_CONST.direction.previous ),
+			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, OUR_CONST.collection.direction.previous ),
 
 			/*
 			--- remove function ---------------------------------------------------------------------------------------

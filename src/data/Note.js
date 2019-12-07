@@ -46,15 +46,11 @@ Patterns : Closure
 
 function newNote ( ) {
 
-	const MY_CONST = {
-		defaultIconSize : 40
-	};
-
 	let myObjId = newObjId ( );
 
-	let myIconHeight = MY_CONST.defaultIconSize;
+	let myIconHeight = OUR_CONST.note.defaultIconSize;
 
-	let myIconWidth = MY_CONST.defaultIconSize;
+	let myIconWidth = OUR_CONST.note.defaultIconSize;
 
 	let myIconContent = '';
 
@@ -167,8 +163,8 @@ function newNote ( ) {
 
 	function mySetObject ( something ) {
 		something = myValidate ( something );
-		myIconHeight = something.iconHeight || MY_CONST.defaultIconSize;
-		myIconWidth = something.iconWidth || MY_CONST.defaultIconSize;
+		myIconHeight = something.iconHeight || OUR_CONST.note.defaultIconSize;
+		myIconWidth = something.iconWidth || OUR_CONST.note.defaultIconSize;
 		myIconContent = something.iconContent || '';
 		myPopupContent = something.popupContent || '';
 		myTooltipContent = something.tooltipContent || '';

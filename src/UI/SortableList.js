@@ -49,7 +49,7 @@ function newSortableList ( options, parentNode ) {
 
 	let myItems = [];
 
-	let myOptions = { minSize : 2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
+	let myOptions = { minSize : OUR_CONST.number2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
 
 	let myContainer = myHTMLElementsFactory.create (
 		'div',
@@ -75,10 +75,10 @@ function newSortableList ( options, parentNode ) {
 			console.log ( err );
 		}
 
-		// for this #@!& MS Edge... don't remove - 1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove - OUR_CONST.number1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
 		// different in the drag event and the drop event
-		myDataObjId = dragEvent.target.dataObjId - 1;
+		myDataObjId = dragEvent.target.dataObjId - OUR_CONST.number1;
 	}
 
 	/*
@@ -106,9 +106,9 @@ function newSortableList ( options, parentNode ) {
 		let clientRect = element.getBoundingClientRect ( );
 		let sortableListDropEvent = new Event ( 'SortableListDrop' );
 
-		// for this #@!& MS Edge... don't remove + 1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove + OUR_CONST.number1 otherwise crasy things comes in FF
 		// event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-		sortableListDropEvent.draggedObjId = myDataObjId + 1;
+		sortableListDropEvent.draggedObjId = myDataObjId + OUR_CONST.number1;
 
 		sortableListDropEvent.targetObjId = element.dataObjId;
 		sortableListDropEvent.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
@@ -302,7 +302,11 @@ function newSortableList ( options, parentNode ) {
 		item.dataObjId = dataObjId;
 
 		item.canDrag = false;
-		if ( ( ( 'LimitedSort' !== myOptions.listStyle ) || ( 1 < myItems.length ) ) && ( ! isLastItem  ) ) {
+		if (
+			( ( 'LimitedSort' !== myOptions.listStyle ) || ( OUR_CONST.number1 < myItems.length ) )
+			&&
+			( ! isLastItem  )
+		) {
 			item.draggable = true;
 			item.addEventListener ( 'dragstart', myOnDragStart, false );
 			item.classList.add ( 'TravelNotes-SortableList-MoveCursor' );

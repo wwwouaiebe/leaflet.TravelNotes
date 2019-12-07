@@ -64,7 +64,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				action :
 					(
 						( theTravelNotesData.editedRouteObjId !== myRouteObjId )
-						&& ( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
+						&& ( OUR_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
 					) ?
 						theTravelEditor.editRoute
 						:
@@ -78,7 +78,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 					(
 						( myRouteObjId )
 						&&
-						( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
+						( OUR_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
 						theTravelEditor.removeRoute

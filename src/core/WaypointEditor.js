@@ -73,7 +73,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myRenameWayPoint ( wayPointName, wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).name = wayPointName;
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 	}
@@ -133,7 +133,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myAddWayPoint ( latLng, distance ) {
-		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.editedChanged;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		let wayPoint = newWayPoint ( );
 		if ( latLng ) {
 			wayPoint.latLng = latLng;
@@ -197,7 +197,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myReverseWayPoints ( ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
@@ -227,7 +227,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myRemoveAllWayPoints ( ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
@@ -249,7 +249,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myRemoveWayPoint ( wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
@@ -269,7 +269,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function mySwapWayPoints ( wayPointObjId, swapUp ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
@@ -287,7 +287,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function mySetStartPoint ( latLng ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		if ( 0 !== theTravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
@@ -321,7 +321,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function mySetEndPoint ( latLng ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		if ( 0 !== theTravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
@@ -355,7 +355,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myWayPointDragEnd ( wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		if ( theConfig.wayPoint.reverseGeocoding ) {
 			myRenameWayPointWithGeocoder (
 				theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
@@ -374,7 +374,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myWayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-		theTravelNotesData.travel.editedRoute.edited = 2;
+		theTravelNotesData.travel.editedRoute.edited = OUR_CONST.route.edited.editedChanged;
 		if ( targetWayPointObjId === theTravelNotesData.travel.editedRoute.wayPoints.first.objId && draggedBefore ) {
 			return;
 		}

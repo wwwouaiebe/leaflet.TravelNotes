@@ -41,6 +41,8 @@ import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- newRoutePropertiesDialog function ---------------------------------------------------------------------------------
 
@@ -129,8 +131,8 @@ function newRoutePropertiesDialog ( route ) {
 			widthDiv
 		);
 		myWidthInput.value = route.width;
-		myWidthInput.min = 1;
-		myWidthInput.max = 40;
+		myWidthInput.min = OUR_CONST.route.minWidth;
+		myWidthInput.max = OUR_CONST.route.maxWidth;
 	}
 
 	/*

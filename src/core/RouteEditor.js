@@ -56,7 +56,6 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
-import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -80,74 +79,6 @@ function newRouteEditor ( ) {
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
-
-	/*
-	--- myCutRoute function -------------------------------------------------------------------------------------------
-
-	This function cut a route at a given point
-	Warning: not tested, not used!!!
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCutRoute ( route, latLng ) {
-
-		// an array is created with 2 clones of the route
-		let routes = [ newRoute ( ), newRoute ( ) ];
-		routes [ 0 ].object = route.object;
-		routes [ 1 ].object = route.object;
-
-		// and the itineraryPoints are removed
-		routes [ 0 ].itinerary.itineraryPoints.removeAll ( );
-		routes [ 1 ].itinerary.itineraryPoints.removeAll ( );
-
-		// the distance between the origin and the cutting point is computed
-		let cuttingPointLatLngDistance = myGeometry.getClosestLatLngDistance ( route, latLng );
-
-		// iteration on the itineraryPoints
-		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-		let iterationDistance = 0;
-		let itineraryPoint = null;
-		let previousItineraryPoint = null;
-
-		let routeCounter = 0;
-		while ( ! itineraryPointIterator.done ) {
-			itineraryPoint = newItineraryPoint ( );
-			itineraryPoint.object = itineraryPointIterator.value.object;
-			if ( 0 === routeCounter && 0 !== iterationDistance && iterationDistance > cuttingPointLatLngDistance.distance ) {
-
-				// we have passed the cutting point...
-				let removedDistance = myGeometry.pointsDistance (
-					cuttingPointLatLngDistance.latLng,
-					itineraryPointIterator.value.latLng
-				);
-
-				// a new point is created at the cutting point position and added to the first route.
-				let cuttingPoint = newItineraryPoint ( );
-				cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-				routes [ 0 ].itinerary.itineraryPoints.add ( cuttingPoint );
-				routes [ 0 ].distance = iterationDistance - removedDistance;
-				if ( previousItineraryPoint ) {
-					previousItineraryPoint.distance -= removedDistance;
-				}
-
-				routeCounter = 1;
-
-				// a new point is created at the cutting point position and added to the second route.
-				cuttingPoint = newItineraryPoint ( );
-				cuttingPoint.latLng = cuttingPointLatLngDistance.latLng;
-				cuttingPoint.distance = removedDistance;
-				routes [ 1 ].itinerary.itineraryPoints.add ( cuttingPoint );
-				iterationDistance = removedDistance;
-			}
-			routes [ routeCounter ].itinerary.itineraryPoints.add ( itineraryPoint );
-			iterationDistance += itineraryPointIterator.value.distance;
-			previousItineraryPoint = itineraryPoint;
-		}
-		routes [ routeCounter ].distance = iterationDistance;
-
-		return routes;
-	}
 
 	/*
 	--- myComputeRouteDistances function ------------------------------------------------------------------------------
@@ -511,7 +442,7 @@ function newRouteEditor ( ) {
 		}
 
 		theTravelNotesData.travel.editedRoute = newRoute ( );
-		theTravelNotesData.editedRouteObjId = -1;
+		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'reducerouteui' );
@@ -630,9 +561,6 @@ function newRouteEditor ( ) {
 
 	return Object.seal (
 		{
-
-			cutRoute : ( route, latLng ) => myCutRoute ( route, latLng ),
-
 			computeRouteDistances : route => myComputeRouteDistances ( route ),
 
 			saveGpx : ( ) => mySaveGpx ( ),

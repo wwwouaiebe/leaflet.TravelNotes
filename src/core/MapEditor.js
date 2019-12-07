@@ -98,13 +98,6 @@ Patterns : Closure and Singleton
 
 function newMapEditor ( ) {
 
-	const MY_CONST = {
-		defaultMaxZoom : 18,
-		defaultMinZoom : 0,
-		wayPointIconSize : 40,
-		markerBoundsPrecision : 0.01
-	};
-
 	let myDataSearchEngine  = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -146,14 +139,14 @@ function newMapEditor ( ) {
 		theTravelNotesData.map.addLayer ( leafletLayer );
 		myCurrentLayer = leafletLayer;
 
-		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || MY_CONST.defaultMinZoom ) ) {
-			theTravelNotesData.map.setZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
+		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || OUR_CONST.mapEditor.defaultMinZoom ) ) {
+			theTravelNotesData.map.setZoom ( layer.minZoom || OUR_CONST.mapEditor.defaultMinZoom );
 		}
-		theTravelNotesData.map.setMinZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
-		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || MY_CONST.defaultMaxZoom ) ) {
-			theTravelNotesData.map.setZoom ( layer.maxZoom || MY_CONST.defaultMaxZoom );
+		theTravelNotesData.map.setMinZoom ( layer.minZoom || OUR_CONST.mapEditor.defaultMinZoom );
+		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || OUR_CONST.mapEditor.defaultMaxZoom ) ) {
+			theTravelNotesData.map.setZoom ( layer.maxZoom || OUR_CONST.mapEditor.defaultMaxZoom );
 		}
-		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || MY_CONST.defaultMaxZoom );
+		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || OUR_CONST.mapEditor.defaultMaxZoom );
 		if ( layer.bounds ) {
 			if (
 				! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
@@ -162,7 +155,7 @@ function newMapEditor ( ) {
 			) {
 				theTravelNotesData.map.setMaxBounds ( null );
 				theTravelNotesData.map.fitBounds ( layer.bounds );
-				theTravelNotesData.map.setZoom ( layer.minZoom || MY_CONST.defaultMinZoom );
+				theTravelNotesData.map.setZoom ( layer.minZoom || OUR_CONST.mapEditor.defaultMinZoom );
 			}
 			theTravelNotesData.map.setMaxBounds ( layer.bounds );
 		}
@@ -261,7 +254,7 @@ function newMapEditor ( ) {
 		if ( iDashArray ) {
 			let dashArray = '';
 			let dashCounter = 0;
-			for ( dashCounter = 0; dashCounter < iDashArray.length - 1; dashCounter ++ ) {
+			for ( dashCounter = 0; dashCounter < iDashArray.length - OUR_CONST.number1; dashCounter ++ ) {
 				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
 			dashArray += iDashArray [ dashCounter ] * route.width;
@@ -333,7 +326,6 @@ function newMapEditor ( ) {
 						html : '<div></div>'
 					}
 				),
-				zIndexOffset : -1000,
 				opacity : theConfig.note.grip.opacity,
 				draggable : ! readOnly
 			}
@@ -535,8 +527,11 @@ function newMapEditor ( ) {
 			{
 				icon : L.divIcon (
 					{
-						iconSize : [ MY_CONST.wayPointIconSize, MY_CONST.wayPointIconSize ],
-						iconAnchor : [ MY_CONST.wayPointIconSize / OUR_CONST.number2, MY_CONST.wayPointIconSize ],
+						iconSize : [ OUR_CONST.mapEditor.wayPointIconSize, OUR_CONST.mapEditor.wayPointIconSize ],
+						iconAnchor : [
+							OUR_CONST.mapEditor.wayPointIconSize / OUR_CONST.number2,
+							OUR_CONST.mapEditor.wayPointIconSize
+						],
 						html : iconHtml,
 						className : 'TravelNotes-WayPointStyle'
 					}
@@ -551,8 +546,8 @@ function newMapEditor ( ) {
 			)
 		);
 		marker.getTooltip ( ).options.offset  = [
-			MY_CONST.wayPointIconSize / OUR_CONST.number2,
-			-MY_CONST.wayPointIconSize / OUR_CONST.number2
+			OUR_CONST.mapEditor.wayPointIconSize / OUR_CONST.number2,
+			-OUR_CONST.mapEditor.wayPointIconSize / OUR_CONST.number2
 		];
 
 		L.DomEvent.on (
@@ -828,13 +823,13 @@ function newMapEditor ( ) {
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
 					/
 					( mapBounds.getEast ( ) - mapBounds.getWest ( ) )
-				) > MY_CONST.markerBoundsPrecision
+				) > OUR_CONST.mapEditor.markerBoundsPrecision
 				&&
 				(
 					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
 					/
 					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
-				) > MY_CONST.markerBoundsPrecision;
+				) > OUR_CONST.mapEditor.markerBoundsPrecision;
 		}
 		if ( showGeometry ) {
 			myAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );

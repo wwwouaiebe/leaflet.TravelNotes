@@ -51,11 +51,6 @@ let ourRequestStarted = false;
 
 function newSvgIconFromOsmFactory ( ) {
 
-	const MY_CONST = {
-		comparePrecision : 0.00001,
-		searchAroundFactor : 1.5
-	};
-
 	let myGeometry = newGeometry ( );
 
 	let myIconLatLngDistance = newItineraryPoint ( );
@@ -148,9 +143,9 @@ function newSvgIconFromOsmFactory ( ) {
 		myRoute.wayPoints.forEach (
 			wayPoint => {
 				if (
-					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < MY_CONST.comparePrecision )
+					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < OUR_CONST.svgIconFromOsmFactory.comparePrecision )
 					&&
-					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < MY_CONST.comparePrecision )
+					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < OUR_CONST.svgIconFromOsmFactory.comparePrecision )
 				) {
 					isntWayPoint = false;
 				}
@@ -278,11 +273,11 @@ function newSvgIconFromOsmFactory ( ) {
 					( way.tags.wayName && way.tags.ref ? ' '  : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
 				if ( way.nodesIds.includes ( iconPointId ) ) {
-					let isClosed = way.nodesIds [ 0 ] === way.nodesIds [ way.nodesIds.length - 1 ];
+					let isClosed = way.nodesIds [ 0 ] === way.nodesIds [ way.nodesIds.length - OUR_CONST.number1 ];
 					let isInOutStreet =
 						( 0 !== way.nodesIds.indexOf ( iconPointId ) )
 						&&
-						( way.nodesIds.length - 1 !== way.nodesIds.lastIndexOf ( iconPointId ) );
+						( way.nodesIds.length - OUR_CONST.number1 !== way.nodesIds.lastIndexOf ( iconPointId ) );
 					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
@@ -555,7 +550,7 @@ function newSvgIconFromOsmFactory ( ) {
 					if ( 0 < firstPointIndex ) {
 						firstPointIndex --;
 					}
-					if ( way.nodesIds.length - 1 > lastPointIndex ) {
+					if ( way.nodesIds.length - OUR_CONST.number1 > lastPointIndex ) {
 						lastPointIndex ++;
 					}
 					let pointsAttribute = '';
@@ -641,7 +636,7 @@ function newSvgIconFromOsmFactory ( ) {
 			'?data=[out:json][timeout:' +
 			theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( theConfig.note.svgIconWidth * MY_CONST.searchAroundFactor ).toFixed ( 0 ) +
+			( theConfig.note.svgIconWidth * OUR_CONST.svgIconFromOsmFactory.searchAroundFactor ).toFixed ( 0 ) +
 			',' +
 			requestLatLng +
 			')->.a;(.a >;.a;)->.a;.a out;' +

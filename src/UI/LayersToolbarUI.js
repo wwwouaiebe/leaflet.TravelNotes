@@ -48,8 +48,6 @@ import  { OUR_CONST } from '../util/Constants.js';
 
 function newLayersToolbarUI ( ) {
 
-	const MY_CONST = { buttonsAlwaysVisible : 3 };
-
 	let myLayers = [
 		{
 			service : 'wmts',
@@ -204,9 +202,10 @@ function newLayersToolbarUI ( ) {
 			myMarginTop -= wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
-				myMarginTop < myButtonTop - myButtonsHeight + ( MY_CONST.buttonsAlwaysVisible * myButtonHeight )
+				myMarginTop < myButtonTop - myButtonsHeight +
+				( OUR_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
 					?
-					myButtonTop - myButtonsHeight + ( MY_CONST.buttonsAlwaysVisible * myButtonHeight )
+					myButtonTop - myButtonsHeight + ( OUR_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
 					:
 					myMarginTop;
 			myLayersToolbarButtonsDiv.style.marginTop = String ( myMarginTop ) + 'px';
@@ -337,7 +336,7 @@ function newLayersToolbarUI ( ) {
 	function myCreateUI ( ) {
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 			'TravelNotesLayers.json'
 		)
 			.then ( layers => { myLayers = myLayers.concat ( layers ); } )

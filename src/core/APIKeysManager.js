@@ -247,7 +247,7 @@ function newAPIKeysManager ( ) {
 			return;
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'APIKeys'
 		)
 			.then ( myOnServerFile )

@@ -122,7 +122,7 @@ function travelNotesFactory ( ) {
 
 	function myReadURL ( ) {
 		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( 1 )
+		( decodeURI ( window.location.search ).substr ( OUR_CONST.number1 )
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString => {
@@ -363,11 +363,11 @@ function travelNotesFactory ( ) {
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'TravelNotesConfig.json'
 			),
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+				window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 				'TravelNotes' +
 				( myLangage || theConfig.language ).toUpperCase ( )  +
 				'.json'
@@ -589,7 +589,7 @@ catch ( err ) {
 }
 
 newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+	window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 	'TravelNotesConfig.json'
 )
 	.then (

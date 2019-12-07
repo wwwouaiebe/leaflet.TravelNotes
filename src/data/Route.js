@@ -82,10 +82,16 @@ function newRoute ( ) {
 
 	let myDuration = 0;
 
-	let myEdited = OUR_CONST.route.notEdited;
+	let myEdited = OUR_CONST.route.edited.notEdited;
 
 	function mySetEdited ( edited ) {
-		if ( typeof edited !== 'number' || OUR_CONST.route.notEdited > edited || OUR_CONST.route.editedChanged < edited ) {
+		if (
+			typeof edited !== 'number'
+			||
+			OUR_CONST.route.edited.notEdited > edited
+			||
+			OUR_CONST.route.edited.editedChanged < edited
+		) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
 		else {

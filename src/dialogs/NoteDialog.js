@@ -51,9 +51,9 @@ import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
 import  { OUR_CONST } from '../util/Constants.js';
 
-let theUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let theTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let theAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let ourUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let ourTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
+let ourAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 
 /*
 --- newNoteDialog function --------------------------------------------------------------------------------------------
@@ -247,7 +247,11 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let address = '';
 		let showPlace = 0;
 		for ( let counter = 0; counter < svgData.streets.length; counter ++ ) {
-			if ( ( 0 === counter  || svgData.streets.length - 1 === counter ) && svgData.streets [ counter ] === '' ) {
+			if (
+				( 0 === counter  || svgData.streets.length - OUR_CONST.number1 === counter )
+				&&
+				svgData.streets [ counter ] === ''
+			) {
 				address += '???';
 				showPlace ++;
 			}
@@ -336,34 +340,34 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function myAddPreDefinedIconsList ( ) {
-		theAllButtonsAndIcons.preDefinedIconsList =
-			theTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( theUserButtonsAndIcons.preDefinedIconsList );
+		ourAllButtonsAndIcons.preDefinedIconsList =
+			ourTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( ourUserButtonsAndIcons.preDefinedIconsList );
 
 		if ( OUR_CONST.invalidObjId < routeObjId ) {
-			theAllButtonsAndIcons.preDefinedIconsList.push (
+			ourAllButtonsAndIcons.preDefinedIconsList.push (
 				{
 					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
 					icon : '',
 					tooltip : '',
-					width : 40,
-					height : 40
+					width : OUR_CONST.note.defaultIconSize,
+					height : OUR_CONST.note.defaultIconSize
 				}
 			);
 		}
 
-		theAllButtonsAndIcons.preDefinedIconsList.sort (
+		ourAllButtonsAndIcons.preDefinedIconsList.sort (
 			( first, second ) => first.name.localeCompare ( second.name )
 		);
 		let elementCounter = 0;
-		for ( elementCounter = myPredefinedIconsSelect.length - 1; elementCounter >= 0; elementCounter -- ) {
+		for ( elementCounter = myPredefinedIconsSelect.length - OUR_CONST.number1; elementCounter >= 0; elementCounter -- ) {
 			myPredefinedIconsSelect.remove ( elementCounter );
 		}
-		for ( elementCounter = 0; elementCounter < theAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
+		for ( elementCounter = 0; elementCounter < ourAllButtonsAndIcons.preDefinedIconsList.length; elementCounter ++ ) {
 			myPredefinedIconsSelect.add (
 				myHTMLElementsFactory.create (
 					'option',
 					{
-						text : theAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
+						text : ourAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
 					}
 				)
 			);
@@ -384,7 +388,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	function myOnPredefinedIconListSelectChange ( changeEvent ) {
 
-		let preDefinedIcon = theAllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
+		let preDefinedIcon = ourAllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
 		if ( preDefinedIcon.name === theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ) ) {
 			myNoteDialog.showWait ( );
 			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
@@ -491,10 +495,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		fileReader.onload = function ( ) {
 			try {
 				let newUserButtonsAndIcons = JSON.parse ( fileReader.result );
-				theUserButtonsAndIcons.editionButtons =
-					theUserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
-				theUserButtonsAndIcons.preDefinedIconsList =
-					theUserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
+				ourUserButtonsAndIcons.editionButtons =
+					ourUserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
+				ourUserButtonsAndIcons.preDefinedIconsList =
+					ourUserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
 				myAddEditionButtons ( newUserButtonsAndIcons.editionButtons );
 				myAddPreDefinedIconsList ( );
 			}
@@ -627,10 +631,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 
 		// personnalised buttons from server file are restored
-		myAddEditionButtons ( theTravelNotesButtonsAndIcons.editionButtons );
+		myAddEditionButtons ( ourTravelNotesButtonsAndIcons.editionButtons );
 
 		// personnalised buttons from local file are restored
-		myAddEditionButtons ( theUserButtonsAndIcons.editionButtons );
+		myAddEditionButtons ( ourUserButtonsAndIcons.editionButtons );
 	}
 
 	/*
@@ -945,22 +949,22 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	function myLoadIconsAndButtons ( ) {
 
 		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
-			theTravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
-			myAddEditionButtons ( theTravelNotesButtonsAndIcons.editionButtons );
-			theTravelNotesButtonsAndIcons.preDefinedIconsList.push (
+			ourTravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
+			myAddEditionButtons ( ourTravelNotesButtonsAndIcons.editionButtons );
+			ourTravelNotesButtonsAndIcons.preDefinedIconsList.push (
 				{
 					name : '',
 					icon : '',
 					tooltip : '',
-					width : 40,
-					height : 40
+					width : OUR_CONST.note.defaultIconSize,
+					height : OUR_CONST.note.defaultIconSize
 				}
 			);
 			myAddPreDefinedIconsList ( );
 		}
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+			window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 			'TravelNotesNoteDialog' +
 			theConfig.language.toUpperCase ( ) +
 			'.json'

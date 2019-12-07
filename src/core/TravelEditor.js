@@ -85,7 +85,7 @@ function newTravelEditor ( ) {
 	*/
 
 	function myEditRoute ( routeObjId ) {
-		if ( OUR_CONST.route.editedChanged === theTravelNotesData.travel.editedRoute.edited ) {
+		if ( OUR_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited ) {
 
 			// not possible to edit - the current edited route is not saved or cancelled
 			theErrorsUI.showError (
@@ -129,7 +129,7 @@ function newTravelEditor ( ) {
 
 		// The edited route is pushed in the editors
 		theTravelNotesData.travel.editedRoute = newRoute ( );
-		initialRoute.edited = 1;
+		initialRoute.edited = OUR_CONST.route.edited.editedNoChange;
 
 		// Route is cloned, so we can have a cancel button in the editor
 		theTravelNotesData.travel.editedRoute.object = initialRoute.object;
@@ -173,7 +173,7 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		theRouteEditor.chainRoutes ( );
 		newRoadbookUpdate ( );
-		if ( OUR_CONST.route.editedChanged !== theTravelNotesData.travel.editedRoute.edited ) {
+		if ( OUR_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited ) {
 			myEditRoute ( route.objId );
 		}
 	}
@@ -193,7 +193,7 @@ function newTravelEditor ( ) {
 		if (
 			routeObjId === theTravelNotesData.editedRouteObjId
 			&&
-			OUR_CONST.route.editedChanged === theTravelNotesData.travel.editedRoute.edited
+			OUR_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited
 		) {
 
 			// cannot remove the route currently edited
@@ -332,7 +332,7 @@ function newTravelEditor ( ) {
 		}
 		myEventDispatcher.dispatch ( 'removeallobjects' );
 		theTravelNotesData.travel.editedRoute = newRoute ( );
-		theTravelNotesData.editedRouteObjId = -1;
+		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
 		theTravelNotesData.travel = newTravel ( );
 		theTravelNotesData.travel.routes.add ( newRoute ( ) );
 		myEventDispatcher.dispatch ( 'setrouteslist' );

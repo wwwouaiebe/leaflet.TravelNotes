@@ -129,7 +129,12 @@ function newGeoLocator ( ) {
 		return myStatus;
 	}
 
-	myStatus = ( 'geolocation' in navigator ) ? 1 : 0;
+	myStatus =
+		( 'geolocation' in navigator )
+			?
+			OUR_CONST.geoLocation.status.inactive
+			:
+			OUR_CONST.geoLocation.status.disabled;
 
 	/*
 	--- GeoLocator object ---------------------------------------------------------------------------------------------

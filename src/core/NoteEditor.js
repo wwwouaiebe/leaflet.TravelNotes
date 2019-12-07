@@ -144,7 +144,7 @@ function newNoteEditor ( ) {
 		// the note and the route are searched
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
-		noteAndRoute.note.distance = -1;
+		noteAndRoute.note.distance = OUR_CONST.distance.invalid;
 		noteAndRoute.note.chainedDistance = 0;
 		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
 
@@ -297,8 +297,6 @@ function newNoteEditor ( ) {
 			'<div class="TravelNotes-ManeuverNote TravelNotes-ManeuverNote-' +
 			maneuver.iconName + '"></div>';
 		note.popupContent = maneuver.instruction;
-		note.iconWidth = 40;
-		note.iconHeight = 40;
 
 		// and displayed in a dialog box
 		newNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true )

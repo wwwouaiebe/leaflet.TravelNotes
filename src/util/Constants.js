@@ -8,11 +8,37 @@ const OUR_CONST = {
 		degree270 : 270,
 		degree360 : 360
 	},
+	baseContextMenu : {
+		menuMargin : 20
+	},
+	baseDialog : {
+		dragMargin : 20
+	},
+	colorDialog : {
+		maxColorValue : 255,
+		linColorValue : 0,
+		colorRowsNumber : 6,
+		deltaColor : 51
+	},
+	collection : {
+		swapUp : -1,
+		swapDown : 1,
+		direction : {
+			next : 1,
+			previous : -1
+		}
+	},
 	distance : {
 		mInKm : 1000,
 		round : 10,
 		fixed : 2,
 		invalid : -1
+	},
+	dataPanesUI : {
+		invalidPane : -1,
+		itineraryPane : 0,
+		travelNotesPane : 1,
+		searchPane : 2
 	},
 	geoLocation : {
 		status : {
@@ -23,7 +49,14 @@ const OUR_CONST = {
 		}
 	},
 	hexadecimal : 16,
+	htmlViewsFactory : {
+		linksMaxLength : 40,
+		minNotesDistance : 9
+	},
 	invalidObjId : -1,
+	layersToolbarUI : {
+		buttonsAlwaysVisible : 3
+	},
 	latLng : {
 		fixed : 6,
 		maxLat : 90,
@@ -32,8 +65,17 @@ const OUR_CONST = {
 		minLng : -180
 
 	},
+	mapEditor : {
+		defaultMaxZoom : 18,
+		defaultMinZoom : 0,
+		wayPointIconSize : 40,
+		markerBoundsPrecision : 0.01
+	},
 	mouse : {
 		wheelFactor : 10
+	},
+	note : {
+		defaultIconSize : 40
 	},
 	notFound : -1,
 	numberMinus1 : -1,
@@ -44,18 +86,31 @@ const OUR_CONST = {
 	number5 : 5,
 	number16 : 16,
 	number65536 : 65536,
+	passwordDialog : {
+		pswdMinLength : 12
+	},
 	polylinePrecision : 6,
 	route : {
-		notEdited : 0,
-		editedNoChange : 1,
-		editedChanged : 2
+		edited : {
+			notEdited : 0,
+			editedNoChange : 1,
+			editedChanged : 2
+		},
+		minWidth : 1,
+		maxWidth : 40
 	},
 	svgIcon : {
 		positionOnRoute : {
 			atStart : -1,
 			onRoute : 0,
 			atEnd : 1
-		}
+		},
+		width : 40,
+		height : 40
+	},
+	svgIconFromOsmFactory : {
+		comparePrecision : 0.00001,
+		searchAroundFactor : 1.5
 	},
 	time : {
 		secondInDay : 86400,

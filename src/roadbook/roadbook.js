@@ -33,6 +33,8 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
+import  { OUR_CONST } from '../util/Constants.js';
+
 /*
 --- showTravelNotes function --------------------------------------------------------------------------------------
 
@@ -108,7 +110,7 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 -------------------------------------------------------------------------------------------------------------------
 */
 
-let params = new URLSearchParams ( document.location.search.substring ( 1 ) );
+let params = new URLSearchParams ( document.location.search.substring ( OUR_CONST.number1 ) );
 let language = params.get ( 'lng' );
 let pageId = params.get ( 'page' );
 
@@ -160,7 +162,7 @@ else {
 
 if ( language ) {
 	newHttpRequestBuilder ( ).getJsonPromise (
-		window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + 1 ) +
+		window.location.href.substr ( 0, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json'

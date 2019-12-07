@@ -40,9 +40,9 @@ function newUtilities ( ) {
 	function myGetUUID ( ) {
 		function Random4 ( ) {
 			return Math
-				.floor ( ( 1 + Math.random ( ) ) * OUR_CONST.number65536 )
+				.floor ( ( OUR_CONST.number1 + Math.random ( ) ) * OUR_CONST.number65536 )
 				.toString ( OUR_CONST.hexadecimal )
-				.substring ( 1 );
+				.substring ( OUR_CONST.number1 );
 		}
 		return Random4 ( ) +
 			Random4 ( ) + '-' +
