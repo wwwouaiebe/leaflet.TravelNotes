@@ -137,20 +137,10 @@ function newTravelEditor ( ) {
 		theTravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
 		myEventDispatcher.dispatch (
-			'removeroute',
+			'routeupdated',
 			{
-				route : initialRoute,
-				removeNotes : true,
-				removeWayPoints : true
-			}
-		);
-		myEventDispatcher.dispatch (
-			'addroute',
-			{
-				route : theTravelNotesData.travel.editedRoute,
-				addNotes : true,
-				addWayPoints : true,
-				readOnly : false
+				removedRouteObjId : initialRoute.objId,
+				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 			}
 		);
 		theRouteEditor.chainRoutes ( );
@@ -201,12 +191,12 @@ function newTravelEditor ( ) {
 			return;
 		}
 
+		theRouteEditor.chainRoutes ( );
 		myEventDispatcher.dispatch (
-			'removeroute',
+			'routeupdated',
 			{
-				route : myDataSearchEngine.getRoute ( routeObjId ),
-				removeNotes : true,
-				removeWayPoints : true
+				removedRouteObjId : routeObjId,
+				addedRouteObjId : THE_CONST.invalidObjId
 			}
 		);
 		theTravelNotesData.travel.routes.remove ( routeObjId );
@@ -214,8 +204,6 @@ function newTravelEditor ( ) {
 		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
 			theRouteEditor.cancelEdition ( );
 		}
-		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -350,7 +338,36 @@ function newTravelEditor ( ) {
 	*/
 
 	function myZoomToTravel ( ) {
-		myEventDispatcher.dispatch ( 'zoomtotravel' );
+		let geometry = [];
+
+		function pushNoteGeometry ( note ) {
+			geometry.push ( note.latLng );
+			geometry.push ( note.iconLatLng );
+		}
+
+		function pushRouteGeometry ( route ) {
+			route.itinerary.itineraryPoints.forEach ( itineraryPoint => geometry.push ( itineraryPoint.latLng ) );
+			route.notes.forEach (
+				note => pushNoteGeometry ( note )
+			);
+		}
+
+		theTravelNotesData.travel.routes.forEach (
+			route => pushRouteGeometry ( route )
+		);
+
+		pushRouteGeometry ( theTravelNotesData.travel.editedRoute );
+
+		theTravelNotesData.travel.notes.forEach (
+			note => pushNoteGeometry ( note )
+		);
+
+		myEventDispatcher.dispatch (
+			'zoomto',
+			{
+				geometry : [ geometry ]
+			}
+		);
 	}
 
 	/*

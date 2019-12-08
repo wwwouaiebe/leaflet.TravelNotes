@@ -33,6 +33,7 @@ Tests ...
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -127,9 +128,9 @@ function newTravelNotesPaneUI ( ) {
 			element = element.parentNode;
 		}
 		myEventDispatcher.dispatch (
-			'zoomtonote',
+			'zoomto',
 			{
-				noteObjId : element.noteObjId
+				latLng : newDataSearchEngine ( ).getNoteAndRoute ( element.noteObjId ).note.iconLatLng
 			}
 		);
 	}

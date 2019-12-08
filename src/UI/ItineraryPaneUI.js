@@ -64,7 +64,7 @@ function newItineraryPaneUI ( ) {
 			element = element.parentNode;
 		}
 		myEventDispatcher.dispatch (
-			'zoomtopoint',
+			'zoomto',
 			{
 				latLng : element.latLng
 			}

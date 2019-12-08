@@ -237,7 +237,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.registerTask('default', [ 'eslint', 'includes:Polyline', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
-	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
+	grunt.registerTask('release', [ 'eslint', 'includes:Polyline', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

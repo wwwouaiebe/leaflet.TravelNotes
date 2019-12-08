@@ -163,43 +163,46 @@ function travelNotesFactory ( ) {
 		myReadURL ( );
 
 		document.addEventListener (
-			'removeroute',
-			removeRouteEvent => {
-				if ( removeRouteEvent.data ) {
-					theMapEditor.removeRoute (
-						removeRouteEvent.data.route,
-						removeRouteEvent.data.RemoveNotes,
-						removeRouteEvent.data.removeWayPoints
+			'routeupdated',
+			updateRouteEvent => {
+				if ( updateRouteEvent.data ) {
+					theMapEditor.updateRoute (
+						updateRouteEvent.data.removedRouteObjId,
+						updateRouteEvent.data.addedRouteObjId
 					);
+					newRoadbookUpdate ( );
 				}
 			},
 			false
 		);
+
 		document.addEventListener (
-			'addroute',
-			addRouteEvent => {
-				if ( addRouteEvent.data ) {
-					theMapEditor.addRoute (
-						addRouteEvent.data.route,
-						addRouteEvent.data.addNotes,
-						addRouteEvent.data.addWayPoints,
-						addRouteEvent.data.readOnly
+			'routepropertiesupdated',
+			updateRoutePropertiesEvent => {
+				if ( updateRoutePropertiesEvent.data ) {
+					theMapEditor.updateRouteProperties (
+						updateRoutePropertiesEvent.data.routeObjId
 					);
+					newRoadbookUpdate ( );
 				}
 			},
 			false
 		);
+
 		document.addEventListener (
-			'editroute',
-			editRouteEvent => {
-				if ( editRouteEvent.data ) {
-					theMapEditor.editRoute (
-						editRouteEvent.data.route
+			'noteupdated',
+			updateNoteEvent => {
+				if ( updateNoteEvent.data ) {
+					theMapEditor.updateNote (
+						updateNoteEvent.data.removedNoteObjId,
+						updateNoteEvent.data.addedNoteObjId
 					);
+					newRoadbookUpdate ( );
 				}
 			},
 			false
 		);
+
 		document.addEventListener (
 			'removeobject',
 			removeObjectEvent => {
@@ -211,53 +214,22 @@ function travelNotesFactory ( ) {
 			},
 			false
 		);
+
 		document.addEventListener ( 'removeallobjects',	( ) => theMapEditor.removeAllObjects ( ), false );
+
 		document.addEventListener (
-			'zoomtopoint',
-			zoomToPointEvent => {
-				if ( zoomToPointEvent.data ) {
-					theMapEditor.zoomToPoint (
-						zoomToPointEvent.data.latLng
+			'zoomto',
+			zoomToEvent => {
+				if ( zoomToEvent.data ) {
+					theMapEditor.zoomTo (
+						zoomToEvent.data.latLng,
+						zoomToEvent.data.geometry
 					);
 				}
 			},
 			false
 		);
-		document.addEventListener (
-			'zoomtosearchresult',
-			zoomToSearchResultEvent => {
-				if ( zoomToSearchResultEvent.data ) {
-					theMapEditor.zoomToSearchResult (
-						zoomToSearchResultEvent.data.latLng,
-						zoomToSearchResultEvent.data.geometry
-					);
-				}
-			},
-			false
-		);
-		document.addEventListener (
-			'zoomtonote',
-			zoomToNoteEvent => {
-				if ( zoomToNoteEvent.data ) {
-					theMapEditor.zoomToNote (
-						zoomToNoteEvent.data.noteObjId
-					);
-				}
-			},
-			false
-		);
-		document.addEventListener (
-			'zoomtoroute',
-			zoomToRouteEvent => {
-				if ( zoomToRouteEvent.data ) {
-					theMapEditor.zoomToRoute (
-						zoomToRouteEvent.data.routeObjId
-					);
-				}
-			},
-			false
-		);
-		document.addEventListener ( 'zoomtotravel',	( ) => theMapEditor.zoomToTravel ( ), false );
+
 		document.addEventListener (
 			'additinerarypointmarker',
 			addItineraryPointMarkerEvent => {
@@ -303,29 +275,6 @@ function travelNotesFactory ( ) {
 					theMapEditor.addWayPoint (
 						addWayPointEvent.data.wayPoint,
 						addWayPointEvent.data.letter
-					);
-				}
-			},
-			false
-		);
-		document.addEventListener (
-			'redrawnote',
-			redrawNoteEvent => {
-				if ( redrawNoteEvent.data ) {
-					theMapEditor.redrawNote (
-						redrawNoteEvent.data.note
-					);
-				}
-			},
-			false
-		);
-		document.addEventListener (
-			'addnote',
-			addNoteEvent => {
-				if ( addNoteEvent.data ) {
-					theMapEditor.addNote (
-						addNoteEvent.data.note,
-						addNoteEvent.data.readOnly
 					);
 				}
 			},

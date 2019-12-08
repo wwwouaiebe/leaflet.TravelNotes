@@ -73,7 +73,7 @@ function newSearchPaneUI ( ) {
 			element = element.parentNode;
 		}
 		myEventDispatcher.dispatch (
-			'zoomtosearchresult',
+			'zoomto',
 			{
 				latLng : element.latLng,
 				geometry : element.geometry

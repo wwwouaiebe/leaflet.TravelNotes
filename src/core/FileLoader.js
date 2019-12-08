@@ -107,12 +107,10 @@ function newFileLoader ( ) {
 		while ( ! routesIterator.done ) {
 			if ( THE_CONST.route.edited.notEdited === routesIterator.value.edited ) {
 				myEventDispatcher.dispatch (
-					'addroute',
+					'routeupdated',
 					{
-						route : routesIterator.value,
-						addNotes : true,
-						addWayPoints : false,
-						readOnly : myIsFileReadOnly
+						removedRouteObjId : THE_CONST.invalidObjId,
+						addedRouteObjId : routesIterator.value.objId
 					}
 				);
 			}
@@ -121,12 +119,10 @@ function newFileLoader ( ) {
 		// edited route is added with notes and , depending of read only, waypoints
 		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			myEventDispatcher.dispatch (
-				'addroute',
+				'routeupdated',
 				{
-					route : theTravelNotesData.travel.editedRoute,
-					addNotes : true,
-					addWayPoints : ! myIsFileReadOnly,
-					readOnly : myIsFileReadOnly
+					removedRouteObjId : THE_CONST.invalidObjId,
+					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 				}
 			);
 		}

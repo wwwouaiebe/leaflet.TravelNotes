@@ -156,6 +156,49 @@ function newNoteEditor ( ) {
 	}
 
 	/*
+	--- myNoteDialog function -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myNoteDialog ( note, routeObjId, isNewNote ) {
+		newNoteDialog ( note, routeObjId, isNewNote )
+			.show ( )
+			.then (
+				( ) => {
+					if ( isNewNote ) {
+						if ( THE_CONST.invalidObjId === routeObjId ) {
+							theTravelNotesData.travel.notes.add ( note );
+						}
+						else {
+							let route = myDataSearchEngine.getRoute ( routeObjId );
+							route.notes.add ( note );
+							note.chainedDistance = route.chainedDistance;
+							route.notes.sort (
+								( first, second ) => first.distance - second.distance
+							);
+						}
+					}
+					if ( THE_CONST.invalidObjId === routeObjId ) {
+						myEventDispatcher.dispatch ( 'settravelnotes' );
+					}
+					else {
+						myEventDispatcher.dispatch ( 'setitinerary' );
+					}
+					myEventDispatcher.dispatch (
+						'noteupdated',
+						{
+							removedNoteObjId : note.objId,
+							addedNoteObjId : note.objId
+						}
+					);
+				}
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+
+	}
+
+	/*
 	--- myNewNote function --------------------------------------------------------------------------------------------
 
 	This function create a new TravelNotes note object
@@ -189,9 +232,11 @@ function newNoteEditor ( ) {
 
 	function myNewRouteNote ( routeObjId, contextMenuEvent ) {
 
+		let route = myDataSearchEngine.getRoute ( routeObjId );
+
 		// the nearest point and distance on the route is searched
 		let latLngDistance = myGeometry.getClosestLatLngDistance (
-			myDataSearchEngine.getRoute ( routeObjId ),
+			route,
 			[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
 		);
 
@@ -199,29 +244,7 @@ function newNoteEditor ( ) {
 		let note = myNewNote ( latLngDistance.latLng );
 		note.distance = latLngDistance.distance;
 
-		// and displayed in a dialog box
-		newNoteDialog ( note, routeObjId, true )
-			.show ( )
-			.then (
-				modifiedNote => {
-					let route = myDataSearchEngine.getRoute ( routeObjId );
-					route.notes.add ( modifiedNote );
-					modifiedNote.chainedDistance = route.chainedDistance;
-					route.notes.sort (
-						( first, second ) => first.distance - second.distance
-					);
-					myEventDispatcher.dispatch ( 'setitinerary' );
-					myEventDispatcher.dispatch (
-						'addnote',
-						{
-							note : modifiedNote,
-							readOnly : false
-						}
-					);
-					newRoadbookUpdate ( );
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+		myNoteDialog ( note, route.objId, true );
 	}
 
 	/*
@@ -248,23 +271,7 @@ function newNoteEditor ( ) {
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
 
-		newNoteDialog ( note, THE_CONST.invalidObjId, true )
-			.show ( )
-			.then (
-				modifiedNote => {
-					theTravelNotesData.travel.notes.add ( modifiedNote );
-					myEventDispatcher.dispatch ( 'settravelnotes' );
-					myEventDispatcher.dispatch (
-						'addnote',
-						{
-							note : modifiedNote,
-							readOnly : false
-						}
-					);
-					newRoadbookUpdate ( );
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+		myNoteDialog ( note, THE_CONST.invalidObjId, true );
 	}
 
 	/*
@@ -298,29 +305,7 @@ function newNoteEditor ( ) {
 			maneuver.iconName + '"></div>';
 		note.popupContent = maneuver.instruction;
 
-		// and displayed in a dialog box
-		newNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true )
-			.show ( )
-			.then (
-				modifiedNote => {
-					let route = myDataSearchEngine.getRoute ( theTravelNotesData.travel.editedRoute.objId );
-					route.notes.add ( modifiedNote );
-					modifiedNote.chainedDistance = route.chainedDistance;
-					route.notes.sort (
-						( first, second ) => first.distance - second.distance
-					);
-					myEventDispatcher.dispatch ( 'setitinerary' );
-					myEventDispatcher.dispatch (
-						'addnote',
-						{
-							note : modifiedNote,
-							readOnly : false
-						}
-					);
-					newRoadbookUpdate ( );
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+		myNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true );
 	}
 
 	/*
@@ -339,24 +324,7 @@ function newNoteEditor ( ) {
 		// the note is created
 		let note = myNewNote ( latLng );
 
-		// and displayed in a dialog box
-		newNoteDialog ( note, THE_CONST.invalidObjId, true )
-			.show ( )
-			.then (
-				modifiedNote => {
-					theTravelNotesData.travel.notes.add ( modifiedNote );
-					myEventDispatcher.dispatch ( 'settravelnotes' );
-					myEventDispatcher.dispatch (
-						'addnote',
-						{
-							note : modifiedNote,
-							readOnly : false
-						}
-					);
-					newRoadbookUpdate ( );
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+		myNoteDialog ( note, THE_CONST.invalidObjId, true );
 	}
 
 	/*
@@ -373,30 +341,8 @@ function newNoteEditor ( ) {
 	function myEditNote ( noteObjId ) {
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		let routeObjId = null === noteAndRoute.route ? THE_CONST.invalidObjId : noteAndRoute.route.objId;
-		newNoteDialog ( noteAndRoute.note, routeObjId, false )
-			.show ( )
-			.then (
-				modifiedNote => {
-					if ( noteAndRoute.note ) {
 
-						// it's an existing note. The note is changed on the map
-						myEventDispatcher.dispatch (
-							'redrawnote',
-							{
-								note : modifiedNote
-							}
-						);
-						if ( noteAndRoute.route ) {
-							myEventDispatcher.dispatch ( 'setitinerary' );
-						}
-						else {
-							myEventDispatcher.dispatch ( 'settravelnotes' );
-						}
-					}
-					newRoadbookUpdate ( );
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+		myNoteDialog ( noteAndRoute.note, routeObjId, false );
 	}
 
 	/*
@@ -501,7 +447,7 @@ function newNoteEditor ( ) {
 
 	function myZoomToNote ( noteObjId ) {
 		myEventDispatcher.dispatch (
-			'zoomtopoint',
+			'zoomto',
 			{
 				latLng : myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.latLng
 			}
@@ -530,7 +476,6 @@ function newNoteEditor ( ) {
 
 	return Object.seal (
 		{
-
 			newRouteNote : ( routeObjId, contextMenuEvent ) => myNewRouteNote ( routeObjId, contextMenuEvent ),
 
 			newSearchNote : searchResult => myNewSearchNote ( searchResult ),

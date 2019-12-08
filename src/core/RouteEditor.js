@@ -261,7 +261,7 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- myShowRoutes function -----------------------------------------------------------------------------------------
+	--- myZoomToRoute function -----------------------------------------------------------------------------------------
 
 	This function zoom on a route
 
@@ -269,10 +269,19 @@ function newRouteEditor ( ) {
 	*/
 
 	function myZoomToRoute ( routeObjId ) {
+		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let geometry = [];
+		route.itinerary.itineraryPoints.forEach ( itineraryPoint => geometry.push ( itineraryPoint.latLng ) );
+		route.notes.forEach (
+			note => {
+				geometry.push ( note.latLng );
+				geometry.push ( note.iconLatLng );
+			}
+		);
 		myEventDispatcher.dispatch (
-			'zoomtoroute',
+			'zoomto',
 			{
-				routeObjId : routeObjId
+				geometry : [ geometry ]
 			}
 		);
 	}
@@ -325,16 +334,6 @@ function newRouteEditor ( ) {
 			}
 		}
 
-		// the previous route is removed from the leaflet map
-		myEventDispatcher.dispatch (
-			'removeroute',
-			{
-				route : theTravelNotesData.travel.editedRoute,
-				removeNotes : true,
-				removeWayPoints : true
-			}
-		);
-
 		// the position of the notes linked to the route is recomputed
 		let notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
 		while ( ! notesIterator.done ) {
@@ -351,14 +350,11 @@ function newRouteEditor ( ) {
 			( first, second ) => first.distance - second.distance
 		);
 
-		// the new route is added to the map
 		myEventDispatcher.dispatch (
-			'addroute',
+			'routeupdated',
 			{
-				route : theTravelNotesData.travel.editedRoute,
-				addNotes : true,
-				addWayPoints : true,
-				readOnly : false
+				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
+				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 			}
 		);
 		if ( myMustZoomToRoute ) {
@@ -424,36 +420,23 @@ function newRouteEditor ( ) {
 	*/
 
 	function myCancelEdition ( ) {
+		let oldEditedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
+		oldEditedRoute.edited = THE_CONST.route.edited.notEdited;
 		myEventDispatcher.dispatch (
-			'removeroute',
+			'routeupdated',
 			{
-				route : theTravelNotesData.travel.editedRoute,
-				removeNotes : true,
-				removeWayPoints : true
+				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
+				addedRouteObjId : oldEditedRoute.objId
 			}
 		);
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
-			let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-			editedRoute.edited = THE_CONST.route.edited.notEdited;
-			myEventDispatcher.dispatch (
-				'addroute',
-				{
-					route : editedRoute,
-					addNotes : true,
-					addWayPoints : false,
-					readOnly : false
-				}
-			);
-		}
 
 		theTravelNotesData.travel.editedRoute = newRoute ( );
 		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
+		myChainRoutes ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'reducerouteui' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
-		myChainRoutes ( );
-		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -492,19 +475,18 @@ function newRouteEditor ( ) {
 		let routePropertiesDialog = newRoutePropertiesDialog ( route );
 
 		routePropertiesDialog.show ( ).then (
-			changedRoute => {
+			( ) => {
+				myChainRoutes ( );
 				myEventDispatcher.dispatch (
-					'editroute',
+					'routepropertiesupdated',
 					{
-						route : changedRoute
+						routeObjId : route.objId
 					}
 				);
-				myChainRoutes ( );
 				myEventDispatcher.dispatch ( 'setrouteslist' );
-				newRoadbookUpdate ( );
 			}
 		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
 	}
 
 	/*
@@ -519,18 +501,14 @@ function newRouteEditor ( ) {
 	*/
 
 	function myHideRoute ( routeObjId ) {
-		let route = myDataSearchEngine.getRoute ( routeObjId );
-		if ( route ) {
-			myEventDispatcher.dispatch (
-				'removeroute',
-				{
-					route : route,
-					removeNotes : true,
-					removeWayPoints : true
-				}
-			);
-			route.hidden = true;
-		}
+
+		myEventDispatcher.dispatch (
+			'routeupdated',
+			{
+				removedRouteObjId : routeObjId,
+				addedRouteObjId : THE_CONST.invalidObjId
+			}
+		);
 	}
 
 	/*
@@ -546,12 +524,10 @@ function newRouteEditor ( ) {
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.hidden ) {
 				myEventDispatcher.dispatch (
-					'addroute',
+					'routeupdated',
 					{
-						route : routesIterator.value,
-						addNotes : true,
-						addWayPoints : true,
-						readOnly : false
+						removedRouteObjId : THE_CONST.invalidObjId,
+						addedRouteObjId : routesIterator.value.objId
 					}
 				);
 			}
@@ -566,8 +542,6 @@ function newRouteEditor ( ) {
 
 	return Object.seal (
 		{
-			computeRouteDistances : route => myComputeRouteDistances ( route ),
-
 			saveGpx : ( ) => mySaveGpx ( ),
 
 			chainRoutes : ( ) => myChainRoutes ( ),

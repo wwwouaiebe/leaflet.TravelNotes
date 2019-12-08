@@ -68,25 +68,19 @@ function newEventDispatcher ( ) {
 		}
 		else if ( THE_CONST.notFound <
 		[
-			'removeroute',
-			'addroute',
-			'editroute',
 			'removeobject',
 			'removeallobjects',
-			'zoomtopoint',
-			'zoomtosearchresult',
-			'zoomtonote',
-			'zoomtoroute',
-			'zoomtotravel',
+			'zoomto',
 			'additinerarypointmarker',
 			'addsearchpointmarker',
 			'addrectangle',
 			'addwaypoint',
-			'redrawnote',
-			'addnote',
 			'layerchange',
 			'geolocationstatuschanged',
-			'geolocationpositionchanged'
+			'geolocationpositionchanged',
+			'routeupdated',
+			'routepropertiesupdated',
+			'noteupdated'
 		].indexOf ( eventName ) ) {
 			return document;
 		}

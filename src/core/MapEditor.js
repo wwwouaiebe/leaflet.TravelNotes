@@ -107,8 +107,6 @@ function newMapEditor ( ) {
 	/*
 	--- mySetLayer function -------------------------------------------------------------------------------------------
 
-	This function add a leaflet object to the leaflet map and to the JavaScript map
-
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -219,26 +217,6 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- myGetRouteLatLng function -------------------------------------------------------------------------------------
-
-	This function returns an array of points from a route and the notes linked to the route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetRouteLatLng ( route ) {
-		let latLngs = [];
-		route.itinerary.itineraryPoints.forEach ( itineraryPoint => latLngs.push ( itineraryPoint.latLng ) );
-		route.notes.forEach (
-			note => {
-				latLngs.push ( note.latLng );
-				latLngs.push ( note.iconLatLng );
-			}
-		);
-		return latLngs;
-	}
-
-	/*
 	--- myGetDashArray function ---------------------------------------------------------------------------------------
 
 	This function returns the dashArray used for the polyline representation. See also leaflet docs
@@ -267,46 +245,35 @@ function newMapEditor ( ) {
 	/*
 	--- myRemoveRoute function ------------------------------------------------------------------------------------
 
-	This function remove a route and eventually the attached notes and waypoints
-	from the leaflet map and the JavaScript map
-
-	parameters:
-	- route : a TravelNotes route object.
-	- removeNotes : a boolean. Linked notes are removed when true
-	- removeWayPoints : a boolean. Linked waypoints are removed when true
-
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRemoveRoute ( route, removeNotes, removeWayPoints ) {
+	function myRemoveRoute ( routeObjId ) {
+
+		let route = myDataSearchEngine.getRoute ( routeObjId );
 		myRemoveObject ( route.objId );
-		if ( removeNotes ) {
-			let notesIterator = route.notes.iterator;
-			while ( ! notesIterator.done ) {
-				myRemoveObject ( notesIterator.value.objId );
-			}
+
+		let notesIterator = route.notes.iterator;
+		while ( ! notesIterator.done ) {
+			myRemoveObject ( notesIterator.value.objId );
 		}
-		if ( removeWayPoints ) {
-			let wayPointsIterator = route.wayPoints.iterator;
-			while ( ! wayPointsIterator.done ) {
-				myRemoveObject ( wayPointsIterator.value.objId );
-			}
+
+		let wayPointsIterator = route.wayPoints.iterator;
+		while ( ! wayPointsIterator.done ) {
+			myRemoveObject ( wayPointsIterator.value.objId );
 		}
 	}
 
 	/*
 	--- myAddNote function --------------------------------------------------------------------------------------------
 
-	This function add a TravelNotes note object to the leaflet map
-
-	parameters:
-	- note : a TravelNotes note object
-	- readOnly : a boolean. Created objects cannot be edited when true
-
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddNote ( note, readOnly ) {
+	function myAddNote ( noteObjId ) {
+
+		let note = myDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
+		let readOnly = theTravelNotesData.travel.readOnly;
 
 		// first a marker is created at the note position. This marker is empty and transparent, so
 		// not visible on the map but the marker can be dragged
@@ -587,7 +554,9 @@ function newMapEditor ( ) {
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddRoute ( route, addNotes, addWayPoints, readOnly ) {
+	function myAddRoute ( routeObjId ) {
+
+		let route = myDataSearchEngine.getRoute ( routeObjId );
 
 		// an array of points is created
 		let latLng = [];
@@ -626,7 +595,7 @@ function newMapEditor ( ) {
 		L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
 
 		// right click event
-		if ( ! readOnly ) {
+		if ( ! theTravelNotesData.travel.readOnly ) {
 			L.DomEvent.on (
 				polyline,
 				'contextmenu',
@@ -635,15 +604,13 @@ function newMapEditor ( ) {
 		}
 
 		// notes are added
-		if ( addNotes ) {
-			let notesIterator = route.notes.iterator;
-			while ( ! notesIterator.done ) {
-				myAddNote ( notesIterator.value, readOnly );
-			}
+		let notesIterator = route.notes.iterator;
+		while ( ! notesIterator.done ) {
+			myAddNote ( notesIterator.value );
 		}
 
 		// waypoints are added
-		if ( addWayPoints ) {
+		if ( ! theTravelNotesData.travel.readOnly && THE_CONST.route.edited.notEdited !== route.edited ) {
 			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				myAddWayPoint (
@@ -652,22 +619,6 @@ function newMapEditor ( ) {
 				);
 			}
 		}
-	}
-
-	/*
-	--- myEditRoute function ------------------------------------------------------------------------------------------
-
-	This function changes the color and width of a route
-
-	parameters:
-	- route : a TravelNotes route object.
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myEditRoute ( route ) {
-		let polyline = theTravelNotesData.mapObjects.get ( route.objId );
-		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : myGetDashArray ( route ) } );
 	}
 
 	/*
@@ -689,91 +640,21 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- myZoomToPoint function ----------------------------------------------------------------------------------------
-
-	This function zoom on a given point
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToPoint ( latLng ) {
-		theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
-	}
-
-	/*
-	--- myZoomToSearchResult function ---------------------------------------------------------------------------------
+	--- myZoomTo function ---------------------------------------------------------------------------------------------
 
 	This function zoom on a search result
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myZoomToSearchResult ( latLng, geometry ) {
+	function myZoomTo ( latLng, geometry ) {
 		if ( geometry ) {
 			let latLngs = [];
 			geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
 			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
 		else {
-			myZoomToPoint ( latLng );
-		}
-	}
-
-	/*
-	--- myZoomToNote function -----------------------------------------------------------------------------------------
-
-	This function zoom on a note
-
-	parameters:
-	- noteObjId : the TravelNotes objId of the desired note
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToNote ( noteObjId ) {
-		myZoomToPoint ( myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.iconLatLng );
-	}
-
-	/*
-	--- myZoomToRoute function ----------------------------------------------------------------------------------------
-
-	This function zoom on a route
-
-	parameters:
-	- routeObjId : the TravelNotes objId of the desired route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToRoute ( routeObjId ) {
-		let latLngs = myGetRouteLatLng ( myDataSearchEngine.getRoute ( routeObjId ) );
-		if ( THE_CONST.zero !== latLngs.length ) {
-			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
-		}
-	}
-
-	/*
-	--- myZoomToTravel function ---------------------------------------------------------------------------------------
-
-	This function zoom on the entire travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToTravel ( ) {
-		let latLngs = [];
-		theTravelNotesData.travel.routes.forEach (
-			route => { latLngs = latLngs.concat ( myGetRouteLatLng ( route ) ); }
-		);
-		latLngs = latLngs.concat ( myGetRouteLatLng ( theTravelNotesData.travel.editedRoute ) );
-		theTravelNotesData.travel.notes.forEach (
-			note => {
-				latLngs.push ( note.latLng );
-				latLngs.push ( note.iconLatLng );
-			}
-		);
-		if ( THE_CONST.zero !== latLngs.length ) {
-			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
+			theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
 		}
 	}
 
@@ -860,22 +741,6 @@ function newMapEditor ( ) {
 	}
 
 	/*
-	--- myRedrawNote function -----------------------------------------------------------------------------------------
-
-	This function redraw a note object on the leaflet map
-
-	parameters:
-	- note : a TravelNotes note object
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRedrawNote ( note ) {
-		myRemoveObject ( note.objId );
-		myAddNote ( note );
-	}
-
-	/*
 	--- myOnGeolocationStatusChanged function -----------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -925,6 +790,48 @@ function newMapEditor ( ) {
 	}
 
 	/*
+	--- myUpdateRoute function ----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myUpdateRoute ( removedRouteObjId, addedRouteObjId ) {
+		if ( THE_CONST.invalidObjId !== removedRouteObjId ) {
+			myRemoveRoute ( removedRouteObjId );
+		}
+		if ( THE_CONST.invalidObjId !== addedRouteObjId ) {
+			myAddRoute ( addedRouteObjId );
+		}
+	}
+
+	/*
+	--- myUpdateRouteProperties function ------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myUpdateRouteProperties ( routeObjId ) {
+		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let polyline = theTravelNotesData.mapObjects.get ( route.objId );
+		polyline.setStyle ( { color : route.color, weight : route.width, dashArray : myGetDashArray ( route ) } );
+	}
+
+	/*
+	--- myUpdateNote function -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myUpdateNote ( removedNoteObjId, addedNoteObjId ) {
+		if ( THE_CONST.invalidObjId !== removedNoteObjId ) {
+			myRemoveObject ( removedNoteObjId );
+		}
+		if ( THE_CONST.invalidObjId !== addedNoteObjId ) {
+			myAddNote ( addedNoteObjId );
+		}
+	}
+
+	/*
 	--- MapEditor object ----------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -932,26 +839,17 @@ function newMapEditor ( ) {
 
 	return Object.seal (
 		{
+			updateRoute : ( removedRouteObjId, addedRouteObjId ) => myUpdateRoute ( removedRouteObjId, addedRouteObjId ),
 
-			removeRoute : ( route, removeNotes, removeWayPoints ) => myRemoveRoute ( route, removeNotes, removeWayPoints ),
+			updateRouteProperties : routeObjId => myUpdateRouteProperties ( routeObjId ),
 
-			addRoute : ( route, addNotes, addWayPoints, readOnly ) => myAddRoute ( route, addNotes, addWayPoints, readOnly ),
-
-			editRoute : route => myEditRoute ( route ),
+			updateNote : ( removedNoteObjId, addedNoteObjId ) => myUpdateNote ( removedNoteObjId, addedNoteObjId ),
 
 			removeObject : objId => myRemoveObject ( objId ),
 
 			removeAllObjects : ( ) => myRemoveAllObjects ( ),
 
-			zoomToPoint : latLng => myZoomToPoint ( latLng ),
-
-			zoomToSearchResult : ( latLng, geometry ) => myZoomToSearchResult ( latLng, geometry ),
-
-			zoomToNote : noteObjId => myZoomToNote ( noteObjId ),
-
-			zoomToRoute : routeObjId => myZoomToRoute ( routeObjId ),
-
-			zoomToTravel : ( ) => myZoomToTravel ( ),
+			zoomTo : ( latLng, geometry ) => myZoomTo ( latLng, geometry ),
 
 			addItineraryPointMarker : ( objId, latLng ) => myAddItineraryPointMarker ( objId, latLng ),
 
@@ -960,10 +858,6 @@ function newMapEditor ( ) {
 			addRectangle : ( objId, bounds, properties ) => myAddRectangle ( objId, bounds, properties ),
 
 			addWayPoint : ( wayPoint, letter ) => myAddWayPoint ( wayPoint, letter ),
-
-			redrawNote : note => myRedrawNote ( note ),
-
-			addNote : ( note, readOnly ) => myAddNote ( note, readOnly ),
 
 			setLayer : layer => mySetLayer ( layer ),
 
