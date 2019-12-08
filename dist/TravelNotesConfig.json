@@ -1,4 +1,57 @@
 {
+	"autoLoad":true,
+	"map":
+	{
+		"center": {
+			"lat":50.50923,
+			"lng":5.49542
+		},
+		"zoom":12
+	},
+	"travelNotesToolbarUI":
+	{
+		"contactMail":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+	},
+	"layersToolbarUI":
+	{
+		"haveLayersToolbarUI":true,
+		"toolbarTimeOut":1500,
+		"theDevil": {
+			"addButton": true,
+			"title": "Reminder! The devil will know everything about you",
+			"text": "&#x1f47f;",
+			"noteZoom" : 17
+		}
+	},
+	"mouseUI":
+	{
+		"haveMouseUI":true
+	},
+	"errorUI":
+	{
+		"timeOut":10000,
+		"showError":true,
+		"showWarning":true,
+		"showInfo":true,
+		"showHelp":true
+	},
+	"geoLocation":{
+			"color":"red",
+			"radius":10,
+			"zoomToPosition":true,
+			"zoomFactor":17,
+			"options":{
+				"enableHighAccuracy":false, 
+				"maximumAge":0, 
+				"timeout":3600000
+			}
+	},
+	"APIKeys":
+	{
+		"showDialogButton":true,
+		"saveToSessionStorage":true,
+		"showAPIKeysInDialog":true
+	},
 	"contextMenu":
 	{
 		"timeout": 1500

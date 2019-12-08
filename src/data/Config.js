@@ -249,7 +249,7 @@ function newConfig ( ) {
 
 			for ( let property in source ) {
 				if ( 'object' === typeof source [ property ] ) {
-					if ( Object.prototype.toString.call ( source [ property ] ) === '[object Array]' ) {
+					if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
 						dest [ property ] = dest [ property ] || [];
 					}
 					else {

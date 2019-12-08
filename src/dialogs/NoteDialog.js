@@ -250,7 +250,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			if (
 				( THE_CONST.zero === counter || svgData.streets.length - THE_CONST.number1 === counter )
 				&&
-				svgData.streets [ counter ] === ''
+				'' === svgData.streets [ counter ]
 			) {
 				address += '???';
 				showPlace ++;

@@ -59,11 +59,10 @@ function newCollection ( objName ) {
 
 	function myAdd ( object ) {
 		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== myObjName ) ) {
-			throw 'invalid object name for add function';
+			throw new Error ( 'invalid object name for add function' );
 		}
 		myArray.push ( object );
 
-		return;
 	}
 
 	/*
@@ -189,7 +188,7 @@ function newCollection ( objName ) {
 	function myNextOrPrevious ( objId, condition, direction ) {
 		let index = myIndexOfObjId ( objId );
 		if ( THE_CONST.notFound === index ) {
-			throw 'invalid objId for next or previous function';
+			throw new Error ( 'invalid objId for next or previous function' );
 		}
 
 		let otherCondition = condition;
@@ -217,7 +216,7 @@ function newCollection ( objName ) {
 	function myRemove ( objId ) {
 		let index = myIndexOfObjId ( objId );
 		if ( THE_CONST.notFound === index ) {
-			throw 'invalid objId for remove function';
+			throw new Error ( 'invalid objId for remove function' );
 		}
 		myArray.splice ( myIndexOfObjId ( objId ), THE_CONST.number1 );
 	}
@@ -246,7 +245,7 @@ function newCollection ( objName ) {
 	function myReplace ( oldObjId, object ) {
 		let index = myIndexOfObjId ( oldObjId );
 		if ( THE_CONST.notFound === index ) {
-			throw 'invalid objId for replace function';
+			throw new Error ( 'invalid objId for replace function' );
 		}
 		myArray [ index ] = object;
 	}
@@ -289,7 +288,7 @@ function newCollection ( objName ) {
 					newObject = newItineraryPoint ( );
 					break;
 				default :
-					throw ( 'invalid ObjName ( ' + myObjName + ' ) in Collection.mySetObject' );
+					throw new Error ( 'invalid ObjName ( ' + myObjName + ' ) in Collection.mySetObject' );
 				}
 				newObject.object = arrayObject;
 				myAdd ( newObject );
@@ -322,7 +321,7 @@ function newCollection ( objName ) {
 			||
 			( ( myArray.length - THE_CONST.number1 === index ) && ( ! swapUp ) )
 		) {
-			throw 'invalid objId for swap function';
+			throw new Error ( 'invalid objId for swap function' );
 		}
 		let tmp = myArray [ index ];
 		myArray [ index ] = myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown ) ];

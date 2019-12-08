@@ -8,6 +8,46 @@
 		"msgstr" : "Cancel"
 	},
 	{
+		"msgid" : "APIKeysDialog - An error occurs when saving the keys",
+		"msgstr" : "An error occurs when saving the API keys"
+	},
+	{
+		"msgid" : "APIKeysDialog - An error occurs when reading the file",
+		"msgstr" : "An error occurs when reading the file"
+	},
+	{
+		"msgid" : "APIKeysDialog - API key",
+		"msgstr" : "API key"
+	},
+	{
+		"msgid" : "APIKeysDialog - API keys",
+		"msgstr" : "API keys"
+	},
+	{
+		"msgid" : "APIKeysDialog - delete API key",
+		"msgstr" : "delete API key"
+	},
+	{
+		"msgid" : "APIKeysDialog - empty API key name or value",
+		"msgstr" : "empty API key name or value"
+	},
+	{
+		"msgid" : "APIKeysDialog - new API key",
+		"msgstr" : "new API key"
+	},
+	{
+		"msgid" : "APIKeysDialog - Open file",
+		"msgstr" : "Open file"
+	},
+	{
+		"msgid" : "APIKeysDialog - provider name",
+		"msgstr" : "Provider name"
+	},
+	{
+		"msgid" : "APIKeysDialog - Save to file",
+		"msgstr" : "Save to file"
+	},
+	{
 		"msgid" : "ColorDialog - Blue",
 		"msgstr" : "Blue"
 	},
@@ -192,8 +232,16 @@
 		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2019</a>"
 	},
 	{
+		"msgid" : "LayersToolbarUI - Layers",
+		"msgstr" : "Maps"
+	},
+	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
 		"msgstr" : "Address&nbsp;:"
+	},
+	{
+		"msgid" : "Notedialog - an error occurs when searching the adress",
+		"msgstr" : "An error occurs when searching the adress"
 	},
 	{
 		"msgid" : "Notedialog - The icon content cannot be empty",
@@ -294,6 +342,14 @@
 	{
 		"msgid" : "NoteEditor - Link",
 		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "PasswordDialog - password",
+		"msgstr" : "Password"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules",
+		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
 	},
 	{
 		"msgid" : "Roadbook - show travel notes",
@@ -424,6 +480,10 @@
 		"msgstr" : "Move up"
 	},
 	{
+		"msgid" : "TravelEditorUI - API keys",
+		"msgstr" : "API keys management"
+	},
+	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "It's impossible to remove an edited route"
 	},
@@ -442,6 +502,10 @@
 	{
 		"msgid" : "TravelEditorUI - Expand the list",
 		"msgstr" : "Expand"
+	},
+	{
+		"msgid" : "TravelEditorUI - Geo location",
+		"msgstr" : "Localisation"
 	},
 	{
 		"msgid" : "TravelEditorUI - Hide",

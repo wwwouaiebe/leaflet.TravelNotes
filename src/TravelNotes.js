@@ -75,8 +75,6 @@ import { theErrorsUI } from './UI/ErrorsUI.js';
 
 import { THE_CONST } from './util/Constants.js';
 
-theAttributionsUI;
-
 /*
 --- travelNotesFactory funtion ----------------------------------------------------------------------------------------
 
@@ -134,7 +132,7 @@ function travelNotesFactory ( ) {
 						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
 							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
 						}
-						newUrlSearch += ( newUrlSearch === '?' ) ? '' : '&';
+						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
 						newUrlSearch += urlSearchSubString;
 					}
 					else {

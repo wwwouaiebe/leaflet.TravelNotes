@@ -84,7 +84,7 @@ function newNote ( ) {
 
 	function myValidate ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw 'No objType for ' + ourObjType.name;
+			throw new Error ( 'No objType for ' + ourObjType.name );
 		}
 		ourObjType.validate ( something.objType );
 		if ( ourObjType.version !== something.objType.version ) {
@@ -98,7 +98,7 @@ function newNote ( ) {
 				something.objType.version = '1.6.0';
 				break;
 			default :
-				throw 'invalid version for ' + ourObjType.name;
+				throw new Error ( 'invalid version for ' + ourObjType.name );
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
@@ -121,7 +121,7 @@ function newNote ( ) {
 		].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
-					throw 'No ' + property + ' for ' + ourObjType.name;
+					throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
 				}
 			}
 		);

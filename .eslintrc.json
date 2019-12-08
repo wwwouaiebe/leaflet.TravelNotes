@@ -13,9 +13,6 @@
         "sourceType": "module"
     },
     "rules": {
-	
-	
-	
 		"curly" : [ "warn" ],
 		"complexity" : [ "warn", 25 ],
 		"default-case" : [ "warn" ],
@@ -33,8 +30,14 @@
 		"no-magic-numbers" : [ "warn", { "ignoreArrayIndexes" : false, "detectObjects" : true } ],
 		"no-multi-spaces" : [ "warn" ],
 		"no-param-reassign" : [ "warn" ],
-		
-		
+		"no-self-assign" : [ "warn" ],
+		"no-self-compare" : [ "warn" ],
+		"no-sequences" : [ "warn" ],
+		"no-throw-literal" : [ "warn" ],
+		"no-unmodified-loop-condition" : [ "warn" ],
+		"no-useless-return" : [ "warn" ],
+		"prefer-promise-reject-errors" : [ "warn" ],
+		"yoda" : [ "warn" , "always" ],
 		
 		"init-declarations" : [ "warn", "always" ],
 		"no-shadow" : [ "error", { "builtinGlobals" : true, "hoist" : "all"} ],
@@ -105,6 +108,5 @@
 		"arrow-spacing" : [ "warn", { "before": true, "after": true } ],
 		"no-duplicate-imports" : [ "warn" ],
 		"no-var" : [ "error" ]
-		
     }
 }

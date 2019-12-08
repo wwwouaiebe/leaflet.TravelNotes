@@ -296,7 +296,7 @@ function newSearchPaneUI ( ) {
 						className :	'TravelNotes-Control-SearchResult',
 						innerHTML :
 							(
-								searchResult.description === ''
+								'' === searchResult.description
 									?
 									''
 									:

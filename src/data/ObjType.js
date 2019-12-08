@@ -67,13 +67,13 @@ function newObjType ( objTypeName ) {
 	function myValidate ( something ) {
 
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
-			throw 'No name for ' + myName;
+			throw new Error ( 'No name for ' + myName );
 		}
 		if ( myName !== something.name ) {
-			throw 'Invalid name for ' + myName;
+			throw new Error ( 'Invalid name for ' + myName );
 		}
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
-			throw 'No version for ' + myName;
+			throw new Error ( 'No version for ' + myName );
 		}
 	}
 

@@ -8,6 +8,46 @@
 		"msgstr" : "Abandonner"
 	},
 	{
+		"msgid" : "APIKeysDialog - An error occurs when saving the keys",
+		"msgstr" : "Une erreur est survenue lors de la sauvegarde des clés d'accès"
+	},
+	{
+		"msgid" : "APIKeysDialog - An error occurs when reading the file",
+		"msgstr" : "Une erreur est survenue lors de la lecture du fichier"
+	},
+	{
+		"msgid" : "APIKeysDialog - API key",
+		"msgstr" : "Clé d'accès"
+	},
+	{
+		"msgid" : "APIKeysDialog - API keys",
+		"msgstr" : "Clés d'accès"
+	},
+	{
+		"msgid" : "APIKeysDialog - delete API key",
+		"msgstr" : "effacer la clé d'accès"
+	},
+	{
+		"msgid" : "APIKeysDialog - empty API key name or value",
+		"msgstr" : "Un nom de clé ou une clé d'accès n'est pas complété"
+	},
+	{
+		"msgid" : "APIKeysDialog - new API key",
+		"msgstr" : "Nouvelle clé d'accès"
+	},
+	{
+		"msgid" : "APIKeysDialog - Open file",
+		"msgstr" : "Ouvrir un fichier"
+	},
+	{
+		"msgid" : "APIKeysDialog - provider name",
+		"msgstr" : "Fournisseur"
+	},
+	{
+		"msgid" : "APIKeysDialog - Save to file",
+		"msgstr" : "Sauver dans un fichier"
+	},
+	{
 		"msgid" : "ColorDialog - Blue",
 		"msgstr" : "Bleu"
 	},
@@ -192,8 +232,16 @@
 		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2019</a>"
 	},
 	{
+		"msgid" : "LayersToolbarUI - Layers",
+		"msgstr" : "Cartes"
+	},
+	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
 		"msgstr" : "Adresse&nbsp;:"
+	},
+	{
+		"msgid" : "Notedialog - an error occurs when searching the adress",
+		"msgstr" : "Une erreur est survenue en recherchant l'adresse"
 	},
 	{
 		"msgid" : "Notedialog - The icon content cannot be empty",
@@ -294,6 +342,14 @@
 	{
 		"msgid" : "NoteEditor - Link",
 		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "PasswordDialog - password",
+		"msgstr" : "Mot de passe"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules",
+		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
 	},
 	{
 		"msgid" : "Roadbook - show travel notes",
@@ -424,6 +480,10 @@
 		"msgstr" : "Déplacer vers le haut"
 	},
 	{
+		"msgid" : "TravelEditorUI - API keys",
+		"msgstr" : "Gestion des clés d'accès"
+	},
+	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
@@ -442,6 +502,10 @@
 	{
 		"msgid" : "TravelEditorUI - Expand the list",
 		"msgstr" : "Étendre"
+	},
+	{
+		"msgid" : "TravelEditorUI - Geo location",
+		"msgstr" : "Localisation"
 	},
 	{
 		"msgid" : "TravelEditorUI - Hide",

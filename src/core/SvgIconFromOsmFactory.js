@@ -280,7 +280,7 @@ function newSvgIconFromOsmFactory ( ) {
 					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
-					let haveName = wayName !== '';
+					let haveName = '' !== wayName;
 
 					if ( isSimpleStreet && haveName ) {
 						myPassingStreets.push ( wayName );

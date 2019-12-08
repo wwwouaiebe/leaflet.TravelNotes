@@ -215,8 +215,6 @@ function newSortableList ( options, parentNode ) {
 
 	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem ) {
 
-		dataObjId = dataObjId || THE_CONST.invalidObjId;
-
 		let item = myHTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
 		myHTMLElementsFactory.create (
@@ -296,7 +294,7 @@ function newSortableList ( options, parentNode ) {
 			item
 		);
 		deleteButton.addEventListener ( 'click', myOnDeleteButtonClick, false );
-		item.dataObjId = dataObjId;
+		item.dataObjId = dataObjId || THE_CONST.invalidObjId;
 
 		item.canDrag = false;
 		if (

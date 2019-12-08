@@ -61,7 +61,7 @@ function newMouseUI ( ) {
 		myMousePos +
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
 		myZoom +
-		( myFileName === '' ? '' : '&nbsp;-&nbsp;' + myFileName ) +
+		( '' === myFileName ? '' : '&nbsp;-&nbsp;' + myFileName ) +
 		'</span>';
 	}
 
