@@ -356,7 +356,9 @@ function newTravelEditor ( ) {
 			route => pushRouteGeometry ( route )
 		);
 
-		pushRouteGeometry ( theTravelNotesData.travel.editedRoute );
+		if ( THE_CONST.invalidObjId !== theTravelNotesData.travel.editedRouteObjId ) {
+			pushRouteGeometry ( theTravelNotesData.travel.editedRoute );
+		}
 
 		theTravelNotesData.travel.notes.forEach (
 			note => pushNoteGeometry ( note )

@@ -287,14 +287,14 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- myEndError function -------------------------------------------------------------------------------------------
+	--- myEndRoutingError function ------------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myEndError ( err ) {
+	function myEndRoutingError ( err ) {
 
 		myRequestStarted = false;
 
@@ -405,8 +405,8 @@ function newRouteEditor ( ) {
 		theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
 
 		routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-			.then ( myEndRoutingOk, myEndError )
-			.catch ( myEndError );
+			.then ( myEndRoutingOk, myEndRoutingError )
+			.catch ( myEndRoutingError );
 
 		return true;
 	}
@@ -430,7 +430,7 @@ function newRouteEditor ( ) {
 			}
 		);
 
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = null;
 		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
 		myChainRoutes ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );

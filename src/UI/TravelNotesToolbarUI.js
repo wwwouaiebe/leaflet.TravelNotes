@@ -136,7 +136,7 @@ function newTravelNotesToolbarUI ( ) {
 			{
 				id : 'TravelNotes-Control-HomeButton',
 				className : 'TravelNotes-Control-Button',
-				title : 'Help',
+				title : 'Home',
 				innerHTML :
 					'<a class="TravelNotes-Control-LinkButton" href="' +
 					window.location.origin +
