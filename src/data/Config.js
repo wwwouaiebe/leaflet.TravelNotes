@@ -36,8 +36,6 @@ Tests ...
 
 /* eslint no-magic-numbers: "off" */
 
-import  { OUR_CONST } from '../util/Constants.js';
-
 /*
 --- newConfig funtion -------------------------------------------------------------------------------------------------
 
@@ -152,15 +150,15 @@ function newConfig ( ) {
 				},
 				{
 					text : '— — — — —',
-					iDashArray : [ OUR_CONST.number4, OUR_CONST.number2 ]
+					iDashArray : [ 4, 2 ]
 				},
 				{
 					text : '—‧—‧—‧—‧—',
-					iDashArray : [ OUR_CONST.number4, OUR_CONST.number2, OUR_CONST.zero, OUR_CONST.number2 ]
+					iDashArray : [ 4, 2, 0, 2 ]
 				},
 				{
 					text : '················',
-					iDashArray : [ OUR_CONST.zero, OUR_CONST.number2 ]
+					iDashArray : [ 0, 2 ]
 				}
 			]
 		},

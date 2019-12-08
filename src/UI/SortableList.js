@@ -201,7 +201,7 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myRemoveAllItems ( ) {
-		for ( let ItemCounter = 0; ItemCounter < myItems.length; ItemCounter ++ ) {
+		for ( let ItemCounter = OUR_CONST.zero; ItemCounter < myItems.length; ItemCounter ++ ) {
 			myContainer.removeChild ( myItems [ ItemCounter ] );
 		}
 		myItems.length = OUR_CONST.zero;
@@ -336,7 +336,7 @@ function newSortableList ( options, parentNode ) {
 		parentNode.appendChild ( myContainer );
 	}
 
-	for ( let itemCounter = 0; itemCounter < myOptions.minSize; itemCounter ++ ) {
+	for ( let itemCounter = OUR_CONST.zero; itemCounter < myOptions.minSize; itemCounter ++ ) {
 		myAddItem ( );
 	}
 

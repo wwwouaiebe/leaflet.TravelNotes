@@ -81,7 +81,7 @@ function newGeometry  ( ) {
 
 		// variables initialization
 		let closestLatLng = null;
-		let closestDistance = 0;
+		let closestDistance = OUR_CONST.distance.defaultValue;
 		let endSegmentDistance = itineraryPointIterator.value.distance;
 
 		// iteration on the route points
