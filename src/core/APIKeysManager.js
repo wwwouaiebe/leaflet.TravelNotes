@@ -40,7 +40,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -82,12 +82,12 @@ function newAPIKeysManager ( ) {
 
 	function myFromUrl ( urlString ) {
 		let urlSubStrings = urlString.split ( '=' );
-		if ( OUR_CONST.number2 === urlSubStrings.length ) {
+		if ( THE_CONST.number2 === urlSubStrings.length ) {
 			let providerName =
-				urlSubStrings [ OUR_CONST.zero ]
-					.substr ( OUR_CONST.zero, urlSubStrings [ OUR_CONST.zero ].length - 'ProviderKey'.length )
+				urlSubStrings [ THE_CONST.zero ]
+					.substr ( THE_CONST.zero, urlSubStrings [ THE_CONST.zero ].length - 'ProviderKey'.length )
 					.toLowerCase ( );
-			let providerKey = urlSubStrings [ OUR_CONST.number1 ];
+			let providerKey = urlSubStrings [ THE_CONST.number1 ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}
@@ -106,12 +106,12 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromSessionStorage ( ) {
-		let APIKeysCounter = OUR_CONST.zero;
-		for ( let counter  = OUR_CONST.zero; counter < sessionStorage.length; counter ++ ) {
+		let APIKeysCounter = THE_CONST.zero;
+		for ( let counter  = THE_CONST.zero; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
 				mySetKey (
-					keyName.substr ( OUR_CONST.zero, keyName.length - 'ProviderKey'.length ),
+					keyName.substr ( THE_CONST.zero, keyName.length - 'ProviderKey'.length ),
 					atob ( sessionStorage.getItem ( keyName ) )
 				);
 				APIKeysCounter ++;
@@ -242,12 +242,12 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromServerFile ( ) {
-		if ( OUR_CONST.zero !== myFromSessionStorage ( ) ) {
+		if ( THE_CONST.zero !== myFromSessionStorage ( ) ) {
 			newEventDispatcher ( ).dispatch ( 'providersadded' );
 			return;
 		}
 		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 				'APIKeys'
 		)
 			.then ( myOnServerFile )

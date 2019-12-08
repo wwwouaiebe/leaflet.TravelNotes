@@ -44,7 +44,7 @@ import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Route' );
 
@@ -76,21 +76,21 @@ function newRoute ( ) {
 
 	let myChain = false;
 
-	let myChainedDistance = OUR_CONST.distance.defaultValue;
+	let myChainedDistance = THE_CONST.distance.defaultValue;
 
-	let myDistance = OUR_CONST.distance.defaultValue;
+	let myDistance = THE_CONST.distance.defaultValue;
 
-	let myDuration = OUR_CONST.distance.defaultValue;
+	let myDuration = THE_CONST.distance.defaultValue;
 
-	let myEdited = OUR_CONST.route.edited.notEdited;
+	let myEdited = THE_CONST.route.edited.notEdited;
 
 	function mySetEdited ( edited ) {
 		if (
 			typeof edited !== 'number'
 			||
-			OUR_CONST.route.edited.notEdited > edited
+			THE_CONST.route.edited.notEdited > edited
 			||
-			OUR_CONST.route.edited.editedChanged < edited
+			THE_CONST.route.edited.editedChanged < edited
 		) {
 			throw 'Invalid value for Route.edited : ' + edited;
 		}
@@ -117,7 +117,7 @@ function newRoute ( ) {
 		if ( ourObjType.version !== something.objType.version ) {
 			switch ( something.objType.version ) {
 			case '1.0.0' :
-				something.dashArray = OUR_CONST.zero;
+				something.dashArray = THE_CONST.zero;
 				something.hidden = false;
 				// eslint break omitted intentionally
 			case '1.1.0' :
@@ -127,7 +127,7 @@ function newRoute ( ) {
 			case '1.3.0' :
 				// eslint break omitted intentionally
 			case '1.4.0' :
-				something.edited = OUR_CONST.route.edited.notEdited;
+				something.edited = THE_CONST.route.edited.notEdited;
 				// eslint break omitted intentionally
 			case '1.5.0' :
 				something.objType.version = '1.6.0';
@@ -178,11 +178,11 @@ function newRoute ( ) {
 			color : myColor,
 			dashArray : myDashArray,
 			chain : myChain,
-			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
 			duration : myDuration,
 			edited : myEdited,
 			hidden : myHidden,
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( OUR_CONST.distance.fixed ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( THE_CONST.distance.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -202,11 +202,11 @@ function newRoute ( ) {
 		myItinerary.object = something.itinerary || newItinerary ( ).object;
 		myWidth = something.width || theConfig.route.width;
 		myColor = something.color || '#000000';
-		myDashArray = something.dashArray || OUR_CONST.zero;
+		myDashArray = something.dashArray || THE_CONST.zero;
 		myChain = something.chain || false;
 		myDistance = something.distance;
 		myDuration = something.duration;
-		myEdited = something.edited || OUR_CONST.route.edited.notEdited;
+		myEdited = something.edited || THE_CONST.route.edited.notEdited;
 		myHidden = something.hidden || false;
 		myChainedDistance = something.chainedDistance;
 		myObjId = newObjId ( );

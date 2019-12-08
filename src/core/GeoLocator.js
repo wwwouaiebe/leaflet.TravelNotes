@@ -39,7 +39,7 @@ Patterns : Closure
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theConfig } from '../data/Config.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newGeoLocator function --------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ Patterns : Closure
 
 function newGeoLocator ( ) {
 
-	let myStatus = OUR_CONST.geoLocation.status.disabled;
+	let myStatus = THE_CONST.geoLocation.status.disabled;
 	let myWatchId = null;
 	let myEventDispatcher = newEventDispatcher ( );
 
@@ -72,8 +72,8 @@ function newGeoLocator ( ) {
 	*/
 
 	function myStop ( ) {
-		if ( OUR_CONST.geoLocation.status.active === myStatus ) {
-			myStatus = OUR_CONST.geoLocation.status.inactive;
+		if ( THE_CONST.geoLocation.status.active === myStatus ) {
+			myStatus = THE_CONST.geoLocation.status.inactive;
 		}
 
 		// if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
@@ -89,8 +89,8 @@ function newGeoLocator ( ) {
 	*/
 
 	function myError ( positionError ) {
-		if ( OUR_CONST.number1 === positionError.code ) { // see positionError object in MDN
-			myStatus = OUR_CONST.geoLocation.status.refusedByUser;
+		if ( THE_CONST.number1 === positionError.code ) { // see positionError object in MDN
+			myStatus = THE_CONST.geoLocation.status.refusedByUser;
 		}
 		myStop ( );
 	}
@@ -102,7 +102,7 @@ function newGeoLocator ( ) {
 	*/
 
 	function myStart ( ) {
-		myStatus = OUR_CONST.geoLocation.status.active;
+		myStatus = THE_CONST.geoLocation.status.active;
 		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
 		navigator.geolocation.getCurrentPosition ( myShowPosition, myError, theConfig.geoLocation.options );
 		myWatchId = navigator.geolocation.watchPosition ( myShowPosition, myError, theConfig.geoLocation.options );
@@ -116,10 +116,10 @@ function newGeoLocator ( ) {
 
 	function mySwitch ( ) {
 		switch ( myStatus ) {
-		case OUR_CONST.geoLocation.status.inactive :
+		case THE_CONST.geoLocation.status.inactive :
 			myStart ( );
 			break;
-		case OUR_CONST.geoLocation.status.active :
+		case THE_CONST.geoLocation.status.active :
 			myStop ( );
 			break;
 		default :
@@ -132,9 +132,9 @@ function newGeoLocator ( ) {
 	myStatus =
 		( 'geolocation' in navigator )
 			?
-			OUR_CONST.geoLocation.status.inactive
+			THE_CONST.geoLocation.status.inactive
 			:
-			OUR_CONST.geoLocation.status.disabled;
+			THE_CONST.geoLocation.status.disabled;
 
 	/*
 	--- GeoLocator object ---------------------------------------------------------------------------------------------

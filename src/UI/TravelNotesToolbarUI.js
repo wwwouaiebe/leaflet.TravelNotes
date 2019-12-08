@@ -35,7 +35,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newTravelNotesToolbarUI function ----------------------------------------------------------------------------------
@@ -93,10 +93,10 @@ function newTravelNotesToolbarUI ( ) {
 
 	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
 		switch ( geoLocationStatus ) {
-		case OUR_CONST.geoLocation.status.inactive :
+		case THE_CONST.geoLocation.status.inactive :
 			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
-		case OUR_CONST.geoLocation.status.active :
+		case THE_CONST.geoLocation.status.active :
 			myGeoLocationButton.classList.add ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
 		default :
@@ -192,7 +192,7 @@ function newTravelNotesToolbarUI ( ) {
 					false
 				);
 		}
-		if ( OUR_CONST.geoLocation.status.disabled < theGeoLocator.status ) {
+		if ( THE_CONST.geoLocation.status.disabled < theGeoLocator.status ) {
 
 			// GeoLocator button
 			myGeoLocationButton = myHTMLElementsFactory.create (

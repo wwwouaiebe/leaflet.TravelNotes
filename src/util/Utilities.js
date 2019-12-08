@@ -27,7 +27,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 function newUtilities ( ) {
 
@@ -40,9 +40,9 @@ function newUtilities ( ) {
 	function myGetUUID ( ) {
 		function Random4 ( ) {
 			return Math
-				.floor ( ( OUR_CONST.number1 + Math.random ( ) ) * OUR_CONST.number65536 )
-				.toString ( OUR_CONST.hexadecimal )
-				.substring ( OUR_CONST.number1 );
+				.floor ( ( THE_CONST.number1 + Math.random ( ) ) * THE_CONST.number65536 )
+				.toString ( THE_CONST.hexadecimal )
+				.substring ( THE_CONST.number1 );
 		}
 		return Random4 ( ) +
 			Random4 ( ) + '-' +
@@ -163,14 +163,14 @@ function newUtilities ( ) {
 
 	function myFormatTime ( time ) {
 		time = Math.floor ( time );
-		if ( OUR_CONST.zero === time ) {
+		if ( THE_CONST.zero === time ) {
 			return '';
 		}
-		let days = Math.floor ( time / OUR_CONST.time.secondInDay );
-		let hours = Math.floor ( time % OUR_CONST.time.secondInDay / OUR_CONST.time.secondInHour );
-		let minutes = Math.floor ( time % OUR_CONST.time.secondInHour / OUR_CONST.time.secondInMinut );
-		let seconds = Math.floor ( time % OUR_CONST.time.secondInMinut );
-		if ( OUR_CONST.zero < days ) {
+		let days = Math.floor ( time / THE_CONST.time.secondInDay );
+		let hours = Math.floor ( time % THE_CONST.time.secondInDay / THE_CONST.time.secondInHour );
+		let minutes = Math.floor ( time % THE_CONST.time.secondInHour / THE_CONST.time.secondInMinut );
+		let seconds = Math.floor ( time % THE_CONST.time.secondInMinut );
+		if ( THE_CONST.zero < days ) {
 			return days +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Day' ) +
@@ -179,7 +179,7 @@ function newUtilities ( ) {
 				'&nbsp;' +
 				theTranslator.getText ( 'Utilities - Hour' );
 		}
-		else if ( OUR_CONST.zero < hours ) {
+		else if ( THE_CONST.zero < hours ) {
 			return hours +
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Hour' )
@@ -188,7 +188,7 @@ function newUtilities ( ) {
 				'&nbsp;'
 				+ theTranslator.getText ( 'Utilities - Minute' );
 		}
-		else if ( OUR_CONST.zero < minutes ) {
+		else if ( THE_CONST.zero < minutes ) {
 			return minutes +
 				'&nbsp;' +
 				theTranslator.getText ( 'Utilities - Minute' );
@@ -206,14 +206,14 @@ function newUtilities ( ) {
 
 	function myFormatDistance ( distance ) {
 		distance = Math.floor ( distance );
-		if ( OUR_CONST.zero === distance ) {
+		if ( THE_CONST.zero === distance ) {
 			return '';
 		}
-		return Math.floor ( distance / OUR_CONST.distance.mInKm ) +
+		return Math.floor ( distance / THE_CONST.distance.mInKm ) +
 			',' +
-			Math.floor ( ( distance % OUR_CONST.distance.mInKm ) / OUR_CONST.distance.round ).toFixed ( OUR_CONST.zero )
-				.padStart ( OUR_CONST.number2, '0' )
-				.padEnd ( OUR_CONST.number3, '0' ) +
+			Math.floor ( ( distance % THE_CONST.distance.mInKm ) / THE_CONST.distance.round ).toFixed ( THE_CONST.zero )
+				.padStart ( THE_CONST.number2, '0' )
+				.padEnd ( THE_CONST.number3, '0' ) +
 			'&nbsp;km';
 	}
 
@@ -227,11 +227,11 @@ function newUtilities ( ) {
 
 	function myFormatLat ( lat ) {
 		return (
-			lat > OUR_CONST.zero
+			lat > THE_CONST.zero
 				?
-				lat.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;N'
+				lat.toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;N'
 				:
-				( -lat ).toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;S'
+				( -lat ).toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;S'
 		);
 	}
 
@@ -245,11 +245,11 @@ function newUtilities ( ) {
 
 	function myFormatLng ( lng ) {
 		return (
-			lng > OUR_CONST.zero
+			lng > THE_CONST.zero
 				?
-				lng.toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;E'
+				lng.toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;E'
 				:
-				( -lng ).toFixed ( OUR_CONST.latLng.fixed ) + '&nbsp;W'
+				( -lng ).toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;W'
 		);
 	}
 
@@ -262,7 +262,7 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLatLng ( latLng ) {
-		return myFormatLat ( latLng [ OUR_CONST.zero ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ OUR_CONST.number1 ] );
+		return myFormatLat ( latLng [ THE_CONST.zero ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ THE_CONST.number1 ] );
 	}
 
 	/* --- End of myFormatLatLng function --- */

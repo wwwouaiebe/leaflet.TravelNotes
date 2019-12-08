@@ -43,7 +43,7 @@ import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
@@ -71,14 +71,14 @@ function newFileLoader ( ) {
 
 	function myDecompressRoute ( route ) {
 		route.itinerary.itineraryPoints.latLngs =
-			polyline.decode ( route.itinerary.itineraryPoints.latLngs, OUR_CONST.polylinePrecision );
+			polyline.decode ( route.itinerary.itineraryPoints.latLngs, THE_CONST.polylinePrecision );
 		let decompressedItineraryPoints = [];
-		let latLngsCounter = OUR_CONST.zero;
+		let latLngsCounter = THE_CONST.zero;
 		route.itinerary.itineraryPoints.latLngs.forEach (
 			latLng => {
 				let itineraryPoint = {};
-				itineraryPoint.lat = latLng [ OUR_CONST.zero ];
-				itineraryPoint.lng = latLng [ OUR_CONST.number1 ];
+				itineraryPoint.lat = latLng [ THE_CONST.zero ];
+				itineraryPoint.lng = latLng [ THE_CONST.number1 ];
 				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
 				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
 				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
@@ -105,7 +105,7 @@ function newFileLoader ( ) {
 		// routes are added with their notes
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			if ( OUR_CONST.route.edited.notEdited === routesIterator.value.edited ) {
+			if ( THE_CONST.route.edited.notEdited === routesIterator.value.edited ) {
 				myEventDispatcher.dispatch (
 					'addroute',
 					{
@@ -119,7 +119,7 @@ function newFileLoader ( ) {
 		}
 
 		// edited route is added with notes and , depending of read only, waypoints
-		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			myEventDispatcher.dispatch (
 				'addroute',
 				{
@@ -161,7 +161,7 @@ function newFileLoader ( ) {
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );
-			if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+			if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 				if (
 					providerName
@@ -244,15 +244,15 @@ function newFileLoader ( ) {
 
 	function myOpen ( ) {
 		theTravelNotesData.travel.object = myFileContent;
-		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
+		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
 
 		if ( '' !== myFileName ) {
-			theTravelNotesData.travel.name = myFileName.substr ( OUR_CONST.zero, myFileName.lastIndexOf ( '.' ) );
+			theTravelNotesData.travel.name = myFileName.substr ( THE_CONST.zero, myFileName.lastIndexOf ( '.' ) );
 		}
 		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
 		theTravelNotesData.travel.routes.forEach (
 			route => {
-				if ( OUR_CONST.route.edited.notEdited !== route.edited ) {
+				if ( THE_CONST.route.edited.notEdited !== route.edited ) {
 					theTravelNotesData.editedRouteObjId = route.objId;
 				}
 			}
@@ -293,7 +293,7 @@ function newFileLoader ( ) {
 	*/
 
 	function myOpenFile ( changeEvent ) {
-		myFileName = changeEvent.target.files [ OUR_CONST.zero ].name;
+		myFileName = changeEvent.target.files [ THE_CONST.zero ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
@@ -305,7 +305,7 @@ function newFileLoader ( ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ OUR_CONST.zero ] );
+		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
 	}
 
 	/*

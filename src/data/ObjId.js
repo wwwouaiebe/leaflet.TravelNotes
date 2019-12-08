@@ -30,9 +30,9 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
-let theTravelNotesObjId = OUR_CONST.zero;
+let theTravelNotesObjId = THE_CONST.zero;
 
 /*
 --- newObjId function ---------------------------------------------------------------------------------------------

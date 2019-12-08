@@ -33,7 +33,7 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newSortableList function ------------------------------------------------------------------------------------------
@@ -43,13 +43,13 @@ import  { OUR_CONST } from '../util/Constants.js';
 
 function newSortableList ( options, parentNode ) {
 
-	let myDataObjId  = OUR_CONST.zero;
+	let myDataObjId  = THE_CONST.zero;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myItems = [];
 
-	let myOptions = { minSize : OUR_CONST.number2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
+	let myOptions = { minSize : THE_CONST.number2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
 
 	let myContainer = myHTMLElementsFactory.create (
 		'div',
@@ -75,10 +75,10 @@ function newSortableList ( options, parentNode ) {
 			console.log ( err );
 		}
 
-		// for this #@!& MS Edge... don't remove - OUR_CONST.number1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove - THE_CONST.number1 otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
 		// different in the drag event and the drop event
-		myDataObjId = dragEvent.target.dataObjId - OUR_CONST.number1;
+		myDataObjId = dragEvent.target.dataObjId - THE_CONST.number1;
 	}
 
 	/*
@@ -106,9 +106,9 @@ function newSortableList ( options, parentNode ) {
 		let clientRect = element.getBoundingClientRect ( );
 		let sortableListDropEvent = new Event ( 'SortableListDrop' );
 
-		// for this #@!& MS Edge... don't remove + OUR_CONST.number1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove + THE_CONST.number1 otherwise crasy things comes in FF
 		// event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-		sortableListDropEvent.draggedObjId = myDataObjId + OUR_CONST.number1;
+		sortableListDropEvent.draggedObjId = myDataObjId + THE_CONST.number1;
 
 		sortableListDropEvent.targetObjId = element.dataObjId;
 		sortableListDropEvent.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
@@ -189,7 +189,7 @@ function newSortableList ( options, parentNode ) {
 
 	function myOnWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop += wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
+			wheelEvent.target.scrollTop += wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
 		}
 		wheelEvent.stopPropagation ( );
 	}
@@ -201,10 +201,10 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myRemoveAllItems ( ) {
-		for ( let ItemCounter = OUR_CONST.zero; ItemCounter < myItems.length; ItemCounter ++ ) {
+		for ( let ItemCounter = THE_CONST.zero; ItemCounter < myItems.length; ItemCounter ++ ) {
 			myContainer.removeChild ( myItems [ ItemCounter ] );
 		}
-		myItems.length = OUR_CONST.zero;
+		myItems.length = THE_CONST.zero;
 	}
 
 	/*
@@ -218,7 +218,7 @@ function newSortableList ( options, parentNode ) {
 		itemValue = itemValue || '';
 		itemValue = indexName || '';
 		placeholder = placeholder || '';
-		dataObjId = dataObjId || OUR_CONST.invalidObjId;
+		dataObjId = dataObjId || THE_CONST.invalidObjId;
 
 		let item = myHTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
@@ -303,7 +303,7 @@ function newSortableList ( options, parentNode ) {
 
 		item.canDrag = false;
 		if (
-			( ( 'LimitedSort' !== myOptions.listStyle ) || ( OUR_CONST.number1 < myItems.length ) )
+			( ( 'LimitedSort' !== myOptions.listStyle ) || ( THE_CONST.number1 < myItems.length ) )
 			&&
 			( ! isLastItem  )
 		) {
@@ -324,8 +324,8 @@ function newSortableList ( options, parentNode ) {
 	for ( let option in options ) {
 		myOptions [ option ] = options [ option ];
 	}
-	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( OUR_CONST.number2 > myOptions.minSize ) ) {
-		myOptions.minSize = OUR_CONST.zero;
+	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( THE_CONST.number2 > myOptions.minSize ) ) {
+		myOptions.minSize = THE_CONST.zero;
 	}
 	myContainer.classList.add ( myOptions.listStyle );
 	myContainer.addEventListener ( 'drop', myOnDrop, false );
@@ -336,7 +336,7 @@ function newSortableList ( options, parentNode ) {
 		parentNode.appendChild ( myContainer );
 	}
 
-	for ( let itemCounter = OUR_CONST.zero; itemCounter < myOptions.minSize; itemCounter ++ ) {
+	for ( let itemCounter = THE_CONST.zero; itemCounter < myOptions.minSize; itemCounter ++ ) {
 		myAddItem ( );
 	}
 

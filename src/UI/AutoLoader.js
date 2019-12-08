@@ -31,7 +31,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newAutoLoader function --------------------------------------------------------------------------------------------
@@ -47,12 +47,12 @@ function newAutoLoader ( ) {
 	newHTMLElementsFactory ( ).create (
 		'div',
 		{ id : 'Map' },
-		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
+		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
 	);
 	newHTMLElementsFactory ( ).create (
 		'div',
 		{ id : 'TravelNotes' },
-		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
+		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
 	);
 
 	let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )

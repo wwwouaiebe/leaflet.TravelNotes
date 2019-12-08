@@ -61,7 +61,7 @@ import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
@@ -100,10 +100,10 @@ function newRouteEditor ( ) {
 		maneuverIterator.done;
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		let previousManeuver = maneuverIterator.value;
-		previousManeuver.distance = OUR_CONST.distance.defaultValue;
+		previousManeuver.distance = THE_CONST.distance.defaultValue;
 		maneuverIterator.done;
-		route.distance = OUR_CONST.distance.defaultValue;
-		route.duration = OUR_CONST.distance.defaultValue;
+		route.distance = THE_CONST.distance.defaultValue;
+		route.duration = THE_CONST.distance.defaultValue;
 		while ( ! itineraryPointsIterator.done ) {
 			previousItineraryPoint.distance = myGeometry.pointsDistance (
 				previousItineraryPoint.latLng,
@@ -112,7 +112,7 @@ function newRouteEditor ( ) {
 			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
 				previousManeuver =  maneuverIterator.value;
-				maneuverIterator.value.distance = OUR_CONST.distance.defaultValue;
+				maneuverIterator.value.distance = THE_CONST.distance.defaultValue;
 				maneuverIterator.done;
 			}
 			route.distance += previousItineraryPoint.distance;
@@ -219,14 +219,14 @@ function newRouteEditor ( ) {
 
 	function myChainRoutes ( ) {
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		let chainedDistance = OUR_CONST.distance.defaultValue;
+		let chainedDistance = THE_CONST.distance.defaultValue;
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.chain ) {
 				routesIterator.value.chainedDistance = chainedDistance;
 				chainedDistance += routesIterator.value.distance;
 			}
 			else {
-				routesIterator.value.chainedDistance = OUR_CONST.distance.defaultValue;
+				routesIterator.value.chainedDistance = THE_CONST.distance.defaultValue;
 			}
 			let notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
@@ -252,9 +252,9 @@ function newRouteEditor ( ) {
 				result =
 					result
 					&&
-					OUR_CONST.latLng.defaultValue !== wayPoint.lat
+					THE_CONST.latLng.defaultValue !== wayPoint.lat
 					&&
-					OUR_CONST.latLng.defaultValue !== wayPoint.lng;
+					THE_CONST.latLng.defaultValue !== wayPoint.lng;
 				return result;
 			}
 		);
@@ -398,7 +398,7 @@ function newRouteEditor ( ) {
 			return false;
 		}
 
-		myMustZoomToRoute = OUR_CONST.zero === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+		myMustZoomToRoute = THE_CONST.zero === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
 		myRequestStarted = true;
 
 		// Choosing the correct route provider
@@ -432,9 +432,9 @@ function newRouteEditor ( ) {
 				removeWayPoints : true
 			}
 		);
-		if ( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
 			let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-			editedRoute.edited = OUR_CONST.route.edited.notEdited;
+			editedRoute.edited = THE_CONST.route.edited.notEdited;
 			myEventDispatcher.dispatch (
 				'addroute',
 				{
@@ -447,7 +447,7 @@ function newRouteEditor ( ) {
 		}
 
 		theTravelNotesData.travel.editedRoute = newRoute ( );
-		theTravelNotesData.editedRouteObjId = OUR_CONST.invalidObjId;
+		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'reducerouteui' );

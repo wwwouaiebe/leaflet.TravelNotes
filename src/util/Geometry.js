@@ -32,7 +32,7 @@ Tests ...
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function newGeometry  ( ) {
 
 	function myGetClosestLatLngDistance ( route, latLng ) {
 
-		if ( OUR_CONST.zero === route.itinerary.itineraryPoints.length ) {
+		if ( THE_CONST.zero === route.itinerary.itineraryPoints.length ) {
 			return null;
 		}
 
@@ -74,14 +74,14 @@ function newGeometry  ( ) {
 
 		// projections of points are made
 		let point = L.Projection.SphericalMercator.project (
-			L.latLng ( latLng [ OUR_CONST.zero ], latLng [ OUR_CONST.number1 ] ) );
+			L.latLng ( latLng [ THE_CONST.zero ], latLng [ THE_CONST.number1 ] ) );
 		let point1 = L.Projection.SphericalMercator.project (
 			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 		);
 
 		// variables initialization
 		let closestLatLng = null;
-		let closestDistance = OUR_CONST.distance.defaultValue;
+		let closestDistance = THE_CONST.distance.defaultValue;
 		let endSegmentDistance = itineraryPointIterator.value.distance;
 
 		// iteration on the route points
@@ -168,8 +168,8 @@ function newGeometry  ( ) {
 
 	function myAddPoint ( point1, point2 ) {
 		return [
-			point1 [ OUR_CONST.zero ] + point2 [ OUR_CONST.zero ],
-			point1 [ OUR_CONST.number1 ] + point2 [ OUR_CONST.number1 ]
+			point1 [ THE_CONST.zero ] + point2 [ THE_CONST.zero ],
+			point1 [ THE_CONST.number1 ] + point2 [ THE_CONST.number1 ]
 		];
 	}
 
@@ -181,8 +181,8 @@ function newGeometry  ( ) {
 
 	function mySubtrackPoints ( point1, point2 ) {
 		return [
-			point1 [ OUR_CONST.zero ] - point2 [ OUR_CONST.zero ],
-			point1 [ OUR_CONST.number1 ] - point2 [ OUR_CONST.number1 ]
+			point1 [ THE_CONST.zero ] - point2 [ THE_CONST.zero ],
+			point1 [ THE_CONST.number1 ] - point2 [ THE_CONST.number1 ]
 		];
 	}
 

@@ -32,7 +32,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newPasswordDialog function ----------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ function newPasswordDialog ( verifyPassword ) {
 		myPasswordDialog.hideError ( );
 		if ( verifyPassword ) {
 			if (
-				( myPasswordInput.value.length < OUR_CONST.passwordDialog.pswdMinLength )
+				( myPasswordInput.value.length < THE_CONST.passwordDialog.pswdMinLength )
 				||
 				! myPasswordInput.value.match ( RegExp ( '[0-9]+' ) )
 				||

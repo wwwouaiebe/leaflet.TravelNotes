@@ -35,7 +35,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newAPIKeysDialog function -----------------------------------------------------------------------------------------
@@ -60,11 +60,11 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myGetAPIKeys ( ) {
 		let dlgAPIKeys = [];
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
+		for ( let counter = THE_CONST.zero; counter < rows.length; counter ++ ) {
 			dlgAPIKeys.push (
 				{
-					providerName : rows [ counter ].childNodes [ OUR_CONST.zero ].value,
-					providerKey : rows [ counter ].childNodes [ OUR_CONST.number1 ].value
+					providerName : rows [ counter ].childNodes [ THE_CONST.zero ].value,
+					providerKey : rows [ counter ].childNodes [ THE_CONST.number1 ].value
 				}
 			);
 		}
@@ -81,9 +81,9 @@ function newAPIKeysDialog ( APIKeys ) {
 		let returnValue = true;
 		myAPIKeysDialog.hideError ( );
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = OUR_CONST.zero; counter < rows.length; counter ++ ) {
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ OUR_CONST.zero ].value;
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ OUR_CONST.number1 ].value;
+		for ( let counter = THE_CONST.zero; counter < rows.length; counter ++ ) {
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ THE_CONST.zero ].value;
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ THE_CONST.number1 ].value;
 		}
 		if ( ! returnValue ) {
 			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - empty API key name or value' ) );
@@ -267,7 +267,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				newPasswordDialog ( false ).show ( )
 			);
 		};
-		fileReader.readAsArrayBuffer ( changeEvent.target.files [ OUR_CONST.zero ] );
+		fileReader.readAsArrayBuffer ( changeEvent.target.files [ THE_CONST.zero ] );
 
 	}
 

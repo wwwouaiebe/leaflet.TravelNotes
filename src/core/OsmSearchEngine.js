@@ -35,12 +35,12 @@ import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 let ourOsmSearchStarted = false;
 let ourSearchParameters = { searchPhrase : '', bbox : null };
-let ourPreviousSearchRectangleObjId = OUR_CONST.invalidObjId;
-let ourNextSearchRectangleObjId = OUR_CONST.invalidObjId;
+let ourPreviousSearchRectangleObjId = THE_CONST.invalidObjId;
+let ourNextSearchRectangleObjId = THE_CONST.invalidObjId;
 let ourSearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 
 /*
@@ -55,7 +55,7 @@ function ourDrawSearchRectangle ( ) {
 	if ( ! ourSearchParameters.bbox ) {
 		return;
 	}
-	if ( OUR_CONST.invalidObjId === ourPreviousSearchRectangleObjId ) {
+	if ( THE_CONST.invalidObjId === ourPreviousSearchRectangleObjId ) {
 		ourPreviousSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -113,7 +113,7 @@ change event listener for the map
 
 function ourOnMapChange ( ) {
 	let mapCenter = theTravelNotesData.map.getCenter ( );
-	if ( OUR_CONST.invalidObjId === ourNextSearchRectangleObjId ) {
+	if ( THE_CONST.invalidObjId === ourNextSearchRectangleObjId ) {
 		ourNextSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -204,13 +204,13 @@ function newOsmSearchEngine ( ) {
 	function myHide ( ) {
 		theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
 		theTravelNotesData.map.off ( 'move', ourOnMapChange );
-		if ( OUR_CONST.invalidObjId !== ourNextSearchRectangleObjId ) {
+		if ( THE_CONST.invalidObjId !== ourNextSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
-			ourNextSearchRectangleObjId = OUR_CONST.invalidObjId;
+			ourNextSearchRectangleObjId = THE_CONST.invalidObjId;
 		}
-		if ( OUR_CONST.invalidObjId !== ourPreviousSearchRectangleObjId ) {
+		if ( THE_CONST.invalidObjId !== ourPreviousSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
-			ourPreviousSearchRectangleObjId = OUR_CONST.invalidObjId;
+			ourPreviousSearchRectangleObjId = THE_CONST.invalidObjId;
 		}
 	}
 

@@ -38,7 +38,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------
@@ -71,10 +71,10 @@ function newLayersToolbarUI ( ) {
 	let myLayersToolbarButtonsDiv = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
-	let myMarginTop = OUR_CONST.zero;
-	let myButtonHeight = OUR_CONST.zero;
-	let myButtonsHeight = OUR_CONST.zero;
-	let myButtonTop = OUR_CONST.zero;
+	let myMarginTop = THE_CONST.zero;
+	let myButtonHeight = THE_CONST.zero;
+	let myButtonsHeight = THE_CONST.zero;
+	let myButtonTop = THE_CONST.zero;
 
 	/*
 	--- myOnMouseEnterLayerButton function ----------------------------------------------------------------------------
@@ -199,13 +199,13 @@ function newLayersToolbarUI ( ) {
 
 	function myOnWheelToolbar ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			myMarginTop -= wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
+			myMarginTop -= wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
 				myMarginTop < myButtonTop - myButtonsHeight +
-				( OUR_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
+				( THE_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
 					?
-					myButtonTop - myButtonsHeight + ( OUR_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
+					myButtonTop - myButtonsHeight + ( THE_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
 					:
 					myMarginTop;
 			myLayersToolbarButtonsDiv.style.marginTop = String ( myMarginTop ) + 'px';
@@ -257,7 +257,7 @@ function newLayersToolbarUI ( ) {
 			myLayersToolbar
 		);
 		myButtonTop = myLayersToolbar.clientHeight;
-		myButtonsHeight = OUR_CONST.zero;
+		myButtonsHeight = THE_CONST.zero;
 		myLayers.forEach ( layer => myCreateLayerButton ( layer ) );
 
 		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
@@ -297,7 +297,7 @@ function newLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ]
+			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
 		);
 		myHTMLElementsFactory.create (
 			'div',
@@ -322,8 +322,8 @@ function newLayersToolbarUI ( ) {
 			false
 		);
 
-		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ OUR_CONST.zero ] } );
-		theAttributionsUI.attributions = myLayers [ OUR_CONST.zero ].attribution;
+		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ THE_CONST.zero ] } );
+		theAttributionsUI.attributions = myLayers [ THE_CONST.zero ].attribution;
 
 	}
 
@@ -336,7 +336,7 @@ function newLayersToolbarUI ( ) {
 	function myCreateUI ( ) {
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 			'TravelNotesLayers.json'
 		)
 			.then ( layers => { myLayers = myLayers.concat ( layers ); } )

@@ -32,7 +32,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Note' );
 
@@ -48,9 +48,9 @@ function newNote ( ) {
 
 	let myObjId = newObjId ( );
 
-	let myIconHeight = OUR_CONST.note.defaultIconSize;
+	let myIconHeight = THE_CONST.note.defaultIconSize;
 
-	let myIconWidth = OUR_CONST.note.defaultIconSize;
+	let myIconWidth = THE_CONST.note.defaultIconSize;
 
 	let myIconContent = '';
 
@@ -64,17 +64,17 @@ function newNote ( ) {
 
 	let myAddress = '';
 
-	let myIconLat = OUR_CONST.latLng.defaultValue;
+	let myIconLat = THE_CONST.latLng.defaultValue;
 
-	let myIconLng = OUR_CONST.latLng.defaultValue;
+	let myIconLng = THE_CONST.latLng.defaultValue;
 
-	let myLat = OUR_CONST.latLng.defaultValue;
+	let myLat = THE_CONST.latLng.defaultValue;
 
-	let myLng = OUR_CONST.latLng.defaultValue;
+	let myLng = THE_CONST.latLng.defaultValue;
 
-	let myDistance = OUR_CONST.distance.invalid;
+	let myDistance = THE_CONST.distance.invalid;
 
-	let myChainedDistance = OUR_CONST.distance.defaultValue;
+	let myChainedDistance = THE_CONST.distance.defaultValue;
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -144,12 +144,12 @@ function newNote ( ) {
 			phone : myPhone,
 			url : myUrl,
 			address : myAddress,
-			iconLat : parseFloat ( myIconLat.toFixed ( OUR_CONST.latLng.fixed ) ),
-			iconLng : parseFloat ( myIconLng.toFixed ( OUR_CONST.latLng.fixed ) ),
-			lat : parseFloat ( myLat.toFixed ( OUR_CONST.latLng.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( OUR_CONST.latLng.fixed ) ),
-			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( OUR_CONST.distance.fixed ) ),
+			iconLat : parseFloat ( myIconLat.toFixed ( THE_CONST.latLng.fixed ) ),
+			iconLng : parseFloat ( myIconLng.toFixed ( THE_CONST.latLng.fixed ) ),
+			lat : parseFloat ( myLat.toFixed ( THE_CONST.latLng.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( THE_CONST.latLng.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( THE_CONST.distance.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -163,19 +163,19 @@ function newNote ( ) {
 
 	function mySetObject ( something ) {
 		something = myValidate ( something );
-		myIconHeight = something.iconHeight || OUR_CONST.note.defaultIconSize;
-		myIconWidth = something.iconWidth || OUR_CONST.note.defaultIconSize;
+		myIconHeight = something.iconHeight || THE_CONST.note.defaultIconSize;
+		myIconWidth = something.iconWidth || THE_CONST.note.defaultIconSize;
 		myIconContent = something.iconContent || '';
 		myPopupContent = something.popupContent || '';
 		myTooltipContent = something.tooltipContent || '';
 		myPhone = something.phone || '';
 		myUrl = something.url || '';
 		myAddress = something.address || '';
-		myIconLat = something.iconLat || OUR_CONST.latLng.defaultValue;
-		myIconLng = something.iconLng || OUR_CONST.latLng.defaultValue;
-		myLat = something.lat || OUR_CONST.latLng.defaultValue;
-		myLng = something.lng || OUR_CONST.latLng.defaultValue;
-		myDistance = something.distance || OUR_CONST.distance.invalid;
+		myIconLat = something.iconLat || THE_CONST.latLng.defaultValue;
+		myIconLng = something.iconLng || THE_CONST.latLng.defaultValue;
+		myLat = something.lat || THE_CONST.latLng.defaultValue;
+		myLng = something.lng || THE_CONST.latLng.defaultValue;
+		myDistance = something.distance || THE_CONST.distance.invalid;
 		myChainedDistance = something.chainedDistance;
 		myObjId = newObjId ( );
 	}
@@ -189,7 +189,7 @@ function newNote ( ) {
 	return Object.seal (
 		{
 
-			get isRouteNote ( ) { return myDistance !== OUR_CONST.distance.invalid; },
+			get isRouteNote ( ) { return myDistance !== THE_CONST.distance.invalid; },
 
 			get iconHeight ( ) { return myIconHeight; },
 			set iconHeight ( IconHeight ) { myIconHeight = IconHeight; },
@@ -223,8 +223,8 @@ function newNote ( ) {
 
 			get iconLatLng ( ) { return [ myIconLat, myIconLng ]; },
 			set iconLatLng ( IconLatLng ) {
-				myIconLat = IconLatLng [ OUR_CONST.zero ];
-				myIconLng = IconLatLng [ OUR_CONST.number1 ];
+				myIconLat = IconLatLng [ THE_CONST.zero ];
+				myIconLng = IconLatLng [ THE_CONST.number1 ];
 			},
 
 			get lat ( ) { return myLat; },
@@ -235,8 +235,8 @@ function newNote ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ OUR_CONST.zero ];
-				myLng = LatLng [ OUR_CONST.number1 ];
+				myLat = LatLng [ THE_CONST.zero ];
+				myLng = LatLng [ THE_CONST.number1 ];
 			},
 
 			get distance ( ) { return myDistance; },

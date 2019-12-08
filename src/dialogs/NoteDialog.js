@@ -49,7 +49,7 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 let ourUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 let ourTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
@@ -95,7 +95,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( OUR_CONST.zero === myIconHtmlContent.value.length ) {
+		if ( THE_CONST.zero === myIconHtmlContent.value.length ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 		}
 
@@ -149,7 +149,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( '' !== myCity ) {
 			myAddress += theConfig.note.cityPrefix + myCity + theConfig.note.cityPostfix;
 		}
-		if ( OUR_CONST.zero === myAddress.length ) {
+		if ( THE_CONST.zero === myAddress.length ) {
 			myAddress += geoCoderData.address.country;
 		}
 		if ( ( theConfig.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
@@ -245,10 +245,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	function myGetSvgAddress ( svgData, arrow ) {
 		let address = '';
-		let showPlace = OUR_CONST.zero;
-		for ( let counter = OUR_CONST.zero; counter < svgData.streets.length; counter ++ ) {
+		let showPlace = THE_CONST.zero;
+		for ( let counter = THE_CONST.zero; counter < svgData.streets.length; counter ++ ) {
 			if (
-				( OUR_CONST.zero === counter  || svgData.streets.length - OUR_CONST.number1 === counter )
+				( THE_CONST.zero === counter  || svgData.streets.length - THE_CONST.number1 === counter )
 				&&
 				svgData.streets [ counter ] === ''
 			) {
@@ -260,10 +260,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				showPlace --;
 			}
 			switch ( counter ) {
-			case svgData.streets.length - OUR_CONST.number2 :
+			case svgData.streets.length - THE_CONST.number2 :
 				address += arrow;
 				break;
-			case svgData.streets.length - OUR_CONST.number1 :
+			case svgData.streets.length - THE_CONST.number1 :
 				break;
 			default :
 				address += '&#x2AA5;';
@@ -276,7 +276,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( svgData.city ) {
 			address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
 		}
-		if ( svgData.place && svgData.place !== svgData.city  && showPlace !== OUR_CONST.number2 ) {
+		if ( svgData.place && svgData.place !== svgData.city  && showPlace !== THE_CONST.number2 ) {
 			address += ' (' + svgData.place + ')';
 		}
 
@@ -293,13 +293,13 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myIconHtmlContent.value = svgData.svg.outerHTML;
 		let directionArrowAndTextTooltip = getDirectionArrowAndTextTooltip ( svgData.direction );
 
-		if ( OUR_CONST.svgIcon.positionOnRoute.atStart === svgData.positionOnRoute ) {
+		if ( THE_CONST.svgIcon.positionOnRoute.atStart === svgData.positionOnRoute ) {
 			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start' );
 		}
-		else if ( OUR_CONST.svgIcon.positionOnRoute.onRoute === svgData.positionOnRoute ) {
+		else if ( THE_CONST.svgIcon.positionOnRoute.onRoute === svgData.positionOnRoute ) {
 			myTooltipContent.value = directionArrowAndTextTooltip.text;
 		}
-		else if ( OUR_CONST.svgIcon.positionOnRoute.atEnd === svgData.positionOnRoute ) {
+		else if ( THE_CONST.svgIcon.positionOnRoute.atEnd === svgData.positionOnRoute ) {
 			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop' );
 		}
 
@@ -343,14 +343,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		ourAllButtonsAndIcons.preDefinedIconsList =
 			ourTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( ourUserButtonsAndIcons.preDefinedIconsList );
 
-		if ( OUR_CONST.invalidObjId < routeObjId ) {
+		if ( THE_CONST.invalidObjId < routeObjId ) {
 			ourAllButtonsAndIcons.preDefinedIconsList.push (
 				{
 					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
 					icon : '',
 					tooltip : '',
-					width : OUR_CONST.note.defaultIconSize,
-					height : OUR_CONST.note.defaultIconSize
+					width : THE_CONST.note.defaultIconSize,
+					height : THE_CONST.note.defaultIconSize
 				}
 			);
 		}
@@ -358,16 +358,16 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		ourAllButtonsAndIcons.preDefinedIconsList.sort (
 			( first, second ) => first.name.localeCompare ( second.name )
 		);
-		let elementCounter = OUR_CONST.zero;
+		let elementCounter = THE_CONST.zero;
 		for (
-			elementCounter = myPredefinedIconsSelect.length - OUR_CONST.number1;
-			elementCounter >= OUR_CONST.zero;
+			elementCounter = myPredefinedIconsSelect.length - THE_CONST.number1;
+			elementCounter >= THE_CONST.zero;
 			elementCounter --
 		) {
 			myPredefinedIconsSelect.remove ( elementCounter );
 		}
 		for (
-			elementCounter = OUR_CONST.zero;
+			elementCounter = THE_CONST.zero;
 			elementCounter < ourAllButtonsAndIcons.preDefinedIconsList.length;
 			elementCounter ++ ) {
 			myPredefinedIconsSelect.add (
@@ -430,12 +430,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		while ( ! button.htmlBefore ) {
 			button = button.parentNode;
 		}
-		let bInsertBeforeAndAfter = button.htmlAfter && OUR_CONST.zero < button.htmlAfter.length;
+		let bInsertBeforeAndAfter = button.htmlAfter && THE_CONST.zero < button.htmlAfter.length;
 		let selectionStart = myFocusControl.selectionStart;
 		let selectionEnd = myFocusControl.selectionEnd;
 		let oldText = myFocusControl.value;
 		myFocusControl.value =
-			oldText.substring ( OUR_CONST.zero, selectionStart ) +
+			oldText.substring ( THE_CONST.zero, selectionStart ) +
 			(
 				bInsertBeforeAndAfter
 					?
@@ -513,7 +513,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				console.log ( err ? err : 'An error occurs when opening the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ OUR_CONST.zero ] );
+		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
 	}
 
 	/*
@@ -873,9 +873,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : ( theConfig.layersToolbarUI.theDevil.addButton ?
 					( '<a href="https://www.google.com/maps/@' +
-					note.lat.toFixed ( OUR_CONST.latLng.fixed ) +
+					note.lat.toFixed ( THE_CONST.latLng.fixed ) +
 					',' +
-					note.lng.toFixed ( OUR_CONST.latLng.fixed ) +
+					note.lng.toFixed ( THE_CONST.latLng.fixed ) +
 					',' +
 					theConfig.layersToolbarUI.theDevil.noteZoom +
 					'z" target="_blank" title="' +
@@ -963,15 +963,15 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 					name : '',
 					icon : '',
 					tooltip : '',
-					width : OUR_CONST.note.defaultIconSize,
-					height : OUR_CONST.note.defaultIconSize
+					width : THE_CONST.note.defaultIconSize,
+					height : THE_CONST.note.defaultIconSize
 				}
 			);
 			myAddPreDefinedIconsList ( );
 		}
 
 		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 			'TravelNotesNoteDialog' +
 			theConfig.language.toUpperCase ( ) +
 			'.json'

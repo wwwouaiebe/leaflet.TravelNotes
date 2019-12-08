@@ -32,7 +32,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Maneuver' );
 
@@ -56,9 +56,9 @@ function newManeuver ( ) {
 
 	let myItineraryPointObjId = -1;
 
-	let myDistance = OUR_CONST.distance.defaultValue;
+	let myDistance = THE_CONST.distance.defaultValue;
 
-	let myDuration = OUR_CONST.distance.defaultValue;
+	let myDuration = THE_CONST.distance.defaultValue;
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ function newManeuver ( ) {
 		return {
 			iconName : myIconName,
 			instruction : myInstruction,
-			distance : parseFloat ( myDistance.toFixed ( OUR_CONST.distance.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
 			duration : myDuration,
 			itineraryPointObjId : myItineraryPointObjId,
 			objId : myObjId,
@@ -124,9 +124,9 @@ function newManeuver ( ) {
 		something = myValidate ( something );
 		myIconName = something.iconName || '';
 		myInstruction = something.instruction || '';
-		myDistance = something.distance || OUR_CONST.distance.defaultValue;
-		myDuration = something.duration || OUR_CONST.distance.defaultValue;
-		myItineraryPointObjId = something.itineraryPointObjId || OUR_CONST.invalidObjId;
+		myDistance = something.distance || THE_CONST.distance.defaultValue;
+		myDuration = something.duration || THE_CONST.distance.defaultValue;
+		myItineraryPointObjId = something.itineraryPointObjId || THE_CONST.invalidObjId;
 		myObjId = newObjId ( );
 	}
 

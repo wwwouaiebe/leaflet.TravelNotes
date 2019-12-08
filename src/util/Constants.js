@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: "off" */
 
-const OUR_CONST = {
+const THE_CONST = {
 	angle : {
 		degree0 : 0,
 		degree90 : 90,
@@ -131,4 +131,4 @@ const OUR_CONST = {
 	zero : 0
 };
 
-export  { OUR_CONST };
+export  { THE_CONST };

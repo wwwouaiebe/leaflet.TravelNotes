@@ -39,7 +39,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newMapContextMenu function ----------------------------------------------------------------------------------------
@@ -63,9 +63,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as start point' ),
 				action :
-					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
+					( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
-					( OUR_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+					( THE_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
 						?
 						theWayPointEditor.setStartPoint
 						:
@@ -76,7 +76,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as way point' ),
 				action :
-					( OUR_CONST.invalidObjId === theTravelNotesData.editedRouteObjId )
+					( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId )
 						?
 						null
 						:
@@ -87,9 +87,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as end point' ),
 				action :
-					( OUR_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
+					( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
 					&&
-					( OUR_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+					( THE_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
 						?
 						theWayPointEditor.setEndPoint
 						:

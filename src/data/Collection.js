@@ -35,7 +35,7 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newCollection function ----------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myFirst ( ) {
-		return myArray [ OUR_CONST.zero ];
+		return myArray [ THE_CONST.zero ];
 	}
 
 	/*
@@ -83,12 +83,12 @@ function newCollection ( objName ) {
 	*/
 
 	function myIterator ( ) {
-		let nextIndex = OUR_CONST.notFound;
+		let nextIndex = THE_CONST.notFound;
 		return {
 			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
 			get done ( ) { return ++ nextIndex  >= myArray.length; },
-			get first ( ) { return OUR_CONST.zero === nextIndex; },
-			get last ( ) { return nextIndex  >= myArray.length - OUR_CONST.number1; },
+			get first ( ) { return THE_CONST.zero === nextIndex; },
+			get last ( ) { return nextIndex  >= myArray.length - THE_CONST.number1; },
 			get index ( ) { return nextIndex; }
 		};
 	}
@@ -129,7 +129,7 @@ function newCollection ( objName ) {
 
 	function myGetAt ( objId ) {
 		let index = myIndexOfObjId ( objId );
-		if ( OUR_CONST.notFound === index ) {
+		if ( THE_CONST.notFound === index ) {
 			return null;
 		}
 		return myArray [ index ];
@@ -163,11 +163,11 @@ function newCollection ( objName ) {
 		if ( ! moveBefore ) {
 			newPosition ++;
 		}
-		myArray.splice ( newPosition, OUR_CONST.zero, myArray [ oldPosition ] );
+		myArray.splice ( newPosition, THE_CONST.zero, myArray [ oldPosition ] );
 		if ( newPosition < oldPosition ) {
 			oldPosition ++;
 		}
-		myArray.splice ( oldPosition, OUR_CONST.number1 );
+		myArray.splice ( oldPosition, THE_CONST.number1 );
 	}
 
 	/*
@@ -177,7 +177,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myLast ( ) {
-		return myArray [ myArray.length - OUR_CONST.number1 ];
+		return myArray [ myArray.length - THE_CONST.number1 ];
 	}
 
 	/*
@@ -188,7 +188,7 @@ function newCollection ( objName ) {
 
 	function myNextOrPrevious ( objId, condition, direction ) {
 		let index = myIndexOfObjId ( objId );
-		if ( OUR_CONST.notFound === index ) {
+		if ( THE_CONST.notFound === index ) {
 			throw 'invalid objId for next or previous function';
 		}
 
@@ -197,10 +197,10 @@ function newCollection ( objName ) {
 		}
 		index += direction;
 
-		while ( ( OUR_CONST.notFound < index ) && ( index < myArray.length ) && ! condition ( myArray [ index ] ) ) {
+		while ( ( THE_CONST.notFound < index ) && ( index < myArray.length ) && ! condition ( myArray [ index ] ) ) {
 			index += direction;
 		}
-		if ( OUR_CONST.notFound === index || myArray.length === index ) {
+		if ( THE_CONST.notFound === index || myArray.length === index ) {
 			return null;
 		}
 
@@ -215,10 +215,10 @@ function newCollection ( objName ) {
 
 	function myRemove ( objId ) {
 		let index = myIndexOfObjId ( objId );
-		if ( OUR_CONST.notFound === index ) {
+		if ( THE_CONST.notFound === index ) {
 			throw 'invalid objId for remove function';
 		}
-		myArray.splice ( myIndexOfObjId ( objId ), OUR_CONST.number1 );
+		myArray.splice ( myIndexOfObjId ( objId ), THE_CONST.number1 );
 	}
 
 	/*
@@ -229,10 +229,10 @@ function newCollection ( objName ) {
 
 	function myRemoveAll ( ExceptFirstLast ) {
 		if ( ExceptFirstLast ) {
-			myArray.splice ( OUR_CONST.number1, myArray.length - OUR_CONST.number2 );
+			myArray.splice ( THE_CONST.number1, myArray.length - THE_CONST.number2 );
 		}
 		else {
-			myArray.length = OUR_CONST.zero;
+			myArray.length = THE_CONST.zero;
 		}
 	}
 
@@ -244,7 +244,7 @@ function newCollection ( objName ) {
 
 	function myReplace ( oldObjId, object ) {
 		let index = myIndexOfObjId ( oldObjId );
-		if ( OUR_CONST.notFound === index ) {
+		if ( THE_CONST.notFound === index ) {
 			throw 'invalid objId for replace function';
 		}
 		myArray [ index ] = object;
@@ -267,7 +267,7 @@ function newCollection ( objName ) {
 	*/
 
 	function mySetObject ( something ) {
-		myArray.length = OUR_CONST.zero;
+		myArray.length = THE_CONST.zero;
 		let newObject = null;
 		something.forEach (
 			arrayObject => {
@@ -315,17 +315,17 @@ function newCollection ( objName ) {
 	function mySwap ( objId, swapUp ) {
 		let index = myIndexOfObjId ( objId );
 		if (
-			( OUR_CONST.notFound === index )
+			( THE_CONST.notFound === index )
 			||
-			( ( OUR_CONST.zero === index ) && swapUp )
+			( ( THE_CONST.zero === index ) && swapUp )
 			||
-			( ( myArray.length - OUR_CONST.number1 === index ) && ( ! swapUp ) )
+			( ( myArray.length - THE_CONST.number1 === index ) && ( ! swapUp ) )
 		) {
 			throw 'invalid objId for swap function';
 		}
 		let tmp = myArray [ index ];
-		myArray [ index ] = myArray [ index + ( swapUp ? OUR_CONST.collection.swapUp : OUR_CONST.collection.swapDown  ) ];
-		myArray [ index + ( swapUp ? OUR_CONST.collection.swapUp : OUR_CONST.collection.swapDown  ) ] = tmp;
+		myArray [ index ] = myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown  ) ];
+		myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown  ) ] = tmp;
 	}
 
 	/*
@@ -385,7 +385,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, OUR_CONST.collection.direction.next ),
+			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, THE_CONST.collection.direction.next ),
 
 			/*
 			--- previous function -------------------------------------------------------------------------------------
@@ -393,7 +393,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, OUR_CONST.collection.direction.previous ),
+			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, THE_CONST.collection.direction.previous ),
 
 			/*
 			--- remove function ---------------------------------------------------------------------------------------

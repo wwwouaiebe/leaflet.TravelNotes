@@ -28,7 +28,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newHttpRequestBuilder function ------------------------------------------------------------------------------------
@@ -56,13 +56,13 @@ function newHttpRequestBuilder ( ) {
 
 		function jsonRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = OUR_CONST.xmlHttpRequest.timeout;
+			xmlHttpRequest.timeout = THE_CONST.xmlHttpRequest.timeout;
 			xmlHttpRequest.ontimeout = function ( ) {
 				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
 			};
 			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( OUR_CONST.xmlHttpRequest.readyState.done === xmlHttpRequest.readyState ) {
-					if ( OUR_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
+				if ( THE_CONST.xmlHttpRequest.readyState.done === xmlHttpRequest.readyState ) {
+					if ( THE_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
 						let response = null;
 						try {
 							response = JSON.parse ( xmlHttpRequest.responseText );
@@ -106,12 +106,12 @@ function newHttpRequestBuilder ( ) {
 
 		function binaryRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = OUR_CONST.xmlHttpRequest.timeout;
+			xmlHttpRequest.timeout = THE_CONST.xmlHttpRequest.timeout;
 			xmlHttpRequest.ontimeout = function ( ) {
 				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
 			};
 			xmlHttpRequest.onload = function ( ) {
-				if ( OUR_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
+				if ( THE_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
 					let arrayBuffer = xmlHttpRequest.response;
 					if ( arrayBuffer ) {
 						onOk ( arrayBuffer );

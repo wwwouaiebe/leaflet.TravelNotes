@@ -34,15 +34,15 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 let ourContainer = null;
 let ourTimerId = null;
-let ourFocusIsOnItem = OUR_CONST.zero;
+let ourFocusIsOnItem = THE_CONST.zero;
 let ourOriginalEvent = null;
 let ourCloseButton = null;
-let ourLat = OUR_CONST.latLng.defaultValue;
-let ourLng = OUR_CONST.latLng.defaultValue;
+let ourLat = THE_CONST.latLng.defaultValue;
+let ourLng = THE_CONST.latLng.defaultValue;
 
 /*
 --- newBaseContextMenu function ---------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ function newBaseContextMenu ( originalEvent ) {
 	let myMenuItems = [];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myBody = document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ];
+	let myBody = document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ];
 
 	/*
 	--- myOnKeyPress function -----------------------------------------------------------------------------------------
@@ -101,15 +101,15 @@ function newBaseContextMenu ( originalEvent ) {
 			ourCloseButton.click ( ) ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? OUR_CONST.number1 : ++ ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? THE_CONST.number1 : ++ ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem <= OUR_CONST.number1 ? myMenuItems.length : -- ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem <= THE_CONST.number1 ? myMenuItems.length : -- ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = OUR_CONST.number1;
+			ourFocusIsOnItem = THE_CONST.number1;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
@@ -119,9 +119,9 @@ function newBaseContextMenu ( originalEvent ) {
 		if (
 			( 'Enter' === keyBoardEvent.key )
 			&&
-			( ourFocusIsOnItem > OUR_CONST.zero )
+			( ourFocusIsOnItem > THE_CONST.zero )
 			&&
-			( myMenuItems[ ourFocusIsOnItem - OUR_CONST.number1 ].action )
+			( myMenuItems[ ourFocusIsOnItem - THE_CONST.number1 ].action )
 		) {
 			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
@@ -175,18 +175,18 @@ function newBaseContextMenu ( originalEvent ) {
 
 		// removing menu items
 		let childNodes = ourContainer.childNodes;
-		childNodes [ OUR_CONST.zero ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
-		for ( let childNodesCounter = OUR_CONST.number1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+		childNodes [ THE_CONST.zero ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
+		for ( let childNodesCounter = THE_CONST.number1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].removeChild ( ourContainer );
+		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( ourContainer );
 		ourContainer = null;
-		ourFocusIsOnItem = OUR_CONST.zero;
+		ourFocusIsOnItem = THE_CONST.zero;
 		myMenuItems = [];
-		ourLat = OUR_CONST.latLng.defaultValue;
-		ourLng = OUR_CONST.latLng.defaultValue;
+		ourLat = THE_CONST.latLng.defaultValue;
+		ourLng = THE_CONST.latLng.defaultValue;
 	}
 
 	/*
@@ -260,11 +260,11 @@ function newBaseContextMenu ( originalEvent ) {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
 			ourOriginalEvent.originalEvent.clientY,
-			screenHeight - ourContainer.clientHeight - OUR_CONST.baseContextMenu.menuMargin
+			screenHeight - ourContainer.clientHeight - THE_CONST.baseContextMenu.menuMargin
 		);
 		let menuLeft = Math.min (
 			ourOriginalEvent.originalEvent.clientX,
-			screenWidth - ourContainer.clientWidth - OUR_CONST.baseContextMenu.menuMargin
+			screenWidth - ourContainer.clientWidth - THE_CONST.baseContextMenu.menuMargin
 		);
 		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
 	}
@@ -288,7 +288,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function myAddMenuItems ( ) {
-		let menuItemCounter = OUR_CONST.zero;
+		let menuItemCounter = THE_CONST.zero;
 		myMenuItems.forEach (
 			menuItem => {
 				let itemContainer = myHTMLElementsFactory.create (

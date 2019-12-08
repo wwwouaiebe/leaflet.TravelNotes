@@ -40,7 +40,7 @@ import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newDataPanesUI function -------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ This function returns the dataPanesUI object
 
 function newDataPanesUI ( ) {
 
-	let myActivePaneIndex = OUR_CONST.dataPanesUI.invalidPane;
+	let myActivePaneIndex = THE_CONST.dataPanesUI.invalidPane;
 	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
 	let mySearchPaneUI = newSearchPaneUI ( );
 	let myItineraryPaneUI = newItineraryPaneUI ( );
@@ -67,13 +67,13 @@ function newDataPanesUI ( ) {
 
 	function myRemoveActivePane ( ) {
 		switch ( myActivePaneIndex ) {
-		case OUR_CONST.dataPanesUI.itineraryPane :
+		case THE_CONST.dataPanesUI.itineraryPane :
 			myItineraryPaneUI.remove ( );
 			break;
-		case OUR_CONST.dataPanesUI.travelNotesPane :
+		case THE_CONST.dataPanesUI.travelNotesPane :
 			myTravelNotesPaneUI.remove ( );
 			break;
-		case OUR_CONST.dataPanesUI.searchPane :
+		case THE_CONST.dataPanesUI.searchPane :
 			if ( window.osmSearch ) {
 				mySearchPaneUI.remove ( );
 			}
@@ -95,7 +95,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		myItineraryPaneUI.add ( );
 
-		myActivePaneIndex = OUR_CONST.dataPanesUI.itineraryPane;
+		myActivePaneIndex = THE_CONST.dataPanesUI.itineraryPane;
 	}
 
 	/*
@@ -107,7 +107,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateItinerary ( ) {
-		if ( OUR_CONST.dataPanesUI.itineraryPane === myActivePaneIndex ) {
+		if ( THE_CONST.dataPanesUI.itineraryPane === myActivePaneIndex ) {
 			myItineraryPaneUI.remove ( );
 			myItineraryPaneUI.add ( );
 		}
@@ -124,7 +124,7 @@ function newDataPanesUI ( ) {
 	function mySetTravelNotes ( ) {
 		myRemoveActivePane ( );
 		myTravelNotesPaneUI.add ( );
-		myActivePaneIndex = OUR_CONST.dataPanesUI.travelNotesPane;
+		myActivePaneIndex = THE_CONST.dataPanesUI.travelNotesPane;
 	}
 
 	/*
@@ -136,7 +136,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateTravelNotes ( ) {
-		if ( OUR_CONST.dataPanesUI.travelNotesPane === myActivePaneIndex ) {
+		if ( THE_CONST.dataPanesUI.travelNotesPane === myActivePaneIndex ) {
 			myTravelNotesPaneUI.remove ( );
 			myTravelNotesPaneUI.add ( );
 		}
@@ -154,7 +154,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		mySearchPaneUI.add ( );
 
-		myActivePaneIndex = OUR_CONST.dataPanesUI.searchPane;
+		myActivePaneIndex = THE_CONST.dataPanesUI.searchPane;
 
 	}
 
@@ -167,7 +167,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateSearch ( ) {
-		if ( OUR_CONST.dataPanesUI.searchPane === myActivePaneIndex ) {
+		if ( THE_CONST.dataPanesUI.searchPane === myActivePaneIndex ) {
 			mySearchPaneUI.remove ( );
 			mySearchPaneUI.add ( );
 		}
@@ -241,7 +241,7 @@ function newDataPanesUI ( ) {
 			'wheel',
 			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop += wheelEvent.deltaY * OUR_CONST.mouse.wheelFactor;
+					wheelEvent.target.scrollTop += wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
 				}
 				wheelEvent.stopPropagation ( );
 			},

@@ -48,7 +48,7 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -144,8 +144,8 @@ function newNoteEditor ( ) {
 		// the note and the route are searched
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
-		noteAndRoute.note.distance = OUR_CONST.distance.invalid;
-		noteAndRoute.note.chainedDistance = OUR_CONST.distance.defaultValue;
+		noteAndRoute.note.distance = THE_CONST.distance.invalid;
+		noteAndRoute.note.chainedDistance = THE_CONST.distance.defaultValue;
 		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
 
 		myEventDispatcher.dispatch ( 'updateitinerary' );
@@ -248,7 +248,7 @@ function newNoteEditor ( ) {
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
 
-		newNoteDialog ( note, OUR_CONST.invalidObjId, true )
+		newNoteDialog ( note, THE_CONST.invalidObjId, true )
 			.show ( )
 			.then (
 				modifiedNote => {
@@ -340,7 +340,7 @@ function newNoteEditor ( ) {
 		let note = myNewNote ( latLng );
 
 		// and displayed in a dialog box
-		newNoteDialog ( note, OUR_CONST.invalidObjId, true )
+		newNoteDialog ( note, THE_CONST.invalidObjId, true )
 			.show ( )
 			.then (
 				modifiedNote => {
@@ -372,7 +372,7 @@ function newNoteEditor ( ) {
 
 	function myEditNote ( noteObjId ) {
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let routeObjId = null === noteAndRoute.route ? OUR_CONST.invalidObjId : noteAndRoute.route.objId;
+		let routeObjId = null === noteAndRoute.route ? THE_CONST.invalidObjId : noteAndRoute.route.objId;
 		newNoteDialog ( noteAndRoute.note, routeObjId, false )
 			.show ( )
 			.then (

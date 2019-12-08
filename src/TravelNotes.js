@@ -73,7 +73,7 @@ import { theMouseUI } from './UI/MouseUI.js';
 import { theAttributionsUI } from './UI/AttributionsUI.js';
 import { theErrorsUI } from './UI/ErrorsUI.js';
 
-import  { OUR_CONST } from './util/Constants.js';
+import  { THE_CONST } from './util/Constants.js';
 
 theAttributionsUI;
 
@@ -122,17 +122,17 @@ function travelNotesFactory ( ) {
 
 	function myReadURL ( ) {
 		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( OUR_CONST.number1 )
+		( decodeURI ( window.location.search ).substr ( THE_CONST.number1 )
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString => {
-					if ( OUR_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( OUR_CONST.zero, OUR_CONST.number4 ).toLowerCase ( ) ) {
+					if ( THE_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+						if ( 'fil=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
 							myTravelUrl = decodeURIComponent (
-								escape ( atob ( urlSearchSubString.substr ( OUR_CONST.number4 ) ) ) );
+								escape ( atob ( urlSearchSubString.substr ( THE_CONST.number4 ) ) ) );
 						}
-						else if ( 'lng=' === urlSearchSubString.substr ( OUR_CONST.zero, OUR_CONST.number4 ).toLowerCase ( ) ) {
-							myLangage = urlSearchSubString.substr ( OUR_CONST.number4 ).toLowerCase ( );
+						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
+							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
 						}
 						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
 						newUrlSearch += urlSearchSubString;
@@ -363,11 +363,11 @@ function travelNotesFactory ( ) {
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 				'TravelNotesConfig.json'
 			),
 			requestBuilder.getJsonPromise (
-				window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 				'TravelNotes' +
 				( myLangage || theConfig.language ).toUpperCase ( )  +
 				'.json'
@@ -384,13 +384,13 @@ function travelNotesFactory ( ) {
 
 				// config adaptation
 				if ( myLangage ) {
-					values [ OUR_CONST.zero ].language = myLangage;
+					values [ THE_CONST.zero ].language = myLangage;
 				}
 
-				// theConfig.overload ( values [ OUR_CONST.zero ] );
+				// theConfig.overload ( values [ THE_CONST.zero ] );
 
 				// translations adaptation
-				theTranslator.setTranslations ( values [ OUR_CONST.number1 ] );
+				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
 				theTravelNotesData.providers.forEach (
 					provider => {
 						provider.userLanguage =  theConfig.language;
@@ -425,7 +425,7 @@ function travelNotesFactory ( ) {
 				if ( myTravelUrl ) {
 
 					// loading travel...
-					newFileLoader ( ).openDistantFile ( values [ OUR_CONST.number2 ] );
+					newFileLoader ( ).openDistantFile ( values [ THE_CONST.number2 ] );
 				}
 				else {
 					theAPIKeysManager.fromServerFile ( );
@@ -589,7 +589,7 @@ catch ( err ) {
 }
 
 newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr ( OUR_CONST.zero, window.location.href.lastIndexOf ( '/' ) + OUR_CONST.number1 ) +
+	window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 	'TravelNotesConfig.json'
 )
 	.then (

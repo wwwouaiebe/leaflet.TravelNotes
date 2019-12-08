@@ -40,7 +40,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { OUR_CONST } from '../util/Constants.js';
+import  { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newBaseDialog function --------------------------------------------------------------------------------------------
@@ -51,12 +51,12 @@ import  { OUR_CONST } from '../util/Constants.js';
 function newBaseDialog ( ) {
 
 	// variables initialization for drag and drop
-	let myStartDragX = OUR_CONST.zero;
-	let myStartDragY = OUR_CONST.zero;
-	let myDialogX = OUR_CONST.zero;
-	let myDialogY = OUR_CONST.zero;
-	let myScreenWidth = OUR_CONST.zero;
-	let myScreenHeight = OUR_CONST.zero;
+	let myStartDragX = THE_CONST.zero;
+	let myStartDragY = THE_CONST.zero;
+	let myDialogX = THE_CONST.zero;
+	let myDialogY = THE_CONST.zero;
+	let myScreenWidth = THE_CONST.zero;
+	let myScreenHeight = THE_CONST.zero;
 
 	// Div
 	let myBackgroundDiv = null;
@@ -98,7 +98,7 @@ function newBaseDialog ( ) {
 			}
 
 			document.removeEventListener ( 'keydown', myOnKeyDown, true );
-			document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].removeChild ( myBackgroundDiv );
+			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myBackgroundDiv );
 			myOnCancel ( 'Canceled by user' );
 		}
 	}
@@ -176,7 +176,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].removeChild ( myBackgroundDiv );
+				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myBackgroundDiv );
 				myOnCancel ( 'Canceled by user' );
 			},
 			false
@@ -202,12 +202,12 @@ function newBaseDialog ( ) {
 				myDialogX += dragEndEvent.screenX - myStartDragX;
 				myDialogY += dragEndEvent.screenY - myStartDragY;
 				myDialogX = Math.min (
-					Math.max ( myDialogX, OUR_CONST.baseDialog.dragMargin ),
-					myScreenWidth - myDialogDiv.clientWidth - OUR_CONST.baseDialog.dragMargin
+					Math.max ( myDialogX, THE_CONST.baseDialog.dragMargin ),
+					myScreenWidth - myDialogDiv.clientWidth - THE_CONST.baseDialog.dragMargin
 				);
-				myDialogY = Math.max ( myDialogY, OUR_CONST.baseDialog.dragMargin );
+				myDialogY = Math.max ( myDialogY, THE_CONST.baseDialog.dragMargin );
 				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - OUR_CONST.baseDialog.dragMargin;
+					myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - THE_CONST.baseDialog.dragMargin;
 				myDialogDiv.setAttribute (
 					'style',
 					'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
@@ -299,7 +299,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].removeChild ( myBackgroundDiv );
+				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myBackgroundDiv );
 				myOnOk ( returnValue );
 			},
 			false
@@ -352,14 +352,14 @@ function newBaseDialog ( ) {
 	*/
 
 	function myCenter ( ) {
-		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / OUR_CONST.number2;
-		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / OUR_CONST.number2;
+		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / THE_CONST.number2;
+		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / THE_CONST.number2;
 		myDialogX = Math.min (
-			Math.max ( myDialogX, OUR_CONST.baseDialog.dragMargin ),
-			myScreenWidth - myDialogDiv.clientWidth - OUR_CONST.baseDialog.dragMargin
+			Math.max ( myDialogX, THE_CONST.baseDialog.dragMargin ),
+			myScreenWidth - myDialogDiv.clientWidth - THE_CONST.baseDialog.dragMargin
 		);
-		myDialogY = Math.max ( myDialogY, OUR_CONST.baseDialog.dragMargin );
-		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, OUR_CONST.zero ) - OUR_CONST.baseDialog.dragMargin;
+		myDialogY = Math.max ( myDialogY, THE_CONST.baseDialog.dragMargin );
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - THE_CONST.baseDialog.dragMargin;
 		myDialogDiv.setAttribute (
 			'style',
 			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
@@ -376,7 +376,7 @@ function newBaseDialog ( ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
-		document.getElementsByTagName ( 'body' ) [ OUR_CONST.zero ].appendChild ( myBackgroundDiv );
+		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].appendChild ( myBackgroundDiv );
 		document.addEventListener ( 'keydown', myOnKeyDown, true );
 
 		myScreenWidth = myBackgroundDiv.clientWidth;
