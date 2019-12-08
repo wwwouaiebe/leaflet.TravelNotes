@@ -35,7 +35,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newAPIKeysDialog function -----------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function  myOnErrorDecrypt (  ) {
+	function myOnErrorDecrypt ( ) {
 		myAPIKeysDialog.hideWait ( );
 		myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );
 	}

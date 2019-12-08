@@ -40,7 +40,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -107,7 +107,7 @@ function newAPIKeysManager ( ) {
 
 	function myFromSessionStorage ( ) {
 		let APIKeysCounter = THE_CONST.zero;
-		for ( let counter  = THE_CONST.zero; counter < sessionStorage.length; counter ++ ) {
+		for ( let counter = THE_CONST.zero; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
 				mySetKey (
@@ -164,7 +164,7 @@ function newAPIKeysManager ( ) {
 			APIKey => {
 				if ( saveToSessionStorage ) {
 					sessionStorage.setItem (
-						( APIKey.providerName  ).toLowerCase ( ) + 'ProviderKey',
+						( APIKey.providerName ).toLowerCase ( ) + 'ProviderKey',
 						btoa ( APIKey.providerKey )
 					);
 				}

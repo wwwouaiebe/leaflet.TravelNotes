@@ -27,7 +27,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 function newUtilities ( ) {
 
@@ -277,7 +277,7 @@ function newUtilities ( ) {
 		{
 			get UUID ( ) { return myGetUUID ( ); },
 
-			storageAvailable : type =>  myStorageAvailable ( type ),
+			storageAvailable : type => myStorageAvailable ( type ),
 
 			fileAPIAvailable : ( ) => myFileAPIAvailable ( ),
 

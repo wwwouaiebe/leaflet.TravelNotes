@@ -33,7 +33,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newMouseUI function -----------------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ function newMouseUI ( ) {
 		myMousePos +
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
 		myZoom +
-		( myFileName === '' ? '' : '&nbsp;-&nbsp;' + myFileName  ) +
+		( myFileName === '' ? '' : '&nbsp;-&nbsp;' + myFileName ) +
 		'</span>';
 	}
 

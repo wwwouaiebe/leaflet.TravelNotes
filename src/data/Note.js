@@ -32,7 +32,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Note' );
 

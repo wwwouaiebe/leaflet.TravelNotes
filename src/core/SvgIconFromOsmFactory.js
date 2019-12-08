@@ -39,7 +39,7 @@ import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -175,7 +175,7 @@ function newSvgIconFromOsmFactory ( ) {
 		// Iteration on the points...
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				let pointDistance = myGeometry.pointsDistance ( myIconLatLngDistance.latLng, itineraryPoint.latLng  );
+				let pointDistance = myGeometry.pointsDistance ( myIconLatLngDistance.latLng, itineraryPoint.latLng );
 				if ( minDistance > pointDistance ) {
 					minDistance = pointDistance;
 					myIconItineraryPoint = itineraryPoint;
@@ -241,7 +241,7 @@ function newSvgIconFromOsmFactory ( ) {
 		myNodesMap.forEach (
 			node => {
 				if ( myIconItineraryPoint ) {
-					pointDistance =  myGeometry.pointsDistance ( [ node.lat, node.lon ], myIconItineraryPoint.latLng );
+					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myIconItineraryPoint.latLng );
 					if ( pointDistance < iconPointDistance ) {
 						iconPointId = node.id;
 						iconPointDistance = pointDistance;
@@ -254,7 +254,7 @@ function newSvgIconFromOsmFactory ( ) {
 						incomingPointDistance = pointDistance;
 					}
 				}
-				if ( myOutgoingPoint   ) {
+				if ( myOutgoingPoint ) {
 					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myOutgoingPoint.latLng );
 					if ( pointDistance < outgoingPointDistance ) {
 						outgoingPointId = node.id;
@@ -269,7 +269,7 @@ function newSvgIconFromOsmFactory ( ) {
 			way => {
 				let wayName =
 					( way.tags.wayName ? way.tags.wayName : '' ) +
-					( way.tags.wayName && way.tags.ref ? ' '  : '' ) +
+					( way.tags.wayName && way.tags.ref ? ' ' : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
 				if ( way.nodesIds.includes ( iconPointId ) ) {
 					let isClosed = way.nodesIds [ THE_CONST.zero ] === way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ];
@@ -282,10 +282,10 @@ function newSvgIconFromOsmFactory ( ) {
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
 					let haveName = wayName !== '';
 
-					if ( isSimpleStreet && haveName )  {
+					if ( isSimpleStreet && haveName ) {
 						myPassingStreets.push ( wayName );
 					}
-					if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) )  {
+					if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) ) {
 						if ( ! isIncomingStreet && ! isOutgoingStreet ) {
 							myPassingStreets.push ( wayName );
 							myPassingStreets.push ( wayName );
@@ -298,11 +298,11 @@ function newSvgIconFromOsmFactory ( ) {
 							myPassingStreets.push ( wayName );
 						}
 					}
-					if ( isIncomingStreet )  {
+					if ( isIncomingStreet ) {
 						incomingStreet = haveName ? wayName : '???';
 					}
-					if ( isOutgoingStreet )  {
-						outgoingStreet =  haveName ? wayName : '???';
+					if ( isOutgoingStreet ) {
+						outgoingStreet = haveName ? wayName : '???';
 					}
 				}
 			}
@@ -371,7 +371,7 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 
 		// computing rotation... if possible
-		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.first.objId  ) {
+		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.first.objId ) {
 			let rotationPoint = myGeometry.addPoints (
 				myGeometry.project ( rotationItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
@@ -397,7 +397,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 		// computing direction ... if possible
 
-		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId  ) {
+		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId ) {
 			let directionPoint = myGeometry.addPoints (
 				myGeometry.project ( directionItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
@@ -424,7 +424,7 @@ function newSvgIconFromOsmFactory ( ) {
 				myDirection -= THE_CONST.angle.degree360;
 			}
 		}
-		if ( myIconItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId  ) {
+		if ( myIconItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
 			myRotation = -myDirection - THE_CONST.angle.degree90;
 			myDirection = null;
 			myPositionOnRoute = THE_CONST.svgIcon.positionOnRoute.atStart;
@@ -469,11 +469,11 @@ function newSvgIconFromOsmFactory ( ) {
 				let pointIsInside =
 					point [ THE_CONST.zero ] >= THE_CONST.zero && point [ THE_CONST.number1 ] >= THE_CONST.zero
 					&&
-					point [ THE_CONST.zero ] <=  theConfig.note.svgIconWidth
+					point [ THE_CONST.zero ] <= theConfig.note.svgIconWidth
 					&&
 					point [ THE_CONST.number1 ] <= theConfig.note.svgIconWidth;
 				if ( pointIsInside ) {
-					if ( THE_CONST.notFound === firstPointIndex )  {
+					if ( THE_CONST.notFound === firstPointIndex ) {
 						firstPointIndex = index;
 					}
 					lastPointIndex = index;
@@ -547,7 +547,7 @@ function newSvgIconFromOsmFactory ( ) {
 							&&
 							point [ THE_CONST.number1 ] <= theConfig.note.svgIconWidth;
 						if ( pointIsInside ) {
-							if ( THE_CONST.notFound === firstPointIndex )  {
+							if ( THE_CONST.notFound === firstPointIndex ) {
 								firstPointIndex = index;
 							}
 							lastPointIndex = index;
@@ -725,7 +725,7 @@ function newSvgIconFromOsmFactory ( ) {
 		myCity = null;
 
 		newHttpRequestBuilder ( ).getJsonPromise ( myGetUrl ( ) )
-			.then ( BuildIconAndAdress  )
+			.then ( BuildIconAndAdress )
 			.catch (
 				err => {
 					ourRequestStarted = false;

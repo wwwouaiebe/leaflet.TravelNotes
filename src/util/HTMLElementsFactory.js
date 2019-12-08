@@ -45,7 +45,7 @@ function newHTMLElementsFactory ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreate  ( tagName, properties, parentNode ) {
+	function myCreate ( tagName, properties, parentNode ) {
 		let element = null;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
 			element = document.createTextNode ( '' );

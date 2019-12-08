@@ -39,7 +39,7 @@ Patterns : Closure
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theConfig } from '../data/Config.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newGeoLocator function --------------------------------------------------------------------------------------------

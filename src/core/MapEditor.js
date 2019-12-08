@@ -60,7 +60,7 @@ import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -72,8 +72,8 @@ This function updates the route tooltip with the distance
 */
 
 function onMouseOverOrMoveOnRoute ( mapEvent ) {
-	let dataSearchEngine  = newDataSearchEngine ( );
-	let route = dataSearchEngine.getRoute (  mapEvent.target.objId );
+	let dataSearchEngine = newDataSearchEngine ( );
+	let route = dataSearchEngine.getRoute ( mapEvent.target.objId );
 	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] ).distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
@@ -85,7 +85,7 @@ function onMouseOverOrMoveOnRoute ( mapEvent ) {
 		tooltipText += distance;
 	}
 	polyline.setTooltipContent ( tooltipText );
-	polyline.openTooltip (  mapEvent.latlng );
+	polyline.openTooltip ( mapEvent.latlng );
 }
 
 /*
@@ -98,7 +98,7 @@ Patterns : Closure and Singleton
 
 function newMapEditor ( ) {
 
-	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
 	let myCurrentLayer = null;
@@ -512,7 +512,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myAddWayPoint ( wayPoint, letter ) {
-		if ( ( THE_CONST.latLng.defaultValue === wayPoint.lat ) && ( THE_CONST.latLng.defaultValue === wayPoint.lng  ) ) {
+		if ( ( THE_CONST.latLng.defaultValue === wayPoint.lat ) && ( THE_CONST.latLng.defaultValue === wayPoint.lng ) ) {
 			return;
 		}
 
@@ -545,7 +545,7 @@ function newMapEditor ( ) {
 				myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).latLng
 			)
 		);
-		marker.getTooltip ( ).options.offset  = [
+		marker.getTooltip ( ).options.offset = [
 			THE_CONST.mapEditor.wayPointIconSize / THE_CONST.number2,
 			-THE_CONST.mapEditor.wayPointIconSize / THE_CONST.number2
 		];
@@ -648,7 +648,7 @@ function newMapEditor ( ) {
 			while ( ! wayPointsIterator.done ) {
 				myAddWayPoint (
 					wayPointsIterator.value,
-					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
+					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
 				);
 			}
 		}
@@ -746,7 +746,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myZoomToRoute ( routeObjId ) {
-		let latLngs = myGetRouteLatLng (  myDataSearchEngine.getRoute ( routeObjId ) );
+		let latLngs = myGetRouteLatLng ( myDataSearchEngine.getRoute ( routeObjId ) );
 		if ( THE_CONST.zero !== latLngs.length ) {
 			theTravelNotesData.map.fitBounds ( myGetLatLngBounds ( latLngs ) );
 		}
@@ -959,7 +959,7 @@ function newMapEditor ( ) {
 
 			addRectangle : ( objId, bounds, properties ) => myAddRectangle ( objId, bounds, properties ),
 
-			addWayPoint : ( wayPoint, letter ) => myAddWayPoint  ( wayPoint, letter ),
+			addWayPoint : ( wayPoint, letter ) => myAddWayPoint ( wayPoint, letter ),
 
 			redrawNote : note => myRedrawNote ( note ),
 

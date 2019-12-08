@@ -40,7 +40,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newSearchPaneUI function ------------------------------------------------------------------------------------------

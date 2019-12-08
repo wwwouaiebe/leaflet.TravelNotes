@@ -48,7 +48,7 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ Patterns : Closure and Singleton
 
 function newNoteEditor ( ) {
 
-	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
 
@@ -101,7 +101,7 @@ function newNoteEditor ( ) {
 		);
 
 		if ( selectedRoute ) {
-			theTravelNotesData.travel.notes.remove (  noteObjId );
+			theTravelNotesData.travel.notes.remove ( noteObjId );
 			noteAndRoute.note.distance = newNoteDistance;
 			noteAndRoute.note.latLng = newNoteLatLng;
 			noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
@@ -264,7 +264,7 @@ function newNoteEditor ( ) {
 					newRoadbookUpdate ( );
 				}
 			)
-			.catch (  err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*
@@ -516,7 +516,7 @@ function newNoteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNoteDropped (  draggedNoteObjId, targetNoteObjId, draggedBefore ) {
+	function myNoteDropped ( draggedNoteObjId, targetNoteObjId, draggedBefore ) {
 		theTravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
 		myEventDispatcher.dispatch ( 'updatetravelnotes' );
 		newRoadbookUpdate ( );

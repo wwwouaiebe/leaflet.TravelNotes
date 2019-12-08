@@ -31,7 +31,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newAutoLoader function --------------------------------------------------------------------------------------------

@@ -276,7 +276,7 @@ function newConfig ( ) {
 	function myFreeze ( object ) {
 		for ( let property in object ) {
 			if ( 'object' === typeof object [ property ] ) {
-				object [ property ] = myFreeze (  object [ property ] );
+				object [ property ] = myFreeze ( object [ property ] );
 			}
 		}
 

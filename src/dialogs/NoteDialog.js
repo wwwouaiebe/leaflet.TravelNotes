@@ -49,7 +49,7 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let ourUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 let ourTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
@@ -137,7 +137,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		else if ( geoCoderData.address.pedestrian ) {
 			myAddress += geoCoderData.address.pedestrian + ' ';
 		}
-		if (  geoCoderData.address.village ) {
+		if ( geoCoderData.address.village ) {
 			myCity = geoCoderData.address.village;
 		}
 		else if ( geoCoderData.address.town ) {
@@ -152,7 +152,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( THE_CONST.zero === myAddress.length ) {
 			myAddress += geoCoderData.address.country;
 		}
-		if ( ( theConfig.note.reverseGeocoding )  && ( '' === note.address ) && newNote ) {
+		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && newNote ) {
 			myAdressInput.value = myAddress;
 		}
 	}
@@ -248,7 +248,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let showPlace = THE_CONST.zero;
 		for ( let counter = THE_CONST.zero; counter < svgData.streets.length; counter ++ ) {
 			if (
-				( THE_CONST.zero === counter  || svgData.streets.length - THE_CONST.number1 === counter )
+				( THE_CONST.zero === counter || svgData.streets.length - THE_CONST.number1 === counter )
 				&&
 				svgData.streets [ counter ] === ''
 			) {
@@ -276,7 +276,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( svgData.city ) {
 			address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
 		}
-		if ( svgData.place && svgData.place !== svgData.city  && showPlace !== THE_CONST.number2 ) {
+		if ( svgData.place && svgData.place !== svgData.city && showPlace !== THE_CONST.number2 ) {
 			address += ' (' + svgData.place + ')';
 		}
 
@@ -674,7 +674,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		myWidthInput =  myHTMLElementsFactory.create (
+		myWidthInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -694,7 +694,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		myHeightInput =  myHTMLElementsFactory.create (
+		myHeightInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',

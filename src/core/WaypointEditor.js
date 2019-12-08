@@ -45,7 +45,7 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newWayPointEditor function ----------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ function newWayPointEditor ( ) {
 			else if ( geoCoderData.address.pedestrian ) {
 				address += geoCoderData.address.pedestrian + ' ';
 			}
-			if (  geoCoderData.address.village ) {
+			if ( geoCoderData.address.village ) {
 				address += geoCoderData.address.village;
 			}
 			else if ( geoCoderData.address.town ) {
@@ -392,7 +392,7 @@ function newWayPointEditor ( ) {
 				'addwaypoint',
 				{
 					wayPoint : wayPointsIterator.value,
-					letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' :  wayPointsIterator.index )
+					letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
 				}
 			);
 		}
@@ -429,7 +429,7 @@ function newWayPointEditor ( ) {
 
 			setStartPoint : latLng => mySetStartPoint ( latLng ),
 
-			setEndPoint : latLng  => mySetEndPoint ( latLng ),
+			setEndPoint : latLng => mySetEndPoint ( latLng ),
 
 			wayPointDragEnd : wayPointObjId => myWayPointDragEnd ( wayPointObjId ),
 

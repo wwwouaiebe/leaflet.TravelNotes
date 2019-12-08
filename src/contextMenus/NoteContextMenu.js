@@ -36,7 +36,7 @@ import { theNoteEditor } from '../core/NoteEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newNoteContextMenu function ---------------------------------------------------------------------------------------

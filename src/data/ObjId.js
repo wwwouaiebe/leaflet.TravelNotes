@@ -30,7 +30,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let theTravelNotesObjId = THE_CONST.zero;
 
@@ -42,7 +42,7 @@ let theTravelNotesObjId = THE_CONST.zero;
 
 function newObjId ( ) {
 	++ theTravelNotesObjId;
-	return  theTravelNotesObjId;
+	return theTravelNotesObjId;
 }
 
 export { newObjId };

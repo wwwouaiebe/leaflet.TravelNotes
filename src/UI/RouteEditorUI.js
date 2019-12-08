@@ -44,7 +44,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let myWayPointsList = null;
 
@@ -447,7 +447,7 @@ function newRouteEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return  Object.seal (
+	return Object.seal (
 		{
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 			expandUI : ( ) => myExpandUI ( ),

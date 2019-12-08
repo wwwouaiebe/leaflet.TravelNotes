@@ -36,7 +36,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newColorDialog function -------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ function newColorDialog ( color ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnColorInput ( )  {
+	function myOnColorInput ( ) {
 		myNewColor = myNumbersToColor ( myRedInput.value, myGreenInput.value, myBlueInput.value );
 		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor + ';' );
 		myColorSampleDiv.color = myNewColor;
@@ -265,7 +265,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		myRedInput =  myHTMLElementsFactory.create (
+		myRedInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -289,7 +289,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		myGreenInput =  myHTMLElementsFactory.create (
+		myGreenInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -311,7 +311,7 @@ function newColorDialog ( color ) {
 			},
 			rvbDiv
 		);
-		myBlueInput =  myHTMLElementsFactory.create (
+		myBlueInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',

@@ -43,7 +43,7 @@ import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ function newFileLoader ( ) {
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			try {
-				myFileContent =  JSON.parse ( fileReader.result );
+				myFileContent = JSON.parse ( fileReader.result );
 				myDecompressFileContent ( );
 			}
 			catch ( err ) {

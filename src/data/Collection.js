@@ -35,7 +35,7 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newCollection function ----------------------------------------------------------------------------------------
@@ -85,10 +85,10 @@ function newCollection ( objName ) {
 	function myIterator ( ) {
 		let nextIndex = THE_CONST.notFound;
 		return {
-			get value ( ) { return nextIndex < myArray.length ?  myArray [ nextIndex ] : null; },
-			get done ( ) { return ++ nextIndex  >= myArray.length; },
+			get value ( ) { return nextIndex < myArray.length ? myArray [ nextIndex ] : null; },
+			get done ( ) { return ++ nextIndex >= myArray.length; },
 			get first ( ) { return THE_CONST.zero === nextIndex; },
-			get last ( ) { return nextIndex  >= myArray.length - THE_CONST.number1; },
+			get last ( ) { return nextIndex >= myArray.length - THE_CONST.number1; },
 			get index ( ) { return nextIndex; }
 		};
 	}
@@ -324,8 +324,8 @@ function newCollection ( objName ) {
 			throw 'invalid objId for swap function';
 		}
 		let tmp = myArray [ index ];
-		myArray [ index ] = myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown  ) ];
-		myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown  ) ] = tmp;
+		myArray [ index ] = myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown ) ];
+		myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown ) ] = tmp;
 	}
 
 	/*

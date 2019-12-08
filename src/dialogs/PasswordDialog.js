@@ -32,7 +32,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newPasswordDialog function ----------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ function newPasswordDialog ( verifyPassword ) {
 	*/
 
 	function myOnKeyDown ( keyBoardEvent ) {
-		if ( 'Enter' === keyBoardEvent.key  ) {
+		if ( 'Enter' === keyBoardEvent.key ) {
 			myPasswordDialog.okButton.click ( );
 		}
 	}

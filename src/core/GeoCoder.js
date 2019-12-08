@@ -38,7 +38,7 @@ Tests ...
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 function newGeoCoder ( ) {
 
@@ -57,12 +57,12 @@ function newGeoCoder ( ) {
 			latLng [ THE_CONST.zero ] + '&lon=' + latLng [ THE_CONST.number1 ] +
 			'&zoom=18&addressdetails=1';
 		let nominatimLanguage = theConfig.nominatim.language;
-		if (  nominatimLanguage && nominatimLanguage !== '*' ) {
+		if ( nominatimLanguage && nominatimLanguage !== '*' ) {
 			NominatimUrl += '&accept-language=' + nominatimLanguage;
 		}
 		let requestHeaders = null;
 
-		if (  nominatimLanguage && nominatimLanguage === '*' ) {
+		if ( nominatimLanguage && nominatimLanguage === '*' ) {
 			requestHeaders = [ { headerName : 'accept-language', headerValue : '' } ];
 		}
 

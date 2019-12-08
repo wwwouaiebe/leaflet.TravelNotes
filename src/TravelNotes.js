@@ -73,7 +73,7 @@ import { theMouseUI } from './UI/MouseUI.js';
 import { theAttributionsUI } from './UI/AttributionsUI.js';
 import { theErrorsUI } from './UI/ErrorsUI.js';
 
-import  { THE_CONST } from './util/Constants.js';
+import { THE_CONST } from './util/Constants.js';
 
 theAttributionsUI;
 
@@ -134,7 +134,7 @@ function travelNotesFactory ( ) {
 						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
 							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
 						}
-						newUrlSearch += ( newUrlSearch === '?' ) ? '' :  '&';
+						newUrlSearch += ( newUrlSearch === '?' ) ? '' : '&';
 						newUrlSearch += urlSearchSubString;
 					}
 					else {
@@ -369,7 +369,7 @@ function travelNotesFactory ( ) {
 			requestBuilder.getJsonPromise (
 				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 				'TravelNotes' +
-				( myLangage || theConfig.language ).toUpperCase ( )  +
+				( myLangage || theConfig.language ).toUpperCase ( ) +
 				'.json'
 			)
 		];
@@ -393,7 +393,7 @@ function travelNotesFactory ( ) {
 				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
 				theTravelNotesData.providers.forEach (
 					provider => {
-						provider.userLanguage =  theConfig.language;
+						provider.userLanguage = theConfig.language;
 					}
 				);
 
@@ -545,7 +545,7 @@ function travelNotesFactory ( ) {
 
 		get rightContextMenu ( ) { return myHaveRightContextMenu; },
 		set rightContextMenu ( RightContextMenu ) {
-			if  ( ( RightContextMenu ) && ( ! myHaveRightContextMenu ) ) {
+			if ( ( RightContextMenu ) && ( ! myHaveRightContextMenu ) ) {
 				theTravelNotesData.map.on ( 'contextmenu', myOnMapContextMenu );
 				myHaveRightContextMenu = true;
 			}
@@ -557,7 +557,7 @@ function travelNotesFactory ( ) {
 
 		get leftContextMenu ( ) { return myHaveLeftContextMenu; },
 		set leftContextMenu ( LeftContextMenu ) {
-			if  ( ( LeftContextMenu ) && ( ! myHaveLeftContextMenu ) ) {
+			if ( ( LeftContextMenu ) && ( ! myHaveLeftContextMenu ) ) {
 				theTravelNotesData.map.on ( 'click', myOnMapClick );
 				myHaveLeftContextMenu = true;
 			}

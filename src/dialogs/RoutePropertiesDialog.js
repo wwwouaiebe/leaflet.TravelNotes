@@ -41,7 +41,7 @@ import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newRoutePropertiesDialog function ---------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ function newRoutePropertiesDialog ( route ) {
 			myRoutePropertiesDiv
 		);
 		widthDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>';
-		myWidthInput =  myHTMLElementsFactory.create (
+		myWidthInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -183,7 +183,7 @@ function newRoutePropertiesDialog ( route ) {
 			myRoutePropertiesDiv
 		);
 		chainDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route' ) + '</span>';
-		myChainInput =  myHTMLElementsFactory.create (
+		myChainInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',

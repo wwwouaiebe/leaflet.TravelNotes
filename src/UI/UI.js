@@ -41,7 +41,7 @@ import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------
@@ -119,10 +119,10 @@ function newUI ( ) {
 		myMainDiv.addEventListener (
 			'click',
 			clickEvent => {
-				if  ( clickEvent.target.classList.contains (  'TravelNotes-SortableList-ItemInput' ) ) {
+				if ( clickEvent.target.classList.contains ( 'TravelNotes-SortableList-ItemInput' ) ) {
 					return;
 				}
-				if  ( clickEvent.target.classList.contains (  'TravelNotes-Control-LinkButton' ) ) {
+				if ( clickEvent.target.classList.contains ( 'TravelNotes-Control-LinkButton' ) ) {
 					return;
 				}
 				if (

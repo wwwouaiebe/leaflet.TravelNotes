@@ -34,7 +34,7 @@ Tests ...
 import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newTravelNotesData funtion ----------------------------------------------------------------------------------------

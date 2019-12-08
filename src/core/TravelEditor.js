@@ -57,7 +57,7 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newTravelEditor function ------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ Patterns : Closure and Singleton
 function newTravelEditor ( ) {
 
 	let myUtilities = newUtilities ( );
-	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
@@ -211,7 +211,7 @@ function newTravelEditor ( ) {
 		);
 		theTravelNotesData.travel.routes.remove ( routeObjId );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( routeObjId === theTravelNotesData.editedRouteObjId  ) {
+		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
 			theRouteEditor.cancelEdition ( );
 		}
 		theRouteEditor.chainRoutes ( );
@@ -281,7 +281,7 @@ function newTravelEditor ( ) {
 		if ( THE_CONST.zero !== route.itinerary.itineraryPoints.length ) {
 			objType = route.itinerary.itineraryPoints [ THE_CONST.zero ].objType;
 		}
-		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType  };
+		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType };
 		route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
@@ -370,7 +370,7 @@ function newTravelEditor ( ) {
 
 			renameRoute : ( routeObjId, routeName ) => myRenameRoute ( routeObjId, routeName ),
 
-			swapRoute : ( routeObjId, swapUp ) => mySwapRoute  ( routeObjId, swapUp ),
+			swapRoute : ( routeObjId, swapUp ) => mySwapRoute ( routeObjId, swapUp ),
 
 			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => myRouteDropped (
 				draggedRouteObjId,

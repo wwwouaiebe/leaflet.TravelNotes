@@ -35,7 +35,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newTravelNotesToolbarUI function ----------------------------------------------------------------------------------

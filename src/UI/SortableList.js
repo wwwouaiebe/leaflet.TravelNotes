@@ -33,7 +33,7 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newSortableList function ------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ import  { THE_CONST } from '../util/Constants.js';
 
 function newSortableList ( options, parentNode ) {
 
-	let myDataObjId  = THE_CONST.zero;
+	let myDataObjId = THE_CONST.zero;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
@@ -213,7 +213,7 @@ function newSortableList ( options, parentNode ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem  ) {
+	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem ) {
 
 		itemValue = itemValue || '';
 		itemValue = indexName || '';
@@ -305,7 +305,7 @@ function newSortableList ( options, parentNode ) {
 		if (
 			( ( 'LimitedSort' !== myOptions.listStyle ) || ( THE_CONST.number1 < myItems.length ) )
 			&&
-			( ! isLastItem  )
+			( ! isLastItem )
 		) {
 			item.draggable = true;
 			item.addEventListener ( 'dragstart', myOnDragStart, false );

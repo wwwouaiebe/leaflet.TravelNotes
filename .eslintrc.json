@@ -31,7 +31,7 @@
 		"no-labels" : [ "error" ],
 		"no-lone-blocks" : [ "error" ],
 		"no-magic-numbers" : [ "warn", { "ignoreArrayIndexes" : false, "detectObjects" : true } ],
-		
+		"no-multi-spaces" : [ "warn" ],
 		
 		
 		

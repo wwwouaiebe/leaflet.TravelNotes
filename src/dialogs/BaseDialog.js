@@ -40,7 +40,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newBaseDialog function --------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ function newBaseDialog ( ) {
 	function myCreateBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		myBackgroundDiv = myHTMLElementsFactory.create ( 'div', {  className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
+		myBackgroundDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
 		myBackgroundDiv.addEventListener (
 			'dragover',
 			( ) => null,

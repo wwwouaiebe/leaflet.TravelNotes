@@ -39,7 +39,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- providersToolbarUI function ---------------------------------------------------------------------------------------
@@ -147,13 +147,13 @@ function newProvidersToolbarUI ( ) {
 			if ( provider.transitModes.bike ) {
 				mySetTransitMode ( 'bike' );
 			}
-			else if ( provider.transitModes.pedestrian )  {
+			else if ( provider.transitModes.pedestrian ) {
 				mySetTransitMode ( 'pedestrian' );
 			}
-			else if ( provider.transitModes.car )  {
+			else if ( provider.transitModes.car ) {
 				mySetTransitMode ( 'car' );
 			}
-			else if ( provider.transitModes.train )  {
+			else if ( provider.transitModes.train ) {
 				mySetTransitMode ( 'train' );
 			}
 		}

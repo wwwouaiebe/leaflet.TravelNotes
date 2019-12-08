@@ -34,7 +34,7 @@ import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newErrorsUI function ----------------------------------------------------------------------------------------------
@@ -204,13 +204,13 @@ function newErrorsUI ( ) {
 
 		createUI : ( ) => myCreateUI ( ),
 
-		showError : error  => myShow ( error, 'Error' ),
+		showError : error => myShow ( error, 'Error' ),
 
-		showWarning : warning  => myShow ( warning, 'Warning' ),
+		showWarning : warning => myShow ( warning, 'Warning' ),
 
-		showInfo : info  => myShow ( info, 'Info' ),
+		showInfo : info => myShow ( info, 'Info' ),
 
-		showHelp : help  => myShow ( help, 'Help' )
+		showHelp : help => myShow ( help, 'Help' )
 
 	};
 }

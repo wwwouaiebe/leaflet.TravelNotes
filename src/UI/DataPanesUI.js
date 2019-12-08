@@ -40,7 +40,7 @@ import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newDataPanesUI function -------------------------------------------------------------------------------------------
@@ -259,14 +259,14 @@ function newDataPanesUI ( ) {
 		{
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			setItinerary : ( ) =>  mySetItinerary ( ),
-			updateItinerary : ( ) =>  myUpdateItinerary ( ),
+			setItinerary : ( ) => mySetItinerary ( ),
+			updateItinerary : ( ) => myUpdateItinerary ( ),
 
-			setTravelNotes : ( ) =>  mySetTravelNotes ( ),
-			updateTravelNotes : ( ) =>  myUpdateTravelNotes ( ),
+			setTravelNotes : ( ) => mySetTravelNotes ( ),
+			updateTravelNotes : ( ) => myUpdateTravelNotes ( ),
 
-			setSearch : ( ) =>  mySetSearch ( ),
-			updateSearch : ( ) =>  myUpdateSearch ( )
+			setSearch : ( ) => mySetSearch ( ),
+			updateSearch : ( ) => myUpdateSearch ( )
 
 		}
 	);

@@ -44,7 +44,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
 
@@ -330,7 +330,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		);
 
 		let notesIterator = route.notes.iterator;
-		let notesDone =  notesIterator.done;
+		let notesDone = notesIterator.done;
 		let notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
 		let previousNotesDistance = notesDistance;
 
@@ -361,7 +361,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					);
 
 					let maneuverText =
-						'<div>' +  maneuversIterator.value.instruction + '</div>';
+						'<div>' + maneuversIterator.value.instruction + '</div>';
 
 					if ( THE_CONST.zero < maneuversIterator.value.distance ) {
 						maneuverText +=	'<div>' +
@@ -387,7 +387,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 						route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 					rowDiv.maneuverObjId = maneuversIterator.value.objId;
 
-					maneuversDistance +=  maneuversIterator.value.distance;
+					maneuversDistance += maneuversIterator.value.distance;
 					maneuversDone = maneuversIterator.done;
 					if ( maneuversDone ) {
 						maneuversDistance = Number.MAX_VALUE;
@@ -404,8 +404,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				rowDiv.noteObjId = notesIterator.value.objId;
 				previousNotesDistance = notesIterator.value.distance;
 				notesDone = notesIterator.done;
-				notesDistance = notesDone ? Number.MAX_VALUE :  notesIterator.value.distance;
-				if ( ! notesDone  ) {
+				notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
+				if ( ! notesDone ) {
 					let nextDistance = notesIterator.value.distance - previousNotesDistance;
 					if ( THE_CONST.htmlViewsFactory.minNotesDistance < nextDistance ) {
 						myHTMLElementsFactory.create (
@@ -539,21 +539,21 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	return Object.seal (
 		{
 
-			get travelHeaderHTML ( )  { return myGetTravelHeaderHTML ( ); },
+			get travelHeaderHTML ( ) { return myGetTravelHeaderHTML ( ); },
 
-			get travelNotesHTML ( )  { return myGetTravelNotesHTML ( ); },
+			get travelNotesHTML ( ) { return myGetTravelNotesHTML ( ); },
 
-			get routeHeaderHTML ( )  { return myGetRouteHeaderHTML ( theTravelNotesData.travel.editedRoute ); },
+			get routeHeaderHTML ( ) { return myGetRouteHeaderHTML ( theTravelNotesData.travel.editedRoute ); },
 
 			get routeManeuversAndNotesHTML ( ) {
 				return myGetRouteManeuversAndNotesHTML ( theTravelNotesData.travel.editedRoute );
 			},
 
-			get routeFooterHTML ( )  { return myGetRouteFooterHTML ( theTravelNotesData.travel.editedRoute ); },
+			get routeFooterHTML ( ) { return myGetRouteFooterHTML ( theTravelNotesData.travel.editedRoute ); },
 
-			get travelFooterHTML ( )  { return myGetTravelFooterHTML ( ); },
+			get travelFooterHTML ( ) { return myGetTravelFooterHTML ( ); },
 
-			get travelHTML ( ) { return  myGetTravelHTML ( ); },
+			get travelHTML ( ) { return myGetTravelHTML ( ); },
 
 			getRouteHTML : route => myGetRouteHTML ( route ),
 

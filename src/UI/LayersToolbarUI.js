@@ -38,7 +38,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------

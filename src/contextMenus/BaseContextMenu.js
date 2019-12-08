@@ -34,7 +34,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let ourContainer = null;
 let ourTimerId = null;
@@ -100,11 +100,11 @@ function newBaseContextMenu ( originalEvent ) {
 		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
 			ourCloseButton.click ( ) ( );
 		}
-		if ( 'ArrowDown' === keyBoardEvent.key  || 'ArrowRight' === keyBoardEvent.key  ||  'Tab' === keyBoardEvent.key ) {
+		if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
 			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? THE_CONST.number1 : ++ ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
-		if ( 'ArrowUp' === keyBoardEvent.key  || 'ArrowLeft' === keyBoardEvent.key ) {
+		if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
 			ourFocusIsOnItem = ourFocusIsOnItem <= THE_CONST.number1 ? myMenuItems.length : -- ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
@@ -335,7 +335,7 @@ function newBaseContextMenu ( originalEvent ) {
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
 
-		if  ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
+		if ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
 			return;
 		}
 

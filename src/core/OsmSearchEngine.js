@@ -35,7 +35,7 @@ import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 let ourOsmSearchStarted = false;
 let ourSearchParameters = { searchPhrase : '', bbox : null };
@@ -159,7 +159,7 @@ function newOsmSearchEngine ( ) {
 
 		ourOsmSearchStarted = true;
 
-		let mapBounds =  theTravelNotesData.map.getBounds ( );
+		let mapBounds = theTravelNotesData.map.getBounds ( );
 		ourSearchParameters = {
 			bbox : {
 				southWest : {
@@ -174,7 +174,7 @@ function newOsmSearchEngine ( ) {
 			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
 		};
 		theTravelNotesData.searchData = [];
-		window.osmSearch.getSearchPromise ( ourSearchParameters ).then (  ourOnSearchSuccess, ourOnSearchError  );
+		window.osmSearch.getSearchPromise ( ourSearchParameters ).then ( ourOnSearchSuccess, ourOnSearchError );
 	}
 
 	/*

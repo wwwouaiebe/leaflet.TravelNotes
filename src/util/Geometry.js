@@ -32,7 +32,7 @@ Tests ...
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newGeometry  ( ) {
+function newGeometry ( ) {
 
 	/*
 	--- myGetClosestLatLngDistance function ---------------------------------------------------------------------------

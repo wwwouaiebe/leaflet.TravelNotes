@@ -52,7 +52,7 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- travelEditorUI function -------------------------------------------------------------------------------------------
@@ -406,7 +406,7 @@ function newTravelEditorUI ( ) {
 			.addEventListener (
 				'click',
 				( ) => {
-					if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId  ) {
+					if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
 						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
 					}
 					else {
@@ -488,7 +488,7 @@ function newTravelEditorUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySetRoutesList (  ) {
+	function mySetRoutesList ( ) {
 		myRoutesList.removeAllItems ( );
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
@@ -512,7 +512,7 @@ function newTravelEditorUI ( ) {
 		{
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 
-			setRoutesList : (  ) => mySetRoutesList ( )
+			setRoutesList : ( ) => mySetRoutesList ( )
 		}
 	);
 }

@@ -33,7 +33,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- showTravelNotes function --------------------------------------------------------------------------------------

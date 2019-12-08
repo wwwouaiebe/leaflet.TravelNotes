@@ -31,7 +31,7 @@ Tests ...
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newAttributionsUI function ----------------------------------------------------------------------------------------

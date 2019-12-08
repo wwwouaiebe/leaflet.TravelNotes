@@ -34,7 +34,7 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newTravelNotesPaneUI function -------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ This function returns the travelNotesPaneUI object
 
 function newTravelNotesPaneUI ( ) {
 
-	let myNoteObjId  = THE_CONST.zero;
+	let myNoteObjId = THE_CONST.zero;
 
 	let myEventDispatcher = newEventDispatcher ( );
 

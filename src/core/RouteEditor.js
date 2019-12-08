@@ -61,7 +61,7 @@ import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import  { THE_CONST } from '../util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ function newRouteEditor ( ) {
 
 	let myMustZoomToRoute = false;
 	let myRequestStarted = false;
-	let myDataSearchEngine  = newDataSearchEngine ( );
+	let myDataSearchEngine = newDataSearchEngine ( );
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -109,9 +109,9 @@ function newRouteEditor ( ) {
 				previousItineraryPoint.latLng,
 				itineraryPointsIterator.value.latLng
 			);
-			if (  maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
+			if ( maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
-				previousManeuver =  maneuverIterator.value;
+				previousManeuver = maneuverIterator.value;
 				maneuverIterator.value.distance = THE_CONST.distance.defaultValue;
 				maneuverIterator.done;
 			}
@@ -409,7 +409,7 @@ function newRouteEditor ( ) {
 		theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
 
 		routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-			.then (  myEndRoutingOk, myEndError  )
+			.then ( myEndRoutingOk, myEndError )
 			.catch ( myEndError );
 
 		return true;
@@ -504,7 +504,7 @@ function newRouteEditor ( ) {
 				newRoadbookUpdate ( );
 			}
 		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' )  );
+			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 	}
 
 	/*

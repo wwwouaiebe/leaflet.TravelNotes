@@ -131,4 +131,4 @@ const THE_CONST = {
 	zero : 0
 };
 
-export  { THE_CONST };
+export { THE_CONST };
