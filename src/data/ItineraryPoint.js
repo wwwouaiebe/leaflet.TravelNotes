@@ -113,10 +113,10 @@ function newItineraryPoint ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myLat = something.lat || THE_CONST.latLng.defaultValue;
-		myLng = something.lng || THE_CONST.latLng.defaultValue;
-		myDistance = something.distance || THE_CONST.distance.defaultValue;
+		let otherthing = myValidate ( something );
+		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
+		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
+		myDistance = otherthing.distance || THE_CONST.distance.defaultValue;
 		myObjId = newObjId ( );
 	}
 

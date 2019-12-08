@@ -244,20 +244,20 @@ function newRouteEditor ( ) {
 	*/
 
 	function myHaveValidWayPoints ( ) {
-		return theTravelNotesData.travel.editedRoute.wayPoints.forEach (
-			( wayPoint, result ) => {
-				if ( null === result ) {
-					result = true;
-				}
-				result =
-					result
+
+		let haveValidWayPoints = true;
+		theTravelNotesData.travel.editedRoute.wayPoints.forEach (
+			wayPoint => {
+				haveValidWayPoints =
+					haveValidWayPoints
 					&&
 					THE_CONST.latLng.defaultValue !== wayPoint.lat
 					&&
 					THE_CONST.latLng.defaultValue !== wayPoint.lng;
-				return result;
 			}
 		);
+
+		return haveValidWayPoints;
 	}
 
 	/*

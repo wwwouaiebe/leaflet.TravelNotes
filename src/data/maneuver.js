@@ -121,12 +121,12 @@ function newManeuver ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myIconName = something.iconName || '';
-		myInstruction = something.instruction || '';
-		myDistance = something.distance || THE_CONST.distance.defaultValue;
-		myDuration = something.duration || THE_CONST.distance.defaultValue;
-		myItineraryPointObjId = something.itineraryPointObjId || THE_CONST.invalidObjId;
+		let otherthing = myValidate ( something );
+		myIconName = otherthing.iconName || '';
+		myInstruction = otherthing.instruction || '';
+		myDistance = otherthing.distance || THE_CONST.distance.defaultValue;
+		myDuration = otherthing.duration || THE_CONST.distance.defaultValue;
+		myItineraryPointObjId = otherthing.itineraryPointObjId || THE_CONST.invalidObjId;
 		myObjId = newObjId ( );
 	}
 

@@ -116,9 +116,6 @@ function newUtilities ( ) {
 	*/
 
 	function mySaveFile ( filename, text, type ) {
-		if ( ! type ) {
-			type = 'text/plain';
-		}
 		if ( window.navigator.msSaveOrOpenBlob ) {
 
 			// https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
@@ -135,7 +132,7 @@ function newUtilities ( ) {
 			// FF...
 			// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
 			try {
-				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type : type } ) );
+				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type : type || 'text/plain' } ) );
 				let element = document.createElement ( 'a' );
 				element.setAttribute ( 'href', mapFile );
 				element.setAttribute ( 'download', filename );
@@ -156,20 +153,18 @@ function newUtilities ( ) {
 	/*
 	--- myFormatTime function -----------------------------------------------------------------------------------------
 
-	This function save data to a local file
-
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myFormatTime ( time ) {
-		time = Math.floor ( time );
-		if ( THE_CONST.zero === time ) {
+		let iTtime = Math.floor ( time );
+		if ( THE_CONST.zero === iTtime ) {
 			return '';
 		}
-		let days = Math.floor ( time / THE_CONST.time.secondInDay );
-		let hours = Math.floor ( time % THE_CONST.time.secondInDay / THE_CONST.time.secondInHour );
-		let minutes = Math.floor ( time % THE_CONST.time.secondInHour / THE_CONST.time.secondInMinut );
-		let seconds = Math.floor ( time % THE_CONST.time.secondInMinut );
+		let days = Math.floor ( iTtime / THE_CONST.time.secondInDay );
+		let hours = Math.floor ( iTtime % THE_CONST.time.secondInDay / THE_CONST.time.secondInHour );
+		let minutes = Math.floor ( iTtime % THE_CONST.time.secondInHour / THE_CONST.time.secondInMinut );
+		let seconds = Math.floor ( iTtime % THE_CONST.time.secondInMinut );
 		if ( THE_CONST.zero < days ) {
 			return days +
 				'&nbsp;'
@@ -205,13 +200,13 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatDistance ( distance ) {
-		distance = Math.floor ( distance );
-		if ( THE_CONST.zero === distance ) {
+		let iDistance = Math.floor ( distance );
+		if ( THE_CONST.zero === iDistance ) {
 			return '';
 		}
-		return Math.floor ( distance / THE_CONST.distance.mInKm ) +
+		return Math.floor ( iDistance / THE_CONST.distance.mInKm ) +
 			',' +
-			Math.floor ( ( distance % THE_CONST.distance.mInKm ) / THE_CONST.distance.round ).toFixed ( THE_CONST.zero )
+			Math.floor ( ( iDistance % THE_CONST.distance.mInKm ) / THE_CONST.distance.round ).toFixed ( THE_CONST.zero )
 				.padStart ( THE_CONST.number2, '0' )
 				.padEnd ( THE_CONST.number3, '0' ) +
 			'&nbsp;km';

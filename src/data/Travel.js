@@ -128,13 +128,13 @@ function newTravel ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myEditedRoute.object = something.editedRoute;
-		myName = something.name || '';
-		myUserData = something.userData || {};
-		myReadOnly = something.readOnly || false;
-		myRoutes.object = something.routes || [];
-		myNotes.object = something.notes || [];
+		let otherthing = myValidate ( something );
+		myEditedRoute.object = otherthing.editedRoute;
+		myName = otherthing.name || '';
+		myUserData = otherthing.userData || {};
+		myReadOnly = otherthing.readOnly || false;
+		myRoutes.object = otherthing.routes || [];
+		myNotes.object = otherthing.notes || [];
 		myObjId = newObjId ( );
 	}
 

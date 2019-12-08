@@ -215,9 +215,6 @@ function newSortableList ( options, parentNode ) {
 
 	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem ) {
 
-		itemValue = itemValue || '';
-		itemValue = indexName || '';
-		placeholder = placeholder || '';
 		dataObjId = dataObjId || THE_CONST.invalidObjId;
 
 		let item = myHTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
@@ -226,7 +223,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemTextIndex',
-				innerHTML : indexName
+				innerHTML : indexName || ''
 			},
 			item
 		);
@@ -235,8 +232,8 @@ function newSortableList ( options, parentNode ) {
 			{
 				type : 'text',
 				className : 'TravelNotes-SortableList-ItemInput',
-				placeholder : placeholder,
-				value : itemValue
+				placeholder : placeholder || '',
+				value : itemValue || ''
 			},
 			item
 		);

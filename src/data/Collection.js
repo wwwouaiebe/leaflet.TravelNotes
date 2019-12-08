@@ -192,12 +192,13 @@ function newCollection ( objName ) {
 			throw 'invalid objId for next or previous function';
 		}
 
-		if ( ! condition ) {
-			condition = ( ) => true;
+		let otherCondition = condition;
+		if ( ! otherCondition ) {
+			otherCondition = ( ) => true;
 		}
 		index += direction;
 
-		while ( ( THE_CONST.notFound < index ) && ( index < myArray.length ) && ! condition ( myArray [ index ] ) ) {
+		while ( ( THE_CONST.notFound < index ) && ( index < myArray.length ) && ! otherCondition ( myArray [ index ] ) ) {
 			index += direction;
 		}
 		if ( THE_CONST.notFound === index || myArray.length === index ) {

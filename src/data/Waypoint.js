@@ -113,10 +113,10 @@ function newWayPoint ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myName = something.name || '';
-		myLat = something.lat || THE_CONST.latLng.defaultValue;
-		myLng = something.lng || THE_CONST.latLng.defaultValue;
+		let otherthing = myValidate ( something );
+		myName = otherthing.name || '';
+		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
+		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
 		myObjId = newObjId ( );
 	}
 

@@ -195,20 +195,20 @@ function newRoute ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myName = something.name || '';
-		myWayPoints.object = something.wayPoints || [];
-		myNotes.object = something.notes || [];
-		myItinerary.object = something.itinerary || newItinerary ( ).object;
-		myWidth = something.width || theConfig.route.width;
-		myColor = something.color || '#000000';
-		myDashArray = something.dashArray || THE_CONST.zero;
-		myChain = something.chain || false;
-		myDistance = something.distance;
-		myDuration = something.duration;
-		myEdited = something.edited || THE_CONST.route.edited.notEdited;
-		myHidden = something.hidden || false;
-		myChainedDistance = something.chainedDistance;
+		let otherthing = myValidate ( something );
+		myName = otherthing.name || '';
+		myWayPoints.object = otherthing.wayPoints || [];
+		myNotes.object = otherthing.notes || [];
+		myItinerary.object = otherthing.itinerary || newItinerary ( ).object;
+		myWidth = otherthing.width || theConfig.route.width;
+		myColor = otherthing.color || '#000000';
+		myDashArray = otherthing.dashArray || THE_CONST.zero;
+		myChain = otherthing.chain || false;
+		myDistance = otherthing.distance;
+		myDuration = otherthing.duration;
+		myEdited = otherthing.edited || THE_CONST.route.edited.notEdited;
+		myHidden = otherthing.hidden || false;
+		myChainedDistance = otherthing.chainedDistance;
 		myObjId = newObjId ( );
 	}
 

@@ -162,21 +162,21 @@ function newNote ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myIconHeight = something.iconHeight || THE_CONST.note.defaultIconSize;
-		myIconWidth = something.iconWidth || THE_CONST.note.defaultIconSize;
-		myIconContent = something.iconContent || '';
-		myPopupContent = something.popupContent || '';
-		myTooltipContent = something.tooltipContent || '';
-		myPhone = something.phone || '';
-		myUrl = something.url || '';
-		myAddress = something.address || '';
-		myIconLat = something.iconLat || THE_CONST.latLng.defaultValue;
-		myIconLng = something.iconLng || THE_CONST.latLng.defaultValue;
-		myLat = something.lat || THE_CONST.latLng.defaultValue;
-		myLng = something.lng || THE_CONST.latLng.defaultValue;
-		myDistance = something.distance || THE_CONST.distance.invalid;
-		myChainedDistance = something.chainedDistance;
+		let otherthing = myValidate ( something );
+		myIconHeight = otherthing.iconHeight || THE_CONST.note.defaultIconSize;
+		myIconWidth = otherthing.iconWidth || THE_CONST.note.defaultIconSize;
+		myIconContent = otherthing.iconContent || '';
+		myPopupContent = otherthing.popupContent || '';
+		myTooltipContent = otherthing.tooltipContent || '';
+		myPhone = otherthing.phone || '';
+		myUrl = otherthing.url || '';
+		myAddress = otherthing.address || '';
+		myIconLat = otherthing.iconLat || THE_CONST.latLng.defaultValue;
+		myIconLng = otherthing.iconLng || THE_CONST.latLng.defaultValue;
+		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
+		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
+		myDistance = otherthing.distance || THE_CONST.distance.invalid;
+		myChainedDistance = otherthing.chainedDistance;
 		myObjId = newObjId ( );
 	}
 

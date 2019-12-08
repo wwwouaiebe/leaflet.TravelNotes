@@ -117,11 +117,11 @@ function newItinerary ( ) {
 	*/
 
 	function mySetObject ( something ) {
-		something = myValidate ( something );
-		myItineraryPoints.object = something.itineraryPoints || [];
-		myManeuvers.object = something.maneuvers || [];
-		myProvider = something.provider || '';
-		myTransitMode = something.transitMode || '';
+		let otherthing = myValidate ( something );
+		myItineraryPoints.object = otherthing.itineraryPoints || [];
+		myManeuvers.object = otherthing.maneuvers || [];
+		myProvider = otherthing.provider || '';
+		myTransitMode = otherthing.transitMode || '';
 		myObjId = newObjId ( );
 
 		// rebuilding links between maneuvers and itineraryPoints
@@ -129,7 +129,7 @@ function newItinerary ( ) {
 		let sourceCounter = THE_CONST.zero;
 		let targetIterator = myItineraryPoints.iterator;
 		while ( ! targetIterator.done ) {
-			itineraryPointObjIdMap.set ( something.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
+			itineraryPointObjIdMap.set ( otherthing.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
 			sourceCounter ++;
 		}
 		let maneuverIterator = myManeuvers.iterator;
