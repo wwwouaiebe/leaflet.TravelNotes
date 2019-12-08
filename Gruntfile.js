@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		eslint: {
 			options: {
-				fix: true,
+				fix: false,
 				configFile: '.eslintrc.json'
 			},				
 			target: ['src/**/*.js']
@@ -225,7 +225,7 @@ module.exports = function(grunt) {
 				]
 			}
 		},
-		clean : ['tmp']
+		clean : ['tmp', 'src/polyline/Polyline.js' ]
 	});
 	grunt.config.data.pkg.buildNumber = grunt.file.readJSON('buildNumber.json').buildNumber;
 	grunt.config.data.pkg.buildNumber = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.buildNumber ) + 1 )).substr ( -5, 5 ) ;
@@ -236,7 +236,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify-es');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.registerTask('default', [ 'includes:Polyline', 'eslint', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
+	grunt.registerTask('default', [ 'eslint', 'includes:Polyline', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
 	grunt.registerTask('release', [ 'includes:Polyline', 'eslint', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
