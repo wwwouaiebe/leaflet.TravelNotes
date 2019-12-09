@@ -307,6 +307,12 @@ function travelNotesFactory ( ) {
 			false
 		);
 
+		document.addEventListener (
+			'roadbookupdate',
+			( ) => newRoadbookUpdate ( ),
+			false
+		);
+
 		let requestBuilder = newHttpRequestBuilder ( );
 		let promises = [
 			requestBuilder.getJsonPromise (
@@ -364,7 +370,7 @@ function travelNotesFactory ( ) {
 				theUI.createUI ( document.getElementById ( divControlId ) );
 
 				myEventDispatcher.dispatch ( 'setrouteslist' );
-				newRoadbookUpdate ( );
+				myEventDispatcher.dispatch ( 'roadbookupdate' );
 
 				theAttributionsUI.createUI ( );
 				theErrorsUI.createUI ( );

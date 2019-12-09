@@ -275,10 +275,6 @@ function newTravelEditorUI ( ) {
 				clickEvent => {
 					clickEvent.stopPropagation ();
 					theTravelEditor.clear ( );
-					if ( theConfig.travelEditor.startupRouteEdition ) {
-						theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
-					}
-					theTravelNotesData.map.fire ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
 				},
 				false
 			);

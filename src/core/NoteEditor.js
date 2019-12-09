@@ -41,7 +41,6 @@ Tests ...
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
@@ -115,16 +114,14 @@ function newNoteEditor ( ) {
 			);
 
 			myEventDispatcher.dispatch (
-				'redrawnote',
+				'noteupdated',
 				{
-					note : noteAndRoute.note
+					removedNoteObjId : noteObjId,
+					addedNoteObjId : noteObjId
 				}
 			);
 			myEventDispatcher.dispatch ( 'updateitinerary' );
 			myEventDispatcher.dispatch ( 'updatetravelnotes' );
-
-			// and the HTML page is adapted
-			newRoadbookUpdate ( );
 		}
 	}
 
@@ -150,9 +147,7 @@ function newNoteEditor ( ) {
 
 		myEventDispatcher.dispatch ( 'updateitinerary' );
 		myEventDispatcher.dispatch ( 'updatetravelnotes' );
-
-		// and the HTML page is adapted
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*
@@ -194,7 +189,7 @@ function newNoteEditor ( ) {
 					);
 				}
 			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+			.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
 
 	}
 
@@ -358,9 +353,6 @@ function newNoteEditor ( ) {
 
 	function myRemoveNote ( noteObjId ) {
 
-		// the note is removed from the leaflet map
-		myEventDispatcher.dispatch ( 'removeobject', { objId : noteObjId } );
-
 		// the note and the route are searched
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		if ( noteAndRoute.route ) {
@@ -375,9 +367,14 @@ function newNoteEditor ( ) {
 			theTravelNotesData.travel.notes.remove ( noteObjId );
 			myEventDispatcher.dispatch ( 'updatetravelnotes' );
 		}
+		myEventDispatcher.dispatch (
+			'noteupdated',
+			{
+				removedNoteObjId : noteObjId,
+				addedNoteObjId : THE_CONST.invalidObjId
+			}
+		);
 
-		// and the HTML page is adapted
-		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -465,7 +462,7 @@ function newNoteEditor ( ) {
 	function myNoteDropped ( draggedNoteObjId, targetNoteObjId, draggedBefore ) {
 		theTravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
 		myEventDispatcher.dispatch ( 'updatetravelnotes' );
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*

@@ -87,6 +87,7 @@ function newUI ( ) {
 
 		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteEditorUI.expandUI ( ), false );
 		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteEditorUI.reduceUI ( ), false );
+
 		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteEditorUI.setWayPointsList ( ), false );
 
 		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
@@ -95,6 +96,7 @@ function newUI ( ) {
 		myMainDiv.addEventListener ( 'updatetravelnotes', ( ) => theDataPanesUI.updateTravelNotes ( ), false );
 		myMainDiv.addEventListener ( 'setsearch', ( ) => theDataPanesUI.setSearch ( ), false );
 		myMainDiv.addEventListener ( 'updatesearch', ( ) => theDataPanesUI.updateSearch ( ), false );
+
 		myMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
 
 		myMainDiv.addEventListener (

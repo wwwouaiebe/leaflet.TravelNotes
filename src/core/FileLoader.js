@@ -41,7 +41,6 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -188,9 +187,9 @@ function newFileLoader ( ) {
 				myEventDispatcher.dispatch ( 'setwaypointslist' );
 				myEventDispatcher.dispatch ( 'setitinerary' );
 			}
-			newRoadbookUpdate ( );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
-		theTravelNotesData.map.fire (
+		myEventDispatcher.dispatch (
 			'travelnotesfileloaded',
 			{
 				readOnly : myIsFileReadOnly,

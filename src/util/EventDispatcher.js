@@ -80,7 +80,9 @@ function newEventDispatcher ( ) {
 			'geolocationpositionchanged',
 			'routeupdated',
 			'routepropertiesupdated',
-			'noteupdated'
+			'noteupdated',
+			'roadbookupdate',
+			'travelnotesfileloaded'
 		].indexOf ( eventName ) ) {
 			return document;
 		}

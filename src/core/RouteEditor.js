@@ -53,7 +53,6 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -345,10 +344,16 @@ function newRouteEditor ( ) {
 			notesIterator.value.distance = latLngDistance.distance;
 		}
 
+		myChainRoutes ( );
+
 		// and the notes sorted
 		theTravelNotesData.travel.editedRoute.notes.sort (
 			( first, second ) => first.distance - second.distance
 		);
+
+		if ( myMustZoomToRoute ) {
+			myZoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
+		}
 
 		myEventDispatcher.dispatch (
 			'routeupdated',
@@ -357,17 +362,10 @@ function newRouteEditor ( ) {
 				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 			}
 		);
-		if ( myMustZoomToRoute ) {
-			myZoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
-		}
 
 		// and the itinerary and waypoints are displayed
 		myEventDispatcher.dispatch ( 'setitinerary' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
-
-		// the HTML page is adapted ( depending of the config.... )
-		myChainRoutes ( );
-		newRoadbookUpdate ( );
 	}
 
 	/*
@@ -420,19 +418,20 @@ function newRouteEditor ( ) {
 	*/
 
 	function myCancelEdition ( ) {
-		let oldEditedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-		oldEditedRoute.edited = THE_CONST.route.edited.notEdited;
+		let routeToRestore = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
+		let oldEditedRouteObjId = theTravelNotesData.editedRoute.objId;
+		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
+		routeToRestore.edited = THE_CONST.route.edited.notEdited;
+		theTravelNotesData.travel.editedRoute = null;
+		myChainRoutes ( );
+
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{
-				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
-				addedRouteObjId : oldEditedRoute.objId
+				removedRouteObjId : oldEditedRouteObjId,
+				addedRouteObjId : routeToRestore.objId
 			}
 		);
-
-		theTravelNotesData.travel.editedRoute = null;
-		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
-		myChainRoutes ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'reducerouteui' );

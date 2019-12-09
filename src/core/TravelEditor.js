@@ -48,6 +48,7 @@ import { polyline } from '../polyline/Polyline.js';
 
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theConfig } from '../data/Config.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -55,7 +56,6 @@ import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -136,6 +136,7 @@ function newTravelEditor ( ) {
 		theTravelNotesData.editedRouteObjId = initialRoute.objId;
 		theTravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
+		theRouteEditor.chainRoutes ( );
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{
@@ -143,7 +144,6 @@ function newTravelEditor ( ) {
 				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 			}
 		);
-		theRouteEditor.chainRoutes ( );
 		myEventDispatcher.dispatch ( 'expandrouteui' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
@@ -162,7 +162,7 @@ function newTravelEditor ( ) {
 		theTravelNotesData.travel.routes.add ( route );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 		if ( THE_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited ) {
 			myEditRoute ( route.objId );
 		}
@@ -191,7 +191,10 @@ function newTravelEditor ( ) {
 			return;
 		}
 
+		theTravelNotesData.travel.routes.remove ( routeObjId );
+
 		theRouteEditor.chainRoutes ( );
+
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{
@@ -199,7 +202,6 @@ function newTravelEditor ( ) {
 				addedRouteObjId : THE_CONST.invalidObjId
 			}
 		);
-		theTravelNotesData.travel.routes.remove ( routeObjId );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
 			theRouteEditor.cancelEdition ( );
@@ -219,11 +221,11 @@ function newTravelEditor ( ) {
 
 	function myRenameRoute ( routeObjId, routeName ) {
 		myDataSearchEngine.getRoute ( routeObjId ).name = routeName;
-		myEventDispatcher.dispatch ( 'setrouteslist' );
 		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
 			theTravelNotesData.travel.editedRoute.name = routeName;
 		}
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*
@@ -236,9 +238,9 @@ function newTravelEditor ( ) {
 
 	function mySwapRoute ( routeObjId, swapUp ) {
 		theTravelNotesData.travel.routes.swap ( routeObjId, swapUp );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
 		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*
@@ -251,9 +253,9 @@ function newTravelEditor ( ) {
 
 	function myRouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
 		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
 		theRouteEditor.chainRoutes ( );
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*
@@ -326,7 +328,11 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
+		myEventDispatcher.dispatch ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+		if ( theConfig.travelEditor.startupRouteEdition ) {
+			myEditRoute ( theTravelNotesData.travel.routes.first.objId );
+		}
 	}
 
 	/*

@@ -133,12 +133,13 @@ function newMouseUI ( ) {
 				myUpdate ( );
 			}
 		);
-		theTravelNotesData.map.on (
+		document.addEventListener (
 			'travelnotesfileloaded',
 			TravelNotesFileLoadedEvent => {
 				myFileName = TravelNotesFileLoadedEvent.name || '';
 				myUpdate ( );
-			}
+			},
+			false
 		);
 
 	}

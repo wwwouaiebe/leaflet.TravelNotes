@@ -56,7 +56,6 @@ import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
@@ -349,7 +348,7 @@ function newMapEditor ( ) {
 						.setLatLngs ( [ draggedNote.latLng, draggedNote.iconLatLng ] );
 
 					// and the HTML page is adapted
-					newRoadbookUpdate ( );
+					myEventDispatcher.dispatch ( 'roadbookupdate' );
 				}
 			);
 
