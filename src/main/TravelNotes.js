@@ -48,43 +48,40 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from './UI/Translator.js';
-import { theConfig } from './data/Config.js';
-import { theTravelNotesData } from './data/TravelNotesData.js';
-import { theTravelEditor } from './core/TravelEditor.js';
-import { theMapEditor } from './core/MapEditor.js';
-import { theAPIKeysManager } from './core/APIKeysManager.js';
-import { theUI } from './UI/UI.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theConfig } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theTravelEditor } from '../core/TravelEditor.js';
+import { theMapEditor } from '../core/MapEditor.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import { theUI } from '../UI/UI.js';
 
-import { newTravel } from './data/Travel.js';
-import { newRoute } from './data/Route.js';
-import { newFileLoader } from './core/FileLoader.js';
-import { newBaseDialog } from './dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from './util/HTMLElementsFactory.js';
-import { newManeuver } from './data/Maneuver.js';
-import { newItineraryPoint } from './data/ItineraryPoint.js';
-import { theCurrentVersion } from './data/Version.js';
-import { newEventDispatcher } from './util/EventDispatcher.js';
-import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
-import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
-import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
-import { theLayersToolbarUI } from './UI/LayersToolbarUI.js';
-import { theMouseUI } from './UI/MouseUI.js';
-import { theAttributionsUI } from './UI/AttributionsUI.js';
-import { theErrorsUI } from './UI/ErrorsUI.js';
+import { newTravel } from '../data/Travel.js';
+import { newRoute } from '../data/Route.js';
+import { newFileLoader } from '../core/FileLoader.js';
+import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import { newManeuver } from '../data/Maneuver.js';
+import { newItineraryPoint } from '../data/ItineraryPoint.js';
+import { theCurrentVersion } from '../data/Version.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
+import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import { theMouseUI } from '../UI/MouseUI.js';
+import { theAttributionsUI } from '../UI/AttributionsUI.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { THE_CONST } from './util/Constants.js';
+import { THE_CONST } from '../util/Constants.js';
 
 /*
---- travelNotesFactory funtion ----------------------------------------------------------------------------------------
-
-This function returns all you need to use TravelNotes :-)
+--- newTravelNotes funtion --------------------------------------------------------------------------------------------
 
 Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function travelNotesFactory ( ) {
+function newTravelNotes ( ) {
 
 	let myLeftUserContextMenuData = [];
 	let myRightUserContextMenuData = [];
@@ -444,131 +441,101 @@ function travelNotesFactory ( ) {
 		theAPIKeysManager.addProvider ( provider );
 	}
 
-	return {
+	return Object.seal (
+		{
 
-		/*
-		--- addControl method ------------------------------------------------------------------------------------------
+			/*
+			--- addControl method ------------------------------------------------------------------------------------------
 
-		This method add the control on the page
+			This method add the control on the page
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
+			---------------------------------------------------------------------------------------------------------------
+			*/
 
-		addControl : ( map, divControlId ) => myAddControl ( map, divControlId ),
+			addControl : ( map, divControlId ) => myAddControl ( map, divControlId ),
 
-		/*
-		--- addProvider method ----------------------------------------------------------------------------------------
+			/*
+			--- addProvider method ----------------------------------------------------------------------------------------
 
-		This method add a provider to the providers map
+			This method add a provider to the providers map
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
+			---------------------------------------------------------------------------------------------------------------
+			*/
 
-		addProvider : provider => myAddProvider ( provider ),
+			addProvider : provider => myAddProvider ( provider ),
 
-		/*
-		--- addMapContextMenu method ----------------------------------------------------------------------------------
+			/*
+			--- addMapContextMenu method ----------------------------------------------------------------------------------
 
-		This method add the map context menus
+			This method add the map context menus
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
+			---------------------------------------------------------------------------------------------------------------
+			*/
 
-		addMapContextMenu : ( leftButton, rightButton ) => {
-			if ( leftButton ) {
-				theTravelNotesData.map.on ( 'click', myOnMapClick );
-				myHaveLeftContextMenu = true;
-			}
-			if ( rightButton ) {
-				theTravelNotesData.map.on ( 'contextmenu', myOnMapClick );
-				myHaveRightContextMenu = true;
-			}
-		},
+			addMapContextMenu : ( leftButton, rightButton ) => {
+				if ( leftButton ) {
+					theTravelNotesData.map.on ( 'click', myOnMapClick );
+					myHaveLeftContextMenu = true;
+				}
+				if ( rightButton ) {
+					theTravelNotesData.map.on ( 'contextmenu', myOnMapClick );
+					myHaveRightContextMenu = true;
+				}
+			},
 
-		/*
-		--- getters and setters ---------------------------------------------------------------------------------------
+			/*
+			--- getters and setters ---------------------------------------------------------------------------------------
 
-		---------------------------------------------------------------------------------------------------------------
-		*/
+			---------------------------------------------------------------------------------------------------------------
+			*/
 
-		get baseDialog ( ) { return newBaseDialog ( ); },
+			get baseDialog ( ) { return newBaseDialog ( ); },
 
-		get userData ( ) { return theTravelNotesData.travel.userData; },
-		set userData ( userData ) { theTravelNotesData.travel.userData = userData; },
+			get userData ( ) { return theTravelNotesData.travel.userData; },
+			set userData ( userData ) { theTravelNotesData.travel.userData = userData; },
 
-		get rightContextMenu ( ) { return myHaveRightContextMenu; },
-		set rightContextMenu ( RightContextMenu ) {
-			if ( ( RightContextMenu ) && ( ! myHaveRightContextMenu ) ) {
-				theTravelNotesData.map.on ( 'contextmenu', myOnMapContextMenu );
-				myHaveRightContextMenu = true;
-			}
-			else if ( ( ! RightContextMenu ) && ( myHaveRightContextMenu ) ) {
-				theTravelNotesData.map.off ( 'contextmenu', myOnMapContextMenu );
-				myHaveRightContextMenu = false;
-			}
-		},
+			get rightContextMenu ( ) { return myHaveRightContextMenu; },
+			set rightContextMenu ( RightContextMenu ) {
+				if ( ( RightContextMenu ) && ( ! myHaveRightContextMenu ) ) {
+					theTravelNotesData.map.on ( 'contextmenu', myOnMapContextMenu );
+					myHaveRightContextMenu = true;
+				}
+				else if ( ( ! RightContextMenu ) && ( myHaveRightContextMenu ) ) {
+					theTravelNotesData.map.off ( 'contextmenu', myOnMapContextMenu );
+					myHaveRightContextMenu = false;
+				}
+			},
 
-		get leftContextMenu ( ) { return myHaveLeftContextMenu; },
-		set leftContextMenu ( LeftContextMenu ) {
-			if ( ( LeftContextMenu ) && ( ! myHaveLeftContextMenu ) ) {
-				theTravelNotesData.map.on ( 'click', myOnMapClick );
-				myHaveLeftContextMenu = true;
-			}
-			else if ( ( ! LeftContextMenu ) && ( myHaveLeftContextMenu ) ) {
-				theTravelNotesData.map.off ( 'click', myOnMapClick );
-				myHaveLeftContextMenu = false;
-			}
-		},
+			get leftContextMenu ( ) { return myHaveLeftContextMenu; },
+			set leftContextMenu ( LeftContextMenu ) {
+				if ( ( LeftContextMenu ) && ( ! myHaveLeftContextMenu ) ) {
+					theTravelNotesData.map.on ( 'click', myOnMapClick );
+					myHaveLeftContextMenu = true;
+				}
+				else if ( ( ! LeftContextMenu ) && ( myHaveLeftContextMenu ) ) {
+					theTravelNotesData.map.off ( 'click', myOnMapClick );
+					myHaveLeftContextMenu = false;
+				}
+			},
 
-		get leftUserContextMenu ( ) { return myLeftUserContextMenuData; },
-		set leftUserContextMenu ( LeftUserContextMenu ) { myLeftUserContextMenuData = LeftUserContextMenu; },
+			get leftUserContextMenu ( ) { return myLeftUserContextMenuData; },
+			set leftUserContextMenu ( LeftUserContextMenu ) { myLeftUserContextMenuData = LeftUserContextMenu; },
 
-		get rightUserContextMenu ( ) { return myRightUserContextMenuData; },
-		set rightUserContextMenu ( RightUserContextMenu ) { myRightUserContextMenuData = RightUserContextMenu; },
+			get rightUserContextMenu ( ) { return myRightUserContextMenuData; },
+			set rightUserContextMenu ( RightUserContextMenu ) { myRightUserContextMenuData = RightUserContextMenu; },
 
-		get maneuver ( ) { return newManeuver ( ); },
+			get maneuver ( ) { return newManeuver ( ); },
 
-		get itineraryPoint ( ) { return newItineraryPoint ( ); },
+			get itineraryPoint ( ) { return newItineraryPoint ( ); },
 
-		get version ( ) { return theCurrentVersion; }
-	};
-}
-
-try {
-	window.L.travelNotes = travelNotesFactory ( );
-}
-catch ( err ) {
-	console.log ( err ? err : 'An error occurs when loading TravelNotes' );
-}
-
-newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-	'TravelNotesConfig.json'
-)
-	.then (
-		config => {
-			theConfig.overload ( config );
-
-			if ( ! theConfig.autoLoad ) {
-				return;
-			}
-			newHTMLElementsFactory ( ).create (
-				'div',
-				{ id : 'Map' },
-				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
-			);
-			newHTMLElementsFactory ( ).create (
-				'div',
-				{ id : 'TravelNotes' },
-				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
-			);
-
-			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-				.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
-			window.L.travelNotes.addControl ( map, 'TravelNotes' );
-			window.L.travelNotes.rightContextMenu = true;
+			get version ( ) { return theCurrentVersion; }
 		}
 	);
+}
+
+const theTravelNotes = newTravelNotes ( );
+
+export { theTravelNotes };
 
 /*
 --- End of TravelNotes.js file ----------------------------------------------------------------------------------------

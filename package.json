@@ -2,7 +2,7 @@
   "name": "leaflet.travelnotes",
   "version": "1.6.0",
   "description": "Editable markers and routing engine for leaflet",
-  "main": "src/TravelNotes.js",
+  "main": "src/main/main.js",
   "dependencies": {
     "@mapbox/polyline": "^1.1.0",
     "leaflet": "^1.5.1"

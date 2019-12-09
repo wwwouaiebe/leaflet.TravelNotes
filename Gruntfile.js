@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 					format : 'iife'
 				},
 				files: {
-				  'tmp/TravelNotes.min.js': ['src/TravelNotes.js'],  
+				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
 				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']				  
 				}
 			}
@@ -229,6 +229,7 @@ module.exports = function(grunt) {
 	});
 	grunt.config.data.pkg.buildNumber = grunt.file.readJSON('buildNumber.json').buildNumber;
 	grunt.config.data.pkg.buildNumber = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.buildNumber ) + 1 )).substr ( -5, 5 ) ;
+	grunt.file.write ( 'buildNumber.json', '{ "buildNumber" : "' + grunt.config.data.pkg.buildNumber + '"}'  );
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rollup');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -241,5 +242,4 @@ module.exports = function(grunt) {
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
-	grunt.file.write ( 'buildNumber.json', '{ "buildNumber" : "' + grunt.config.data.pkg.buildNumber + '"}'  );
 };
