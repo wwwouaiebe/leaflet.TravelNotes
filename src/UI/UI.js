@@ -36,8 +36,8 @@ Tests ...
 */
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theTravelEditorUI } from '../UI/TravelEditorUI.js';
-import { theRouteEditorUI } from '../UI/RouteEditorUI.js';
+import { theTravelUI } from '../UI/TravelUI.js';
+import { theRouteUI } from '../UI/RouteUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
@@ -77,18 +77,18 @@ function newUI ( ) {
 		);
 
 		theTravelNotesToolbarUI.createUI ( myMainDiv );
-		theTravelEditorUI.createUI ( myMainDiv );
-		theRouteEditorUI.createUI ( myMainDiv );
+		theTravelUI.createUI ( myMainDiv );
+		theRouteUI.createUI ( myMainDiv );
 		theDataPanesUI.createUI ( myMainDiv );
 
 		theProvidersToolbarUI.createUI ( myMainDiv );
 
-		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelEditorUI.setRoutesList ( ), false );
+		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
 
-		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteEditorUI.expandUI ( ), false );
-		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteEditorUI.reduceUI ( ), false );
+		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteUI.expandUI ( ), false );
+		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteUI.reduceUI ( ), false );
 
-		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteEditorUI.setWayPointsList ( ), false );
+		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteUI.setWayPointsList ( ), false );
 
 		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
 		myMainDiv.addEventListener ( 'updateitinerary', ( ) => theDataPanesUI.updateItinerary ( ), false );

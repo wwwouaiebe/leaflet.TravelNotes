@@ -16,9 +16,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- TravelEditorUI.js file --------------------------------------------------------------------------------------------
+--- TravelUI.js file --------------------------------------------------------------------------------------------------
 This file contains:
-	- the newTravelEditorUI function
+	- the newTravelUI function
 Changes:
 	- v1.0.0:
 		- created
@@ -55,14 +55,14 @@ import { newFileLoader } from '../core/FileLoader.js';
 import { THE_CONST } from '../util/Constants.js';
 
 /*
---- travelEditorUI function -------------------------------------------------------------------------------------------
+--- newTravelUI function ----------------------------------------------------------------------------------------------
 
 This function creates the UI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravelEditorUI ( ) {
+function newTravelUI ( ) {
 
 	let myRoutesList = null;
 
@@ -118,9 +118,9 @@ function newTravelEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title =
 						hiddenList
 							?
-							theTranslator.getText ( 'TravelEditorUI - Show' )
+							theTranslator.getText ( 'TravelUI - Show' )
 							:
-							theTranslator.getText ( 'TravelEditorUI - Hide' );
+							theTranslator.getText ( 'TravelUI - Hide' );
 					clickEvent.stopPropagation ( );
 				},
 				false );
@@ -129,7 +129,7 @@ function newTravelEditorUI ( ) {
 		myHTMLElementsFactory.create (
 			'span',
 			{
-				innerHTML : theTranslator.getText ( 'TravelEditorUI - Travel routes' ),
+				innerHTML : theTranslator.getText ( 'TravelUI - Travel routes' ),
 				id : 'TravelNotes-Control-TravelHeaderText',
 				className : 'TravelNotes-Control-HeaderText'
 			},
@@ -234,7 +234,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-ExpandRoutesListButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Expand the list' ),
+				title : theTranslator.getText ( 'TravelUI - Expand the list' ),
 				innerHTML : '&#x25bd;'
 			},
 			buttonsDiv
@@ -252,9 +252,9 @@ function newTravelEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title =
 						expandedList
 							?
-							theTranslator.getText ( 'TravelEditorUI - Reduce the list' )
+							theTranslator.getText ( 'TravelUI - Reduce the list' )
 							:
-							theTranslator.getText ( 'TravelEditorUI - Expand the list' );
+							theTranslator.getText ( 'TravelUI - Expand the list' );
 				},
 				false
 			);
@@ -265,7 +265,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-CancelTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Cancel travel' ),
+				title : theTranslator.getText ( 'TravelUI - Cancel travel' ),
 				innerHTML : '&#x274c'
 			},
 			buttonsDiv
@@ -285,7 +285,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-SaveTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Save travel' ),
+				title : theTranslator.getText ( 'TravelUI - Save travel' ),
 				innerHTML : '&#x1f4be;'
 			},
 			buttonsDiv
@@ -338,7 +338,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-OpenTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Open travel' ),
+				title : theTranslator.getText ( 'TravelUI - Open travel' ),
 				innerHTML : '&#x1F4C2;'
 			},
 			openTravelFakeDiv
@@ -394,7 +394,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-ImportTravelButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Import travel' ),
+				title : theTranslator.getText ( 'TravelUI - Import travel' ),
 				innerHTML : '&#x1F30F;'
 			},
 			importTravelFakeDiv
@@ -407,7 +407,7 @@ function newTravelEditorUI ( ) {
 					}
 					else {
 						theErrorsUI.showError (
-							theTranslator.getText ( 'TravelEditorUI - Not possible to merge a travel when a route is edited' )
+							theTranslator.getText ( 'TravelUI - Not possible to merge a travel when a route is edited' )
 						);
 					}
 				},
@@ -420,7 +420,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-OpenTravelRoadbookButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - Open travel roadbook' ),
+				title : theTranslator.getText ( 'TravelUI - Open travel roadbook' ),
 				innerHTML :
 					'<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' +
 					theConfig.language +
@@ -437,7 +437,7 @@ function newTravelEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-AddRoutesButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelEditorUI - New route' ),
+				title : theTranslator.getText ( 'TravelUI - New route' ),
 				innerHTML : '+'
 			},
 			buttonsDiv
@@ -491,7 +491,7 @@ function newTravelEditorUI ( ) {
 			myRoutesList.addItem (
 				routesIterator.value.name,
 				routesIterator.value.chain ? '&#x26d3;' : '',
-				theTranslator.getText ( 'TravelEditorUI - Route' ),
+				theTranslator.getText ( 'TravelUI - Route' ),
 				routesIterator.value.objId,
 				false
 			);
@@ -499,7 +499,7 @@ function newTravelEditorUI ( ) {
 	}
 
 	/*
-	--- travelEditorUI object -----------------------------------------------------------------------------------------
+	--- travelUI object -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -514,17 +514,17 @@ function newTravelEditorUI ( ) {
 }
 
 /*
---- theTravelEditorUI object ------------------------------------------------------------------------------------------
+--- theTravelUI object ------------------------------------------------------------------------------------------------
 
-The one and only one travelEditorUI
+The one and only one travelUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const theTravelEditorUI = newTravelEditorUI ( );
+const theTravelUI = newTravelUI ( );
 
-export { theTravelEditorUI };
+export { theTravelUI };
 
 /*
---- End of TravelEditorUI.js file -------------------------------------------------------------------------------------
+--- End of TravelUI.js file -------------------------------------------------------------------------------------------
 */

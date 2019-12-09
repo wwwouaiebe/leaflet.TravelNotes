@@ -17,9 +17,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- RouteEditorUI.js file ---------------------------------------------------------------------------------------------
+--- RouteUI.js file ---------------------------------------------------------------------------------------------------
 This file contains:
-	- the newRouteEditorUI object
+	- the newRouteUI object
 Changes:
 	- v1.0.0:
 		- created
@@ -49,14 +49,14 @@ import { THE_CONST } from '../util/Constants.js';
 let myWayPointsList = null;
 
 /*
---- routeEditorUI function --------------------------------------------------------------------------------------------
+--- routeUI function --------------------------------------------------------------------------------------------------
 
 This function creates the UI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteEditorUI ( ) {
+function newRouteUI ( ) {
 
 	let myControlDiv = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -108,9 +108,9 @@ function newRouteEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-Control-RouteExpandButton' ).title =
 						hiddenList
 							?
-							theTranslator.getText ( 'RouteEditorUI - Show' )
+							theTranslator.getText ( 'RouteUI - Show' )
 							:
-							theTranslator.getText ( 'RouteEditorUI - Hide' );
+							theTranslator.getText ( 'RouteUI - Hide' );
 				},
 				false
 			);
@@ -120,7 +120,7 @@ function newRouteEditorUI ( ) {
 			'span',
 			{
 				innerHTML :
-				theTranslator.getText ( 'RouteEditorUI - Waypoints' ),
+				theTranslator.getText ( 'RouteUI - Waypoints' ),
 				id : 'TravelNotes-Control-RouteHeaderText',
 				className : 'TravelNotes-Control-HeaderText'
 			},
@@ -226,7 +226,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-ExpandWayPointsListButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Expand the list' ),
+				title : theTranslator.getText ( 'RouteUI - Expand the list' ),
 				innerHTML : '&#x25bd;'
 			},
 			buttonsDiv
@@ -245,9 +245,9 @@ function newRouteEditorUI ( ) {
 					document.getElementById ( 'TravelNotes-Control-ExpandWayPointsListButton' ).title =
 						expandedList
 							?
-							theTranslator.getText ( 'RouteEditorUI - Reduce the list' )
+							theTranslator.getText ( 'RouteUI - Reduce the list' )
 							:
-							theTranslator.getText ( 'RouteEditorUI - Expand the list' );
+							theTranslator.getText ( 'RouteUI - Expand the list' );
 				},
 				false
 			);
@@ -258,7 +258,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-CancelRouteButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Cancel' ),
+				title : theTranslator.getText ( 'RouteUI - Cancel' ),
 				innerHTML : '&#x274c'
 			},
 			buttonsDiv
@@ -278,7 +278,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-SaveRouteButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Save' ),
+				title : theTranslator.getText ( 'RouteUI - Save' ),
 				innerHTML : '&#x1f4be;'
 			},
 			buttonsDiv
@@ -297,7 +297,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-gpxButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Save the route in a gpx file' ),
+				title : theTranslator.getText ( 'RouteUI - Save the route in a gpx file' ),
 				innerHTML : 'gpx'
 			},
 			buttonsDiv
@@ -317,7 +317,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-ReverseWayPointsButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Invert waypoints' ),
+				title : theTranslator.getText ( 'RouteUI - Invert waypoints' ),
 				innerHTML : '&#x21C5;'
 			},
 			buttonsDiv
@@ -337,7 +337,7 @@ function newRouteEditorUI ( ) {
 			{
 				id : 'TravelNotes-Control-RemoveAllWayPointsButton',
 				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'RouteEditorUI - Delete all waypoints' ),
+				title : theTranslator.getText ( 'RouteUI - Delete all waypoints' ),
 				innerHTML : '&#x267b;'
 			},
 			buttonsDiv
@@ -422,14 +422,14 @@ function newRouteEditorUI ( ) {
 			let placeholder =
 				wayPointsIterator.first
 					?
-					theTranslator.getText ( 'RouteEditorUI - Start' )
+					theTranslator.getText ( 'RouteUI - Start' )
 					:
 					(
 						wayPointsIterator.last
 							?
-							theTranslator.getText ( 'RouteEditorUI - End' )
+							theTranslator.getText ( 'RouteUI - End' )
 							:
-							theTranslator.getText ( 'RouteEditorUI - Via' )
+							theTranslator.getText ( 'RouteUI - Via' )
 					);
 			myWayPointsList.addItem (
 				newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng ),
@@ -442,7 +442,7 @@ function newRouteEditorUI ( ) {
 	}
 
 	/*
-	--- routeEditorUI object ------------------------------------------------------------------------------------------
+	--- routeUI object ------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -458,17 +458,17 @@ function newRouteEditorUI ( ) {
 }
 
 /*
---- theRouteEditorUI object --------------------------------------------------------------------------------------------
+--- theRouteUI object -------------------------------------------------------------------------------------------------
 
-The one and only one routeEditorUI
+The one and only one routeUI
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const theRouteEditorUI = newRouteEditorUI ( );
+const theRouteUI = newRouteUI ( );
 
-export { theRouteEditorUI };
+export { theRouteUI };
 
 /*
---- End of RouteEditorUI.js file --------------------------------------------------------------------------------------
+--- End of RouteUI.js file --------------------------------------------------------------------------------------------
 */

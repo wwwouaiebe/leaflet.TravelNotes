@@ -178,7 +178,7 @@ function newTravelNotesToolbarUI ( ) {
 				{
 					id : 'TravelNotes-Control-ApiKeysButton',
 					className : 'TravelNotes-Control-Button',
-					title : theTranslator.getText ( 'TravelEditorUI - API keys' ),
+					title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
 					innerHTML : '&#x1f511;'
 				},
 				buttonsDiv
@@ -200,7 +200,7 @@ function newTravelNotesToolbarUI ( ) {
 				{
 					id : 'TravelNotes-Control-GeoLocatorButton',
 					className : 'TravelNotes-Control-Button',
-					title : theTranslator.getText ( 'TravelEditorUI - Geo location' ),
+					title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
 					innerHTML : '&#x1f310;'
 				},
 				buttonsDiv
