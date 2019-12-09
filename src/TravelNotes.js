@@ -60,6 +60,7 @@ import { newTravel } from './data/Travel.js';
 import { newRoute } from './data/Route.js';
 import { newFileLoader } from './core/FileLoader.js';
 import { newBaseDialog } from './dialogs/BaseDialog.js';
+import { newHTMLElementsFactory } from './util/HTMLElementsFactory.js';
 import { newManeuver } from './data/Maneuver.js';
 import { newItineraryPoint } from './data/ItineraryPoint.js';
 import { theCurrentVersion } from './data/Version.js';
@@ -67,7 +68,6 @@ import { newEventDispatcher } from './util/EventDispatcher.js';
 import { newHttpRequestBuilder } from './util/HttpRequestBuilder.js';
 import { newMapContextMenu } from './contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from './roadbook/RoadbookUpdate.js';
-import { newAutoLoader } from './UI/AutoLoader.js';
 import { theLayersToolbarUI } from './UI/LayersToolbarUI.js';
 import { theMouseUI } from './UI/MouseUI.js';
 import { theAttributionsUI } from './UI/AttributionsUI.js';
@@ -548,7 +548,25 @@ newHttpRequestBuilder ( ).getJsonPromise (
 	.then (
 		config => {
 			theConfig.overload ( config );
-			newAutoLoader ( );
+
+			if ( ! theConfig.autoLoad ) {
+				return;
+			}
+			newHTMLElementsFactory ( ).create (
+				'div',
+				{ id : 'Map' },
+				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			);
+			newHTMLElementsFactory ( ).create (
+				'div',
+				{ id : 'TravelNotes' },
+				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			);
+
+			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+				.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
+			window.L.travelNotes.addControl ( map, 'TravelNotes' );
+			window.L.travelNotes.rightContextMenu = true;
 		}
 	);
 
