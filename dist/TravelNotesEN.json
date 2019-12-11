@@ -384,59 +384,59 @@
 		"msgstr" : "It's impossible to edit a route without a save or cancel on the modifications"
 	},
 	{
-		"msgid" : "RouteEditorUI - Add waypoint",
+		"msgid" : "RouteUI - Add waypoint",
 		"msgstr" : "Add a waypoint"
 	},
 	{
-		"msgid" : "RouteEditorUI - Cancel",
+		"msgid" : "RouteUI - Cancel",
 		"msgstr" : "Cancel the modifications"
 	},
 	{
-		"msgid" : "RouteEditorUI - Delete all waypoints",
+		"msgid" : "RouteUI - Delete all waypoints",
 		"msgstr" : "Delete all waypoints"
 	},
 	{
-		"msgid" : "RouteEditorUI - End",
+		"msgid" : "RouteUI - End",
 		"msgstr" : "End"
 	},
 	{
-		"msgid" : "RouteEditorUI - Expand the list",
+		"msgid" : "RouteUI - Expand the list",
 		"msgstr" : "Expand"
 	},
 	{
-		"msgid" : "RouteEditorUI - Hide",
+		"msgid" : "RouteUI - Hide",
 		"msgstr" : "Hide"
 	},
 	{
-		"msgid" : "RouteEditorUI - Invert waypoints",
+		"msgid" : "RouteUI - Invert waypoints",
 		"msgstr" : "Invert the waypoints"
 	},
 	{
-		"msgid" : "RouteEditorUI - Reduce the list",
+		"msgid" : "RouteUI - Reduce the list",
 		"msgstr" : "Reduce"
 	},
 	{
-		"msgid" : "RouteEditorUI - Save",
+		"msgid" : "RouteUI - Save",
 		"msgstr" : "Save the modifications"
 	},
 	{
-		"msgid" : "RouteEditorUI - Save the route in a gpx file",
+		"msgid" : "RouteUI - Save the route in a gpx file",
 		"msgstr" : "Save the route in a gpx file"
 	},
 	{
-		"msgid" : "RouteEditorUI - Show",
+		"msgid" : "RouteUI - Show",
 		"msgstr" : "Show"
 	},
 	{
-		"msgid" : "RouteEditorUI - Start",
+		"msgid" : "RouteUI - Start",
 		"msgstr" : "Start"
 	},
 	{
-		"msgid" : "RouteEditorUI - Via",
+		"msgid" : "RouteUI - Via",
 		"msgstr" : "Via"
 	},
 	{
-		"msgid" : "RouteEditorUI - Waypoints",
+		"msgid" : "RouteUI - Waypoints",
 		"msgstr" : "Route waypoints:"
 	},
 	{
@@ -480,10 +480,6 @@
 		"msgstr" : "Move up"
 	},
 	{
-		"msgid" : "TravelEditorUI - API keys",
-		"msgstr" : "API keys management"
-	},
-	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",
 		"msgstr" : "It's impossible to remove an edited route"
 	},
@@ -492,64 +488,68 @@
 		"msgstr" : "This page ask to close; data are perhaps not saved."
 	},
 	{
-		"msgid" : "TravelEditorUI - Cancel travel",
+		"msgid" : "TravelUI - Cancel travel",
 		"msgstr" : "Cancel travel"
 	},
 	{
-		"msgid" : "TravelEditorUI - Delete all routes",
+		"msgid" : "TravelUI - Delete all routes",
 		"msgstr" : "Delete all routes"
 	},
 	{
-		"msgid" : "TravelEditorUI - Expand the list",
+		"msgid" : "TravelUI - Expand the list",
 		"msgstr" : "Expand"
 	},
 	{
-		"msgid" : "TravelEditorUI - Geo location",
-		"msgstr" : "Localisation"
-	},
-	{
-		"msgid" : "TravelEditorUI - Hide",
+		"msgid" : "TravelUI - Hide",
 		"msgstr" : "Hide"
 	},
 	{
-		"msgid" : "TravelEditorUI - Import travel",
+		"msgid" : "TravelUI - Import travel",
 		"msgstr" : "Import routes and notes from another travel"
 	},
 	{
-		"msgid" : "TravelEditorUI - New route",
+		"msgid" : "TravelUI - New route",
 		"msgstr" : "New route"
 	},
 	{
-		"msgid" : "TravelEditorUI - Not possible to merge a travel when a route is edited",
+		"msgid" : "TravelUI - Not possible to merge a travel when a route is edited",
 		"msgstr" : "Not possible to merge a travel when a route is edited"
 	},
 	{
-		"msgid" : "TravelEditorUI - Open travel roadbook",
+		"msgid" : "TravelUI - Open travel roadbook",
 		"msgstr" : "Open the roadbook"
 	},
 	{
-		"msgid" : "TravelEditorUI - Reduce the list",
+		"msgid" : "TravelUI - Reduce the list",
 		"msgstr" : "Reduce"
 	},
 	{
-		"msgid" : "TravelEditorUI - Route",
+		"msgid" : "TravelUI - Route",
 		"msgstr" : "Route"
 	},
 	{
-		"msgid" : "TravelEditorUI - Travel routes",
+		"msgid" : "TravelUI - Travel routes",
 		"msgstr" : "Travel routes&nbsp;:"
 	},
 	{
-		"msgid" : "TravelEditorUI - Save travel",
+		"msgid" : "TravelUI - Save travel",
 		"msgstr" : "Save the travel in a file"
 	},
 	{
-		"msgid" : "TravelEditorUI - Open travel",
+		"msgid" : "TravelUI - Open travel",
 		"msgstr" : "Open a file"
 	},
 	{
-		"msgid" : "TravelEditorUI - Show",
+		"msgid" : "TravelUI - Show",
 		"msgstr" : "Show"
+	},
+	{
+		"msgid" : "TravelNotesToolbarUI - API keys",
+		"msgstr" : "API keys management"
+	},
+	{
+		"msgid" : "TravelNotesToolbarUI - Geo location",
+		"msgstr" : "Localisation"
 	},
 	{
 		"msgid" : "Utilities - Day",
