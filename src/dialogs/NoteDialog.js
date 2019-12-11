@@ -175,115 +175,6 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnGeocoderError function ---
-	*/
-
-	/*
-	--- getDirectionArrowAndTextTooltip function ----------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function getDirectionArrowAndTextTooltip ( direction ) {
-		if ( null !== direction ) {
-			if ( direction < theConfig.note.svgAnleMaxDirection.right ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn right' ),
-					arrow : '&#x1f882;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.slightRight ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn slight right' ),
-					arrow : '&#x1f885;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.continue ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Continue' ),
-					arrow : '&#x1f881;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.slightLeft ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn slight left' ),
-					arrow : '&#x1f884;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.left ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn left' ),
-					arrow : '&#x1f880;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn sharp left' ),
-					arrow : '&#x1f887;'
-				};
-			}
-			else if ( direction < theConfig.note.svgAnleMaxDirection.sharpRight ) {
-				return {
-					text : theTranslator.getText ( 'NoteDialog - Turn sharp right' ),
-					arrow : '&#x1f886;'
-				};
-			}
-			return {
-				text : theTranslator.getText ( 'NoteDialog - Turn right' ),
-				arrow : '&#x1f882;'
-			};
-		}
-
-		return { text : '', arrow : '' };
-	}
-
-	/*
-	--- myGetSvgAddress function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetSvgAddress ( svgData, arrow ) {
-		let address = '';
-		let showPlace = THE_CONST.zero;
-		for ( let counter = THE_CONST.zero; counter < svgData.streets.length; counter ++ ) {
-			if (
-				( THE_CONST.zero === counter || svgData.streets.length - THE_CONST.number1 === counter )
-				&&
-				'' === svgData.streets [ counter ]
-			) {
-				address += '???';
-				showPlace ++;
-			}
-			else {
-				address += svgData.streets [ counter ];
-				showPlace --;
-			}
-			switch ( counter ) {
-			case svgData.streets.length - THE_CONST.number2 :
-				address += arrow;
-				break;
-			case svgData.streets.length - THE_CONST.number1 :
-				break;
-			default :
-				address += '&#x2AA5;';
-				break;
-			}
-		}
-		if ( ! svgData.city && '' !== myCity ) {
-			svgData.city = myCity;
-		}
-		if ( svgData.city ) {
-			address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
-		}
-		if ( svgData.place && svgData.place !== svgData.city && showPlace !== THE_CONST.number2 ) {
-			address += ' (' + svgData.place + ')';
-		}
-
-		return address;
-	}
-
-	/*
 	--- myOnSvgIcon function ------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -291,22 +182,21 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	function myOnSvgIcon ( svgData ) {
 		myIconHtmlContent.value = svgData.svg.outerHTML;
-		let directionArrowAndTextTooltip = getDirectionArrowAndTextTooltip ( svgData.direction );
+		myTooltipContent.value = svgData.tooltip;
 
-		if ( THE_CONST.svgIcon.positionOnRoute.atStart === svgData.positionOnRoute ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Start' );
+		let address = svgData.streets;
+		let city = '' === svgData.city ? myCity : svgData.city;
+		if ( '' !== city ) {
+			address += ' ' + theConfig.note.cityPrefix + city + theConfig.note.cityPostfix;
 		}
-		else if ( THE_CONST.svgIcon.positionOnRoute.onRoute === svgData.positionOnRoute ) {
-			myTooltipContent.value = directionArrowAndTextTooltip.text;
-		}
-		else if ( THE_CONST.svgIcon.positionOnRoute.atEnd === svgData.positionOnRoute ) {
-			myTooltipContent.value = theTranslator.getText ( 'NoteDialog - Stop' );
+		if ( svgData.place && svgData.place !== city ) {
+			address += ' (' + svgData.place + ')';
 		}
 
-		myAdressInput.value = myGetSvgAddress ( svgData, directionArrowAndTextTooltip.arrow );
+		myAdressInput.value = address;
+		myLatLng = svgData.latLng;
 
 		myNoteDialog.hideWait ( );
-		myLatLng = svgData.latLng;
 	}
 
 	/*

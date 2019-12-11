@@ -35,9 +35,9 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theTranslator } from '../UI/Translator.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -53,13 +53,15 @@ function newSvgIconFromOsmFactory ( ) {
 
 	let myGeometry = newGeometry ( );
 
-	let myIconLatLngDistance = newItineraryPoint ( );
-
-	let myIconItineraryPoint = null;
+	let mySvgLatLngDistance = {
+		latLng : [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
+		distance : THE_CONST.distance.defaultValue
+	};
+	let myNearestItineraryPoint = null;
 
 	let myRoute = null; // the TravelNotes route object
 
-	let myResponse = {}; // the xmlHttpRequest parsed
+	let myResponse = {}; // the xmlHttpRequest response parsed
 
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
@@ -77,9 +79,11 @@ function newSvgIconFromOsmFactory ( ) {
 	let mySvgZoom = theConfig.note.svgZoom;
 	let mySvgAngleDistance = theConfig.note.svgAngleDistance;
 
-	let myIncomingPoint = null;
-	let myOutgoingPoint = null;
-	let myPassingStreets = [ ];
+	let myDirectionArrow = ' ';
+	let myTooltip = '';
+	let myStreets = '';
+
+	// let myPassingStreets = [ ];
 
 	/*
 	--- myCreateNodesAndWaysMaps function -----------------------------------------------------------------------------
@@ -132,33 +136,6 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	/*
-	--- myLatLngCompare function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLatLngCompare ( itineraryPoint ) {
-		let isntWayPoint = true;
-		myRoute.wayPoints.forEach (
-			wayPoint => {
-				if (
-					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
-					&&
-					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
-				) {
-					isntWayPoint = false;
-				}
-			}
-		);
-		let returnValue =
-			isntWayPoint
-			&&
-			( myIconItineraryPoint.lat !== itineraryPoint.lat || myIconItineraryPoint.lng !== itineraryPoint.lng );
-
-		return returnValue;
-	}
-
-	/*
 	--- mySearchItineraryPoints function ------------------------------------------------------------------------------
 
 	This function search the nearest route point from the icon and compute the distance from the begining of the route
@@ -166,7 +143,7 @@ function newSvgIconFromOsmFactory ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySearchItineraryPoints ( ) {
+	function mySearchNearestItineraryPoint ( ) {
 
 		// Searching the nearest itinerary point
 		let minDistance = Number.MAX_VALUE;
@@ -175,21 +152,19 @@ function newSvgIconFromOsmFactory ( ) {
 		// Iteration on the points...
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				let pointDistance = myGeometry.pointsDistance ( myIconLatLngDistance.latLng, itineraryPoint.latLng );
-				if ( minDistance > pointDistance ) {
-					minDistance = pointDistance;
-					myIconItineraryPoint = itineraryPoint;
-					myIconLatLngDistance.distance = distance;
+				let itineraryPointDistance = myGeometry.pointsDistance ( mySvgLatLngDistance.latLng, itineraryPoint.latLng );
+				if ( minDistance > itineraryPointDistance ) {
+					minDistance = itineraryPointDistance;
+					myNearestItineraryPoint = itineraryPoint;
+					mySvgLatLngDistance.distance = distance;
 				}
 				distance += itineraryPoint.distance;
 			}
 		);
 
-		// The coordinates of the nearest point are used as position of the icon
-		myIconLatLngDistance.latLng = myIconItineraryPoint.latLng;
+		// The coordinates of the nearest point are used as position of the SVG
+		mySvgLatLngDistance.latLng = myNearestItineraryPoint.latLng;
 
-		myIncomingPoint = myRoute.itinerary.itineraryPoints.previous ( myIconItineraryPoint.objId, myLatLngCompare );
-		myOutgoingPoint = myRoute.itinerary.itineraryPoints.next ( myIconItineraryPoint.objId, myLatLngCompare );
 	}
 
 	/*
@@ -208,7 +183,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let minDistance = Number.MAX_VALUE;
 		myPlaces.forEach (
 			place => {
-				let placeDistance = myGeometry.pointsDistance ( myIconItineraryPoint.latLng, [ place.lat, place.lon ] );
+				let placeDistance = myGeometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
 				if ( minDistance > placeDistance ) {
 					minDistance = placeDistance;
 					myPlace = place.tags.name;
@@ -222,6 +197,33 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	/*
+	--- myLatLngCompare function --------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLatLngCompare ( itineraryPoint ) {
+		let isWayPoint = false;
+		myRoute.wayPoints.forEach (
+			wayPoint => {
+				if (
+					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
+					&&
+					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
+				) {
+					isWayPoint = true;
+				}
+			}
+		);
+		let returnValue =
+			! isWayPoint
+			&&
+			( myNearestItineraryPoint.lat !== itineraryPoint.lat || myNearestItineraryPoint.lng !== itineraryPoint.lng );
+
+		return returnValue;
+	}
+
+	/*
 	--- mySearchPassingStreets function -------------------------------------------------------------------------------
 
 	This function
@@ -231,31 +233,37 @@ function newSvgIconFromOsmFactory ( ) {
 
 	function mySearchPassingStreets ( ) {
 
-		let iconPointId = -1;
+		let incomingItineraryPoint =
+			myRoute.itinerary.itineraryPoints.previous ( myNearestItineraryPoint.objId, myLatLngCompare );
+		let outgoingItineraryPoint =
+			myRoute.itinerary.itineraryPoints.next ( myNearestItineraryPoint.objId, myLatLngCompare );
+
+		let svgPointId = -1;
 		let incomingPointId = -1;
 		let outgoingPointId = -1;
-		let iconPointDistance = Number.MAX_VALUE;
+
+		let svgPointDistance = Number.MAX_VALUE;
 		let incomingPointDistance = Number.MAX_VALUE;
 		let outgoingPointDistance = Number.MAX_VALUE;
 		let pointDistance = THE_CONST.distance.defaultValue;
 		myNodesMap.forEach (
 			node => {
-				if ( myIconItineraryPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myIconItineraryPoint.latLng );
-					if ( pointDistance < iconPointDistance ) {
-						iconPointId = node.id;
-						iconPointDistance = pointDistance;
+				if ( myNearestItineraryPoint ) {
+					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
+					if ( pointDistance < svgPointDistance ) {
+						svgPointId = node.id;
+						svgPointDistance = pointDistance;
 					}
 				}
-				if ( myIncomingPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myIncomingPoint.latLng );
+				if ( incomingItineraryPoint ) {
+					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
 					if ( pointDistance < incomingPointDistance ) {
 						incomingPointId = node.id;
 						incomingPointDistance = pointDistance;
 					}
 				}
-				if ( myOutgoingPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myOutgoingPoint.latLng );
+				if ( outgoingItineraryPoint ) {
+					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
 					if ( pointDistance < outgoingPointDistance ) {
 						outgoingPointId = node.id;
 						outgoingPointDistance = pointDistance;
@@ -265,37 +273,41 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 		let incomingStreet = '';
 		let outgoingStreet = '';
+
+		function addStreet ( street ) {
+			myStreets = '' === myStreets ? street : myStreets + '&#x2AA5;' + street;
+		}
+
 		myWaysMap.forEach (
 			way => {
 				let wayName =
-					( way.tags.wayName ? way.tags.wayName : '' ) +
-					( way.tags.wayName && way.tags.ref ? ' ' : '' ) +
+					( way.tags.name ? way.tags.name : '' ) +
+					( way.tags.name && way.tags.ref ? ' ' : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
-				if ( way.nodesIds.includes ( iconPointId ) ) {
+				if ( way.nodesIds.includes ( svgPointId ) ) {
 					let isClosed = way.nodesIds [ THE_CONST.zero ] === way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ];
 					let isInOutStreet =
-						( THE_CONST.zero !== way.nodesIds.indexOf ( iconPointId ) )
+						( THE_CONST.zero !== way.nodesIds.indexOf ( svgPointId ) )
 						&&
-						( way.nodesIds.length - THE_CONST.number1 !== way.nodesIds.lastIndexOf ( iconPointId ) );
+						( way.nodesIds.length - THE_CONST.number1 !== way.nodesIds.lastIndexOf ( svgPointId ) );
 					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
 					let haveName = '' !== wayName;
-
 					if ( isSimpleStreet && haveName ) {
-						myPassingStreets.push ( wayName );
+						addStreet ( wayName );
 					}
 					if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) ) {
 						if ( ! isIncomingStreet && ! isOutgoingStreet ) {
-							myPassingStreets.push ( wayName );
-							myPassingStreets.push ( wayName );
+							addStreet ( wayName );
+							addStreet ( wayName );
 						}
 						else if (
 							( isIncomingStreet && ! isOutgoingStreet )
 							||
 							( ! isIncomingStreet && isOutgoingStreet )
 						) {
-							myPassingStreets.push ( wayName );
+							addStreet ( wayName );
 						}
 					}
 					if ( isIncomingStreet ) {
@@ -307,8 +319,11 @@ function newSvgIconFromOsmFactory ( ) {
 				}
 			}
 		);
-		myPassingStreets.unshift ( incomingStreet );
-		myPassingStreets.push ( outgoingStreet );
+		myStreets =
+			incomingStreet +
+			( '' === myStreets ? '' : '&#x2AA5;' + myStreets ) +
+			myDirectionArrow +
+			outgoingStreet;
 	}
 
 	/*
@@ -326,7 +341,7 @@ function newSvgIconFromOsmFactory ( ) {
 	function myComputeTranslation ( ) {
 		myTranslation = myGeometry.subtrackPoints (
 			[ theConfig.note.svgIconWidth / THE_CONST.number2, theConfig.note.svgIconWidth / THE_CONST.number2 ],
-			myGeometry.project ( myIconLatLngDistance.latLng, mySvgZoom )
+			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
 		);
 	}
 
@@ -354,10 +369,10 @@ function newSvgIconFromOsmFactory ( ) {
 
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				if ( myIconLatLngDistance.distance - distance > mySvgAngleDistance ) {
+				if ( mySvgLatLngDistance.distance - distance > mySvgAngleDistance ) {
 					rotationItineraryPoint = itineraryPoint;
 				}
-				if ( distance - myIconLatLngDistance.distance > mySvgAngleDistance && ! directionPointReached ) {
+				if ( distance - mySvgLatLngDistance.distance > mySvgAngleDistance && ! directionPointReached ) {
 					directionItineraryPoint = itineraryPoint;
 					directionPointReached = true;
 				}
@@ -366,12 +381,12 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 
 		let iconPoint = myGeometry.addPoints (
-			myGeometry.project ( myIconLatLngDistance.latLng, mySvgZoom ),
+			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom ),
 			myTranslation
 		);
 
 		// computing rotation... if possible
-		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.first.objId ) {
+		if ( myNearestItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.first.objId ) {
 			let rotationPoint = myGeometry.addPoints (
 				myGeometry.project ( rotationItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
@@ -397,7 +412,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 		// computing direction ... if possible
 
-		if ( myIconItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId ) {
+		if ( myNearestItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId ) {
 			let directionPoint = myGeometry.addPoints (
 				myGeometry.project ( directionItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
@@ -424,16 +439,16 @@ function newSvgIconFromOsmFactory ( ) {
 				myDirection -= THE_CONST.angle.degree360;
 			}
 		}
-		if ( myIconItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
+		if ( myNearestItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
 			myRotation = -myDirection - THE_CONST.angle.degree90;
 			myDirection = null;
 			myPositionOnRoute = THE_CONST.svgIcon.positionOnRoute.atStart;
 		}
 
 		if (
-			myIconLatLngDistance.lat === myRoute.itinerary.itineraryPoints.last.lat
+			mySvgLatLngDistance.latLng [ THE_CONST.zero ] === myRoute.itinerary.itineraryPoints.last.lat
 			&&
-			myIconLatLngDistance.lng === myRoute.itinerary.itineraryPoints.last.lng
+			mySvgLatLngDistance.lngLng [ THE_CONST.number1 ] === myRoute.itinerary.itineraryPoints.last.lng
 		) {
 
 			// using lat & lng because last point is sometime duplicated
@@ -443,8 +458,55 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
-	--- End of myComputeRotationAndDirection function ---
+	--- mySetDirectionArrowAndTooltip function ------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
 	*/
+
+	function mySetDirectionArrowAndTooltip ( ) {
+
+		if ( null !== myDirection ) {
+			if ( myDirection < theConfig.note.svgAnleMaxDirection.right ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn right' );
+				myDirectionArrow = '&#x1f882;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightRight ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn slight right' );
+				myDirectionArrow = '&#x1f885;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.continue ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Continue' );
+				myDirectionArrow = '&#x1f881;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightLeft ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn slight left' );
+				myDirectionArrow = '&#x1f884;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.left ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn left' );
+				myDirectionArrow = '&#x1f880;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn sharp left' );
+				myDirectionArrow = '&#x1f887;';
+			}
+			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpRight ) {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn sharp right' );
+				myDirectionArrow = '&#x1f886;';
+			}
+			else {
+				myTooltip = theTranslator.getText ( 'NoteDialog - Turn right' );
+				myDirectionArrow = '&#x1f882;';
+			}
+		}
+
+		if ( THE_CONST.svgIcon.positionOnRoute.atStart === myPositionOnRoute ) {
+			myTooltip = theTranslator.getText ( 'NoteDialog - Start' );
+		}
+		else if ( THE_CONST.svgIcon.positionOnRoute.atEnd === myPositionOnRoute ) {
+			myTooltip = theTranslator.getText ( 'NoteDialog - Stop' );
+		}
+	}
 
 	/*
 	--- myCreateRoute function ----------------------------------------------------------------------------------------
@@ -603,8 +665,6 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function myCreateSvg ( ) {
-		myCreateNodesAndWaysMaps ( );
-
 		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
 		mySvg.setAttributeNS (
 			null,
@@ -615,14 +675,6 @@ function newSvgIconFromOsmFactory ( ) {
 			( theConfig.note.svgIconWidth / THE_CONST.number2 )
 		);
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
-
-		mySearchItineraryPoints ( );
-		mySearchPassingStreets ( );
-		mySearchHamlet ( );
-		myComputeTranslation ( );
-		myComputeRotationAndDirection ( );
-		myCreateRoute ( );
-		myCreateWays ( );
 	}
 
 	/*
@@ -637,9 +689,9 @@ function newSvgIconFromOsmFactory ( ) {
 
 	function myGetUrl ( ) {
 		let requestLatLng =
-			myIconLatLngDistance.lat.toFixed ( THE_CONST.latLng.fixed ) +
+			mySvgLatLngDistance.latLng [ THE_CONST.zero ].toFixed ( THE_CONST.latLng.fixed ) +
 			',' +
-			myIconLatLngDistance.lng.toFixed ( THE_CONST.latLng.fixed );
+			mySvgLatLngDistance.latLng [ THE_CONST.number1 ].toFixed ( THE_CONST.latLng.fixed );
 
 		let requestUrl = theConfig.overpassApiUrl +
 			'?data=[out:json][timeout:' +
@@ -698,18 +750,27 @@ function newSvgIconFromOsmFactory ( ) {
 
 		function BuildIconAndAdress ( response ) {
 			myResponse = response;
+
+			myCreateNodesAndWaysMaps ( );
 			myCreateSvg ( );
+			mySearchHamlet ( );
+			myComputeTranslation ( );
+			myComputeRotationAndDirection ( );
+			mySetDirectionArrowAndTooltip ( );
+			mySearchPassingStreets ( );
+			myCreateRoute ( );
+			myCreateWays ( );
+
 			ourRequestStarted = false;
 
 			onOk (
 				{
 					svg : mySvg,
-					direction : myDirection,
-					positionOnRoute : myPositionOnRoute,
+					tooltip : myTooltip,
 					city : myCity,
 					place : myPlace,
-					streets : myPassingStreets,
-					latLng : myIconItineraryPoint.latLng
+					streets : myStreets,
+					latLng : myNearestItineraryPoint.latLng
 				}
 			);
 		}
@@ -718,11 +779,17 @@ function newSvgIconFromOsmFactory ( ) {
 			onError ( 'A request is already running' );
 			return;
 		}
+
 		ourRequestStarted = true;
 
 		myResponse = {};
 		mySvg = null;
 		myCity = null;
+		myDirectionArrow = ' ';
+		myTooltip = '';
+		myStreets = '';
+
+		mySearchNearestItineraryPoint ( );
 
 		newHttpRequestBuilder ( ).getJsonPromise ( myGetUrl ( ) )
 			.then ( BuildIconAndAdress )
@@ -742,7 +809,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 	function myGetPromiseIconAndAdress ( iconLatLng, routeObjId ) {
 
-		myIconLatLngDistance.latLng = iconLatLng;
+		mySvgLatLngDistance.latLng = iconLatLng;
 		myRoute = newDataSearchEngine ( ).getRoute ( routeObjId );
 
 		return new Promise ( myGetIconAndAdress );
