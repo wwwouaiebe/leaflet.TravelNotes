@@ -71,6 +71,8 @@ import { theMouseUI } from '../UI/MouseUI.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
+import { THE_CONST } from '../util/Constants.js';
+
 /*
 --- newTravelNotes funtion --------------------------------------------------------------------------------------------
 
@@ -275,6 +277,18 @@ function newTravelNotes ( ) {
 		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
 			.then (
 				newFileLoader ( ).openDistantFile
+			)
+			.catch (
+				err => {
+					console.log ( err ? err : 'Not possible to load the .trv file' );
+					theTravelNotesData.map.setView (
+						[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
+						THE_CONST.number2
+					);
+					theLayersToolbarUI.setLayer ( 'OSM - Color' );
+					theErrorsUI.createUI ( );
+					theErrorsUI.showError ( 'Not possible to load the file ' + travelUrl );
+				}
 			);
 	}
 

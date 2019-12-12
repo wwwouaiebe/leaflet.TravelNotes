@@ -145,9 +145,7 @@ function newFileLoader ( ) {
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and roadbook are filled
-		if ( myIsFileReadOnly ) {
-		}
-		else {
+		if ( ! myIsFileReadOnly ) {
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );
