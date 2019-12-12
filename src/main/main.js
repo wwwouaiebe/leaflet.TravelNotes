@@ -33,39 +33,146 @@ import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theTranslator } from '../UI/Translator.js';
+import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
-window.L.travelNotes = theTravelNotes;
+function startup ( ) {
 
-newHttpRequestBuilder ( ).getJsonPromise (
-	window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-	'TravelNotesConfig.json'
-)
-	.then (
-		config => {
-			theConfig.overload ( config );
+	let myLangage = null;
+	let myTravelUrl = null;
 
-			if ( ! theConfig.autoLoad ) {
-				return;
+	/*
+	--- myReadURL function --------------------------------------------------------------------------------------------
+
+	This function extract the route providers API key from the url
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myReadURL ( ) {
+		let newUrlSearch = '?';
+		( decodeURI ( window.location.search ).substr ( THE_CONST.number1 )
+			.split ( '&' ) )
+			.forEach (
+				urlSearchSubString => {
+					if ( THE_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+						if ( 'fil=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
+							myTravelUrl = decodeURIComponent (
+								escape ( atob ( urlSearchSubString.substr ( THE_CONST.number4 ) ) ) );
+						}
+						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
+							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
+						}
+						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
+						newUrlSearch += urlSearchSubString;
+					}
+					else {
+						theAPIKeysManager.fromUrl ( urlSearchSubString );
+					}
+				}
+			);
+		let stateObj = { index : 'bar' };
+		history.replaceState ( stateObj, 'page', newUrlSearch );
+	}
+
+	/*
+	--- End of myReadURL function ---
+	*/
+
+	myReadURL ( );
+
+	window.L.travelNotes = theTravelNotes;
+
+	// osmSearch
+	if ( window.osmSearch ) {
+		window.osmSearch.getDictionaryPromise ( theConfig.language, 'travelNotes' )
+			.then (
+				( ) => console.log ( 'osmSearch dictionary loaded' ),
+				err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
+			);
+	}
+	else {
+		console.log ( 'osmSearch not found' );
+	}
+
+	let requestBuilder = newHttpRequestBuilder ( );
+	let promises = [
+		requestBuilder.getJsonPromise (
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			'TravelNotesConfig.json'
+		),
+		requestBuilder.getJsonPromise (
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			'TravelNotes' +
+			( myLangage || theConfig.language ).toUpperCase ( ) +
+			'.json'
+		),
+		requestBuilder.getJsonPromise (
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			'TravelNotesLayers.json'
+		)
+	];
+
+	Promise.all ( promises )
+		.then (
+
+			// promises succeeded
+			values => {
+
+				// config adaptation
+				if ( myLangage ) {
+					values [ THE_CONST.zero ].language = myLangage;
+				}
+
+				theConfig.overload ( values [ THE_CONST.zero ] );
+
+				theTravelNotesData.providers.forEach (
+					provider => {
+						provider.userLanguage = theConfig.language;
+					}
+				);
+
+				// translations adaptation
+				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
+
+				// layers adaptation
+				theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+
+				if ( theConfig.autoLoad ) {
+					newHTMLElementsFactory ( ).create (
+						'div',
+						{ id : 'Map' },
+						document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+					);
+					newHTMLElementsFactory ( ).create (
+						'div',
+						{ id : 'TravelNotes' },
+						document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+					);
+
+					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+						.setView ( [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ], THE_CONST.zero );
+
+					theTravelNotesData.map = map;
+
+					if ( myTravelUrl ) {
+						theTravelNotes.addReadOnlyMap ( myTravelUrl );
+					}
+					else {
+						theTravelNotes.addControl ( 'TravelNotes' );
+						theTravelNotes.rightContextMenu = true;
+					}
+				}
 			}
-			newHTMLElementsFactory ( ).create (
-				'div',
-				{ id : 'Map' },
-				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
-			);
-			newHTMLElementsFactory ( ).create (
-				'div',
-				{ id : 'TravelNotes' },
-				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
-			);
+		)
+		.catch ( err => console.log ( err ? err : 'An error occurs when downloading the json configuration files' ) );
+}
 
-			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-				.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
-			theTravelNotes.addControl ( map, 'TravelNotes' );
-			theTravelNotes.rightContextMenu = true;
-		}
-	);
+startup ( );
 
 /*
 --- End of Main file --------------------------------------------------------------------------------------------------

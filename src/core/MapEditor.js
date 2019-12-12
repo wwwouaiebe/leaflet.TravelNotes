@@ -605,7 +605,7 @@ function newMapEditor ( ) {
 		// notes are added
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
-			myAddNote ( notesIterator.value );
+			myAddNote ( notesIterator.value.objId );
 		}
 
 		// waypoints are added

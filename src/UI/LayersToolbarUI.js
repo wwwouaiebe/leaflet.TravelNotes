@@ -30,7 +30,6 @@ Tests ...
 */
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -258,6 +257,7 @@ function newLayersToolbarUI ( ) {
 		);
 		myButtonTop = myLayersToolbar.clientHeight;
 		myButtonsHeight = THE_CONST.zero;
+
 		myLayers.forEach ( layer => myCreateLayerButton ( layer ) );
 
 		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
@@ -328,6 +328,34 @@ function newLayersToolbarUI ( ) {
 	}
 
 	/*
+	--- mySetLayer function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySetLayer ( layerName ) {
+
+		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ THE_CONST.zero ];
+		if ( newLayer.providerKeyNeeded ) {
+			let providerKey = theAPIKeysManager.getKey ( newLayer.providerName.toLowerCase ( ) );
+			if ( ! providerKey ) {
+				newLayer = myLayers [ THE_CONST.zero ];
+			}
+		}
+		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
+	}
+
+	/*
+	--- mySetLayers function ------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySetLayers ( layers ) {
+		myLayers = myLayers.concat ( layers );
+	}
+
+	/*
 	--- myCreateUI function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -335,13 +363,7 @@ function newLayersToolbarUI ( ) {
 
 	function myCreateUI ( ) {
 
-		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-			'TravelNotesLayers.json'
-		)
-			.then ( layers => { myLayers = myLayers.concat ( layers ); } )
-			.catch ( err => console.log ( err ? err : 'An error occurs when loading TravelNotesLayers.json' ) )
-			.finally ( myCreateLayersToolbar );
+		myCreateLayersToolbar ( );
 	}
 
 	/*
@@ -352,7 +374,9 @@ function newLayersToolbarUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : ( ) => myCreateUI ( )
+			createUI : ( ) => myCreateUI ( ),
+			setLayer : layerName => mySetLayer ( layerName ),
+			setLayers : layers => mySetLayers ( layers )
 		}
 	);
 }

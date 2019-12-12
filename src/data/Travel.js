@@ -52,6 +52,8 @@ function newTravel ( ) {
 
 	let myEditedRoute = newRoute ( );
 
+	let myLayerName = 'OSM - Color';
+
 	let myName = 'TravelNotes';
 
 	let myRoutes = newCollection ( 'Route' );
@@ -85,6 +87,33 @@ function newTravel ( ) {
 				something.editedRoute = null;
 				// eslint break omitted intentionally
 			case '1.5.0' :
+				if ( something.userData.layerId ) {
+
+					// old layersId from maps are converted to TravelNotes layerName
+					let layerConvert =
+					[
+						{ layerId : '0', layerName : 'OSM - Color' },
+						{ layerId : '1', layerName : 'OSM - Black and White' },
+						{ layerId : '2', layerName : 'Thunderforest - Transport' },
+						{ layerId : '3', layerName : 'Thunderforest - OpenCycleMap' },
+						{ layerId : '4', layerName : 'Thunderforest - Outdoors' },
+						{ layerId : '5', layerName : 'Esri - Aerial view' },
+						{ layerId : '6', layerName : 'Kartverket - Norway' },
+						{ layerId : '7', layerName : 'IGN-NGI - Belgium now' },
+						{ layerId : '12', layerName : 'Thunderforest - Landscape' },
+						{ layerId : '24', layerName : 'Lantmäteriet - Sweden' },
+						{ layerId : '25', layerName : 'Maanmittauslaitos - Finland' }
+					].find ( layerConversion => layerConversion.layerId === something.userData.layerId );
+					if ( layerConvert ) {
+						something.layerName = layerConvert.layerName;
+					}
+					else {
+						something.layerName = 'OSM - Color';
+					}
+				}
+				else {
+					something.layerName = 'OSM - Color';
+				}
 				something.objType.version = '1.6.0';
 				break;
 			default :
@@ -111,6 +140,7 @@ function newTravel ( ) {
 	function myGetObject ( ) {
 		return {
 			editedRoute : myEditedRoute.object,
+			layerName : myLayerName,
 			name : myName,
 			routes : myRoutes.object,
 			notes : myNotes.object,
@@ -130,6 +160,7 @@ function newTravel ( ) {
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
 		myEditedRoute.object = otherthing.editedRoute;
+		myLayerName = something.layerName || 'OSM - Color';
 		myName = otherthing.name || '';
 		myUserData = otherthing.userData || {};
 		myReadOnly = otherthing.readOnly || false;
@@ -152,6 +183,9 @@ function newTravel ( ) {
 			get routes ( ) { return myRoutes; },
 
 			get notes ( ) { return myNotes; },
+
+			get layerName ( ) { return myLayerName; },
+			set layerName ( LayerName ) { myLayerName = LayerName; },
 
 			get name ( ) { return myName; },
 			set name ( Name ) { myName = Name; },

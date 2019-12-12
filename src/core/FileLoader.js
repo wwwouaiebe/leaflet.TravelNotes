@@ -38,7 +38,9 @@ import { polyline } from '../polyline/Polyline.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
+import { theTravelEditor } from '../core/TravelEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
@@ -140,23 +142,17 @@ function newFileLoader ( ) {
 
 		// zoom on the travel
 		myEventDispatcher.dispatch ( 'zoomtotravel' );
+		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and roadbook are filled
 		if ( myIsFileReadOnly ) {
-
-			// control is hidden
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.add ( 'TravelNotes-Control-MainDiv-Hidden' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-			document.getElementById ( 'TravelNotes-Control-MainDiv' )
-				.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
 		}
 		else {
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 			if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+
 				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 				if (
 					providerName
@@ -184,11 +180,16 @@ function newFileLoader ( ) {
 				}
 				theRouteEditor.chainRoutes ( );
 				myEventDispatcher.dispatch ( 'expandrouteui' );
-				myEventDispatcher.dispatch ( 'setwaypointslist' );
-				myEventDispatcher.dispatch ( 'setitinerary' );
 			}
+			else {
+				myEventDispatcher.dispatch ( 'reducerouteui' );
+			}
+			myEventDispatcher.dispatch ( 'setwaypointslist' );
+			myEventDispatcher.dispatch ( 'setitinerary' );
+
 			myEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
+		theTravelEditor.zoomToTravel ( );
 		myEventDispatcher.dispatch (
 			'travelnotesfileloaded',
 			{
@@ -238,6 +239,7 @@ function newFileLoader ( ) {
 	*/
 
 	function myOpen ( ) {
+
 		theTravelNotesData.travel.object = myFileContent;
 		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
 
@@ -341,7 +343,6 @@ function newFileLoader ( ) {
 	*/
 
 	function myOpenDistantFile ( fileContent ) {
-		window.L.travelNotes.rightContextMenu = false;
 		myIsFileReadOnly = true;
 		myFileContent = fileContent;
 		myDecompressFileContent ( );

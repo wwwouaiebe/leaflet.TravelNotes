@@ -46,7 +46,6 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -321,7 +320,6 @@ function newTravelUI ( ) {
 				'change',
 				changeEvent => {
 					changeEvent.stopPropagation ( );
-					theRouteEditor.cancelEdition ( );
 					newFileLoader ( ).openLocalFile ( changeEvent );
 				},
 				false

@@ -48,7 +48,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
@@ -72,8 +71,6 @@ import { theMouseUI } from '../UI/MouseUI.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
-
 /*
 --- newTravelNotes funtion --------------------------------------------------------------------------------------------
 
@@ -88,76 +85,28 @@ function newTravelNotes ( ) {
 	let myHaveLeftContextMenu = false;
 	let myHaveRightContextMenu = false;
 
-	let myLangage = null;
-
-	let myTravelUrl = null;
-
 	let myEventDispatcher = newEventDispatcher ( );
 
-	window.addEventListener (
-		'unload',
-		( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
-	);
-
-	window.addEventListener (
-		'beforeunload',
-		beforeUnloadEvent => {
-			beforeUnloadEvent.returnValue = 'x';
-			return 'x';
-		}
-	);
-
 	/*
-	--- myReadURL function --------------------------------------------------------------------------------------------
-
-	This function extract the route providers API key from the url
+	--- myAddEventsListeners function ---------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myReadURL ( ) {
-		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( THE_CONST.number1 )
-			.split ( '&' ) )
-			.forEach (
-				urlSearchSubString => {
-					if ( THE_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
-							myTravelUrl = decodeURIComponent (
-								escape ( atob ( urlSearchSubString.substr ( THE_CONST.number4 ) ) ) );
-						}
-						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
-							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
-						}
-						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
-						newUrlSearch += urlSearchSubString;
-					}
-					else {
-						theAPIKeysManager.fromUrl ( urlSearchSubString );
-					}
-				}
-			);
-		let stateObj = { index : 'bar' };
-		history.replaceState ( stateObj, 'page', newUrlSearch );
-	}
+	function myAddEventsListeners ( ) {
 
-	/*
-	--- End of myReadURL function ---
-	*/
+		window.addEventListener (
+			'unload',
+			( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
+		);
 
-	/*
-	--- myAddControl function -----------------------------------------------------------------------------------------
-
-	This function add the control on the HTML page
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddControl ( map, divControlId ) {
-
-		theTravelNotesData.map = map;
-
-		myReadURL ( );
+		window.addEventListener (
+			'beforeunload',
+			beforeUnloadEvent => {
+				beforeUnloadEvent.returnValue = 'x';
+				return 'x';
+			}
+		);
 
 		document.addEventListener (
 			'routeupdated',
@@ -309,94 +258,66 @@ function newTravelNotes ( ) {
 			( ) => newRoadbookUpdate ( ),
 			false
 		);
+	}
 
-		let requestBuilder = newHttpRequestBuilder ( );
-		let promises = [
-			requestBuilder.getJsonPromise (
-				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-				'TravelNotesConfig.json'
-			),
-			requestBuilder.getJsonPromise (
-				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-				'TravelNotes' +
-				( myLangage || theConfig.language ).toUpperCase ( ) +
-				'.json'
-			)
-		];
-		if ( myTravelUrl ) {
-			promises.push ( requestBuilder.getJsonPromise ( myTravelUrl ) );
+	/*
+	--- myAddReadOnlyMap function -------------------------------------------------------------------------------------
+
+	This function load a read only map
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddReadOnlyMap ( travelUrl ) {
+
+		myAddEventsListeners ( );
+
+		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
+			.then (
+				newFileLoader ( ).openDistantFile
+			);
+	}
+
+	/*
+	--- myAddControl function -----------------------------------------------------------------------------------------
+
+	This function add the control on the HTML page
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddControl ( divControlId ) {
+
+		myAddEventsListeners ( );
+
+		// loading new travel
+		theTravelNotesData.travel = newTravel ( );
+		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+
+		// user interface is added
+		theUI.createUI ( document.getElementById ( divControlId ) );
+
+		theAttributionsUI.createUI ( );
+		theErrorsUI.createUI ( );
+
+		theAPIKeysManager.fromServerFile ( );
+		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
+			theLayersToolbarUI.createUI ( );
+		}
+		if ( theConfig.mouseUI.haveMouseUI ) {
+			theMouseUI.createUI ( );
 		}
 
-		Promise.all ( promises ).then (
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 
-			// promises succeeded
-			values => {
-
-				// config adaptation
-				if ( myLangage ) {
-					values [ THE_CONST.zero ].language = myLangage;
-				}
-
-				// theConfig.overload ( values [ THE_CONST.zero ] );
-
-				// translations adaptation
-				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
-				theTravelNotesData.providers.forEach (
-					provider => {
-						provider.userLanguage = theConfig.language;
-					}
-				);
-
-				// osmSearch
-				if ( window.osmSearch ) {
-					window.osmSearch.getDictionaryPromise ( theConfig.language, 'travelNotes' )
-						.then (
-							( ) => console.log ( 'osmSearch dictionary loaded' ),
-							err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
-						);
-				}
-				else {
-					console.log ( 'osmSearch not found' );
-				}
-
-				// loading new travel
-				theTravelNotesData.travel = newTravel ( );
-				theTravelNotesData.travel.routes.add ( newRoute ( ) );
-
-				// user interface is added
-				theUI.createUI ( document.getElementById ( divControlId ) );
-
-				myEventDispatcher.dispatch ( 'setrouteslist' );
-				myEventDispatcher.dispatch ( 'roadbookupdate' );
-
-				theAttributionsUI.createUI ( );
-				theErrorsUI.createUI ( );
-
-				if ( myTravelUrl ) {
-
-					// loading travel...
-					newFileLoader ( ).openDistantFile ( values [ THE_CONST.number2 ] );
-				}
-				else {
-					theAPIKeysManager.fromServerFile ( );
-					if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
-						theLayersToolbarUI.createUI ( );
-					}
-					if ( theConfig.mouseUI.haveMouseUI ) {
-						theMouseUI.createUI ( );
-					}
-					if ( theConfig.travelEditor.startupRouteEdition ) {
-						theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
-					}
-					else {
-						myEventDispatcher.dispatch ( 'reducerouteui' );
-					}
-				}
-			}
-		)
-			.catch (
-				err => console.log ( err ? err : 'An error occurs when loading translations or config' )
-			);
+		if ( theConfig.travelEditor.startupRouteEdition ) {
+			theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
+		}
+		else {
+			myEventDispatcher.dispatch ( 'reducerouteui' );
+		}
+		theTravelNotesData.map.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
 	}
 
 	/*
@@ -445,31 +366,41 @@ function newTravelNotes ( ) {
 		{
 
 			/*
-			--- addControl method ------------------------------------------------------------------------------------------
+			--- addReadOnlyMap method ---------------------------------------------------------------------------------
 
 			This method add the control on the page
 
-			---------------------------------------------------------------------------------------------------------------
+			-----------------------------------------------------------------------------------------------------------
+			*/
+
+			addReadOnlyMap : ( map, travelUrl ) => myAddReadOnlyMap ( map, travelUrl ),
+
+			/*
+			--- addControl method -------------------------------------------------------------------------------------
+
+			This method add the control on the page
+
+			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			addControl : ( map, divControlId ) => myAddControl ( map, divControlId ),
 
 			/*
-			--- addProvider method ----------------------------------------------------------------------------------------
+			--- addProvider method ------------------------------------------------------------------------------------
 
 			This method add a provider to the providers map
 
-			---------------------------------------------------------------------------------------------------------------
+			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			addProvider : provider => myAddProvider ( provider ),
 
 			/*
-			--- addMapContextMenu method ----------------------------------------------------------------------------------
+			--- addMapContextMenu method ------------------------------------------------------------------------------
 
 			This method add the map context menus
 
-			---------------------------------------------------------------------------------------------------------------
+			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			addMapContextMenu : ( leftButton, rightButton ) => {
@@ -484,9 +415,9 @@ function newTravelNotes ( ) {
 			},
 
 			/*
-			--- getters and setters ---------------------------------------------------------------------------------------
+			--- getters and setters -----------------------------------------------------------------------------------
 
-			---------------------------------------------------------------------------------------------------------------
+			-----------------------------------------------------------------------------------------------------------
 			*/
 
 			get baseDialog ( ) { return newBaseDialog ( ); },
