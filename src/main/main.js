@@ -37,6 +37,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -114,6 +115,12 @@ function startup ( ) {
 		requestBuilder.getJsonPromise (
 			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
 			'TravelNotesLayers.json'
+		),
+		requestBuilder.getJsonPromise (
+			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			'TravelNotesNoteDialog' +
+			( myLangage || theConfig.language ).toUpperCase ( ) +
+			'.json'
 		)
 	];
 
@@ -141,6 +148,9 @@ function startup ( ) {
 
 				// layers adaptation
 				theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+
+				theNoteDialogToolbar.selectOptions = values [ THE_CONST.number3 ].preDefinedIconsList;
+				theNoteDialogToolbar.buttons = values [ THE_CONST.number3 ].editionButtons;
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (

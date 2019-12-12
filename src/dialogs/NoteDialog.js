@@ -47,13 +47,9 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { THE_CONST } from '../util/Constants.js';
-
-let ourUserButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let ourTravelNotesButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
-let ourAllButtonsAndIcons = { editionButtons : [], preDefinedIconsList : [] };
 
 /*
 --- newNoteDialog function --------------------------------------------------------------------------------------------
@@ -80,13 +76,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	let myUrlInput = null;
 	let myPhoneInput = null;
 	let myResetAdressButton = null;
-	let myPredefinedIconsSelect = null;
-	let myToolbarDiv = null;
 
 	/*
 	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
-
-	click event listener for the ok button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -114,13 +106,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnOkButtonClick function ---
-	*/
-
-	/*
 	--- myOnGeocoderResponse function ---------------------------------------------------------------------------------
-
-	Handler for the geoCoder call
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -158,13 +144,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnGeocoderResponse function ---
-	*/
-
-	/*
 	--- myOnGeocoderError function -------------------------------------------------------------------------------------
-
-	Error handler for the geoCoder call
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -200,13 +180,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnSvgIcon function ---
-	*/
-
-	/*
 	--- myOnErrorSvgIcon function -------------------------------------------------------------------------------------
-
-	event handler for predefined icons list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -218,81 +192,30 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnErrorSvgIcon function ---
-	*/
-
-	/*
-	--- myAddPreDefinedIconsList function -----------------------------------------------------------------------------
-
-	function to add the predefined icons to the select
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddPreDefinedIconsList ( ) {
-		ourAllButtonsAndIcons.preDefinedIconsList =
-			ourTravelNotesButtonsAndIcons.preDefinedIconsList.concat ( ourUserButtonsAndIcons.preDefinedIconsList );
-
-		if ( THE_CONST.invalidObjId < routeObjId ) {
-			ourAllButtonsAndIcons.preDefinedIconsList.push (
-				{
-					name : theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ),
-					icon : '',
-					tooltip : '',
-					width : THE_CONST.note.defaultIconSize,
-					height : THE_CONST.note.defaultIconSize
-				}
-			);
-		}
-
-		ourAllButtonsAndIcons.preDefinedIconsList.sort (
-			( first, second ) => first.name.localeCompare ( second.name )
-		);
-		let elementCounter = THE_CONST.zero;
-		for (
-			elementCounter = myPredefinedIconsSelect.length - THE_CONST.number1;
-			elementCounter >= THE_CONST.zero;
-			elementCounter --
-		) {
-			myPredefinedIconsSelect.remove ( elementCounter );
-		}
-		for (
-			elementCounter = THE_CONST.zero;
-			elementCounter < ourAllButtonsAndIcons.preDefinedIconsList.length;
-			elementCounter ++ ) {
-			myPredefinedIconsSelect.add (
-				myHTMLElementsFactory.create (
-					'option',
-					{
-						text : ourAllButtonsAndIcons.preDefinedIconsList [ elementCounter ].name
-					}
-				)
-			);
-		}
-	}
-
-	/*
-	--- End of myAddPreDefinedIconsList function ---
-	*/
-
-	/*
 	--- myOnPredefinedIconListSelectChange function -------------------------------------------------------------------
-
-	event handler for predefined icons list
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnPredefinedIconListSelectChange ( changeEvent ) {
 
-		let preDefinedIcon = ourAllButtonsAndIcons.preDefinedIconsList [ changeEvent.target.selectedIndex ];
-		if ( preDefinedIcon.name === theTranslator.getText ( 'NoteDialog - SVG icon from OSM' ) ) {
-			myNoteDialog.showWait ( );
-			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
-				.then ( myOnSvgIcon )
-				.catch ( myOnErrorSvgIcon );
+		let preDefinedIcon = theNoteDialogToolbar.getIconData ( changeEvent.target.selectedIndex );
+
+		if ( 'SvgIcon' === preDefinedIcon.icon ) {
+			if ( THE_CONST.invalidObjId === routeObjId ) {
+				myNoteDialog.showError (
+					theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
+				);
+			}
+			else {
+				myNoteDialog.showWait ( );
+				newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
+					.then ( myOnSvgIcon )
+					.catch ( myOnErrorSvgIcon );
+			}
 		}
 		else {
+			myNoteDialog.hideError ( );
 			myWidthInput.value = preDefinedIcon.width;
 			myHeightInput = preDefinedIcon.height;
 			myIconHtmlContent.value = preDefinedIcon.icon;
@@ -301,13 +224,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnPredefinedIconListSelectChange function ---
-	*/
-
-	/*
 	--- myOnClickEditionButton function -------------------------------------------------------------------------------
-
-	event handler for edition with the styles buttons
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -346,74 +263,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnClickEditionButton function ---
-	*/
-
-	/*
-	--- myAddEditionButtons function ----------------------------------------------------------------------------------
-
-	function to add buttons on the toolbar
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddEditionButtons ( editionButtons ) {
-		editionButtons.forEach (
-			function ( editionButton ) {
-				let newButton = myHTMLElementsFactory.create (
-					'button',
-					{
-						type : 'button',
-						innerHTML : editionButton.title || '?',
-						htmlBefore : editionButton.htmlBefore || '',
-						htmlAfter : editionButton.htmlAfter || '',
-						className : 'TravelNotes-NoteDialog-EditorButton'
-					},
-					myToolbarDiv
-				);
-				newButton.addEventListener ( 'click', myOnClickEditionButton, false );
-			}
-		);
-	}
-
-	/*
-	--- End of myAddEditionButtons function ---
-	*/
-
-	/*
-	--- myOnOpenUserDataFileInputChange function ------------------------------------------------------------------------
-
-	event handler for
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnOpenUserDataFileInputChange ( changeEvent ) {
-		let fileReader = new FileReader ( );
-		fileReader.onload = function ( ) {
-			try {
-				let newUserButtonsAndIcons = JSON.parse ( fileReader.result );
-				ourUserButtonsAndIcons.editionButtons =
-					ourUserButtonsAndIcons.editionButtons.concat ( newUserButtonsAndIcons.editionButtons );
-				ourUserButtonsAndIcons.preDefinedIconsList =
-					ourUserButtonsAndIcons.preDefinedIconsList.concat ( newUserButtonsAndIcons.preDefinedIconsList );
-				myAddEditionButtons ( newUserButtonsAndIcons.editionButtons );
-				myAddPreDefinedIconsList ( );
-			}
-			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when opening the file' );
-			}
-		};
-		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
-	}
-
-	/*
-	--- End of myOnOpenUserDataFileInputChange function ---
-	*/
-
-	/*
 	--- myOnFocusControl function ---------------------------------------------------------------------------------------
-
-	event handler for
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -423,13 +273,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myOnFocusControl function ---
-	*/
-
-	/*
 	--- myCreateDialog function ---------------------------------------------------------------------------------------
-
-	Creation of the base dialog
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -451,97 +295,22 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateBaseDialog function ---
-	*/
-
-	/*
 	--- myCreateToolbar function --------------------------------------------------------------------------------------
-
-	Creation of the toolbar
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateToolbar ( ) {
-		myToolbarDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-ToolbarDiv',
-				id : 'TravelNotes-NoteDialog-ToolbarDiv'
-			},
-			myNoteDataDiv
+		myNoteDataDiv.appendChild (
+			theNoteDialogToolbar.createToolbar (
+				myOnPredefinedIconListSelectChange,
+				myOnClickEditionButton
+			)
 		);
-
-		// a select is added for the predefined icons
-		myPredefinedIconsSelect = myHTMLElementsFactory.create (
-			'select',
-			{
-				className : 'TravelNotes-NoteDialog-Select',
-				id : 'TravelNotes-NoteDialog-IconSelect'
-			},
-			myToolbarDiv
-		);
-
-		// change event listener on the select
-		myPredefinedIconsSelect.addEventListener ( 'change', myOnPredefinedIconListSelectChange, false );
-
-		// open userdata button ... with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		let openUserDataFileDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileDiv'
-			},
-			myToolbarDiv
-		);
-		let openUserDataFileInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileInput',
-				type : 'file',
-				accept : '.json'
-			},
-			openUserDataFileDiv
-		);
-		openUserDataFileInput.addEventListener ( 'change', myOnOpenUserDataFileInputChange, false );
-		let openUserDataFileFakeDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
-			},
-			openUserDataFileDiv
-		);
-		let openUserDataFileButton = myHTMLElementsFactory.create (
-			'button',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileButton',
-				className : 'TravelNotes-NoteDialog-EditorButton',
-				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-				innerHTML : '&#x23CD;'
-			},
-			openUserDataFileFakeDiv
-		);
-
-		openUserDataFileButton.addEventListener (
-			'click',
-			( ) => openUserDataFileInput.click ( ),
-			false
-		);
-
-		// personnalised buttons from server file are restored
-		myAddEditionButtons ( ourTravelNotesButtonsAndIcons.editionButtons );
-
-		// personnalised buttons from local file are restored
-		myAddEditionButtons ( ourUserButtonsAndIcons.editionButtons );
 	}
 
 	/*
-	--- End of myCreateToolbar function ---
-	*/
-
-	/*
 	--- myCreateIconDimensions function -------------------------------------------------------------------------------
-
-	Creation of icon dimensions...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -597,13 +366,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateIconDimensions function ---
-	*/
-
-	/*
 	--- myCreateIconContent function ----------------------------------------------------------------------------------
-
-	Creation of icon content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -631,13 +394,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateIconContent function ---
-	*/
-
-	/*
 	--- myCreatePopupContent function ---------------------------------------------------------------------------------
-
-	Creation of popup content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -664,13 +421,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreatePopupContent function ---
-	*/
-
-	/*
 	--- myCreateTooltipContent function -------------------------------------------------------------------------------
-
-	Creation of tooltip content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -698,13 +449,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateTooltipContent function ---
-	*/
-
-	/*
 	--- myCreateAddressContent function -------------------------------------------------------------------------------
-
-	Creation of address content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -745,13 +490,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateAddressContent function ---
-	*/
-
-	/*
 	--- myCreateLinkContent function ----------------------------------------------------------------------------------
-
-	Creation of link content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -798,13 +537,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreateLinkContent function ---
-	*/
-
-	/*
 	--- myCreatePhoneContent function ---------------------------------------------------------------------------------
-
-	Creation of phone content
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -832,49 +565,6 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	}
 
 	/*
-	--- End of myCreatePhoneContent function ---
-	*/
-
-	/*
-	--- myLoadIconsAndButtons function --------------------------------------------------------------------------------
-
-	loading predefined icons and buttons
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadIconsAndButtons ( ) {
-
-		function loadIconsAndButtons ( travelNotesButtonsAndIcons ) {
-			ourTravelNotesButtonsAndIcons = travelNotesButtonsAndIcons;
-			myAddEditionButtons ( ourTravelNotesButtonsAndIcons.editionButtons );
-			ourTravelNotesButtonsAndIcons.preDefinedIconsList.push (
-				{
-					name : '',
-					icon : '',
-					tooltip : '',
-					width : THE_CONST.note.defaultIconSize,
-					height : THE_CONST.note.defaultIconSize
-				}
-			);
-			myAddPreDefinedIconsList ( );
-		}
-
-		newHttpRequestBuilder ( ).getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-			'TravelNotesNoteDialog' +
-			theConfig.language.toUpperCase ( ) +
-			'.json'
-		)
-			.then ( loadIconsAndButtons )
-			.catch ( err => console.log ( err ? err : 'An error occurs when loading icons and buttons' ) );
-	}
-
-	/*
-	--- End of myLoadIconsAndButtons function ---
-	*/
-
-	/*
 	--- Main function -------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -889,8 +579,6 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	myCreateAddressContent ( );
 	myCreateLinkContent ( );
 	myCreatePhoneContent ( );
-	myLoadIconsAndButtons ( );
-	myAddPreDefinedIconsList ( );
 
 	return myNoteDialog;
 }

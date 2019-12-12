@@ -14,7 +14,7 @@
     },
     "rules": {
 		"curly" : [ "warn" ],
-		"complexity" : [ "warn", 25 ],
+		"complexity" : [ "warn", 20 ],
 		"default-case" : [ "warn" ],
 		"dot-location" : [ "warn", "property" ],
 		"eqeqeq" : [ "warn", "always" ],

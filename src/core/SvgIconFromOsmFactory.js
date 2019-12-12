@@ -274,51 +274,66 @@ function newSvgIconFromOsmFactory ( ) {
 		let incomingStreet = '';
 		let outgoingStreet = '';
 
-		function addStreet ( street ) {
-			myStreets = '' === myStreets ? street : myStreets + '&#x2AA5;' + street;
-		}
-
 		myWaysMap.forEach (
 			way => {
+				if ( ! way.nodesIds.includes ( svgPointId ) ) {
+					return;
+				}
+
 				let wayName =
 					( way.tags.name ? way.tags.name : '' ) +
 					( way.tags.name && way.tags.ref ? ' ' : '' ) +
 					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
-				if ( way.nodesIds.includes ( svgPointId ) ) {
-					let isClosed = way.nodesIds [ THE_CONST.zero ] === way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ];
-					let isInOutStreet =
+				let haveName = '' !== wayName;
+
+				let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
+				let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
+
+				let streetCounter = THE_CONST.number1;
+				if (
+
+					// the street start and finish in the node (it's a loop)...
+					way.nodesIds [ THE_CONST.zero ] === way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ]
+					||
+
+					// ... or the street don't start AND don't finish in the node...
+					(
 						( THE_CONST.zero !== way.nodesIds.indexOf ( svgPointId ) )
 						&&
-						( way.nodesIds.length - THE_CONST.number1 !== way.nodesIds.lastIndexOf ( svgPointId ) );
-					let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
-					let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
-					let isSimpleStreet = ! isInOutStreet && ! isIncomingStreet && ! isOutgoingStreet;
-					let haveName = '' !== wayName;
-					if ( isSimpleStreet && haveName ) {
-						addStreet ( wayName );
-					}
-					if ( ( isInOutStreet && haveName ) || ( isClosed && haveName ) ) {
-						if ( ! isIncomingStreet && ! isOutgoingStreet ) {
-							addStreet ( wayName );
-							addStreet ( wayName );
-						}
-						else if (
-							( isIncomingStreet && ! isOutgoingStreet )
-							||
-							( ! isIncomingStreet && isOutgoingStreet )
-						) {
-							addStreet ( wayName );
-						}
-					}
-					if ( isIncomingStreet ) {
-						incomingStreet = haveName ? wayName : '???';
-					}
-					if ( isOutgoingStreet ) {
-						outgoingStreet = haveName ? wayName : '???';
-					}
+						( way.nodesIds.length - THE_CONST.number1 !== way.nodesIds.lastIndexOf ( svgPointId ) )
+					)
+				) {
+
+					// ... so we have to write 2 times the street name
+					streetCounter ++;
 				}
+				if ( isIncomingStreet ) {
+					incomingStreet = haveName ? wayName : '???';
+					streetCounter --;
+				}
+				if ( THE_CONST.zero === streetCounter ) {
+					return;
+				}
+				if ( isOutgoingStreet ) {
+					outgoingStreet = haveName ? wayName : '???';
+					streetCounter --;
+				}
+				if ( THE_CONST.zero === streetCounter ) {
+					return;
+				}
+				if ( ! haveName ) {
+					return;
+				}
+				myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
+				streetCounter --;
+				if ( THE_CONST.zero === streetCounter ) {
+					return;
+				}
+				myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
+
 			}
 		);
+
 		myStreets =
 			incomingStreet +
 			( '' === myStreets ? '' : '&#x2AA5;' + myStreets ) +
