@@ -53,6 +53,16 @@ function newErrorsUI ( ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
+	--- myOnHelpInputChange function ----------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnHelpInputChange ( ) {
+		myShowHelp = myShowHelpInput.checked;
+	}
+
+	/*
 	--- myOnTimer function --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -71,10 +81,6 @@ function newErrorsUI ( ) {
 			myShowHelpDiv = null;
 		}
 		myErrorDiv.innerHTML = '';
-	}
-
-	function myOnHelpInputChange ( ) {
-		myShowHelp = myShowHelpInput.checked;
 	}
 
 	/*

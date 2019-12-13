@@ -57,18 +57,21 @@ function newRouteContextMenu ( contextMenuEvent ) {
 	*/
 
 	function myGetMenuItems ( ) {
+		console.log ( theTravelNotesData.travel.object );
+		console.log ( 'myRouteObjId : ' + myRouteObjId );
+		console.log ( 'theTravelNotesData.editedRouteObjId : ' + theTravelNotesData.editedRouteObjId );
 		return [
 			{
 				context : theRouteEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Edit this route' ),
 				action :
 					(
-						( theTravelNotesData.editedRouteObjId !== myRouteObjId )
-						&& ( THE_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
+						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
+						|| ( THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited )
 					) ?
-						theTravelEditor.editRoute
+						null
 						:
-						null,
+						theTravelEditor.editRoute,
 				param : myRouteObjId
 			},
 			{
@@ -76,14 +79,14 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				name : theTranslator.getText ( 'ContextMenuFactory - Delete this route' ),
 				action :
 					(
-						( myRouteObjId )
-						&&
-						( THE_CONST.route.edited.editedChanged !== theTravelNotesData.travel.editedRoute.edited )
+						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
+						||
+						( THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
-						theTravelEditor.removeRoute
+						null
 						:
-						null,
+						theTravelEditor.removeRoute,
 				param : myRouteObjId
 			},
 			{
@@ -100,11 +103,11 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Add a waypoint on the route' ),
 				action :
-					( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId )
+					( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
 						?
-						null
+						theWayPointEditor.addWayPointOnRoute
 						:
-						theWayPointEditor.addWayPointOnRoute,
+						null,
 				param : myRouteObjId
 			},
 			{
