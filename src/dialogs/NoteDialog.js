@@ -217,7 +217,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		else {
 			myNoteDialog.hideError ( );
 			myWidthInput.value = preDefinedIcon.width;
-			myHeightInput = preDefinedIcon.height;
+			myHeightInput.value = preDefinedIcon.height;
 			myIconHtmlContent.value = preDefinedIcon.icon;
 			myTooltipContent.value = preDefinedIcon.tooltip;
 		}
