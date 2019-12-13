@@ -83,8 +83,6 @@ function newSvgIconFromOsmFactory ( ) {
 	let myTooltip = '';
 	let myStreets = '';
 
-	// let myPassingStreets = [ ];
-
 	/*
 	--- myCreateNodesAndWaysMaps function -----------------------------------------------------------------------------
 
@@ -132,10 +130,6 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
-	--- End of myCreateNodesAndWaysMaps function ---
-	*/
-
-	/*
 	--- mySearchItineraryPoints function ------------------------------------------------------------------------------
 
 	This function search the nearest route point from the icon and compute the distance from the begining of the route
@@ -168,13 +162,7 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
-	--- End of mySearchItineraryPoints function ---
-	*/
-
-	/*
 	--- mySearchHamlet function ---------------------------------------------------------------------------------------
-
-	This function
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -191,10 +179,6 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		);
 	}
-
-	/*
-	--- End of mySearchHamlet function ---
-	*/
 
 	/*
 	--- myLatLngCompare function --------------------------------------------------------------------------------------
@@ -225,8 +209,6 @@ function newSvgIconFromOsmFactory ( ) {
 
 	/*
 	--- mySearchPassingStreets function -------------------------------------------------------------------------------
-
-	This function
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -289,48 +271,31 @@ function newSvgIconFromOsmFactory ( ) {
 				let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 				let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 
-				let streetCounter = THE_CONST.number1;
-				if (
-
-					// the street start and finish in the node (it's a loop)...
-					way.nodesIds [ THE_CONST.zero ] === way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ]
-					||
-
-					// ... or the street don't start AND don't finish in the node...
-					(
-						( THE_CONST.zero !== way.nodesIds.indexOf ( svgPointId ) )
-						&&
-						( way.nodesIds.length - THE_CONST.number1 !== way.nodesIds.lastIndexOf ( svgPointId ) )
-					)
-				) {
-
-					// ... so we have to write 2 times the street name
-					streetCounter ++;
+				let streetOcurrences = way.nodesIds.filter ( nodeId => nodeId === svgPointId ).length * THE_CONST.number2;
+				if ( way.nodesIds [ THE_CONST.zero ] === svgPointId ) {
+					streetOcurrences --;
+				}
+				if ( way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ] === svgPointId ) {
+					streetOcurrences --;
 				}
 				if ( isIncomingStreet ) {
 					incomingStreet = haveName ? wayName : '???';
-					streetCounter --;
+					streetOcurrences --;
 				}
-				if ( THE_CONST.zero === streetCounter ) {
+				if ( THE_CONST.zero === streetOcurrences ) {
 					return;
 				}
 				if ( isOutgoingStreet ) {
 					outgoingStreet = haveName ? wayName : '???';
-					streetCounter --;
+					streetOcurrences --;
 				}
-				if ( THE_CONST.zero === streetCounter ) {
+				if ( THE_CONST.zero === streetOcurrences || ! haveName ) {
 					return;
 				}
-				if ( ! haveName ) {
-					return;
+				while ( THE_CONST.zero !== streetOcurrences ) {
+					myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
+					streetOcurrences --;
 				}
-				myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
-				streetCounter --;
-				if ( THE_CONST.zero === streetCounter ) {
-					return;
-				}
-				myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
-
 			}
 		);
 
@@ -340,10 +305,6 @@ function newSvgIconFromOsmFactory ( ) {
 			myDirectionArrow +
 			outgoingStreet;
 	}
-
-	/*
-	--- End of mySearchPassingStreets function ---
-	*/
 
 	/*
 	--- myComputeTranslation function ---------------------------------------------------------------------------------
@@ -359,10 +320,6 @@ function newSvgIconFromOsmFactory ( ) {
 			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
 		);
 	}
-
-	/*
-	--- End of myComputeTranslation function ---
-	*/
 
 	/*
 	--- myComputeRotationAndDirection function ------------------------------------------------------------------------
@@ -586,10 +543,6 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
-	--- End of myCreateRoute function ---
-	*/
-
-	/*
 	--- myCreateWays function -----------------------------------------------------------------------------------------
 
 	This function creates the ways from OSM
@@ -668,10 +621,6 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
-	--- End of myCreateWays function ---
-	*/
-
-	/*
 	--- myCreateSvg function ------------------------------------------------------------------------------------------
 
 	This function creates the SVG
@@ -691,10 +640,6 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
 	}
-
-	/*
-	--- End of myCreateSvg function ---
-	*/
 
 	/*
 	--- myGetUrl function ---------------------------------------------------------------------------------------------
