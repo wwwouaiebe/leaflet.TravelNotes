@@ -57,9 +57,6 @@ function newRouteContextMenu ( contextMenuEvent ) {
 	*/
 
 	function myGetMenuItems ( ) {
-		console.log ( theTravelNotesData.travel.object );
-		console.log ( 'myRouteObjId : ' + myRouteObjId );
-		console.log ( 'theTravelNotesData.editedRouteObjId : ' + theTravelNotesData.editedRouteObjId );
 		return [
 			{
 				context : theRouteEditor,
