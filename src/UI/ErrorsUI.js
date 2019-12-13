@@ -65,10 +65,16 @@ function newErrorsUI ( ) {
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Help' );
 		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-Hidden' );
-		myCancelButton.removeEventListener ( 'click', myOnTimer, false );
-		myCancelButton = null;
-		myShowHelpDiv = null;
+		if ( myShowHelpInput ) {
+			myShowHelpInput.removeEventListener ( 'change', myOnHelpInputChange, false );
+			myShowHelpInput = null;
+			myShowHelpDiv = null;
+		}
 		myErrorDiv.innerHTML = '';
+	}
+
+	function myOnHelpInputChange ( ) {
+		myShowHelp = myShowHelpInput.checked;
 	}
 
 	/*
@@ -93,11 +99,7 @@ function newErrorsUI ( ) {
 			},
 			myShowHelpDiv
 		);
-		myShowHelpInput.addEventListener (
-			'change',
-			( ) => { myShowHelp = myShowHelpInput.checked; },
-			false
-		);
+		myShowHelpInput.addEventListener ( 'change', myOnHelpInputChange, false );
 		myHTMLElementsFactory.create (
 			'label',
 			{

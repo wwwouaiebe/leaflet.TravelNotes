@@ -515,6 +515,7 @@ function newRouteEditor ( ) {
 				addedRouteObjId : THE_CONST.invalidObjId
 			}
 		);
+		myDataSearchEngine.getRoute ( routeObjId ).hidden = true;
 	}
 
 	/*

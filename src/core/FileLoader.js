@@ -133,10 +133,10 @@ function newFileLoader ( ) {
 		let notesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
 			myEventDispatcher.dispatch (
-				'addnote',
+				'noteupdated',
 				{
-					note : notesIterator.value,
-					readOnly : myIsFileReadOnly
+					removedNoteObjId : THE_CONST.invalidObjId,
+					addedNoteObjId : notesIterator.value.objId
 				}
 			);
 		}

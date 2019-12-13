@@ -397,6 +397,12 @@ function newNoteEditor ( ) {
 				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 			}
 		}
+		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+			notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
+			while ( ! notesIterator.done ) {
+				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+			}
+		}
 	}
 
 	/*
@@ -412,10 +418,10 @@ function newNoteEditor ( ) {
 		let notesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
 			myEventDispatcher.dispatch (
-				'addnote',
+				'noteupdated',
 				{
-					note : notesIterator.value,
-					readOnly : false
+					removedNoteObjId : THE_CONST.invalidObjId,
+					addedNoteObjId : notesIterator.value.objId
 				}
 			);
 		}
@@ -424,10 +430,10 @@ function newNoteEditor ( ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
 				myEventDispatcher.dispatch (
-					'addnote',
+					'noteupdated',
 					{
-						note : notesIterator.value,
-						readOnly : false
+						removedNoteObjId : THE_CONST.invalidObjId,
+						addedNoteObjId : notesIterator.value.objId
 					}
 				);
 			}
