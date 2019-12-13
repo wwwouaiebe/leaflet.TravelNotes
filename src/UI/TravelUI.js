@@ -487,11 +487,13 @@ function newTravelUI ( ) {
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			myRoutesList.addItem (
-				routesIterator.value.name,
-				routesIterator.value.chain ? '&#x26d3;' : '',
-				theTranslator.getText ( 'TravelUI - Route' ),
-				routesIterator.value.objId,
-				false
+				{
+					value : routesIterator.value.name,
+					label : routesIterator.value.chain ? '&#x26d3;' : '',
+					placeholder : theTranslator.getText ( 'TravelUI - Route' ),
+					objId : routesIterator.value.objId,
+					isLast : false
+				}
 			);
 		}
 	}

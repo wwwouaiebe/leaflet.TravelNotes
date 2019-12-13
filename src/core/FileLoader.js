@@ -149,7 +149,10 @@ function newFileLoader ( ) {
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );
-			if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+			if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+				myEventDispatcher.dispatch ( 'reducerouteui' );
+			}
+			else {
 
 				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 				if (
@@ -178,9 +181,6 @@ function newFileLoader ( ) {
 				}
 				theRouteEditor.chainRoutes ( );
 				myEventDispatcher.dispatch ( 'expandrouteui' );
-			}
-			else {
-				myEventDispatcher.dispatch ( 'reducerouteui' );
 			}
 			myEventDispatcher.dispatch ( 'setwaypointslist' );
 			myEventDispatcher.dispatch ( 'setitinerary' );

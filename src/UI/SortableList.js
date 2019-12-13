@@ -213,7 +213,7 @@ function newSortableList ( options, parentNode ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddItem ( itemValue, indexName, placeholder, dataObjId, isLastItem ) {
+	function myAddItem ( itemData ) {
 
 		let item = myHTMLElementsFactory.create ( 'div', { draggable : false, className : 'TravelNotes-SortableList-Item' } );
 
@@ -221,7 +221,7 @@ function newSortableList ( options, parentNode ) {
 			'div',
 			{
 				className : 'TravelNotes-SortableList-ItemTextIndex',
-				innerHTML : indexName || ''
+				innerHTML : itemData.label || ''
 			},
 			item
 		);
@@ -230,8 +230,8 @@ function newSortableList ( options, parentNode ) {
 			{
 				type : 'text',
 				className : 'TravelNotes-SortableList-ItemInput',
-				placeholder : placeholder || '',
-				value : itemValue || ''
+				placeholder : itemData.placeholder || '',
+				value : itemData.value || ''
 			},
 			item
 		);
@@ -294,13 +294,13 @@ function newSortableList ( options, parentNode ) {
 			item
 		);
 		deleteButton.addEventListener ( 'click', myOnDeleteButtonClick, false );
-		item.dataObjId = dataObjId || THE_CONST.invalidObjId;
+		item.dataObjId = itemData.objId || THE_CONST.invalidObjId;
 
 		item.canDrag = false;
 		if (
 			( ( 'LimitedSort' !== myOptions.listStyle ) || ( THE_CONST.number1 < myItems.length ) )
 			&&
-			( ! isLastItem )
+			( ! itemData.isLast )
 		) {
 			item.draggable = true;
 			item.addEventListener ( 'dragstart', myOnDragStart, false );
@@ -344,13 +344,7 @@ function newSortableList ( options, parentNode ) {
 	return Object.seal (
 		{
 			removeAllItems : ( ) => myRemoveAllItems ( ),
-			addItem :
-				(
-					itemValue,
-					indexName,
-					placeholder,
-					dataObjId,
-					isLastItem ) => myAddItem ( name, indexName, placeholder, dataObjId, isLastItem ),
+			addItem : itemData => myAddItem ( itemData ),
 			get container ( ) { return myContainer; }
 		}
 	);

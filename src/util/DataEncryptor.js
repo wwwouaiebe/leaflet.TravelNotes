@@ -26,6 +26,7 @@ Tests ...
 */
 
 /* eslint no-magic-numbers: "off" */
+/* eslint max-params: ["warn", 4] */
 
 /*
 --- dataEncryptor function ----------------------------------------------------------------------------------------

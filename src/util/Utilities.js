@@ -167,28 +167,28 @@ function newUtilities ( ) {
 		let seconds = Math.floor ( iTtime % THE_CONST.time.secondInMinut );
 		if ( THE_CONST.zero < days ) {
 			return days +
-				'&nbsp;'
+				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Day' ) +
-				'&nbsp;' +
+				'\u00A0' +
 				hours +
-				'&nbsp;' +
+				'\u00A0' +
 				theTranslator.getText ( 'Utilities - Hour' );
 		}
 		else if ( THE_CONST.zero < hours ) {
 			return hours +
-				'&nbsp;'
+				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Hour' )
-				+ '&nbsp;' +
+				+ '\u00A0' +
 				minutes +
-				'&nbsp;'
+				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Minute' );
 		}
 		else if ( THE_CONST.zero < minutes ) {
 			return minutes +
-				'&nbsp;' +
+				'\u00A0' +
 				theTranslator.getText ( 'Utilities - Minute' );
 		}
-		return seconds + '&nbsp;' + theTranslator.getText ( 'Utilities - Second' );
+		return seconds + '\u00A0' + theTranslator.getText ( 'Utilities - Second' );
 	}
 
 	/* --- End of myFormatTime function --- */
@@ -209,7 +209,7 @@ function newUtilities ( ) {
 			Math.floor ( ( iDistance % THE_CONST.distance.mInKm ) / THE_CONST.distance.round ).toFixed ( THE_CONST.zero )
 				.padStart ( THE_CONST.number2, '0' )
 				.padEnd ( THE_CONST.number3, '0' ) +
-			'&nbsp;km';
+			'\u00A0km';
 	}
 
 	/* --- End of myFormatDistance function --- */
@@ -224,9 +224,9 @@ function newUtilities ( ) {
 		return (
 			lat > THE_CONST.zero
 				?
-				lat.toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;N'
+				lat.toFixed ( THE_CONST.latLng.fixed ) + '\u00A0N'
 				:
-				( -lat ).toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;S'
+				( -lat ).toFixed ( THE_CONST.latLng.fixed ) + '\u00A0S'
 		);
 	}
 
@@ -242,9 +242,9 @@ function newUtilities ( ) {
 		return (
 			lng > THE_CONST.zero
 				?
-				lng.toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;E'
+				lng.toFixed ( THE_CONST.latLng.fixed ) + '\u00A0E'
 				:
-				( -lng ).toFixed ( THE_CONST.latLng.fixed ) + '&nbsp;W'
+				( -lng ).toFixed ( THE_CONST.latLng.fixed ) + '\u00A0W'
 		);
 	}
 
@@ -257,7 +257,7 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLatLng ( latLng ) {
-		return myFormatLat ( latLng [ THE_CONST.zero ] ) + '&nbsp;-&nbsp;' + myFormatLng ( latLng [ THE_CONST.number1 ] );
+		return myFormatLat ( latLng [ THE_CONST.zero ] ) + '\u00A0-\u00A0' + myFormatLng ( latLng [ THE_CONST.number1 ] );
 	}
 
 	/* --- End of myFormatLatLng function --- */

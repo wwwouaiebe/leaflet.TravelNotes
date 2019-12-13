@@ -432,11 +432,13 @@ function newRouteUI ( ) {
 							theTranslator.getText ( 'RouteUI - Via' )
 					);
 			myWayPointsList.addItem (
-				newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng ),
-				indexName,
-				placeholder,
-				wayPointsIterator.value.objId,
-				wayPointsIterator.last
+				{
+					value : newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng ),
+					label : indexName,
+					placeholder : placeholder,
+					objId : wayPointsIterator.value.objId,
+					isLast : wayPointsIterator.last
+				}
 			);
 		}
 	}
