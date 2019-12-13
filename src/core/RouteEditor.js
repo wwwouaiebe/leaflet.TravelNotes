@@ -58,6 +58,7 @@ import { newRoute } from '../data/Route.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 
 import { THE_CONST } from '../util/Constants.js';
@@ -363,6 +364,8 @@ function newRouteEditor ( ) {
 			}
 		);
 
+		newRoadbookUpdate ( );
+
 		// and the itinerary and waypoints are displayed
 		myEventDispatcher.dispatch ( 'setitinerary' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
@@ -418,24 +421,28 @@ function newRouteEditor ( ) {
 	*/
 
 	function myCancelEdition ( ) {
-		let routeToRestore = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-		let oldEditedRouteObjId = theTravelNotesData.editedRoute.objId;
-		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
-		routeToRestore.edited = THE_CONST.route.edited.notEdited;
-		theTravelNotesData.travel.editedRoute = null;
-		myChainRoutes ( );
+
+		// !!! order is important!!!
+		myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId ).edited = THE_CONST.route.edited.notEdited;
 
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{
-				removedRouteObjId : oldEditedRouteObjId,
-				addedRouteObjId : routeToRestore.objId
+				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
+				addedRouteObjId : theTravelNotesData.editedRouteObjId
 			}
 		);
+
+		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
+		theTravelNotesData.travel.editedRoute = newRoute ( );
+		myChainRoutes ( );
+
+		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'reducerouteui' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
+
 	}
 
 	/*

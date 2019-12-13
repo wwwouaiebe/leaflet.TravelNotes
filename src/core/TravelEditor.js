@@ -56,6 +56,7 @@ import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -144,6 +145,8 @@ function newTravelEditor ( ) {
 				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 			}
 		);
+
+		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch ( 'expandrouteui' );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
@@ -195,6 +198,7 @@ function newTravelEditor ( ) {
 
 		theRouteEditor.chainRoutes ( );
 
+		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{

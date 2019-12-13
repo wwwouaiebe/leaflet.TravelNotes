@@ -433,7 +433,12 @@ function newRouteUI ( ) {
 					);
 			myWayPointsList.addItem (
 				{
-					value : newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng ),
+					value :
+						'' === wayPointsIterator.value.name
+							?
+							newUtilities ( ).formatLatLng ( wayPointsIterator.value.latLng )
+							:
+							wayPointsIterator.value.name,
 					label : indexName,
 					placeholder : placeholder,
 					objId : wayPointsIterator.value.objId,

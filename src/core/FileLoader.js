@@ -43,6 +43,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -146,6 +147,8 @@ function newFileLoader ( ) {
 
 		// Editors and roadbook are filled
 		if ( ! myIsFileReadOnly ) {
+
+			newRoadbookUpdate ( );
 
 			// Editors and HTML pages are filled
 			myEventDispatcher.dispatch ( 'setrouteslist' );

@@ -118,7 +118,6 @@ function newTravelNotes ( ) {
 						updateRouteEvent.data.removedRouteObjId,
 						updateRouteEvent.data.addedRouteObjId
 					);
-					newRoadbookUpdate ( );
 				}
 			},
 			false
