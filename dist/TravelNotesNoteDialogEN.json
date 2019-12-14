@@ -114,6 +114,13 @@
 	"preDefinedIconsList" :
 	[
 		{
+			"name" : "SVG icon from OSM",
+			"icon" : "SvgIcon",
+			"tooltip" : "SVG icon from OSM",
+			"width" : 40,
+			"height" : 40
+		},
+		{
 			"name" : "Airport",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0001'></div>",
 			"tooltip" : "Airport",

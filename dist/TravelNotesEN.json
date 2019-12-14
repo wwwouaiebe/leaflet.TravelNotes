@@ -280,8 +280,8 @@
 		"msgstr" : "Phone&nbsp:&nbsp;"
 	},
 	{
-		"msgid" : "NoteDialog - SVG icon from OSM",
-		"msgstr" : "SVG icon from OSM"
+		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
+		"msgstr" : "It's impossible to create a SVG icon for a travel note"
 	},
 	{
 		"msgid" : "NoteDialog - Start",
