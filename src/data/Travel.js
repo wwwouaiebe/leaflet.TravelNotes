@@ -84,7 +84,7 @@ function newTravel ( ) {
 			case '1.2.0' :
 			case '1.3.0' :
 			case '1.4.0' :
-				something.editedRoute = null;
+				something.editedRoute = newRoute ( );
 				// eslint break omitted intentionally
 			case '1.5.0' :
 				if ( something.userData.layerId ) {
