@@ -77,7 +77,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						||
+						&&
 						( THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
