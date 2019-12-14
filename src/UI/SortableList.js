@@ -268,7 +268,7 @@ function newSortableList ( options, parentNode ) {
 			{
 				className : 'TravelNotes-SortableList-ItemDownArrowButton',
 				title : theTranslator.getText ( 'SortableList - Move down' ),
-				innerHTML : '&#x21e8;'
+				innerHTML : '&#x21e9;'
 			},
 			item
 		);

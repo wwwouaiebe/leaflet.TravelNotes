@@ -183,33 +183,48 @@ function newTravelEditor ( ) {
 	*/
 
 	function myRemoveRoute ( routeObjId ) {
+
+		console.log ( theTravelNotesData.travel.object );
+
+		let routeToDeleteObjId = routeObjId;
 		if (
-			routeObjId === theTravelNotesData.editedRouteObjId
+			(
+				routeToDeleteObjId === theTravelNotesData.editedRouteObjId
+				||
+				routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
+			)
 			&&
 			THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited
 		) {
 
-			// cannot remove the route currently edited
+			// cannot remove the route currently edited and changed
 			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
 			return;
 		}
 
-		theTravelNotesData.travel.routes.remove ( routeObjId );
+		if (
+			routeToDeleteObjId === theTravelNotesData.editedRouteObjId
+			||
+			routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
 
-		theRouteEditor.chainRoutes ( );
+		) {
+			routeToDeleteObjId = theTravelNotesData.editedRouteObjId;
+			theRouteEditor.cancelEdition ( );
+		}
 
-		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch (
 			'routeupdated',
 			{
-				removedRouteObjId : routeObjId,
+				removedRouteObjId : routeToDeleteObjId,
 				addedRouteObjId : THE_CONST.invalidObjId
 			}
 		);
+
+		theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
+		theRouteEditor.chainRoutes ( );
+
+		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
-			theRouteEditor.cancelEdition ( );
-		}
 	}
 
 	/*
