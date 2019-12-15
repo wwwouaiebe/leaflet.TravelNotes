@@ -136,7 +136,7 @@ function newMapEditor ( ) {
 		theTravelNotesData.map.addLayer ( leafletLayer );
 		myCurrentLayer = leafletLayer;
 		if ( ! theTravelNotesData.travel.readOnly ) {
-			
+
 			// strange... see issue #79 ... zoom is not correct on read only file
 			// when the background map have bounds...
 			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom ) ) {

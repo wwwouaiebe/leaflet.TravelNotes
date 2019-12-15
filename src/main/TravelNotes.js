@@ -259,6 +259,7 @@ function newTravelNotes ( ) {
 	function myAddReadOnlyMap ( travelUrl ) {
 
 		myAddEventsListeners ( );
+		theAttributionsUI.createUI ( );
 
 		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
 			.then (
@@ -271,8 +272,8 @@ function newTravelNotes ( ) {
 						[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
 						THE_CONST.number2
 					);
-					theLayersToolbarUI.setLayer ( 'OSM - Color' );
 					theErrorsUI.createUI ( );
+					theLayersToolbarUI.setLayer ( 'OSM - Color' );
 					theErrorsUI.showError ( 'Not possible to load the file ' + travelUrl );
 				}
 			);

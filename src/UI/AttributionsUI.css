@@ -1,4 +1,5 @@
-#TravelNotes-AttributionsUI {
+#TravelNotes-AttributionsUI 
+{
 	position : absolute;
 	left: 0;
 	bottom: 0;
@@ -6,4 +7,10 @@
 	background-color: white;
 	padding-left: 1em;
 	padding-right: 1em;
+	color: #0078A8;
+	font-size: 80%;
+}
+
+#TravelNotes-AttributionsUI a{
+	color: #0078A8;
 }

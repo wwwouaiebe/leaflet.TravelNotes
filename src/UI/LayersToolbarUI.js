@@ -343,6 +343,7 @@ function newLayersToolbarUI ( ) {
 			}
 		}
 		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
+		theAttributionsUI.attributions = newLayer.attribution;
 	}
 
 	/*
