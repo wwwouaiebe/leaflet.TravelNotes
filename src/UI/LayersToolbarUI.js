@@ -138,6 +138,7 @@ function newLayersToolbarUI ( ) {
 	function myOnClickLayerButton ( clickEvent ) {
 		myEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
 		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
+		theTravelNotesData.travel.layerName = clickEvent.target.layer.name;
 	}
 
 	/*
@@ -344,6 +345,7 @@ function newLayersToolbarUI ( ) {
 		}
 		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
+		theTravelNotesData.travel.layerName = newLayer.name;
 	}
 
 	/*
