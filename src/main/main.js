@@ -80,6 +80,21 @@ function startup ( ) {
 		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
+	function myTestCryptoPromise ( ) {
+		if ( ! window.crypto || ! window.crypto.subtle || ! window.crypto.subtle.importKey ) {
+			return Promise.reject ( new Error ( 'Crypto.subtle not available' ) );
+		}
+
+		return	window.crypto.subtle.importKey (
+			'raw',
+			new window.TextEncoder ( ).encode ( 'hoho' ),
+			{ name : 'PBKDF2' },
+			false,
+			[ 'deriveKey' ]
+		);
+
+	}
+
 	/*
 	--- End of myReadURL function ---
 	*/
@@ -121,21 +136,33 @@ function startup ( ) {
 			'TravelNotesNoteDialog' +
 			( myLangage || theConfig.language ).toUpperCase ( ) +
 			'.json'
-		)
+		),
+		myTestCryptoPromise ( )
 	];
 
-	Promise.all ( promises )
+	Promise.allSettled ( promises )
 		.then (
 
 			// promises succeeded
-			values => {
+			results => {
+				for (
+					let promisesCounter = THE_CONST.zero;
+					promisesCounter <= THE_CONST.number3;
+					promisesCounter ++
+				) {
+					if ( 'rejected' === results [ promisesCounter ].status ) {
+						throw new Error ( results [ promisesCounter ].reason );
+					}
+				}
 
 				// config adaptation
 				if ( myLangage ) {
-					values [ THE_CONST.zero ].language = myLangage;
+					results [ THE_CONST.zero ].value.language = myLangage;
 				}
+				results [ THE_CONST.zero ].value.haveCrypto =
+					'fulfilled' === results [ THE_CONST.number4 ].status;
 
-				theConfig.overload ( values [ THE_CONST.zero ] );
+				theConfig.overload ( results [ THE_CONST.zero ].value );
 
 				theTravelNotesData.providers.forEach (
 					provider => {
@@ -144,13 +171,13 @@ function startup ( ) {
 				);
 
 				// translations adaptation
-				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
+				theTranslator.setTranslations ( results [ THE_CONST.number1 ].value );
 
 				// layers adaptation
-				theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+				theLayersToolbarUI.setLayers ( results [ THE_CONST.number2 ].value );
 
-				theNoteDialogToolbar.selectOptions = values [ THE_CONST.number3 ].preDefinedIconsList;
-				theNoteDialogToolbar.buttons = values [ THE_CONST.number3 ].editionButtons;
+				theNoteDialogToolbar.selectOptions = results [ THE_CONST.number3 ].value.preDefinedIconsList;
+				theNoteDialogToolbar.buttons = results [ THE_CONST.number3 ].value.editionButtons;
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (

@@ -68,7 +68,7 @@ function newHttpRequestBuilder ( ) {
 							response = JSON.parse ( xmlHttpRequest.responseText );
 						}
 						catch ( err ) {
-							onError ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL );
+							onError ( err.message + ' File: ' + xmlHttpRequest.responseURL );
 						}
 						onOk ( response );
 					}

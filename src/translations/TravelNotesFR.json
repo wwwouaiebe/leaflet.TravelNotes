@@ -37,7 +37,11 @@
 	},
 	{
 		"msgid" : "APIKeysDialog - Open file",
-		"msgstr" : "Ouvrir un fichier"
+		"msgstr" : "Ouvrir un fichier avec mot de passe"
+	},
+	{
+		"msgid" : "APIKeysDialog - Open json file",
+		"msgstr" : "Ouvrir un fichier sans mot de passe"
 	},
 	{
 		"msgid" : "APIKeysDialog - provider name",
@@ -45,7 +49,11 @@
 	},
 	{
 		"msgid" : "APIKeysDialog - Save to file",
-		"msgstr" : "Sauver dans un fichier"
+		"msgstr" : "Sauver dans un fichier avec mot de passe"
+	},
+	{
+		"msgid" : "APIKeysDialog - Save to json file",
+		"msgstr" : "Sauver dans un fichier SANS mot de passe"
 	},
 	{
 		"msgid" : "ColorDialog - Blue",

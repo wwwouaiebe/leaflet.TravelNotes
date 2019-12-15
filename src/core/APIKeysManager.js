@@ -246,12 +246,14 @@ function newAPIKeysManager ( ) {
 			newEventDispatcher ( ).dispatch ( 'providersadded' );
 			return;
 		}
-		newHttpRequestBuilder ( ).getBinaryPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
-				'APIKeys'
-		)
-			.then ( myOnServerFile )
-			.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
+		if ( theConfig.haveCrypto ) {
+			newHttpRequestBuilder ( ).getBinaryPromise (
+				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+					'APIKeys'
+			)
+				.then ( myOnServerFile )
+				.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
+		}
 	}
 
 	/*

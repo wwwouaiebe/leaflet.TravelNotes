@@ -50,7 +50,8 @@
 	{
 		"showDialogButton":true,
 		"saveToSessionStorage":true,
-		"showAPIKeysInDialog":true
+		"showAPIKeysInDialog":true,
+		"dialogHaveUnsecureButtons":true
 	},
 	"contextMenu":
 	{

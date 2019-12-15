@@ -96,7 +96,8 @@ function newConfig ( ) {
 		APIKeys : {
 			showDialogButton : true,
 			saveToSessionStorage : true,
-			showAPIKeysInDialog : true
+			showAPIKeysInDialog : true,
+			dialogHaveUnsecureButtons : true
 		},
 		contextMenu : {
 			timeout : 1500
@@ -210,7 +211,8 @@ function newConfig ( ) {
 		{
 			url : 'https://nominatim.openstreetmap.org/',
 			language : '*'
-		}
+		},
+		haveCrypto : false
 	};
 
 	/*
@@ -327,6 +329,7 @@ function newConfig ( ) {
 		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; },
 		get nominatim ( ) { return myConfig.nominatim; },
 		get geoLocation ( ) { return myConfig.geoLocation; },
+		get haveCrypto ( ) { return myConfig.haveCrypto; },
 
 		overload : source => myOverload ( source )
 

@@ -33,6 +33,7 @@ import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 
 import { THE_CONST } from '../util/Constants.js';
@@ -50,6 +51,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	let myToolbarDiv = null;
 	let myAPIKeysDiv = null;
 	let myOpenFileInput = null;
+	let myOpenJsonFileInput = null;
 
 	/*
 	--- myGetAPIKeys function -----------------------------------------------------------------------------------------
@@ -102,6 +104,7 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	function myOnOkButtonClick ( ) {
 
+		myAPIKeysDialog.hideError ( );
 		if ( ! myVerifyKeys ( ) ) {
 			return;
 		}
@@ -201,9 +204,13 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function mySaveKeysToFile ( ) {
+
+		myAPIKeysDialog.hideError ( );
+
 		if ( ! myVerifyKeys ( ) ) {
 			return;
 		}
+
 		myAPIKeysDialog.showWait ( );
 		newDataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( JSON.stringify ( myGetAPIKeys ( ) ) ),
@@ -214,7 +221,22 @@ function newAPIKeysDialog ( APIKeys ) {
 	}
 
 	/*
-	--- myOnErrorDecrypt function ------------------------------------------------------------------------------
+	--- mySaveKeysToJsonFile function ---------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySaveKeysToJsonFile ( ) {
+		myAPIKeysDialog.hideError ( );
+
+		if ( ! myVerifyKeys ( ) ) {
+			return;
+		}
+		newUtilities ( ).saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
+	}
+
+	/*
+	--- myOnErrorDecrypt function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -256,6 +278,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myOnOpenFileInputChange ( changeEvent ) {
+		myAPIKeysDialog.hideError ( );
 		myAPIKeysDialog.showWait ( );
 		changeEvent.stopPropagation ( );
 		let fileReader = new FileReader ( );
@@ -269,6 +292,34 @@ function newAPIKeysDialog ( APIKeys ) {
 		};
 		fileReader.readAsArrayBuffer ( changeEvent.target.files [ THE_CONST.zero ] );
 
+	}
+
+	/*
+	--- myOnOpenJsonFileInputChange function --------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOpenJsonFileInputChange ( changeEvent ) {
+		changeEvent.stopPropagation ( );
+
+		myAPIKeysDialog.hideError ( );
+		let fileReader = new FileReader ( );
+		fileReader.onload = function ( ) {
+			try {
+				let jsonAPIKeys = JSON.parse ( fileReader.result );
+
+				while ( myAPIKeysDiv.firstChild ) {
+					myAPIKeysDiv.removeChild ( myAPIKeysDiv.firstChild );
+				}
+				jsonAPIKeys.forEach ( jsonAPIKey => myCreateAPIKeyRow ( jsonAPIKey ) );
+			}
+			catch ( err ) {
+				myAPIKeysDialog.showError ( err.message );
+				console.log ( err ? err : 'An error occurs when reading the file' );
+			}
+		};
+		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
 	}
 
 	/*
@@ -308,68 +359,71 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	function myCreateToolbar ( ) {
 
-		// save button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-APIKeysDialog-SaveToFileButton',
-				className : 'TravelNotes-APIKeysDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
-				innerHTML : '&#x1f4be;'
-			},
-			myToolbarDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					mySaveKeysToFile ( );
-				},
-				false
-			);
+		if ( theConfig.haveCrypto ) {
 
-		let openFileDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-APIKeysDialog-OpenFileDiv'
-			},
-			myToolbarDiv
-		);
-		myOpenFileInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-APIKeysDialog-OpenFileInput',
-				type : 'file'
-			},
-			openFileDiv
-		);
-		myOpenFileInput.addEventListener (
-			'change',
-			changeEvent => { myOnOpenFileInputChange ( changeEvent ); },
-			false
-		);
-		let openFileFakeDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
-			},
-			openFileDiv
-		);
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-APIKeysDialog-OpenFileButton',
-				className : 'TravelNotes-APIKeysDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
-				innerHTML : '&#x1F4C2;'
-			},
-			openFileFakeDiv
-		)
-			.addEventListener (
-				'click',
-				( ) => { myOpenFileInput.click ( ); },
+			// save button
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-SaveToFileButton',
+					className : 'TravelNotes-APIKeysDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
+					innerHTML : '&#x1f4be;'
+				},
+				myToolbarDiv
+			)
+				.addEventListener (
+					'click',
+					clickEvent => {
+						clickEvent.stopPropagation ( );
+						mySaveKeysToFile ( );
+					},
+					false
+				);
+
+			let openFileDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenFileDiv'
+				},
+				myToolbarDiv
+			);
+			myOpenFileInput = myHTMLElementsFactory.create (
+				'input',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenFileInput',
+					type : 'file'
+				},
+				openFileDiv
+			);
+			myOpenFileInput.addEventListener (
+				'change',
+				changeEvent => { myOnOpenFileInputChange ( changeEvent ); },
 				false
 			);
+			let openFileFakeDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
+				},
+				openFileDiv
+			);
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenFileButton',
+					className : 'TravelNotes-APIKeysDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
+					innerHTML : '&#x1F4C2;'
+				},
+				openFileFakeDiv
+			)
+				.addEventListener (
+					'click',
+					( ) => { myOpenFileInput.click ( ); },
+					false
+				);
+		}
 
 		myHTMLElementsFactory.create (
 			'div',
@@ -390,6 +444,69 @@ function newAPIKeysDialog ( APIKeys ) {
 				false
 			);
 
+		if ( theConfig.APIKeys.dialogHaveUnsecureButtons ) {
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-SaveToJsonFileButton',
+					className : 'TravelNotes-APIKeysDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
+					innerHTML : '&#x1f4be;'
+				},
+				myToolbarDiv
+			)
+				.addEventListener (
+					'click',
+					clickEvent => {
+						clickEvent.stopPropagation ( );
+						mySaveKeysToJsonFile ( );
+					},
+					false
+				);
+
+			let openJsonFileDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenJsonFileDiv'
+				},
+				myToolbarDiv
+			);
+			myOpenJsonFileInput = myHTMLElementsFactory.create (
+				'input',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenJsonFileInput',
+					type : 'file'
+				},
+				openJsonFileDiv
+			);
+			myOpenJsonFileInput.addEventListener (
+				'change',
+				changeEvent => { myOnOpenJsonFileInputChange ( changeEvent ); },
+				false
+			);
+			let openJsonFileFakeDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenJsonFileFakeDiv'
+				},
+				openJsonFileDiv
+			);
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-OpenJsonFileButton',
+					className : 'TravelNotes-APIKeysDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
+					innerHTML : '&#x1F4C2;'
+				},
+				openJsonFileFakeDiv
+			)
+				.addEventListener (
+					'click',
+					( ) => { myOpenJsonFileInput.click ( ); },
+					false
+				);
+		}
 	}
 
 	/*
