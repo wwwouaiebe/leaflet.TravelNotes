@@ -135,29 +135,33 @@ function newMapEditor ( ) {
 		}
 		theTravelNotesData.map.addLayer ( leafletLayer );
 		myCurrentLayer = leafletLayer;
-
-		if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom ) ) {
-			theTravelNotesData.map.setZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
-		}
-		theTravelNotesData.map.setMinZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
-		if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom ) ) {
-			theTravelNotesData.map.setZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
-		}
-		theTravelNotesData.map.setMaxZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
-		if ( layer.bounds ) {
-			if (
-				! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
-				||
-				theTravelNotesData.map.getBounds ( ).contains ( layer.bounds )
-			) {
-				theTravelNotesData.map.setMaxBounds ( null );
-				theTravelNotesData.map.fitBounds ( layer.bounds );
+		if ( ! theTravelNotesData.travel.readOnly ) {
+			
+			// strange... see issue #79 ... zoom is not correct on read only file
+			// when the background map have bounds...
+			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom ) ) {
 				theTravelNotesData.map.setZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
 			}
-			theTravelNotesData.map.setMaxBounds ( layer.bounds );
-		}
-		else {
-			theTravelNotesData.map.setMaxBounds ( null );
+			theTravelNotesData.map.setMinZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
+			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom ) ) {
+				theTravelNotesData.map.setZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
+			}
+			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
+			if ( layer.bounds ) {
+				if (
+					! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
+					||
+					theTravelNotesData.map.getBounds ( ).contains ( layer.bounds )
+				) {
+					theTravelNotesData.map.setMaxBounds ( null );
+					theTravelNotesData.map.fitBounds ( layer.bounds );
+					theTravelNotesData.map.setZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
+				}
+				theTravelNotesData.map.setMaxBounds ( layer.bounds );
+			}
+			else {
+				theTravelNotesData.map.setMaxBounds ( null );
+			}
 		}
 		theTravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
 	}
