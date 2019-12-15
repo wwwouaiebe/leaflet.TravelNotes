@@ -140,6 +140,9 @@ function newPasswordDialog ( verifyPassword ) {
 			},
 			myPasswordDiv
 		);
+	}
+
+	function myOnShow ( ) {
 		myPasswordInput.focus ( );
 	}
 
@@ -151,6 +154,7 @@ function newPasswordDialog ( verifyPassword ) {
 
 	myCreateDialog ( );
 	myCreateContent ( );
+	myPasswordDialog.onShow = myOnShow;
 
 	return myPasswordDialog;
 }

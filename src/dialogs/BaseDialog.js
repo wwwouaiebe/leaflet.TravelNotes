@@ -77,6 +77,8 @@ function newBaseDialog ( ) {
 	let myCancelButtonListener = null;
 	let myEscapeKeyEventListener = null;
 
+	let myOnShow = null;
+
 	// Promise callback
 	let myOnOk = null;
 	let myOnCancel = null;
@@ -382,6 +384,9 @@ function newBaseDialog ( ) {
 		myScreenWidth = myBackgroundDiv.clientWidth;
 		myScreenHeight = myBackgroundDiv.clientHeight;
 		myCenter ( );
+		if ( myOnShow ) {
+			myOnShow ( );
+		}
 	}
 
 	/*
@@ -446,6 +451,8 @@ function newBaseDialog ( ) {
 			set cancelButtonListener ( Listener ) { myCancelButtonListener = Listener; },
 
 			set escapeKeyListener ( Listener ) { myEscapeKeyEventListener = Listener; },
+
+			set onShow ( OnShow ) { myOnShow = OnShow; },
 
 			showError : errorText => myShowError ( errorText ),
 			hideError : ( ) => myHideError ( ),
