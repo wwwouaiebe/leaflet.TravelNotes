@@ -118,11 +118,8 @@ function newNoteDialogToolbar ( ) {
 					( first, second ) => first.name.localeCompare ( second.name )
 				);
 
-				while ( myToolbarDiv.firstChild ) {
-					myToolbarDiv.removeChild ( myToolbarDiv.firstChild );
-				}
 				let oldButton = null;
-				while ( document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ) ) {
+				while ( THE_CONST.zero < document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ).length ) {
 					oldButton = document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ) [ THE_CONST.zero ];
 					oldButton.removeEventListener ( 'click', myOnButtonClickEventListener, false );
 					myToolbarDiv.removeChild ( oldButton );
@@ -197,9 +194,8 @@ function newNoteDialogToolbar ( ) {
 			'button',
 			{
 				id : 'TravelNotes-NoteDialog-OpenEditorFileButton',
-				className : 'TravelNotes-NoteDialog-EditorButton',
 				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-				innerHTML : '&#x23CD;'
+				innerHTML : '&#x1F4C2;'
 			},
 			openFileFakeDiv
 		);
