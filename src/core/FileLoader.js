@@ -141,8 +141,6 @@ function newFileLoader ( ) {
 			);
 		}
 
-		// zoom on the travel
-		myEventDispatcher.dispatch ( 'zoomtotravel' );
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and roadbook are filled

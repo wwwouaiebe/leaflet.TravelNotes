@@ -97,19 +97,6 @@ function newTravelNotes ( ) {
 
 	function myAddEventsListeners ( ) {
 
-		window.addEventListener (
-			'unload',
-			( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
-		);
-
-		window.addEventListener (
-			'beforeunload',
-			beforeUnloadEvent => {
-				beforeUnloadEvent.returnValue = 'x';
-				return 'x';
-			}
-		);
-
 		document.addEventListener (
 			'routeupdated',
 			updateRouteEvent => {
@@ -302,6 +289,20 @@ function newTravelNotes ( ) {
 	function myAddControl ( divControlId ) {
 
 		myAddEventsListeners ( );
+
+		// unload and beforeunload must only be added when not readonly map
+		window.addEventListener (
+			'unload',
+			( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
+		);
+
+		window.addEventListener (
+			'beforeunload',
+			beforeUnloadEvent => {
+				beforeUnloadEvent.returnValue = 'x';
+				return 'x';
+			}
+		);
 
 		// loading new travel
 		theTravelNotesData.travel = newTravel ( );
