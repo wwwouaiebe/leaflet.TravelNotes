@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 			},
 			Viewer: {
 				files: {
-					'tmp/TravelNotesViewer.min.css': [ 'src/**/*.css']
+					'tmp/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Popup.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ]
 				}
 			},
 			Roadbook: {

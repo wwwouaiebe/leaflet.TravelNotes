@@ -34,10 +34,8 @@ import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
-import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -133,46 +131,32 @@ function newTravelNotesViewer ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddReadOnlyMap ( travelUrl ) {
+	function myAddReadOnlyMap ( travelUrl, addLayerToolbar ) {
 
 		myAddEventsListeners ( );
 		theAttributionsUI.createUI ( );
 
-		let newLayer =
-		{
-			service : 'wmts',
-			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-			name : 'OSM - Color',
-			toolbar :
-			{
-				text : 'OSM',
-				color : 'red',
-				backgroundColor : 'white'
-			},
-			providerName : 'OSM',
-			providerKeyNeeded : false,
-			attribution : '| &copy; <a href="http://www.openstreetmap.org/copyright" ' +
-				'target="_blank" title="OpenStreetMap contributors">OpenStreetMap contributors</a> '
-		};
+		if ( addLayerToolbar ) {
+			theViewerLayersToolbarUI.createUI ( );
+		}
 
-		newEventDispatcher ( ).dispatch ( 'layerchange', { layer : newLayer } );
+		theViewerLayersToolbarUI.setLayer ( 'OSM - Color' );
 
-		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
-			.then (
-				newViewerFileLoader ( ).openDistantFile
-			)
-			.catch (
-				err => {
-					console.log ( err ? err : 'Not possible to load the .trv file' );
-					theTravelNotesData.map.setView (
-						[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
-						THE_CONST.number2
-					);
-					theErrorsUI.createUI ( );
-					theLayersToolbarUI.setLayer ( 'OSM - Color' );
-					theErrorsUI.showError ( 'Not possible to load the file ' + travelUrl );
-				}
-			);
+		if ( travelUrl ) {
+			newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
+				.then (
+					newViewerFileLoader ( ).openDistantFile
+				)
+				.catch (
+					err => {
+						console.log ( err ? err : 'Not possible to load the .trv file' );
+						theTravelNotesData.map.setView (
+							[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
+							THE_CONST.number2
+						);
+					}
+				);
+		}
 	}
 
 	/*
@@ -192,7 +176,7 @@ function newTravelNotesViewer ( ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			addReadOnlyMap : ( map, travelUrl ) => myAddReadOnlyMap ( map, travelUrl )
+			addReadOnlyMap : ( travelUrl, addLayerToolbar ) => myAddReadOnlyMap ( travelUrl, addLayerToolbar )
 		}
 	);
 }

@@ -35,6 +35,7 @@ import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
+import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -42,6 +43,7 @@ function startup ( ) {
 
 	let myLangage = null;
 	let myTravelUrl = null;
+	let myAddLayerToolbar = false;
 
 	/*
 	--- myReadURL function --------------------------------------------------------------------------------------------
@@ -62,6 +64,9 @@ function startup ( ) {
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
 						myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
+					}
+					else if ( 'lay' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number3 ).toLowerCase ( ) ) {
+						myAddLayerToolbar = true;
 					}
 				}
 			);
@@ -106,7 +111,7 @@ function startup ( ) {
 				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
 
 				// layers adaptation
-				// theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+				theViewerLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (
@@ -120,9 +125,7 @@ function startup ( ) {
 
 					theTravelNotesData.map = map;
 
-					if ( myTravelUrl ) {
-						theTravelNotesViewer.addReadOnlyMap ( myTravelUrl );
-					}
+					theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
 				}
 			}
 		)
