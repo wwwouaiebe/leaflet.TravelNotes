@@ -45,6 +45,28 @@ Patterns : Closure
 function newGeometry ( ) {
 
 	/*
+	--- myGetLatLngBounds function ------------------------------------------------------------------------------------
+
+	This function build a L.latLngBounds object from an array of points
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetLatLngBounds ( latLngs ) {
+		let sw = L.latLng ( [ THE_CONST.latLng.maxLat, THE_CONST.latLng.maxLng ] );
+		let ne = L.latLng ( [ THE_CONST.latLng.minLat, THE_CONST.latLng.minLng ] );
+		latLngs.forEach (
+			latLng => {
+				sw.lat = Math.min ( sw.lat, latLng [ THE_CONST.zero ] );
+				sw.lng = Math.min ( sw.lng, latLng [ THE_CONST.number1 ] );
+				ne.lat = Math.max ( ne.lat, latLng [ THE_CONST.zero ] );
+				ne.lng = Math.max ( ne.lng, latLng [ THE_CONST.number1 ] );
+			}
+		);
+		return L.latLngBounds ( sw, ne );
+	}
+
+	/*
 	--- myGetClosestLatLngDistance function ---------------------------------------------------------------------------
 
 	This function search the nearest point on a route from a given point and compute the distance
@@ -195,6 +217,7 @@ function newGeometry ( ) {
 	return Object.seal (
 		{
 			getClosestLatLngDistance : ( route, latLng ) => myGetClosestLatLngDistance ( route, latLng ),
+			getLatLngBounds : latLngs => myGetLatLngBounds ( latLngs ),
 			pointsDistance :
 				( latLngStartPoint, latLngEndPoint ) => myPointsDistance ( latLngStartPoint, latLngEndPoint ),
 			project : ( latLng, zoom ) => myProject ( latLng, zoom ),

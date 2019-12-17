@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		eslint: {
 			options: {
-				fix: false,
+				fix: true,
 				configFile: '.eslintrc.json'
 			},				
 			target: ['src/**/*.js']
@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 				},
 				files: {
 				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
+				  'tmp/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
 				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js']				  
 				}
 			}
@@ -41,6 +42,11 @@ module.exports = function(grunt) {
 					'tmp/TravelNotes.min.css': [ 'src/**/*.css']
 				}
 			},
+			Viewer: {
+				files: {
+					'tmp/TravelNotesViewer.min.css': [ 'src/**/*.css']
+				}
+			},
 			Roadbook: {
 				files: {
 					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/roadbook/Roadbook.css']
@@ -62,6 +68,22 @@ module.exports = function(grunt) {
 				},
 				files: {
 					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.min.js']
+				}
+			},
+			Viewer: {
+				options: {
+					banner: '\n/*!\n<%= pkg.name %> - version <%= pkg.version %> ' + 
+						'\nbuild <%= pkg.buildNumber %> - ' + 
+						'<%= grunt.template.today("isoDateTime") %> ' + 
+						'\nCopyright 2017 <%= grunt.template.today("yyyy") %> wwwouaiebe ' + 
+						'\nContact: http://www.ouaie.be/' + 
+						'\nSources: <%= pkg.sources %> ' + 
+						'\nLicense: <%= pkg.license %>\n*/\n\n',
+					mangle: true,
+					beautify: false
+				},
+				files: {
+					'tmp/TravelNotesViewer.min.js': ['tmp/TravelNotesViewer.min.js']
 				}
 			},
 			Roadbook: {
@@ -104,6 +126,12 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/html/',
+						src: ['TravelNotesViewer.html'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotes.min.css'],
 						dest: 'dist/'
@@ -111,7 +139,19 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.css'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
 						src: ['TravelNotes.min.js'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.js'],
 						dest: 'dist/'
 					},
 					{
@@ -144,6 +184,12 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/html/',
+						src: ['TravelNotesViewer.html'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotes.min.css'],
 						dest: 'gh-page/'
@@ -151,7 +197,19 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.css'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
 						src: ['TravelNotes.min.js'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.js'],
 						dest: 'gh-page/'
 					},
 					{
@@ -184,8 +242,20 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/html/',
+						src: 'TravelNotesViewerDebug.html',
+						rename: function ( ){return 'debug/TravelNotesViewer.html';}
+					},
+					{
+						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotes.min.css'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.css'],
 						dest: 'debug/'
 					},
 					{

@@ -34,10 +34,10 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
+import { newZoomer } from '../core/Zoomer.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -50,6 +50,7 @@ import { THE_CONST } from '../util/Constants.js';
 function newMapContextMenu ( contextMenuEvent ) {
 
 	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
+	let myZoomer = newZoomer ( );
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------
@@ -118,9 +119,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				action : theRouteEditor.showRoutes
 			},
 			{
-				context : theTravelEditor,
+				context : myZoomer,
 				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to travel' ),
-				action : theTravelEditor.zoomToTravel
+				action : myZoomer.zoomToTravel
 			},
 			{
 				context : null,

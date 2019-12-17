@@ -33,6 +33,7 @@ Tests ...
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
+import { newZoomer } from '../core/Zoomer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
@@ -47,6 +48,7 @@ import { THE_CONST } from '../util/Constants.js';
 function newNoteContextMenu ( contextMenuEvent ) {
 
 	let myNoteObjId = contextMenuEvent.target.objId;
+	let myZoomer = newZoomer ( );
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------
@@ -72,9 +74,9 @@ function newNoteContextMenu ( contextMenuEvent ) {
 				param : myNoteObjId
 			},
 			{
-				context : theNoteEditor,
+				context : myZoomer,
 				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to note' ),
-				action : theNoteEditor.zoomToNote,
+				action : myZoomer.zoomToNote,
 				param : myNoteObjId
 			},
 			{

@@ -52,6 +52,7 @@ import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 import { theMapEditor } from '../core/MapEditor.js';
+import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theUI } from '../UI/UI.js';
 
@@ -155,7 +156,7 @@ function newTravelNotes ( ) {
 			'zoomto',
 			zoomToEvent => {
 				if ( zoomToEvent.data ) {
-					theMapEditor.zoomTo (
+					theViewerMapEditor.zoomTo (
 						zoomToEvent.data.latLng,
 						zoomToEvent.data.geometry
 					);
@@ -226,7 +227,7 @@ function newTravelNotes ( ) {
 			'geolocationpositionchanged',
 			geoLocationPositionChangedEvent => {
 				if ( geoLocationPositionChangedEvent.data ) {
-					theMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
+					theViewerMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
 				}
 			},
 			false
@@ -235,12 +236,11 @@ function newTravelNotes ( ) {
 			'geolocationstatuschanged',
 			geoLocationStatusChangedEvent => {
 				if ( geoLocationStatusChangedEvent.data ) {
-					theMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+					theViewerMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 				}
 			},
 			false
 		);
-
 		document.addEventListener (
 			'roadbookupdate',
 			( ) => newRoadbookUpdate ( ),

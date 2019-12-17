@@ -44,8 +44,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { polyline } from '../polyline/Polyline.js';
-
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
@@ -57,6 +55,7 @@ import { newTravel } from '../data/Travel.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
+import { newFileCompactor } from '../core/FileCompactor.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -278,32 +277,6 @@ function newTravelEditor ( ) {
 	}
 
 	/*
-	--- myCompressRoute function --------------------------------------------------------------------------------------
-
-	This function compress the itinerary points of a route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCompressRoute ( route ) {
-		let objType = {};
-		if ( THE_CONST.zero !== route.itinerary.itineraryPoints.length ) {
-			objType = route.itinerary.itineraryPoints [ THE_CONST.zero ].objType;
-		}
-		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType };
-		route.itinerary.itineraryPoints.forEach (
-			itineraryPoint => {
-				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
-				compressedItineraryPoints.distances.push ( itineraryPoint.distance );
-				compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
-			}
-		);
-		compressedItineraryPoints.latLngs =
-			polyline.encode ( compressedItineraryPoints.latLngs, THE_CONST.polylinePrecision );
-		route.itinerary.itineraryPoints = compressedItineraryPoints;
-	}
-
-	/*
 	--- mySaveTravel function -----------------------------------------------------------------------------------------
 
 	This function save a travel to a local file
@@ -317,10 +290,7 @@ function newTravelEditor ( ) {
 			routesIterator.value.hidden = false;
 		}
 
-		// compressing the itineraryPoints
-		let compressedTravel = theTravelNotesData.travel.object;
-		compressedTravel.routes.forEach ( myCompressRoute );
-		myCompressRoute ( compressedTravel.editedRoute );
+		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
 
 		// save file
 		myUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
@@ -355,49 +325,6 @@ function newTravelEditor ( ) {
 	}
 
 	/*
-	--- myZoomToTravel function ---------------------------------------------------------------------------------------
-
-	This function zoom on the entire travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToTravel ( ) {
-		let geometry = [];
-
-		function pushNoteGeometry ( note ) {
-			geometry.push ( note.latLng );
-			geometry.push ( note.iconLatLng );
-		}
-
-		function pushRouteGeometry ( route ) {
-			route.itinerary.itineraryPoints.forEach ( itineraryPoint => geometry.push ( itineraryPoint.latLng ) );
-			route.notes.forEach (
-				note => pushNoteGeometry ( note )
-			);
-		}
-
-		theTravelNotesData.travel.routes.forEach (
-			route => pushRouteGeometry ( route )
-		);
-
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.travel.editedRouteObjId ) {
-			pushRouteGeometry ( theTravelNotesData.travel.editedRoute );
-		}
-
-		theTravelNotesData.travel.notes.forEach (
-			note => pushNoteGeometry ( note )
-		);
-
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				geometry : [ geometry ]
-			}
-		);
-	}
-
-	/*
 	--- travelEditor object -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -424,9 +351,7 @@ function newTravelEditor ( ) {
 
 			saveTravel : ( ) => mySaveTravel ( ),
 
-			clear : ( ) => myClear ( ),
-
-			zoomToTravel : ( ) => myZoomToTravel ( )
+			clear : ( ) => myClear ( )
 
 		}
 	);

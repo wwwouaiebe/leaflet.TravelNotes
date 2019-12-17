@@ -441,23 +441,6 @@ function newNoteEditor ( ) {
 	}
 
 	/*
-	--- myZoomToNote function -----------------------------------------------------------------------------------------
-
-	This function zoom to a given note
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToNote ( noteObjId ) {
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				latLng : myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.latLng
-			}
-		);
-	}
-
-	/*
 	--- myNoteDropped function ----------------------------------------------------------------------------------------
 
 	This function changes the position of a note after a drag and drop
@@ -494,8 +477,6 @@ function newNoteEditor ( ) {
 			hideNotes : ( ) => myHideNotes ( ),
 
 			showNotes : ( ) => myShowNotes ( ),
-
-			zoomToNote : noteObjId => myZoomToNote ( noteObjId ),
 
 			attachNoteToRoute : noteObjId => myAttachNoteToRoute ( noteObjId ),
 

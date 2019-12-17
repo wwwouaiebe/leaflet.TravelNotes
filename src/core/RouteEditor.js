@@ -60,6 +60,7 @@ import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
+import { newZoomer } from '../core/Zoomer.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -261,32 +262,6 @@ function newRouteEditor ( ) {
 	}
 
 	/*
-	--- myZoomToRoute function -----------------------------------------------------------------------------------------
-
-	This function zoom on a route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomToRoute ( routeObjId ) {
-		let route = myDataSearchEngine.getRoute ( routeObjId );
-		let geometry = [];
-		route.itinerary.itineraryPoints.forEach ( itineraryPoint => geometry.push ( itineraryPoint.latLng ) );
-		route.notes.forEach (
-			note => {
-				geometry.push ( note.latLng );
-				geometry.push ( note.iconLatLng );
-			}
-		);
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				geometry : [ geometry ]
-			}
-		);
-	}
-
-	/*
 	--- myEndRoutingError function ------------------------------------------------------------------------------------
 
 	This function ...
@@ -353,7 +328,7 @@ function newRouteEditor ( ) {
 		);
 
 		if ( myMustZoomToRoute ) {
-			myZoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
+			newZoomer ( ).zoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
 		}
 
 		myEventDispatcher.dispatch (
@@ -563,10 +538,7 @@ function newRouteEditor ( ) {
 
 			hideRoute : routeObjId => myHideRoute ( routeObjId ),
 
-			showRoutes : ( ) => myShowRoutes ( ),
-
-			zoomToRoute : routeObjId => myZoomToRoute ( routeObjId )
-
+			showRoutes : ( ) => myShowRoutes ( )
 		}
 	);
 }

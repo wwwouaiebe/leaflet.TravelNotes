@@ -33,17 +33,14 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { polyline } from '../polyline/Polyline.js';
-
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
-import { newTravel } from '../data/Travel.js';
+import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
+import { newFileCompactor } from '../core/FileCompactor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -57,39 +54,7 @@ Patterns : Closure
 
 function newFileLoader ( ) {
 
-	let myMergeContent = false;
-	let myFileName = '';
-	let myIsFileReadOnly = false;
-	let myFileContent = {};
 	let myEventDispatcher = newEventDispatcher ( );
-
-	/*
-	--- myDecompressRoute function ------------------------------------------------------------------------------------
-
-	This function decompress a route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDecompressRoute ( route ) {
-		route.itinerary.itineraryPoints.latLngs =
-			polyline.decode ( route.itinerary.itineraryPoints.latLngs, THE_CONST.polylinePrecision );
-		let decompressedItineraryPoints = [];
-		let latLngsCounter = THE_CONST.zero;
-		route.itinerary.itineraryPoints.latLngs.forEach (
-			latLng => {
-				let itineraryPoint = {};
-				itineraryPoint.lat = latLng [ THE_CONST.zero ];
-				itineraryPoint.lng = latLng [ THE_CONST.number1 ];
-				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
-				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
-				decompressedItineraryPoints.push ( itineraryPoint );
-				latLngsCounter ++;
-			}
-		);
-		route.itinerary.itineraryPoints = decompressedItineraryPoints;
-	}
 
 	/*
 	--- myDisplay function --------------------------------------------------------------------------------------------
@@ -104,180 +69,54 @@ function newFileLoader ( ) {
 		// the map is cleaned
 		myEventDispatcher.dispatch ( 'removeallobjects' );
 
-		// routes are added with their notes
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			if ( THE_CONST.route.edited.notEdited === routesIterator.value.edited ) {
-				myEventDispatcher.dispatch (
-					'routeupdated',
-					{
-						removedRouteObjId : THE_CONST.invalidObjId,
-						addedRouteObjId : routesIterator.value.objId
-					}
-				);
-			}
-		}
-
-		// edited route is added with notes and , depending of read only, waypoints
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
-			myEventDispatcher.dispatch (
-				'routeupdated',
-				{
-					removedRouteObjId : THE_CONST.invalidObjId,
-					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
-				}
-			);
-		}
-
-		// travel notes are added
-		let notesIterator = theTravelNotesData.travel.notes.iterator;
-		while ( ! notesIterator.done ) {
-			myEventDispatcher.dispatch (
-				'noteupdated',
-				{
-					removedNoteObjId : THE_CONST.invalidObjId,
-					addedNoteObjId : notesIterator.value.objId
-				}
-			);
-		}
+		newViewerFileLoader ( ).display ( );
 
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and roadbook are filled
-		if ( ! myIsFileReadOnly ) {
-
-			newRoadbookUpdate ( );
-
-			// Editors and HTML pages are filled
-			myEventDispatcher.dispatch ( 'setrouteslist' );
-			if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
-				myEventDispatcher.dispatch ( 'reducerouteui' );
-			}
-			else {
-
-				let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
-				if (
-					providerName
-					&&
-					( '' !== providerName )
-					&&
-					! theTravelNotesData.providers.get ( providerName.toLowerCase ( ) )
-				) {
-					theErrorsUI.showError (
-						theTranslator.getText (
-							'FileLoader - Not possible to select as provider',
-							{ provider : providerName }
-						)
-					);
-				}
-				else {
-
-					// Provider and transit mode are changed in the itinerary editor
-					let transitMode = theTravelNotesData.travel.editedRoute.itinerary.transitMode;
-					myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
-
-					if ( transitMode && '' !== transitMode ) {
-						myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
-					}
-				}
-				theRouteEditor.chainRoutes ( );
-				myEventDispatcher.dispatch ( 'expandrouteui' );
-			}
-			myEventDispatcher.dispatch ( 'setwaypointslist' );
-			myEventDispatcher.dispatch ( 'setitinerary' );
-
-			myEventDispatcher.dispatch ( 'roadbookupdate' );
-		}
-		theTravelEditor.zoomToTravel ( );
-		myEventDispatcher.dispatch (
-			'travelnotesfileloaded',
-			{
-				readOnly : myIsFileReadOnly,
-				name : theTravelNotesData.travel.name
-			}
-		);
-	}
-
-	/*
-	--- myMerge function ----------------------------------------------------------------------------------------------
-
-	This function merge the file data with the theTravelNotesData.travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myMerge ( ) {
-
-		// ... and transform the data in the correct format
-		let travel = newTravel ( );
-		travel.object = myFileContent;
-
-		// routes are added with their notes
-		let routesIterator = travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			theTravelNotesData.travel.routes.add ( routesIterator.value );
-		}
-
-		// travel notes are added
-		let notesIterator = travel.notes.iterator;
-		while ( ! notesIterator.done ) {
-			theTravelNotesData.travel.notes.add ( notesIterator.value );
-		}
 
 		theRouteEditor.chainRoutes ( );
 
-		myDisplay ( );
-	}
-
-	/*
-	--- myOpen function -----------------------------------------------------------------------------------------------
-
-	This function load the file data within the theTravelNotesData.travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOpen ( ) {
-
-		theTravelNotesData.travel.object = myFileContent;
-		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
-
-		if ( '' !== myFileName ) {
-			theTravelNotesData.travel.name = myFileName.substr ( THE_CONST.zero, myFileName.lastIndexOf ( '.' ) );
-		}
-		theTravelNotesData.travel.readOnly = myIsFileReadOnly;
-		theTravelNotesData.travel.routes.forEach (
-			route => {
-				if ( THE_CONST.route.edited.notEdited !== route.edited ) {
-					theTravelNotesData.editedRouteObjId = route.objId;
-				}
-			}
-		);
-		myDisplay ( );
-	}
-
-	/*
-	--- myDecompressFileContent function ------------------------------------------------------------------------------
-
-	This function decompress the file data
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDecompressFileContent ( ) {
-
-		myFileContent.routes.forEach ( myDecompressRoute );
-		if ( myFileContent.editedRoute ) {
-
-			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
-			myDecompressRoute ( myFileContent.editedRoute );
-		}
-		if ( myMergeContent ) {
-			myMerge ( );
+		// Editors and HTML pages are filled
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+			myEventDispatcher.dispatch ( 'reducerouteui' );
 		}
 		else {
-			myOpen ( );
+
+			let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
+			if (
+				providerName
+				&&
+				( '' !== providerName )
+				&&
+				! theTravelNotesData.providers.get ( providerName.toLowerCase ( ) )
+			) {
+				theErrorsUI.showError (
+					theTranslator.getText (
+						'FileLoader - Not possible to select as provider',
+						{ provider : providerName }
+					)
+				);
+			}
+			else {
+
+				// Provider and transit mode are changed in the itinerary editor
+				let transitMode = theTravelNotesData.travel.editedRoute.itinerary.transitMode;
+				myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+
+				if ( transitMode && '' !== transitMode ) {
+					myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+				}
+			}
+			theRouteEditor.chainRoutes ( );
+			myEventDispatcher.dispatch ( 'expandrouteui' );
 		}
+		myEventDispatcher.dispatch ( 'setwaypointslist' );
+		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
+		myEventDispatcher.dispatch ( 'travelnotesfileloaded', { name : theTravelNotesData.travel.name } );
+
 	}
 
 	/*
@@ -288,63 +127,31 @@ function newFileLoader ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOpenFile ( changeEvent ) {
-		myFileName = changeEvent.target.files [ THE_CONST.zero ].name;
+	function myOpenFile ( changeEvent, mustMerge ) {
+		let fileName = changeEvent.target.files [ THE_CONST.zero ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
+			let fileContent = {};
 			try {
-				myFileContent = JSON.parse ( fileReader.result );
-				myDecompressFileContent ( );
+				fileContent = JSON.parse ( fileReader.result );
 			}
 			catch ( err ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
+			if ( mustMerge ) {
+				newFileCompactor ( ).decompressMerge ( fileContent );
+			}
+			else {
+				newFileCompactor ( ).decompress ( fileContent );
+				theTravelNotesData.travel.name =
+					fileName.substr ( THE_CONST.zero, fileName.lastIndexOf ( '.' ) );
+			}
+
+			myDisplay ( );
+
 		};
 		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
-	}
-
-	/*
-	--- myOpenLocalFile function --------------------------------------------------------------------------------------
-
-	This function open a local file
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOpenLocalFile ( changeEvent ) {
-		myMergeContent = false;
-		myIsFileReadOnly = false;
-		myOpenFile ( changeEvent );
-	}
-
-	/*
-	--- myMergeLocalFile function -------------------------------------------------------------------------------------
-
-	This function open a local file
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myMergeLocalFile ( changeEvent ) {
-
-		myMergeContent = true;
-		myIsFileReadOnly = false;
-		myOpenFile ( changeEvent );
-	}
-
-	/*
-	--- myOpenDistantFile function ------------------------------------------------------------------------------------
-
-	This function open a local file
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOpenDistantFile ( fileContent ) {
-		myIsFileReadOnly = true;
-		myFileContent = fileContent;
-		myDecompressFileContent ( );
 	}
 
 	/*
@@ -355,9 +162,8 @@ function newFileLoader ( ) {
 
 	return Object.seal (
 		{
-			openLocalFile : changeEvent => myOpenLocalFile ( changeEvent ),
-			mergeLocalFile : changeEvent => myMergeLocalFile ( changeEvent ),
-			openDistantFile : fileContent => myOpenDistantFile ( fileContent )
+			openLocalFile : changeEvent => myOpenFile ( changeEvent, false ),
+			mergeLocalFile : changeEvent => myOpenFile ( changeEvent, true )
 		}
 	);
 }

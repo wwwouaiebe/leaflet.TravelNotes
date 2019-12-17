@@ -37,6 +37,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
+import { newZoomer } from '../core/Zoomer.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -49,6 +50,7 @@ import { THE_CONST } from '../util/Constants.js';
 function newRouteContextMenu ( contextMenuEvent ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
+	let myZoomer = newZoomer ( );
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------
@@ -120,9 +122,9 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				param : myRouteObjId
 			},
 			{
-				context : theRouteEditor,
+				context : myZoomer,
 				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to route' ),
-				action : theRouteEditor.zoomToRoute,
+				action : myZoomer.zoomToRoute,
 				param : myRouteObjId
 			},
 			{
