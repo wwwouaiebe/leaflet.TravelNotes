@@ -81,17 +81,25 @@ function startup ( ) {
 	}
 
 	function myTestCryptoPromise ( ) {
+
+		// MS Edge @#?£$ don't know Promise.allSettled, so we need to always
+		// return Promise.resolve...
 		if ( ! window.crypto || ! window.crypto.subtle || ! window.crypto.subtle.importKey ) {
-			return Promise.reject ( new Error ( 'Crypto.subtle not available' ) );
+			return Promise.resolve ( false );
 		}
 
-		return	window.crypto.subtle.importKey (
-			'raw',
-			new window.TextEncoder ( ).encode ( 'hoho' ),
-			{ name : 'PBKDF2' },
-			false,
-			[ 'deriveKey' ]
-		);
+		try {
+			return window.crypto.subtle.importKey (
+				'raw',
+				new window.TextEncoder ( ).encode ( 'hoho' ),
+				{ name : 'PBKDF2' },
+				false,
+				[ 'deriveKey' ]
+			);
+		}
+		catch ( err ) {
+			return Promise.resolve ( false );
+		}
 
 	}
 
@@ -140,29 +148,23 @@ function startup ( ) {
 		myTestCryptoPromise ( )
 	];
 
-	Promise.allSettled ( promises )
+	// MS Edge @#?£$ don't know Promise.allSettled ...
+	Promise.all ( promises )
 		.then (
 
 			// promises succeeded
-			results => {
-				for (
-					let promisesCounter = THE_CONST.zero;
-					promisesCounter <= THE_CONST.number3;
-					promisesCounter ++
-				) {
-					if ( 'rejected' === results [ promisesCounter ].status ) {
-						throw new Error ( results [ promisesCounter ].reason );
-					}
-				}
+			values => {
 
 				// config adaptation
 				if ( myLangage ) {
-					results [ THE_CONST.zero ].value.language = myLangage;
+					values [ THE_CONST.zero ].language = myLangage;
 				}
-				results [ THE_CONST.zero ].value.haveCrypto =
-					'fulfilled' === results [ THE_CONST.number4 ].status;
 
-				theConfig.overload ( results [ THE_CONST.zero ].value );
+				if ( values [ THE_CONST.number4 ] ) {
+					values [ THE_CONST.zero ].haveCrypto = true;
+				}
+
+				theConfig.overload ( values [ THE_CONST.zero ] );
 
 				theTravelNotesData.providers.forEach (
 					provider => {
@@ -171,13 +173,13 @@ function startup ( ) {
 				);
 
 				// translations adaptation
-				theTranslator.setTranslations ( results [ THE_CONST.number1 ].value );
+				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
 
 				// layers adaptation
-				theLayersToolbarUI.setLayers ( results [ THE_CONST.number2 ].value );
+				theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
 
-				theNoteDialogToolbar.selectOptions = results [ THE_CONST.number3 ].value.preDefinedIconsList;
-				theNoteDialogToolbar.buttons = results [ THE_CONST.number3 ].value.editionButtons;
+				theNoteDialogToolbar.selectOptions = values [ THE_CONST.number3 ].preDefinedIconsList;
+				theNoteDialogToolbar.buttons = values [ THE_CONST.number3 ].editionButtons;
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (
