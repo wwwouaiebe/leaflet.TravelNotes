@@ -136,7 +136,7 @@ function newMouseUI ( ) {
 		document.addEventListener (
 			'travelnotesfileloaded',
 			TravelNotesFileLoadedEvent => {
-				myFileName = TravelNotesFileLoadedEvent.name || '';
+				myFileName = TravelNotesFileLoadedEvent.data.name || '';
 				myUpdate ( );
 			},
 			false
