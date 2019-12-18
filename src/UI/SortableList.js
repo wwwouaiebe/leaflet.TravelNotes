@@ -189,7 +189,8 @@ function newSortableList ( options, parentNode ) {
 
 	function myOnWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop += wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
+			wheelEvent.target.scrollTop +=
+				wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
 		}
 		wheelEvent.stopPropagation ( );
 	}

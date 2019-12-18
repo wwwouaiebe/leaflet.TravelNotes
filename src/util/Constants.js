@@ -74,7 +74,7 @@ const THE_CONST = {
 		markerBoundsPrecision : 0.01
 	},
 	mouse : {
-		wheelFactor : 10
+		wheelCorrectionFactors : [ 0.3, 10, 1 ]
 	},
 	note : {
 		defaultIconSize : 40

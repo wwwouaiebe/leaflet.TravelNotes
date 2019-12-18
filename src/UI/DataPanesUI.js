@@ -241,7 +241,8 @@ function newDataPanesUI ( ) {
 			'wheel',
 			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop += wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
+					wheelEvent.target.scrollTop +=
+						wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
 				}
 				wheelEvent.stopPropagation ( );
 			},

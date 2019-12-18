@@ -199,7 +199,7 @@ function newLayersToolbarUI ( ) {
 
 	function myOnWheelToolbar ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			myMarginTop -= wheelEvent.deltaY * THE_CONST.mouse.wheelFactor;
+			myMarginTop -= wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
 				myMarginTop < myButtonTop - myButtonsHeight +
