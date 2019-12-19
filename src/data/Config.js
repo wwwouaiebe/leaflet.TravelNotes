@@ -173,7 +173,7 @@ function newConfig ( ) {
 				color : 'gray',
 				weight : 1
 			},
-			style : 'TravelNotes-NotesStyle',
+			style : '',
 			svgIconWidth : 200,
 			svgAnleMaxDirection :
 			{

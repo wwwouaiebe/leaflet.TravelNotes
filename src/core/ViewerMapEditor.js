@@ -134,12 +134,13 @@ function newViewerMapEditor ( ) {
 				iconAnchor : [ note.iconWidth / THE_CONST.number2, note.iconHeight / THE_CONST.number2 ],
 				popupAnchor : [ THE_CONST.zero, -note.iconHeight / THE_CONST.number2 ],
 				html : note.iconContent,
-				className : theConfig.note.style
+				className : 'TravelNotes-AllNotes ' + theConfig.note.style
 			}
 		);
 		let marker = L.marker (
 			note.iconLatLng,
 			{
+				zIndexOffset : 100,
 				icon : icon,
 				draggable : ! readOnly
 			}

@@ -89,6 +89,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		// and then, cannot be edited or removed!
 		if ( THE_CONST.zero === myIconHtmlContent.value.length ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
+			return;
 		}
 
 		// saving values in the note.

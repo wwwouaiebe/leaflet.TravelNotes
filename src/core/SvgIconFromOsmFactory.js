@@ -420,7 +420,7 @@ function newSvgIconFromOsmFactory ( ) {
 		if (
 			mySvgLatLngDistance.latLng [ THE_CONST.zero ] === myRoute.itinerary.itineraryPoints.last.lat
 			&&
-			mySvgLatLngDistance.lngLng [ THE_CONST.number1 ] === myRoute.itinerary.itineraryPoints.last.lng
+			mySvgLatLngDistance.latLng [ THE_CONST.number1 ] === myRoute.itinerary.itineraryPoints.last.lng
 		) {
 
 			// using lat & lng because last point is sometime duplicated
