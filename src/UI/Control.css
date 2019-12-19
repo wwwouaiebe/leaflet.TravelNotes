@@ -358,31 +358,31 @@ Changes:
 }
 .TravelNotes-Control-Route-ManeuversAndNotes
 {
-	display: table;
 	border-spacing: 0.4em 0.2em;
 }
 .TravelNotes-Control-Route-Maneuvers-Row,
 .TravelNotes-Control-Route-Notes-Row
 {
-	display: table-row;
+	display:flex;
+	flex-direction: row;
 }
 .TravelNotes-Control-Travel-Notes-Cell,
 .TravelNotes-Control-Route-ManeuversAndNotes-Cell
 {
-	display: table-cell;
 	padding: 0.3em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-bottom-color: lightgray;
+	flex-shrink: 1;
 }
 .TravelNotes-Control-Travel-Notes-IconCell,
 .TravelNotes-Control-Route-ManeuversAndNotes-IconCell
 {
-	display: table-cell;
 	width: 40px;
 	height: 40px;
 	min-height: 20px;
 	background-repeat: no-repeat;
+	flex-shrink: 0;
 }
 
 /* --- search --- */
