@@ -248,6 +248,10 @@
 		"msgstr" : "Address&nbsp;:"
 	},
 	{
+		"msgid" : "Notedialog - an error occurs when creating the SVG icon",
+		"msgstr" : "An error occurs when creating the SVG icon"
+	},
+	{
 		"msgid" : "Notedialog - an error occurs when searching the adress",
 		"msgstr" : "An error occurs when searching the adress"
 	},

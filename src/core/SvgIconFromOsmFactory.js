@@ -293,7 +293,7 @@ function newSvgIconFromOsmFactory ( ) {
 					return;
 				}
 				while ( THE_CONST.zero !== streetOcurrences ) {
-					myStreets = '' === myStreets ? wayName : myStreets + '&#x2AA5;' + wayName;
+					myStreets = '' === myStreets ? wayName : myStreets + ' &#x2AA5; ' + wayName;
 					streetOcurrences --;
 				}
 			}
@@ -301,8 +301,8 @@ function newSvgIconFromOsmFactory ( ) {
 
 		myStreets =
 			incomingStreet +
-			( '' === myStreets ? '' : '&#x2AA5;' + myStreets ) +
-			myDirectionArrow +
+			( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
+			' ' + myDirectionArrow + ' ' +
 			outgoingStreet;
 	}
 
