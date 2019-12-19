@@ -386,6 +386,10 @@ Changes:
 }
 
 /* --- search --- */
+#TravelNotes-Control-SearchDiv
+{
+	margin-top:0.5em;
+}
 #TravelNotes-Control-SearchInput
 {
 	height: 1.4em;

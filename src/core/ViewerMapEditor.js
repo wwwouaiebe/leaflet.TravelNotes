@@ -140,7 +140,7 @@ function newViewerMapEditor ( ) {
 		let marker = L.marker (
 			note.iconLatLng,
 			{
-				zIndexOffset : 100,
+				zIndexOffset : THE_CONST.note.zIndexOffset,
 				icon : icon,
 				draggable : ! readOnly
 			}

@@ -17,7 +17,7 @@
 		"haveLayersToolbarUI":true,
 		"toolbarTimeOut":1500,
 		"theDevil": {
-			"addButton": true,
+			"addButton": false,
 			"title": "Reminder! The devil will know everything about you",
 			"text": "&#x1f47f;",
 			"noteZoom" : 17
@@ -33,7 +33,7 @@
 		"showError":true,
 		"showWarning":true,
 		"showInfo":true,
-		"showHelp":true
+		"showHelp":false
 	},
 	"geoLocation":{
 			"color":"red",
@@ -50,7 +50,7 @@
 	{
 		"showDialogButton":true,
 		"saveToSessionStorage":true,
-		"showAPIKeysInDialog":true,
+		"showAPIKeysInDialog":false,
 		"dialogHaveUnsecureButtons":true
 	},
 	"contextMenu":
@@ -139,7 +139,7 @@
 			"color":"gray",
 			"weight":1
 		},
-		"style":"TravelNotes-NotesStyle",
+		"style":"",
 		"svgIconWidth":200,
 		"svgAnleMaxDirection":
 		{
@@ -170,7 +170,7 @@
 	{
 		"clearAfterSave":true,
 		"startMinimized":true,
-		"timeout":1000,
+		"timeout":1500,
 		"startupRouteEdition":true
 	},
 	"haveBeforeUnloadWarning":true,

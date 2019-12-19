@@ -126,8 +126,14 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'src/html/',
-						src: ['TravelNotesViewer.html'],
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
+						dest: 'dist/'
+					},					
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotes.min.js'],
 						dest: 'dist/'
 					},
 					{
@@ -138,28 +144,34 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
-						src: ['TravelNotesViewer.min.css'],
-						dest: 'dist/'
+						cwd: 'src/cfg/',
+						src: [ 'TravelNotesConfig.json', 'TravelNotesLayers.json' ],
+						dest: 'dist/viewer/'
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
-						src: ['TravelNotes.min.js'],
-						dest: 'dist/'
+						cwd: 'src/translations/',
+						src: ['*.json'],
+						dest: 'dist/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/html/',
+						src: ['TravelNotesViewer.html'],
+						rename: function ( ){return 'dist/viewer/index.html';}
 					},
 					{
 						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotesViewer.min.js'],
-						dest: 'dist/'
+						dest: 'dist/viewer/'
 					},
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesRoadbook.html'],
-						dest: 'dist/'
-					}					
+						src: ['TravelNotesViewer.min.css'],
+						dest: 'dist/viewer/'
+					}
 				]
 			},
 			ghpage: {
@@ -184,8 +196,14 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'src/html/',
-						src: ['TravelNotesViewer.html'],
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html'],
+						dest: 'gh-page/'
+					},					
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.js'],
 						dest: 'gh-page/'
 					},
 					{
@@ -196,28 +214,34 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
-						src: ['TravelNotesViewer.min.css'],
-						dest: 'gh-page/'
+						cwd: 'src/cfg/',
+						src: [ 'TravelNotesConfig.json', 'TravelNotesLayers.json' ],
+						dest: 'gh-page/viewer/'
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
-						src: ['TravelNotes.min.js'],
-						dest: 'gh-page/'
+						cwd: 'src/translations/',
+						src: ['*.json'],
+						dest: 'gh-page/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/html/',
+						src: ['TravelNotesViewer.html'],
+						rename: function ( ){return 'gh-page/viewer/index.html';}
 					},
 					{
 						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotesViewer.min.js'],
-						dest: 'gh-page/'
+						dest: 'gh-page/viewer/'
 					},
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesRoadbook.html'],
-						dest: 'gh-page/'
-					}					
+						src: ['TravelNotesViewer.min.css'],
+						dest: 'gh-page/viewer/'
+					}
 				]
 			},
 			debug: {
@@ -242,20 +266,8 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'src/html/',
-						src: 'TravelNotesViewerDebug.html',
-						rename: function ( ){return 'debug/TravelNotesViewer.html';}
-					},
-					{
-						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotes.min.css'],
-						dest: 'debug/'
-					},
-					{
-						expand: true,
-						cwd: 'tmp/',
-						src: ['TravelNotesViewer.min.css'],
+						src: ['TravelNotesRoadbook.html'],
 						dest: 'debug/'
 					},
 					{
@@ -267,9 +279,39 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesRoadbook.html'],
+						src: ['TravelNotes.min.css'],
 						dest: 'debug/'
-					}					
+					},
+					{
+						expand: true,
+						cwd: 'src/cfg/',
+						src: [ 'TravelNotesConfig.json', 'TravelNotesLayers.json' ],
+						dest: 'debug/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/translations/',
+						src: ['*.json'],
+						dest: 'debug/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/html/',
+						src: 'TravelNotesViewerDebug.html',
+						rename: function ( ){return 'debug/viewer/index.html';}
+					},
+					{
+						expand: true,
+						cwd: 'src/',
+						src: ['**/*.js'],
+						dest: 'debug/viewer/src/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesViewer.min.css'],
+						dest: 'debug/viewer/'
+					},
 				]
 			},
 			TravelNotesGuides: {

@@ -77,7 +77,8 @@ const THE_CONST = {
 		wheelCorrectionFactors : [ 0.3, 10, 1 ]
 	},
 	note : {
-		defaultIconSize : 40
+		defaultIconSize : 40,
+		zIndexOffset : 100
 	},
 	notFound : -1,
 	numberMinus1 : -1,
