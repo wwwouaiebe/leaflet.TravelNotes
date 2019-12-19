@@ -58,7 +58,7 @@ import { theUI } from '../UI/UI.js';
 
 import { newTravel } from '../data/Travel.js';
 import { newRoute } from '../data/Route.js';
-import { newFileLoader } from '../core/FileLoader.js';
+import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
@@ -261,9 +261,11 @@ function newTravelNotes ( ) {
 		myAddEventsListeners ( );
 		theAttributionsUI.createUI ( );
 
+		theLayersToolbarUI.setLayer ( 'OSM - Color' );
+
 		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
 			.then (
-				newFileLoader ( ).openDistantFile
+				newViewerFileLoader ( ).openDistantFile
 			)
 			.catch (
 				err => {
@@ -272,9 +274,6 @@ function newTravelNotes ( ) {
 						[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
 						THE_CONST.number2
 					);
-					theErrorsUI.createUI ( );
-					theLayersToolbarUI.setLayer ( 'OSM - Color' );
-					theErrorsUI.showError ( 'Not possible to load the file ' + travelUrl );
 				}
 			);
 	}
