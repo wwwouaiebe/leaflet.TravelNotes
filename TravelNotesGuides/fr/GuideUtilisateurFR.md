@@ -98,22 +98,25 @@ Pour les geeks et les paranos voyez aussi dans le guide d'installation et le fic
 - APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite de dialogue
 - APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: et :file_folder: à __droite__
 
+l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner.
 *(<- depuis v1.6.0)*
 
-Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
-suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
+
+*(jusu'à v1.6.0 ->)*
+~~Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
+suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.~~
 
 Exemple:
 ```
 https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
 ```
 
-Les clefs d'accès sont sauvegardées dans le _sessionStorage_ du browser. Il n'est donc pas nécessaire de les réintroduire lors de chaque rafraichissement de la page. Cependant, elles sont définitivement effacées 
-lors de la fermeture du browser
+~~Les clefs d'accès sont sauvegardées dans le _sessionStorage_ du browser. Il n'est donc pas nécessaire de les réintroduire lors de chaque rafraichissement de la page. Cependant, elles sont définitivement effacées 
+lors de la fermeture du browser~~
 
-Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
-**Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
-
+~~Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
+**Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.~~
+*(<- jusqu'à v1.6.0)*
 ## __Interface__
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
