@@ -1,5 +1,7 @@
 # Travel & Notes - Guide de l'utilisateur
 
+**__Ce document est en cours de modification et n'est pas complet__**
+
 ## __Pourquoi Travel & Notes__
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. Ce genre de voyage ne s'improvise pas, même si il y a
@@ -32,7 +34,7 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 ## __Avant de commencer à utiliser Travel & Notes__
 
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets 
-*et l'affichage de certaines cartes (depuis v1.6.0).*
+*(depuis v1.6.0 ->) et l'affichage de certaines cartes (<- depuis v1.6.0).*
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox, OpenRouteService et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
@@ -40,8 +42,8 @@ que cet itinéraire soit encodé dans Openstreetmap, en respectant les règles d
 
 Pour GraphHopper, OpenRouteService et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 
-*Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, vue aérienne ESRI, IGN - Belgique, 
-Kartverket - Norvège, Maanmittauslaitos - Finlande)(depuis v1.6.0).*
+*(depuis v1.6.0 ->) Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, vue aérienne ESRI, IGN - Belgique, 
+Kartverket - Norvège, Maanmittauslaitos - Finlande)(<- depuis v1.6.0).*
 
 Vous devez également lire correctement  les conditions d'utilisation des clefs d'accès et vérifier que ce que vous faites avec Travel & Notes correspond à ces conditions d'utilisation.
 
@@ -49,6 +51,12 @@ Vous êtes également responsable de l'utilisation qui est faite de vos clefs d'
 ni ne les laissez pas trainer n'importe où.
 
 ### Comment introduire vos clefs d'accès dans Travel & Notes
+
+*(depuis v1.6.0 ->) 
+
+Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci, cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
+
+(<- depuis v1.6.0).*
 
 Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
 suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
