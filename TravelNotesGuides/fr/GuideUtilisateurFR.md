@@ -31,13 +31,17 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 
 ## __Avant de commencer à utiliser Travel & Notes__
 
-Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets.
+Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets 
+*et l'affichage de certaines cartes (depuis v1.6.0).*
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox, OpenRouteService et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
 que cet itinéraire soit encodé dans Openstreetmap, en respectant les règles des transports publics version 2.
 
 Pour GraphHopper, OpenRouteService et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
+
+*Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, vue aérienne ESRI, IGN - Belgique, 
+Kartverket - Norvège, Maanmittauslaitos - Finlande)(depuis v1.6.0).*
 
 Vous devez également lire correctement  les conditions d'utilisation des clefs d'accès et vérifier que ce que vous faites avec Travel & Notes correspond à ces conditions d'utilisation.
 
