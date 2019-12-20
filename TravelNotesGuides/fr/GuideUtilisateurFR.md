@@ -34,7 +34,7 @@ Le **livre de voyage** est une page HTML qui regroupe toute l'information du voy
 ## __Avant de commencer à utiliser Travel & Notes__
 
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets 
-*(depuis v1.6.0 ->) et l'affichage de certaines cartes (<- depuis v1.6.0).*
+*(depuis v1.6.0 ->)* et l'affichage de certaines cartes *(<- depuis v1.6.0)*.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible d'utiliser actuellement
 sont GraphHopper, Mapbox, OpenRouteService et OSRM. Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. Un itinéraire en train entre deux gares peut aussi être ajouté, à condition
@@ -42,8 +42,8 @@ que cet itinéraire soit encodé dans Openstreetmap, en respectant les règles d
 
 Pour GraphHopper, OpenRouteService et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** ) pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir une clef d'accès.
 
-*(depuis v1.6.0 ->) Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, vue aérienne ESRI, IGN - Belgique, 
-Kartverket - Norvège, Maanmittauslaitos - Finlande)(<- depuis v1.6.0).*
+*(depuis v1.6.0 ->)* Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, vue aérienne ESRI, IGN - Belgique, 
+Kartverket - Norvège, Maanmittauslaitos - Finlande)*(<- depuis v1.6.0)*.
 
 Vous devez également lire correctement  les conditions d'utilisation des clefs d'accès et vérifier que ce que vous faites avec Travel & Notes correspond à ces conditions d'utilisation.
 
@@ -52,11 +52,53 @@ ni ne les laissez pas trainer n'importe où.
 
 ### Comment introduire vos clefs d'accès dans Travel & Notes
 
-*(depuis v1.6.0 ->) 
+*(depuis v1.6.0 ->)*
+
+
+
+
+
+
+
+
 
 Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci, cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
 
-(<- depuis v1.6.0).*
+<img src="APIKeysDialogFR.PNG" />
+
+Pour chaque fournisseur de service, vous devez indiquer à gauche le nom de ce fournisseur  et à droite la clef d' accès. Le nom doit correspondre 
+au providerName encodé dans le fichier TravelNotesLayers.json (insensible au majuscules/minuscules).
+
+Utilisez le bouton + pour ajouter un fournisseur de service et le bouton :x: à droite pour supprimer celui-ci.
+
+Quand vos clefs d'accès sont introduites, appuyez sur le bouton :ok: pour terminer. Vos clefs sont sauvegardées dans le 'sessionStorage' du browser et disponibles jusqu'à la fermeture de celui-ci.
+
+Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par un mot de passe ou non protégé.
+
+Attention: seul Firefox permet de sauvegarder les clefs d'accès dans un fichier protégé par mot de passe depuis une page servie en http. Tous les autres browsers exigent une page servie en https.
+MS Edge ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
+
+Le bouton :floppy_disk: à **gauche** de la boite de dialogue permet de sauver les clefs d'accès dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont
+au moins une majuscule, une minuscule, un chiffre et un autre caractère.
+
+Le bouton :file_folder: à **gauche** de la boite de dialogue remplace toutes les clefs d'accès de la boite de dialogue par le contenu d'un fichier protégé par mot de passe.
+
+Ces deux boutons ne sont présents que si toutes les conditions pour pouvoir sauvegarder/restaurer les clefs avec un mot de passe sont réunies (site servi en https ou Firefox).
+
+Le bouton :floppy_disk: à **droite** de la boite de dialogue permet de sauver les clefs d'accès dans un fichier **non protégé** par mot de passe.
+
+Le bouton :file_folder: à **droite** de la boite de dialogue remplace toutes les clefs d'accès de la boite de dialogue par le contenu d'un fichier **non protégé** par mot de passe.
+
+Si un fichier protégé par un mot de passe et nommé **APIKeys** est placé dans le même répertoire que Travel & Notes sur le serveur, Travel & Notes vous demandera le mot de passe à l'ouverture
+pour pouvoir utiliser les clefs contenues dans ce fichier.
+
+Pour les geeks et les paranos voyez aussi dans le guide d'installation et le fichier TravelNotesConfig.json:
+- APIKeys.showDialogButton pour afficher ou masquer le bouton :key: dans la barre d'outils
+- APIKeys.saveToSessionStorage pour sauver ou non les clefs dans le sessionStorage
+- APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite de dialogue
+- APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: et :file_folder: à __droite__
+
+*(<- depuis v1.6.0)*
 
 Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
 suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
