@@ -52,17 +52,7 @@ ni ne les laissez pas trainer n'importe où.
 
 ### Comment introduire vos clefs d'accès dans Travel & Notes
 
-*(depuis v1.6.0 ->)*
-
-
-
-
-
-
-
-
-
-Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci, cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
+*(depuis v1.6.0 ->)* Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci, cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
 
 <img src="APIKeysDialogFR.PNG" />
 
@@ -75,8 +65,9 @@ Quand vos clefs d'accès sont introduites, appuyez sur le bouton :ok: pour termi
 
 Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par un mot de passe ou non protégé.
 
-Attention: seul Firefox permet de sauvegarder les clefs d'accès dans un fichier protégé par mot de passe depuis une page servie en http. Tous les autres browsers exigent une page servie en https.
-MS Edge ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
+**Attention:**
+- seul Firefox permet de sauvegarder les clefs d'accès dans un fichier protégé par mot de passe depuis une page servie en http. Tous les autres browsers exigent une page servie en https.
+- MS Edge ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
 
 Le bouton :floppy_disk: à **gauche** de la boite de dialogue permet de sauver les clefs d'accès dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont
 au moins une majuscule, une minuscule, un chiffre et un autre caractère.
@@ -98,15 +89,14 @@ Pour les geeks et les paranos voyez aussi dans le guide d'installation et le fic
 - APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite de dialogue
 - APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: et :file_folder: à __droite__
 
-l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner.
-*(<- depuis v1.6.0)*
+l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner.*(<- depuis v1.6.0)*
 
 
 *(jusu'à v1.6.0 ->)*
 ~~Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
 suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.~~
 
-Exemple:
+~~Exemple:~~
 ```
 https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
 ```
@@ -117,6 +107,7 @@ lors de la fermeture du browser~~
 ~~Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.~~
 *(<- jusqu'à v1.6.0)*
+
 ## __Interface__
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
@@ -127,7 +118,17 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 <img src="InterfaceFR.PNG" />
 
-Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton &#x1f4cc;
+*(depuis v1.6.0 ->)*
+En haut de l'interface se trouve une première barre d'outils:
+- le bouton :house: redirige vers la page d'accueil
+- le bouton @ redirige vers une page de contact. Par défaut, c'est [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
+- le bouton ? redirige vers [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
+- le bouton :key: affiche la boite de dialogue des clefs d'accès
+- le bouton :globe_with_meridians: active ou désactive la localisation. Ce bouton n'est présent que si la localisation est possible (page servie en https).
+-le bouton :pushpin: affiche l'interface en permanence.
+*(<- depuis v1.6.0)*
+
+*(jusu'à v1.6.0 ->)*~~Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton :pushpin:~~*(<- jusqu'à v1.6.0)*
 
 ### Trajets du voyage
 
@@ -136,7 +137,7 @@ Dans cette partie, les différents trajets du voyage ainsi que une barre d'outil
 Pour chaque trajet :
 - les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets. Ces boutons ne sont visibles que lorsque plusieurs trajets sont présents.
 - Le bouton &#x21f0; commence l'édition d'un trajet.
-- Le bouton &#x267b; supprime le trajet.
+- Le bouton :recycle: supprime le trajet.
 
 Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
 
@@ -147,11 +148,11 @@ Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable 
 #### Boutons de la barre d'outils "Trajets du voyage"
 
 - le bouton &#x25bd; agrandit la liste des trajets
-- le bouton &#x274c; efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
-- le bouton &#x1f4be; sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
-- le bouton &#x1f4c2; ouvre un voyage préalablement sauvé dans un fichier
-- le bouton &#x1F30F; ouvre un voyage préalablement sauvé dans un fichier et inclut tous les trajets et toutes les notes de ce voyage dans le voyage en cours d'édition
-- le bouton &#x1f4cb; ouvre le livre de voyage
+- le bouton :x: efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
+- le bouton :floppy_disk: sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
+- le bouton :file_folder: ouvre un voyage préalablement sauvé dans un fichier
+- le bouton :earth_asia: ouvre un voyage préalablement sauvé dans un fichier et inclut tous les trajets et toutes les notes de ce voyage dans le voyage en cours d'édition
+- le bouton :clipboard: ouvre le livre de voyage
 - le bouton + ajoute un nouveau trajet au voyage
 
 ### Points de passage du trajet
@@ -161,12 +162,12 @@ Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessair
 #### Boutons de la barre d'outils "Points de passage du trajet"
 
 - le bouton &#x25bd; agrandit la liste des points de passage
-- le bouton &#x274c; abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
+- le bouton :x: abandonne l'édition du trajet. Toutes les modifications seront perdues et le trajet restauré dans l'état dans lequel il se trouvait
 avant d'être édité
-- le bouton &#x1f4be; sauve les modifications faites au trajet.
+- le bouton :floppy_disk: sauve les modifications faites au trajet.
 - le bouton __gpx__ sauve l'itinéraire calculé dans un fichier gpx
 - le bouton &#x21c5; inverse l'ordre des points de passage
-- Le bouton &#x267b; supprime tous les points de passage
+- Le bouton :recycle: supprime tous les points de passage
 
 #### Créer un point de passage
 
@@ -287,7 +288,7 @@ La note sera attachée au trajet le plus proche de celle-ci.
 
 Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible de modifier cette liste. Consultez le guide d'installation.
 
-Le premier bouton vous permet de charger votre propre fichier avec des notes prédéfinies dans Travel & Notes. Consultez le guide d'installation pour savoir comment 
+Le bouton :file_folder: vous permet de charger votre propre fichier avec des notes prédéfinies dans Travel & Notes. Consultez le guide d'installation pour savoir comment 
 créer ce fichier.
 
 Les boutons div p span et a permettent d'ajouter les balises html &lt;div&gt;, &lt;p&gt;, &lt;span&gt; et &lt;a&gt; dans les zones d'édition. Tous les autres boutons sont modifiables et
