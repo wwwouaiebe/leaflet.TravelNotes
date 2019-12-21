@@ -77,6 +77,7 @@ function newConfig ( ) {
 		errorUI :
 		{
 			timeOut : 10000,
+			helpTimeOut : 30000,
 			showError : true,
 			showWarning : true,
 			showInfo : true,

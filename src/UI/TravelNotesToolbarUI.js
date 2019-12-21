@@ -192,6 +192,9 @@ function newTravelNotesToolbarUI ( ) {
 					false
 				);
 		}
+
+		// Don't test the https protocol. On some mobile devices with an integreted GPS
+		// the geolocation is working also on http protocol
 		if ( THE_CONST.geoLocation.status.disabled < theGeoLocator.status ) {
 
 			// GeoLocator button

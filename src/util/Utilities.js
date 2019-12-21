@@ -257,6 +257,9 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLatLng ( latLng ) {
+		if ( THE_CONST.zero === latLng [ THE_CONST.zero ] && THE_CONST.zero === latLng [ THE_CONST.number1 ] ) {
+			return '';
+		}
 		return myFormatLat ( latLng [ THE_CONST.zero ] ) + '\u00A0-\u00A0' + myFormatLng ( latLng [ THE_CONST.number1 ] );
 	}
 

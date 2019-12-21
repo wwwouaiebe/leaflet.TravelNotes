@@ -21,11 +21,6 @@
 			"htmlAfter" : "</a>"
 		},
 		{
-			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
 			"title" : "<span style='color:white;background-color:red'>Red</span>",
 			"htmlBefore" : "<span style='color:white;background-color:red'>",
 			"htmlAfter" : "</span>"
@@ -36,11 +31,6 @@
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:black'>Black</span>",
-			"htmlBefore" : "<span style='color:white;background-color:black'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
 			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
 			"htmlBefore" : "<span style='color:white;background-color:blue'>",
 			"htmlAfter" : "</span>"
@@ -48,6 +38,11 @@
 		{
 			"title" : "<span style='color:white;background-color:brown'>Brown</span>",
 			"htmlBefore" : "<span style='color:white;background-color:brown'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:black'>Black</span>",
+			"htmlBefore" : "<span style='color:white;background-color:black'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{

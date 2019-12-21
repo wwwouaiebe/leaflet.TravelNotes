@@ -168,13 +168,14 @@ function newErrorsUI ( ) {
 		);
 
 		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
-
+		let timeOutDuration = theConfig.errorUI.timeOut;
 		if ( 'Help' === errorLevel ) {
 			myAddHelpCheckbox ( );
+			timeOutDuration = theConfig.errorUI.helpTimeOut;
 		}
 
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
-		myTimerId = setTimeout ( myOnTimer, theConfig.errorUI.timeOut );
+		myTimerId = setTimeout ( myOnTimer, timeOutDuration );
 	}
 
 	/*

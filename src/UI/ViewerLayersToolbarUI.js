@@ -118,7 +118,10 @@ function newViewerLayersToolbarUI ( ) {
 			},
 			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
 		);
-		let layerButton = myHTMLElementsFactory.create (
+
+		// Don't test the https protocol. On some mobile devices with an integreted GPS
+		// the geolocation is working also on http protocol
+		let geoLocationButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -128,7 +131,7 @@ function newViewerLayersToolbarUI ( ) {
 			},
 			myLayersToolbar
 		);
-		layerButton.addEventListener ( 'click',
+		geoLocationButton.addEventListener ( 'click',
 			clickEvent => {
 				clickEvent.stopPropagation ( );
 				theGeoLocator.switch ( );
