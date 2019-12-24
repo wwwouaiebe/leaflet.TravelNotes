@@ -203,7 +203,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'tmp/',
-						src: ['TravelNotesViewer.min.js'],
+						src: ['TravelNotes.min.js'],
 						dest: 'gh-page/'
 					},
 					{

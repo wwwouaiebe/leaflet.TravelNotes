@@ -80,6 +80,14 @@ function startup ( ) {
 		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
+	/*
+	--- myTestCryptoPromise function ----------------------------------------------------------------------------------
+
+	This function extract the route providers API key from the url
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function myTestCryptoPromise ( ) {
 
 		// MS Edge @#?£$ don't know Promise.allSettled, so we need to always
@@ -88,16 +96,25 @@ function startup ( ) {
 			return Promise.resolve ( false );
 		}
 
-		try {
-			return window.crypto.subtle.importKey (
-				'raw',
-				new window.TextEncoder ( ).encode ( 'hoho' ),
-				{ name : 'PBKDF2' },
-				false,
-				[ 'deriveKey' ]
-			);
+		if (
+			'https:' === window.location.protocol.toLowerCase ( )
+			||
+			'localhost' === window.location.host
+		) {
+			try {
+				return window.crypto.subtle.importKey (
+					'raw',
+					new window.TextEncoder ( ).encode ( 'hoho' ),
+					{ name : 'PBKDF2' },
+					false,
+					[ 'deriveKey' ]
+				);
+			}
+			catch ( err ) {
+				return Promise.resolve ( false );
+			}
 		}
-		catch ( err ) {
+		else {
 			return Promise.resolve ( false );
 		}
 
