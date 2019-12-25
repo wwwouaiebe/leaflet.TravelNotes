@@ -89,14 +89,15 @@ Pour les geeks et les paranos voyez aussi dans le guide d'installation et le fic
 - APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite de dialogue
 - APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: et :file_folder: à __droite__
 
-l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner.*(<- depuis v1.6.0)*
+l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner:*(<- depuis v1.6.0)*
 
 
 *(jusu'à v1.6.0 ->)*
-~~Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci à la fin de l'url de la page web chargeant Travel & Notes: vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
-suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.~~
+~~Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci~~
+- à la fin de l'url de la page web chargeant Travel & Notes, vous devez introduire un ? suivi du nom du fournisseur suivi de ProviderKey
+suivi de = suivi de votre clef d'accès. Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
 
-~~Exemple:~~
+Exemple:
 ```
 https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
 ```
@@ -104,7 +105,7 @@ https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&G
 ~~Les clefs d'accès sont sauvegardées dans le _sessionStorage_ du browser. Il n'est donc pas nécessaire de les réintroduire lors de chaque rafraichissement de la page. Cependant, elles sont définitivement effacées 
 lors de la fermeture du browser~~
 
-~~Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
+Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.~~
 *(<- jusqu'à v1.6.0)*
 
@@ -121,11 +122,11 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 *(depuis v1.6.0 ->)*
 En haut de l'interface se trouve une première barre d'outils:
 - le bouton :house: redirige vers la page d'accueil
-- le bouton @ redirige vers une page de contact. Par défaut, c'est [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
 - le bouton ? redirige vers [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
+- le bouton @ redirige vers une page de contact. Par défaut, c'est [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
 - le bouton :key: affiche la boite de dialogue des clefs d'accès
-- le bouton :globe_with_meridians: active ou désactive la localisation. Ce bouton n'est présent que si la localisation est possible (page servie en https).
--le bouton :pushpin: affiche l'interface en permanence.
+- le bouton :globe_with_meridians: active ou désactive la localisation. 
+- le bouton :pushpin: affiche l'interface en permanence.
 *(<- depuis v1.6.0)*
 
 *(jusu'à v1.6.0 ->)*~~Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton :pushpin:~~*(<- jusqu'à v1.6.0)*
@@ -225,6 +226,15 @@ Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci.
 
 Il est également possible d'abandonner l'édition d'un trajet et de revenir à la situation avant modifications avec le bouton &#x274c;. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
+
+*(depuis v1.6.0 ->)*
+
+#### Itinéraire en train
+
+Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md) pour
+plus d'explications sur la façon de créer un itinéraire en train.
+
+*(<- depuis v1.6.0)*
 
 ### Itinéraire et notes
 
@@ -371,9 +381,28 @@ Il est également possible de modifier la largeur du trajet ainsi que le type de
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est toujours possible de glisser / déposer une boite d'édition en la saississant par
 la barre dans la partie supérieure.
 
+*(depuis v1.6.0 ->)*
+
+## Menu des fonds de carte
+
+À gauche de l'écran une barre d'outils permet de choisir différents fond de cartes. Seul un petit rectangle noir est visible à l'écran:
+
+<img src="MapsInterface1FR.PNG" />
+
+Amenez la souris sur ce rectangle pour afficher toute la barre d'outils:
+
+<img src="MapsInterface2FR.PNG" />
+
+Pour chaque fond de carte un bouton est présent dans la barre d'outils. La composition de la barre d'outils dépend des cartes définies dans le fichier TravelNotesLayers.json 
+ainsi que des clefs d'accès qui ont été introduites. Consultez le guide d'installation.
+
+Il est possible de se déplacer dans la barre d'outils en utilisant la roulette de la souris.
+
+*(<- depuis v1.6.0)*
+
 ## __Livre de voyage__
 
-Cliquez sur le bouton &#x1f4cb;. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
+Cliquez sur le bouton :clipboard:. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient tous les trajets ainsi que toutes les notes qui ont été
 créées sur la carte. Il est possible de choisir ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
 <img src="RoadbookFR.PNG" />
@@ -387,11 +416,41 @@ Il est possible de préparer un voyage, sauver celui-ci dans un fichier sur un s
 Pour consulter le voyage, il faut appeler TravelNotes en lui donnant en paramètre dans l'url l'adresse du fichier convertie en base64.
 
 ```
-https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2
+https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==
 ```
 
-aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2 en l'équivalent de https://wwwouaiebe.github.io/sample.trv encodé en base64
+aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg== est l'équivalent de
+ https://wwwouaiebe.github.io/samples/Liege/StationToYouthHostel.trv encodé en base64
 
-Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGUudHJ2)
+Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
 
 Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas visible et tous les menus contextuels sont désactivés.
+
+*(depuis v1.6.0 ->)*
+
+## Viewer
+
+Certains browsers anciens, surtout sur des mobiles, ne comprennent pas toujours tout le code JavaScript de Travel & Notes. Dans ce cas, vous pouvez essayer
+une version simplifiée de Travel & Notes qui permet juste la visualisation des fichiers. L'url doit être complétée de la même façon que pour la version normale:
+
+```
+https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==
+```
+
+Vous pouvez cependant ajouter &lay à la fin de l'url pour afficher également une barre d'outils reprenant les fonds de carte ne nécéssitant pas de clef d'accès.
+
+```
+https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==&lay
+```
+
+Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==&lay)
+
+D'autres exemples:
+
+[Un extrait de mon dernier voyage en vélo de Dover à Chester](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL1VLMjAxOS9VSzIwMTkudHJ2) 
+
+[Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
+
+[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.html)
+
+*(<- depuis v1.6.0)*
