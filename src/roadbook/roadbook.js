@@ -167,7 +167,19 @@ if ( language ) {
 		language.toUpperCase ( ) +
 		'.json'
 	)
-		.then ( response => theTranslator.setTranslations ( response ) )
+		.then (
+			response => {
+				theTranslator.setTranslations ( response );
+				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
+					theTranslator.getText ( 'Roadbook - show travel notes' );
+				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).innerHTML =
+					theTranslator.getText ( 'Roadbook - show maneuver' );
+				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).innerHTML =
+					theTranslator.getText ( 'Roadbook - show routes notes' );
+				document.getElementById ( 'TravelNotes-SaveFile' ).value =
+					theTranslator.getText ( 'Roadbook - Save' );
+			}
+		)
 		.catch ( err => console.log ( err ? err : 'An error occurs when loading translation' ) );
 }
 

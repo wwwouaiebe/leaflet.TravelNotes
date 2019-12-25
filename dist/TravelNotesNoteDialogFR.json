@@ -21,50 +21,40 @@
 			"htmlAfter" : "</a>"
 		},
 		{
-			"title" : "<span style='color:white;background-color:red'>Red</span>",
-			"htmlBefore" : "<span style='color:white;background-color:red'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
-			"title" : "<span style='color:white;background-color:green'>Green</span>",
-			"htmlBefore" : "<span style='color:white;background-color:green'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
-			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
-			"title" : "<span style='color:white;background-color:brown'>Brown</span>",
-			"htmlBefore" : "<span style='color:white;background-color:brown'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
-			"title" : "<span style='color:white;background-color:black'>Black</span>",
-			"htmlBefore" : "<span style='color:white;background-color:black'>",
-			"htmlAfter" : "</span>"
-		}, 
-		{
-			"title" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>&nbsp;</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title" : "<span style='border:solid 0.1em'>White</span>",
-			"htmlBefore" : "<span style='border:solid 0.1em'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title" : "<span style='text-decoration: underline'>U</span>",
-			"htmlBefore" : "<span style='text-decoration: underline'>",
-			"htmlAfter" : "</span>"
-		},
-		{
 			"title": "&lt;li&gt;●&lt;li&gt;",
 			"htmlBefore": "<li>",
 			"htmlAfter": "</li>"
 		}, 	
+		{
+			"title" : "<span style='color:white;background-color:red'>Rouge</span>",
+			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:green'>Vert</span>",
+			"htmlBefore" : "<span style='color:white;background-color:green'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:blue'>Bleu</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:brown'>Brun</span>",
+			"htmlBefore" : "<span style='color:white;background-color:brown'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='color:white;background-color:black'>Noir</span>",
+			"htmlBefore" : "<span style='color:white;background-color:black'>",
+			"htmlAfter" : "</span>"
+		}, 
+		{
+			"title" : "<span style='border:solid 0.1em'>Blanc</span>",
+			"htmlBefore" : "<span style='border:solid 0.1em'>",
+			"htmlAfter" : "</span>"
+		},
 		{
 			"title": "⮜",
 			"htmlBefore": "⮜"
@@ -74,12 +64,18 @@
 			"htmlBefore": "⮞"
 		}, 
 		{
+			"title" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>&nbsp;</span>",
+			"htmlBefore" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>",
+			"htmlAfter" : "</span>"
+		},
+		{
 			"title": "&#x1F6B2;",
 			"htmlBefore": "&nbsp;&#x1F6B2;&nbsp;"
 		}, 
 		{
-			"title": "&amp;nbsp;",
-			"htmlBefore": "&nbsp;"
+			"title" : "<span style='text-decoration: underline'>U</span>",
+			"htmlBefore" : "<span style='text-decoration: underline'>",
+			"htmlAfter" : "</span>"
 		},
 		{
 			"title": "Å",
@@ -104,6 +100,10 @@
 		{
 			"title": "ø",
 			"htmlBefore": "ø"
+		},
+		{
+			"title": "&amp;nbsp;",
+			"htmlBefore": "&nbsp;"
 		}
 	],
 	"preDefinedIconsList" :

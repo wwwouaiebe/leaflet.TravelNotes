@@ -98,7 +98,7 @@
 		},
 		"providerName":"IGN",
 		"providerKeyNeeded":false,
-		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='http://www.ngi.be/topomapviewer/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='https://topomapviewer.ngi.be/conditions/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
 		"getCapabilitiesUrl":"http://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
 	},
 	{
