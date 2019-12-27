@@ -96,11 +96,7 @@ function startup ( ) {
 			return Promise.resolve ( false );
 		}
 
-		if (
-			'https:' === window.location.protocol.toLowerCase ( )
-			||
-			'localhost' === window.location.host
-		) {
+		if ( window.isSecureContext	) {
 			try {
 				return window.crypto.subtle.importKey (
 					'raw',
@@ -119,10 +115,6 @@ function startup ( ) {
 		}
 
 	}
-
-	/*
-	--- End of myReadURL function ---
-	*/
 
 	myReadURL ( );
 
