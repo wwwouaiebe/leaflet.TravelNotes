@@ -5,6 +5,7 @@
 Pour des raisons de sécurité, il n'est plus possible d'utiliser Travel & Notes depuis le disque d'un 
 ordinateur. Il est indispensable de passer par l'intermédiaire soit d'un serveur web soit distant, soit
 d'un serveur web local de type LAMP or MAMP.
+Voir https://www.mozilla.org/en-US/security/advisories/mfsa2019-21/#CVE-2019-11730
 
 ### Guide d'installation pour les null
 
@@ -100,11 +101,11 @@ sauvé dans le fichier du voyage
 
 - __version__ (lecture seule) : la version courante de TravelNotes.
 
--__map__ : renvoie une référence vers l'objet leaflet map
+- __map__ : renvoie une référence vers l'objet leaflet map
 
 #### Le fichier TravelNotesConfig.json
 
-Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prudents quand vous 
+Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prudent quand vous 
 modifiez ce fichier. Vous devez suivre __toutes__ les règles d'écriture des fichiers json.
 
 Le contenu du fichier TravelNotesConfig.json:
@@ -322,11 +323,11 @@ Voir la documentation de TileLayer.WMS de Leaflet.
 Au minimum, "layers", "format" et "transparent" devraient être présents.
 - __bounds__ : le coin inférieur gauche et supérieur droit de la carte.
 - __minZoom__ : le plus petit zoom possible pour cette carte
-- __maxzoom__ : le plus grand zoom possible pour cette carte
+- __maxZoom__ : le plus grand zoom possible pour cette carte
 - __name__ : le nom de la carte.Il sera utilisé dans le tooltip du bouton de la barre d'outils.
 - __toolbar.text__ : le texte à afficher dans le bouton de la barre d'outils
-- __toolbar.color : la couleur d'avant-plan du bouton de la barre d'outils
-- __toolbar.BackgroundColor : la couleur d'arrière-plan du bouton de la barre d'outils
+- __toolbar.color__ : la couleur d'avant-plan du bouton de la barre d'outils
+- __toolbar.backgroundColor__ : la couleur d'arrière-plan du bouton de la barre d'outils
 - __providerName__ : le nom du fournisseur de service. Ce nom sera utilisé pour retrouver la clef d'accès
 au service.
 - __providerKeyNeeded__ : quand cette valeur est true, une clef d'accès est nécessaire 
