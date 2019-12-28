@@ -1,6 +1,6 @@
 # Travel & Notes documentation 
 
-[Vers la version française] (README.md#fr)
+<a href="#fr" >Vers la version française</a>
 
 ## Guides
 
