@@ -403,6 +403,38 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
 
+### Utiliser le viewer
+
+Le viewer permet de visualiser des fichiers qui ont été réalisés avec TravelNotes. Il ne possède
+pas de contrôles ni de menus et ne permet donc pas la modification d'un voyage.
+Son intérêt réside dans le fait qu'il n'utilise pas (trop) de Javascript récent et qu'il est
+plus léger que Travel & Notes. De ce fait, il convient bien pour visualiser des voyages sur de
+vieux mobiles relativement lents.
+
+Il s'installe comme Travel & Notes, avec deux balises &lt;link&gt; et deux balises &lt;script&gt;,
+une pour Leaflet et l'autre pour le viewer:
+
+```
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+		<title>Travel & Notes by wwwouaiebe</title>
+		<link rel="stylesheet" href="leaflet/leaflet.css" />
+		<link rel="stylesheet" href="TravelNotesViewer.min.css" />
+	</head>
+	<body>
+		<script src="leaflet/leaflet.js"></script><noscript>Oh oh. Javascript is not enabled. It's impossible to display this page without javascript.</noscript>
+		<script src="TravelNotesViewer.min.js"></script>
+	</body>
+</html>
+```
+
+Les fichiers TravelNotesViewer.min.css et TravelNotesViewer.min.js ainsi que les fichiers JSON
+de configuration se trouvent dans le sous-répertoire "viewer".
+
 ### Traductions
 
 Travel & Notes est traduit en 'fr' et en 'en'. Si vous désirez traduire Travel & Notes dans une autre 
