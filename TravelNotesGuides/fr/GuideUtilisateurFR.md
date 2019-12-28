@@ -1,7 +1,5 @@
 # Travel & Notes - Guide de l'utilisateur
 
-**__Ce document est en cours de modification et n'est pas complet__**
-
 ## __Pourquoi Travel & Notes__
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. 
@@ -132,13 +130,6 @@ Exemple:
 ```
 https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
 ```
-
-*(jusu'à v1.6.0 ->)*
-
-~~Les clefs d'accès sont sauvegardées dans le _sessionStorage_ du browser. Il n'est donc pas nécessaire de les réintroduire lors de chaque rafraichissement de la page. Cependant, elles sont définitivement effacées 
-lors de la fermeture du browser~~
-
-*(<-jusu'à v1.6.0)*
 
 Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans 
 le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
