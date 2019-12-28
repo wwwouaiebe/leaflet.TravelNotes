@@ -4,12 +4,13 @@
 
 For security reasons, it is no longer possible to use Travel & Notes from a computer disc. 
 It is essential to go through either a remote web server, or a local LAMP or MAMP web server.
+See https://www.mozilla.org/en-US/security/advisories/mfsa2019-21/#CVE-2019-11730
 
 ### Installation Guide for Nulls
 
 No great computer skills? If the demo suits you, you can download it by going to the gh-pages branch.
-Still too complicated? follow this link directly 
-(https://github.com/wwwouaiebe/leaflet.TravelNotes/archive/gh-pages.zip) 
+Still too complicated? follow this 
+[link](https://github.com/wwwouaiebe/leaflet.TravelNotes/archive/gh-pages.zip)  directly
 which allows you to download the demo.
 Open the zip file and install its contents in a directory on your server and open the 
 index.html file. That's all :-).
@@ -18,7 +19,7 @@ index.html file. That's all :-).
 
 #### What to do in the HTML file?
 
-Travel & Notes uses [Leaflet] (http://leafletjs.com/) to display the map. You must therefore download 
+Travel & Notes uses [Leaflet](http://leafletjs.com/) to display the map. You must therefore download 
 and install Leaflet.
 
 In the &lt;head&gt; of the html file, load the Leaflet and TravelNotes stylesheet:
@@ -316,11 +317,11 @@ See the Leaflet TileLayer.WMS documentation.
 At a minimum, "layers", "format" and "transparent" should be present.
 - __bounds__ : the lower left and upper right corner of the map.
 - __minZoom__ : the smallest possible zoom for this map
-- __maxzoom__ : the largest possible zoom for this map
+- __maxZoom__ : the largest possible zoom for this map
 - __name__ : the name of the card. It will be used in the tooltip of the button in the toolbar.
 - __toolbar.text__ : the text to display in the toolbar button
-- __toolbar.color : the foreground color of the toolbar button
-- __toolbar.BackgroundColor : the background color of the toolbar button
+- __toolbar.color__ : the foreground color of the toolbar button
+- __toolbar.backgroundColor : the background color of the toolbar button
 - __providerName__ : the name of the service provider. This name will be used to find 
 the access key to the service.
 - __providerKeyNeeded__ : when this value is true, an access key is required to get the map.
