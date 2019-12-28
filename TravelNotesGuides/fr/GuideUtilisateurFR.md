@@ -45,18 +45,13 @@ les trajets et les itinéraires.
 ## __Avant de commencer à utiliser Travel & Notes__
 
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie 
-qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets 
-
-*(depuis v1.6.0 ->)* 
-
-et l'affichage de certaines cartes.
-
-*(<- depuis v1.6.0)*.
+qui concernent les clefs d'accès. Celles-ci ne sont utilisées que pour le calcul des trajets et 
+l'affichage de certaines cartes.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur 
-d'itinéraires pour obtenir ce trajet. Les différents fournisseurs d'itinéraire qu'il est possible 
+d'itinéraires pour obtenir cet itinéraire. Les différents fournisseurs d'itinéraire qu'il est possible 
 d'utiliser actuellement sont GraphHopper, Mapbox, OpenRouteService et OSRM. 
-Il est également possible de tracer une polyline entre deux endroits, sans suivre de chemins. 
+Il est également possible de tracer une polyligne entre deux endroits, sans suivre de chemins. 
 Un itinéraire en train entre deux gares peut aussi être ajouté, à condition que cet itinéraire 
 soit encodé dans Openstreetmap, en respectant les règles des transports publics version 2.
 
@@ -64,13 +59,9 @@ Pour GraphHopper, OpenRouteService et Mapbox il est nécessaire de posséder une
 pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir 
 une clef d'accès.
 
-*(depuis v1.6.0 ->)* 
-
 Pour l' affichage de certaines cartes (Thunderforest, Lantmäteriet - Suède, Mapbox), une clef d'accès 
 est également indispensable. Pour d'autres cartes, ce n'est pas nécessaire (OpenStreetMap, 
 vue aérienne ESRI, IGN - Belgique, Kartverket - Norvège, Maanmittauslaitos - Finlande).
-
-*(<- depuis v1.6.0)*.
 
 Vous devez également lire correctement  les conditions d'utilisation des clefs d'accès et vérifier 
 que ce que vous faites avec Travel & Notes correspond à ces conditions d'utilisation.
@@ -81,22 +72,20 @@ qu'il peut y avoir une facturation qui est faite sur la base de ces clefs d'acc�
 
 ### Comment introduire vos clefs d'accès dans Travel & Notes
 
-*(depuis v1.6.0 ->)* 
-
 Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci,
 cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
 
 <img src="APIKeysDialogFR.PNG" />
 
 Pour chaque fournisseur de service, vous devez indiquer à gauche le nom de ce fournisseur  et à droite 
-a clef d' accès. Le nom doit correspondre au providerName encodé dans le fichier TravelNotesLayers.json
+la clef d' accès. Le nom doit correspondre au "providerName" encodé dans le fichier TravelNotesLayers.json
 (insensible au majuscules/minuscules).
 
 Utilisez le bouton + pour ajouter un fournisseur de service et le bouton :x: à droite pour 
 supprimer celui-ci.
 
 Quand vos clefs d'accès sont introduites, appuyez sur le bouton :ok: pour terminer. 
-Vos clefs sont sauvegardées dans le 'sessionStorage' du browser et disponibles jusqu'à la fermeture 
+Vos clefs sont sauvegardées dans le "sessionStorage" du browser et disponibles jusqu'à la fermeture 
 de celui-ci.
 
 Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par un mot de passe ou non protégé.
@@ -134,16 +123,7 @@ de dialogue
 - APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: 
 et :file_folder: à __droite__
 
-l'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner:
-
-*(<- depuis v1.6.0)*
-
-*(jusu'à v1.6.0 ->)*
-
-~~Le seul moyen d'introduire les clefs d'accès dans Travel & Notes est de mettre celles-ci~~
-
-*(<-jusu'à v1.6.0)*
-
+L'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner:
 - à la fin de l'url de la page web chargeant Travel & Notes, vous devez introduire un ? suivi 
 du nom du fournisseur suivi de ProviderKey suivi de = suivi de votre clef d'accès. 
 Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
@@ -175,8 +155,6 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 <img src="InterfaceFR.PNG" />
 
-*(depuis v1.6.0 ->)*
-
 En haut de l'interface se trouve une première barre d'outils:
 - le bouton :house: redirige vers votre page d'accueil
 - le bouton ? redirige vers 
@@ -187,14 +165,6 @@ L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToo
 - le bouton :key: affiche la boite de dialogue des clefs d'accès
 - le bouton :globe_with_meridians: active ou désactive la localisation. 
 - le bouton :pushpin: affiche l'interface en permanence.
-
-*(<- depuis v1.6.0)*
-
-*(jusu'à v1.6.0 ->)*
-
-~~Si vous désirez que l'interface soit toujours visible, cliquez sur le bouton :pushpin:~~
-
-*(<- jusqu'à v1.6.0)*
 
 ### Trajets du voyage
 
@@ -208,7 +178,7 @@ Ces boutons ne sont visibles que lorsque plusieurs trajets sont présents.
 
 Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
 
-Lorsque un trajet est chainé, une icône &#x26d3; est présente.
+Lorsque un trajet est chainé, une icône &#x26d3; est présente à gauche de celui-ci.
 
 Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous 
 faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
@@ -261,7 +231,7 @@ d'arrivée et un chiffre pour les points intermédiaires).
 - les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des points intermédiaires. 
 Ces boutons ne sont visibles que lorsque plusieurs points intermédiaires sont présents. Il
 n'est pas possible de transformer le point de départ ou le point de fin en point intermédiaire.
-- Le bouton &#x267b; supprime le point de passage. Il n'est pas possible de supprimer le point de 
+- Le bouton :recycle: supprime le point de passage. Il n'est pas possible de supprimer le point de 
 départ ou le point de fin.
 
 #### Modifier un point de passage 
@@ -302,20 +272,16 @@ peut ensuite être déplacé à sa nouvelle position avec un glisser / déposer.
 
 #### Sauver ou abandonner les modifications
 
-Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci.
+Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci avec le bouton :floppy_disk:.
 
 Il est également possible d'abandonner l'édition d'un trajet et de revenir à la situation avant 
 modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
 
-*(depuis v1.6.0 ->)*
-
 #### Itinéraire en train
 
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 pour plus d'explications sur la façon de créer un itinéraire en train.
-
-*(<- depuis v1.6.0)*
 
 ### Itinéraire et notes
 
@@ -404,7 +370,7 @@ vide (laisser cette zone vide empêcherait toute modification ultérieure de la 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - 
 [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
 Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. 
-Le bouton &#x1f504; permet cependant de demander une nouvelle géolocalisation à Nominatim.
+Le bouton :arrows_counterclockwise: permet cependant de demander une nouvelle géolocalisation à Nominatim.
 
 #### Note de trajet prédéfinie "Icône SVG depuis OSM"
 
@@ -488,8 +454,6 @@ Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire
 toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
 partie supérieure.
 
-*(depuis v1.6.0 ->)*
-
 ## Menu des fonds de carte
 
 À gauche de l'écran une barre d'outils permet de choisir différents fond de cartes. Seul un petit 
@@ -506,8 +470,6 @@ d'outils dépend des cartes définies dans le fichier TravelNotesLayers.json ain
 d'accès qui ont été introduites. Consultez le guide d'installation.
 
 Il est possible de se déplacer dans la barre d'outils en utilisant la roulette de la souris.
-
-*(<- depuis v1.6.0)*
 
 ## __Livre de voyage__
 
@@ -540,12 +502,10 @@ Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?
 Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas 
 visible et tous les menus contextuels sont désactivés.
 
-*(depuis v1.6.0 ->)*
-
 ## Viewer
 
 Certains browsers anciens, surtout sur des mobiles, ne comprennent pas toujours tout le code JavaScript
- de Travel & Notes. Dans ce cas, vous pouvez essayer une version simplifiée de Travel & Notes qui permet 
+de Travel & Notes. Dans ce cas, vous pouvez essayer une version simplifiée de Travel & Notes qui permet 
 juste la visualisation des fichiers. L'url doit être complétée de la même façon que pour 
 la version normale:
 
@@ -570,5 +530,3 @@ D'autres exemples:
 [Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
 
 [Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.html)
-
-*(<- depuis v1.6.0)*
