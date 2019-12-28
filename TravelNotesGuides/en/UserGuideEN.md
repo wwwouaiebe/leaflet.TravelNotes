@@ -81,23 +81,23 @@ It is possible to save the access keys in a file, protected by a password or unp
 - The page must be served in HTTPS to save in a file protected by a password.
 - MS Edge does not allow saving to a password protected file.
 
-The button :floppy_disk: on the ** left ** of the dialog box allows you to save the access keys
+The button :floppy_disk: on the **left** of the dialog box allows you to save the access keys
 in a password protected file. This must contain at least 12 characters including at least 
 one uppercase, one lowercase, one number, and one other character.
 
-The button :file_folder: on the ** left ** of the dialog box replaces all the access keys of the
+The button :file_folder: on the **left** of the dialog box replaces all the access keys of the
 dialog box with the contents of a password protected file.
 
 These two buttons are only present if all the conditions to be able to save / restore the
 keys with a password are met.
 
-The button :floppy_disk: on the ** right ** of the dialog box allows you to save the access keys in
-a file ** not protected ** by password.
+The button :floppy_disk: on the **right** of the dialog box allows you to save the access keys in
+a file **not protected** by password.
 
-The button :file_folder: on the ** right ** of the dialog box replaces all the access keys of the
-dialog box by the contents of a file ** not protected ** by password.
+The button :file_folder: on the **right** of the dialog box replaces all the access keys of the
+dialog box by the contents of a file **not protected** by password.
 
-If a password protected file named ** APIKeys ** is placed in the same directory as
+If a password protected file named **APIKeys** is placed in the same directory as
 Travel & Notes on the server, Travel & Notes will ask you for the password when you open it 
 in order to use the keys contained in this file.
 
@@ -467,7 +467,7 @@ See the sample on the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?f
 When such a file is displayed, it is not possible to modify it. The TravelNotes interface is not 
 visible and all context menus are disabled.
 
-## viewer
+## Viewer
 
 Some older browsers, especially on mobile phones, do not always understand all of the Travel & Notes 
 JavaScript code. In this case, you can try a simplified version of Travel & Notes which just allows 
@@ -477,7 +477,7 @@ you to view the files. The url must be completed in the same way as for the norm
 https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==
 ```
 
-You can however add & lay at the end of the url to also display a toolbar showing the background maps 
+You can however add &lay at the end of the url to also display a toolbar showing the background maps 
 not requiring an access key.
 
 ```
