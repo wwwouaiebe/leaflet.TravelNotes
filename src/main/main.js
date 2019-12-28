@@ -205,13 +205,11 @@ function startup ( ) {
 					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
 						.setView ( [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ], THE_CONST.zero );
 
-					theTravelNotesData.map = map;
-
 					if ( myTravelUrl ) {
-						theTravelNotes.addReadOnlyMap ( myTravelUrl );
+						theTravelNotes.addReadOnlyMap ( map, myTravelUrl );
 					}
 					else {
-						theTravelNotes.addControl ( 'TravelNotes' );
+						theTravelNotes.addControl ( map, 'TravelNotes' );
 						theTravelNotes.rightContextMenu = true;
 					}
 				}

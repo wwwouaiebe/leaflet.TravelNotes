@@ -256,9 +256,14 @@ function newTravelNotes ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddReadOnlyMap ( travelUrl ) {
+	function myAddReadOnlyMap ( map, travelUrl ) {
 
 		myAddEventsListeners ( );
+
+		if ( map ) {
+			theTravelNotesData.map = map;
+		}
+
 		theAttributionsUI.createUI ( );
 
 		theLayersToolbarUI.setLayer ( 'OSM - Color' );
@@ -286,7 +291,7 @@ function newTravelNotes ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddControl ( divControlId ) {
+	function myAddControl ( map, divControlId ) {
 
 		myAddEventsListeners ( );
 
@@ -303,6 +308,10 @@ function newTravelNotes ( ) {
 				return 'x';
 			}
 		);
+
+		if ( map ) {
+			theTravelNotesData.map = map;
+		}
 
 		// loading new travel
 		theTravelNotesData.travel = newTravel ( );
@@ -494,6 +503,8 @@ function newTravelNotes ( ) {
 
 			get rightUserContextMenu ( ) { return myRightUserContextMenuData; },
 			set rightUserContextMenu ( RightUserContextMenu ) { myRightUserContextMenuData = RightUserContextMenu; },
+
+			get map ( ) { return theTravelNotesData.map; },
 
 			get maneuver ( ) { return newManeuver ( ); },
 

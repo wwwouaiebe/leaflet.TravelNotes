@@ -103,9 +103,6 @@ function newConfig ( ) {
 		contextMenu : {
 			timeout : 1500
 		},
-		errorMessages : {
-			timeout : 20000
-		},
 		routing : {
 			auto : true
 		},
@@ -312,7 +309,6 @@ function newConfig ( ) {
 		get errorUI ( ) { return myConfig.errorUI; },
 		get APIKeys ( ) { return myConfig.APIKeys; },
 		get contextMenu ( ) { return myConfig.contextMenu; },
-		get errorMessages ( ) { return myConfig.errorMessages; },
 		get routing ( ) { return myConfig.routing; },
 		get language ( ) { return myConfig.language; },
 		get itineraryPointMarker ( ) { return myConfig.itineraryPointMarker; },
