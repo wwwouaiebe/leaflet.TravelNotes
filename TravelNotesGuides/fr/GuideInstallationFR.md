@@ -261,6 +261,80 @@ page web est fermée mais que des données pourraient ne pas être sauvegardées
 - __nominatim.url__ : l'url à utiliser pour Nominatim
 - __nominatim.language__ : la langue à utiliser pour Nominatim
 
+#### Le contenu du fichier TravelNotesLayers.json
+
+Ce fichier contient les définitions des fonds de carte de la barre d'outils "Cartes"
+Ces définitions peuvent être adaptées.
+
+Un exemple de fichier avec deux fond de carte différents, l'un avec la carte de Ferraris 
+de la Belgique en 1771, l'autre avec la carte de OpenCycleMap de Thunderforest
+
+```
+[
+	{
+		"service":"wms",
+		"url":"http://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer",
+		"wmsOptions":
+		{
+			"layers":"0",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.15, 2.56 ], [ 50.95, 6.49 ] ],
+		"minZoom":7,
+		"name":"Service Public de Wallonie - Ferraris map 1770 - 1776",
+		"toolbar":
+		{
+			"text":"1771",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"SPW",
+		"providerKeyNeeded":false,
+		"attribution":"| <a href='http://geoportail.wallonie.be/home.html' target='_blank'>Service public de Wallonie (SPW)</a>",
+		"getCapabilitiesUrl":"https://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - OpenCycleMap",
+		"toolbar":
+		{
+			"text":"&#x1f6b2;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	}
+]
+```
+
+Quelques explications sur le contenu du fichier pour chaque fond de carte
+
+- __service__ : le type de service: wms ou wmts
+- __url__: l'url à utiliser pour obtenir la carte. Les valeurs {s}, {x}, {y} et {z} 
+seront remplacées par Leaflet, la valeur {providerKey} sera remplacée par Travel & Notes par la clef d'accès
+éventuelle pour de service. Ne jamais remplacer directement {providerKey} par votre propre clef d'accès!!!
+- __wmsOptions__ : ce sont les options à passer à Leaflet pour un service wms. 
+Voir la documentation de TileLayer.WMS de Leaflet.
+Au minimum, "layers", "format" et "transparent" devraient être présents.
+- __bounds__ : le coin inférieur gauche et supérieur droit de la carte.
+- __minZoom__ : le plus petit zoom possible pour cette carte
+- __maxzoom__ : le plus grand zoom possible pour cette carte
+- __name__ : le nom de la carte.Il sera utilisé dans le tooltip du bouton de la barre d'outils.
+- __toolbar.text__ : le texte à afficher dans le bouton de la barre d'outils
+- __toolbar.color : la couleur d'avant-plan du bouton de la barre d'outils
+- __toolbar.BackgroundColor : la couleur d'arrière-plan du bouton de la barre d'outils
+- __providerName__ : le nom du fournisseur de service. Ce nom sera utilisé pour retrouver la clef d'accès
+au service.
+- __providerKeyNeeded__ : quand cette valeur est true, une clef d'accès est nécessaire 
+pour obtenir la carte.
+
+- __attribution__ : les attributions de la carte
+- __getCapabilitiesUrl__ : l'url du fichier getCapabilities quand celle-ci est connue.
+
 #### Le contenu du fichier TravelNotesNoteDialog.json
 
 Ce fichier contient les définitions des boutons et de la liste des icônes prédéfinies de la boite 
@@ -324,7 +398,7 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 - __width__ : la largeur de l'icône en pixels
 - __height__ : la hauteur de l'icône en pixels
 
-#### Le contenu du fichier de configuration pouvant être chargé avec le bouton &#x23CD;
+#### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:
 
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
 
