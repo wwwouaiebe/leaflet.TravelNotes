@@ -256,6 +256,77 @@ is closed but data may not be saved.
 - __nominatim.url__ : the url to use for Nominatim
 - __nominatim.language__ : the language to use for Nominatim
 
+#### The contents of the TravelNotesLayers.json file
+
+This file contains the definitions of background maps of the "Maps" toolbar
+These definitions can be adapted.
+
+A sample file with two different background maps, one with the Ferraris map
+of Belgium in 1771, the other with the Thunderforest OpenCycleMap map
+```
+[
+	{
+		"service":"wms",
+		"url":"http://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer",
+		"wmsOptions":
+		{
+			"layers":"0",
+			"format":"image/png",
+			"transparent":true
+		},
+		"bounds":[ [ 49.15, 2.56 ], [ 50.95, 6.49 ] ],
+		"minZoom":7,
+		"name":"Service Public de Wallonie - Ferraris map 1770 - 1776",
+		"toolbar":
+		{
+			"text":"1771",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"SPW",
+		"providerKeyNeeded":false,
+		"attribution":"| <a href='http://geoportail.wallonie.be/home.html' target='_blank'>Service public de Wallonie (SPW)</a>",
+		"getCapabilitiesUrl":"https://geoservices.wallonie.be/arcgis/services/CARTES_ANCIENNES/FERRARIS/MapServer/WMSServer?REQUEST=GetCapabilities&SERVICE=WMS"
+	},
+	{
+		"service":"wmts",
+		"url":"https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey={providerKey}",
+		"name":"Thunderforest - OpenCycleMap",
+		"toolbar":
+		{
+			"text":"&#x1f6b2;",
+			"color":"black",
+			"backgroundColor":"white"
+		},
+		"providerName":"Thunderforest",
+		"providerKeyNeeded":true,
+		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+	}
+]
+```
+
+Some explanations on the content of the file for each background map
+
+- __service__ : the type of service: wms or wmts
+- __url__: the url to use to get the map. The values {s}, {x}, {y} and {z} will be replaced by 
+Leaflet, the value {providerKey} will be replaced by Travel & Notes by the possible access key 
+for service. Never replace {providerKey} directly with your own access key !!!
+- __wmsOptions__ : these are the options to pass to Leaflet for a wms service. 
+See the Leaflet TileLayer.WMS documentation.
+At a minimum, "layers", "format" and "transparent" should be present.
+- __bounds__ : the lower left and upper right corner of the map.
+- __minZoom__ : the smallest possible zoom for this map
+- __maxzoom__ : the largest possible zoom for this map
+- __name__ : the name of the card. It will be used in the tooltip of the button in the toolbar.
+- __toolbar.text__ : the text to display in the toolbar button
+- __toolbar.color : the foreground color of the toolbar button
+- __toolbar.BackgroundColor : the background color of the toolbar button
+- __providerName__ : the name of the service provider. This name will be used to find 
+the access key to the service.
+- __providerKeyNeeded__ : when this value is true, an access key is required to get the map.
+- __attribution__ : the map attributions
+- __getCapabilitiesUrl__ : the url of the getCapabilities file when it is known.
+
 #### The contents of the  TravelNotesNoteDialog.json file
 
 This file contains the definitions of the buttons and list of predefined icons of the note editing box. 
@@ -320,7 +391,7 @@ Each object in the "preDefinedIconsList" collection has five properties:
 - __width__ : the width of the icon in pixels
 - __height__ : the height of the icon in pixels
 
-#### The contents of the configuration file that can be loaded with the button &#x23CD;
+#### The contents of the configuration file that can be loaded with the button :file_folder:
 
 The organization of this file is identical to the file TravelNotesNoteDialog.json
 
