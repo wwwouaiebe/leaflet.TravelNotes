@@ -54,7 +54,7 @@ function newAttributionsUI ( ) {
 			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Maps & TravelNotes</a> ';
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
 	}
 
 	/*
