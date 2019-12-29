@@ -68,6 +68,7 @@ Many technical modifications have also been made:
 
 [Guide d'installation - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideInstallationFR.md)
 
+## Démo
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
 
