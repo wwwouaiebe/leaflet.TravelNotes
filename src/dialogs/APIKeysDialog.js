@@ -35,6 +35,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -528,6 +529,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	myCreateDialog ( );
 	myCreateToolbar ( );
 	myCreateContent ( );
+	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Complete the APIKeys' ) );
 
 	return myAPIKeysDialog;
 }

@@ -59,7 +59,7 @@ function newErrorsUI ( ) {
 	*/
 
 	function myOnHelpInputChange ( ) {
-		myShowHelp = myShowHelpInput.checked;
+		myShowHelp = ! myShowHelpInput.checked;
 	}
 
 	/*
@@ -69,7 +69,10 @@ function newErrorsUI ( ) {
 	*/
 
 	function myOnTimer ( ) {
-		myTimerId = null;
+		if ( myTimerId ) {
+			clearTimeout ( myTimerId );
+			myTimerId = null;
+		}
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Error' );
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Warning' );
 		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );

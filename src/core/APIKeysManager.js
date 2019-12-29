@@ -207,6 +207,7 @@ function newAPIKeysManager ( ) {
 	function myOnOkDecrypt ( data ) {
 		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
 		myResetAPIKeys ( APIKeys );
+		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}
 
 	/*
@@ -217,6 +218,7 @@ function newAPIKeysManager ( ) {
 
 	function myOnErrorDecrypt ( err ) {
 		console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
+		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}
 
 	/*

@@ -196,8 +196,8 @@
 		"msgstr" : "Travel notes"
 	},
 	{
-		"msgid" : "ErrorEditorUI - Hide",
-		"msgstr" : "Hide"
+		"msgid" : "ErrorUI - Dont show again",
+		"msgstr" : "Don't show help again"
 	},
 	{
 		"msgid" : "FileLoader - Not possible to select as provider",
@@ -578,5 +578,17 @@
 	{
 		"msgid" : "Utilities - Second",
 		"msgstr" : "sec"
+	},
+	{
+		"msgid" : "Help - gives a password for the APIKeys file or cancel",
+		"msgstr" : "<p>The password is <span style='color:red'>Travel&Notes160</span></p><p>If you have a Mapbox, GraphHopper or OpenRouteService access key, enter the password, finish with the &#x1f197; button and then open the dialog for editing access keys (&#x1f511; button) to enter your access key.</p><p>If you do not have an access key continue by pressing the button &#x274c;</p>"
+	},
+	{
+		"msgid" : "Help - Continue with interface",
+		"msgstr" : "Move your mouse over the black rectangle <span style='color:white;background-color:black'> Travel &amp; Notes </span> in the upper right corner to display the interface"
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys",
+		"msgstr" : "<p>Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper' or 'OpenRouteservice' for a route provider or 'Mapbox,' Thunderforest 'or' Lantmateriet 'for a map provider.</p><p>Complete on the right with your access key</p><p>Use the + button to add other providers</p>"
 	}
 ]
