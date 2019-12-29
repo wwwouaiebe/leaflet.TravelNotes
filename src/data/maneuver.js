@@ -79,7 +79,8 @@ function newManeuver ( ) {
 			case '1.3.0' :
 			case '1.4.0' :
 			case '1.5.0' :
-				something.objType.version = '1.6.0';
+			case '1.6.0' :
+				something.objType.version = '1.7.0';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );

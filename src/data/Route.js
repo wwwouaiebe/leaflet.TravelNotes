@@ -121,16 +121,14 @@ function newRoute ( ) {
 				something.hidden = false;
 				// eslint break omitted intentionally
 			case '1.1.0' :
-				// eslint break omitted intentionally
 			case '1.2.0' :
-				// eslint break omitted intentionally
 			case '1.3.0' :
-				// eslint break omitted intentionally
 			case '1.4.0' :
 				something.edited = THE_CONST.route.edited.notEdited;
 				// eslint break omitted intentionally
 			case '1.5.0' :
-				something.objType.version = '1.6.0';
+			case '1.6.0' :
+				something.objType.version = '1.7.0';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );

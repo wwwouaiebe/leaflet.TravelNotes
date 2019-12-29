@@ -114,7 +114,9 @@ function newTravel ( ) {
 				else {
 					something.layerName = 'OSM - Color';
 				}
-				something.objType.version = '1.6.0';
+				// eslint break omitted intentionally
+			case '1.6.0' :
+				something.objType.version = '1.7.0';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );
