@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	-v1.7.0:
+		- modified way of working for myPointsDistance ( )
 Doc reviewed 20191125
 Tests ...
 
@@ -143,6 +145,16 @@ function newGeometry ( ) {
 	}
 
 	/*
+	--- myNormalizeLng function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myNormalizeLng ( Lng ) {
+		return ( ( Lng + THE_CONST.angle.degree540 ) % THE_CONST.angle.degree360 ) - THE_CONST.angle.degree180;
+	}
+
+	/*
 	--- myPointsDistance function -------------------------------------------------------------------------------------
 
 	This function returns the distance between two points
@@ -158,7 +170,37 @@ function newGeometry ( ) {
 		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
 		// valid function to compute the distances. So all distances are always
 		// recomputed with this function.
-		return L.latLng ( latLngStartPoint ).distanceTo ( L.latLng ( latLngEndPoint ) );
+
+		// return L.latLng ( latLngStartPoint ).distanceTo ( L.latLng ( latLngEndPoint ) );
+
+		if (
+			latLngStartPoint [ THE_CONST.zero ] === latLngEndPoint [ THE_CONST.zero ]
+			&&
+			latLngStartPoint [ THE_CONST.number1 ] === latLngEndPoint [ THE_CONST.number1 ]
+		) {
+
+			// the function runs infinitely when latLngStartPoint === latLngStartPoint :-(
+			return THE_CONST.zero;
+		}
+
+		// and since v1.7.0 we use the simple spherical law of cosines formula
+		// (cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet function is
+		// always < 10e-3 m. The error due to the earth radius is a lot bigger...
+		// Notice: leaflet uses the haversine formula.
+		const toRadians = Math.PI / THE_CONST.angle.degree180;
+		const earthRadius = 6371e3;
+		let latStartPoint = latLngStartPoint [ THE_CONST.zero ] * toRadians;
+		let latEndPoint = latLngEndPoint [ THE_CONST.zero ] * toRadians;
+		let deltaLng =
+			(
+				myNormalizeLng ( latLngEndPoint [ THE_CONST.number1 ] ) -
+				myNormalizeLng ( latLngStartPoint [ THE_CONST.number1 ] )
+			)
+			* toRadians;
+		return Math.acos (
+			( Math.sin ( latStartPoint ) * Math.sin ( latEndPoint ) ) +
+				( Math.cos ( latStartPoint ) * Math.cos ( latEndPoint ) * Math.cos ( deltaLng ) )
+		) * earthRadius;
 	}
 
 	/*

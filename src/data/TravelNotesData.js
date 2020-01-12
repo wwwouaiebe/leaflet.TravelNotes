@@ -87,8 +87,6 @@ function newTravelNotesData ( ) {
 			get searchData ( ) { return myTravelNotesData.searchData; },
 			set searchData ( SearchData ) { myTravelNotesData.searchData = SearchData; },
 
-			get translations ( ) { return myTravelNotesData.translations; },
-
 			get UUID ( ) { return myTravelNotesData.UUID; }
 		}
 	);

@@ -6,7 +6,8 @@ const THE_CONST = {
 		degree90 : 90,
 		degree180 : 180,
 		degree270 : 270,
-		degree360 : 360
+		degree360 : 360,
+		degree540 : 540
 	},
 	baseContextMenu : {
 		menuMargin : 20

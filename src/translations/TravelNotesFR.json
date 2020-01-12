@@ -364,6 +364,30 @@
 		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
 	},
 	{
+		"msgid" : "ProvidersToolbarUI - bike",
+		"msgstr" : "Itinéraire en vélo"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - pedestrian",
+		"msgstr" : "Itinéraire à pied"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - car",
+		"msgstr" : "Itinéraire en voiture"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - train",
+		"msgstr" : "Itinéraire en train"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - line",
+		"msgstr" : "Itinéraire à vol d'oiseau"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - circle",
+		"msgstr" : "Cercle"
+	},
+	{
 		"msgid" : "Roadbook - show travel notes",
 		"msgstr" : "Notes du voyage"
 	},

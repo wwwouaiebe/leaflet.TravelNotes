@@ -364,6 +364,30 @@
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
 	},
 	{
+		"msgid" : "ProvidersToolbarUI - bike",
+		"msgstr" : "Cycling route"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - pedestrian",
+		"msgstr" : "Walking route"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - car",
+		"msgstr" : "Car route"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - train",
+		"msgstr" : "Train route"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - line",
+		"msgstr" : "Directions as the crow flies"
+	},
+	{
+		"msgid" : "ProvidersToolbarUI - circle",
+		"msgstr" : "Circle"
+	},
+	{
 		"msgid" : "Roadbook - show travel notes",
 		"msgstr" : "Show travel notes"
 	},

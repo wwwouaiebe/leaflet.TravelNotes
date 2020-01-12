@@ -28,12 +28,16 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
+	- v1.7.0:
+		- added line and circle icons
+		- modified bike, pedestrian and car icons
 Doc reviewed 20191125
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 
@@ -58,6 +62,8 @@ function newProvidersToolbarUI ( ) {
 	let myPedestrianButton = null;
 	let myCarButton = null;
 	let myTrainButton = null;
+	let myLineButton = null;
+	let myCircleButton = null;
 	let myParentDiv = null;
 
 	/*
@@ -140,6 +146,22 @@ function newProvidersToolbarUI ( ) {
 			document.getElementById ( 'TravelNotes-Control-trainImgButton' )
 				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 		}
+		if ( provider.transitModes.line ) {
+			document.getElementById ( 'TravelNotes-Control-lineImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+		}
+		else {
+			document.getElementById ( 'TravelNotes-Control-lineImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+		}
+		if ( provider.transitModes.circle ) {
+			document.getElementById ( 'TravelNotes-Control-circleImgButton' )
+				.classList.remove ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+		}
+		else {
+			document.getElementById ( 'TravelNotes-Control-circleImgButton' )
+				.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+		}
 
 		// changing the transitMode if the provider don't have the active transit mode
 		if ( ! theTravelNotesData.providers.get (
@@ -155,6 +177,12 @@ function newProvidersToolbarUI ( ) {
 			}
 			else if ( provider.transitModes.train ) {
 				mySetTransitMode ( 'train' );
+			}
+			else if ( provider.transitModes.line ) {
+				mySetTransitMode ( 'line' );
+			}
+			else if ( provider.transitModes.circle ) {
+				mySetTransitMode ( 'circle' );
 			}
 		}
 	}
@@ -176,7 +204,7 @@ function newProvidersToolbarUI ( ) {
 		let providerButton = myHTMLElementsFactory.create (
 			'img',
 			{
-				src : 'data:image/png;base64,' + provider.icon,
+				src : provider.icon,
 				id : 'TravelNotes-Control-' + provider.name + 'ImgButton',
 				className : 'TravelNotes-Control-ImgButton',
 				title : provider.name
@@ -216,6 +244,14 @@ function newProvidersToolbarUI ( ) {
 				myTrainButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 				theTravelNotesData.routing.transitMode = 'train';
 			}
+			else if ( provider.transitModes.line ) {
+				myLineButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'line';
+			}
+			else if ( provider.transitModes.circle ) {
+				myCircleButton.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+				theTravelNotesData.routing.transitMode = 'circle';
+			}
 
 			// deactivating transit mode buttons if not supported by the provider
 			if ( ! provider.transitModes.car ) {
@@ -229,6 +265,12 @@ function newProvidersToolbarUI ( ) {
 			}
 			if ( ! provider.transitModes.train ) {
 				myTrainButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( ! provider.transitModes.line ) {
+				myLineButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
+			}
+			if ( ! provider.transitModes.circle ) {
+				myCircleButton.classList.add ( 'TravelNotes-Control-InactiveTransitModeImgButton' );
 			}
 		}
 	}
@@ -261,27 +303,24 @@ function newProvidersToolbarUI ( ) {
 			'img',
 			{
 				src :
-					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
-					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoaESkaC0SxrgAABMdJREFUSMfNl1loVGcYhp//n+WcZmbiJE4WjVKVaLWOGxglilFTSm\
-					YUF1ILKiIILSjplQiKS65EXG4UvBGrQvVCUAdjoRrEGmtwjQbtWKlpEsTGGDMxkzKTzHr+XiRucbK4ts/lOd/5X853vuU9gj4YN+\
-					48Dx58DUBOzrmhnZ0qXykWJBKqKJlkYjyusgAsFtFqMnHPbBa/CcEvaWnir5YWT1vvM3ojUl2cPv1XamqK8fv/MBcWPtwfDhuLlW\
-					KYUvSLECAEzTabPHP16uc/uN1fJp6fNShhpRROZ+WSzk7jVDyuTLwDFotIpqXJb4LBkgohRP/Cbvc5/H6krhsnolFVOtAbDoQQoG\
-					nCF4nIb91uDL/f8+KefDXQ70e6XOpIJPL+ot2Zg0hElbpc6ojf/7qWBPB6q1FKoevqRCBgrOYDEwgYq3VdnVBK4fVWd2cjL6+Spq\
-					YSnM5zi4PBZAUfEafTtCQY9JzJy6tENjWVsH79ZWs4bJziIxMOG6fWr79sbWoq6S4uTTt7MBo1vuMToGnyx2jU+71ITz/rCoWM3w\
-					2D3AFKBUj0NIL5nYWl5IndLidJw2CsUgOJwtSp6SQSC7h5czZO50vhIUPMTJrkYMIEO8OHa4Op9FzDYKyUEs9gWqelJUpbm8GcOd\
-					cJBmOAARjEYgZFRUOoqZnNyJGDEkZKPOZIRM0bTIricUU8blBePhaQKAXJZBzDUMyYkcnly21cvx7sPRpSEomoeWZgQv9hSUAxYo\
-					SD8+efsmdPIxkZVgBMJrDZTKxdO4YLF56Sm/sZT5509jzX76SdYI7FurdMKoqKMti8eQyZmVakFOTkaGzaFGP79gZCoSSaJpk82U\
-					Fl5VN2727k+PEpxGIGHR0Jdu5s4Natf1KeG4uprD7Lc86cDPbuHc/y5Xd4/DhKa+tXNDZ2cfJkC9euFXLw4EMMA6ZNG8KOHfUcPj\
-					yZKVPSWbnyNg0NEXy+aaxadYcbN1KLS6tVtKZK75YtY1ix4i51dZ0sWpTF3bshurqSZGdruN3VLFyYS3HxUEKhJAsXZpGbq1Faeo\
-					vt28dz716IpUtvs21bfs+neh2rVbSagftAVu+edTotdHUl0XVJdraV+fOvcejQJPLzbSj1lHXr/GiapL09gc83lWg0ycyZDk6ffo\
-					zNZiIUSpKdbe3p/ze4LzVNVKVIBJcuteHxuOjqSrJvXyNpaSaKi134fM2AoL6+C6/Xxf79X7Bx45/Y7RZ27XpIeXkdoVCcuXMzuX\
-					IldZVrmqgSdvvZwnDYuNK7l9PTzVRVzUAIQV1dmLlzh7Jhw32OHm16ZY0r8vPTSCQUXm8WW7fmc/p0C263g5wcK7NmXePZs/gbO9\
-					pmk7MGGJkJvN5cRo9O4+efW3j0KNKXaQEMJk50sGzZMOrrwxw79nfKlno+MgexJFR/Lumt458vCQlQVmYvs1hEgj79oHiLNdB3vM\
-					UiEmVl9rL/3gh4vdW0t5ec0XXp+1iiui597e0lZ7zeal4YgZecky6XOvKhfZfLJX8KBMQa8BgpXabbjREIiDW6LnxCvL+gEKDrwh\
-					cIiDVuN8b/wtCnXJ4FBRfp6PBU1NaO0h0OeUBKmgeTASFASpodDnmgtnaU3tHhqSgouDj4f6dP8dP2L6C7Ld6Z4dDBAAAAAElFTk\
-					SuQmCC',
+					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
+					MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEIChYTLGSDtAAAA65JREFUSMftVl1sk1UYfs53vnZft4/R/W+hHaUrbshcQch06VCGWd\
+					BohmNRCRiXKXphZCOacCEYBeOFXHhDlHDjQDEBdKIx9sL4Q8bqtEPqLAOE/YDrGPspa2m7bt/Xr8eLr3WddFuJ88b4Xp285z1P3v\
+					Oe533eQ9xud3FxMcdxmMMURWGMUUoJIUjNFEUZHBwkPp8vovBnHVfB7gghACNIsgEQQgjAwBjiAfFIQqqrLBpNhKeU/to9Vr/fic\
+					Wzbw6iqrKEQ/Ks/pkxAODwr9n/0HcHLWq5uoqlXMqMTjR+nj2bKWPlcrH9t4komyHRmgLt3pcq0gQNGOr2dSJZMyycteNaSJKjlk\
+					Ih0dk9KjnO3QhORtrsV+YmXjzreW576qfxlrrlJUXCrUkWlBgDlmgJI+Tn7pvHfvTOeYzEodncTfP8xoIu93h7XzDR+Vx1vj8kVx\
+					oEp2fqrlvGWihsseoFnggCv2JZRql+1pNMK+xL10T5yiyeI6/UFuzbalydq12YIbWW9CMt1u2bDeVm8VCzdZUl+1j7yEPr8wmBlh\
+					JTJg+AEgBI1+L4Gw9OSez8ldsv1JvfbbonKUNi1U6jZNuW0p3vuVRG1K8P6wUc2G4++OlAU03Rh98PV63OKvNNXR8K2oxCqTn747\
+					aLgVCkfSBkv+Bvqs5985kV+08OzGTNEoi192lTm71XdTSs1RMl2trhzczUBWXm6vG2PGHcue2+xzeZHNfDWx81vX308tcX/BbTEp\
+					X0rR3jOdnpswqSKPAZomC/FABQadA1PlX+uWsCAM8xAK4Rqb7WvMlmebZhzQ5bXl6u+MC9WS9uzM/R6z7ac796fHJa+XtB/sKOSJ\
+					Eqg9DpmXJ6wnWvd8RGRjS273TdqFxnvnh5+BPH2Nqy7N/7/F/5ZABArAiiQNUFpRwATlEUhmnVdeiz/saGWa/xWJkoyxF1vefo1Y\
+					wNrR8c7wbQ+kX/q42rEiN3bS76Y+i2uo5GGQCeUhplkuryhJROp+fIbmuXa9h9LfTkw0WimNZ8uGeGrwxDo2EAPV75bOfg4eaK8b\
+					FAKCQtM+i9t8JvneiPQ0cBkEAgcO6XkZrXvksYe3j5kYK8HN2ZrtEz/ZPza1CNRczP0p4+PyEpM3Swv7Nug62UBwBCZ7USw/vfjq\
+					Qobz/0BpNoHs8voHzzik9SsUtZVFNH+Y8NMMqRxQWllAdA/H6/RqPr7bvJGBYcgSz28wIhJK49SR7WUlIoy2HidruNRiOldBGzVr\
+					+TfwLXzWMKJ+iQhAAAAABJRU5ErkJggg==',
 				id : 'TravelNotes-Control-bikeImgButton',
-				className : 'TravelNotes-Control-ImgButton'
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - bike' )
 			},
 			myButtonsDiv
 		);
@@ -292,27 +331,22 @@ function newProvidersToolbarUI ( ) {
 			'img',
 			{
 				src :
-					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
-					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoaESo7bADyMwAABNlJREFUSMe1V19oU1cY/52Te5Ob3DR/SfzTNNCufxRXxmarONCnPb\
-					i+ykYrFdRSkeJLX5ykZcKcFfG5oIJ2Y2sVFZQ+iPoiUhC128OIiJrUlgQTm9o0t23SJufmnj2k2ura5syx7ynknu/7nd93vr8E6w\
-					ghBJxzAEAgAEsmc3pToWD1y3L6M8NQfABA6eIUY54xs3kh5Xb3JONx5D/WXdX2Wh9crkPIZAbAOVBRcbpvYaHuO87lDZyTCs7lFa\
-					ochDAQwucANmmzRa7PzfWECFm2IQTsdrdiZuYqHI5quVg80J7P113WdR+AIsTEBEmagsUSOayq539PpVLM5WpFJnO1POOtW+GMRH\
-					4dKRa9jZxTABz/TggIMSDLU+Fg8NDuaBTaxyfoux8ORxsAwG7vrI5Ehl7pur+Rc/IJoCX3c05QKGxsnJgYemW3d1avxPgH42AQzk\
-					Ri6JWuOz3ljReX7k3KnpQkLb158/6aWGyZOS0F0kF4vX45mRwY0XV3WdCGBhsePvwa3d1BAEZZYF13e5LJgRGv1y87nQdLjCmlMA\
-					wDqvrj4Wx2x6XyDAw8eLADe/b4AQCqehu5nJj7bbYnHbncT5cppaCGYYBzIJ+vu7TiydcNnP7+GBKJRQwPJ5HL6YLvTlEo1F3iHD\
-					AMo4Rkt5/qK6UMFwK+du0NurvDePt2EQ0NdkE9Dl33wW4/1QcApKoKltevrz01DLVWNGKbmhwYHd1dCrEiR0vLY9y7Ny0UaJRmo5\
-					WV339OZ2b6NgGyXzRRVFXC4OCXKwwBd+/uRH//VkHmsn9mpm8TZUzxcU4comzb2zciEFCg6yWQZ8/mcOJEGF1dNaivV8tb4MTBmO\
-					KjkpSuLdXe8lJZacb5819g374/QEiphJpMBGfPvlxiTwSAZUjSdC0tdZnyCiYTwfBwMx49SuPOnSkA7P3/7/QZM4SC0zCsPkn0bX\
-					0+GU+eTCMUGgNAcO7cGEwmCbOzFITI2Lv3ESYmFsWruar2tmWzu4bEjhtLxY4jn/8G2ayByck8mpsfY36+CPEAfbif6ronSggTLg\
-					KAgQsXtmF+nuLIkTC2bHGhpcUj3EwIYdB1b5TK8uIUIXxW9LbBoBXt7VW4ciWOGzeSuHnzNQYHvxJ3MeGzZvPiFHW7Q0mApcTUiu\
-					jtrYHVChw79hyAjOPHX6JYJLh4cZtQwyCEpVyuUJLG48hbrS+uA6aySvX1Kjo7q9HV9fS9a6PRHG7dSqCtLYBAwFp2OlGUF9fjce\
-					RJKbcAWf6N67p3zbciBBgZ2Ym6OjsaGh4gk1luDmYzQT7/LUKhZzhzZnyN0kkgSdNg7AAhBKCUUhACWCyRjvVc1dxcgV273Dh58j\
-					kymQ+DsVAwcPToX1AUsm5GmM2RjiXQ0tVcroMAbsvZ7Nk/GdvYuNoF/H4ZGzZYEA7PrcpIUSgoBXI5Y9VskOU3Yafzh+2MtTBN++\
-					W/jD7iIklauqpqf834+Eejz7tBLBaDpij3myRJS4sNBeXzXpK0tKLcbxofh+Z0tq0/3tbWwhmLDYww5vv/x9vlDaIV0Sg0jye03W\
-					YbPSxJ0xBJtQ8H+mlus412eDwntkej0Fyu1k9dYX7uW1ioX3OFoZQB4HOEsEmr9RNXmLWWtspKWDRt9aVN1z1jsryQcjh6komE2N\
-					L2N0SHF0QJfjNNAAAAAElFTkSuQmCC',
+					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
+					MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEICholT2tZIQAAAyxJREFUSMetll1IFFEUx/93PtZ13cykJNvWNDXEMkgoyYKICCJISK\
+					kIIYjqpU98kB77loogjCzKCvoQkqigh8ioKKS01NS2grDwY7ddLa3dNVt37r1ze5haLXVzV8/TmTN3fufMYeacP3E4HCkpKZIkYX\
+					wmhCCEhD/DOXc6ncTr9TKu1D5vgxj7LCEQYvglAYQQnOuSTAiMTAQGgpDlSzNUlSmyLLe0fl1/6BUmzx6exNIl6RLwV7kygUomzB\
+					YA8G+LuQD9kyoxRrqxf9HFvQtIVMmUMPeqDuevWZUNgDJ917n3kaLDfRhZmUmGE2dRo6g6HLr6bmtQY+5u78kr7ycZ3fCmlzGdUj\
+					01yTyZ6MOb0q6dLYyzmObYE29VFp3Ykjk56HXZU0p2rrDE/m6xJda0c1v+yjTLeIgyCYveujHb0+MfCLBQxOsPHi1dNh40F2HRVm\
+					vMz4AW1IbQZyrrF8637S+wT7QhVovKGedMD0U8Xwau3mzYsyM/XpUmhDaZVKHrus5DEVUmu8+/8/T4LpbmGpFjxelvb6zLSjRFhl\
+					ZUhTGu86GqzSYJwL6Dz3Lm21ZnWgEkxMfYbdP8QT0ydMWluoorjRrlnAtKdQCKTAC8cAXKymsvn1p752Desry0/h+D+ZnWyNCVtX\
+					3XG7yDQdbU3F52+nEIDaDq1bfj5c/efei1z060JSdUnS86snluxH+jRjkIqMYAmIZNkXNPejpc/dOmxgLo6PpeVLDQqkiRoRnjBM\
+					TbTwEoyl+Dtbgw25i0U+PNJQce5SSbx0SPOpB1ziVJcvdp/xyYZVEW56YaftJ0K+Woc/4cEz3qXqSUg8DVpwEAGXq/HJv53v0Wd7\
+					fvZVNXp/PbjAQ14l4HBhkAt4/+2bS/rabtR/GJlt6+gYZmV3tnb3XT92jQhBBPvyYEMGKJCcBsVijTo1lg92rarHGqLkRQ46NpD/\
+					HZ4/d0+6NBX3jaYzhOt3f4FDSs8XXXg+fuetdgNOiQzdtwe2Rwe7nj/+NJlqJXHqM+KcsKAOLz+VQ19uOnbiEwht4gMGSZGJJp4S\
+					0jfSalAeJwOOx2uyzLYfTjCAU4Ljn5C1w5SWBHSm1MAAAAAElFTkSuQmCC',
 				id : 'TravelNotes-Control-pedestrianImgButton',
-				className : 'TravelNotes-Control-ImgButton'
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - pedestrian' )
 			},
 			myButtonsDiv
 		);
@@ -323,27 +357,19 @@ function newProvidersToolbarUI ( ) {
 			'img',
 			{
 				src :
-					'data:image/png;base64,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',
+					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
+					MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEICh4hLGpYPAAAAlZJREFUSMfdlk1oE0EUx/+zszEx3UhD0zZYkn5ksfWjlVgrVk1RQV\
+					R6EMFaK9qjggdBRO1NvSiIB8/iyQ/akxepSKteRPxoETXamkQtJAbbBN0ky0boZne8FIu23exqKuhjDgMz78ef/3u8GRIOh/1+P8\
+					dxKF1ompZIJEgmkylo/KPHMTBL6QQzCXM2hGxpF222Ak8pffkqvff88xKqHrqE9g0BDrAo10wwAOCwaPFvovmFDo6Gak4f3+x0gj\
+					HoOjQNTIfOoOvQ9dn93aF3p268tobu3R9sqC+XJACgdGbxPCgFIbPXHPYWa+gKWtbS7M3nIe669VVTfjm1aRUC53AtwYObHXW1rr\
+					ZK90haMuv1mZ4VgsBFYlNzuQBU+kUiybiajMYmeR69e0QLZdwW8gMYGU0ZF+rp6GcArcHlZg3Z5K1avaqKMUwkpGNbawzQ2VxB09\
+					DU6Gl0lUVkpQj6xA7xwtntdjsjBBfPdZhpMnc5fXL7wO5DA8+mFCND1gddDgcA8nFCVtUi0OlpRKKyrsPtphuby015PTYuB7r67w\
+					3HjdH3H8abDva/eStZKGOt33n9ZNu6tZXG6NagZ6AvVF+3zEJfCwI93BMs6nJ1tbN730rTM+R3JyxjxVQfuRztu5IaG+4UBORyWL\
+					Nz0AD34k6nx4NCAYHQ4Cc1XQStMEVRlR8SEmrSjOT4fNf++lBNpfR8npNlzThZlmG3Y6H2nx8tdl8zo6uh6+p/94AtMppypLRQSn\
+					kAJJvN2mxL33+YZOynR+9PQgx4VfUbCYfDPp+PUlry7+R3HyvZuSYHFFYAAAAASUVORK5CYII=',
 				id : 'TravelNotes-Control-carImgButton',
-				className : 'TravelNotes-Control-ImgButton'
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - car' )
 			},
 			myButtonsDiv
 		);
@@ -354,35 +380,79 @@ function newProvidersToolbarUI ( ) {
 			'img',
 			{
 				src :
-					'data:image/png;base64,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\
-					9E2t/6aPsbwfNWty4y/a8AAAAASUVORK5CYII=',
+					'data:image/png;base64,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',
 				id : 'TravelNotes-Control-trainImgButton',
-				className : 'TravelNotes-Control-ImgButton'
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - train' )
 			},
 			myButtonsDiv
 		);
 		myTrainButton.transitMode = 'train';
 		myTrainButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
+		myLineButton = myHTMLElementsFactory.create (
+			'img',
+			{
+				src :
+					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
+					MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEICiINbUFNIAAAAfZJREFUSMdjvHz5spycHBMTEwP1wN+/fx8/fsz44cOHP39ZDh+9zf\
+					CfJO2MDFANGAxGRhtLFVbWPyzMzMwXLr4ObDxFRVfv6mKwNFNmYmAg0bnEgP8MDAwMZAZxoqXgomJd/GrIMdpCkq270SMi1Iz6Rs\
+					9sdxIW4l2x+hSVjV5UrKunI3fpyqO43svUNDrfVSwi1Oztu8/plfsIKmYiKYhrS50ZGBiau/eeeP6LmkbDg3ji7lfEqGeiehCTZj\
+					RJQYzTaMb/bBQGMU6j/zOia57f60ZSEBMbIBsbTTXUpI6dvE18EMMBCx65mgBpT3e9Fy8/FLccxZUcE4OUv//4XTD3DglGW0iyle\
+					Y7MTAwVLXsRgtiiIl21srKSuKsLMyPn7wlzej5vW58vJyz5h+ef/w9VhN///l7997LQ0fvzl93l4QAgQdx+tTrAVrcUQFqxoZysr\
+					IiaCbiTzAsuIL40+fvb958ubvaX0lRnIGB4fv3X9dvPD1x+iFBE3EaDQliVhZmVl5OP2/D799/nTl3/+jJ+1hDkzSjixK1+Xg5v3\
+					//dfX6U/JMxGl03/yrl669atnwlPIKEt3oE89/naCGueRXu4PAaGYmRuoayszMwsDAwPjx40dWVs47d1/8/8/ASCUrVJQlfv/+zn\
+					j58mVZWVlmZmaqNycB+D3rTYmxQpEAAAAASUVORK5CYII=',
+				id : 'TravelNotes-Control-lineImgButton',
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - line' )
+			},
+			myButtonsDiv
+		);
+		myLineButton.transitMode = 'line';
+		myLineButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
+
+		myCircleButton = myHTMLElementsFactory.create (
+			'img',
+			{
+				src :
+					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
+					MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEICiEaxb+bJAAAAqNJREFUSMdjvHz5spycHBMTEwP1wN+/fx8/fsz44cOHP39ZDh+9zf\
+					CfJO2MDFANGAxGRhtLFVbWPyzMzMwXLr4ObDxFRVfv6mKwNFNmYmAg0bnEgP8MDAwMTAw0Ayz4pS0k2RKDlO2slUVFeIWFeBkYGN\
+					6++/z6zedDR+/OX3f3xPNfZBo9M1szIsTk48dvBw7fOnvp5cTdrxgYGPJdxYz1xD1dtWIjzBevOJk+9TrJRu/vszUyVJg6+1DVso\
+					fI4hN3v2LY/Yqh93JNgHRpvpOOloR19n6sJjDhMldZSSw+ex2aucigZcNT96iVstJCR6c6Emv0zGxNI0OFvKodG659xR8TJ57/Cs\
+					vcrKMlMzNbk7DRFpJssRHm3RP3ETQXbnr3xH2xEeYWkmwEjE4MUn7z9nPLhqfEJ7KWDU/fvP2cFaVOwGg7a+UDh2+RmoS3775mai\
+					xPwGhREd6zl16SavSJcy+kJAUJGC0sxAtJvySB+cff8/FyEpX4qALQjf70+Xu+qxippiRaCn76/J2A0c+evzfWEyfVaAsjiWfP3x\
+					Mw+vTZhw62aqQabWetfPrsQwJGT1t2U0SYty1KnnhzawKk5WVFpi27ScDoE89/LV5xMjvVDjN34Sp1S/OdFq84iVnAYkkh6VOvX7\
+					n2ZNV0X4KmW0iyrZrue+XaE6xFK/bEZ529//HTdzuXhdcESOMJh53Lwh8/fYerUMVZXltn75+ZrVlV7JoY/X7PgVsnzr2Yf/w9JJ\
+					1ZGEm4OKhJSgiSWRVAQmb+urtZUep21soRISbzeDkhCf/Z8/dHT9ybtuwm+RUYJFZP9F5mYLhMhdxI5YzOzMRIXUOZmVkYGBgYP3\
+					78yMrKeefui///GRipZIWKssTv398ZL1++LCsry8zMTPXmJADJwQv2CCSQygAAAABJRU5ErkJggg==',
+				id : 'TravelNotes-Control-circleImgButton',
+				className : 'TravelNotes-Control-ImgButton',
+				title : theTranslator.getText ( 'ProvidersToolbarUI - circle' )
+			},
+			myButtonsDiv
+		);
+		myCircleButton.transitMode = 'circle';
+		myCircleButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 	}
 
 	/*
