@@ -24,6 +24,8 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+	- v1.7.0:
+		- issue #89 : Add elevation graph
 Doc reviewed 20191124
 Tests ...
 
@@ -31,6 +33,7 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
@@ -51,6 +54,8 @@ function newRouteContextMenu ( contextMenuEvent ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
+
+	let myProfileWindow = newProfileWindow ( );
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------
@@ -125,6 +130,12 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				context : myZoomer,
 				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to route' ),
 				action : myZoomer.zoomToRoute,
+				param : myRouteObjId
+			},
+			{
+				context : myProfileWindow,
+				name : theTranslator.getText ( 'ContextMenuFactory - View the elevation' ),
+				action : myProfileWindow.show,
 				param : myRouteObjId
 			},
 			{

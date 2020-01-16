@@ -1,0 +1,28 @@
+.TravelNotes-SvgProfile
+{
+	background-color : white;
+	margin : 1em;
+}
+.TravelNotes-SvgProfile-profilePolyline
+{
+	fill : none;
+	stroke : red;
+	stroke-width : 3;
+}
+.TravelNotes-SvgProfile-ascentPolyline
+{
+	fill : none;
+	stroke : blue;
+	stroke-width : 3;
+}
+.TravelNotes-SvgProfile-markerPolyline
+{
+	fill : none;
+	stroke : black;
+	stroke-width : 1;
+}
+.TravelNotes-SvgProfile-elevText
+{
+	fill : black;
+	font: bold 30px sans-serif;
+}

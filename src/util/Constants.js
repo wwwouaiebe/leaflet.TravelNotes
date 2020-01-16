@@ -42,6 +42,10 @@ const THE_CONST = {
 		travelNotesPane : 1,
 		searchPane : 2
 	},
+	elev : {
+		fixed : 2,
+		defaultValue : 0
+	},
 	geoLocation : {
 		status : {
 			refusedByUser : -1,
@@ -89,6 +93,7 @@ const THE_CONST = {
 	number4 : 4,
 	number5 : 5,
 	number16 : 16,
+	number100 : 100,
 	number65536 : 65536,
 	passwordDialog : {
 		pswdMinLength : 12

@@ -364,6 +364,14 @@
 		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
 	},
 	{
+		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descend} m.",
+		"msgstr" : "Montée: {ascent} m. - Descente: {descend} m."
+	},
+	{
+		"msgid" : "ProfileWindow - Profile",
+		"msgstr" : "Profil"
+	},
+	{
 		"msgid" : "ProvidersToolbarUI - bike",
 		"msgstr" : "Itinéraire en vélo"
 	},

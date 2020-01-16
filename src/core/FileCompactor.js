@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.7.0:
+		- issue #89 : Add elevation graph
 Doc reviewed ...
 Tests ...
 
@@ -55,11 +57,12 @@ function newFileCompactor ( ) {
 		if ( THE_CONST.zero !== route.itinerary.itineraryPoints.length ) {
 			objType = route.itinerary.itineraryPoints [ THE_CONST.zero ].objType;
 		}
-		let compressedItineraryPoints = { latLngs : [], distances : [], objIds : [], objType : objType };
+		let compressedItineraryPoints = { latLngs : [], distances : [], elevs : [], objIds : [], objType : objType };
 		route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
 				compressedItineraryPoints.distances.push ( itineraryPoint.distance );
+				compressedItineraryPoints.elevs.push ( itineraryPoint.elev );
 				compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
 			}
 		);
@@ -99,6 +102,9 @@ function newFileCompactor ( ) {
 				itineraryPoint.lat = latLng [ THE_CONST.zero ];
 				itineraryPoint.lng = latLng [ THE_CONST.number1 ];
 				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
+				if ( route.itinerary.itineraryPoints.elevs ) {
+					itineraryPoint.elev = route.itinerary.itineraryPoints.elevs [ latLngsCounter ];
+				}
 				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
 				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
 				decompressedItineraryPoints.push ( itineraryPoint );

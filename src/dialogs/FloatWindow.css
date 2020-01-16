@@ -1,0 +1,35 @@
+.TravelNotes-FloatWindow-Container
+{
+	position: absolute;
+	top: 10em;
+	left: 10em;
+	width: 40em;
+	z-index: 1000;
+	background-color: white;
+	border-style: solid;
+	border-width: 0.1em;
+}
+.TravelNotes-FloatWindow-TopBar
+{
+	background-color : lightgray;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+}
+.TravelNotes-FloatWindow-TopBar:hover
+{
+	background-color: darkred;
+}
+.TravelNotes-FloatWindow-TopBar:hover,
+.TravelNotes-FloatWindow-TopBar:active
+{
+	cursor: grab;
+}
+.TravelNotes-FloatWindow-CancelButton
+{
+	background-color : white;
+	width: 1em;
+}
+.TravelNotes-FloatWindow-CancelButton:hover
+{
+	color:red;
+}

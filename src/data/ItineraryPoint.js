@@ -23,6 +23,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.7.0:
+		- issue #89 : Add elevation graph
 Doc reviewed 20191122
 Tests ...
 
@@ -52,6 +54,8 @@ function newItineraryPoint ( ) {
 
 	let myDistance = THE_CONST.distance.defaultValue;
 
+	let myElev = THE_CONST.elev.defaultValue;
+
 	let myObjId = newObjId ( );
 
 	/*
@@ -74,6 +78,7 @@ function newItineraryPoint ( ) {
 			case '1.4.0' :
 			case '1.5.0' :
 			case '1.6.0' :
+				something.elev = THE_CONST.elev.defaultValue;
 				something.objType.version = '1.7.0';
 				break;
 			default :
@@ -102,6 +107,7 @@ function newItineraryPoint ( ) {
 			lat : parseFloat ( myLat.toFixed ( THE_CONST.latLng.fixed ) ),
 			lng : parseFloat ( myLng.toFixed ( THE_CONST.latLng.fixed ) ),
 			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
+			elev : parseFloat ( myElev.toFixed ( THE_CONST.elev.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -118,6 +124,7 @@ function newItineraryPoint ( ) {
 		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
 		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
 		myDistance = otherthing.distance || THE_CONST.distance.defaultValue;
+		myElev = otherthing.elev || THE_CONST.elev.defaultValue;
 		myObjId = newObjId ( );
 	}
 
@@ -144,6 +151,9 @@ function newItineraryPoint ( ) {
 
 			get distance ( ) { return myDistance; },
 			set distance ( Distance ) { myDistance = Distance; },
+
+			get elev ( ) { return myElev; },
+			set elev ( Elev ) { myElev = Elev; },
 
 			get objId ( ) { return myObjId; },
 

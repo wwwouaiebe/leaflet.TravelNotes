@@ -24,6 +24,7 @@ Changes:
 		- created
 	-v1.7.0:
 		- modified way of working for myPointsDistance ( )
+		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
 Doc reviewed 20191125
 Tests ...
 
@@ -45,6 +46,36 @@ Patterns : Closure
 */
 
 function newGeometry ( ) {
+
+	/*
+	--- myGetLatLngElevAtDist function --------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetLatLngElevAtDist ( route, distance ) {
+		if ( route.distance <= distance || THE_CONST.zero >= distance ) {
+			return null;
+		}
+
+		let nearestDistance = 0;
+		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
+		while ( nearestDistance < distance && ! itineraryPointsIterator.done ) {
+			nearestDistance += itineraryPointsIterator.value.distance;
+		}
+		let previousItineraryPoint = itineraryPointsIterator.value;
+		itineraryPointsIterator.done;
+		let scale = ( previousItineraryPoint.distance - nearestDistance + distance ) / previousItineraryPoint.distance;
+		return [
+			previousItineraryPoint.lat + ( ( itineraryPointsIterator.value.lat - previousItineraryPoint.lat ) * scale ),
+			previousItineraryPoint.lng + ( ( itineraryPointsIterator.value.lng - previousItineraryPoint.lng ) * scale ),
+			previousItineraryPoint.elev + ( ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) * scale ),
+			THE_CONST.number100 *
+				( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) / previousItineraryPoint.distance
+		];
+	}
 
 	/*
 	--- myGetLatLngBounds function ------------------------------------------------------------------------------------
@@ -258,6 +289,7 @@ function newGeometry ( ) {
 
 	return Object.seal (
 		{
+			getLatLngElevAtDist : ( route, distance ) => myGetLatLngElevAtDist ( route, distance ),
 			getClosestLatLngDistance : ( route, latLng ) => myGetClosestLatLngDistance ( route, latLng ),
 			getLatLngBounds : latLngs => myGetLatLngBounds ( latLngs ),
 			pointsDistance :
