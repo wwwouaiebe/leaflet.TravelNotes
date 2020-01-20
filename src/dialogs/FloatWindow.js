@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -83,6 +83,20 @@ function newFloatWindow ( ) {
 	}
 
 	/*
+	--- myClose function ----------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myClose ( ) {
+		if ( myOnClose ) {
+			myOnClose ( );
+		}
+		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myWindowDiv );
+		myData = null;
+	}
+
+	/*
 	--- myCreateTopBar function ---------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -108,17 +122,7 @@ function newFloatWindow ( ) {
 			topBar
 		);
 
-		cancelButton.addEventListener (
-			'click',
-			( ) => {
-				if ( myOnClose ) {
-					myOnClose ( );
-				}
-				document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myWindowDiv );
-				myData = null;
-			},
-			false
-		);
+		cancelButton.addEventListener ( 'click', myClose, false );
 
 		topBar.addEventListener (
 			'dragstart',
@@ -212,23 +216,24 @@ function newFloatWindow ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal (
-		{
-			show : data => myShow ( data ),
+	return {
+		show : data => myShow ( data ),
 
-			set onShow ( OnShow ) { myOnShow = OnShow; },
+		close : ( ) => myClose ( ),
 
-			set onClose ( OnClose ) { myOnClose = OnClose; },
+		set onShow ( OnShow ) { myOnShow = OnShow; },
 
-			get data ( ) { return myData; },
+		set onClose ( OnClose ) { myOnClose = OnClose; },
 
-			get header ( ) { return myHeaderDiv; },
-			set header ( Header ) { myHeaderDiv = Header; },
+		get data ( ) { return myData; },
+		set data ( Data ) { myData = Data; },
 
-			get content ( ) { return myContentDiv; },
-			set content ( Content ) { myContentDiv = Content; }
-		}
-	);
+		get header ( ) { return myHeaderDiv; },
+		set header ( Header ) { myHeaderDiv = Header; },
+
+		get content ( ) { return myContentDiv; },
+		set content ( Content ) { myContentDiv = Content; }
+	};
 }
 
 export { newFloatWindow };

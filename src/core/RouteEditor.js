@@ -61,6 +61,7 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
+import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -80,6 +81,8 @@ function newRouteEditor ( ) {
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
+
+	let myProfiles = new Map ( );
 
 	/*
 	--- myComputeRouteDistances function ------------------------------------------------------------------------------
@@ -339,6 +342,11 @@ function newRouteEditor ( ) {
 			}
 		);
 
+		let profile = myProfiles.get ( theTravelNotesData.travel.editedRoute.objId );
+		if ( profile ) {
+			profile.update ( theTravelNotesData.travel.editedRoute.objId );
+		}
+
 		newRoadbookUpdate ( );
 
 		// and the itinerary and waypoints are displayed
@@ -388,6 +396,28 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- myUpdateProfile function --------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myUpdateProfile ( oldObjId, newObjId ) {
+		let profile = myProfiles.get ( oldObjId );
+		if ( profile ) {
+			myProfiles.delete ( oldObjId );
+			if ( newObjId ) {
+				profile.update ( newObjId );
+				myProfiles.set ( newObjId, profile );
+			}
+			else {
+				profile.close ( );
+			}
+		}
+	}
+
+	/*
 	--- myCancelEdition function --------------------------------------------------------------------------------------
 
 	This function cancel the current edited route
@@ -407,6 +437,8 @@ function newRouteEditor ( ) {
 				addedRouteObjId : theTravelNotesData.editedRouteObjId
 			}
 		);
+
+		myUpdateProfile ( theTravelNotesData.travel.editedRoute.objId, theTravelNotesData.editedRouteObjId );
 
 		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
 		theTravelNotesData.travel.editedRoute = newRoute ( );
@@ -517,6 +549,23 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- myShowProfile function ----------------------------------------------------------------------------------------
+
+	This function show all the hidden routes
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myShowProfile ( routeObjId ) {
+		let profileWindow = myProfiles.get ( routeObjId );
+		if ( ! profileWindow ) {
+			profileWindow = newProfileWindow ( );
+		}
+		profileWindow.show ( routeObjId );
+		myProfiles.set ( routeObjId, profileWindow );
+	}
+
+	/*
 	--- routeEditor object --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -538,7 +587,11 @@ function newRouteEditor ( ) {
 
 			hideRoute : routeObjId => myHideRoute ( routeObjId ),
 
-			showRoutes : ( ) => myShowRoutes ( )
+			showRoutes : ( ) => myShowRoutes ( ),
+
+			showProfile : routeObjId => myShowProfile ( routeObjId ),
+
+			updateProfile : ( oldObjId, newObjId ) => myUpdateProfile ( oldObjId, newObjId )
 		}
 	);
 }

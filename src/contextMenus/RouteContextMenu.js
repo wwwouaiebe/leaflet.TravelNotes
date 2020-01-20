@@ -33,7 +33,6 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
@@ -54,8 +53,6 @@ function newRouteContextMenu ( contextMenuEvent ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
-
-	let myProfileWindow = newProfileWindow ( );
 
 	/*
 	--- myGetMenuItems function ---------------------------------------------------------------------------------------
@@ -133,9 +130,9 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				param : myRouteObjId
 			},
 			{
-				context : myProfileWindow,
+				context : theRouteEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - View the elevation' ),
-				action : myProfileWindow.show,
+				action : theRouteEditor.showProfile,
 				param : myRouteObjId
 			},
 			{

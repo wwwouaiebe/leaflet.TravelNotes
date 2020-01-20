@@ -364,12 +364,12 @@
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
 	},
 	{
-		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descend} m.",
-		"msgstr" : "Ascent: {ascent} m. - Descent: {descend} m."
+		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.",
+		"msgstr" : "Ascent: {ascent} m. - Descent: {descent} m."
 	},
 	{
-		"msgid" : "ProfileWindow - Profile",
-		"msgstr" : "Elevation"
+		"msgid" : "ProfileWindow - Profile {name}",
+		"msgstr" : "Profile {name}"
 	},
 	{
 		"msgid" : "ProvidersToolbarUI - bike",

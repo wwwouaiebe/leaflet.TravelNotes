@@ -136,6 +136,10 @@ function newTravelEditor ( ) {
 		theTravelNotesData.editedRouteObjId = initialRoute.objId;
 		theTravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
+		theRouteEditor.updateProfile (
+			theTravelNotesData.editedRouteObjId,
+			theTravelNotesData.travel.editedRoute.objId
+		);
 		theRouteEditor.chainRoutes ( );
 		myEventDispatcher.dispatch (
 			'routeupdated',
@@ -183,8 +187,6 @@ function newTravelEditor ( ) {
 
 	function myRemoveRoute ( routeObjId ) {
 
-		console.log ( theTravelNotesData.travel.object );
-
 		let routeToDeleteObjId = routeObjId;
 		if (
 			(
@@ -220,6 +222,7 @@ function newTravelEditor ( ) {
 		);
 
 		theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
+		theRouteEditor.updateProfile ( routeToDeleteObjId );
 		theRouteEditor.chainRoutes ( );
 
 		newRoadbookUpdate ( );
