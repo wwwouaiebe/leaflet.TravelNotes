@@ -82,13 +82,15 @@ function newCollection ( objName ) {
 	*/
 
 	function myIterator ( ) {
-		let nextIndex = THE_CONST.notFound;
+		let index = THE_CONST.notFound;
 		return {
-			get value ( ) { return nextIndex < myArray.length ? myArray [ nextIndex ] : null; },
-			get done ( ) { return ++ nextIndex >= myArray.length; },
-			get first ( ) { return THE_CONST.zero === nextIndex; },
-			get last ( ) { return nextIndex >= myArray.length - THE_CONST.number1; },
-			get index ( ) { return nextIndex; }
+			get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
+			get previous ( ) { return THE_CONST.zero >= index ? null : myArray [ index - THE_CONST.number1 ]; },
+			get next ( ) { return index < myArray.length - THE_CONST.number1 ? myArray [ index + THE_CONST.number1 ] : null; },
+			get done ( ) { return ++ index >= myArray.length; },
+			get first ( ) { return THE_CONST.zero === index; },
+			get last ( ) { return index >= myArray.length - THE_CONST.number1; },
+			get index ( ) { return index; }
 		};
 	}
 

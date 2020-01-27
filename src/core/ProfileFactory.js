@@ -65,7 +65,6 @@ function newProfileFactory ( ) {
 
 	let myAscent = THE_CONST.zero;
 	let myDescent = THE_CONST.zero;
-	let myAscentScale = THE_CONST.number1;
 
 	let myGeometry = newGeometry ( );
 	let myEventDispatcher = newEventDispatcher ( );
@@ -76,6 +75,7 @@ function newProfileFactory ( ) {
 	const SVG_WIDTH = 1000;
 	const SVG_V_DELTA_TEXT = 30;
 	const SVG_H_DELTA_TEXT = 10;
+	const MAX_PENTE = 0.3;
 
 	const DIST_BTW_POINTS = 50;
 	const ADDED_TMP_POINTS = 3;
@@ -89,6 +89,7 @@ function newProfileFactory ( ) {
 	*/
 
 	function myOnSvgClick ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
 		let clientRect = mySvg.getBoundingClientRect ( );
 		let routeDist =
 		(
@@ -117,6 +118,7 @@ function newProfileFactory ( ) {
 	*/
 
 	function myOnSvgContextMenu ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
 		let clientRect = mySvg.getBoundingClientRect ( );
 		let routeDist =
 		(
@@ -148,6 +150,7 @@ function newProfileFactory ( ) {
 	*/
 
 	function myOnSvgMouseMove ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
 		let clientRect = mySvg.getBoundingClientRect ( );
 		let routeDist =
 		(
@@ -258,7 +261,27 @@ function newProfileFactory ( ) {
 	}
 
 	/*
-	--- myCreateProfilePolyline function -----------------------------------------------------------------------------------
+	--- myCreateFramePolylines function -------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateFramePolylines ( ) {
+		let yPolyline = ( SVG_MARGIN + ( SVG_HEIGHT / THE_CONST.number2 ) ).toFixed ( THE_CONST.zero );
+		let pointsAttribute = SVG_MARGIN.toFixed ( THE_CONST.zero ) + ',' +
+		yPolyline + ' ' +
+		( SVG_MARGIN + SVG_WIDTH ).toFixed ( THE_CONST.zero ) + ' ' +
+		yPolyline;
+		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+		polyline.setAttributeNS ( null, 'points', pointsAttribute );
+		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
+		mySvg.appendChild ( polyline );
+	}
+
+	/*
+	--- myCreateProfilePolyline function ------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -289,24 +312,44 @@ function newProfileFactory ( ) {
 	*/
 
 	function myCreateAscentPolyline ( ) {
-		let pointsAttribute = '';
-		let distance = THE_CONST.zero;
-		let ascent = THE_CONST.zero;
-		let previousElev = myRoute.itinerary.itineraryPoints.first.elev;
+
+		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let totalDistance = THE_CONST.zero;
+		let maxPente = THE_CONST.zero;
+		let minPente = THE_CONST.zero;
+		let polylinePoints = [];
+		while ( ! itineraryPointsIterator.done ) {
+			let pente = THE_CONST.zero;
+			let nextItineraryPoint = itineraryPointsIterator.next;
+			if ( nextItineraryPoint && THE_CONST.zero !== itineraryPointsIterator.value.distance ) {
+				pente = ( nextItineraryPoint.elev - itineraryPointsIterator.value.elev ) /
+					itineraryPointsIterator.value.distance;
+				pente = pente > MAX_PENTE ? MAX_PENTE : pente;
+				pente = pente < -MAX_PENTE ? -MAX_PENTE : pente;
+			}
+			maxPente = Math.max ( maxPente, pente );
+			minPente = Math.min ( minPente, pente );
+			polylinePoints.push ( [ totalDistance, pente ] );
+			totalDistance += itineraryPointsIterator.value.distance;
+		}
+		if ( THE_CONST.zero === maxPente && THE_CONST.zero === minPente ) {
+			return;
+		}
+
+		let ascentScale = SVG_HEIGHT / ( Math.max ( maxPente, -minPente ) * 2 );
 		let xPolyline = THE_CONST.zero;
 		let yPolyline = THE_CONST.zero;
-		myAscentScale = SVG_HEIGHT / myAscent;
-		myRoute.itinerary.itineraryPoints.forEach (
-			itineraryPoint => {
-				let deltaAscent = itineraryPoint.elev - previousElev;
-				if ( THE_CONST.zero < deltaAscent ) {
-					ascent += deltaAscent;
-				}
-				xPolyline = ( SVG_MARGIN + ( myHScale * distance ) ).toFixed ( THE_CONST.zero );
-				yPolyline = ( SVG_MARGIN + SVG_HEIGHT - ( myAscentScale * ascent ) ).toFixed ( THE_CONST.zero );
+		let pointsAttribute = '';
+		polylinePoints.forEach (
+			polylinePoint => {
+				xPolyline = ( SVG_MARGIN + ( myHScale * polylinePoint [ THE_CONST.zero ] ) ).toFixed ( THE_CONST.zero );
+				yPolyline =
+					(
+						SVG_MARGIN +
+						( SVG_HEIGHT / THE_CONST.number2 ) -
+						( ascentScale * polylinePoint [ THE_CONST.number1 ] )
+					).toFixed ( THE_CONST.zero );
 				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
-				distance += itineraryPoint.distance;
-				previousElev = itineraryPoint.elev;
 			}
 		);
 		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
@@ -452,12 +495,7 @@ function newProfileFactory ( ) {
 				let deltaDist = itineraryPointsTotalDistance - previousIronPoint.distance;
 				let ascentFactor = ( nextIronPoint.elev - previousIronPoint.elev ) /
 					( nextIronPoint.distance - previousIronPoint.distance );
-
-				// console.log ( itineraryPointsIterator.value.elev );
 				itineraryPointsIterator.value.elev = previousIronPoint.elev + ( deltaDist * ascentFactor );
-
-				// console.log ( itineraryPointsIterator.value.elev );
-				// console.log ( '---' );
 			}
 			itineraryPointsTotalDistance += itineraryPointsIterator.value.distance;
 		}
@@ -489,7 +527,6 @@ function newProfileFactory ( ) {
 		myMinElev = Number.MAX_VALUE;
 		myVScale = THE_CONST.number1;
 		myHScale = THE_CONST.number1;
-		myAscentScale = THE_CONST.number1;
 		myDeltaElev = THE_CONST.zero;
 
 		myAscent = THE_CONST.zero;
@@ -526,6 +563,7 @@ function newProfileFactory ( ) {
 		myCreateSvg ( );
 		myCreateProfilePolyline ( );
 		myCreateAscentPolyline ( );
+		myCreateFramePolylines ( );
 	}
 
 	/*

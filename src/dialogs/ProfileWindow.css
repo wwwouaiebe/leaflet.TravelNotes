@@ -15,7 +15,8 @@
 	stroke : blue;
 	stroke-width : 3;
 }
-.TravelNotes-SvgProfile-markerPolyline
+.TravelNotes-SvgProfile-markerPolyline,
+.TravelNotes-SvgProfile-framePolyline
 {
 	fill : none;
 	stroke : black;
