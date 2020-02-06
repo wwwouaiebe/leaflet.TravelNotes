@@ -71,6 +71,8 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theIndexedDb } from '../roadbook/IndexedDB.js';
+import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -246,6 +248,15 @@ function newTravelNotes ( ) {
 			( ) => newRoadbookUpdate ( ),
 			false
 		);
+		document.addEventListener (
+			'profileclosed',
+			profileClosedEvent => {
+				if ( profileClosedEvent.data ) {
+					theProfileWindowsManager.onProfileClosed ( profileClosedEvent.data.objId );
+				}
+			},
+			false
+		);
 	}
 
 	/*
@@ -298,12 +309,16 @@ function newTravelNotes ( ) {
 		// unload and beforeunload must only be added when not readonly map
 		window.addEventListener (
 			'unload',
-			( ) => localStorage.removeItem ( theTravelNotesData.UUID + '-TravelNotesHTML' )
+			( ) => {
+
+				localStorage.removeItem ( theTravelNotesData.UUID );
+			}
 		);
 
 		window.addEventListener (
 			'beforeunload',
 			beforeUnloadEvent => {
+				theIndexedDb.closeDb ( theTravelNotesData.UUID );
 				beforeUnloadEvent.returnValue = 'x';
 				return 'x';
 			}

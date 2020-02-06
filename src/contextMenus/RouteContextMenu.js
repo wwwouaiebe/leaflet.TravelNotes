@@ -40,6 +40,8 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newZoomer } from '../core/Zoomer.js';
+import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -132,7 +134,12 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			{
 				context : theRouteEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - View the elevation' ),
-				action : theRouteEditor.showProfile,
+				action :
+					newDataSearchEngine ( ).getRoute ( myRouteObjId ).itinerary.hasProfile
+						?
+						theProfileWindowsManager.showProfile
+						:
+						null,
 				param : myRouteObjId
 			},
 			{

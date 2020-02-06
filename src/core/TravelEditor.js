@@ -56,6 +56,7 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
+import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -136,9 +137,9 @@ function newTravelEditor ( ) {
 		theTravelNotesData.editedRouteObjId = initialRoute.objId;
 		theTravelNotesData.travel.editedRoute.hidden = false;
 		initialRoute.hidden = false;
-		theRouteEditor.updateProfile (
+		theProfileWindowsManager.updateProfile (
 			theTravelNotesData.editedRouteObjId,
-			theTravelNotesData.travel.editedRoute.objId
+			theTravelNotesData.travel.editedRoute
 		);
 		theRouteEditor.chainRoutes ( );
 		myEventDispatcher.dispatch (
@@ -222,7 +223,7 @@ function newTravelEditor ( ) {
 		);
 
 		theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
-		theRouteEditor.updateProfile ( routeToDeleteObjId );
+		theProfileWindowsManager.deleteProfile ( routeToDeleteObjId );
 		theRouteEditor.chainRoutes ( );
 
 		newRoadbookUpdate ( );

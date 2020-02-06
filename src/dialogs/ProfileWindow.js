@@ -30,10 +30,13 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newProfileFactory } from '../core/ProfileFactory.js';
+import { newObjId } from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { newGeometry } from '../util/Geometry.js';
+import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newUtilities } from '../util/Utilities.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -45,33 +48,229 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newProfileWindow ( ) {
 
+	let myLatLngObjId = newObjId ( );
+
+	let mySvg = null;
+	let myMarker = null;
+	let myElevText = null;
+	let myAscentText = null;
+	let myDistanceText = null;
+
 	let myProfileWindow = null;
 	let myAscentDiv = null;
 	let myRoute = null;
-	let myProfileFactory = newProfileFactory ( );
+
+	let myGeometry = newGeometry ( );
+	let myEventDispatcher = newEventDispatcher ( );
+	let myUtilities = newUtilities ( );
 
 	/*
-	--- myCreateSvgProfile function -----------------------------------------------------------------------------------
+	--- myOnSvgClick function -----------------------------------------------------------------------------------------
+
+	Event listener for the svg
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateProfile ( ) {
+	function myOnSvgClick ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		let clientRect = mySvg.getBoundingClientRect ( );
+		let routeDist =
+		(
+			( mouseEvent.clientX - clientRect.x -
+				(
+					( THE_CONST.svgProfile.margin /
+					( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width ) ) * clientRect.width )
+			) /
+			(
+				( THE_CONST.svgProfile.width /
+				( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width ) ) * clientRect.width )
+		) * myRoute.distance;
+		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		if ( latLngElevOnRoute ) {
+			myEventDispatcher.dispatch (
+				'zoomto',
+				{
+					latLng : [ latLngElevOnRoute [ THE_CONST.zero ], latLngElevOnRoute [ THE_CONST.number1 ] ]
+				}
+			);
+		}
+	}
 
-		myProfileFactory.createProfile ( myProfileWindow.data );
-		myProfileWindow.header.innerHTML = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
-		myProfileWindow.content.appendChild ( myProfileFactory.svg );
-		myAscentDiv = newHTMLElementsFactory ( ).create (
-			'div',
-			{
-				className : 'TravelNotes-ProfileWindow-Ascent'
+	/*
+	--- myOnSvgContextMenu function -----------------------------------------------------------------------------------
+
+	Event listener for the svg
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSvgContextMenu ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		let clientRect = mySvg.getBoundingClientRect ( );
+		let routeDist =
+		(
+			( mouseEvent.clientX - clientRect.x -
+				(
+					( THE_CONST.svgProfile.margin /
+						( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width )
+					) * clientRect.width )
+			) /
+			(
+				( THE_CONST.svgProfile.width /
+					( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width )
+				) * clientRect.width )
+		) * myRoute.distance;
+		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		if ( latLngElevOnRoute ) {
+			theNoteEditor.newRouteNote (
+				myRoute.objId,
+				{
+					latlng : {
+						lat : latLngElevOnRoute [ THE_CONST.zero ],
+						lng : latLngElevOnRoute [ THE_CONST.number1 ]
+					}
+				}
+			);
+		}
+	}
+
+	/*
+	--- myOnSvgMouseMove function -------------------------------------------------------------------------------------
+
+	Event listener for the svg
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSvgMouseMove ( mouseEvent ) {
+		mouseEvent.stopPropagation ( );
+		let clientRect = mySvg.getBoundingClientRect ( );
+		let routeDist =
+		(
+			( mouseEvent.clientX - clientRect.x -
+				(
+					( THE_CONST.svgProfile.margin /
+					( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width )
+					) * clientRect.width )
+			) /
+			(
+				( THE_CONST.svgProfile.width /
+				( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width )
+				) * clientRect.width )
+		) * myRoute.distance;
+		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		if ( latLngElevOnRoute ) {
+
+			// itinerary point marker on the map
+			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+			myEventDispatcher.dispatch (
+				'additinerarypointmarker',
+				{
+					objId : myLatLngObjId,
+					latLng : [ latLngElevOnRoute [ THE_CONST.zero ], latLngElevOnRoute [ THE_CONST.number1 ] ]
+				}
+			);
+
+			// Line and text on svg
+			if ( myMarker ) {
+				mySvg.removeChild ( myMarker );
+				mySvg.removeChild ( myDistanceText );
+				mySvg.removeChild ( myElevText );
+				mySvg.removeChild ( myAscentText );
 			}
-		);
-		myAscentDiv.innerHTML = theTranslator.getText (
-			'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.',
-			{ ascent : myProfileFactory.ascent, descent : myProfileFactory.descent }
-		);
-		myProfileWindow.content.appendChild ( myAscentDiv );
+			let markerX =
+				( ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) + THE_CONST.svgProfile.width ) *
+				( mouseEvent.clientX - clientRect.x ) / clientRect.width;
+			let markerY = THE_CONST.svgProfile.margin + THE_CONST.svgProfile.height;
+
+			// line
+			myMarker = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			myMarker.setAttributeNS (
+				null,
+				'points',
+				String ( markerX ) + ',' + THE_CONST.svgProfile.margin + ' ' + markerX + ',' + markerY
+			);
+			myMarker.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-markerPolyline' );
+			mySvg.appendChild ( myMarker );
+
+			// texts
+			let textAnchor = routeDist > myRoute.distance / THE_CONST.number2 ? 'end' : 'start';
+			let deltaMarkerX =
+				routeDist > myRoute.distance / THE_CONST.number2
+					?
+					-THE_CONST.svgProfile.xDeltaText
+					:
+					THE_CONST.svgProfile.xDeltaText;
+
+			// distance
+			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myDistanceText.appendChild (
+				document.createTextNode ( myUtilities.formatDistance ( routeDist ) )
+			);
+			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
+			myDistanceText.setAttributeNS ( null, 'y', THE_CONST.svgProfile.margin + THE_CONST.svgProfile.yDeltaText );
+			myDistanceText.setAttributeNS ( null, 'text-anchor', textAnchor );
+			mySvg.appendChild ( myDistanceText );
+
+			// elevation
+			myElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myElevText.appendChild (
+				document.createTextNode (
+					'Alt. ' + latLngElevOnRoute [ THE_CONST.number2 ].toFixed ( THE_CONST.zero ) + ' m.'
+				)
+			);
+			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myElevText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
+			myElevText.setAttributeNS (
+				null,
+				'y',
+				THE_CONST.svgProfile.margin + ( THE_CONST.svgProfile.yDeltaText * THE_CONST.number2 )
+			);
+			myElevText.setAttributeNS ( null, 'text-anchor', textAnchor );
+			mySvg.appendChild ( myElevText );
+
+			// pente
+			myAscentText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myAscentText.appendChild (
+				document.createTextNode (
+					'Pente ' + latLngElevOnRoute [ THE_CONST.number3 ].toFixed ( THE_CONST.zero ) + ' % '
+				)
+			);
+			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myAscentText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
+			myAscentText.setAttributeNS (
+				null,
+				'y',
+				THE_CONST.svgProfile.margin + ( THE_CONST.svgProfile.yDeltaText * THE_CONST.number3 )
+			);
+			myAscentText.setAttributeNS ( null, 'text-anchor', textAnchor );
+			mySvg.appendChild ( myAscentText );
+		}
+	}
+
+	/*
+	--- myClean function ----------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myClean ( ) {
+		if ( mySvg ) {
+			mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
+			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
+			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
+			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+			myProfileWindow.content.removeChild ( myAscentDiv );
+			myProfileWindow.content.removeChild ( mySvg );
+		}
+		mySvg = null;
+		myMarker = null;
+		myAscentText = null;
+		myDistanceText = null;
+		myElevText = null;
+		myAscentDiv = null;
 	}
 
 	/*
@@ -81,21 +280,14 @@ function newProfileWindow ( ) {
 	*/
 
 	function myOnClose ( ) {
-		myProfileFactory.clean ( );
-	}
+		myClean ( );
+		myEventDispatcher.dispatch (
+			'profileclosed',
+			{
+				objId : myRoute.objId
+			}
+		);
 
-	/*
-	--- myOnShow function ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnShow ( ) {
-		myRoute = newDataSearchEngine ( ).getRoute ( myProfileWindow.data );
-		if ( ! myRoute ) {
-			return;
-		}
-		myCreateProfile ( );
 	}
 
 	/*
@@ -104,20 +296,33 @@ function newProfileWindow ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myUpdate ( routeObjId ) {
-		myProfileWindow.data = routeObjId;
-		myRoute =	newDataSearchEngine ( ).getRoute ( myProfileWindow.data );
-		if ( ! myRoute ) {
-			return;
-		}
-		if ( THE_CONST.zero === myRoute.itinerary.itineraryPoints.length ) {
-			myProfileWindow.close ( );
-			return;
-		}
+	function myUpdate ( svg, route ) {
+		myClean ( );
+		myRoute = route;
+		mySvg = svg;
 
-		myProfileWindow.content.removeChild ( myAscentDiv );
-		myProfileWindow.content.removeChild ( myProfileFactory.svg );
-		myCreateProfile ( );
+		myProfileWindow.header.innerHTML = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
+
+		mySvg.addEventListener ( 'click', myOnSvgClick,	false );
+		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
+		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
+
+		myProfileWindow.content.appendChild ( mySvg );
+
+		myAscentDiv = newHTMLElementsFactory ( ).create (
+			'div',
+			{
+				className : 'TravelNotes-ProfileWindow-Ascent',
+				innerHTML : theTranslator.getText (
+					'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.',
+					{
+						ascent : myRoute.itinerary.ascent.toFixed ( THE_CONST.zero ),
+						descent : myRoute.itinerary.descent.toFixed ( THE_CONST.zero )
+					}
+				)
+			},
+			myProfileWindow.content
+		);
 	}
 
 	/*
@@ -127,8 +332,9 @@ function newProfileWindow ( ) {
 	*/
 
 	myProfileWindow = newFloatWindow ( );
-	myProfileWindow.onShow = myOnShow;
+	myProfileWindow.createWindow ( );
 	myProfileWindow.onClose = myOnClose;
+
 	myProfileWindow.update = myUpdate;
 
 	return Object.seal ( myProfileWindow );

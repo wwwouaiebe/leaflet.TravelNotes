@@ -29,12 +29,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newGeometry } from '../util/Geometry.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
-import { newUtilities } from '../util/Utilities.js';
-import { newObjId } from '../data/ObjId.js';
+import { theConfig } from '../data/Config.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -47,237 +42,203 @@ import { THE_CONST } from '../util/Constants.js';
 function newProfileFactory ( ) {
 
 	let mySvg = null;
+	let myVScale = THE_CONST.number1;
+	let myHScale = THE_CONST.number1;
 
-	let myMarker = null;
-	let myElevText = null;
-	let myAscentText = null;
-	let myDistanceText = null;
-
-	let myLatLngObjId = newObjId ( );
+	let myMinElev = Number.MAX_VALUE;
+	let myMaxElev = THE_CONST.zero;
+	let myDeltaElev = THE_CONST.zero;
 
 	let myRoute = null;
 
-	let myMinElev = THE_CONST.zero;
-	let myMaxElev = THE_CONST.zero;
-	let myVScale = THE_CONST.number1;
-	let myHScale = THE_CONST.number1;
-	let myDeltaElev = THE_CONST.zero;
-
-	let myAscent = THE_CONST.zero;
-	let myDescent = THE_CONST.zero;
-
-	let myGeometry = newGeometry ( );
-	let myEventDispatcher = newEventDispatcher ( );
-	let myUtilities = newUtilities ( );
-
-	const SVG_MARGIN = 50;
-	const SVG_HEIGHT = 500;
-	const SVG_WIDTH = 1000;
-	const SVG_V_DELTA_TEXT = 30;
-	const SVG_H_DELTA_TEXT = 10;
-	const MAX_PENTE = 0.3;
-
-	const DIST_BTW_POINTS = 50;
-	const ADDED_TMP_POINTS = 3;
+	let mySmoothDistance = THE_CONST.zero;
+	let mySmoothCoefficient = theConfig.route.elev.smoothCoefficient;
+	let mySmoothPoints = theConfig.route.elev.smoothPoints;
 
 	/*
-	--- myOnSvgClick function -----------------------------------------------------------------------------------------
-
-	Event listener for the svg
+	--- createTmpPoints function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnSvgClick ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				( ( SVG_MARGIN / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-			) /
-			( ( SVG_WIDTH / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
-		if ( latLngElevOnRoute ) {
-			myEventDispatcher.dispatch (
-				'zoomto',
-				{
-					latLng : [ latLngElevOnRoute [ THE_CONST.zero ], latLngElevOnRoute [ THE_CONST.number1 ] ]
-				}
-			);
-		}
-	}
+	function createTmpPoints ( ) {
 
-	/*
-	--- myOnSvgContextMenu function -----------------------------------------------------------------------------------
+		console.log ( 'myRoute.object' );
+		console.log ( myRoute.object );
 
-	Event listener for the svg
+		let tmpPointsDistance = 0;
+		let tmpPointElev = 0;
+		let tmpPoints = [];
+		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let itineraryPointsDistance = 0;
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		// going to the first itinerary point
+		let done = itineraryPointsIterator.done;
 
-	function myOnSvgContextMenu ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				( ( SVG_MARGIN / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-			) /
-			( ( SVG_WIDTH / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
-		if ( latLngElevOnRoute ) {
-			theNoteEditor.newRouteNote (
-				myRoute.objId,
-				{
-					latlng : {
-						lat : latLngElevOnRoute [ THE_CONST.zero ],
-						lng : latLngElevOnRoute [ THE_CONST.number1 ]
-					}
-				}
-			);
-		}
-	}
+		// adding the first itinerary point to the tmpPoints
+		tmpPoints.push ( { distance : tmpPointsDistance, elev : itineraryPointsIterator.value.elev } );
 
-	/*
-	--- myOnSvgMouseMove function -------------------------------------------------------------------------------------
+		// going to the second itinerary point
+		itineraryPointsDistance += itineraryPointsIterator.value.distance;
+		done = itineraryPointsIterator.done;
 
-	Event listener for the svg
+		// loop on next itinerary points
+		while ( ! done ) {
+			tmpPointsDistance += mySmoothDistance;
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSvgMouseMove ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				( ( SVG_MARGIN / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-			) /
-			( ( SVG_WIDTH / ( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) ) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
-		if ( latLngElevOnRoute ) {
-
-			// itinerary point marker on the map
-			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
-			myEventDispatcher.dispatch (
-				'additinerarypointmarker',
-				{
-					objId : myLatLngObjId,
-					latLng : [ latLngElevOnRoute [ THE_CONST.zero ], latLngElevOnRoute [ THE_CONST.number1 ] ]
-				}
-			);
-
-			// Line and text on svg
-			if ( myMarker ) {
-				mySvg.removeChild ( myMarker );
-				mySvg.removeChild ( myDistanceText );
-				mySvg.removeChild ( myElevText );
-				mySvg.removeChild ( myAscentText );
+			// loop on the itinerary points till we pass the itinerary point distance
+			while ( tmpPointsDistance >= itineraryPointsDistance && ! done ) {
+				itineraryPointsDistance += itineraryPointsIterator.value.distance;
+				done = itineraryPointsIterator.done;
 			}
-			let markerX =
-				( ( THE_CONST.number2 * SVG_MARGIN ) + SVG_WIDTH ) *
-				( mouseEvent.clientX - clientRect.x ) / clientRect.width;
-			let markerY = SVG_MARGIN + SVG_HEIGHT;
+			if ( ! done ) {
 
-			// line
-			myMarker = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
-			myMarker.setAttributeNS (
-				null,
-				'points',
-				String ( markerX ) + ',' + SVG_MARGIN + ' ' + markerX + ',' + markerY
-			);
-			myMarker.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-markerPolyline' );
-			mySvg.appendChild ( myMarker );
-
-			// texts
-			let textAnchor = routeDist > myRoute.distance / THE_CONST.number2 ? 'end' : 'start';
-			let deltaMarkerX = routeDist > myRoute.distance / THE_CONST.number2 ? -SVG_H_DELTA_TEXT : SVG_H_DELTA_TEXT;
-
-			// distance
-			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			myDistanceText.appendChild (
-				document.createTextNode ( myUtilities.formatDistance ( routeDist ) )
-			);
-			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
-			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myDistanceText.setAttributeNS ( null, 'y', SVG_MARGIN + SVG_V_DELTA_TEXT );
-			myDistanceText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myDistanceText );
-
-			// elevation
-			myElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			myElevText.appendChild (
-				document.createTextNode (
-					'Alt. ' + latLngElevOnRoute [ THE_CONST.number2 ].toFixed ( THE_CONST.zero ) + ' m.'
-				)
-			);
-			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
-			myElevText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myElevText.setAttributeNS ( null, 'y', SVG_MARGIN + ( SVG_V_DELTA_TEXT * THE_CONST.number2 ) );
-			myElevText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myElevText );
-
-			// pente
-			myAscentText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			myAscentText.appendChild (
-				document.createTextNode (
-					'Pente ' + latLngElevOnRoute [ THE_CONST.number3 ].toFixed ( THE_CONST.zero ) + ' % '
-				)
-			);
-			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
-			myAscentText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myAscentText.setAttributeNS ( null, 'y', SVG_MARGIN + ( SVG_V_DELTA_TEXT * THE_CONST.number3 ) );
-			myAscentText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myAscentText );
+				// adding tmpPoint
+				let ascentFactor = ( itineraryPointsIterator.value.elev - itineraryPointsIterator.previous.elev ) /
+					itineraryPointsIterator.previous.distance;
+				tmpPointElev =
+					itineraryPointsIterator.value.elev -
+					( ( itineraryPointsDistance - tmpPointsDistance ) * ascentFactor );
+				tmpPoints.push ( { distance : tmpPointsDistance, elev : tmpPointElev } );
+			}
 		}
+
+		// last itinerary point is added
+		tmpPoints.push ( { distance : itineraryPointsDistance, elev : myRoute.itinerary.itineraryPoints.last.elev } );
+
+		console.log ( 'tmpPoints' );
+		console.log ( tmpPoints );
+
+		return tmpPoints;
 	}
 
 	/*
-	--- myCreateSvg function ------------------------------------------------------------------------------------------
-
-	This function creates the SVG
+	--- createSmoothPoints function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateSvg ( ) {
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
-		mySvg.setAttributeNS (
-			null,
-			'viewBox',
-			'0 0 ' + ( SVG_WIDTH + ( THE_CONST.number2 * SVG_MARGIN ) ) +
-			' ' + ( SVG_HEIGHT + ( THE_CONST.number2 * SVG_MARGIN ) )
+	function createSmoothPoints ( ) {
+		let tmpPoints = createTmpPoints ( );
+		let smoothPoints = new Map;
+
+		let deltaElev = ( tmpPoints [ mySmoothPoints ].elev - tmpPoints [ THE_CONST.zero ].elev ) / mySmoothPoints;
+
+		let pointCounter = THE_CONST.zero;
+
+		// Computing the first elevs
+		for ( pointCounter = THE_CONST.zero; pointCounter < mySmoothPoints; pointCounter ++ ) {
+			smoothPoints.set (
+				pointCounter * mySmoothDistance,
+				{
+					distance : pointCounter * mySmoothDistance,
+					elev : tmpPoints [ THE_CONST.zero ].elev + ( deltaElev * pointCounter )
+				}
+			);
+		}
+
+		// Computing next elevs
+		for ( pointCounter = mySmoothPoints; pointCounter < tmpPoints.length - mySmoothPoints; pointCounter ++ ) {
+			let elevSum = THE_CONST.zero;
+			for (
+				let pointNumber = pointCounter - mySmoothPoints;
+				pointCounter + mySmoothPoints >= pointNumber;
+				pointNumber ++
+			) {
+				elevSum += tmpPoints [ pointNumber ].elev;
+			}
+			smoothPoints.set (
+				tmpPoints [ pointCounter ].distance,
+				{
+					distance : tmpPoints [ pointCounter ].distance,
+					elev : elevSum / ( ( mySmoothPoints * THE_CONST.number2 ) + THE_CONST.number1 )
+				}
+			);
+		}
+
+		pointCounter --;
+
+		deltaElev = mySmoothDistance * (
+			tmpPoints [ tmpPoints.length - THE_CONST.number1 ].elev -
+				tmpPoints [ tmpPoints.length - THE_CONST.number1 - mySmoothPoints ].elev
+		) /
+			(
+				tmpPoints [ tmpPoints.length - THE_CONST.number1 ].distance -
+				tmpPoints [ tmpPoints.length - THE_CONST.number1 - mySmoothPoints ].distance
+			);
+
+		// Computing the last elevs
+		smoothPoints.set (
+			tmpPoints [ pointCounter ].distance + mySmoothDistance,
+			{
+				distance : tmpPoints [ pointCounter ].distance + mySmoothDistance,
+				elev : tmpPoints [ pointCounter ].elev + deltaElev
+			}
 		);
-		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
+		smoothPoints.set (
+			tmpPoints [ pointCounter ].distance + ( mySmoothDistance * THE_CONST.number2 ),
+			{
+				distance : tmpPoints [ pointCounter ].distance + ( mySmoothDistance * THE_CONST.number2 ),
+				elev : tmpPoints [ pointCounter ].elev + ( deltaElev * THE_CONST.number2 )
+			}
+		);
 
-		mySvg.addEventListener ( 'click', myOnSvgClick,	false );
-		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
-		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
+		console.log ( 'smoothPoints' );
+		console.log ( smoothPoints );
+
+		return smoothPoints;
 	}
 
 	/*
-	--- myCreateFramePolylines function -------------------------------------------------------------------------------
-
-	This function ...
+	--- mySmooth function --------------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateFramePolylines ( ) {
-		let yPolyline = ( SVG_MARGIN + ( SVG_HEIGHT / THE_CONST.number2 ) ).toFixed ( THE_CONST.zero );
-		let pointsAttribute = SVG_MARGIN.toFixed ( THE_CONST.zero ) + ',' +
-		yPolyline + ' ' +
-		( SVG_MARGIN + SVG_WIDTH ).toFixed ( THE_CONST.zero ) + ' ' +
-		yPolyline;
-		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
-		polyline.setAttributeNS ( null, 'points', pointsAttribute );
-		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
-		mySvg.appendChild ( polyline );
+	function mySmooth ( route ) {
+
+		myRoute = route;
+		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let distance = THE_CONST.zero;
+		let elev = THE_CONST.zero;
+		while ( ! itineraryPointsIterator.done ) {
+			distance += itineraryPointsIterator.value.distance;
+			elev +=
+				itineraryPointsIterator.next
+					?
+					Math.abs ( itineraryPointsIterator.value.elev - itineraryPointsIterator.next.elev )
+					:
+					THE_CONST.zero;
+
+		}
+
+		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * THE_CONST.number10;
+
+		console.log ( 'mySmoothDistance' );
+		console.log ( mySmoothDistance );
+
+		let smoothPoints = createSmoothPoints ( );
+
+		itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+
+		// we skip the first itinerary point
+		itineraryPointsIterator.done;
+		let itineraryPointsTotalDistance = itineraryPointsIterator.value.distance;
+
+		// loop on the itinerary point to push the corrected elev
+		while ( ! itineraryPointsIterator.done ) {
+			let previousIronPoint = smoothPoints.get (
+				Math.floor ( itineraryPointsTotalDistance / mySmoothDistance ) * mySmoothDistance );
+			let nextIronPoint = smoothPoints.get (
+				Math.ceil ( itineraryPointsTotalDistance / mySmoothDistance ) * mySmoothDistance );
+			if ( previousIronPoint && nextIronPoint ) {
+				let deltaDist = itineraryPointsTotalDistance - previousIronPoint.distance;
+				let ascentFactor = ( nextIronPoint.elev - previousIronPoint.elev ) /
+					( nextIronPoint.distance - previousIronPoint.distance );
+				itineraryPointsIterator.value.elev = previousIronPoint.elev + ( deltaDist * ascentFactor );
+			}
+			itineraryPointsTotalDistance += itineraryPointsIterator.value.distance;
+		}
 	}
 
 	/*
@@ -293,8 +254,13 @@ function newProfileFactory ( ) {
 		let yPolyline = THE_CONST.zero;
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				xPolyline = ( SVG_MARGIN + ( myHScale * distance ) ).toFixed ( THE_CONST.zero );
-				yPolyline = ( SVG_MARGIN + ( myVScale * ( myMaxElev - itineraryPoint.elev ) ) ).toFixed ( THE_CONST.zero );
+				xPolyline = ( THE_CONST.svgProfile.margin + ( myHScale * distance ) ).toFixed ( THE_CONST.zero );
+				yPolyline =
+					(
+						THE_CONST.svgProfile.margin +
+						( myVScale * ( myMaxElev - itineraryPoint.elev ) )
+					)
+						.toFixed ( THE_CONST.zero );
 				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
 				distance += itineraryPoint.distance;
 			}
@@ -306,264 +272,74 @@ function newProfileFactory ( ) {
 	}
 
 	/*
-	--- myCreateAscentPolyline function -------------------------------------------------------------------------------
+	--- myCreateFramePolylines function -------------------------------------------------------------------------------
+
+	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateAscentPolyline ( ) {
-
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
-		let totalDistance = THE_CONST.zero;
-		let maxPente = THE_CONST.zero;
-		let minPente = THE_CONST.zero;
-		let polylinePoints = [];
-		while ( ! itineraryPointsIterator.done ) {
-			let pente = THE_CONST.zero;
-			let nextItineraryPoint = itineraryPointsIterator.next;
-			if ( nextItineraryPoint && THE_CONST.zero !== itineraryPointsIterator.value.distance ) {
-				pente = ( nextItineraryPoint.elev - itineraryPointsIterator.value.elev ) /
-					itineraryPointsIterator.value.distance;
-				pente = pente > MAX_PENTE ? MAX_PENTE : pente;
-				pente = pente < -MAX_PENTE ? -MAX_PENTE : pente;
-			}
-			maxPente = Math.max ( maxPente, pente );
-			minPente = Math.min ( minPente, pente );
-			polylinePoints.push ( [ totalDistance, pente ] );
-			totalDistance += itineraryPointsIterator.value.distance;
-		}
-		if ( THE_CONST.zero === maxPente && THE_CONST.zero === minPente ) {
-			return;
-		}
-
-		let ascentScale = SVG_HEIGHT / ( Math.max ( maxPente, -minPente ) * 2 );
-		let xPolyline = THE_CONST.zero;
-		let yPolyline = THE_CONST.zero;
-		let pointsAttribute = '';
-		polylinePoints.forEach (
-			polylinePoint => {
-				xPolyline = ( SVG_MARGIN + ( myHScale * polylinePoint [ THE_CONST.zero ] ) ).toFixed ( THE_CONST.zero );
-				yPolyline =
-					(
-						SVG_MARGIN +
-						( SVG_HEIGHT / THE_CONST.number2 ) -
-						( ascentScale * polylinePoint [ THE_CONST.number1 ] )
-					).toFixed ( THE_CONST.zero );
-				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
-			}
-		);
+	/*
+	function myCreateFramePolylines ( ) {
+		let yPolyline =
+			( THE_CONST.svgProfile.margin + ( THE_CONST.svgProfile.height / THE_CONST.number2 ) ).toFixed ( THE_CONST.zero );
+		let pointsAttribute = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero ) + ',' +
+		yPolyline + ' ' +
+		( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.width ).toFixed ( THE_CONST.zero ) + ' ' +
+		yPolyline;
 		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
 		polyline.setAttributeNS ( null, 'points', pointsAttribute );
-		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-ascentPolyline' );
+		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
 		mySvg.appendChild ( polyline );
 	}
+	*/
 
 	/*
-	--- createTmpPoints function --------------------------------------------------------------------------------------
+	--- myCreateSvg function ------------------------------------------------------------------------------------------
+
+	This function creates the SVG
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function createTmpPoints ( ) {
-		let tmpPointsDistance = 0;
-		let tmpPointElev = 0;
-		let tmpPoints = [];
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
-
-		// go to the first itinerary point
-		let done = itineraryPointsIterator.done;
-		let previousItineraryPoint = itineraryPointsIterator.value;
-		let previousItineraryPointTotalDistance = 0;
-		let currentItineraryPointTotalDistance = itineraryPointsIterator.value.distance;
-
-		// go to the second itinerary point
-		done = itineraryPointsIterator.done;
-
-		// adding  some (depending of ADDED_TMP_POINTS) points at the beginning of tmpPoints
-		let ascentFactor = ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) /
-			previousItineraryPoint.distance;
-		for ( let pointCounter = ADDED_TMP_POINTS; pointCounter > THE_CONST.zero; pointCounter -- ) {
-			tmpPoints.push (
-				{
-					distance : -( DIST_BTW_POINTS * pointCounter ),
-					elev : previousItineraryPoint.elev -
-						( DIST_BTW_POINTS * pointCounter * ascentFactor )
-				}
-			);
-		}
-
-		// adding the first itinerary point to the tmpPoints
-		tmpPoints.push ( { distance : tmpPointsDistance, elev : previousItineraryPoint.elev } );
-
-		// loop on next itinerary points
-		while ( ! done ) {
-			tmpPointsDistance += DIST_BTW_POINTS;
-
-			// loop on the itinerary points till we pass the itinerary point distance
-			while ( tmpPointsDistance >= currentItineraryPointTotalDistance && ! done ) {
-				previousItineraryPointTotalDistance += previousItineraryPoint.distance;
-				previousItineraryPoint = itineraryPointsIterator.value;
-				currentItineraryPointTotalDistance += itineraryPointsIterator.value.distance;
-				done = itineraryPointsIterator.done;
-			}
-			if ( ! done ) {
-
-				// adding tmpPoint
-				ascentFactor = ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) /
-					previousItineraryPoint.distance;
-				tmpPointElev =
-					previousItineraryPoint.elev +
-					( ( tmpPointsDistance - previousItineraryPointTotalDistance ) * ascentFactor );
-				tmpPoints.push ( { distance : tmpPointsDistance, elev : tmpPointElev } );
-			}
-		}
-
-		// adding  some (depending of ADDED_TMP_POINTS) points at the end of tmpPoints
-		for ( let pointCounter = THE_CONST.zero; pointCounter < ADDED_TMP_POINTS; pointCounter ++ ) {
-			tmpPointElev += DIST_BTW_POINTS * ascentFactor;
-			tmpPoints.push ( { distance : tmpPointsDistance, elev : tmpPointElev } );
-			tmpPointsDistance += DIST_BTW_POINTS;
-		}
-
-		console.log ( 'tmpPoints' );
-		console.log ( tmpPoints );
-
-		return tmpPoints;
-	}
-
-	/*
-	--- createIronPoints function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function createIronPoints ( ) {
-		let tmpPoints = createTmpPoints ( );
-		let ironPoints = new Map;
-		let elevSum = THE_CONST.zero;
-
-		// Computing the first elev
-		for ( let pointCounter = THE_CONST.zero; pointCounter <= ADDED_TMP_POINTS * THE_CONST.number2; pointCounter ++ ) {
-			elevSum += tmpPoints [ pointCounter ].elev;
-		}
-
-		// Computing next elevs
-		for ( let pointCounter = ADDED_TMP_POINTS; pointCounter < tmpPoints.length - ADDED_TMP_POINTS; pointCounter ++ ) {
-
-			elevSum = 0;
-			for ( let pointNumber = pointCounter - 3; pointCounter + 3 >= pointNumber; pointNumber ++ ) {
-				elevSum += tmpPoints [ pointNumber ].elev;
-			}
-			ironPoints.set (
-				tmpPoints [ pointCounter ].distance,
-				{
-					distance : tmpPoints [ pointCounter ].distance,
-					elev : elevSum / ( ( ADDED_TMP_POINTS * THE_CONST.number2 ) + THE_CONST.number1 )
-				}
-			);
-		}
-
-		console.log ( 'ironPoints' );
-		console.log ( ironPoints );
-
-		return ironPoints;
-	}
-
-	/*
-	--- aaa function --------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function aaa ( ) {
-
-		let ironPoints = createIronPoints ( );
-
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
-
-		// we skip the first itinerary point
-		itineraryPointsIterator.done;
-		let itineraryPointsTotalDistance = itineraryPointsIterator.value.distance;
-
-		// loop on the itinerary point to push the corrected elev
-		while ( ! itineraryPointsIterator.done ) {
-			let previousIronPoint = ironPoints.get (
-				Math.floor ( itineraryPointsTotalDistance / DIST_BTW_POINTS ) * DIST_BTW_POINTS );
-			let nextIronPoint = ironPoints.get (
-				Math.ceil ( itineraryPointsTotalDistance / DIST_BTW_POINTS ) * DIST_BTW_POINTS );
-			if ( previousIronPoint && nextIronPoint ) {
-				let deltaDist = itineraryPointsTotalDistance - previousIronPoint.distance;
-				let ascentFactor = ( nextIronPoint.elev - previousIronPoint.elev ) /
-					( nextIronPoint.distance - previousIronPoint.distance );
-				itineraryPointsIterator.value.elev = previousIronPoint.elev + ( deltaDist * ascentFactor );
-			}
-			itineraryPointsTotalDistance += itineraryPointsIterator.value.distance;
-		}
-	}
-
-	/*
-	--- myClean function ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClean ( ) {
-		mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
-		mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
-		mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
-		myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
-	}
-
-	/*
-	--- myCreateSvgProfile function -----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateProfile ( routeObjId ) {
-		myRoute = newDataSearchEngine ( ).getRoute ( routeObjId );
-
-		myMaxElev = THE_CONST.zero;
-		myMinElev = Number.MAX_VALUE;
-		myVScale = THE_CONST.number1;
-		myHScale = THE_CONST.number1;
-		myDeltaElev = THE_CONST.zero;
-
-		myAscent = THE_CONST.zero;
-		myDescent = THE_CONST.zero;
-
-		myMarker = null;
-		myElevText = null;
-		myAscentText = null;
-		myDistanceText = null;
-
-		if ( mySvg ) {
-			myClean ( );
-		}
-		aaa ( );
+	function myCreateSvg ( route ) {
+		myRoute = route;
 
 		let previousElev = myRoute.itinerary.itineraryPoints.first.elev;
+		myMinElev = Number.MAX_VALUE;
+		myMaxElev = THE_CONST.zero;
+		myRoute.itinerary.ascent = THE_CONST.zero;
+		myRoute.itinerary.descent = THE_CONST.zero;
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				myMaxElev = Math.max ( myMaxElev, itineraryPoint.elev );
 				myMinElev = Math.min ( myMinElev, itineraryPoint.elev );
 				let deltaElev = itineraryPoint.elev - previousElev;
 				if ( THE_CONST.zero > deltaElev ) {
-					myDescent -= deltaElev;
+					myRoute.itinerary.descent -= deltaElev;
 				}
 				else {
-					myAscent += deltaElev;
+					myRoute.itinerary.ascent += deltaElev;
 				}
 				previousElev = itineraryPoint.elev;
 			}
 		);
 		myDeltaElev = myMaxElev - myMinElev;
-		myVScale = SVG_HEIGHT / myDeltaElev;
-		myHScale = SVG_WIDTH / myRoute.distance;
-		myCreateSvg ( );
+		myVScale = THE_CONST.svgProfile.height / myDeltaElev;
+		myHScale = THE_CONST.svgProfile.width / myRoute.distance;
+
+		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg.setAttributeNS (
+			null,
+			'viewBox',
+			'0 0 ' + ( THE_CONST.svgProfile.width + ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) ) +
+			' ' + ( THE_CONST.svgProfile.height + ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) )
+		);
+		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
+
 		myCreateProfilePolyline ( );
-		myCreateAscentPolyline ( );
-		myCreateFramePolylines ( );
+
+		return mySvg;
 	}
 
 	/*
@@ -574,11 +350,8 @@ function newProfileFactory ( ) {
 
 	return Object.seal (
 		{
-			createProfile : routeObjId => myCreateProfile ( routeObjId ),
-			get svg ( ) { return mySvg; },
-			get ascent ( ) { return myAscent.toFixed ( THE_CONST.zero ); },
-			get descent ( ) { return myDescent.toFixed ( THE_CONST.zero ); },
-			clean : ( ) => myClean ( )
+			smooth : route => mySmooth ( route ),
+			createSvg : route => myCreateSvg ( route )
 		}
 	);
 }

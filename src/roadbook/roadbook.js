@@ -32,6 +32,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -144,16 +145,43 @@ if ( pageId ) {
 
 	document.getElementById ( 'TravelNotes-SaveFile' ).addEventListener ( 'click', saveFile );
 
-	document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
-	window.addEventListener (
-		'storage',
-		function ( ) {
-			document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
+	// document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
+
+	theIndexedDb.getOpenPromise ( )
+		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
+		.then ( innerHTML => {
+			document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
+		} )
+		.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
+
+	window.addEventListener (
+		'storage',
+		( ) => {
+			theIndexedDb.getReadPromise ( pageId )
+				.then ( innerHTML => {
+					if ( innerHTML ) {
+						document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
+						showTravelNotes ( );
+						showRouteNotes ( );
+						showRouteManeuvers ( );
+					}
+					else {
+						document.getElementById ( 'TravelNotes' ).innerHTML = '';
+					}
+				} )
+				.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
 		}
 	);
+	window.addEventListener (
+		'unload',
+		( ) => {
+			theIndexedDb.closeDb ( );
+		}
+	);
+
 }
 else {
 	document.getElementById ( 'TravelNotes-Menu' )

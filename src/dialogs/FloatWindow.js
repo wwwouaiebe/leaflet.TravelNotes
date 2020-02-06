@@ -54,10 +54,6 @@ function newFloatWindow ( ) {
 	let myScreenWidth = THE_CONST.zero;
 	let myScreenHeight = THE_CONST.zero;
 
-	let myData = null;
-
-	let myOnShow = null;
-
 	let myOnClose = null;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -93,7 +89,6 @@ function newFloatWindow ( ) {
 			myOnClose ( );
 		}
 		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myWindowDiv );
-		myData = null;
 	}
 
 	/*
@@ -194,20 +189,16 @@ function newFloatWindow ( ) {
 	}
 
 	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
+	--- createWindow function -----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myShow ( data ) {
-		myData = data;
+	function myCreateWindow ( ) {
 		myCreateWindowDiv ( );
 		myCreateTopBar ( );
 		myCreateHeaderDiv ( );
 		myCreateContentDiv ( );
-		if ( myOnShow ) {
-			myOnShow ( );
-		}
 	}
 
 	/*
@@ -217,16 +208,11 @@ function newFloatWindow ( ) {
 	*/
 
 	return {
-		show : data => myShow ( data ),
+		createWindow : ( ) => myCreateWindow ( ),
 
 		close : ( ) => myClose ( ),
 
-		set onShow ( OnShow ) { myOnShow = OnShow; },
-
 		set onClose ( OnClose ) { myOnClose = OnClose; },
-
-		get data ( ) { return myData; },
-		set data ( Data ) { myData = Data; },
 
 		get header ( ) { return myHeaderDiv; },
 		set header ( Header ) { myHeaderDiv = Header; },

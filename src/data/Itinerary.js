@@ -47,6 +47,12 @@ Patterns : Closure
 
 function newItinerary ( ) {
 
+	let myHasProfile = false;
+
+	let myAscent = THE_CONST.zero;
+
+	let myDescent = THE_CONST.zero;
+
 	let myProvider = '';
 
 	let myTransitMode = '';
@@ -78,13 +84,23 @@ function newItinerary ( ) {
 			case '1.5.0' :
 			case '1.6.0' :
 				something.objType.version = '1.7.0';
+				something.hasProfile = false;
+				something.ascent = THE_CONST.zero;
+				something.descent = THE_CONST.zero;
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		[ 'itineraryPoints', 'maneuvers', 'provider', 'transitMode', 'objId' ].forEach (
+		[ 	'hasProfile',
+			'ascent',
+			'descent',
+			'itineraryPoints',
+			'maneuvers',
+			'provider',
+			'transitMode',
+			'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
@@ -102,6 +118,9 @@ function newItinerary ( ) {
 
 	function myGetObject ( ) {
 		return {
+			hasProfile : myHasProfile,
+			ascent : myAscent,
+			descent : myDescent,
 			itineraryPoints : myItineraryPoints.object,
 			maneuvers : myManeuvers.object,
 			provider : myProvider,
@@ -119,6 +138,9 @@ function newItinerary ( ) {
 
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
+		myHasProfile = otherthing.hasProfile || false;
+		myAscent = otherthing.ascent || THE_CONST.zero;
+		myDescent = otherthing.descent || THE_CONST.zero;
 		myItineraryPoints.object = otherthing.itineraryPoints || [];
 		myManeuvers.object = otherthing.maneuvers || [];
 		myProvider = otherthing.provider || '';
@@ -148,6 +170,14 @@ function newItinerary ( ) {
 
 	return Object.seal (
 		{
+			get hasProfile ( ) { return myHasProfile; },
+			set hasProfile ( HasProfile ) { myHasProfile = HasProfile; },
+
+			get ascent ( ) { return myAscent; },
+			set ascent ( Ascent ) { myAscent = Ascent; },
+
+			get descent ( ) { return myDescent; },
+			set descent ( Descent ) { myDescent = Descent; },
 
 			get itineraryPoints ( ) { return myItineraryPoints; },
 

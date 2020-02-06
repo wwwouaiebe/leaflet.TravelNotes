@@ -82,7 +82,8 @@ function newEventDispatcher ( ) {
 			'routepropertiesupdated',
 			'noteupdated',
 			'roadbookupdate',
-			'travelnotesfileloaded'
+			'travelnotesfileloaded',
+			'profileclosed'
 		].indexOf ( eventName ) ) {
 			return document;
 		}

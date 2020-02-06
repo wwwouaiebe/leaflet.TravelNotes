@@ -159,7 +159,12 @@ function newConfig ( ) {
 					text : '················',
 					iDashArray : [ 0, 2 ]
 				}
-			]
+			],
+			elev : {
+				smooth : true,
+				smoothCoefficient : 0.25,
+				smoothPoints : 3
+			}
 		},
 		note : {
 			reverseGeocoding : false,

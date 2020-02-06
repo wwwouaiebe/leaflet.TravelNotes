@@ -86,7 +86,7 @@ function newItineraryPoint ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		[ 'lat', 'lng', 'distance', 'objId' ].forEach (
+		[ 'lat', 'lng', 'distance', 'elev', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw new Error ( 'No ' + property + ' for ' + ourObjType.name );

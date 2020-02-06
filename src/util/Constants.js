@@ -92,6 +92,7 @@ const THE_CONST = {
 	number3 : 3,
 	number4 : 4,
 	number5 : 5,
+	number10 : 10,
 	number16 : 16,
 	number100 : 100,
 	number65536 : 65536,
@@ -107,6 +108,13 @@ const THE_CONST = {
 		},
 		minWidth : 1,
 		maxWidth : 40
+	},
+	svgProfile : {
+		margin : 50,
+		height : 500,
+		width : 1000,
+		yDeltaText : 30,
+		xDeltaText : 10
 	},
 	svgIcon : {
 		positionOnRoute : {

@@ -31,6 +31,7 @@ Tests ...
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
 /*
 --- newRoadbookUpdate function ----------------------------------------------------------------------------------------
@@ -42,7 +43,12 @@ function newRoadbookUpdate ( ) {
 
 	if ( newUtilities ( ).storageAvailable ( 'localStorage' ) ) {
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
-		localStorage.setItem ( theTravelNotesData.UUID + '-TravelNotesHTML', htmlViewsFactory.travelHTML.outerHTML );
+		theIndexedDb.getOpenPromise ( )
+			.then ( ( ) => {
+				theIndexedDb.getWritePromise ( theTravelNotesData.UUID, htmlViewsFactory.travelHTML.outerHTML );
+			} )
+			.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )
+			.catch ( err => console.log ( err ? err : 'An error occurs when writing the content' ) );
 	}
 }
 
