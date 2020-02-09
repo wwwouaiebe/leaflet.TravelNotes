@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 			},
 			Roadbook: {
 				files: {
-					'tmp/TravelNotesRoadbook.min.css': ['src/css/NotesIcons.css', 'src/roadbook/Roadbook.css']
+					'tmp/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
 				}
 			}
 		},

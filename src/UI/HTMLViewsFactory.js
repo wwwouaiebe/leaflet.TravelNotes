@@ -43,6 +43,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { newProfileFactory } from '../core/ProfileFactory.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -51,6 +52,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myUtilities = newUtilities ( );
+	let myProfileFactory = newProfileFactory ( );
 
 	let mySvgIconSize = theConfig.note.svgIconWidth;
 
@@ -476,6 +478,27 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	}
 
 	/*
+	--- myGetRouteProfileHTML function --------------------------------------------------------------------------------
+
+	This function returns an HTML element with the route profile
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetRouteProfileHTML ( route ) {
+		let profileDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : myClassNamePrefix + 'RouteProfile',
+				innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Profile' )
+			}
+		);
+		profileDiv.appendChild ( myProfileFactory.createSvg ( route ) );
+
+		return profileDiv;
+	}
+
+	/*
 	--- myGetTravelHTML function --------------------------------------------------------------------------------------
 
 	This function returns an HTML element with the complete travel
@@ -496,33 +519,13 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				theConfig.routeEditor.displayEditionInHTMLPage
 				&&
 				travelRoutesIterator.value.objId === theTravelNotesData.editedRouteObjId;
-			travelHTML.appendChild (
-				myGetRouteHeaderHTML (
-					useEditedRoute
-						?
-						theTravelNotesData.travel.editedRoute
-						:
-						travelRoutesIterator.value
-				)
-			);
-			travelHTML.appendChild (
-				myGetRouteManeuversAndNotesHTML (
-					useEditedRoute
-						?
-						theTravelNotesData.travel.editedRoute
-						:
-						travelRoutesIterator.value
-				)
-			);
-			travelHTML.appendChild (
-				myGetRouteFooterHTML (
-					useEditedRoute
-						?
-						theTravelNotesData.travel.editedRoute
-						:
-						travelRoutesIterator.value
-				)
-			);
+			let route = useEditedRoute ? theTravelNotesData.travel.editedRoute : travelRoutesIterator.value;
+			travelHTML.appendChild ( myGetRouteHeaderHTML ( route ) );
+			if ( route.itinerary.hasProfile ) {
+				travelHTML.appendChild ( myGetRouteProfileHTML ( route ) );
+			}
+			travelHTML.appendChild ( myGetRouteManeuversAndNotesHTML ( route ) );
+			travelHTML.appendChild ( myGetRouteFooterHTML ( route ) );
 		}
 
 		travelHTML.appendChild ( myGetTravelFooterHTML ( ) );

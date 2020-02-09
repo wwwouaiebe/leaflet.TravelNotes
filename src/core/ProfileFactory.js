@@ -63,9 +63,6 @@ function newProfileFactory ( ) {
 
 	function createTmpPoints ( ) {
 
-		console.log ( 'myRoute.object' );
-		console.log ( myRoute.object );
-
 		let tmpPointsDistance = 0;
 		let tmpPointElev = 0;
 		let tmpPoints = [];
@@ -105,9 +102,6 @@ function newProfileFactory ( ) {
 
 		// last itinerary point is added
 		tmpPoints.push ( { distance : itineraryPointsDistance, elev : myRoute.itinerary.itineraryPoints.last.elev } );
-
-		console.log ( 'tmpPoints' );
-		console.log ( tmpPoints );
 
 		return tmpPoints;
 	}
@@ -183,9 +177,6 @@ function newProfileFactory ( ) {
 			}
 		);
 
-		console.log ( 'smoothPoints' );
-		console.log ( smoothPoints );
-
 		return smoothPoints;
 	}
 
@@ -213,9 +204,6 @@ function newProfileFactory ( ) {
 		}
 
 		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * THE_CONST.number10;
-
-		console.log ( 'mySmoothDistance' );
-		console.log ( mySmoothDistance );
 
 		let smoothPoints = createSmoothPoints ( );
 

@@ -37,6 +37,7 @@ import { newGeometry } from '../util/Geometry.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
+import { newProfileFactory } from '../core/ProfileFactory.js';
 
 import { THE_CONST } from '../util/Constants.js';
 
@@ -57,6 +58,7 @@ function newProfileWindow ( ) {
 	let myDistanceText = null;
 
 	let myProfileWindow = null;
+
 	let myAscentDiv = null;
 	let myRoute = null;
 
@@ -257,14 +259,18 @@ function newProfileWindow ( ) {
 	*/
 
 	function myClean ( ) {
+		console.log ( 'myClean' );
+		console.log ( mySvg );
 		if ( mySvg ) {
 			mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
 			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
 			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+
 			myProfileWindow.content.removeChild ( myAscentDiv );
 			myProfileWindow.content.removeChild ( mySvg );
 		}
+
 		mySvg = null;
 		myMarker = null;
 		myAscentText = null;
@@ -296,18 +302,16 @@ function newProfileWindow ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myUpdate ( svg, route ) {
+	function myUpdate ( route ) {
 		myClean ( );
 		myRoute = route;
-		mySvg = svg;
+		mySvg = newProfileFactory ( ).createSvg ( route );
 
 		myProfileWindow.header.innerHTML = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
-
+		myProfileWindow.content.appendChild ( mySvg );
 		mySvg.addEventListener ( 'click', myOnSvgClick,	false );
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
-
-		myProfileWindow.content.appendChild ( mySvg );
 
 		myAscentDiv = newHTMLElementsFactory ( ).create (
 			'div',
@@ -320,9 +324,10 @@ function newProfileWindow ( ) {
 						descent : myRoute.itinerary.descent.toFixed ( THE_CONST.zero )
 					}
 				)
-			},
-			myProfileWindow.content
+			}
 		);
+		myProfileWindow.content.appendChild ( myAscentDiv );
+
 	}
 
 	/*

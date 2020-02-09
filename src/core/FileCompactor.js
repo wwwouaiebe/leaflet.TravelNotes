@@ -105,6 +105,9 @@ function newFileCompactor ( ) {
 				if ( route.itinerary.itineraryPoints.elevs ) {
 					itineraryPoint.elev = route.itinerary.itineraryPoints.elevs [ latLngsCounter ];
 				}
+				else {
+					itineraryPoint.elev = THE_CONST.elev.defaultValue;
+				}
 				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
 				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
 				decompressedItineraryPoints.push ( itineraryPoint );

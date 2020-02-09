@@ -45,8 +45,6 @@ function newProfileWindowsManager ( ) {
 
 	let myProfileWindows = new Map ( );
 
-	let mySvgProfiles = new Map ( );
-
 	let myProfileFactory = newProfileFactory ( );
 
 	/*
@@ -58,26 +56,18 @@ function newProfileWindowsManager ( ) {
 	*/
 
 	function myCreateProfile ( route ) {
-
 		let profileWindow = myProfileWindows.get ( route.objId );
 
 		if ( route.itinerary.hasProfile ) {
 			if ( theConfig.route.elev.smooth ) {
 				myProfileFactory.smooth ( route );
 			}
-			let svgProfile = myProfileFactory.createSvg ( route );
-			mySvgProfiles.set ( route.objId, svgProfile );
-
 			if ( profileWindow ) {
-				profileWindow.update ( svgProfile, route );
+				profileWindow.update ( route );
 			}
 		}
-		else {
-			mySvgProfiles.delete ( route.objId );
-			if ( profileWindow ) {
-				profileWindow.close ( );
-				myProfileWindows.delete ( route.objId );
-			}
+		else if ( profileWindow ) {
+			profileWindow.close ( );
 		}
 	}
 
@@ -90,12 +80,12 @@ function newProfileWindowsManager ( ) {
 	*/
 
 	function myUpdateProfile ( oldRouteObjId, newRoute ) {
+
 		let profileWindow = myProfileWindows.get ( oldRouteObjId );
 		if ( profileWindow ) {
 			myProfileWindows.delete ( oldRouteObjId );
-			if ( newRoute && newRoute.hasProfile ) {
-				let svgProfile = mySvgProfiles.get ( newRoute.objId );
-				profileWindow.update ( svgProfile, newRoute );
+			if ( newRoute && newRoute.itinerary.hasProfile ) {
+				profileWindow.update ( newRoute );
 				myProfileWindows.set ( newRoute.objId, profileWindow );
 			}
 			else {
@@ -114,12 +104,11 @@ function newProfileWindowsManager ( ) {
 
 	function myShowProfile ( routeObjId ) {
 		let profileWindow = myProfileWindows.get ( routeObjId );
-		let svgProfile = mySvgProfiles.get ( routeObjId );
 		if ( ! profileWindow ) {
 			profileWindow = newProfileWindow ( );
 		}
 		let route = newDataSearchEngine ( ).getRoute ( routeObjId );
-		profileWindow.update ( svgProfile, route );
+		profileWindow.update ( route );
 		myProfileWindows.set ( routeObjId, profileWindow );
 	}
 

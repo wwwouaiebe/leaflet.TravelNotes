@@ -9,12 +9,6 @@
 	stroke : red;
 	stroke-width : 3;
 }
-.TravelNotes-SvgProfile-ascentPolyline
-{
-	fill : none;
-	stroke : blue;
-	stroke-width : 3;
-}
 .TravelNotes-SvgProfile-markerPolyline,
 .TravelNotes-SvgProfile-framePolyline
 {

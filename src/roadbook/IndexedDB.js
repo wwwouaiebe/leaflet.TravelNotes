@@ -53,7 +53,6 @@ function newIndexedDb ( ) {
 	*/
 
 	function myCloseDb ( UUID ) {
-		console.log ( 'myCloseDb' );
 		if ( ! myDb ) {
 			return;
 		}
@@ -124,7 +123,14 @@ function newIndexedDb ( ) {
 				onError ( new Error ( 'Database not opened' ) );
 				return;
 			}
-			let transaction = myDb.transaction ( [ 'Travels' ], 'readwrite' );
+			let transaction = null;
+			try {
+				transaction = myDb.transaction ( [ 'Travels' ], 'readwrite' );
+			}
+			catch ( err ) {
+				onError ( err );
+				return;
+			}
 			transaction.onerror = function ( ) {
 				onError ( new Error ( 'Transaction error' ) );
 			};
@@ -171,7 +177,6 @@ function newIndexedDb ( ) {
 			openRequest.onupgradeneeded = function ( upgradeEvent ) {
 				myDb = upgradeEvent.target.result;
 				myDb.createObjectStore ( 'Travels', { keyPath : 'UUID' } );
-				onOk ( );
 			};
 
 		}
