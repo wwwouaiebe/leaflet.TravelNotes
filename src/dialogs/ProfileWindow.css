@@ -21,3 +21,9 @@
 	fill : black;
 	font: bold 30px sans-serif;
 }
+.TravelNotes-SvgProfile-elevLegend,
+.TravelNotes-SvgProfile-distLegend
+{
+	fill : black;
+	font: bold 24px sans-serif;
+}

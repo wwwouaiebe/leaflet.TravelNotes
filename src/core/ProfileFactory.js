@@ -260,27 +260,104 @@ function newProfileFactory ( ) {
 	}
 
 	/*
-	--- myCreateFramePolylines function -------------------------------------------------------------------------------
+	--- myCreateFramePolyline function --------------------------------------------------------------------------------
 
 	This function ...
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	/*
-	function myCreateFramePolylines ( ) {
-		let yPolyline =
-			( THE_CONST.svgProfile.margin + ( THE_CONST.svgProfile.height / THE_CONST.number2 ) ).toFixed ( THE_CONST.zero );
-		let pointsAttribute = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero ) + ',' +
-		yPolyline + ' ' +
-		( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.width ).toFixed ( THE_CONST.zero ) + ' ' +
-		yPolyline;
+	function myCreateFramePolyline ( ) {
+		const LEFT = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero );
+		const BOTTOM = ( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.height ).toFixed ( THE_CONST.zero );
+		const RIGHT = ( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.width ).toFixed ( THE_CONST.zero );
+		const TOP = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero );
+		let pointsAttribute =
+			LEFT + ',' + TOP + ' ' + LEFT + ',' + BOTTOM + ' ' +
+			RIGHT + ',' + BOTTOM + ' ' + RIGHT + ',' + TOP;
 		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
 		polyline.setAttributeNS ( null, 'points', pointsAttribute );
 		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
 		mySvg.appendChild ( polyline );
 	}
+
+	function myCreateDistanceTexts ( ) {
+		let minDelta = Number.MAX_VALUE;
+		let selectedScale = 0;
+		const SCALES = [ 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000 ];
+		SCALES.forEach (
+			scale => {
+				let currentDelta = Math.abs ( ( myRoute.distance / 8 ) - scale );
+				if ( currentDelta < minDelta ) {
+					minDelta = currentDelta;
+					selectedScale = scale;
+				}
+			}
+		);
+		console.log ( 'selectedScale ' + selectedScale );
+		let distance = 0;
+		const BOTTOM_TEXT = ( THE_CONST.svgProfile.margin * 1.5 ) + THE_CONST.svgProfile.height;
+		while ( distance < myRoute.distance ) {
+			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			distanceText.appendChild ( document.createTextNode ( distance.toFixed ( THE_CONST.zero ) ) );
+			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-distLegend' );
+			distanceText.setAttributeNS ( null, 'x', THE_CONST.svgProfile.margin + ( distance * myHScale ) );
+			distanceText.setAttributeNS ( null, 'y', BOTTOM_TEXT );
+			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
+			mySvg.appendChild ( distanceText );
+			distance += selectedScale;
+		}
+	}
+
+	/*
+	--- myCreateElevTexts function ------------------------------------------------------------------------------------
+
+	This function creates the elevation texts for the svg
+
+	-------------------------------------------------------------------------------------------------------------------
 	*/
+
+	function myCreateElevTexts ( ) {
+		let minDelta = Number.MAX_VALUE;
+		let selectedScale = 0;
+		const SCALES = [ 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000 ];
+		SCALES.forEach (
+			scale => {
+				let currentDelta = Math.abs ( ( myDeltaElev / 4 ) - scale );
+				if ( currentDelta < minDelta ) {
+					minDelta = currentDelta;
+					selectedScale = scale;
+				}
+			}
+		);
+		let elev = Math.ceil ( myMinElev / selectedScale ) * selectedScale;
+		const RIGHT_TEXT =
+			(
+				THE_CONST.svgProfile.margin +
+				THE_CONST.svgProfile.width +
+				THE_CONST.svgProfile.xDeltaText
+			).toFixed ( THE_CONST.zero );
+		const LEFT_TEXT = ( THE_CONST.svgProfile.margin - THE_CONST.svgProfile.xDeltaText ).toFixed ( THE_CONST.zero );
+		while ( elev < myMaxElev ) {
+			let elevTextY = THE_CONST.svgProfile.margin + ( ( myMaxElev - elev ) * myVScale );
+			let rightElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( THE_CONST.zero ) ) );
+			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
+			rightElevText.setAttributeNS ( null, 'x', RIGHT_TEXT );
+			rightElevText.setAttributeNS ( null, 'y', elevTextY );
+			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
+			mySvg.appendChild ( rightElevText );
+			let leftElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( THE_CONST.zero ) ) );
+			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
+			leftElevText.setAttributeNS ( null, 'x', LEFT_TEXT );
+			leftElevText.setAttributeNS ( null, 'y', elevTextY );
+			leftElevText.setAttributeNS ( null, 'text-anchor', 'end' );
+			mySvg.appendChild ( leftElevText );
+			elev += selectedScale;
+		}
+
+	}
 
 	/*
 	--- myCreateSvg function ------------------------------------------------------------------------------------------
@@ -326,6 +403,9 @@ function newProfileFactory ( ) {
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
 
 		myCreateProfilePolyline ( );
+		myCreateFramePolyline ( );
+		myCreateElevTexts ( );
+		myCreateDistanceTexts ( );
 
 		return mySvg;
 	}

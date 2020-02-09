@@ -110,7 +110,7 @@ const THE_CONST = {
 		maxWidth : 40
 	},
 	svgProfile : {
-		margin : 50,
+		margin : 100,
 		height : 500,
 		width : 1000,
 		yDeltaText : 30,
