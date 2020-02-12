@@ -196,19 +196,38 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				myClassNamePrefix +
 				'Route-Header-Distance">' +
 				theTranslator.getText (
-					'RouteEditor - Distance',
+					'HTMLViewsFactory - Distance',
 					{ distance : myUtilities.formatDistance ( route.distance ) }
 				) +
 				'</div>';
 		}
-		if ( ! theTravelNotesData.travel.readOnly ) {
+		if ( ! theTravelNotesData.travel.readOnly && 'bike' !== route.itinerary.transitMode ) {
 			returnValue +=
 				'<div class="' +
 				myClassNamePrefix +
 				'Route-Header-Duration">' +
 				theTranslator.getText (
-					'RouteEditor - Duration',
+					'HTMLViewsFactory - Duration',
 					{ duration : myUtilities.formatTime ( route.duration ) }
+				) +
+				'</div>';
+		}
+
+		if ( route.itinerary.hasProfile ) {
+			returnValue +=
+				'<div class="' +
+				myClassNamePrefix +
+				'Route-Header-Ascent">' +
+				theTranslator.getText (
+					'HTMLViewsFactory - Ascent',
+					{ ascent : route.itinerary.ascent.toFixed ( THE_CONST.zero ) }
+				) +
+				'</div><div class="' +
+				myClassNamePrefix +
+				'Route-Header-Descent">' +
+				theTranslator.getText (
+					'HTMLViewsFactory - Descent',
+					{ descent : route.itinerary.descent.toFixed ( THE_CONST.zero ) }
 				) +
 				'</div>';
 		}
@@ -236,6 +255,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		);
 
 		let travelDistance = THE_CONST.distance.defaultValue;
+		let travelAscent = THE_CONST.zero;
+		let travelDescent = THE_CONST.zero;
 		let travelRoutesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! travelRoutesIterator.done ) {
 			myHTMLElementsFactory.create (
@@ -253,6 +274,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			);
 			if ( travelRoutesIterator.value.chain ) {
 				travelDistance += travelRoutesIterator.value.distance;
+				travelAscent += travelRoutesIterator.value.itinerary.ascent;
+				travelDescent += travelRoutesIterator.value.itinerary.descent;
 			}
 		}
 
@@ -269,6 +292,38 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			},
 			travelHeaderHTML
 		);
+
+		if ( THE_CONST.zero !== travelAscent ) {
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className : myClassNamePrefix + 'Travel-Header-TravelAscent',
+					innerHTML :
+						theTranslator.getText ( 'HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}',
+							{
+								ascent : travelAscent.toFixed ( THE_CONST.zero )
+							}
+						)
+				},
+				travelHeaderHTML
+			);
+		}
+
+		if ( THE_CONST.zero !== travelDescent ) {
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className : myClassNamePrefix + 'Travel-Header-TravelDescent',
+					innerHTML :
+						theTranslator.getText ( 'HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}',
+							{
+								descent : travelDescent.toFixed ( THE_CONST.zero )
+							}
+						)
+				},
+				travelHeaderHTML
+			);
+		}
 
 		return travelHeaderHTML;
 	}

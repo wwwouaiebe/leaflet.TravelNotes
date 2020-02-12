@@ -281,11 +281,18 @@ function newProfileFactory ( ) {
 		mySvg.appendChild ( polyline );
 	}
 
+	/*
+	--- myCreateDistanceTexts function --------------------------------------------------------------------------------
+
+	This function creates the distance texts for the svg
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	function myCreateDistanceTexts ( ) {
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
-		const SCALES = [ 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000 ];
-		SCALES.forEach (
+		THE_CONST.svgProfile.hScales.forEach (
 			scale => {
 				let currentDelta = Math.abs ( ( myRoute.distance / 8 ) - scale );
 				if ( currentDelta < minDelta ) {
@@ -294,14 +301,14 @@ function newProfileFactory ( ) {
 				}
 			}
 		);
-		console.log ( 'selectedScale ' + selectedScale );
-		let distance = 0;
+		let distance = Math.ceil ( myRoute.chainedDistance / selectedScale ) * selectedScale;
 		const BOTTOM_TEXT = ( THE_CONST.svgProfile.margin * 1.5 ) + THE_CONST.svgProfile.height;
-		while ( distance < myRoute.distance ) {
+		while ( distance < myRoute.distance + myRoute.chainedDistance ) {
 			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			distanceText.appendChild ( document.createTextNode ( distance.toFixed ( THE_CONST.zero ) ) );
+
+			distanceText.appendChild ( document.createTextNode ( 500 > selectedScale ? distance + ' m ' : ( distance / 1000 ) + ' km' ) );
 			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-distLegend' );
-			distanceText.setAttributeNS ( null, 'x', THE_CONST.svgProfile.margin + ( distance * myHScale ) );
+			distanceText.setAttributeNS ( null, 'x', THE_CONST.svgProfile.margin + ( ( distance - myRoute.chainedDistance ) * myHScale ) );
 			distanceText.setAttributeNS ( null, 'y', BOTTOM_TEXT );
 			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( distanceText );
@@ -320,8 +327,7 @@ function newProfileFactory ( ) {
 	function myCreateElevTexts ( ) {
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
-		const SCALES = [ 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000 ];
-		SCALES.forEach (
+		THE_CONST.svgProfile.vScales.forEach (
 			scale => {
 				let currentDelta = Math.abs ( ( myDeltaElev / 4 ) - scale );
 				if ( currentDelta < minDelta ) {

@@ -204,6 +204,26 @@
 		"msgstr" : "Not possible to select {provider}"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Ascent",
+		"msgstr" : "Ascent : {ascent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Descent",
+		"msgstr" : "Descent : {descent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Distance",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Duration",
+		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Profile",
+		"msgstr" : "Profile"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
@@ -226,6 +246,14 @@
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode train",
 		"msgstr" : "the train"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
+		"msgstr" : "Travel ascent&nbsp;:&nbsp;{ascent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
+		"msgstr" : "Travel descent&nbsp;:&nbsp;{descent} m."
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
@@ -410,14 +438,6 @@
 	{
 		"msgid" : "Roadbook - Save",
 		"msgstr" : "Save"
-	},
-	{
-		"msgid" : "RouteEditor - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "RouteEditor - Duration",
-		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
