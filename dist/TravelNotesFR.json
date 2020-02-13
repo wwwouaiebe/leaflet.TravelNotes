@@ -204,6 +204,26 @@
 		"msgstr" : "Impossible de sélectionner {provider}"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Ascent",
+		"msgstr" : "Montée : {ascent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Descent",
+		"msgstr" : "Descente : {descent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Distance",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Duration",
+		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Profile",
+		"msgstr" : "Profil"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
@@ -226,6 +246,14 @@
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode train",
 		"msgstr" : "le train"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
+		"msgstr" : "Montées du voyage&nbsp;:&nbsp;{ascent} m."
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
+		"msgstr" : "Descentes du voyage&nbsp;:&nbsp;{descent} m."
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
@@ -364,6 +392,14 @@
 		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
 	},
 	{
+		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.",
+		"msgstr" : "Montée: {ascent} m. - Descente: {descent} m."
+	},
+	{
+		"msgid" : "ProfileWindow - Profile {name}",
+		"msgstr" : "Profil {name}"
+	},
+	{
 		"msgid" : "ProvidersToolbarUI - bike",
 		"msgstr" : "Itinéraire en vélo"
 	},
@@ -402,14 +438,6 @@
 	{
 		"msgid" : "Roadbook - Save",
 		"msgstr" : "Enrégistrer"
-	},
-	{
-		"msgid" : "RouteEditor - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "RouteEditor - Duration",
-		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",

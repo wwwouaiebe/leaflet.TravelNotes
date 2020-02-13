@@ -291,11 +291,16 @@ function newProfileFactory ( ) {
 	*/
 
 	function myCreateDistanceTexts ( ) {
+
+		const MAX_X_LEGEND_NUMBER = 8;
+		const BOTTOM_TEXT = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_PROFILE.margin / TWO );
+		const M_IN_KM = 1000;
+
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
 		SVG_PROFILE.hScales.forEach (
 			scale => {
-				let currentDelta = Math.abs ( ( myRoute.distance / 8 ) - scale );
+				let currentDelta = Math.abs ( ( myRoute.distance / MAX_X_LEGEND_NUMBER ) - scale );
 				if ( currentDelta < minDelta ) {
 					minDelta = currentDelta;
 					selectedScale = scale;
@@ -303,13 +308,18 @@ function newProfileFactory ( ) {
 			}
 		);
 		let distance = Math.ceil ( myRoute.chainedDistance / selectedScale ) * selectedScale;
-		const BOTTOM_TEXT = ( SVG_PROFILE.margin * 1.5 ) + SVG_PROFILE.height;
 		while ( distance < myRoute.distance + myRoute.chainedDistance ) {
 			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 
-			distanceText.appendChild ( document.createTextNode ( 500 > selectedScale ? distance + ' m ' : ( distance / 1000 ) + ' km' ) );
+			distanceText.appendChild (
+				document.createTextNode ( M_IN_KM >= selectedScale ? distance + ' m ' : ( distance / M_IN_KM ) + ' km' )
+			);
 			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-distLegend' );
-			distanceText.setAttributeNS ( null, 'x', SVG_PROFILE.margin + ( ( distance - myRoute.chainedDistance ) * myHScale ) );
+			distanceText.setAttributeNS (
+				null,
+				'x',
+				SVG_PROFILE.margin + ( ( distance - myRoute.chainedDistance ) * myHScale )
+			);
 			distanceText.setAttributeNS ( null, 'y', BOTTOM_TEXT );
 			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( distanceText );
@@ -326,11 +336,14 @@ function newProfileFactory ( ) {
 	*/
 
 	function myCreateElevTexts ( ) {
+
+		const MAX_Y_LEGEND_NUMBER = 4;
+
 		let minDelta = Number.MAX_VALUE;
-		let selectedScale = 0;
+		let selectedScale = ZERO;
 		SVG_PROFILE.vScales.forEach (
 			scale => {
-				let currentDelta = Math.abs ( ( myDeltaElev / 4 ) - scale );
+				let currentDelta = Math.abs ( ( myDeltaElev / MAX_Y_LEGEND_NUMBER ) - scale );
 				if ( currentDelta < minDelta ) {
 					minDelta = currentDelta;
 					selectedScale = scale;

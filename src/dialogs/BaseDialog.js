@@ -48,9 +48,9 @@ import { ZERO, TWO } from '../util/Constants.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseDialog ( ) {
+const DRAG_MARGIN = 20;
 
-	const DRAG_MARGIN = 20;
+function newBaseDialog ( ) {
 
 	// variables initialization for drag and drop
 	let myStartDragX = ZERO;
