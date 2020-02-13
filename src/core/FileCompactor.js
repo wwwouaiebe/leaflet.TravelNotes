@@ -34,7 +34,7 @@ import { polyline } from '../polyline/Polyline.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newTravel } from '../data/Travel.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newFileCompactor function -----------------------------------------------------------------------------------------
@@ -52,10 +52,12 @@ function newFileCompactor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
+	const POLYLINE_PRECISION = 6;
+
 	function myCompressRoute ( route ) {
 		let objType = {};
-		if ( THE_CONST.zero !== route.itinerary.itineraryPoints.length ) {
-			objType = route.itinerary.itineraryPoints [ THE_CONST.zero ].objType;
+		if ( ZERO !== route.itinerary.itineraryPoints.length ) {
+			objType = route.itinerary.itineraryPoints [ ZERO ].objType;
 		}
 		let compressedItineraryPoints = { latLngs : [], distances : [], elevs : [], objIds : [], objType : objType };
 		route.itinerary.itineraryPoints.forEach (
@@ -67,7 +69,7 @@ function newFileCompactor ( ) {
 			}
 		);
 		compressedItineraryPoints.latLngs =
-			polyline.encode ( compressedItineraryPoints.latLngs, THE_CONST.polylinePrecision );
+			polyline.encode ( compressedItineraryPoints.latLngs, POLYLINE_PRECISION );
 		route.itinerary.itineraryPoints = compressedItineraryPoints;
 	}
 
@@ -93,20 +95,20 @@ function newFileCompactor ( ) {
 
 	function myDecompressRoute ( route ) {
 		route.itinerary.itineraryPoints.latLngs =
-			polyline.decode ( route.itinerary.itineraryPoints.latLngs, THE_CONST.polylinePrecision );
+			polyline.decode ( route.itinerary.itineraryPoints.latLngs, POLYLINE_PRECISION );
 		let decompressedItineraryPoints = [];
-		let latLngsCounter = THE_CONST.zero;
+		let latLngsCounter = ZERO;
 		route.itinerary.itineraryPoints.latLngs.forEach (
 			latLng => {
 				let itineraryPoint = {};
-				itineraryPoint.lat = latLng [ THE_CONST.zero ];
-				itineraryPoint.lng = latLng [ THE_CONST.number1 ];
+				itineraryPoint.lat = latLng [ ZERO ];
+				itineraryPoint.lng = latLng [ ONE ];
 				itineraryPoint.distance = route.itinerary.itineraryPoints.distances [ latLngsCounter ];
 				if ( route.itinerary.itineraryPoints.elevs ) {
 					itineraryPoint.elev = route.itinerary.itineraryPoints.elevs [ latLngsCounter ];
 				}
 				else {
-					itineraryPoint.elev = THE_CONST.elev.defaultValue;
+					itineraryPoint.elev = ELEV.defaultValue;
 				}
 				itineraryPoint.objId = route.itinerary.itineraryPoints.objIds [ latLngsCounter ];
 				itineraryPoint.objType = route.itinerary.itineraryPoints.objType;
@@ -149,11 +151,11 @@ function newFileCompactor ( ) {
 
 		theTravelNotesData.travel.object = myDecompressTravel ( compressedTravel );
 
-		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
+		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
 
 		theTravelNotesData.travel.routes.forEach (
 			route => {
-				if ( THE_CONST.route.edited.notEdited !== route.edited ) {
+				if ( ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
 					theTravelNotesData.editedRouteObjId = route.objId;
 				}
 			}

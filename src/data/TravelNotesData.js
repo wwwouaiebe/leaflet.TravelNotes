@@ -34,7 +34,7 @@ Tests ...
 import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newTravelNotesData funtion ----------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ function newTravelNotesData ( ) {
 		providers : new Map ( ),
 		mapObjects : new Map ( ),
 		travel : newTravel ( ),
-		editedRouteObjId : THE_CONST.invalidObjId,
+		editedRouteObjId : INVALID_OBJ_ID,
 		routing : Object.seal ( { provider : '', transitMode : '' } ),
 		searchData : [],
 		UUID : newUtilities ( ).UUID

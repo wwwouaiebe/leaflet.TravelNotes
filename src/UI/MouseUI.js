@@ -33,7 +33,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newMouseUI function -----------------------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ function newMouseUI ( ) {
 			{
 				id : 'TravelNotes-MouseControl'
 			},
-			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			document.getElementsByTagName ( 'body' ) [ ZERO ]
 		);
 		theTravelNotesData.map.on (
 			'mousemove',

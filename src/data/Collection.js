@@ -35,7 +35,7 @@ import { newWayPoint } from '../data/WayPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 /*
 --- newCollection function ----------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myFirst ( ) {
-		return myArray [ THE_CONST.zero ];
+		return myArray [ ZERO ];
 	}
 
 	/*
@@ -87,14 +87,14 @@ function newCollection ( objName ) {
 	*/
 
 	function myIterator ( ) {
-		let index = THE_CONST.notFound;
+		let index = NOT_FOUND;
 		return {
 			get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
-			get previous ( ) { return THE_CONST.zero >= index ? null : myArray [ index - THE_CONST.number1 ]; },
-			get next ( ) { return index < myArray.length - THE_CONST.number1 ? myArray [ index + THE_CONST.number1 ] : null; },
+			get previous ( ) { return ZERO >= index ? null : myArray [ index - ONE ]; },
+			get next ( ) { return index < myArray.length - ONE ? myArray [ index + ONE ] : null; },
 			get done ( ) { return ++ index >= myArray.length; },
-			get first ( ) { return THE_CONST.zero === index; },
-			get last ( ) { return index >= myArray.length - THE_CONST.number1; },
+			get first ( ) { return ZERO === index; },
+			get last ( ) { return index >= myArray.length - ONE; },
 			get index ( ) { return index; }
 		};
 	}
@@ -135,7 +135,7 @@ function newCollection ( objName ) {
 
 	function myGetAt ( objId ) {
 		let index = myIndexOfObjId ( objId );
-		if ( THE_CONST.notFound === index ) {
+		if ( NOT_FOUND === index ) {
 			return null;
 		}
 		return myArray [ index ];
@@ -169,11 +169,11 @@ function newCollection ( objName ) {
 		if ( ! moveBefore ) {
 			newPosition ++;
 		}
-		myArray.splice ( newPosition, THE_CONST.zero, myArray [ oldPosition ] );
+		myArray.splice ( newPosition, ZERO, myArray [ oldPosition ] );
 		if ( newPosition < oldPosition ) {
 			oldPosition ++;
 		}
-		myArray.splice ( oldPosition, THE_CONST.number1 );
+		myArray.splice ( oldPosition, ONE );
 	}
 
 	/*
@@ -183,7 +183,7 @@ function newCollection ( objName ) {
 	*/
 
 	function myLast ( ) {
-		return myArray [ myArray.length - THE_CONST.number1 ];
+		return myArray [ myArray.length - ONE ];
 	}
 
 	/*
@@ -194,7 +194,7 @@ function newCollection ( objName ) {
 
 	function myNextOrPrevious ( objId, condition, direction ) {
 		let index = myIndexOfObjId ( objId );
-		if ( THE_CONST.notFound === index ) {
+		if ( NOT_FOUND === index ) {
 			throw new Error ( 'invalid objId for next or previous function' );
 		}
 
@@ -204,10 +204,10 @@ function newCollection ( objName ) {
 		}
 		index += direction;
 
-		while ( ( THE_CONST.notFound < index ) && ( index < myArray.length ) && ! otherCondition ( myArray [ index ] ) ) {
+		while ( ( NOT_FOUND < index ) && ( index < myArray.length ) && ! otherCondition ( myArray [ index ] ) ) {
 			index += direction;
 		}
-		if ( THE_CONST.notFound === index || myArray.length === index ) {
+		if ( NOT_FOUND === index || myArray.length === index ) {
 			return null;
 		}
 
@@ -222,10 +222,10 @@ function newCollection ( objName ) {
 
 	function myRemove ( objId ) {
 		let index = myIndexOfObjId ( objId );
-		if ( THE_CONST.notFound === index ) {
+		if ( NOT_FOUND === index ) {
 			throw new Error ( 'invalid objId for remove function' );
 		}
-		myArray.splice ( myIndexOfObjId ( objId ), THE_CONST.number1 );
+		myArray.splice ( myIndexOfObjId ( objId ), ONE );
 	}
 
 	/*
@@ -236,10 +236,10 @@ function newCollection ( objName ) {
 
 	function myRemoveAll ( ExceptFirstLast ) {
 		if ( ExceptFirstLast ) {
-			myArray.splice ( THE_CONST.number1, myArray.length - THE_CONST.number2 );
+			myArray.splice ( ONE, myArray.length - TWO );
 		}
 		else {
-			myArray.length = THE_CONST.zero;
+			myArray.length = ZERO;
 		}
 	}
 
@@ -251,7 +251,7 @@ function newCollection ( objName ) {
 
 	function myReplace ( oldObjId, object ) {
 		let index = myIndexOfObjId ( oldObjId );
-		if ( THE_CONST.notFound === index ) {
+		if ( NOT_FOUND === index ) {
 			throw new Error ( 'invalid objId for replace function' );
 		}
 		myArray [ index ] = object;
@@ -274,7 +274,7 @@ function newCollection ( objName ) {
 	*/
 
 	function mySetObject ( something ) {
-		myArray.length = THE_CONST.zero;
+		myArray.length = ZERO;
 		let newObject = null;
 		something.forEach (
 			arrayObject => {
@@ -322,11 +322,11 @@ function newCollection ( objName ) {
 	function mySwap ( objId, swapUp ) {
 		let index = myIndexOfObjId ( objId );
 		if (
-			( THE_CONST.notFound === index )
+			( NOT_FOUND === index )
 			||
-			( ( THE_CONST.zero === index ) && swapUp )
+			( ( ZERO === index ) && swapUp )
 			||
-			( ( myArray.length - THE_CONST.number1 === index ) && ( ! swapUp ) )
+			( ( myArray.length - ONE === index ) && ( ! swapUp ) )
 		) {
 			throw new Error ( 'invalid objId for swap function' );
 		}

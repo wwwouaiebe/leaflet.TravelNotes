@@ -35,7 +35,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
 /*
 --- newTravelNotesToolbarUI function ----------------------------------------------------------------------------------
@@ -93,10 +93,10 @@ function newTravelNotesToolbarUI ( ) {
 
 	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
 		switch ( geoLocationStatus ) {
-		case THE_CONST.geoLocation.status.inactive :
+		case GEOLOCATION_STATUS.inactive :
 			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
-		case THE_CONST.geoLocation.status.active :
+		case GEOLOCATION_STATUS.active :
 			myGeoLocationButton.classList.add ( 'TravelNotes-Control-GeoLocationButton-Striked' );
 			break;
 		default :
@@ -195,7 +195,7 @@ function newTravelNotesToolbarUI ( ) {
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS
 		// the geolocation is working also on http protocol
-		if ( THE_CONST.geoLocation.status.disabled < theGeoLocator.status ) {
+		if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
 
 			// GeoLocator button
 			myGeoLocationButton = myHTMLElementsFactory.create (

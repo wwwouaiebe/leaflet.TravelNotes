@@ -41,7 +41,7 @@ import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newRoutePropertiesDialog function ---------------------------------------------------------------------------------
@@ -164,10 +164,10 @@ function newRoutePropertiesDialog ( route ) {
 		);
 
 		let dashChoices = theConfig.route.dashChoices;
-		for ( let optionsCounter = THE_CONST.zero; optionsCounter < dashChoices.length; optionsCounter ++ ) {
+		for ( let optionsCounter = ZERO; optionsCounter < dashChoices.length; optionsCounter ++ ) {
 			myDashSelect.add ( myHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
-		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : THE_CONST.zero;
+		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : ZERO;
 	}
 
 	/*

@@ -37,7 +37,7 @@ import { newZoomer } from '../core/Zoomer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newNoteContextMenu function ---------------------------------------------------------------------------------------
@@ -88,9 +88,9 @@ function newNoteContextMenu ( contextMenuEvent ) {
 						:
 						theTranslator.getText ( 'ContextMenuFactory - Attach note to route' ),
 				action :
-					theTravelNotesData.travel.routes.length !== THE_CONST.zero
+					theTravelNotesData.travel.routes.length !== ZERO
 					&&
-					THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId
+					INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
 						?
 						( route ? theNoteEditor.detachNoteFromRoute : theNoteEditor.attachNoteToRoute )
 						:

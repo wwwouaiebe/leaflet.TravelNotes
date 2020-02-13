@@ -33,7 +33,7 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newZoomer function ------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ function newZoomer ( ) {
 			route => myPushRouteGeometry ( route )
 		);
 
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.travel.editedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== theTravelNotesData.travel.editedRouteObjId ) {
 			myPushRouteGeometry ( theTravelNotesData.travel.editedRoute );
 		}
 

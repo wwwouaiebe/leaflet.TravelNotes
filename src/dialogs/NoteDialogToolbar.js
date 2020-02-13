@@ -33,7 +33,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 /*
 --- newNoteDialogToolbar function -------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ function newNoteDialogToolbar ( ) {
 				)
 			)
 		);
-		myIconsSelect.selectedIndex = THE_CONST.notFound;
+		myIconsSelect.selectedIndex = NOT_FOUND;
 	}
 
 	/*
@@ -119,15 +119,15 @@ function newNoteDialogToolbar ( ) {
 				);
 
 				let oldButton = null;
-				while ( THE_CONST.zero < document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ).length ) {
-					oldButton = document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ) [ THE_CONST.zero ];
+				while ( ZERO < document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ).length ) {
+					oldButton = document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ) [ ZERO ];
 					oldButton.removeEventListener ( 'click', myOnButtonClickEventListener, false );
 					myToolbarDiv.removeChild ( oldButton );
 				}
 				myAddButtons ( );
 				for (
-					let elementCounter = myIconsSelect.length - THE_CONST.number1;
-					elementCounter >= THE_CONST.zero;
+					let elementCounter = myIconsSelect.length - ONE;
+					elementCounter >= ZERO;
 					elementCounter --
 				) {
 					myIconsSelect.remove ( elementCounter );
@@ -138,7 +138,7 @@ function newNoteDialogToolbar ( ) {
 				console.log ( err ? err : 'An error occurs when opening the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
+		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
 	/*

@@ -31,7 +31,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
 --- newProfileFactory function ----------------------------------------------------------------------------------------
@@ -42,16 +42,16 @@ import { THE_CONST } from '../util/Constants.js';
 function newProfileFactory ( ) {
 
 	let mySvg = null;
-	let myVScale = THE_CONST.number1;
-	let myHScale = THE_CONST.number1;
+	let myVScale = ONE;
+	let myHScale = ONE;
 
 	let myMinElev = Number.MAX_VALUE;
-	let myMaxElev = THE_CONST.zero;
-	let myDeltaElev = THE_CONST.zero;
+	let myMaxElev = ZERO;
+	let myDeltaElev = ZERO;
 
 	let myRoute = null;
 
-	let mySmoothDistance = THE_CONST.zero;
+	let mySmoothDistance = ZERO;
 	let mySmoothCoefficient = theConfig.route.elev.smoothCoefficient;
 	let mySmoothPoints = theConfig.route.elev.smoothPoints;
 
@@ -116,24 +116,24 @@ function newProfileFactory ( ) {
 		let tmpPoints = createTmpPoints ( );
 		let smoothPoints = new Map;
 
-		let deltaElev = ( tmpPoints [ mySmoothPoints ].elev - tmpPoints [ THE_CONST.zero ].elev ) / mySmoothPoints;
+		let deltaElev = ( tmpPoints [ mySmoothPoints ].elev - tmpPoints [ ZERO ].elev ) / mySmoothPoints;
 
-		let pointCounter = THE_CONST.zero;
+		let pointCounter = ZERO;
 
 		// Computing the first elevs
-		for ( pointCounter = THE_CONST.zero; pointCounter < mySmoothPoints; pointCounter ++ ) {
+		for ( pointCounter = ZERO; pointCounter < mySmoothPoints; pointCounter ++ ) {
 			smoothPoints.set (
 				pointCounter * mySmoothDistance,
 				{
 					distance : pointCounter * mySmoothDistance,
-					elev : tmpPoints [ THE_CONST.zero ].elev + ( deltaElev * pointCounter )
+					elev : tmpPoints [ ZERO ].elev + ( deltaElev * pointCounter )
 				}
 			);
 		}
 
 		// Computing next elevs
 		for ( pointCounter = mySmoothPoints; pointCounter < tmpPoints.length - mySmoothPoints; pointCounter ++ ) {
-			let elevSum = THE_CONST.zero;
+			let elevSum = ZERO;
 			for (
 				let pointNumber = pointCounter - mySmoothPoints;
 				pointCounter + mySmoothPoints >= pointNumber;
@@ -145,7 +145,7 @@ function newProfileFactory ( ) {
 				tmpPoints [ pointCounter ].distance,
 				{
 					distance : tmpPoints [ pointCounter ].distance,
-					elev : elevSum / ( ( mySmoothPoints * THE_CONST.number2 ) + THE_CONST.number1 )
+					elev : elevSum / ( ( mySmoothPoints * TWO ) + ONE )
 				}
 			);
 		}
@@ -153,12 +153,12 @@ function newProfileFactory ( ) {
 		pointCounter --;
 
 		deltaElev = mySmoothDistance * (
-			tmpPoints [ tmpPoints.length - THE_CONST.number1 ].elev -
-				tmpPoints [ tmpPoints.length - THE_CONST.number1 - mySmoothPoints ].elev
+			tmpPoints [ tmpPoints.length - ONE ].elev -
+				tmpPoints [ tmpPoints.length - ONE - mySmoothPoints ].elev
 		) /
 			(
-				tmpPoints [ tmpPoints.length - THE_CONST.number1 ].distance -
-				tmpPoints [ tmpPoints.length - THE_CONST.number1 - mySmoothPoints ].distance
+				tmpPoints [ tmpPoints.length - ONE ].distance -
+				tmpPoints [ tmpPoints.length - ONE - mySmoothPoints ].distance
 			);
 
 		// Computing the last elevs
@@ -170,10 +170,10 @@ function newProfileFactory ( ) {
 			}
 		);
 		smoothPoints.set (
-			tmpPoints [ pointCounter ].distance + ( mySmoothDistance * THE_CONST.number2 ),
+			tmpPoints [ pointCounter ].distance + ( mySmoothDistance * TWO ),
 			{
-				distance : tmpPoints [ pointCounter ].distance + ( mySmoothDistance * THE_CONST.number2 ),
-				elev : tmpPoints [ pointCounter ].elev + ( deltaElev * THE_CONST.number2 )
+				distance : tmpPoints [ pointCounter ].distance + ( mySmoothDistance * TWO ),
+				elev : tmpPoints [ pointCounter ].elev + ( deltaElev * TWO )
 			}
 		);
 
@@ -190,8 +190,8 @@ function newProfileFactory ( ) {
 
 		myRoute = route;
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
-		let distance = THE_CONST.zero;
-		let elev = THE_CONST.zero;
+		let distance = ZERO;
+		let elev = ZERO;
 		while ( ! itineraryPointsIterator.done ) {
 			distance += itineraryPointsIterator.value.distance;
 			elev +=
@@ -199,11 +199,12 @@ function newProfileFactory ( ) {
 					?
 					Math.abs ( itineraryPointsIterator.value.elev - itineraryPointsIterator.next.elev )
 					:
-					THE_CONST.zero;
+					ZERO;
 
 		}
 
-		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * THE_CONST.number10;
+		const TEN = 10;
+		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * TEN;
 
 		let smoothPoints = createSmoothPoints ( );
 
@@ -237,18 +238,18 @@ function newProfileFactory ( ) {
 
 	function myCreateProfilePolyline ( ) {
 		let pointsAttribute = '';
-		let distance = THE_CONST.zero;
-		let xPolyline = THE_CONST.zero;
-		let yPolyline = THE_CONST.zero;
+		let distance = ZERO;
+		let xPolyline = ZERO;
+		let yPolyline = ZERO;
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				xPolyline = ( THE_CONST.svgProfile.margin + ( myHScale * distance ) ).toFixed ( THE_CONST.zero );
+				xPolyline = ( SVG_PROFILE.margin + ( myHScale * distance ) ).toFixed ( ZERO );
 				yPolyline =
 					(
-						THE_CONST.svgProfile.margin +
+						SVG_PROFILE.margin +
 						( myVScale * ( myMaxElev - itineraryPoint.elev ) )
 					)
-						.toFixed ( THE_CONST.zero );
+						.toFixed ( ZERO );
 				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
 				distance += itineraryPoint.distance;
 			}
@@ -268,10 +269,10 @@ function newProfileFactory ( ) {
 	*/
 
 	function myCreateFramePolyline ( ) {
-		const LEFT = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero );
-		const BOTTOM = ( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.height ).toFixed ( THE_CONST.zero );
-		const RIGHT = ( THE_CONST.svgProfile.margin + THE_CONST.svgProfile.width ).toFixed ( THE_CONST.zero );
-		const TOP = THE_CONST.svgProfile.margin.toFixed ( THE_CONST.zero );
+		const LEFT = SVG_PROFILE.margin.toFixed ( ZERO );
+		const BOTTOM = ( SVG_PROFILE.margin + SVG_PROFILE.height ).toFixed ( ZERO );
+		const RIGHT = ( SVG_PROFILE.margin + SVG_PROFILE.width ).toFixed ( ZERO );
+		const TOP = SVG_PROFILE.margin.toFixed ( ZERO );
 		let pointsAttribute =
 			LEFT + ',' + TOP + ' ' + LEFT + ',' + BOTTOM + ' ' +
 			RIGHT + ',' + BOTTOM + ' ' + RIGHT + ',' + TOP;
@@ -292,7 +293,7 @@ function newProfileFactory ( ) {
 	function myCreateDistanceTexts ( ) {
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
-		THE_CONST.svgProfile.hScales.forEach (
+		SVG_PROFILE.hScales.forEach (
 			scale => {
 				let currentDelta = Math.abs ( ( myRoute.distance / 8 ) - scale );
 				if ( currentDelta < minDelta ) {
@@ -302,13 +303,13 @@ function newProfileFactory ( ) {
 			}
 		);
 		let distance = Math.ceil ( myRoute.chainedDistance / selectedScale ) * selectedScale;
-		const BOTTOM_TEXT = ( THE_CONST.svgProfile.margin * 1.5 ) + THE_CONST.svgProfile.height;
+		const BOTTOM_TEXT = ( SVG_PROFILE.margin * 1.5 ) + SVG_PROFILE.height;
 		while ( distance < myRoute.distance + myRoute.chainedDistance ) {
 			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 
 			distanceText.appendChild ( document.createTextNode ( 500 > selectedScale ? distance + ' m ' : ( distance / 1000 ) + ' km' ) );
 			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-distLegend' );
-			distanceText.setAttributeNS ( null, 'x', THE_CONST.svgProfile.margin + ( ( distance - myRoute.chainedDistance ) * myHScale ) );
+			distanceText.setAttributeNS ( null, 'x', SVG_PROFILE.margin + ( ( distance - myRoute.chainedDistance ) * myHScale ) );
 			distanceText.setAttributeNS ( null, 'y', BOTTOM_TEXT );
 			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( distanceText );
@@ -327,7 +328,7 @@ function newProfileFactory ( ) {
 	function myCreateElevTexts ( ) {
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
-		THE_CONST.svgProfile.vScales.forEach (
+		SVG_PROFILE.vScales.forEach (
 			scale => {
 				let currentDelta = Math.abs ( ( myDeltaElev / 4 ) - scale );
 				if ( currentDelta < minDelta ) {
@@ -339,22 +340,22 @@ function newProfileFactory ( ) {
 		let elev = Math.ceil ( myMinElev / selectedScale ) * selectedScale;
 		const RIGHT_TEXT =
 			(
-				THE_CONST.svgProfile.margin +
-				THE_CONST.svgProfile.width +
-				THE_CONST.svgProfile.xDeltaText
-			).toFixed ( THE_CONST.zero );
-		const LEFT_TEXT = ( THE_CONST.svgProfile.margin - THE_CONST.svgProfile.xDeltaText ).toFixed ( THE_CONST.zero );
+				SVG_PROFILE.margin +
+				SVG_PROFILE.width +
+				SVG_PROFILE.xDeltaText
+			).toFixed ( ZERO );
+		const LEFT_TEXT = ( SVG_PROFILE.margin - SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
 		while ( elev < myMaxElev ) {
-			let elevTextY = THE_CONST.svgProfile.margin + ( ( myMaxElev - elev ) * myVScale );
+			let elevTextY = SVG_PROFILE.margin + ( ( myMaxElev - elev ) * myVScale );
 			let rightElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( THE_CONST.zero ) ) );
+			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
 			rightElevText.setAttributeNS ( null, 'x', RIGHT_TEXT );
 			rightElevText.setAttributeNS ( null, 'y', elevTextY );
 			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( rightElevText );
 			let leftElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
-			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( THE_CONST.zero ) ) );
+			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
 			leftElevText.setAttributeNS ( null, 'x', LEFT_TEXT );
 			leftElevText.setAttributeNS ( null, 'y', elevTextY );
@@ -378,15 +379,15 @@ function newProfileFactory ( ) {
 
 		let previousElev = myRoute.itinerary.itineraryPoints.first.elev;
 		myMinElev = Number.MAX_VALUE;
-		myMaxElev = THE_CONST.zero;
-		myRoute.itinerary.ascent = THE_CONST.zero;
-		myRoute.itinerary.descent = THE_CONST.zero;
+		myMaxElev = ZERO;
+		myRoute.itinerary.ascent = ZERO;
+		myRoute.itinerary.descent = ZERO;
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				myMaxElev = Math.max ( myMaxElev, itineraryPoint.elev );
 				myMinElev = Math.min ( myMinElev, itineraryPoint.elev );
 				let deltaElev = itineraryPoint.elev - previousElev;
-				if ( THE_CONST.zero > deltaElev ) {
+				if ( ZERO > deltaElev ) {
 					myRoute.itinerary.descent -= deltaElev;
 				}
 				else {
@@ -396,15 +397,15 @@ function newProfileFactory ( ) {
 			}
 		);
 		myDeltaElev = myMaxElev - myMinElev;
-		myVScale = THE_CONST.svgProfile.height / myDeltaElev;
-		myHScale = THE_CONST.svgProfile.width / myRoute.distance;
+		myVScale = SVG_PROFILE.height / myDeltaElev;
+		myHScale = SVG_PROFILE.width / myRoute.distance;
 
 		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',
-			'0 0 ' + ( THE_CONST.svgProfile.width + ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) ) +
-			' ' + ( THE_CONST.svgProfile.height + ( THE_CONST.number2 * THE_CONST.svgProfile.margin ) )
+			'0 0 ' + ( SVG_PROFILE.width + ( TWO * SVG_PROFILE.margin ) ) +
+			' ' + ( SVG_PROFILE.height + ( TWO * SVG_PROFILE.margin ) )
 		);
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
 

@@ -40,7 +40,7 @@ import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 /*
 --- newDataPanesUI function -------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ function newDataPanesUI ( ) {
 			wheelEvent => {
 				if ( wheelEvent.deltaY ) {
 					wheelEvent.target.scrollTop +=
-						wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
+						wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 				}
 				wheelEvent.stopPropagation ( );
 			},

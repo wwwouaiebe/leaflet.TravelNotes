@@ -43,7 +43,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- providersToolbarUI function ---------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ function newProvidersToolbarUI ( ) {
 	function mySetTransitMode ( transitMode ) {
 
 		theTravelNotesData.routing.transitMode = transitMode;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ THE_CONST.zero ]
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ ZERO ]
 			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
@@ -107,7 +107,7 @@ function newProvidersToolbarUI ( ) {
 
 	function mySetProvider ( providerName ) {
 		theTravelNotesData.routing.provider = providerName;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ THE_CONST.zero ]
+		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ ZERO ]
 			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		document.getElementById ( 'TravelNotes-Control-' + providerName + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
@@ -197,7 +197,7 @@ function newProvidersToolbarUI ( ) {
 
 	function myCreateProviderButton ( provider ) {
 
-		if ( THE_CONST.zero === provider.providerKey ) {
+		if ( ZERO === provider.providerKey ) {
 			return;
 		}
 

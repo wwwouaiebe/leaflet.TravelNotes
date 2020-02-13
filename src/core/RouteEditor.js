@@ -63,7 +63,7 @@ import { newGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newRouteEditor function -------------------------------------------------------------------------------------------
@@ -102,10 +102,10 @@ function newRouteEditor ( ) {
 		maneuverIterator.done;
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		let previousManeuver = maneuverIterator.value;
-		previousManeuver.distance = THE_CONST.distance.defaultValue;
+		previousManeuver.distance = DISTANCE.defaultValue;
 		maneuverIterator.done;
-		route.distance = THE_CONST.distance.defaultValue;
-		route.duration = THE_CONST.distance.defaultValue;
+		route.distance = DISTANCE.defaultValue;
+		route.duration = DISTANCE.defaultValue;
 		while ( ! itineraryPointsIterator.done ) {
 			previousItineraryPoint.distance = myGeometry.pointsDistance (
 				previousItineraryPoint.latLng,
@@ -114,7 +114,7 @@ function newRouteEditor ( ) {
 			if ( maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 				route.duration += previousManeuver.duration;
 				previousManeuver = maneuverIterator.value;
-				maneuverIterator.value.distance = THE_CONST.distance.defaultValue;
+				maneuverIterator.value.distance = DISTANCE.defaultValue;
 				maneuverIterator.done;
 			}
 			route.distance += previousItineraryPoint.distance;
@@ -221,14 +221,14 @@ function newRouteEditor ( ) {
 
 	function myChainRoutes ( ) {
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		let chainedDistance = THE_CONST.distance.defaultValue;
+		let chainedDistance = DISTANCE.defaultValue;
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.chain ) {
 				routesIterator.value.chainedDistance = chainedDistance;
 				chainedDistance += routesIterator.value.distance;
 			}
 			else {
-				routesIterator.value.chainedDistance = THE_CONST.distance.defaultValue;
+				routesIterator.value.chainedDistance = DISTANCE.defaultValue;
 			}
 			let notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
@@ -253,9 +253,9 @@ function newRouteEditor ( ) {
 				haveValidWayPoints =
 					haveValidWayPoints
 					&&
-					THE_CONST.latLng.defaultValue !== wayPoint.lat
+					LAT_LNG.defaultValue !== wayPoint.lat
 					&&
-					THE_CONST.latLng.defaultValue !== wayPoint.lng;
+					LAT_LNG.defaultValue !== wayPoint.lng;
 			}
 		);
 
@@ -373,7 +373,7 @@ function newRouteEditor ( ) {
 			return false;
 		}
 
-		myMustZoomToRoute = THE_CONST.zero === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+		myMustZoomToRoute = ZERO === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
 		myRequestStarted = true;
 
 		// Choosing the correct route provider
@@ -402,7 +402,7 @@ function newRouteEditor ( ) {
 
 		// !!! order is important!!!
 		let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-		editedRoute.edited = THE_CONST.route.edited.notEdited;
+		editedRoute.edited = ROUTE_EDITION_STATUS.notEdited;
 
 		theProfileWindowsManager.updateProfile (
 			theTravelNotesData.travel.editedRoute.objId,
@@ -417,7 +417,7 @@ function newRouteEditor ( ) {
 			}
 		);
 
-		theTravelNotesData.editedRouteObjId = THE_CONST.invalidObjId;
+		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
 		theTravelNotesData.travel.editedRoute = newRoute ( );
 		myChainRoutes ( );
 
@@ -496,7 +496,7 @@ function newRouteEditor ( ) {
 			'routeupdated',
 			{
 				removedRouteObjId : routeObjId,
-				addedRouteObjId : THE_CONST.invalidObjId
+				addedRouteObjId : INVALID_OBJ_ID
 			}
 		);
 		myDataSearchEngine.getRoute ( routeObjId ).hidden = true;
@@ -517,7 +517,7 @@ function newRouteEditor ( ) {
 				myEventDispatcher.dispatch (
 					'routeupdated',
 					{
-						removedRouteObjId : THE_CONST.invalidObjId,
+						removedRouteObjId : INVALID_OBJ_ID,
 						addedRouteObjId : routesIterator.value.objId
 					}
 				);

@@ -33,7 +33,7 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newZoomer } from '../core/Zoomer.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newViewerFileLoader function --------------------------------------------------------------------------------------
@@ -60,11 +60,11 @@ function newViewerFileLoader ( ) {
 		// routes are added with their notes
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			if ( THE_CONST.route.edited.notEdited === routesIterator.value.edited ) {
+			if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.edited ) {
 				myEventDispatcher.dispatch (
 					'routeupdated',
 					{
-						removedRouteObjId : THE_CONST.invalidObjId,
+						removedRouteObjId : INVALID_OBJ_ID,
 						addedRouteObjId : routesIterator.value.objId
 					}
 				);
@@ -72,11 +72,11 @@ function newViewerFileLoader ( ) {
 		}
 
 		// edited route is added with notes and , depending of read only, waypoints
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			myEventDispatcher.dispatch (
 				'routeupdated',
 				{
-					removedRouteObjId : THE_CONST.invalidObjId,
+					removedRouteObjId : INVALID_OBJ_ID,
 					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 				}
 			);
@@ -88,7 +88,7 @@ function newViewerFileLoader ( ) {
 			myEventDispatcher.dispatch (
 				'noteupdated',
 				{
-					removedNoteObjId : THE_CONST.invalidObjId,
+					removedNoteObjId : INVALID_OBJ_ID,
 					addedNoteObjId : notesIterator.value.objId
 				}
 			);

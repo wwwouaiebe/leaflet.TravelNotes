@@ -40,7 +40,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newSearchPaneUI function ------------------------------------------------------------------------------------------
@@ -149,14 +149,14 @@ function newSearchPaneUI ( ) {
 
 		// removing previous search results
 		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
-		while ( THE_CONST.zero !== searchResultsElements.length ) {
+		while ( ZERO !== searchResultsElements.length ) {
 
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-			searchResultsElements [ THE_CONST.zero ].removeEventListener ( 'click', myOnSearchResultClick, false );
-			searchResultsElements [ THE_CONST.zero ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-			searchResultsElements [ THE_CONST.zero ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-			searchResultsElements [ THE_CONST.zero ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-			searchDiv.removeChild ( searchResultsElements [ THE_CONST.zero ] );
+			searchResultsElements [ ZERO ].removeEventListener ( 'click', myOnSearchResultClick, false );
+			searchResultsElements [ ZERO ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
+			searchResultsElements [ ZERO ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
+			searchResultsElements [ ZERO ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
+			searchDiv.removeChild ( searchResultsElements [ ZERO ] );
 		}
 		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
 
@@ -286,7 +286,7 @@ function newSearchPaneUI ( ) {
 			},
 			false );
 		searchInput.focus ( );
-		let resultsCounter = THE_CONST.zero;
+		let resultsCounter = ZERO;
 		theTravelNotesData.searchData.forEach (
 			searchResult => {
 				let searchResultDiv = myHTMLElementsFactory.create (

@@ -42,7 +42,7 @@ import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- fileLoader function -----------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ function newFileLoader ( ) {
 
 		// Editors and HTML pages are filled
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
 			myEventDispatcher.dispatch ( 'reducerouteui' );
 		}
 		else {
@@ -128,7 +128,7 @@ function newFileLoader ( ) {
 	*/
 
 	function myOpenFile ( changeEvent, mustMerge ) {
-		let fileName = changeEvent.target.files [ THE_CONST.zero ].name;
+		let fileName = changeEvent.target.files [ ZERO ].name;
 
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
@@ -145,13 +145,13 @@ function newFileLoader ( ) {
 			else {
 				newFileCompactor ( ).decompress ( fileContent );
 				theTravelNotesData.travel.name =
-					fileName.substr ( THE_CONST.zero, fileName.lastIndexOf ( '.' ) );
+					fileName.substr ( ZERO, fileName.lastIndexOf ( '.' ) );
 			}
 
 			myDisplay ( );
 
 		};
-		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
+		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
 	/*

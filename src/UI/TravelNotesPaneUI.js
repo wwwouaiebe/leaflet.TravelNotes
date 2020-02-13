@@ -35,7 +35,7 @@ import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE } from '../util/Constants.js';
 
 /*
 --- newTravelNotesPaneUI function -------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ This function returns the travelNotesPaneUI object
 
 function newTravelNotesPaneUI ( ) {
 
-	let myNoteObjId = THE_CONST.zero;
+	let myNoteObjId = ZERO;
 
 	let myEventDispatcher = newEventDispatcher ( );
 
@@ -69,10 +69,10 @@ function newTravelNotesPaneUI ( ) {
 			console.log ( err );
 		}
 
-		// for this #@!& MS Edge... don't remove - THE_CONST.number1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove - ONE otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
 		// different in the drag event and the drop event
-		myNoteObjId = dragEvent.target.noteObjId - THE_CONST.number1;
+		myNoteObjId = dragEvent.target.noteObjId - ONE;
 	}
 
 	/*
@@ -104,9 +104,9 @@ function newTravelNotesPaneUI ( ) {
 		}
 		let clientRect = element.getBoundingClientRect ( );
 
-		// for this #@!& MS Edge... don't remove + THE_CONST.number1 otherwise crazy things comes in FF
+		// for this #@!& MS Edge... don't remove + ONE otherwise crazy things comes in FF
 		theNoteEditor.noteDropped (
-			myNoteObjId + THE_CONST.number1,
+			myNoteObjId + ONE,
 			element.noteObjId,
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
 		);

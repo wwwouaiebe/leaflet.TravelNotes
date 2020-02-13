@@ -37,7 +37,7 @@ import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, TWO } from '../util/Constants.js';
 
 /*
 --- newTravelNotesViewer funtion --------------------------------------------------------------------------------------
@@ -151,8 +151,8 @@ function newTravelNotesViewer ( ) {
 					err => {
 						console.log ( err ? err : 'Not possible to load the .trv file' );
 						theTravelNotesData.map.setView (
-							[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
-							THE_CONST.number2
+							[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
+							TWO
 						);
 					}
 				);

@@ -33,7 +33,7 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS, ZERO, ONE, TWO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newSortableList function ------------------------------------------------------------------------------------------
@@ -43,13 +43,13 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newSortableList ( options, parentNode ) {
 
-	let myDataObjId = THE_CONST.zero;
+	let myDataObjId = ZERO;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myItems = [];
 
-	let myOptions = { minSize : THE_CONST.number2, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
+	let myOptions = { minSize : TWO, listStyle : 'AllSort', id : 'TravelNotes-SortableList-Container' };
 
 	let myContainer = myHTMLElementsFactory.create (
 		'div',
@@ -75,10 +75,10 @@ function newSortableList ( options, parentNode ) {
 			console.log ( err );
 		}
 
-		// for this #@!& MS Edge... don't remove - THE_CONST.number1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove - ONE otherwise crasy things comes in FF
 		// MS Edge know the dataTransfer object, but the objects linked to the event are
 		// different in the drag event and the drop event
-		myDataObjId = dragEvent.target.dataObjId - THE_CONST.number1;
+		myDataObjId = dragEvent.target.dataObjId - ONE;
 	}
 
 	/*
@@ -106,9 +106,9 @@ function newSortableList ( options, parentNode ) {
 		let clientRect = element.getBoundingClientRect ( );
 		let sortableListDropEvent = new Event ( 'SortableListDrop' );
 
-		// for this #@!& MS Edge... don't remove + THE_CONST.number1 otherwise crasy things comes in FF
+		// for this #@!& MS Edge... don't remove + ONE otherwise crasy things comes in FF
 		// event.draggedObjId = parseInt ( dragEvent.dataTransfer.getData("Text") );
-		sortableListDropEvent.draggedObjId = myDataObjId + THE_CONST.number1;
+		sortableListDropEvent.draggedObjId = myDataObjId + ONE;
 
 		sortableListDropEvent.targetObjId = element.dataObjId;
 		sortableListDropEvent.draggedBefore = ( dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY );
@@ -190,7 +190,7 @@ function newSortableList ( options, parentNode ) {
 	function myOnWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
 			wheelEvent.target.scrollTop +=
-				wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
+				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 		}
 		wheelEvent.stopPropagation ( );
 	}
@@ -202,10 +202,10 @@ function newSortableList ( options, parentNode ) {
 	*/
 
 	function myRemoveAllItems ( ) {
-		for ( let ItemCounter = THE_CONST.zero; ItemCounter < myItems.length; ItemCounter ++ ) {
+		for ( let ItemCounter = ZERO; ItemCounter < myItems.length; ItemCounter ++ ) {
 			myContainer.removeChild ( myItems [ ItemCounter ] );
 		}
-		myItems.length = THE_CONST.zero;
+		myItems.length = ZERO;
 	}
 
 	/*
@@ -295,11 +295,11 @@ function newSortableList ( options, parentNode ) {
 			item
 		);
 		deleteButton.addEventListener ( 'click', myOnDeleteButtonClick, false );
-		item.dataObjId = itemData.objId || THE_CONST.invalidObjId;
+		item.dataObjId = itemData.objId || INVALID_OBJ_ID;
 
 		item.canDrag = false;
 		if (
-			( ( 'LimitedSort' !== myOptions.listStyle ) || ( THE_CONST.number1 < myItems.length ) )
+			( ( 'LimitedSort' !== myOptions.listStyle ) || ( ONE < myItems.length ) )
 			&&
 			( ! itemData.isLast )
 		) {
@@ -320,8 +320,8 @@ function newSortableList ( options, parentNode ) {
 	for ( let option in options ) {
 		myOptions [ option ] = options [ option ];
 	}
-	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( THE_CONST.number2 > myOptions.minSize ) ) {
-		myOptions.minSize = THE_CONST.zero;
+	if ( ( 'LimitedSort' === myOptions.listStyle ) && ( TWO > myOptions.minSize ) ) {
+		myOptions.minSize = ZERO;
 	}
 	myContainer.classList.add ( myOptions.listStyle );
 	myContainer.addEventListener ( 'drop', myOnDrop, false );
@@ -332,7 +332,7 @@ function newSortableList ( options, parentNode ) {
 		parentNode.appendChild ( myContainer );
 	}
 
-	for ( let itemCounter = THE_CONST.zero; itemCounter < myOptions.minSize; itemCounter ++ ) {
+	for ( let itemCounter = ZERO; itemCounter < myOptions.minSize; itemCounter ++ ) {
 		myAddItem ( );
 	}
 

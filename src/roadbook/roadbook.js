@@ -34,7 +34,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE } from '../util/Constants.js';
 
 /*
 --- showTravelNotes function --------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Event listener for show/ hide travel notes checkbox
 function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
-	for ( let notesCounter = THE_CONST.zero; notesCounter < notes.length; notesCounter ++ ) {
+	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -70,7 +70,7 @@ Event listener for show/ hide route notes checkbox
 function showRouteNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
-	for ( let notesCounter = THE_CONST.zero; notesCounter < notes.length; notesCounter ++ ) {
+	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
 			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -93,7 +93,7 @@ Event listener for show/ hide route maneuvers checkbox
 function showRouteManeuvers ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
 	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
-	for ( let maneuversCounter = THE_CONST.zero; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
+	for ( let maneuversCounter = ZERO; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
 		if ( show ) {
 			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
 		}
@@ -111,7 +111,7 @@ document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener 
 -------------------------------------------------------------------------------------------------------------------
 */
 
-let params = new URLSearchParams ( document.location.search.substring ( THE_CONST.number1 ) );
+let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
 let language = params.get ( 'lng' );
 let pageId = params.get ( 'page' );
 
@@ -127,7 +127,7 @@ function saveFile ( ) {
 		element.setAttribute ( 'href', mapFile );
 		element.setAttribute (
 			'download',
-			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ THE_CONST.zero ]
+			document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Header-Name' ) [ ZERO ]
 				.innerHTML + '-Roadbook.html'
 		);
 		element.style.display = 'none';
@@ -190,7 +190,7 @@ else {
 
 if ( language ) {
 	newHttpRequestBuilder ( ).getJsonPromise (
-		window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
 		'.json'

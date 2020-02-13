@@ -32,7 +32,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
 
@@ -48,9 +48,9 @@ function newWayPoint ( ) {
 
 	let myName = '';
 
-	let myLat = THE_CONST.latLng.defaultValue;
+	let myLat = LAT_LNG.defaultValue;
 
-	let myLng = THE_CONST.latLng.defaultValue;
+	let myLng = LAT_LNG.defaultValue;
 
 	let myObjId = newObjId ( );
 
@@ -100,8 +100,8 @@ function newWayPoint ( ) {
 	function myGetObject ( ) {
 		return {
 			name : myName,
-			lat : parseFloat ( myLat.toFixed ( THE_CONST.latLng.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( THE_CONST.latLng.fixed ) ),
+			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -116,8 +116,8 @@ function newWayPoint ( ) {
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
 		myName = otherthing.name || '';
-		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
-		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
+		myLat = otherthing.lat || LAT_LNG.defaultValue;
+		myLng = otherthing.lng || LAT_LNG.defaultValue;
 		myObjId = newObjId ( );
 	}
 
@@ -141,8 +141,8 @@ function newWayPoint ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ THE_CONST.zero ];
-				myLng = LatLng [ THE_CONST.number1 ];
+				myLat = LatLng [ ZERO ];
+				myLng = LatLng [ ONE ];
 			},
 
 			get objId ( ) { return myObjId; },

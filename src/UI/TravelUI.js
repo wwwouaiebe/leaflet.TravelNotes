@@ -51,7 +51,7 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newFileLoader } from '../core/FileLoader.js';
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newTravelUI function ----------------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ function newTravelUI ( ) {
 		);
 
 		// Routes list
-		myRoutesList = newSortableList ( { minSize : THE_CONST.zero, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
+		myRoutesList = newSortableList ( { minSize : ZERO, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
 		myRoutesList.container.addEventListener (
 			'SortableListDelete',
 			sortableListDeleteEvent => {
@@ -400,7 +400,7 @@ function newTravelUI ( ) {
 			.addEventListener (
 				'click',
 				( ) => {
-					if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+					if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
 						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
 					}
 					else {

@@ -37,7 +37,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
 
 function startup ( ) {
 
@@ -54,18 +54,20 @@ function startup ( ) {
 	*/
 
 	function myReadURL ( ) {
-		( decodeURI ( window.location.search ).substr ( THE_CONST.number1 )
+		const THREE = 3;
+		const FOUR = 4;
+		( decodeURI ( window.location.search ).substr ( ONE )
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString => {
-					if ( 'fil=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
+					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						myTravelUrl = decodeURIComponent (
-							escape ( atob ( urlSearchSubString.substr ( THE_CONST.number4 ) ) ) );
+							escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
 					}
-					else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
-						myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
+					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+						myLangage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
 					}
-					else if ( 'lay' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number3 ).toLowerCase ( ) ) {
+					else if ( 'lay' === urlSearchSubString.substr ( ZERO, THREE ).toLowerCase ( ) ) {
 						myAddLayerToolbar = true;
 					}
 				}
@@ -79,17 +81,17 @@ function startup ( ) {
 	let requestBuilder = newHttpRequestBuilder ( );
 	let promises = [
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotesConfig.json'
 		),
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotes' +
 			( myLangage || theConfig.language ).toUpperCase ( ) +
 			'.json'
 		),
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotesLayers.json'
 		)
 	];
@@ -102,26 +104,26 @@ function startup ( ) {
 
 				// config adaptation
 				if ( myLangage ) {
-					values [ THE_CONST.zero ].language = myLangage;
+					values [ ZERO ].language = myLangage;
 				}
 
-				theConfig.overload ( values [ THE_CONST.zero ] );
+				theConfig.overload ( values [ ZERO ] );
 
 				// translations adaptation
-				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
+				theTranslator.setTranslations ( values [ ONE ] );
 
 				// layers adaptation
-				theViewerLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+				theViewerLayersToolbarUI.setLayers ( values [ TWO ] );
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (
 						'div',
 						{ id : 'Map' },
-						document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+						document.getElementsByTagName ( 'body' ) [ ZERO ]
 					);
 
 					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-						.setView ( [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ], THE_CONST.zero );
+						.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
 
 					theTravelNotesData.map = map;
 

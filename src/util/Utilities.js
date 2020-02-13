@@ -27,7 +27,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
 
 function newUtilities ( ) {
 
@@ -42,9 +42,9 @@ function newUtilities ( ) {
 			const HEXADECIMAL = 16;
 			const TWO_EXP_16 = 65536;
 			return Math
-				.floor ( ( THE_CONST.number1 + Math.random ( ) ) * TWO_EXP_16 )
+				.floor ( ( ONE + Math.random ( ) ) * TWO_EXP_16 )
 				.toString ( HEXADECIMAL )
-				.substring ( THE_CONST.number1 );
+				.substring ( ONE );
 		}
 		return Random4 ( ) +
 			Random4 ( ) + '-' +
@@ -165,14 +165,14 @@ function newUtilities ( ) {
 		const SECOND_IN_MINUT = 60;
 
 		let iTtime = Math.floor ( time );
-		if ( THE_CONST.zero === iTtime ) {
+		if ( ZERO === iTtime ) {
 			return '';
 		}
 		let days = Math.floor ( iTtime / SECOND_IN_DAY );
 		let hours = Math.floor ( iTtime % SECOND_IN_DAY / SECOND_IN_HOUR );
 		let minutes = Math.floor ( iTtime % SECOND_IN_HOUR / SECOND_IN_MINUT );
 		let seconds = Math.floor ( iTtime % SECOND_IN_MINUT );
-		if ( THE_CONST.zero < days ) {
+		if ( ZERO < days ) {
 			return days +
 				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Day' ) +
@@ -181,7 +181,7 @@ function newUtilities ( ) {
 				'\u00A0' +
 				theTranslator.getText ( 'Utilities - Hour' );
 		}
-		else if ( THE_CONST.zero < hours ) {
+		else if ( ZERO < hours ) {
 			return hours +
 				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Hour' )
@@ -190,7 +190,7 @@ function newUtilities ( ) {
 				'\u00A0'
 				+ theTranslator.getText ( 'Utilities - Minute' );
 		}
-		else if ( THE_CONST.zero < minutes ) {
+		else if ( ZERO < minutes ) {
 			return minutes +
 				'\u00A0' +
 				theTranslator.getText ( 'Utilities - Minute' );
@@ -210,16 +210,17 @@ function newUtilities ( ) {
 
 		const M_IN_KM = 1000;
 		const DISTANCE_ROUND = 10;
+		const THREE = 3;
 
 		let iDistance = Math.floor ( distance );
-		if ( THE_CONST.zero === iDistance ) {
+		if ( ZERO === iDistance ) {
 			return '';
 		}
 		return Math.floor ( iDistance / M_IN_KM ) +
 			',' +
-			Math.floor ( ( iDistance % M_IN_KM ) / DISTANCE_ROUND ).toFixed ( THE_CONST.zero )
-				.padStart ( THE_CONST.number2, '0' )
-				.padEnd ( THE_CONST.number3, '0' ) +
+			Math.floor ( ( iDistance % M_IN_KM ) / DISTANCE_ROUND ).toFixed ( ZERO )
+				.padStart ( TWO, '0' )
+				.padEnd ( THREE, '0' ) +
 			'\u00A0km';
 	}
 
@@ -233,11 +234,11 @@ function newUtilities ( ) {
 
 	function myFormatLat ( lat ) {
 		return (
-			lat > THE_CONST.zero
+			lat > ZERO
 				?
-				lat.toFixed ( THE_CONST.latLng.fixed ) + '\u00A0N'
+				lat.toFixed ( LAT_LNG.fixed ) + '\u00A0N'
 				:
-				( -lat ).toFixed ( THE_CONST.latLng.fixed ) + '\u00A0S'
+				( -lat ).toFixed ( LAT_LNG.fixed ) + '\u00A0S'
 		);
 	}
 
@@ -251,11 +252,11 @@ function newUtilities ( ) {
 
 	function myFormatLng ( lng ) {
 		return (
-			lng > THE_CONST.zero
+			lng > ZERO
 				?
-				lng.toFixed ( THE_CONST.latLng.fixed ) + '\u00A0E'
+				lng.toFixed ( LAT_LNG.fixed ) + '\u00A0E'
 				:
-				( -lng ).toFixed ( THE_CONST.latLng.fixed ) + '\u00A0W'
+				( -lng ).toFixed ( LAT_LNG.fixed ) + '\u00A0W'
 		);
 	}
 
@@ -268,10 +269,10 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatLatLng ( latLng ) {
-		if ( THE_CONST.zero === latLng [ THE_CONST.zero ] && THE_CONST.zero === latLng [ THE_CONST.number1 ] ) {
+		if ( ZERO === latLng [ ZERO ] && ZERO === latLng [ ONE ] ) {
 			return '';
 		}
-		return myFormatLat ( latLng [ THE_CONST.zero ] ) + '\u00A0-\u00A0' + myFormatLng ( latLng [ THE_CONST.number1 ] );
+		return myFormatLat ( latLng [ ZERO ] ) + '\u00A0-\u00A0' + myFormatLng ( latLng [ ONE ] );
 	}
 
 	/* --- End of myFormatLatLng function --- */

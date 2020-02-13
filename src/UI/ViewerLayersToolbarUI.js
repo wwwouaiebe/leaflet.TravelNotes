@@ -4,7 +4,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newZoomer } from '../core/Zoomer.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newViewerLayersToolbarUI function ---------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ function newViewerLayersToolbarUI ( ) {
 
 	function mySetLayer ( layerName ) {
 
-		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ THE_CONST.zero ];
+		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ ZERO ];
 		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
 	}
@@ -116,7 +116,7 @@ function newViewerLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-ViewerLayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			document.getElementsByTagName ( 'body' ) [ ZERO ]
 		);
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS

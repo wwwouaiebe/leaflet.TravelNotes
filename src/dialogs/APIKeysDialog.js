@@ -37,7 +37,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE } from '../util/Constants.js';
 
 /*
 --- newAPIKeysDialog function -----------------------------------------------------------------------------------------
@@ -63,11 +63,11 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myGetAPIKeys ( ) {
 		let dlgAPIKeys = [];
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = THE_CONST.zero; counter < rows.length; counter ++ ) {
+		for ( let counter = ZERO; counter < rows.length; counter ++ ) {
 			dlgAPIKeys.push (
 				{
-					providerName : rows [ counter ].childNodes [ THE_CONST.zero ].value,
-					providerKey : rows [ counter ].childNodes [ THE_CONST.number1 ].value
+					providerName : rows [ counter ].childNodes [ ZERO ].value,
+					providerKey : rows [ counter ].childNodes [ ONE ].value
 				}
 			);
 		}
@@ -84,9 +84,9 @@ function newAPIKeysDialog ( APIKeys ) {
 		let returnValue = true;
 		myAPIKeysDialog.hideError ( );
 		let rows = myAPIKeysDiv.childNodes;
-		for ( let counter = THE_CONST.zero; counter < rows.length; counter ++ ) {
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ THE_CONST.zero ].value;
-			returnValue = returnValue && '' !== rows [ counter ].childNodes [ THE_CONST.number1 ].value;
+		for ( let counter = ZERO; counter < rows.length; counter ++ ) {
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ ZERO ].value;
+			returnValue = returnValue && '' !== rows [ counter ].childNodes [ ONE ].value;
 		}
 		if ( ! returnValue ) {
 			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - empty API key name or value' ) );
@@ -291,7 +291,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				newPasswordDialog ( false ).show ( )
 			);
 		};
-		fileReader.readAsArrayBuffer ( changeEvent.target.files [ THE_CONST.zero ] );
+		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );
 
 	}
 
@@ -320,7 +320,7 @@ function newAPIKeysDialog ( APIKeys ) {
 				console.log ( err ? err : 'An error occurs when reading the file' );
 			}
 		};
-		fileReader.readAsText ( changeEvent.target.files [ THE_CONST.zero ] );
+		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
 	/*

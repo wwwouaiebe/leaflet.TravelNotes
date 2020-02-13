@@ -59,7 +59,7 @@ import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, TWO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newMapEditor function ---------------------------------------------------------------------------------------------
@@ -284,7 +284,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myAddWayPoint ( wayPoint, letter ) {
-		if ( ( THE_CONST.latLng.defaultValue === wayPoint.lat ) && ( THE_CONST.latLng.defaultValue === wayPoint.lng ) ) {
+		if ( ( LAT_LNG.defaultValue === wayPoint.lat ) && ( LAT_LNG.defaultValue === wayPoint.lng ) ) {
 			return;
 		}
 
@@ -301,7 +301,7 @@ function newMapEditor ( ) {
 					{
 						iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
 						iconAnchor : [
-							WAY_POINT_ICON_SIZE / THE_CONST.number2,
+							WAY_POINT_ICON_SIZE / TWO,
 							WAY_POINT_ICON_SIZE
 						],
 						html : iconHtml,
@@ -318,8 +318,8 @@ function newMapEditor ( ) {
 			)
 		);
 		marker.getTooltip ( ).options.offset = [
-			WAY_POINT_ICON_SIZE / THE_CONST.number2,
-			-WAY_POINT_ICON_SIZE / THE_CONST.number2
+			WAY_POINT_ICON_SIZE / TWO,
+			-WAY_POINT_ICON_SIZE / TWO
 		];
 
 		L.DomEvent.on (
@@ -380,7 +380,7 @@ function newMapEditor ( ) {
 		}
 
 		// waypoints are added
-		if ( ! theTravelNotesData.travel.readOnly && THE_CONST.route.edited.notEdited !== route.edited ) {
+		if ( ! theTravelNotesData.travel.readOnly && ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
 			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				myAddWayPoint (
@@ -498,10 +498,10 @@ function newMapEditor ( ) {
 	*/
 
 	function myUpdateRoute ( removedRouteObjId, addedRouteObjId ) {
-		if ( THE_CONST.invalidObjId !== removedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== removedRouteObjId ) {
 			myRemoveRoute ( removedRouteObjId );
 		}
-		if ( THE_CONST.invalidObjId !== addedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== addedRouteObjId ) {
 			myAddRoute ( addedRouteObjId );
 		}
 	}
@@ -531,10 +531,10 @@ function newMapEditor ( ) {
 	*/
 
 	function myUpdateNote ( removedNoteObjId, addedNoteObjId ) {
-		if ( THE_CONST.invalidObjId !== removedNoteObjId ) {
+		if ( INVALID_OBJ_ID !== removedNoteObjId ) {
 			myRemoveObject ( removedNoteObjId );
 		}
-		if ( THE_CONST.invalidObjId !== addedNoteObjId ) {
+		if ( INVALID_OBJ_ID !== addedNoteObjId ) {
 			myAddNote ( addedNoteObjId );
 		}
 	}

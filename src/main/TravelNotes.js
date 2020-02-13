@@ -74,7 +74,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, TWO } from '../util/Constants.js';
 
 /*
 --- newTravelNotes funtion --------------------------------------------------------------------------------------------
@@ -287,8 +287,8 @@ function newTravelNotes ( ) {
 				err => {
 					console.log ( err ? err : 'Not possible to load the .trv file' );
 					theTravelNotesData.map.setView (
-						[ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
-						THE_CONST.number2
+						[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
+						TWO
 					);
 				}
 			);

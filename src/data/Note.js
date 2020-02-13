@@ -32,7 +32,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Note' );
 
@@ -66,17 +66,17 @@ function newNote ( ) {
 
 	let myAddress = '';
 
-	let myIconLat = THE_CONST.latLng.defaultValue;
+	let myIconLat = LAT_LNG.defaultValue;
 
-	let myIconLng = THE_CONST.latLng.defaultValue;
+	let myIconLng = LAT_LNG.defaultValue;
 
-	let myLat = THE_CONST.latLng.defaultValue;
+	let myLat = LAT_LNG.defaultValue;
 
-	let myLng = THE_CONST.latLng.defaultValue;
+	let myLng = LAT_LNG.defaultValue;
 
-	let myDistance = THE_CONST.distance.invalid;
+	let myDistance = DISTANCE.invalid;
 
-	let myChainedDistance = THE_CONST.distance.defaultValue;
+	let myChainedDistance = DISTANCE.defaultValue;
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -147,12 +147,12 @@ function newNote ( ) {
 			phone : myPhone,
 			url : myUrl,
 			address : myAddress,
-			iconLat : parseFloat ( myIconLat.toFixed ( THE_CONST.latLng.fixed ) ),
-			iconLng : parseFloat ( myIconLng.toFixed ( THE_CONST.latLng.fixed ) ),
-			lat : parseFloat ( myLat.toFixed ( THE_CONST.latLng.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( THE_CONST.latLng.fixed ) ),
-			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( THE_CONST.distance.fixed ) ),
+			iconLat : parseFloat ( myIconLat.toFixed ( LAT_LNG.fixed ) ),
+			iconLng : parseFloat ( myIconLng.toFixed ( LAT_LNG.fixed ) ),
+			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+			chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -174,11 +174,11 @@ function newNote ( ) {
 		myPhone = otherthing.phone || '';
 		myUrl = otherthing.url || '';
 		myAddress = otherthing.address || '';
-		myIconLat = otherthing.iconLat || THE_CONST.latLng.defaultValue;
-		myIconLng = otherthing.iconLng || THE_CONST.latLng.defaultValue;
-		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
-		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
-		myDistance = otherthing.distance || THE_CONST.distance.invalid;
+		myIconLat = otherthing.iconLat || LAT_LNG.defaultValue;
+		myIconLng = otherthing.iconLng || LAT_LNG.defaultValue;
+		myLat = otherthing.lat || LAT_LNG.defaultValue;
+		myLng = otherthing.lng || LAT_LNG.defaultValue;
+		myDistance = otherthing.distance || DISTANCE.invalid;
 		myChainedDistance = otherthing.chainedDistance;
 		myObjId = newObjId ( );
 	}
@@ -192,7 +192,7 @@ function newNote ( ) {
 	return Object.seal (
 		{
 
-			get isRouteNote ( ) { return myDistance !== THE_CONST.distance.invalid; },
+			get isRouteNote ( ) { return myDistance !== DISTANCE.invalid; },
 
 			get iconHeight ( ) { return myIconHeight; },
 			set iconHeight ( IconHeight ) { myIconHeight = IconHeight; },
@@ -226,8 +226,8 @@ function newNote ( ) {
 
 			get iconLatLng ( ) { return [ myIconLat, myIconLng ]; },
 			set iconLatLng ( IconLatLng ) {
-				myIconLat = IconLatLng [ THE_CONST.zero ];
-				myIconLng = IconLatLng [ THE_CONST.number1 ];
+				myIconLat = IconLatLng [ ZERO ];
+				myIconLng = IconLatLng [ ONE ];
 			},
 
 			get lat ( ) { return myLat; },
@@ -238,8 +238,8 @@ function newNote ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ THE_CONST.zero ];
-				myLng = LatLng [ THE_CONST.number1 ];
+				myLat = LatLng [ ZERO ];
+				myLng = LatLng [ ONE ];
 			},
 
 			get distance ( ) { return myDistance; },

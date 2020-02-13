@@ -34,7 +34,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ELEV, LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'ItineraryPoint' );
 
@@ -48,13 +48,13 @@ Patterns : Closure
 
 function newItineraryPoint ( ) {
 
-	let myLat = THE_CONST.latLng.defaultValue;
+	let myLat = LAT_LNG.defaultValue;
 
-	let myLng = THE_CONST.latLng.defaultValue;
+	let myLng = LAT_LNG.defaultValue;
 
-	let myDistance = THE_CONST.distance.defaultValue;
+	let myDistance = DISTANCE.defaultValue;
 
-	let myElev = THE_CONST.elev.defaultValue;
+	let myElev = ELEV.defaultValue;
 
 	let myObjId = newObjId ( );
 
@@ -78,7 +78,7 @@ function newItineraryPoint ( ) {
 			case '1.4.0' :
 			case '1.5.0' :
 			case '1.6.0' :
-				something.elev = THE_CONST.elev.defaultValue;
+				something.elev = ELEV.defaultValue;
 				something.objType.version = '1.7.0';
 				break;
 			default :
@@ -104,10 +104,10 @@ function newItineraryPoint ( ) {
 
 	function myGetObject ( ) {
 		return {
-			lat : parseFloat ( myLat.toFixed ( THE_CONST.latLng.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( THE_CONST.latLng.fixed ) ),
-			distance : parseFloat ( myDistance.toFixed ( THE_CONST.distance.fixed ) ),
-			elev : parseFloat ( myElev.toFixed ( THE_CONST.elev.fixed ) ),
+			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
+			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+			elev : parseFloat ( myElev.toFixed ( ELEV.fixed ) ),
 			objId : myObjId,
 			objType : ourObjType.object
 		};
@@ -121,10 +121,10 @@ function newItineraryPoint ( ) {
 
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
-		myLat = otherthing.lat || THE_CONST.latLng.defaultValue;
-		myLng = otherthing.lng || THE_CONST.latLng.defaultValue;
-		myDistance = otherthing.distance || THE_CONST.distance.defaultValue;
-		myElev = otherthing.elev || THE_CONST.elev.defaultValue;
+		myLat = otherthing.lat || LAT_LNG.defaultValue;
+		myLng = otherthing.lng || LAT_LNG.defaultValue;
+		myDistance = otherthing.distance || DISTANCE.defaultValue;
+		myElev = otherthing.elev || ELEV.defaultValue;
 		myObjId = newObjId ( );
 	}
 
@@ -145,8 +145,8 @@ function newItineraryPoint ( ) {
 
 			get latLng ( ) { return [ myLat, myLng ]; },
 			set latLng ( LatLng ) {
-				myLat = LatLng [ THE_CONST.zero ];
-				myLng = LatLng [ THE_CONST.number1 ];
+				myLat = LatLng [ ZERO ];
+				myLng = LatLng [ ONE ];
 			},
 
 			get distance ( ) { return myDistance; },

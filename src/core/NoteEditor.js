@@ -47,7 +47,7 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -141,8 +141,8 @@ function newNoteEditor ( ) {
 		// the note and the route are searched
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
-		noteAndRoute.note.distance = THE_CONST.distance.invalid;
-		noteAndRoute.note.chainedDistance = THE_CONST.distance.defaultValue;
+		noteAndRoute.note.distance = DISTANCE.invalid;
+		noteAndRoute.note.chainedDistance = DISTANCE.defaultValue;
 		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
 
 		myEventDispatcher.dispatch ( 'updateitinerary' );
@@ -162,7 +162,7 @@ function newNoteEditor ( ) {
 			.then (
 				( ) => {
 					if ( isNewNote ) {
-						if ( THE_CONST.invalidObjId === routeObjId ) {
+						if ( INVALID_OBJ_ID === routeObjId ) {
 							theTravelNotesData.travel.notes.add ( note );
 						}
 						else {
@@ -174,7 +174,7 @@ function newNoteEditor ( ) {
 							);
 						}
 					}
-					if ( THE_CONST.invalidObjId === routeObjId ) {
+					if ( INVALID_OBJ_ID === routeObjId ) {
 						myEventDispatcher.dispatch ( 'settravelnotes' );
 					}
 					else {
@@ -266,7 +266,7 @@ function newNoteEditor ( ) {
 		note.tooltipContent = searchResult.tags.name || '';
 		note.popupContent = searchResult.tags.name || '';
 
-		myNoteDialog ( note, THE_CONST.invalidObjId, true );
+		myNoteDialog ( note, INVALID_OBJ_ID, true );
 	}
 
 	/*
@@ -319,7 +319,7 @@ function newNoteEditor ( ) {
 		// the note is created
 		let note = myNewNote ( latLng );
 
-		myNoteDialog ( note, THE_CONST.invalidObjId, true );
+		myNoteDialog ( note, INVALID_OBJ_ID, true );
 	}
 
 	/*
@@ -335,7 +335,7 @@ function newNoteEditor ( ) {
 
 	function myEditNote ( noteObjId ) {
 		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let routeObjId = null === noteAndRoute.route ? THE_CONST.invalidObjId : noteAndRoute.route.objId;
+		let routeObjId = null === noteAndRoute.route ? INVALID_OBJ_ID : noteAndRoute.route.objId;
 
 		myNoteDialog ( noteAndRoute.note, routeObjId, false );
 	}
@@ -371,7 +371,7 @@ function newNoteEditor ( ) {
 			'noteupdated',
 			{
 				removedNoteObjId : noteObjId,
-				addedNoteObjId : THE_CONST.invalidObjId
+				addedNoteObjId : INVALID_OBJ_ID
 			}
 		);
 
@@ -397,7 +397,7 @@ function newNoteEditor ( ) {
 				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 			}
 		}
-		if ( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
 			while ( ! notesIterator.done ) {
 				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
@@ -420,7 +420,7 @@ function newNoteEditor ( ) {
 			myEventDispatcher.dispatch (
 				'noteupdated',
 				{
-					removedNoteObjId : THE_CONST.invalidObjId,
+					removedNoteObjId : INVALID_OBJ_ID,
 					addedNoteObjId : notesIterator.value.objId
 				}
 			);
@@ -432,7 +432,7 @@ function newNoteEditor ( ) {
 				myEventDispatcher.dispatch (
 					'noteupdated',
 					{
-						removedNoteObjId : THE_CONST.invalidObjId,
+						removedNoteObjId : INVALID_OBJ_ID,
 						addedNoteObjId : notesIterator.value.objId
 					}
 				);

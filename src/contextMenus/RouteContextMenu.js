@@ -43,7 +43,7 @@ import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS } from '../util/Constants.js';
 
 /*
 --- newRouteContextMenu function --------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						|| ( THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
 					) ?
 						null
 						:
@@ -84,7 +84,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
 						&&
-						( THE_CONST.route.edited.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
 					)
 						?
 						null

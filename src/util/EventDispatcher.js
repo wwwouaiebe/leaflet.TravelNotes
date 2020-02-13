@@ -28,7 +28,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { THE_CONST } from '../util/Constants.js';
+import { NOT_FOUND } from '../util/Constants.js';
 
 /*
 --- newEventDispatcher function ---------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ function newEventDispatcher ( ) {
 	*/
 
 	function myGetTarget ( eventName ) {
-		if ( THE_CONST.notFound <
+		if ( NOT_FOUND <
 		[
 			'setitinerary',
 			'updateitinerary',
@@ -66,7 +66,7 @@ function newEventDispatcher ( ) {
 		) {
 			return document.getElementById ( 'TravelNotes-Control-MainDiv' );
 		}
-		else if ( THE_CONST.notFound <
+		else if ( NOT_FOUND <
 		[
 			'removeobject',
 			'removeallobjects',

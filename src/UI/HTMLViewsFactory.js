@@ -45,7 +45,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { DISTANCE, ZERO } from '../util/Constants.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
 
@@ -76,7 +76,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	function myGetNoteHTML ( note ) {
 
 		let noteText = '';
-		if ( THE_CONST.zero !== note.tooltipContent.length ) {
+		if ( ZERO !== note.tooltipContent.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -84,7 +84,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				note.tooltipContent +
 				'</div>';
 		}
-		if ( THE_CONST.zero !== note.popupContent.length ) {
+		if ( ZERO !== note.popupContent.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -92,7 +92,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				note.popupContent +
 				'</div>';
 		}
-		if ( THE_CONST.zero !== note.address.length ) {
+		if ( ZERO !== note.address.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -100,7 +100,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				theTranslator.getText ( 'NoteEditor - Address' ) +
 				note.address + '</div>';
 		}
-		if ( THE_CONST.zero !== note.phone.length ) {
+		if ( ZERO !== note.phone.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -108,7 +108,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				theTranslator.getText ( 'NoteEditor - Phone' )
 				+ note.phone + '</div>';
 		}
-		if ( THE_CONST.zero !== note.url.length ) {
+		if ( ZERO !== note.url.length ) {
 			noteText +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -117,7 +117,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<a href="' +
 				note.url +
 				'" target="_blank">' +
-				note.url.substr ( THE_CONST.zero, LINKS_MAX_LENGTH ) +
+				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) +
 				'...' +
 				'</a></div>';
 		}
@@ -131,7 +131,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				}
 			) + '</div>';
 
-		if ( THE_CONST.distance.invalid !== note.distance ) {
+		if ( DISTANCE.invalid !== note.distance ) {
 			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
 				theTranslator.getText (
 					'NoteEditor - Distance',
@@ -193,7 +193,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		let returnValue = '<div class="' + myClassNamePrefix + 'Route-Header-Name">' +
 			route.name +
 			'</div>';
-		if ( THE_CONST.zero !== route.distance ) {
+		if ( ZERO !== route.distance ) {
 			returnValue +=
 				'<div class="' +
 				myClassNamePrefix +
@@ -223,14 +223,14 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'Route-Header-Ascent">' +
 				theTranslator.getText (
 					'HTMLViewsFactory - Ascent',
-					{ ascent : route.itinerary.ascent.toFixed ( THE_CONST.zero ) }
+					{ ascent : route.itinerary.ascent.toFixed ( ZERO ) }
 				) +
 				'</div><div class="' +
 				myClassNamePrefix +
 				'Route-Header-Descent">' +
 				theTranslator.getText (
 					'HTMLViewsFactory - Descent',
-					{ descent : route.itinerary.descent.toFixed ( THE_CONST.zero ) }
+					{ descent : route.itinerary.descent.toFixed ( ZERO ) }
 				) +
 				'</div>';
 		}
@@ -257,9 +257,9 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			travelHeaderHTML
 		);
 
-		let travelDistance = THE_CONST.distance.defaultValue;
-		let travelAscent = THE_CONST.zero;
-		let travelDescent = THE_CONST.zero;
+		let travelDistance = DISTANCE.defaultValue;
+		let travelAscent = ZERO;
+		let travelDescent = ZERO;
 		let travelRoutesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! travelRoutesIterator.done ) {
 			myHTMLElementsFactory.create (
@@ -296,7 +296,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			travelHeaderHTML
 		);
 
-		if ( THE_CONST.zero !== travelAscent ) {
+		if ( ZERO !== travelAscent ) {
 			myHTMLElementsFactory.create (
 				'div',
 				{
@@ -304,7 +304,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					innerHTML :
 						theTranslator.getText ( 'HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}',
 							{
-								ascent : travelAscent.toFixed ( THE_CONST.zero )
+								ascent : travelAscent.toFixed ( ZERO )
 							}
 						)
 				},
@@ -312,7 +312,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			);
 		}
 
-		if ( THE_CONST.zero !== travelDescent ) {
+		if ( ZERO !== travelDescent ) {
 			myHTMLElementsFactory.create (
 				'div',
 				{
@@ -320,7 +320,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					innerHTML :
 						theTranslator.getText ( 'HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}',
 							{
-								descent : travelDescent.toFixed ( THE_CONST.zero )
+								descent : travelDescent.toFixed ( ZERO )
 							}
 						)
 				},
@@ -396,7 +396,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 		let maneuversIterator = route.itinerary.maneuvers.iterator;
 		let maneuversDone = maneuversIterator.done;
-		let maneuversDistance = THE_CONST.distance.defaultValue;
+		let maneuversDistance = DISTANCE.defaultValue;
 
 		while ( ! ( maneuversDone && notesDone ) ) {
 			let rowDiv = myHTMLElementsFactory.create (
@@ -423,7 +423,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					let maneuverText =
 						'<div>' + maneuversIterator.value.instruction + '</div>';
 
-					if ( THE_CONST.zero < maneuversIterator.value.distance ) {
+					if ( ZERO < maneuversIterator.value.distance ) {
 						maneuverText +=	'<div>' +
 							theTranslator.getText (
 								'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}',

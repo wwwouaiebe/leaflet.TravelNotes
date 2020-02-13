@@ -39,7 +39,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 function startup ( ) {
 
@@ -55,18 +55,19 @@ function startup ( ) {
 	*/
 
 	function myReadURL ( ) {
+		const FOUR = 4;
 		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( THE_CONST.number1 )
+		( decodeURI ( window.location.search ).substr ( ONE )
 			.split ( '&' ) )
 			.forEach (
 				urlSearchSubString => {
-					if ( THE_CONST.notFound === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
+					if ( NOT_FOUND === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
+						if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 							myTravelUrl = decodeURIComponent (
-								escape ( atob ( urlSearchSubString.substr ( THE_CONST.number4 ) ) ) );
+								escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
 						}
-						else if ( 'lng=' === urlSearchSubString.substr ( THE_CONST.zero, THE_CONST.number4 ).toLowerCase ( ) ) {
-							myLangage = urlSearchSubString.substr ( THE_CONST.number4 ).toLowerCase ( );
+						else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+							myLangage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
 						}
 						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
 						newUrlSearch += urlSearchSubString;
@@ -135,21 +136,21 @@ function startup ( ) {
 	let requestBuilder = newHttpRequestBuilder ( );
 	let promises = [
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotesConfig.json'
 		),
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotes' +
 			( myLangage || theConfig.language ).toUpperCase ( ) +
 			'.json'
 		),
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotesLayers.json'
 		),
 		requestBuilder.getJsonPromise (
-			window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 			'TravelNotesNoteDialog' +
 			( myLangage || theConfig.language ).toUpperCase ( ) +
 			'.json'
@@ -163,17 +164,21 @@ function startup ( ) {
 
 			// promises succeeded
 			values => {
+				const TRAVEL_NOTES_CFG_POS = 0;
+				const TRANSLATIONS_POS = 1;
+				const LAYERS_CFG_POS = 2;
+				const NOTES_DIALOG_CFG_POS = 3;
+				const TEST_CRYPTO_PROMISE_POS = 4;
 
 				// config adaptation
 				if ( myLangage ) {
-					values [ THE_CONST.zero ].language = myLangage;
+					values [ TRAVEL_NOTES_CFG_POS ].language = myLangage;
+				}
+				if ( values [ TEST_CRYPTO_PROMISE_POS ] ) {
+					values [ TRAVEL_NOTES_CFG_POS ].haveCrypto = true;
 				}
 
-				if ( values [ THE_CONST.number4 ] ) {
-					values [ THE_CONST.zero ].haveCrypto = true;
-				}
-
-				theConfig.overload ( values [ THE_CONST.zero ] );
+				theConfig.overload ( values [ TRAVEL_NOTES_CFG_POS ] );
 
 				theTravelNotesData.providers.forEach (
 					provider => {
@@ -182,28 +187,28 @@ function startup ( ) {
 				);
 
 				// translations adaptation
-				theTranslator.setTranslations ( values [ THE_CONST.number1 ] );
+				theTranslator.setTranslations ( values [ TRANSLATIONS_POS ] );
 
 				// layers adaptation
-				theLayersToolbarUI.setLayers ( values [ THE_CONST.number2 ] );
+				theLayersToolbarUI.setLayers ( values [ LAYERS_CFG_POS ] );
 
-				theNoteDialogToolbar.selectOptions = values [ THE_CONST.number3 ].preDefinedIconsList;
-				theNoteDialogToolbar.buttons = values [ THE_CONST.number3 ].editionButtons;
+				theNoteDialogToolbar.selectOptions = values [ NOTES_DIALOG_CFG_POS ].preDefinedIconsList;
+				theNoteDialogToolbar.buttons = values [ NOTES_DIALOG_CFG_POS ].editionButtons;
 
 				if ( theConfig.autoLoad ) {
 					newHTMLElementsFactory ( ).create (
 						'div',
 						{ id : 'Map' },
-						document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+						document.getElementsByTagName ( 'body' ) [ ZERO ]
 					);
 					newHTMLElementsFactory ( ).create (
 						'div',
 						{ id : 'TravelNotes' },
-						document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+						document.getElementsByTagName ( 'body' ) [ ZERO ]
 					);
 
 					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-						.setView ( [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ], THE_CONST.zero );
+						.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
 
 					if ( myTravelUrl ) {
 						theTravelNotes.addReadOnlyMap ( map, myTravelUrl );

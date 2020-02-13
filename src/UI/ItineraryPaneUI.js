@@ -35,7 +35,7 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
@@ -142,17 +142,17 @@ function newItineraryPaneUI ( ) {
 		}
 
 		// removing previous header
-		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ THE_CONST.zero ];
+		let routeHeader = document.getElementsByClassName ( 'TravelNotes-Control-Route-Header' ) [ ZERO ];
 		if ( routeHeader ) {
 			dataDiv.removeChild ( routeHeader );
 		}
 
 		// removing previous itinerary
 		let routeManeuversNotesList =
-			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ THE_CONST.zero ];
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ ZERO ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
-			for ( let childCounter = THE_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {
+			for ( let childCounter = ZERO; childCounter < childNodes.length; childCounter ++ ) {
 				let childNode = childNodes [ childCounter ];
 				childNode.removeEventListener ( 'click', myOnInstructionClick, false );
 				childNode.removeEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
@@ -197,10 +197,10 @@ function newItineraryPaneUI ( ) {
 
 		// adding event listeners
 		let routeManeuversNotesList =
-			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ THE_CONST.zero ];
+			document.getElementsByClassName ( 'TravelNotes-Control-Route-ManeuversAndNotes' ) [ ZERO ];
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
-			for ( let childCounter = THE_CONST.zero; childCounter < childNodes.length; childCounter ++ ) {
+			for ( let childCounter = ZERO; childCounter < childNodes.length; childCounter ++ ) {
 				let childNode = childNodes [ childCounter ];
 				childNode.addEventListener ( 'click', myOnInstructionClick, false );
 				childNode.addEventListener ( 'contextmenu', myOnInstructionContextMenu, false );

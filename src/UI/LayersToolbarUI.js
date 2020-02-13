@@ -37,7 +37,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
 
 /*
 --- newLayersToolbarUI function ---------------------------------------------------------------------------------------
@@ -70,10 +70,10 @@ function newLayersToolbarUI ( ) {
 	let myLayersToolbarButtonsDiv = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
-	let myMarginTop = THE_CONST.zero;
-	let myButtonHeight = THE_CONST.zero;
-	let myButtonsHeight = THE_CONST.zero;
-	let myButtonTop = THE_CONST.zero;
+	let myMarginTop = ZERO;
+	let myButtonHeight = ZERO;
+	let myButtonsHeight = ZERO;
+	let myButtonTop = ZERO;
 
 	/*
 	--- myOnMouseEnterLayerButton function ----------------------------------------------------------------------------
@@ -200,7 +200,7 @@ function newLayersToolbarUI ( ) {
 	function myOnWheelToolbar ( wheelEvent ) {
 		const MIN_BUTTONS = 3;
 		if ( wheelEvent.deltaY ) {
-			myMarginTop -= wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
+			myMarginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
 				myMarginTop < myButtonTop - myButtonsHeight +
@@ -258,7 +258,7 @@ function newLayersToolbarUI ( ) {
 			myLayersToolbar
 		);
 		myButtonTop = myLayersToolbar.clientHeight;
-		myButtonsHeight = THE_CONST.zero;
+		myButtonsHeight = ZERO;
 
 		myLayers.forEach ( layer => myCreateLayerButton ( layer ) );
 
@@ -299,7 +299,7 @@ function newLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			document.getElementsByTagName ( 'body' ) [ ZERO ]
 		);
 		myHTMLElementsFactory.create (
 			'div',
@@ -324,8 +324,8 @@ function newLayersToolbarUI ( ) {
 			false
 		);
 
-		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ THE_CONST.zero ] } );
-		theAttributionsUI.attributions = myLayers [ THE_CONST.zero ].attribution;
+		myEventDispatcher.dispatch ( 'layerchange', { layer : myLayers [ ZERO ] } );
+		theAttributionsUI.attributions = myLayers [ ZERO ].attribution;
 
 	}
 
@@ -337,11 +337,11 @@ function newLayersToolbarUI ( ) {
 
 	function mySetLayer ( layerName ) {
 
-		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ THE_CONST.zero ];
+		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ ZERO ];
 		if ( newLayer.providerKeyNeeded ) {
 			let providerKey = theAPIKeysManager.getKey ( newLayer.providerName.toLowerCase ( ) );
 			if ( ! providerKey ) {
-				newLayer = myLayers [ THE_CONST.zero ];
+				newLayer = myLayers [ ZERO ];
 			}
 		}
 		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );

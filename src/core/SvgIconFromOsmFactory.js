@@ -39,7 +39,7 @@ import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -64,8 +64,8 @@ function newSvgIconFromOsmFactory ( ) {
 	let myGeometry = newGeometry ( );
 
 	let mySvgLatLngDistance = {
-		latLng : [ THE_CONST.latLng.defaultValue, THE_CONST.latLng.defaultValue ],
-		distance : THE_CONST.distance.defaultValue
+		latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
+		distance : DISTANCE.defaultValue
 	};
 	let myNearestItineraryPoint = null;
 
@@ -83,8 +83,8 @@ function newSvgIconFromOsmFactory ( ) {
 
 	let myPositionOnRoute = ON_ROUTE;
 
-	let myTranslation = [ THE_CONST.zero, THE_CONST.zero ];
-	let myRotation = THE_CONST.zero;
+	let myTranslation = [ ZERO, ZERO ];
+	let myRotation = ZERO;
 	let myDirection = null;
 	let mySvgZoom = theConfig.note.svgZoom;
 	let mySvgAngleDistance = theConfig.note.svgAngleDistance;
@@ -151,7 +151,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 		// Searching the nearest itinerary point
 		let minDistance = Number.MAX_VALUE;
-		let distance = THE_CONST.distance.defaultValue;
+		let distance = DISTANCE.defaultValue;
 
 		// Iteration on the points...
 		myRoute.itinerary.itineraryPoints.forEach (
@@ -240,7 +240,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let svgPointDistance = Number.MAX_VALUE;
 		let incomingPointDistance = Number.MAX_VALUE;
 		let outgoingPointDistance = Number.MAX_VALUE;
-		let pointDistance = THE_CONST.distance.defaultValue;
+		let pointDistance = DISTANCE.defaultValue;
 		myNodesMap.forEach (
 			node => {
 				if ( myNearestItineraryPoint ) {
@@ -284,28 +284,28 @@ function newSvgIconFromOsmFactory ( ) {
 				let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
 				let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
 
-				let streetOcurrences = way.nodesIds.filter ( nodeId => nodeId === svgPointId ).length * THE_CONST.number2;
-				if ( way.nodesIds [ THE_CONST.zero ] === svgPointId ) {
+				let streetOcurrences = way.nodesIds.filter ( nodeId => nodeId === svgPointId ).length * TWO;
+				if ( way.nodesIds [ ZERO ] === svgPointId ) {
 					streetOcurrences --;
 				}
-				if ( way.nodesIds [ way.nodesIds.length - THE_CONST.number1 ] === svgPointId ) {
+				if ( way.nodesIds [ way.nodesIds.length - ONE ] === svgPointId ) {
 					streetOcurrences --;
 				}
 				if ( isIncomingStreet ) {
 					incomingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
 				}
-				if ( THE_CONST.zero === streetOcurrences ) {
+				if ( ZERO === streetOcurrences ) {
 					return;
 				}
 				if ( isOutgoingStreet ) {
 					outgoingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
 				}
-				if ( THE_CONST.zero === streetOcurrences || ! haveName ) {
+				if ( ZERO === streetOcurrences || ! haveName ) {
 					return;
 				}
-				while ( THE_CONST.zero !== streetOcurrences ) {
+				while ( ZERO !== streetOcurrences ) {
 					myStreets = '' === myStreets ? wayName : myStreets + ' &#x2AA5; ' + wayName;
 					streetOcurrences --;
 				}
@@ -329,7 +329,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 	function myComputeTranslation ( ) {
 		myTranslation = myGeometry.subtrackPoints (
-			[ theConfig.note.svgIconWidth / THE_CONST.number2, theConfig.note.svgIconWidth / THE_CONST.number2 ],
+			[ theConfig.note.svgIconWidth / TWO, theConfig.note.svgIconWidth / TWO ],
 			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
 		);
 	}
@@ -347,7 +347,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 		// searching points at least at 10 m ( mySvgAngleDistance ) from the icon point,
 		// one for rotation and one for direction
-		let distance = THE_CONST.distance.defaultValue;
+		let distance = DISTANCE.defaultValue;
 		let rotationItineraryPoint = myRoute.itinerary.itineraryPoints.first;
 		let directionItineraryPoint = myRoute.itinerary.itineraryPoints.last;
 		let directionPointReached = false;
@@ -378,19 +378,19 @@ function newSvgIconFromOsmFactory ( ) {
 			);
 			myRotation =
 				Math.atan (
-					( iconPoint [ THE_CONST.number1 ] - rotationPoint [ THE_CONST.number1 ] )
+					( iconPoint [ ONE ] - rotationPoint [ ONE ] )
 					/
-					( rotationPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] )
+					( rotationPoint [ ZERO ] - iconPoint [ ZERO ] )
 				)
 				*
 				DEGREE_180 / Math.PI;
-			if ( THE_CONST.zero > myRotation ) {
+			if ( ZERO > myRotation ) {
 				myRotation += DEGREE_360;
 			}
 			myRotation -= DEGREE_270;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( THE_CONST.zero > rotationPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] ) {
+			if ( ZERO > rotationPoint [ ZERO ] - iconPoint [ ZERO ] ) {
 				myRotation += DEGREE_180;
 			}
 		}
@@ -403,15 +403,15 @@ function newSvgIconFromOsmFactory ( ) {
 				myTranslation
 			);
 			myDirection = Math.atan (
-				( iconPoint [ THE_CONST.number1 ] - directionPoint [ THE_CONST.number1 ] )
+				( iconPoint [ ONE ] - directionPoint [ ONE ] )
 				/
-				( directionPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] )
+				( directionPoint [ ZERO ] - iconPoint [ ZERO ] )
 			)
 				*
 				DEGREE_180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( THE_CONST.zero > directionPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] ) {
+			if ( ZERO > directionPoint [ ZERO ] - iconPoint [ ZERO ] ) {
 				myDirection += DEGREE_180;
 			}
 			myDirection -= myRotation;
@@ -431,9 +431,9 @@ function newSvgIconFromOsmFactory ( ) {
 		}
 
 		if (
-			mySvgLatLngDistance.latLng [ THE_CONST.zero ] === myRoute.itinerary.itineraryPoints.last.lat
+			mySvgLatLngDistance.latLng [ ZERO ] === myRoute.itinerary.itineraryPoints.last.lat
 			&&
-			mySvgLatLngDistance.latLng [ THE_CONST.number1 ] === myRoute.itinerary.itineraryPoints.last.lng
+			mySvgLatLngDistance.latLng [ ONE ] === myRoute.itinerary.itineraryPoints.last.lng
 		) {
 
 			// using lat & lng because last point is sometime duplicated
@@ -504,9 +504,9 @@ function newSvgIconFromOsmFactory ( ) {
 	function myCreateRoute ( ) {
 
 		// to avoid a big svg, all points outside the svg viewBox are not added
-		let index = THE_CONST.numberMinus1;
-		let firstPointIndex = THE_CONST.notFound;
-		let lastPointIndex = THE_CONST.notFound;
+		let index = -ONE;
+		let firstPointIndex = NOT_FOUND;
+		let lastPointIndex = NOT_FOUND;
 		let points = [];
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
@@ -514,30 +514,30 @@ function newSvgIconFromOsmFactory ( ) {
 				let point = myGeometry.addPoints ( myGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
 				points.push ( point );
 				let pointIsInside =
-					point [ THE_CONST.zero ] >= THE_CONST.zero && point [ THE_CONST.number1 ] >= THE_CONST.zero
+					point [ ZERO ] >= ZERO && point [ ONE ] >= ZERO
 					&&
-					point [ THE_CONST.zero ] <= theConfig.note.svgIconWidth
+					point [ ZERO ] <= theConfig.note.svgIconWidth
 					&&
-					point [ THE_CONST.number1 ] <= theConfig.note.svgIconWidth;
+					point [ ONE ] <= theConfig.note.svgIconWidth;
 				if ( pointIsInside ) {
-					if ( THE_CONST.notFound === firstPointIndex ) {
+					if ( NOT_FOUND === firstPointIndex ) {
 						firstPointIndex = index;
 					}
 					lastPointIndex = index;
 				}
 			}
 		);
-		if ( THE_CONST.notFound !== firstPointIndex && THE_CONST.notFound !== lastPointIndex ) {
-			if ( THE_CONST.zero < firstPointIndex ) {
+		if ( NOT_FOUND !== firstPointIndex && NOT_FOUND !== lastPointIndex ) {
+			if ( ZERO < firstPointIndex ) {
 				firstPointIndex --;
 			}
-			if ( myRoute.itinerary.itineraryPoints.length - THE_CONST.number1 > lastPointIndex ) {
+			if ( myRoute.itinerary.itineraryPoints.length - ONE > lastPointIndex ) {
 				lastPointIndex ++;
 			}
 			let pointsAttribute = '';
 			for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-				pointsAttribute += points[ index ] [ THE_CONST.zero ].toFixed ( THE_CONST.zero ) + ',' +
-					points[ index ] [ THE_CONST.number1 ].toFixed ( THE_CONST.zero ) + ' ';
+				pointsAttribute += points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
+					points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 			}
 			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
 			polyline.setAttributeNS ( null, 'points', pointsAttribute );
@@ -546,8 +546,8 @@ function newSvgIconFromOsmFactory ( ) {
 				null,
 				'transform',
 				'rotate(' + myRotation +
-					',' + ( theConfig.note.svgIconWidth / THE_CONST.number2 ) +
-					',' + ( theConfig.note.svgIconWidth / THE_CONST.number2 )
+					',' + ( theConfig.note.svgIconWidth / TWO ) +
+					',' + ( theConfig.note.svgIconWidth / TWO )
 					+ ')'
 			);
 			mySvg.appendChild ( polyline );
@@ -568,9 +568,9 @@ function newSvgIconFromOsmFactory ( ) {
 		// to avoid a big svg, all points outside the svg viewBox are not added
 		myWaysMap.forEach (
 			way => {
-				let firstPointIndex = THE_CONST.notFound;
-				let lastPointIndex = THE_CONST.notFound;
-				let index = THE_CONST.numberMinus1;
+				let firstPointIndex = NOT_FOUND;
+				let lastPointIndex = NOT_FOUND;
+				let index = -ONE;
 				let points = [ ];
 				way.nodesIds.forEach (
 					nodeId => {
@@ -582,33 +582,33 @@ function newSvgIconFromOsmFactory ( ) {
 						);
 						points.push ( point );
 						let pointIsInside =
-							point [ THE_CONST.zero ] >= THE_CONST.zero
+							point [ ZERO ] >= ZERO
 							&&
-							point [ THE_CONST.number1 ] >= THE_CONST.zero
+							point [ ONE ] >= ZERO
 							&&
-							point [ THE_CONST.zero ] <= theConfig.note.svgIconWidth
+							point [ ZERO ] <= theConfig.note.svgIconWidth
 							&&
-							point [ THE_CONST.number1 ] <= theConfig.note.svgIconWidth;
+							point [ ONE ] <= theConfig.note.svgIconWidth;
 						if ( pointIsInside ) {
-							if ( THE_CONST.notFound === firstPointIndex ) {
+							if ( NOT_FOUND === firstPointIndex ) {
 								firstPointIndex = index;
 							}
 							lastPointIndex = index;
 						}
 					}
 				);
-				if ( THE_CONST.notFound !== firstPointIndex && THE_CONST.notFound !== lastPointIndex ) {
-					if ( THE_CONST.zero < firstPointIndex ) {
+				if ( NOT_FOUND !== firstPointIndex && NOT_FOUND !== lastPointIndex ) {
+					if ( ZERO < firstPointIndex ) {
 						firstPointIndex --;
 					}
-					if ( way.nodesIds.length - THE_CONST.number1 > lastPointIndex ) {
+					if ( way.nodesIds.length - ONE > lastPointIndex ) {
 						lastPointIndex ++;
 					}
 					let pointsAttribute = '';
 					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
 						pointsAttribute +=
-							points[ index ] [ THE_CONST.zero ].toFixed ( THE_CONST.zero ) + ',' +
-							points[ index ] [ THE_CONST.number1 ].toFixed ( THE_CONST.zero ) + ' ';
+							points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
+							points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 					}
 
 					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
@@ -622,8 +622,8 @@ function newSvgIconFromOsmFactory ( ) {
 						null,
 						'transform',
 						'rotate(' + myRotation +
-							',' + ( theConfig.note.svgIconWidth / THE_CONST.number2 ) +
-							',' + ( theConfig.note.svgIconWidth / THE_CONST.number2 ) +
+							',' + ( theConfig.note.svgIconWidth / TWO ) +
+							',' + ( theConfig.note.svgIconWidth / TWO ) +
 							')'
 					);
 
@@ -642,14 +642,15 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function myCreateSvg ( ) {
+		const FOUR = 4;
 		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',
-			String ( theConfig.note.svgIconWidth / THE_CONST.number4 ) + ' ' +
-			( theConfig.note.svgIconWidth / THE_CONST.number4 ) + ' ' +
-			( theConfig.note.svgIconWidth / THE_CONST.number2 ) + ' ' +
-			( theConfig.note.svgIconWidth / THE_CONST.number2 )
+			String ( theConfig.note.svgIconWidth / FOUR ) + ' ' +
+			( theConfig.note.svgIconWidth / FOUR ) + ' ' +
+			( theConfig.note.svgIconWidth / TWO ) + ' ' +
+			( theConfig.note.svgIconWidth / TWO )
 		);
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
 	}
@@ -665,15 +666,15 @@ function newSvgIconFromOsmFactory ( ) {
 		const SEARCH_AROUND_FACTOR = 1.5;
 
 		let requestLatLng =
-			mySvgLatLngDistance.latLng [ THE_CONST.zero ].toFixed ( THE_CONST.latLng.fixed ) +
+			mySvgLatLngDistance.latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) +
 			',' +
-			mySvgLatLngDistance.latLng [ THE_CONST.number1 ].toFixed ( THE_CONST.latLng.fixed );
+			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
 		let requestUrl = theConfig.overpassApiUrl +
 			'?data=[out:json][timeout:' +
 			theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( theConfig.note.svgIconWidth * SEARCH_AROUND_FACTOR ).toFixed ( THE_CONST.zero ) +
+			( theConfig.note.svgIconWidth * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
 			',' +
 			requestLatLng +
 			')->.a;(.a >;.a;)->.a;.a out;' +

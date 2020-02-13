@@ -38,7 +38,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { GEOLOCATION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function onMouseOverOrMoveOnRoute ( mapEvent ) {
 	polyline.closeTooltip ( );
 	let tooltipText = dataSearchEngine.getRoute ( mapEvent.target.objId ).name;
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		tooltipText += ( THE_CONST.zero === tooltipText.length ? '' : ' - ' );
+		tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
 	}
 	polyline.setTooltipContent ( tooltipText );
@@ -118,8 +118,8 @@ function newViewerMapEditor ( ) {
 							theConfig.note.grip.size
 						],
 						iconAnchor : [
-							theConfig.note.grip.size / THE_CONST.number2,
-							theConfig.note.grip.size / THE_CONST.number2
+							theConfig.note.grip.size / TWO,
+							theConfig.note.grip.size / TWO
 						],
 						html : '<div></div>'
 					}
@@ -134,8 +134,8 @@ function newViewerMapEditor ( ) {
 		let icon = L.divIcon (
 			{
 				iconSize : [ note.iconWidth, note.iconHeight ],
-				iconAnchor : [ note.iconWidth / THE_CONST.number2, note.iconHeight / THE_CONST.number2 ],
-				popupAnchor : [ THE_CONST.zero, -note.iconHeight / THE_CONST.number2 ],
+				iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
+				popupAnchor : [ ZERO, -note.iconHeight / TWO ],
 				html : note.iconContent,
 				className : 'TravelNotes-AllNotes ' + theConfig.note.style
 			}
@@ -161,11 +161,11 @@ function newViewerMapEditor ( ) {
 		);
 
 		// ... and also a tooltip
-		if ( THE_CONST.zero !== note.tooltipContent.length ) {
+		if ( ZERO !== note.tooltipContent.length ) {
 			marker.bindTooltip (
 				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
-			marker.getTooltip ( ).options.offset [ THE_CONST.zero ] = note.iconWidth / THE_CONST.number2;
+			marker.getTooltip ( ).options.offset [ ZERO ] = note.iconWidth / TWO;
 		}
 
 		// Finally a polyline is created between the 2 markers
@@ -192,13 +192,13 @@ function newViewerMapEditor ( ) {
 
 	function myGetDashArray ( route ) {
 		if ( route.dashArray >= theConfig.route.dashChoices.length ) {
-			route.dashArray = THE_CONST.zero;
+			route.dashArray = ZERO;
 		}
 		let iDashArray = theConfig.route.dashChoices [ route.dashArray ].iDashArray;
 		if ( iDashArray ) {
 			let dashArray = '';
-			let dashCounter = THE_CONST.zero;
-			for ( dashCounter = THE_CONST.zero; dashCounter < iDashArray.length - THE_CONST.number1; dashCounter ++ ) {
+			let dashCounter = ZERO;
+			for ( dashCounter = ZERO; dashCounter < iDashArray.length - ONE; dashCounter ++ ) {
 				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
 			}
 			dashArray += iDashArray [ dashCounter ] * route.width;
@@ -344,7 +344,7 @@ function newViewerMapEditor ( ) {
 	*/
 
 	function myOnGeolocationStatusChanged ( geoLocationStatus ) {
-		if ( THE_CONST.geoLocation.status.active === geoLocationStatus ) {
+		if ( GEOLOCATION_STATUS.active === geoLocationStatus ) {
 			return;
 		}
 		if ( myGeolocationCircle ) {

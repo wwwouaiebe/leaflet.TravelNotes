@@ -41,7 +41,7 @@ import { theRouteUI } from '../UI/RouteUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
-import { THE_CONST } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newUserInterface function -----------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ function newUI ( ) {
 				}
 				if (
 					clickEvent.target.id &&
-				THE_CONST.invalidObjId !==
+				INVALID_OBJ_ID !==
 					[
 						'TravelNotes-Control-OpenTravelInput',
 						'TravelNotes-Control-OpenTravelButton',

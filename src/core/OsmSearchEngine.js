@@ -35,12 +35,12 @@ import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 let ourOsmSearchStarted = false;
 let ourSearchParameters = { searchPhrase : '', bbox : null };
-let ourPreviousSearchRectangleObjId = THE_CONST.invalidObjId;
-let ourNextSearchRectangleObjId = THE_CONST.invalidObjId;
+let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
+let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
 let ourSearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 
 /*
@@ -55,7 +55,7 @@ function ourDrawSearchRectangle ( ) {
 	if ( ! ourSearchParameters.bbox ) {
 		return;
 	}
-	if ( THE_CONST.invalidObjId === ourPreviousSearchRectangleObjId ) {
+	if ( INVALID_OBJ_ID === ourPreviousSearchRectangleObjId ) {
 		ourPreviousSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -113,7 +113,7 @@ change event listener for the map
 
 function ourOnMapChange ( ) {
 	let mapCenter = theTravelNotesData.map.getCenter ( );
-	if ( THE_CONST.invalidObjId === ourNextSearchRectangleObjId ) {
+	if ( INVALID_OBJ_ID === ourNextSearchRectangleObjId ) {
 		ourNextSearchRectangleObjId = newObjId ( );
 	}
 	else {
@@ -204,13 +204,13 @@ function newOsmSearchEngine ( ) {
 	function myHide ( ) {
 		theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
 		theTravelNotesData.map.off ( 'move', ourOnMapChange );
-		if ( THE_CONST.invalidObjId !== ourNextSearchRectangleObjId ) {
+		if ( INVALID_OBJ_ID !== ourNextSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
-			ourNextSearchRectangleObjId = THE_CONST.invalidObjId;
+			ourNextSearchRectangleObjId = INVALID_OBJ_ID;
 		}
-		if ( THE_CONST.invalidObjId !== ourPreviousSearchRectangleObjId ) {
+		if ( INVALID_OBJ_ID !== ourPreviousSearchRectangleObjId ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
-			ourPreviousSearchRectangleObjId = THE_CONST.invalidObjId;
+			ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 		}
 	}
 

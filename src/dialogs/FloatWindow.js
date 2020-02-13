@@ -33,7 +33,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newFloatWindow function -------------------------------------------------------------------------------------------
@@ -49,12 +49,12 @@ function newFloatWindow ( ) {
 	let myHeaderDiv = null;
 	let myContentDiv = null;
 
-	let myStartDragX = THE_CONST.zero;
-	let myStartDragY = THE_CONST.zero;
-	let myWindowX = THE_CONST.zero;
-	let myWindowY = THE_CONST.zero;
-	let myScreenWidth = THE_CONST.zero;
-	let myScreenHeight = THE_CONST.zero;
+	let myStartDragX = ZERO;
+	let myStartDragY = ZERO;
+	let myWindowX = ZERO;
+	let myWindowY = ZERO;
+	let myScreenWidth = ZERO;
+	let myScreenHeight = ZERO;
 
 	let myOnClose = null;
 
@@ -75,7 +75,7 @@ function newFloatWindow ( ) {
 			{
 				className : 'TravelNotes-FloatWindow-Container'
 			},
-			document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ]
+			document.getElementsByTagName ( 'body' ) [ ZERO ]
 		);
 
 	}
@@ -90,7 +90,7 @@ function newFloatWindow ( ) {
 		if ( myOnClose ) {
 			myOnClose ( );
 		}
-		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( myWindowDiv );
+		document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myWindowDiv );
 	}
 
 	/*
@@ -147,7 +147,7 @@ function newFloatWindow ( ) {
 				);
 				myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
 				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myWindowY, THE_CONST.zero ) - DRAG_MARGIN;
+					myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
 				myWindowDiv.setAttribute (
 					'style',
 					'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'

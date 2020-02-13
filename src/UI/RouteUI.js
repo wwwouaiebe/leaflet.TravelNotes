@@ -44,7 +44,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSortableList } from '../UI/SortableList.js';
 import { newUtilities } from '../util/Utilities.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 let myWayPointsList = null;
 
@@ -91,7 +91,7 @@ function newRouteUI ( ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ( );
-					if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+					if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
 						return;
 					}
 					document.getElementById ( 'TravelNotes-Control-RouteHeaderDiv' )
@@ -147,7 +147,7 @@ function newRouteUI ( ) {
 		// wayPoints list
 		myWayPointsList = newSortableList (
 			{
-				minSize : THE_CONST.zero,
+				minSize : ZERO,
 				listStyle : 'LimitedSort',
 				id : 'TravelNotes-Control-RouteWaypointsList'
 			},
@@ -413,7 +413,7 @@ function newRouteUI ( ) {
 
 	function mySetWayPointsList ( ) {
 		myWayPointsList.removeAllItems ( );
-		if ( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId ) {
+		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
 			return;
 		}
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;

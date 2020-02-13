@@ -49,7 +49,7 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newNoteDialog function --------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( THE_CONST.zero === myIconHtmlContent.value.length ) {
+		if ( ZERO === myIconHtmlContent.value.length ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 			return;
 		}
@@ -136,7 +136,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		if ( '' !== myCity ) {
 			myAddress += theConfig.note.cityPrefix + myCity + theConfig.note.cityPostfix;
 		}
-		if ( THE_CONST.zero === myAddress.length ) {
+		if ( ZERO === myAddress.length ) {
 			myAddress += geoCoderData.address.country;
 		}
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && newNote ) {
@@ -203,7 +203,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		let preDefinedIcon = theNoteDialogToolbar.getIconData ( changeEvent.target.selectedIndex );
 
 		if ( 'SvgIcon' === preDefinedIcon.icon ) {
-			if ( THE_CONST.invalidObjId === routeObjId ) {
+			if ( INVALID_OBJ_ID === routeObjId ) {
 				myNoteDialog.showError (
 					theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
 				);
@@ -238,12 +238,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		while ( ! button.htmlBefore ) {
 			button = button.parentNode;
 		}
-		let bInsertBeforeAndAfter = button.htmlAfter && THE_CONST.zero < button.htmlAfter.length;
+		let bInsertBeforeAndAfter = button.htmlAfter && ZERO < button.htmlAfter.length;
 		let selectionStart = myFocusControl.selectionStart;
 		let selectionEnd = myFocusControl.selectionEnd;
 		let oldText = myFocusControl.value;
 		myFocusControl.value =
-			oldText.substring ( THE_CONST.zero, selectionStart ) +
+			oldText.substring ( ZERO, selectionStart ) +
 			(
 				bInsertBeforeAndAfter
 					?
@@ -503,9 +503,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 				className : 'TravelNotes-NoteDialog-TitleDiv',
 				innerHTML : ( theConfig.layersToolbarUI.theDevil.addButton ?
 					( '<a href="https://www.google.com/maps/@' +
-					note.lat.toFixed ( THE_CONST.latLng.fixed ) +
+					note.lat.toFixed ( LAT_LNG.fixed ) +
 					',' +
-					note.lng.toFixed ( THE_CONST.latLng.fixed ) +
+					note.lng.toFixed ( LAT_LNG.fixed ) +
 					',' +
 					theConfig.layersToolbarUI.theDevil.noteZoom +
 					'z" target="_blank" title="' +

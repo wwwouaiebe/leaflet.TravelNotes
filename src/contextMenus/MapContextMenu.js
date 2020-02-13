@@ -39,7 +39,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 import { newZoomer } from '../core/Zoomer.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newMapContextMenu function ----------------------------------------------------------------------------------------
@@ -64,9 +64,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as start point' ),
 				action :
-					( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
-					( THE_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
 						?
 						theWayPointEditor.setStartPoint
 						:
@@ -77,7 +77,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as way point' ),
 				action :
-					( THE_CONST.invalidObjId === theTravelNotesData.editedRouteObjId )
+					( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId )
 						?
 						null
 						:
@@ -88,9 +88,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as end point' ),
 				action :
-					( THE_CONST.invalidObjId !== theTravelNotesData.editedRouteObjId )
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
-					( THE_CONST.latLng.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
 						?
 						theWayPointEditor.setEndPoint
 						:

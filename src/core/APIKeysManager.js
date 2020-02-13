@@ -40,7 +40,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -82,12 +82,12 @@ function newAPIKeysManager ( ) {
 
 	function myFromUrl ( urlString ) {
 		let urlSubStrings = urlString.split ( '=' );
-		if ( THE_CONST.number2 === urlSubStrings.length ) {
+		if ( TWO === urlSubStrings.length ) {
 			let providerName =
-				urlSubStrings [ THE_CONST.zero ]
-					.substr ( THE_CONST.zero, urlSubStrings [ THE_CONST.zero ].length - 'ProviderKey'.length )
+				urlSubStrings [ ZERO ]
+					.substr ( ZERO, urlSubStrings [ ZERO ].length - 'ProviderKey'.length )
 					.toLowerCase ( );
-			let providerKey = urlSubStrings [ THE_CONST.number1 ];
+			let providerKey = urlSubStrings [ ONE ];
 			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}
@@ -106,12 +106,12 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromSessionStorage ( ) {
-		let APIKeysCounter = THE_CONST.zero;
-		for ( let counter = THE_CONST.zero; counter < sessionStorage.length; counter ++ ) {
+		let APIKeysCounter = ZERO;
+		for ( let counter = ZERO; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
 				mySetKey (
-					keyName.substr ( THE_CONST.zero, keyName.length - 'ProviderKey'.length ),
+					keyName.substr ( ZERO, keyName.length - 'ProviderKey'.length ),
 					atob ( sessionStorage.getItem ( keyName ) )
 				);
 				APIKeysCounter ++;
@@ -244,13 +244,13 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myFromServerFile ( ) {
-		if ( THE_CONST.zero !== myFromSessionStorage ( ) ) {
+		if ( ZERO !== myFromSessionStorage ( ) ) {
 			newEventDispatcher ( ).dispatch ( 'providersadded' );
 			return;
 		}
 		if ( theConfig.haveCrypto ) {
 			newHttpRequestBuilder ( ).getBinaryPromise (
-				window.location.href.substr ( THE_CONST.zero, window.location.href.lastIndexOf ( '/' ) + THE_CONST.number1 ) +
+				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 					'APIKeys'
 			)
 				.then ( myOnServerFile )

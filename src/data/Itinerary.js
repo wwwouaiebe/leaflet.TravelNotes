@@ -33,7 +33,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Itinerary' );
 
@@ -49,9 +49,9 @@ function newItinerary ( ) {
 
 	let myHasProfile = false;
 
-	let myAscent = THE_CONST.zero;
+	let myAscent = ZERO;
 
-	let myDescent = THE_CONST.zero;
+	let myDescent = ZERO;
 
 	let myProvider = '';
 
@@ -85,8 +85,8 @@ function newItinerary ( ) {
 			case '1.6.0' :
 				something.objType.version = '1.7.0';
 				something.hasProfile = false;
-				something.ascent = THE_CONST.zero;
-				something.descent = THE_CONST.zero;
+				something.ascent = ZERO;
+				something.descent = ZERO;
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -139,8 +139,8 @@ function newItinerary ( ) {
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
 		myHasProfile = otherthing.hasProfile || false;
-		myAscent = otherthing.ascent || THE_CONST.zero;
-		myDescent = otherthing.descent || THE_CONST.zero;
+		myAscent = otherthing.ascent || ZERO;
+		myDescent = otherthing.descent || ZERO;
 		myItineraryPoints.object = otherthing.itineraryPoints || [];
 		myManeuvers.object = otherthing.maneuvers || [];
 		myProvider = otherthing.provider || '';
@@ -149,7 +149,7 @@ function newItinerary ( ) {
 
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
-		let sourceCounter = THE_CONST.zero;
+		let sourceCounter = ZERO;
 		let targetIterator = myItineraryPoints.iterator;
 		while ( ! targetIterator.done ) {
 			itineraryPointObjIdMap.set ( otherthing.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );

@@ -35,7 +35,7 @@ Tests ...
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 /*
 --- newGeometry function ----------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ function newGeometry ( ) {
 	*/
 
 	function myGetLatLngElevAtDist ( route, distance ) {
-		if ( route.distance <= distance || THE_CONST.zero >= distance ) {
+		if ( route.distance <= distance || ZERO >= distance ) {
 			return null;
 		}
 
@@ -72,11 +72,12 @@ function newGeometry ( ) {
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		itineraryPointsIterator.done;
 		let scale = ( previousItineraryPoint.distance - nearestDistance + distance ) / previousItineraryPoint.distance;
+		const HUNDRED = 100;
 		return [
 			previousItineraryPoint.lat + ( ( itineraryPointsIterator.value.lat - previousItineraryPoint.lat ) * scale ),
 			previousItineraryPoint.lng + ( ( itineraryPointsIterator.value.lng - previousItineraryPoint.lng ) * scale ),
 			previousItineraryPoint.elev + ( ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) * scale ),
-			THE_CONST.number100 *
+			HUNDRED *
 				( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) / previousItineraryPoint.distance
 		];
 	}
@@ -90,14 +91,20 @@ function newGeometry ( ) {
 	*/
 
 	function myGetLatLngBounds ( latLngs ) {
-		let sw = L.latLng ( [ THE_CONST.latLng.maxLat, THE_CONST.latLng.maxLng ] );
-		let ne = L.latLng ( [ THE_CONST.latLng.minLat, THE_CONST.latLng.minLng ] );
+
+		const MAX_LAT = 90;
+		const MIN_LAT = -90;
+		const MAX_LNG = 180;
+		const MIN_LNG = -180;
+
+		let sw = L.latLng ( [ MAX_LAT, MAX_LNG ] );
+		let ne = L.latLng ( [ MIN_LAT, MIN_LNG ] );
 		latLngs.forEach (
 			latLng => {
-				sw.lat = Math.min ( sw.lat, latLng [ THE_CONST.zero ] );
-				sw.lng = Math.min ( sw.lng, latLng [ THE_CONST.number1 ] );
-				ne.lat = Math.max ( ne.lat, latLng [ THE_CONST.zero ] );
-				ne.lng = Math.max ( ne.lng, latLng [ THE_CONST.number1 ] );
+				sw.lat = Math.min ( sw.lat, latLng [ ZERO ] );
+				sw.lng = Math.min ( sw.lng, latLng [ ONE ] );
+				ne.lat = Math.max ( ne.lat, latLng [ ZERO ] );
+				ne.lng = Math.max ( ne.lng, latLng [ ONE ] );
 			}
 		);
 		return L.latLngBounds ( sw, ne );
@@ -118,7 +125,7 @@ function newGeometry ( ) {
 
 	function myGetClosestLatLngDistance ( route, latLng ) {
 
-		if ( THE_CONST.zero === route.itinerary.itineraryPoints.length ) {
+		if ( ZERO === route.itinerary.itineraryPoints.length ) {
 			return null;
 		}
 
@@ -133,14 +140,14 @@ function newGeometry ( ) {
 
 		// projections of points are made
 		let point = L.Projection.SphericalMercator.project (
-			L.latLng ( latLng [ THE_CONST.zero ], latLng [ THE_CONST.number1 ] ) );
+			L.latLng ( latLng [ ZERO ], latLng [ ONE ] ) );
 		let point1 = L.Projection.SphericalMercator.project (
 			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 		);
 
 		// variables initialization
 		let closestLatLng = null;
-		let closestDistance = THE_CONST.distance.defaultValue;
+		let closestDistance = DISTANCE.defaultValue;
 		let endSegmentDistance = itineraryPointIterator.value.distance;
 
 		// iteration on the route points
@@ -209,13 +216,13 @@ function newGeometry ( ) {
 		// return L.latLng ( latLngStartPoint ).distanceTo ( L.latLng ( latLngEndPoint ) );
 
 		if (
-			latLngStartPoint [ THE_CONST.zero ] === latLngEndPoint [ THE_CONST.zero ]
+			latLngStartPoint [ ZERO ] === latLngEndPoint [ ZERO ]
 			&&
-			latLngStartPoint [ THE_CONST.number1 ] === latLngEndPoint [ THE_CONST.number1 ]
+			latLngStartPoint [ ONE ] === latLngEndPoint [ ONE ]
 		) {
 
 			// the function runs infinitely when latLngStartPoint === latLngStartPoint :-(
-			return THE_CONST.zero;
+			return ZERO;
 		}
 
 		// and since v1.7.0 we use the simple spherical law of cosines formula
@@ -224,12 +231,12 @@ function newGeometry ( ) {
 		// Notice: leaflet uses the haversine formula.
 		const toRadians = Math.PI / DEGREE_180;
 		const earthRadius = 6371e3;
-		let latStartPoint = latLngStartPoint [ THE_CONST.zero ] * toRadians;
-		let latEndPoint = latLngEndPoint [ THE_CONST.zero ] * toRadians;
+		let latStartPoint = latLngStartPoint [ ZERO ] * toRadians;
+		let latEndPoint = latLngEndPoint [ ZERO ] * toRadians;
 		let deltaLng =
 			(
-				myNormalizeLng ( latLngEndPoint [ THE_CONST.number1 ] ) -
-				myNormalizeLng ( latLngStartPoint [ THE_CONST.number1 ] )
+				myNormalizeLng ( latLngEndPoint [ ONE ] ) -
+				myNormalizeLng ( latLngStartPoint [ ONE ] )
 			)
 			* toRadians;
 		return Math.acos (
@@ -267,8 +274,8 @@ function newGeometry ( ) {
 
 	function myAddPoint ( point1, point2 ) {
 		return [
-			point1 [ THE_CONST.zero ] + point2 [ THE_CONST.zero ],
-			point1 [ THE_CONST.number1 ] + point2 [ THE_CONST.number1 ]
+			point1 [ ZERO ] + point2 [ ZERO ],
+			point1 [ ONE ] + point2 [ ONE ]
 		];
 	}
 
@@ -280,8 +287,8 @@ function newGeometry ( ) {
 
 	function mySubtrackPoints ( point1, point2 ) {
 		return [
-			point1 [ THE_CONST.zero ] - point2 [ THE_CONST.zero ],
-			point1 [ THE_CONST.number1 ] - point2 [ THE_CONST.number1 ]
+			point1 [ ZERO ] - point2 [ ZERO ],
+			point1 [ ONE ] - point2 [ ONE ]
 		];
 	}
 

@@ -34,15 +34,15 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-import { THE_CONST } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 let ourContainer = null;
 let ourTimerId = null;
-let ourFocusIsOnItem = THE_CONST.zero;
+let ourFocusIsOnItem = ZERO;
 let ourOriginalEvent = null;
 let ourCloseButton = null;
-let ourLat = THE_CONST.latLng.defaultValue;
-let ourLng = THE_CONST.latLng.defaultValue;
+let ourLat = LAT_LNG.defaultValue;
+let ourLng = LAT_LNG.defaultValue;
 
 /*
 --- newBaseContextMenu function ---------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ function newBaseContextMenu ( originalEvent ) {
 	let myMenuItems = [];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myBody = document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ];
+	let myBody = document.getElementsByTagName ( 'body' ) [ ZERO ];
 
 	/*
 	--- myOnKeyPress function -----------------------------------------------------------------------------------------
@@ -101,15 +101,15 @@ function newBaseContextMenu ( originalEvent ) {
 			ourCloseButton.click ( ) ( );
 		}
 		if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? THE_CONST.number1 : ++ ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? ONE : ++ ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem <= THE_CONST.number1 ? myMenuItems.length : -- ourFocusIsOnItem;
+			ourFocusIsOnItem = ourFocusIsOnItem <= ONE ? myMenuItems.length : -- ourFocusIsOnItem;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'Home' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = THE_CONST.number1;
+			ourFocusIsOnItem = ONE;
 			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
 		}
 		if ( 'End' === keyBoardEvent.key ) {
@@ -119,9 +119,9 @@ function newBaseContextMenu ( originalEvent ) {
 		if (
 			( 'Enter' === keyBoardEvent.key )
 			&&
-			( ourFocusIsOnItem > THE_CONST.zero )
+			( ourFocusIsOnItem > ZERO )
 			&&
-			( myMenuItems[ ourFocusIsOnItem - THE_CONST.number1 ].action )
+			( myMenuItems[ ourFocusIsOnItem - ONE ].action )
 		) {
 			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
 		}
@@ -175,18 +175,18 @@ function newBaseContextMenu ( originalEvent ) {
 
 		// removing menu items
 		let childNodes = ourContainer.childNodes;
-		childNodes [ THE_CONST.zero ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
-		for ( let childNodesCounter = THE_CONST.number1; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
+		childNodes [ ZERO ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
+		for ( let childNodesCounter = ONE; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
 			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ( 'body' ) [ THE_CONST.zero ].removeChild ( ourContainer );
+		document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( ourContainer );
 		ourContainer = null;
-		ourFocusIsOnItem = THE_CONST.zero;
+		ourFocusIsOnItem = ZERO;
 		myMenuItems = [];
-		ourLat = THE_CONST.latLng.defaultValue;
-		ourLng = THE_CONST.latLng.defaultValue;
+		ourLat = LAT_LNG.defaultValue;
+		ourLng = LAT_LNG.defaultValue;
 	}
 
 	/*
@@ -290,7 +290,7 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function myAddMenuItems ( ) {
-		let menuItemCounter = THE_CONST.zero;
+		let menuItemCounter = ZERO;
 		myMenuItems.forEach (
 			menuItem => {
 				let itemContainer = myHTMLElementsFactory.create (
