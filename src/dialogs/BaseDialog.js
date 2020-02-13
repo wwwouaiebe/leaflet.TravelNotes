@@ -50,6 +50,8 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newBaseDialog ( ) {
 
+	const DRAG_MARGIN = 20;
+
 	// variables initialization for drag and drop
 	let myStartDragX = THE_CONST.zero;
 	let myStartDragY = THE_CONST.zero;
@@ -204,12 +206,12 @@ function newBaseDialog ( ) {
 				myDialogX += dragEndEvent.screenX - myStartDragX;
 				myDialogY += dragEndEvent.screenY - myStartDragY;
 				myDialogX = Math.min (
-					Math.max ( myDialogX, THE_CONST.baseDialog.dragMargin ),
-					myScreenWidth - myDialogDiv.clientWidth - THE_CONST.baseDialog.dragMargin
+					Math.max ( myDialogX, DRAG_MARGIN ),
+					myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
 				);
-				myDialogY = Math.max ( myDialogY, THE_CONST.baseDialog.dragMargin );
+				myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
 				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - THE_CONST.baseDialog.dragMargin;
+					myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - DRAG_MARGIN;
 				myDialogDiv.setAttribute (
 					'style',
 					'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
@@ -357,11 +359,11 @@ function newBaseDialog ( ) {
 		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / THE_CONST.number2;
 		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / THE_CONST.number2;
 		myDialogX = Math.min (
-			Math.max ( myDialogX, THE_CONST.baseDialog.dragMargin ),
-			myScreenWidth - myDialogDiv.clientWidth - THE_CONST.baseDialog.dragMargin
+			Math.max ( myDialogX, DRAG_MARGIN ),
+			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
 		);
-		myDialogY = Math.max ( myDialogY, THE_CONST.baseDialog.dragMargin );
-		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - THE_CONST.baseDialog.dragMargin;
+		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, THE_CONST.zero ) - DRAG_MARGIN;
 		myDialogDiv.setAttribute (
 			'style',
 			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'

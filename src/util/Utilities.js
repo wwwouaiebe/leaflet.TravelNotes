@@ -39,9 +39,11 @@ function newUtilities ( ) {
 
 	function myGetUUID ( ) {
 		function Random4 ( ) {
+			const HEXADECIMAL = 16;
+			const TWO_EXP_16 = 65536;
 			return Math
-				.floor ( ( THE_CONST.number1 + Math.random ( ) ) * THE_CONST.number65536 )
-				.toString ( THE_CONST.hexadecimal )
+				.floor ( ( THE_CONST.number1 + Math.random ( ) ) * TWO_EXP_16 )
+				.toString ( HEXADECIMAL )
 				.substring ( THE_CONST.number1 );
 		}
 		return Random4 ( ) +
@@ -157,14 +159,19 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatTime ( time ) {
+
+		const SECOND_IN_DAY = 86400;
+		const SECOND_IN_HOUR = 3600;
+		const SECOND_IN_MINUT = 60;
+
 		let iTtime = Math.floor ( time );
 		if ( THE_CONST.zero === iTtime ) {
 			return '';
 		}
-		let days = Math.floor ( iTtime / THE_CONST.time.secondInDay );
-		let hours = Math.floor ( iTtime % THE_CONST.time.secondInDay / THE_CONST.time.secondInHour );
-		let minutes = Math.floor ( iTtime % THE_CONST.time.secondInHour / THE_CONST.time.secondInMinut );
-		let seconds = Math.floor ( iTtime % THE_CONST.time.secondInMinut );
+		let days = Math.floor ( iTtime / SECOND_IN_DAY );
+		let hours = Math.floor ( iTtime % SECOND_IN_DAY / SECOND_IN_HOUR );
+		let minutes = Math.floor ( iTtime % SECOND_IN_HOUR / SECOND_IN_MINUT );
+		let seconds = Math.floor ( iTtime % SECOND_IN_MINUT );
 		if ( THE_CONST.zero < days ) {
 			return days +
 				'\u00A0'
@@ -200,13 +207,17 @@ function newUtilities ( ) {
 	*/
 
 	function myFormatDistance ( distance ) {
+
+		const M_IN_KM = 1000;
+		const DISTANCE_ROUND = 10;
+
 		let iDistance = Math.floor ( distance );
 		if ( THE_CONST.zero === iDistance ) {
 			return '';
 		}
-		return Math.floor ( iDistance / THE_CONST.distance.mInKm ) +
+		return Math.floor ( iDistance / M_IN_KM ) +
 			',' +
-			Math.floor ( ( iDistance % THE_CONST.distance.mInKm ) / THE_CONST.distance.round ).toFixed ( THE_CONST.zero )
+			Math.floor ( ( iDistance % M_IN_KM ) / DISTANCE_ROUND ).toFixed ( THE_CONST.zero )
 				.padStart ( THE_CONST.number2, '0' )
 				.padEnd ( THE_CONST.number3, '0' ) +
 			'\u00A0km';

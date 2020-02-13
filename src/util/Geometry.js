@@ -47,6 +47,10 @@ Patterns : Closure
 
 function newGeometry ( ) {
 
+	const DEGREE_180 = 180;
+	const DEGREE_360 = 360;
+	const DEGREE_540 = 540;
+
 	/*
 	--- myGetLatLngElevAtDist function --------------------------------------------------------------------------------
 
@@ -182,7 +186,7 @@ function newGeometry ( ) {
 	*/
 
 	function myNormalizeLng ( Lng ) {
-		return ( ( Lng + THE_CONST.angle.degree540 ) % THE_CONST.angle.degree360 ) - THE_CONST.angle.degree180;
+		return ( ( Lng + DEGREE_540 ) % DEGREE_360 ) - DEGREE_180;
 	}
 
 	/*
@@ -218,7 +222,7 @@ function newGeometry ( ) {
 		// (cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet function is
 		// always < 10e-3 m. The error due to the earth radius is a lot bigger...
 		// Notice: leaflet uses the haversine formula.
-		const toRadians = Math.PI / THE_CONST.angle.degree180;
+		const toRadians = Math.PI / DEGREE_180;
 		const earthRadius = 6371e3;
 		let latStartPoint = latLngStartPoint [ THE_CONST.zero ] * toRadians;
 		let latEndPoint = latLngEndPoint [ THE_CONST.zero ] * toRadians;

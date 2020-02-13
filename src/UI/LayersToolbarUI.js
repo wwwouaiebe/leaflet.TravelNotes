@@ -198,14 +198,15 @@ function newLayersToolbarUI ( ) {
 	*/
 
 	function myOnWheelToolbar ( wheelEvent ) {
+		const MIN_BUTTONS = 3;
 		if ( wheelEvent.deltaY ) {
 			myMarginTop -= wheelEvent.deltaY * THE_CONST.mouse.wheelCorrectionFactors [ wheelEvent.deltaMode ];
 			myMarginTop = myMarginTop > myButtonTop ? myButtonTop : myMarginTop;
 			myMarginTop =
 				myMarginTop < myButtonTop - myButtonsHeight +
-				( THE_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
+				( MIN_BUTTONS * myButtonHeight )
 					?
-					myButtonTop - myButtonsHeight + ( THE_CONST.layersToolbarUI.buttonsAlwaysVisible * myButtonHeight )
+					myButtonTop - myButtonsHeight + ( MIN_BUTTONS * myButtonHeight )
 					:
 					myMarginTop;
 			myLayersToolbarButtonsDiv.style.marginTop = String ( myMarginTop ) + 'px';

@@ -43,6 +43,8 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newFloatWindow ( ) {
 
+	const DRAG_MARGIN = 20;
+
 	let myWindowDiv = null;
 	let myHeaderDiv = null;
 	let myContentDiv = null;
@@ -140,12 +142,12 @@ function newFloatWindow ( ) {
 				myWindowX += dragEndEvent.screenX - myStartDragX;
 				myWindowY += dragEndEvent.screenY - myStartDragY;
 				myWindowX = Math.min (
-					Math.max ( myWindowX, THE_CONST.baseDialog.dragMargin ),
-					myScreenWidth - myWindowDiv.clientWidth - THE_CONST.baseDialog.dragMargin
+					Math.max ( myWindowX, DRAG_MARGIN ),
+					myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
 				);
-				myWindowY = Math.max ( myWindowY, THE_CONST.baseDialog.dragMargin );
+				myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
 				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myWindowY, THE_CONST.zero ) - THE_CONST.baseDialog.dragMargin;
+					myScreenHeight - Math.max ( myWindowY, THE_CONST.zero ) - DRAG_MARGIN;
 				myWindowDiv.setAttribute (
 					'style',
 					'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'

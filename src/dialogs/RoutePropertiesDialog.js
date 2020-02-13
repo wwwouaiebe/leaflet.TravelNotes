@@ -51,6 +51,9 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newRoutePropertiesDialog ( route ) {
 
+	const ROUTE_MIN_WIDTH = 1;
+	const ROUTE_MAX_WIDTH = 40;
+
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myRoutePropertiesDialog = null;
 	let myRoutePropertiesDiv = null;
@@ -131,8 +134,8 @@ function newRoutePropertiesDialog ( route ) {
 			widthDiv
 		);
 		myWidthInput.value = route.width;
-		myWidthInput.min = THE_CONST.route.minWidth;
-		myWidthInput.max = THE_CONST.route.maxWidth;
+		myWidthInput.min = ROUTE_MIN_WIDTH;
+		myWidthInput.max = ROUTE_MAX_WIDTH;
 	}
 
 	/*

@@ -74,6 +74,9 @@ function onMouseOverOrMoveOnRoute ( mapEvent ) {
 
 function newViewerMapEditor ( ) {
 
+	const DEFAULT_MAX_ZOOM = 18;
+	const DEFAULT_MIN_ZOOM = 0;
+
 	let myDataSearchEngine = newDataSearchEngine ( );
 	let myCurrentLayer = null;
 	let myGeolocationCircle = null;
@@ -137,10 +140,12 @@ function newViewerMapEditor ( ) {
 				className : 'TravelNotes-AllNotes ' + theConfig.note.style
 			}
 		);
+
+		const NOTE_Z_INDEX_OFFSET = 100;
 		let marker = L.marker (
 			note.iconLatLng,
 			{
-				zIndexOffset : THE_CONST.note.zIndexOffset,
+				zIndexOffset : NOTE_Z_INDEX_OFFSET,
 				icon : icon,
 				draggable : ! readOnly
 			}
@@ -305,14 +310,14 @@ function newViewerMapEditor ( ) {
 
 			// strange... see issue #79 ... zoom is not correct on read only file
 			// when the background map have bounds...
-			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom ) ) {
-				theTravelNotesData.map.setZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
+			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || DEFAULT_MIN_ZOOM ) ) {
+				theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
 			}
-			theTravelNotesData.map.setMinZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
-			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom ) ) {
-				theTravelNotesData.map.setZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
+			theTravelNotesData.map.setMinZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || DEFAULT_MAX_ZOOM ) ) {
+				theTravelNotesData.map.setZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
 			}
-			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || THE_CONST.mapEditor.defaultMaxZoom );
+			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
 			if ( layer.bounds ) {
 				if (
 					! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
@@ -321,7 +326,7 @@ function newViewerMapEditor ( ) {
 				) {
 					theTravelNotesData.map.setMaxBounds ( null );
 					theTravelNotesData.map.fitBounds ( layer.bounds );
-					theTravelNotesData.map.setZoom ( layer.minZoom || THE_CONST.mapEditor.defaultMinZoom );
+					theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
 				}
 				theTravelNotesData.map.setMaxBounds ( layer.bounds );
 			}

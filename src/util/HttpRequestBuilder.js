@@ -28,8 +28,6 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { THE_CONST } from '../util/Constants.js';
-
 /*
 --- newHttpRequestBuilder function ------------------------------------------------------------------------------------
 
@@ -37,6 +35,10 @@ import { THE_CONST } from '../util/Constants.js';
 */
 
 function newHttpRequestBuilder ( ) {
+
+	const STATUS_OK = 200;
+	const READY_STATE_DONE = 4;
+	const TIMEOUT = 20000;
 
 	/*
 	--- myGetJsonPromise function -------------------------------------------------------------------------------------
@@ -56,13 +58,13 @@ function newHttpRequestBuilder ( ) {
 
 		function jsonRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = THE_CONST.xmlHttpRequest.timeout;
+			xmlHttpRequest.timeout = TIMEOUT;
 			xmlHttpRequest.ontimeout = function ( ) {
 				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
 			};
 			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( THE_CONST.xmlHttpRequest.readyState.done === xmlHttpRequest.readyState ) {
-					if ( THE_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
+				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
+					if ( STATUS_OK === xmlHttpRequest.status ) {
 						let response = null;
 						try {
 							response = JSON.parse ( xmlHttpRequest.responseText );
@@ -106,12 +108,12 @@ function newHttpRequestBuilder ( ) {
 
 		function binaryRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = THE_CONST.xmlHttpRequest.timeout;
+			xmlHttpRequest.timeout = TIMEOUT;
 			xmlHttpRequest.ontimeout = function ( ) {
 				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
 			};
 			xmlHttpRequest.onload = function ( ) {
-				if ( THE_CONST.xmlHttpRequest.status.ok === xmlHttpRequest.status ) {
+				if ( STATUS_OK === xmlHttpRequest.status ) {
 					let arrayBuffer = xmlHttpRequest.response;
 					if ( arrayBuffer ) {
 						onOk ( arrayBuffer );

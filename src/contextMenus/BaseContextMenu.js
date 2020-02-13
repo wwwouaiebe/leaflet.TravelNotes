@@ -251,6 +251,8 @@ function newBaseContextMenu ( originalEvent ) {
 
 	function myMoveContainer ( ) {
 
+		const MENU_MARGIN = 20;
+
 		// a dummy div is created to find the screen width and height
 		let dummyDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, myBody );
 		let screenWidth = dummyDiv.clientWidth;
@@ -260,11 +262,11 @@ function newBaseContextMenu ( originalEvent ) {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
 			ourOriginalEvent.originalEvent.clientY,
-			screenHeight - ourContainer.clientHeight - THE_CONST.baseContextMenu.menuMargin
+			screenHeight - ourContainer.clientHeight - MENU_MARGIN
 		);
 		let menuLeft = Math.min (
 			ourOriginalEvent.originalEvent.clientX,
-			screenWidth - ourContainer.clientWidth - THE_CONST.baseContextMenu.menuMargin
+			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
 		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
 	}

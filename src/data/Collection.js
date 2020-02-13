@@ -47,6 +47,11 @@ Patterns : Closure
 
 function newCollection ( objName ) {
 
+	const SWAP_UP = -1;
+	const SWAP_DOWN = 1;
+	const NEXT = 1;
+	const PREVIOUS = -1;
+
 	let myArray = [];
 
 	let myObjName = objName;
@@ -326,8 +331,8 @@ function newCollection ( objName ) {
 			throw new Error ( 'invalid objId for swap function' );
 		}
 		let tmp = myArray [ index ];
-		myArray [ index ] = myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown ) ];
-		myArray [ index + ( swapUp ? THE_CONST.collection.swapUp : THE_CONST.collection.swapDown ) ] = tmp;
+		myArray [ index ] = myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ];
+		myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ] = tmp;
 	}
 
 	/*
@@ -387,7 +392,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, THE_CONST.collection.direction.next ),
+			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, NEXT ),
 
 			/*
 			--- previous function -------------------------------------------------------------------------------------
@@ -395,7 +400,7 @@ function newCollection ( objName ) {
 			-----------------------------------------------------------------------------------------------------------
 			*/
 
-			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, THE_CONST.collection.direction.previous ),
+			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, PREVIOUS ),
 
 			/*
 			--- remove function ---------------------------------------------------------------------------------------

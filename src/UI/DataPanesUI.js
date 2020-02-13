@@ -52,7 +52,12 @@ This function returns the dataPanesUI object
 
 function newDataPanesUI ( ) {
 
-	let myActivePaneIndex = THE_CONST.dataPanesUI.invalidPane;
+	const INVALID_PANE = -1;
+	const ITINERARY_PANE = 0;
+	const TRAVEL_NOTES_PANE = 1;
+	const SEARCH_PANE = 2;
+
+	let myActivePaneIndex = INVALID_PANE;
 	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
 	let mySearchPaneUI = newSearchPaneUI ( );
 	let myItineraryPaneUI = newItineraryPaneUI ( );
@@ -67,13 +72,13 @@ function newDataPanesUI ( ) {
 
 	function myRemoveActivePane ( ) {
 		switch ( myActivePaneIndex ) {
-		case THE_CONST.dataPanesUI.itineraryPane :
+		case ITINERARY_PANE :
 			myItineraryPaneUI.remove ( );
 			break;
-		case THE_CONST.dataPanesUI.travelNotesPane :
+		case TRAVEL_NOTES_PANE :
 			myTravelNotesPaneUI.remove ( );
 			break;
-		case THE_CONST.dataPanesUI.searchPane :
+		case SEARCH_PANE :
 			if ( window.osmSearch ) {
 				mySearchPaneUI.remove ( );
 			}
@@ -95,7 +100,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		myItineraryPaneUI.add ( );
 
-		myActivePaneIndex = THE_CONST.dataPanesUI.itineraryPane;
+		myActivePaneIndex = ITINERARY_PANE;
 	}
 
 	/*
@@ -107,7 +112,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateItinerary ( ) {
-		if ( THE_CONST.dataPanesUI.itineraryPane === myActivePaneIndex ) {
+		if ( ITINERARY_PANE === myActivePaneIndex ) {
 			myItineraryPaneUI.remove ( );
 			myItineraryPaneUI.add ( );
 		}
@@ -124,7 +129,7 @@ function newDataPanesUI ( ) {
 	function mySetTravelNotes ( ) {
 		myRemoveActivePane ( );
 		myTravelNotesPaneUI.add ( );
-		myActivePaneIndex = THE_CONST.dataPanesUI.travelNotesPane;
+		myActivePaneIndex = TRAVEL_NOTES_PANE;
 	}
 
 	/*
@@ -136,7 +141,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateTravelNotes ( ) {
-		if ( THE_CONST.dataPanesUI.travelNotesPane === myActivePaneIndex ) {
+		if ( TRAVEL_NOTES_PANE === myActivePaneIndex ) {
 			myTravelNotesPaneUI.remove ( );
 			myTravelNotesPaneUI.add ( );
 		}
@@ -154,7 +159,7 @@ function newDataPanesUI ( ) {
 		myRemoveActivePane ( );
 		mySearchPaneUI.add ( );
 
-		myActivePaneIndex = THE_CONST.dataPanesUI.searchPane;
+		myActivePaneIndex = SEARCH_PANE;
 
 	}
 
@@ -167,7 +172,7 @@ function newDataPanesUI ( ) {
 	*/
 
 	function myUpdateSearch ( ) {
-		if ( THE_CONST.dataPanesUI.searchPane === myActivePaneIndex ) {
+		if ( SEARCH_PANE === myActivePaneIndex ) {
 			mySearchPaneUI.remove ( );
 			mySearchPaneUI.add ( );
 		}

@@ -71,6 +71,9 @@ Patterns : Closure and Singleton
 
 function newMapEditor ( ) {
 
+	const WAY_POINT_ICON_SIZE = 40;
+	const MARKER_BOUNDS_PRECISION = 0.01;
+
 	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -296,10 +299,10 @@ function newMapEditor ( ) {
 			{
 				icon : L.divIcon (
 					{
-						iconSize : [ THE_CONST.mapEditor.wayPointIconSize, THE_CONST.mapEditor.wayPointIconSize ],
+						iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
 						iconAnchor : [
-							THE_CONST.mapEditor.wayPointIconSize / THE_CONST.number2,
-							THE_CONST.mapEditor.wayPointIconSize
+							WAY_POINT_ICON_SIZE / THE_CONST.number2,
+							WAY_POINT_ICON_SIZE
 						],
 						html : iconHtml,
 						className : 'TravelNotes-WayPointStyle'
@@ -315,8 +318,8 @@ function newMapEditor ( ) {
 			)
 		);
 		marker.getTooltip ( ).options.offset = [
-			THE_CONST.mapEditor.wayPointIconSize / THE_CONST.number2,
-			-THE_CONST.mapEditor.wayPointIconSize / THE_CONST.number2
+			WAY_POINT_ICON_SIZE / THE_CONST.number2,
+			-WAY_POINT_ICON_SIZE / THE_CONST.number2
 		];
 
 		L.DomEvent.on (
@@ -452,13 +455,13 @@ function newMapEditor ( ) {
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
 					/
 					( mapBounds.getEast ( ) - mapBounds.getWest ( ) )
-				) > THE_CONST.mapEditor.markerBoundsPrecision
+				) > MARKER_BOUNDS_PRECISION
 				&&
 				(
 					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
 					/
 					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
-				) > THE_CONST.mapEditor.markerBoundsPrecision;
+				) > MARKER_BOUNDS_PRECISION;
 		}
 		if ( showGeometry ) {
 			myAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );

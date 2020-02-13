@@ -49,6 +49,9 @@ import { THE_CONST } from '../util/Constants.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
 
+	const LINKS_MAX_LENGTH = 40;
+	const MIN_NOTES_DISTANCE = 9;
+
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myUtilities = newUtilities ( );
@@ -114,7 +117,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<a href="' +
 				note.url +
 				'" target="_blank">' +
-				note.url.substr ( THE_CONST.zero, THE_CONST.htmlViewsFactory.linksMaxLength ) +
+				note.url.substr ( THE_CONST.zero, LINKS_MAX_LENGTH ) +
 				'...' +
 				'</a></div>';
 		}
@@ -464,7 +467,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
 				if ( ! notesDone ) {
 					let nextDistance = notesIterator.value.distance - previousNotesDistance;
-					if ( THE_CONST.htmlViewsFactory.minNotesDistance < nextDistance ) {
+					if ( MIN_NOTES_DISTANCE < nextDistance ) {
 						myHTMLElementsFactory.create (
 							'div',
 							{

@@ -51,6 +51,16 @@ let ourRequestStarted = false;
 
 function newSvgIconFromOsmFactory ( ) {
 
+	const DEGREE_0 = 0;
+	const DEGREE_90 = 90;
+	const DEGREE_180 = 180;
+	const DEGREE_270 = 270;
+	const DEGREE_360 = 360;
+
+	const AT_START = -1;
+	const ON_ROUTE = 0;
+	const AT_END = 1;
+
 	let myGeometry = newGeometry ( );
 
 	let mySvgLatLngDistance = {
@@ -71,7 +81,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 	let mySvg = null; // the svg element
 
-	let myPositionOnRoute = THE_CONST.svgIcon.positionOnRoute.onRoute;
+	let myPositionOnRoute = ON_ROUTE;
 
 	let myTranslation = [ THE_CONST.zero, THE_CONST.zero ];
 	let myRotation = THE_CONST.zero;
@@ -187,13 +197,16 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function myLatLngCompare ( itineraryPoint ) {
+
+		const COMPARE_PRECISION = 0.00001;
+
 		let isWayPoint = false;
 		myRoute.wayPoints.forEach (
 			wayPoint => {
 				if (
-					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
+					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < COMPARE_PRECISION )
 					&&
-					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < THE_CONST.svgIconFromOsmFactory.comparePrecision )
+					( Math.abs ( itineraryPoint.lng - wayPoint.lng ) < COMPARE_PRECISION )
 				) {
 					isWayPoint = true;
 				}
@@ -370,15 +383,15 @@ function newSvgIconFromOsmFactory ( ) {
 					( rotationPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] )
 				)
 				*
-				THE_CONST.angle.degree180 / Math.PI;
+				DEGREE_180 / Math.PI;
 			if ( THE_CONST.zero > myRotation ) {
-				myRotation += THE_CONST.angle.degree360;
+				myRotation += DEGREE_360;
 			}
-			myRotation -= THE_CONST.angle.degree270;
+			myRotation -= DEGREE_270;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( THE_CONST.zero > rotationPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] ) {
-				myRotation += THE_CONST.angle.degree180;
+				myRotation += DEGREE_180;
 			}
 		}
 
@@ -395,26 +408,26 @@ function newSvgIconFromOsmFactory ( ) {
 				( directionPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] )
 			)
 				*
-				THE_CONST.angle.degree180 / Math.PI;
+				DEGREE_180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( THE_CONST.zero > directionPoint [ THE_CONST.zero ] - iconPoint [ THE_CONST.zero ] ) {
-				myDirection += THE_CONST.angle.degree180;
+				myDirection += DEGREE_180;
 			}
 			myDirection -= myRotation;
 
 			// setting direction between 0 and 360
-			while ( THE_CONST.angle.degree0 > myDirection ) {
-				myDirection += THE_CONST.angle.degree360;
+			while ( DEGREE_0 > myDirection ) {
+				myDirection += DEGREE_360;
 			}
-			while ( THE_CONST.angle.degree360 < myDirection ) {
-				myDirection -= THE_CONST.angle.degree360;
+			while ( DEGREE_360 < myDirection ) {
+				myDirection -= DEGREE_360;
 			}
 		}
 		if ( myNearestItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
-			myRotation = -myDirection - THE_CONST.angle.degree90;
+			myRotation = -myDirection - DEGREE_90;
 			myDirection = null;
-			myPositionOnRoute = THE_CONST.svgIcon.positionOnRoute.atStart;
+			myPositionOnRoute = AT_START;
 		}
 
 		if (
@@ -425,7 +438,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 			// using lat & lng because last point is sometime duplicated
 			myDirection = null;
-			myPositionOnRoute = THE_CONST.svgIcon.positionOnRoute.atEnd;
+			myPositionOnRoute = AT_END;
 		}
 	}
 
@@ -472,10 +485,10 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		}
 
-		if ( THE_CONST.svgIcon.positionOnRoute.atStart === myPositionOnRoute ) {
+		if ( AT_START === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'NoteDialog - Start' );
 		}
-		else if ( THE_CONST.svgIcon.positionOnRoute.atEnd === myPositionOnRoute ) {
+		else if ( AT_END === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'NoteDialog - Stop' );
 		}
 	}
@@ -648,6 +661,9 @@ function newSvgIconFromOsmFactory ( ) {
 	*/
 
 	function myGetUrl ( ) {
+
+		const SEARCH_AROUND_FACTOR = 1.5;
+
 		let requestLatLng =
 			mySvgLatLngDistance.latLng [ THE_CONST.zero ].toFixed ( THE_CONST.latLng.fixed ) +
 			',' +
@@ -657,7 +673,7 @@ function newSvgIconFromOsmFactory ( ) {
 			'?data=[out:json][timeout:' +
 			theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( theConfig.note.svgIconWidth * THE_CONST.svgIconFromOsmFactory.searchAroundFactor ).toFixed ( THE_CONST.zero ) +
+			( theConfig.note.svgIconWidth * SEARCH_AROUND_FACTOR ).toFixed ( THE_CONST.zero ) +
 			',' +
 			requestLatLng +
 			')->.a;(.a >;.a;)->.a;.a out;' +
