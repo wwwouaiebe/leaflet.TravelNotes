@@ -260,8 +260,6 @@ function newProfileWindow ( ) {
 	*/
 
 	function myClean ( ) {
-		console.log ( 'myClean' );
-		console.log ( mySvg );
 		if ( mySvg ) {
 			mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
 			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );

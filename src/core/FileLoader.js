@@ -27,6 +27,8 @@ Changes:
 		- Issue #61 : Disable right context menu when readonly travel.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.7.0:
+		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 Doc reviewed 20191122
 Tests ...
 
@@ -41,6 +43,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -143,6 +146,7 @@ function newFileLoader ( ) {
 				newFileCompactor ( ).decompressMerge ( fileContent );
 			}
 			else {
+				theProfileWindowsManager.deleteAllProfiles ( );
 				newFileCompactor ( ).decompress ( fileContent );
 				theTravelNotesData.travel.name =
 					fileName.substr ( ZERO, fileName.lastIndexOf ( '.' ) );

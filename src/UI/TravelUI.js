@@ -36,6 +36,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
+	- v1.7.0:
+		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 Doc reviewed 20191125
 Tests ...
 

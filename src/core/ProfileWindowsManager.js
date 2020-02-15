@@ -128,6 +128,18 @@ function newProfileWindowsManager ( ) {
 	}
 
 	/*
+	--- myDeleteAllProfiles function ----------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myDeleteAllProfiles ( ) {
+		myProfileWindows.forEach ( profileWindow => profileWindow.close ( ) );
+	}
+
+	/*
 	--- myOnProfileClosed function ------------------------------------------------------------------------------------
 
 	This function ...
@@ -152,6 +164,8 @@ function newProfileWindowsManager ( ) {
 			updateProfile : ( oldRouteObjId, newRoute ) => myUpdateProfile ( oldRouteObjId, newRoute ),
 
 			deleteProfile : objId => myDeleteProfile ( objId ),
+
+			deleteAllProfiles : ( ) => myDeleteAllProfiles ( ),
 
 			showProfile : routeObjId => myShowProfile ( routeObjId ),
 

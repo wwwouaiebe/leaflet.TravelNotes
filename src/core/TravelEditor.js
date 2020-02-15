@@ -38,6 +38,8 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.7.0:
+		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 Doc reviewed 20191121
 Tests ...
 
@@ -313,6 +315,7 @@ function newTravelEditor ( ) {
 			'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
 			return;
 		}
+		theProfileWindowsManager.deleteAllProfiles ( );
 		myEventDispatcher.dispatch ( 'removeallobjects' );
 		theTravelNotesData.travel.editedRoute = newRoute ( );
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
