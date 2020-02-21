@@ -187,7 +187,6 @@ function newProfileFactory ( ) {
 	*/
 
 	function mySmooth ( route ) {
-
 		myRoute = route;
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		let distance = ZERO;
@@ -205,6 +204,9 @@ function newProfileFactory ( ) {
 
 		const TEN = 10;
 		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * TEN;
+		if ( distance <= TWO * mySmoothPoints * mySmoothDistance ) {
+			return;
+		}
 
 		let smoothPoints = createSmoothPoints ( );
 
