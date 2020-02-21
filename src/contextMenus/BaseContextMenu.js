@@ -94,36 +94,42 @@ function newBaseContextMenu ( originalEvent ) {
 	function myOnKeyDown ( keyBoardEvent ) {
 
 		if ( ourContainer ) {
-			keyBoardEvent.preventDefault ( );
-			keyBoardEvent.stopPropagation ( );
-		}
-		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			ourCloseButton.click ( ) ( );
-		}
-		if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? ONE : ++ ourFocusIsOnItem;
-			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-		}
-		if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ourFocusIsOnItem <= ONE ? myMenuItems.length : -- ourFocusIsOnItem;
-			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-		}
-		if ( 'Home' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = ONE;
-			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-		}
-		if ( 'End' === keyBoardEvent.key ) {
-			ourFocusIsOnItem = myMenuItems.length;
-			ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-		}
-		if (
-			( 'Enter' === keyBoardEvent.key )
-			&&
-			( ourFocusIsOnItem > ZERO )
-			&&
-			( myMenuItems[ ourFocusIsOnItem - ONE ].action )
-		) {
-			ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
+
+			// keyBoardEvent.preventDefault ( );
+			if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+				keyBoardEvent.stopPropagation ( );
+				ourCloseButton.click ( );
+			}
+			else if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
+				keyBoardEvent.stopPropagation ( );
+				ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? ONE : ++ ourFocusIsOnItem;
+				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
+			}
+			else if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
+				keyBoardEvent.stopPropagation ( );
+				ourFocusIsOnItem = ourFocusIsOnItem <= ONE ? myMenuItems.length : -- ourFocusIsOnItem;
+				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
+			}
+			else if ( 'Home' === keyBoardEvent.key ) {
+				keyBoardEvent.stopPropagation ( );
+				ourFocusIsOnItem = ONE;
+				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
+			}
+			else if ( 'End' === keyBoardEvent.key ) {
+				keyBoardEvent.stopPropagation ( );
+				ourFocusIsOnItem = myMenuItems.length;
+				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
+			}
+			else if (
+				( 'Enter' === keyBoardEvent.key )
+				&&
+				( ourFocusIsOnItem > ZERO )
+				&&
+				( myMenuItems[ ourFocusIsOnItem - ONE ].action )
+			) {
+				keyBoardEvent.stopPropagation ( );
+				ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
+			}
 		}
 	}
 
