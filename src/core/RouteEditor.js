@@ -294,19 +294,23 @@ function newRouteEditor ( ) {
 		myComputeRouteDistances ( theTravelNotesData.travel.editedRoute );
 
 		// Placing the waypoints on the itinerary
-		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done ) {
-			if ( wayPointsIterator.first ) {
-				wayPointsIterator.value.latLng = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
-			}
-			else if ( wayPointsIterator.last ) {
-				wayPointsIterator.value.latLng = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
-			}
-			else {
-				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance (
-					theTravelNotesData.travel.editedRoute,
-					wayPointsIterator.value.latLng
-				).latLng;
+		if ( 'circle' !== theTravelNotesData.travel.editedRoute.itinerary.transitMode ) {
+			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
+			while ( ! wayPointsIterator.done ) {
+				if ( wayPointsIterator.first ) {
+					wayPointsIterator.value.latLng =
+						theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
+				}
+				else if ( wayPointsIterator.last ) {
+					wayPointsIterator.value.latLng =
+						theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
+				}
+				else {
+					wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance (
+						theTravelNotesData.travel.editedRoute,
+						wayPointsIterator.value.latLng
+					).latLng;
+				}
 			}
 		}
 

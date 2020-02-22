@@ -91,6 +91,9 @@ function newWayPointEditor ( ) {
 		}
 
 		function setAdressFromGeocoder ( geoCoderData ) {
+			if ( geoCoderData.error ) {
+				return;
+			}
 			let address = '';
 			if ( geoCoderData.address.house_number ) {
 				address += geoCoderData.address.house_number + ' ';

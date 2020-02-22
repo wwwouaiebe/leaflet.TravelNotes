@@ -315,7 +315,7 @@ function newProfileFactory ( ) {
 
 			distanceText.appendChild (
 				document.createTextNode (
-					M_IN_KM < selectedScale || 0 < myRoute.chainedDistance
+					M_IN_KM < selectedScale || ZERO < myRoute.chainedDistance
 						?
 						( distance / M_IN_KM ) + ' km'
 						:
