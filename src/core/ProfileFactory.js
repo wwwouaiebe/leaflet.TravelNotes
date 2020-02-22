@@ -314,9 +314,6 @@ function newProfileFactory ( ) {
 			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 
 			distanceText.appendChild (
-
-				// document.createTextNode ( M_IN_KM >= selectedScale ? distance + ' m ' : ( distance / M_IN_KM ) + ' km' )
-
 				document.createTextNode (
 					M_IN_KM < selectedScale || 0 < myRoute.chainedDistance
 						?
