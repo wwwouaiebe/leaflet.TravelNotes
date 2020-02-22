@@ -59,6 +59,7 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
 import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -105,12 +106,17 @@ function newTravelEditor ( ) {
 		// We verify that the provider  for this route is available
 		let initialRoute = myDataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
+		let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
 		if (
 			providerName
-				&&
-				( '' !== providerName )
-				&&
-				( ! theTravelNotesData.providers.get ( providerName.toLowerCase ( ) ) )
+			&&
+			( '' !== providerName )
+			&&
+			(
+				( ! provider )
+				||
+				( provider.providerKeyNeeded && ! theAPIKeysManager.getKey ( providerName ) )
+			)
 		) {
 			theErrorsUI.showError (
 				theTranslator.getText (
