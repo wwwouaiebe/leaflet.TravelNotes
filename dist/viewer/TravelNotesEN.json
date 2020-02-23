@@ -168,6 +168,10 @@
 		"msgstr" : "Show all routes"
 	},
 	{
+		"msgid" : "ContextMenuFactory - View the elevation",
+		"msgstr" : "View the profile"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Zoom to travel",
 		"msgstr" : "Zoom to travel"
 	},
