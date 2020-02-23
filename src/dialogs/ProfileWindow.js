@@ -108,6 +108,7 @@ function newProfileWindow ( ) {
 	*/
 
 	function myOnSvgContextMenu ( mouseEvent ) {
+		mouseEvent.preventDefault ( );
 		mouseEvent.stopPropagation ( );
 		let clientRect = mySvg.getBoundingClientRect ( );
 		let routeDist =
