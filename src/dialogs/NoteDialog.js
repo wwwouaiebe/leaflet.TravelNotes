@@ -59,6 +59,9 @@ import { LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 function newNoteDialog ( note, routeObjId, newNote ) {
 
+	const DEFAULT_ICON_WIDTH = 40;
+	const DEFAULT_ICON_HEIGHT = 40;
+
 	let myFocusControl = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myLatLng = note.latLng;
@@ -344,7 +347,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		myWidthInput.value = note.iconWidth;
+		myWidthInput.value = ZERO === note.iconWidth ? DEFAULT_ICON_WIDTH : note.iconWidth;
 
 		// ... and height
 		myHTMLElementsFactory.create (
@@ -363,7 +366,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			iconDimensionsDiv
 		);
-		myHeightInput.value = note.iconHeight;
+		myHeightInput.value = ZERO === note.iconHeight ? DEFAULT_ICON_HEIGHT : note.iconHeight;
 	}
 
 	/*
