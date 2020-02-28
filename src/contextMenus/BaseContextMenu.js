@@ -353,7 +353,9 @@ function newBaseContextMenu ( originalEvent ) {
 		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			myOnCloseMenu ( );
+			// For an unknown reason, event listeners are not removed in the myOnCloseMenu procedure,
+			// so it's beter to not close the menu to avoid the keyboard blocked...
+			// myOnCloseMenu ( );
 			return;
 		}
 
