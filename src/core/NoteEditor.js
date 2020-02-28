@@ -427,13 +427,12 @@ function newNoteEditor ( ) {
 		}
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			notesIterator = routesIterator.value.notes.iterator;
-			while ( ! notesIterator.done ) {
+			if ( ! routesIterator.value.hidden ) {
 				myEventDispatcher.dispatch (
-					'noteupdated',
+					'routeupdated',
 					{
-						removedNoteObjId : INVALID_OBJ_ID,
-						addedNoteObjId : notesIterator.value.objId
+						removedRouteObjId : routesIterator.value.objId,
+						addedRouteObjId : routesIterator.value.objId
 					}
 				);
 			}
