@@ -16,7 +16,7 @@ __Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OS
 Due to heavy traffic on this server, you can frequently receive an http error 429. 
 
 If you have a Mapbox, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, GraphHopper and/or OpenRouteService. 
-Simply add your API key via the access key management dialog (button: key: on the toolbar at the top of the control).
+Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
 And with Mapbox, GraphHopper and OpenRouteService, you can search a route for car, bike or pedestrian.
 
