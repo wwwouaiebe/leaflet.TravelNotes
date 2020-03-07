@@ -115,7 +115,7 @@ function newViewerFileLoader ( ) {
 	function myOpenDistantFile ( fileContent ) {
 
 		newFileCompactor ( ).decompress ( fileContent );
-
+		theTravelNotesData.travel.readOnly = true;
 		myDisplay ( );
 	}
 
