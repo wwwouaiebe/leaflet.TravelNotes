@@ -77,7 +77,7 @@ function newSvgIconFromOsmFactory ( ) {
 	let myNodesMap = new Map ( );
 	let myPlaces = [];
 	let myPlace = null;
-	let myCity = null;
+	let myCity = '';
 
 	let mySvg = null; // the svg element
 
@@ -761,7 +761,7 @@ function newSvgIconFromOsmFactory ( ) {
 
 		myResponse = {};
 		mySvg = null;
-		myCity = null;
+		myCity = '';
 		myDirectionArrow = ' ';
 		myTooltip = '';
 		myStreets = '';
