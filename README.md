@@ -48,7 +48,7 @@ The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/maste
 
 ### What's new in release 1.7.0
 
-- When Mapbox or GraphHopper are used as route providers, it is also possible to display the route profile.
+- When OpenRouteService or GraphHopper are used as route providers, it is also possible to display the route profile.
 - When a route between two points is made with leaflet.TravelNotesPolyline this route is no longer represented as a straight line,
 but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md) documentation.
 - It is also possible to draw circles with leaflet.TravelNotesPolyline. See [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md) documentation.
@@ -101,7 +101,7 @@ La [branche master](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/maste
 
 ### Quoi de neuf dans la version 1.7.0
 
-- Lorsque Mapbox ou GraphHopper sont utilisés comme fournisseurs d'itinéraire, il est également possible d'afficher le profil de la route.
+- Lorsque OpenRouteService ou GraphHopper sont utilisés comme fournisseurs d'itinéraire, il est également possible d'afficher le profil de la route.
 - Lorsque un trajet entre deux points est fait avec leaflet.TravelNotesPolyline ce trajet n'est plus représente sous forme de ligne droite,
 mais bien sous forme d'un segment de grand cercle. Voir la documentation de [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md)
 - Il est également possible de tracer des cercles avec leaflet.TravelNotesPolyline. Voir la documentation de [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md)
