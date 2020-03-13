@@ -204,6 +204,10 @@ RoutesPropertiesDialog dialog box. Text will be displayed in the line type selec
 is the template of the line type. Warning: the values in this table are numeric values and will be 
 multiplied by the width of the line and converted into text before being used to adapt the line 
 type in Leaflet.
+- __route.elev.smooth__ : when this value is true, the road profile is smoothed
+- __route.elev.smoothCoefficient__ : a coefficient used to calculate the distance between two points
+for smoothing the elevation. Default value: 0.25
+- __route.elev.smoothPoints__ : the number of points before and after the current point in the smoothing calculations
 - __note.reverseGeocoding__ : when this value is true, the coordinates of the notes are replaced 
 by an address.
 - __note.grip.size__ : the size of the handle at the end of the line of a note.

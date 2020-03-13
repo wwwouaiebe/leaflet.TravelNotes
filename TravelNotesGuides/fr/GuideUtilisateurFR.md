@@ -269,6 +269,17 @@ Il est également possible d'abandonner l'édition d'un trajet et de revenir à 
 modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
 
+#### Profil d'un trajet
+
+Lorsque un trajet est calculé avec GraphHopper ou OpenRouteService, il est possible d'afficher un profil de ce trajet.
+Faites un clic droit sur le __trajet__ et sélectionnez "Voir le profil du trajet" dans le menu contextuel.
+
+<img src="ProfileFR.PNG" />
+
+Il peut y avoir plusieurs fenêtres affichant des profils ouvertes.
+
+Il est possible de déplacer un profil sur l'écran en faisant un glisser/déposer de la barre supérieure de la fenêtre.
+
 #### Itinéraire en train
 
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)

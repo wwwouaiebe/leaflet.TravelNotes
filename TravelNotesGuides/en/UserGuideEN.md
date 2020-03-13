@@ -250,6 +250,18 @@ It is also possible to abort editing a route and return to the situation before 
 the &#x274c; button. Warning, __all__ the changes will be lost, including modified properties 
 and notes added since the beginning of editing.
 
+#### Route profile
+
+
+When a route is calculated with GraphHopper or OpenRouteService, it is possible to display a profile of this route.
+Right-click on the __route__ and select "View the profile" from the context menu.
+
+<img src="ProfileEN.PNG" />
+
+There may be multiple open windows displaying profiles.
+
+It is possible to move a profile on the screen by dragging and dropping with the top bar of the window.
+
 #### Itinerary by train
 
 Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)

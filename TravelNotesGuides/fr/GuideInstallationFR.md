@@ -208,6 +208,10 @@ dans la boite de dialogue RoutesPropertiesDialog. Text sera affiché dans le sé
 et iDashArray est le template du type de ligne. Attention: les valeurs contenues dans ce tableau sont 
 des valeurs numériques et seront multipliées par l'épaisseur de la ligne (width) et transformées en 
 texte avant d'être utilisées pour adapter le type de ligne dans Leaflet.
+- __route.elev.smooth__ : quand cette valeur est true, le profil de la route est lissé 
+- __route.elev.smoothCoefficient__ : un coefficient utilisé pour calculer la distance entre deux points 
+pour le lissage de l'élévation. Valeur par défaut: 0.25
+- __route.elev.smoothPoints__ : le nombre de points avant et après le point courant dans les calculs de lissage
 - __note.reverseGeocoding__ : quand cette valeur est true, les coordonnées des notes sont remplacées 
 par une adresse.
 - __note.grip.size__ : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
