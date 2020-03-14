@@ -29,6 +29,8 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
@@ -83,10 +85,12 @@ function newItinerary ( ) {
 			case '1.4.0' :
 			case '1.5.0' :
 			case '1.6.0' :
-				something.objType.version = '1.7.0';
 				something.hasProfile = false;
 				something.ascent = ZERO;
 				something.descent = ZERO;
+				// eslint break omitted intentionally
+			case '1.7.0' :
+				something.objType.version = '1.7.1';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );

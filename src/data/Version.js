@@ -25,7 +25,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-const theCurrentVersion = '1.7.0';
+const theCurrentVersion = '1.7.1';
 
 export { theCurrentVersion };
 
