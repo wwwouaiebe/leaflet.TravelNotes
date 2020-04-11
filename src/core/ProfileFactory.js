@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.7.0:
 		- created
+	- v1.8.0:
+		- Issue #98 : Elevation is not modified in the itinerary pane
 Doc reviewed ...
 Tests ...
 
@@ -397,24 +399,12 @@ function newProfileFactory ( ) {
 
 	function myCreateSvg ( route ) {
 		myRoute = route;
-
-		let previousElev = myRoute.itinerary.itineraryPoints.first.elev;
 		myMinElev = Number.MAX_VALUE;
 		myMaxElev = ZERO;
-		myRoute.itinerary.ascent = ZERO;
-		myRoute.itinerary.descent = ZERO;
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				myMaxElev = Math.max ( myMaxElev, itineraryPoint.elev );
 				myMinElev = Math.min ( myMinElev, itineraryPoint.elev );
-				let deltaElev = itineraryPoint.elev - previousElev;
-				if ( ZERO > deltaElev ) {
-					myRoute.itinerary.descent -= deltaElev;
-				}
-				else {
-					myRoute.itinerary.ascent += deltaElev;
-				}
-				previousElev = itineraryPoint.elev;
 			}
 		);
 		myDeltaElev = myMaxElev - myMinElev;

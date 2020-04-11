@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.7.0:
 		- created
+	- v1.8.0:
+		- Issue #98 : Elevation is not modified in the itinerary pane
 Doc reviewed ...
 Tests ...
 
@@ -34,6 +36,7 @@ import { theConfig } from '../data/Config.js';
 import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { ZERO } from '../util/Constants.js';
 
 /*
 --- newProfileWindowsManager function ---------------------------------------------------------------------------------
@@ -62,6 +65,21 @@ function newProfileWindowsManager ( ) {
 			if ( theConfig.route.elev.smooth ) {
 				myProfileFactory.smooth ( route );
 			}
+			route.itinerary.ascent = ZERO;
+			route.itinerary.descent = ZERO;
+			let previousElev = route.itinerary.itineraryPoints.first.elev;
+			route.itinerary.itineraryPoints.forEach (
+				itineraryPoint => {
+					let deltaElev = itineraryPoint.elev - previousElev;
+					if ( ZERO > deltaElev ) {
+						route.itinerary.descent -= deltaElev;
+					}
+					else {
+						route.itinerary.ascent += deltaElev;
+					}
+					previousElev = itineraryPoint.elev;
+				}
+			);
 			if ( profileWindow ) {
 				profileWindow.update ( route );
 			}
