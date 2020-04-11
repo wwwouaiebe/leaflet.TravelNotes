@@ -12,9 +12,6 @@
 
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
 
-__Warning__ : This demo uses OSRM demo server. See https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server for conditions. 
-Due to heavy traffic on this server, you can frequently receive an http error 429. 
-
 If you have a Mapbox, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, GraphHopper and/or OpenRouteService. 
 Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
@@ -64,9 +61,6 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 ## Démo
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
-
-__Avertissement__ : cette démo utilise le serveur de démo de OSRM. Voyez la page https://github.com/Project-OSRM/osrm-backend/wiki/Demo-server pour les conditions d'utilisation. 
-Suite à un trafic important sur ce serveur, vous pouvez fréquemment recevoir une erreur http 429.
 
 Si vous disposez d'une API key pour Mapbox, GraphHopper ou OpenRouteService, vous pouvez également utiliser cette démo avec Mapbox, GraphHopper et / ou OpenRouteService.
 Ajoutez simplement votre API key via la boite de dialogue de gestion des clefs d'accès ( bouton :key: sur la barre d'outils en haut du contrôle ).
