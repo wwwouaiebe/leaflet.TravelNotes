@@ -25,6 +25,23 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/*
+
+Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!!
+
+								--
+							   //\\
+							  //  \\
+							 //    \\
+							//   |  \\
+						   //    |   \\
+						  //     |    \\
+						 //      o     \\
+						 \==============/
+
+You have also to adapt the version in the myValidate ( ) method of Maneuver, Note, Route, Travel and WayPoint
+*/
+
 const theCurrentVersion = '1.8.0';
 
 export { theCurrentVersion };
