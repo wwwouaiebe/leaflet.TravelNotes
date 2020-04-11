@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.7.0:
 		- created
+	- v1.8.0:
+		- Issue #99 : Add distance in the elevation window
 Doc reviewed ...
 Tests ...
 
@@ -318,10 +320,11 @@ function newProfileWindow ( ) {
 			{
 				className : 'TravelNotes-ProfileWindow-Ascent',
 				innerHTML : theTranslator.getText (
-					'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.',
+					'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}',
 					{
 						ascent : myRoute.itinerary.ascent.toFixed ( ZERO ),
-						descent : myRoute.itinerary.descent.toFixed ( ZERO )
+						descent : myRoute.itinerary.descent.toFixed ( ZERO ),
+						distance : myUtilities.formatDistance ( myRoute.distance )
 					}
 				)
 			}
