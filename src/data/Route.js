@@ -28,6 +28,8 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.8.0:
+		- Issue #100 : Fix circular dependancies with Collection
 Doc reviewed 20191122
 Tests ...
 
@@ -43,6 +45,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
+import { newNote } from '../data/Note.js';
 
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
@@ -60,11 +63,11 @@ function newRoute ( ) {
 
 	let myName = '';
 
-	let myWayPoints = newCollection ( 'WayPoint' );
+	let myWayPoints = newCollection ( newWayPoint );
 	myWayPoints.add ( newWayPoint ( ) );
 	myWayPoints.add ( newWayPoint ( ) );
 
-	let myNotes = newCollection ( 'Note' );
+	let myNotes = newCollection ( newNote );
 
 	let myItinerary = newItinerary ( );
 

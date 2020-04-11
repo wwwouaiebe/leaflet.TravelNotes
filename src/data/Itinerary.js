@@ -23,6 +23,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.8.0:
+		- Issue #100 : Fix circular dependancies with Collection
 Doc reviewed 20191122
 Tests ...
 
@@ -34,6 +36,8 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
+import { newItineraryPoint } from '../data/ItineraryPoint.js';
+import { newManeuver } from '../data/Maneuver.js';
 
 import { ZERO } from '../util/Constants.js';
 
@@ -59,9 +63,9 @@ function newItinerary ( ) {
 
 	let myTransitMode = '';
 
-	let myItineraryPoints = newCollection ( 'ItineraryPoint' );
+	let myItineraryPoints = newCollection ( newItineraryPoint );
 
-	let myManeuvers = newCollection ( 'Maneuver' );
+	let myManeuvers = newCollection ( newManeuver );
 
 	let myObjId = newObjId ( );
 

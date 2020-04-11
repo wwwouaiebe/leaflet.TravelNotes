@@ -25,6 +25,8 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.8.0:
+		- Issue #100 : Fix circular dependancies with Collection
 Doc reviewed 20191122
 Tests ...
 
@@ -37,6 +39,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newRoute } from '../data/Route.js';
+import { newNote } from '../data/Note.js';
 
 const ourObjType = newObjType ( 'Travel' );
 
@@ -56,9 +59,9 @@ function newTravel ( ) {
 
 	let myName = 'TravelNotes';
 
-	let myRoutes = newCollection ( 'Route' );
+	let myRoutes = newCollection ( newRoute );
 
-	let myNotes = newCollection ( 'Note' );
+	let myNotes = newCollection ( newNote );
 
 	let myObjId = newObjId ( );
 

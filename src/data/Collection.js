@@ -23,17 +23,13 @@ Changes:
 		- added next and previous method
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.8.0:
+		- Issue #100 : Fix circular dependancies with Collection
 Doc reviewed 20191122
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
-
-import { newRoute } from '../data/Route.js';
-import { newNote } from '../data/Note.js';
-import { newWayPoint } from '../data/WayPoint.js';
-import { newManeuver } from '../data/Maneuver.js';
-import { newItineraryPoint } from '../data/ItineraryPoint.js';
 
 import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
@@ -45,16 +41,18 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newCollection ( objName ) {
+function newCollection ( newObjFunction ) {
 
 	const SWAP_UP = -1;
 	const SWAP_DOWN = 1;
 	const NEXT = 1;
 	const PREVIOUS = -1;
 
-	let myArray = [];
+	const myObjName = newObjFunction ( ).objType.name;
 
-	let myObjName = objName;
+	const myNewObjFunction = newObjFunction;
+
+	let myArray = [];
 
 	/*
 	--- myAdd function ------------------------------------------------------------------------------------------------
@@ -276,27 +274,10 @@ function newCollection ( objName ) {
 	function mySetObject ( something ) {
 		myArray.length = ZERO;
 		let newObject = null;
+
 		something.forEach (
 			arrayObject => {
-				switch ( myObjName ) {
-				case 'Route' :
-					newObject = newRoute ( );
-					break;
-				case 'Note' :
-					newObject = newNote ( );
-					break;
-				case 'WayPoint' :
-					newObject = newWayPoint ( );
-					break;
-				case 'Maneuver' :
-					newObject = newManeuver ( );
-					break;
-				case 'ItineraryPoint' :
-					newObject = newItineraryPoint ( );
-					break;
-				default :
-					throw new Error ( 'invalid ObjName ( ' + myObjName + ' ) in Collection.mySetObject' );
-				}
+				newObject = myNewObjFunction ( );
 				newObject.object = arrayObject;
 				myAdd ( newObject );
 			}
