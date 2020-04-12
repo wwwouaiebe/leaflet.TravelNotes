@@ -272,6 +272,10 @@
 		"msgstr" : "Cartes"
 	},
 	{
+		"msgid" : "MapEditor - Drag and drop to add a waypoint",
+		"msgstr" : "Faites glisser et déposez pour ajouter un point de passage ou faites un clic droit pour le menu"
+	},
+	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
 		"msgstr" : "Adresse&nbsp;:"
 	},
