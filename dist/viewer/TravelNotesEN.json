@@ -112,10 +112,6 @@
 		"msgstr" : "Add a note on the route"
 	},
 	{
-		"msgid" : "ContextMenuFactory - Add a waypoint on the route",
-		"msgstr" : "Add a waypoint on the route"
-	},
-	{
 		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
 		"msgstr" : "Cancel the modifications on this route"
 	},
@@ -396,8 +392,8 @@
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
 	},
 	{
-		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m.",
-		"msgstr" : "Ascent: {ascent} m. - Descent: {descent} m."
+		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}",
+		"msgstr" : "Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}"
 	},
 	{
 		"msgid" : "ProfileWindow - Profile {name}",

@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created from MapEditor
+	- v1.8.0:
+		- issue #97 : Improve adding a new waypoint to a route
 Doc reviewed ...
 Tests ...
 
@@ -38,7 +40,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
-import { GEOLOCATION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
+import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
 --- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
@@ -50,14 +52,14 @@ This function updates the route tooltip with the distance
 */
 
 function onMouseOverOrMoveOnRoute ( mapEvent ) {
-	let dataSearchEngine = newDataSearchEngine ( );
-	let route = dataSearchEngine.getRoute ( mapEvent.target.objId );
-	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] ).distance;
+	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
+	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
+		.distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
 	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
 	polyline.closeTooltip ( );
-	let tooltipText = dataSearchEngine.getRoute ( mapEvent.target.objId ).name;
+	let tooltipText = route.name;
 	if ( ! theTravelNotesData.travel.readOnly ) {
 		tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
@@ -240,12 +242,14 @@ function newViewerMapEditor ( ) {
 		myAddTo ( route.objId, polyline );
 
 		// tooltip and popup are created
-		polyline.bindTooltip (
-			route.name,
-			{ sticky : true, direction : 'right' }
-		);
-		polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );
-		polyline.on ( 'mousemove', onMouseOverOrMoveOnRoute );
+		if ( ROUTE_EDITION_STATUS.notEdited === route.edited ) {
+			polyline.bindTooltip (
+				route.name,
+				{ sticky : true, direction : 'right' }
+			);
+			polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );
+			polyline.on ( 'mousemove', onMouseOverOrMoveOnRoute );
+		}
 
 		polyline.bindPopup (
 			layer => {

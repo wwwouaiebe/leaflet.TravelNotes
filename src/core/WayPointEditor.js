@@ -29,6 +29,8 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
+	- v1.8.0:
+		- issue #97 : Improve adding a new waypoint to a route
 Doc reviewed 20191121
 Tests ...
 
@@ -40,7 +42,6 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 
 import { newGeoCoder } from '../core/GeoCoder.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
@@ -135,13 +136,11 @@ function newWayPointEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddWayPoint ( latLng, distance ) {
+	function myAddWayPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
-		if ( latLng ) {
-			wayPoint.latLng = latLng;
-			myRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
-		}
+		wayPoint.latLng = latLng;
+		myRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
 		myEventDispatcher.dispatch (
 			'addwaypoint',
@@ -150,24 +149,7 @@ function newWayPointEditor ( ) {
 				letter : theTravelNotesData.travel.editedRoute.wayPoints.length - TWO
 			}
 		);
-		if ( distance ) {
-			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-			while ( ! wayPointsIterator.done ) {
-				let latLngDistance = myGeometry.getClosestLatLngDistance (
-					theTravelNotesData.travel.editedRoute,
-					wayPointsIterator.value.latLng
-				);
-				if ( distance < latLngDistance.distance ) {
-					theTravelNotesData.travel.editedRoute.wayPoints.moveTo (
-						wayPoint.objId, wayPointsIterator.value.objId, true
-					);
-					break;
-				}
-			}
-		}
-		else {
-			theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPoint.objId, true );
-		}
+		theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPoint.objId, true );
 		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
@@ -183,12 +165,39 @@ function newWayPointEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddWayPointOnRoute ( routeObjId, mapContextMenuEvent ) {
-		let latLngDistance = myGeometry.getClosestLatLngDistance (
-			newDataSearchEngine ( ).getRoute ( routeObjId ),
-			[ mapContextMenuEvent.latlng.lat, mapContextMenuEvent.latlng.lng ]
+	function myAddWayPointOnRoute ( initialLatLng, finalLatLng ) {
+		let newWayPointDistance = myGeometry.getClosestLatLngDistance (
+			theTravelNotesData.travel.editedRoute,
+			initialLatLng
+		).distance;
+		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		let wayPoint = newWayPoint ( );
+		wayPoint.latLng = finalLatLng;
+		myRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
+		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
+		myEventDispatcher.dispatch (
+			'addwaypoint',
+			{
+				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
+				letter : theTravelNotesData.travel.editedRoute.wayPoints.length - TWO
+			}
 		);
-		myAddWayPoint ( latLngDistance.latLng, latLngDistance.distance );
+
+		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
+		while ( ! wayPointsIterator.done ) {
+			let latLngDistance = myGeometry.getClosestLatLngDistance (
+				theTravelNotesData.travel.editedRoute,
+				wayPointsIterator.value.latLng
+			);
+			if ( newWayPointDistance < latLngDistance.distance ) {
+				theTravelNotesData.travel.editedRoute.wayPoints.moveTo (
+					wayPoint.objId, wayPointsIterator.value.objId, true
+				);
+				break;
+			}
+		}
+		myEventDispatcher.dispatch ( 'setwaypointslist' );
+		theRouteEditor.startRouting ( );
 	}
 
 	/*
@@ -413,11 +422,11 @@ function newWayPointEditor ( ) {
 			addWayPoint : latLng => myAddWayPoint ( latLng ),
 
 			addWayPointOnRoute : (
-				routeObjId,
-				mapContextMenuEvent
+				initialLatLng,
+				finalLatLng
 			) => myAddWayPointOnRoute (
-				routeObjId,
-				mapContextMenuEvent
+				initialLatLng,
+				finalLatLng
 			),
 
 			reverseWayPoints : ( ) => myReverseWayPoints ( ),

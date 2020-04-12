@@ -38,6 +38,8 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 		- Issue #70 : Put the get...HTML functions outside of the editors
 		- Issue #75 : Merge Maps and TravelNotes
+	- v1.8.0:
+		- issue #97 : Improve adding a new waypoint to a route
 Doc reviewed 20191121
 Tests ...
 
@@ -59,7 +61,103 @@ import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 
-import { ROUTE_EDITION_STATUS, LAT_LNG, TWO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, TWO, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
+
+const WAY_POINT_ICON_SIZE = 40;
+
+let ourWayPointMarker = null;
+let ourWayPointInitialLatLng = null;
+
+/*
+--- onDragEndWayPointMarker function ---------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function onDragEndWayPointMarker ( dragEndEvent ) {
+	theWayPointEditor.addWayPointOnRoute (
+		ourWayPointInitialLatLng,
+		[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
+	);
+	if ( ourWayPointMarker ) {
+		L.DomEvent.off ( ourWayPointMarker );
+		theTravelNotesData.map.removeLayer ( ourWayPointMarker );
+		ourWayPointMarker = null;
+	}
+}
+
+/*
+--- onMouseOutWayPointMarker function ---------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function onMouseOutWayPointMarker ( ) {
+	if ( ourWayPointMarker ) {
+		L.DomEvent.off ( ourWayPointMarker );
+		theTravelNotesData.map.removeLayer ( ourWayPointMarker );
+		ourWayPointMarker = null;
+	}
+}
+
+/*
+--- onContextMenuWayPointMarker function ---------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function onContextMenuWayPointMarker ( contextMenuEvent ) {
+	contextMenuEvent.latlng.lat = ourWayPointInitialLatLng [ ZERO ];
+	contextMenuEvent.latlng.lng = ourWayPointInitialLatLng [ ONE ];
+	contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
+	newRouteContextMenu ( contextMenuEvent ).show ( );
+}
+
+/*
+--- onMouseOverEditedRoute function -----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+function onMouseOverEditedRoute ( mapEvent ) {
+	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
+	if ( ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
+		ourWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
+		if ( ourWayPointMarker ) {
+			ourWayPointMarker.setLatLng ( mapEvent.latlng );
+		}
+		else {
+
+			// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
+			let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPointTmp' +
+			'"></div><div class="TravelNotes-WayPointText">?</div>';
+
+			// a leaflet marker is created...
+			ourWayPointMarker = L.marker (
+				mapEvent.latlng,
+				{
+					icon : L.divIcon (
+						{
+							iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
+							iconAnchor : [
+								WAY_POINT_ICON_SIZE / TWO,
+								WAY_POINT_ICON_SIZE
+							],
+							html : iconHtml,
+							className : 'TravelNotes-WayPointStyle'
+						}
+					),
+					draggable : true
+				}
+			);
+			ourWayPointMarker.addTo ( theTravelNotesData.map );
+			ourWayPointMarker.on ( 'mouseout', onMouseOutWayPointMarker );
+			ourWayPointMarker.on ( 'dragstart', ( ) => ourWayPointMarker.off ( 'mouseout', onMouseOutWayPointMarker ) );
+			ourWayPointMarker.on ( 'dragend', onDragEndWayPointMarker );
+			ourWayPointMarker.on ( 'contextmenu', onContextMenuWayPointMarker );
+		}
+	}
+}
 
 /*
 --- newMapEditor function ---------------------------------------------------------------------------------------------
@@ -71,7 +169,6 @@ Patterns : Closure and Singleton
 
 function newMapEditor ( ) {
 
-	const WAY_POINT_ICON_SIZE = 40;
 	const MARKER_BOUNDS_PRECISION = 0.01;
 
 	let myDataSearchEngine = newDataSearchEngine ( );
@@ -372,6 +469,7 @@ function newMapEditor ( ) {
 				'contextmenu',
 				contextMenuEvent => newRouteContextMenu ( contextMenuEvent ).show ( )
 			);
+			polyline.on ( 'mouseover', onMouseOverEditedRoute );
 
 			let notesIterator = route.notes.iterator;
 			while ( ! notesIterator.done ) {

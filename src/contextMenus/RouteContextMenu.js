@@ -26,6 +26,8 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.7.0:
 		- issue #89 : Add elevation graph
+	- v1.8.0:
+		- issue #97 : Improve adding a new waypoint to a route
 Doc reviewed 20191124
 Tests ...
 
@@ -33,7 +35,6 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
@@ -100,17 +101,6 @@ function newRouteContextMenu ( contextMenuEvent ) {
 						?
 						null :
 						theRouteEditor.hideRoute,
-				param : myRouteObjId
-			},
-			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Add a waypoint on the route' ),
-				action :
-					( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						?
-						theWayPointEditor.addWayPointOnRoute
-						:
-						null,
 				param : myRouteObjId
 			},
 			{
