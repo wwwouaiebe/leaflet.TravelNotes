@@ -131,7 +131,9 @@
 			"smooth" : true,
 			"smoothCoefficient": 0.25,
 			"smoothPoints": 3
-		}
+		},
+		"showDragTooltip": -1
+		
 	},
 	"note":
 	{

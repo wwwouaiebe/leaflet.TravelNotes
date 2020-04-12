@@ -164,7 +164,8 @@ function newConfig ( ) {
 				smooth : true,
 				smoothCoefficient : 0.25,
 				smoothPoints : 3
-			}
+			},
+			showDragTooltip : 3
 		},
 		note : {
 			reverseGeocoding : false,

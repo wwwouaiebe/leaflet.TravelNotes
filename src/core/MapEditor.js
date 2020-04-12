@@ -60,13 +60,15 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
+import { theTranslator } from '../UI/Translator.js';
 
-import { ROUTE_EDITION_STATUS, LAT_LNG, TWO, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const WAY_POINT_ICON_SIZE = 40;
 
 let ourWayPointMarker = null;
 let ourWayPointInitialLatLng = null;
+let ourShowDragTooltip = 1;
 
 /*
 --- onDragEndWayPointMarker function ---------------------------------------------------------------------------
@@ -150,6 +152,12 @@ function onMouseOverEditedRoute ( mapEvent ) {
 					draggable : true
 				}
 			);
+			if ( NOT_FOUND === theConfig.route.showDragTooltip || ourShowDragTooltip <= theConfig.route.showDragTooltip ) {
+				ourShowDragTooltip ++;
+				ourWayPointMarker.bindTooltip (	theTranslator.getText ( 'MapEditor - Drag and drop to add a waypoint' ) );
+				ourWayPointMarker.getTooltip ( ).options.offset = [	ZERO, ZERO ];
+
+			}
 			ourWayPointMarker.addTo ( theTravelNotesData.map );
 			ourWayPointMarker.on ( 'mouseout', onMouseOutWayPointMarker );
 			ourWayPointMarker.on ( 'dragstart', ( ) => ourWayPointMarker.off ( 'mouseout', onMouseOutWayPointMarker ) );
