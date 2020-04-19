@@ -214,6 +214,16 @@ the start point or end point into an intermediate point.
 
 Drag and drop the waypoint on the map to change a waypoint
 
+#### Adding a waypoint
+
+Move the mouse over the route to see a temporary waypoint.
+Then by dragging and dropping it, the waypoint is added to the path.
+
+<img src="AddWayPointEN.PNG" />
+
+You can also add a waypoint via the context menu of the map. In this case, it will always be added
+as the last intermediate point.
+
 #### Delete a waypoint
 
 Right click on the waypoint and choose "delete this waypoint" from the menu. It is not possible to 
@@ -232,15 +242,6 @@ When the starting point and end point are known, the route is calculated and dis
 It's the same every time an intermediate point is added or a waypoint is moved.
 
 The description of the route is also displayed in the "Itinerary and notes" section.
-
-#### Insert an intermediate point.
-
-When an intermediate point is added via the map context menu, it is always added as the last 
-intermediate point. This can give strange results on the calculated route.
-
-To avoid this, it is also possible to add a waypoint at a specific point in the route. Right click 
-on the __route__ where you want to insert the waypoint and select in the context menu "Add a waypoint 
-on the route". The new point can then be moved to its new position with a drag and drop.
 
 #### Save or discard changes
 

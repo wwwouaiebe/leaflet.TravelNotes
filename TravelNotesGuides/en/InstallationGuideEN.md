@@ -208,6 +208,8 @@ type in Leaflet.
 - __route.elev.smoothCoefficient__ : a coefficient used to calculate the distance between two points
 for smoothing the elevation. Default value: 0.25
 - __route.elev.smoothPoints__ : the number of points before and after the current point in the smoothing calculations
+- __route.showDragTooltip__ : the number of times the tooltip displayed when adding a waypoint is shown
+( -1 = always ).
 - __note.reverseGeocoding__ : when this value is true, the coordinates of the notes are replaced 
 by an address.
 - __note.grip.size__ : the size of the handle at the end of the line of a note.

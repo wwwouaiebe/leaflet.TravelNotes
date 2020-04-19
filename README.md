@@ -35,13 +35,27 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.7.1 branch
+### v1.8.0 branch
 
-The [v1.7.1 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.7.1) contains the source files of the last stable version.
+The [v1.8.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.8.0) contains the source files of the last stable version.
 
 ### master branch
 
 The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) is the development branch and is unstable. 
+
+### What's new in release 1.6.0
+
+- The management of access keys has been completely revised. This is now done via a dialog box and it is possible to 
+read / save these access keys from / to a file protected by password.
+- Error display has been improved
+- A toolbar allowing to manage the background maps was added
+- A light viewer has been created. This allows viewing a travel on an old device that does not understand all the new JavaScript
+
+Many technical modifications have also been made:
+- All code has been migrated to ES6 and uses ES6 modules instead of nodeJS modules
+- eslint is used to check the quality of the code
+- All dialogs are based on the use of Promise
+- Updates to the user interface and the map are made via events, which greatly reduces dependencies in the code.
 
 ### What's new in release 1.7.0
 
@@ -49,6 +63,10 @@ The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/maste
 - When a route between two points is made with leaflet.TravelNotesPolyline this route is no longer represented as a straight line,
 but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md) documentation.
 - It is also possible to draw circles with leaflet.TravelNotesPolyline. See [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md) documentation.
+
+### What's new in release 1.8.0
+
+- Adding a waypoint to a route has been improved. Now just move the mouse over the route to see a temporary waypoint appear. Then by dragging and dropping it, the waypoint is added to the route.
 
 <a id="fr" />
 
@@ -85,13 +103,29 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.7.1
+### branche v1.8.0
 
-La [branche v1.7.1](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.7.1) contient les sources de la dernière version stable.
+La [branche v1.8.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.8.0) contient les sources de la dernière version stable.
 
 ### branche master
 
 La [branche master](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) est la branche de développement et est instable.
+
+### Quoi de neuf dans la version 1.6.0
+
+- La gestion des clefs d'accès a été entièrement revue. Celle-ci se fait maintenant via une boite de dialogue et il est
+possible de lire / sauver ces clefs d'accès depuis / vers un fichier protégé par mot de passe.
+- L'affichage des erreurs a été amélioré
+- Une barre d'outils permettant des gérer les fonds de cartes a été ajoutée.
+- Un viewer léger a été créé. Celui-ci permet la visualisation d'un voyage sur un appareil ancien qui ne comprend pas
+toutes les nouveautés de JavaScript
+
+De nombreuses modifications techniques ont également été faites:
+- Tout le code a été migré vers ES6 et utilise les modules ES6 au lieu de modules nodeJS
+- eslint est utilisé pour vérifier la qualité du code
+- toutes les boites de dialogue sont basées sur l'utilisation de Promise
+- les mises à jour de l'interface utilisateur et de la carte se font via des events, ce qui réduit fortement
+les dépendances dans le code.
 
 ### Quoi de neuf dans la version 1.7.0
 
@@ -100,5 +134,8 @@ La [branche master](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/maste
 mais bien sous forme d'un segment de grand cercle. Voir la documentation de [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md)
 - Il est également possible de tracer des cercles avec leaflet.TravelNotesPolyline. Voir la documentation de [leaflet.TravelNotesPolyline](https://github.com/wwwouaiebe/leaflet.TravelNotesPolyline/blob/master/README.md)
 
+### Quoi de neuf dans la version 1.8.0
 
+- Ajouter un point de passage à un trajet a été amélioré. Il suffit maintenant d'amener la souris sur le trajet pour voir apparaître un point de passage temporaire.
+En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
