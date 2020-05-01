@@ -188,5 +188,14 @@
 	{
 		"url":"https://nominatim.openstreetmap.org/",
 		"language": "*"
+	},
+	"printRouteMap":
+	{
+		"paperWidth":287,
+		"paperHeight":200,
+		"pageBreak":false,
+		"printNotes":false,
+		"borderWidth":30,
+		"zoomFactor":15
 	}
 }

@@ -28,6 +28,8 @@ Changes:
 		- issue #89 : Add elevation graph
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
+	- v1.9.0:
+		- issue #101 : Add a print command for a route
 Doc reviewed 20191124
 Tests ...
 
@@ -130,6 +132,12 @@ function newRouteContextMenu ( contextMenuEvent ) {
 						theProfileWindowsManager.showProfile
 						:
 						null,
+				param : myRouteObjId
+			},
+			{
+				context : theRouteEditor,
+				name : theTranslator.getText ( 'ContextMenuFactory - Print route map' ),
+				action : theRouteEditor.printRouteMap,
 				param : myRouteObjId
 			},
 			{

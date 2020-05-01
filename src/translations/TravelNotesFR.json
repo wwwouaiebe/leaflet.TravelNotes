@@ -396,6 +396,46 @@
 		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
 	},
 	{
+		"msgid" : "PrintRouteMapDialog - Border width",
+		"msgstr" : "Dimension de la marge:"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Border width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height",
+		"msgstr" : "Hauteur du papier:"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width",
+		"msgstr" : "Largeur du papier:"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Page break",
+		"msgstr" : "Insérer un saut de page"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print notes",
+		"msgstr" : "Imprimer les notes du trajet"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print",
+		"msgstr" : "Imprimer les cartes d'un trajet"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Zoom factor",
+		"msgstr" : "Zoom:"
+	},
+	{
 		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}",
 		"msgstr" : "Montée: {ascent} m. - Descente: {descent} m. - Distance: {distance}"
 	},

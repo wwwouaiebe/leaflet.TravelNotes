@@ -396,6 +396,46 @@
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
 	},
 	{
+		"msgid" : "PrintRouteMapDialog - Border width",
+		"msgstr" : "Border width:"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Border width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height",
+		"msgstr" : "Paper height"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width",
+		"msgstr" : "Paper width"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Page break",
+		"msgstr" : "Insert a page break"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print notes",
+		"msgstr" : "Print notes"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print",
+		"msgstr" : "Print a route map"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Zoom factor",
+		"msgstr" : "Zoom:"
+	},
+	{
 		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}",
 		"msgstr" : "Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}"
 	},
