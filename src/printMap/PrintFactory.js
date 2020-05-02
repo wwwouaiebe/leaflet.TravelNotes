@@ -38,6 +38,8 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
+import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
@@ -59,6 +61,7 @@ function newPrintFactory ( ) {
 	let myViews = [];
 	let myViewCounter = 0;
 	let myRoutePolyline = null;
+
 	let myBody = document.getElementsByTagName ( 'body' ) [ ZERO ];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -126,6 +129,64 @@ function newPrintFactory ( ) {
 	}
 
 	/*
+	--- isFirstPointOnView function -----------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myIsFirstPointOnView ( currentView, firstItineraryPoint ) {
+		const tolerance = 0.000001;
+		if (
+			currentView.topLeft [ LAT ] - firstItineraryPoint.lat < tolerance
+			||
+			firstItineraryPoint.lat - currentView.bottomRight [ LAT ] < tolerance
+			||
+			firstItineraryPoint.lng - currentView.topLeft [ LNG ] < tolerance
+			||
+			currentView.bottomRight [ LNG ] - firstItineraryPoint.lng < tolerance
+		) {
+
+			// itinerary point is really near the frame. we consider the itinerary point as intermediate point
+			return { lat : firstItineraryPoint.lat, lng : firstItineraryPoint.lng };
+		}
+		return null;
+	}
+
+	/*
+	--- myIsItineraryHorOrVer function --------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myIsItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+		if ( firstItineraryPoint.lng === lastItineraryPoint.lng ) {
+
+			// Itinerary is vertical
+			return {
+				lat : firstItineraryPoint.lat > lastItineraryPoint.lat
+					?
+					currentView.bottomRight [ LAT ] : currentView.topLeft [ LAT ],
+				lng : firstItineraryPoint.lng
+			};
+		}
+		if ( firstItineraryPoint.lat === lastItineraryPoint.lat ) {
+
+			// Itinerary is horizontal
+			return {
+				lat : firstItineraryPoint.lat,
+				lng : firstItineraryPoint.lng < lastItineraryPoint.lng
+					?
+					currentView.bottomRight [ LNG ] : currentView.topLeft [ LNG ]
+			};
+		}
+		return null;
+	}
+
+	/*
 	--- myComputeIntermediatePoint function ---------------------------------------------------------------------------
 
 	This function ...
@@ -135,28 +196,13 @@ function newPrintFactory ( ) {
 
 	function myComputeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
 
-		let intermediatePoint = { lat : ZERO, lng : ZERO };
-
-		if ( firstItineraryPoint.lng === lastItineraryPoint.lng ) {
-
-			// Itinerary is vertical
-			intermediatePoint = {
-				lat : firstItineraryPoint.lat > lastItineraryPoint.lat
-					?
-					currentView.bottomRight [ LAT ] : currentView.topLeft [ LAT ],
-				lng : firstItineraryPoint.lng
-			};
+		let intermediatePoint = myIsFirstPointOnView ( currentView, firstItineraryPoint );
+		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
-		if ( firstItineraryPoint.lat === lastItineraryPoint.lat ) {
 
-			// Itinerary is horizontal
-			intermediatePoint = {
-				lat : firstItineraryPoint.lat,
-				lng : firstItineraryPoint.lng < lastItineraryPoint.lng
-					?
-					currentView.bottomRight [ LNG ] : currentView.topLeft [ LNG ]
-			};
+		intermediatePoint = myIsItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint );
+		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
 
@@ -226,7 +272,7 @@ function newPrintFactory ( ) {
 		) {
 			return intermediatePoint;
 		}
-		return { lat : ZERO, lng : ZERO };
+		throw new Error ( 'intermediate point not found' );
 	}
 
 	/*
@@ -300,6 +346,32 @@ function newPrintFactory ( ) {
 	}
 
 	/*
+	--- myGetLayer function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetLayer ( ) {
+		let layer = theLayersToolbarUI.getLayer ( theTravelNotesData.travel.layerName );
+		console.log ( 'layer' );
+		console.log ( layer );
+		let url = layer.url;
+		if ( layer.providerKeyNeeded ) {
+			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
+			url = url.replace ( '{providerKey}', providerKey );
+		}
+		let leafletLayer = null;
+		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
+			leafletLayer = L.tileLayer ( url );
+		}
+		else {
+			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
+		}
+
+		return leafletLayer;
+	}
+
+	/*
 	--- myPrintView function ------------------------------------------------------------------------------------------
 
 	This function ...
@@ -339,7 +411,7 @@ function newPrintFactory ( ) {
 				minZoom : myPrintData.zoomFactor,
 				maxZoom : myPrintData.zoomFactor,
 				layers : [
-					L.tileLayer ( 'https://{s}.tile.osm.org/{z}/{x}/{y}.png' ),
+					myGetLayer ( ),
 					L.circleMarker ( view.entryPoint, theConfig.searchPointMarker ),
 					L.circleMarker ( view.exitPoint, theConfig.searchPointMarker ),
 					myRoutePolyline

@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.9.0:
+		- issue #101 : Add a print command for a route
 Doc reviewed ...
 Tests ...
 
@@ -330,6 +332,24 @@ function newLayersToolbarUI ( ) {
 	}
 
 	/*
+	--- myGetLayer function -------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetLayer ( layerName ) {
+
+		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ ZERO ];
+		if ( newLayer.providerKeyNeeded ) {
+			let providerKey = theAPIKeysManager.getKey ( newLayer.providerName.toLowerCase ( ) );
+			if ( ! providerKey ) {
+				newLayer = myLayers [ ZERO ];
+			}
+		}
+		return newLayer;
+	}
+
+	/*
 	--- mySetLayer function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -379,6 +399,7 @@ function newLayersToolbarUI ( ) {
 	return Object.seal (
 		{
 			createUI : ( ) => myCreateUI ( ),
+			getLayer : layerName => myGetLayer ( layerName ),
 			setLayer : layerName => mySetLayer ( layerName ),
 			setLayers : layers => mySetLayers ( layers )
 		}
