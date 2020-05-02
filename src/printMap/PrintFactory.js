@@ -36,6 +36,8 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
+import { theConfig } from '../data/Config.js';
+import { theTranslator } from '../UI/Translator.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
@@ -55,8 +57,38 @@ function newPrintFactory ( ) {
 	let myRoute = null;
 	let myPrintSize = null;
 	let myViews = [];
+	let myViewCounter = 0;
+	let myRoutePolyline = null;
+	let myBody = document.getElementsByTagName ( 'body' ) [ ZERO ];
 
+	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myGeometry = newGeometry ( );
+
+	/*
+	--- onAfterPrint function -----------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function onAfterPrint ( ) {
+
+		while ( ZERO < document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ).length ) {
+			myBody.removeChild ( document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ) [ ZERO ] );
+		}
+
+		document.getElementById ( 'TravelNotes-PrintToolbar-PrintButton' )
+			.removeEventListener (	'click', ( ) => window.print ( ), false );
+		document.getElementById ( 'TravelNotes-PrintToolbar-CancelButton' )
+			.removeEventListener (	'click', onAfterPrint, false );
+		myBody.removeChild ( document.getElementById ( 'TravelNotes-PrintToolbar' ) );
+
+		myBody.classList.remove ( 'TravelNotes-PrintViews' );
+		theTravelNotesData.map.invalidateSize ( false );
+
+		window.removeEventListener ( 'afterprint', onAfterPrint, true );
+	}
 
 	/*
 	--- myComputePrintArea function -----------------------------------------------------------------------------------
@@ -68,7 +100,6 @@ function newPrintFactory ( ) {
 
 	function myComputePrintSize ( ) {
 
-		let myHTMLElementsFactory = newHTMLElementsFactory ( );
 		let body = document.getElementsByTagName ( 'body' ) [ ZERO ];
 		let dummyDiv = myHTMLElementsFactory.create ( 'div', { }, body );
 		dummyDiv.setAttribute (
@@ -269,6 +300,128 @@ function newPrintFactory ( ) {
 	}
 
 	/*
+	--- myPrintView function ------------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myPrintView ( view ) {
+		myViewCounter ++;
+		let viewId = 'TravelNotes-RouteViewDiv' + myViewCounter;
+		let viewDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-routeViewDiv',
+				id : viewId
+			},
+			myBody
+		);
+		viewDiv.setAttribute (
+			'style',
+			'width:' +
+				myPrintData.paperWidth +
+				'mm;height:' +
+				myPrintData.paperHeight +
+				'mm;'
+		);
+		L.map (
+			viewId,
+			{
+				attributionControl : false,
+				zoomControl : false,
+				center : [
+					( view.topLeft [ LAT ] + view.bottomRight [ LAT ] ) / TWO,
+					( view.topLeft [ LNG ] + view.bottomRight [ LNG ] ) / TWO
+				],
+				zoom : myPrintData.zoomFactor,
+				minZoom : myPrintData.zoomFactor,
+				maxZoom : myPrintData.zoomFactor,
+				layers : [
+					L.tileLayer ( 'https://{s}.tile.osm.org/{z}/{x}/{y}.png' ),
+					L.circleMarker ( view.entryPoint, theConfig.searchPointMarker ),
+					L.circleMarker ( view.exitPoint, theConfig.searchPointMarker ),
+					myRoutePolyline
+				]
+			}
+		);
+	}
+
+	/*
+	--- myCreateToolbar function ---------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateToolbar ( ) {
+		let printToolbar = myHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-PrintToolbar'
+			},
+			myBody
+		);
+
+		myHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-PrintToolbar-PrintButton',
+				className : 'TravelNotes-Control-Button',
+				title : theTranslator.getText ( 'PrintFactory - Print' ),
+				innerHTML : '&#x1F5A8;&#xFE0F;'
+			},
+			printToolbar
+		)
+			.addEventListener (	'click', ( ) => window.print ( ), false );
+		myHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-PrintToolbar-CancelButton',
+				className : 'TravelNotes-Control-Button',
+				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
+				innerHTML : '&#x274c'
+			},
+			printToolbar
+		)
+			.addEventListener (	'click', onAfterPrint, false );
+	}
+
+	/*
+	--- myPrintViews function -----------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myPrintViews ( ) {
+		myBody.classList.add ( 'TravelNotes-PrintViews' );
+
+		window.addEventListener ( 'afterprint', onAfterPrint, true );
+
+		myCreateToolbar ( );
+
+		let latLng = [];
+		let pointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		while ( ! pointsIterator.done ) {
+			latLng.push ( pointsIterator.value.latLng );
+		}
+		myRoutePolyline = L.polyline (
+			latLng,
+			{
+				color : myRoute.color,
+				weight : myRoute.width
+			}
+		);
+
+		myViewCounter = ZERO;
+		myViews.forEach ( myPrintView );
+	}
+
+	/*
 	--- myPrint function ----------------------------------------------------------------------------------------------
 
 	This function ...
@@ -287,9 +440,13 @@ function newPrintFactory ( ) {
 
 		myComputeViews ( );
 
+		/*
 		myViews.forEach (
 			view => L.rectangle ( [ view.topLeft, view.bottomRight ] ).addTo ( theTravelNotesData.map )
 		);
+		*/
+
+		myPrintViews ( );
 	}
 
 	/*

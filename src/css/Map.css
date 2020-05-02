@@ -47,6 +47,17 @@ body
 	z-index: 1200;
 }
 
+.TravelNotes-PrintViews #TravelNotes
+{
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	top:0;
+	left:0;
+	visibility: hidden;
+}
+
 /*
 --- Map ----------------------------------------------------------------------------------------------------------------
 */
@@ -61,6 +72,53 @@ body
 	top: 0px;
 	left: 0px;
 	overflow:none;
+}
+
+.TravelNotes-PrintViews #Map
+{
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	top:0;
+	left:0;
+	visibility: hidden;
+}
+
+.TravelNotes-PrintViews .TravelNotes-routeViewDiv
+{
+	margin: 5mm;
+}
+
+.TravelNotes-PrintViews #TravelNotes-PrintToolbar
+{
+	position: fixed;
+	top: 0;
+	right:0;
+	margin: 1em;
+	padding:0.5em;
+	z-index: 1000;
+	border-style: solid;
+	border-width: 0.1em;
+	background-color: white;
+}
+
+@media print
+{
+	.TravelNotes-PrintViews .TravelNotes-routeViewDiv
+	{
+		margin: 0;
+	}	
+	.TravelNotes-PrintViews #TravelNotes-PrintToolbar
+	{
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		top:0;
+		left:0;
+		visibility: hidden;
+	}
 }
 
 /*
