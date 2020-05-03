@@ -192,12 +192,12 @@
 	"printRouteMap":
 	{
 		"isEnabled" : true,
-		"maxPages" : 20,
+		"maxPages" : 60,
 		"paperWidth":287,
 		"paperHeight":200,
 		"pageBreak":false,
 		"printNotes":true,
-		"borderWidth":30,
+		"borderWidth":10,
 		"zoomFactor":15,
 		"entryPointMarker" : {
 			"color" : "green",

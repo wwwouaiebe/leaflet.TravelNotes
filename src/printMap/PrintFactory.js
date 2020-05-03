@@ -141,13 +141,13 @@ function newPrintFactory ( ) {
 	function myIsFirstPointOnView ( currentView, firstItineraryPoint ) {
 		const tolerance = 0.000001;
 		if (
-			currentView.topLeft [ LAT ] - firstItineraryPoint.lat < tolerance
+			firstItineraryPoint.lat - currentView.bottomLeft.lat < tolerance
 			||
-			firstItineraryPoint.lat - currentView.bottomRight [ LAT ] < tolerance
+			currentView.upperRight.lat - firstItineraryPoint.lat < tolerance
 			||
-			firstItineraryPoint.lng - currentView.topLeft [ LNG ] < tolerance
+			firstItineraryPoint.lng - currentView.bottomLeft.lng < tolerance
 			||
-			currentView.bottomRight [ LNG ] - firstItineraryPoint.lng < tolerance
+			currentView.upperRight.lng - firstItineraryPoint.lng < tolerance
 		) {
 
 			// itinerary point is really near the frame. we consider the itinerary point as intermediate point
@@ -171,7 +171,7 @@ function newPrintFactory ( ) {
 			return {
 				lat : firstItineraryPoint.lat > lastItineraryPoint.lat
 					?
-					currentView.bottomRight [ LAT ] : currentView.topLeft [ LAT ],
+					currentView.bottomLeft.lat : currentView.upperRight.lat,
 				lng : firstItineraryPoint.lng
 			};
 		}
@@ -182,7 +182,33 @@ function newPrintFactory ( ) {
 				lat : firstItineraryPoint.lat,
 				lng : firstItineraryPoint.lng < lastItineraryPoint.lng
 					?
-					currentView.bottomRight [ LNG ] : currentView.topLeft [ LNG ]
+					currentView.upperRight.lng : currentView.bottomLeft.lng
+			};
+		}
+		return null;
+	}
+
+	/*
+	--- myHaveViewOnlyOnePoint function ---------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+		if (
+			currentView.bottomLeft.lat === currentView.upperRight.lat
+			&&
+			currentView.bottomLeft.lng === currentView.upperRight.lng
+		) {
+			let coef = Math.min (
+				Math.abs ( myPrintSize [ LAT ] / ( lastItineraryPoint.lat - firstItineraryPoint.lat ) ),
+				Math.abs ( myPrintSize [ LNG ] / ( lastItineraryPoint.lng - firstItineraryPoint.lng ) )
+			);
+			return {
+				lat : firstItineraryPoint.lat + ( coef * ( lastItineraryPoint.lat - firstItineraryPoint.lat ) ),
+				lng : firstItineraryPoint.lng + ( coef * ( lastItineraryPoint.lng - firstItineraryPoint.lng ) )
 			};
 		}
 		return null;
@@ -198,7 +224,12 @@ function newPrintFactory ( ) {
 
 	function myComputeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
 
-		let intermediatePoint = myIsFirstPointOnView ( currentView, firstItineraryPoint );
+		let intermediatePoint = myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint );
+		if ( intermediatePoint ) {
+			return intermediatePoint;
+		}
+
+		intermediatePoint = myIsFirstPointOnView ( currentView, firstItineraryPoint );
 		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
@@ -213,14 +244,14 @@ function newPrintFactory ( ) {
 
 		// Searching intersection with the right side of currentView
 		intermediatePoint = {
-			lat : ( coefA * currentView.bottomRight [ LNG ] ) + coefB,
-			lng : currentView.bottomRight [ LNG ]
+			lat : ( coefA * currentView.upperRight.lng ) + coefB,
+			lng : currentView.upperRight.lng
 		};
 
 		if (
-			intermediatePoint.lat <= currentView.topLeft [ LAT ]
+			intermediatePoint.lat <= currentView.upperRight.lat
 				&&
-				intermediatePoint.lat >= currentView.bottomRight [ LAT ]
+				intermediatePoint.lat >= currentView.bottomLeft.lat
 				&&
 				intermediatePoint.lng < lastItineraryPoint.lng
 		) {
@@ -229,14 +260,14 @@ function newPrintFactory ( ) {
 
 		// Searching intersection with the top side of currentView
 		intermediatePoint = {
-			lat : currentView.topLeft [ LAT ],
-			lng : ( currentView.topLeft [ LAT ] - coefB ) / coefA
+			lat : currentView.upperRight.lat,
+			lng : ( currentView.upperRight.lat - coefB ) / coefA
 		};
 
 		if (
-			intermediatePoint.lng >= currentView.topLeft [ LNG ]
+			intermediatePoint.lng >= currentView.bottomLeft.lng
 				&&
-				intermediatePoint.lng <= currentView.bottomRight [ LNG ]
+				intermediatePoint.lng <= currentView.upperRight.lng
 				&&
 				intermediatePoint.lat < lastItineraryPoint.lat
 		) {
@@ -245,14 +276,14 @@ function newPrintFactory ( ) {
 
 		// Searching intersection with the left side of currentView
 		intermediatePoint = {
-			lat : ( coefA * currentView.topLeft [ LNG ] ) + coefB,
-			lng : currentView.topLeft [ LNG ]
+			lat : ( coefA * currentView.bottomLeft.lng ) + coefB,
+			lng : currentView.bottomLeft.lng
 		};
 
 		if (
-			intermediatePoint.lat <= currentView.topLeft [ LAT ]
+			intermediatePoint.lat <= currentView.upperRight.lat
 				&&
-				intermediatePoint.lat >= currentView.bottomRight [ LAT ]
+				intermediatePoint.lat >= currentView.bottomLeft.lat
 				&&
 				intermediatePoint.lng > lastItineraryPoint.lng
 		) {
@@ -261,14 +292,14 @@ function newPrintFactory ( ) {
 
 		// Searching intersection with the bottom side of currentView
 		intermediatePoint = {
-			lat : currentView.bottomRight [ LAT ],
-			lng : ( currentView.bottomRight [ LAT ] - coefB ) / coefA
+			lat : currentView.bottomLeft.lat,
+			lng : ( currentView.bottomLeft.lat - coefB ) / coefA
 		};
 
 		if (
-			intermediatePoint.lng >= currentView.topLeft [ LNG ]
+			intermediatePoint.lng >= currentView.bottomLeft.lng
 				&&
-				intermediatePoint.lng <= currentView.bottomRight [ LNG ]
+				intermediatePoint.lng <= currentView.upperRight.lng
 				&&
 				intermediatePoint.lat > lastItineraryPoint.lat
 		) {
@@ -292,28 +323,29 @@ function newPrintFactory ( ) {
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		let done = itineraryPointsIterator.done;
 		let currentView = {
-			topLeft : [ itineraryPointsIterator.value.lat, itineraryPointsIterator.value.lng ],
-			bottomRight : [ itineraryPointsIterator.value.lat, itineraryPointsIterator.value.lng ]
+			bottomLeft : { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng },
+			upperRight : { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng }
 		};
-		let entryPoint = itineraryPointsIterator.value;
+		let entryPoint = { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng };
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		done = itineraryPointsIterator.done;
 		let currentItineraryPoint = itineraryPointsIterator.value;
 		while ( ! done ) {
 			let tmpView = {
-				topLeft : [
-					Math.max ( currentView.topLeft [ LAT ], currentItineraryPoint.lat ),
-					Math.min ( currentView.topLeft [ LNG ], currentItineraryPoint.lng )
-				],
-				bottomRight : [
-					Math.min ( currentView.bottomRight [ LAT ], currentItineraryPoint.lat ),
-					Math.max ( currentView.bottomRight [ LNG ], currentItineraryPoint.lng )
-				]
+				bottomLeft : {
+					lat : Math.min ( currentView.bottomLeft.lat, currentItineraryPoint.lat ),
+					lng : Math.min ( currentView.bottomLeft.lng, currentItineraryPoint.lng )
+				},
+				upperRight : {
+					lat : Math.max ( currentView.upperRight.lat, currentItineraryPoint.lat ),
+					lng : Math.max ( currentView.upperRight.lng, currentItineraryPoint.lng )
+				}
 			};
 			let tmpViewSize = [
-				Math.abs ( tmpView.topLeft [ LAT ] - tmpView.bottomRight [ LAT ] ),
-				Math.abs ( tmpView.topLeft [ LNG ] - tmpView.bottomRight [ LNG ] )
+				tmpView.upperRight.lat - tmpView.bottomLeft.lat,
+				tmpView.upperRight.lng - tmpView.bottomLeft.lng
 			];
+
 			if ( myPrintSize [ LAT ] > tmpViewSize [ LAT ] && myPrintSize [ LNG ] > tmpViewSize [ LNG ] ) {
 
 				// itineraryPoint is inside the view...
@@ -335,14 +367,23 @@ function newPrintFactory ( ) {
 					previousItineraryPoint,
 					currentItineraryPoint
 				);
+				currentView.bottomLeft = {
+					lat : Math.min ( currentView.bottomLeft.lat, previousItineraryPoint.lat ),
+					lng : Math.min ( currentView.bottomLeft.lng, previousItineraryPoint.lng )
+				};
+				currentView.upperRight = {
+					lat : Math.max ( currentView.upperRight.lat, previousItineraryPoint.lat ),
+					lng : Math.max ( currentView.upperRight.lng, previousItineraryPoint.lng )
+				};
+
 				currentView.entryPoint = entryPoint;
 				currentView.exitPoint = previousItineraryPoint;
 				myViews.push ( currentView );
 				currentView = {
-					topLeft : [ previousItineraryPoint.lat, previousItineraryPoint.lng ],
-					bottomRight : [ previousItineraryPoint.lat, previousItineraryPoint.lng ]
+					bottomLeft : { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng },
+					upperRight : { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng }
 				};
-				entryPoint = [ previousItineraryPoint.lat, previousItineraryPoint.lng ];
+				entryPoint = { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng };
 			}
 			if ( theConfig.printRouteMap.maxPages < myViews.length ) {
 				done = true;
@@ -450,8 +491,18 @@ function newPrintFactory ( ) {
 		);
 		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
 		layers.push ( myGetLayer ( ) );
-		layers.push ( L.circleMarker ( view.entryPoint, theConfig.printRouteMap.entryPointMarker ) );
-		layers.push ( L.circleMarker ( view.exitPoint, theConfig.printRouteMap.exitPointMarker ) );
+		layers.push (
+			L.circleMarker (
+				[ view.entryPoint.lat, view.entryPoint.lng ],
+				theConfig.printRouteMap.entryPointMarker
+			)
+		);
+		layers.push (
+			L.circleMarker (
+				[ view.exitPoint.lat, view.exitPoint.lng ],
+				theConfig.printRouteMap.exitPointMarker
+			)
+		);
 		layers.push ( myRoutePolyline );
 		L.map (
 			viewId,
@@ -459,8 +510,8 @@ function newPrintFactory ( ) {
 				attributionControl : true,
 				zoomControl : false,
 				center : [
-					( view.topLeft [ LAT ] + view.bottomRight [ LAT ] ) / TWO,
-					( view.topLeft [ LNG ] + view.bottomRight [ LNG ] ) / TWO
+					( view.bottomLeft.lat + view.upperRight.lat ) / TWO,
+					( view.bottomLeft.lng + view.upperRight.lng ) / TWO
 				],
 				zoom : myPrintData.zoomFactor,
 				minZoom : myPrintData.zoomFactor,
@@ -563,6 +614,11 @@ function newPrintFactory ( ) {
 		myComputePrintSize ( );
 
 		myComputeViews ( );
+
+		myViews.forEach (
+			view => L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
+		);
+		console.log ( 'views :' + myViews.length );
 
 		if ( theConfig.printRouteMap.maxPages < myViews.length ) {
 			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
