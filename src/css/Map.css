@@ -88,6 +88,13 @@ body
 .TravelNotes-PrintViews .TravelNotes-routeViewDiv
 {
 	margin: 5mm;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.TravelNotes-PrintPageBreak .TravelNotes-routeViewDiv
+{
+	page-break-inside: avoid;
 }
 
 .TravelNotes-PrintViews #TravelNotes-PrintToolbar
@@ -103,12 +110,23 @@ body
 	background-color: white;
 }
 
+
 @media print
 {
+	/*
+	@page {
+		size: A4 portrait;
+		margin: 5mm;
+	}
+	*/
+	
 	.TravelNotes-PrintViews .TravelNotes-routeViewDiv
 	{
 		margin: 0;
+		margin-left: auto;
+		margin-right: auto;
 	}	
+	
 	.TravelNotes-PrintViews #TravelNotes-PrintToolbar
 	{
 		width: 0;

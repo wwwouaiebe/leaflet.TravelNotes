@@ -225,7 +225,21 @@ function newConfig ( ) {
 			pageBreak : false,
 			printNotes : false,
 			borderWidth : 30,
-			zoomFactor : 15
+			zoomFactor : 15,
+			entryPointMarker : {
+				color : 'green',
+				weight : 4,
+				radius : 10,
+				fill : true,
+				fillOpacity : 1
+			},
+			exitPointMarker : {
+				color : 'red',
+				weight : 4,
+				radius : 10,
+				fill : true,
+				fillOpacity : 1
+			}
 		},
 		haveCrypto : false
 	};

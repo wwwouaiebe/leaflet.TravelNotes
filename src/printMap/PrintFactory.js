@@ -40,7 +40,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 /*
 --- newPrintFactory function ------------------------------------------------------------------------------------------
@@ -87,6 +87,7 @@ function newPrintFactory ( ) {
 			.removeEventListener (	'click', onAfterPrint, false );
 		myBody.removeChild ( document.getElementById ( 'TravelNotes-PrintToolbar' ) );
 
+		myBody.classList.remove ( 'TravelNotes-PrintPageBreak' );
 		myBody.classList.remove ( 'TravelNotes-PrintViews' );
 		theTravelNotesData.map.invalidateSize ( false );
 
@@ -353,8 +354,6 @@ function newPrintFactory ( ) {
 
 	function myGetLayer ( ) {
 		let layer = theLayersToolbarUI.getLayer ( theTravelNotesData.travel.layerName );
-		console.log ( 'layer' );
-		console.log ( layer );
 		let url = layer.url;
 		if ( layer.providerKeyNeeded ) {
 			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
@@ -368,7 +367,54 @@ function newPrintFactory ( ) {
 			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
+		leafletLayer.options.attribution = layer.attribution.substr ( ONE );
+		if ( NOT_FOUND === layer.attribution.indexOf ( 'openstreetmap' ) ) {
+			leafletLayer.options.attribution +=
+			'| &copy; <a href=\'http://www.openstreetmap.org/copyright\' ' +
+			'target=\'_blank\' title=\'OpenStreetMap contributors\'>OpenStreetMap contributors</a>';
+		}
+		leafletLayer.options.attribution +=
+			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
+
 		return leafletLayer;
+	}
+
+	/*
+	--- myGetNotesMarkers function ------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetNotesMarkers ( ) {
+		let notesMarkers = [];
+		myRoute.notes.forEach (
+			note => {
+				let icon = L.divIcon (
+					{
+						iconSize : [ note.iconWidth, note.iconHeight ],
+						iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
+						popupAnchor : [ ZERO, -note.iconHeight / TWO ],
+						html : note.iconContent,
+						className : 'TravelNotes-AllNotes ' + theConfig.note.style
+					}
+				);
+
+				const NOTE_Z_INDEX_OFFSET = 100;
+				let marker = L.marker (
+					note.iconLatLng,
+					{
+						zIndexOffset : NOTE_Z_INDEX_OFFSET,
+						icon : icon,
+						draggable : true
+					}
+				);
+				notesMarkers.push ( marker );
+			}
+		);
+		return notesMarkers;
 	}
 
 	/*
@@ -398,10 +444,15 @@ function newPrintFactory ( ) {
 				myPrintData.paperHeight +
 				'mm;'
 		);
+		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
+		layers.push ( myGetLayer ( ) );
+		layers.push ( L.circleMarker ( view.entryPoint, theConfig.printRouteMap.entryPointMarker ) );
+		layers.push ( L.circleMarker ( view.exitPoint, theConfig.printRouteMap.exitPointMarker ) );
+		layers.push ( myRoutePolyline );
 		L.map (
 			viewId,
 			{
-				attributionControl : false,
+				attributionControl : true,
 				zoomControl : false,
 				center : [
 					( view.topLeft [ LAT ] + view.bottomRight [ LAT ] ) / TWO,
@@ -410,12 +461,7 @@ function newPrintFactory ( ) {
 				zoom : myPrintData.zoomFactor,
 				minZoom : myPrintData.zoomFactor,
 				maxZoom : myPrintData.zoomFactor,
-				layers : [
-					myGetLayer ( ),
-					L.circleMarker ( view.entryPoint, theConfig.searchPointMarker ),
-					L.circleMarker ( view.exitPoint, theConfig.searchPointMarker ),
-					myRoutePolyline
-				]
+				layers : layers
 			}
 		);
 	}
@@ -472,6 +518,10 @@ function newPrintFactory ( ) {
 	function myPrintViews ( ) {
 		myBody.classList.add ( 'TravelNotes-PrintViews' );
 
+		if ( myPrintData.pageBreak ) {
+			myBody.classList.add ( 'TravelNotes-PrintPageBreak' );
+		}
+
 		window.addEventListener ( 'afterprint', onAfterPrint, true );
 
 		myCreateToolbar ( );
@@ -511,12 +561,6 @@ function newPrintFactory ( ) {
 		myComputePrintSize ( );
 
 		myComputeViews ( );
-
-		/*
-		myViews.forEach (
-			view => L.rectangle ( [ view.topLeft, view.bottomRight ] ).addTo ( theTravelNotesData.map )
-		);
-		*/
 
 		myPrintViews ( );
 	}
