@@ -112,6 +112,10 @@
 		"msgstr" : "Add a note on the route"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Print route map",
+		"msgstr" : "Print the maps for this route"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
 		"msgstr" : "Cancel the modifications on this route"
 	},
@@ -394,6 +398,18 @@
 	{
 		"msgid" : "PasswordDialog - Password rules",
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
+	},
+	{
+		"msgid" : "PrintFactory - Print",
+		"msgstr" : "Print"
+	},
+	{
+		"msgid" : "PrintFactory - Cancel print",
+		"msgstr" : "Cancel print"
+	},
+	{
+		"msgid" : "PrintFactory - The maximum of allowed pages is reached.",
+		"msgstr" : "The maximum of allowed pages is reached."
 	},
 	{
 		"msgid" : "PrintRouteMapDialog - Border width",

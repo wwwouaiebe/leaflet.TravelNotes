@@ -248,9 +248,10 @@ function newPrintRouteMapDialog ( ) {
 			},
 			zoomFactorDiv
 		);
-		myZoomFactorInput.value = theConfig.printRouteMap.zoomFactor;
+		const MAX_ZOOM = 15;
+		myZoomFactorInput.value = Math.min ( theConfig.printRouteMap.zoomFactor, MAX_ZOOM );
 		myZoomFactorInput.min = theTravelNotesData.map.getMinZoom ( );
-		myZoomFactorInput.max = theTravelNotesData.map.getMaxZoom ( );
+		myZoomFactorInput.max = Math.min ( theTravelNotesData.map.getMaxZoom ( ), MAX_ZOOM );
 
 		// page break...
 		let pageBreakDiv = myHTMLElementsFactory.create (

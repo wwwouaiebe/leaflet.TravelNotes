@@ -220,10 +220,12 @@ function newConfig ( ) {
 		},
 		printRouteMap :
 		{
+			isEnabled : true,
+			maxPages : 20,
 			paperWidth : 287,
 			paperHeight : 200,
 			pageBreak : false,
-			printNotes : false,
+			printNotes : true,
 			borderWidth : 30,
 			zoomFactor : 15,
 			entryPointMarker : {

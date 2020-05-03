@@ -31,8 +31,8 @@ Tests ...
 
 /* global L */
 
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
@@ -70,7 +70,7 @@ function newPrintFactory ( ) {
 	/*
 	--- onAfterPrint function -----------------------------------------------------------------------------------------
 
-	This function ...
+	This function restore the map after printing
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -89,13 +89,14 @@ function newPrintFactory ( ) {
 
 		myBody.classList.remove ( 'TravelNotes-PrintPageBreak' );
 		myBody.classList.remove ( 'TravelNotes-PrintViews' );
+
 		theTravelNotesData.map.invalidateSize ( false );
 
 		window.removeEventListener ( 'afterprint', onAfterPrint, true );
 	}
 
 	/*
-	--- myComputePrintArea function -----------------------------------------------------------------------------------
+	--- myComputePrintSize function -----------------------------------------------------------------------------------
 
 	This function ...
 
@@ -130,7 +131,7 @@ function newPrintFactory ( ) {
 	}
 
 	/*
-	--- isFirstPointOnView function -----------------------------------------------------------------------------------
+	--- myIsFirstPointOnView function ---------------------------------------------------------------------------------
 
 	This function ...
 
@@ -343,6 +344,9 @@ function newPrintFactory ( ) {
 				};
 				entryPoint = [ previousItineraryPoint.lat, previousItineraryPoint.lng ];
 			}
+			if ( theConfig.printRouteMap.maxPages < myViews.length ) {
+				done = true;
+			}
 		}
 	}
 
@@ -524,8 +528,6 @@ function newPrintFactory ( ) {
 
 		window.addEventListener ( 'afterprint', onAfterPrint, true );
 
-		myCreateToolbar ( );
-
 		let latLng = [];
 		let pointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		while ( ! pointsIterator.done ) {
@@ -561,6 +563,13 @@ function newPrintFactory ( ) {
 		myComputePrintSize ( );
 
 		myComputeViews ( );
+
+		if ( theConfig.printRouteMap.maxPages < myViews.length ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
+			return;
+		}
+
+		myCreateToolbar ( );
 
 		myPrintViews ( );
 	}

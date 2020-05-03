@@ -37,6 +37,7 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import { theConfig } from '../data/Config.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
@@ -66,7 +67,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 	*/
 
 	function myGetMenuItems ( ) {
-		return [
+		let menuItems = [
 			{
 				context : theRouteEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Edit this route' ),
@@ -133,24 +134,42 @@ function newRouteContextMenu ( contextMenuEvent ) {
 						:
 						null,
 				param : myRouteObjId
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Print route map' ),
-				action : theRouteEditor.printRouteMap,
-				param : myRouteObjId
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Save modifications on this route' ),
-				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.saveEdition : null
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Cancel modifications on this route' ),
-				action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId ) ? theRouteEditor.cancelEdition : null
 			}
 		];
+		if ( theConfig.printRouteMap.isEnabled ) {
+			menuItems.push (
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'ContextMenuFactory - Print route map' ),
+					action : theRouteEditor.printRouteMap,
+					param : myRouteObjId
+				}
+			);
+		}
+		menuItems = menuItems.concat (
+			[
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'ContextMenuFactory - Save modifications on this route' ),
+					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+						?
+						theRouteEditor.saveEdition
+						:
+						null
+				},
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'ContextMenuFactory - Cancel modifications on this route' ),
+					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+						?
+						theRouteEditor.cancelEdition
+						:
+						null
+				}
+			]
+		);
+
+		return menuItems;
 	}
 
 	/*

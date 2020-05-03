@@ -112,6 +112,10 @@
 		"msgstr" : "Ajouter une note à ce trajet"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Print route map",
+		"msgstr" : "Imprimer les cartes de ce trajet"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
 		"msgstr" : "Abandonner les modifications"
 	},
@@ -394,6 +398,18 @@
 	{
 		"msgid" : "PasswordDialog - Password rules",
 		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
+	},
+	{
+		"msgid" : "PrintFactory - Print",
+		"msgstr" : "Imprimer"
+	},
+	{
+		"msgid" : "PrintFactory - Cancel print",
+		"msgstr" : "Annuler l'impression"
+	},
+	{
+		"msgid" : "PrintFactory - The maximum of allowed pages is reached.",
+		"msgstr" : "Le maximum de pages autorisé est atteint."
 	},
 	{
 		"msgid" : "PrintRouteMapDialog - Border width",
