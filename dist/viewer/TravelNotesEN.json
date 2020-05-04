@@ -112,6 +112,10 @@
 		"msgstr" : "Add a note on the route"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Print route map",
+		"msgstr" : "Print the maps for this route"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
 		"msgstr" : "Cancel the modifications on this route"
 	},
@@ -394,6 +398,58 @@
 	{
 		"msgid" : "PasswordDialog - Password rules",
 		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
+	},
+	{
+		"msgid" : "PrintFactory - Print",
+		"msgstr" : "Print"
+	},
+	{
+		"msgid" : "PrintFactory - Cancel print",
+		"msgstr" : "Cancel print"
+	},
+	{
+		"msgid" : "PrintFactory - The maximum of allowed pages is reached.",
+		"msgstr" : "The maximum of allowed pages is reached."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Border width",
+		"msgstr" : "Border width:"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Border width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height",
+		"msgstr" : "Paper height"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper height units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width",
+		"msgstr" : "Paper width"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Paper width units",
+		"msgstr" : "mm."
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Page break",
+		"msgstr" : "Insert a page break"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print notes",
+		"msgstr" : "Print notes"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Print",
+		"msgstr" : "Print a route map"
+	},
+	{
+		"msgid" : "PrintRouteMapDialog - Zoom factor",
+		"msgstr" : "Zoom:"
 	},
 	{
 		"msgid" : "ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}",
