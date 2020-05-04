@@ -66,6 +66,7 @@ function newPrintFactory ( ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myGeometry = newGeometry ( );
+	let myTilesPage = 0;
 
 	/*
 	--- onAfterPrint function -----------------------------------------------------------------------------------------
@@ -115,7 +116,8 @@ function newPrintFactory ( ) {
 				( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) +
 				'mm;'
 		);
-
+		const TILE_SIZE = 256;
+		myTilesPage = Math.ceil ( dummyDiv.clientWidth / TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / TILE_SIZE );
 		let topLeftScreen = myGeometry.screenCoordToLatLng ( ZERO, ZERO );
 		let bottomRightScreen = myGeometry.screenCoordToLatLng (
 			dummyDiv.clientWidth,
@@ -385,7 +387,7 @@ function newPrintFactory ( ) {
 				};
 				entryPoint = { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng };
 			}
-			if ( theConfig.printRouteMap.maxPages < myViews.length ) {
+			if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
 				done = true;
 			}
 		}
@@ -615,12 +617,15 @@ function newPrintFactory ( ) {
 
 		myComputeViews ( );
 
+		/*
+		// Remain for debugging
 		myViews.forEach (
 			view => L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
 		);
 		console.log ( 'views :' + myViews.length );
+		*/
 
-		if ( theConfig.printRouteMap.maxPages < myViews.length ) {
+		if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
 			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
 			return;
 		}

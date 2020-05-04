@@ -221,7 +221,7 @@ function newConfig ( ) {
 		printRouteMap :
 		{
 			isEnabled : true,
-			maxPages : 20,
+			maxTiles : 240,
 			paperWidth : 287,
 			paperHeight : 200,
 			pageBreak : false,
