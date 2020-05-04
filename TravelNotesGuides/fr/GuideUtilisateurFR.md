@@ -229,6 +229,16 @@ départ ou le point de fin.
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
+#### Ajouter un point de passage
+
+Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
+En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
+
+<img src="AddWayPointFR.PNG" />
+
+Vous pouvez également ajouter un point de passage via le menu contextuel de la carte. Dans ce cas, il sera toujours ajouté 
+comme étant le dernier point intermédiaire. 
+
 #### Supprimer un point de passage
 
 Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu.
@@ -249,17 +259,6 @@ la carte. Il en est de même chaque fois qu'un point intermédiaire est ajouté 
 passage est déplacé.
 
 La description de l'itinéraire est également affichée dans la partie "Itinéraire et notes".
-
-#### Insérer un point intermédiaire.
-
-Lorsque un point intermédiaire est ajouté via le menu contextuel de la carte, il est toujours ajouté 
-comme étant le dernier point intermédiaire. Cela peut donner des résultats étranges au niveau de 
-l'itinéraire calculé.
-
-Pour éviter cela, il est également possible d'ajouter un point de passage à un endroit précis du trajet. 
-Faites un clic droit sur le __trajet__ à l'endroit où vous voulez insérer le point de passage et 
-sélectionnez dans le menu contextuel "Ajouter un point de passage à ce trajet". Le nouveau point 
-peut ensuite être déplacé à sa nouvelle position avec un glisser / déposer.
 
 #### Sauver ou abandonner les modifications
 
