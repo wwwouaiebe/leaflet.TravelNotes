@@ -11,7 +11,7 @@
 		},
 		"providerName":"OSM",
 		"providerKeyNeeded":false,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> "
+		"attribution":""
 	},
 	{
 		"service":"wmts",
@@ -25,7 +25,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},		
 	{
 		"service":"wmts",
@@ -39,7 +39,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -53,7 +53,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -67,7 +67,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -98,7 +98,7 @@
 		},
 		"providerName":"IGN",
 		"providerKeyNeeded":false,
-		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='https://topomapviewer.ngi.be/conditions/conditions.html' target='_blank'>Conditions d&apos;utilisation</a>",
+		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='https://topomapviewer.ngi.be/conditions/conditions.html' target='_blank'>Conditions d&apos;utilisation </a>",
 		"getCapabilitiesUrl":"http://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
 	},
 	{
@@ -163,7 +163,7 @@
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -177,7 +177,7 @@
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -191,7 +191,7 @@
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -205,6 +205,6 @@
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	}
 ]

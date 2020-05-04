@@ -25,6 +25,7 @@ Changes:
 		- created
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
+		- issue #103 : Review the attributions
 Doc reviewed ...
 Tests ...
 
@@ -62,8 +63,7 @@ function newLayersToolbarUI ( ) {
 			},
 			providerName : 'OSM',
 			providerKeyNeeded : false,
-			attribution : '| &copy; <a href="http://www.openstreetmap.org/copyright" ' +
-				'target="_blank" title="OpenStreetMap contributors">OpenStreetMap contributors</a> '
+			attribution : ''
 		}
 	];
 

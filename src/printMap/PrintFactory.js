@@ -40,7 +40,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 /*
 --- newPrintFactory function ------------------------------------------------------------------------------------------
@@ -414,13 +414,10 @@ function newPrintFactory ( ) {
 			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
-		leafletLayer.options.attribution = layer.attribution.substr ( ONE );
-		if ( NOT_FOUND === layer.attribution.indexOf ( 'openstreetmap' ) ) {
-			leafletLayer.options.attribution +=
-			'| &copy; <a href=\'http://www.openstreetmap.org/copyright\' ' +
-			'target=\'_blank\' title=\'OpenStreetMap contributors\'>OpenStreetMap contributors</a>';
-		}
-		leafletLayer.options.attribution +=
+		leafletLayer.options.attribution =
+			' &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
+			layer.attribution +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
 

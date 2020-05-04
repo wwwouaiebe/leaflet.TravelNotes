@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.9.0:
+		- issue #103 : Review the attributions
 Doc reviewed ...
 Tests ...
 
@@ -52,6 +54,8 @@ function newAttributionsUI ( ) {
 	function mySetAttributions ( attributions ) {
 		myAttributionsUIDiv.innerHTML =
 			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+			'| &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
