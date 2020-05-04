@@ -31,6 +31,8 @@ Changes:
 	- v1.7.0:
 		- added line and circle icons
 		- modified bike, pedestrian and car icons
+	- v1.6.0:
+		- Issue #102 : Sometime the provider toolbar is incomplete at startup
 Doc reviewed 20191125
 Tests ...
 
@@ -77,8 +79,11 @@ function newProvidersToolbarUI ( ) {
 	function mySetTransitMode ( transitMode ) {
 
 		theTravelNotesData.routing.transitMode = transitMode;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ ZERO ]
-			.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		let activeTransitModeButton =
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ ZERO ];
+		if ( activeTransitModeButton ) {
+			activeTransitModeButton.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
+		}
 		document.getElementById ( 'TravelNotes-Control-' + transitMode + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 	}
@@ -107,8 +112,11 @@ function newProvidersToolbarUI ( ) {
 
 	function mySetProvider ( providerName ) {
 		theTravelNotesData.routing.provider = providerName;
-		document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ ZERO ]
-			.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
+		let activeProviderButton =
+			document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ ZERO ];
+		if ( activeProviderButton ) {
+			activeProviderButton.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
+		}
 		document.getElementById ( 'TravelNotes-Control-' + providerName + 'ImgButton' )
 			.classList.add ( 'TravelNotes-Control-ActiveProviderImgButton' );
 

@@ -28,6 +28,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
+	- v1.9.0:
+		- issue #101 : Add a print command for a route
 Doc reviewed 20191121
 Tests ...
 
@@ -216,6 +218,31 @@ function newConfig ( ) {
 			url : 'https://nominatim.openstreetmap.org/',
 			language : '*'
 		},
+		printRouteMap :
+		{
+			isEnabled : true,
+			maxTiles : 240,
+			paperWidth : 287,
+			paperHeight : 200,
+			pageBreak : false,
+			printNotes : true,
+			borderWidth : 30,
+			zoomFactor : 15,
+			entryPointMarker : {
+				color : 'green',
+				weight : 4,
+				radius : 10,
+				fill : true,
+				fillOpacity : 1
+			},
+			exitPointMarker : {
+				color : 'red',
+				weight : 4,
+				radius : 10,
+				fill : true,
+				fillOpacity : 1
+			}
+		},
 		haveCrypto : false
 	};
 
@@ -332,6 +359,7 @@ function newConfig ( ) {
 		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; },
 		get nominatim ( ) { return myConfig.nominatim; },
 		get geoLocation ( ) { return myConfig.geoLocation; },
+		get printRouteMap ( ) { return myConfig.printRouteMap; },
 		get haveCrypto ( ) { return myConfig.haveCrypto; },
 
 		overload : source => myOverload ( source )

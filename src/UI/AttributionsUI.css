@@ -14,3 +14,12 @@
 #TravelNotes-AttributionsUI a{
 	color: #0078A8;
 }
+
+.TravelNotes-PrintViews #TravelNotes-AttributionsUI
+{
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	visibility: hidden;
+}

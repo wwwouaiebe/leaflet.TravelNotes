@@ -44,6 +44,8 @@ Changes:
 		- Issue #66 : Work with promises for dialogs
 		- Issue #70 : Put the get...HTML functions outside of the editors
 		- Issue #68 : Review all existing promises.
+	- v1.9.0:
+		- issue #101 : Add a print command for a route
 Doc reviewed 20191122
 Tests ...
 
@@ -57,11 +59,13 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
+import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import { newPrintFactory } from '../printMap/PrintFactory.js';
 
 import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -530,6 +534,25 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- myPrintRouteMap function --------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myPrintRouteMap ( routeObjId ) {
+		let printRouteMapDialog = newPrintRouteMapDialog ( );
+
+		printRouteMapDialog.show ( ).then (
+			printData => {
+				newPrintFactory ( ).print ( printData, routeObjId );
+			}
+		)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+	}
+
+	/*
 	--- routeEditor object --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -548,6 +571,8 @@ function newRouteEditor ( ) {
 			cancelEdition : ( ) => myCancelEdition ( ),
 
 			routeProperties : routeObjId => myRouteProperties ( routeObjId ),
+
+			printRouteMap : routeObjId => myPrintRouteMap ( routeObjId ),
 
 			hideRoute : routeObjId => myHideRoute ( routeObjId ),
 

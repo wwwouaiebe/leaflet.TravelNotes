@@ -25,6 +25,8 @@ Changes:
 	-v1.7.0:
 		- modified way of working for myPointsDistance ( )
 		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
+	- v1.9.0:
+		- issue #101 : Add a print command for a route
 Doc reviewed 20191125
 Tests ...
 
@@ -221,7 +223,7 @@ function newGeometry ( ) {
 			latLngStartPoint [ ONE ] === latLngEndPoint [ ONE ]
 		) {
 
-			// the function runs infinitely when latLngStartPoint === latLngStartPoint :-(
+			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
 
@@ -262,13 +264,19 @@ function newGeometry ( ) {
 	}
 
 	/*
+	--- myScreenCoordToLatLng function --------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myScreenCoordToLatLng ( xScreen, yScreen ) {
+		let latLng = theTravelNotesData.map.containerPointToLatLng ( L.point ( xScreen, yScreen ) );
+		return [ latLng.lat, latLng.lng ];
+	}
+
+	/*
 	--- myAddPoint function -------------------------------------------------------------------------------------------
 
-	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
-
-	parameters:
-	- latLng: the coordinates of the two points. Must be an array of two numbers
-			with the lat and lng of the point
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -306,6 +314,7 @@ function newGeometry ( ) {
 			pointsDistance :
 				( latLngStartPoint, latLngEndPoint ) => myPointsDistance ( latLngStartPoint, latLngEndPoint ),
 			project : ( latLng, zoom ) => myProject ( latLng, zoom ),
+			screenCoordToLatLng : ( xScreen, yScreen ) => myScreenCoordToLatLng ( xScreen, yScreen ),
 			addPoints : ( point1, point2 ) => myAddPoint ( point1, point2 ),
 			subtrackPoints : ( point1, point2 ) => mySubtrackPoints ( point1, point2 )
 		}

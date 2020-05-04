@@ -95,7 +95,8 @@ function newItinerary ( ) {
 				// eslint break omitted intentionally
 			case '1.7.0' :
 			case '1.7.1' :
-				something.objType.version = '1.8.0';
+			case '1.8.0' :
+				something.objType.version = '1.9.0';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );
