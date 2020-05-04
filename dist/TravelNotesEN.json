@@ -269,7 +269,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
-		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2019</a>"
+		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a>"
 	},
 	{
 		"msgid" : "LayersToolbarUI - Layers",
