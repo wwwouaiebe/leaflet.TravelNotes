@@ -35,9 +35,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.8.0 branch
+### v1.9.0 branch
 
-The [v1.8.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.8.0) contains the source files of the last stable version.
+The [v1.9.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.9.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -67,6 +67,10 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 ### What's new in release 1.8.0
 
 - Adding a waypoint to a route has been improved. Now just move the mouse over the route to see a temporary waypoint appear. Then by dragging and dropping it, the waypoint is added to the route.
+
+### What's new in release 1.9.0
+
+- it's now possible to print maps of a route.
 
 <a id="fr" />
 
@@ -103,9 +107,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.8.0
+### branche v1.9.0
 
-La [branche v1.8.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.8.0) contient les sources de la dernière version stable.
+La [branche v1.9.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.9.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -139,3 +143,6 @@ mais bien sous forme d'un segment de grand cercle. Voir la documentation de [lea
 - Ajouter un point de passage à un trajet a été amélioré. Il suffit maintenant d'amener la souris sur le trajet pour voir apparaître un point de passage temporaire.
 En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
+### Quoi de neuf dans la version 1.9.0
+
+Il est maintenant possible d'imprimer les cartes d'un trajet.
