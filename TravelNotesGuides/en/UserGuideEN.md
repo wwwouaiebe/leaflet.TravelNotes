@@ -22,6 +22,7 @@
 	- [Save or discard changes](#SaveOrDiscardRoute)
 	- [Route profile](#RouteProfile)
 	- [Itinerary by train](#TrainItinerary)
+	- [Editing the properties of a route](#RouteDlg)
 - [Notes](#Notes1)
 	- [Add a travel note](#NewTravelNote)
 	- [Add a route note](#NewRouteNote)
@@ -35,7 +36,6 @@
 	- [The note dialog box](#NoteDlg)
 		- [Predefined route notes "SVG icon from OSM"](#SvgNoteFromOsm)
 		- [Some examples of notes](#NoteSamples)
-	- [Editing the properties of a route](#RouteDlg)
 - [Background map menu](#MapsMenu)
 - [Roadbook](#Roadbook)
 - [Prepare a travel and consult it from the internet](#PrepareTravel)
@@ -350,6 +350,22 @@ It is possible to move a profile on the screen by dragging and dropping with the
 Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 for more explanation on how to create a train route.
 
+<a id="RouteDlg"></a>
+### Editing the properties of a route
+
+Right click on the route and select "Properties" from the context menu.
+
+<img src="RoutePropertiesEN.PNG" />
+
+The first 6 rows of color buttons are used to select the color used to display the route. The last 
+row of color buttons adds more or less shade of red in the proposed colors.
+
+Each shade of red, green and blue for the desired color can also be individually set via the 3 
+color editing areas.
+
+It is also possible to change the width of the route as well as the type of line and also chaining 
+the route.
+
 <a id="Notes1"></a>
 ## __Notes__
 
@@ -495,22 +511,6 @@ The dialog box:
 And the result on TravelNotes:
 
 <img src="NotePhoto2EN.PNG" />
-
-<a id="RouteDlg"></a>
-### Editing the properties of a route
-
-Right click on the route and select "Properties" from the context menu.
-
-<img src="RoutePropertiesEN.PNG" />
-
-The first 6 rows of color buttons are used to select the color used to display the route. The last 
-row of color buttons adds more or less shade of red in the proposed colors.
-
-Each shade of red, green and blue for the desired color can also be individually set via the 3 
-color editing areas.
-
-It is also possible to change the width of the route as well as the type of line and also chaining 
-the route.
 
 <a id="MapsMenu"></a>
 ## __Background map menu__
