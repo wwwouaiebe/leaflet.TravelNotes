@@ -3,8 +3,8 @@
 ## [__Pourquoi Travel & Notes__](#WhyTravelNotes)
 ## [__Quelques explications sur les termes utilisés__](#SomeExplanations)
 ## [__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
-## [__Interface__](#Interface)
-## [__Notes__](#Notes)
+## [__Interface__](#Interface1)
+## [__Notes__](#Notes1)
 ## [__Menu des fonds de carte__](#MapsMenu)
 ## [__Livre de voyage__](#Roadbook)
 ## [__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
@@ -150,7 +150,7 @@ le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans 
 l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
 
-<a id="Interface"></a>
+<a id="Interface1"></a>
 ## __Interface__
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
@@ -314,7 +314,7 @@ Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte
 Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
 note précomplétée avec les instructions de changement de direction.
 
-<a id="Notes"></a>
+<a id="Notes1"></a>
 ## __Notes__
 ### [__Créer une note de voyage__](#NewTravelNote)
 ### [__Créer une note de trajet__](#NewRouteNote)
