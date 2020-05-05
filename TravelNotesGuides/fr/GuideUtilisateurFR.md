@@ -22,6 +22,7 @@
 	- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
 	- [Profil d'un trajet](#RouteProfile)
 	- [Itinéraire en train](#TrainItinerary)
+	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
@@ -35,7 +36,6 @@
 	- [La boite d'édition d'une note](#NoteDlg)
 		- [Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
 		- [Quelques exemples de notes](#NoteSamples)
-	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
 - [Menu des fonds de carte](#MapsMenu)
 - [Livre de voyage](#Roadbook)
 - [Préparer un voyage et le consulter depuis internet](#PrepareTravel)
@@ -378,6 +378,23 @@ Il est possible de déplacer un profil sur l'écran en faisant un glisser/dépos
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 pour plus d'explications sur la façon de créer un itinéraire en train.
 
+<a id="RouteDlg"></a>
+### La boite d'édition des propriétés d'un trajet
+
+Faites un clic droit sur le trajet et sélectionnez "Propriétés" dans le menu contextuel.
+
+<img src="RoutePropertiesFR.PNG" />
+
+Les 6 premières rangées de boutons de couleur permettent de sélectionner la couleur utilisée pour 
+afficher le trajet. La dernière rangée de boutons de couleur ajoute plus ou moins 
+de nuance de rouge dans les couleurs proposées.
+
+Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement 
+via les 3 zones d'édition des couleurs.
+
+Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
+chainer le trajet au voyage.
+
 <a id="Notes1"></a>
 ## __Notes__
 
@@ -527,23 +544,6 @@ La boite de dialogue:
 Et le résultat dans TravelNotes:
 
 <img src="NotePhoto2FR.PNG" />
-
-<a id="RouteDlg"></a>
-### La boite d'édition des propriétés d'un trajet
-
-Faites un clic droit sur le trajet et sélectionnez "Propriétés" dans le menu contextuel.
-
-<img src="RoutePropertiesFR.PNG" />
-
-Les 6 premières rangées de boutons de couleur permettent de sélectionner la couleur utilisée pour 
-afficher le trajet. La dernière rangée de boutons de couleur ajoute plus ou moins 
-de nuance de rouge dans les couleurs proposées.
-
-Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement 
-via les 3 zones d'édition des couleurs.
-
-Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
-chainer le trajet au voyage.
 
 <a id="MapsMenu"></a>
 ## __Menu des fonds de carte__
