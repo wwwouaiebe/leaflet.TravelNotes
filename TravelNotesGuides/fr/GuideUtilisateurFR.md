@@ -7,8 +7,19 @@
 - [Interface](#Interface1)
 	- [Trajets du voyage](#RoutesTravel)
 	- [Points de passage du trajet](#RouteWayPoints)
+		- [Boutons de la barre d'outils "Trajets du voyage"](#RouteToolbar)
+		- [Boutons de la barre d'outils "Points de passage du trajet"](#WayPointsToolbar)
+		- [Créer un point de passage](#AddWayPoint)
+		- [Modifier un point de passage ](#ModifyWayPoint)
+		- [Ajouter un point de passage](#AddWayPoint)
+		- [Supprimer un point de passage](#DeleteWayPoint)
+		- [Choisir un mode de parcours et un fournisseur d'itinéraire](#ItineraryModeAndProvider)
+		- [Calcul de l'itinéraire](#ComputingItinerary)
+		- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
+		- [Profil d'un trajet](#RouteProfile)
+		- [Itinéraire en train](#TrainItinerary)
 	- [Itinéraire et notes](#ItineraryAndNotes)
-	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)
+	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)	
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
@@ -205,6 +216,7 @@ Lorsque un trajet est chainé, une icône &#x26d3; est présente à gauche de ce
 Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous 
 faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
 
+<a id="RouteToolbar"></a>
 #### Boutons de la barre d'outils "Trajets du voyage"
 
 - le bouton &#x25bd; agrandit la liste des trajets
@@ -222,6 +234,7 @@ et toutes les notes de ce voyage dans le voyage en cours d'édition
 Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessaire de commencer 
 l'édition de celui-ci avec le bouton &#x21f0; présent dans la liste des trajets.
 
+<a id="WayPointsToolbar"></a>
 #### Boutons de la barre d'outils "Points de passage du trajet"
 
 - le bouton &#x25bd; agrandit la liste des points de passage
@@ -232,9 +245,8 @@ trajet restauré dans l'état dans lequel il se trouvait avant d'être édité
 - le bouton &#x21c5; inverse l'ordre des points de passage
 - Le bouton :recycle: supprime tous les points de passage
 
+<a id="AddWayPoint"></a>
 #### Créer un point de passage
-
-<img src="RouteEditorFR.PNG" />
 
 Pour créer un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez
 "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
@@ -257,10 +269,12 @@ n'est pas possible de transformer le point de départ ou le point de fin en poin
 - Le bouton :recycle: supprime le point de passage. Il n'est pas possible de supprimer le point de 
 départ ou le point de fin.
 
+<a id="ModifyWayPoint"></a>
 #### Modifier un point de passage 
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
+<a id="AddWayPoint"></a>
 #### Ajouter un point de passage
 
 Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
@@ -271,12 +285,14 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 Vous pouvez également ajouter un point de passage via le menu contextuel de la carte. Dans ce cas, il sera toujours ajouté 
 comme étant le dernier point intermédiaire. 
 
+<a id="DeleteWayPoint"></a>
 #### Supprimer un point de passage
 
 Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu.
 Il n'est pas possible de supprimer le point de départ ni le point de fin. Seul un glisser / déposer 
 est possible.
 
+<a id="ItineraryModeAndProvider"></a>
 #### Choisir un mode de parcours et un fournisseur d'itinéraire
 
 Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton, 
@@ -284,6 +300,7 @@ voiture ou train) ainsi que le fournisseur de trajet.
 
 <img src="RouterButtons.PNG" />
 
+<a id="ComputingItinerary"></a>
 #### Calcul de l'itinéraire
 
 Lorsque le point de départ et le point de fin sont connus, l'itinéraire est calculé et affiché sur 
@@ -292,6 +309,7 @@ passage est déplacé.
 
 La description de l'itinéraire est également affichée dans la partie "Itinéraire et notes".
 
+<a id="SaveOrDiscardRoute"></a>
 #### Sauver ou abandonner les modifications
 
 Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci avec le bouton :floppy_disk:.
@@ -300,6 +318,7 @@ Il est également possible d'abandonner l'édition d'un trajet et de revenir à 
 modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
 
+<a id="RouteProfile"></a>
 #### Profil d'un trajet
 
 Lorsque un trajet est calculé avec GraphHopper ou OpenRouteService, il est possible d'afficher un profil de ce trajet.
@@ -311,6 +330,7 @@ Il peut y avoir plusieurs fenêtres affichant des profils ouvertes.
 
 Il est possible de déplacer un profil sur l'écran en faisant un glisser/déposer de la barre supérieure de la fenêtre.
 
+<a id="TrainItinerary"></a>
 #### Itinéraire en train
 
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
