@@ -1,5 +1,45 @@
 # Travel & Notes - User Guide
 
+- [Why Travel & Notes](#WhyTravelNotes)
+- [Some explanations on the terms used](#SomeExplanations)
+- [Before you start using Travel & Notes](#BeforeStart)
+	- [How to introduce your access keys in Travel & Notes](#APIKeys)
+- [Interface](#Interface1)
+	- [Travel routes](#RoutesTravel)
+		- [Toolbar buttons "Travel routes](#RouteToolbar)
+	- [Route waypoints](#RouteWayPoints)
+		- [Toolbar buttons "Waypoints of the route"](#WayPointsToolbar)
+		- [Create a waypoint](#AddWayPoint)
+		- [Adding a waypoint with Drag And Drop](#AddWayPointDragDrop)
+		- [Modify a waypoint](#ModifyWayPoint)
+		- [Delete a waypoint](#DeleteWayPoint)
+		- [Choose a route mode and route provider](#ItineraryModeAndProvider)
+		- [Calculation of the itinerary](#ComputingItinerary)
+		- [Save or discard changes](#SaveOrDiscardRoute)
+		- [Route profile](#RouteProfile)
+		- [Itinerary by train](#TrainItinerary)
+	- [Itinerary and notes](#ItineraryAndNotes)
+	- [Move an edit box on the screen](#MoveEditBox)	
+- [Notes](#Notes1)
+	- [Add a travel note](#NewTravelNote)
+	- [Add a route note](#NewRouteNote)
+	- [Consult a note](#ViewNote)
+	- [Modify a note](#ModifyNote)
+	- [Delete a note](#DeleteNote)
+	- [Move the icon of a note](#MoveNote)
+	- [Change the latitude and longitude of a note](#LatLngNote)
+	- [Turn a route note into a travel note](#RouteToTravelNote)
+	- [Turn a travel note into a route note](#TravelToRouteNote)
+	- [The note dialog box](#NoteDlg)
+		- [Predefined route notes "SVG icon from OSM"](#SvgNoteFromOsm)
+		- [Some examples of notes](#NoteSamples)
+	- [Editing the properties of a route](#RouteDlg)
+- [Background map menu](#MapsMenu)
+- [Roadbook](#Roadbook)
+- [Prepare a travel and consult it from the internet](#PrepareTravel)
+- [Viewer](#Viewer)
+
+<a id="WhyTravelNotes"></a>
 ## __Why Travel & Notes__
 
 I go from time to time on a bike travel for several weeks, sometimes in isolated areas. This kind 
@@ -14,6 +54,7 @@ Finally, it is also important to be able to record what has been prepared becaus
 few minutes. You must also be able to print the result. In some isolated areas, there is not always 
 a mobile network or the possibility of recharging a battery. A good old hard copy is often valuable.
 
+<a id="SomeExplanations"></a>
 ## __Some explanations on the terms used__
 
 A **route** connects two points. On the map, it is represented by a polyline.
@@ -34,6 +75,7 @@ This icon can be an image, a photo, a text ...
 The **roadbook** is an HTML page that contains all the information of the travel: the notes, the 
 routes and the itineraries.
 
+<a id="BeforeStart"></a>
 ## __Before you start using Travel & Notes__
 
 If you use Travel & Notes only to create notes, you can skip all the part about the access keys. 
@@ -58,6 +100,7 @@ aerial view ESRI, IGN - Belgium, Kartverket - Norway, Maanmittauslaitos - Finlan
 You are also responsible for the use of your access keys. Remember that there may be billing that 
 is done based on these access keys. Do not give them to anyone or do not let them hang around anywhere.
 
+<a id="APIKeys"></a>
 ### How to introduce your access keys in Travel & Notes
 
 Access keys are managed from the access keys dialog. To view it, click the :key: button 
@@ -123,6 +166,7 @@ As soon as Travel & Notes detects access keys in the url, they are stored in the
 deleted from the url. They are no longer visible on the screen. **However, remember that a malicious 
 person can always find them in the browser history**, unless you use the private mode of your browser.
 
+<a id="Interface1"></a>
 ## __Interface__
 
 When the map is displayed, only a small black rectangle is visible in the upper right corner of the map:
@@ -144,6 +188,7 @@ the url can be modified via the TravelNotes Config.json file (travelNotesToolbar
 - the button :globe_with_meridians: enables or disables localization.
 - the button :pushpin: permanently displays the interface.
 
+<a id="RoutesTravel"></a>
 ### Travel routes
 
 In this part, the different travel routes as well as a toolbar are displayed.
@@ -161,6 +206,7 @@ When a route is chained, an icon &#x26d3; is present on the left.
 It is possible to give a name to each route. This is not essential but can make your job easier, 
 especially when the travel has a lot of routes.
 
+<a id="RouteToolbar"></a>
 #### Toolbar buttons "Travel routes"
 
 - the button &#x25bd; enlarge the list of routes
@@ -172,6 +218,7 @@ travel in the current edited travel
 - the button :clipboard: opens the roadbook
 - the button + add a new route to the travel
 
+<a id="RouteWayPoints"></a>
 ### Route waypoints
 
 Before you can view the waypoints of a route, it is necessary to start editing it with the &#x21f0; 
@@ -179,6 +226,7 @@ present in the route list.
 
 <img src="RouteEditorEN.PNG" />
 
+<a id="WayPointsToolbar"></a>
 #### Toolbar buttons "Waypoints of the route"
 
 - the button &#x25bd; enlarge the list of waypoints
@@ -189,6 +237,7 @@ restored to the state it was in before being edited
 - the button &#x21c5; reverse the order of waypoints
 - the button :recycle: delete all waypoints
 
+<a id="AddWayPoint"></a>
 #### Create a waypoint
 
 To create a waypoint, right-click on the map at the desired location and choose "Select this point 
@@ -210,25 +259,29 @@ buttons are visible only when several intermediate points are present. It is not
 the start point or end point into an intermediate point.
 - the button :recycle: delete the waypoint. It is not possible to delete the start point or the end point.
 
-#### Modify a waypoint
-
-Drag and drop the waypoint on the map to change a waypoint
-
-#### Adding a waypoint
+<a id="AddWayPointDragDrop"></a>
+#### Adding a waypoint with Drag And Drop
 
 Move the mouse over the route to see a temporary waypoint.
 Then by dragging and dropping it, the waypoint is added to the path.
+
+<a id="ModifyWayPoint"></a>
+#### Modify a waypoint
+
+Drag and drop the waypoint on the map to change a waypoint
 
 <img src="AddWayPointEN.PNG" />
 
 You can also add a waypoint via the context menu of the map. In this case, it will always be added
 as the last intermediate point.
 
+<a id="DeleteWayPoint"></a>
 #### Delete a waypoint
 
 Right click on the waypoint and choose "delete this waypoint" from the menu. It is not possible to 
 delete the start point or the end point. Only a drag and drop is possible.
 
+<a id="ItineraryModeAndProvider"></a>
 #### Choose a route mode and route provider
 
 Use the buttons at the bottom of the control to change the route mode (bike, pedestrian, car or train) 
@@ -236,6 +289,7 @@ as well as the route provider.
 
 <img src="RouterButtons.PNG" />
 
+<a id="ComputingItinerary"></a>
 #### Calculation of the itinerary
 
 When the starting point and end point are known, the route is calculated and displayed on the map. 
@@ -243,6 +297,7 @@ It's the same every time an intermediate point is added or a waypoint is moved.
 
 The description of the route is also displayed in the "Itinerary and notes" section.
 
+<a id="SaveOrDiscardRoute"></a>
 #### Save or discard changes
 
 When editing a route is over, you must save it with the button :floppy_disk:.
@@ -251,8 +306,8 @@ It is also possible to abort editing a route and return to the situation before 
 the &#x274c; button. Warning, __all__ the changes will be lost, including modified properties 
 and notes added since the beginning of editing.
 
+<a id="RouteProfile"></a>
 #### Route profile
-
 
 When a route is calculated with GraphHopper or OpenRouteService, it is possible to display a profile of this route.
 Right-click on the __route__ and select "View the profile" from the context menu.
@@ -263,11 +318,13 @@ There may be multiple open windows displaying profiles.
 
 It is possible to move a profile on the screen by dragging and dropping with the top bar of the window.
 
+<a id="TrainItinerary"></a>
 #### Itinerary by train
 
 Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 for more explanation on how to create a train route.
 
+<a id="ItineraryAndNotes"></a>
 ### Itinerary and notes
 
 This part includes the itinerary of the route as well as notes related to the route.
@@ -279,38 +336,52 @@ A left click on a line of the itinerary will zoom in on the location on the map.
 Right-clicking on an itinerary line will start editing a new route-related note, pre-filled 
 with change of direction instructions
 
+<a id="MoveEditBox"></a>
+### Move an edit box on the screen
+
+Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
+and drop an edit box by clicking on the bar at the top.
+
+<a id="Notes1"></a>
 ## __Notes__
 
 There are two kinds of notes: travel notes and route notes. The position of the travel notes 
 is completely free and they will all be displayed at the beginning of the roadbook. Route notes 
 are always positioned on a route and displayed with the route in the roadbook.
 
+<a id="NewTravelNote"></a>
 ### Add a travel note
 
 Right-click at the desired point on the __map__ and select "New travel note" from the context menu.
 
-### add a route note
+<a id="NewRouteNote"></a>
+### Add a route note
 
 Right-click at the desired location on the __route__ and select "Add a note on the route" in 
 the context menu.
 
+<a id="ViewNote"></a>
 ### Consult a note
 
 Left click on the note icon.
 
+<a id="ModifyNote"></a>
 ### Modify a note
 
 Right-click on the note icon and select "Edit this note" from the context menu.
 
+<a id="DeleteNote"></a>
 ### Delete a note
 
 Right-click on the note icon and select "Delete this note" from the context menu.
 
+<a id="MoveNote"></a>
 ### Move the icon of a note
 
 Drag and drop the note. A line will be drawn between the icon of the note and the point chosen for 
 the insertion of the note. The latitude and longitude of the note are not modified.
 
+<a id="LatLngNote"></a>
 ### Change the latitude and longitude of a note
 
 Move the note icon to make the line visible. Then drag and drop the free end of this line.
@@ -318,17 +389,20 @@ Move the note icon to make the line visible. Then drag and drop the free end of 
 A route note always has its latitude and longitude on the route. When the line is dropped, the nearest 
 point on the route is searched and the free end of the line moved to this point.
 
+<a id="RouteToTravelNote"></a>
 ### Turn a route note into a travel note
 
 Right-click on the note icon and select "Transform to travel note" from the context menu. 
 The transformation is only possible if no route is being edited.
 
+<a id="TravelToRouteNote"></a>
 ### Turn a travel note into a route note
 
 Right-click on the note icon and select "Transform to route note" from the context menu. 
 The transformation is only possible if no route is being edited. The note will be attached 
 to the route closest to it.
 
+<a id="NoteDlg"></a>
 ### The note dialog box
 
 <img src="NoteEditionEN.PNG" />
@@ -353,6 +427,7 @@ The "Address" area is completed automatically when creating the note -
 This area will never be changed by Nominatim afterwards, even if the note has been moved. 
 The button &#x1f504; allows, however, to request a new geolocation to Nominatim.
 
+<a id="SvgNoteFromOsm"></a>
 #### Predefined route notes "SVG icon from OSM"
 
 When creating a route note, you can choose "SVG icon from OSM" in the list of predefined notes. 
@@ -370,6 +445,7 @@ This name will be preceded by an arrow indicating the direction to follow. The n
 town / city will also be added. If a hamlet or village name is found near the intersection, 
 it will also be added in parentheses.
 
+<a id="NoteSamples"></a>
 #### Some examples of notes
 
 ##### A simple note created from a predefined note
@@ -412,6 +488,7 @@ And the result on TravelNotes:
 
 <img src="NotePhoto2EN.PNG" />
 
+<a id="RouteDlg"></a>
 ### Editing the properties of a route
 
 Right click on the route and select "Properties" from the context menu.
@@ -427,12 +504,8 @@ color editing areas.
 It is also possible to change the width of the route as well as the type of line and also chaining 
 the route.
 
-### Move an edit box on the screen.
-
-Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
-and drop an edit box by clicking on the bar at the top.
-
-## Background map menu
+<a id="MapsMenu"></a>
+## __Background map menu__
 
 On the left of the screen, a toolbar allows you to choose different background maps. Only a little
 black rectangle is visible on the screen:
@@ -449,6 +522,7 @@ as well as the access keys that have been introduced. Consult the installation g
 
 It is possible to move around in the toolbar using the mouse wheel.
 
+<a id="Roadbook"></a>
 ## __Roadbook__
 
 Click on the button :clipboard:. A new tab is created with the roadbook. This contains all the routes as 
@@ -459,7 +533,7 @@ in the roadbook via the menu at the top of the page:
 
 The "Save" button saves the html file on your PC. 
 
-## Prepare a travel and consult it from the internet
+## __Prepare a travel and consult it from the internet__
 
 It is possible to prepare a travel, save it in a file on a web server and consult it from the internet.
 
@@ -480,7 +554,8 @@ See the sample on the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?f
 When such a file is displayed, it is not possible to modify it. The TravelNotes interface is not 
 visible and all context menus are disabled.
 
-## Viewer
+<a id="Viewer"></a>
+## __Viewer__
 
 Some older browsers, especially on mobile phones, do not always understand all of the Travel & Notes 
 JavaScript code. In this case, you can try a simplified version of Travel & Notes which just allows 
