@@ -5,21 +5,23 @@
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
 - [Interface](#Interface1)
+	- [Barre d'outils en haut de l'interface](#InterfaceToolbar)
 	- [Trajets du voyage](#RoutesTravel)
 		- [Boutons de la barre d'outils "Trajets du voyage"](#RouteToolbar)
 	- [Points de passage du trajet](#RouteWayPoints)
 		- [Boutons de la barre d'outils "Points de passage du trajet"](#WayPointsToolbar)
-		- [Créer un point de passage](#AddWayPoint)
-		- [Ajouter un point de passage avec un glisser/déposer ](#AddWayPointDragDrop)
-		- [Modifier un point de passage ](#ModifyWayPoint)
-		- [Supprimer un point de passage](#DeleteWayPoint)
-		- [Choisir un mode de parcours et un fournisseur d'itinéraire](#ItineraryModeAndProvider)
-		- [Calcul de l'itinéraire](#ComputingItinerary)
-		- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
-		- [Profil d'un trajet](#RouteProfile)
-		- [Itinéraire en train](#TrainItinerary)
 	- [Itinéraire et notes](#ItineraryAndNotes)
 	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)	
+- [Trajets et points de passage](#routes)	
+	- [Créer un point de passage](#AddWayPoint)
+	- [Ajouter un point de passage avec un glisser/déposer ](#AddWayPointDragDrop)
+	- [Modifier un point de passage ](#ModifyWayPoint)
+	- [Supprimer un point de passage](#DeleteWayPoint)
+	- [Choisir un mode de parcours et un fournisseur d'itinéraire](#ItineraryModeAndProvider)
+	- [Calcul de l'itinéraire](#ComputingItinerary)
+	- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
+	- [Profil d'un trajet](#RouteProfile)
+	- [Itinéraire en train](#TrainItinerary)
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
@@ -133,7 +135,7 @@ Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par
 
 **Attention:**
 - La page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
-- MS Edge ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
+- MS Edge (anciennes versions) ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
 
 Le bouton :floppy_disk: à **gauche** de la boite de dialogue permet de sauver les clefs d'accès 
 dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont
@@ -190,6 +192,9 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 <img src="InterfaceFR.PNG" />
 
+<a id="InterfaceToolbar"></a>
+### Barre d'outils en haut de l'interface
+
 En haut de l'interface se trouve une première barre d'outils:
 - le bouton :house: redirige vers votre page d'accueil
 - le bouton ? redirige vers 
@@ -237,6 +242,9 @@ et toutes les notes de ce voyage dans le voyage en cours d'édition
 Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessaire de commencer 
 l'édition de celui-ci avec le bouton &#x21f0; présent dans la liste des trajets.
 
+À noter que, quand Travel & Notes est lancé, le premier trajet est directement édité. Il en est de 
+même quand un nouveau trajet est créé et que le trajet en cours d'édition n'a pas encore été édité.
+
 <a id="WayPointsToolbar"></a>
 #### Boutons de la barre d'outils "Points de passage du trajet"
 
@@ -248,8 +256,39 @@ trajet restauré dans l'état dans lequel il se trouvait avant d'être édité
 - le bouton &#x21c5; inverse l'ordre des points de passage
 - Le bouton :recycle: supprime tous les points de passage
 
+<a id="ItineraryAndNotes"></a>
+### Itinéraire et notes
+
+Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
+
+Lorsque la souris est placée sur une ligne de l'itinéraire, un marqueur est affiché à cet endroit sur 
+la carte.
+
+Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte.
+
+Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
+note précomplétée avec les instructions de changement de direction.
+
+<a id="MoveEditBox"></a>
+### Déplacer une boite d'édition sur l'écran.
+
+Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
+toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
+partie supérieure.
+
+
+
+
+
+
+
+
+<a id="Routes"></a>
+## Trajets et points de passage
+
+
 <a id="AddWayPoint"></a>
-#### Créer un point de passage
+### Créer un point de passage
 
 Pour créer un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez
 "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
@@ -273,13 +312,13 @@ n'est pas possible de transformer le point de départ ou le point de fin en poin
 départ ou le point de fin.
 
 <a id="AddWayPointDragDrop"></a>
-#### Ajouter un point de passage avec un glisser/déposer
+### Ajouter un point de passage avec un glisser/déposer
 
 Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
 En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
 <a id="ModifyWayPoint"></a>
-#### Modifier un point de passage 
+### Modifier un point de passage 
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
@@ -289,14 +328,14 @@ Vous pouvez également ajouter un point de passage via le menu contextuel de la 
 comme étant le dernier point intermédiaire. 
 
 <a id="DeleteWayPoint"></a>
-#### Supprimer un point de passage
+### Supprimer un point de passage
 
 Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu.
 Il n'est pas possible de supprimer le point de départ ni le point de fin. Seul un glisser / déposer 
 est possible.
 
 <a id="ItineraryModeAndProvider"></a>
-#### Choisir un mode de parcours et un fournisseur d'itinéraire
+### Choisir un mode de parcours et un fournisseur d'itinéraire
 
 Utilisez les boutons dans le bas du contrôle pour modifier le mode de déplacement (vélo, piéton, 
 voiture ou train) ainsi que le fournisseur de trajet.
@@ -304,7 +343,7 @@ voiture ou train) ainsi que le fournisseur de trajet.
 <img src="RouterButtons.PNG" />
 
 <a id="ComputingItinerary"></a>
-#### Calcul de l'itinéraire
+### Calcul de l'itinéraire
 
 Lorsque le point de départ et le point de fin sont connus, l'itinéraire est calculé et affiché sur 
 la carte. Il en est de même chaque fois qu'un point intermédiaire est ajouté ou qu'un point de 
@@ -313,7 +352,7 @@ passage est déplacé.
 La description de l'itinéraire est également affichée dans la partie "Itinéraire et notes".
 
 <a id="SaveOrDiscardRoute"></a>
-#### Sauver ou abandonner les modifications
+### Sauver ou abandonner les modifications
 
 Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci avec le bouton :floppy_disk:.
 
@@ -322,7 +361,7 @@ modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
 
 <a id="RouteProfile"></a>
-#### Profil d'un trajet
+### Profil d'un trajet
 
 Lorsque un trajet est calculé avec GraphHopper ou OpenRouteService, il est possible d'afficher un profil de ce trajet.
 Faites un clic droit sur le __trajet__ et sélectionnez "Voir le profil du trajet" dans le menu contextuel.
@@ -334,30 +373,10 @@ Il peut y avoir plusieurs fenêtres affichant des profils ouvertes.
 Il est possible de déplacer un profil sur l'écran en faisant un glisser/déposer de la barre supérieure de la fenêtre.
 
 <a id="TrainItinerary"></a>
-#### Itinéraire en train
+### Itinéraire en train
 
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 pour plus d'explications sur la façon de créer un itinéraire en train.
-
-<a id="ItineraryAndNotes"></a>
-### Itinéraire et notes
-
-Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
-
-Lorsque la souris est placée sur une ligne de l'itinéraire, un marqueur est affiché à cet endroit sur 
-la carte.
-
-Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte.
-
-Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
-note précomplétée avec les instructions de changement de direction.
-
-<a id="MoveEditBox"></a>
-### Déplacer une boite d'édition sur l'écran.
-
-Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
-toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
-partie supérieure.
 
 <a id="Notes1"></a>
 ## __Notes__
