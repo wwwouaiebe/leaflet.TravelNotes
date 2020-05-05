@@ -262,6 +262,18 @@ is closed but data may not be saved.
 - __overpassApiUrl__ : the url to use for the overpass API
 - __nominatim.url__ : the url to use for Nominatim
 - __nominatim.language__ : the language to use for Nominatim
+- __printRouteMap.isEnabled__ : when this value is true, the command to print the maps of a route is active.
+- __printRouteMap.maxTiles__ : the maximum number of tiles that can be used to print a route
+- __printRouteMap.paperWidth__ : the paper width
+- __printRouteMap.paperHeight__ : the paper height
+- __printRouteMap.pageBreak__ : when this value is true, a page break is inserted after each map
+- __printRouteMap.printNotes__ : when this value is true, the notes icon is also printed
+- __printRouteMap.borderWidth__ : the width of the map edge which will be duplicated in each map
+- __printRouteMap.zoomFactor__ :  the zoom to use for printing
+- __printRouteMap.entryPointMarker__ : the options to use for the start of route marker. All options
+from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
+- __printRouteMap.exitPointMarker__ : the options to use for the end of route marker. All options
+from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
 
 #### The contents of the TravelNotesLayers.json file
 
@@ -331,7 +343,8 @@ At a minimum, "layers", "format" and "transparent" should be present.
 - __providerName__ : the name of the service provider. This name will be used to find 
 the access key to the service.
 - __providerKeyNeeded__ : when this value is true, an access key is required to get the map.
-- __attribution__ : the map attributions
+- __attribution__ : the map attributions. For maps based on OpenStreetMap, it is not necessary to add
+the attributions of OpenStreetMap because they are always present in Travel & Notes.
 - __getCapabilitiesUrl__ : the url of the getCapabilities file when it is known.
 
 #### The contents of the  TravelNotesNoteDialog.json file
