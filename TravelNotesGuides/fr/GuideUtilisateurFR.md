@@ -1,5 +1,9 @@
 # Travel & Notes - Guide de l'utilisateur
 
+## [__Pourquoi Travel & Notes__](#WhyTravelNotes)
+## [__Quelques explications sur les termes utilisés__](#SomeExplanations)
+
+<a id="WhyTravelNotes"></a>
 ## __Pourquoi Travel & Notes__
 
 Je pars de temps en temps en voyage en vélo pour plusieurs semaines, parfois dans des régions isolées. 
@@ -16,6 +20,7 @@ en quelques minutes.Il faut aussi pouvoir imprimer le résultat. Dans certaines 
 il n'y a pas toujours de réseau mobile ni de possibilité de recharger une batterie. 
 Une bonne vieille copie papier est souvent précieuse.
 
+<a id="SomeExplanations"></a>
 ## __Quelques explications sur les termes utilisés__
 
 Un **trajet** relie deux points. Sur la carte, il est représenté par une polyligne.
@@ -455,7 +460,7 @@ Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire
 toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
 partie supérieure.
 
-## Menu des fonds de carte
+## __Menu des fonds de carte__
 
 À gauche de l'écran une barre d'outils permet de choisir différents fond de cartes. Seul un petit 
 rectangle noir est visible à l'écran:
@@ -482,7 +487,7 @@ ce que l'on désire voir présent dans le livre de voyage via le menu en haut de
 
 Le bouton "Enrégistrer" permet de sauver le fichier html sur votre PC.
 
-## Préparer un voyage et le consulter depuis internet
+## __Préparer un voyage et le consulter depuis internet__
 
 Il est possible de préparer un voyage, sauver celui-ci dans un fichier sur un serveur web et consulter 
 celui-ci depuis internet.
@@ -503,7 +508,7 @@ Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?
 Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas 
 visible et tous les menus contextuels sont désactivés.
 
-## Viewer
+## __Viewer__
 
 Certains browsers anciens, surtout sur des mobiles, ne comprennent pas toujours tout le code JavaScript
 de Travel & Notes. Dans ce cas, vous pouvez essayer une version simplifiée de Travel & Notes qui permet 
