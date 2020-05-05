@@ -1,7 +1,14 @@
 # Travel & Notes - Guide de l'utilisateur
 
-## [__Pourquoi Travel & Notes__](#WhyTravelNotes)
-## [__Quelques explications sur les termes utilisés__](#SomeExplanations)
+##[__Pourquoi Travel & Notes__](#WhyTravelNotes)
+##[__Quelques explications sur les termes utilisés__](#SomeExplanations)
+##[__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
+##[__Interface__](#Interface)
+##[__Notes__](#Notes)
+##[__Menu des fonds de carte__](#MapsMenu)
+##[__Livre de voyage__](#Roadbook)
+##[__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
+##[__Viewer__](#Viewer)
 
 <a id="WhyTravelNotes"></a>
 ## __Pourquoi Travel & Notes__
@@ -45,6 +52,7 @@ une photo, un texte...
 Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, 
 les trajets et les itinéraires.
 
+<a id="BeforeStart"></a>
 ## __Avant de commencer à utiliser Travel & Notes__
 
 Si vous utilisez Travel & Notes uniquement pour créer des notes, vous pouvez ignorer toute la partie 
@@ -141,6 +149,7 @@ le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans 
 l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
 
+<a id="Interface"></a>
 ## __Interface__
 
 Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
@@ -301,6 +310,7 @@ Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte
 Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
 note précomplétée avec les instructions de changement de direction.
 
+<a id="Notes"></a>
 ## __Notes__
 
 Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage 
@@ -460,6 +470,7 @@ Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire
 toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
 partie supérieure.
 
+<a id="MapsMenu"></a>
 ## __Menu des fonds de carte__
 
 À gauche de l'écran une barre d'outils permet de choisir différents fond de cartes. Seul un petit 
@@ -477,6 +488,7 @@ d'accès qui ont été introduites. Consultez le guide d'installation.
 
 Il est possible de se déplacer dans la barre d'outils en utilisant la roulette de la souris.
 
+<a id="Roadbook"></a>
 ## __Livre de voyage__
 
 Cliquez sur le bouton :clipboard:. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient 
@@ -487,6 +499,7 @@ ce que l'on désire voir présent dans le livre de voyage via le menu en haut de
 
 Le bouton "Enrégistrer" permet de sauver le fichier html sur votre PC.
 
+<a id="PrepareTravel"></a>
 ## __Préparer un voyage et le consulter depuis internet__
 
 Il est possible de préparer un voyage, sauver celui-ci dans un fichier sur un serveur web et consulter 
@@ -508,6 +521,7 @@ Voir l'exemple sur la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?
 Quand un tel fichier est affiché, il n'est pas possible de modifier celui-ci. Le contrôle n'est pas 
 visible et tous les menus contextuels sont désactivés.
 
+<a id="Viewer"></a>
 ## __Viewer__
 
 Certains browsers anciens, surtout sur des mobiles, ne comprennent pas toujours tout le code JavaScript
