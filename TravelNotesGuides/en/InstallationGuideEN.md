@@ -319,7 +319,7 @@ of Belgium in 1771, the other with the Thunderforest OpenCycleMap map
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	}
 ]
 ```
