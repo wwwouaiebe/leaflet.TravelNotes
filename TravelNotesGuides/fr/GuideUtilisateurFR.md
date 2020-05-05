@@ -31,6 +31,9 @@
 	- [Transformer une note de trajet en note de voyage](#RouteToTravelNote)
 	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
 	- [La boite d'édition d'une note](#NoteDlg)
+		- Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
+		- Quleques exemples de notes](#NoteSamples)
+	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
 - [Menu des fonds de carte](#MapsMenu)
 - [Livre de voyage](#Roadbook)
 - [Préparer un voyage et le consulter depuis internet](#PrepareTravel)
@@ -444,6 +447,7 @@ La zone "Adresse" est complétée automatiquement lors de la création de la not
 Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. 
 Le bouton :arrows_counterclockwise: permet cependant de demander une nouvelle géolocalisation à Nominatim.
 
+<a id="SvgNoteFromOsm"></a>
 #### Note de trajet prédéfinie "Icône SVG depuis OSM"
 
 Lorsque l'on crée une note de trajet, il est possible de choisir "Icône SVG depuis OSM" dans la 
@@ -461,6 +465,7 @@ d'une flèche indiquant la direction à suivre. Le nom de la commune / ville ser
 Si un nom de hameau ou de village est trouvé à proximité de l'intersection, celui-ci sera également
 ajouté entre parenthèses.
 
+<a id="NoteSamples"></a>
 #### Quleques exemples de notes 
 
 ##### Une note simple créée à partir d'une note prédéfinie
