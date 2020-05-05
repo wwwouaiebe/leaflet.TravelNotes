@@ -267,6 +267,18 @@ page web est fermée mais que des données pourraient ne pas être sauvegardées
 - __overpassApiUrl__ : l'url à utiliser pour l'overpass API
 - __nominatim.url__ : l'url à utiliser pour Nominatim
 - __nominatim.language__ : la langue à utiliser pour Nominatim
+- __printRouteMap.isEnabled__ : quand cette valeur est true, la commande pour imprimer les cartes d'un trajet est active.
+- __printRouteMap.maxTiles__ : le maximum de tuiles pouvant être utilisées pour imprimer un trajet
+- __printRouteMap.paperWidth__ : la largeur du papier
+- __printRouteMap.paperHeight__ : la hauteur du papier
+- __printRouteMap.pageBreak__ : quand cette valeur est true, un saut de page est inséré après chaque carte
+- __printRouteMap.printNotes__ : quand cette valeur est true, l'icône des notes est également imprimée
+- __printRouteMap.borderWidth__ : la largeur du bord de carte qui sera dupliqué dans chaque carte
+- __printRouteMap.zoomFactor__ :  le zoom à utiliser pour l'impression
+- __printRouteMap.entryPointMarker__ : les options à utiliser pour le marqueur de début de trajet. Toutes les options
+de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) peuvent être utilisées.
+- __printRouteMap.exitPointMarker__ : les options à utiliser pour le marqueur de fin de trajet. Toutes les options
+de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) peuvent être utilisées.
 
 #### Le contenu du fichier TravelNotesLayers.json
 
@@ -338,8 +350,8 @@ Au minimum, "layers", "format" et "transparent" devraient être présents.
 au service.
 - __providerKeyNeeded__ : quand cette valeur est true, une clef d'accès est nécessaire 
 pour obtenir la carte.
-
-- __attribution__ : les attributions de la carte
+- __attribution__ : les attributions de la carte. Pour les cartes basées sur OpenStreetMap, il n'est pas nécessaire d'ajouter 
+les attributions de OpenStreetMap car celles-ci sont toujours présentes dans Travel & Notes.
 - __getCapabilitiesUrl__ : l'url du fichier getCapabilities quand celle-ci est connue.
 
 #### Le contenu du fichier TravelNotesNoteDialog.json
