@@ -145,4 +145,4 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 
 ### Quoi de neuf dans la version 1.9.0
 
-Il est maintenant possible d'imprimer les cartes d'un trajet.
+- Il est maintenant possible d'imprimer les cartes d'un trajet.
