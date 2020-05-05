@@ -533,6 +533,7 @@ in the roadbook via the menu at the top of the page:
 
 The "Save" button saves the html file on your PC. 
 
+<a id="PrepareTravel"></a>
 ## __Prepare a travel and consult it from the internet__
 
 It is possible to prepare a travel, save it in a file on a web server and consult it from the internet.
