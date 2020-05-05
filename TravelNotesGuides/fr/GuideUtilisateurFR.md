@@ -81,6 +81,7 @@ Vous êtes également responsable de l'utilisation qui est faite de vos clefs d'
 qu'il peut y avoir une facturation qui est faite sur la base de ces clefs d'accès. Ne les donnez pas 
 à n'importe qui, ne les laissez pas trainer n'importe où.
 
+<a id="APIKeys"></a>
 ### Comment introduire vos clefs d'accès dans Travel & Notes
 
 Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci,
@@ -171,6 +172,7 @@ L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToo
 - le bouton :globe_with_meridians: active ou désactive la localisation. 
 - le bouton :pushpin: affiche l'interface en permanence.
 
+<a id="RoutesTravel"></a>
 ### Trajets du voyage
 
 Dans cette partie, les différents trajets du voyage ainsi que une barre d'outils sont affichés.
@@ -199,6 +201,7 @@ et toutes les notes de ce voyage dans le voyage en cours d'édition
 - le bouton :clipboard: ouvre le livre de voyage
 - le bouton + ajoute un nouveau trajet au voyage
 
+<a id="RouteWayPoints"></a>
 ### Points de passage du trajet
 
 Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessaire de commencer 
@@ -298,6 +301,7 @@ Il est possible de déplacer un profil sur l'écran en faisant un glisser/dépos
 Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 pour plus d'explications sur la façon de créer un itinéraire en train.
 
+<a id="ItineraryAndNotes"></a>
 ### Itinéraire et notes
 
 Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
@@ -313,38 +317,56 @@ note précomplétée avec les instructions de changement de direction.
 <a id="Notes"></a>
 ## __Notes__
 
+### [__Créer une note de voyage__](#NewTravelNote)
+### [__Créer une note de trajet__](#NewRouteNote)
+### [__consulter une note__](#ViewNote)
+### [__Modifier le contenu d'une note__](#ModifyNote)
+### [__Effacer une note__](#DeleteNote)
+### [__Déplacer l'icône d'une note__](#MoveNote)
+### [__Modifier la latitude et la longitude d'une note__](#LatLngNote)
+### [__Transformer une note de trajet en note de voyage__](#RouteToTravelNote)
+### [__Transformer une note de voyage en note de trajet__](#TravelToRouteNote)
+### [__La boite d'édition d'une note__](#NoteDlg)
+
 Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage 
 est totalement libre et elles seront toutes affichées au début du livre de voyage.
 Les notes de trajet sont toujours positionnées sur un trajet et affichées avec l'itinéraire dans le 
 livre de voyage.
 
+<a id="NewTravelNote"></a>
 ### Créer une note de voyage
 
 Faite un clic droit à l'endroit souhaité sur la __carte__ et sélectionnez "Ajouter une note" dans le 
 menu contextuel.
 
+<a id="NewRouteNote"></a>
 ### Créer une note de trajet
 
 Faite un clic droit à l'endroit souhaité sur le __trajet__ et sélectionnez "Ajouter une note à ce trajet" 
 dans le menu contextuel.
 
+<a id="ViewNote"></a>
 ### consulter une note
 
 Faites un clic gauche sur l'icône de la note.
 
+<a id="ModifyNote"></a>
 ### Modifier le contenu d'une note
 
 Faites un clic droit sur l'icône de la note et sélectionnez "Éditer cette note" dans le menu contextuel.
 
+<a id="DeleteNote"></a>
 ### Effacer une note
 
 Faites un clic droit sur l'icône de la note et sélectionnez "Effacer cette note" dans le menu contextuel.
 
+<a id="MoveNote"></a>
 ### Déplacer l'icône d'une note
 
 Faites un glisser / déposer de la note. Une ligne sera tracée entre l'icône de la note et le point 
 choisi pour l'insertion de la note. La latitude et longitude de la note ne sont pas modifiées.
 
+<a id="LatLngNote"></a>
 ### Modifier la latitude et la longitude d'une note
 
 Déplacez l'icône de la note pour que la ligne soit visible. Ensuite faites un glisser / déposer de 
@@ -353,17 +375,20 @@ l'extrémité libre de cette ligne.
 Une note de trajet a toujours sa latitude et longitude sur le trajet. Lorsque la ligne est déposée, 
 le point le plus proche sur le trajet est recherché et l'extrémité libre de la ligne déplacé vers ce point.
 
+<a id="RouteToTravelNote"></a>
 ### Transformer une note de trajet en note de voyage
 
 Faites un clic droit sur l'icône de la note et sélectionnez "Transformer en note de voyage" dans le menu 
 contextuel. La transformation n'est possible que si aucun trajet n'est en cours d'édition.
 
+<a id="TravelToRouteNote"></a>
 ### Transformer une note de voyage en note de trajet
 
 Faites un clic droit sur l'icône de la note et sélectionnez "Transformer en note de trajet" dans le menu 
 contextuel. La transformation n'est possible que si aucun trajet n'est en cours d'édition. La note sera 
 attachée au trajet le plus proche de celle-ci.
 
+<a id="NoteDlg"></a>
 ### La boite d'édition d'une note
 
 <img src="NoteEditionFR.PNG" />
@@ -448,6 +473,7 @@ Et le résultat dans TravelNotes:
 
 <img src="NotePhoto2FR.PNG" />
 
+<a id="RouteDlg"></a>
 ### La boite d'édition des propriétés d'un trajet
 
 Faites un clic droit sur le trajet et sélectionnez "Propriétés" dans le menu contextuel.
@@ -464,6 +490,7 @@ via les 3 zones d'édition des couleurs.
 Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
 chainer le trajet au voyage.
 
+<a id="MoveEditBox"></a>
 ### Déplacer une boite d'édition sur l'écran.
 
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
