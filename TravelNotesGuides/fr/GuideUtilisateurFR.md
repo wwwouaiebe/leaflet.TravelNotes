@@ -316,7 +316,6 @@ note précomplétée avec les instructions de changement de direction.
 
 <a id="Notes"></a>
 ## __Notes__
-
 ### [__Créer une note de voyage__](#NewTravelNote)
 ### [__Créer une note de trajet__](#NewRouteNote)
 ### [__consulter une note__](#ViewNote)
