@@ -1,14 +1,14 @@
 # Travel & Notes - Guide de l'utilisateur
 
-##[__Pourquoi Travel & Notes__](#WhyTravelNotes)
-##[__Quelques explications sur les termes utilisés__](#SomeExplanations)
-##[__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
-##[__Interface__](#Interface)
-##[__Notes__](#Notes)
-##[__Menu des fonds de carte__](#MapsMenu)
-##[__Livre de voyage__](#Roadbook)
-##[__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
-##[__Viewer__](#Viewer)
+## [__Pourquoi Travel & Notes__](#WhyTravelNotes)
+## [__Quelques explications sur les termes utilisés__](#SomeExplanations)
+## [__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
+## [__Interface__](#Interface)
+## [__Notes__](#Notes)
+## [__Menu des fonds de carte__](#MapsMenu)
+## [__Livre de voyage__](#Roadbook)
+## [__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
+## [__Viewer__](#Viewer)
 
 <a id="WhyTravelNotes"></a>
 ## __Pourquoi Travel & Notes__
