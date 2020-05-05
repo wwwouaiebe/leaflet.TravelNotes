@@ -3,7 +3,12 @@
 - [Pourquoi Travel & Notes](#WhyTravelNotes)
 - [Quelques explications sur les termes utilisés](#SomeExplanations)
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
+	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
 - [Interface](#Interface1)
+	- [Trajets du voyage](#RoutesTravel)
+	- [Points de passage du trajet](#RouteWayPoints)
+	- [Itinéraire et notes](#ItineraryAndNotes)
+	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
@@ -324,6 +329,13 @@ Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte
 Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
 note précomplétée avec les instructions de changement de direction.
 
+<a id="MoveEditBox"></a>
+### Déplacer une boite d'édition sur l'écran.
+
+Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
+toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
+partie supérieure.
+
 <a id="Notes1"></a>
 ## __Notes__
 
@@ -488,13 +500,6 @@ via les 3 zones d'édition des couleurs.
 
 Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
 chainer le trajet au voyage.
-
-<a id="MoveEditBox"></a>
-### Déplacer une boite d'édition sur l'écran.
-
-Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
-toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
-partie supérieure.
 
 <a id="MapsMenu"></a>
 ## __Menu des fonds de carte__
