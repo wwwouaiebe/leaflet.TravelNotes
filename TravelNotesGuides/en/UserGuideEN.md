@@ -5,21 +5,23 @@
 - [Before you start using Travel & Notes](#BeforeStart)
 	- [How to introduce your access keys in Travel & Notes](#APIKeys)
 - [Interface](#Interface1)
+	- [Toolbar buttons on top of the interface](#InterfaceToolbar)
 	- [Travel routes](#RoutesTravel)
 		- [Toolbar buttons "Travel routes](#RouteToolbar)
 	- [Route waypoints](#RouteWayPoints)
 		- [Toolbar buttons "Waypoints of the route"](#WayPointsToolbar)
-		- [Create a waypoint](#AddWayPoint)
-		- [Adding a waypoint with Drag And Drop](#AddWayPointDragDrop)
-		- [Modify a waypoint](#ModifyWayPoint)
-		- [Delete a waypoint](#DeleteWayPoint)
-		- [Choose a route mode and route provider](#ItineraryModeAndProvider)
-		- [Calculation of the itinerary](#ComputingItinerary)
-		- [Save or discard changes](#SaveOrDiscardRoute)
-		- [Route profile](#RouteProfile)
-		- [Itinerary by train](#TrainItinerary)
 	- [Itinerary and notes](#ItineraryAndNotes)
 	- [Move an edit box on the screen](#MoveEditBox)	
+- [Routes and waypoints](#routes)	
+	- [Create a waypoint](#AddWayPoint)
+	- [Adding a waypoint with Drag And Drop](#AddWayPointDragDrop)
+	- [Modify a waypoint](#ModifyWayPoint)
+	- [Delete a waypoint](#DeleteWayPoint)
+	- [Choose a route mode and route provider](#ItineraryModeAndProvider)
+	- [Calculation of the itinerary](#ComputingItinerary)
+	- [Save or discard changes](#SaveOrDiscardRoute)
+	- [Route profile](#RouteProfile)
+	- [Itinerary by train](#TrainItinerary)
 - [Notes](#Notes1)
 	- [Add a travel note](#NewTravelNote)
 	- [Add a route note](#NewRouteNote)
@@ -62,10 +64,11 @@ A **route** connects two points. On the map, it is represented by a polyline.
 An **itinerary** is the description of the various changes of direction needed to follow a route.
 
 A **travel** consists of one or more routes. They do not have to touch each other at their ends.
-There may also be more than two routes starting from the same point. In a travel, some routes may 
-be **chained** between them. In this case, the different chained routes will be considered as only 
-one for the calculation of the distances. One and only one chain maybe created by travel, but it is 
-not mandatory that all routes are included in the chain.
+There may also be more than two routes starting from the same point.
+
+In a travel, some routes may be **chained** between them. In this case, the different chained routes 
+will be considered as only one for the calculation of the distances. One and only one chain maybe 
+created by travel, but it is not mandatory that all routes are included in the chain.
 
 A **note** is a set of information that relates to a specific point on the map or on a route. A note 
 consists of an icon, a tooltip, a free text, an address, a link and a phone number. None of this 
@@ -122,7 +125,7 @@ It is possible to save the access keys in a file, protected by a password or unp
 
 **Attention:**
 - The page must be served in HTTPS to save in a file protected by a password.
-- MS Edge does not allow saving to a password protected file.
+- MS Edge (old versions) does not allow saving to a password protected file.
 
 The button :floppy_disk: on the **left** of the dialog box allows you to save the access keys
 in a password protected file. This must contain at least 12 characters including at least 
@@ -151,8 +154,6 @@ For geeks and paranos also see in the installation guide and in the file TravelN
 - APIKeys.dialogHaveUnsecureButtons to show or hide the buttons :floppy_disk: and :file_folder: on __right__
 
 The old method of entering access keys via the url continues to work:
-
-
 - at the end of the url of the web page loading Travel & Notes: you need to enter a ? followed 
 by the provider name + 'ProviderKey' followed by = followed by your access key. Several access keys 
 can be introduced simultaneously by separating them by a &.
@@ -176,6 +177,9 @@ When the map is displayed, only a small black rectangle is visible in the upper 
 Move the mouse over this rectangle to see the complete interface:
 
 <img src="InterfaceEN.PNG" />
+
+<a id="InterfaceToolbar"></a>
+### Toolbar buttons on top of the interface
 
 At the top of the interface is a first toolbar:
 - the button :house: redirects to your home page
@@ -224,7 +228,8 @@ travel in the current edited travel
 Before you can view the waypoints of a route, it is necessary to start editing it with the &#x21f0; 
 present in the route list.
 
-<img src="RouteEditorEN.PNG" />
+Note that when Travel & Notes is launched, the first trip is directly edited. The same applies 
+when a new route is created and the route being edited has not yet been modified.
 
 <a id="WayPointsToolbar"></a>
 #### Toolbar buttons "Waypoints of the route"
@@ -237,8 +242,29 @@ restored to the state it was in before being edited
 - the button &#x21c5; reverse the order of waypoints
 - the button :recycle: delete all waypoints
 
+<a id="ItineraryAndNotes"></a>
+### Itinerary and notes
+
+This part includes the itinerary of the route as well as notes related to the route.
+
+When the mouse is placed on a line of the itinerary, a marker is displayed at this location on the map.
+
+A left click on a line of the itinerary will zoom in on the location on the map.
+
+Right-clicking on an itinerary line will start editing a new route-related note, pre-filled 
+with change of direction instructions
+
+<a id="MoveEditBox"></a>
+### Move an edit box on the screen
+
+Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
+and drop an edit box by clicking on the bar at the top.
+
+<a id="Routes"></a>
+## Routes and waypoints
+
 <a id="AddWayPoint"></a>
-#### Create a waypoint
+### Create a waypoint
 
 To create a waypoint, right-click on the map at the desired location and choose "Select this point 
 as start point", "Select this point as waypoint" or "Select this point as end point" in the menu:
@@ -260,13 +286,13 @@ the start point or end point into an intermediate point.
 - the button :recycle: delete the waypoint. It is not possible to delete the start point or the end point.
 
 <a id="AddWayPointDragDrop"></a>
-#### Adding a waypoint with Drag And Drop
+### Adding a waypoint with Drag And Drop
 
 Move the mouse over the route to see a temporary waypoint.
 Then by dragging and dropping it, the waypoint is added to the path.
 
 <a id="ModifyWayPoint"></a>
-#### Modify a waypoint
+### Modify a waypoint
 
 Drag and drop the waypoint on the map to change a waypoint
 
@@ -276,13 +302,13 @@ You can also add a waypoint via the context menu of the map. In this case, it wi
 as the last intermediate point.
 
 <a id="DeleteWayPoint"></a>
-#### Delete a waypoint
+### Delete a waypoint
 
 Right click on the waypoint and choose "delete this waypoint" from the menu. It is not possible to 
 delete the start point or the end point. Only a drag and drop is possible.
 
 <a id="ItineraryModeAndProvider"></a>
-#### Choose a route mode and route provider
+### Choose a route mode and route provider
 
 Use the buttons at the bottom of the control to change the route mode (bike, pedestrian, car or train) 
 as well as the route provider.
@@ -290,7 +316,7 @@ as well as the route provider.
 <img src="RouterButtons.PNG" />
 
 <a id="ComputingItinerary"></a>
-#### Calculation of the itinerary
+### Calculation of the itinerary
 
 When the starting point and end point are known, the route is calculated and displayed on the map. 
 It's the same every time an intermediate point is added or a waypoint is moved.
@@ -298,7 +324,7 @@ It's the same every time an intermediate point is added or a waypoint is moved.
 The description of the route is also displayed in the "Itinerary and notes" section.
 
 <a id="SaveOrDiscardRoute"></a>
-#### Save or discard changes
+### Save or discard changes
 
 When editing a route is over, you must save it with the button :floppy_disk:.
 
@@ -307,7 +333,7 @@ the &#x274c; button. Warning, __all__ the changes will be lost, including modifi
 and notes added since the beginning of editing.
 
 <a id="RouteProfile"></a>
-#### Route profile
+### Route profile
 
 When a route is calculated with GraphHopper or OpenRouteService, it is possible to display a profile of this route.
 Right-click on the __route__ and select "View the profile" from the context menu.
@@ -319,28 +345,10 @@ There may be multiple open windows displaying profiles.
 It is possible to move a profile on the screen by dragging and dropping with the top bar of the window.
 
 <a id="TrainItinerary"></a>
-#### Itinerary by train
+### Itinerary by train
 
 Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
 for more explanation on how to create a train route.
-
-<a id="ItineraryAndNotes"></a>
-### Itinerary and notes
-
-This part includes the itinerary of the route as well as notes related to the route.
-
-When the mouse is placed on a line of the itinerary, a marker is displayed at this location on the map.
-
-A left click on a line of the itinerary will zoom in on the location on the map.
-
-Right-clicking on an itinerary line will start editing a new route-related note, pre-filled 
-with change of direction instructions
-
-<a id="MoveEditBox"></a>
-### Move an edit box on the screen
-
-Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
-and drop an edit box by clicking on the bar at the top.
 
 <a id="Notes1"></a>
 ## __Notes__
