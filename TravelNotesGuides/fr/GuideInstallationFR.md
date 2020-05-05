@@ -325,7 +325,7 @@ de la Belgique en 1771, l'autre avec la carte de OpenCycleMap de Thunderforest
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a> | Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	}
 ]
 ```
