@@ -5,6 +5,16 @@
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
 - [Interface](#Interface1)
 - [Notes](#Notes1)
+	- [Créer une note de voyage](#NewTravelNote)
+	- [Créer une note de trajet](#NewRouteNote)
+	- [consulter une note](#ViewNote)
+	- [Modifier le contenu d'une note](#ModifyNote)
+	- [Effacer une note](#DeleteNote)
+	- [Déplacer l'icône d'une note](#MoveNote)
+	- [Modifier la latitude et la longitude d'une note](#LatLngNote)
+	- [Transformer une note de trajet en note de voyage](#RouteToTravelNote)
+	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
+	- [La boite d'édition d'une note](#NoteDlg)
 - [Menu des fonds de carte](#MapsMenu)
 - [Livre de voyage](#Roadbook)
 - [Préparer un voyage et le consulter depuis internet](#PrepareTravel)
@@ -316,16 +326,6 @@ note précomplétée avec les instructions de changement de direction.
 
 <a id="Notes1"></a>
 ## __Notes__
-- [Créer une note de voyage](#NewTravelNote)
-- [Créer une note de trajet](#NewRouteNote)
-- [consulter une note](#ViewNote)
-- [Modifier le contenu d'une note](#ModifyNote)
-- [Effacer une note](#DeleteNote)
-- [Déplacer l'icône d'une note](#MoveNote)
-- [Modifier la latitude et la longitude d'une note](#LatLngNote)
-- [Transformer une note de trajet en note de voyage](#RouteToTravelNote)
-- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
-- [La boite d'édition d'une note](#NoteDlg)
 
 Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage 
 est totalement libre et elles seront toutes affichées au début du livre de voyage.
