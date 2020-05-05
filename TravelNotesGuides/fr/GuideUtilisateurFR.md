@@ -1,14 +1,14 @@
 # Travel & Notes - Guide de l'utilisateur
 
-## [__Pourquoi Travel & Notes__](#WhyTravelNotes)
-## [__Quelques explications sur les termes utilisés__](#SomeExplanations)
-## [__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
-## [__Interface__](#Interface1)
-## [__Notes__](#Notes1)
-## [__Menu des fonds de carte__](#MapsMenu)
-## [__Livre de voyage__](#Roadbook)
-## [__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
-## [__Viewer__](#Viewer)
+- [__Pourquoi Travel & Notes__](#WhyTravelNotes)
+- [__Quelques explications sur les termes utilisés__](#SomeExplanations)
+- [__Avant de commencer à utiliser Travel & Notes__](#BeforeStart)
+- [__Interface__](#Interface1)
+- [__Notes__](#Notes1)
+- [__Menu des fonds de carte__](#MapsMenu)
+- [__Livre de voyage__](#Roadbook)
+- [__Préparer un voyage et le consulter depuis internet__](#PrepareTravel)
+- [__Viewer__](#Viewer)
 
 <a id="WhyTravelNotes"></a>
 ## __Pourquoi Travel & Notes__
@@ -316,16 +316,16 @@ note précomplétée avec les instructions de changement de direction.
 
 <a id="Notes1"></a>
 ## __Notes__
-### [__Créer une note de voyage__](#NewTravelNote)
-### [__Créer une note de trajet__](#NewRouteNote)
-### [__consulter une note__](#ViewNote)
-### [__Modifier le contenu d'une note__](#ModifyNote)
-### [__Effacer une note__](#DeleteNote)
-### [__Déplacer l'icône d'une note__](#MoveNote)
-### [__Modifier la latitude et la longitude d'une note__](#LatLngNote)
-### [__Transformer une note de trajet en note de voyage__](#RouteToTravelNote)
-### [__Transformer une note de voyage en note de trajet__](#TravelToRouteNote)
-### [__La boite d'édition d'une note__](#NoteDlg)
+- [__Créer une note de voyage__](#NewTravelNote)
+- [__Créer une note de trajet__](#NewRouteNote)
+- [__consulter une note__](#ViewNote)
+- [__Modifier le contenu d'une note__](#ModifyNote)
+- [__Effacer une note__](#DeleteNote)
+- [__Déplacer l'icône d'une note__](#MoveNote)
+- [__Modifier la latitude et la longitude d'une note__](#LatLngNote)
+- [__Transformer une note de trajet en note de voyage__](#RouteToTravelNote)
+- [__Transformer une note de voyage en note de trajet__](#TravelToRouteNote)
+- [__La boite d'édition d'une note__](#NoteDlg)
 
 Il y a deux sortes de notes: les notes de voyage et les notes de trajet. La position des notes de voyage 
 est totalement libre et elles seront toutes affichées au début du livre de voyage.
