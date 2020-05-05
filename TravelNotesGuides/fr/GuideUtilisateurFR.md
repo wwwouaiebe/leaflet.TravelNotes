@@ -6,12 +6,12 @@
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
 - [Interface](#Interface1)
 	- [Trajets du voyage](#RoutesTravel)
-	- [Points de passage du trajet](#RouteWayPoints)
 		- [Boutons de la barre d'outils "Trajets du voyage"](#RouteToolbar)
+	- [Points de passage du trajet](#RouteWayPoints)
 		- [Boutons de la barre d'outils "Points de passage du trajet"](#WayPointsToolbar)
 		- [Créer un point de passage](#AddWayPoint)
+		- [Ajouter un point de passage avec un glisser/déposer ](#AddWayPointDragDrop)
 		- [Modifier un point de passage ](#ModifyWayPoint)
-		- [Ajouter un point de passage](#AddWayPoint)
 		- [Supprimer un point de passage](#DeleteWayPoint)
 		- [Choisir un mode de parcours et un fournisseur d'itinéraire](#ItineraryModeAndProvider)
 		- [Calcul de l'itinéraire](#ComputingItinerary)
@@ -23,7 +23,7 @@
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
-	- [consulter une note](#ViewNote)
+	- [Consulter une note](#ViewNote)
 	- [Modifier le contenu d'une note](#ModifyNote)
 	- [Effacer une note](#DeleteNote)
 	- [Déplacer l'icône d'une note](#MoveNote)
@@ -32,7 +32,7 @@
 	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
 	- [La boite d'édition d'une note](#NoteDlg)
 		- [Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
-		- [Quleques exemples de notes](#NoteSamples)
+		- [Quelques exemples de notes](#NoteSamples)
 	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
 - [Menu des fonds de carte](#MapsMenu)
 - [Livre de voyage](#Roadbook)
@@ -272,16 +272,16 @@ n'est pas possible de transformer le point de départ ou le point de fin en poin
 - Le bouton :recycle: supprime le point de passage. Il n'est pas possible de supprimer le point de 
 départ ou le point de fin.
 
+<a id="AddWayPointDragDrop"></a>
+#### Ajouter un point de passage avec un glisser/déposer
+
+Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
+En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
+
 <a id="ModifyWayPoint"></a>
 #### Modifier un point de passage 
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
-
-<a id="AddWayPoint"></a>
-#### Ajouter un point de passage
-
-Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
-En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
 <img src="AddWayPointFR.PNG" />
 
@@ -380,7 +380,7 @@ Faite un clic droit à l'endroit souhaité sur le __trajet__ et sélectionnez "A
 dans le menu contextuel.
 
 <a id="ViewNote"></a>
-### consulter une note
+### Consulter une note
 
 Faites un clic gauche sur l'icône de la note.
 
@@ -466,7 +466,7 @@ Si un nom de hameau ou de village est trouvé à proximité de l'intersection, c
 ajouté entre parenthèses.
 
 <a id="NoteSamples"></a>
-#### Quleques exemples de notes 
+#### Quelques exemples de notes 
 
 ##### Une note simple créée à partir d'une note prédéfinie
 
