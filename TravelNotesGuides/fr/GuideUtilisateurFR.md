@@ -316,7 +316,7 @@ Une icône verte (pour le point de départ), orange (pour un point intermédiair
 rouge (pour le point de fin) est ajoutée à la carte à l'endroit choisi et le point de passage complété,
 soit avec les coordonnées de l'endroit, soit avec l'adresse.
 
-Um point intermédiaire ajouté via le menu contextuel sera toujours ajouté à la fin de la 
+Un point intermédiaire ajouté via le menu contextuel sera toujours ajouté à la fin de la 
 liste des points intermédiaires.
 
 L'ordre des points de passage est également indiqué (A pour le point de départ, B pour le point 
@@ -336,12 +336,12 @@ départ ou le point de fin.
 Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire gris.
 En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
+<img src="AddWayPointFR.PNG" />
+
 <a id="ModifyWayPoint"></a>
 ### Modifier un point de passage 
 
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
-
-<img src="AddWayPointFR.PNG" />
 
 <a id="DeleteWayPoint"></a>
 ### Supprimer un point de passage
@@ -375,6 +375,8 @@ Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci avec le bo
 Il est également possible d'abandonner l'édition d'un trajet et de revenir à la situation avant 
 modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
 perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
+
+Sauver ou abandonner les modifications peut aussi se faire depuis le menu contextuel du trajet.
 
 <a id="RouteProfile"></a>
 ### Profil d'un trajet
