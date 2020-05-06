@@ -148,7 +148,7 @@ If a password protected file named **APIKeys** is placed in the same directory a
 Travel & Notes on the server, Travel & Notes will ask you for the password when you open it 
 in order to use the keys contained in this file.
 
-For geeks and paranos also see in the installation guide and in the file TravelNotesConfig.json:
+For geeks and paranos also see in the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson) and in the file TravelNotesConfig.json:
 - APIKeys.showDialogButton to show or hide the :key: button in the toolbar
 - APIKeys.saveToSessionStorage to save or not the keys in the sessionStorage
 - APIKeys.showAPIKeysInDialog to show or hide the keys as a password in the dialog box
@@ -457,14 +457,14 @@ to the route closest to it.
 <img src="NoteEditionEN.PNG" />
 
 At the top of the box, a drop-down list allows you to choose predefined notes. It is possible to 
-modify this list. See the installation guide.
+modify this list. See the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson).
 
 The :file_folder: button allows you to load your own file with predefined notes in Travel & Notes. 
-Consult the installation guide to find out how create this file.
+Consult the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson) to find out how create this file.
 
 The div p span and a buttons add html tags &lt;div&gt;, &lt;p&gt;, &lt;span&gt; et &lt;a&gt; to 
 edit boxes. All other buttons are editable and also allow you to insert predefined text into the 
-edit boxes. See the installation guide.
+edit boxes. See the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson).
 
 Each edit box can contain plain text or html, except for the "Link" area.
 
@@ -551,7 +551,7 @@ Move the mouse over this rectangle to display the entire toolbar:
 
 For each background map there is a button in the toolbar. 
 The composition of the toolbar depends on the maps defined in the TravelNotesLayers.json file 
-as well as the access keys that have been introduced. Consult the installation guide.
+as well as the access keys that have been introduced. Consult the [installation guide](InstallationGuideEN.md#TravelNotesLayersJson).
 
 It is possible to move around in the toolbar using the mouse wheel.
 
