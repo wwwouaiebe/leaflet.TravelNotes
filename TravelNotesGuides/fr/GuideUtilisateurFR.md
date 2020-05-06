@@ -482,14 +482,14 @@ attachée au trajet le plus proche de celle-ci.
 <img src="NoteEditionFR.PNG" />
 
 Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible 
-de modifier cette liste. Consultez le guide d'installation.
+de modifier cette liste. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
 Le bouton :file_folder: vous permet de charger votre propre fichier avec des notes prédéfinies dans 
-Travel & Notes. Consultez le guide d'installation pour savoir comment créer ce fichier.
+Travel & Notes. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson). pour savoir comment créer ce fichier.
 
 Les boutons div p span et a permettent d'ajouter les balises html &lt;div&gt;, &lt;p&gt;, &lt;span&gt;
 et &lt;a&gt; dans les zones d'édition. Tous les autres boutons sont modifiables et permettent aussi 
-d'insérer du texte prédéfini dans les zones d'édition. Consultez le guide d'installation.
+d'insérer du texte prédéfini dans les zones d'édition. [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
 Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien".
 
@@ -577,7 +577,7 @@ Amenez la souris sur ce rectangle pour afficher toute la barre d'outils:
 
 Pour chaque fond de carte un bouton est présent dans la barre d'outils. La composition de la barre 
 d'outils dépend des cartes définies dans le fichier TravelNotesLayers.json ainsi que des clefs 
-d'accès qui ont été introduites. Consultez le guide d'installation.
+d'accès qui ont été introduites. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesLayersJson).
 
 Il est possible de se déplacer dans la barre d'outils en utilisant la roulette de la souris.
 
