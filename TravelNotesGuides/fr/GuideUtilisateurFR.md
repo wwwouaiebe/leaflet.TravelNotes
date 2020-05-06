@@ -420,7 +420,7 @@ chainer le trajet au voyage.
 Attention: cette commande est expérimentale. Elle peut ne pas fonctionner avec votre installation de Travel & Notes
 si vous avez ajouté d'autres éléments à la page. De plus, tous les browsers n'ont pas implémenté toutes
 les balises css nécessaires. Si cette commande ne vous convient pas, vous pouvez la désactiver à partir 
-fu fichier TravelNotesConfig.json (printRouteMap.isEnabled). 
+du fichier TravelNotesConfig.json (printRouteMap.isEnabled). 
 Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson).
 
 Faites un clic droit sur le trajet pour lequel vous voulez imprimer les cartes et sélectionnez 
