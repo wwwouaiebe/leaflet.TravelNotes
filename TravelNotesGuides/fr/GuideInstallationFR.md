@@ -92,6 +92,10 @@ __addProvider ( provider )__
 
 Cette méthode est utilisée uniquement par les plugins
 
+__showInfo ( info )__
+
+Cette méthode affiche à l'écran le texte contenu dans "info" 
+
 __addMapContextMenu ( leftButton, rightButton )__
 
 Cette méthode ajoute les menus contextuels gauche et droit
@@ -361,9 +365,9 @@ Quelques explications sur le contenu du fichier pour chaque fond de carte
 - __service__ : le type de service: wms ou wmts
 - __url__: l'url à utiliser pour obtenir la carte. Les valeurs {s}, {x}, {y} et {z} 
 seront remplacées par Leaflet, la valeur {providerKey} sera remplacée par Travel & Notes par la clef d'accès
-éventuelle pour de service. Ne jamais remplacer directement {providerKey} par votre propre clef d'accès!!!
+éventuelle pour ce fournisseur. Ne jamais remplacer directement {providerKey} par votre propre clef d'accès!!!
 - __wmsOptions__ : ce sont les options à passer à Leaflet pour un service wms. 
-Voir la documentation de TileLayer.WMS de Leaflet.
+Voir la documentation de [TileLayer.WMS](https://leafletjs.com/reference-1.6.0.html#tilelayer-wms) de Leaflet.
 Au minimum, "layers", "format" et "transparent" devraient être présents.
 - __bounds__ : le coin inférieur gauche et supérieur droit de la carte.
 - __minZoom__ : le plus petit zoom possible pour cette carte
@@ -447,7 +451,7 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 <a id="myTravelNotesNoteDialogJson"></a>
 ### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder: dans la boite d'édition des notes
 
-L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
+L'organisation de ce fichier est identique aux fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json
 
 <a id="Viewer"></a>
 ## Utiliser le viewer
