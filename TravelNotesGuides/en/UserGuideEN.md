@@ -24,6 +24,7 @@
 	- [Route profile](#RouteProfile)
 	- [Itinerary by train](#TrainItinerary)
 	- [Editing the properties of a route](#RouteDlg)
+	- [Print route maps](#PrintRouteMaps)
 - [Notes](#Notes1)
 	- [Add a travel note](#NewTravelNote)
 	- [Add a route note](#NewRouteNote)
@@ -390,6 +391,77 @@ color editing areas.
 
 It is also possible to change the width of the route as well as the type of line and also chaining 
 the route.
+
+<a id="PrintRouteMaps"></a>
+### Print route maps
+
+Please note: this command is experimental. It may not work with your Travel & Notes installation 
+if you have added other elements to the page. In addition, not all browsers have implemented all 
+the necessary css tags. If this command does not suit you, you can disable it from the 
+TravelNotesConfig.json file (printRouteMap.isEnabled).
+See the [installation guide](GuideInstallationFR.md#TravelNotesConfigJson).
+
+Right-click on the route for which you want to print the maps and select "Print the maps for this route" 
+from the context menu.
+
+The edit box is displayed:
+
+<img src="PrintRouteMapDlgEN.PNG" />
+
+"Paper width" et "Paper height": this is the width and height of the printable area of the paper.
+ You must check this with your printer.
+
+"Border width": it is an area around the map and inside it which will be reprinted in the 
+following map.
+
+"Zoom" : the zoom to use for maps. It is independent of the zoom used to display the map before launching 
+the command. For reasons of performance of the tile servers, it is not possible to use a zoom 
+larger than 15.
+
+"Insert a page break": when this box is checked, a page break is inserted after each map.
+
+"Print notes" when this box is checked, the notes icon is printed on the map.
+
+When the edit box is closed with the "ok" button, the map and controls are replaced by views of the map that 
+have the desired dimensions and two buttons are present at the top right:
+
+<img src="PrintRouteMapToolbar.PNG" />
+
+The button &#x1F5A8;&#xFE0F; will launch the print command from your browser and the button &#x274c; 
+will cancel printing and redisplay the map.
+
+When the print command of the browser is closed, the print views will also be closed and 
+the map redisplayed.
+
+All the default values of the edit box can be modified in the TravelNotesConfig.json file.
+See the [installation guide](GuideInstallationFR.md#TravelNotesConfigJson).
+
+Avoid overloading the tile servers. Issue this command only if you really need it.
+Decreasing the paper size, the margin size and the zoom will also decrease the number of tiles required.
+
+When the edit box is closed, the program calculates the number of tiles required. If this number is too 
+large, the command is stopped.
+
+#### Some tips for printing with a browser based on Chrome (Brave, Vivaldi, MS Edge latest version, Chromium, Chrome)
+
+- Check the box "Insert a page break"
+- indicate as "paper height" the actual height of your paper minus the top and bottom printing margins minus 1 mm
+- for geeks: you can insert a css file in the html page with a css @page rule to fix the dimensions,
+ orientation and margins of the paper:
+```
+@page {
+  size: A4 landscape;
+  margin: 7mm;
+}
+```
+
+#### Some tips for printing with Firefox
+
+- Never check the "Insert page break" box or use a css @page rule. If you do this, the route will not be 
+printed correctly after the page break.
+- indicate as "paper height" the actual height of your paper minus the top and bottom printing 
+margins minus 1 mm (to be checked with your printer ...). Check that everything is correct with the
+ "Print preview" command in Firefox.
 
 <a id="Notes1"></a>
 ## __Notes__
