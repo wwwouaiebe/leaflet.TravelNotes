@@ -1,12 +1,30 @@
 # Travel & Notes - Installation guide
 
+- [Where to install Travel & Notes?](#WhereInstall)
+- [Installation Guide for Nulls](#GuideNull)
+- [Installation guide for geeks](#GuideGeeks)
+	- [What to do in the HTML file?](#HtmlPage)
+	- [Some additional explanations on Javascript](#MoreOnJS)
+		- [The object L.travelNotes](#LTravelNotes)
+		- [L.travelNotes methods](#LTravelNotesMethods)
+		- [L.travelNotes properties](#LTravelNotesProperties)
+	- [The contents of the TravelNotesConfig.json file](#TravelNotesConfigJson)
+	- [The contents of the TravelNotesLayers.json file](#TravelNotesLayersJson)
+	- [The contents of the TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json file](#TravelNotesNoteDialogJson)
+	- [The contents of the configuration file that can be loaded with the button :file_folder: in the notes dialog](#myTravelNotesNoteDialogJson)
+- [Using the viewer](#Viewer)
+- [Translations](#Translations)
+- [Plugins](#Plugins)
+
+<a id="WhereInstall"></a>
 ## Where to install Travel & Notes?
 
 For security reasons, it is no longer possible to use Travel & Notes from a computer disc. 
 It is essential to go through either a remote web server, or a local LAMP or MAMP web server.
 See https://www.mozilla.org/en-US/security/advisories/mfsa2019-21/#CVE-2019-11730
 
-### Installation Guide for Nulls
+<a id="GuideNull"></a>
+## Installation Guide for Nulls
 
 No great computer skills? If the demo suits you, you can download it by going to the gh-pages branch.
 Still too complicated? follow this 
@@ -15,9 +33,11 @@ which allows you to download the demo.
 Open the zip file and install its contents in a directory on your server and open the 
 index.html file. That's all :-).
 
-### Installation guide for geeks
+<a id="GuideGeeks"></a>
+## Installation guide for geeks
 
-#### What to do in the HTML file?
+<a id="HtmlPage"></a>
+### What to do in the HTML file?
 
 Travel & Notes uses [Leaflet](http://leafletjs.com/) to display the map. You must therefore download 
 and install Leaflet.
@@ -56,13 +76,16 @@ And in the &lt;body&gt; load Leaflet, TravelNotes and TravelNotes plugins
 
 Travel & Notes will automatically create the map and all necessary controls.
 
-#### Some additional explanations on Javascript
+<a id="MoreOnJS"></a>
+### Some additional explanations on Javascript
 
-##### L.travelNotes
+<a id="LTravelNotes"></a>
+#### The object L.travelNotes
 
 This object allows you to communicate with TravelNotes from Javascript
 
-##### L.travelNotes methods
+<a id="LTravelNotesMethods"></a>
+#### L.travelNotes methods
 
 __addProvider ( provider )__
 
@@ -79,7 +102,8 @@ is made on the map
 - rightButton : when this parameter is true, a pop-up menu is displayed when a right click 
 is made on the map
 
-##### L.travelNotes properties
+<a id="LTravelNotesProperties"></a>
+#### L.travelNotes properties
 
 - __userData__ : a Javascript object containing data not related to TravelNotes and which will 
 be saved in the travel file
@@ -102,7 +126,8 @@ be saved in the travel file
 
 -__map__ : return a reference to the leaflet object map
 
-#### The TravelNotesConfig.json file
+<a id="TravelNotesConfigJson"></a>
+### The contents of the TravelNotesConfig.json file
 
 This file is used to modify certain behavior of TravelNotes. Be careful when editing this file. 
 You must follow __all__ the rules for writing json files.
@@ -275,7 +300,8 @@ from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemar
 - __printRouteMap.exitPointMarker__ : the options to use for the end of route marker. All options
 from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
 
-#### The contents of the TravelNotesLayers.json file
+<a id="TravelNotesLayersJson"></a>
+### The contents of the TravelNotesLayers.json file
 
 This file contains the definitions of background maps of the "Maps" toolbar
 These definitions can be adapted.
@@ -347,7 +373,8 @@ the access key to the service.
 the attributions of OpenStreetMap because they are always present in Travel & Notes.
 - __getCapabilitiesUrl__ : the url of the getCapabilities file when it is known.
 
-#### The contents of the  TravelNotesNoteDialog.json file
+<a id="TravelNotesNoteDialogJson"></a>
+### The contents of the TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json file
 
 This file contains the definitions of the buttons and list of predefined icons of the note editing box. 
 These definitions can be adapted to your needs.
@@ -411,11 +438,13 @@ Each object in the "preDefinedIconsList" collection has five properties:
 - __width__ : the width of the icon in pixels
 - __height__ : the height of the icon in pixels
 
-#### The contents of the configuration file that can be loaded with the button :file_folder:
+<a id="myTravelNotesNoteDialogJson"></a>
+### The contents of the configuration file that can be loaded with the button :file_folder: in the notes dialog
 
 The organization of this file is identical to the file TravelNotesNoteDialog.json
 
-### Using the viewer
+<a id="Viewer"></a>
+## Using the viewer
 
 The viewer allows you to view files that have been made with TravelNotes. It does not have 
 controls or menus and therefore does not allow modification of a travel. Its advantage lies in the 
@@ -446,7 +475,8 @@ one for Leaflet and the other for the viewer.
 The TravelNotesViewer.min.css and TravelNotesViewer.min.js files as well as the configuration JSON 
 files are in the "viewer" sub-directory
 
-### Translations
+<a id="Translations"></a>
+## Translations
 
 Travel & Notes is translated into 'fr' and 'en'. If you want to translate Travel & Notes into 
 another language, copy the TravelNotesEN.json file and rename it according to the language used. Then,
@@ -457,6 +487,7 @@ To load Travel & Notes in another language, add to the url lng = and the languag
 The organization of these files is as close as possible to that of 
 [GNU getText](https://en.wikipedia.org/wiki/Gettext)
 
-### Plugins
+<a id="Plugins"></a>
+## Plugins
 
 To use a plugin, simply load it from the html page using the tag <script>
