@@ -25,6 +25,7 @@
 	- [Profil d'un trajet](#RouteProfile)
 	- [Itinéraire en train](#TrainItinerary)
 	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
+	- [Imprimer les cartes d'un trajet](#PrintRouteMaps)
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
@@ -412,6 +413,72 @@ via les 3 zones d'édition des couleurs.
 
 Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
 chainer le trajet au voyage.
+
+<a id="PrintRouteMaps"></a>
+### Imprimer les cartes d'un trajet
+
+Attention: cette commande est expérimentale. Elle peut ne pas fonctionner avec votre installation de Travel & Notes
+si vous avez ajouté d'autres éléments à la page. De plus, tous les browsers n'ont pas implémentés toutes
+les balises css nécessaires. Si cette commande ne vous convient pas, vous pouvez la désactiver à partir 
+fu fichier TravelNotesConfig.json (printRouteMap.isEnabled). 
+Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson).
+
+Faites un clic droit sur le trajet pour lequel vous voulez imprimer les cartes et sélectionnez 
+"Imprimer les cartes de ce trajet" dans le menu contextuel.
+
+La boite d'édition est affichée:
+
+<img src="PrintRouteMapDlgFR.PNG" />
+
+"Largeur du papier" et "hauteur du papier": il s'agit de la largeur et hauteur de la zone imprimable
+du papier. Vous devez contrôler celle-ci avec votre imprimante.
+
+"Dimension de la marge": c'est une zone autour de la carte qui sera répétée dans chacune des cartes.
+
+"Zoom" : le zoom à utiliser pour les cartes.Il est indépendant du zoom utilisé pour afficher la carte 
+avant le lancement de la commande. Pour des raisons de performance des serveurs de tuiles, ce zoom
+est limité à 15.
+
+"Insérer un saut de page": quand cette case est cochée, un saut de page est inséré après chaque carte.
+
+"Imprimer les notes du trajet" quand cette case est cochée, l'icône des notes est imprimée sur la carte.
+
+Lorsque la boite d'édition est fermée avec le bouton "ok", la carte et les contrôles sont remplacés par
+des vues de la carte qui ont les dimensions souhaitées et deux boutons sont présents en haut à droite:
+
+<img src="PrintRouteMapToolbar.PNG" />
+
+Le bouton &#x1F5A8;&#xFE0F; lancera la commande d'impression de votre browser et le bouton &#x274c;
+annulera l'impression et réaffichera la carte.
+
+Lorsque la commande d'impression du browser est fermée, les vues d'impression seront également fermées 
+et la carte réaffichée.
+
+Tooutes les valeurs par défaut de la boite d'édition peuvent être modifiées dans le fichier TravelNotesConfig.json.
+Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson).
+
+Évitez de surcharger les serveurs de tuiles. ne lancez cette commande que si vous en avez réellement besoin.
+Diminuer les dimensions du papier, la dimension de la marge et le zoom diminuera également le nombre de tuiles
+nécessaires.
+
+Lorsque la boite d'édition est fermée, le programme calcule le nombre de tuiles nécessaire. Si ce nombre est
+trop important, la commande est arrêtée.
+
+#### Quelques astuces pour imprimer avec un browser basé sur Chrome ( Brave, Vivaldi, MS Edge dernière version,
+Chromium, Chrome )
+
+- Cochez la case "Insérer un saut de page"
+- indiquez comme "hauteur de papier" la hauteur réelle de votre papier moins les marges d'impression haut et bas
+moins 1 mm
+- pour les geeks: vous pouvez insérer un fichier css dans la page html avec une règle css @page pour fixer les
+marges, orientation et dimension du papier.
+
+#### Quelques astuces pour imprimer avec Firefox
+
+- Ne jamais cocher la case "Insérer un saut de page" ni utiliser une règle css @page. Si vous faites cela,
+le trajet ne sera pas imprimé correctement après le saut de page.
+- indiquez comme "hauteur de papier" la hauteur réelle de votre papier moins les marges d'impression haut et bas
+moins 1 mm (à vérifier avec votre imprimante...)
 
 <a id="Notes1"></a>
 ## __Notes__
