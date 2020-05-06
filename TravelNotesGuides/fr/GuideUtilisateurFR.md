@@ -297,6 +297,12 @@ partie supérieure.
 <a id="Routes"></a>
 ## Trajets et points de passage
 
+Pour ajouter, modifier ou supprimer des points de passage, il est nécessaire d'éditer le trajet depuis l'interface
+ou via le menu contextuel du trajet si celui-ci existe déjà.
+
+Toutes les autres modifications (notes, propriétés ou nom du trajet) peuvent se faire, que le trajet 
+soit édité ou non.
+
 <a id="AddWayPoint"></a>
 ### Créer un point de passage
 
@@ -324,7 +330,7 @@ départ ou le point de fin.
 <a id="AddWayPointDragDrop"></a>
 ### Ajouter un point de passage avec un glisser/déposer
 
-Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire.
+Amenez la souris sur le trajet pour voir apparaître un point de passage temporaire gris.
 En faisant ensuite un glisser / déposer de celui-ci, le point de passage est ajouté au trajet.
 
 <a id="ModifyWayPoint"></a>
