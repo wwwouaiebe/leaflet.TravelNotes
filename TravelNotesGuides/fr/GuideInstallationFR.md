@@ -1,5 +1,22 @@
 # Travel & Notes - Guide d'installation
 
+- [Où installer Travel & Notes?](#WhereInstall)
+- [Guide d'installation pour les null](#GuideNull)
+- [Guide d'installation pour les geeks](#GuideGeeks)
+	- [Que faut-il faire dans le fichier HTML?](#HtmlPage)
+	- [Quelques explications complémentaires sur le Javascript](#MoreOnJS)
+		- [L'objet L.travelNotes](#LTravelNotes)
+		- Méthodes de L.travelNotes](#LTravelNotesMethods)
+		- Propriétés de L.travelNotes](#LTravelNotesProperties)
+	- [Le contenu du fichier TravelNotesConfig.json](#TravelNotesConfigJson)
+	- [Le contenu du fichier TravelNotesLayers.json](#TravelNotesLayersJson)
+	- [Le contenu des fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json](#TravelNotesNoteDialogJson)
+	- [Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:](#myTravelNotesNoteDialogJson)
+- [Utiliser le viewer](#Viewer)
+- [Traductions](#Translations)
+- [Plugins](#Plugins)
+
+<a id="WhereInstall"></a>
 ## Où installer Travel & Notes?
 
 Pour des raisons de sécurité, il n'est plus possible d'utiliser Travel & Notes depuis le disque d'un 
@@ -7,7 +24,8 @@ ordinateur. Il est indispensable de passer par l'intermédiaire soit d'un serveu
 d'un serveur web local de type LAMP or MAMP.
 Voir https://www.mozilla.org/en-US/security/advisories/mfsa2019-21/#CVE-2019-11730
 
-### Guide d'installation pour les null
+<a id="GuideNull"></a>
+## Guide d'installation pour les null
 
 Pas de grandes connaissances informatiques? Si la démo vous convient, vous pouvez télécharger celle-ci 
 en vous rendant dans la branche gh-pages.
@@ -16,9 +34,11 @@ Encore trop compliqué? suivez directement ce
  qui vous permet de télécharger la démo. Ouvrez le fichier zip et installez son contenu dans 
  un répertoire sur votre serveur et ouvrez le fichier index.html. That's all :-).
 
-### Guide d'installation pour les geeks
+<a id="GuideGeeks"></a>
+## Guide d'installation pour les geeks
 
-#### Que faut-il faire dans le fichier HTML?
+<a id="HtmlPage"></a>
+### Que faut-il faire dans le fichier HTML?
 
 Travel & Notes utilise [Leaflet](http://leafletjs.com/) pour afficher la carte. Vous devez donc 
 télécharger et installer Leaflet.
@@ -57,13 +77,16 @@ Et dans le &lt;body&gt; chargez les Javascript de Leaflet, de TravelNotes et des
 
 Travel & Notes créera automatiquement la carte et tous les contrôles nécessaires.
 
-#### Quelques explications complémentaires sur le Javascript
+<a id="MoreOnJS"></a>
+### Quelques explications complémentaires sur le Javascript
 
-##### L.travelNotes
+<a id="LTravelNotes"></a>
+#### L'objet L.travelNotes
 
 Cet objet permet de communiquer avec TravelNotes à partir de Javascript
 
-##### Méthodes de L.travelNotes
+<a id="LTravelNotesMethods"></a>
+#### Méthodes de L.travelNotes
 
 __addProvider ( provider )__
 
@@ -80,7 +103,8 @@ est fait sur la carte
 - rightButton : quand ce paramètre est true, un menu contextuel est affiché quand un clic droit 
 est fait sur la carte
 
-##### Propriétés de L.travelNotes
+<a id="LTravelNotesProperties"></a>
+#### Propriétés de L.travelNotes
 
 - __userData__ : un objet Javascript contenant des données non liées à TravelNotes et qui sera 
 sauvé dans le fichier du voyage
@@ -103,7 +127,8 @@ sauvé dans le fichier du voyage
 
 - __map__ : renvoie une référence vers l'objet leaflet map
 
-#### Le fichier TravelNotesConfig.json
+<a id="TravelNotesConfigJson"></a>
+### Le contenu du fichier TravelNotesConfig.json
 
 Ce fichier permet de modifier certains comportements de TravelNotes. Soyez prudent quand vous 
 modifiez ce fichier. Vous devez suivre __toutes__ les règles d'écriture des fichiers json.
@@ -280,7 +305,8 @@ de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarke
 - __printRouteMap.exitPointMarker__ : les options à utiliser pour le marqueur de fin de trajet. Toutes les options
 de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) peuvent être utilisées.
 
-#### Le contenu du fichier TravelNotesLayers.json
+<a id="TravelNotesLayersJson"></a>
+### Le contenu du fichier TravelNotesLayers.json
 
 Ce fichier contient les définitions des fonds de carte de la barre d'outils "Cartes"
 Ces définitions peuvent être adaptées.
@@ -354,7 +380,8 @@ pour obtenir la carte.
 les attributions de OpenStreetMap car celles-ci sont toujours présentes dans Travel & Notes.
 - __getCapabilitiesUrl__ : l'url du fichier getCapabilities quand celle-ci est connue.
 
-#### Le contenu du fichier TravelNotesNoteDialog.json
+<a id="TravelNotesNoteDialogJson"></a>
+### Le contenu des fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json
 
 Ce fichier contient les définitions des boutons et de la liste des icônes prédéfinies de la boite 
 d'édition des notes. Ces définitions peuvent être adaptées à vos besoins.
@@ -417,11 +444,13 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 - __width__ : la largeur de l'icône en pixels
 - __height__ : la hauteur de l'icône en pixels
 
-#### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:
+<a id="myTravelNotesNoteDialogJson"></a>
+### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:
 
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
 
-### Utiliser le viewer
+<a id="Viewer"></a>
+## Utiliser le viewer
 
 Le viewer permet de visualiser des fichiers qui ont été réalisés avec TravelNotes. Il ne possède
 pas de contrôles ni de menus et ne permet donc pas la modification d'un voyage.
@@ -453,7 +482,8 @@ une pour Leaflet et l'autre pour le viewer:
 Les fichiers TravelNotesViewer.min.css et TravelNotesViewer.min.js ainsi que les fichiers JSON
 de configuration se trouvent dans le sous-répertoire "viewer".
 
-### Traductions
+<a id="Translations"></a>
+## Traductions
 
 Travel & Notes est traduit en 'fr' et en 'en'. Si vous désirez traduire Travel & Notes dans une autre 
 langue, copiez le fichier TravelNotesEN.json et renommez-le en fonction de la langue utilisée. Ensuite,
@@ -464,7 +494,8 @@ Pour charger Travel & Notes dans une autre langue, ajoutez à l'url lng= et la l
 L'organisation de ces fichiers est la plus proche possible de celle de 
 [GNU getText](https://en.wikipedia.org/wiki/Gettext)
 
-### Plugins
+<a id="Plugins"></a>
+## Plugins
 
 Pour utiliser un plugin, chargez simplement celui-ci à partir de la page html en utilisant 
 le tag <script>
