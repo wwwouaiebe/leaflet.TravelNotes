@@ -554,7 +554,7 @@ function newPrintFactory ( ) {
 				id : 'TravelNotes-PrintToolbar-CancelButton',
 				className : 'TravelNotes-Control-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
-				innerHTML : '&#x274c'
+				innerHTML : '&#x274c;'
 			},
 			printToolbar
 		)
