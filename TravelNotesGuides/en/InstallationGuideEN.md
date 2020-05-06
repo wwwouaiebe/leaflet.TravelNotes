@@ -91,6 +91,10 @@ __addProvider ( provider )__
 
 This method is only used by plugins
 
+__showInfo ( info )__
+
+This method displays the text contained in 'info' on the screen
+
 __addMapContextMenu ( leftButton, rightButton )__
 
 This method adds the left and right context menus
@@ -357,7 +361,7 @@ Some explanations on the content of the file for each background map
 Leaflet, the value {providerKey} will be replaced by Travel & Notes by the possible access key 
 for service. Never replace {providerKey} directly with your own access key !!!
 - __wmsOptions__ : these are the options to pass to Leaflet for a wms service. 
-See the Leaflet TileLayer.WMS documentation.
+See the Leaflet [TileLayer.WMS](https://leafletjs.com/reference-1.6.0.html#tilelayer-wms) documentation.
 At a minimum, "layers", "format" and "transparent" should be present.
 - __bounds__ : the lower left and upper right corner of the map.
 - __minZoom__ : the smallest possible zoom for this map
@@ -441,7 +445,7 @@ Each object in the "preDefinedIconsList" collection has five properties:
 <a id="myTravelNotesNoteDialogJson"></a>
 ### The contents of the configuration file that can be loaded with the button :file_folder: in the notes dialog
 
-The organization of this file is identical to the file TravelNotesNoteDialog.json
+The organization of this file is identical to the files TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json
 
 <a id="Viewer"></a>
 ## Using the viewer
