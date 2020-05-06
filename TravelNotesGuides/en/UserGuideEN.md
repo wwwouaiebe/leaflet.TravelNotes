@@ -298,7 +298,7 @@ A green icon (for the start point), orange (for a waypoint) or red (for the end 
 the map at the chosen location and the waypoint is completed, either with the coordinates of the place, 
 or with the address.
 
-Um intermediate waypoint added via the context menu will always be added at the end of the
+An intermediate waypoint added via the context menu will always be added at the end of the
 list of intermediate waypoints. 
 
 The order of the waypoints is also indicated (A for the start point, B for the ending point and a number
@@ -317,12 +317,12 @@ the start point or end point into an intermediate point.
 Move the mouse over the route to see a temporary gray waypoint.
 Then by dragging and dropping it, the waypoint is added to the path.
 
+<img src="AddWayPointEN.PNG" />
+
 <a id="ModifyWayPoint"></a>
 ### Modify a waypoint
 
 Drag and drop the waypoint on the map to change a waypoint
-
-<img src="AddWayPointEN.PNG" />
 
 <a id="DeleteWayPoint"></a>
 ### Delete a waypoint
@@ -354,6 +354,8 @@ When editing a route is over, you must save it with the button :floppy_disk:.
 It is also possible to abort editing a route and return to the situation before changes with 
 the &#x274c; button. Warning, __all__ the changes will be lost, including modified properties 
 and notes added since the beginning of editing.
+
+Saving or discarding the modifications can also be done from the contextual menu of the journey.
 
 <a id="RouteProfile"></a>
 ### Route profile
