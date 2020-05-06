@@ -280,6 +280,12 @@ and drop an edit box by clicking on the bar at the top.
 <a id="Routes"></a>
 ## Routes and waypoints
 
+To add, modify or delete waypoints, it is necessary to edit the route from the interface or via the 
+contextual menu of the route if it already exists.
+
+All other modifications (notes, properties or name of the route) can be made, whether the route
+is edited or not.
+
 <a id="AddWayPoint"></a>
 ### Create a waypoint
 
@@ -291,6 +297,9 @@ as start point", "Select this point as waypoint" or "Select this point as end po
 A green icon (for the start point), orange (for a waypoint) or red (for the end point) is added to 
 the map at the chosen location and the waypoint is completed, either with the coordinates of the place, 
 or with the address.
+
+Um intermediate waypoint added via the context menu will always be added at the end of the
+list of intermediate waypoints. 
 
 The order of the waypoints is also indicated (A for the start point, B for the ending point and a number
 for the waypoints).
@@ -305,7 +314,7 @@ the start point or end point into an intermediate point.
 <a id="AddWayPointDragDrop"></a>
 ### Adding a waypoint with Drag And Drop
 
-Move the mouse over the route to see a temporary waypoint.
+Move the mouse over the route to see a temporary gray waypoint.
 Then by dragging and dropping it, the waypoint is added to the path.
 
 <a id="ModifyWayPoint"></a>
@@ -314,9 +323,6 @@ Then by dragging and dropping it, the waypoint is added to the path.
 Drag and drop the waypoint on the map to change a waypoint
 
 <img src="AddWayPointEN.PNG" />
-
-You can also add a waypoint via the context menu of the map. In this case, it will always be added
-as the last intermediate point.
 
 <a id="DeleteWayPoint"></a>
 ### Delete a waypoint
