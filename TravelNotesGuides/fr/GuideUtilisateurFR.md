@@ -11,6 +11,8 @@
 	- [Points de passage du trajet](#RouteWayPoints)
 		- [Boutons de la barre d'outils "Points de passage du trajet"](#WayPointsToolbar)
 	- [Itinéraire et notes](#ItineraryAndNotes)
+	- [Barre d'outils des modes de parcours et des fournisseurs d'itinéraire](#RouterButtons)
+- [Boites d'édition](#EditBoxes)
 	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)	
 - [Trajets et points de passage](#routes)	
 	- [Créer un point de passage](#AddWayPoint)
@@ -243,7 +245,7 @@ Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessair
 l'édition de celui-ci avec le bouton &#x21f0; présent dans la liste des trajets.
 
 À noter que, quand Travel & Notes est lancé, le premier trajet est directement édité. Il en est de 
-même quand un nouveau trajet est créé et que le trajet en cours d'édition n'a pas encore été édité.
+même quand un nouveau trajet est créé et que le trajet en cours d'édition n'a pas encore été modifié.
 
 <a id="WayPointsToolbar"></a>
 #### Boutons de la barre d'outils "Points de passage du trajet"
@@ -269,23 +271,31 @@ Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte
 Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
 note précomplétée avec les instructions de changement de direction.
 
-<a id="MoveEditBox"></a>
-### Déplacer une boite d'édition sur l'écran.
+<a id="RouterButtons"></a>
+### Barre d'outils des modes de parcours et des fournisseurs d'itinéraire
+
+Les différents modes de parcours (vélo, piéton, voiture,train ou ligne) ainsi que les différents 
+fournisseurs d'itinéraires sont sélectionnés sur cette barre d'outils.
+
+<img src="RouterButtons.PNG" />
+
+Les boutons bleus à gauche permettent de sélectionner le mode de parcours, les autres boutons 
+sélectionnent les fournisseurs d'itinéraire.
+
+Seuls les boutons utilisables sont visibles dans la barre d'outils:
+- les modes de parcours dépendent du fournisseur d'itinéraire sélectionné
+- un fournisseur d'itinéraire n'est présent que si le plugin correspondant est installé
+et si la clef d'accès pour ce fournisseur est connue (qund une clef d'accès est nécessaire).
+
+<a id="EditBoxes"></a>
+## Boites d'édition
 
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
 toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
 partie supérieure.
 
-
-
-
-
-
-
-
 <a id="Routes"></a>
 ## Trajets et points de passage
-
 
 <a id="AddWayPoint"></a>
 ### Créer un point de passage
