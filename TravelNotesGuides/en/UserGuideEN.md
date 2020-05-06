@@ -11,7 +11,8 @@
 	- [Route waypoints](#RouteWayPoints)
 		- [Toolbar buttons "Waypoints of the route"](#WayPointsToolbar)
 	- [Itinerary and notes](#ItineraryAndNotes)
-	- [Move an edit box on the screen](#MoveEditBox)	
+	- [Route modes and route providers toolbar](#RouterButtons)
+- [Edit boxes](#EditBoxes)
 - [Routes and waypoints](#routes)	
 	- [Create a waypoint](#AddWayPoint)
 	- [Adding a waypoint with Drag And Drop](#AddWayPointDragDrop)
@@ -254,8 +255,24 @@ A left click on a line of the itinerary will zoom in on the location on the map.
 Right-clicking on an itinerary line will start editing a new route-related note, pre-filled 
 with change of direction instructions
 
-<a id="MoveEditBox"></a>
-### Move an edit box on the screen
+<a id="RouterButtons"></a>
+### Route modes and route providers toolbar
+
+The different route modes (bicycle, pedestrian, car, train or line) as well as the different 
+route providers are selected on this toolbar.
+
+<img src="RouterButtons.PNG" />
+
+The blue buttons on the left allow you to select the route mode, the other buttons select 
+the route providers.
+
+Only the buttons that can be used are visible in the toolbar:
+- the route modes depend on the route provider selected
+- a route provider is only present if the corresponding plugin is installed and if the access key 
+for this provider is known (when an access key is required).
+
+<a id="EditBoxes"></a>
+## Edit boxes
 
 Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
 and drop an edit box by clicking on the bar at the top.
