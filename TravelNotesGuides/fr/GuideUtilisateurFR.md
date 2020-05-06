@@ -316,6 +316,9 @@ Une icône verte (pour le point de départ), orange (pour un point intermédiair
 rouge (pour le point de fin) est ajoutée à la carte à l'endroit choisi et le point de passage complété,
 soit avec les coordonnées de l'endroit, soit avec l'adresse.
 
+Um point intermédiaire ajouté via le menu contextuel sera toujours ajouté à la fin de la 
+liste des points intermédiaires.
+
 L'ordre des points de passage est également indiqué (A pour le point de départ, B pour le point 
 d'arrivée et un chiffre pour les points intermédiaires).
 
@@ -339,9 +342,6 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 Faites un glisser / déposer du point de passage sur la carte pour modifier un point de passage
 
 <img src="AddWayPointFR.PNG" />
-
-Vous pouvez également ajouter un point de passage via le menu contextuel de la carte. Dans ce cas, il sera toujours ajouté 
-comme étant le dernier point intermédiaire. 
 
 <a id="DeleteWayPoint"></a>
 ### Supprimer un point de passage
