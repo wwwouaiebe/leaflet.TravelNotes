@@ -11,7 +11,7 @@
 	- [Le contenu du fichier TravelNotesConfig.json](#TravelNotesConfigJson)
 	- [Le contenu du fichier TravelNotesLayers.json](#TravelNotesLayersJson)
 	- [Le contenu des fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json](#TravelNotesNoteDialogJson)
-	- [Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:](#myTravelNotesNoteDialogJson)
+	- [Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder: dans la boite d'édition des notes](#myTravelNotesNoteDialogJson)
 - [Utiliser le viewer](#Viewer)
 - [Traductions](#Translations)
 - [Plugins](#Plugins)
@@ -445,7 +445,7 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 - __height__ : la hauteur de l'icône en pixels
 
 <a id="myTravelNotesNoteDialogJson"></a>
-### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder:
+### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder: dans la boite d'édition des notes
 
 L'organisation de ce fichier est identique au fichier TravelNotesNoteDialog.json
 
