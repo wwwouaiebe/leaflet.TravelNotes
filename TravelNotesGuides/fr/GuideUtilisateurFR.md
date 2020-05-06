@@ -159,7 +159,7 @@ Si un fichier protégé par un mot de passe et nommé **APIKeys** est placé dan
 Travel & Notes sur le serveur, Travel & Notes vous demandera le mot de passe à l'ouverture pour 
 pouvoir utiliser les clefs contenues dans ce fichier.
 
-Pour les geeks et les paranos voyez aussi ,dans le guide d'installation et dans le fichier 
+Pour les geeks et les paranos voyez aussi ,dans le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson) et dans le fichier 
 TravelNotesConfig.json:
 - APIKeys.showDialogButton pour afficher ou masquer le bouton :key: dans la barre d'outils
 - APIKeys.saveToSessionStorage pour sauver ou non les clefs dans le sessionStorage
