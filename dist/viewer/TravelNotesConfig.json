@@ -192,7 +192,7 @@
 	"printRouteMap":
 	{
 		"isEnabled" : true,
-		"maxTiles" : 720,
+		"maxTiles" : 120,
 		"paperWidth":287,
 		"paperHeight":200,
 		"pageBreak":false,

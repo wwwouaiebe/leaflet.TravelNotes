@@ -73,6 +73,7 @@ import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import { theTranslator } from '../UI/Translator.js';
 
 import { LAT_LNG, TWO } from '../util/Constants.js';
 
@@ -356,6 +357,7 @@ function newTravelNotes ( ) {
 			myEventDispatcher.dispatch ( 'reducerouteui' );
 		}
 		theTravelNotesData.map.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
+		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}
 
 	/*
