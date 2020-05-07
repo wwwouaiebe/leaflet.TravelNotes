@@ -177,7 +177,12 @@ function startup ( ) {
 				if ( values [ TEST_CRYPTO_PROMISE_POS ] ) {
 					values [ TRAVEL_NOTES_CFG_POS ].haveCrypto = true;
 				}
-
+				if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+					values [ TRAVEL_NOTES_CFG_POS ].layersToolbarUI.theDevil.addButton = false;
+					values [ TRAVEL_NOTES_CFG_POS ].errorUI.showHelp = true;
+					const PRINT_MAX_TILES = 120;
+					values [ TRAVEL_NOTES_CFG_POS ].printRouteMap.maxTiles = PRINT_MAX_TILES;
+				}
 				theConfig.overload ( values [ TRAVEL_NOTES_CFG_POS ] );
 
 				theTravelNotesData.providers.forEach (

@@ -207,7 +207,6 @@ function newAPIKeysManager ( ) {
 	function myOnOkDecrypt ( data ) {
 		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
 		myResetAPIKeys ( APIKeys );
-		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}
 
 	/*
@@ -228,7 +227,6 @@ function newAPIKeysManager ( ) {
 	*/
 
 	function myOnServerFile ( data ) {
-		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - gives a password for the APIKeys file or cancel' ) );
 		newDataEncryptor ( ).decryptData (
 			data,
 			myOnOkDecrypt,

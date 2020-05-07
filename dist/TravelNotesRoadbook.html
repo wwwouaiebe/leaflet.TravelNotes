@@ -23,15 +23,37 @@
 		</div>
 		<script>
 
-
-				/*!
-				leaflet.travelnotes - version 1.9.0 
-				build 00357 - 2020-05-04T12:26:13+0200 
-				Copyright 2017 2020 wwwouaiebe 
-				Contact: http://www.ouaie.be/
-				Sources: https://github.com/wwwouaiebe/leaflet.TravelNotes 
-				License: GPL-3.0
-				*/
+				/**
+				 * 
+				 * @source: https://github.com/wwwouaiebe/leaflet.TravelNotes
+				 * 
+				 * @licstart  The following is the entire license notice for the
+				 * JavaScript code in this page.
+				 * 
+				 * leaflet.travelnotes - version 1.9.0
+				 * Build 00369 - 2020-05-07T17:47:39+0200 
+				 * Copyright 2017 2020 wwwouaiebe 
+				 * Contact: https://www.ouaie.be/
+				 * License: GPL-3.0
+				 * 
+				 * The JavaScript code in this page is free software: you can
+				 * redistribute it and/or modify it under the terms of the GNU
+				 * General Public License (GNU GPL) as published by the Free Software
+				 * Foundation, either version 3 of the License, or (at your option)
+				 * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+				 * without even the implied warranty of MERCHANTABILITY or FITNESS
+				 * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+				 * 
+				 * As additional permission under GNU GPL version 3 section 7, you
+				 * may distribute non-source (e.g., minimized or compacted) forms of
+				 * that code without the copy of the GNU GPL normally required by
+				 * section 4, provided you include this license notice and a URL
+				 * through which recipients can access the Corresponding Source.
+				 * 
+				 * @licend  The above is the entire license notice
+				 * for the JavaScript code in this page.
+				 * 
+				 */
 
 
 				!function(){"use strict";const e=function(){let e=new Map;return{setTranslations:t=>(t=t,void t.forEach(t=>e.set(t.msgid,t.msgstr))),getText:(t,o)=>(function(t,o){let n=e.get(t);return o&&n&&Object.getOwnPropertyNames(o).forEach(e=>n=n.replace("{"+e+"}",o[e])),n||t})(t,o)};var t}();const t=1;const o=function(){let e=null;return Object.seal({getOpenPromise:()=>new Promise(function(o,n){if(e)return void o();let r=window.indexedDB.open("TravelNotesDb",t);r.onerror=function(){e=null,n(new Error("Not possible to open the db"))},r.onsuccess=function(t){e=t.target.result,o()},r.onupgradeneeded=function(t){(e=t.target.result).createObjectStore("Travels",{keyPath:"UUID"})}}),getReadPromise:t=>(t=t,new Promise(function(o,n){if(!e)return void n(new Error("Database not opened"));let r=e.transaction(["Travels"],"readonly");r.onerror=function(){n(new Error("Transaction error"))},r.objectStore("Travels").get(t).onsuccess=function(e){o(e.target.result?e.target.result.data:null)}})),getWritePromise:(t,o)=>(function(t,o){return new Promise(function(n,r){if(!e)return void r(new Error("Database not opened"));let s=null;try{s=e.transaction(["Travels"],"readwrite")}catch(e){return void r(e)}s.onerror=function(){r(new Error("Transaction error"))},s.objectStore("Travels").put({UUID:t,data:o}).onsuccess=function(){n()}})})(t,o),closeDb:t=>(function(t){if(!e)return;if(!t)return e.close(),void(e=null);let o=e.transaction(["Travels"],"readwrite");o.onerror=function(){};let n=o.objectStore("Travels").delete(t);n.onerror=function(){e.close(),e=null},n.onsuccess=function(){e.close(),e=null}})(t)});var o}(),n=(Object.freeze({fixed:2,invalid:-1,defaultValue:0}),Object.freeze({refusedByUser:-1,disabled:0,inactive:1,active:2}),Object.freeze({fixed:2,defaultValue:0}),Object.freeze({defaultValue:0,fixed:6}),Object.freeze({notEdited:0,editedNoChange:1,editedChanged:2}),Object.freeze({margin:100,height:500,width:1e3,yDeltaText:30,xDeltaText:10,vScales:[1,2,5,10,20,50,100,200,500,1e3,2e3,5e3],hScales:[1,2,5,10,20,50,100,200,500,1e3,2e3,5e3,1e4,2e4,5e4,1e5]}),0);function r(){let e=document.getElementById("TravelNotes-Travel-ShowNotes").checked,t=document.getElementsByClassName("TravelNotes-Roadbook-Travel-Notes-Row");for(let o=n;o<t.length;o++)e?t[o].classList.remove("TravelNotes-Roadbook-Hidden-Row"):t[o].classList.add("TravelNotes-Roadbook-Hidden-Row")}function s(){let e=document.getElementById("TravelNotes-Routes-ShowNotes").checked,t=document.getElementsByClassName("TravelNotes-Roadbook-Route-Notes-Row");for(let o=n;o<t.length;o++)e?t[o].classList.remove("TravelNotes-Roadbook-Hidden-Row"):t[o].classList.add("TravelNotes-Roadbook-Hidden-Row")}function a(){let e=document.getElementById("TravelNotes-Routes-ShowManeuvers").checked,t=document.getElementsByClassName("TravelNotes-Roadbook-Route-Maneuvers-Row");for(let o=n;o<t.length;o++)e?t[o].classList.remove("TravelNotes-Roadbook-Hidden-Row"):t[o].classList.add("TravelNotes-Roadbook-Hidden-Row")}document.getElementById("TravelNotes-Travel-ShowNotes").addEventListener("change",r),document.getElementById("TravelNotes-Routes-ShowNotes").addEventListener("change",s),document.getElementById("TravelNotes-Routes-ShowManeuvers").addEventListener("change",a);let l=new URLSearchParams(document.location.search.substring(1)),d=l.get("lng"),i=l.get("page");i?(document.getElementById("TravelNotes-SaveFile").addEventListener("click",function(){try{let e=window.URL.createObjectURL(new File(["<!DOCTYPE html>",document.documentElement.outerHTML],{type:"text/plain"})),t=document.createElement("a");t.setAttribute("href",e),t.setAttribute("download",document.getElementsByClassName("TravelNotes-Roadbook-Travel-Header-Name")[n].innerHTML+"-Roadbook.html"),t.style.display="none",document.body.appendChild(t),t.click(),document.body.removeChild(t),window.URL.revokeObjectURL(e)}catch(e){console.log(e||"An error occurs when saving the file")}}),o.getOpenPromise().then(()=>o.getReadPromise(i)).then(e=>{document.getElementById("TravelNotes").innerHTML=e,r(),s(),a()}).catch(e=>console.log(e||"An error occurs when loading the content")),window.addEventListener("storage",()=>{o.getReadPromise(i).then(e=>{e?(document.getElementById("TravelNotes").innerHTML=e,r(),s(),a()):document.getElementById("TravelNotes").innerHTML=""}).catch(e=>console.log(e||"An error occurs when loading the content"))}),window.addEventListener("unload",()=>{o.closeDb()})):document.getElementById("TravelNotes-Menu").removeChild(document.getElementById("TravelNotes-ButtonContainer")),d&&function(){const e=200,t=4,o=2e4;return{getJsonPromise:(n,r)=>(n=n,r=r,new Promise(function(s,a){let l=new XMLHttpRequest;l.timeout=o,l.ontimeout=function(){a("XMLHttpRequest TimeOut. File : "+l.responseURL)},l.onreadystatechange=function(){if(t===l.readyState)if(e===l.status){let e=null;try{e=JSON.parse(l.responseText)}catch(e){a(e.message+" File: "+l.responseURL)}s(e)}else a("Error XMLHttpRequest - File : "+l.responseURL)},l.open("GET",n,!0),r&&r.forEach(e=>l.setRequestHeader(e.headerName,e.headerValue)),l.overrideMimeType("application/json"),l.send(null)})),getBinaryPromise:(t,n)=>(function(t,n){return new Promise(function(r,s){let a=new XMLHttpRequest;a.timeout=o,a.ontimeout=function(){s("XMLHttpRequest TimeOut. File : "+a.responseURL)},a.onload=function(){if(e===a.status){let e=a.response;e?r(e):s("Error XMLHttpRequest - File : "+a.responseURL)}else s("Error XMLHttpRequest - File : "+a.responseURL)},a.open("GET",t,!0),n&&n.forEach(e=>a.setRequestHeader(e.headerName,e.headerValue)),a.responseType="arraybuffer",a.send(null)})})(t,n)};var n,r}().getJsonPromise(window.location.href.substr(n,window.location.href.lastIndexOf("/")+1)+"TravelNotes"+d.toUpperCase()+".json").then(t=>{e.setTranslations(t),document.getElementById("TravelNotes-Travel-ShowNotesLabel").innerHTML=e.getText("Roadbook - show travel notes"),document.getElementById("TravelNotes-Routes-ShowManeuversLabel").innerHTML=e.getText("Roadbook - show maneuver"),document.getElementById("TravelNotes-Routes-ShowNotesLabel").innerHTML=e.getText("Roadbook - show routes notes"),document.getElementById("TravelNotes-SaveFile").value=e.getText("Roadbook - Save")}).catch(e=>console.log(e||"An error occurs when loading translation")),r(),s(),a()}();

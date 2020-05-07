@@ -692,15 +692,11 @@
 		"msgstr" : "sec"
 	},
 	{
-		"msgid" : "Help - gives a password for the APIKeys file or cancel",
-		"msgstr" : "<p>Le mot de passe est <span style='color:red'>Travel&Notes160</span></p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper ou OpenRouteService, introduisez le mot de passe, terminez avec le bouton &#x1f197; et ensuite ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511;) pour entrer votre clef d'accès.</p><p>Si vous ne possédez pas de clef d'accès continuez en appuyant sur le bouton &#x274c;</p>"
-	},
-	{
 		"msgid" : "Help - Continue with interface",
-		"msgstr" : "Déplacez votre souris sur le rectangle noir <span style='color:white;background-color:black'> Travel &amp; Notes </span> dans le coin supérieur droit pour afficher l'interface"
+		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir <span style='color:white;background-color:black'> Travel &amp; Notes </span> dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511; en haut de l'interface) pour entrer votre clef d'accès.</p>"
 	},
 	{
 		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper' ou 'OpenRouteservice' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p><p>Utilisez le bouton + pour ajouter d'autres fournisseurs</p>"
+		"msgstr" : "<p>Utilisez le bouton + pour ajouter un fournisseur.</p><p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper' ou 'OpenRouteservice' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p>"
 	}
 ]
