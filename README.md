@@ -15,8 +15,6 @@
 If you have a Mapbox, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, GraphHopper and/or OpenRouteService. 
 Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
-And with Mapbox, GraphHopper and OpenRouteService, you can search a route for car, bike or pedestrian.
-
 see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
 This demo displays a travel with a route and some icons and without any control, so the user cannot modify the travel.
 
@@ -88,8 +86,6 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 
 Si vous disposez d'une API key pour Mapbox, GraphHopper ou OpenRouteService, vous pouvez également utiliser cette démo avec Mapbox, GraphHopper et / ou OpenRouteService.
 Ajoutez simplement votre API key via la boite de dialogue de gestion des clefs d'accès ( bouton :key: sur la barre d'outils en haut du contrôle ).
-
-Et avec Mapbox, Graphhopper et OpenRouteService, vous pouvez rechercher un trajet pour une voiture, un vélo ou un piéton.
 
 Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
 qui affiche un voyage avec un trajet et des icônes, sans aucun contrôle, et donc sans possibilité de modifications.
