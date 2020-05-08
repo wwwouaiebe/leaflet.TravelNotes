@@ -99,7 +99,8 @@ function newPrintFactory ( ) {
 	/*
 	--- myComputePrintSize function -----------------------------------------------------------------------------------
 
-	This function ...
+	This function compute the print size in lat and lng
+	transforming the dimension given in mm by the user.
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -135,7 +136,7 @@ function newPrintFactory ( ) {
 	/*
 	--- myIsFirstPointOnView function ---------------------------------------------------------------------------------
 
-	This function ...
+	This function test if firstItineraryPoint is on the frame of currentView
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -161,7 +162,8 @@ function newPrintFactory ( ) {
 	/*
 	--- myIsItineraryHorOrVer function --------------------------------------------------------------------------------
 
-	This function ...
+	This function compute if the line defined by firstItineraryPoint  lastItineraryPoint
+	is horizontal or vertical. If yes, the intersection of the line and currentView is returned
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -193,7 +195,8 @@ function newPrintFactory ( ) {
 	/*
 	--- myHaveViewOnlyOnePoint function ---------------------------------------------------------------------------
 
-	This function ...
+	This function test if currentView is only a point. If yes an intermediatePoint is computed
+	to exetend the view to the maximun possible
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -225,6 +228,39 @@ function newPrintFactory ( ) {
 	*/
 
 	function myComputeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+
+		/*
+		we have to find the intersection of the line segment 'firstItineraryPoint -> lastItineraryPoint' with
+		the rectangle defined by currentView.lowerLeft, currentView.upperRight.
+		We know also that firstItineraryPoint is inside currentView
+		but perhaps on the frame and that lastItineraryPoint is outside the frame so the intersection is
+		always between firstItineraryPoint and lastItineraryPoint
+
+		Equation of the a line :
+			y = coefA * x + coefB
+			or
+			x = ( y - coefB ) / coefA
+
+		So we have :
+
+			firstItineraryPoint.lat = coefA * firstItineraryPoint.lng + coefB
+			and
+			lastItineraryPoint.lat = coefA * lastItineraryPoint.lng + coefB
+
+		and after some transformations:
+			coefA = ( firstItineraryPoint.lat - lastItineraryPoint.lat ) / ( firstItineraryPoint.lng - lastItineraryPoint.lng )
+			coefB = firstItineraryPoint.lat - ( coefA * firstItineraryPoint.lng )
+
+		Notice: we have some computing problems when
+		- currentView.lowerLeft === currentView.upperRight. We cannot find an intersection and we have to compute a
+		intermediatePoint outside the currentView
+		- firstItineraryPoint is on the frame (or really near the frame ) of currentView -> the intersection
+		is the firstItineraryPoint
+		- the line segment 'firstItineraryPoint -> lastItineraryPoint' is horizontal or vertical
+		(we have to divide by 0)
+
+		So we test first the 3 problems and then we compute the intersection if needed
+		*/
 
 		let intermediatePoint = myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint );
 		if ( intermediatePoint ) {
@@ -313,7 +349,7 @@ function newPrintFactory ( ) {
 	/*
 	--- myComputeViews function ---------------------------------------------------------------------------------------
 
-	This function ...
+	This function compute the different views needed to print the maps
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -322,17 +358,24 @@ function newPrintFactory ( ) {
 
 		myViews = [];
 
+		// Iteration on the route
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		let done = itineraryPointsIterator.done;
+
+		// First view is created with the first point
 		let currentView = {
 			bottomLeft : { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng },
 			upperRight : { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng }
 		};
 		let entryPoint = { lat : itineraryPointsIterator.value.lat, lng : itineraryPointsIterator.value.lng };
 		let previousItineraryPoint = itineraryPointsIterator.value;
+
+		// we go to the next point
 		done = itineraryPointsIterator.done;
 		let currentItineraryPoint = itineraryPointsIterator.value;
 		while ( ! done ) {
+
+			// a temporary view is created, extending the current view with the current itinerary point
 			let tmpView = {
 				bottomLeft : {
 					lat : Math.min ( currentView.bottomLeft.lat, currentItineraryPoint.lat ),
@@ -343,14 +386,18 @@ function newPrintFactory ( ) {
 					lng : Math.max ( currentView.upperRight.lng, currentItineraryPoint.lng )
 				}
 			};
+
+			// computing the temporary view size...
 			let tmpViewSize = [
 				tmpView.upperRight.lat - tmpView.bottomLeft.lat,
 				tmpView.upperRight.lng - tmpView.bottomLeft.lng
 			];
 
+			// and comparing with the desired max view size
 			if ( myPrintSize [ LAT ] > tmpViewSize [ LAT ] && myPrintSize [ LNG ] > tmpViewSize [ LNG ] ) {
 
-				// itineraryPoint is inside the view...
+				// the current itineraryPoint is inside the temporary view.
+				// the temporary view becomes the current view and we go to the next itinerary point
 				currentView = tmpView;
 				previousItineraryPoint = itineraryPointsIterator.value;
 				done = itineraryPointsIterator.done;
@@ -363,12 +410,15 @@ function newPrintFactory ( ) {
 			}
 			else {
 
-				// itineraryPoint is outside the view...
+				// the itineraryPoint is outside the view. We have to compute an intermediate
+				// point (where the route intersect with the max size view).
 				previousItineraryPoint = myComputeIntermediatePoint (
 					currentView,
 					previousItineraryPoint,
 					currentItineraryPoint
 				);
+
+				// The view is extended to the intermediate point
 				currentView.bottomLeft = {
 					lat : Math.min ( currentView.bottomLeft.lat, previousItineraryPoint.lat ),
 					lng : Math.min ( currentView.bottomLeft.lng, previousItineraryPoint.lng )
@@ -378,9 +428,14 @@ function newPrintFactory ( ) {
 					lng : Math.max ( currentView.upperRight.lng, previousItineraryPoint.lng )
 				};
 
+				// entry point and exit point are computed and added to the view
 				currentView.entryPoint = entryPoint;
 				currentView.exitPoint = previousItineraryPoint;
+
+				// and the view added to the list view
 				myViews.push ( currentView );
+
+				// and a new view is created
 				currentView = {
 					bottomLeft : { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng },
 					upperRight : { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng }
@@ -388,13 +443,17 @@ function newPrintFactory ( ) {
 				entryPoint = { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng };
 			}
 			if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
+
+				// verifying that we don't have to mutch views
 				done = true;
 			}
-		}
+		} // end of while ( ! done )
 	}
 
 	/*
 	--- myGetLayer function -------------------------------------------------------------------------------------------
+
+	This function creates a leaflet layer with the same map that the main map
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -427,7 +486,7 @@ function newPrintFactory ( ) {
 	/*
 	--- myGetNotesMarkers function ------------------------------------------------------------------------------------
 
-	This function ...
+	This function creates markers for notes
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -464,7 +523,7 @@ function newPrintFactory ( ) {
 	/*
 	--- myPrintView function ------------------------------------------------------------------------------------------
 
-	This function ...
+	This function creates a print view
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -480,6 +539,8 @@ function newPrintFactory ( ) {
 			},
 			myBody
 		);
+
+		// setting the size given by theuser in mm
 		viewDiv.setAttribute (
 			'style',
 			'width:' +
@@ -488,8 +549,14 @@ function newPrintFactory ( ) {
 				myPrintData.paperHeight +
 				'mm;'
 		);
+
+		// creating markers for notes
 		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
+
+		// adding the leaflet map layer
 		layers.push ( myGetLayer ( ) );
+
+		// adding entry point and exit point markers
 		layers.push (
 			L.circleMarker (
 				[ view.entryPoint.lat, view.entryPoint.lng ],
@@ -502,7 +569,11 @@ function newPrintFactory ( ) {
 				theConfig.printRouteMap.exitPointMarker
 			)
 		);
+
+		// adding the route
 		layers.push ( myRoutePolyline );
+
+		// creating the map
 		L.map (
 			viewId,
 			{
@@ -523,7 +594,7 @@ function newPrintFactory ( ) {
 	/*
 	--- myCreateToolbar function ---------------------------------------------------------------------------------------
 
-	This function ...
+	This function creates the toolbar with the print and cancel button
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -564,12 +635,14 @@ function newPrintFactory ( ) {
 	/*
 	--- myPrintViews function -----------------------------------------------------------------------------------------
 
-	This function ...
+	This function add the print views to the html page
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myPrintViews ( ) {
+
+		// adding classes to the body
 		myBody.classList.add ( 'TravelNotes-PrintViews' );
 
 		if ( myPrintData.pageBreak ) {
@@ -578,6 +651,8 @@ function newPrintFactory ( ) {
 
 		window.addEventListener ( 'afterprint', onAfterPrint, true );
 
+		// creating the polyline for the route
+		// why we can create the polyline only once and we have to create markers and layers for each view?
 		let latLng = [];
 		let pointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		while ( ! pointsIterator.done ) {
@@ -591,6 +666,7 @@ function newPrintFactory ( ) {
 			}
 		);
 
+		// adding views
 		myViewCounter = ZERO;
 		myViews.forEach ( myPrintView );
 	}
