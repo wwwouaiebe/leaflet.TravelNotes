@@ -47,7 +47,7 @@ body
 	z-index: 1200;
 }
 
-.TravelNotes-PrintViews #TravelNotes
+.TravelNotes-PrintViews-Hidden
 {
 	width: 0;
 	height: 0;
@@ -74,30 +74,19 @@ body
 	overflow:none;
 }
 
-.TravelNotes-PrintViews #Map
-{
-	width: 0;
-	height: 0;
-	margin: 0;
-	padding: 0;
-	top:0;
-	left:0;
-	visibility: hidden;
-}
-
-.TravelNotes-PrintViews .TravelNotes-routeViewDiv
+.TravelNotes-routeViewDiv
 {
 	margin: 5mm;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.TravelNotes-PrintPageBreak .TravelNotes-routeViewDiv
+.TravelNotes-routeViewDiv.TravelNotes-PrintPageBreak
 {
 	page-break-inside: avoid;
 }
 
-.TravelNotes-PrintViews #TravelNotes-PrintToolbar
+#TravelNotes-PrintToolbar
 {
 	position: fixed;
 	top: 0;
@@ -120,14 +109,14 @@ body
 	}
 	*/
 	
-	.TravelNotes-PrintViews .TravelNotes-routeViewDiv
+	.TravelNotes-routeViewDiv
 	{
 		margin: 0;
 		margin-left: auto;
 		margin-right: auto;
 	}	
 	
-	.TravelNotes-PrintViews #TravelNotes-PrintToolbar
+	#TravelNotes-PrintToolbar
 	{
 		width: 0;
 		height: 0;

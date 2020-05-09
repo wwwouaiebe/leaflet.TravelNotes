@@ -23,7 +23,9 @@ This file contains:
 Changes:
 	- v1.9.0:
 		- created
-Doc reviewed
+	- v1.10.0
+		- Issue #106 : Profiles are not hidden when printing the route maps
+Doc reviewed 20200508
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -88,8 +90,10 @@ function newPrintFactory ( ) {
 			.removeEventListener (	'click', onAfterPrint, false );
 		myBody.removeChild ( document.getElementById ( 'TravelNotes-PrintToolbar' ) );
 
-		myBody.classList.remove ( 'TravelNotes-PrintPageBreak' );
-		myBody.classList.remove ( 'TravelNotes-PrintViews' );
+		let childrens = myBody.children;
+		for ( let counter = 0; counter < childrens.length; counter ++ ) {
+			childrens.item ( counter ).classList.remove ( 'TravelNotes-PrintViews-Hidden' );
+		}
 
 		theTravelNotesData.map.invalidateSize ( false );
 
@@ -540,6 +544,10 @@ function newPrintFactory ( ) {
 			myBody
 		);
 
+		if ( myPrintData.pageBreak ) {
+			viewDiv.classList.add ( 'TravelNotes-PrintPageBreak' );
+		}
+
 		// setting the size given by theuser in mm
 		viewDiv.setAttribute (
 			'style',
@@ -643,11 +651,13 @@ function newPrintFactory ( ) {
 	function myPrintViews ( ) {
 
 		// adding classes to the body
-		myBody.classList.add ( 'TravelNotes-PrintViews' );
 
-		if ( myPrintData.pageBreak ) {
-			myBody.classList.add ( 'TravelNotes-PrintPageBreak' );
+		let childrens = myBody.children;
+		for ( let counter = 0; counter < childrens.length; counter ++ ) {
+			childrens.item ( counter ).classList.add ( 'TravelNotes-PrintViews-Hidden' );
 		}
+
+		myCreateToolbar ( );
 
 		window.addEventListener ( 'afterprint', onAfterPrint, true );
 
@@ -702,8 +712,6 @@ function newPrintFactory ( ) {
 			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
 			return;
 		}
-
-		myCreateToolbar ( );
 
 		myPrintViews ( );
 	}
