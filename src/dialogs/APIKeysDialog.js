@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.10.0:
+		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
 Doc reviewed ...
 Tests ...
 
@@ -36,6 +38,7 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 
 import { ZERO, ONE } from '../util/Constants.js';
 
@@ -272,6 +275,35 @@ function newAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog.hideError ( );
 	}
 
+	function myOnReloadServerFile ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		if ( theConfig.haveCrypto ) {
+			myAPIKeysDialog.showWait ( );
+			newHttpRequestBuilder ( ).getBinaryPromise (
+				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
+					'APIKeys'
+			)
+				.then ( data => {
+					newDataEncryptor ( ).decryptData (
+						data,
+						myOnOkDecrypt,
+						myOnErrorDecrypt,
+						newPasswordDialog ( false ).show ( )
+					);
+				}
+				)
+				.catch (
+					() => {
+						myAPIKeysDialog.showError (
+							theTranslator.getText ( 'APIKeysDialog - An error occurs when loading the APIKeys file' )
+						);
+						myAPIKeysDialog.hideWait ( );
+					}
+				);
+		}
+
+	}
+
 	/*
 	--- myOnOpenFileInputChange function ------------------------------------------------------------------------------
 
@@ -361,6 +393,19 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myCreateToolbar ( ) {
 
 		if ( theConfig.haveCrypto ) {
+
+			// reload button
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-APIKeysDialog-reloadFileButton',
+					className : 'TravelNotes-APIKeysDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
+					innerHTML : '&#x1f504;'
+				},
+				myToolbarDiv
+			)
+				.addEventListener ( 'click', myOnReloadServerFile, false );
 
 			// save button
 			myHTMLElementsFactory.create (
