@@ -64,6 +64,10 @@
 		"msgstr" : "Save to file WITHOUT password"
 	},
 	{
+		"msgid" : "APIKeysManager - An error occurs when reading the APIKeys file",
+		"msgstr" : "An error occurs when reading the API keys"
+	},
+	{
 		"msgid" : "ColorDialog - Blue",
 		"msgstr" : "Blue"
 	},

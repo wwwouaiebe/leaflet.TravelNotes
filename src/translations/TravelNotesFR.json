@@ -64,6 +64,10 @@
 		"msgstr" : "Sauver dans un fichier SANS mot de passe"
 	},
 	{
+		"msgid" : "APIKeysManager - An error occurs when reading the APIKeys file",
+		"msgstr" : "Une erreur est survenue lors de la lecture des clefs d'accès"
+	},
+	{
 		"msgid" : "ColorDialog - Blue",
 		"msgstr" : "Bleu"
 	},
