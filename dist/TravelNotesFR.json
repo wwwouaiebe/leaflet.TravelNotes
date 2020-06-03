@@ -8,6 +8,10 @@
 		"msgstr" : "Abandonner"
 	},
 	{
+		"msgid" : "APIKeysDialog - An error occurs when loading the APIKeys file",
+		"msgstr" : "Une erreur est survenue lors du chargement des clefs d'accès sur le serveur web"
+	},
+	{
 		"msgid" : "APIKeysDialog - An error occurs when saving the keys",
 		"msgstr" : "Une erreur est survenue lors de la sauvegarde des clés d'accès"
 	},
@@ -48,12 +52,20 @@
 		"msgstr" : "Fournisseur"
 	},
 	{
+		"msgid" : "APIKeysDialog - Reload from server",
+		"msgstr" : "Recharger les clefs d'accès depuis le serveur web"
+	},
+	{
 		"msgid" : "APIKeysDialog - Save to file",
 		"msgstr" : "Sauver dans un fichier avec mot de passe"
 	},
 	{
 		"msgid" : "APIKeysDialog - Save to json file",
 		"msgstr" : "Sauver dans un fichier SANS mot de passe"
+	},
+	{
+		"msgid" : "APIKeysManager - An error occurs when reading the APIKeys file",
+		"msgstr" : "Une erreur est survenue lors de la lecture des clefs d'accès"
 	},
 	{
 		"msgid" : "ColorDialog - Blue",

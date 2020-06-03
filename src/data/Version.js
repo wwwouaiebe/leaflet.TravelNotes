@@ -39,10 +39,11 @@ Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! War
 						 //      o     \\
 						 \==============/
 
-You have also to adapt the version in the myValidate ( ) method of Maneuver, Note, Route, Travel and WayPoint
+You have also to adapt the version in the myValidate ( ) method of
+Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
 */
 
-const theCurrentVersion = '1.9.0';
+const theCurrentVersion = '1.10.0';
 
 export { theCurrentVersion };
 

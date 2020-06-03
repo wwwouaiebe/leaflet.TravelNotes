@@ -8,6 +8,10 @@
 		"msgstr" : "Cancel"
 	},
 	{
+		"msgid" : "APIKeysDialog - An error occurs when loading the APIKeys file",
+		"msgstr" : "An error occurs when loading the API keys from web server"
+	},
+	{
 		"msgid" : "APIKeysDialog - An error occurs when saving the keys",
 		"msgstr" : "An error occurs when saving the API keys"
 	},
@@ -48,12 +52,20 @@
 		"msgstr" : "Provider name"
 	},
 	{
+		"msgid" : "APIKeysDialog - Reload from server",
+		"msgstr" : "Reload the API keys from web server"
+	},
+	{
 		"msgid" : "APIKeysDialog - Save to file",
 		"msgstr" : "Save to file with password"
 	},
 	{
 		"msgid" : "APIKeysDialog - Save to json file",
 		"msgstr" : "Save to file WITHOUT password"
+	},
+	{
+		"msgid" : "APIKeysManager - An error occurs when reading the APIKeys file",
+		"msgstr" : "An error occurs when reading the API keys"
 	},
 	{
 		"msgid" : "ColorDialog - Blue",
