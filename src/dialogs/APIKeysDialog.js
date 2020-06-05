@@ -251,7 +251,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	}
 
 	/*
-	--- myOnOkDecrypt function ------------------------------------------------------------------------------
+	--- myOnOkDecrypt function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -274,6 +274,12 @@ function newAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog.hideWait ( );
 		myAPIKeysDialog.hideError ( );
 	}
+
+	/*
+	--- myOnReloadServerFile function ---------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	function myOnReloadServerFile ( clickEvent ) {
 		clickEvent.stopPropagation ( );

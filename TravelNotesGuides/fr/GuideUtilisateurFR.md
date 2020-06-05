@@ -95,12 +95,12 @@ l'affichage de certaines cartes.
 
 Travel & Notes ne calcule pas lui-même les itinéraires des trajets. Il se connecte chez un fournisseur 
 d'itinéraires pour obtenir cet itinéraire. Les différents fournisseurs d'itinéraire qu'il est possible 
-d'utiliser actuellement sont GraphHopper, Mapbox, OpenRouteService et OSRM. 
+d'utiliser actuellement sont GraphHopper, Stadia Maps, Mapbox, OpenRouteService et OSRM. 
 Il est également possible de tracer une polyligne entre deux endroits, sans suivre de chemins. 
 Un itinéraire en train entre deux gares peut aussi être ajouté, à condition que cet itinéraire 
 soit encodé dans Openstreetmap, en respectant les règles des transports publics version 2.
 
-Pour GraphHopper, OpenRouteService et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** )
+Pour GraphHopper, Stadia Maps, OpenRouteService et Mapbox il est nécessaire de posséder une clef d'accès ( **API Key** )
 pour se connecter au serveur. Consultez les sites internet de ces différents fournisseurs pour obtenir 
 une clef d'accès.
 
@@ -139,6 +139,8 @@ Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par
 **Attention:**
 - La page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
 - MS Edge (anciennes versions) ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
+
+Le bouton :arrows_counterclockwise: permet de recharger le fichier des clefs d'accès depuis le serveur web.
 
 Le bouton :floppy_disk: à **gauche** de la boite de dialogue permet de sauver les clefs d'accès 
 dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont

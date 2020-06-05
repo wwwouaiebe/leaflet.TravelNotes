@@ -129,6 +129,8 @@ It is possible to save the access keys in a file, protected by a password or unp
 - The page must be served in HTTPS to save in a file protected by a password.
 - MS Edge (old versions) does not allow saving to a password protected file.
 
+The button :arrows_counterclockwise: reloads the APIkeys file from the web server.
+
 The button :floppy_disk: on the **left** of the dialog box allows you to save the access keys
 in a password protected file. This must contain at least 12 characters including at least 
 one uppercase, one lowercase, one number, and one other character.

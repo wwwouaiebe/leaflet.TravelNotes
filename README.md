@@ -12,7 +12,7 @@
 
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
 
-If you have a Mapbox, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, GraphHopper and/or OpenRouteService. 
+If you have a Mapbox, Stadia Maps, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, Stadia Maps, GraphHopper and/or OpenRouteService. 
 Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
 see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
@@ -35,9 +35,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.9.0 branch
+### v1.10.0 branch
 
-The [v1.9.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.9.0) contains the source files of the last stable version.
+The [v1.10.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.10.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -72,6 +72,13 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 
 - it's now possible to print maps of a route.
 
+### What's new in release 1.10.0
+
+- A new service provider, based on Mapzen Valhalla, has been added: Stadia Maps
+- A button to reload the access keys has been added to the access key management dialog
+- An error message is displayed when a problem occurs while reading the access keys file
+- Some bugs are fixed
+
 <a id="fr" />
 
 ## Guides
@@ -84,7 +91,7 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 
 [Demo - fr ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?)
 
-Si vous disposez d'une API key pour Mapbox, GraphHopper ou OpenRouteService, vous pouvez également utiliser cette démo avec Mapbox, GraphHopper et / ou OpenRouteService.
+Si vous disposez d'une API key pour Mapbox, Stadia Maps, GraphHopper ou OpenRouteService, vous pouvez également utiliser cette démo avec Mapbox, Stadia Maps, GraphHopper et / ou OpenRouteService.
 Ajoutez simplement votre API key via la boite de dialogue de gestion des clefs d'accès ( bouton :key: sur la barre d'outils en haut du contrôle ).
 
 Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
@@ -107,9 +114,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.9.0
+### branche v1.10.0
 
-La [branche v1.9.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.9.0) contient les sources de la dernière version stable.
+La [branche v1.10.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.10.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -146,3 +153,10 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 ### Quoi de neuf dans la version 1.9.0
 
 - Il est maintenant possible d'imprimer les cartes d'un trajet.
+
+### Quoi de neuf dans la version 1.10.0
+
+- Un nouveau fournisseur de service, basé sur Mapzen Valhalla, a été ajouté: Stadia Maps
+- Un bouton permettant de recharger les clefs d'accès a été ajouté dans la boite de dialogue de gestion des clefs d'accès
+- Un message d'erreur est affiché quand un problème survient lors de la lecture du fichier des clefs d'accès
+- Quelques bugs sont corrigés
