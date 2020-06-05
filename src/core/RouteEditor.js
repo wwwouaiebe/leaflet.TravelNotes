@@ -102,28 +102,28 @@ function newRouteEditor ( ) {
 		// Computing the distance between itineraryPoints
 		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
+
 		itineraryPointsIterator.done;
 		maneuverIterator.done;
-		let previousItineraryPoint = itineraryPointsIterator.value;
-		let previousManeuver = maneuverIterator.value;
-		previousManeuver.distance = DISTANCE.defaultValue;
+
+		maneuverIterator.value.distance = DISTANCE.defaultValue;
 		maneuverIterator.done;
+
 		route.distance = DISTANCE.defaultValue;
 		route.duration = DISTANCE.defaultValue;
+
 		while ( ! itineraryPointsIterator.done ) {
-			previousItineraryPoint.distance = myGeometry.pointsDistance (
-				previousItineraryPoint.latLng,
+			itineraryPointsIterator.previous.distance = myGeometry.pointsDistance (
+				itineraryPointsIterator.previous.latLng,
 				itineraryPointsIterator.value.latLng
 			);
+			route.distance += itineraryPointsIterator.previous.distance;
+			maneuverIterator.previous.distance += itineraryPointsIterator.previous.distance;
 			if ( maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
-				route.duration += previousManeuver.duration;
-				previousManeuver = maneuverIterator.value;
+				route.duration += maneuverIterator.previous.duration;
 				maneuverIterator.value.distance = DISTANCE.defaultValue;
 				maneuverIterator.done;
 			}
-			route.distance += previousItineraryPoint.distance;
-			previousManeuver.distance += previousItineraryPoint.distance;
-			previousItineraryPoint = itineraryPointsIterator.value;
 		}
 	}
 
