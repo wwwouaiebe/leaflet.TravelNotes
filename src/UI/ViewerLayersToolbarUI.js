@@ -32,8 +32,7 @@ function newViewerLayersToolbarUI ( ) {
 			},
 			providerName : 'OSM',
 			providerKeyNeeded : false,
-			attribution : '| &copy; <a href="http://www.openstreetmap.org/copyright" ' +
-				'target="_blank" title="OpenStreetMap contributors">OpenStreetMap contributors</a> '
+			attribution : ''
 		}
 	];
 
