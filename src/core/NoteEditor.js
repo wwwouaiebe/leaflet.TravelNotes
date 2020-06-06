@@ -53,7 +53,7 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 
-import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
+import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -97,52 +97,60 @@ function newNoteEditor ( ) {
 			}
 		}
 
-		myManeuverCounter ++;
 		myWaitUI.showInfo (
 			theTranslator.getText (
 				'NoteEditor - Creating note',
 				{ noteNumber : myManeuverCounter, notesLength : myManeuverLength }
 			)
 		);
-		let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-			.then (
-				svgData => {
-					let note = newNote ( );
-					note.iconContent = svgData.svg.outerHTML;
-					note.popupContent = '';
-					note.iconWidth = ICON_DIMENSIONS.width;
-					note.iconHeight = ICON_DIMENSIONS.height;
-					note.tooltipContent = svgData.tooltip;
-					note.address = svgData.streets;
-					if ( '' !== svgData.city ) {
-						note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
-					}
-					if ( svgData.place && svgData.place !== svgData.city ) {
-						note.address += ' (' + svgData.place + ')';
-					}
-					note.latLng = svgData.latLng;
-					note.iconLatLng = svgData.latLng;
-					note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
-					note.chainedDistance = route.chainedDistance;
-					route.notes.add ( note );
-					myEventDispatcher.dispatch (
-						'noteupdated',
-						{
-							removedNoteObjId : null,
-							addedNoteObjId : note.objId
+		if (
+			( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
+			||
+			( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
+		) {
+			endAdd ( );
+		}
+		else {
+			myManeuverCounter ++;
+			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+				.then (
+					svgData => {
+						let note = newNote ( );
+						note.iconContent = svgData.svg.outerHTML;
+						note.popupContent = '';
+						note.iconWidth = ICON_DIMENSIONS.width;
+						note.iconHeight = ICON_DIMENSIONS.height;
+						note.tooltipContent = svgData.tooltip;
+						note.address = svgData.streets;
+						if ( '' !== svgData.city ) {
+							note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
 						}
-					);
-					console.log ( note.object );
-					endAdd ( );
-				}
-			)
-			.catch (
-				err => {
-					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
-					endAdd ( );
-				}
-			);
+						if ( svgData.place && svgData.place !== svgData.city ) {
+							note.address += ' (' + svgData.place + ')';
+						}
+						note.latLng = svgData.latLng;
+						note.iconLatLng = svgData.latLng;
+						note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
+						note.chainedDistance = route.chainedDistance;
+						route.notes.add ( note );
+						myEventDispatcher.dispatch (
+							'noteupdated',
+							{
+								removedNoteObjId : null,
+								addedNoteObjId : note.objId
+							}
+						);
+						endAdd ( );
+					}
+				)
+				.catch (
+					err => {
+						console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+						endAdd ( );
+					}
+				);
+		}
 	}
 
 	/*
@@ -157,11 +165,21 @@ function newNoteEditor ( ) {
 
 		let route = myDataSearchEngine.getRoute ( routeObjId );
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
+		myManeuverLength = ZERO;
+		while ( ! maneuverIterator.done ) {
+			if (
+				! ( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
+				&&
+				! ( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
+			) {
+				myManeuverLength ++;
+			}
+		}
+		maneuverIterator = route.itinerary.maneuvers.iterator;
 		if ( ! maneuverIterator.done ) {
 			myWaitUI = newWaitUI ( );
 			myWaitUI.createUI ( );
-			myManeuverCounter = ZERO;
-			myManeuverLength = route.itinerary.maneuvers.length;
+			myManeuverCounter = ONE;
 			myAddManeuverNote ( maneuverIterator, route );
 		}
 	}
