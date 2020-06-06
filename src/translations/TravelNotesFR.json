@@ -124,6 +124,10 @@
 		"msgstr" : "Ajouter une note à ce trajet"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Create a note for each route maneuver",
+		"msgstr" : "Créer une note pour chaque manœuvre du trajet"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Print route map",
 		"msgstr" : "Imprimer les cartes de ce trajet"
 	},
@@ -386,6 +390,10 @@
 	{
 		"msgid" : "NoteEditor - Address",
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Creating note",
+		"msgstr" : "Création de la note {noteNumber} de {notesLength}"
 	},
 	{
 		"msgid" : "NoteEditor - Distance",

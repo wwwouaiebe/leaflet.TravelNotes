@@ -34,20 +34,26 @@ Changes:
 		- Issue #66 : Work with promises for dialogs
 		- Issue #70 : Put the get...HTML functions outside of the editors
 		- Issue #68 : Review all existing promises.
+	- v1.11.0:
+		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 Doc reviewed 20191121
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
+import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
+import { theConfig } from '../data/Config.js';
+import { newWaitUI } from '../UI/WaitUI.js';
 
-import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
 /*
 --- newNoteEditor function --------------------------------------------------------------------------------------------
@@ -62,6 +68,103 @@ function newNoteEditor ( ) {
 	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
+	let myWaitUI = null;
+	let myManeuverCounter = ZERO;
+	let myManeuverLength = ZERO;
+
+	/*
+	--- myAddAllManeuverNotes function --------------------------------------------------------------------------------
+
+	This function...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddManeuverNote ( maneuverIterator, route ) {
+
+		function endAdd ( ) {
+			if ( maneuverIterator.done ) {
+				route.notes.sort (
+					( first, second ) => first.distance - second.distance
+				);
+				myEventDispatcher.dispatch ( 'updateitinerary' );
+				myEventDispatcher.dispatch ( 'roadbookupdate' );
+				myWaitUI.close ( );
+				myWaitUI = null;
+			}
+			else {
+				myAddManeuverNote ( maneuverIterator, route );
+			}
+		}
+
+		myManeuverCounter ++;
+		myWaitUI.showInfo (
+			theTranslator.getText (
+				'NoteEditor - Creating note',
+				{ noteNumber : myManeuverCounter, notesLength : myManeuverLength }
+			)
+		);
+		let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+			.then (
+				svgData => {
+					let note = newNote ( );
+					note.iconContent = svgData.svg.outerHTML;
+					note.popupContent = '';
+					note.iconWidth = ICON_DIMENSIONS.width;
+					note.iconHeight = ICON_DIMENSIONS.height;
+					note.tooltipContent = svgData.tooltip;
+					note.address = svgData.streets;
+					if ( '' !== svgData.city ) {
+						note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
+					}
+					if ( svgData.place && svgData.place !== svgData.city ) {
+						note.address += ' (' + svgData.place + ')';
+					}
+					note.latLng = svgData.latLng;
+					note.iconLatLng = svgData.latLng;
+					note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
+					note.chainedDistance = route.chainedDistance;
+					route.notes.add ( note );
+					myEventDispatcher.dispatch (
+						'noteupdated',
+						{
+							removedNoteObjId : null,
+							addedNoteObjId : note.objId
+						}
+					);
+					console.log ( note.object );
+					endAdd ( );
+				}
+			)
+			.catch (
+				err => {
+					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+					endAdd ( );
+				}
+			);
+	}
+
+	/*
+	--- myAddAllManeuverNotes function --------------------------------------------------------------------------------
+
+	This function...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddAllManeuverNotes ( routeObjId ) {
+
+		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let maneuverIterator = route.itinerary.maneuvers.iterator;
+		if ( ! maneuverIterator.done ) {
+			myWaitUI = newWaitUI ( );
+			myWaitUI.createUI ( );
+			myManeuverCounter = ZERO;
+			myManeuverLength = route.itinerary.maneuvers.length;
+			myAddManeuverNote ( maneuverIterator, route );
+		}
+	}
 
 	/*
 	--- myAttachNoteToRoute function ----------------------------------------------------------------------------------
@@ -461,6 +564,8 @@ function newNoteEditor ( ) {
 
 	return Object.seal (
 		{
+			addAllManeuverNotes : routeObjId => myAddAllManeuverNotes ( routeObjId ),
+
 			newRouteNote : ( routeObjId, contextMenuEvent ) => myNewRouteNote ( routeObjId, contextMenuEvent ),
 
 			newSearchNote : searchResult => myNewSearchNote ( searchResult ),

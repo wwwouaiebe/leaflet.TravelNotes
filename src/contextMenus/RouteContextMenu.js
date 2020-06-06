@@ -30,6 +30,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
+	- v1.11.0:
+		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 Doc reviewed 20191124
 Tests ...
 
@@ -110,6 +112,12 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				context : theNoteEditor,
 				name : theTranslator.getText ( 'ContextMenuFactory - Add a note on the route' ),
 				action : theNoteEditor.newRouteNote,
+				param : myRouteObjId
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'ContextMenuFactory - Create a note for each route maneuver' ),
+				action : theNoteEditor.addAllManeuverNotes,
 				param : myRouteObjId
 			},
 			{
