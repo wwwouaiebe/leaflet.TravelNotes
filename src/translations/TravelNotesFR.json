@@ -312,10 +312,6 @@
 		"msgstr" : "Le contenu de l'icône doit être complété."
 	},
 	{
-		"msgid" : "NoteDialog - Continue",
-		"msgstr" : "Continuer"
-	},
-	{
 		"msgid" : "NoteDialog - Icon height",
 		"msgstr" : "Hauteur de l'icône : "
 	},
@@ -348,44 +344,12 @@
 		"msgstr" : "Il n'est pas possible de créer une icône SVG pour une note de voyage."
 	},
 	{
-		"msgid" : "NoteDialog - Start",
-		"msgstr" : "Départ"
-	},
-	{
-		"msgid" : "NoteDialog - Stop",
-		"msgstr" : "Arrivée"
-	},
-	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Texte&nbsp;:&nbsp;"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
 		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
-	},
-	{
-		"msgid" : "NoteDialog - Turn right",
-		"msgstr" : "Tourner à droite"
-	},
-	{
-		"msgid" : "NoteDialog - Turn slight right",
-		"msgstr" : "Tourner légèrement à droite"
-	},
-	{
-		"msgid" : "NoteDialog - Turn slight left",
-		"msgstr" : "Tourner légèrement à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn left",
-		"msgstr" : "Tourner à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp left",
-		"msgstr" : "Tourner fortement à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp right",
-		"msgstr" : "Tourner fortement à droite"
 	},
 	{
 		"msgid" : "NoteEditor - Address",
@@ -622,6 +586,54 @@
 	{
 		"msgid" : "SortableList - Move up",
 		"msgstr" : "Déplacer vers le haut"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Start",
+		"msgstr" : "Départ"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Stop",
+		"msgstr" : "Arrivée"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Continue",
+		"msgstr" : "Continuer"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn right",
+		"msgstr" : "Tourner à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight right",
+		"msgstr" : "Tourner légèrement à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight left",
+		"msgstr" : "Tourner légèrement à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn left",
+		"msgstr" : "Tourner à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp left",
+		"msgstr" : "Tourner fortement à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp right",
+		"msgstr" : "Tourner fortement à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
+		"msgstr" : " pour entrer dans le rond-point"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - exit roundabout",
+		"msgstr" : " pour sortir du rond-point"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - continue roundabout",
+		"msgstr" : " et continuer dans le rond-point"
 	},
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",

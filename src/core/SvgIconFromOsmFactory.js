@@ -221,6 +221,18 @@ function newSvgIconFromOsmFactory ( ) {
 	}
 
 	/*
+	--- myGetWayName function -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetWayName ( way ) {
+		return ( way.tags.name ? way.tags.name : '' ) +
+			( way.tags.name && way.tags.ref ? ' ' : '' ) +
+			( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
+	}
+
+	/*
 	--- mySearchPassingStreets function -------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -241,6 +253,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let incomingPointDistance = Number.MAX_VALUE;
 		let outgoingPointDistance = Number.MAX_VALUE;
 		let pointDistance = DISTANCE.defaultValue;
+
 		myNodesMap.forEach (
 			node => {
 				if ( myNearestItineraryPoint ) {
@@ -269,16 +282,16 @@ function newSvgIconFromOsmFactory ( ) {
 		let incomingStreet = '';
 		let outgoingStreet = '';
 
+		let isRoundaboutEntry = false;
+		let isRoundaboutExit = false;
+
 		myWaysMap.forEach (
 			way => {
 				if ( ! way.nodesIds.includes ( svgPointId ) ) {
 					return;
 				}
 
-				let wayName =
-					( way.tags.name ? way.tags.name : '' ) +
-					( way.tags.name && way.tags.ref ? ' ' : '' ) +
-					( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
+				let wayName = myGetWayName ( way );
 				let haveName = '' !== wayName;
 
 				let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
@@ -294,6 +307,9 @@ function newSvgIconFromOsmFactory ( ) {
 				if ( isIncomingStreet ) {
 					incomingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
+					if ( way.tags.junction && 'roundabout' === way.tags.junction ) {
+						isRoundaboutExit = true;
+					}
 				}
 				if ( ZERO === streetOcurrences ) {
 					return;
@@ -301,6 +317,9 @@ function newSvgIconFromOsmFactory ( ) {
 				if ( isOutgoingStreet ) {
 					outgoingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
+					if ( way.tags.junction && 'roundabout' === way.tags.junction ) {
+						isRoundaboutEntry = true;
+					}
 				}
 				if ( ZERO === streetOcurrences || ! haveName ) {
 					return;
@@ -317,6 +336,16 @@ function newSvgIconFromOsmFactory ( ) {
 			( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
 			' ' + myDirectionArrow + ' ' +
 			outgoingStreet;
+
+		if ( isRoundaboutEntry && ! isRoundaboutExit ) {
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - entry roundabout' );
+		}
+		else if ( ! isRoundaboutEntry && isRoundaboutExit ) {
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - exit roundabout' );
+		}
+		else if ( isRoundaboutEntry && isRoundaboutExit ) {
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - continue roundabout' );
+		}
 	}
 
 	/*
@@ -452,44 +481,44 @@ function newSvgIconFromOsmFactory ( ) {
 
 		if ( null !== myDirection ) {
 			if ( myDirection < theConfig.note.svgAnleMaxDirection.right ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn right' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
 				myDirectionArrow = '&#x1f882;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightRight ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn slight right' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight right' );
 				myDirectionArrow = '&#x1f885;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.continue ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Continue' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Continue' );
 				myDirectionArrow = '&#x1f881;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightLeft ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn slight left' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight left' );
 				myDirectionArrow = '&#x1f884;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.left ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn left' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn left' );
 				myDirectionArrow = '&#x1f880;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn sharp left' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp left' );
 				myDirectionArrow = '&#x1f887;';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpRight ) {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn sharp right' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp right' );
 				myDirectionArrow = '&#x1f886;';
 			}
 			else {
-				myTooltip = theTranslator.getText ( 'NoteDialog - Turn right' );
+				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
 				myDirectionArrow = '&#x1f882;';
 			}
 		}
 
 		if ( AT_START === myPositionOnRoute ) {
-			myTooltip = theTranslator.getText ( 'NoteDialog - Start' );
+			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Start' );
 		}
 		else if ( AT_END === myPositionOnRoute ) {
-			myTooltip = theTranslator.getText ( 'NoteDialog - Stop' );
+			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Stop' );
 		}
 	}
 
