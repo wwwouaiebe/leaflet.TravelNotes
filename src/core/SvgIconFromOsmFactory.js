@@ -279,6 +279,15 @@ function newSvgIconFromOsmFactory ( ) {
 				}
 			}
 		);
+
+		let iconNode = myNodesMap.get ( svgPointId );
+		let miniRoundaboutTooltip =
+			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway )
+				?
+				theTranslator.getText ( 'SvgIconFromOsmFactory - at the small roundabout on the ground' )
+				:
+				null;
+
 		let incomingStreet = '';
 		let outgoingStreet = '';
 
@@ -345,6 +354,9 @@ function newSvgIconFromOsmFactory ( ) {
 		}
 		else if ( isRoundaboutEntry && isRoundaboutExit ) {
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - continue roundabout' );
+		}
+		if ( miniRoundaboutTooltip ) {
+			myTooltip += miniRoundaboutTooltip;
 		}
 	}
 

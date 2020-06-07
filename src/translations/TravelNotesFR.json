@@ -588,6 +588,10 @@
 		"msgstr" : "Déplacer vers le haut"
 	},
 	{
+		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
+		"msgstr" : " au petit rond-point au sol"
+	},
+	{
 		"msgid" : "SvgIconFromOsmFactory - Start",
 		"msgstr" : "Départ"
 	},

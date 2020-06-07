@@ -588,6 +588,10 @@
 		"msgstr" : "Move up"
 	},
 	{
+		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
+		"msgstr" : " at the small roundabout on the ground"
+	},
+	{
 		"msgid" : "SvgIconFromOsmFactory - Start",
 		"msgstr" : "Start"
 	},
