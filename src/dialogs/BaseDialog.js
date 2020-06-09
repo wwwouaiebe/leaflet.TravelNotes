@@ -102,7 +102,7 @@ function newBaseDialog ( ) {
 			}
 
 			document.removeEventListener ( 'keydown', myOnKeyDown, true );
-			document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
+			document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 			myOnCancel ( 'Canceled by user' );
 		}
 	}
@@ -180,7 +180,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
+				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 				myOnCancel ( 'Canceled by user' );
 			},
 			false
@@ -303,7 +303,7 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
+				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 				myOnOk ( returnValue );
 			},
 			false
@@ -380,7 +380,7 @@ function newBaseDialog ( ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
-		document.getElementsByTagName ( 'body' ) [ ZERO ].appendChild ( myBackgroundDiv );
+		document.querySelector ( 'body' ).appendChild ( myBackgroundDiv );
 		document.addEventListener ( 'keydown', myOnKeyDown, true );
 
 		myScreenWidth = myBackgroundDiv.clientWidth;

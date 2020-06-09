@@ -55,7 +55,7 @@ function newBaseContextMenu ( originalEvent ) {
 	let myMenuItems = [];
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myBody = document.getElementsByTagName ( 'body' ) [ ZERO ];
+	let myBody = document.querySelector ( 'body' );
 
 	/*
 	--- myOnKeyPress function -----------------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ function newBaseContextMenu ( originalEvent ) {
 		}
 
 		// removing the menu container
-		document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( ourContainer );
+		document.querySelector ( 'body' ).removeChild ( ourContainer );
 		ourContainer = null;
 		ourFocusIsOnItem = ZERO;
 		myMenuItems = [];

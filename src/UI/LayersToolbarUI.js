@@ -301,7 +301,7 @@ function newLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ ZERO ]
+			document.querySelector ( 'body' )
 		);
 		myHTMLElementsFactory.create (
 			'div',

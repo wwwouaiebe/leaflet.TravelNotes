@@ -115,7 +115,7 @@ function newViewerLayersToolbarUI ( ) {
 			{
 				id : 'TravelNotes-ViewerLayersToolbarUI'
 			},
-			document.getElementsByTagName ( 'body' ) [ ZERO ]
+			document.querySelector ( 'body' )
 		);
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS

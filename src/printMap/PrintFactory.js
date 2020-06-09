@@ -64,7 +64,7 @@ function newPrintFactory ( ) {
 	let myViewCounter = 0;
 	let myRoutePolyline = null;
 
-	let myBody = document.getElementsByTagName ( 'body' ) [ ZERO ];
+	let myBody = document.querySelector ( 'body' );
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myGeometry = newGeometry ( );
@@ -111,7 +111,7 @@ function newPrintFactory ( ) {
 
 	function myComputePrintSize ( ) {
 
-		let body = document.getElementsByTagName ( 'body' ) [ ZERO ];
+		let body = document.querySelector ( 'body' );
 		let dummyDiv = myHTMLElementsFactory.create ( 'div', { }, body );
 		dummyDiv.setAttribute (
 			'style',

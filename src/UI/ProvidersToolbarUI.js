@@ -80,7 +80,7 @@ function newProvidersToolbarUI ( ) {
 
 		theTravelNotesData.routing.transitMode = transitMode;
 		let activeTransitModeButton =
-			document.getElementsByClassName ( 'TravelNotes-Control-ActiveTransitModeImgButton' ) [ ZERO ];
+			document.querySelector ( '.TravelNotes-Control-ActiveTransitModeImgButton' );
 		if ( activeTransitModeButton ) {
 			activeTransitModeButton.classList.remove ( 'TravelNotes-Control-ActiveTransitModeImgButton' );
 		}
@@ -113,7 +113,7 @@ function newProvidersToolbarUI ( ) {
 	function mySetProvider ( providerName ) {
 		theTravelNotesData.routing.provider = providerName;
 		let activeProviderButton =
-			document.getElementsByClassName ( 'TravelNotes-Control-ActiveProviderImgButton' ) [ ZERO ];
+			document.querySelector ( '.TravelNotes-Control-ActiveProviderImgButton' );
 		if ( activeProviderButton ) {
 			activeProviderButton.classList.remove ( 'TravelNotes-Control-ActiveProviderImgButton' );
 		}
