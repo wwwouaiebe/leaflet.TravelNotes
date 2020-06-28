@@ -23,6 +23,10 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.10.0:
+		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
+	- v1.11.0:
+		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 Doc reviewed ...
 Tests ...
 
@@ -217,7 +221,7 @@ function newAPIKeysManager ( ) {
 
 	function myOnErrorDecrypt ( err ) {
 		console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
-		if ( err ) {
+		if ( err && 'Canceled by user' !== err ) {
 			theErrorsUI.showError (
 				theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
 			);
