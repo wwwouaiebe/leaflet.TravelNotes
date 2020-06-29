@@ -12,7 +12,7 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify-es": "^3.3.0",
+    "grunt-terser": "^1.0.0",
     "grunt-eslint": "^23.0.0",
     "grunt-includes": "^1.1.0",
     "grunt-rollup": "^11.2.0"

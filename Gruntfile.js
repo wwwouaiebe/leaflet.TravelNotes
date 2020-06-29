@@ -77,12 +77,13 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		uglify: {
+		terser: {
 			TravelNotes: {
 				options: {
-					banner: banner,
 					mangle: true,
-					beautify: false
+					output: {
+						preamble: banner
+					}
 				},
 				files: {
 					'tmp/TravelNotes.min.js': ['tmp/TravelNotes.min.js']
@@ -90,9 +91,10 @@ module.exports = function(grunt) {
 			},
 			Viewer: {
 				options: {
-					banner: banner,
 					mangle: true,
-					beautify: false
+					output: {
+						preamble: banner
+					}
 				},
 				files: {
 					'tmp/TravelNotesViewer.min.js': ['tmp/TravelNotesViewer.min.js']
@@ -100,14 +102,15 @@ module.exports = function(grunt) {
 			},
 			Roadbook: {
 				options: {
-					banner: banner,
 					mangle: true,
-					beautify: false
+					output: {
+						preamble: banner
+					}
 				},
 				files: {
 					'tmp/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.min.js']
 				}
-			}
+			},
 		},
 		copy: {
 			dist: {
@@ -352,11 +355,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-rollup');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-includes');
-	grunt.loadNpmTasks('grunt-contrib-uglify-es');
+	grunt.loadNpmTasks('grunt-terser');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
-	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'uglify', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
+	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
