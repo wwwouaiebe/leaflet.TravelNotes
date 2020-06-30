@@ -352,6 +352,14 @@
 		"msgstr" : "Tooltip content&nbsp;:&nbsp;"
 	},
 	{
+		"msgid" : "NoteEditor - Add a note for each maneuver",
+		"msgstr" : "Add a note for each maneuver"
+	},
+	{
+		"msgid" : "NoteEditor - Add a note for each maneuver. Are you sure?",
+		"msgstr" : "You'll add {noteLength} notes. This will consume a lot of resources on the OpenStreetMap server and take time. Are you sure you want to continue?"
+	},
+	{
 		"msgid" : "NoteEditor - Address",
 		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
 	},

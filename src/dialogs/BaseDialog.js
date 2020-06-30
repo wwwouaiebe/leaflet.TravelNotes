@@ -32,6 +32,7 @@ Changes:
 		- Issue #68 : Review all existing promises.
 		- Issue #63 : Find a better solution for provider keys upload
 	- v1.11.0:
+		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 Doc reviewed 20191124
 Tests ...
@@ -276,6 +277,22 @@ function newBaseDialog ( ) {
 			},
 			myDialogDiv
 		);
+
+		// you understand?
+		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
+			},
+			mySearchWaitDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
+				},
+				myFooterDiv
+			)
+		);
+
 		myOkButton = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -302,20 +319,6 @@ function newBaseDialog ( ) {
 			false
 		);
 
-		// you understand?
-		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
-			},
-			mySearchWaitDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
-				},
-				myFooterDiv
-			)
-		);
 	}
 
 	/*
@@ -466,6 +469,8 @@ function newBaseDialog ( ) {
 			set footer ( Footer ) { myFooterDiv = Footer; },
 
 			get okButton ( ) { return myOkButton; },
+
+			get cancelButton ( ) { return myCancelButton; },
 
 			show : ( ) => myShow ( )
 		}

@@ -52,6 +52,7 @@ import { newGeometry } from '../util/Geometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
+import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
@@ -175,13 +176,30 @@ function newNoteEditor ( ) {
 				myManeuverLength ++;
 			}
 		}
-		maneuverIterator = route.itinerary.maneuvers.iterator;
-		if ( ! maneuverIterator.done ) {
-			myWaitUI = newWaitUI ( );
-			myWaitUI.createUI ( );
-			myManeuverCounter = ONE;
-			myAddManeuverNote ( maneuverIterator, route );
-		}
+
+		newTwoButtonsDialog (
+			{
+				title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
+				textContent : theTranslator.getText (
+					'NoteEditor - Add a note for each maneuver. Are you sure?',
+					{ noteLength : myManeuverLength }
+				),
+				secondButtonContent : '&#x274C'
+			}
+		)
+			.show ( )
+			.then (
+				( ) => {
+					maneuverIterator = route.itinerary.maneuvers.iterator;
+					if ( ! maneuverIterator.done ) {
+						myWaitUI = newWaitUI ( );
+						myWaitUI.createUI ( );
+						myManeuverCounter = ONE;
+						myAddManeuverNote ( maneuverIterator, route );
+					}
+				}
+			)
+			.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
 	}
 
 	/*
