@@ -26,6 +26,8 @@ Changes:
 		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
 	- v1.11.0:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
+	- v1.11.0:
+		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 Doc reviewed ...
 Tests ...
 
@@ -181,6 +183,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myOnErrorEncrypt ( ) {
 		myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' ) );
 		myAPIKeysDialog.hideWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/*
@@ -201,6 +204,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		element.click ( );
 		document.body.removeChild ( element );
 		window.URL.revokeObjectURL ( blobUrl );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/*
@@ -218,6 +222,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		}
 
 		myAPIKeysDialog.showWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = false;
 		newDataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( JSON.stringify ( myGetAPIKeys ( ) ) ),
 			myOnOkEncrypt,
@@ -249,6 +254,7 @@ function newAPIKeysDialog ( APIKeys ) {
 
 	function myOnErrorDecrypt ( err ) {
 		myAPIKeysDialog.hideWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 		if ( err && 'Canceled by user' !== err ) {
 			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );
 		}
@@ -277,6 +283,7 @@ function newAPIKeysDialog ( APIKeys ) {
 		decryptedAPIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
 		myAPIKeysDialog.hideWait ( );
 		myAPIKeysDialog.hideError ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/*
@@ -289,18 +296,20 @@ function newAPIKeysDialog ( APIKeys ) {
 		clickEvent.stopPropagation ( );
 		if ( theConfig.haveCrypto ) {
 			myAPIKeysDialog.showWait ( );
+			myAPIKeysDialog.keyboardEventListenerEnabled = false;
 			newHttpRequestBuilder ( ).getBinaryPromise (
 				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 					'APIKeys'
 			)
-				.then ( data => {
-					newDataEncryptor ( ).decryptData (
-						data,
-						myOnOkDecrypt,
-						myOnErrorDecrypt,
-						newPasswordDialog ( false ).show ( )
-					);
-				}
+				.then (
+					data => {
+						newDataEncryptor ( ).decryptData (
+							data,
+							myOnOkDecrypt,
+							myOnErrorDecrypt,
+							newPasswordDialog ( false ).show ( )
+						);
+					}
 				)
 				.catch (
 					() => {
@@ -308,6 +317,7 @@ function newAPIKeysDialog ( APIKeys ) {
 							theTranslator.getText ( 'APIKeysDialog - An error occurs when loading the APIKeys file' )
 						);
 						myAPIKeysDialog.hideWait ( );
+						myAPIKeysDialog.keyboardEventListenerEnabled = true;
 					}
 				);
 		}
@@ -323,6 +333,7 @@ function newAPIKeysDialog ( APIKeys ) {
 	function myOnOpenFileInputChange ( changeEvent ) {
 		myAPIKeysDialog.hideError ( );
 		myAPIKeysDialog.showWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = false;
 		changeEvent.stopPropagation ( );
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
