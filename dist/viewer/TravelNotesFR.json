@@ -352,6 +352,14 @@
 		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
 	},
 	{
+		"msgid" : "NoteEditor - Add a note for each maneuver",
+		"msgstr" : "Ajouter une note pour chaque manœuvre"
+	},
+	{
+		"msgid" : "NoteEditor - Add a note for each maneuver. Are you sure?",
+		"msgstr" : "Vous allez ajouter {noteLength} notes. Cela va consommer beaucoup de ressources sur le serveur OpenStreetMap et prendre du temps. Êtes vous sûr de vouloir continuer?"
+	},
+	{
 		"msgid" : "NoteEditor - Address",
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
 	},
@@ -366,6 +374,10 @@
 	{
 		"msgid" : "NoteEditor - Latitude Longitude",
 		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
+		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
 	},
 	{
 		"msgid" : "NoteEditor - Phone",
