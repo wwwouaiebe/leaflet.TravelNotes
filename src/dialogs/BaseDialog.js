@@ -31,6 +31,9 @@ Changes:
 		- Issue #66 : Work with promises for dialogs
 		- Issue #68 : Review all existing promises.
 		- Issue #63 : Find a better solution for provider keys upload
+	- v1.11.0:
+		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 Doc reviewed 20191124
 Tests ...
 
@@ -70,15 +73,14 @@ function newBaseDialog ( ) {
 	let mySearchWaitDiv = null;
 	let mySearchWaitBulletDiv = null;
 	let myOkButton = null;
+	let myCancelButton = null;
 
 	// Utilities
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	// Listeners
 	let myOkButtonListener = null;
-	let myCancelButtonListener = null;
-	let myEscapeKeyEventListener = null;
-
+	let myKeyboardEventListenerEnabled = true;
 	let myOnShow = null;
 
 	// Promise callback
@@ -94,16 +96,13 @@ function newBaseDialog ( ) {
 	*/
 
 	function myOnKeyDown ( keyBoardEvent ) {
-		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			if ( myEscapeKeyEventListener ) {
-				if ( ! myEscapeKeyEventListener ( ) ) {
-					return;
-				}
+		if ( myKeyboardEventListenerEnabled ) {
+			if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+				myCancelButton.click ( );
 			}
-
-			document.removeEventListener ( 'keydown', myOnKeyDown, true );
-			document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
-			myOnCancel ( 'Canceled by user' );
+			else if ( 'Enter' === keyBoardEvent.key ) {
+				myOkButton.click ( );
+			}
 		}
 	}
 
@@ -162,7 +161,7 @@ function newBaseDialog ( ) {
 			},
 			myDialogDiv
 		);
-		let cancelButton = myHTMLElementsFactory.create (
+		myCancelButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
@@ -171,16 +170,11 @@ function newBaseDialog ( ) {
 			},
 			topBar
 		);
-		cancelButton.addEventListener (
+		myCancelButton.addEventListener (
 			'click',
 			( ) => {
-				if ( myCancelButtonListener ) {
-					if ( ! myCancelButtonListener ( ) ) {
-						return;
-					}
-				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
+				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 				myOnCancel ( 'Canceled by user' );
 			},
 			false
@@ -270,7 +264,7 @@ function newBaseDialog ( ) {
 	}
 
 	/*
-	--- myCreateErrorDiv function -------------------------------------------------------------------------------------
+	--- myCreateFooterDiv function ------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -283,6 +277,22 @@ function newBaseDialog ( ) {
 			},
 			myDialogDiv
 		);
+
+		// you understand?
+		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
+			},
+			mySearchWaitDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
+				},
+				myFooterDiv
+			)
+		);
+
 		myOkButton = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -303,26 +313,12 @@ function newBaseDialog ( ) {
 					}
 				}
 				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myBackgroundDiv );
+				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 				myOnOk ( returnValue );
 			},
 			false
 		);
 
-		// you understand?
-		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
-			},
-			mySearchWaitDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
-				},
-				myFooterDiv
-			)
-		);
 	}
 
 	/*
@@ -380,7 +376,7 @@ function newBaseDialog ( ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
-		document.getElementsByTagName ( 'body' ) [ ZERO ].appendChild ( myBackgroundDiv );
+		document.querySelector ( 'body' ).appendChild ( myBackgroundDiv );
 		document.addEventListener ( 'keydown', myOnKeyDown, true );
 
 		myScreenWidth = myBackgroundDiv.clientWidth;
@@ -392,7 +388,7 @@ function newBaseDialog ( ) {
 	}
 
 	/*
-	--- myDisplay function --------------------------------------------------------------------------------------------
+	--- myShowWait function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -407,7 +403,7 @@ function newBaseDialog ( ) {
 	}
 
 	/*
-	--- myDisplay function --------------------------------------------------------------------------------------------
+	--- myHideWait function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -450,9 +446,7 @@ function newBaseDialog ( ) {
 		{
 			set okButtonListener ( Listener ) { myOkButtonListener = Listener; },
 
-			set cancelButtonListener ( Listener ) { myCancelButtonListener = Listener; },
-
-			set escapeKeyListener ( Listener ) { myEscapeKeyEventListener = Listener; },
+			set keyboardEventListenerEnabled ( isEnabled ) { myKeyboardEventListenerEnabled = isEnabled; },
 
 			set onShow ( OnShow ) { myOnShow = OnShow; },
 
@@ -475,6 +469,8 @@ function newBaseDialog ( ) {
 			set footer ( Footer ) { myFooterDiv = Footer; },
 
 			get okButton ( ) { return myOkButton; },
+
+			get cancelButton ( ) { return myCancelButton; },
 
 			show : ( ) => myShow ( )
 		}

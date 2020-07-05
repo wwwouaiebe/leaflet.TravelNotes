@@ -124,6 +124,10 @@
 		"msgstr" : "Ajouter une note à ce trajet"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Create a note for each route maneuver",
+		"msgstr" : "Créer une note pour chaque manœuvre du trajet"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Print route map",
 		"msgstr" : "Imprimer les cartes de ce trajet"
 	},
@@ -308,10 +312,6 @@
 		"msgstr" : "Le contenu de l'icône doit être complété."
 	},
 	{
-		"msgid" : "NoteDialog - Continue",
-		"msgstr" : "Continuer"
-	},
-	{
 		"msgid" : "NoteDialog - Icon height",
 		"msgstr" : "Hauteur de l'icône : "
 	},
@@ -344,14 +344,6 @@
 		"msgstr" : "Il n'est pas possible de créer une icône SVG pour une note de voyage."
 	},
 	{
-		"msgid" : "NoteDialog - Start",
-		"msgstr" : "Départ"
-	},
-	{
-		"msgid" : "NoteDialog - Stop",
-		"msgstr" : "Arrivée"
-	},
-	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Texte&nbsp;:&nbsp;"
 	},
@@ -360,32 +352,20 @@
 		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteDialog - Turn right",
-		"msgstr" : "Tourner à droite"
+		"msgid" : "NoteEditor - Add a note for each maneuver",
+		"msgstr" : "Ajouter une note pour chaque manœuvre"
 	},
 	{
-		"msgid" : "NoteDialog - Turn slight right",
-		"msgstr" : "Tourner légèrement à droite"
-	},
-	{
-		"msgid" : "NoteDialog - Turn slight left",
-		"msgstr" : "Tourner légèrement à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn left",
-		"msgstr" : "Tourner à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp left",
-		"msgstr" : "Tourner fortement à gauche"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp right",
-		"msgstr" : "Tourner fortement à droite"
+		"msgid" : "NoteEditor - Add a note for each maneuver. Are you sure?",
+		"msgstr" : "Vous allez ajouter {noteLength} notes. Cela va consommer beaucoup de ressources sur le serveur OpenStreetMap et prendre du temps. Êtes vous sûr de vouloir continuer?"
 	},
 	{
 		"msgid" : "NoteEditor - Address",
 		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Creating note",
+		"msgstr" : "Création de la note {noteNumber} de {notesLength}"
 	},
 	{
 		"msgid" : "NoteEditor - Distance",
@@ -394,6 +374,10 @@
 	{
 		"msgid" : "NoteEditor - Latitude Longitude",
 		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
+		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
 	},
 	{
 		"msgid" : "NoteEditor - Phone",
@@ -614,6 +598,58 @@
 	{
 		"msgid" : "SortableList - Move up",
 		"msgstr" : "Déplacer vers le haut"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
+		"msgstr" : " au petit rond-point au sol"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Start",
+		"msgstr" : "Départ"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Stop",
+		"msgstr" : "Arrivée"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Continue",
+		"msgstr" : "Continuer"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn right",
+		"msgstr" : "Tourner à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight right",
+		"msgstr" : "Tourner légèrement à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight left",
+		"msgstr" : "Tourner légèrement à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn left",
+		"msgstr" : "Tourner à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp left",
+		"msgstr" : "Tourner fortement à gauche"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp right",
+		"msgstr" : "Tourner fortement à droite"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
+		"msgstr" : " pour entrer dans le rond-point"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - exit roundabout",
+		"msgstr" : " pour sortir du rond-point"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - continue roundabout",
+		"msgstr" : " et continuer dans le rond-point"
 	},
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",

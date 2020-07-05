@@ -39,6 +39,11 @@ export const SVG_PROFILE = Object.freeze ( {
 	hScales : [ 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000 ]
 } );
 
+export const ICON_DIMENSIONS = Object.freeze ( {
+	width : 40,
+	height : 40
+} );
+
 export const MOUSE_WHEEL_FACTORS = [ 0.3, 10, 1 ];
 
 export const INVALID_OBJ_ID = -1;

@@ -124,6 +124,10 @@
 		"msgstr" : "Add a note on the route"
 	},
 	{
+		"msgid" : "ContextMenuFactory - Create a note for each route maneuver",
+		"msgstr" : "Create a note for each route maneuver"
+	},
+	{
 		"msgid" : "ContextMenuFactory - Print route map",
 		"msgstr" : "Print the maps for this route"
 	},
@@ -308,10 +312,6 @@
 		"msgstr" : "The icon content cannot be empty."
 	},
 	{
-		"msgid" : "NoteDialog - Continue",
-		"msgstr" : "Continue"
-	},
-	{
 		"msgid" : "NoteDialog - Icon height",
 		"msgstr" : "Icon height : "
 	},
@@ -344,14 +344,6 @@
 		"msgstr" : "It's impossible to create a SVG icon for a travel note"
 	},
 	{
-		"msgid" : "NoteDialog - Start",
-		"msgstr" : "Start"
-	},
-	{
-		"msgid" : "NoteDialog - Stop",
-		"msgstr" : "End"
-	},
-	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Text&nbsp;:&nbsp;"
 	},
@@ -360,32 +352,20 @@
 		"msgstr" : "Tooltip content&nbsp;:&nbsp;"
 	},
 	{
-		"msgid" : "NoteDialog - Turn right",
-		"msgstr" : "Turn right"
+		"msgid" : "NoteEditor - Add a note for each maneuver",
+		"msgstr" : "Add a note for each maneuver"
 	},
 	{
-		"msgid" : "NoteDialog - Turn slight right",
-		"msgstr" : "Turn slight right"
-	},
-	{
-		"msgid" : "NoteDialog - Turn slight left",
-		"msgstr" : "Turn slight left"
-	},
-	{
-		"msgid" : "NoteDialog - Turn left",
-		"msgstr" : "Turn left"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp left",
-		"msgstr" : "Turn sharp left"
-	},
-	{
-		"msgid" : "NoteDialog - Turn sharp right",
-		"msgstr" : "Turn sharp right"
+		"msgid" : "NoteEditor - Add a note for each maneuver. Are you sure?",
+		"msgstr" : "You'll add {noteLength} notes. This will consume a lot of resources on the OpenStreetMap server and take time. Are you sure you want to continue?"
 	},
 	{
 		"msgid" : "NoteEditor - Address",
 		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "NoteEditor - Creating note",
+		"msgstr" : "Creating note {noteNumber} of {notesLength}"
 	},
 	{
 		"msgid" : "NoteEditor - Distance",
@@ -394,6 +374,10 @@
 	{
 		"msgid" : "NoteEditor - Latitude Longitude",
 		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
+		"msgstr" : "You want to create {maneuversLength} notes. For performance reasons, the number of notes is limited to {maxManeuversNotes} for the demo. Change your route."
 	},
 	{
 		"msgid" : "NoteEditor - Phone",
@@ -614,6 +598,58 @@
 	{
 		"msgid" : "SortableList - Move up",
 		"msgstr" : "Move up"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
+		"msgstr" : " at the small roundabout on the ground"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Start",
+		"msgstr" : "Start"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Stop",
+		"msgstr" : "End"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Continue",
+		"msgstr" : "Continue"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn right",
+		"msgstr" : "Turn right"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight right",
+		"msgstr" : "Turn slight right"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn slight left",
+		"msgstr" : "Turn slight left"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn left",
+		"msgstr" : "Turn left"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp left",
+		"msgstr" : "Turn sharp left"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - Turn sharp right",
+		"msgstr" : "Turn sharp right"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
+		"msgstr" : " to enter the roundabout"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - exit roundabout",
+		"msgstr" : " to exit the roundabout"
+	},
+	{
+		"msgid" : "SvgIconFromOsmFactory - continue roundabout",
+		"msgstr" : " and continue in the roundabout"
 	},
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",

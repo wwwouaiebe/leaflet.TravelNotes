@@ -75,7 +75,7 @@ function newFloatWindow ( ) {
 			{
 				className : 'TravelNotes-FloatWindow-Container'
 			},
-			document.getElementsByTagName ( 'body' ) [ ZERO ]
+			document.querySelector ( 'body' )
 		);
 
 	}
@@ -90,7 +90,7 @@ function newFloatWindow ( ) {
 		if ( myOnClose ) {
 			myOnClose ( );
 		}
-		document.getElementsByTagName ( 'body' ) [ ZERO ].removeChild ( myWindowDiv );
+		document.querySelector ( 'body' ).removeChild ( myWindowDiv );
 	}
 
 	/*

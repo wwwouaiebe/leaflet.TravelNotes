@@ -119,7 +119,7 @@ function startup ( ) {
 					newHTMLElementsFactory ( ).create (
 						'div',
 						{ id : 'Map' },
-						document.getElementsByTagName ( 'body' ) [ ZERO ]
+						document.querySelector ( 'body' )
 					);
 
 					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )

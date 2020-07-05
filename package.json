@@ -1,6 +1,6 @@
 {
   "name": "leaflet.travelnotes",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Editable markers and routing engine for leaflet",
   "main": "src/main/main.js",
   "dependencies": {
@@ -8,14 +8,14 @@
     "leaflet": "^1.6.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.4",
+    "grunt": "^1.1.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify-es": "^3.3.0",
-    "grunt-eslint": "^22.0.0",
+    "grunt-terser": "^1.0.0",
+    "grunt-eslint": "^23.0.0",
     "grunt-includes": "^1.1.0",
-    "grunt-rollup": "^10.0.0"
+    "grunt-rollup": "^11.2.0"
   },
   "repository": {
     "type": "git",

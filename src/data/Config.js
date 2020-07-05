@@ -30,6 +30,8 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
+	- v1.11.0:
+		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 Doc reviewed 20191121
 Tests ...
 
@@ -199,7 +201,8 @@ function newConfig ( ) {
 			svgTownDistance : 1500,
 			svgTimeOut : 15000,
 			cityPrefix : '<span class="TravelNotes-NoteHtml-Address-City">',
-			cityPostfix : '</span>'
+			cityPostfix : '</span>',
+			maxManeuversNotes : 100
 		},
 		itineraryPointZoom : 17,
 		routeEditor : {

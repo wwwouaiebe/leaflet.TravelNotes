@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.11.0:
+		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 Doc reviewed ...
 Tests ...
 
@@ -44,18 +46,6 @@ function newPasswordDialog ( verifyPassword ) {
 	let myPasswordDialog = null;
 	let myPasswordDiv = null;
 	let myPasswordInput = null;
-
-	/*
-	--- myOnKeyDown function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyDown ( keyBoardEvent ) {
-		if ( 'Enter' === keyBoardEvent.key ) {
-			myPasswordDialog.okButton.click ( );
-		}
-	}
 
 	/*
 	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
@@ -88,19 +78,7 @@ function newPasswordDialog ( verifyPassword ) {
 			}
 		}
 
-		document.removeEventListener ( 'keydown', myOnKeyDown, false );
 		return new window.TextEncoder ( ).encode ( myPasswordInput.value );
-	}
-
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnEscape ( ) {
-		document.removeEventListener ( 'keydown', myOnKeyDown, false );
-		return true;
 	}
 
 	/*
@@ -122,8 +100,6 @@ function newPasswordDialog ( verifyPassword ) {
 			},
 			myPasswordDialog.content
 		);
-		document.addEventListener ( 'keydown', myOnKeyDown, false );
-		myPasswordDialog.escapeKeyListener = myOnEscape;
 	}
 
 	/*
@@ -142,6 +118,12 @@ function newPasswordDialog ( verifyPassword ) {
 			myPasswordDiv
 		);
 	}
+
+	/*
+	--- myOnShow function ---------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
 	function myOnShow ( ) {
 		myPasswordInput.focus ( );
