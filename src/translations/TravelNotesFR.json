@@ -376,6 +376,10 @@
 		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
 	},
 	{
+		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
+		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
+	},
+	{
 		"msgid" : "NoteEditor - Phone",
 		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
 	},

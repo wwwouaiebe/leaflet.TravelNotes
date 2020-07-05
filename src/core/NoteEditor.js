@@ -53,6 +53,7 @@ import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
@@ -175,6 +176,14 @@ function newNoteEditor ( ) {
 			) {
 				myManeuverLength ++;
 			}
+		}
+
+		if ( theConfig.note.maxManeuversNotes < myManeuverLength ) {
+			theErrorsUI.showError (
+				theTranslator.getText ( 'NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}',
+					{ maneuversLength : myManeuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
+			);
+			return;
 		}
 
 		newTwoButtonsDialog (
