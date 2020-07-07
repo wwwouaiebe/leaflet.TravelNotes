@@ -276,7 +276,7 @@ Changes:
 		/* --- overload for hidden lists --- */
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv.TravelNotes-Control-HiddenList,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList
 {
 	transform : scale(0);
 	margin: 0;
