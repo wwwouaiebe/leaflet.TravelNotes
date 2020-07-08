@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -16,59 +16,53 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#TravelNotes-GoTop > a
-{
+#TravelNotes-GoTop > a {
 	color: black;
 	text-decoration: none;
 }
 
 .TravelNotes-ManeuverNote,
-.TravelNotes-MapNote
-{
-	background-repeat : no-repeat;
+.TravelNotes-MapNote {
+	background-repeat: no-repeat;
 	min-height: 40px;
 	min-width: 40px;
-    display: inline-block;
+	display: inline-block;
 	vertical-align: top;
 }
 
-.TravelNotes-Roadbook-Travel
-{
+.TravelNotes-Roadbook-Travel {
 	margin-top: 0.5em;
 	margin-left: 1em;
 	margin-right: 1em;
 	font-family: sans-serif;
 	line-height: 1.5em;
 }
-.TravelNotes-Roadbook-Travel-Header
-{
+
+.TravelNotes-Roadbook-Travel-Header {
 	border-style: solid;
 	border-width: 0.1em;
 	padding: 1em;
 }
-.TravelNotes-Roadbook-Travel-Header-Name
-{
+
+.TravelNotes-Roadbook-Travel-Header-Name {
 	font-size: 156%;
 	font-weight: bold;
 	margin-bottom: 1em;
 }
-.TravelNotes-Roadbook-Travel-Header-RouteName
-{
+
+.TravelNotes-Roadbook-Travel-Header-TravelDistance {
+	margin-top: 1em;
 }
-.TravelNotes-Roadbook-Travel-Header-TravelDistance
-{
-	margin-top:1em;
-}
+
 .TravelNotes-Roadbook-Travel-Notes,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes
-{
+.TravelNotes-Roadbook-Route-ManeuversAndNotes {
 	margin-top: 1em;
 	margin-bottom: 2em;
 }
+
 .TravelNotes-Roadbook-Travel-Notes-Row,
 .TravelNotes-Roadbook-Route-Maneuvers-Row,
-.TravelNotes-Roadbook-Route-Notes-Row
-{
+.TravelNotes-Roadbook-Route-Notes-Row {
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	padding-top: 1em;
@@ -76,12 +70,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	display: flex;
 	flex-direction: row;
 }
+
+.TravelNotes-Roadbook-Travel-Notes-IconCell,
+.TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell {
+	background-repeat: no-repeat;
+	min-width: 40px;
+	min-height: 40px;
+	vertical-align: top;
+	flex-shrink: 0;
+}
+
+.TravelNotes-Roadbook-Travel-Notes-Cell,
+.TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell {
+	padding-left: 0.5em;
+	flex-shrink: 2;
+}
+
 .TravelNotes-Roadbook-Hidden-Row,
 .TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-IconCell,
 .TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell,
 .TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-Cell,
-.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell
-{
+.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell {
 	visibility: hidden;
 	min-width: 0;
 	min-height: 0;
@@ -92,98 +101,73 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-bottom-style: none;
 	border-bottom-width: 0;
 }
-.TravelNotes-Roadbook-Travel-Notes-IconCell,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell
-{
-	background-repeat : no-repeat;
-	min-width: 40px;
-	min-height: 40px;
- 	vertical-align: top;	
-	flex-shrink: 0;
+
+.TravelNotes-Roadbook-Travel-Notes-IconCell > svg {
+	width: 170px;
 }
-.TravelNotes-Roadbook-Travel-Notes-IconCell > svg
-{
-	width:170px;
-}
-.TravelNotes-Roadbook-Travel-Notes-Cell,
-.TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell
-{
-	padding-left: 0.5em;
-	flex-shrink: 2;
-}
-.TravelNotes-Roadbook-Route-Header
-{
+
+.TravelNotes-Roadbook-Route-Header {
 	border-style: solid;
 	border-width: 0.1em;
 	padding: 1em;
 }
-.TravelNotes-Roadbook-Route-Header-Name
-{
+
+.TravelNotes-Roadbook-Route-Header-Name {
 	font-size: 125%;
 	font-weight: bold;
 	margin-bottom: 1em;
 }
-.TravelNotes-Roadbook-Route-Header-Distance,
-.TravelNotes-Roadbook-Route-Header-Duration,
-.TravelNotes-Roadbook-Route-Header-Ascent,
-.TravelNotes-Roadbook-Route-Header-Descent
-{
+
+.TravelNotes-NoteHtml-Address-City {
+	text-decoration: underline;
 }
-.TravelNotes-NoteHtml-Address-City
-{
-	text-decoration : underline;
-}
-.TravelNotes-Roadbook-RouteFooter
-{
+
+.TravelNotes-Roadbook-RouteFooter {
 	padding-bottom: 2em;
 }
-.TravelNotes-Roadbook-TravelFooter
-{
+
+.TravelNotes-Roadbook-TravelFooter {
 	border-top-style: solid;
 	border-top-width: 0.1em;
 	padding-top: 2em;
-	padding-bottom: 2em
+	padding-bottom: 2em;
 }
-#TravelNotes-Menu
-{
+
+#TravelNotes-Menu {
 	position: fixed;
 	top: 1em;
 	left: 1em;
 	background-color: white;
 }
 
-@media screen and (max-width: 70em)
-{
-	.TravelNotes-Roadbook-Travel
-	{
+@media screen and (max-width: 70em) {
+	.TravelNotes-Roadbook-Travel {
 		padding-top: 3.5em;
 	}
-	#TravelNotes-Menu
-	{
-		padding:0.5em;
-		border-style:solid;
+
+	#TravelNotes-Menu {
+		padding: 0.5em;
+		border-style: solid;
 		border-width: 1px;
-		margin-left:0.5em;
+		margin-left: 0.5em;
 	}
-	#TravelNotes-Menu > div
-	{
+
+	#TravelNotes-Menu > div {
 		display: inline-block;
 	}
 }
-@media screen and (min-width: 70em)
-{
-	.TravelNotes-Roadbook-Travel
-	{
+
+@media screen and (min-width: 70em) {
+	.TravelNotes-Roadbook-Travel {
 		width: 50em;
 		margin-left: calc(50% - 50em / 2);
 		margin-right: calc(50% - 50em / 2);
 	}
 }
-@media print
-{
+
+@media print {
 	#TravelNotes-Menu,
-	.TravelNotes-Roadbook-NoteHtml-Url
-	{
+	.TravelNotes-Roadbook-NoteHtml-Url {
 		visibility: hidden;
 		width: 0;
 		height: 0;
@@ -192,14 +176,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		border-width: 0;
 		border-style: none;
 	}
-	.TravelNotes-Roadbook-Route-Header
-	{
+
+	.TravelNotes-Roadbook-Route-Header {
 		page-break-before: always;
 	}
+
 	.TravelNotes-Roadbook-Travel-Notes-Row,
 	.TravelNotes-Roadbook-Route-Maneuvers-Row,
-	.TravelNotes-Roadbook-Route-Notes-Row
-	{
+	.TravelNotes-Roadbook-Route-Notes-Row {
 		page-break-inside: avoid;
 	}
 }

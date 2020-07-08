@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -16,13 +16,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-.TravelNotes-Route-Header-Name
-{
-	font-weight : bold;
+.TravelNotes-Route-Header-Name {
+	font-weight: bold;
 }
 
 .TravelNotes-Route-Header-Distance > span,
-.TravelNotes-Route-Header-Duration > span
-{
+.TravelNotes-Route-Header-Duration > span {
 	text-decoration: underline;
 }

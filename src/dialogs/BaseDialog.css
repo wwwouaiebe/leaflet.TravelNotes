@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -16,8 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-.TravelNotes-BaseDialog-BackgroundDiv
-{
+.TravelNotes-BaseDialog-BackgroundDiv {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -26,145 +25,143 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	background-color: rgba(0, 0, 0, 0.8);
 	z-index: 1200;
 }
-.TravelNotes-BaseDialog-BackgroundDiv:hover
-{
+
+.TravelNotes-BaseDialog-BackgroundDiv:hover {
 	cursor: not-allowed;
 }
 
-.TravelNotes-BaseDialog-Container
-{
+.TravelNotes-BaseDialog-Container {
 	z-index: 1200;
 	position: absolute;
 	background-color: white;
 	border-style: solid;
 	border-width: 0.1em;
-	font-family : sans-serif;
+	font-family: sans-serif;
 	font-size: 1em;
-	cursor:default;
-	display : flex;
-	flex-direction : column;
+	cursor: default;
+	display: flex;
+	flex-direction: column;
 	flex-wrap: nowrap;
-	max-height : 90vh;
+	max-height: 90vh;
 }
 
-.TravelNotes-BaseDialog-TopBar
-{
-	background-color : lightgray;
+.TravelNotes-BaseDialog-TopBar {
+	background-color: lightgray;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 }
-.TravelNotes-BaseDialog-TopBar:hover
-{
+
+.TravelNotes-BaseDialog-TopBar:hover {
 	background-color: darkred;
 }
+
 .TravelNotes-BaseDialog-TopBar:hover,
-.TravelNotes-BaseDialog-TopBar:active
-{
+.TravelNotes-BaseDialog-TopBar:active {
 	cursor: grab;
 }
-.TravelNotes-BaseDialog-CancelButton
-{
-	background-color : white;
+
+.TravelNotes-BaseDialog-CancelButton {
+	background-color: white;
 	width: 1em;
 }
-.TravelNotes-BaseDialog-CancelButton:hover
-{
-	color:red;
+
+.TravelNotes-BaseDialog-CancelButton:hover {
+	color: red;
 }
-.TravelNotes-BaseDialog-HeaderDiv
-{
+
+.TravelNotes-BaseDialog-HeaderDiv {
 	text-align: center;
 	font-weight: bold;
 	padding: 0.5em;
 }
-.TravelNotes-BaseDialog-ContentDiv
-{
-	border-top-style : solid;
-	border-bottom-style : solid;
+
+.TravelNotes-BaseDialog-ContentDiv {
+	border-top-style: solid;
+	border-bottom-style: solid;
 	border-color: lightgray;
-	border-width : 0.1em;
-	padding: 0.5em;	
+	border-width: 0.1em;
+	padding: 0.5em;
 	flex-grow: 1;
 	overflow: auto;
 }
-.TravelNotes-BaseDialog-FooterDiv
-{
+
+.TravelNotes-BaseDialog-FooterDiv {
 	padding: 0.5em;
 }
-.TravelNotes-BaseDialog-Button
-{
+
+.TravelNotes-BaseDialog-Button {
 	width: 2em;
-	border-style : solid;
-	border-width : 0.1em;
-	border-color : white;
-	text-align: center;	
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+	text-align: center;
 }
-.TravelNotes-BaseDialog-Button:hover
-{
+
+.TravelNotes-BaseDialog-Button:hover {
 	border-color: black;
 }
-.TravelNotes-BaseDialog-ErrorDiv
-{
+
+.TravelNotes-BaseDialog-ErrorDiv {
 	padding: 0.5em;
 	background-color: red;
 	color: white;
 }
-.TravelNotes-BaseDialog-ErrorDivHidden
-{
+
+.TravelNotes-BaseDialog-ErrorDivHidden {
 	visibility: hidden;
-	height : 0;
+	height: 0;
 	padding: 0;
 	margin: 0;
 }
-.TravelNotes-BaseDialog-ErrorDivVisible
-{
-	visibility : visible;
-}
-.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Visible
-{
+
+.TravelNotes-BaseDialog-ErrorDivVisible {
 	visibility: visible;
 }
-.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Hidden
-{
-	width : 0;
-	height : 0;
-	padding : 0;
-	margin : 0;
+
+.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Visible {
+	visibility: visible;
+}
+
+.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Hidden {
+	width: 0;
+	height: 0;
+	padding: 0;
+	margin: 0;
 	visibility: hidden;
 	border-width: 0;
 }
-.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Visible
-{
-	margin : 1em;
+
+.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Visible {
+	margin: 1em;
 	height: 1em;
-	width: calc(100%; - 2em);
+	width: calc(100% - 2em);
 	overflow: hidden;
 	visibility: visible;
 }
-.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Visible
-{
+
+.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Visible {
 	background-color: red;
 	height: 100%;
 	width: 1em;
 	animation: 2s linear 0s infinite alternate searchBullet;
 	visibility: visible;
 }
-@keyframes searchBullet
-{
-	from { margin-left: 0%; } to { margin-left: calc(100% - 1em); }
+
+@keyframes searchBullet {
+	from { margin-left: 0%; }
+	to { margin-left: calc(100% - 1em); }
 }
-.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Hidden
-{
-	margin : 0;
+
+.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Hidden {
+	margin: 0;
 	height: 0;
 	width: 0;
 	visibility: hidden;
 }
-.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Hidden
-{
+
+.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Hidden {
 	height: 0;
 	width: 0;
 	visibility: hidden;
 	animation: none;
 }
-

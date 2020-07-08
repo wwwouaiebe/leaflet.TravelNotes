@@ -56,6 +56,12 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		stylelint: {
+			 options: {
+				 fix: true
+			 },
+			src: ['src/**/*.css']
+		},		
 		cssmin: {
 			options: {
 				mergeIntoShorthands: false,
@@ -353,13 +359,14 @@ module.exports = function(grunt) {
 	grunt.file.write ( 'buildNumber.json', '{ "buildNumber" : "' + grunt.config.data.pkg.buildNumber + '"}'  );
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-rollup');
+	grunt.loadNpmTasks('grunt-stylelint');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-includes');
 	grunt.loadNpmTasks('grunt-terser');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
-	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
+	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
+	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

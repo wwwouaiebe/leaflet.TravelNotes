@@ -1,83 +1,75 @@
-#TravelNotes-APIKeysDialog-DataDiv
-{
+#TravelNotes-APIKeysDialog-DataDiv {
 	margin-top: 1em;
 	width: 39em;
 }
-#TravelNotes-APIKeysDialog-ToolbarDiv
-{
+
+#TravelNotes-APIKeysDialog-ToolbarDiv {
 	margin-bottom: 0.5em;
 	display: flex;
 	flex-direction: row;
 }
+
 #TravelNotes-APIKeysDialog-OpenFileDiv,
-#TravelNotes-APIKeysDialog-OpenJsonFileDiv
-{
+#TravelNotes-APIKeysDialog-OpenJsonFileDiv {
 	margin: 0;
 	padding: 0;
 	display: inline-block;
 }
-#TravelNotes-APIKeysDialog-SaveToJsonFileButton
-/*,
-#TravelNotes-APIKeysDialog-OpenJsonFileDiv,
-#TravelNotes-APIKeysDialog-OpenJsonFileFakeDiv*/
-{
+
+#TravelNotes-APIKeysDialog-SaveToJsonFileButton {
 	margin-left: auto;
 }
+
 #TravelNotes-APIKeysDialog-OpenFileInput,
-#TravelNotes-APIKeysDialog-OpenJsonFileInput
-{
+#TravelNotes-APIKeysDialog-OpenJsonFileInput {
 	opacity: 0;
 	position: relative;
-	width: 0em;
-	height:0em;
+	width: 0;
+	height: 0;
 }
+
 #TravelNotes-APIKeysDialog-OpenFileFakeDiv,
-#TravelNotes-APIKeysDialog-OpenJsonFileFakeDiv
-{
+#TravelNotes-APIKeysDialog-OpenJsonFileFakeDiv {
 	display: inline;
 }
-#TravelNotes-APIKeysDialog-OpenFileButton,
-#TravelNotes-APIKeysDialog-OpenJsonFileButton
-{
-}
+
 #TravelNotes-APIKeysDialog-OpenFileButton:hover,
-#TravelNotes-APIKeysDialog-OpenJsonFileButton:hover
-{
+#TravelNotes-APIKeysDialog-OpenJsonFileButton:hover {
 	color: red;
 }
-.TravelNotes-APIKeysDialog-Button
-{
+
+.TravelNotes-APIKeysDialog-Button {
 	font-weight: bold;
 	display: inline-block;
 	width: 2em;
-	text-align : center;
+	text-align: center;
 	cursor: default;
 	border-style: solid;
 	border-width: 0.1em;
 	border-color: white;
 }
-.TravelNotes-APIKeysDialog-Button:hover
-{
+
+.TravelNotes-APIKeysDialog-Button:hover {
 	border-color: black;
 }
-.TravelNotes-APIKeysDialog-ApiKeyRow
-{
+
+.TravelNotes-APIKeysDialog-ApiKeyRow {
 	display: flex;
 	flex-direction: row;
 }
-.TravelNotes-APIKeysDialog-DeleteButton
-{
+
+.TravelNotes-APIKeysDialog-DeleteButton {
 	margin-left: auto;
 }
-.TravelNotes-APIKeysDialog-Input
-{
+
+.TravelNotes-APIKeysDialog-Input {
 	margin: 0.2em;
 }
-.TravelNotes-APIKeysDialog-ApiKeyName
-{
+
+.TravelNotes-APIKeysDialog-ApiKeyName {
 	width: 10em;
 }
-.TravelNotes-APIKeysDialog-ApiKeyValue
-{
+
+.TravelNotes-APIKeysDialog-ApiKeyValue {
 	width: 20em;
 }

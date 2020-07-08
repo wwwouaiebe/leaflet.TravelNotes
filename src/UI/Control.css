@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -32,113 +32,97 @@ Changes:
 
 /* --- Main settings --- */
 
-#TravelNotes-Control-MainDiv
-{
+#TravelNotes-Control-MainDiv {
 	height: 100vh;
-	max-height : 100vh;
-	font-family : sans-serif;
+	max-height: 100vh;
+	font-family: sans-serif;
 	font-size: 1em;
 	margin: 0;
+	display: flex;
+	flex-direction: column;
 }
-#TravelNotes-Control-MainDiv-Title
-{
-	text-align:center;
+
+#TravelNotes-Control-MainDiv-Title {
+	text-align: center;
 	font-size: 1em;
 	font-weight: bold;
 	color: white;
 	background-color: black;
 	padding: 0.5em;
-	margin:0;
+	margin: 0;
 }
 
 /* --- flex column --- */
 
-#TravelNotes-Control-MainDiv
-{
-	display: flex;
-	flex-direction: column;
-}
 #TravelNotes-Control-MainDiv > #TravelNotes-Control-RouteDataDiv,
-#TravelNotes-Control-MainDiv > #TravelNotes-Control-TravelDataDiv
-{
+#TravelNotes-Control-MainDiv > #TravelNotes-Control-TravelDataDiv {
 	flex-shrink: 0;
 	max-height: 7em;
 	overflow: auto;
 }
-#TravelNotes-Control-MainDiv > #TravelNotes-Control-DataPanesDiv
-{
-	margin-bottom: auto;
-}
 
-/* --- flex row ---*/
-
+/* --- flex row --- */
 
 #TravelNotes-Control-MainDiv > div.TravelNotes-Control-HeaderDiv,
-#TravelNotes-Control-MainDiv > div.TravelNotes-Control-ButtonsDiv
-{
+#TravelNotes-Control-MainDiv > div.TravelNotes-Control-ButtonsDiv {
 	display: flex;
 	flex-direction: row;
 }
 
 #TravelNotes-Control-PinButton,
 #TravelNotes-Control-ReverseWayPointsButton,
-#TravelNotes-Control-AddRoutesButton
-{
+#TravelNotes-Control-AddRoutesButton {
 	margin-left: auto;
 }
-#TravelNotes-Control-TravelNotesToolbarDiv
-{
+
+#TravelNotes-Control-TravelNotesToolbarDiv {
 	margin-top: 0.5em;
 }
 
-/* --- buttons ---*/
+/* --- buttons --- */
 
-.TravelNotes-Control-Button
-{
+.TravelNotes-Control-Button {
 	font-weight: bold;
 	display: inline-block;
 	width: 2em;
-	text-align : center;
+	text-align: center;
 	cursor: default;
 	border-style: solid;
 	border-width: 0.1em;
 	border-color: white;
 }
-.TravelNotes-Control-Button:hover
-{
+
+.TravelNotes-Control-Button:hover {
 	border-color: black;
 }
 
-.TravelNotes-Control-Button > a
-{
+.TravelNotes-Control-Button > a {
 	text-decoration: none;
 	color: black;
 }
-.TravelNotes-Control-Button > a:visited
-{
+
+.TravelNotes-Control-Button > a:visited {
 	color: black;
 }
-.TravelNotes-Control-ExpandButton
-{
+
+.TravelNotes-Control-ExpandButton {
 	padding-right: 0.5em;
 	color: lightgray;
 }
-.TravelNotes-Control-ExpandButton:hover
-{
+
+.TravelNotes-Control-ExpandButton:hover {
 	cursor: default;
-	color:red;
+	color: red;
 }
 
 #TravelNotes-Control-CancelTravelButton:hover,
 #TravelNotes-Control-RemoveAllWayPointsButton:hover,
 #TravelNotes-Control-CancelRouteButton:hover,
-#TravelNotes-Control-PinButton:hover
-{
+#TravelNotes-Control-PinButton:hover {
 	color: red;
 }
 
-.TravelNotes-Control-PaneButton
-{
+.TravelNotes-Control-PaneButton {
 	border-style: solid;
 	border-top-width: 0.3em;
 	border-right-width: 0.1em;
@@ -149,21 +133,19 @@ Changes:
 	margin-left: 0.1em;
 }
 
-.TravelNotes-Control-ActivePaneButton
-{
+.TravelNotes-Control-ActivePaneButton {
 	background-color: white;
 	border-bottom-color: white;
 }
 
-#TravelNotes-Control-ItineraryButtonsDiv
-{
+#TravelNotes-Control-ItineraryButtonsDiv {
 	padding-top: 0.5em;
 	border-style: solid;
 	border-width: 0.1em;
 	border-color: lightgray;
 }
-.TravelNotes-Control-ImgButton
-{
+
+.TravelNotes-Control-ImgButton {
 	padding: 0.1em;
 	margin: 0.1em;
 	border-style: solid;
@@ -172,34 +154,33 @@ Changes:
 	width: 24px;
 	height: 24px;
 }
+
 .TravelNotes-Control-ActiveProviderImgButton,
-.TravelNotes-Control-ActiveTransitModeImgButton
-{
+.TravelNotes-Control-ActiveTransitModeImgButton {
 	border-color: black;
 }
-.TravelNotes-Control-InactiveTransitModeImgButton
-{
+
+.TravelNotes-Control-InactiveTransitModeImgButton {
 	visibility: hidden;
 	width: 0;
 	padding: 0;
-	margin:0;
-	border-width:0;
+	margin: 0;
+	border-width: 0;
 }
+
 #TravelNotes-Control-ImportTravelInput,
-#TravelNotes-Control-OpenTravelInput
-{
+#TravelNotes-Control-OpenTravelInput {
 	opacity: 0;
 	position: relative;
-	width: 0em;
+	width: 0;
 }
+
 #TravelNotes-Control-ImportTravelFakeDiv,
-#TravelNotes-Control-OpenTravelFakeDiv
-{
+#TravelNotes-Control-OpenTravelFakeDiv {
 	display: inline;
 }
 
-.TravelNotes-Control-GeoLocationButton-Striked
-{
+.TravelNotes-Control-GeoLocationButton-Striked {
 	text-decoration: line-through;
 	text-decoration-color: red;
 	text-decoration-thickness: 2px;
@@ -209,175 +190,160 @@ Changes:
 
 /* --- overload for maximized control --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize
-{
-	max-width:30em;
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize {
+	max-width: 30em;
 	width: 30em;
 	background-color: white;
 }
 
-		/* --- title --- */
+/* --- title --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-MainDiv-Title
-{
-	margin:0;
-	padding : 0;
-	transform : scale(0);
-	height:0;
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div#TravelNotes-Control-MainDiv-Title {
+	margin: 0;
+	padding: 0;
+	transform: scale(0);
+	height: 0;
 }
 
-		/* --- padding left and padding-right --- */
+/* --- padding left and padding-right --- */
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-HeaderDiv,
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
-{
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv {
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 }
-		/* --- padding-top --- */
+
+/* --- padding-top --- */
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-HeaderDiv,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv,
-{
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv, {
 	padding-top: 0.5em;
 }
 
-		/* --- padding-bottom --- */
+/* --- padding-bottom --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
-{
+/* --- border-bottom --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv {
 	padding-bottom: 0.5em;
-}
-
-		/* --- border-bottom --- */
-
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv
-{
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-bottom-color: lightgray;
 }
-		/* --- max-height overload for expanded list --- */
+
+/* --- max-height overload for expanded list --- */
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-RouteDataDiv.TravelNotes-Control-ExpandedList,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-TravelDataDiv.TravelNotes-Control-ExpandedList
-{
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-TravelDataDiv.TravelNotes-Control-ExpandedList {
 	max-height: 40%;
 }
 
-		/* padding-top and bottom overload for small headers --- */
+/* padding-top and bottom overload for small headers --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-SmallHeader
-{
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-SmallHeader {
 	padding-top: 0;
 	padding-bottom: 0;
 }
-		/* --- overload for hidden lists --- */
+
+/* --- overload for hidden lists --- */
 
 #TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-DataDiv.TravelNotes-Control-HiddenList,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList
-{
-	transform : scale(0);
-	margin: 0;
-	padding: 0;
-	height:0;
-}
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > #TravelNotes-Control-ItineraryButtonsDiv.TravelNotes-Control-HiddenList >img.TravelNotes-Control-ImgButton
-{
-	padding: 0;
-	margin: 0;
-	border-style: none;
-	border-width: 0;
-}
-/* --- overload for minimized control --- */
-
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize
-{
-	height: 3em;
-	background-color: transparent;
-	width : 8em;
-	margin:0;
-	padding : 0;
-}
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div > div,
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div > div > div
-{
-	margin:0;
-	padding : 0;
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Maximize > div.TravelNotes-Control-ButtonsDiv.TravelNotes-Control-HiddenList {
 	transform: scale(0);
-	width:0;
-	height:0;
-}
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title
-{
-	transform-origin: bottom right;
-	transform : rotateZ(-90deg) translateX(3em) scale(1);
-	padding-top : 1em;
-	padding-bottom: 0.5em;
-	margin:0;
-	height: 3em;
-	width: 8em;
+	margin: 0;
+	padding: 0;
+	height: 0;
 }
 
 /* --- overload for hidden control --- */
 
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden
-{
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden {
 	transform: scale(0);
-	margin:0;
-	padding : 0;
-	height: 0;
-	width: 0;
-}#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > div
-{
-	transform: scale(0);
-	margin:0;
-	padding : 0;
+	margin: 0;
+	padding: 0;
 	height: 0;
 	width: 0;
 }
-#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > #TravelNotes-Control-ItineraryButtonsDiv >img.TravelNotes-Control-ImgButton
-{
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > div {
+	transform: scale(0);
+	margin: 0;
+	padding: 0;
+	height: 0;
+	width: 0;
+}
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Hidden > #TravelNotes-Control-ItineraryButtonsDiv > img.TravelNotes-Control-ImgButton {
 	padding: 0;
 	margin: 0;
 	border-style: none;
 	border-width: 0;
 }
+
+/* --- overload for minimized control --- */
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize {
+	height: 3em;
+	background-color: transparent;
+	width: 8em;
+	margin: 0;
+	padding: 0;
+}
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div > div,
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div > div > div {
+	margin: 0;
+	padding: 0;
+	transform: scale(0);
+	width: 0;
+	height: 0;
+}
+
+#TravelNotes-Control-MainDiv.TravelNotes-Control-MainDiv-Minimize > div#TravelNotes-Control-MainDiv-Title {
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateX(3em) scale(1);
+	padding-top: 1em;
+	padding-bottom: 0.5em;
+	margin: 0;
+	height: 3em;
+	width: 8em;
+}
+
 /* --- Itinerary --- */
 
-#TravelNotes-Control-ItineraryDiv
-{
+#TravelNotes-Control-ItineraryDiv {
 	overflow: auto;
 }
-#TravelNotes-Control-DataPanesDiv
-{
+
+#TravelNotes-Control-DataPanesDiv {
+	margin-bottom: auto;
 	max-height: none;
 	overflow: auto;
 }
-.TravelNotes-Control-Route-ManeuversAndNotes
-{
+
+.TravelNotes-Control-Route-ManeuversAndNotes {
 	border-spacing: 0.4em 0.2em;
 }
+
 .TravelNotes-Control-Route-Maneuvers-Row,
-.TravelNotes-Control-Route-Notes-Row
-{
-	display:flex;
+.TravelNotes-Control-Route-Notes-Row {
+	display: flex;
 	flex-direction: row;
 }
+
 .TravelNotes-Control-Travel-Notes-Cell,
-.TravelNotes-Control-Route-ManeuversAndNotes-Cell
-{
+.TravelNotes-Control-Route-ManeuversAndNotes-Cell {
 	padding: 0.3em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-bottom-color: lightgray;
 	flex-shrink: 1;
 }
+
 .TravelNotes-Control-Travel-Notes-IconCell,
-.TravelNotes-Control-Route-ManeuversAndNotes-IconCell
-{
+.TravelNotes-Control-Route-ManeuversAndNotes-IconCell {
 	width: 40px;
 	height: 40px;
 	min-height: 20px;
@@ -386,66 +352,62 @@ Changes:
 }
 
 /* --- search --- */
-#TravelNotes-Control-SearchDiv
-{
-	margin-top:0.5em;
+#TravelNotes-Control-SearchDiv {
+	margin-top: 0.5em;
 }
-#TravelNotes-Control-SearchInput
-{
+
+#TravelNotes-Control-SearchInput {
 	height: 1.4em;
-	width: calc(100% - 3em) ;
-	margin:0;
-	padding:0;
+	width: calc(100% - 3em);
+	margin: 0;
+	padding: 0;
 }
-#TravelNotes-Control-SearchButton
-{
-	margin-right:0.3em;
+
+#TravelNotes-Control-SearchButton {
+	margin-right: 0.3em;
 }
-.TravelNotes-Control-SearchResult
-{
+
+.TravelNotes-Control-SearchResult {
 	line-height: 1.2em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	margin: 0.3em;
 }
-.TravelNotes-Control-SearchResult > p
-{
+
+.TravelNotes-Control-SearchResult > p {
 	margin: 0;
 	padding: 0;
 }
-.TravelNotes-Control-SearchResult > p:first-child
-{
+
+.TravelNotes-Control-SearchResult > p:first-child {
 	text-decoration: underline;
 }
-.TravelNotes-Control-SearchResult:hover
-{
-	background-color:lightgray;
+
+.TravelNotes-Control-SearchResult:hover {
+	background-color: lightgray;
 }
-#TravelNotes-Control-SearchWait
-{
-	margin : 1em;
+
+#TravelNotes-Control-SearchWait {
+	margin: 1em;
 	height: 1em;
-	width: calc(100%; - 2em);
+	width: calc(100% - 2em);
 	overflow: hidden;
 }
-#TravelNotes-Control-SearchWaitBullet
-{
+
+#TravelNotes-Control-SearchWaitBullet {
 	background-color: red;
 	height: 100%;
 	width: 1em;
 	animation: 2s linear 0s infinite alternate searchBullet;
 }
-@keyframes searchBullet
-{
-	from { margin-left: 0%; } to { margin-left: calc(100% - 1em); }
+
+@keyframes searchBullet {
+	from { margin-left: 0%; }
+	to { margin-left: calc(100% - 1em); }
 }
 
 /* --- special texts --- */
 
-.TravelNotes-Control-HeaderText
-{
+.TravelNotes-Control-HeaderText {
 	font-weight: bold;
 }
-
-
-

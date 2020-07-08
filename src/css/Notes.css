@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -16,42 +16,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* notes popup*/
-.TravelNotes-NoteHtml-TooltipContent
-{
+/* notes popup */
+.TravelNotes-NoteHtml-TooltipContent {
 	font-weight: bold;
 }
+
+.TravelNotes-NoteHtml-LatLng > span,
 .TravelNotes-NoteHtml-Address > span:first-child,
 .TravelNotes-NoteHtml-Phone > span:first-child,
 .TravelNotes-NoteHtml-Url > span:first-child,
-.TravelNotes-NoteHtml-LatLng > span,
 .TravelNotes-NoteHtml-Distance > span:first-child,
-.TravelNotes-NoteHtml-Address-City
-{
-	text-decoration : underline;
+.TravelNotes-NoteHtml-Address-City {
+	text-decoration: underline;
 }
-.TravelNotes-MapNote
-{
-	background-repeat : no-repeat;
+
+.TravelNotes-MapNote {
+	background-repeat: no-repeat;
 	height: 40px;
 	width: 40px;
-    display: inline-block;
+	display: inline-block;
 	vertical-align: top;
 }
-.TravelNotes-ManeuverNote
-{
-	background-repeat : no-repeat;
+
+.TravelNotes-ManeuverNote {
+	background-repeat: no-repeat;
 	height: 40px;
 	width: 40px;
-    display: inline-block;
+	display: inline-block;
 	vertical-align: top;
-	background-color : white;
+	background-color: white;
 	border-color: black;
 	border-width: 1px;
 	border-style: solid;
 }
-.TravelNotes-AllNotes
-{
-	background : transparent;
+
+.TravelNotes-AllNotes {
+	background: transparent;
 	height: auto;
 }

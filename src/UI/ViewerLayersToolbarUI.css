@@ -1,16 +1,15 @@
-#TravelNotes-ViewerLayersToolbarUI
-{
+#TravelNotes-ViewerLayersToolbarUI {
 	position: absolute;
 	top: 0;
 	left: 0;
 	z-index: 1000;
 	background-color: white;
 }
-.TravelNotes-ViewerLayersToolbarUI-Button
-{
+
+.TravelNotes-ViewerLayersToolbarUI-Button {
 	padding: 0.5em;
-	text-align:center;
-	margin:0;
+	text-align: center;
+	margin: 0;
 	font-weight: bold;
 	height: 1.5em;
 	vertical-align: center;

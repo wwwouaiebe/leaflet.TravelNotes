@@ -2,7 +2,7 @@
 Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
 
 This  program is free software;
-you can redistribute it and/or modify it under the terms of the 
+you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
 
@@ -16,48 +16,48 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* Don't change TravelNotes-ContextMenu-Panel. It's used to find the screen height!*/
+/* Don't change TravelNotes-ContextMenu-Panel. It's used to find the screen height! */
 
-.TravelNotes-ContextMenu-Panel
-{
+.TravelNotes-ContextMenu-Panel {
 	position: absolute;
 	top: 0;
 	left: 0;
-	/*opacity : 0;*/
+
+	/* opacity : 0; */
 	width: 100vw;
 	height: 100vh;
 	background-color: transparent;
 	z-index: 1100;
 }
-.TravelNotes-ContextMenu-Container
-{
+
+.TravelNotes-ContextMenu-Container {
 	position: absolute;
 	z-index: 1200;
 	background-color: white;
 	border-style: solid;
 	border-width: 0.1em;
-	font-family : sans-serif;
-	font-size: 1em;;
+	font-family: sans-serif;
+	font-size: 1em;
 	padding: 0.2em;
 }
-.TravelNotes-ContextMenu-ItemContainer
-{
+
+.TravelNotes-ContextMenu-ItemContainer {
 	margin-left: 2em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 }
-.TravelNotes-ContextMenu-CloseButton:hover
-{
-	color:red;
+
+.TravelNotes-ContextMenu-CloseButton:hover {
+	color: red;
 	cursor: default;
 }
-.TravelNotes-ContextMenu-ItemContainer:last-child
-{
+
+.TravelNotes-ContextMenu-ItemContainer:last-child {
 	border-bottom-style: none;
 }
-.TravelNotes-ContextMenu-Item
-{
-	padding: 0em;
+
+.TravelNotes-ContextMenu-Item {
+	padding: 0;
 	border-style: none;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
@@ -68,13 +68,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	text-align: left;
 	background-color: white;
 }
-.TravelNotes-ContextMenu-Item:hover
-{
+
+.TravelNotes-ContextMenu-Item:hover {
 	background-color: lightblue;
 	cursor: default;
 }
-.TravelNotes-ContextMenu-Item:focus
-{
+
+.TravelNotes-ContextMenu-Item:focus {
 	width: calc(100% + 1em);
 	background-color: lightblue;
 	margin-left: -1.5em;
@@ -82,13 +82,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-style: none;
 	cursor: default;
 }
-.TravelNotes-ContextMenu-ItemDisabled
-{
+
+.TravelNotes-ContextMenu-ItemDisabled {
 	color: gray;
 }
+
 .TravelNotes-ContextMenu-ItemDisabled:focus,
-.TravelNotes-ContextMenu-ItemDisabled:hover
-{
+.TravelNotes-ContextMenu-ItemDisabled:hover {
 	background-color: lightgray;
 	cursor: auto;
 }

@@ -1,9 +1,8 @@
-.TravelNotes-BaseDialog-FooterDiv 
-{
+.TravelNotes-BaseDialog-FooterDiv {
 	display: flex;
-	flex-direction : row;
+	flex-direction: row;
 }
-#TravelNotes-TwoButtonsDialog-MessageDiv
-{
+
+#TravelNotes-TwoButtonsDialog-MessageDiv {
 	width: 30em;
 }
