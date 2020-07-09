@@ -182,6 +182,8 @@ function newViewerMapEditor ( ) {
 
 		// and the layerGroup added to the leaflet map and JavaScript map
 		myAddTo ( note.objId, layerGroup );
+
+		return { marker : marker, polyline : polyline, bullet : bullet };
 	}
 
 	/*

@@ -139,7 +139,7 @@ function newNoteEditor ( ) {
 						myEventDispatcher.dispatch (
 							'noteupdated',
 							{
-								removedNoteObjId : null,
+								removedNoteObjId : INVALID_OBJ_ID,
 								addedNoteObjId : note.objId
 							}
 						);

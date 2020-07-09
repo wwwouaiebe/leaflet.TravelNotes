@@ -242,14 +242,11 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddNoteEvents ( noteObjId ) {
-		let layerGroup = theTravelNotesData.mapObjects.get ( noteObjId );
-		let bullet = layerGroup.getLayer ( layerGroup.bulletId );
-		let marker = layerGroup.getLayer ( layerGroup.markerId );
+	function myAddNoteEvents ( noteObjId, noteObjects ) {
 
 		// event listener for the dragend event
 		L.DomEvent.on (
-			bullet,
+			noteObjects.bullet,
 			'dragend',
 			dragEndEvent => {
 
@@ -301,7 +298,7 @@ function newMapEditor ( ) {
 
 		// event listener for the drag event
 		L.DomEvent.on (
-			bullet,
+			noteObjects.bullet,
 			'drag',
 			dragEvent => {
 				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
@@ -313,14 +310,14 @@ function newMapEditor ( ) {
 
 		// event listener for the contextmenu event
 		L.DomEvent.on (
-			marker,
+			noteObjects.marker,
 			'contextmenu',
 			contextMenuEvent => newNoteContextMenu ( contextMenuEvent ).show ( )
 		);
 
 		// event listener for the dragend event
 		L.DomEvent.on (
-			marker,
+			noteObjects.marker,
 			'dragend',
 			dragEndEvent => {
 
@@ -344,7 +341,7 @@ function newMapEditor ( ) {
 
 		// event listener for the drag event
 		L.DomEvent.on (
-			marker,
+			noteObjects.marker,
 			'drag',
 			dragEvent => {
 
@@ -367,12 +364,15 @@ function newMapEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddNote ( noteObjId ) {
+	function myAddNote ( noteObjId, isPopupOpen ) {
 
-		theViewerMapEditor.addNote ( noteObjId );
+		let noteObjects = theViewerMapEditor.addNote ( noteObjId );
+		if ( isPopupOpen ) {
+			noteObjects.marker.openPopup ( );
+		}
 
 		if ( ! theTravelNotesData.travel.readOnly ) {
-			myAddNoteEvents ( noteObjId );
+			myAddNoteEvents ( noteObjId, noteObjects );
 		}
 	}
 
@@ -481,7 +481,15 @@ function newMapEditor ( ) {
 
 			let notesIterator = route.notes.iterator;
 			while ( ! notesIterator.done ) {
-				myAddNoteEvents ( notesIterator.value.objId );
+				let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
+				myAddNoteEvents (
+					notesIterator.value.objId,
+					{
+						marker : layerGroup.getLayer ( layerGroup.markerId ),
+						polyline : layerGroup.getLayer ( layerGroup.polylineId ),
+						bullet : layerGroup.getLayer ( layerGroup.bulletId )
+					}
+				);
 			}
 		}
 
@@ -637,11 +645,16 @@ function newMapEditor ( ) {
 	*/
 
 	function myUpdateNote ( removedNoteObjId, addedNoteObjId ) {
+		let isPopupOpen = false;
 		if ( INVALID_OBJ_ID !== removedNoteObjId ) {
+			let layerGroup = theTravelNotesData.mapObjects.get ( removedNoteObjId );
+			if ( layerGroup ) {
+				isPopupOpen = layerGroup.getLayer ( layerGroup.markerId ).isPopupOpen ( );
+			}
 			myRemoveObject ( removedNoteObjId );
 		}
 		if ( INVALID_OBJ_ID !== addedNoteObjId ) {
-			myAddNote ( addedNoteObjId );
+			myAddNote ( addedNoteObjId, isPopupOpen );
 		}
 	}
 
