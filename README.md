@@ -79,6 +79,13 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - An error message is displayed when a problem occurs while reading the access keys file
 - Some bugs are fixed
 
+### What's new in release 1.11.0
+
+- The predefined route notes "Icon SVG from OSM" have been improved for entries and exits from roundabouts
+- It is possible to create a note for all the maneuvers of a route in one operation
+- The display of errors when reading the "APIKeys" file has been improved
+- Some bugs are fixed ( Issues #113, #115, #116, #117 and #118)
+
 <a id="fr" />
 
 ## Guides
@@ -160,3 +167,10 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 - Un bouton permettant de recharger les clefs d'accès a été ajouté dans la boite de dialogue de gestion des clefs d'accès
 - Un message d'erreur est affiché quand un problème survient lors de la lecture du fichier des clefs d'accès
 - Quelques bugs sont corrigés
+
+### Quoi de neuf dans la version 1.11.0
+
+- Les notes de trajet prédéfinie "Icône SVG depuis OSM" ont été améliorées pour les entrées et sorties des rond-points
+- Il est possible de créer une note pour toutes les manoeuvres d'un trajet en une opération
+- L'affichage des erreurs lors de la lecture du fichier "APIKeys" a été amélioré
+- Quelques bugs sont corrigés ( Issues #113, #115, #116, #117 et #118)

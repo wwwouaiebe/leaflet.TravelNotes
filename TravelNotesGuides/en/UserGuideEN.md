@@ -35,6 +35,7 @@
 	- [Change the latitude and longitude of a note](#LatLngNote)
 	- [Turn a route note into a travel note](#RouteToTravelNote)
 	- [Turn a travel note into a route note](#TravelToRouteNote)
+	- [Create a note for each route maneuver](#AllManeuverNotesFromOsm)
 	- [The note dialog box](#NoteDlg)
 		- [Predefined route notes "SVG icon from OSM"](#SvgNoteFromOsm)
 		- [Some examples of notes](#NoteSamples)
@@ -524,6 +525,13 @@ The transformation is only possible if no route is being edited.
 Right-click on the note icon and select "Transform to route note" from the context menu. 
 The transformation is only possible if no route is being edited. The note will be attached 
 to the route closest to it.
+
+<a id="AllManeuverNotesFromOsm"></a>
+#### Create a note for each route maneuver
+
+Right-click on the route and select "Create a note for each route maneuver" from the context menu. 
+A confirmation request is displayed.
+For each route maneuver, [a SVG note from the OpenStreetMap data](#SvgNoteFromOsm) will be created.
 
 <a id="NoteDlg"></a>
 ### The note dialog box

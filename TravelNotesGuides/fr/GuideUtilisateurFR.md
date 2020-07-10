@@ -36,6 +36,7 @@
 	- [Modifier la latitude et la longitude d'une note](#LatLngNote)
 	- [Transformer une note de trajet en note de voyage](#RouteToTravelNote)
 	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
+	- [Créer une note pour chaque maneuvre du trajet](#AllManeuverNotesFromOsm)
 	- [La boite d'édition d'une note](#NoteDlg)
 		- [Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
 		- [Quelques exemples de notes](#NoteSamples)
@@ -552,6 +553,13 @@ contextuel. La transformation n'est possible que si aucun trajet n'est en cours 
 Faites un clic droit sur l'icône de la note et sélectionnez "Transformer en note de trajet" dans le menu 
 contextuel. La transformation n'est possible que si aucun trajet n'est en cours d'édition. La note sera 
 attachée au trajet le plus proche de celle-ci.
+
+<a id="AllManeuverNotesFromOsm"></a>
+#### Créer une note pour chaque maneuvre du trajet
+
+Faites un clic droit sur le trajet et sélectionnez "Créer une note pour chaque manoeuvre du trajet" dans le menu 
+contextuel. Une demande de confirmation est affichée. 
+Pour chaque manoeuvre du trajet, [une note en SVG à partir des données OpenStreetMap ](#SvgNoteFromOsm) sera créée.
 
 <a id="NoteDlg"></a>
 ### La boite d'édition d'une note

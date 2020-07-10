@@ -279,7 +279,9 @@ tag place=city dans OSM pour que ce tag soit utilisé dans l'adresse de l'icône
 tag place=town dans OSM pour que ce tag soit utilisé dans l'adresse de l'icône
 - __note.svgTimeOut__ : la durée du timeout envoyé avec la requête de création de l'icône SVG
 - __note.cityPrefix__ : un texte qui sera affiché avant le nom de la cité dans l'adresse
-- __note.cityPostfix__ :un texte qui sera affiché après le nom de la cité dans l'adresse
+- __note.cityPostfix__ : un texte qui sera affiché après le nom de la cité dans l'adresse
+- __note.maxManeuversNotes__: le maximum de notes qui peuvent être créées avec la commande
+"Créer une note pour chaque maneoeuvre du trajet".
 - __itineraryPointZoom__ : le facteur de zoom utilisé pour zoomer sur un point de l'itinéraire à partir 
 d'un double-clic dans le contrôle
 - __routeEditor.displayEditionInHTMLPage__ : quand cette valeur est true et que un trajet est en cours 

@@ -275,6 +275,8 @@ with the tag place = town in OSM for this tag to be used in the address of the i
 - __note.svgTimeOut__ : the duration of the timeout sent with the request to create the SVG icon
 - __note.cityPrefix__ : a text that will be displayed before the name of the city in the address
 - __note.cityPostfix__ : a text that will be displayed after the name of the city in the address
+- __note.maxManeuversNotes__: the maximum number of notes that can be created with the command
+"Create a note for each route maneuver".
 - __itineraryPointZoom__ : the zoom factor used to zoom in on a point in the route from a 
 double-click in the control.
 - __displayEditionInHTMLPage__ : when this value is true and a route is being edited, changes to 
