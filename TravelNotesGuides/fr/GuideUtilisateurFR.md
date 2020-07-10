@@ -555,7 +555,7 @@ contextuel. La transformation n'est possible que si aucun trajet n'est en cours 
 attachée au trajet le plus proche de celle-ci.
 
 <a id="AllManeuverNotesFromOsm"></a>
-#### Créer une note pour chaque maneuvre du trajet
+### Créer une note pour chaque maneuvre du trajet
 
 Faites un clic droit sur le trajet et sélectionnez "Créer une note pour chaque manoeuvre du trajet" dans le menu 
 contextuel. Une demande de confirmation est affichée. 

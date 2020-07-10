@@ -527,7 +527,7 @@ The transformation is only possible if no route is being edited. The note will b
 to the route closest to it.
 
 <a id="AllManeuverNotesFromOsm"></a>
-#### Create a note for each route maneuver
+### Create a note for each route maneuver
 
 Right-click on the route and select "Create a note for each route maneuver" from the context menu. 
 A confirmation request is displayed.
