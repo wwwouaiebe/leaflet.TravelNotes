@@ -340,11 +340,23 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		myStreets =
-			incomingStreet +
-			( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
-			' ' + myDirectionArrow + ' ' +
-			outgoingStreet;
+		if ( '' === incomingStreet ) {
+			myDirectionArrow = '&#x1F7E2;';
+		}
+
+		if ( AT_START === myPositionOnRoute ) {
+			myStreets = '&#x1F7E2; ' + outgoingStreet;
+		}
+		else if ( AT_END === myPositionOnRoute ) {
+			myStreets = incomingStreet + ' &#x1F534;';
+		}
+		else {
+			myStreets =
+				incomingStreet +
+				( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
+				' ' + myDirectionArrow + ' ' +
+				outgoingStreet;
+		}
 
 		if ( isRoundaboutEntry && ! isRoundaboutExit ) {
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - entry roundabout' );
