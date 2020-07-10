@@ -213,8 +213,8 @@ function newUtilities ( ) {
 		const THREE = 3;
 
 		let iDistance = Math.floor ( distance );
-		if ( ZERO === iDistance ) {
-			return '';
+		if ( ZERO >= iDistance ) {
+			return '0\u00A0km';
 		}
 		return Math.floor ( iDistance / M_IN_KM ) +
 			',' +
