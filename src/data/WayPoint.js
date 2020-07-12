@@ -79,7 +79,8 @@ function newWayPoint ( ) {
 			case '1.8.0' :
 			case '1.9.0' :
 			case '1.10.0' :
-				something.objType.version = '1.11.0';
+			case '1.11.0' :
+				something.objType.version = '1.12.0';
 				break;
 			default :
 				throw new Error ( 'invalid version for ' + ourObjType.name );
