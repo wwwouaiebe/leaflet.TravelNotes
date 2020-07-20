@@ -88,110 +88,6 @@
 		"msgstr" : "Fermer"
 	},
 	{
-		"msgid" : "ContextMenuFactory - Attach note to route",
-		"msgstr" : "transformer en note de trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this note",
-		"msgstr" : "Effacer cette note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Detach note from route",
-		"msgstr" : "Transformer en note de voyage"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Edit this note",
-		"msgstr" : "Éditer cette note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Hide notes",
-		"msgstr" : "Masquer les notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - New travel note",
-		"msgstr" : "Ajouter une note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Show notes",
-		"msgstr" : "Afficher les notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to note",
-		"msgstr" : "Zoom sur cette note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Add a note on the route",
-		"msgstr" : "Ajouter une note à ce trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Create a note for each route maneuver",
-		"msgstr" : "Créer une note pour chaque manœuvre du trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Print route map",
-		"msgstr" : "Imprimer les cartes de ce trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
-		"msgstr" : "Abandonner les modifications"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this route",
-		"msgstr" : "Supprimer ce trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this waypoint",
-		"msgstr" : "Supprimer ce point de passage"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Edit this route",
-		"msgstr" : "Éditer ce trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Hide this route",
-		"msgstr" : "Masquer ce trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Properties",
-		"msgstr" : "Propriétés"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Save modifications on this route",
-		"msgstr" : "Sauver les modifications"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as end point",
-		"msgstr" : "Sélectionner cet endroit comme point de fin"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as start point",
-		"msgstr" : "Sélectionner cet endroit comme point de départ"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as way point",
-		"msgstr" : "Sélectionner cet endroit comme point intermédiaire"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to route",
-		"msgstr" : "Zoom sur le trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - About Travel & Notes",
-		"msgstr" : "À propos de Travel & Notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Show all routes",
-		"msgstr" : "Afficher tous les trajets"
-	},
-	{
-		"msgid" : "ContextMenuFactory - View the elevation",
-		"msgstr" : "Voir le profil du trajet"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to travel",
-		"msgstr" : "Zoom sur le voyage"
-	},
-	{
 		"msgid" : "DataPanesUI - Hide",
 		"msgstr" : "Masquer"
 	},
@@ -292,8 +188,68 @@
 		"msgstr" : "Cartes"
 	},
 	{
+		"msgid" : "MapContextMenu - About Travel & Notes",
+		"msgstr" : "À propos de Travel & Notes"
+	},
+	{
+		"msgid" : "MapContextMenu - Hide all routes",
+		"msgstr" : "Masquer tous les trajets"
+	},
+	{
+		"msgid" : "MapContextMenu - Hide notes",
+		"msgstr" : "Masquer les notes"
+	},
+	{
+		"msgid" : "MapContextMenu - New travel note",
+		"msgstr" : "Ajouter une note"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as end point",
+		"msgstr" : "Sélectionner cet endroit comme point de fin"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as start point",
+		"msgstr" : "Sélectionner cet endroit comme point de départ"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as way point",
+		"msgstr" : "Sélectionner cet endroit comme point intermédiaire"
+	},
+	{
+		"msgid" : "MapContextMenu - Show all routes",
+		"msgstr" : "Afficher tous les trajets"
+	},
+	{
+		"msgid" : "MapContextMenu - Show notes",
+		"msgstr" : "Afficher les notes"
+	},
+	{
+		"msgid" : "MapContextMenu - Zoom to travel",
+		"msgstr" : "Zoom sur le voyage"
+	},
+	{
 		"msgid" : "MapEditor - Drag and drop to add a waypoint",
 		"msgstr" : "Faites glisser et déposez pour ajouter un point de passage ou faites un clic droit pour le menu"
+	},
+	{
+		"msgid" : "NoteContextMenu - Attach note to route",
+		"msgstr" : "transformer en note de trajet"
+	},
+	{
+		"msgid" : "NoteContextMenu - Delete this note",
+		"msgstr" : "Effacer cette note"
+	},
+	{
+		"msgid" : "NoteContextMenu - Detach note from route",
+		"msgstr" : "Transformer en note de voyage"
+	},
+	{
+		"msgid" : "NoteContextMenu - Edit this note",
+		"msgstr" : "Éditer cette note"
+	},
+	{
+		"msgid" : "NoteContextMenu - Zoom to note",
+		"msgstr" : "Zoom sur cette note"
 	},
 	{
 		"msgid" : "NoteDialog - Address&nbsp;:",
@@ -496,68 +452,68 @@
 		"msgstr" : "Enrégistrer"
 	},
 	{
+		"msgid" : "RouteContextMenu - Add a note on the route",
+		"msgstr" : "Ajouter une note à ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Cancel modifications on this route",
+		"msgstr" : "Abandonner les modifications de ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Create a note for each route maneuver",
+		"msgstr" : "Créer une note pour chaque manœuvre du trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Delete this route",
+		"msgstr" : "Supprimer ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Edit this route",
+		"msgstr" : "Éditer ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Hide this route",
+		"msgstr" : "Masquer ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Invert waypoints",
+		"msgstr" : "Inverser les points de passage de ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Print route map",
+		"msgstr" : "Imprimer les cartes de ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Properties",
+		"msgstr" : "Propriétés de ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Save modifications on this route",
+		"msgstr" : "Sauver les modifications de ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Save this route in a GPX file",
+		"msgstr" : "Sauver ce trajet dans un fichier GPX"
+	},
+	{
+		"msgid" : "RouteContextMenu - Show this route",
+		"msgstr" : "Afficher ce trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - View the elevation",
+		"msgstr" : "Voir le profil du trajet"
+	},
+	{
+		"msgid" : "RouteContextMenu - Zoom to route",
+		"msgstr" : "Zoom sur le trajet"
+	},
+	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
 	},
 	{
 		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
 		"msgstr" : "Il n'est pas possible d'éditer un trajet sans sauver ou abandonner les modifications"
-	},
-	{
-		"msgid" : "RouteUI - Add waypoint",
-		"msgstr" : "Ajouter un point de passage"
-	},
-	{
-		"msgid" : "RouteUI - Cancel",
-		"msgstr" : "Abandonner les modifications"
-	},
-	{
-		"msgid" : "RouteUI - Delete all waypoints",
-		"msgstr" : "Supprimer tous les points de passage"
-	},
-	{
-		"msgid" : "RouteUI - End",
-		"msgstr" : "Fin"
-	},
-	{
-		"msgid" : "RouteUI - Expand the list",
-		"msgstr" : "Étendre"
-	},
-	{
-		"msgid" : "RouteUI - Hide",
-		"msgstr" : "Masquer"
-	},
-	{
-		"msgid" : "RouteUI - Invert waypoints",
-		"msgstr" : "Inverser les points de passage"
-	},
-	{
-		"msgid" : "RouteUI - Reduce the list",
-		"msgstr" : "Réduire"
-	},
-	{
-		"msgid" : "RouteUI - Save",
-		"msgstr" : "Sauver les modifications"
-	},
-	{
-		"msgid" : "RouteUI - Save the route in a gpx file",
-		"msgstr" : "Sauver la route dans un fichier gpx"
-	},
-	{
-		"msgid" : "RouteUI - Show",
-		"msgstr" : "Afficher"
-	},
-	{
-		"msgid" : "RouteUI - Start",
-		"msgstr" : "Départ"
-	},
-	{
-		"msgid" : "RouteUI - Via",
-		"msgstr" : "Point de passage"
-	},
-	{
-		"msgid" : "RouteUI - Waypoints",
-		"msgstr" : "Points de passage&nbsp;du trajet:"
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Chained route",
@@ -664,14 +620,6 @@
 		"msgstr" : "Abandonner ce voyage"
 	},
 	{
-		"msgid" : "TravelUI - Delete all routes",
-		"msgstr" : "Supprimer tous les trajets"
-	},
-	{
-		"msgid" : "TravelUI - Expand the list",
-		"msgstr" : "Étendre"
-	},
-	{
 		"msgid" : "TravelUI - Hide",
 		"msgstr" : "Masquer"
 	},
@@ -688,32 +636,32 @@
 		"msgstr" : "Il n'est pas possible de fusionner un voyage quand une route est en cours d'édition"
 	},
 	{
-		"msgid" : "TravelUI - Open travel roadbook",
-		"msgstr" : "Ouvrir le livre de voyage"
+		"msgid" : "TravelUI - Open travel",
+		"msgstr" : "Ouvrir un fichier"
 	},
 	{
-		"msgid" : "TravelUI - Reduce the list",
-		"msgstr" : "Réduire"
+		"msgid" : "TravelUI - Open travel roadbook",
+		"msgstr" : "Ouvrir le livre de voyage"
 	},
 	{
 		"msgid" : "TravelUI - Route",
 		"msgstr" : "Trajet"
 	},
 	{
-		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Trajets du voyage&nbsp;:"
-	},
-	{
 		"msgid" : "TravelUI - Save travel",
 		"msgstr" : "Sauver dans un fichier"
 	},
 	{
-		"msgid" : "TravelUI - Open travel",
-		"msgstr" : "Ouvrir un fichier"
-	},
-	{
 		"msgid" : "TravelUI - Show",
 		"msgstr" : "Afficher"
+	},
+	{
+		"msgid" : "TravelUI - Travel",
+		"msgstr" : "Voyage&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "TravelUI - Travel routes",
+		"msgstr" : "Trajets du voyage&nbsp;:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -738,6 +686,10 @@
 	{
 		"msgid" : "Utilities - Second",
 		"msgstr" : "sec"
+	},
+	{
+		"msgid" : "WayPointContextMenu - Delete this waypoint",
+		"msgstr" : "Supprimer ce point de passage"
 	},
 	{
 		"msgid" : "Help - Continue with interface",

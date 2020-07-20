@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed ...
 Tests ...
 
@@ -109,28 +111,12 @@ function newTravelNotesToolbarUI ( ) {
 	}
 
 	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
+	--- myCreateHomeButton --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ) {
-
-		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
-			return;
-		}
-
-		let buttonsDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-TravelNotesToolbarDiv',
-				className : 'TravelNotes-Control-ButtonsDiv'
-			},
-			controlDiv
-		);
-
+	function myCreateHomeButton ( buttonsDiv ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
@@ -144,6 +130,15 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
+	}
+
+	/*
+	--- myCreateHelpButton --------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateHelpButton ( buttonsDiv ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
@@ -157,6 +152,15 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
+	}
+
+	/*
+	--- myCreateContactButton -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateContactButton ( buttonsDiv ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
@@ -170,6 +174,15 @@ function newTravelNotesToolbarUI ( ) {
 			},
 			buttonsDiv
 		);
+	}
+
+	/*
+	--- myCreateApiKeysButton -----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateApiKeysButton ( buttonsDiv ) {
 		if ( theConfig.APIKeys.showDialogButton ) {
 
 			// API keys button
@@ -192,6 +205,15 @@ function newTravelNotesToolbarUI ( ) {
 					false
 				);
 		}
+	}
+
+	/*
+	--- myCreateGeoLocationButton -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateGeoLocationButton ( buttonsDiv ) {
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS
 		// the geolocation is working also on http protocol
@@ -217,13 +239,22 @@ function newTravelNotesToolbarUI ( ) {
 				false
 			);
 		}
+	}
+
+	/*
+	--- myCreatePinButton ---------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreatePinButton ( buttonsDiv, controlDiv ) {
 
 		// pin button
 		myPinButton = myHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x274c;',
-				id : 'TravelNotes-Control-PinButton'
+				className : 'TravelNotes-Control-FlexRow-RightButton'
 			},
 			buttonsDiv
 		);
@@ -258,6 +289,37 @@ function newTravelNotesToolbarUI ( ) {
 	}
 
 	/*
+	--- myCreateUI function -------------------------------------------------------------------------------------------
+
+	This function creates the UI
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateUI ( controlDiv ) {
+
+		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
+			return;
+		}
+
+		let buttonsDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-Control-TravelNotesToolbarDiv',
+				className : 'TravelNotes-Control-FlexRow'
+			},
+			controlDiv
+		);
+
+		myCreateHomeButton ( buttonsDiv );
+		myCreateHelpButton ( buttonsDiv );
+		myCreateContactButton ( buttonsDiv );
+		myCreateApiKeysButton ( buttonsDiv );
+		myCreateGeoLocationButton ( buttonsDiv );
+		myCreatePinButton ( buttonsDiv, controlDiv );
+	}
+
+	/*
 	--- TravelNotesToolbarUI object -----------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -268,6 +330,7 @@ function newTravelNotesToolbarUI ( ) {
 			createUI : controlDiv => myCreateUI ( controlDiv ),
 
 			geoLocationStatusChanged : geoLocationStatus => myOnGeoLocationStatusChanged ( geoLocationStatus )
+
 		}
 	);
 }

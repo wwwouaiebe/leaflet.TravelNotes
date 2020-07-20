@@ -24,6 +24,8 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191124
 Tests ...
 
@@ -50,12 +52,12 @@ let ourLng = LAT_LNG.defaultValue;
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseContextMenu ( originalEvent ) {
+function newBaseContextMenu ( originalEvent, parentDiv ) {
 
 	let myMenuItems = [];
-
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myBody = document.querySelector ( 'body' );
+	let myParentDiv = parentDiv || myBody;
 
 	/*
 	--- myOnKeyPress function -----------------------------------------------------------------------------------------
@@ -168,7 +170,6 @@ function newBaseContextMenu ( originalEvent ) {
 	*/
 
 	function myOnCloseMenu ( ) {
-
 		if ( ourTimerId ) {
 			clearTimeout ( ourTimerId );
 			ourTimerId = null;
@@ -187,7 +188,7 @@ function newBaseContextMenu ( originalEvent ) {
 		}
 
 		// removing the menu container
-		document.querySelector ( 'body' ).removeChild ( ourContainer );
+		myParentDiv.removeChild ( ourContainer );
 		ourContainer = null;
 		ourFocusIsOnItem = ZERO;
 		myMenuItems = [];
@@ -208,7 +209,7 @@ function newBaseContextMenu ( originalEvent ) {
 				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
-			myBody
+			myParentDiv
 		);
 
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
@@ -274,7 +275,12 @@ function newBaseContextMenu ( originalEvent ) {
 			ourOriginalEvent.originalEvent.clientX,
 			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
-		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+		if ( parentDiv ) {
+			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;right:' + MENU_MARGIN + 'px;' );
+		}
+		else {
+			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+		}
 	}
 
 	/*
@@ -342,14 +348,18 @@ function newBaseContextMenu ( originalEvent ) {
 		// when clicking on a leaflet polyline, a route event AND a map event are generated
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
-
-		if ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
+		if (
+			! ourOriginalEvent.fromUI
+			&&
+			( ourOriginalEvent.latlng.lat === ourLat )
+			&&
+			( ourOriginalEvent.latlng.lng === ourLng )
+		) {
 			return;
 		}
 
 		ourLat = ourOriginalEvent.latlng.lat;
 		ourLng = ourOriginalEvent.latlng.lng;
-
 		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
@@ -368,9 +378,6 @@ function newBaseContextMenu ( originalEvent ) {
 
 	function myInit ( menuItems ) {
 		myMenuItems = menuItems;
-
-		// completely crazy...
-		// delete myBaseContextMenu.init;
 	}
 
 	/*
@@ -379,12 +386,10 @@ function newBaseContextMenu ( originalEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let myBaseContextMenu = {
+	return {
 		init : menuItems => myInit ( menuItems ),
 		show : ( ) => myShow ( )
 	};
-
-	return myBaseContextMenu;
 }
 
 export { newBaseContextMenu };

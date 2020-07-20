@@ -46,6 +46,8 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191122
 Tests ...
 
@@ -135,7 +137,7 @@ function newRouteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySaveGpx ( ) {
+	function mySaveGpx ( routeObjId ) {
 
 		// initializations...
 		let tab0 = '\n';
@@ -143,6 +145,11 @@ function newRouteEditor ( ) {
 		let tab2 = '\n\t\t';
 		let tab3 = '\n\t\t\t';
 		let timeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
+
+		let route = myDataSearchEngine.getRoute ( routeObjId );
+		if ( ! route ) {
+			return;
+		}
 
 		// header
 		let gpxString = '<?xml version="1.0"?>' + tab0;
@@ -152,7 +159,7 @@ function newRouteEditor ( ) {
 		'version="1.1" creator="leaflet.TravelNotes">';
 
 		// waypoints
-		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
+		let wayPointsIterator = route.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			gpxString +=
 				tab1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
@@ -162,9 +169,9 @@ function newRouteEditor ( ) {
 
 		// route
 		gpxString += tab1 + '<rte>';
-		let maneuverIterator = theTravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
+		let maneuverIterator = route.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			let wayPoint = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt (
+			let wayPoint = route.itinerary.itineraryPoints.getAt (
 				maneuverIterator.value.itineraryPointObjId
 			);
 			let instruction = maneuverIterator.value.instruction
@@ -189,7 +196,7 @@ function newRouteEditor ( ) {
 		// track
 		gpxString += tab1 + '<trk>';
 		gpxString += tab2 + '<trkseg>';
-		let itineraryPointsIterator = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
+		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
 			gpxString +=
 				tab3 +
@@ -207,7 +214,7 @@ function newRouteEditor ( ) {
 		gpxString += tab0 + '</gpx>';
 
 		// file is saved
-		let fileName = theTravelNotesData.travel.editedRoute.name;
+		let fileName = route.name;
 		if ( '' === fileName ) {
 			fileName = 'TravelNote';
 		}
@@ -354,7 +361,6 @@ function newRouteEditor ( ) {
 
 		// and the itinerary and waypoints are displayed
 		myEventDispatcher.dispatch ( 'setitinerary' );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 	}
 
 	/*
@@ -431,8 +437,6 @@ function newRouteEditor ( ) {
 
 		newRoadbookUpdate ( );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		myEventDispatcher.dispatch ( 'reducerouteui' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
 
 	}
@@ -508,6 +512,31 @@ function newRouteEditor ( ) {
 			}
 		);
 		myDataSearchEngine.getRoute ( routeObjId ).hidden = true;
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+	}
+
+	/*
+	--- myShowRoute function ------------------------------------------------------------------------------------------
+
+	This function show a route on the map
+
+	parameters:
+	- routeObjId : the route objId that was clicked
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myShowRoute ( routeObjId ) {
+
+		myEventDispatcher.dispatch (
+			'routeupdated',
+			{
+				removedRouteObjId : INVALID_OBJ_ID,
+				addedRouteObjId : routeObjId
+			}
+		);
+		myDataSearchEngine.getRoute ( routeObjId ).hidden = false;
+		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/*
@@ -529,8 +558,39 @@ function newRouteEditor ( ) {
 						addedRouteObjId : routesIterator.value.objId
 					}
 				);
+				routesIterator.value.hidden = false;
 			}
 		}
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+	}
+
+	/*
+	--- myHideRoutes function -----------------------------------------------------------------------------------------
+
+	This function hide all the showed routes
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myHideRoutes ( ) {
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			if (
+				! routesIterator.value.hidden
+				&&
+				routesIterator.value.objId !== theTravelNotesData.editedRouteObjId
+			) {
+				myEventDispatcher.dispatch (
+					'routeupdated',
+					{
+						removedRouteObjId : routesIterator.value.objId,
+						addedRouteObjId : INVALID_OBJ_ID
+					}
+				);
+				routesIterator.value.hidden = true;
+			}
+		}
+		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/*
@@ -560,7 +620,7 @@ function newRouteEditor ( ) {
 
 	return Object.seal (
 		{
-			saveGpx : ( ) => mySaveGpx ( ),
+			saveGpx : RouteObjId => mySaveGpx ( RouteObjId ),
 
 			chainRoutes : ( ) => myChainRoutes ( ),
 
@@ -574,9 +634,13 @@ function newRouteEditor ( ) {
 
 			printRouteMap : routeObjId => myPrintRouteMap ( routeObjId ),
 
+			showRoute : routeObjId => myShowRoute ( routeObjId ),
+
 			hideRoute : routeObjId => myHideRoute ( routeObjId ),
 
-			showRoutes : ( ) => myShowRoutes ( )
+			showRoutes : ( ) => myShowRoutes ( ),
+
+			hideRoutes : ( ) => myHideRoutes ( )
 
 		}
 	);

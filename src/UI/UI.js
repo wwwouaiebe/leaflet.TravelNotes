@@ -29,6 +29,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191125
 Tests ...
 
@@ -37,7 +39,6 @@ Tests ...
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelUI } from '../UI/TravelUI.js';
-import { theRouteUI } from '../UI/RouteUI.js';
 import { theDataPanesUI } from '../UI/DataPanesUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
@@ -78,18 +79,12 @@ function newUI ( ) {
 
 		theTravelNotesToolbarUI.createUI ( myMainDiv );
 		theTravelUI.createUI ( myMainDiv );
-		theRouteUI.createUI ( myMainDiv );
 		theDataPanesUI.createUI ( myMainDiv );
 
 		theProvidersToolbarUI.createUI ( myMainDiv );
 
+		myMainDiv.addEventListener ( 'travelnotesfileloaded', ( ) => theTravelUI.setTravelName ( ), false );
 		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
-
-		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteUI.expandUI ( ), false );
-		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteUI.reduceUI ( ), false );
-
-		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteUI.setWayPointsList ( ), false );
-
 		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
 		myMainDiv.addEventListener ( 'updateitinerary', ( ) => theDataPanesUI.updateItinerary ( ), false );
 		myMainDiv.addEventListener ( 'settravelnotes', ( ) => theDataPanesUI.setTravelNotes ( ), false );
@@ -121,9 +116,6 @@ function newUI ( ) {
 		myMainDiv.addEventListener (
 			'click',
 			clickEvent => {
-				if ( clickEvent.target.classList.contains ( 'TravelNotes-SortableList-ItemInput' ) ) {
-					return;
-				}
 				if ( clickEvent.target.classList.contains ( 'TravelNotes-Control-LinkButton' ) ) {
 					return;
 				}

@@ -24,6 +24,8 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191124
 Tests ...
 
@@ -62,7 +64,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 		return [
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as start point' ),
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
 				action :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
@@ -75,7 +77,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as way point' ),
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
 				action :
 					( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId )
 						?
@@ -86,7 +88,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Select this point as end point' ),
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
 				action :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
@@ -99,33 +101,38 @@ function newMapContextMenu ( contextMenuEvent ) {
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - New travel note' ),
+				name : theTranslator.getText ( 'MapContextMenu - New travel note' ),
 				action : theNoteEditor.newTravelNote,
 				param : myLatLng
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Hide notes' ),
+				name : theTranslator.getText ( 'MapContextMenu - Hide notes' ),
 				action : theNoteEditor.hideNotes
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Show notes' ),
+				name : theTranslator.getText ( 'MapContextMenu - Show notes' ),
 				action : theNoteEditor.showNotes
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Show all routes' ),
+				name : theTranslator.getText ( 'MapContextMenu - Hide all routes' ),
+				action : theRouteEditor.hideRoutes
+			},
+			{
+				context : theRouteEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
 				action : theRouteEditor.showRoutes
 			},
 			{
 				context : myZoomer,
-				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to travel' ),
+				name : theTranslator.getText ( 'MapContextMenu - Zoom to travel' ),
 				action : myZoomer.zoomToTravel
 			},
 			{
 				context : null,
-				name : theTranslator.getText ( 'ContextMenuFactory - About Travel & Notes' ),
+				name : theTranslator.getText ( 'MapContextMenu - About Travel & Notes' ),
 				action : newAboutDialog
 			}
 		];

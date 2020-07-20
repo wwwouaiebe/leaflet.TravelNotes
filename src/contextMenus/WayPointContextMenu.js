@@ -24,6 +24,8 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191124
 Tests ...
 
@@ -59,7 +61,7 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 		return [
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Delete this waypoint' ),
+				name : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
 				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
 				param : myWayPointObjId
 			}

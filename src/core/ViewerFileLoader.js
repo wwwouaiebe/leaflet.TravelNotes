@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed ...
 Tests ...
 
@@ -96,12 +98,7 @@ function newViewerFileLoader ( ) {
 
 		newZoomer ( ).zoomToTravel ( );
 
-		myEventDispatcher.dispatch (
-			'travelnotesfileloaded',
-			{
-				name : theTravelNotesData.travel.name
-			}
-		);
+		myEventDispatcher.dispatch ( 'travelnotesfileloaded' );
 	}
 
 	/*

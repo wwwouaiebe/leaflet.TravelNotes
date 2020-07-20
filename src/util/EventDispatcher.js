@@ -22,6 +22,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191125
 Tests ...
 
@@ -48,43 +50,41 @@ function newEventDispatcher ( ) {
 
 	function myGetTarget ( eventName ) {
 		if ( NOT_FOUND <
-		[
-			'setitinerary',
-			'updateitinerary',
-			'settravelnotes',
-			'updatetravelnotes',
-			'setsearch',
-			'updatesearch',
-			'expandrouteui',
-			'reducerouteui',
-			'setwaypointslist',
-			'setrouteslist',
-			'setprovider',
-			'providersadded',
-			'settransitmode'
-		].indexOf ( eventName )
+			[
+				'setitinerary',
+				'updateitinerary',
+				'settravelnotes',
+				'updatetravelnotes',
+				'setsearch',
+				'updatesearch',
+				'setrouteslist',
+				'setprovider',
+				'providersadded',
+				'travelnotesfileloaded',
+				'settransitmode'
+			].indexOf ( eventName )
 		) {
 			return document.getElementById ( 'TravelNotes-Control-MainDiv' );
 		}
 		else if ( NOT_FOUND <
-		[
-			'removeobject',
-			'removeallobjects',
-			'zoomto',
-			'additinerarypointmarker',
-			'addsearchpointmarker',
-			'addrectangle',
-			'addwaypoint',
-			'layerchange',
-			'geolocationstatuschanged',
-			'geolocationpositionchanged',
-			'routeupdated',
-			'routepropertiesupdated',
-			'noteupdated',
-			'roadbookupdate',
-			'travelnotesfileloaded',
-			'profileclosed'
-		].indexOf ( eventName ) ) {
+			[
+				'removeobject',
+				'removeallobjects',
+				'zoomto',
+				'additinerarypointmarker',
+				'addsearchpointmarker',
+				'addrectangle',
+				'addwaypoint',
+				'layerchange',
+				'geolocationstatuschanged',
+				'geolocationpositionchanged',
+				'routeupdated',
+				'routepropertiesupdated',
+				'noteupdated',
+				'roadbookupdate',
+				'profileclosed'
+			].indexOf ( eventName )
+		) {
 			return document;
 		}
 		return null;

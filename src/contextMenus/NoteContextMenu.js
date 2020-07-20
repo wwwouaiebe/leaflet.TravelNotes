@@ -24,6 +24,8 @@ Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191124
 Tests ...
 
@@ -63,19 +65,19 @@ function newNoteContextMenu ( contextMenuEvent ) {
 		return [
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Edit this note' ),
+				name : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
 				action : theNoteEditor.editNote,
 				param : myNoteObjId
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Delete this note' ),
+				name : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
 				action : theNoteEditor.removeNote,
 				param : myNoteObjId
 			},
 			{
 				context : myZoomer,
-				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to note' ),
+				name : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
 				action : myZoomer.zoomToNote,
 				param : myNoteObjId
 			},
@@ -84,9 +86,9 @@ function newNoteContextMenu ( contextMenuEvent ) {
 				name :
 					route
 						?
-						theTranslator.getText ( 'ContextMenuFactory - Detach note from route' )
+						theTranslator.getText ( 'NoteContextMenu - Detach note from route' )
 						:
-						theTranslator.getText ( 'ContextMenuFactory - Attach note to route' ),
+						theTranslator.getText ( 'NoteContextMenu - Attach note to route' ),
 				action :
 					theTravelNotesData.travel.routes.length !== ZERO
 					&&

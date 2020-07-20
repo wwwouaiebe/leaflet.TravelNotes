@@ -29,6 +29,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191122
 Tests ...
 
@@ -82,11 +84,7 @@ function newFileLoader ( ) {
 
 		// Editors and HTML pages are filled
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-			myEventDispatcher.dispatch ( 'reducerouteui' );
-		}
-		else {
-
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 			if (
 				providerName
@@ -113,12 +111,10 @@ function newFileLoader ( ) {
 				}
 			}
 			theRouteEditor.chainRoutes ( );
-			myEventDispatcher.dispatch ( 'expandrouteui' );
 		}
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
 		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		myEventDispatcher.dispatch ( 'travelnotesfileloaded', { name : theTravelNotesData.travel.name } );
+		myEventDispatcher.dispatch ( 'travelnotesfileloaded' );
 
 	}
 

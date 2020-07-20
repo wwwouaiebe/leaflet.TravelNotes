@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed ...
 Tests ...
 
@@ -45,7 +47,6 @@ function newMouseUI ( ) {
 
 	let myMousePos = null;
 	let myZoom = null;
-	let myFileName = '';
 	let myUtilities = newUtilities ( );
 
 	/*
@@ -59,7 +60,6 @@ function newMouseUI ( ) {
 		myMousePos +
 		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
 		myZoom +
-		( '' === myFileName ? '' : '&nbsp;-&nbsp;' + myFileName ) +
 		'</span>';
 	}
 
@@ -82,17 +82,6 @@ function newMouseUI ( ) {
 
 	function mySetZoom ( zoom ) {
 		myZoom = zoom;
-		myUpdate ( );
-	}
-
-	/*
-	--- mySetFileName function ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetFileName ( fileName ) {
-		myFileName = fileName;
 		myUpdate ( );
 	}
 
@@ -131,14 +120,6 @@ function newMouseUI ( ) {
 				myUpdate ( );
 			}
 		);
-		document.addEventListener (
-			'travelnotesfileloaded',
-			TravelNotesFileLoadedEvent => {
-				myFileName = TravelNotesFileLoadedEvent.data.name || '';
-				myUpdate ( );
-			},
-			false
-		);
 
 	}
 
@@ -152,8 +133,7 @@ function newMouseUI ( ) {
 		{
 			createUI : ( ) => myCreateUI ( ),
 			set mousePos ( MousePos ) { mySetMousePos ( MousePos ); },
-			set zoom ( Zoom ) { mySetZoom ( Zoom ); },
-			set fileName ( FileName ) { mySetFileName ( FileName ); }
+			set zoom ( Zoom ) { mySetZoom ( Zoom ); }
 		}
 	);
 }

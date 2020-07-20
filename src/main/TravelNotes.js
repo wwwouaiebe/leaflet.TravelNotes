@@ -42,6 +42,8 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191127
 Tests ...
 
@@ -347,15 +349,11 @@ function newTravelNotes ( ) {
 			theMouseUI.createUI ( );
 		}
 
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}
-		else {
-			myEventDispatcher.dispatch ( 'reducerouteui' );
-		}
+		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 		theTravelNotesData.map.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
 		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}

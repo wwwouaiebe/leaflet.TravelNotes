@@ -24,6 +24,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191125
 Tests ...
 
@@ -217,7 +219,7 @@ function newTravelNotesPaneUI ( ) {
 				childNode.addEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
 				childNode.draggable = true;
 				childNode.addEventListener ( 'dragstart', myOnDragStart, false );
-				childNode.classList.add ( 'TravelNotes-SortableList-MoveCursor' );
+				childNode.classList.add ( 'TravelNotes-MoveCursor' );
 			}
 		);
 	}

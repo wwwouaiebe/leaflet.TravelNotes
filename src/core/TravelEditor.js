@@ -40,6 +40,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191121
 Tests ...
 
@@ -159,9 +161,8 @@ function newTravelEditor ( ) {
 		);
 
 		newRoadbookUpdate ( );
-		myEventDispatcher.dispatch ( 'expandrouteui' );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/*
@@ -328,10 +329,9 @@ function newTravelEditor ( ) {
 		theTravelNotesData.travel = newTravel ( );
 		theTravelNotesData.travel.routes.add ( newRoute ( ) );
 		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
 		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		myEventDispatcher.dispatch ( 'travelnotesfileloaded', { readOnly : false, name : '' } );
+		myEventDispatcher.dispatch ( 'travelnotesfileloaded' );
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			myEditRoute ( theTravelNotesData.travel.routes.first.objId );
 		}

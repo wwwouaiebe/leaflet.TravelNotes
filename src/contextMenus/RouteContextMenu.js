@@ -32,6 +32,8 @@ Changes:
 		- issue #101 : Add a print command for a route
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191124
 Tests ...
 
@@ -43,13 +45,14 @@ import { theConfig } from '../data/Config.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
-import { ROUTE_EDITION_STATUS } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 
 /*
 --- newRouteContextMenu function --------------------------------------------------------------------------------------
@@ -57,9 +60,10 @@ import { ROUTE_EDITION_STATUS } from '../util/Constants.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteContextMenu ( contextMenuEvent ) {
+function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
+	let myRoute = newDataSearchEngine ( ).getRoute ( myRouteObjId );
 	let myZoomer = newZoomer ( );
 
 	/*
@@ -72,7 +76,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 		let menuItems = [
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Edit this route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
@@ -85,7 +89,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			},
 			{
 				context : theTravelEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Delete this route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
@@ -98,45 +102,69 @@ function newRouteContextMenu ( contextMenuEvent ) {
 						theTravelEditor.removeRoute,
 				param : myRouteObjId
 			},
+			myRoute.hidden
+				?
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Show this route' ),
+					action : theRouteEditor.showRoute,
+					param : myRouteObjId
+				}
+				:
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Hide this route' ),
+					action :
+							( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+								?
+								null :
+								theRouteEditor.hideRoute,
+					param : myRouteObjId
+				},
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Hide this route' ),
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
 				action :
-					( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+					contextMenuEvent.fromUI
 						?
-						null :
-						theRouteEditor.hideRoute,
+						null
+						:
+						theNoteEditor.newRouteNote,
 				param : myRouteObjId
 			},
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Add a note on the route' ),
-				action : theNoteEditor.newRouteNote,
-				param : myRouteObjId
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Create a note for each route maneuver' ),
-				action : theNoteEditor.addAllManeuverNotes,
+				name : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
+				action :
+					myRoute.hidden
+						?
+						null
+						:
+						theNoteEditor.addAllManeuverNotes,
 				param : myRouteObjId
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Properties' ),
-				action : theRouteEditor.routeProperties,
+				name : theTranslator.getText ( 'RouteContextMenu - Properties' ),
+				action :
+					myRoute.hidden
+						?
+						null
+						:
+						theRouteEditor.routeProperties,
 				param : myRouteObjId
 			},
 			{
 				context : myZoomer,
-				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
 				action : myZoomer.zoomToRoute,
 				param : myRouteObjId
 			},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - View the elevation' ),
+				name : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
 				action :
-					newDataSearchEngine ( ).getRoute ( myRouteObjId ).itinerary.hasProfile
+					myRoute.itinerary.hasProfile
 						?
 						theProfileWindowsManager.showProfile
 						:
@@ -148,7 +176,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			menuItems.push (
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Print route map' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
 					action : theRouteEditor.printRouteMap,
 					param : myRouteObjId
 				}
@@ -158,7 +186,26 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			[
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Save modifications on this route' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
+					action : ( ZERO < myRoute.itinerary.itineraryPoints.length )
+						?
+						theRouteEditor.saveGpx
+						:
+						null,
+					param : myRouteObjId
+				},
+				{
+					context : theWayPointEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
+					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+						?
+						theWayPointEditor.reverseWayPoints
+						:
+						null
+				},
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
 					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
 						theRouteEditor.saveEdition
@@ -167,7 +214,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				},
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Cancel modifications on this route' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
 					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
 						theRouteEditor.cancelEdition
@@ -185,7 +232,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let routeContextMenu = newBaseContextMenu ( contextMenuEvent );
+	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
 	routeContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( routeContextMenu );

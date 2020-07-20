@@ -28,6 +28,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191125
 Tests ...
 
@@ -198,7 +200,7 @@ function newDataPanesUI ( ) {
 			'div',
 			{
 				id : 'TravelNotes-Control-ItineraryHeaderDiv',
-				className : 'TravelNotes-Control-HeaderDiv'
+				className : 'TravelNotes-Control-FlexRow'
 			},
 			controlDiv
 		);

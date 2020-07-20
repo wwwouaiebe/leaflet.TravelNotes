@@ -33,6 +33,8 @@ Changes:
 		- modified bike, pedestrian and car icons
 	- v1.6.0:
 		- Issue #102 : Sometime the provider toolbar is incomplete at startup
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191125
 Tests ...
 
@@ -478,8 +480,7 @@ function newProvidersToolbarUI ( ) {
 		myButtonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-ItineraryButtonsDiv',
-				className : 'TravelNotes-Control-ButtonsDiv'
+				className : 'TravelNotes-Control-FlexRow TravelNotes-Control-ImgButtonsDiv'
 			},
 			controlDiv
 		);

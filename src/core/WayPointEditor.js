@@ -31,6 +31,8 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
+	- v1.12.0:
+		- Issue #120 : Review the control
 Doc reviewed 20191121
 Tests ...
 
@@ -63,13 +65,10 @@ function newWayPointEditor ( ) {
 
 	/*
 	--- myRenameWayPoint function -------------------------------------------------------------------------------------
-
 	This function rename a wayPoint
-
 	parameters:
 	- wayPointObjId : the waypoint objId to rename
 	- wayPointName : the new name
-
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
@@ -150,7 +149,6 @@ function newWayPointEditor ( ) {
 			}
 		);
 		theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPoint.objId, true );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -196,7 +194,6 @@ function newWayPointEditor ( ) {
 				break;
 			}
 		}
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -226,26 +223,6 @@ function newWayPointEditor ( ) {
 				}
 			);
 		}
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		theRouteEditor.startRouting ( );
-	}
-
-	/*
-	--- myRemoveAllWayPoints function ---------------------------------------------------------------------------------
-
-	This function remove all waypoints except the first and last ( see also Collection ...)
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveAllWayPoints ( ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
-		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done ) {
-			myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
-		}
-		theTravelNotesData.travel.editedRoute.wayPoints.removeAll ( true );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -264,26 +241,6 @@ function newWayPointEditor ( ) {
 		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
 		myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		theRouteEditor.startRouting ( );
-	}
-
-	/*
-	--- mySwapWayPoints function --------------------------------------------------------------------------------------
-
-	This function change the order of two waypoints
-
-	parameters:
-	- wayPointObjId : the waypoint objId to swap
-	- swapUp : when true the waypoint is swapped with the previous one, otherwise with the next
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySwapWayPoints ( wayPointObjId, swapUp ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
-		theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPointObjId, swapUp );
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -317,7 +274,6 @@ function newWayPointEditor ( ) {
 				letter : 'A'
 			}
 		);
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -351,7 +307,6 @@ function newWayPointEditor ( ) {
 				letter : 'B'
 			}
 		);
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -371,41 +326,6 @@ function newWayPointEditor ( ) {
 		if ( theConfig.wayPoint.reverseGeocoding ) {
 			myRenameWayPointWithGeocoder (
 				theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
-			);
-		}
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		theRouteEditor.startRouting ( );
-	}
-
-	/*
-	--- myWayPointDropped function ------------------------------------------------------------------------------------
-
-	This function is called when the drop event is fired on a waypoint
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myWayPointDropped ( draggedWayPointObjId, targetWayPointObjId, draggedBefore ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
-		if ( targetWayPointObjId === theTravelNotesData.travel.editedRoute.wayPoints.first.objId && draggedBefore ) {
-			return;
-		}
-		if ( targetWayPointObjId === theTravelNotesData.travel.editedRoute.wayPoints.last.objId && ( ! draggedBefore ) )	{
-			return;
-		}
-		theTravelNotesData.travel.editedRoute.wayPoints.moveTo (
-			draggedWayPointObjId, targetWayPointObjId, draggedBefore
-		);
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done ) {
-			myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
-			myEventDispatcher.dispatch (
-				'addwaypoint',
-				{
-					wayPoint : wayPointsIterator.value,
-					letter : wayPointsIterator.first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
-				}
 			);
 		}
 		theRouteEditor.startRouting ( );
@@ -431,29 +351,13 @@ function newWayPointEditor ( ) {
 
 			reverseWayPoints : ( ) => myReverseWayPoints ( ),
 
-			removeAllWayPoints : ( ) => myRemoveAllWayPoints ( ),
-
 			removeWayPoint : wayPointObjId => myRemoveWayPoint ( wayPointObjId ),
-
-			renameWayPoint : ( wayPointName, wayPointObjId ) => myRenameWayPoint ( wayPointName, wayPointObjId ),
-
-			swapWayPoints : ( wayPointObjId, swapUp ) => mySwapWayPoints ( wayPointObjId, swapUp ),
 
 			setStartPoint : latLng => mySetStartPoint ( latLng ),
 
 			setEndPoint : latLng => mySetEndPoint ( latLng ),
 
-			wayPointDragEnd : wayPointObjId => myWayPointDragEnd ( wayPointObjId ),
-
-			wayPointDropped : (
-				draggedWayPointObjId,
-				targetWayPointObjId,
-				draggedBefore
-			) => myWayPointDropped (
-				draggedWayPointObjId,
-				targetWayPointObjId,
-				draggedBefore
-			)
+			wayPointDragEnd : wayPointObjId => myWayPointDragEnd ( wayPointObjId )
 		}
 	);
 }
