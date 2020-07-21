@@ -25,6 +25,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -136,20 +138,20 @@ function newItineraryPaneUI ( ) {
 
 	function myRemove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
 
 		// removing previous header
-		let routeHeader = document.querySelector ( '.TravelNotes-Control-Route-Header' );
+		let routeHeader = document.querySelector ( '.TravelNotes-UI-Route-Header' );
 		if ( routeHeader ) {
 			dataDiv.removeChild ( routeHeader );
 		}
 
 		// removing previous itinerary
 		let routeManeuversNotesList =
-			document.querySelector ( '.TravelNotes-Control-Route-ManeuversAndNotes' );
+			document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
 			for ( let childCounter = ZERO; childCounter < childNodes.length; childCounter ++ ) {
@@ -173,18 +175,18 @@ function newItineraryPaneUI ( ) {
 
 	function myAdd ( ) {
 
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
-			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
-			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
+			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
+			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
-				.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
+				.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 		}
 
-		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
+		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -197,7 +199,7 @@ function newItineraryPaneUI ( ) {
 
 		// adding event listeners
 		let routeManeuversNotesList =
-			document.querySelector ( '.TravelNotes-Control-Route-ManeuversAndNotes' );
+			document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
 			for ( let childCounter = ZERO; childCounter < childNodes.length; childCounter ++ ) {

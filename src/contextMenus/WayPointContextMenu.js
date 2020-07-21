@@ -25,7 +25,7 @@ Changes:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191124
 Tests ...
 

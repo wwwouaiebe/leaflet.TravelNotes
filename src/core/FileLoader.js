@@ -30,7 +30,7 @@ Changes:
 	- v1.7.0:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 

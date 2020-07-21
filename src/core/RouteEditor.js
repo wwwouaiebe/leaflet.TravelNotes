@@ -47,7 +47,7 @@ Changes:
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 

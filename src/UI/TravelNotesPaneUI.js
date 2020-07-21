@@ -25,7 +25,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -165,7 +165,7 @@ function newTravelNotesPaneUI ( ) {
 
 	function myRemove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -193,17 +193,17 @@ function newTravelNotesPaneUI ( ) {
 
 	function myAdd ( ) {
 
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
-			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
-			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
+			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
+			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
-				.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
+			document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
+				.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 		}
 
-		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Control-' );
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -219,7 +219,7 @@ function newTravelNotesPaneUI ( ) {
 				childNode.addEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
 				childNode.draggable = true;
 				childNode.addEventListener ( 'dragstart', myOnDragStart, false );
-				childNode.classList.add ( 'TravelNotes-MoveCursor' );
+				childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
 			}
 		);
 	}

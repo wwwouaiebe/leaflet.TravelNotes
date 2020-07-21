@@ -23,7 +23,7 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed ...
 Tests ...
 

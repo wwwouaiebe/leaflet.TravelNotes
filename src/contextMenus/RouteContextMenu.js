@@ -33,7 +33,7 @@ Changes:
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191124
 Tests ...
 

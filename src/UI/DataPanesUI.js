@@ -29,7 +29,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -188,9 +188,9 @@ function newDataPanesUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ) {
+	function myCreateUI ( UIDiv ) {
 
-		if ( document.getElementById ( 'TravelNotes-Control-DataPanesDiv' ) ) {
+		if ( document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' ) ) {
 			return;
 		}
 
@@ -199,18 +199,17 @@ function newDataPanesUI ( ) {
 		let headerDiv = htmlElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-ItineraryHeaderDiv',
-				className : 'TravelNotes-Control-FlexRow'
+				className : 'TravelNotes-UI-FlexRowDiv'
 			},
-			controlDiv
+			UIDiv
 		);
 
 		htmlElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
-				id : 'TravelNotes-Control-ItineraryPaneButton',
-				className : 'TravelNotes-Control-PaneButton'
+				id : 'TravelNotes-DataPanesUI-ItineraryPaneButton',
+				className : 'TravelNotes-DataPaneUI-PaneButton'
 			},
 			headerDiv
 		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
@@ -219,8 +218,8 @@ function newDataPanesUI ( ) {
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
-				id : 'TravelNotes-Control-TravelNotesPaneButton',
-				className : 'TravelNotes-Control-PaneButton'
+				id : 'TravelNotes-DataPanesUI-TravelNotesPaneButton',
+				className : 'TravelNotes-DataPaneUI-PaneButton'
 			},
 			headerDiv
 		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
@@ -230,8 +229,8 @@ function newDataPanesUI ( ) {
 				'div',
 				{
 					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
-					id : 'TravelNotes-Control-SearchPaneButton',
-					className : 'TravelNotes-Control-PaneButton'
+					id : 'TravelNotes-DataPaneUI-SearchPaneButton',
+					className : 'TravelNotes-DataPaneUI-PaneButton'
 				},
 				headerDiv
 			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
@@ -240,10 +239,9 @@ function newDataPanesUI ( ) {
 		let dataDiv = htmlElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-DataPanesDiv',
-				className : 'TravelNotes-Control-DataDiv'
+				id : 'TravelNotes-DataPanesUI-DataPanesDiv'
 			},
-			controlDiv );
+			UIDiv );
 		dataDiv.addEventListener (
 			'wheel',
 			wheelEvent => {
@@ -265,7 +263,7 @@ function newDataPanesUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : controlDiv => myCreateUI ( controlDiv ),
+			createUI : UIDiv => myCreateUI ( UIDiv ),
 
 			setItinerary : ( ) => mySetItinerary ( ),
 			updateItinerary : ( ) => myUpdateItinerary ( ),

@@ -24,7 +24,7 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed ...
 Tests ...
 
@@ -53,35 +53,35 @@ function newTravelNotesToolbarUI ( ) {
 	let myTimerId = null;
 
 	/*
-	--- myOnMouseEnterControl function --------------------------------------------------------------------------------
+	--- myOnMouseEnterUI function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseEnterControl ( ) {
+	function myOnMouseEnterUI ( ) {
 		if ( myTimerId ) {
 			clearTimeout ( myTimerId );
 			myTimerId = null;
 		}
-		document.getElementById ( 'TravelNotes-Control-MainDiv' )
-			.classList.remove ( 'TravelNotes-Control-MainDiv-Minimize' );
-		document.getElementById ( 'TravelNotes-Control-MainDiv' )
-			.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
+		document.getElementById ( 'TravelNotes-UI-MainDiv' )
+			.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
+		document.getElementById ( 'TravelNotes-UI-MainDiv' )
+			.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
 	}
 
 	/*
-	--- myOnMouseLeaveControlfunction ---------------------------------------------------------------------------------
+	--- myOnMouseLeaveUI function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnMouseLeaveControl ( ) {
+	function myOnMouseLeaveUI ( ) {
 		myTimerId = setTimeout (
 			( ) => {
-				document.getElementById ( 'TravelNotes-Control-MainDiv' )
-					.classList.remove ( 'TravelNotes-Control-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-Control-MainDiv' )
-					.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+				document.getElementById ( 'TravelNotes-UI-MainDiv' )
+					.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
+				document.getElementById ( 'TravelNotes-UI-MainDiv' )
+					.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
 			},
 			theConfig.travelEditor.timeout
 		);
@@ -96,10 +96,10 @@ function newTravelNotesToolbarUI ( ) {
 	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
 		switch ( geoLocationStatus ) {
 		case GEOLOCATION_STATUS.inactive :
-			myGeoLocationButton.classList.remove ( 'TravelNotes-Control-GeoLocationButton-Striked' );
+			myGeoLocationButton.classList.remove ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
 			break;
 		case GEOLOCATION_STATUS.active :
-			myGeoLocationButton.classList.add ( 'TravelNotes-Control-GeoLocationButton-Striked' );
+			myGeoLocationButton.classList.add ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
 			break;
 		default :
 			if ( myGeoLocationButton ) {
@@ -120,11 +120,10 @@ function newTravelNotesToolbarUI ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-HomeButton',
-				className : 'TravelNotes-Control-Button',
+				className : 'TravelNotes-UI-Button',
 				title : 'Home',
 				innerHTML :
-					'<a class="TravelNotes-Control-LinkButton" href="' +
+					'<a class="TravelNotes-UI-LinkButton" href="' +
 					window.location.origin +
 					'" target="_blank">&#x1f3e0;</a>'
 			},
@@ -142,11 +141,10 @@ function newTravelNotesToolbarUI ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-HelpButton',
-				className : 'TravelNotes-Control-Button',
+				className : 'TravelNotes-UI-Button',
 				title : 'Help',
 				innerHTML :
-					'<a class="TravelNotes-Control-LinkButton" ' +
+					'<a class="TravelNotes-UI-LinkButton" ' +
 					'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' +
 					'target="_blank">?</a>'
 			},
@@ -164,11 +162,10 @@ function newTravelNotesToolbarUI ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-ContactButton',
-				className : 'TravelNotes-Control-Button',
+				className : 'TravelNotes-UI-Button',
 				title : 'Contact',
 				innerHTML :
-					'<a class="TravelNotes-Control-LinkButton" href="' +
+					'<a class="TravelNotes-UI-LinkButton" href="' +
 					( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ) +
 					'" target="_blank">@</a>'
 			},
@@ -189,8 +186,7 @@ function newTravelNotesToolbarUI ( ) {
 			myHTMLElementsFactory.create (
 				'div',
 				{
-					id : 'TravelNotes-Control-ApiKeysButton',
-					className : 'TravelNotes-Control-Button',
+					className : 'TravelNotes-UI-Button',
 					title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
 					innerHTML : '&#x1f511;'
 				},
@@ -223,8 +219,7 @@ function newTravelNotesToolbarUI ( ) {
 			myGeoLocationButton = myHTMLElementsFactory.create (
 				'div',
 				{
-					id : 'TravelNotes-Control-GeoLocatorButton',
-					className : 'TravelNotes-Control-Button',
+					className : 'TravelNotes-UI-Button',
 					title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
 					innerHTML : '&#x1f310;'
 				},
@@ -247,44 +242,44 @@ function newTravelNotesToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreatePinButton ( buttonsDiv, controlDiv ) {
+	function myCreatePinButton ( buttonsDiv, UIDiv ) {
 
 		// pin button
 		myPinButton = myHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x274c;',
-				className : 'TravelNotes-Control-FlexRow-RightButton'
+				className : 'TravelNotes-UI-FlexRow-RightButton'
 			},
 			buttonsDiv
 		);
 		myPinButton.addEventListener (
 			'click',
 			clickEvent => {
-				let control = document.getElementById ( 'TravelNotes-Control-MainDiv' );
+				let userInterface = document.getElementById ( 'TravelNotes-UI-MainDiv' );
 				let tmp = document.createElement ( 'div' );
 				tmp.innerHTML = '&#x274c;';
 				if ( tmp.innerHTML === clickEvent.target.innerHTML ) {
 					clickEvent.target.innerHTML = '&#x1f4cc;';
-					control.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
-					control.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
+					userInterface.addEventListener ( 'mouseenter', myOnMouseEnterUI, false );
+					userInterface.addEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
 				}
 				else {
 					clickEvent.target.innerHTML = '&#x274c;';
-					control.removeEventListener ( 'mouseenter', myOnMouseEnterControl, false );
-					control.removeEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
+					userInterface.removeEventListener ( 'mouseenter', myOnMouseEnterUI, false );
+					userInterface.removeEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
 				}
 			},
 			false
 		);
 		if ( theConfig.travelEditor.startMinimized ) {
 			myPinButton.innerHTML = '&#x1f4cc;';
-			controlDiv.addEventListener ( 'mouseenter', myOnMouseEnterControl, false );
-			controlDiv.addEventListener ( 'mouseleave', myOnMouseLeaveControl, false );
-			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Minimize' );
+			UIDiv.addEventListener ( 'mouseenter', myOnMouseEnterUI, false );
+			UIDiv.addEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
+			UIDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
 		}
 		else {
-			controlDiv.classList.add ( 'TravelNotes-Control-MainDiv-Maximize' );
+			UIDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
 		}
 	}
 
@@ -296,19 +291,14 @@ function newTravelNotesToolbarUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ) {
-
-		if ( document.getElementById ( 'TravelNotes-Control-TravelNotesToolbarDiv' ) ) {
-			return;
-		}
+	function myCreateUI ( UIDiv ) {
 
 		let buttonsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-TravelNotesToolbarDiv',
-				className : 'TravelNotes-Control-FlexRow'
+				className : 'TravelNotes-UI-FlexRowDiv'
 			},
-			controlDiv
+			UIDiv
 		);
 
 		myCreateHomeButton ( buttonsDiv );
@@ -316,7 +306,7 @@ function newTravelNotesToolbarUI ( ) {
 		myCreateContactButton ( buttonsDiv );
 		myCreateApiKeysButton ( buttonsDiv );
 		myCreateGeoLocationButton ( buttonsDiv );
-		myCreatePinButton ( buttonsDiv, controlDiv );
+		myCreatePinButton ( buttonsDiv, UIDiv );
 	}
 
 	/*
@@ -327,7 +317,7 @@ function newTravelNotesToolbarUI ( ) {
 
 	return Object.seal (
 		{
-			createUI : controlDiv => myCreateUI ( controlDiv ),
+			createUI : UIDiv => myCreateUI ( UIDiv ),
 
 			geoLocationStatusChanged : geoLocationStatus => myOnGeoLocationStatusChanged ( geoLocationStatus )
 

@@ -43,7 +43,7 @@ Changes:
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191127
 Tests ...
 

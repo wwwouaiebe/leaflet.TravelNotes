@@ -23,7 +23,7 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -64,7 +64,7 @@ function newEventDispatcher ( ) {
 				'settransitmode'
 			].indexOf ( eventName )
 		) {
-			return document.getElementById ( 'TravelNotes-Control-MainDiv' );
+			return document.getElementById ( 'TravelNotes-UI-MainDiv' );
 		}
 		else if ( NOT_FOUND <
 			[

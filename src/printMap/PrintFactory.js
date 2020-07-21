@@ -25,6 +25,8 @@ Changes:
 		- created
 	- v1.10.0
 		- Issue #106 : Profiles are not hidden when printing the route maps
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20200508
 Tests ...
 
@@ -620,7 +622,7 @@ function newPrintFactory ( ) {
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar-PrintButton',
-				className : 'TravelNotes-Control-Button',
+				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Print' ),
 				innerHTML : '&#x1F5A8;&#xFE0F;'
 			},
@@ -631,7 +633,7 @@ function newPrintFactory ( ) {
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar-CancelButton',
-				className : 'TravelNotes-Control-Button',
+				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
 				innerHTML : '&#x274c;'
 			},

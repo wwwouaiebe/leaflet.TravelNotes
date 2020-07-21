@@ -25,6 +25,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -143,12 +145,12 @@ function newSearchPaneUI ( ) {
 	function myOnSearchInputChange ( ) {
 
 		// saving the search phrase
-		mySearchInputValue = document.getElementById ( 'TravelNotes-Control-SearchInput' ).value;
+		mySearchInputValue = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchInput' ).value;
 
-		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+		let searchDiv = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchDiv' );
 
 		// removing previous search results
-		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-SearchPaneUI-SearchResult' );
 		while ( ZERO !== searchResultsElements.length ) {
 
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
@@ -158,18 +160,18 @@ function newSearchPaneUI ( ) {
 			searchResultsElements [ ZERO ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
 			searchDiv.removeChild ( searchResultsElements [ ZERO ] );
 		}
-		if ( ! document.getElementById ( 'TravelNotes-Control-SearchWaitBullet' ) ) {
+		if ( ! document.getElementById ( 'TravelNotes-SearchPaneUI-SearchWaitBullet' ) ) {
 
 			// adding wait animation
 			let htmlElementsFactory = newHTMLElementsFactory ( );
 			htmlElementsFactory.create (
 				'div',
 				{
-					id : 'TravelNotes-Control-SearchWaitBullet'
+					id : 'TravelNotes-SearchPaneUI-SearchWaitBullet'
 				},
 				htmlElementsFactory.create (
 					'div',
-					{ id : 'TravelNotes-Control-SearchWait' },
+					{ id : 'TravelNotes-SearchPaneUI-SearchWait' },
 					searchDiv
 				)
 			);
@@ -189,25 +191,25 @@ function newSearchPaneUI ( ) {
 
 	function myRemove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
 
 		myOsmSearchEngine.hide ( );
 
-		let searchButton = document.getElementById ( 'TravelNotes-Control-SearchButton' );
+		let searchButton = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchButton' );
 		if ( searchButton ) {
 			searchButton.removeEventListener ( 'click', myOnSearchInputChange, false );
 		}
 
-		let searchInputElement = document.getElementById ( 'TravelNotes-Control-SearchInput' );
+		let searchInputElement = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchInput' );
 		if ( searchInputElement ) {
 			searchInputElement.removeEventListener ( 'change', myOnSearchInputChange, false );
 		}
-		let searchDiv = document.getElementById ( 'TravelNotes-Control-SearchDiv' );
+		let searchDiv = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchDiv' );
 
-		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-Control-SearchResult' );
+		let searchResultsElements = document.getElementsByClassName ( 'TravelNotes-SearchPaneUI-SearchResult' );
 
 		Array.prototype.forEach.call (
 			searchResultsElements,
@@ -234,14 +236,14 @@ function newSearchPaneUI ( ) {
 
 	function myAdd ( ) {
 
-		document.getElementById ( 'TravelNotes-Control-ItineraryPaneButton' )
-			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-TravelNotesPaneButton' )
-			.classList.remove ( 'TravelNotes-Control-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-Control-SearchPaneButton' )
-			.classList.add ( 'TravelNotes-Control-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
+			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
+			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+		document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
+			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 
-		let dataDiv = document.getElementById ( 'TravelNotes-Control-DataPanesDiv' );
+		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		if ( ! dataDiv ) {
 			return;
 		}
@@ -250,15 +252,15 @@ function newSearchPaneUI ( ) {
 		let searchDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-SearchDiv'
+				id : 'TravelNotes-SearchPaneUI-SearchDiv'
 			},
 			dataDiv
 		);
 		let searchButton = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-SearchButton',
-				className : 'TravelNotes-Control-Button',
+				id : 'TravelNotes-SearchPaneUI-SearchButton',
+				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'SearchPaneUI - Search OpenStreetMap' ),
 				innerHTML : '&#x1f50e'
 			},
@@ -270,7 +272,7 @@ function newSearchPaneUI ( ) {
 			'input',
 			{
 				type : 'text',
-				id : 'TravelNotes-Control-SearchInput',
+				id : 'TravelNotes-SearchPaneUI-SearchInput',
 				placeholder : theTranslator.getText ( 'SearchPaneUI - Search phrase' ),
 				value : mySearchInputValue
 			},
@@ -292,15 +294,15 @@ function newSearchPaneUI ( ) {
 				let searchResultDiv = myHTMLElementsFactory.create (
 					'div',
 					{
-						id : 'TravelNotes-Control-SearchResult' + ( resultsCounter ++ ),
-						className :	'TravelNotes-Control-SearchResult',
+						id : 'TravelNotes-SearchPaneUI-SearchResult' + ( resultsCounter ++ ),
+						className :	'TravelNotes-SearchPaneUI-SearchResult',
 						innerHTML :
 							(
 								'' === searchResult.description
 									?
 									''
 									:
-									'<p class="TravelNotes-Control-SearchResultDescription">' +
+									'<p>' +
 									searchResult.description +
 									'</p>'
 							) +

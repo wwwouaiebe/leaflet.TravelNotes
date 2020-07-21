@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed
 Tests ...
 
@@ -71,11 +73,11 @@ function newErrorsUI ( ) {
 			clearTimeout ( myTimerId );
 			myTimerId = null;
 		}
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Error' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Warning' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Help' );
-		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-Hidden' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Error' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Warning' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Info' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Help' );
+		myErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-Hidden' );
 		if ( myShowHelpInput ) {
 			myShowHelpInput.removeEventListener ( 'change', myOnHelpInputChange, false );
 			myShowHelpInput = null;
@@ -94,14 +96,14 @@ function newErrorsUI ( ) {
 		myShowHelpDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI-HelpInputDiv'
+				id : 'TravelNotes-ErrorsUI-HelpInputDiv'
 			},
 			myErrorDiv
 		);
 		myShowHelpInput = myHTMLElementsFactory.create (
 			'input',
 			{
-				id : 'TravelNotes-ErrorUI-HelpInput',
+				id : 'TravelNotes-ErrorsUI-HelpInput',
 				type : 'checkbox'
 			},
 			myShowHelpDiv
@@ -110,8 +112,8 @@ function newErrorsUI ( ) {
 		myHTMLElementsFactory.create (
 			'label',
 			{
-				id : 'TravelNotes-ErrorUI-HelpInputLabel',
-				for : 'TravelNotes-ErrorUI-HelpInput',
+				id : 'TravelNotes-ErrorsUI-HelpInputLabel',
+				for : 'TravelNotes-ErrorsUI-HelpInput',
 				innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
 			},
 			myShowHelpDiv
@@ -146,14 +148,14 @@ function newErrorsUI ( ) {
 		let headerDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI-Header'
+				id : 'TravelNotes-ErrorsUI-Header'
 			},
 			myErrorDiv
 		);
 		myCancelButton = myHTMLElementsFactory.create (
 			'span',
 			{
-				id : 'TravelNotes-ErrorUI-CancelButton',
+				id : 'TravelNotes-ErrorsUI-CancelButton',
 				innerHTML : '&#x274c'
 			},
 			headerDiv
@@ -162,20 +164,20 @@ function newErrorsUI ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI-Message',
+				id : 'TravelNotes-ErrorsUI-Message',
 				innerHTML : message
 			},
 			myErrorDiv
 		);
 
-		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
+		myErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
 		let timeOutDuration = theConfig.errorUI.timeOut;
 		if ( 'Help' === errorLevel ) {
 			myAddHelpCheckbox ( );
 			timeOutDuration = theConfig.errorUI.helpTimeOut;
 		}
 
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
+		myErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Hidden' );
 		myTimerId = setTimeout ( myOnTimer, timeOutDuration );
 	}
 
@@ -189,15 +191,15 @@ function newErrorsUI ( ) {
 
 	function myCreateUI ( ) {
 
-		if ( document.getElementById ( 'TravelNotes-ErrorUI' ) ) {
+		if ( document.getElementById ( 'TravelNotes-ErrorsUI' ) ) {
 			return;
 		}
 
 		myErrorDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI',
-				className : 'TravelNotes-ErrorUI-Hidden'
+				id : 'TravelNotes-ErrorsUI',
+				className : 'TravelNotes-ErrorsUI-Hidden'
 			},
 			document.querySelector ( 'body' )
 		);

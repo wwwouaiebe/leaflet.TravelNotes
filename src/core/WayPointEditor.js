@@ -32,7 +32,7 @@ Changes:
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191121
 Tests ...
 

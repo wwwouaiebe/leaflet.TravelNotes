@@ -30,7 +30,7 @@ Changes:
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191125
 Tests ...
 
@@ -62,16 +62,16 @@ function newUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( controlDiv ) {
-		if ( document.getElementById ( 'TravelNotes-Control-MainDiv' ) ) {
+	function myCreateUI ( uiDiv ) {
+		if ( document.getElementById ( 'TravelNotes-UI-MainDiv' ) ) {
 			return;
 		}
 		let htmlElementsFactory = newHTMLElementsFactory ( );
-		myMainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
+		myMainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
 		htmlElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-Control-MainDiv-Title',
+				id : 'TravelNotes-UI-MainDiv-Title',
 				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
 			},
 			myMainDiv
@@ -116,17 +116,17 @@ function newUI ( ) {
 		myMainDiv.addEventListener (
 			'click',
 			clickEvent => {
-				if ( clickEvent.target.classList.contains ( 'TravelNotes-Control-LinkButton' ) ) {
+				if ( clickEvent.target.classList.contains ( 'TravelNotes-UI-LinkButton' ) ) {
 					return;
 				}
 				if (
 					clickEvent.target.id &&
 				INVALID_OBJ_ID !==
 					[
-						'TravelNotes-Control-OpenTravelInput',
-						'TravelNotes-Control-OpenTravelButton',
-						'TravelNotes-Control-ImportTravelInput',
-						'TravelNotes-Control-ImportTravelButton'
+						'TravelNotes-TravelUIl-OpenTravelInput',
+						'TravelNotes-TravelUI-OpenTravelButton',
+						'TravelNotes-TravelUI-ImportTravelInput',
+						'TravelNotes-TravelUI-ImportTravelButton'
 					].indexOf ( clickEvent.target.id )
 				) {
 					return;
@@ -174,7 +174,7 @@ function newUI ( ) {
 	*/
 
 	return {
-		createUI : controlDiv => myCreateUI ( controlDiv )
+		createUI : uiDiv => myCreateUI ( uiDiv )
 	};
 }
 

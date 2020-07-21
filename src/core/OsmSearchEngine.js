@@ -24,6 +24,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 
@@ -171,7 +173,7 @@ function newOsmSearchEngine ( ) {
 					lng : mapBounds.getNorthEast ( ).lng
 				}
 			},
-			searchPhrase : document.getElementById ( 'TravelNotes-Control-SearchInput' ).value
+			searchPhrase : document.getElementById ( 'TravelNotes-SearchPaneUI-SearchInput' ).value
 		};
 		theTravelNotesData.searchData = [];
 		window.osmSearch.getSearchPromise ( ourSearchParameters ).then ( ourOnSearchSuccess, ourOnSearchError );

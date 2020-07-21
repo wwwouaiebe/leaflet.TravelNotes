@@ -24,7 +24,7 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the control
+		- Issue #120 : Review the UserInterface
 Doc reviewed ...
 Tests ...
 
@@ -99,7 +99,7 @@ function newMouseUI ( ) {
 		myMouseDiv = newHTMLElementsFactory ( ).create (
 			'div',
 			{
-				id : 'TravelNotes-MouseControl'
+				id : 'TravelNotes-MouseUI'
 			},
 			document.querySelector ( 'body' )
 		);
