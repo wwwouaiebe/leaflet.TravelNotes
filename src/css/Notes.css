@@ -16,6 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+--- Notes.css file ----------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the notes
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
 /* notes popup */
 .TravelNotes-NoteHtml-TooltipContent {
 	font-weight: bold;
