@@ -193,7 +193,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	function myGetRouteHTML ( route ) {
 
 		let returnValue = '<div class="' + myClassNamePrefix + 'Route-Header-Name">' +
-			route.name +
+			route.computedName +
 			'</div>';
 		if ( ZERO !== route.distance ) {
 			returnValue +=
@@ -271,7 +271,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					innerHTML :
 						'<a href="#route' +
 						travelRoutesIterator.value.objId +
-						'">' + travelRoutesIterator.value.name +
+						'">' + travelRoutesIterator.value.computedName +
 						'</a>' + '&nbsp;:&nbsp;' +
 						myUtilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
 				},

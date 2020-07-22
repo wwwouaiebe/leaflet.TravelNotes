@@ -29,6 +29,8 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 
@@ -55,7 +57,7 @@ function newGeoCoder ( ) {
 		let NominatimUrl =
 			theConfig.nominatim.url + 'reverse?format=json&lat=' +
 			latLng [ ZERO ] + '&lon=' + latLng [ ONE ] +
-			'&zoom=18&addressdetails=1';
+			'&zoom=18&addressdetails=1&namedetails=1';
 		let nominatimLanguage = theConfig.nominatim.language;
 		if ( nominatimLanguage && '*' !== nominatimLanguage ) {
 			NominatimUrl += '&accept-language=' + nominatimLanguage;
@@ -70,8 +72,48 @@ function newGeoCoder ( ) {
 	}
 
 	/*
-	--- End of myGetPromiseAddress function ---
+	--- myParseResponse function --------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
 	*/
+
+	function myParseResponse ( geoCoderData ) {
+
+		let address = '';
+		let namedetails = '';
+		if ( ! geoCoderData.error ) {
+			if ( geoCoderData.address.house_number ) {
+				address += geoCoderData.address.house_number + ' ';
+			}
+			if ( geoCoderData.address.road ) {
+				address += geoCoderData.address.road + ' ';
+			}
+			else if ( geoCoderData.address.pedestrian ) {
+				address += geoCoderData.address.pedestrian + ' ';
+			}
+			if ( geoCoderData.address.village ) {
+				address += geoCoderData.address.village;
+			}
+			else if ( geoCoderData.address.town ) {
+				address += geoCoderData.address.town;
+			}
+			else if ( geoCoderData.address.city ) {
+				address += geoCoderData.address.city;
+			}
+			if ( ZERO === address.length ) {
+				address += geoCoderData.address.country;
+			}
+			namedetails = geoCoderData.namedetails.name || '';
+			if ( address.includes ( namedetails ) ) {
+				namedetails = '';
+			}
+		}
+
+		return {
+			name : namedetails,
+			address : address
+		};
+	}
 
 	/*
 	--- geoCoder object -----------------------------------------------------------------------------------------------
@@ -81,6 +123,7 @@ function newGeoCoder ( ) {
 
 	return Object.seal (
 		{
+			parseResponse : geoCoderResponse => myParseResponse ( geoCoderResponse ),
 			getPromiseAddress : latLng => myGetPromiseAddress ( latLng )
 		}
 	);

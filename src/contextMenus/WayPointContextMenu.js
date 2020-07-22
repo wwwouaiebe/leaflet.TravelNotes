@@ -64,6 +64,12 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 				name : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
 				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
 				param : myWayPointObjId
+			},
+			{
+				context : theWayPointEditor,
+				name : theTranslator.getText ( 'WayPointContextMenu - Rename this waypoint' ),
+				action : theWayPointEditor.wayPointProperties,
+				param : myWayPointObjId
 			}
 		];
 	}

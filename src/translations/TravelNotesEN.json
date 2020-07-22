@@ -520,8 +520,16 @@
 		"msgstr" : "Chained route : "
 	},
 	{
+		"msgid" : "RoutePropertiesDialog - Color",
+		"msgstr" : "Color : "
+	},
+	{
 		"msgid" : "RoutePropertiesDialog - Linetype",
 		"msgstr" : "Linetype : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Name",
+		"msgstr" : "Route name : "
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Route properties",

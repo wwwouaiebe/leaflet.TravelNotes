@@ -25,6 +25,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191124
 Tests ...
 
@@ -48,23 +50,23 @@ function newHTMLElementsFactory ( ) {
 	function myCreate ( tagName, properties, parentNode ) {
 		let element = null;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
-			element = document.createTextNode ( '' );
+			element = document.createTextNode ( properties.value || '' );
 		}
 		else {
 			element = document.createElement ( tagName );
+			if ( properties ) {
+				for ( let property in properties ) {
+					try {
+						element [ property ] = properties [ property ];
+					}
+					catch ( err ) {
+						console.log ( 'Invalid property : ' + property );
+					}
+				}
+			}
 		}
 		if ( parentNode ) {
 			parentNode.appendChild ( element );
-		}
-		if ( properties ) {
-			for ( let property in properties ) {
-				try {
-					element [ property ] = properties [ property ];
-				}
-				catch ( err ) {
-					console.log ( 'Invalid property : ' + property );
-				}
-			}
 		}
 		return element;
 	}

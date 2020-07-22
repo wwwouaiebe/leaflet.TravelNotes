@@ -520,8 +520,16 @@
 		"msgstr" : "Trajet chaîné : "
 	},
 	{
+		"msgid" : "RoutePropertiesDialog - Color",
+		"msgstr" : "Couleur : "
+	},
+	{
 		"msgid" : "RoutePropertiesDialog - Linetype",
 		"msgstr" : "Type de ligne : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Name",
+		"msgstr" : "Nom du trajet : "
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Route properties",

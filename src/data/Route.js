@@ -30,6 +30,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 
@@ -219,6 +221,18 @@ function newRoute ( ) {
 		myObjId = newObjId ( );
 	}
 
+	function myGetComputedName ( ) {
+		let computedName = myName;
+		if ( '' === computedName ) {
+			computedName =
+				( '' === myWayPoints.first.fullName ? '???' : myWayPoints.first.fullName ) +
+				' ⮞ ' +
+				( '' === myWayPoints.last.fullName ? '???' : myWayPoints.last.fullName );
+		}
+
+		return computedName;
+	}
+
 	/*
 	--- route object --------------------------------------------------------------------------------------------------
 
@@ -236,6 +250,8 @@ function newRoute ( ) {
 
 			get name ( ) { return myName; },
 			set name ( Name ) { myName = Name; },
+
+			get computedName ( ) { return myGetComputedName ( ); },
 
 			get width ( ) { return myWidth; },
 			set width ( Width ) { myWidth = Width; },

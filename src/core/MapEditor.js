@@ -40,6 +40,8 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191121
 Tests ...
 
@@ -55,7 +57,6 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
-import { newUtilities } from '../util/Utilities.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
@@ -418,9 +419,7 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			tooltipWayPoint => newUtilities ( ).formatLatLng (
-				myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).latLng
-			)
+			tooltipWayPoint => myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).fullName
 		);
 		marker.getTooltip ( ).options.offset = [
 			WAY_POINT_ICON_SIZE / TWO,

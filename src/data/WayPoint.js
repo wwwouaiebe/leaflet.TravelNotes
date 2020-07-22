@@ -23,6 +23,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191122
 Tests ...
 
@@ -31,7 +33,7 @@ Tests ...
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-
+import { newUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
@@ -48,11 +50,28 @@ function newWayPoint ( ) {
 
 	let myName = '';
 
+	let myAddress = '';
+
 	let myLat = LAT_LNG.defaultValue;
 
 	let myLng = LAT_LNG.defaultValue;
 
 	let myObjId = newObjId ( );
+
+	/*
+	--- myGetFullName function ----------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetFullName ( ) {
+		let fullName = ( '' === myName ? myAddress : myName + ', ' + myAddress );
+		if ( '' === fullName ) {
+			fullName = newUtilities ( ).formatLatLng ( [ myLat, myLng ] );
+		}
+
+		return fullName;
+	}
 
 	/*
 	--- myValidate function -------------------------------------------------------------------------------------------
@@ -80,6 +99,8 @@ function newWayPoint ( ) {
 			case '1.9.0' :
 			case '1.10.0' :
 			case '1.11.0' :
+				something.address = something.name;
+				something.name = '';
 				something.objType.version = '1.12.0';
 				break;
 			default :
@@ -87,7 +108,7 @@ function newWayPoint ( ) {
 			}
 		}
 		let properties = Object.getOwnPropertyNames ( something );
-		[ 'name', 'lat', 'lng', 'objId' ].forEach (
+		[ 'address', 'name', 'lat', 'lng', 'objId' ].forEach (
 			property => {
 				if ( ! properties.includes ( property ) ) {
 					throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
@@ -106,6 +127,7 @@ function newWayPoint ( ) {
 	function myGetObject ( ) {
 		return {
 			name : myName,
+			address : myAddress,
 			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
 			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
 			objId : myObjId,
@@ -121,6 +143,7 @@ function newWayPoint ( ) {
 
 	function mySetObject ( something ) {
 		let otherthing = myValidate ( something );
+		myAddress = otherthing.address || '';
 		myName = otherthing.name || '';
 		myLat = otherthing.lat || LAT_LNG.defaultValue;
 		myLng = otherthing.lng || LAT_LNG.defaultValue;
@@ -136,8 +159,13 @@ function newWayPoint ( ) {
 	return Object.seal (
 		{
 
+			get address ( ) { return myAddress; },
+			set address ( Address ) { myAddress = Address; },
+
 			get name ( ) { return myName; },
 			set name ( Name ) { myName = Name; },
+
+			get fullName ( ) { return myGetFullName ( ); },
 
 			get lat ( ) { return myLat; },
 			set lat ( Lat ) { myLat = Lat; },

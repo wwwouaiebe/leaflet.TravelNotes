@@ -32,6 +32,10 @@ Changes:
 	text-align: center;
 }
 
+#TravelNotes-RoutePropertiesDialog-NameInput {
+	width: 100%;
+}
+
 .TravelNotes-RoutePropertiesDialog-DataDiv {
 	text-align: left;
 	margin: 0.5em;
@@ -44,14 +48,19 @@ Changes:
 	padding-right: 1em;
 }
 
-#TravelNotes-RoutePropertiesDialog-WithDiv {
-	border-top-style: solid;
-	border-top-width: 0.1em;
-	border-top-color: lightgray;
-	margin-top: 1em;
-	padding-top: 1em;
+#TravelNotes-RoutePropertiesDialog-NameInputDiv,
+#TravelNotes-RoutePropertiesDialog-ChainDiv {
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+	margin-bottom: 1em;
+	padding-bottom: 1em;
 }
 
 #TravelNotes-RoutePropertiesDialog-WidthInput {
 	width: 3em;
+}
+
+#TravelNotes-RoutePropertiesDialog-ColorHeaderDiv {
+	margin: 0.5em;
 }

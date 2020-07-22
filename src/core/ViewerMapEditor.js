@@ -25,6 +25,8 @@ Changes:
 		- created from MapEditor
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed ...
 Tests ...
 
@@ -59,7 +61,7 @@ function onMouseOverOrMoveOnRoute ( mapEvent ) {
 	distance = newUtilities ( ).formatDistance ( distance );
 	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
 	polyline.closeTooltip ( );
-	let tooltipText = route.name;
+	let tooltipText = route.computedName;
 	if ( ! theTravelNotesData.travel.readOnly ) {
 		tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
 		tooltipText += distance;
@@ -246,7 +248,7 @@ function newViewerMapEditor ( ) {
 		// tooltip and popup are created
 		if ( ROUTE_EDITION_STATUS.notEdited === route.edited ) {
 			polyline.bindTooltip (
-				route.name,
+				route.computedName,
 				{ sticky : true, direction : 'right' }
 			);
 			polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );

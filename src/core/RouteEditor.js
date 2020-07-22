@@ -256,10 +256,10 @@ function newRouteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myHaveValidWayPoints ( ) {
+	function myHaveValidWayPoints ( route ) {
 
 		let haveValidWayPoints = true;
-		theTravelNotesData.travel.editedRoute.wayPoints.forEach (
+		route.wayPoints.forEach (
 			wayPoint => {
 				haveValidWayPoints =
 					haveValidWayPoints
@@ -383,7 +383,7 @@ function newRouteEditor ( ) {
 		}
 
 		// Control of the wayPoints
-		if ( ! myHaveValidWayPoints ( ) ) {
+		if ( ! myHaveValidWayPoints ( theTravelNotesData.travel.editedRoute ) ) {
 			return false;
 		}
 
@@ -479,12 +479,14 @@ function newRouteEditor ( ) {
 		routePropertiesDialog.show ( ).then (
 			( ) => {
 				myChainRoutes ( );
-				myEventDispatcher.dispatch (
-					'routepropertiesupdated',
-					{
-						routeObjId : route.objId
-					}
-				);
+				if ( myHaveValidWayPoints ( route ) ) {
+					myEventDispatcher.dispatch (
+						'routepropertiesupdated',
+						{
+							routeObjId : route.objId
+						}
+					);
+				}
 				myEventDispatcher.dispatch ( 'setrouteslist' );
 			}
 		)

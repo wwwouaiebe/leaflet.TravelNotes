@@ -555,18 +555,23 @@ function newTravelUI ( ) {
 	*/
 
 	function mySetRoutesList ( ) {
-
 		while ( myRoutesList.firstChild ) {
+			myRoutesList.firstChild.removeEventListener ( 'dragstart', myOnDragStart, false );
+			myRoutesList.firstChild.removeEventListener ( 'contextmenu', myOnContextMenuRoute, false );
 			myRoutesList.removeChild ( myRoutesList.firstChild );
 		}
 
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-
+			let route = routesIterator.value.objId === theTravelNotesData.editedRouteObjId
+				?
+				theTravelNotesData.travel.editedRoute
+				:
+				routesIterator.value;
 			let routeName =
 				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '&#x1f534;&nbsp;' : '' ) +
-				( routesIterator.value.chain ? '&#x26d3;&nbsp;' : '' ) +
-				( '' === routesIterator.value.name ? '???' : routesIterator.value.name );
+				( route.chain ? '&#x26d3;&nbsp;' : '' ) +
+				( route.computedName );
 
 			let routeDiv = myHTMLElementsFactory.create (
 				'div',
@@ -588,7 +593,6 @@ function newTravelUI ( ) {
 			);
 
 			routeDiv.addEventListener ( 'dragstart', myOnDragStart, false );
-
 			routeDiv.addEventListener ( 'contextmenu', myOnContextMenuRoute, false );
 		}
 	}

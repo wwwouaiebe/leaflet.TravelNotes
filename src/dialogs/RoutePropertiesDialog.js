@@ -30,6 +30,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #63 : Find a better solution for provider keys upload
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191124
 Tests ...
 
@@ -57,6 +59,7 @@ function newRoutePropertiesDialog ( route ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myRoutePropertiesDialog = null;
 	let myRoutePropertiesDiv = null;
+	let myNameInput = null;
 	let myWidthInput = null;
 	let myChainInput = null;
 	let myDashSelect = null;
@@ -71,6 +74,9 @@ function newRoutePropertiesDialog ( route ) {
 
 	function myOnOkButtonClick ( ) {
 		route.color = document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv' ).color;
+		if ( route.computedName !== myNameInput.value ) {
+			route.name = myNameInput.value;
+		}
 		route.width = parseInt ( myWidthInput.value );
 		route.chain = myChainInput.checked;
 		route.dashArray = myDashSelect.selectedIndex;
@@ -93,7 +99,7 @@ function newRoutePropertiesDialog ( route ) {
 	}
 
 	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateRoutePropertiesDiv function ---------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -103,13 +109,60 @@ function newRoutePropertiesDialog ( route ) {
 			'div',
 			{
 				id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
-			},
-			myRoutePropertiesDialog.content
+			}
+		);
+		myRoutePropertiesDialog.content.insertBefore (
+			myRoutePropertiesDiv,
+			myRoutePropertiesDialog.content.firstChild
 		);
 	}
 
 	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateWidthDiv function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateNameDiv ( ) {
+		let nameDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-RoutePropertiesDialog-NameDiv'
+			},
+			myRoutePropertiesDiv
+		);
+
+		myHTMLElementsFactory.create (
+			'div',
+			{
+				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Name' )
+			},
+			nameDiv
+		);
+
+		let inputNameDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-NameInputDiv'
+			},
+			nameDiv
+		);
+
+		myNameInput = myHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				id : 'TravelNotes-RoutePropertiesDialog-NameInput',
+				value : route.computedName
+			},
+			inputNameDiv
+		);
+
+	}
+
+	/*
+	--- myCreateWidthDiv function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -119,27 +172,27 @@ function newRoutePropertiesDialog ( route ) {
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-WithDiv'
+				id : 'TravelNotes-RoutePropertiesDialog-WithDiv',
+				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>'
 			},
 			myRoutePropertiesDiv
 		);
-		widthDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>';
+
 		myWidthInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
-				id : 'TravelNotes-RoutePropertiesDialog-WidthInput'
-
+				id : 'TravelNotes-RoutePropertiesDialog-WidthInput',
+				value : route.width,
+				min : ROUTE_MIN_WIDTH,
+				max : ROUTE_MAX_WIDTH
 			},
 			widthDiv
 		);
-		myWidthInput.value = route.width;
-		myWidthInput.min = ROUTE_MIN_WIDTH;
-		myWidthInput.max = ROUTE_MAX_WIDTH;
 	}
 
 	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateDashDiv function --------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -171,7 +224,7 @@ function newRoutePropertiesDialog ( route ) {
 	}
 
 	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	--- myCreateChainDiv function -------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
@@ -197,11 +250,36 @@ function newRoutePropertiesDialog ( route ) {
 		myChainInput.checked = route.chain;
 	}
 
+	/*
+	--- myCreateColorHeaderDiv function -------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateColorHeaderDiv ( ) {
+		myHTMLElementsFactory.create (
+			'div',
+			{
+				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Color' ),
+				id : 'TravelNotes-RoutePropertiesDialog-ColorHeaderDiv'
+			},
+			myRoutePropertiesDiv
+		);
+	}
+
+	/*
+	--- main ----------------------------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
 	myCreateDialog ( );
 	myCreateRoutePropertiesDiv ( );
+	myCreateNameDiv ( );
 	myCreateWidthDiv ( );
 	myCreateDashDiv ( );
 	myCreateChainDiv ( );
+	myCreateColorHeaderDiv ( );
 
 	return myRoutePropertiesDialog;
 }
