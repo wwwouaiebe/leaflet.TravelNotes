@@ -151,7 +151,7 @@ function newItineraryPaneUI ( ) {
 
 		// removing previous itinerary
 		let routeManeuversNotesList =
-			document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
+			document.querySelector ( '.TravelNotes-UI-Route-ManeuversAndNotes' );
 		if ( routeManeuversNotesList ) {
 			let childNodes = routeManeuversNotesList.childNodes;
 			for ( let childCounter = ZERO; childCounter < childNodes.length; childCounter ++ ) {

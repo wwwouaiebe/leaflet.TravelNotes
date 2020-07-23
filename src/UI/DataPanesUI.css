@@ -31,6 +31,7 @@ Changes:
 /* --- Pane buttons --- */
 
 #TravelNotes-DataPanesUI-DataPanesDiv {
+	margin-left: 0.5em;
 	margin-bottom: auto;
 	max-height: none;
 	overflow: auto;
@@ -50,4 +51,32 @@ Changes:
 .TravelNotes-DataPaneUI-ActivePaneButton {
 	background-color: white;
 	border-bottom-color: white;
+}
+
+.TravelNotes-UI-Route-ManeuversAndNotes {
+	border-spacing: 0.4em 0.2em;
+}
+
+.TravelNotes-UI-Route-Maneuvers-Row,
+.TravelNotes-UI-Route-Notes-Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.TravelNotes-UI-Travel-Notes-Cell,
+.TravelNotes-UI-Route-ManeuversAndNotes-Cell {
+	padding: 0.3em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+	flex-shrink: 1;
+}
+
+.TravelNotes-UI-Travel-Notes-IconCell,
+.TravelNotes-UI-Route-ManeuversAndNotes-IconCell {
+	width: 40px;
+	height: 40px;
+	min-height: 20px;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
 }
