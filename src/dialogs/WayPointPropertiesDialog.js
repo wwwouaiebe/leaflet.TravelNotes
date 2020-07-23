@@ -85,7 +85,7 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 
 		// the dialog base is created
 		myWayPointPropertiesDialog = newBaseDialog ( );
-		myWayPointPropertiesDialog.title = theTranslator.getText ( 'myWayPointPropertiesDialog - Waypoint properties' );
+		myWayPointPropertiesDialog.title = theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' );
 
 		myWayPointPropertiesDialog.okButtonListener = myOnOkButtonClick;
 
@@ -107,7 +107,7 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : theTranslator.getText ( 'myWayPointPropertiesDialog - Name' )
+				innerHTML : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
 			},
 			myWayPointDataDiv
 		);
@@ -135,7 +135,7 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'myWayPointPropertiesDialog - Reset address' ),
+				title : theTranslator.getText ( 'WayPointPropertiesDialog - Reset address' ),
 				innerHTML : '&#x1f504;'
 			},
 			addressHeader
@@ -148,7 +148,7 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				value : theTranslator.getText ( 'myWayPointPropertiesDialog - Address' )
+				value : theTranslator.getText ( 'WayPointPropertiesDialog - Address' )
 			},
 			addressHeader
 		);

@@ -700,6 +700,26 @@
 		"msgstr" : "Delete this waypoint"
 	},
 	{
+		"msgid" : "WayPointContextMenu - Modify properties",
+		"msgstr" : "Modify the properties of this waypoint"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Address",
+		"msgstr" : "Address : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Name",
+		"msgstr" : "Name : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Reset address",
+		"msgstr" : "Update the address with Nominatim"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Waypoint properties",
+		"msgstr" : "Waypoint properties"
+	},
+	{
 		"msgid" : "Help - Continue with interface",
 		"msgstr" : "<p>Move your mouse over the black rectangle <span style='color:white;background-color:black'> Travel &amp; Notes </span> in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (&#x1f511; button on top of interface) to enter your access key.</p>"
 	},

@@ -700,6 +700,26 @@
 		"msgstr" : "Supprimer ce point de passage"
 	},
 	{
+		"msgid" : "WayPointContextMenu - Modify properties",
+		"msgstr" : "Modifier les propriétés de ce point de passage"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Address",
+		"msgstr" : "Adresse : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Name",
+		"msgstr" : "Nom : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Reset address",
+		"msgstr" : "Mettre l'adresse à jour avec Nominatim"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Waypoint properties",
+		"msgstr" : "Propriétés du point de passage"
+	},
+	{
 		"msgid" : "Help - Continue with interface",
 		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir <span style='color:white;background-color:black'> Travel &amp; Notes </span> dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511; en haut de l'interface) pour entrer votre clef d'accès.</p>"
 	},

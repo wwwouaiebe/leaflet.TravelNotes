@@ -67,7 +67,7 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 			},
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'WayPointContextMenu - Rename this waypoint' ),
+				name : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
 				action : theWayPointEditor.wayPointProperties,
 				param : myWayPointObjId
 			}
