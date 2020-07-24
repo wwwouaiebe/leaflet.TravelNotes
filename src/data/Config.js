@@ -32,6 +32,8 @@ Changes:
 		- issue #101 : Add a print command for a route
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191121
 Tests ...
 
@@ -246,7 +248,12 @@ function newConfig ( ) {
 				fillOpacity : 1
 			}
 		},
-		haveCrypto : false
+		haveCrypto : false,
+		itineraryPane :
+		{
+			showNotes : true,
+			showManeuvers : false
+		}
 	};
 
 	/*
@@ -364,6 +371,7 @@ function newConfig ( ) {
 		get geoLocation ( ) { return myConfig.geoLocation; },
 		get printRouteMap ( ) { return myConfig.printRouteMap; },
 		get haveCrypto ( ) { return myConfig.haveCrypto; },
+		get itineraryPane ( ) { return myConfig.itineraryPane; },
 
 		overload : source => myOverload ( source )
 

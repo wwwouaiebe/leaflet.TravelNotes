@@ -37,6 +37,8 @@ Changes:
 		- Issue #76 : Add a devil button in the noteDialog.
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191124
 Tests ...
 
@@ -63,6 +65,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 
 	let myFocusControl = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
 	let myAddress = '';
 	let myCity = '';
@@ -115,32 +118,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function myOnGeocoderResponse ( geoCoderData ) {
-		myAddress = '';
-		myCity = '';
-		if ( geoCoderData.address.house_number ) {
-			myAddress += geoCoderData.address.house_number + ' ';
+
+		let response = myGeoCoder.parseResponse ( geoCoderData );
+		myAddress = response.street;
+		if ( '' !== response.city ) {
+			myAddress += ' ' + theConfig.note.cityPrefix + response.city + theConfig.note.cityPostfix;
 		}
-		if ( geoCoderData.address.road ) {
-			myAddress += geoCoderData.address.road + ' ';
-		}
-		else if ( geoCoderData.address.pedestrian ) {
-			myAddress += geoCoderData.address.pedestrian + ' ';
-		}
-		if ( geoCoderData.address.village ) {
-			myCity = geoCoderData.address.village;
-		}
-		else if ( geoCoderData.address.town ) {
-			myCity = geoCoderData.address.town;
-		}
-		else if ( geoCoderData.address.city ) {
-			myCity = geoCoderData.address.city;
-		}
-		if ( '' !== myCity ) {
-			myAddress += theConfig.note.cityPrefix + myCity + theConfig.note.cityPostfix;
-		}
-		if ( ZERO === myAddress.length ) {
-			myAddress += geoCoderData.address.country;
-		}
+		myCity = response.city;
+
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && newNote ) {
 			myAdressInput.value = myAddress;
 		}
@@ -486,10 +471,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myAdressInput.value = note.address;
 
 		// geolocalization
-		newGeoCoder ( ).getPromiseAddress ( note.latLng )
+		myGeoCoder.getPromiseAddress ( note.latLng )
 			.then ( myOnGeocoderResponse )
 			.catch ( myOnGeocoderError );
-
 	}
 
 	/*

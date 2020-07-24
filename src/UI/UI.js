@@ -123,7 +123,9 @@ function newUI ( ) {
 					clickEvent.target.id &&
 				INVALID_OBJ_ID !==
 					[
-						'TravelNotes-TravelUIl-OpenTravelInput',
+						'TravelNotes-ItineraryPane-ShowNotesInput',
+						'TravelNotes-ItineraryPane-ShowManeuversInput',
+						'TravelNotes-TravelUI-OpenTravelInput',
 						'TravelNotes-TravelUI-OpenTravelButton',
 						'TravelNotes-TravelUI-ImportTravelInput',
 						'TravelNotes-TravelUI-ImportTravelButton'

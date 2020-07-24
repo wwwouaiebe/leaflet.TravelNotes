@@ -35,6 +35,7 @@ Changes:
 	margin-bottom: auto;
 	max-height: none;
 	overflow: auto;
+	flex-grow: 2;
 }
 
 .TravelNotes-DataPaneUI-PaneButton {

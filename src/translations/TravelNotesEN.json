@@ -184,6 +184,14 @@
 		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a>"
 	},
 	{
+		"msgid" : "ItineraryPaneUI - Show notes",
+		"msgstr" : "Notes"
+	},
+	{
+		"msgid" : "ItineraryPaneUI - Show maneuvers",
+		"msgstr" : "Maneuvers"
+	},
+	{
 		"msgid" : "LayersToolbarUI - Layers",
 		"msgstr" : "Maps"
 	},

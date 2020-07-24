@@ -95,6 +95,7 @@ function newWayPointEditor ( ) {
 		wayPoint.name = wayPointData.name;
 		wayPoint.address = wayPointData.address;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'setitinerary' );
 	}
 
 	/*
@@ -110,15 +111,17 @@ function newWayPointEditor ( ) {
 
 		let geoCoder = newGeoCoder ( );
 
-		function setAdressFromGeocoder ( geoCoderResponse ) {
-			myRenameWayPoint (
-				geoCoder.parseResponse ( geoCoderResponse ),
-				wayPointObjId
-			);
-		}
-
 		geoCoder.getPromiseAddress ( latLng )
-			.then ( setAdressFromGeocoder )
+			.then (
+				geoCoderData => {
+					let response = geoCoder.parseResponse ( geoCoderData );
+					let address = response.street;
+					if ( '' !== response.city ) {
+						address += ' ' + response.city;
+					}
+					myRenameWayPoint ( { name : response.name, address : address }, wayPointObjId );
+				}
+			)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 	}
 

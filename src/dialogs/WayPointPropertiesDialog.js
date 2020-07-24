@@ -70,7 +70,16 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 
 		let geoCoder = newGeoCoder ( );
 		geoCoder.getPromiseAddress ( wayPoint.latLng )
-			.then ( geoCoderResponse => { myAddressInput.value = geoCoder.parseResponse ( geoCoderResponse ).address; } )
+			.then (
+				geoCoderData => {
+					let response = geoCoder.parseResponse ( geoCoderData );
+					let address = response.street;
+					if ( '' !== response.city ) {
+						address += ' ' + response.city;
+					}
+					myAddressInput.value = address;
+				}
+			)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
 
 	}

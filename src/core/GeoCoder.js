@@ -79,39 +79,44 @@ function newGeoCoder ( ) {
 
 	function myParseResponse ( geoCoderData ) {
 
-		let address = '';
+		let street = '';
 		let namedetails = '';
+		let city = '';
 		if ( ! geoCoderData.error ) {
 			if ( geoCoderData.address.house_number ) {
-				address += geoCoderData.address.house_number + ' ';
+				street += geoCoderData.address.house_number + ' ';
 			}
 			if ( geoCoderData.address.road ) {
-				address += geoCoderData.address.road + ' ';
+				street += geoCoderData.address.road + ' ';
 			}
 			else if ( geoCoderData.address.pedestrian ) {
-				address += geoCoderData.address.pedestrian + ' ';
+				street += geoCoderData.address.pedestrian + ' ';
 			}
+
 			if ( geoCoderData.address.village ) {
-				address += geoCoderData.address.village;
+				city = geoCoderData.address.village;
 			}
 			else if ( geoCoderData.address.town ) {
-				address += geoCoderData.address.town;
+				city = geoCoderData.address.town;
 			}
 			else if ( geoCoderData.address.city ) {
-				address += geoCoderData.address.city;
+				city = geoCoderData.address.city;
 			}
-			if ( ZERO === address.length ) {
-				address += geoCoderData.address.country;
+
+			if ( '' === street && '' === city ) {
+				street = geoCoderData.address.country;
 			}
+
 			namedetails = geoCoderData.namedetails.name || '';
-			if ( address.includes ( namedetails ) ) {
+			if ( street.includes ( namedetails ) || city.includes ( namedetails ) ) {
 				namedetails = '';
 			}
 		}
 
 		return {
 			name : namedetails,
-			address : address
+			street : street,
+			city : city
 		};
 	}
 

@@ -214,5 +214,9 @@
 			"fill" : true,
 			"fillOpacity" : 1
 		}
-	}
+	},
+	"itineraryPane" : {	
+		"showNotes" : true,
+		"showManeuvers" : false
+	}	
 }

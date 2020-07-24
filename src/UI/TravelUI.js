@@ -246,7 +246,7 @@ function newTravelUI ( ) {
 		myHTMLElementsFactory.create (
 			'input',
 			{
-				id : 'TravelNotes-TravelUIl-OpenTravelInput',
+				id : 'TravelNotes-TravelUI-OpenTravelInput',
 				className : 'TravelNotes-TravelUI-OpenFileInput',
 				type : 'file',
 				accept : '.trv'
@@ -286,7 +286,7 @@ function newTravelUI ( ) {
 					) {
 						return;
 					}
-					document.getElementById ( 'TravelNotes-TravelUIl-OpenTravelInput' ).click ( );
+					document.getElementById ( 'TravelNotes-TravelUI-OpenTravelInput' ).click ( );
 				},
 				false
 			);
