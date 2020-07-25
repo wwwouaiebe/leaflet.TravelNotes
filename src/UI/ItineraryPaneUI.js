@@ -37,10 +37,11 @@ import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
+import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
+import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
 /*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
@@ -62,28 +63,6 @@ function newItineraryPaneUI ( ) {
 	let myCheckBoxesDiv = null;
 
 	/*
-	--- myOnInstructionClick function ---------------------------------------------------------------------------------
-
-	click event listener for the instruction
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnInstructionClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		let element = clickEvent.target;
-		while ( ! element.latLng ) {
-			element = element.parentNode;
-		}
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				latLng : element.latLng
-			}
-		);
-	}
-
-	/*
 	--- myOnInstructionContextMenu function ---------------------------------------------------------------------------
 
 	contextmenu event listener for the instruction
@@ -91,18 +70,30 @@ function newItineraryPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnInstructionContextMenu ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		clickEvent.preventDefault ( );
-		let element = clickEvent.target;
+	function myOnInstructionContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.stopPropagation ( );
+		contextMenuEvent.preventDefault ( );
+		let element = contextMenuEvent.target;
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
+		contextMenuEvent.stopPropagation ( );
+		contextMenuEvent.preventDefault ( );
+		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+		contextMenuEvent.fromUI = true;
+		contextMenuEvent.originalEvent =
+			{
+				clientX : contextMenuEvent.clientX,
+				clientY : contextMenuEvent.clientY,
+				latLng : element.latLng
+			};
 		if ( element.maneuverObjId ) {
-			theNoteEditor.newManeuverNote ( element.maneuverObjId, element.latLng );
+			contextMenuEvent.maneuverObjId = element.maneuverObjId;
+			newManeuverContextMenu ( contextMenuEvent, myDataDiv ).show ( );
 		}
 		else if ( element.noteObjId ) {
-			theNoteEditor.editNote ( element.noteObjId );
+			contextMenuEvent.noteObjId = element.noteObjId;
+			newNoteContextMenu ( contextMenuEvent, myDataDiv ).show ( );
 		}
 	}
 
@@ -197,7 +188,6 @@ function newItineraryPaneUI ( ) {
 
 		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
 			row => {
-				row.removeEventListener ( 'click', myOnInstructionClick, false );
 				row.removeEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
 				row.removeEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );
 				row.removeEventListener ( 'mouseleave', myOnInstructionMouseLeave, false );
@@ -283,7 +273,6 @@ function newItineraryPaneUI ( ) {
 
 		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
 			row => {
-				row.addEventListener ( 'click', myOnInstructionClick, false );
 				row.addEventListener ( 'contextmenu', myOnInstructionContextMenu, false );
 				row.addEventListener ( 'mouseenter', myOnInstructionMouseEnter, false );
 				row.addEventListener ( 'mouseleave', myOnInstructionMouseLeave, false );

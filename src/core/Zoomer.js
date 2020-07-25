@@ -23,6 +23,8 @@ This file contains:
 Changes:
 	- v1.6.0:
 		- created
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed ...
 Tests ...
 
@@ -72,6 +74,20 @@ function newZoomer ( ) {
 		route.notes.forEach (
 			note => myPushNoteGeometry ( note )
 		);
+	}
+
+	/*
+	--- myZoomToManeuver function -------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myZoomToManeuver ( maneuverObjId ) {
+		let itineraryPointObjId =
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).itineraryPointObjId;
+		let latLng =
+			theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng;
+		myEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
 	}
 
 	/*
@@ -146,6 +162,8 @@ function newZoomer ( ) {
 
 	return Object.seal (
 		{
+			zoomToManeuver : maneuverObjId => myZoomToManeuver ( maneuverObjId ),
+
 			zoomToNote : noteObjId => myZoomToNote ( noteObjId ),
 
 			zoomToRoute : routeObjId => myZoomToRoute ( routeObjId ),

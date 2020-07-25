@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 --- NoteContextMenu.js file -------------------------------------------------------------------------------------------
 This file contains:
-	-
+	- the newNoteContextMenu function
 Changes:
 	- v1.6.0:
 		- created
@@ -47,9 +47,9 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteContextMenu ( contextMenuEvent ) {
+function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
-	let myNoteObjId = contextMenuEvent.target.objId;
+	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
 
 	/*
@@ -108,7 +108,7 @@ function newNoteContextMenu ( contextMenuEvent ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let noteContextMenu = newBaseContextMenu ( contextMenuEvent );
+	let noteContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
 	noteContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( noteContextMenu );
@@ -117,5 +117,5 @@ function newNoteContextMenu ( contextMenuEvent ) {
 export { newNoteContextMenu };
 
 /*
---- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
+--- End of NoteContextMenu.js file ------------------------------------------------------------------------------------
 */

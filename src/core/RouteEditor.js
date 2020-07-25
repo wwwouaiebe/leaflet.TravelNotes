@@ -615,6 +615,20 @@ function newRouteEditor ( ) {
 	}
 
 	/*
+	--- myRemoveManeuver function --------------------------------------------------------------------------------------
+
+	This function ...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myRemoveManeuver ( maneuverObjId ) {
+		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
+		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
+	}
+
+	/*
 	--- routeEditor object --------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -622,6 +636,8 @@ function newRouteEditor ( ) {
 
 	return Object.seal (
 		{
+			removeManeuver : maneuverObjId => myRemoveManeuver ( maneuverObjId ),
+
 			saveGpx : RouteObjId => mySaveGpx ( RouteObjId ),
 
 			chainRoutes : ( ) => myChainRoutes ( ),

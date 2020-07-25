@@ -36,6 +36,8 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
 Doc reviewed 20191121
 Tests ...
 
@@ -75,7 +77,43 @@ function newNoteEditor ( ) {
 	let myManeuverLength = ZERO;
 
 	/*
-	--- myAddAllManeuverNotes function --------------------------------------------------------------------------------
+	--- myNewNoteFromSvgData function ---------------------------------------------------------------------------------
+
+	This function...
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myNewNoteFromSvgData ( svgData, route ) {
+		let note = newNote ( );
+		note.iconContent = svgData.svg.outerHTML;
+		note.popupContent = '';
+		note.iconWidth = ICON_DIMENSIONS.width;
+		note.iconHeight = ICON_DIMENSIONS.height;
+		note.tooltipContent = svgData.tooltip;
+		note.address = svgData.streets;
+		if ( '' !== svgData.city ) {
+			note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
+		}
+		if ( svgData.place && svgData.place !== svgData.city ) {
+			note.address += ' (' + svgData.place + ')';
+		}
+		note.latLng = svgData.latLng;
+		note.iconLatLng = svgData.latLng;
+		note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
+		note.chainedDistance = route.chainedDistance;
+		route.notes.add ( note );
+		myEventDispatcher.dispatch (
+			'noteupdated',
+			{
+				removedNoteObjId : INVALID_OBJ_ID,
+				addedNoteObjId : note.objId
+			}
+		);
+	}
+
+	/*
+	--- myAddManeuverNote function ------------------------------------------------------------------------------------
 
 	This function...
 
@@ -118,31 +156,7 @@ function newNoteEditor ( ) {
 			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
 				.then (
 					svgData => {
-						let note = newNote ( );
-						note.iconContent = svgData.svg.outerHTML;
-						note.popupContent = '';
-						note.iconWidth = ICON_DIMENSIONS.width;
-						note.iconHeight = ICON_DIMENSIONS.height;
-						note.tooltipContent = svgData.tooltip;
-						note.address = svgData.streets;
-						if ( '' !== svgData.city ) {
-							note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
-						}
-						if ( svgData.place && svgData.place !== svgData.city ) {
-							note.address += ' (' + svgData.place + ')';
-						}
-						note.latLng = svgData.latLng;
-						note.iconLatLng = svgData.latLng;
-						note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
-						note.chainedDistance = route.chainedDistance;
-						route.notes.add ( note );
-						myEventDispatcher.dispatch (
-							'noteupdated',
-							{
-								removedNoteObjId : INVALID_OBJ_ID,
-								addedNoteObjId : note.objId
-							}
-						);
+						myNewNoteFromSvgData ( svgData, route );
 						endAdd ( );
 					}
 				)
@@ -429,8 +443,32 @@ function newNoteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNewManeuverNote ( maneuverObjId, latLng ) {
+	function myNewManeuverNote ( latLng ) {
+		myWaitUI = newWaitUI ( );
+		myWaitUI.createUI ( );
+		let route = theTravelNotesData.travel.editedRoute;
+		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+			.then (
+				svgData => {
+					myNewNoteFromSvgData ( svgData, route );
+					route.notes.sort (
+						( first, second ) => first.distance - second.distance
+					);
+					myEventDispatcher.dispatch ( 'setitinerary' );
+					myEventDispatcher.dispatch ( 'roadbookupdate' );
+					myWaitUI.close ( );
+					myWaitUI = null;
+				}
+			)
+			.catch (
+				err => {
+					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+					myWaitUI.close ( );
+					myWaitUI = null;
+				}
+			);
 
+		/*
 		// the nearest point and distance on the route is searched
 		let latLngDistance = myGeometry.getClosestLatLngDistance (
 			theTravelNotesData.travel.editedRoute,
@@ -449,6 +487,8 @@ function newNoteEditor ( ) {
 		note.popupContent = maneuver.instruction;
 
 		myNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true );
+	*/
+
 	}
 
 	/*
@@ -615,7 +655,7 @@ function newNoteEditor ( ) {
 
 			newSearchNote : searchResult => myNewSearchNote ( searchResult ),
 
-			newManeuverNote : ( maneuverObjId, latLng ) => myNewManeuverNote ( maneuverObjId, latLng ),
+			newManeuverNote : latLng => myNewManeuverNote ( latLng ),
 
 			newTravelNote : latLng => myNewTravelNote ( latLng ),
 
