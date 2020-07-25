@@ -36,6 +36,7 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
+import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
@@ -100,20 +101,9 @@ function newMapContextMenu ( contextMenuEvent ) {
 				param : myLatLng
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - New travel note' ),
-				action : theNoteEditor.newTravelNote,
-				param : myLatLng
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Hide notes' ),
-				action : theNoteEditor.hideNotes
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Show notes' ),
-				action : theNoteEditor.showNotes
+				context : theTravelEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Add a route' ),
+				action : theTravelEditor.addRoute
 			},
 			{
 				context : theRouteEditor,
@@ -124,6 +114,22 @@ function newMapContextMenu ( contextMenuEvent ) {
 				context : theRouteEditor,
 				name : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
 				action : theRouteEditor.showRoutes
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'MapContextMenu - New travel note' ),
+				action : theNoteEditor.newTravelNote,
+				param : myLatLng
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Hide all notes' ),
+				action : theNoteEditor.hideNotes
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Show all notes' ),
+				action : theNoteEditor.showNotes
 			},
 			{
 				context : myZoomer,

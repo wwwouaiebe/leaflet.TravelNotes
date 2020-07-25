@@ -449,7 +449,7 @@ function newTravelUI ( ) {
 			'span',
 			{
 				className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
-				title : theTranslator.getText ( 'TravelUI - New route' ),
+				title : theTranslator.getText ( 'TravelUI - Add a route' ),
 				innerHTML : '+'
 			},
 			routesHeaderDiv

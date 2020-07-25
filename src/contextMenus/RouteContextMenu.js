@@ -122,28 +122,6 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 					param : myRouteObjId
 				},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
-				action :
-					contextMenuEvent.fromUI
-						?
-						null
-						:
-						theNoteEditor.newRouteNote,
-				param : myRouteObjId
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
-				action :
-					myRoute.hidden
-						?
-						null
-						:
-						theNoteEditor.addAllManeuverNotes,
-				param : myRouteObjId
-			},
-			{
 				context : theRouteEditor,
 				name : theTranslator.getText ( 'RouteContextMenu - Properties' ),
 				action :
@@ -202,6 +180,28 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 						theWayPointEditor.reverseWayPoints
 						:
 						null
+				},
+				{
+					context : theNoteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
+					action :
+						contextMenuEvent.fromUI
+							?
+							null
+							:
+							theNoteEditor.newRouteNote,
+					param : myRouteObjId
+				},
+				{
+					context : theNoteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
+					action :
+						myRoute.hidden
+							?
+							null
+							:
+							theNoteEditor.addAllManeuverNotes,
+					param : myRouteObjId
 				},
 				{
 					context : theRouteEditor,

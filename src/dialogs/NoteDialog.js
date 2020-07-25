@@ -77,10 +77,9 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	let myHeightInput = null;
 	let myPopupContent = null;
 	let myTooltipContent = null;
-	let myAdressInput = null;
+	let myAddressInput = null;
 	let myUrlInput = null;
 	let myPhoneInput = null;
-	let myResetAdressButton = null;
 
 	/*
 	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
@@ -103,7 +102,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		note.iconContent = myIconHtmlContent.value;
 		note.popupContent = myPopupContent.value;
 		note.tooltipContent = myTooltipContent.value;
-		note.address = myAdressInput.value;
+		note.address = myAddressInput.value;
 		note.url = myUrlInput.value;
 		note.phone = myPhoneInput.value;
 		note.latLng = myLatLng;
@@ -127,7 +126,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myCity = response.city;
 
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && newNote ) {
-			myAdressInput.value = myAddress;
+			myAddressInput.value = myAddress;
 		}
 	}
 
@@ -161,7 +160,7 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			address += ' (' + svgData.place + ')';
 		}
 
-		myAdressInput.value = address;
+		myAddressInput.value = address;
 		myLatLng = svgData.latLng;
 
 		myNoteDialog.hideWait ( );
@@ -443,6 +442,55 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	*/
 
 	function myCreateAddressContent ( ) {
+
+		let addressHeader = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-TitleDiv'
+			},
+			myNoteDataDiv
+		);
+		myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-UI-Button',
+
+				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
+				innerHTML : '&#x1f504;'
+			},
+			addressHeader
+		)
+			.addEventListener (
+				'click',
+				( ) => { myAddressInput.value = myAddress; },
+				false
+			);
+		myHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'NoteDialog - Address' )
+			},
+			addressHeader
+		);
+
+		myAddressInput = myHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				value : note.address,
+				className : 'TravelNotes-NoteDialog-InputText',
+				id : 'TravelNotes-NoteDialog-InputText-Adress'
+			},
+			myHTMLElementsFactory.create ( 'div', null, myNoteDataDiv )
+		);
+		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
+
+		// geolocalization
+		myGeoCoder.getPromiseAddress ( note.latLng )
+			.then ( myOnGeocoderResponse )
+			.catch ( myOnGeocoderError );
+
+		/*
 		myResetAdressButton = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -455,10 +503,10 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 		myResetAdressButton.addEventListener (
 			'click',
-			function ( ) { myAdressInput.value = myAddress; },
+			function ( ) { myAddressInput.value = myAddress; },
 			false
 		);
-		myAdressInput = myHTMLElementsFactory.create (
+		myAddressInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
@@ -467,13 +515,15 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			},
 			myNoteDataDiv
 		);
-		myAdressInput.addEventListener ( 'focus', myOnFocusControl, false );
-		myAdressInput.value = note.address;
+		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myAddressInput.value = note.address;
 
 		// geolocalization
 		myGeoCoder.getPromiseAddress ( note.latLng )
 			.then ( myOnGeocoderResponse )
 			.catch ( myOnGeocoderError );
+		*/
+
 	}
 
 	/*

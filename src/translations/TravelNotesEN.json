@@ -200,12 +200,16 @@
 		"msgstr" : "About Travel & Notes"
 	},
 	{
+		"msgid" : "MapContextMenu - Add a route",
+		"msgstr" : "Add a route"
+	},
+	{
 		"msgid" : "MapContextMenu - Hide all routes",
 		"msgstr" : "Hide all routes"
 	},
 	{
-		"msgid" : "MapContextMenu - Hide notes",
-		"msgstr" : "Hide notes"
+		"msgid" : "MapContextMenu - Hide all notes",
+		"msgstr" : "Hide all notes"
 	},
 	{
 		"msgid" : "MapContextMenu - New travel note",
@@ -228,8 +232,8 @@
 		"msgstr" : "Show all routes"
 	},
 	{
-		"msgid" : "MapContextMenu - Show notes",
-		"msgstr" : "Show notes"
+		"msgid" : "MapContextMenu - Show all notes",
+		"msgstr" : "Show all notes"
 	},
 	{
 		"msgid" : "MapContextMenu - Zoom to travel",
@@ -260,8 +264,8 @@
 		"msgstr" : "Zoom to note"
 	},
 	{
-		"msgid" : "NoteDialog - Address&nbsp;:",
-		"msgstr" : "Address&nbsp;:"
+		"msgid" : "NoteDialog - Address",
+		"msgstr" : "Address :"
 	},
 	{
 		"msgid" : "Notedialog - an error occurs when creating the SVG icon",
@@ -306,6 +310,10 @@
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
 		"msgstr" : "It's impossible to create a SVG icon for a travel note"
+	},
+	{
+		"msgid" : "NoteDialog - Reset address",
+		"msgstr" : "Update the address with Nominatim"
 	},
 	{
 		"msgid" : "NoteDialog - Text",
@@ -493,7 +501,7 @@
 	},
 	{
 		"msgid" : "RouteContextMenu - Properties",
-		"msgstr" : "Properties of this route"
+		"msgstr" : "Modify the properties of this route"
 	},
 	{
 		"msgid" : "RouteContextMenu - Save modifications on this route",
@@ -644,8 +652,8 @@
 		"msgstr" : "Import routes and notes from another travel"
 	},
 	{
-		"msgid" : "TravelUI - New route",
-		"msgstr" : "New route"
+		"msgid" : "TravelUI - Add a route",
+		"msgstr" : "Add a route"
 	},
 	{
 		"msgid" : "TravelUI - Not possible to merge a travel when a route is edited",

@@ -83,7 +83,8 @@ Changes:
 
 .TravelNotes-NoteDialog-DataDiv,
 .TravelNotes-NoteDialog-TitleDiv {
-	margin-top: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
 }
 
 .TravelNotes-NoteDialog-TextArea {
