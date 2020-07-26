@@ -443,10 +443,12 @@ function newNoteEditor ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNewManeuverNote ( latLng ) {
+	function myNewManeuverNote ( maneuverObjId ) {
 		myWaitUI = newWaitUI ( );
 		myWaitUI.createUI ( );
 		let route = theTravelNotesData.travel.editedRoute;
+		let maneuver = route.itinerary.maneuvers.getAt ( maneuverObjId );
+		let latLng = route.itinerary.itineraryPoints.getAt ( maneuver.itineraryPointObjId ).latLng;
 		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
 			.then (
 				svgData => {
@@ -454,6 +456,7 @@ function newNoteEditor ( ) {
 					route.notes.sort (
 						( first, second ) => first.distance - second.distance
 					);
+					route.itinerary.maneuvers.remove ( maneuverObjId );
 					myEventDispatcher.dispatch ( 'setitinerary' );
 					myEventDispatcher.dispatch ( 'roadbookupdate' );
 					myWaitUI.close ( );
@@ -467,28 +470,6 @@ function newNoteEditor ( ) {
 					myWaitUI = null;
 				}
 			);
-
-		/*
-		// the nearest point and distance on the route is searched
-		let latLngDistance = myGeometry.getClosestLatLngDistance (
-			theTravelNotesData.travel.editedRoute,
-			latLng
-		);
-
-		// the maneuver is searched
-		let maneuver = theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId );
-
-		// the note is created
-		let note = myNewNote ( latLng );
-		note.distance = latLngDistance.distance;
-		note.iconContent =
-			'<div class="TravelNotes-ManeuverNote TravelNotes-ManeuverNote-' +
-			maneuver.iconName + '"></div>';
-		note.popupContent = maneuver.instruction;
-
-		myNoteDialog ( note, theTravelNotesData.travel.editedRoute.objId, true );
-	*/
-
 	}
 
 	/*
@@ -655,7 +636,7 @@ function newNoteEditor ( ) {
 
 			newSearchNote : searchResult => myNewSearchNote ( searchResult ),
 
-			newManeuverNote : latLng => myNewManeuverNote ( latLng ),
+			newManeuverNote : maneuverObjId => myNewManeuverNote ( maneuverObjId ),
 
 			newTravelNote : latLng => myNewTravelNote ( latLng ),
 

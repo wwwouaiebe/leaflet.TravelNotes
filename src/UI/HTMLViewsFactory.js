@@ -46,7 +46,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-
+import { newGeometry } from '../util/Geometry.js';
 import { DISTANCE, ZERO } from '../util/Constants.js';
 
 function newHTMLViewsFactory ( classNamePrefix ) {
@@ -55,19 +55,17 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	const MIN_NOTES_DISTANCE = 9;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-
 	let myUtilities = newUtilities ( );
 	let myProfileFactory = newProfileFactory ( );
-
+	let myGeometry = newGeometry ( );
 	let mySvgIconSize = theConfig.note.svgIconWidth;
-
 	let myClassNamePrefix = classNamePrefix || 'TravelNotes-UI-';
 
 	/*
 	--- myGetNoteHTML function ----------------------------------------------------------------------------------------
 
 	This function returns an HTML string with the note contents. This string will be used in the
-	note popup and on the roadbook page
+	note popup, the itinerary pane and on the roadbook page
 
 	parameters:
 	- note : the TravelNotes object
@@ -75,8 +73,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetNoteHTML ( note ) {
-
+	function myGetNoteHTML ( noteAndRoute ) {
+		let note = noteAndRoute.note;
 		let noteText = '';
 		if ( ZERO !== note.tooltipContent.length ) {
 			noteText +=
@@ -99,7 +97,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<div class="' +
 				myClassNamePrefix +
 				'NoteHtml-Address">' +
-				theTranslator.getText ( 'NoteEditor - Address' ) +
+				theTranslator.getText ( 'HTMLViewsFactory - Address' ) +
 				note.address + '</div>';
 		}
 		if ( ZERO !== note.phone.length ) {
@@ -107,7 +105,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<div class="' +
 				myClassNamePrefix +
 				'NoteHtml-Phone">' +
-				theTranslator.getText ( 'NoteEditor - Phone' )
+				theTranslator.getText ( 'HTMLViewsFactory - Phone' )
 				+ note.phone + '</div>';
 		}
 		if ( ZERO !== note.url.length ) {
@@ -115,7 +113,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				'<div class="' +
 				myClassNamePrefix +
 				'NoteHtml-Url">' +
-				theTranslator.getText ( 'NoteEditor - Link' ) +
+				theTranslator.getText ( 'HTMLViewsFactory - Link' ) +
 				'<a href="' +
 				note.url +
 				'" target="_blank">' +
@@ -126,19 +124,28 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		let utilities = newUtilities ( );
 		noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-LatLng">' +
 			theTranslator.getText (
-				'NoteEditor - Latitude Longitude',
+				'HTMLViewsFactory - Latitude Longitude',
 				{
 					lat : utilities.formatLat ( note.lat ),
 					lng : utilities.formatLng ( note.lng )
 				}
 			) + '</div>';
 
-		if ( DISTANCE.invalid !== note.distance ) {
-			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
+		if ( noteAndRoute.route ) {
+			if ( noteAndRoute.route.chain ) {
+				noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
 				theTranslator.getText (
-					'NoteEditor - Distance',
+					'HTMLViewsFactory - Distance from start of travel',
 					{
 						distance : utilities.formatDistance ( note.chainedDistance + note.distance )
+					}
+				) + '</div>';
+			}
+			noteText += '<div class="' + myClassNamePrefix + 'NoteHtml-Distance">' +
+				theTranslator.getText (
+					'HTMLViewsFactory - Distance from start of route',
+					{
+						distance : utilities.formatDistance ( note.distance )
 					}
 				) + '</div>';
 		}
@@ -154,12 +161,12 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddNoteHTML ( note, rowDiv ) {
+	function myAddNoteHTML ( noteAndRoute, rowDiv ) {
 		let iconCell = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Notes-IconCell',
-				innerHTML : note.iconContent
+				innerHTML : noteAndRoute.note.iconContent
 			},
 			rowDiv
 		);
@@ -171,11 +178,11 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Notes-Cell',
-				innerHTML : myGetNoteHTML ( note )
+				innerHTML : myGetNoteHTML ( noteAndRoute )
 			},
 			rowDiv
 		);
-		rowDiv.noteObjId = note.objId;
+		rowDiv.noteObjId = noteAndRoute.note.objId;
 	}
 
 	/*
@@ -262,25 +269,35 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		let travelDistance = DISTANCE.defaultValue;
 		let travelAscent = ZERO;
 		let travelDescent = ZERO;
-		let travelRoutesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! travelRoutesIterator.done ) {
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+
+			let route =
+				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId
+					&&
+					theConfig.routeEditor.displayEditionInHTMLPage
+				)
+					?
+					theTravelNotesData.travel.editedRoute
+					:
+					routesIterator.value;
 			myHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Travel-Header-RouteName',
 					innerHTML :
 						'<a href="#route' +
-						travelRoutesIterator.value.objId +
-						'">' + travelRoutesIterator.value.computedName +
+						route.objId +
+						'">' + route.computedName +
 						'</a>' + '&nbsp;:&nbsp;' +
-						myUtilities.formatDistance ( travelRoutesIterator.value.distance ) + '.'
+						myUtilities.formatDistance ( route.distance ) + '.'
 				},
 				travelHeaderHTML
 			);
-			if ( travelRoutesIterator.value.chain ) {
-				travelDistance += travelRoutesIterator.value.distance;
-				travelAscent += travelRoutesIterator.value.itinerary.ascent;
-				travelDescent += travelRoutesIterator.value.itinerary.descent;
+			if ( route.chain ) {
+				travelDistance += route.distance;
+				travelAscent += route.itinerary.ascent;
+				travelDescent += route.itinerary.descent;
 			}
 		}
 
@@ -350,7 +367,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 				{ className : myClassNamePrefix + 'Travel-Notes-Row' },
 				travelNotesHTML
 			);
-			myAddNoteHTML ( travelNotesIterator.value, rowDiv );
+			myAddNoteHTML ( { note : travelNotesIterator.value, route : null }, rowDiv );
 		}
 
 		return travelNotesHTML;
@@ -384,108 +401,125 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetRouteManeuversAndNotesHTML ( route ) {
+
+		let notesAndManeuverRows = [];
+
+		let notesIterator = route.notes.iterator;
+		while ( ! notesIterator.done ) {
+			let rowDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					className : myClassNamePrefix + 'Route-Notes-Row',
+					objId : newObjId ( ),
+					latLng : notesIterator.value.latLng,
+					noteObjId : notesIterator.value.objId,
+					distance : notesIterator.value.distance
+				}
+			);
+
+			myAddNoteHTML ( { note : notesIterator.value, route : route }, rowDiv );
+
+			let nextNote = notesIterator.next;
+			if ( nextNote ) {
+				let nextDistance = nextNote.distance - notesIterator.value.distance;
+				if ( MIN_NOTES_DISTANCE < nextDistance ) {
+					myHTMLElementsFactory.create (
+						'div',
+						{
+							className : myClassNamePrefix + 'NoteHtml-NextDistance',
+							innerHTML :
+								theTranslator.getText (
+									'HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}',
+									{ distance : myUtilities.formatDistance ( nextDistance ) }
+								)
+						},
+						rowDiv.lastChild
+					);
+				}
+			}
+			notesAndManeuverRows.push ( rowDiv );
+		}
+
+		let maneuversIterator = route.itinerary.maneuvers.iterator;
+		while ( ! maneuversIterator.done ) {
+
+			let latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
+			let maneuverDistance = myGeometry.getClosestLatLngDistance ( route, latLng ).distance;
+
+			let rowDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					className : myClassNamePrefix + 'Route-Maneuvers-Row',
+					objId : newObjId ( ),
+					latLng : latLng,
+					maneuverObjId : maneuversIterator.value.objId,
+					distance : maneuverDistance
+				}
+			);
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className :
+						myClassNamePrefix +
+						'Route-ManeuversAndNotes-IconCell ' +
+						'TravelNotes-ManeuverNote-' +
+						maneuversIterator.value.iconName
+				},
+				rowDiv
+			);
+			let maneuverText =
+				'<div>' + maneuversIterator.value.instruction + '</div>';
+
+			if ( route.chain ) {
+				maneuverText += '<div>' +
+						theTranslator.getText (
+							'HTMLViewsFactory - Distance from start of travel',
+							{
+								distance : myUtilities.formatDistance ( route.chainedDistance + maneuverDistance )
+							}
+						) + '</div>';
+			}
+
+			maneuverText += '<div>' +
+					theTranslator.getText (
+						'HTMLViewsFactory - Distance from start of route',
+						{
+							distance : myUtilities.formatDistance ( maneuverDistance )
+						}
+					) + '</div>';
+
+			let nextManeuver = maneuversIterator.next;
+			if ( nextManeuver ) {
+				let nextLatLng = route.itinerary.itineraryPoints.getAt ( nextManeuver.itineraryPointObjId ).latLng;
+				let nextManeuverDistance = myGeometry.getClosestLatLngDistance ( route, nextLatLng ).distance;
+				maneuverText +=	'<div>' +
+					theTranslator.getText (
+						'HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}',
+						{
+							distance : myUtilities.formatDistance ( nextManeuverDistance - maneuverDistance )
+						}
+					) + '</div>';
+			}
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className : myClassNamePrefix + 'Route-ManeuversAndNotes-Cell',
+					innerHTML : maneuverText
+				},
+				rowDiv
+			);
+			notesAndManeuverRows.push ( rowDiv );
+		}
+
+		notesAndManeuverRows.sort ( ( first, second ) => first.distance - second.distance );
+
 		let routeManeuversAndNotesHTML = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Route-ManeuversAndNotes'
 			}
 		);
-
-		let notesIterator = route.notes.iterator;
-		let notesDone = notesIterator.done;
-		let notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
-		let previousNotesDistance = notesDistance;
-
-		let maneuversIterator = route.itinerary.maneuvers.iterator;
-		let maneuversDone = maneuversIterator.done;
-		let maneuversDistance = DISTANCE.defaultValue;
-
-		while ( ! ( maneuversDone && notesDone ) ) {
-			let rowDiv = myHTMLElementsFactory.create (
-				'div',
-				{ className : myClassNamePrefix + 'Route-ManeuversAndNotes-Row' },
-				routeManeuversAndNotesHTML
-			);
-
-			if ( maneuversDistance <= notesDistance ) {
-				if ( ! maneuversDone ) {
-					rowDiv.className = myClassNamePrefix + 'Route-Maneuvers-Row';
-					myHTMLElementsFactory.create (
-						'div',
-						{
-							className :
-								myClassNamePrefix +
-								'Route-ManeuversAndNotes-IconCell ' +
-								'TravelNotes-ManeuverNote-' +
-								maneuversIterator.value.iconName
-						},
-						rowDiv
-					);
-
-					let maneuverText =
-						'<div>' + maneuversIterator.value.instruction + '</div>';
-
-					if ( ZERO < maneuversIterator.value.distance ) {
-						maneuverText +=	'<div>' +
-							theTranslator.getText (
-								'HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}',
-								{
-									distance : myUtilities.formatDistance ( maneuversIterator.value.distance ),
-									duration : myUtilities.formatTime ( maneuversIterator.value.duration )
-								}
-							) + '</div>';
-					}
-					myHTMLElementsFactory.create (
-						'div',
-						{
-							className : myClassNamePrefix + 'Route-ManeuversAndNotes-Cell',
-							innerHTML : maneuverText
-						},
-						rowDiv
-					);
-
-					rowDiv.objId = newObjId ( );
-					rowDiv.latLng =
-						route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
-					rowDiv.maneuverObjId = maneuversIterator.value.objId;
-
-					maneuversDistance += maneuversIterator.value.distance;
-					maneuversDone = maneuversIterator.done;
-					if ( maneuversDone ) {
-						maneuversDistance = Number.MAX_VALUE;
-					}
-				}
-			}
-			else if ( ! notesDone ) {
-				rowDiv.className = myClassNamePrefix + 'Route-Notes-Row';
-
-				myAddNoteHTML ( notesIterator.value, rowDiv );
-
-				rowDiv.objId = newObjId ( );
-				rowDiv.latLng = notesIterator.value.latLng;
-				rowDiv.noteObjId = notesIterator.value.objId;
-				previousNotesDistance = notesIterator.value.distance;
-				notesDone = notesIterator.done;
-				notesDistance = notesDone ? Number.MAX_VALUE : notesIterator.value.distance;
-				if ( ! notesDone ) {
-					let nextDistance = notesIterator.value.distance - previousNotesDistance;
-					if ( MIN_NOTES_DISTANCE < nextDistance ) {
-						myHTMLElementsFactory.create (
-							'div',
-							{
-								className : myClassNamePrefix + 'NoteHtml-NextDistance',
-								innerHTML :
-									theTranslator.getText (
-										'HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}',
-										{ distance : myUtilities.formatDistance ( nextDistance ) }
-									)
-							},
-							rowDiv.lastChild
-						);
-					}
-				}
-			}
-		}
+		notesAndManeuverRows.forEach ( row => routeManeuversAndNotesHTML.appendChild ( row ) );
 
 		return routeManeuversAndNotesHTML;
 	}
@@ -620,7 +654,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 			getRouteHTML : route => myGetRouteHTML ( route ),
 
-			getNoteHTML : note => myGetNoteHTML ( note )
+			getNoteHTML : noteAndRoute => myGetNoteHTML ( noteAndRoute )
 
 		}
 	);

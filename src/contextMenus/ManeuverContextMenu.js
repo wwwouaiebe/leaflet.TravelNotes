@@ -52,9 +52,9 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ManeuverContextMenu - Create a maneuver note' ),
+				name : theTranslator.getText ( 'ManeuverContextMenu - Replace with a maneuver note' ),
 				action : theNoteEditor.newManeuverNote,
-				param : contextMenuEvent.originalEvent.latLng
+				param : myManeuverObjId
 			},
 			{
 				context : theRouteEditor,

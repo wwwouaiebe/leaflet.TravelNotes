@@ -76,6 +76,8 @@ function newWayPointEditor ( ) {
 		wayPointPropertiesDialog.show ( ).then (
 			( ) => {
 				myEventDispatcher.dispatch ( 'setrouteslist' );
+				myEventDispatcher.dispatch ( 'setitinerary' );
+				myEventDispatcher.dispatch ( 'roadbookupdate' );
 			}
 		)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the waypoint properties dialog' ) );
@@ -96,6 +98,7 @@ function newWayPointEditor ( ) {
 		wayPoint.address = wayPointData.address;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/*
@@ -225,6 +228,8 @@ function newWayPointEditor ( ) {
 			);
 		}
 		myEventDispatcher.dispatch ( 'setrouteslist' );
+		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 		theRouteEditor.startRouting ( );
 	}
 

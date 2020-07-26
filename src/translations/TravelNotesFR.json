@@ -120,6 +120,10 @@
 		"msgstr" : "Impossible de sélectionner {provider}"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Address",
+		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Ascent",
 		"msgstr" : "Montée : {ascent} m."
 	},
@@ -132,20 +136,40 @@
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
+		"msgid" : "HTMLViewsFactory - Distance from start of travel",
+		"msgstr" : "<span>Distance depuis le début du voyage</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Profile",
-		"msgstr" : "Profil"
+		"msgid" : "HTMLViewsFactory - Distance from start of route",
+		"msgstr" : "<span>Distance depuis le début du trajet</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Duration",
+		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}",
-		"msgstr" : "Jusqu'à la prochaine instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
+		"msgid" : "HTMLViewsFactory - Latitude Longitude",
+		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Link",
+		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
+		"msgstr" : "Manœuvre suivante dans&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Phone",
+		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Profile",
+		"msgstr" : "Profil"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -176,7 +200,7 @@
 		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}",
+		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
 		"msgstr" : "Note suivante dans&nbsp;:&nbsp;{distance}"
 	},
 	{
@@ -194,6 +218,18 @@
 	{
 		"msgid" : "LayersToolbarUI - Layers",
 		"msgstr" : "Cartes"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Replace with a maneuver note",
+		"msgstr" : "Remplacer par une note"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Delete this maneuver",
+		"msgstr" : "Supprimer cette manœuvre"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Zoom to this maneuver",
+		"msgstr" : "Zoom sur cette manœuvre"
 	},
 	{
 		"msgid" : "MapContextMenu - About Travel & Notes",
@@ -332,32 +368,12 @@
 		"msgstr" : "Vous allez ajouter {noteLength} notes. Cela va consommer beaucoup de ressources sur le serveur OpenStreetMap et prendre du temps. Êtes vous sûr de vouloir continuer?"
 	},
 	{
-		"msgid" : "NoteEditor - Address",
-		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
-	},
-	{
 		"msgid" : "NoteEditor - Creating note",
 		"msgstr" : "Création de la note {noteNumber} de {notesLength}"
 	},
 	{
-		"msgid" : "NoteEditor - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "NoteEditor - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
-	},
-	{
 		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
 		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
-	},
-	{
-		"msgid" : "NoteEditor - Phone",
-		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
-	},
-	{
-		"msgid" : "NoteEditor - Link",
-		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
 	},
 	{
 		"msgid" : "PasswordDialog - password",

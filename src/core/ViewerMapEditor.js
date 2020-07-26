@@ -158,10 +158,9 @@ function newViewerMapEditor ( ) {
 
 		// a popup is binded to the the marker...
 		marker.bindPopup (
-			layer => {
-				let popupNote = myDataSearchEngine.getNoteAndRoute ( layer.objId ).note;
-				return newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML ( popupNote );
-			}
+			layer => newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML (
+				myDataSearchEngine.getNoteAndRoute ( layer.objId )
+			)
 		);
 
 		// ... and also a tooltip
