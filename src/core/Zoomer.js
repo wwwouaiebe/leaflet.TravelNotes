@@ -155,6 +155,17 @@ function newZoomer ( ) {
 	}
 
 	/*
+	--- myZoomToTravel function ---------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myZoomToPoi ( poi ) {
+		myEventDispatcher.dispatch ( 'zoomto', poi );
+
+	}
+
+	/*
 	--- Zoomer object function ----------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
@@ -168,7 +179,9 @@ function newZoomer ( ) {
 
 			zoomToRoute : routeObjId => myZoomToRoute ( routeObjId ),
 
-			zoomToTravel : ( ) => myZoomToTravel ( )
+			zoomToTravel : ( ) => myZoomToTravel ( ),
+
+			zoomToPoi : poi => myZoomToPoi ( poi )
 		}
 	);
 }

@@ -35,14 +35,14 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 
-import { ZERO } from '../util/Constants.js';
+import { LAT_LNG, ZERO } from '../util/Constants.js';
 
 /*
 --- newSearchPaneUI function ------------------------------------------------------------------------------------------
@@ -60,28 +60,7 @@ function newSearchPaneUI ( ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
-	/*
-	--- myOnSearchResultClick function --------------------------------------------------------------------------------
-
-	click event listener for the search
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchResultClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		let element = clickEvent.target;
-		while ( ! element.latLng ) {
-			element = element.parentNode;
-		}
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				latLng : element.latLng,
-				geometry : element.geometry
-			}
-		);
-	}
+	let myDataDiv = null;
 
 	/*
 	--- myOnSearchResultContextMenu function --------------------------------------------------------------------------
@@ -91,14 +70,25 @@ function newSearchPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnSearchResultContextMenu ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		clickEvent.preventDefault ( );
-		let element = clickEvent.target;
+	function myOnSearchResultContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.stopPropagation ( );
+		contextMenuEvent.preventDefault ( );
+		let element = contextMenuEvent.target;
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		theNoteEditor.newSearchNote ( element.searchResult );
+
+		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+		contextMenuEvent.fromUI = true;
+		contextMenuEvent.originalEvent =
+			{
+				clientX : contextMenuEvent.clientX,
+				clientY : contextMenuEvent.clientY,
+				latLng : element.latLng,
+				searchResult : element.searchResult,
+				geometry : element.geometry
+			};
+		newOsmSearchContextMenu ( contextMenuEvent, myDataDiv ).show ( );
 	}
 
 	/*
@@ -154,7 +144,6 @@ function newSearchPaneUI ( ) {
 		while ( ZERO !== searchResultsElements.length ) {
 
 			// cannot use forEach because searchResultsElements is directly updated when removing an element!!!
-			searchResultsElements [ ZERO ].removeEventListener ( 'click', myOnSearchResultClick, false );
 			searchResultsElements [ ZERO ].removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
 			searchResultsElements [ ZERO ].removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
 			searchResultsElements [ ZERO ].removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
@@ -191,11 +180,6 @@ function newSearchPaneUI ( ) {
 
 	function myRemove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		if ( ! dataDiv ) {
-			return;
-		}
-
 		myOsmSearchEngine.hide ( );
 
 		let searchButton = document.getElementById ( 'TravelNotes-SearchPaneUI-SearchButton' );
@@ -214,7 +198,6 @@ function newSearchPaneUI ( ) {
 		Array.prototype.forEach.call (
 			searchResultsElements,
 			searchResultsElement => {
-				searchResultsElement.removeEventListener ( 'click', myOnSearchResultClick, false );
 				searchResultsElement.removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
 				searchResultsElement.removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
 				searchResultsElement.removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
@@ -222,7 +205,7 @@ function newSearchPaneUI ( ) {
 		);
 
 		if ( searchDiv ) {
-			dataDiv.removeChild ( searchDiv );
+			myDataDiv.removeChild ( searchDiv );
 		}
 	}
 
@@ -243,9 +226,8 @@ function newSearchPaneUI ( ) {
 		document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
 			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 
-		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		if ( ! dataDiv ) {
-			return;
+		if ( ! myDataDiv ) {
+			myDataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
 		}
 
 		myOsmSearchEngine.show ( );
@@ -254,7 +236,7 @@ function newSearchPaneUI ( ) {
 			{
 				id : 'TravelNotes-SearchPaneUI-SearchDiv'
 			},
-			dataDiv
+			myDataDiv
 		);
 		let searchButton = myHTMLElementsFactory.create (
 			'div',
@@ -397,7 +379,6 @@ function newSearchPaneUI ( ) {
 				searchResultDiv.osmId = searchResult.id;
 				searchResultDiv.latLng = [ searchResult.lat, searchResult.lon ];
 				searchResultDiv.geometry = searchResult.geometry;
-				searchResultDiv.addEventListener ( 'click', myOnSearchResultClick, false );
 				searchResultDiv.addEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
 				searchResultDiv.addEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
 				searchResultDiv.addEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );

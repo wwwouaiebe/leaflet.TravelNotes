@@ -59,6 +59,7 @@ Changes:
 }
 
 .TravelNotes-UI-Route-Maneuvers-Row,
+.TravelNotes-UI-Travel-Notes-Row,
 .TravelNotes-UI-Route-Notes-Row {
 	display: flex;
 	flex-direction: row;

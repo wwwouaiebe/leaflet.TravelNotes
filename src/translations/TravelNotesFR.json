@@ -376,6 +376,14 @@
 		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
 	},
 	{
+		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
+		"msgstr" : "Ajouter une note de voyage avec ce résultat"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Zoom to this result",
+		"msgstr" : "Zoom sur ce résultat"
+	},
+	{
 		"msgid" : "PasswordDialog - password",
 		"msgstr" : "Mot de passe"
 	},
@@ -493,7 +501,7 @@
 	},
 	{
 		"msgid" : "RouteContextMenu - Create a note for each route maneuver",
-		"msgstr" : "Créer une note pour chaque manœuvre du trajet"
+		"msgstr" : "Ajouter une note pour chaque manœuvre du trajet"
 	},
 	{
 		"msgid" : "RouteContextMenu - Delete this route",

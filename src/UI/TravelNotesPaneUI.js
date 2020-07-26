@@ -34,10 +34,9 @@ Tests ...
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 /*
 --- newTravelNotesPaneUI function -------------------------------------------------------------------------------------
@@ -50,8 +49,7 @@ This function returns the travelNotesPaneUI object
 function newTravelNotesPaneUI ( ) {
 
 	let myNoteObjId = ZERO;
-
-	let myEventDispatcher = newEventDispatcher ( );
+	let myDataDiv = null;
 
 	/*
 	--- myOnDragStart function ----------------------------------------------------------------------------------------
@@ -115,29 +113,6 @@ function newTravelNotesPaneUI ( ) {
 	}
 
 	/*
-	--- myOnTravelNoteClick function ----------------------------------------------------------------------------------
-
-	click event listener for the notes
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTravelNoteClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		clickEvent.preventDefault ( );
-		let element = clickEvent.target;
-		while ( ! element.noteObjId ) {
-			element = element.parentNode;
-		}
-		myEventDispatcher.dispatch (
-			'zoomto',
-			{
-				latLng : newDataSearchEngine ( ).getNoteAndRoute ( element.noteObjId ).note.iconLatLng
-			}
-		);
-	}
-
-	/*
 	--- myOnTravelNoteContextMenu function ----------------------------------------------------------------------------
 
 	contextmenu event listener for the notes
@@ -145,14 +120,25 @@ function newTravelNotesPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnTravelNoteContextMenu ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		clickEvent.preventDefault ( );
-		let element = clickEvent.target;
+	function myOnTravelNoteContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.stopPropagation ( );
+		contextMenuEvent.preventDefault ( );
+		let element = contextMenuEvent.target;
 		while ( ! element.noteObjId ) {
 			element = element.parentNode;
 		}
-		theNoteEditor.editNote ( element.noteObjId );
+		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+		contextMenuEvent.fromUI = true;
+		contextMenuEvent.originalEvent =
+			{
+				clientX : contextMenuEvent.clientX,
+				clientY : contextMenuEvent.clientY,
+				latLng : element.latLng
+			};
+		if ( element.noteObjId ) {
+			contextMenuEvent.noteObjId = element.noteObjId;
+			newNoteContextMenu ( contextMenuEvent, myDataDiv ).show ( );
+		}
 	}
 
 	/*
@@ -165,21 +151,15 @@ function newTravelNotesPaneUI ( ) {
 
 	function myRemove ( ) {
 
-		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		if ( ! dataDiv ) {
-			return;
-		}
-
-		let travelNotesDiv = dataDiv.firstChild;
+		let travelNotesDiv = myDataDiv.firstChild;
 		if ( travelNotesDiv ) {
 			travelNotesDiv.childNodes.forEach (
 				childNode => {
-					childNode.removeEventListener ( 'click', myOnTravelNoteClick, false );
 					childNode.removeEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
 					childNode.removeEventListener ( 'dragstart', myOnDragStart, false );
 				}
 			);
-			dataDiv.removeChild ( travelNotesDiv );
+			myDataDiv.removeChild ( travelNotesDiv );
 		}
 	}
 
@@ -193,6 +173,10 @@ function newTravelNotesPaneUI ( ) {
 
 	function myAdd ( ) {
 
+		if ( ! myDataDiv ) {
+			myDataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
+		}
+
 		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
 			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
@@ -203,19 +187,14 @@ function newTravelNotesPaneUI ( ) {
 		}
 
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
-		let dataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		if ( ! dataDiv ) {
-			return;
-		}
 
 		let travelNotesDiv = htmlViewsFactory.travelNotesHTML;
 		travelNotesDiv.addEventListener ( 'drop', myOnDrop, false );
 		travelNotesDiv.addEventListener ( 'dragover', myOnDragOver, false );
 
-		dataDiv.appendChild ( travelNotesDiv );
+		myDataDiv.appendChild ( travelNotesDiv );
 		travelNotesDiv.childNodes.forEach (
 			childNode => {
-				childNode.addEventListener ( 'click', myOnTravelNoteClick, false );
 				childNode.addEventListener ( 'contextmenu', myOnTravelNoteContextMenu, false );
 				childNode.draggable = true;
 				childNode.addEventListener ( 'dragstart', myOnDragStart, false );

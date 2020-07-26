@@ -77,8 +77,6 @@ function newItineraryPaneUI ( ) {
 		while ( ! element.latLng ) {
 			element = element.parentNode;
 		}
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
 		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
 		contextMenuEvent.fromUI = true;
 		contextMenuEvent.originalEvent =

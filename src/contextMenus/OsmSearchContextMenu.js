@@ -17,9 +17,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ManeuverContextMenu.js file ---------------------------------------------------------------------------------------
+--- OsmSearchContextMenu.js file --------------------------------------------------------------------------------------
 This file contains:
-	- the newManeuverContextMenu function
+	- the newOsmSearchContextMenu function
 Changes:
 	- v1.12.0:
 		- created
@@ -30,14 +30,12 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
 
-function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
+function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
-	let myManeuverObjId = contextMenuEvent.maneuverObjId;
 	let myZoomer = newZoomer ( );
 
 	/*
@@ -49,24 +47,20 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 	function myGetMenuItems ( ) {
 
 		return [
-
 			{
 				context : theNoteEditor,
-				name : theTranslator.getText ( 'ManeuverContextMenu - Replace with a maneuver note' ),
-				action : theNoteEditor.newManeuverNote,
-				param : myManeuverObjId
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ManeuverContextMenu - Delete this maneuver' ),
-				action : theRouteEditor.removeManeuver,
-				param : myManeuverObjId
+				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
+				action : theNoteEditor.newSearchNote,
+				param : contextMenuEvent.originalEvent.searchResult
 			},
 			{
 				context : myZoomer,
-				name : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
-				action : myZoomer.zoomToManeuver,
-				param : myManeuverObjId
+				name : theTranslator.getText ( 'OsmSearchContextMenu - Zoom to this result' ),
+				action : myZoomer.zoomToPoi,
+				param : {
+					latLng : contextMenuEvent.originalEvent.latLng,
+					geometry : contextMenuEvent.originalEvent.geometry
+				}
 			}
 		];
 	}
@@ -77,13 +71,13 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let maneuverContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
-	maneuverContextMenu.init ( myGetMenuItems ( ) );
+	let osmSearchContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
+	osmSearchContextMenu.init ( myGetMenuItems ( ) );
 
-	return Object.seal ( maneuverContextMenu );
+	return Object.seal ( osmSearchContextMenu );
 }
 
-export { newManeuverContextMenu };
+export { newOsmSearchContextMenu };
 
 /*
 --- End of ManeuverContextMenu.js file --------------------------------------------------------------------------------

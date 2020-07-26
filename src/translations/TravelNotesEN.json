@@ -249,7 +249,7 @@
 	},
 	{
 		"msgid" : "MapContextMenu - New travel note",
-		"msgstr" : "New travel note"
+		"msgstr" : "Add a travel note"
 	},
 	{
 		"msgid" : "MapContextMenu - Select this point as end point",
@@ -374,6 +374,14 @@
 	{
 		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
 		"msgstr" : "You want to create {maneuversLength} notes. For performance reasons, the number of notes is limited to {maxManeuversNotes} for the demo. Change your route."
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
+		"msgstr" : "Add a travel note with this result"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Zoom to this result",
+		"msgstr" : "Zoom to this result"
 	},
 	{
 		"msgid" : "PasswordDialog - password",
