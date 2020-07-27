@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -18,24 +18,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 --- BaseContextMenu.js file -------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed 20202707
 Tests ...
 
------------------------------------------------------------------------------------------------------------------------
+@@---------------------------------------------------------------------------------------------------------------------
+ */
+
+/**
+@@---------------------------------------------------------------------------------------------------------------------
+
+@file BaseContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@@---------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@@---------------------------------------------------------------------------------------------------------------------
+
+@module BaseContextMenu
+
+@@---------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 let ourContainer = null;
@@ -46,10 +61,20 @@ let ourCloseButton = null;
 let ourLat = LAT_LNG.defaultValue;
 let ourLng = LAT_LNG.defaultValue;
 
-/*
---- newBaseContextMenu function ---------------------------------------------------------------------------------------
+/**
+@@---------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newBaseContextMenu
+@desc constructor of BaseContextMenu objects
+@param  {event} originalEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return an instance of a BaseContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+
+@private
+
+@@---------------------------------------------------------------------------------------------------------------------
 */
 
 function newBaseContextMenu ( originalEvent, parentDiv ) {
@@ -59,12 +84,15 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 	let myBody = document.querySelector ( 'body' );
 	let myParentDiv = parentDiv || myBody;
 
-	/*
-	--- myOnKeyPress function -----------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	Keyboard event listener
+	@function myOnKeyPress
+	@desc keyboard event listener
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
+
 	*/
 
 	function myOnKeyPress ( keyBoardEvent ) {
@@ -72,12 +100,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		keyBoardEvent.stopPropagation ( );
 	}
 
-	/*
-	--- myOnKeyUp function --------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	Keyboard event listener
+	@function myOnKeyUp
+	@desc keyboard event listener
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnKeyUp ( keyBoardEvent ) {
@@ -85,19 +115,19 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		keyBoardEvent.stopPropagation ( );
 	}
 
-	/*
-	--- myOnKeyDown function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	Keyboard event listener
+	@function myOnKeyDown
+	@desc keyboard event listener
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	@------------------------------------------------------------------------------------------------------------------
+	 */
 
 	function myOnKeyDown ( keyBoardEvent ) {
 
 		if ( ourContainer ) {
-
-			// keyBoardEvent.preventDefault ( );
 			if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
 				keyBoardEvent.stopPropagation ( );
 				ourCloseButton.click ( );
@@ -135,12 +165,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		}
 	}
 
-	/*
-	--- onClickItem function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	Mouse click event listener
+	@function myOnClickItem
+	@desc click event on a menu item listener
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnClickItem ( clickEvent ) {
@@ -161,12 +193,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		ourCloseButton.click ( );
 	}
 
-	/*
-	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	event listener for the close button. Alson called from others events
+	@function myOnCloseMenu
+	@desc click event on the close button listener
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnCloseMenu ( ) {
@@ -196,10 +230,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		ourLng = LAT_LNG.defaultValue;
 	}
 
-	/*
-	--- myBuildContainer function -------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myBuildContainer
+	@desc Build the main html element for the menu and add event listeners
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myBuildContainer ( ) {
@@ -231,10 +269,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 
 	}
 
-	/*
-	--- myAddCloseButton function -------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myAddCloseButton
+	@desc add the close button and it's event listener to the menu
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddCloseButton ( ) {
@@ -250,10 +292,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		ourCloseButton.addEventListener ( 'click', myOnCloseMenu, false );
 	}
 
-	/*
-	--- myMoveContainer function --------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myMoveContainer
+	@desc move the menu container on the screen, so the menu is always completely visible
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myMoveContainer ( ) {
@@ -283,22 +329,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		}
 	}
 
-	/*
-	--- myAddKeyboardEvents function ----------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	@function myAddMenuItems
+	@desc build and add the menu items to the container
+	@private
 
-	function myAddKeyboardEvents ( ) {
-		document.addEventListener ( 'keydown', myOnKeyDown, true );
-		document.addEventListener ( 'keypress', myOnKeyPress, true );
-		document.addEventListener ( 'keyup', myOnKeyUp, true );
-	}
-
-	/*
-	--- myAddMenuItems function ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddMenuItems ( ) {
@@ -335,10 +373,14 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		);
 	}
 
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myShow
+	@desc build the complete menu an show it on the screen
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myShow ( ) {
@@ -373,27 +415,84 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 		myAddCloseButton ( );
 		myAddMenuItems ( );
 		myMoveContainer ( );
-		myAddKeyboardEvents ( );
+		document.addEventListener ( 'keydown', myOnKeyDown, true );
+		document.addEventListener ( 'keypress', myOnKeyPress, true );
+		document.addEventListener ( 'keyup', myOnKeyUp, true );
 	}
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function myInit
+	@desc Add the menu items
+	@param menuItems {array} the menu items to use
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
 
 	function myInit ( menuItems ) {
 		myMenuItems = menuItems;
 	}
 
-	/*
-	--- BaseContextMenu object ----------------------------------------------------------------------------------------
+	return (
 
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@class
+	@lends BaseContextMenu.prototype
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return {
-		init : menuItems => myInit ( menuItems ),
-		show : ( ) => myShow ( )
-	};
+		{
+
+			/**
+			@classdesc Base class used to show context menus
+			@abstract
+			@hideconstructor
+			@constructs
+			 */
+
+			// dummy constructor for jsdoc :-(
+			dummy : () => {},
+
+			/**
+			Add the menu items. Must be called by the derived classes
+			@param menuItems {array} the menu items to use
+			*/
+
+			init : menuItems => myInit ( menuItems ),
+
+			/**
+			Show the menu on the screen.
+			*/
+
+			show : ( ) => myShow ( )
+		}
+	);
 }
 
-export { newBaseContextMenu };
+export {
 
-/*
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function
+	@desc constructor of BaseContextMenu objects
+	@param  {event} originalEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return an instance of a BaseContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newBaseContextMenu
+};
+
+/**
 --- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
 */
