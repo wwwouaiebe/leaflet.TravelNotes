@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -34,10 +34,28 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file RouteContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module RouteContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -54,10 +72,19 @@ import { newDataSearchEngine } from '../data/DataSearchEngine.js';
 
 import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 
-/*
---- newRouteContextMenu function --------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newRouteContextMenu
+@desc constructor of RouteContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {Object} an instance of a RouteContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
@@ -66,10 +93,15 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 	let myRoute = newDataSearchEngine ( ).getRoute ( myRouteObjId );
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -227,9 +259,15 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 		return menuItems;
 	}
 
-	/*
-	--- RouteContextMenu object function ------------------------------------------------------------------------------
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class RouteContextMenu
+	@classdesc a BaseContextMenu object with items completed for routes
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
@@ -238,7 +276,24 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 	return Object.seal ( routeContextMenu );
 }
 
-export { newRouteContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newRouteContextMenu
+	@desc constructor of RouteContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {Object} an instance of a RouteContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newRouteContextMenu
+};
 
 /*
 --- End of RouteContextMenu.js file -----------------------------------------------------------------------------------

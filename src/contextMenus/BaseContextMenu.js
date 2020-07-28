@@ -27,25 +27,25 @@ Changes:
 Doc reviewed 20202707
 Tests ...
 
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
  */
 
 /**
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 
 @file BaseContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 /**
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 
 @module BaseContextMenu
 
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
@@ -56,28 +56,27 @@ import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 let ourContainer = null;
 let ourTimerId = null;
 let ourFocusIsOnItem = ZERO;
-let ourOriginalEvent = null;
+let ourContextMenuEvent = null;
 let ourCloseButton = null;
 let ourLat = LAT_LNG.defaultValue;
 let ourLng = LAT_LNG.defaultValue;
 
 /**
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 
 @function newBaseContextMenu
 @desc constructor of BaseContextMenu objects
-@param  {event} originalEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 When null, the body of the html page is selected
 @return an instance of a BaseContextMenu object
 @listens mouseenter mouseleave click keydown keypress keyup
-
 @private
 
-@@---------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseContextMenu ( originalEvent, parentDiv ) {
+function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myMenuItems = [];
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -181,13 +180,13 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 			myMenuItems[ clickEvent.target.menuItem ].action.call (
 				myMenuItems[ clickEvent.target.menuItem ].context,
 				myMenuItems[ clickEvent.target.menuItem ].param,
-				ourOriginalEvent
+				ourContextMenuEvent
 			);
 		}
 		else {
 			myMenuItems[ clickEvent.target.menuItem ].action.call (
 				myMenuItems[ clickEvent.target.menuItem ].context,
-				ourOriginalEvent
+				ourContextMenuEvent
 			);
 		}
 		ourCloseButton.click ( );
@@ -314,11 +313,11 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
-			ourOriginalEvent.originalEvent.clientY,
+			ourContextMenuEvent.originalEvent.clientY,
 			screenHeight - ourContainer.clientHeight - MENU_MARGIN
 		);
 		let menuLeft = Math.min (
-			ourOriginalEvent.originalEvent.clientX,
+			ourContextMenuEvent.originalEvent.clientX,
 			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
 		if ( parentDiv ) {
@@ -385,23 +384,23 @@ function newBaseContextMenu ( originalEvent, parentDiv ) {
 
 	function myShow ( ) {
 
-		ourOriginalEvent = originalEvent;
+		ourContextMenuEvent = contextMenuEvent;
 
 		// when clicking on a leaflet polyline, a route event AND a map event are generated
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
 		if (
-			! ourOriginalEvent.fromUI
+			! ourContextMenuEvent.fromUI
 			&&
-			( ourOriginalEvent.latlng.lat === ourLat )
+			( ourContextMenuEvent.latlng.lat === ourLat )
 			&&
-			( ourOriginalEvent.latlng.lng === ourLng )
+			( ourContextMenuEvent.latlng.lng === ourLng )
 		) {
 			return;
 		}
 
-		ourLat = ourOriginalEvent.latlng.lat;
-		ourLng = ourOriginalEvent.latlng.lng;
+		ourLat = ourContextMenuEvent.latlng.lat;
+		ourLng = ourContextMenuEvent.latlng.lng;
 		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
@@ -481,10 +480,10 @@ export {
 
 	@function
 	@desc constructor of BaseContextMenu objects
-	@param  {event} originalEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 	When null, the body of the html page is selected
-	@return an instance of a BaseContextMenu object
+	@return {Object} an instance of a BaseContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
 
 	@------------------------------------------------------------------------------------------------------------------

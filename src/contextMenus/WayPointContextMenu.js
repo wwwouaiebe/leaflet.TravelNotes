@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -26,10 +26,28 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file WayPointContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module WayPointContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -37,20 +55,32 @@ import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
-/*
---- newWayPointContextMenu function -----------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newWayPointContextMenu
+@desc constructor of WayPointContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@return {Object} an instance of a WayPointContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newWayPointContextMenu ( contextMenuEvent ) {
 
 	let myWayPointObjId = contextMenuEvent.target.objId;
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -74,19 +104,41 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 		];
 	}
 
-	/*
-	--- WayPointContextMenu object function ---------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class WayPointContextMenu
+	@classdesc a BaseContextMenu object with items completed for wayPoints
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
-
+	 
 	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent );
 	wayPointContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( wayPointContextMenu );
 }
 
-export { newWayPointContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newWayPointContextMenu
+	@desc constructor of WayPointContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@return {Object} an instance of a WayPointContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+
+	*/
+
+	newWayPointContextMenu
+
+};
 
 /*
 --- End of WayPointContextMenu.js file ------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -34,14 +34,52 @@ import { theNoteEditor } from '../core/NoteEditor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
 
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file OsmSearchContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module OsmSearchContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@function newOsmSearchContextMenu
+@desc constructor of OsmSearchContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {Object} an instance of a OsmSearchContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
 function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -65,10 +103,15 @@ function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 		];
 	}
 
-	/*
-	--- NoteContextMenu object function -------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class OsmSearchContextMenu
+	@classdesc a BaseContextMenu object with items completed for OsmSearch items
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let osmSearchContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
@@ -77,8 +120,25 @@ function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 	return Object.seal ( osmSearchContextMenu );
 }
 
-export { newOsmSearchContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newOsmSearchContextMenu
+	@desc constructor of OsmSearchContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {Object} an instance of a OsmSearchContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newOsmSearchContextMenu
+};
 
 /*
---- End of ManeuverContextMenu.js file --------------------------------------------------------------------------------
+--- End of OsmSearchContextMenu.js file --------------------------------------------------------------------------------
 */

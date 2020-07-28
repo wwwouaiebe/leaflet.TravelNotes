@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -26,10 +26,28 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file MapContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module MapContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -44,10 +62,17 @@ import { newZoomer } from '../core/Zoomer.js';
 
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- newMapContextMenu function ----------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newMapContextMenu
+@desc constructor of MapContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@return {Object} an instance of a MapContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newMapContextMenu ( contextMenuEvent ) {
@@ -55,10 +80,15 @@ function newMapContextMenu ( contextMenuEvent ) {
 	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -144,21 +174,40 @@ function newMapContextMenu ( contextMenuEvent ) {
 		];
 	}
 
-	/*
-	--- MapContextMenu object function --------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class MapContextMenu
+	@classdesc a BaseContextMenu object with items completed for maps
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let mapContextMenu = newBaseContextMenu ( contextMenuEvent );
-
 	mapContextMenu.init ( myGetMenuItems ( ) );
 
 	return Object.seal ( mapContextMenu );
 }
 
-export { newMapContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newMapContextMenu
+	@desc constructor of MapContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@return {Object} an instance of a MapContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newMapContextMenu
+};
 
 /*
---- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
+--- End of MapContextMenu.js file ------------------------------------------------------------------------------------
 */

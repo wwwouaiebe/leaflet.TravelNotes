@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -26,10 +26,28 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed ...
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file NoteContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module NoteContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -41,10 +59,19 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- newNoteContextMenu function ---------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newNoteContextMenu
+@desc constructor of NoteContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {Object} an instance of a NoteContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
@@ -52,10 +79,15 @@ function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -102,10 +134,15 @@ function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 		];
 	}
 
-	/*
-	--- NoteContextMenu object function -------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class NoteContextMenu
+	@classdesc a BaseContextMenu object with items completed for Notes
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let noteContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
@@ -114,7 +151,24 @@ function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 	return Object.seal ( noteContextMenu );
 }
 
-export { newNoteContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newNoteContextMenu
+	@desc constructor of NoteContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {Object} an instance of a NoteContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newNoteContextMenu
+};
 
 /*
 --- End of NoteContextMenu.js file ------------------------------------------------------------------------------------

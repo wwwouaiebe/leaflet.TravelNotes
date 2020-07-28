@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -29,21 +29,59 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file ManeuverContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module ManeuverContextMenu
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@function newManeuverContextMenu
+@desc constructor of ManeuverContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {Object} an instance of a ManeuverContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
 function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myManeuverObjId = contextMenuEvent.maneuverObjId;
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -71,10 +109,15 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 		];
 	}
 
-	/*
-	--- NoteContextMenu object function -------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+	 
+	@class ManeuverContextMenu
+	@classdesc a BaseContextMenu object with items completed for maneuvers
+	@see BaseContextMenu
+	@hideconstructor
+	
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	let maneuverContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
@@ -83,7 +126,24 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 	return Object.seal ( maneuverContextMenu );
 }
 
-export { newManeuverContextMenu };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newManeuverContextMenu
+	@desc constructor of ManeuverContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {Object} an instance of a ManeuverContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newManeuverContextMenu
+};
 
 /*
 --- End of ManeuverContextMenu.js file --------------------------------------------------------------------------------
