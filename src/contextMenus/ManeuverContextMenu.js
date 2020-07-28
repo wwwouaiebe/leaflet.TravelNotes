@@ -17,16 +17,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ManeuverContextMenu.js file ---------------------------------------------------------------------------------------
-This file contains:
-	- the newManeuverContextMenu function
 Changes:
 	- v1.12.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200727
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -111,12 +106,12 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	/**
 	@------------------------------------------------------------------------------------------------------------------
-	 
+
 	@class ManeuverContextMenu
 	@classdesc a BaseContextMenu object with items completed for maneuvers
-	@see BaseContextMenu
+	@augments BaseContextMenu
 	@hideconstructor
-	
+
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 

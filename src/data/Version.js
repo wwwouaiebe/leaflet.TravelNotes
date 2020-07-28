@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,17 +13,31 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- Version.js file ---------------------------------------------------------------------------------------------------
-This file contains:
-	- the version number
 Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20191122
+Doc reviewed 20200728
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Version.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module Version
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 /*
@@ -45,7 +60,20 @@ Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
 
 const theCurrentVersion = '1.12.0';
 
-export { theCurrentVersion };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@desc The version number
+	@type {string}
+	@constant
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	theCurrentVersion
+};
 
 /*
 --- End of Version.js file --------------------------------------------------------------------------------------------

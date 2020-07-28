@@ -17,17 +17,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- BaseContextMenu.js file -------------------------------------------------------------------------------------------
 Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20202707
+Doc reviewed 20200727
 Tests ...
-
-@----------------------------------------------------------------------------------------------------------------------
  */
 
 /**
@@ -66,7 +63,7 @@ let ourLng = LAT_LNG.defaultValue;
 
 @function newBaseContextMenu
 @desc constructor of BaseContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 When null, the body of the html page is selected
 @return an instance of a BaseContextMenu object
@@ -91,7 +88,6 @@ function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
 	@private
 
 	@------------------------------------------------------------------------------------------------------------------
-
 	*/
 
 	function myOnKeyPress ( keyBoardEvent ) {
@@ -458,7 +454,7 @@ function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
 			dummy : () => {},
 
 			/**
-			Add the menu items. Must be called by the derived classes
+			Add the menu items. Must be called in the derived classes
 			@param menuItems {array} the menu items to use
 			*/
 

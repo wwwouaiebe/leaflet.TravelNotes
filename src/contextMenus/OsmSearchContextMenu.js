@@ -17,16 +17,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- OsmSearchContextMenu.js file --------------------------------------------------------------------------------------
-This file contains:
-	- the newOsmSearchContextMenu function
 Changes:
 	- v1.12.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200727
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -105,12 +100,12 @@ function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	/**
 	@------------------------------------------------------------------------------------------------------------------
-	 
+
 	@class OsmSearchContextMenu
 	@classdesc a BaseContextMenu object with items completed for OsmSearch items
-	@see BaseContextMenu
+	@augments BaseContextMenu
 	@hideconstructor
-	
+
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 

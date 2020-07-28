@@ -17,19 +17,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- NoteContextMenu.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the newNoteContextMenu function
 Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200727
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -136,12 +131,12 @@ function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	/**
 	@------------------------------------------------------------------------------------------------------------------
-	 
+
 	@class NoteContextMenu
 	@classdesc a BaseContextMenu object with items completed for Notes
-	@see BaseContextMenu
+	@augments BaseContextMenu
 	@hideconstructor
-	
+
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 

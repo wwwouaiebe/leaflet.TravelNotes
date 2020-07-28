@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- RouteContextMenu.js file ------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.6.0:
 		- created
@@ -34,10 +31,8 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200727
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -261,12 +256,12 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	/**
 	@------------------------------------------------------------------------------------------------------------------
-	 
+
 	@class RouteContextMenu
 	@classdesc a BaseContextMenu object with items completed for routes
-	@see BaseContextMenu
+	@augments BaseContextMenu
 	@hideconstructor
-	
+
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
