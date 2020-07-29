@@ -55,7 +55,7 @@ import { theTranslator } from '../UI/Translator.js';
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 When null, the body of the html page is selected
-@return {Object} an instance of a OsmSearchContextMenu object
+@return {OsmSearchContextMenu} an instance of a OsmSearchContextMenu object
 @listens mouseenter mouseleave click keydown keypress keyup
 @private
 
@@ -125,7 +125,7 @@ export {
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 	When null, the body of the html page is selected
-	@return {Object} an instance of a OsmSearchContextMenu object
+	@return {OsmSearchContextMenu} an instance of a OsmSearchContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
 
 	@------------------------------------------------------------------------------------------------------------------

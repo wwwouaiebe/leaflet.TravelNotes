@@ -63,7 +63,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 @function newMapContextMenu
 @desc constructor of MapContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {Object} an instance of a MapContextMenu object
+@return {MapContextMenu} an instance of a MapContextMenu object
 @listens mouseenter mouseleave click keydown keypress keyup
 @private
 
@@ -194,7 +194,7 @@ export {
 	@function newMapContextMenu
 	@desc constructor of MapContextMenu objects
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {Object} an instance of a MapContextMenu object
+	@return {MapContextMenu} an instance of a MapContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
 
 	@------------------------------------------------------------------------------------------------------------------

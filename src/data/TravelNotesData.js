@@ -132,7 +132,7 @@ function newTravelNotesData ( ) {
 
 			/**
 			A JS map with the provider objects. Providers objects are created and added by the plugins
-			@type {Map.Object}
+			@type {Map.provider}
 			@see {@link module:TravelNotesData~provider}
 			*/
 
@@ -196,7 +196,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 
 	@desc The one and only one instance of TravelNoteData class
-	@type {object}
+	@type {TravelNotesData}
 	@see TravelNotesData
 	@constant
 	@global

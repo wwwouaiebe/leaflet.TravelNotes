@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- Collection.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newCollection function
 Changes:
 	- v1.0.0:
 		- created
@@ -25,34 +24,65 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
-Doc reviewed 20191122
+Doc reviewed 20200729
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Collection.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module Collection
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
-/*
---- newCollection function ----------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function newCollection
+@desc constructor of Collection objects
+@param {constructor} objectConstructor the constructor of objects to be stored in the Collection
+@return {Collection} an instance of a Collection object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
-function newCollection ( newObjFunction ) {
+function newCollection ( objectConstructor ) {
 
 	const SWAP_UP = -1;
 	const SWAP_DOWN = 1;
-	const NEXT = 1;
-	const PREVIOUS = -1;
 
-	const myObjName = newObjFunction ( ).objType.name;
-
-	const myNewObjFunction = newObjFunction;
-
+	const myObjectConstructor = objectConstructor;
 	let myArray = [];
+
+	/*
+	--- mySetObjectName function --------------------------------------------------------------------------------------
+
+	-------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySetObjName ( ) {
+		let tmpObject = myObjectConstructor ( );
+		if ( ( ! tmpObject.objType ) || ( ! tmpObject.objType.name ) ) {
+			throw new Error ( 'invalid object name for collection' );
+		}
+		return tmpObject.objType.name;
+	}
+
+	const myObjName = mySetObjName ( );
 
 	/*
 	--- myAdd function ------------------------------------------------------------------------------------------------
@@ -65,7 +95,6 @@ function newCollection ( newObjFunction ) {
 			throw new Error ( 'invalid object name for add function' );
 		}
 		myArray.push ( object );
-
 	}
 
 	/*
@@ -164,6 +193,9 @@ function newCollection ( newObjFunction ) {
 	function myMoveTo ( objId, targetObjId, moveBefore ) {
 		let oldPosition = myIndexOfObjId ( objId );
 		let newPosition = myIndexOfObjId ( targetObjId );
+		if ( NOT_FOUND === oldPosition || NOT_FOUND === newPosition ) {
+			throw new Error ( 'invalid objId for function  myMoveTo' );
+		}
 		if ( ! moveBefore ) {
 			newPosition ++;
 		}
@@ -182,34 +214,6 @@ function newCollection ( newObjFunction ) {
 
 	function myLast ( ) {
 		return myArray [ myArray.length - ONE ];
-	}
-
-	/*
-	--- myNextOrPrevious function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNextOrPrevious ( objId, condition, direction ) {
-		let index = myIndexOfObjId ( objId );
-		if ( NOT_FOUND === index ) {
-			throw new Error ( 'invalid objId for next or previous function' );
-		}
-
-		let otherCondition = condition;
-		if ( ! otherCondition ) {
-			otherCondition = ( ) => true;
-		}
-		index += direction;
-
-		while ( ( NOT_FOUND < index ) && ( index < myArray.length ) && ! otherCondition ( myArray [ index ] ) ) {
-			index += direction;
-		}
-		if ( NOT_FOUND === index || myArray.length === index ) {
-			return null;
-		}
-
-		return myArray [ index ];
 	}
 
 	/*
@@ -247,12 +251,15 @@ function newCollection ( newObjFunction ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myReplace ( oldObjId, object ) {
+	function myReplace ( oldObjId, newObject ) {
 		let index = myIndexOfObjId ( oldObjId );
 		if ( NOT_FOUND === index ) {
 			throw new Error ( 'invalid objId for replace function' );
 		}
-		myArray [ index ] = object;
+		if ( ( ! newObject.objType ) || ( ! newObject.objType.name ) || ( newObject.objType.name !== myObjName ) ) {
+			throw new Error ( 'invalid object name for replace function' );
+		}
+		myArray [ index ] = newObject;
 	}
 
 	/*
@@ -277,7 +284,7 @@ function newCollection ( newObjFunction ) {
 
 		something.forEach (
 			arrayObject => {
-				newObject = myNewObjFunction ( );
+				newObject = myObjectConstructor ( );
 				newObject.object = arrayObject;
 				myAdd ( newObject );
 			}
@@ -323,126 +330,104 @@ function newCollection ( newObjFunction ) {
 	*/
 
 	return Object.seal (
+
+		/**
+		@--------------------------------------------------------------------------------------------------------------
+
+		@class
+		@lends Collection.prototype
+
+		@--------------------------------------------------------------------------------------------------------------
+		*/
+
 		{
 
-			/*
-			--- add function ------------------------------------------------------------------------------------------
+			/**
+			@classdesc Class used to store objects in an iterable
+			@hideconstructor
+			@constructs
+			 */
 
-			This function add an object to the collection
-			throw when the object type is invalid
+			// dummy constructor for jsdoc :-(
+			dummy : () => {},
 
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Add an object at the end of the collection
+			@param {Object} object The object to add
+			@throws when the object type is invalid
 			*/
 
 			add : object => myAdd ( object ),
 
-			/*
-			--- forEach function --------------------------------------------------------------------------------------
-
-			This function executes a function on each object of the collection and returns the final result
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Executes a function on each object of the Collection and returns the final result
+			@param {function} funct The function to execute
+			@return The final result
 			*/
 
 			forEach : funct => myForEach ( funct ),
 
-			/*
-			--- getAt function ----------------------------------------------------------------------------------------
-
-			This function returns the object with the given objId or null when the object is not found
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Search an object in the Collection
+			@param {!number} objId The objId of the object to search
+			@return the object with the given objId or null when the object is not found
 			*/
 
 			getAt : objId => myGetAt ( objId ),
 
-			/*
-			--- moveTo function ---------------------------------------------------------------------------------------
-
-			This function move the object identified by objId to the position ocuped by the object
-			identified by targetObjId
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Move an object near another object in the Collection
+			@param {!number} objId The objId of the object to move
+			@param {!number} targetObjId The objId of the object near witch the object will be moved
+			@param {boolean} moveBefore When true, the object is moved before the target, when false after the target
+			@throws when objId or targetObjId are invalid
 			*/
 
 			moveTo : ( objId, targetObjId, moveBefore ) => myMoveTo ( objId, targetObjId, moveBefore ),
 
-			/*
-			--- next function -----------------------------------------------------------------------------------------
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			next : ( objId, condition ) => myNextOrPrevious ( objId, condition, NEXT ),
-
-			/*
-			--- previous function -------------------------------------------------------------------------------------
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			previous : ( objId, condition ) => myNextOrPrevious ( objId, condition, PREVIOUS ),
-
-			/*
-			--- remove function ---------------------------------------------------------------------------------------
-
-			This function remove the object with the given objId
-			throw when the object is not found
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Remove an object from the Collection
+			@param {!number} objId The objId of the object to remove
+			@throws when the object is not found
 			*/
 
 			remove : objId => myRemove ( objId ),
 
-			/*
-			--- removeAll function ------------------------------------------------------------------------------------
-
-			This function remove all objects in the collection
-			when the exceptFirstLast parameter is true, first and last objects in the collection are not removed
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Remove all objects from the Collection
+			@param {?boolean} exceptFirstLast When true, first and last objects are not removed
 			*/
 
 			removeAll : exceptFirstLast => myRemoveAll ( exceptFirstLast ),
 
-			/*
-			--- replace function --------------------------------------------------------------------------------------
-
-			This function replace the object identified by oldObjId with a new object
-			throw when the object type is invalid
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Replace an object in the Collection with another object
+			@param {!number} oldObjId the objId of the object to replace
+			@param (Object) newObject The new object
+			@throws when the object type of newObject is invalid or when the object to replace is not found
 			*/
 
-			replace : ( oldObjId, object ) => myReplace ( oldObjId, object ),
+			replace : ( oldObjId, newObject ) => myReplace ( oldObjId, newObject ),
 
-			/*
-			--- reverse function --------------------------------------------------------------------------------------
-
-			This function reverse the objects in the collection
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Reverse the objects in the collection
 			*/
 
 			reverse : ( ) => myReverse ( ),
 
-			/*
-			--- sort function -----------------------------------------------------------------------------------------
-
-			This function sort the collection, using the compare function
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Sort the collection, using a function
+			@param {function} compareFunction The function to use to compare objects in the Collection
 			*/
 
 			sort : compareFunction => mySort ( compareFunction ),
 
-			/*
-			--- swap function -----------------------------------------------------------------------------------------
-
-			This function move up ( when swapUp is true ) or move down an object in the collection
-			throw when the swap is not possible
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			Reverse an Object with the previous or next object in the Collection
+			@param {!number} objId The objId of the object to swap
+			@param {boolean} swapUp When true the object is swapped with the previous one,
+			when false with the next one
+			@throws when the object is not found or when the swap is not possible
 			*/
 
 			swap : ( objId, swapUp ) =>	mySwap ( objId, swapUp ),
@@ -531,7 +516,21 @@ function newCollection ( newObjFunction ) {
 	);
 }
 
-export { newCollection };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newCollection
+	@desc constructor of Collection objects
+	@param {constructor} objectConstructor the constructor of objects to be stored in the Collection
+	@return {Collection} an instance of a Collection object
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newCollection
+};
 
 /*
 --- End of Collection.js file -----------------------------------------------------------------------------------------

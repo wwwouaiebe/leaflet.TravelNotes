@@ -260,21 +260,6 @@ function newTravelEditor ( ) {
 	}
 
 	/*
-	--- mySwapRoute function ------------------------------------------------------------------------------------------
-
-	This function changes the position of a route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySwapRoute ( routeObjId, swapUp ) {
-		theTravelNotesData.travel.routes.swap ( routeObjId, swapUp );
-		theRouteEditor.chainRoutes ( );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
-
-	/*
 	--- myRouteDropped function ---------------------------------------------------------------------------------------
 
 	This function changes the position of a route after a drag and drop
@@ -353,8 +338,6 @@ function newTravelEditor ( ) {
 			editRoute : routeObjId => myEditRoute ( routeObjId ),
 
 			renameRoute : ( routeObjId, routeName ) => myRenameRoute ( routeObjId, routeName ),
-
-			swapRoute : ( routeObjId, swapUp ) => mySwapRoute ( routeObjId, swapUp ),
 
 			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => myRouteDropped (
 				draggedRouteObjId,

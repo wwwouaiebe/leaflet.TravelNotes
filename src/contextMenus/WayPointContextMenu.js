@@ -56,7 +56,7 @@ import { theTranslator } from '../UI/Translator.js';
 @function newWayPointContextMenu
 @desc constructor of WayPointContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {Object} an instance of a WayPointContextMenu object
+@return {WayPointContextMenu} an instance of a WayPointContextMenu object
 @listens mouseenter mouseleave click keydown keypress keyup
 @private
 
@@ -124,7 +124,7 @@ export {
 	@function newWayPointContextMenu
 	@desc constructor of WayPointContextMenu objects
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {Object} an instance of a WayPointContextMenu object
+	@return {WayPointContextMenu} an instance of a WayPointContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
 
 	@------------------------------------------------------------------------------------------------------------------

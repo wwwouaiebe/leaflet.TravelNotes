@@ -58,7 +58,7 @@ const ourObjType = newObjType ( 'WayPoint' );
 
 @function newWayPoint
 @desc constructor of WayPoint objects
-@return {Object} an instance of a WayPoint object
+@return {WayPoint} an instance of a WayPoint object
 @private
 
 @----------------------------------------------------------------------------------------------------------------------
@@ -303,7 +303,7 @@ export {
 
 	@function newWayPoint
 	@desc constructor of WayPoint objects
-	@return an instance of a WayPoint object
+	@return {WayPoint} an instance of a WayPoint object
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
