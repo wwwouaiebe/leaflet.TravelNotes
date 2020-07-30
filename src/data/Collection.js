@@ -68,10 +68,16 @@ function newCollection ( objectConstructor ) {
 	const myObjectConstructor = objectConstructor;
 	let myArray = [];
 
-	/*
-	--- mySetObjectName function --------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function mySetObjName
+	@desc Search the name of the objects added to the Collection
+	@return {string} the name of the object
+	@throws When the object returned by objectConstructor don't have a name
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySetObjName ( ) {
@@ -84,10 +90,16 @@ function newCollection ( objectConstructor ) {
 
 	const myObjName = mySetObjName ( );
 
-	/*
-	--- myAdd function ------------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myAdd
+	@desc Add an object at the end of the Collection
+	@param {Object} object The object to add
+	@throws when the object type is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAdd ( object ) {
@@ -97,20 +109,15 @@ function newCollection ( objectConstructor ) {
 		myArray.push ( object );
 	}
 
-	/*
-	--- myFirst function ----------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	@function myIterator
+	@desc Manage an iterator on the collection
+	@return {CollectionIterator} An iterator on the Collection
+	@private
 
-	function myFirst ( ) {
-		return myArray [ ZERO ];
-	}
-
-	/*
-	--- myIterator function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myIterator ( ) {
@@ -126,25 +133,16 @@ function newCollection ( objectConstructor ) {
 		};
 	}
 
-	/*
-	--- myForEach function --------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	@function myIndexOfObjId
+	@desc return the position of an object in the Collection
+	@param {!number} objId The objId of the object to locate
+	@return {number} the position of the object in the Collection
+	@private
 
-	function myForEach ( funct ) {
-		let result = null;
-		let iterator = myIterator ( );
-		while ( ! iterator.done ) {
-			result = funct ( iterator.value, result );
-		}
-		return result;
-	}
-
-	/*
-	--- myIndexOfObjId function ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myIndexOfObjId ( objId ) {
@@ -154,340 +152,237 @@ function newCollection ( objectConstructor ) {
 		return index;
 	}
 
-	/*
-	--- myGetAt function ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@typedef {Object} CollectionIterator
+	@desc An iterator on the Collection
+	@property {Object} value The object pointed by the iterator
+	@property {?Object} previous The object before the object pointed by the iterator or null if the iterator
+	is on the first object
+	@property {?Object} next The object after the object pointed by the iterator or null if the iterator
+	is on the last object
+	@property {boolean} done Move the iterator to the next object and return true when the end of the Collection
+	is reached
+	@property {boolean} first True when the iterator is on the first object of the Collection
+	@property {boolean} last True when the iterator is on the last object of the Collection
+	@property {number} index The position of the iterator in the Collection
 	*/
 
-	function myGetAt ( objId ) {
-		let index = myIndexOfObjId ( objId );
-		if ( NOT_FOUND === index ) {
-			return null;
-		}
-		return myArray [ index ];
-	}
+	/**
+	@--------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	@class
+	@classdesc Class used to store objects in an iterable
+	@see {@link module:Collection~newCollection} for constructor
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		let array = [ ];
-		let iterator = myIterator ( );
-		while ( ! iterator.done ) {
-			array.push ( iterator.value.object );
-		}
+	class Collection {
 
-		return array;
-	}
+		/**
+		Add an object at the end of the collection
+		@param {Object} object The object to add
+		@throws when the object type is invalid
+		*/
 
-	/*
-	--- myMoveTo function ---------------------------------------------------------------------------------------------
+		add ( object ) { myAdd ( object ); }
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		/**
+		Executes a function on each object of the Collection and returns the final result
+		@param {function} funct The function to execute
+		@return The final result
+		*/
 
-	function myMoveTo ( objId, targetObjId, moveBefore ) {
-		let oldPosition = myIndexOfObjId ( objId );
-		let newPosition = myIndexOfObjId ( targetObjId );
-		if ( NOT_FOUND === oldPosition || NOT_FOUND === newPosition ) {
-			throw new Error ( 'invalid objId for function  myMoveTo' );
-		}
-		if ( ! moveBefore ) {
-			newPosition ++;
-		}
-		myArray.splice ( newPosition, ZERO, myArray [ oldPosition ] );
-		if ( newPosition < oldPosition ) {
-			oldPosition ++;
-		}
-		myArray.splice ( oldPosition, ONE );
-	}
-
-	/*
-	--- myLast function -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLast ( ) {
-		return myArray [ myArray.length - ONE ];
-	}
-
-	/*
-	--- myRemove function ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemove ( objId ) {
-		let index = myIndexOfObjId ( objId );
-		if ( NOT_FOUND === index ) {
-			throw new Error ( 'invalid objId for remove function' );
-		}
-		myArray.splice ( myIndexOfObjId ( objId ), ONE );
-	}
-
-	/*
-	--- myRemoveAll function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveAll ( ExceptFirstLast ) {
-		if ( ExceptFirstLast ) {
-			myArray.splice ( ONE, myArray.length - TWO );
-		}
-		else {
-			myArray.length = ZERO;
-		}
-	}
-
-	/*
-	--- myReplace function --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myReplace ( oldObjId, newObject ) {
-		let index = myIndexOfObjId ( oldObjId );
-		if ( NOT_FOUND === index ) {
-			throw new Error ( 'invalid objId for replace function' );
-		}
-		if ( ( ! newObject.objType ) || ( ! newObject.objType.name ) || ( newObject.objType.name !== myObjName ) ) {
-			throw new Error ( 'invalid object name for replace function' );
-		}
-		myArray [ index ] = newObject;
-	}
-
-	/*
-	--- myReverse function --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myReverse ( ) {
-		myArray.reverse ( );
-	}
-
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetObject ( something ) {
-		myArray.length = ZERO;
-		let newObject = null;
-
-		something.forEach (
-			arrayObject => {
-				newObject = myObjectConstructor ( );
-				newObject.object = arrayObject;
-				myAdd ( newObject );
+		forEach ( funct ) {
+			let result = null;
+			let iterator = myIterator ( );
+			while ( ! iterator.done ) {
+				result = funct ( iterator.value, result );
 			}
-		);
-	}
-
-	/*
-	--- mySort function -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySort ( compareFunction ) {
-		myArray.sort ( compareFunction );
-	}
-
-	/*
-	--- mySwap function -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySwap ( objId, swapUp ) {
-		let index = myIndexOfObjId ( objId );
-		if (
-			( NOT_FOUND === index )
-			||
-			( ( ZERO === index ) && swapUp )
-			||
-			( ( myArray.length - ONE === index ) && ( ! swapUp ) )
-		) {
-			throw new Error ( 'invalid objId for swap function' );
+			return result;
 		}
-		let tmp = myArray [ index ];
-		myArray [ index ] = myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ];
-		myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ] = tmp;
-	}
-
-	/*
-	--- Collection object ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
 
 		/**
-		@typedef {Object} CollectionIterator
-		@desc An iterator on the Collection
-		@property {Object} value The object pointed by the iterator
-		@property {?Object} previous The object before the object pointed by the iterator or null if the iterator
-		is on the first object
-		@property {?Object} next The object after the object pointed by the iterator or null if the iterator
-		is on the last object
-		@property {boolean} done Move the iterator to the next object and return true when the end of the Collection
-		is reached
-		@property {boolean} first True when the iterator is on the first object of the Collection
-		@property {boolean} last True when the iterator is on the last object of the Collection
-		@property {number} index The position of the iterator in the Collection
+		Search an object in the Collection
+		@param {!number} objId The objId of the object to search
+		@return the object with the given objId or null when the object is not found
 		*/
+
+		getAt ( objId ) {
+			let index = myIndexOfObjId ( objId );
+			if ( NOT_FOUND === index ) {
+				return null;
+			}
+			return myArray [ index ];
+		}
 
 		/**
-		@--------------------------------------------------------------------------------------------------------------
-
-		@class
-		@lends Collection.prototype
-
-		@--------------------------------------------------------------------------------------------------------------
+		Move an object near another object in the Collection
+		@param {!number} objId The objId of the object to move
+		@param {!number} targetObjId The objId of the object near witch the object will be moved
+		@param {boolean} moveBefore When true, the object is moved before the target, when false after the target
+		@throws when objId or targetObjId are invalid
 		*/
 
-		{
-
-			/**
-			@classdesc Class used to store objects in an iterable
-			@see {@link module:Collection~newCollection} for constructor
-			@hideconstructor
-			@constructs
-			 */
-
-			// dummy constructor for jsdoc :-(
-			dummy : () => {},
-
-			/**
-			Add an object at the end of the collection
-			@param {Object} object The object to add
-			@throws when the object type is invalid
-			*/
-
-			add : object => myAdd ( object ),
-
-			/**
-			Executes a function on each object of the Collection and returns the final result
-			@param {function} funct The function to execute
-			@return The final result
-			*/
-
-			forEach : funct => myForEach ( funct ),
-
-			/**
-			Search an object in the Collection
-			@param {!number} objId The objId of the object to search
-			@return the object with the given objId or null when the object is not found
-			*/
-
-			getAt : objId => myGetAt ( objId ),
-
-			/**
-			Move an object near another object in the Collection
-			@param {!number} objId The objId of the object to move
-			@param {!number} targetObjId The objId of the object near witch the object will be moved
-			@param {boolean} moveBefore When true, the object is moved before the target, when false after the target
-			@throws when objId or targetObjId are invalid
-			*/
-
-			moveTo : ( objId, targetObjId, moveBefore ) => myMoveTo ( objId, targetObjId, moveBefore ),
-
-			/**
-			Remove an object from the Collection
-			@param {!number} objId The objId of the object to remove
-			@throws when the object is not found
-			*/
-
-			remove : objId => myRemove ( objId ),
-
-			/**
-			Remove all objects from the Collection
-			@param {?boolean} exceptFirstLast When true, first and last objects are not removed
-			*/
-
-			removeAll : exceptFirstLast => myRemoveAll ( exceptFirstLast ),
-
-			/**
-			Replace an object in the Collection with another object
-			@param {!number} oldObjId the objId of the object to replace
-			@param (Object) newObject The new object
-			@throws when the object type of newObject is invalid or when the object to replace is not found
-			*/
-
-			replace : ( oldObjId, newObject ) => myReplace ( oldObjId, newObject ),
-
-			/**
-			Reverse the objects in the collection
-			*/
-
-			reverse : ( ) => myReverse ( ),
-
-			/**
-			Sort the collection, using a function
-			@param {function} compareFunction The function to use to compare objects in the Collection
-			*/
-
-			sort : compareFunction => mySort ( compareFunction ),
-
-			/**
-			Reverse an Object with the previous or next object in the Collection
-			@param {!number} objId The objId of the object to swap
-			@param {boolean} swapUp When true the object is swapped with the previous one,
-			when false with the next one
-			@throws when the object is not found or when the swap is not possible
-			*/
-
-			swap : ( objId, swapUp ) =>	mySwap ( objId, swapUp ),
-
-			/**
-			The first object of the Collection
-			@readonly
-			*/
-
-			get first ( ) { return myFirst ( ); },
-
-			/**
-			An iterator on the Collection
-			@type {CollectionIterator}
-			@readonly
-			@see {@link module:Collection~CollectionIterator}
-			*/
-
-			get iterator ( ) { return myIterator ( ); },
-
-			/**
-			The last object of the Collection
-			@readonly
-			*/
-
-			get last ( ) { return myLast ( ); },
-
-			/**
-			The length of the Collection
-			@readonly
-			*/
-
-			get length ( ) { return myArray.length; },
-
-			/**
-			an Array with the objects in the collection
-			@type {Array}
-			*/
-
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
-
+		moveTo ( objId, targetObjId, moveBefore ) {
+			let oldPosition = myIndexOfObjId ( objId );
+			let newPosition = myIndexOfObjId ( targetObjId );
+			if ( NOT_FOUND === oldPosition || NOT_FOUND === newPosition ) {
+				throw new Error ( 'invalid objId for function  myMoveTo' );
+			}
+			if ( ! moveBefore ) {
+				newPosition ++;
+			}
+			myArray.splice ( newPosition, ZERO, myArray [ oldPosition ] );
+			if ( newPosition < oldPosition ) {
+				oldPosition ++;
+			}
+			myArray.splice ( oldPosition, ONE );
 		}
-	);
+
+		/**
+		Remove an object from the Collection
+		@param {!number} objId The objId of the object to remove
+		@throws when the object is not found
+		*/
+
+		remove ( objId ) {
+			let index = myIndexOfObjId ( objId );
+			if ( NOT_FOUND === index ) {
+				throw new Error ( 'invalid objId for remove function' );
+			}
+			myArray.splice ( myIndexOfObjId ( objId ), ONE );
+		}
+
+		/**
+		Remove all objects from the Collection
+		@param {?boolean} exceptFirstLast When true, first and last objects are not removed
+		*/
+
+		removeAll ( exceptFirstLast ) {
+			if ( exceptFirstLast ) {
+				myArray.splice ( ONE, myArray.length - TWO );
+			}
+			else {
+				myArray.length = ZERO;
+			}
+		}
+
+		/**
+		Replace an object in the Collection with another object
+		@param {!number} oldObjId the objId of the object to replace
+		@param (Object) newObject The new object
+		@throws when the object type of newObject is invalid or when the object to replace is not found
+		*/
+
+		replace ( oldObjId, newObject ) {
+			let index = myIndexOfObjId ( oldObjId );
+			if ( NOT_FOUND === index ) {
+				throw new Error ( 'invalid objId for replace function' );
+			}
+			if ( ( ! newObject.objType ) || ( ! newObject.objType.name ) || ( newObject.objType.name !== myObjName ) ) {
+				throw new Error ( 'invalid object name for replace function' );
+			}
+			myArray [ index ] = newObject;
+		}
+
+		/**
+		Reverse the objects in the collection
+		*/
+
+		reverse ( ) { myArray.reverse ( ); }
+
+		/**
+		Sort the collection, using a function
+		@param {function} compareFunction The function to use to compare objects in the Collection
+		*/
+
+		sort ( compareFunction ) { myArray.sort ( compareFunction ); }
+
+		/**
+		Reverse an Object with the previous or next object in the Collection
+		@param {!number} objId The objId of the object to swap
+		@param {boolean} swapUp When true the object is swapped with the previous one,
+		when false with the next one
+		@throws when the object is not found or when the swap is not possible
+		*/
+
+		swap ( objId, swapUp ) {
+			let index = myIndexOfObjId ( objId );
+			if (
+				( NOT_FOUND === index )
+				||
+				( ( ZERO === index ) && swapUp )
+				||
+				( ( myArray.length - ONE === index ) && ( ! swapUp ) )
+			) {
+				throw new Error ( 'invalid objId for swap function' );
+			}
+			let tmp = myArray [ index ];
+			myArray [ index ] = myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ];
+			myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ] = tmp;
+		}
+
+		/**
+		The first object of the Collection
+		@readonly
+		*/
+
+		get first ( ) { return myArray [ ZERO ]; }
+
+		/**
+		An iterator on the Collection
+		@type {CollectionIterator}
+		@readonly
+		@see {@link module:Collection~CollectionIterator}
+		*/
+
+		get iterator ( ) { return myIterator ( ); }
+
+		/**
+		The last object of the Collection
+		@readonly
+		*/
+
+		get last ( ) { return myArray [ myArray.length - ONE ]; }
+
+		/**
+		The length of the Collection
+		@readonly
+		*/
+
+		get length ( ) { return myArray.length; }
+
+		/**
+		an Array with the objects in the collection
+		@type {Array}
+		*/
+
+		get object ( ) {
+			let array = [ ];
+			let iterator = myIterator ( );
+			while ( ! iterator.done ) {
+				array.push ( iterator.value.object );
+			}
+
+			return array;
+		}
+		set object ( something ) {
+			myArray.length = ZERO;
+			let newObject = null;
+
+			something.forEach (
+				arrayObject => {
+					newObject = myObjectConstructor ( );
+					newObject.object = arrayObject;
+					myAdd ( newObject );
+				}
+			);
+		}
+	}
+
+	return Object.seal ( new Collection );
 }
 
 export {
@@ -499,6 +394,7 @@ export {
 	@desc constructor of Collection objects
 	@param {constructor} objectConstructor the constructor of objects to be stored in the Collection
 	@return {Collection} an instance of a Collection object
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/

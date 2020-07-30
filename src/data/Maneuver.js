@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- Maneuver.js file --------------------------------------------------------------------------------------------------
-This file contains:
-	- the newManeuver function
 Changes:
 	- v1.0.0:
 		- created
@@ -23,30 +22,46 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191122
+Doc reviewed 20200730
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Maneuver.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module Maneuver
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Maneuver' );
 
-/*
---- newManeuver function ------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function newManeuver
+@desc Constructor for a Maneuver object
+@return {Maneuver} an instance of a Maneuver object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newManeuver ( ) {
-
-	// Private variables
 
 	let myObjId = newObjId ( );
 
@@ -60,10 +75,17 @@ function newManeuver ( ) {
 
 	let myDuration = DISTANCE.defaultValue;
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myValidate
+	@desc verify that the parameter can be transformed to a Maneuver and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myValidate ( something ) {
@@ -103,75 +125,120 @@ function newManeuver ( ) {
 		return something;
 	}
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class Maneuver
+	@classdesc This class represent a maneuver
+	@see {@link module:Maneuver~newManeuver} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			iconName : myIconName,
-			instruction : myInstruction,
-			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
-			duration : myDuration,
-			itineraryPointObjId : myItineraryPointObjId,
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
+	class Maneuver {
 
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
+		/**
+		The icon displayed with the Maneuver in the roadbook
+		@type {string}
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		get iconName ( ) { return myIconName; }
+		set iconName ( IconName ) { myIconName = IconName; }
 
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myIconName = otherthing.iconName || '';
-		myInstruction = otherthing.instruction || '';
-		myDistance = otherthing.distance || DISTANCE.defaultValue;
-		myDuration = otherthing.duration || DISTANCE.defaultValue;
-		myItineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
-		myObjId = newObjId ( );
-	}
+		/**
+		The instruction of the Maneuver
+		@type {string}
+		*/
 
-	/*
-	--- maneuver object -----------------------------------------------------------------------------------------------
+		get instruction ( ) { return myInstruction; }
+		set instruction ( Instruction ) { myInstruction = Instruction; }
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		/**
+		The objId of the ItineraryPoint at the same position than the Maneuver
+		@type {!number}
+		*/
 
-	return Object.seal (
-		{
+		get itineraryPointObjId ( ) { return myItineraryPointObjId; }
+		set itineraryPointObjId ( ItineraryPointObjId ) { myItineraryPointObjId = ItineraryPointObjId; }
 
-			get iconName ( ) { return myIconName; },
-			set iconName ( IconName ) { myIconName = IconName; },
+		/**
+		The distance between the Maneuver and the next Maneuver
+		@type {number}
+		*/
 
-			get instruction ( ) { return myInstruction; },
-			set instruction ( Instruction ) { myInstruction = Instruction; },
+		get distance ( ) { return myDistance; }
+		set distance ( Distance ) { myDistance = Distance; }
 
-			get itineraryPointObjId ( ) { return myItineraryPointObjId; },
-			set itineraryPointObjId ( ItineraryPointObjId ) { myItineraryPointObjId = ItineraryPointObjId; },
+		/**
+		The time between the Maneuver and the next Maneuver
+		@type {number}
+		*/
 
-			get distance ( ) { return myDistance; },
-			set distance ( Distance ) { myDistance = Distance; },
+		get duration ( ) { return myDuration; }
+		set duration ( Duration ) { myDuration = Duration; }
 
-			get duration ( ) { return myDuration; },
-			set duration ( Duration ) { myDuration = Duration; },
+		/**
+		the objId of the Maneuver. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
 
-			get objId ( ) { return myObjId; },
+		get objId ( ) { return myObjId; }
 
-			get objType ( ) { return ourObjType; },
+		/**
+		the ObjType of the Maneuver.
+		@type {ObjType}
+		@readonly
+		*/
 
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the Maneuver properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				iconName : myIconName,
+				instruction : myInstruction,
+				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+				duration : myDuration,
+				itineraryPointObjId : myItineraryPointObjId,
+				objId : myObjId,
+				objType : ourObjType.object
+			};
 		}
-	);
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myIconName = otherthing.iconName || '';
+			myInstruction = otherthing.instruction || '';
+			myDistance = otherthing.distance || DISTANCE.defaultValue;
+			myDuration = otherthing.duration || DISTANCE.defaultValue;
+			myItineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
+			myObjId = newObjId ( );
+		}
+	}
+	return Object.seal ( new Maneuver );
 }
 
-export { newManeuver };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newManeuver
+	@desc Construct a Maneuver object
+	@return {Maneuver} an instance of a Maneuver object
+	@global
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newManeuver
+};
 
 /*
 --- End of Maneuver.js file -------------------------------------------------------------------------------------------

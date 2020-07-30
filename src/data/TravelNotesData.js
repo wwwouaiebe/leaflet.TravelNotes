@@ -74,119 +74,104 @@ function newTravelNotesData ( ) {
 		UUID : newUtilities ( ).UUID
 	};
 
-	/*
-	--- travelNotesData object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@typedef {Object} routing
+	@desc An object to store the current provider and transit mode
+	@property {string} provider The current provider name as defined by the plugins
+	@property {string} transitMode The current transitMode. Must be car, bike, etc... as defined by the plugins
 	*/
 
-	return Object.seal (
+	/**
+	@typedef {Object} provider
+	@desc An object that stores the provider properties. Created by the plugins
+	@property {string} icon The icon displayed in the provider toolbar, base64 encoded
+	@property {string} name The	name of the provider
+	@property {object} transitModes An object with the possible transit modes
+	@property {boolean} providerKeyNeeded A boolean true when a provider key is needed
+	@property {string} providerKey 	The provider key
+	@property {string} userLanguage The user language
+	@property {method} getPromiseRoute A method that start the routing
+	*/
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------
+
+	@class TravelNotesData
+	@classdesc Class used to store the data needed by TravelNotes
+	@see {@link theTravelNotesData} for the one and only one instance of this class
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------
+	*/
+
+	class TravelNotesData {
 
 		/**
-		@typedef {Object} routing
-		@desc An object to store the current provider and transit mode
-		@property {string} provider The current provider name as defined by the plugins
-		@property {string} transitMode The current transitMode. Must be car, bike, etc... as defined by the plugins
+		The Leaflet map object
+		@type {object}
+		@see {@link https://leafletjs.com/reference-1.6.0.html#map}
 		*/
+
+		get map ( ) { return myTravelNotesData.map; }
+		set map ( newMap ) { myTravelNotesData.map = newMap; }
 
 		/**
-		@typedef {Object} provider
-		@desc An object that stores the provider properties. Created by the plugins
-		@property {string} icon The icon displayed in the provider toolbar, base64 encoded
-		@property {string} name The	name of the provider
-		@property {object} transitModes An object with the possible transit modes
-		@property {boolean} providerKeyNeeded A boolean true when a provider key is needed
-		@property {string} providerKey 	The provider key
-		@property {string} userLanguage The user language
-		@property {method} getPromiseRoute A method that start the routing
+		A JS map with the provider objects. Providers objects are created and added by the plugins
+		@type {Map.provider}
+		@see {@link module:TravelNotesData~provider}
 		*/
+
+		get providers ( ) { return myTravelNotesData.providers; }
 
 		/**
-		@--------------------------------------------------------------------------------------------------------------
-
-		@class
-		@lends TravelNotesData.prototype
-
-		@--------------------------------------------------------------------------------------------------------------
+		A JS map with all the Leaflet objects
+		@type {Map.Object}
 		*/
 
-		{
+		get mapObjects ( ) { return myTravelNotesData.mapObjects; }
 
-			/**
-			@classdesc Class used to store the data needed by TravelNotes
-			@see {@link module:TravelNotesData~newTravelNotesData} for constructor
-			@hideconstructor
-			@constructs
-			 */
+		/**
+		The one and only one object Travel
+		@type {Object}
+		@see Travel
+		*/
 
-			// dummy constructor for jsdoc :-(
-			dummy : () => {},
+		get travel ( ) { return myTravelNotesData.travel; }
+		set travel ( Travel ) { myTravelNotesData.travel = Travel; }
 
-			/**
-			The Leaflet map object
-			@type {object}
-			@see {@link https://leafletjs.com/reference-1.6.0.html#map}
-			*/
+		/**
+		The objId of the currently edited route or INVALID_OBJ_ID if none
+		@type {!number}
+		*/
 
-			get map ( ) { return myTravelNotesData.map; },
-			set map ( newMap ) { myTravelNotesData.map = newMap; },
+		get editedRouteObjId ( ) { return myTravelNotesData.editedRouteObjId; }
+		set editedRouteObjId ( EditedRouteObjId ) { myTravelNotesData.editedRouteObjId = EditedRouteObjId; }
 
-			/**
-			A JS map with the provider objects. Providers objects are created and added by the plugins
-			@type {Map.provider}
-			@see {@link module:TravelNotesData~provider}
-			*/
+		/**
+		A literal object with the provider and transit mode used
+		@type {routing}
+		@see {@link module:TravelNotesData~routing}
+		*/
 
-			get providers ( ) { return myTravelNotesData.providers; },
+		get routing ( ) { return myTravelNotesData.routing; }
 
-			/**
-			A JS map with all the Leaflet objects
-			@type {Map.Object}
-			*/
+		/**
+		The POI data found in OpenStreetMap
+		@type {Object[]}
+		*/
 
-			get mapObjects ( ) { return myTravelNotesData.mapObjects; },
+		get searchData ( ) { return myTravelNotesData.searchData; }
+		set searchData ( SearchData ) { myTravelNotesData.searchData = SearchData; }
 
-			/**
-			The one and only one object Travel
-			@type {Object}
-			@see Travel
-			*/
+		/**
+		The UUID currently used
+		@type {string}
+		*/
 
-			get travel ( ) { return myTravelNotesData.travel; },
-			set travel ( Travel ) { myTravelNotesData.travel = Travel; },
+		get UUID ( ) { return myTravelNotesData.UUID; }
+	}
 
-			/**
-			The objId of the currently edited route or INVALID_OBJ_ID if none
-			@type {!number}
-			*/
-
-			get editedRouteObjId ( ) { return myTravelNotesData.editedRouteObjId; },
-			set editedRouteObjId ( EditedRouteObjId ) { myTravelNotesData.editedRouteObjId = EditedRouteObjId; },
-
-			/**
-			A literal object with the provider and transit mode used
-			@type {routing}
-			@see {@link module:TravelNotesData~routing}
-			*/
-
-			get routing ( ) { return myTravelNotesData.routing; },
-
-			/**
-			The POI data found in OpenStreetMap
-			@type {Object[]}
-			*/
-
-			get searchData ( ) { return myTravelNotesData.searchData; },
-			set searchData ( SearchData ) { myTravelNotesData.searchData = SearchData; },
-
-			/**
-			The UUID currently used
-			@type {string}
-			*/
-
-			get UUID ( ) { return myTravelNotesData.UUID; }
-		}
-	);
+	return Object.seal ( new TravelNotesData );
 }
 
 const theTravelNotesData = newTravelNotesData ( );

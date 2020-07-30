@@ -57,7 +57,7 @@ const ourObjType = newObjType ( 'WayPoint' );
 @----------------------------------------------------------------------------------------------------------------------
 
 @function newWayPoint
-@desc constructor of WayPoint objects
+@desc Constructor for a WayPoint object
 @return {WayPoint} an instance of a WayPoint object
 @private
 
@@ -67,13 +67,9 @@ const ourObjType = newObjType ( 'WayPoint' );
 function newWayPoint ( ) {
 
 	let myName = '';
-
 	let myAddress = '';
-
 	let myLat = LAT_LNG.defaultValue;
-
 	let myLng = LAT_LNG.defaultValue;
-
 	let myObjId = newObjId ( );
 
 	/**
@@ -100,7 +96,7 @@ function newWayPoint ( ) {
 	@------------------------------------------------------------------------------------------------------------------
 
 	@function myValidate
-	@desc verify that the parameter can be transformed to a wayPoint and performs the upgrate if needed
+	@desc verify that the parameter can be transformed to a WayPoint and performs the upgrate if needed
 	@param {Object} something an object to validate
 	@return {Object} the validated object
 	@throws {Error} when the parameter is invalid
@@ -151,150 +147,111 @@ function newWayPoint ( ) {
 	/**
 	@------------------------------------------------------------------------------------------------------------------
 
-	@function myGetObject
-	@desc transform the wayPoint into a object literal
-	@return {Object} an object with the same properties than the wayPoint and without any methods.
-	@private
+	@class WayPoint
+	@classdesc This class represent a way point
+	@see {@link module:WayPoint~newWayPoint} for constructor
+	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			name : myName,
-			address : myAddress,
-			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
-
-	/**
-	@------------------------------------------------------------------------------------------------------------------
-
-	@function mySetObject
-	@desc transform the an object literal into a wayPoint
-	@param {Object} something an object to transform into a wayPoint
-	@throws {Error} when the parameter cannot be transformed into a wayPoint
-	@private
-
-	@------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myAddress = otherthing.address || '';
-		myName = otherthing.name || '';
-		myLat = otherthing.lat || LAT_LNG.defaultValue;
-		myLng = otherthing.lng || LAT_LNG.defaultValue;
-		myObjId = newObjId ( );
-	}
-
-	/*
-	--- wayPoint object -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
+	class WayPoint {
 
 		/**
-		@--------------------------------------------------------------------------------------------------------------
-
-		@class
-		@lends WayPoint.prototype
-
-		@--------------------------------------------------------------------------------------------------------------
+		the address of the WayPoint
+		@type {string}
 		*/
 
-		{
+		get address ( ) { return myAddress; }
+		set address ( Address ) { myAddress = Address; }
 
-			/**
-			@classdesc class used to represent a wayPoint
-			@see {@link module:WayPoint~newWayPoint} for constructor
-			@hideconstructor
-			@constructs
-			 */
+		/**
+		the name of the WayPoint
+		@type {string}
+		*/
 
-			// dummy constructor for jsdoc :-(
-			dummy : () => {},
+		get name ( ) { return myName; }
+		set name ( Name ) { myName = Name; }
 
-			/**
-			the address of the wayPoint
-			@type {string}
-			*/
+		/**
+		the full name of the WayPoint. Full name is created with the name and address or latitude and longitude
+		of the WayPoint
+		@readonly
+		@type {string}
+		*/
 
-			get address ( ) { return myAddress; },
-			set address ( Address ) { myAddress = Address; },
+		get fullName ( ) { return myGetFullName ( ); }
 
-			/**
-			the name of the wayPoint
-			@type {string}
-			*/
+		/**
+		the latitude of the WayPoint
+		@type {number}
+		*/
 
-			get name ( ) { return myName; },
-			set name ( Name ) { myName = Name; },
+		get lat ( ) { return myLat; }
+		set lat ( Lat ) { myLat = Lat; }
 
-			/**
-			the full name of the wayPoint. Full name is created with the name, address, latitude and longitude of the wayPoint
-			@readonly
-			@type {string}
-			*/
+		/**
+		the longitude of the WayPoint
+		@type {number}
+		*/
 
-			get fullName ( ) { return myGetFullName ( ); },
+		get lng ( ) { return myLng; }
+		set lng ( Lng ) { myLng = Lng; }
 
-			/**
-			the latitude of the wayPoint
-			@type {number}
-			*/
+		/**
+		the latitude and longitude of the WayPoint
+		@type {number[]}
+		*/
 
-			get lat ( ) { return myLat; },
-			set lat ( Lat ) { myLat = Lat; },
-
-			/**
-			the longitude of the wayPoint
-			@type {number}
-			*/
-
-			get lng ( ) { return myLng; },
-			set lng ( Lng ) { myLng = Lng; },
-
-			/**
-			the latitude and longitude of the wayPoint
-			@type {number[]}
-			*/
-
-			get latLng ( ) { return [ myLat, myLng ]; },
-			set latLng ( LatLng ) {
-				myLat = LatLng [ ZERO ];
-				myLng = LatLng [ ONE ];
-			},
-
-			/**
-			the objId of the wayPoint. objId are unique identifier given by the code
-			@readonly
-			@type {!number}
-			*/
-
-			get objId ( ) { return myObjId; },
-
-			/**
-			the objType of the wayPoint. Always 'WayPoint'
-			@readonly
-			*/
-
-			get objType ( ) { return ourObjType; },
-
-			/**
-			an object literal with the wayPoint properties and without any methods
-			@type {Object}
-			*/
-
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
+		get latLng ( ) { return [ myLat, myLng ]; }
+		set latLng ( LatLng ) {
+			myLat = LatLng [ ZERO ];
+			myLng = LatLng [ ONE ];
 		}
-	);
+
+		/**
+		the objId of the WayPoint. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
+
+		get objId ( ) { return myObjId; }
+
+		/**
+		the ObjType of the WayPoint.
+		@type {ObjType}
+		@readonly
+		*/
+
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the WayPoint properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				name : myName,
+				address : myAddress,
+				lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+				lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
+				objId : myObjId,
+				objType : ourObjType.object
+			};
+		}
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myAddress = otherthing.address || '';
+			myName = otherthing.name || '';
+			myLat = otherthing.lat || LAT_LNG.defaultValue;
+			myLng = otherthing.lng || LAT_LNG.defaultValue;
+			myObjId = newObjId ( );
+		}
+	}
+
+	return Object.seal ( new WayPoint );
 }
 
 export {
@@ -303,8 +260,9 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 
 	@function newWayPoint
-	@desc constructor of WayPoint objects
+	@desc Construct a WayPoint object
 	@return {WayPoint} an instance of a WayPoint object
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/

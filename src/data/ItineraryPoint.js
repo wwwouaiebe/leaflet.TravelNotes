@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- ItineraryPoint.js file --------------------------------------------------------------------------------------------
-This file contains:
-	- the newItineraryPoint function
 Changes:
 	- v1.0.0:
 		- created
@@ -25,27 +24,45 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- issue #89 : Add elevation graph
-Doc reviewed 20191122
+Doc reviewed 20200730
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file ItineraryPoint.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module ItineraryPoint
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-
 import { ELEV, LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'ItineraryPoint' );
 
-/*
---- newItineraryPoint function ------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function newItineraryPoint
+@desc Constructor for an ItineraryPoint object
+@return {ItineraryPoint} an instance of a ItineraryPoint object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newItineraryPoint ( ) {
@@ -60,10 +77,17 @@ function newItineraryPoint ( ) {
 
 	let myObjId = newObjId ( );
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myValidate
+	@desc verify that the parameter can be transformed to an ItineraryPoint and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myValidate ( something ) {
@@ -105,76 +129,122 @@ function newItineraryPoint ( ) {
 		return something;
 	}
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class ItineraryPoint
+	@classdesc This class represent an itinerary point
+	@see {@link module:ItineraryPoint~newItineraryPoint} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
-			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
-			elev : parseFloat ( myElev.toFixed ( ELEV.fixed ) ),
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
+	class ItineraryPoint {
 
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
+		/**
+		the latitude of the ItineraryPoint
+		@type {number}
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		get lat ( ) { return myLat; }
+		set lat ( Lat ) { myLat = Lat; }
 
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myLat = otherthing.lat || LAT_LNG.defaultValue;
-		myLng = otherthing.lng || LAT_LNG.defaultValue;
-		myDistance = otherthing.distance || DISTANCE.defaultValue;
-		myElev = otherthing.elev || ELEV.defaultValue;
-		myObjId = newObjId ( );
-	}
+		/**
+		the longitude of the ItineraryPoint
+		@type {number}
+		*/
 
-	/*
-	--- itineraryPoint object -----------------------------------------------------------------------------------------
+		get lng ( ) { return myLng; }
+		set lng ( Lng ) { myLng = Lng; }
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		/**
+		the latitude and longitude of the ItineraryPoint
+		@type {number[]}
+		*/
 
-	return Object.seal (
-		{
-
-			get lat ( ) { return myLat; },
-			set lat ( Lat ) { myLat = Lat; },
-
-			get lng ( ) { return myLng; },
-			set lng ( Lng ) { myLng = Lng; },
-
-			get latLng ( ) { return [ myLat, myLng ]; },
-			set latLng ( LatLng ) {
-				myLat = LatLng [ ZERO ];
-				myLng = LatLng [ ONE ];
-			},
-
-			get distance ( ) { return myDistance; },
-			set distance ( Distance ) { myDistance = Distance; },
-
-			get elev ( ) { return myElev; },
-			set elev ( Elev ) { myElev = Elev; },
-
-			get objId ( ) { return myObjId; },
-
-			get objType ( ) { return ourObjType; },
-
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
+		get latLng ( ) { return [ myLat, myLng ]; }
+		set latLng ( LatLng ) {
+			myLat = LatLng [ ZERO ];
+			myLng = LatLng [ ONE ];
 		}
-	);
+
+		/**
+		the distance between the beginning of the itinerary and the ItineraryPoint
+		@type {number}
+		*/
+
+		get distance ( ) { return myDistance; }
+		set distance ( Distance ) { myDistance = Distance; }
+
+		/**
+		the elevation (if any)  of the ItineraryPoint
+		@type {number}
+		*/
+
+		get elev ( ) { return myElev; }
+		set elev ( Elev ) { myElev = Elev; }
+
+		/**
+		the objId of the ItineraryPoint. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
+
+		get objId ( ) { return myObjId; }
+
+		/**
+		the ObjType of the WayPoint.
+		@type {ObjType}
+		@readonly
+		*/
+
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the ItineraryPoint properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+				lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
+				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+				elev : parseFloat ( myElev.toFixed ( ELEV.fixed ) ),
+				objId : myObjId,
+				objType : ourObjType.object
+			};
+		}
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myLat = otherthing.lat || LAT_LNG.defaultValue;
+			myLng = otherthing.lng || LAT_LNG.defaultValue;
+			myDistance = otherthing.distance || DISTANCE.defaultValue;
+			myElev = otherthing.elev || ELEV.defaultValue;
+			myObjId = newObjId ( );
+		}
+	}
+
+	return Object.seal ( new ItineraryPoint );
 }
 
-export { newItineraryPoint };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newItineraryPoint
+	@desc Constructor an ItineraryPoint object
+	@return {ItineraryPoint} an instance of a ItineraryPoint object
+	@global
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newItineraryPoint
+};
 
 /*
 --- End of ItineraryPoint.js file -------------------------------------------------------------------------------------
