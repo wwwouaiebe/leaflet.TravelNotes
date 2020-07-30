@@ -332,6 +332,21 @@ function newCollection ( objectConstructor ) {
 	return Object.seal (
 
 		/**
+		@typedef {Object} CollectionIterator
+		@desc An iterator on the Collection
+		@property {Object} value The object pointed by the iterator
+		@property {?Object} previous The object before the object pointed by the iterator or null if the iterator
+		is on the first object
+		@property {?Object} next The object after the object pointed by the iterator or null if the iterator
+		is on the last object
+		@property {boolean} done Move the iterator to the next object and return true when the end of the Collection
+		is reached
+		@property {boolean} first True when the iterator is on the first object of the Collection
+		@property {boolean} last True when the iterator is on the last object of the Collection
+		@property {number} index The position of the iterator in the Collection
+		*/
+
+		/**
 		@--------------------------------------------------------------------------------------------------------------
 
 		@class
@@ -344,6 +359,7 @@ function newCollection ( objectConstructor ) {
 
 			/**
 			@classdesc Class used to store objects in an iterable
+			@see {@link module:Collection~newCollection} for constructor
 			@hideconstructor
 			@constructs
 			 */
@@ -432,85 +448,43 @@ function newCollection ( objectConstructor ) {
 
 			swap : ( objId, swapUp ) =>	mySwap ( objId, swapUp ),
 
-			/*
-			--- first getter ------------------------------------------------------------------------------------------
-
-			The first object in the collection
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			The first object of the Collection
+			@readonly
 			*/
 
-			get first ( ) {
-				return myFirst ( );
-			},
+			get first ( ) { return myFirst ( ); },
 
-			/*
-			--- iterator getter ---------------------------------------------------------------------------------------
-
-			Returns an iterator on the collection.
-			The iterator have the following properties:
-			value : the object pointed by the iterator
-			done : true when the iterator is at the end of the collection.
-				Each time this property is called, the iterator move to the next object
-			first : true when the iterator is on the first object
-			last : true when the iterator is on the last object
-			index : the current position of the iterator in the collection
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			An iterator on the Collection
+			@type {CollectionIterator}
+			@readonly
+			@see {@link module:Collection~CollectionIterator}
 			*/
 
-			get iterator ( ) {
-				return myIterator ( );
-			},
+			get iterator ( ) { return myIterator ( ); },
 
-			/*
-			--- last getter -------------------------------------------------------------------------------------------
-
-			The last object in the collection
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			The last object of the Collection
+			@readonly
 			*/
 
-			get last ( ) {
-				return myLast ( );
-			},
+			get last ( ) { return myLast ( ); },
 
-			/*
-			--- length getter -----------------------------------------------------------------------------------------
-
-			The length of the collection
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			The length of the Collection
+			@readonly
 			*/
 
-			get length ( ) {
-				return myArray.length;
-			},
+			get length ( ) { return myArray.length; },
 
-			/*
-			--- object getter -----------------------------------------------------------------------------------------
-
-			Transform the collection into an array that can be used with JSON
-
-			-----------------------------------------------------------------------------------------------------------
+			/**
+			an Array with the objects in the collection
+			@type {Array}
 			*/
 
-			get object ( ) {
-				return myGetObject ( );
-			},
-
-			/*
-			--- object setter -----------------------------------------------------------------------------------------
-
-			Transform an array to a collection
-			throw when an object in the array have an invalid type
-
-			-----------------------------------------------------------------------------------------------------------
-			*/
-
-			set object ( something ) {
-				mySetObject ( something );
-			}
+			get object ( ) { return myGetObject ( ); },
+			set object ( something ) { mySetObject ( something ); }
 
 		}
 	);

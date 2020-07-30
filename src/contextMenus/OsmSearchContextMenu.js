@@ -103,6 +103,7 @@ function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class OsmSearchContextMenu
 	@classdesc a BaseContextMenu object with items completed for OsmSearch items
+	@see {@link module:OsmSearchContextMenu~newOsmSearchContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 

@@ -134,6 +134,7 @@ function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class NoteContextMenu
 	@classdesc a BaseContextMenu object with items completed for Notes
+	@see {@link module:NoteContextMenu~newNoteContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 

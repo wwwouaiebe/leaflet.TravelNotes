@@ -445,6 +445,7 @@ function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
 
 			/**
 			@classdesc Base class used to show context menus
+			@see {@link module:BaseContextMenu~newBaseContextMenu} for constructor
 			@abstract
 			@hideconstructor
 			@constructs

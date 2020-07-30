@@ -114,6 +114,7 @@ function newTravelNotesData ( ) {
 
 			/**
 			@classdesc Class used to store the data needed by TravelNotes
+			@see {@link module:TravelNotesData~newTravelNotesData} for constructor
 			@hideconstructor
 			@constructs
 			 */
@@ -197,7 +198,6 @@ export {
 
 	@desc The one and only one instance of TravelNoteData class
 	@type {TravelNotesData}
-	@see TravelNotesData
 	@constant
 	@global
 

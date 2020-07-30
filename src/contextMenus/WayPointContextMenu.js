@@ -104,6 +104,7 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 
 	@class WayPointContextMenu
 	@classdesc a BaseContextMenu object with items completed for wayPoints
+	@see {@link module:WayPointContextMenu~newWayPointContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 

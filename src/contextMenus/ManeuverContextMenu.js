@@ -109,6 +109,7 @@ function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class ManeuverContextMenu
 	@classdesc a BaseContextMenu object with items completed for maneuvers
+	@see {@link module:ManeuverContextMenu~newManeuverContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 

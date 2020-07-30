@@ -174,6 +174,7 @@ function newMapContextMenu ( contextMenuEvent ) {
 
 	@class MapContextMenu
 	@classdesc a BaseContextMenu object with items completed for maps
+	@see {@link module:MapContextMenu~newMapContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 

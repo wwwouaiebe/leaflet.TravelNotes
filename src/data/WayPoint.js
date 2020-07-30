@@ -212,6 +212,7 @@ function newWayPoint ( ) {
 
 			/**
 			@classdesc class used to represent a wayPoint
+			@see {@link module:WayPoint~newWayPoint} for constructor
 			@hideconstructor
 			@constructs
 			 */
