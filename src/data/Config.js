@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,10 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- Config.js file ----------------------------------------------------------------------------------------------------
-This file contains:
-	- the newConfig function
-	- the theConfig object
 Changes:
 	- v1.4.0:
 		- created from DataManager
@@ -34,24 +30,36 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191121
+Doc reviewed 20200731
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint no-magic-numbers: "off" */
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-/*
---- newConfig funtion -------------------------------------------------------------------------------------------------
+@file Config.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
 
-This function returns a config object
-
-Patterns : Closure and Singleton
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
-function newConfig ( ) {
+/* eslint no-magic-numbers: "off" */
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@function myNewConfig
+@desc constructor of theConfig object
+@return {Object} an instance of Config object
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+function myNewConfig ( ) {
 
 	let myConfig = {
 		autoLoad : false,
@@ -256,52 +264,57 @@ function newConfig ( ) {
 		}
 	};
 
-	/*
-	--- myCopyObjectTo function -----------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
+	@function myCopyObjectTo
+	@desc copy the properties between two objects
+	@param {Object} source The source object
+	@param {Object} target The target object
+	@example
 	This method:
-		- search recursively all dest properties
-		- foreach found property, search the same property in source
-		- copy the property value from source to dest if found
-		- search recursively all sources properties
-		- foreach found property search the same property in dest
-		- copy the property value from source to dest
+	- search recursively all target properties
+	- foreach found property, search the same property in source
+	- copy the property value from source to target if found
+	- search recursively all sources properties
+	- foreach found property search the same property in target
+	- copy the property value from source to target
+	So:
+	- if a property is missing in the user config, the property is selected from the default config
+	- if a property is in the user config but missing in the default config, the property is also added (and reminder
+	  that the user can have more dashChoices than the default config )
+	- if a property is changed in the user config, the property is adapted
+	@private
 
-		So:
-			- if a property is missing in the user config, the property is selected from the default config
-			- if a property is in the user config but missing in the default config, the property is also added (and reminder
-			  that the user can have more dashChoices than the default config )
-			- if a property is changed in the user config, the property is adapted
-
-	---------------------------------------------------------------------------------------------------------------
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCopyObjectTo ( source, dest ) {
-		if ( ( 'object' !== typeof source ) || ( 'object' !== typeof dest ) ) {
+	function myCopyObjectTo ( source, target ) {
+		if ( ( 'object' !== typeof source ) || ( 'object' !== typeof target ) ) {
 			return;
 		}
 		try {
-			for ( let property in dest ) {
-				if ( 'object' === typeof dest [ property ] ) {
-					myCopyObjectTo ( source [ property ], dest [ property ] );
+			for ( let property in target ) {
+				if ( 'object' === typeof target [ property ] ) {
+					myCopyObjectTo ( source [ property ], target [ property ] );
 				}
 				else {
-					dest [ property ] = source [ property ] || dest [ property ];
+					target [ property ] = source [ property ] || target [ property ];
 				}
 			}
 
 			for ( let property in source ) {
 				if ( 'object' === typeof source [ property ] ) {
 					if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
-						dest [ property ] = dest [ property ] || [];
+						target [ property ] = target [ property ] || [];
 					}
 					else {
-						dest [ property ] = dest [ property ] || {};
+						target [ property ] = target [ property ] || {};
 					}
-					myCopyObjectTo ( source [ property ], dest [ property ] );
+					myCopyObjectTo ( source [ property ], target [ property ] );
 				}
 				else {
-					dest [ property ] = source [ property ];
+					target [ property ] = source [ property ];
 				}
 			}
 		}
@@ -310,10 +323,15 @@ function newConfig ( ) {
 		}
 	}
 
-	/*
-	--- myFreeze function -----------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myFreeze
+	@desc Freeze an object recursively
+	@param {Object} object The object to freeze
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myFreeze ( object ) {
@@ -326,69 +344,74 @@ function newConfig ( ) {
 		return Object.freeze ( object );
 	}
 
-	/*
-	--- myOverload function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@class
+	@classdesc Class used to store objects in an iterable
+	@see {@link theConfig} for the one and only one instance of this class
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOverload ( source ) {
-		myCopyObjectTo ( source, myConfig );
-		myConfig = myFreeze ( myConfig );
+	class Config {
+		get autoLoad ( ) { return myConfig.autoLoad; }
+		get map ( ) { return myConfig.map; }
+		get travelNotesToolbarUI ( ) { return myConfig.travelNotesToolbarUI; }
+		get layersToolbarUI ( ) { return myConfig.layersToolbarUI; }
+		get mouseUI ( ) { return myConfig.mouseUI; }
+		get errorUI ( ) { return myConfig.errorUI; }
+		get APIKeys ( ) { return myConfig.APIKeys; }
+		get contextMenu ( ) { return myConfig.contextMenu; }
+		get routing ( ) { return myConfig.routing; }
+		get language ( ) { return myConfig.language; }
+		get itineraryPointMarker ( ) { return myConfig.itineraryPointMarker; }
+		get searchPointMarker ( ) { return myConfig.searchPointMarker; }
+		get searchPointPolyline ( ) { return myConfig.searchPointPolyline; }
+		get previousSearchLimit ( ) { return myConfig.previousSearchLimit; }
+		get nextSearchLimit ( ) { return myConfig.nextSearchLimit; }
+		get wayPoint ( ) { return myConfig.wayPoint; }
+		get route ( ) { return myConfig.route; }
+		get note ( ) { return myConfig.note; }
+		get itineraryPointZoom ( ) { return myConfig.itineraryPointZoom; }
+		get routeEditor ( ) { return myConfig.routeEditor; }
+		get travelEditor ( ) { return myConfig.travelEditor; }
+		get haveBeforeUnloadWarning ( ) { return myConfig.haveBeforeUnloadWarning; }
+		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; }
+		get nominatim ( ) { return myConfig.nominatim; }
+		get geoLocation ( ) { return myConfig.geoLocation; }
+		get printRouteMap ( ) { return myConfig.printRouteMap; }
+		get haveCrypto ( ) { return myConfig.haveCrypto; }
+		get itineraryPane ( ) { return myConfig.itineraryPane; }
+
+		overload ( source ) {
+			myCopyObjectTo ( source, myConfig );
+			myConfig = myFreeze ( myConfig );
+		}
+
 	}
 
-	/*
-	--- config object ---------------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
-	return {
-		get autoLoad ( ) { return myConfig.autoLoad; },
-		get map ( ) { return myConfig.map; },
-		get travelNotesToolbarUI ( ) { return myConfig.travelNotesToolbarUI; },
-		get layersToolbarUI ( ) { return myConfig.layersToolbarUI; },
-		get mouseUI ( ) { return myConfig.mouseUI; },
-		get errorUI ( ) { return myConfig.errorUI; },
-		get APIKeys ( ) { return myConfig.APIKeys; },
-		get contextMenu ( ) { return myConfig.contextMenu; },
-		get routing ( ) { return myConfig.routing; },
-		get language ( ) { return myConfig.language; },
-		get itineraryPointMarker ( ) { return myConfig.itineraryPointMarker; },
-		get searchPointMarker ( ) { return myConfig.searchPointMarker; },
-		get searchPointPolyline ( ) { return myConfig.searchPointPolyline; },
-		get previousSearchLimit ( ) { return myConfig.previousSearchLimit; },
-		get nextSearchLimit ( ) { return myConfig.nextSearchLimit; },
-		get wayPoint ( ) { return myConfig.wayPoint; },
-		get route ( ) { return myConfig.route; },
-		get note ( ) { return myConfig.note; },
-		get itineraryPointZoom ( ) { return myConfig.itineraryPointZoom; },
-		get routeEditor ( ) { return myConfig.routeEditor; },
-		get travelEditor ( ) { return myConfig.travelEditor; },
-		get haveBeforeUnloadWarning ( ) { return myConfig.haveBeforeUnloadWarning; },
-		get overpassApiUrl ( ) { return myConfig.overpassApiUrl; },
-		get nominatim ( ) { return myConfig.nominatim; },
-		get geoLocation ( ) { return myConfig.geoLocation; },
-		get printRouteMap ( ) { return myConfig.printRouteMap; },
-		get haveCrypto ( ) { return myConfig.haveCrypto; },
-		get itineraryPane ( ) { return myConfig.itineraryPane; },
-
-		overload : source => myOverload ( source )
-
-	};
+	return new Config;
 }
 
-/*
---- theConfig object ---------------------------------------------------------------------------------------------------
+let theConfig = myNewConfig ( );
 
-The one and only one config
+export {
 
------------------------------------------------------------------------------------------------------------------------
-*/
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-let theConfig = newConfig ( );
+	@desc The one and only one instance of Config class
+	@type {Config}
+	@constant
+	@global
 
-export { theConfig };
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	theConfig
+};
 
 /*
 --- End of Config.js file ---------------------------------------------------------------------------------------------
