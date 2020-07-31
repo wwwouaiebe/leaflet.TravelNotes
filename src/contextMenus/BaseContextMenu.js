@@ -37,14 +37,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module BaseContextMenu
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -61,7 +53,7 @@ let ourLng = LAT_LNG.defaultValue;
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newBaseContextMenu
+@function myNewBaseContextMenu
 @desc constructor of BaseContextMenu objects
 @param {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -73,7 +65,7 @@ When null, the body of the html page is selected
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewBaseContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myMenuItems = [];
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -430,44 +422,35 @@ function newBaseContextMenu ( contextMenuEvent, parentDiv ) {
 		myMenuItems = menuItems;
 	}
 
-	return (
-
 	/**
 	@------------------------------------------------------------------------------------------------------------------
 
-	@class
-	@lends BaseContextMenu.prototype
+	@class BaseContextMenu
+	@classdesc Base class used to show context menus
+	@see {@link newBaseContextMenu} for constructor
+	@abstract
+	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-		{
+	class BaseContextMenu {
 
-			/**
-			@classdesc Base class used to show context menus
-			@see {@link module:BaseContextMenu~newBaseContextMenu} for constructor
-			@abstract
-			@hideconstructor
-			@constructs
-			 */
+		/**
+		Add the menu items. Must be called in the derived classes
+		@param menuItems {array} the menu items to use
+		*/
 
-			// dummy constructor for jsdoc :-(
-			dummy : () => {},
+		init ( menuItems ) { myInit ( menuItems ); }
 
-			/**
-			Add the menu items. Must be called in the derived classes
-			@param menuItems {array} the menu items to use
-			*/
+		/**
+		Show the menu on the screen.
+		*/
 
-			init : menuItems => myInit ( menuItems ),
+		show ( ) { myShow ( ); }
+	}
 
-			/**
-			Show the menu on the screen.
-			*/
-
-			show : ( ) => myShow ( )
-		}
-	);
+	return new BaseContextMenu;
 }
 
 export {
@@ -486,7 +469,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newBaseContextMenu
+	myNewBaseContextMenu as newBaseContextMenu
 };
 
 /**
