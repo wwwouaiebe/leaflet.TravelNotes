@@ -56,7 +56,6 @@ const ourObjType = newObjType ( 'Maneuver' );
 @function newManeuver
 @desc Constructor for a Maneuver object
 @return {Maneuver} an instance of a Maneuver object
-@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */

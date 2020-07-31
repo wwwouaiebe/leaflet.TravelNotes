@@ -60,7 +60,6 @@ const ourObjType = newObjType ( 'ItineraryPoint' );
 @function newItineraryPoint
 @desc Constructor for an ItineraryPoint object
 @return {ItineraryPoint} an instance of a ItineraryPoint object
-@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */

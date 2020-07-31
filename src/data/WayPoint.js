@@ -59,7 +59,6 @@ const ourObjType = newObjType ( 'WayPoint' );
 @function newWayPoint
 @desc Constructor for a WayPoint object
 @return {WayPoint} an instance of a WayPoint object
-@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -71,26 +70,6 @@ function newWayPoint ( ) {
 	let myLat = LAT_LNG.defaultValue;
 	let myLng = LAT_LNG.defaultValue;
 	let myObjId = newObjId ( );
-
-	/**
-	@------------------------------------------------------------------------------------------------------------------
-
-	@function myGetFullName
-	@desc compute the full name of the wayPoint
-	@return {string} the full name of the wayPoint
-	@private
-
-	@------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetFullName ( ) {
-		let fullName = ( '' === myName ? myAddress : myName + ', ' + myAddress );
-		if ( '' === fullName ) {
-			fullName = newUtilities ( ).formatLatLng ( [ myLat, myLng ] );
-		}
-
-		return fullName;
-	}
 
 	/**
 	@------------------------------------------------------------------------------------------------------------------
@@ -180,7 +159,14 @@ function newWayPoint ( ) {
 		@type {string}
 		*/
 
-		get fullName ( ) { return myGetFullName ( ); }
+		get fullName ( ) {
+			let fullName = ( '' === myName ? myAddress : myName + ', ' + myAddress );
+			if ( '' === fullName ) {
+				fullName = newUtilities ( ).formatLatLng ( [ myLat, myLng ] );
+			}
+
+			return fullName;
+		}
 
 		/**
 		the latitude of the WayPoint

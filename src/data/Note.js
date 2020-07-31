@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- Note.js file ------------------------------------------------------------------------------------------------------
-This file contains:
-	- the newNote function
 Changes:
 	- v1.0.0:
 		- created
@@ -23,25 +22,42 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191122
+Doc reviewed 20200731
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Note.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module Note
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Note' );
 
-/*
---- newNote function ----------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function newNote
+@desc Constructor for a Note object
+@return {Note} an instance of a Note object
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newNote ( ) {
@@ -78,10 +94,17 @@ function newNote ( ) {
 
 	let myChainedDistance = DISTANCE.defaultValue;
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myValidate
+	@desc verify that the parameter can be transformed to a Note and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myValidate ( something ) {
@@ -137,134 +160,243 @@ function newNote ( ) {
 		return something;
 	}
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class Note
+	@classdesc This class represent a note
+	@see {@link module:Note~newNote} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			iconHeight : myIconHeight,
-			iconWidth : myIconWidth,
-			iconContent : myIconContent,
-			popupContent : myPopupContent,
-			tooltipContent : myTooltipContent,
-			phone : myPhone,
-			url : myUrl,
-			address : myAddress,
-			iconLat : parseFloat ( myIconLat.toFixed ( LAT_LNG.fixed ) ),
-			iconLng : parseFloat ( myIconLng.toFixed ( LAT_LNG.fixed ) ),
-			lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
-			lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
-			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
+	class Note	{
 
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
+		/**
+		is true when the note is linked with a route
+		@type {boolean}
+		@readonly
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		get isRouteNote ( ) { return myDistance !== DISTANCE.invalid; }
 
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myIconHeight = otherthing.iconHeight || DEFAULT_ICON_SIZE;
-		myIconWidth = otherthing.iconWidth || DEFAULT_ICON_SIZE;
-		myIconContent = otherthing.iconContent || '';
-		myPopupContent = otherthing.popupContent || '';
-		myTooltipContent = otherthing.tooltipContent || '';
-		myPhone = otherthing.phone || '';
-		myUrl = otherthing.url || '';
-		myAddress = otherthing.address || '';
-		myIconLat = otherthing.iconLat || LAT_LNG.defaultValue;
-		myIconLng = otherthing.iconLng || LAT_LNG.defaultValue;
-		myLat = otherthing.lat || LAT_LNG.defaultValue;
-		myLng = otherthing.lng || LAT_LNG.defaultValue;
-		myDistance = otherthing.distance || DISTANCE.invalid;
-		myChainedDistance = otherthing.chainedDistance;
-		myObjId = newObjId ( );
-	}
+		/**
+		the height of the icon associated to the note
+		@type {!number}
+		*/
 
-	/*
-	--- note object ---------------------------------------------------------------------------------------------------
+		get iconHeight ( ) { return myIconHeight; }
+		set iconHeight ( IconHeight ) { myIconHeight = IconHeight; }
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		/**
+		the width of the icon associated to the note
+		@type {!number}
+		*/
 
-	return Object.seal (
-		{
+		get iconWidth ( ) { return myIconWidth; }
+		set iconWidth ( IconWidth ) { myIconWidth = IconWidth; }
 
-			get isRouteNote ( ) { return myDistance !== DISTANCE.invalid; },
+		/**
+		the html needed to display the icon
+		@type {string}
+		*/
 
-			get iconHeight ( ) { return myIconHeight; },
-			set iconHeight ( IconHeight ) { myIconHeight = IconHeight; },
+		get iconContent ( ) { return myIconContent; }
+		set iconContent ( IconContent ) { myIconContent = IconContent; }
 
-			get iconWidth ( ) { return myIconWidth; },
-			set iconWidth ( IconWidth ) { myIconWidth = IconWidth; },
+		/**
+		the latitude of the Note icon
+		@type {number}
+		*/
 
-			get iconContent ( ) { return myIconContent; },
-			set iconContent ( IconContent ) { myIconContent = IconContent; },
+		get iconLat ( ) { return myIconLat; }
+		set iconLat ( IconLat ) { myIconLat = IconLat; }
 
-			get popupContent ( ) { return myPopupContent; },
-			set popupContent ( PopupContent ) { myPopupContent = PopupContent; },
+		/**
+		the longitude of the Note icon
+		@type {number}
+		*/
 
-			get tooltipContent ( ) { return myTooltipContent; },
-			set tooltipContent ( TooltipContent ) { myTooltipContent = TooltipContent; },
+		get iconLng ( ) { return myIconLng; }
+		set iconLng ( IconLng ) { myIconLng = IconLng; }
 
-			get phone ( ) { return myPhone; },
-			set phone ( Phone ) { myPhone = Phone; },
+		/**
+		the latitude and longitude of the Note icon
+		@type {number[]}
+		*/
 
-			get url ( ) { return myUrl; },
-			set url ( Url ) { myUrl = Url; },
-
-			get address ( ) { return myAddress; },
-			set address ( Address ) { myAddress = Address; },
-
-			get iconLat ( ) { return myIconLat; },
-			set iconLat ( IconLat ) { myIconLat = IconLat; },
-
-			get iconLng ( ) { return myIconLng; },
-			set iconLng ( IconLng ) { myIconLng = IconLng; },
-
-			get iconLatLng ( ) { return [ myIconLat, myIconLng ]; },
-			set iconLatLng ( IconLatLng ) {
-				myIconLat = IconLatLng [ ZERO ];
-				myIconLng = IconLatLng [ ONE ];
-			},
-
-			get lat ( ) { return myLat; },
-			set lat ( Lat ) { myLat = Lat; },
-
-			get lng ( ) { return myLng; },
-			set lng ( Lng ) { myLng = Lng; },
-
-			get latLng ( ) { return [ myLat, myLng ]; },
-			set latLng ( LatLng ) {
-				myLat = LatLng [ ZERO ];
-				myLng = LatLng [ ONE ];
-			},
-
-			get distance ( ) { return myDistance; },
-			set distance ( Distance ) { myDistance = Distance; },
-
-			get chainedDistance ( ) { return myChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; },
-
-			get objId ( ) { return myObjId; },
-
-			get objType ( ) { return ourObjType; },
-
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
+		get iconLatLng ( ) { return [ myIconLat, myIconLng ]; }
+		set iconLatLng ( IconLatLng ) {
+			myIconLat = IconLatLng [ ZERO ];
+			myIconLng = IconLatLng [ ONE ];
 		}
-	);
+
+		/**
+		the html added to the icon popup
+		@type {string}
+		*/
+
+		get popupContent ( ) { return myPopupContent; }
+		set popupContent ( PopupContent ) { myPopupContent = PopupContent; }
+
+		/**
+		the html added to the icon tooltip
+		@type {string}
+		*/
+
+		get tooltipContent ( ) { return myTooltipContent; }
+		set tooltipContent ( TooltipContent ) { myTooltipContent = TooltipContent; }
+
+		/**
+		the phone number dsplayed in the Note
+		@type {string}
+		*/
+
+		get phone ( ) { return myPhone; }
+		set phone ( Phone ) { myPhone = Phone; }
+
+		/**
+		the url dsplayed in the Note
+		@type {string}
+		*/
+
+		get url ( ) { return myUrl; }
+		set url ( Url ) { myUrl = Url; }
+
+		/**
+		the address dsplayed in the Note
+		@type {string}
+		*/
+
+		get address ( ) { return myAddress; }
+		set address ( Address ) { myAddress = Address; }
+
+		/**
+		the latitude of the Note
+		@type {number}
+		*/
+
+		get lat ( ) { return myLat; }
+		set lat ( Lat ) { myLat = Lat; }
+
+		/**
+		the longitude of the Note
+		@type {number}
+		*/
+
+		get lng ( ) { return myLng; }
+		set lng ( Lng ) { myLng = Lng; }
+
+		/**
+		the latitude and longitude of the Note
+		@type {number[]}
+		*/
+
+		get latLng ( ) { return [ myLat, myLng ]; }
+		set latLng ( LatLng ) {
+			myLat = LatLng [ ZERO ];
+			myLng = LatLng [ ONE ];
+		}
+
+		/**
+		the distance between the beginning of the Route and the Note
+		@default DISTANCE.invalid
+		@type {number}
+		*/
+
+		get distance ( ) { return myDistance; }
+		set distance ( Distance ) { myDistance = Distance; }
+
+		/**
+		the distance between the beginning of the Travel and the Note
+		@default DISTANCE.defaultValue
+		@type {number}
+		*/
+
+		get chainedDistance ( ) { return myChainedDistance; }
+		set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; }
+
+		/**
+		the objId of the Note. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
+
+		get objId ( ) { return myObjId; }
+
+		/**
+		the ObjType of the Note.
+		@type {ObjType}
+		@readonly
+		*/
+
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the Note properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				iconHeight : myIconHeight,
+				iconWidth : myIconWidth,
+				iconContent : myIconContent,
+				popupContent : myPopupContent,
+				tooltipContent : myTooltipContent,
+				phone : myPhone,
+				url : myUrl,
+				address : myAddress,
+				iconLat : parseFloat ( myIconLat.toFixed ( LAT_LNG.fixed ) ),
+				iconLng : parseFloat ( myIconLng.toFixed ( LAT_LNG.fixed ) ),
+				lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
+				lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
+				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+				chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
+				objId : myObjId,
+				objType : ourObjType.object
+			};
+		}
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myIconHeight = otherthing.iconHeight || DEFAULT_ICON_SIZE;
+			myIconWidth = otherthing.iconWidth || DEFAULT_ICON_SIZE;
+			myIconContent = otherthing.iconContent || '';
+			myPopupContent = otherthing.popupContent || '';
+			myTooltipContent = otherthing.tooltipContent || '';
+			myPhone = otherthing.phone || '';
+			myUrl = otherthing.url || '';
+			myAddress = otherthing.address || '';
+			myIconLat = otherthing.iconLat || LAT_LNG.defaultValue;
+			myIconLng = otherthing.iconLng || LAT_LNG.defaultValue;
+			myLat = otherthing.lat || LAT_LNG.defaultValue;
+			myLng = otherthing.lng || LAT_LNG.defaultValue;
+			myDistance = otherthing.distance || DISTANCE.invalid;
+			myChainedDistance = otherthing.chainedDistance;
+			myObjId = newObjId ( );
+		}
+	}
+
+	return Object.seal ( new Note );
 }
 
-export { newNote };
+export {
+
+	/**
+	@----------------------------------------------------------------------------------------------------------------------
+
+	@function newNote
+	@desc Constructor for a Note object
+	@return {Note} an instance of a Note object
+	@global
+
+	@----------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newNote
+};
 
 /*
 --- End of Note.js file -----------------------------------------------------------------------------------------------

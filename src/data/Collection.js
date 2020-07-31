@@ -55,7 +55,6 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 @desc constructor of Collection objects
 @param {constructor} objectConstructor the constructor of objects to be stored in the Collection
 @return {Collection} an instance of a Collection object
-@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */

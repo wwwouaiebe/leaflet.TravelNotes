@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- ObjType.js file ---------------------------------------------------------------------------------------------------
-This file contains:
-	- the newObjType function
 Changes:
 	- v1.0.0:
 		- created
@@ -23,20 +22,39 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191122
+Doc reviewed 20200731
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file ObjType.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module ObjType
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 import { theCurrentVersion } from '../data/Version.js';
 
-/*
---- newObjType function -------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function newObjType
+@desc Constructor for a ObjType object
+@param {string} objTypeName The name of the ObjType
+@return {ObjType} an instance of a ObjType object
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 function newObjType ( objTypeName ) {
@@ -45,61 +63,85 @@ function newObjType ( objTypeName ) {
 
 	const myVersion = theCurrentVersion;
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class ObjType
+	@classdesc This class represent a ObjType
+	@see {@link module:ObjType~newObjType} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			name : myName,
-			version : myVersion
-		};
+	class ObjType {
+
+		/**
+		the name of the ObjType
+		@type {string}
+		*/
+
+		get name ( ) { return myName; }
+
+		/**
+		the version of the ObjType
+		@type {string}
+		*/
+
+		get version ( ) { return myVersion; }
+
+		/**
+		An object literal with the ObjType properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				name : myName,
+				version : myVersion
+			};
+		}
+
+		/**
+		Verify that the ObjType is valid
+		@throws when the ObjType is invalid
+		*/
+
+		validate ( something ) {
+			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
+				throw new Error ( 'No name for ' + myName );
+			}
+			if ( myName !== something.name ) {
+				throw new Error ( 'Invalid name for ' + myName );
+			}
+			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
+				throw new Error ( 'No version for ' + myName );
+			}
+		}
 	}
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	return Object.seal ( new ObjType );
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myValidate ( something ) {
-
-		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
-			throw new Error ( 'No name for ' + myName );
-		}
-		if ( myName !== something.name ) {
-			throw new Error ( 'Invalid name for ' + myName );
-		}
-		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
-			throw new Error ( 'No version for ' + myName );
-		}
-	}
-
-	/*
-	--- objType object ------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-
-			get name ( ) { return myName; },
-
-			get version ( ) { return myVersion; },
-
-			get object ( ) { return myGetObject ( ); },
-
-			validate : something => myValidate ( something )
-
-		}
-	);
 }
 
-export { newObjType };
+export {
+
+	/**
+	@------------------------------------------------------------------------------------------------------------------
+
+	@function newObjType
+	@desc Constructor for a ObjType object
+	@param {string} objTypeName The name of the ObjType
+	@return {ObjType} an instance of a ObjType object
+	@global
+
+	@------------------------------------------------------------------------------------------------------------------
+	*/
+
+	newObjType
+};
 
 /*
---- End of ObjType.js file ----------------------------------------------------------------------------------------------
+--- End of ObjType.js file --------------------------------------------------------------------------------------------
 */
