@@ -80,6 +80,8 @@ function myNewCollection ( objectConstructor ) {
 		return tmpObject.objType.name;
 	}
 
+	/* ---------------------------------------------------------------------------------------------------------------*/
+
 	const myObjName = mySetObjName ( );
 
 	/**
@@ -351,23 +353,23 @@ function myNewCollection ( objectConstructor ) {
 		@type {Array}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			let array = [ ];
 			let iterator = myIterator ( );
 			while ( ! iterator.done ) {
-				array.push ( iterator.value.object );
+				array.push ( iterator.value.jsonObject );
 			}
 
 			return array;
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			myArray.length = ZERO;
 			let newObject = null;
 
 			something.forEach (
 				arrayObject => {
 					newObject = myObjectConstructor ( );
-					newObject.object = arrayObject;
+					newObject.jsonObject = arrayObject;
 					myAdd ( newObject );
 				}
 			);

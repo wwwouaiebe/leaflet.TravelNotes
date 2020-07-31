@@ -80,7 +80,7 @@ function newFileCompactor ( ) {
 	*/
 
 	function myCompress ( ) {
-		let compressedTravel = theTravelNotesData.travel.object;
+		let compressedTravel = theTravelNotesData.travel.jsonObject;
 		compressedTravel.routes.forEach ( myCompressRoute );
 		myCompressRoute ( compressedTravel.editedRoute );
 
@@ -149,13 +149,13 @@ function newFileCompactor ( ) {
 
 	function myDecompress ( compressedTravel ) {
 
-		theTravelNotesData.travel.object = myDecompressTravel ( compressedTravel );
+		theTravelNotesData.travel.jsonObject = myDecompressTravel ( compressedTravel );
 
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
 
 		theTravelNotesData.travel.routes.forEach (
 			route => {
-				if ( ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
+				if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
 					theTravelNotesData.editedRouteObjId = route.objId;
 				}
 			}
@@ -173,7 +173,7 @@ function newFileCompactor ( ) {
 	function myDecompressMerge ( compressedTravel ) {
 
 		let travel = newTravel ( );
-		travel.object = myDecompressTravel ( compressedTravel );
+		travel.jsonObject = myDecompressTravel ( compressedTravel );
 
 		// routes are added with their notes
 		let routesIterator = travel.routes.iterator;

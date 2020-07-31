@@ -52,14 +52,6 @@ import { newNote } from '../data/Note.js';
 
 const ourObjType = newObjType ( 'Travel' );
 
-/*
---- newTravel function --------------------------------------------------------------------------------------------
-
-Patterns : Closure
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
@@ -253,28 +245,28 @@ function myNewTravel ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
-				editedRoute : myEditedRoute.object,
+				editedRoute : myEditedRoute.jsonObject,
 				layerName : myLayerName,
 				name : myName,
-				routes : myRoutes.object,
-				notes : myNotes.object,
+				routes : myRoutes.jsonObject,
+				notes : myNotes.jsonObject,
 				userData : myUserData,
 				readOnly : myReadOnly,
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
-			myEditedRoute.object = otherthing.editedRoute;
+			myEditedRoute.jsonObject = otherthing.editedRoute;
 			myLayerName = something.layerName || 'OSM - Color';
 			myName = otherthing.name || '';
 			myUserData = otherthing.userData || {};
 			myReadOnly = otherthing.readOnly || false;
-			myRoutes.object = otherthing.routes || [];
-			myNotes.object = otherthing.notes || [];
+			myRoutes.jsonObject = otherthing.routes || [];
+			myNotes.jsonObject = otherthing.notes || [];
 			myObjId = newObjId ( );
 		}
 	}

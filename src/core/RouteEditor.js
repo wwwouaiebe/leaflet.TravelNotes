@@ -416,7 +416,7 @@ function newRouteEditor ( ) {
 
 		// !!! order is important!!!
 		let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-		editedRoute.edited = ROUTE_EDITION_STATUS.notEdited;
+		editedRoute.editionStatus = ROUTE_EDITION_STATUS.notEdited;
 
 		theProfileWindowsManager.updateProfile (
 			theTravelNotesData.travel.editedRoute.objId,
@@ -453,7 +453,7 @@ function newRouteEditor ( ) {
 
 		// the edited route is cloned
 		let clonedRoute = newRoute ( );
-		clonedRoute.object = theTravelNotesData.travel.editedRoute.object;
+		clonedRoute.jsonObject = theTravelNotesData.travel.editedRoute.jsonObject;
 
 		// and the initial route replaced with the clone
 		theTravelNotesData.travel.routes.replace ( theTravelNotesData.editedRouteObjId, clonedRoute );

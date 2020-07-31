@@ -92,7 +92,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myRenameWayPoint ( wayPointData, wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		wayPoint.name = wayPointData.name;
 		wayPoint.address = wayPointData.address;
@@ -140,7 +140,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myAddWayPoint ( latLng ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
 		wayPoint.latLng = latLng;
 		myRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
@@ -172,7 +172,7 @@ function newWayPointEditor ( ) {
 			theTravelNotesData.travel.editedRoute,
 			initialLatLng
 		).distance;
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
 		wayPoint.latLng = finalLatLng;
 		myRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
@@ -210,7 +210,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myReverseWayPoints ( ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
@@ -245,7 +245,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myRemoveWayPoint ( wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		myEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 		theRouteEditor.startRouting ( );
@@ -263,7 +263,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function mySetStartPoint ( latLng ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		if ( LAT_LNG.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
@@ -296,7 +296,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function mySetEndPoint ( latLng ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		if ( LAT_LNG.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
 			myEventDispatcher.dispatch (
 				'removeobject',
@@ -329,7 +329,7 @@ function newWayPointEditor ( ) {
 	*/
 
 	function myWayPointDragEnd ( wayPointObjId ) {
-		theTravelNotesData.travel.editedRoute.edited = ROUTE_EDITION_STATUS.editedChanged;
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		if ( theConfig.wayPoint.reverseGeocoding ) {
 			myRenameWayPointWithGeocoder (
 				theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId

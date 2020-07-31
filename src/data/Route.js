@@ -85,7 +85,7 @@ function myNewRoute ( ) {
 	let myChainedDistance = DISTANCE.defaultValue;
 	let myDistance = DISTANCE.defaultValue;
 	let myDuration = DISTANCE.defaultValue;
-	let myEdited = ROUTE_EDITION_STATUS.notEdited;
+	let myEditionStatus = ROUTE_EDITION_STATUS.notEdited;
 	let myHidden = false;
 	let myObjId = newObjId ( );
 
@@ -127,6 +127,7 @@ function myNewRoute ( ) {
 			case '1.9.0' :
 			case '1.10.0' :
 			case '1.11.0' :
+				something.editionStatus = something.edited;
 				something.objType.version = '1.12.0';
 				break;
 			default :
@@ -145,7 +146,7 @@ function myNewRoute ( ) {
 			'chain',
 			'distance',
 			'duration',
-			'edited',
+			'editionStatus',
 			'hidden',
 			'chainedDistance',
 			'objId'
@@ -286,8 +287,8 @@ function myNewRoute ( ) {
 		@type {!number}
 		*/
 
-		get edited ( ) { return myEdited; }
-		set edited ( editionStatus ) {
+		get editionStatus ( ) { return myEditionStatus; }
+		set editionStatus ( editionStatus ) {
 			if (
 				'number' !== typeof editionStatus
 				||
@@ -298,7 +299,7 @@ function myNewRoute ( ) {
 				throw new Error ( 'Invalid value for Route.edited : ' + editionStatus );
 			}
 			else {
-				myEdited = editionStatus;
+				myEditionStatus = editionStatus;
 			}
 		}
 
@@ -332,38 +333,38 @@ function myNewRoute ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				name : myName,
-				wayPoints : myWayPoints.object,
-				notes : myNotes.object,
-				itinerary : myItinerary.object,
+				wayPoints : myWayPoints.jsonObject,
+				notes : myNotes.jsonObject,
+				itinerary : myItinerary.jsonObject,
 				width : myWidth,
 				color : myColor,
 				dashArray : myDashArray,
 				chain : myChain,
 				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
 				duration : myDuration,
-				edited : myEdited,
+				editionStatus : myEditionStatus,
 				hidden : myHidden,
 				chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myName = otherthing.name || '';
-			myWayPoints.object = otherthing.wayPoints || [];
-			myNotes.object = otherthing.notes || [];
-			myItinerary.object = otherthing.itinerary || newItinerary ( ).object;
+			myWayPoints.jsonObject = otherthing.wayPoints || [];
+			myNotes.jsonObject = otherthing.notes || [];
+			myItinerary.jsonObject = otherthing.itinerary || newItinerary ( ).jsonObject;
 			myWidth = otherthing.width || theConfig.route.width;
 			myColor = otherthing.color || '#000000';
 			myDashArray = otherthing.dashArray || ZERO;
 			myChain = otherthing.chain || false;
 			myDistance = otherthing.distance;
 			myDuration = otherthing.duration;
-			myEdited = otherthing.edited || ROUTE_EDITION_STATUS.notEdited;
+			myEditionStatus = otherthing.editionStatus || ROUTE_EDITION_STATUS.notEdited;
 			myHidden = otherthing.hidden || false;
 			myChainedDistance = otherthing.chainedDistance;
 			myObjId = newObjId ( );

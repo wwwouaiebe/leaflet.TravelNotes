@@ -89,7 +89,7 @@ function myNewObjType ( objTypeName ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				name : myName,
 				version : myVersion

@@ -199,17 +199,17 @@ function myNewItineraryPoint ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
 				lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
 				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
 				elev : parseFloat ( myElev.toFixed ( ELEV.fixed ) ),
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myLat = otherthing.lat || LAT_LNG.defaultValue;
 			myLng = otherthing.lng || LAT_LNG.defaultValue;

@@ -124,7 +124,7 @@ function onContextMenuWayPointMarker ( contextMenuEvent ) {
 
 function onMouseOverEditedRoute ( mapEvent ) {
 	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
-	if ( ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
+	if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
 		ourWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
 		if ( ourWayPointMarker ) {
 			ourWayPointMarker.setLatLng ( mapEvent.latlng );
@@ -493,7 +493,7 @@ function newMapEditor ( ) {
 		}
 
 		// waypoints are added
-		if ( ! theTravelNotesData.travel.readOnly && ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
+		if ( ! theTravelNotesData.travel.readOnly && ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
 			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 			while ( ! wayPointsIterator.done ) {
 				myAddWayPoint (

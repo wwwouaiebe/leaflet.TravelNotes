@@ -245,7 +245,7 @@ function newViewerMapEditor ( ) {
 		myAddTo ( route.objId, polyline );
 
 		// tooltip and popup are created
-		if ( ROUTE_EDITION_STATUS.notEdited === route.edited ) {
+		if ( ROUTE_EDITION_STATUS.notEdited === route.editionStatus ) {
 			polyline.bindTooltip (
 				route.computedName,
 				{ sticky : true, direction : 'right' }

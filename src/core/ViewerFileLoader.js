@@ -62,7 +62,7 @@ function newViewerFileLoader ( ) {
 		// routes are added with their notes
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
-			if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.edited ) {
+			if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {
 				myEventDispatcher.dispatch (
 					'routeupdated',
 					{

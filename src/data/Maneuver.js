@@ -192,7 +192,7 @@ function myNewManeuver ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				iconName : myIconName,
 				instruction : myInstruction,
@@ -200,10 +200,10 @@ function myNewManeuver ( ) {
 				duration : myDuration,
 				itineraryPointObjId : myItineraryPointObjId,
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myIconName = otherthing.iconName || '';
 			myInstruction = otherthing.instruction || '';

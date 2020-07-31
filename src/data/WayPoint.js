@@ -210,17 +210,17 @@ function myNewWayPoint ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				name : myName,
 				address : myAddress,
 				lat : parseFloat ( myLat.toFixed ( LAT_LNG.fixed ) ),
 				lng : parseFloat ( myLng.toFixed ( LAT_LNG.fixed ) ),
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myAddress = otherthing.address || '';
 			myName = otherthing.name || '';

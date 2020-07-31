@@ -224,26 +224,26 @@ function myNewItinerary ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				hasProfile : myHasProfile,
 				ascent : myAscent,
 				descent : myDescent,
-				itineraryPoints : myItineraryPoints.object,
-				maneuvers : myManeuvers.object,
+				itineraryPoints : myItineraryPoints.jsonObject,
+				maneuvers : myManeuvers.jsonObject,
 				provider : myProvider,
 				transitMode : myTransitMode,
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myHasProfile = otherthing.hasProfile || false;
 			myAscent = otherthing.ascent || ZERO;
 			myDescent = otherthing.descent || ZERO;
-			myItineraryPoints.object = otherthing.itineraryPoints || [];
-			myManeuvers.object = otherthing.maneuvers || [];
+			myItineraryPoints.jsonObject = otherthing.itineraryPoints || [];
+			myManeuvers.jsonObject = otherthing.maneuvers || [];
 			myProvider = otherthing.provider || '';
 			myTransitMode = otherthing.transitMode || '';
 			myObjId = newObjId ( );

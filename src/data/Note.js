@@ -332,7 +332,7 @@ function myNewNote ( ) {
 		@type {Object}
 		*/
 
-		get object ( ) {
+		get jsonObject ( ) {
 			return {
 				iconHeight : myIconHeight,
 				iconWidth : myIconWidth,
@@ -349,10 +349,10 @@ function myNewNote ( ) {
 				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
 				chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
 				objId : myObjId,
-				objType : ourObjType.object
+				objType : ourObjType.jsonObject
 			};
 		}
-		set object ( something ) {
+		set jsonObject ( something ) {
 			let otherthing = myValidate ( something );
 			myIconHeight = otherthing.iconHeight || DEFAULT_ICON_SIZE;
 			myIconWidth = otherthing.iconWidth || DEFAULT_ICON_SIZE;

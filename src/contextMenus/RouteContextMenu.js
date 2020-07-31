@@ -107,7 +107,7 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
 					) ?
 						null
 						:
@@ -121,7 +121,7 @@ function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
 						&&
-						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
 					)
 						?
 						null
