@@ -177,7 +177,7 @@ function myNewTravel ( ) {
 
 		/**
 		a Collection of Routes
-		@type {Collection.Route}
+		@type {Collection.<Route>}
 		@readonly
 		*/
 
@@ -185,7 +185,7 @@ function myNewTravel ( ) {
 
 		/**
 		a Collection of Notes
-		@type {Collection.Note}
+		@type {Collection.<Note>}
 		@readonly
 		*/
 

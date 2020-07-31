@@ -56,7 +56,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
@@ -76,7 +76,6 @@ Patterns : Closure and Singleton
 function newTravelEditor ( ) {
 
 	let myUtilities = newUtilities ( );
-	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
 	/*
@@ -106,7 +105,7 @@ function newTravelEditor ( ) {
 		}
 
 		// We verify that the provider  for this route is available
-		let initialRoute = myDataSearchEngine.getRoute ( routeObjId );
+		let initialRoute = theDataSearchEngine.getRoute ( routeObjId );
 		let providerName = initialRoute.itinerary.provider;
 		let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
 		if (
@@ -251,7 +250,7 @@ function newTravelEditor ( ) {
 	*/
 
 	function myRenameRoute ( routeObjId, routeName ) {
-		myDataSearchEngine.getRoute ( routeObjId ).name = routeName;
+		theDataSearchEngine.getRoute ( routeObjId ).name = routeName;
 		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
 			theTravelNotesData.travel.editedRoute.name = routeName;
 		}

@@ -32,7 +32,7 @@ Tests ...
 */
 
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 import { INVALID_OBJ_ID } from '../util/Constants.js';
@@ -48,7 +48,6 @@ This function zoom to a given note
 function newZoomer ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
-	let myDataSearchEngine = newDataSearchEngine ( );
 
 	let myGeometry = [];
 
@@ -100,7 +99,7 @@ function newZoomer ( ) {
 		myEventDispatcher.dispatch (
 			'zoomto',
 			{
-				latLng : myDataSearchEngine.getNoteAndRoute ( noteObjId ).note.latLng
+				latLng : theDataSearchEngine.getNoteAndRoute ( noteObjId ).note.latLng
 			}
 		);
 	}
@@ -114,7 +113,7 @@ function newZoomer ( ) {
 	function myZoomToRoute ( routeObjId ) {
 		myGeometry = [];
 
-		myPushRouteGeometry ( myDataSearchEngine.getRoute ( routeObjId ) );
+		myPushRouteGeometry ( theDataSearchEngine.getRoute ( routeObjId ) );
 
 		myEventDispatcher.dispatch (
 			'zoomto',

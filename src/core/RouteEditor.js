@@ -57,7 +57,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
@@ -83,7 +83,6 @@ function newRouteEditor ( ) {
 
 	let myMustZoomToRoute = false;
 	let myRequestStarted = false;
-	let myDataSearchEngine = newDataSearchEngine ( );
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -146,7 +145,7 @@ function newRouteEditor ( ) {
 		let tab3 = '\n\t\t\t';
 		let timeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		if ( ! route ) {
 			return;
 		}
@@ -415,7 +414,7 @@ function newRouteEditor ( ) {
 	function myCancelEdition ( ) {
 
 		// !!! order is important!!!
-		let editedRoute = myDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
+		let editedRoute = theDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
 		editedRoute.editionStatus = ROUTE_EDITION_STATUS.notEdited;
 
 		theProfileWindowsManager.updateProfile (
@@ -473,7 +472,7 @@ function newRouteEditor ( ) {
 	*/
 
 	function myRouteProperties ( routeObjId ) {
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		let routePropertiesDialog = newRoutePropertiesDialog ( route );
 
 		routePropertiesDialog.show ( ).then (
@@ -513,7 +512,7 @@ function newRouteEditor ( ) {
 				addedRouteObjId : INVALID_OBJ_ID
 			}
 		);
-		myDataSearchEngine.getRoute ( routeObjId ).hidden = true;
+		theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
@@ -537,7 +536,7 @@ function newRouteEditor ( ) {
 				addedRouteObjId : routeObjId
 			}
 		);
-		myDataSearchEngine.getRoute ( routeObjId ).hidden = false;
+		theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 

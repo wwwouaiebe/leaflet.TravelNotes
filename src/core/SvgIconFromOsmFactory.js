@@ -34,7 +34,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -840,7 +840,7 @@ function newSvgIconFromOsmFactory ( ) {
 	function myGetPromiseIconAndAdress ( iconLatLng, routeObjId ) {
 
 		mySvgLatLngDistance.latLng = iconLatLng;
-		myRoute = newDataSearchEngine ( ).getRoute ( routeObjId );
+		myRoute = theDataSearchEngine.getRoute ( routeObjId );
 
 		return new Promise ( myGetIconAndAdress );
 	}

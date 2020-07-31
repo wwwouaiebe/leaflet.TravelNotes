@@ -36,7 +36,7 @@ Tests ...
 /* global L  */
 
 import { theConfig } from '../data/Config.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -54,7 +54,7 @@ This function updates the route tooltip with the distance
 */
 
 function onMouseOverOrMoveOnRoute ( mapEvent ) {
-	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
+	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
 	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
 		.distance;
 	distance += route.chainedDistance;
@@ -81,7 +81,6 @@ function newViewerMapEditor ( ) {
 	const DEFAULT_MAX_ZOOM = 18;
 	const DEFAULT_MIN_ZOOM = 0;
 
-	let myDataSearchEngine = newDataSearchEngine ( );
 	let myCurrentLayer = null;
 	let myGeolocationCircle = null;
 
@@ -107,7 +106,7 @@ function newViewerMapEditor ( ) {
 
 	function myAddNote ( noteObjId ) {
 
-		let note = myDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
+		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
 		let readOnly = theTravelNotesData.travel.readOnly;
 
 		// first a marker is created at the note position. This marker is empty and transparent, so
@@ -159,14 +158,14 @@ function newViewerMapEditor ( ) {
 		// a popup is binded to the the marker...
 		marker.bindPopup (
 			layer => newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML (
-				myDataSearchEngine.getNoteAndRoute ( layer.objId )
+				theDataSearchEngine.getNoteAndRoute ( layer.objId )
 			)
 		);
 
 		// ... and also a tooltip
 		if ( ZERO !== note.tooltipContent.length ) {
 			marker.bindTooltip (
-				layer => myDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
+				layer => theDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
 			);
 			marker.getTooltip ( ).options.offset [ ZERO ] = note.iconWidth / TWO;
 		}
@@ -224,7 +223,7 @@ function newViewerMapEditor ( ) {
 
 	function myAddRoute ( routeObjId ) {
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 
 		// an array of points is created
 		let latLng = [];
@@ -256,7 +255,7 @@ function newViewerMapEditor ( ) {
 
 		polyline.bindPopup (
 			layer => {
-				let popupRoute = myDataSearchEngine.getRoute ( layer.objId );
+				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
 				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( popupRoute );
 			}
 		);

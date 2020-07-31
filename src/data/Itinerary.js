@@ -172,7 +172,7 @@ function myNewItinerary ( ) {
 
 		/**
 		a Collection of ItineraryPoints
-		@type {Collection.ItineraryPoint}
+		@type {Collection.<ItineraryPoint>}
 		@readonly
 		*/
 
@@ -180,7 +180,7 @@ function myNewItinerary ( ) {
 
 		/**
 		a Collection of Maneuvers
-		@type {Collection.Maneuver}
+		@type {Collection.<Maneuver>}
 		@readonly
 		*/
 

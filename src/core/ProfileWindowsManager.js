@@ -35,7 +35,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { ZERO } from '../util/Constants.js';
 
 /*
@@ -125,7 +125,7 @@ function newProfileWindowsManager ( ) {
 		if ( ! profileWindow ) {
 			profileWindow = newProfileWindow ( );
 		}
-		let route = newDataSearchEngine ( ).getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		profileWindow.update ( route );
 		myProfileWindows.set ( routeObjId, profileWindow );
 	}

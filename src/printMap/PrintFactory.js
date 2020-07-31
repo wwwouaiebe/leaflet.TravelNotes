@@ -38,7 +38,7 @@ Tests ...
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -692,7 +692,7 @@ function newPrintFactory ( ) {
 	*/
 
 	function myPrint ( printData, routeObjId ) {
-		myRoute = newDataSearchEngine ( ).getRoute ( routeObjId );
+		myRoute = theDataSearchEngine.getRoute ( routeObjId );
 		if ( ! myRoute ) {
 			return;
 		}

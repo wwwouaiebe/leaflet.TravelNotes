@@ -53,7 +53,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
@@ -123,7 +123,7 @@ function onContextMenuWayPointMarker ( contextMenuEvent ) {
 */
 
 function onMouseOverEditedRoute ( mapEvent ) {
-	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
+	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
 	if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
 		ourWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
 		if ( ourWayPointMarker ) {
@@ -180,7 +180,6 @@ function newMapEditor ( ) {
 
 	const MARKER_BOUNDS_PRECISION = 0.01;
 
-	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
 
@@ -223,7 +222,7 @@ function newMapEditor ( ) {
 
 	function myRemoveRoute ( routeObjId ) {
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		myRemoveObject ( route.objId );
 
 		let notesIterator = route.notes.iterator;
@@ -252,7 +251,7 @@ function newMapEditor ( ) {
 			dragEndEvent => {
 
 				// the TravelNotes note and route are searched...
-				let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
+				let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
 				let draggedNote = noteAndRoute.note;
 				let route = noteAndRoute.route;
 
@@ -302,7 +301,7 @@ function newMapEditor ( ) {
 			noteObjects.bullet,
 			'drag',
 			dragEvent => {
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
+				let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
 				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
 				draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
 					.setLatLngs ( [ [ dragEvent.latlng.lat, dragEvent.latlng.lng ], draggedNote.iconLatLng ] );
@@ -323,7 +322,7 @@ function newMapEditor ( ) {
 			dragEndEvent => {
 
 				// The TravelNotes note linked to the marker is searched...
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
+				let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
 
 				// ... new coordinates are saved in the TravelNotes note...
 				draggedNote.iconLatLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
@@ -347,7 +346,7 @@ function newMapEditor ( ) {
 			dragEvent => {
 
 				// The TravelNotes note linked to the marker is searched...
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
+				let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
 
 				// ... then the layerGroup is searched...
 				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
@@ -419,7 +418,7 @@ function newMapEditor ( ) {
 		);
 
 		marker.bindTooltip (
-			tooltipWayPoint => myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).fullName
+			tooltipWayPoint => theDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).fullName
 		);
 		marker.getTooltip ( ).options.offset = [
 			WAY_POINT_ICON_SIZE / TWO,
@@ -626,7 +625,7 @@ function newMapEditor ( ) {
 	*/
 
 	function myUpdateRouteProperties ( routeObjId ) {
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		let polyline = theTravelNotesData.mapObjects.get ( route.objId );
 		polyline.setStyle (
 			{

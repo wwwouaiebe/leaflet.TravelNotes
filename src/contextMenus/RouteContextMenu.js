@@ -63,7 +63,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 
 import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 
@@ -85,7 +85,7 @@ When null, the body of the html page is selected
 function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
-	let myRoute = newDataSearchEngine ( ).getRoute ( myRouteObjId );
+	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
 	let myZoomer = newZoomer ( );
 
 	/**

@@ -48,7 +48,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
@@ -69,7 +69,6 @@ Patterns : Closure and Singleton
 
 function newNoteEditor ( ) {
 
-	let myDataSearchEngine = newDataSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
 	let myWaitUI = null;
@@ -179,7 +178,7 @@ function newNoteEditor ( ) {
 
 	function myAddAllManeuverNotes ( routeObjId ) {
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
 		myManeuverLength = ZERO;
 		while ( ! maneuverIterator.done ) {
@@ -237,7 +236,7 @@ function newNoteEditor ( ) {
 	*/
 
 	function myAttachNoteToRoute ( noteObjId ) {
-		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
+		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
 		let distance = Number.MAX_VALUE;
 		let selectedRoute = null;
 		let newNoteLatLng = null;
@@ -301,7 +300,7 @@ function newNoteEditor ( ) {
 	function myDetachNoteFromRoute ( noteObjId ) {
 
 		// the note and the route are searched
-		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
+		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
 		noteAndRoute.route.notes.remove ( noteObjId );
 		noteAndRoute.note.distance = DISTANCE.invalid;
 		noteAndRoute.note.chainedDistance = DISTANCE.defaultValue;
@@ -328,7 +327,7 @@ function newNoteEditor ( ) {
 							theTravelNotesData.travel.notes.add ( note );
 						}
 						else {
-							let route = myDataSearchEngine.getRoute ( routeObjId );
+							let route = theDataSearchEngine.getRoute ( routeObjId );
 							route.notes.add ( note );
 							note.chainedDistance = route.chainedDistance;
 							route.notes.sort (
@@ -389,7 +388,7 @@ function newNoteEditor ( ) {
 
 	function myNewRouteNote ( routeObjId, contextMenuEvent ) {
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
 
 		// the nearest point and distance on the route is searched
 		let latLngDistance = myGeometry.getClosestLatLngDistance (
@@ -503,7 +502,7 @@ function newNoteEditor ( ) {
 	*/
 
 	function myEditNote ( noteObjId ) {
-		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
+		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
 		let routeObjId = null === noteAndRoute.route ? INVALID_OBJ_ID : noteAndRoute.route.objId;
 
 		myNoteDialog ( noteAndRoute.note, routeObjId, false );
@@ -523,7 +522,7 @@ function newNoteEditor ( ) {
 	function myRemoveNote ( noteObjId ) {
 
 		// the note and the route are searched
-		let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( noteObjId );
+		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
 		if ( noteAndRoute.route ) {
 
 			// it's a route note

@@ -175,7 +175,7 @@ function myNewRoute ( ) {
 
 		/**
 		a Collection of WayPoints
-		@type {Collection.WayPoint}
+		@type {Collection.<WayPoint>}
 		@readonly
 		*/
 
@@ -190,7 +190,7 @@ function myNewRoute ( ) {
 
 		/**
 		a Collection of Notes
-		@type {Collection.Note}
+		@type {Collection.<Note>}
 		@readonly
 		*/
 
