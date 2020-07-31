@@ -38,14 +38,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module WayPoint
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -56,14 +48,15 @@ const ourObjType = newObjType ( 'WayPoint' );
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newWayPoint
+@function myNewWayPoint
 @desc Constructor for a WayPoint object
 @return {WayPoint} an instance of a WayPoint object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newWayPoint ( ) {
+function myNewWayPoint ( ) {
 
 	let myName = '';
 	let myAddress = '';
@@ -128,7 +121,7 @@ function newWayPoint ( ) {
 
 	@class WayPoint
 	@classdesc This class represent a way point
-	@see {@link module:WayPoint~newWayPoint} for constructor
+	@see {@link newWayPoint} for constructor
 	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
@@ -253,7 +246,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newWayPoint
+	myNewWayPoint as newWayPoint
 };
 
 /*

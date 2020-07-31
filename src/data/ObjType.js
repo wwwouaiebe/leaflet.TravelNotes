@@ -36,28 +36,21 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module ObjType
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { theCurrentVersion } from '../data/Version.js';
 
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newObjType
+@function myNewObjType
 @desc Constructor for a ObjType object
 @param {string} objTypeName The name of the ObjType
 @return {ObjType} an instance of a ObjType object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newObjType ( objTypeName ) {
+function myNewObjType ( objTypeName ) {
 
 	const myName = objTypeName;
 
@@ -68,7 +61,7 @@ function newObjType ( objTypeName ) {
 
 	@class ObjType
 	@classdesc This class represent a ObjType
-	@see {@link module:ObjType~newObjType} for constructor
+	@see {@link newObjType} for constructor
 	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
@@ -139,7 +132,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newObjType
+	myNewObjType as newObjType
 };
 
 /*

@@ -38,28 +38,21 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module Collection
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newCollection
+@function myNewCollection
 @desc constructor of Collection objects
 @param {constructor} objectConstructor the constructor of objects to be stored in the Collection
 @return {Collection} an instance of a Collection object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newCollection ( objectConstructor ) {
+function myNewCollection ( objectConstructor ) {
 
 	const SWAP_UP = -1;
 	const SWAP_DOWN = 1;
@@ -171,7 +164,7 @@ function newCollection ( objectConstructor ) {
 
 	@class
 	@classdesc Class used to store objects in an iterable
-	@see {@link module:Collection~newCollection} for constructor
+	@see {@link newCollection} for constructor
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------
@@ -398,7 +391,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newCollection
+	myNewCollection as newCollection
 };
 
 /*

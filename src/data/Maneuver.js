@@ -36,14 +36,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module Maneuver
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
@@ -53,14 +45,15 @@ const ourObjType = newObjType ( 'Maneuver' );
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newManeuver
+@function myNewManeuver
 @desc Constructor for a Maneuver object
 @return {Maneuver} an instance of a Maneuver object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newManeuver ( ) {
+function myNewManeuver ( ) {
 
 	let myObjId = newObjId ( );
 
@@ -129,7 +122,7 @@ function newManeuver ( ) {
 
 	@class Maneuver
 	@classdesc This class represent a maneuver
-	@see {@link module:Maneuver~newManeuver} for constructor
+	@see {@link newManeuver} for constructor
 	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
@@ -236,7 +229,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newManeuver
+	myNewManeuver as newManeuver
 };
 
 /*

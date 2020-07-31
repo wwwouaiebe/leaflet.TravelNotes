@@ -38,14 +38,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module ItineraryPoint
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 import { newObjId } from '../data/ObjId.js';
@@ -57,14 +49,15 @@ const ourObjType = newObjType ( 'ItineraryPoint' );
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newItineraryPoint
+@function myNewItineraryPoint
 @desc Constructor for an ItineraryPoint object
 @return {ItineraryPoint} an instance of a ItineraryPoint object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newItineraryPoint ( ) {
+function myNewItineraryPoint ( ) {
 
 	let myLat = LAT_LNG.defaultValue;
 
@@ -133,7 +126,7 @@ function newItineraryPoint ( ) {
 
 	@class ItineraryPoint
 	@classdesc This class represent an itinerary point
-	@see {@link module:ItineraryPoint~newItineraryPoint} for constructor
+	@see {@link newItineraryPoint} for constructor
 	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
@@ -242,7 +235,7 @@ export {
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newItineraryPoint
+	myNewItineraryPoint as newItineraryPoint
 };
 
 /*

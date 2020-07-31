@@ -36,14 +36,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module Note
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
@@ -53,14 +45,15 @@ const ourObjType = newObjType ( 'Note' );
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newNote
+@function myNewNote
 @desc Constructor for a Note object
 @return {Note} an instance of a Note object
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newNote ( ) {
+function myNewNote ( ) {
 
 	const DEFAULT_ICON_SIZE = 0;
 
@@ -165,7 +158,7 @@ function newNote ( ) {
 
 	@class Note
 	@classdesc This class represent a note
-	@see {@link module:Note~newNote} for constructor
+	@see {@link newNote} for constructor
 	@hideconstructor
 
 	@------------------------------------------------------------------------------------------------------------------
@@ -395,7 +388,7 @@ export {
 	@----------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newNote
+	myNewNote as newNote
 };
 
 /*

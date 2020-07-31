@@ -38,14 +38,6 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-/**
-@----------------------------------------------------------------------------------------------------------------------
-
-@module TravelNotesData
-
-@----------------------------------------------------------------------------------------------------------------------
-*/
-
 import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
@@ -53,7 +45,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newTravelNotesData
+@function myNewTravelNotesData
 @desc constructor of theTravelNotesData object
 @return {Object} an instance of TravelNotesData object
 @private
@@ -61,7 +53,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravelNotesData ( ) {
+function myNewTravelNotesData ( ) {
 
 	let myTravelNotesData = {
 		map : null,
@@ -174,7 +166,7 @@ function newTravelNotesData ( ) {
 	return Object.seal ( new TravelNotesData );
 }
 
-const theTravelNotesData = newTravelNotesData ( );
+const theTravelNotesData = myNewTravelNotesData ( );
 
 export {
 

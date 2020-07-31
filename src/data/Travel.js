@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -12,10 +13,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- Travel.js file ----------------------------------------------------------------------------------------------------
-This file contains:
-	- the newTravel function
 Changes:
 	- v1.0.0:
 		- created
@@ -27,10 +26,20 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
-Doc reviewed 20191122
+Doc reviewed 20200731
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Travel.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
 */
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
@@ -51,28 +60,39 @@ Patterns : Closure
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravel ( ) {
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@function myNewTravel
+@desc Constructor for a Travel object
+@return {Travel} an instance of a Travel object
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+function myNewTravel ( ) {
 
 	let myEditedRoute = newRoute ( );
-
 	let myLayerName = 'OSM - Color';
-
 	let myName = 'TravelNotes';
-
 	let myRoutes = newCollection ( newRoute );
-
 	let myNotes = newCollection ( newNote );
-
 	let myObjId = newObjId ( );
-
 	let myReadOnly = false;
-
 	let myUserData = {};
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myValidate
+	@desc verify that the parameter can be transformed to a Travel and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myValidate ( something ) {
@@ -142,82 +162,140 @@ function newTravel ( ) {
 		return something;
 	}
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class Travel
+	@classdesc This class represent a travel
+	@see {@link newTravel} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			editedRoute : myEditedRoute.object,
-			layerName : myLayerName,
-			name : myName,
-			routes : myRoutes.object,
-			notes : myNotes.object,
-			userData : myUserData,
-			readOnly : myReadOnly,
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
+	class Travel {
 
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
+		/**
+		the route currently edited
+		@type {Route}
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		get editedRoute ( ) { return myEditedRoute; }
+		set editedRoute ( editedRoute ) { myEditedRoute = editedRoute; }
 
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myEditedRoute.object = otherthing.editedRoute;
-		myLayerName = something.layerName || 'OSM - Color';
-		myName = otherthing.name || '';
-		myUserData = otherthing.userData || {};
-		myReadOnly = otherthing.readOnly || false;
-		myRoutes.object = otherthing.routes || [];
-		myNotes.object = otherthing.notes || [];
-		myObjId = newObjId ( );
-	}
+		/**
+		a Collection of Routes
+		@type {Collection.Route}
+		@readonly
+		*/
 
-	/*
-	--- travel object -------------------------------------------------------------------------------------------------
+		get routes ( ) { return myRoutes; }
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		/**
+		a Collection of Notes
+		@type {Collection.Note}
+		@readonly
+		*/
 
-	return Object.seal (
-		{
-			get editedRoute ( ) { return myEditedRoute; },
-			set editedRoute ( editedRoute ) { myEditedRoute = editedRoute; },
+		get notes ( ) { return myNotes; }
 
-			get routes ( ) { return myRoutes; },
+		/**
+		the background map name
+		@type {string}
+		*/
 
-			get notes ( ) { return myNotes; },
+		get layerName ( ) { return myLayerName; }
+		set layerName ( LayerName ) { myLayerName = LayerName; }
 
-			get layerName ( ) { return myLayerName; },
-			set layerName ( LayerName ) { myLayerName = LayerName; },
+		/**
+		the Travel name
+		@type {string}
+		*/
 
-			get name ( ) { return myName; },
-			set name ( Name ) { myName = Name; },
+		get name ( ) { return myName; }
+		set name ( Name ) { myName = Name; }
 
-			get readOnly ( ) { return myReadOnly; },
-			set readOnly ( ReadOnly ) { myReadOnly = ReadOnly; },
+		/**
+		a boolean indicates when the Travel is read only
+		@type {boolean}
+		*/
 
-			get userData ( ) { return myUserData; },
-			set userData ( UserData ) { myUserData = UserData; },
+		get readOnly ( ) { return myReadOnly; }
+		set readOnly ( ReadOnly ) { myReadOnly = ReadOnly; }
 
-			get objId ( ) { return myObjId; },
+		/**
+		Free data that are saved or restored with the Travel. Must only respect the JSON rules
+		@type {object}
+		*/
 
-			get objType ( ) { return ourObjType; },
+		get userData ( ) { return myUserData; }
+		set userData ( UserData ) { myUserData = UserData; }
 
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
+		/**
+		the objId of the Travel. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
+
+		get objId ( ) { return myObjId; }
+
+		/**
+		the ObjType of the Travel.
+		@type {ObjType}
+		@readonly
+		*/
+
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the Travel properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				editedRoute : myEditedRoute.object,
+				layerName : myLayerName,
+				name : myName,
+				routes : myRoutes.object,
+				notes : myNotes.object,
+				userData : myUserData,
+				readOnly : myReadOnly,
+				objId : myObjId,
+				objType : ourObjType.object
+			};
 		}
-	);
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myEditedRoute.object = otherthing.editedRoute;
+			myLayerName = something.layerName || 'OSM - Color';
+			myName = otherthing.name || '';
+			myUserData = otherthing.userData || {};
+			myReadOnly = otherthing.readOnly || false;
+			myRoutes.object = otherthing.routes || [];
+			myNotes.object = otherthing.notes || [];
+			myObjId = newObjId ( );
+		}
+	}
+	return Object.seal ( new Travel );
 }
 
-export { newTravel };
+export {
+
+	/**
+	@----------------------------------------------------------------------------------------------------------------------
+
+	@function newTravel
+	@desc Constructor for a Travel object
+	@return {Travel} an instance of a Travel object
+	@global
+
+	@----------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewTravel as newTravel
+};
 
 /*
 --- End of Travel.js file ---------------------------------------------------------------------------------------------

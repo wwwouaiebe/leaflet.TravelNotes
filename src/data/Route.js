@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -13,9 +14,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- Route.js file -----------------------------------------------------------------------------------------------------
-This file contains:
-	- the newRoute function
 Changes:
 	- v1.0.0:
 		- created
@@ -32,86 +30,76 @@ Changes:
 		- Issue #100 : Fix circular dependancies with Collection
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191122
+Doc reviewed 20200731
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@file Route.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 import { theConfig } from '../data/Config.js';
-
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 import { newNote } from '../data/Note.js';
-
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Route' );
 
-/*
---- newRoute function ---------------------------------------------------------------------------------------------
+/**
+@----------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function myNewRoute
+@desc Constructor for a Route object
+@return {Route} an instance of a Route object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@----------------------------------------------------------------------------------------------------------------------
 */
 
-function newRoute ( ) {
+function myNewRoute ( ) {
 
 	let myName = '';
-
 	let myWayPoints = newCollection ( newWayPoint );
 	myWayPoints.add ( newWayPoint ( ) );
 	myWayPoints.add ( newWayPoint ( ) );
-
 	let myNotes = newCollection ( newNote );
-
 	let myItinerary = newItinerary ( );
-
 	let myWidth = theConfig.route.width;
-
 	let myColor = theConfig.route.color;
-
 	let myDashArray = theConfig.route.dashArray;
-
 	let myChain = false;
-
 	let myChainedDistance = DISTANCE.defaultValue;
-
 	let myDistance = DISTANCE.defaultValue;
-
 	let myDuration = DISTANCE.defaultValue;
-
 	let myEdited = ROUTE_EDITION_STATUS.notEdited;
-
-	function mySetEdited ( edited ) {
-		if (
-			'number' !== typeof edited
-			||
-			ROUTE_EDITION_STATUS.notEdited > edited
-			||
-			ROUTE_EDITION_STATUS.editedChanged < edited
-		) {
-			throw new Error ( 'Invalid value for Route.edited : ' + edited );
-		}
-		else {
-			myEdited = edited;
-		}
-	}
-
 	let myHidden = false;
-
 	let myObjId = newObjId ( );
 
-	/*
-	--- myValidate function -------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myValidate
+	@desc verify that the parameter can be transformed to a Route and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myValidate ( something ) {
@@ -171,126 +159,235 @@ function newRoute ( ) {
 		return something;
 	}
 
-	/*
-	--- myGetObject function ------------------------------------------------------------------------------------------
+	/**
+	@------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class Route
+	@classdesc This class represent a route
+	@see {@link newRoute} for constructor
+	@hideconstructor
+
+	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetObject ( ) {
-		return {
-			name : myName,
-			wayPoints : myWayPoints.object,
-			notes : myNotes.object,
-			itinerary : myItinerary.object,
-			width : myWidth,
-			color : myColor,
-			dashArray : myDashArray,
-			chain : myChain,
-			distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
-			duration : myDuration,
-			edited : myEdited,
-			hidden : myHidden,
-			chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : myObjId,
-			objType : ourObjType.object
-		};
-	}
+	class Route	{
 
-	/*
-	--- mySetObject function ------------------------------------------------------------------------------------------
+		/**
+		a Collection of WayPoints
+		@type {Collection.WayPoint}
+		@readonly
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		get wayPoints ( ) { return myWayPoints; }
 
-	function mySetObject ( something ) {
-		let otherthing = myValidate ( something );
-		myName = otherthing.name || '';
-		myWayPoints.object = otherthing.wayPoints || [];
-		myNotes.object = otherthing.notes || [];
-		myItinerary.object = otherthing.itinerary || newItinerary ( ).object;
-		myWidth = otherthing.width || theConfig.route.width;
-		myColor = otherthing.color || '#000000';
-		myDashArray = otherthing.dashArray || ZERO;
-		myChain = otherthing.chain || false;
-		myDistance = otherthing.distance;
-		myDuration = otherthing.duration;
-		myEdited = otherthing.edited || ROUTE_EDITION_STATUS.notEdited;
-		myHidden = otherthing.hidden || false;
-		myChainedDistance = otherthing.chainedDistance;
-		myObjId = newObjId ( );
-	}
+		/**
+		the Route Itinerary
+		@type {Itinerary}
+		*/
 
-	function myGetComputedName ( ) {
-		let computedName = myName;
-		if ( '' === computedName ) {
-			computedName =
-				( '' === myWayPoints.first.fullName ? '???' : myWayPoints.first.fullName ) +
-				' ⮞ ' +
-				( '' === myWayPoints.last.fullName ? '???' : myWayPoints.last.fullName );
+		get itinerary ( ) { return myItinerary; }
+
+		/**
+		a Collection of Notes
+		@type {Collection.Note}
+		@readonly
+		*/
+
+		get notes ( ) { return myNotes; }
+
+		/**
+		the name of the Route
+		@type {string}
+		*/
+
+		get name ( ) { return myName; }
+		set name ( Name ) { myName = Name; }
+
+		/**
+		A name computed from the starting WayPoint and ending WayPoint names and addresses
+		@type {string}
+		@readonly
+		*/
+
+		get computedName ( ) {
+			let computedName = myName;
+			if ( '' === computedName ) {
+				computedName =
+					( '' === myWayPoints.first.fullName ? '???' : myWayPoints.first.fullName ) +
+					' ⮞ ' +
+					( '' === myWayPoints.last.fullName ? '???' : myWayPoints.last.fullName );
+			}
+
+			return computedName;
 		}
 
-		return computedName;
+		/**
+		the width of the Leaflet polyline used to represent the Route on the map
+		@type {!number}
+		*/
+
+		get width ( ) { return myWidth; }
+		set width ( Width ) { myWidth = Width; }
+
+		/**
+		the color of the Leaflet polyline used to represent the Route on the map
+		using the css format '#rrggbb'
+		@type {string}
+		*/
+
+		get color ( ) { return myColor; }
+		set color ( Color ) { myColor = Color; }
+
+		/**
+		the dash of the Leaflet polyline used to represent the Route on the map.
+		It's the index of the dash in the array Config.route.dashChoices
+		@type {!number}
+		*/
+
+		get dashArray ( ) { return myDashArray; }
+		set dashArray ( DashArray ) { myDashArray = DashArray; }
+
+		/**
+		boolean indicates if the route is chained
+		@type {boolean}
+		*/
+
+		get chain ( ) { return myChain; }
+		set chain ( Chain ) { myChain = Chain; }
+
+		/**
+		the distance betwween the starting point of the traval and the starting point
+		of the route if the route is chained, otherwise DISTANCE.defaultValue
+		@type {!number}
+		*/
+
+		get chainedDistance ( ) { return myChainedDistance; }
+		set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; }
+
+		/**
+		the length of the route or DISTANCE.defaultValue if the Itinerary is not anymore computed
+		@type {number}
+		*/
+
+		get distance ( ) { return myDistance; }
+		set distance ( Distance ) { myDistance = Distance; }
+
+		/**
+		the duration of the route or DISTANCE.defaultValue if the Itinerary is not anymore computed
+		@type {number}
+		*/
+
+		get duration ( ) { return myDuration; }
+		set duration ( Duration ) { myDuration = Duration; }
+
+		/**
+		A number indicating the status of the route.
+		See ROUTE_EDITION_STATUS for possible values
+		@type {!number}
+		*/
+
+		get edited ( ) { return myEdited; }
+		set edited ( editionStatus ) {
+			if (
+				'number' !== typeof editionStatus
+				||
+				ROUTE_EDITION_STATUS.notEdited > editionStatus
+				||
+				ROUTE_EDITION_STATUS.editedChanged < editionStatus
+			) {
+				throw new Error ( 'Invalid value for Route.edited : ' + editionStatus );
+			}
+			else {
+				myEdited = editionStatus;
+			}
+		}
+
+		/**
+		a boolean set to true when the route is hidden on the map
+		@type {boolean}
+		*/
+
+		get hidden ( ) { return myHidden; }
+		set hidden ( Hidden ) { myHidden = Hidden; }
+
+		/**
+		the objId of the Route. objId are unique identifier given by the code
+		@readonly
+		@type {!number}
+		*/
+
+		get objId ( ) { return myObjId; }
+
+		/**
+		the ObjType of the Route.
+		@type {ObjType}
+		@readonly
+		*/
+
+		get objType ( ) { return ourObjType; }
+
+		/**
+		An object literal with the WayPoint properties and without any methods.
+		This object can be used with the JSON object
+		@type {Object}
+		*/
+
+		get object ( ) {
+			return {
+				name : myName,
+				wayPoints : myWayPoints.object,
+				notes : myNotes.object,
+				itinerary : myItinerary.object,
+				width : myWidth,
+				color : myColor,
+				dashArray : myDashArray,
+				chain : myChain,
+				distance : parseFloat ( myDistance.toFixed ( DISTANCE.fixed ) ),
+				duration : myDuration,
+				edited : myEdited,
+				hidden : myHidden,
+				chainedDistance : parseFloat ( myChainedDistance.toFixed ( DISTANCE.fixed ) ),
+				objId : myObjId,
+				objType : ourObjType.object
+			};
+		}
+		set object ( something ) {
+			let otherthing = myValidate ( something );
+			myName = otherthing.name || '';
+			myWayPoints.object = otherthing.wayPoints || [];
+			myNotes.object = otherthing.notes || [];
+			myItinerary.object = otherthing.itinerary || newItinerary ( ).object;
+			myWidth = otherthing.width || theConfig.route.width;
+			myColor = otherthing.color || '#000000';
+			myDashArray = otherthing.dashArray || ZERO;
+			myChain = otherthing.chain || false;
+			myDistance = otherthing.distance;
+			myDuration = otherthing.duration;
+			myEdited = otherthing.edited || ROUTE_EDITION_STATUS.notEdited;
+			myHidden = otherthing.hidden || false;
+			myChainedDistance = otherthing.chainedDistance;
+			myObjId = newObjId ( );
+		}
 	}
 
-	/*
-	--- route object --------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-
-			get wayPoints ( ) { return myWayPoints; },
-
-			get itinerary ( ) { return myItinerary; },
-
-			get notes ( ) { return myNotes; },
-
-			get name ( ) { return myName; },
-			set name ( Name ) { myName = Name; },
-
-			get computedName ( ) { return myGetComputedName ( ); },
-
-			get width ( ) { return myWidth; },
-			set width ( Width ) { myWidth = Width; },
-
-			get color ( ) { return myColor; },
-			set color ( Color ) { myColor = Color; },
-
-			get dashArray ( ) { return myDashArray; },
-			set dashArray ( DashArray ) { myDashArray = DashArray; },
-
-			get chain ( ) { return myChain; },
-			set chain ( Chain ) { myChain = Chain; },
-
-			get chainedDistance ( ) { return myChainedDistance; },
-			set chainedDistance ( ChainedDistance ) { myChainedDistance = ChainedDistance; },
-
-			get distance ( ) { return myDistance; },
-			set distance ( Distance ) { myDistance = Distance; },
-
-			get duration ( ) { return myDuration; },
-			set duration ( Duration ) { myDuration = Duration; },
-
-			get edited ( ) { return myEdited; },
-			set edited ( Edited ) { mySetEdited ( Edited ); },
-
-			get hidden ( ) { return myHidden; },
-			set hidden ( Hidden ) { myHidden = Hidden; },
-
-			get objId ( ) { return myObjId; },
-
-			get objType ( ) { return ourObjType; },
-
-			get object ( ) { return myGetObject ( ); },
-			set object ( something ) { mySetObject ( something ); }
-		}
-	);
+	return Object.seal ( new Route );
 }
 
-export { newRoute };
+export {
+
+	/**
+	@----------------------------------------------------------------------------------------------------------------------
+
+	@function newRoute
+	@desc Constructor for a Route object
+	@return {Route} an instance of a Route object
+	@global
+
+	@----------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewRoute as newRoute
+};
 
 /*
 --- End of Route.js file ----------------------------------------------------------------------------------------------
