@@ -42,6 +42,16 @@ Tests ...
 @file Config.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module Config
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -348,7 +358,7 @@ function myNewConfig ( ) {
 	@--------------------------------------------------------------------------------------------------------------
 
 	@class
-	@classdesc Class used to store objects in an iterable
+	@classdesc Class used to store the configuration of the code
 	@see {@link theConfig} for the one and only one instance of this class
 	@hideconstructor
 

@@ -33,6 +33,7 @@ Tests ...
 @file MapContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -41,6 +42,7 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 
 @module MapContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -60,7 +62,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newMapContextMenu
+@function myNewMapContextMenu
 @desc constructor of MapContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @return {MapContextMenu} an instance of a MapContextMenu object
@@ -70,7 +72,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newMapContextMenu ( contextMenuEvent ) {
+function myNewMapContextMenu ( contextMenuEvent ) {
 
 	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
 	let myZoomer = newZoomer ( );
@@ -197,11 +199,12 @@ export {
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 	@return {MapContextMenu} an instance of a MapContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newMapContextMenu
+	myNewMapContextMenu as newMapContextMenu
 };
 
 /*

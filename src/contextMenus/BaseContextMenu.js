@@ -33,6 +33,16 @@ Tests ...
 @file BaseContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@module BaseContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -465,6 +475,7 @@ export {
 	When null, the body of the html page is selected
 	@return {BaseContextMenu} an instance of a BaseContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/

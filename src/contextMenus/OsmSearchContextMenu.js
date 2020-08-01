@@ -24,17 +24,13 @@ Doc reviewed 20200727
 Tests ...
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
-import { newZoomer } from '../core/Zoomer.js';
-import { theTranslator } from '../UI/Translator.js';
-
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
 @file OsmSearchContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -43,14 +39,20 @@ import { theTranslator } from '../UI/Translator.js';
 @----------------------------------------------------------------------------------------------------------------------
 
 @module OsmSearchContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
+import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
+import { newZoomer } from '../core/Zoomer.js';
+import { theTranslator } from '../UI/Translator.js';
+
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newOsmSearchContextMenu
+@function myNewOsmSearchContextMenu
 @desc constructor of OsmSearchContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -62,7 +64,7 @@ When null, the body of the html page is selected
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myZoomer = newZoomer ( );
 
@@ -128,11 +130,12 @@ export {
 	When null, the body of the html page is selected
 	@return {OsmSearchContextMenu} an instance of a OsmSearchContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newOsmSearchContextMenu
+	myNewOsmSearchContextMenu as newOsmSearchContextMenu
 };
 
 /*

@@ -41,6 +41,7 @@ Tests ...
 @file RouteContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -49,6 +50,7 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 
 @module RouteContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -70,7 +72,7 @@ import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newRouteContextMenu
+@function myNewRouteContextMenu
 @desc constructor of RouteContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -82,7 +84,7 @@ When null, the body of the html page is selected
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
 	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
@@ -284,11 +286,12 @@ export {
 	When null, the body of the html page is selected
 	@return {RouteContextMenu} an instance of a RouteContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newRouteContextMenu
+	myNewRouteContextMenu as newRouteContextMenu
 };
 
 /*

@@ -33,6 +33,7 @@ Tests ...
 @file NoteContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -41,6 +42,7 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 
 @module NoteContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -57,7 +59,7 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newNoteContextMenu
+@function myNewNoteContextMenu
 @desc constructor of NoteContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -69,7 +71,7 @@ When null, the body of the html page is selected
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
@@ -159,11 +161,12 @@ export {
 	When null, the body of the html page is selected
 	@return {NoteContextMenu} an instance of a NoteContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newNoteContextMenu
+	myNewNoteContextMenu as newNoteContextMenu
 };
 
 /*

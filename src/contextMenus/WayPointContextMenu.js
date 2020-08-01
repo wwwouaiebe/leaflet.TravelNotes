@@ -33,6 +33,7 @@ Tests ...
 @file WayPointContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -41,6 +42,7 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 
 @module WayPointContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -53,7 +55,7 @@ import { theTranslator } from '../UI/Translator.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newWayPointContextMenu
+@function myNewWayPointContextMenu
 @desc constructor of WayPointContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @return {WayPointContextMenu} an instance of a WayPointContextMenu object
@@ -63,7 +65,7 @@ import { theTranslator } from '../UI/Translator.js';
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newWayPointContextMenu ( contextMenuEvent ) {
+function myNewWayPointContextMenu ( contextMenuEvent ) {
 
 	let myWayPointObjId = contextMenuEvent.target.objId;
 
@@ -127,12 +129,13 @@ export {
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 	@return {WayPointContextMenu} an instance of a WayPointContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 
 	*/
 
-	newWayPointContextMenu
+	myNewWayPointContextMenu as newWayPointContextMenu
 
 };
 

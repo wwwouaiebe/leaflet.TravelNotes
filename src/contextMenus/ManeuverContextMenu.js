@@ -30,6 +30,7 @@ Tests ...
 @file ManeuverContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -38,6 +39,7 @@ Tests ...
 @----------------------------------------------------------------------------------------------------------------------
 
 @module ManeuverContextMenu
+@private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
@@ -51,7 +53,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
-@function newManeuverContextMenu
+@function myNewManeuverContextMenu
 @desc constructor of ManeuverContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -63,7 +65,7 @@ When null, the body of the html page is selected
 @----------------------------------------------------------------------------------------------------------------------
 */
 
-function newManeuverContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myManeuverObjId = contextMenuEvent.maneuverObjId;
 	let myZoomer = newZoomer ( );
@@ -134,11 +136,12 @@ export {
 	When null, the body of the html page is selected
 	@return {ManeuverContextMenu} an instance of a ManeuverContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
 
 	@------------------------------------------------------------------------------------------------------------------
 	*/
 
-	newManeuverContextMenu
+	myNewManeuverContextMenu as newManeuverContextMenu
 };
 
 /*
