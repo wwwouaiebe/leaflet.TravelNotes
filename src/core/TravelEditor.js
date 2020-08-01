@@ -315,7 +315,7 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'setitinerary' );
 		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		myEventDispatcher.dispatch ( 'travelnotesfileloaded' );
+		myEventDispatcher.dispatch ( 'travelnameupdated' );
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			myEditRoute ( theTravelNotesData.travel.routes.first.objId );
 		}

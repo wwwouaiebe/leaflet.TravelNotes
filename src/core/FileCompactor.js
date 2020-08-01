@@ -48,7 +48,6 @@ Tests ...
 import { polyline } from '../polyline/Polyline.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newTravel } from '../data/Travel.js';
-
 import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**

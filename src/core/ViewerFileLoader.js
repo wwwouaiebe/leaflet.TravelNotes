@@ -98,7 +98,7 @@ function newViewerFileLoader ( ) {
 
 		newZoomer ( ).zoomToTravel ( );
 
-		myEventDispatcher.dispatch ( 'travelnotesfileloaded' );
+		myEventDispatcher.dispatch ( 'travelnameupdated' );
 	}
 
 	/*

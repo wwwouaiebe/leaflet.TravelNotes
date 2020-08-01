@@ -83,7 +83,7 @@ function newUI ( ) {
 
 		theProvidersToolbarUI.createUI ( myMainDiv );
 
-		myMainDiv.addEventListener ( 'travelnotesfileloaded', ( ) => theTravelUI.setTravelName ( ), false );
+		myMainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
 		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
 		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
 		myMainDiv.addEventListener ( 'updateitinerary', ( ) => theDataPanesUI.updateItinerary ( ), false );
