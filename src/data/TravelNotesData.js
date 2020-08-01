@@ -42,6 +42,35 @@ Tests ...
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
+@typedef {Object} routing
+@desc An object to store the current provider and transit mode
+@property {string} provider The current provider name as defined by the plugins
+@property {string} transitMode The current transitMode. Must be car, bike, etc... as defined by the plugins
+@public
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} provider
+@desc An object that stores the provider properties. Created by the plugins
+@property {string} icon The icon displayed in the provider toolbar, base64 encoded
+@property {string} name The	name of the provider
+@property {object} transitModes An object with the possible transit modes
+@property {boolean} providerKeyNeeded A boolean true when a provider key is needed
+@property {string} providerKey 	The provider key
+@property {string} userLanguage The user language
+@property {method} getPromiseRoute A method that start the routing
+@public
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
 @module TravelNotesData
 @private
 
@@ -57,7 +86,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 @function myNewTravelNotesData
 @desc constructor of theTravelNotesData object
-@return {Object} an instance of TravelNotesData object
+@return {TravelNotesData} an instance of TravelNotesData object
 @private
 
 @----------------------------------------------------------------------------------------------------------------------
@@ -75,25 +104,6 @@ function myNewTravelNotesData ( ) {
 		searchData : [],
 		UUID : newUtilities ( ).UUID
 	};
-
-	/**
-	@typedef {Object} routing
-	@desc An object to store the current provider and transit mode
-	@property {string} provider The current provider name as defined by the plugins
-	@property {string} transitMode The current transitMode. Must be car, bike, etc... as defined by the plugins
-	*/
-
-	/**
-	@typedef {Object} provider
-	@desc An object that stores the provider properties. Created by the plugins
-	@property {string} icon The icon displayed in the provider toolbar, base64 encoded
-	@property {string} name The	name of the provider
-	@property {object} transitModes An object with the possible transit modes
-	@property {boolean} providerKeyNeeded A boolean true when a provider key is needed
-	@property {string} providerKey 	The provider key
-	@property {string} userLanguage The user language
-	@property {method} getPromiseRoute A method that start the routing
-	*/
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------

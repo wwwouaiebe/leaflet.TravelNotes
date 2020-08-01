@@ -196,7 +196,7 @@ function newTravelNotesToolbarUI ( ) {
 					'click',
 					clickEvent => {
 						clickEvent.stopPropagation ( );
-						theAPIKeysManager.dialog ( );
+						theAPIKeysManager.setKeysFromDialog ( );
 					},
 					false
 				);

@@ -341,7 +341,7 @@ function newTravelNotes ( ) {
 		theAttributionsUI.createUI ( );
 		theErrorsUI.createUI ( );
 
-		theAPIKeysManager.fromServerFile ( );
+		theAPIKeysManager.setKeysFromServerFile ( );
 		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
 			theLayersToolbarUI.createUI ( );
 		}

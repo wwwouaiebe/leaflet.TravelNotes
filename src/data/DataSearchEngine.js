@@ -43,6 +43,18 @@ Tests ...
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
+@typedef {Object} NoteAndRoute
+@desc An object to store a Note and the Route on witch the Note is attached
+@property {?Note} note the searched Note or null if the note is not found
+@property {?Route} route the Route on witch the Note is attached or null if the Note is a travel note
+@public
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
 @module DataSearchEngine
 @private
 
@@ -56,20 +68,13 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 @function myNewDataSearchEngine
 @desc constructor of theDataSearchEngine object
-@return {Object} an instance of DataSearchEngine object
+@return {DataSearchEngine} an instance of DataSearchEngine object
 @private
 
 @----------------------------------------------------------------------------------------------------------------------
 */
 
 function myNewDataSearchEngine ( ) {
-
-	/**
-	@typedef {Object} NoteAndRoute
-	@desc An object to store a Note and the Route on witch the Note is attached
-	@property {?Note} note the searched Note or null if the note is not found
-	@property {?Route} route the Route on witch the Note is attached or null if the Note is a travel note
-	*/
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------

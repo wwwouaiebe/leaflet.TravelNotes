@@ -73,7 +73,7 @@ function startup ( ) {
 						newUrlSearch += urlSearchSubString;
 					}
 					else {
-						theAPIKeysManager.fromUrl ( urlSearchSubString );
+						theAPIKeysManager.setKeyFromUrl ( urlSearchSubString );
 					}
 				}
 			);

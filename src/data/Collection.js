@@ -42,6 +42,26 @@ Tests ...
 /**
 @----------------------------------------------------------------------------------------------------------------------
 
+@typedef {Object} CollectionIterator
+@desc An iterator on the Collection
+@property {Object} value The object pointed by the iterator
+@property {?Object} previous The object before the object pointed by the iterator or null if the iterator
+is on the first object
+@property {?Object} next The object after the object pointed by the iterator or null if the iterator
+is on the last object
+@property {boolean} done Move the iterator to the next object and return true when the end of the Collection
+is reached
+@property {boolean} first True when the iterator is on the first object of the Collection
+@property {boolean} last True when the iterator is on the last object of the Collection
+@property {number} index The position of the iterator in the Collection
+@public
+
+@----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@----------------------------------------------------------------------------------------------------------------------
+
 @module Collection
 @private
 
@@ -155,21 +175,6 @@ function myNewCollection ( objectConstructor ) {
 		);
 		return index;
 	}
-
-	/**
-	@typedef {Object} CollectionIterator
-	@desc An iterator on the Collection
-	@property {Object} value The object pointed by the iterator
-	@property {?Object} previous The object before the object pointed by the iterator or null if the iterator
-	is on the first object
-	@property {?Object} next The object after the object pointed by the iterator or null if the iterator
-	is on the last object
-	@property {boolean} done Move the iterator to the next object and return true when the end of the Collection
-	is reached
-	@property {boolean} first True when the iterator is on the first object of the Collection
-	@property {boolean} last True when the iterator is on the last object of the Collection
-	@property {number} index The position of the iterator in the Collection
-	*/
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------
