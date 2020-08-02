@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,10 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- LayersToolbarUI.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the newLayersToolbarUI function
-	- the theLayersToolbarUI object
 Changes:
 	- v1.6.0:
 		- created
@@ -28,8 +24,53 @@ Changes:
 		- issue #103 : Review the attributions
 Doc reviewed ...
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file LayersToolbarUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+@typedef {Object} LayerToolbarButton
+@desc A layers toolbar button properties
+@property {string} text The text to display in the toolbar button
+@property {string} color The foreground color of the toolbar button
+@property {string} backgroundColor The background color of the toolbar button
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} Layer
+@desc A background map with all the properties
+@property {string} service The type of service: wms or wmts
+@property {string} url The url to use to get the map
+@property {Object} wmsOptions See the Leaflet TileLayer.WMS documentation
+@property {Array.<number>} bounds The lower left and upper right corner of the map
+@property {number} minZoom The smallest possible zoom for this map
+@property {number} maxZoom The largest possible zoom for this map
+@property {string} name The name of the map
+@property {LayerToolbarButton} toolbar An object with text, color and backgroundColor properties used to create
+the button in the toolbar
+@property {string} providerName The name of the service provider. This name will be used to find the access key to the service.
+@property {booolean} providerKeyNeeded When true, an access key is required to get the map.
+@property {string} attribution The map attributions. For maps based on OpenStreetMap, it is not necessary to add
+the attributions of OpenStreetMap because they are always present in Travel & Notes.
+@property {string} getCapabilitiesUrl The url of the getCapabilities file when it is known.
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
