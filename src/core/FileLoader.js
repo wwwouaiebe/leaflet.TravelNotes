@@ -232,15 +232,15 @@ function myNewFileLoader ( ) {
 export {
 
 	/**
-@------------------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 
-@function newFileLoader
-@desc constructor for FileLoader objects
-@return {FileLoader} an instance of FileLoader object
-@global
+	@function newFileLoader
+	@desc constructor for FileLoader objects
+	@return {FileLoader} an instance of FileLoader object
+	@global
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	myNewFileLoader as newFileLoader
 };
