@@ -167,6 +167,8 @@ function myNewGeoLocator ( ) {
 		/**
 		Start or stop the geolocatiion, depending of the status
 		@return {GEOLOCATION_STATUS} the status after the switch
+		@fires geolocationstatuschanged
+		@fires geolocationpositionchanged
 		@readonly
 		*/
 
