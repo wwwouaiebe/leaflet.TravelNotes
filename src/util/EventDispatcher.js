@@ -134,6 +134,7 @@ Tests ...
 
 @event geolocationstatuschanged
 @desc fired when theTravelNotesToolbarUI must be updated, changing the geolocation button
+and when the geolocation marker must be removed from the map
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -197,6 +198,15 @@ Tests ...
 
 @event routepropertiesupdated
 @desc fired when the properties of a route must be changed on the map
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@event zoomto
+@desc fired when a zoom to a point or to an array of points must be performed on the map
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

@@ -62,6 +62,7 @@ Tests ...
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
+
 /* global L  */
 
 import { theConfig } from '../data/Config.js';
@@ -84,7 +85,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TW
 
 @function myNewMapEditor
 @desc constructor of theMapEditor object
-@return {APIKeysManager} an instance of APIKeysManager object
+@return {MapEditor} an instance of MapEditor object
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------

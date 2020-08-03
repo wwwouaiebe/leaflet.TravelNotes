@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,10 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- MapEditor.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the newMapEditor function
-	- the theMapEditor object
 Changes:
 	- v1.6.0:
 		- created from MapEditor
@@ -27,10 +23,40 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200803
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ViewerMapEditor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} NoteLeafletObjects
+@desc An object with all the Leaflet objects for a note
+@property {Object} marker The marker of the note
+@property {Object} polyline The polyline of the note
+@property {Object} bullet The bullet of the note (= a Leaflet marker)
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ViewerMapEditor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 /* global L  */
@@ -41,42 +67,20 @@ import { newGeometry } from '../util/Geometry.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
-/*
---- onMouseOverOrMoveOnRoute function -----------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Event listener for mouse move and mouse enter on route objects event
-This function updates the route tooltip with the distance
+@function myNewViewerMapEditor
+@desc constructor of theViewerMapEditor object
+@return {ViewerMapEditor} an instance of ViewerMapEditor object
+@private
 
--------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function onMouseOverOrMoveOnRoute ( mapEvent ) {
-	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
-	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
-		.distance;
-	distance += route.chainedDistance;
-	distance = newUtilities ( ).formatDistance ( distance );
-	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
-	polyline.closeTooltip ( );
-	let tooltipText = route.computedName;
-	if ( ! theTravelNotesData.travel.readOnly ) {
-		tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
-		tooltipText += distance;
-	}
-	polyline.setTooltipContent ( tooltipText );
-	polyline.openTooltip ( mapEvent.latlng );
-}
-
-/*
---- newViewerMapEditor function ---------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-function newViewerMapEditor ( ) {
+function myNewViewerMapEditor ( ) {
 
 	const DEFAULT_MAX_ZOOM = 18;
 	const DEFAULT_MIN_ZOOM = 0;
@@ -84,30 +88,68 @@ function newViewerMapEditor ( ) {
 	let myCurrentLayer = null;
 	let myGeolocationCircle = null;
 
-	/*
-	--- myAddTo function ----------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function add a leaflet object to the leaflet map and to the JavaScript map
+	@function myOnTempWayPointMarkerMouseOut
+	@desc Event listener for a Route
+	@listens mouseover
+	@listens mousemove
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddTo ( objId, object ) {
-		object.objId = objId;
-		object.addTo ( theTravelNotesData.map );
-		theTravelNotesData.mapObjects.set ( objId, object );
+	function myOnRouteMouseOverOrMove ( mapEvent ) {
+		let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
+		let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
+			.distance;
+		distance += route.chainedDistance;
+		distance = newUtilities ( ).formatDistance ( distance );
+		let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
+		polyline.closeTooltip ( );
+		let tooltipText = route.computedName;
+		if ( ! theTravelNotesData.travel.readOnly ) {
+			tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
+			tooltipText += distance;
+		}
+		polyline.setTooltipContent ( tooltipText );
+		polyline.openTooltip ( mapEvent.latlng );
 	}
 
-	/*
-	--- myAddNote function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myAddTo
+	@desc Add a Leaflet object to the map
+	@param {!number} objId The objId to use
+	@param {Object} leafletObject The Leaflet object to add
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myAddTo ( objId, leafletObject ) {
+		leafletObject.objId = objId;
+		leafletObject.addTo ( theTravelNotesData.map );
+		theTravelNotesData.mapObjects.set ( objId, leafletObject );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myAddNote
+	@desc Add a Note to the map
+	@param {!number} objId The objId of the note to add
+	@return {NoteLeafletObjects} An object with a reference to the Leaflet objects of the note
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddNote ( noteObjId ) {
 
 		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
-		let readOnly = theTravelNotesData.travel.readOnly;
 
 		// first a marker is created at the note position. This marker is empty and transparent, so
 		// not visible on the map but the marker can be dragged
@@ -116,19 +158,13 @@ function newViewerMapEditor ( ) {
 			{
 				icon : L.divIcon (
 					{
-						iconSize : [
-							theConfig.note.grip.size,
-							theConfig.note.grip.size
-						],
-						iconAnchor : [
-							theConfig.note.grip.size / TWO,
-							theConfig.note.grip.size / TWO
-						],
+						iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
+						iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
 						html : '<div></div>'
 					}
 				),
 				opacity : theConfig.note.grip.opacity,
-				draggable : ! readOnly
+				draggable : ! theTravelNotesData.travel.readOnly
 			}
 		);
 		bullet.objId = note.objId;
@@ -150,7 +186,7 @@ function newViewerMapEditor ( ) {
 			{
 				zIndexOffset : NOTE_Z_INDEX_OFFSET,
 				icon : icon,
-				draggable : ! readOnly
+				draggable : ! theTravelNotesData.travel.readOnly
 			}
 		);
 		marker.objId = note.objId;
@@ -183,15 +219,19 @@ function newViewerMapEditor ( ) {
 		// and the layerGroup added to the leaflet map and JavaScript map
 		myAddTo ( note.objId, layerGroup );
 
-		return { marker : marker, polyline : polyline, bullet : bullet };
+		return Object.seal ( { marker : marker, polyline : polyline, bullet : bullet } );
 	}
 
-	/*
-	--- myGetDashArray function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function returns the dashArray used for the polyline representation. See also leaflet docs
+	@function myGetDashArray
+	@desc This method compute the dashArray to use for a route
+	@param {Route} route The route for witch the dashArray must be computed
+	@return {string} the dashArray to use for the route
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetDashArray ( route ) {
@@ -212,224 +252,240 @@ function newViewerMapEditor ( ) {
 		return null;
 	}
 
-	/*
-	--- myAddRoute function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function add a route and eventually the attached notes
-	to the leaflet map and the JavaScript map
+	@class
+	@classdesc This class performs all the readonly updates on the map
+	@see {@link theViewerMapEditor} for the one and only one instance of this class
+	@see {@link theMapEditor} for read/write updates on the map
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddRoute ( routeObjId ) {
+	class ViewerMapEditor {
 
-		let route = theDataSearchEngine.getRoute ( routeObjId );
+		/**
+		This method add a route on the map
+		This method is called by the 'routeupdated' event listener of the viewer
+		and by the MapEditor.updateRoute( ) method
+		@param {!number} routeObjId The objId of the route to add
+		@return {Route} the added Route
+		@listens routeupdated
+		*/
 
-		// an array of points is created
-		let latLng = [];
-		let pointsIterator = route.itinerary.itineraryPoints.iterator;
-		while ( ! pointsIterator.done ) {
-			latLng.push ( pointsIterator.value.latLng );
-		}
+		addRoute ( routeObjId ) {
+			let route = theDataSearchEngine.getRoute ( routeObjId );
 
-		// the leaflet polyline is created and added to the map
-		let polyline = L.polyline (
-			latLng,
-			{
-				color : route.color,
-				weight : route.width,
-				dashArray : myGetDashArray ( route )
+			// an array of points is created
+			let latLng = [];
+			let pointsIterator = route.itinerary.itineraryPoints.iterator;
+			while ( ! pointsIterator.done ) {
+				latLng.push ( pointsIterator.value.latLng );
 			}
-		);
-		myAddTo ( route.objId, polyline );
 
-		// tooltip and popup are created
-		if ( ROUTE_EDITION_STATUS.notEdited === route.editionStatus ) {
-			polyline.bindTooltip (
-				route.computedName,
-				{ sticky : true, direction : 'right' }
-			);
-			polyline.on ( 'mouseover', onMouseOverOrMoveOnRoute );
-			polyline.on ( 'mousemove', onMouseOverOrMoveOnRoute );
-		}
-
-		polyline.bindPopup (
-			layer => {
-				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
-				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( popupRoute );
-			}
-		);
-
-		// left click event
-		L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
-
-		// notes are added
-		let notesIterator = route.notes.iterator;
-		while ( ! notesIterator.done ) {
-			myAddNote ( notesIterator.value.objId );
-		}
-
-		return route;
-	}
-
-	/*
-	--- myZoomTo function ---------------------------------------------------------------------------------------------
-
-	This function zoom on a search result
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myZoomTo ( latLng, geometry ) {
-		if ( geometry ) {
-			let latLngs = [];
-			geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
-			theTravelNotesData.map.fitBounds ( newGeometry ( ).getLatLngBounds ( latLngs ) );
-		}
-		else {
-			theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
-		}
-	}
-
-	/*
-	--- mySetLayer function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetLayer ( layer ) {
-
-		let leafletLayer = null;
-		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
-			leafletLayer = L.tileLayer ( layer.url );
-		}
-		else {
-			leafletLayer = L.tileLayer.wms ( layer.url, layer.wmsOptions );
-		}
-
-		if ( myCurrentLayer ) {
-			theTravelNotesData.map.removeLayer ( myCurrentLayer );
-		}
-		theTravelNotesData.map.addLayer ( leafletLayer );
-		myCurrentLayer = leafletLayer;
-		if ( ! theTravelNotesData.travel.readOnly ) {
-
-			// strange... see issue #79 ... zoom is not correct on read only file
-			// when the background map have bounds...
-			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || DEFAULT_MIN_ZOOM ) ) {
-				theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
-			}
-			theTravelNotesData.map.setMinZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
-			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || DEFAULT_MAX_ZOOM ) ) {
-				theTravelNotesData.map.setZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
-			}
-			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
-			if ( layer.bounds ) {
-				if (
-					! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
-					||
-					theTravelNotesData.map.getBounds ( ).contains ( layer.bounds )
-				) {
-					theTravelNotesData.map.setMaxBounds ( null );
-					theTravelNotesData.map.fitBounds ( layer.bounds );
-					theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+			// the leaflet polyline is created and added to the map
+			let polyline = L.polyline (
+				latLng,
+				{
+					color : route.color,
+					weight : route.width,
+					dashArray : myGetDashArray ( route )
 				}
-				theTravelNotesData.map.setMaxBounds ( layer.bounds );
+			);
+			myAddTo ( route.objId, polyline );
+
+			// tooltip and popup are created
+			if ( ROUTE_EDITION_STATUS.notEdited === route.editionStatus ) {
+				polyline.bindTooltip (
+					route.computedName,
+					{ sticky : true, direction : 'right' }
+				);
+				polyline.on ( 'mouseover', myOnRouteMouseOverOrMove );
+				polyline.on ( 'mousemove', myOnRouteMouseOverOrMove );
+			}
+
+			polyline.bindPopup (
+				layer => {
+					let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
+					return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( popupRoute );
+				}
+			);
+
+			// left click event
+			L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
+
+			// notes are added
+			let notesIterator = route.notes.iterator;
+			while ( ! notesIterator.done ) {
+				myAddNote ( notesIterator.value.objId );
+			}
+
+			return route;
+		}
+
+		/**
+		This method add a note on the map
+		This method is called by the 'noteupdated' event listener of the viewer
+		and indirectly by the MapEditor.updateNote( ) method
+		@param {!number} noteObjId The objId of the note to add
+		@return {NoteLeafletObjects} An object with a reference to the Leaflet objects of the note
+		@listens noteupdated
+		*/
+
+		addNote ( noteObjId ) { return myAddNote ( noteObjId ); }
+
+		/**
+		This method compute the dashArray to use for a route
+		@param {Route} route The route for witch the dashArray must be computed
+		@return {string} the dashArray to use for the route
+		*/
+
+		getDashArray ( route ) { return myGetDashArray ( route ); }
+
+		/**
+		This method zoom to a point or an array of points
+		@param {Array.<number>} latLng the point
+		@param {Array.<Array.<Array.<number>>>} geometry the array of points...
+		@listens zoomto
+		*/
+
+		zoomTo ( latLng, geometry ) {
+			if ( geometry ) {
+				let latLngs = [];
+				geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
+				theTravelNotesData.map.fitBounds ( newGeometry ( ).getLatLngBounds ( latLngs ) );
 			}
 			else {
-				theTravelNotesData.map.setMaxBounds ( null );
+				theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
 			}
 		}
-		theTravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
-	}
 
-	/*
-	--- myOnGeolocationStatusChanged function -----------------------------------------------------------------------
+		/**
+		This method changes the background map.
+		This method is called by the 'layerchange' event listener of the viewer
+		and by the MapEditor.setLayer( ) method
+		@param {Layer} layer The layer to set
+		@listens layerchange
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnGeolocationStatusChanged ( geoLocationStatus ) {
-		if ( GEOLOCATION_STATUS.active === geoLocationStatus ) {
-			return;
-		}
-		if ( myGeolocationCircle ) {
-			theTravelNotesData.map.removeLayer ( myGeolocationCircle );
-			myGeolocationCircle = null;
-		}
-	}
-
-	/*
-	--- myOnGeolocationPositionChanged function -----------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnGeolocationPositionChanged ( position ) {
-		let zoomToPosition = theConfig.geoLocation.zoomToPosition;
-		if ( myGeolocationCircle ) {
-			theTravelNotesData.map.removeLayer ( myGeolocationCircle );
-			zoomToPosition = false;
-		}
-
-		myGeolocationCircle = L.circleMarker (
-			L.latLng ( position.coords.latitude, position.coords.longitude ),
-			{
-				radius : theConfig.geoLocation.radius,
-				color : theConfig.geoLocation.color
+		setLayer ( layer ) {
+			let leafletLayer = null;
+			if ( 'wmts' === layer.service.toLowerCase ( ) ) {
+				leafletLayer = L.tileLayer ( layer.url );
 			}
-		)
-			.bindTooltip (
-				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
-			)
-			.addTo ( theTravelNotesData.map );
+			else {
+				leafletLayer = L.tileLayer.wms ( layer.url, layer.wmsOptions );
+			}
 
-		if ( zoomToPosition ) {
-			theTravelNotesData.map.setView (
+			if ( myCurrentLayer ) {
+				theTravelNotesData.map.removeLayer ( myCurrentLayer );
+			}
+			theTravelNotesData.map.addLayer ( leafletLayer );
+			myCurrentLayer = leafletLayer;
+			if ( ! theTravelNotesData.travel.readOnly ) {
+
+				// strange... see issue #79 ... zoom is not correct on read only file
+				// when the background map have bounds...
+				if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || DEFAULT_MIN_ZOOM ) ) {
+					theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+				}
+				theTravelNotesData.map.setMinZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+				if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || DEFAULT_MAX_ZOOM ) ) {
+					theTravelNotesData.map.setZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
+				}
+				theTravelNotesData.map.setMaxZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
+				if ( layer.bounds ) {
+					if (
+						! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
+						||
+						theTravelNotesData.map.getBounds ( ).contains ( layer.bounds )
+					) {
+						theTravelNotesData.map.setMaxBounds ( null );
+						theTravelNotesData.map.fitBounds ( layer.bounds );
+						theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+					}
+					theTravelNotesData.map.setMaxBounds ( layer.bounds );
+				}
+				else {
+					theTravelNotesData.map.setMaxBounds ( null );
+				}
+			}
+			theTravelNotesData.map.fire ( 'baselayerchange', leafletLayer );
+		}
+
+		/**
+		This method is called when the geolocation status is changed
+		@param {GEOLOCATION_STATUS} geoLocationStatus The geolocation status
+		@listens geolocationstatuschanged
+		*/
+
+		onGeolocationStatusChanged ( geoLocationStatus ) {
+			if ( GEOLOCATION_STATUS.active === geoLocationStatus ) {
+				return;
+			}
+			if ( myGeolocationCircle ) {
+				theTravelNotesData.map.removeLayer ( myGeolocationCircle );
+				myGeolocationCircle = null;
+			}
+		}
+
+		/**
+		This method is called when the geolocation position is changed
+		@param {GeolocationPosition} position a JS GeolocationPosition object
+		@listens geolocationpositionchanged
+		*/
+
+		onGeolocationPositionChanged ( position ) {
+			let zoomToPosition = theConfig.geoLocation.zoomToPosition;
+			if ( myGeolocationCircle ) {
+				theTravelNotesData.map.removeLayer ( myGeolocationCircle );
+				zoomToPosition = false;
+			}
+
+			myGeolocationCircle = L.circleMarker (
 				L.latLng ( position.coords.latitude, position.coords.longitude ),
-				theConfig.geoLocation.zoomFactor
-			);
+				{
+					radius : theConfig.geoLocation.radius,
+					color : theConfig.geoLocation.color
+				}
+			)
+				.bindTooltip (
+					newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
+				)
+				.addTo ( theTravelNotesData.map );
+
+			if ( zoomToPosition ) {
+				theTravelNotesData.map.setView (
+					L.latLng ( position.coords.latitude, position.coords.longitude ),
+					theConfig.geoLocation.zoomFactor
+				);
+			}
 		}
+
 	}
-
-	/*
-	--- ViewerMapEditor object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			addRoute : routeObjId => myAddRoute ( routeObjId ),
-
-			addNote : noteObjId => myAddNote ( noteObjId ),
-
-			getDashArray : route => myGetDashArray ( route ),
-
-			zoomTo : ( latLng, geometry ) => myZoomTo ( latLng, geometry ),
-
-			setLayer : layer => mySetLayer ( layer ),
-
-			onGeolocationStatusChanged : geoLocationStatus => myOnGeolocationStatusChanged ( geoLocationStatus ),
-
-			onGeolocationPositionChanged : position => myOnGeolocationPositionChanged ( position )
-
-		}
-	);
+	return Object.seal ( new ViewerMapEditor );
 }
 
+const myViewerMapEditor = myNewViewerMapEditor ( );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of ViewerMapEditor class
+	@type {ViewerMapEditor}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myViewerMapEditor as theViewerMapEditor
+};
+
 /*
---- theViewerMapEditor object -----------------------------------------------------------------------------------------
-
-The one and only one mapViewerEditor
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theViewerMapEditor = newViewerMapEditor ( );
-
-export { theViewerMapEditor };
-
-/*
---- End of ViewerMapEditor.js file ------------------------------------------------------------------------------------
+--- End of ViewerMapEditor.js file --------------------------------------------------------------------------------------------
 */
