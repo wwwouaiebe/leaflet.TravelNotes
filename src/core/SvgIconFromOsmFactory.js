@@ -32,6 +32,43 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file SvgIconFromOsmFactory.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} OsmNoteData
+@desc An object to store the data found in osm
+@property {string} svg The svg definition created from the OSM map and the itinerary. This will be used as icon for the note
+@property {string} tooltip A string with the drection to follow This will be used as tooltip for the note
+@property {string} city A string with the city. This will be used for the note address
+@property {string} place A place (Can be 'town', 'city', 'village' or 'hamlet') found in OSM.
+This will be used for the note address
+@property {string} streets A string with all the streets found at the note position. This will be used for the note address
+@property {Array.<number>} latLng The latitude and longitude of the nearest itinerary point
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module SvgIconFromOsmFactory
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import { theConfig } from '../data/Config.js';
 
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
@@ -794,14 +831,16 @@ function newSvgIconFromOsmFactory ( ) {
 			ourRequestStarted = false;
 
 			onOk (
-				{
-					svg : mySvg,
-					tooltip : myTooltip,
-					city : myCity,
-					place : myPlace,
-					streets : myStreets,
-					latLng : myNearestItineraryPoint.latLng
-				}
+				Object.seal (
+					{
+						svg : mySvg,
+						tooltip : myTooltip,
+						city : myCity,
+						place : myPlace,
+						streets : myStreets,
+						latLng : myNearestItineraryPoint.latLng
+					}
+				)
 			);
 		}
 

@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,10 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- NoteEditor.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newNoteEditor function
-	- the theNoteEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -38,10 +34,28 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191121
+Doc reviewed 20200803
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file NoteEditor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module NoteEditor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -59,15 +73,18 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
-/*
---- newNoteEditor function --------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure and Singleton
+@function myNewNoteEditor
+@desc constructor of theNoteEditor object
+@return {NoteEditor} an instance of NoteEditor object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteEditor ( ) {
+function myNewNoteEditor ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -75,30 +92,35 @@ function newNoteEditor ( ) {
 	let myManeuverCounter = ZERO;
 	let myManeuverLength = ZERO;
 
-	/*
-	--- myNewNoteFromSvgData function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function...
+	@function myNewNoteFromOsmData
+	@desc This function creates a new route note with data from osm
+	@param {OsmNoteData} osmNoteData The osm data needed for the note
+	@param {Route} route The route to witch the note will be attached
+	@fires noteupdated
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNewNoteFromSvgData ( svgData, route ) {
+	function myNewNoteFromOsmData ( osmNoteData, route ) {
 		let note = newNote ( );
-		note.iconContent = svgData.svg.outerHTML;
+		note.iconContent = osmNoteData.svg.outerHTML;
 		note.popupContent = '';
 		note.iconWidth = ICON_DIMENSIONS.width;
 		note.iconHeight = ICON_DIMENSIONS.height;
-		note.tooltipContent = svgData.tooltip;
-		note.address = svgData.streets;
-		if ( '' !== svgData.city ) {
-			note.address += ' ' + theConfig.note.cityPrefix + svgData.city + theConfig.note.cityPostfix;
+		note.tooltipContent = osmNoteData.tooltip;
+		note.address = osmNoteData.streets;
+		if ( '' !== osmNoteData.city ) {
+			note.address += ' ' + theConfig.note.cityPrefix + osmNoteData.city + theConfig.note.cityPostfix;
 		}
-		if ( svgData.place && svgData.place !== svgData.city ) {
-			note.address += ' (' + svgData.place + ')';
+		if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
+			note.address += ' (' + osmNoteData.place + ')';
 		}
-		note.latLng = svgData.latLng;
-		note.iconLatLng = svgData.latLng;
+		note.latLng = osmNoteData.latLng;
+		note.iconLatLng = osmNoteData.latLng;
 		note.distance = myGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
 		note.chainedDistance = route.chainedDistance;
 		route.notes.add ( note );
@@ -111,15 +133,21 @@ function newNoteEditor ( ) {
 		);
 	}
 
-	/*
-	--- myAddManeuverNote function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function...
+	@function myAddAllManeuverNote
+	@desc This method add a note with data from osm for each maneuver of a route. This function is recursive!
+	@param {CollectionIterator} maneuverIterator an iterator on the maneuvers
+	@param {Route} route The route to witch the notes will be attached
+	@fires updateitinerary
+	@fires roadbookupdate
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddManeuverNote ( maneuverIterator, route ) {
+	function myAddAllManeuverNote ( maneuverIterator, route ) {
 
 		function endAdd ( ) {
 			if ( maneuverIterator.done ) {
@@ -132,7 +160,7 @@ function newNoteEditor ( ) {
 				myWaitUI = null;
 			}
 			else {
-				myAddManeuverNote ( maneuverIterator, route );
+				myAddAllManeuverNote ( maneuverIterator, route );
 			}
 		}
 
@@ -154,8 +182,8 @@ function newNoteEditor ( ) {
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
 			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
 				.then (
-					svgData => {
-						myNewNoteFromSvgData ( svgData, route );
+					osmNoteData => {
+						myNewNoteFromOsmData ( osmNoteData, route );
 						endAdd ( );
 					}
 				)
@@ -168,153 +196,21 @@ function newNoteEditor ( ) {
 		}
 	}
 
-	/*
-	--- myAddAllManeuverNotes function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function...
+	@function myNoteDialog
+	@desc This method show the Note dialog and then add or update the note
+	@param {Note} note the Note to be added or updated
+	@param {!number} routeObjId The route objId to witch the note will be attached (= INVALID_OBJ_ID for a travel note)
+	@param {boolean} isNewNote when true the note will be added, otherwise updated
+	@fires settravelnotes
+	@fires setitinerary
+	@fires noteupdated
+	@fires roadbookupdate
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddAllManeuverNotes ( routeObjId ) {
-
-		let route = theDataSearchEngine.getRoute ( routeObjId );
-		let maneuverIterator = route.itinerary.maneuvers.iterator;
-		myManeuverLength = ZERO;
-		while ( ! maneuverIterator.done ) {
-			if (
-				! ( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
-				&&
-				! ( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
-			) {
-				myManeuverLength ++;
-			}
-		}
-
-		if ( theConfig.note.maxManeuversNotes < myManeuverLength ) {
-			theErrorsUI.showError (
-				theTranslator.getText ( 'NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}',
-					{ maneuversLength : myManeuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
-			);
-			return;
-		}
-
-		newTwoButtonsDialog (
-			{
-				title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
-				textContent : theTranslator.getText (
-					'NoteEditor - Add a note for each maneuver. Are you sure?',
-					{ noteLength : myManeuverLength }
-				),
-				secondButtonContent : '&#x274C'
-			}
-		)
-			.show ( )
-			.then (
-				( ) => {
-					maneuverIterator = route.itinerary.maneuvers.iterator;
-					if ( ! maneuverIterator.done ) {
-						myWaitUI = newWaitUI ( );
-						myWaitUI.createUI ( );
-						myManeuverCounter = ONE;
-						myAddManeuverNote ( maneuverIterator, route );
-					}
-				}
-			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
-	}
-
-	/*
-	--- myAttachNoteToRoute function ----------------------------------------------------------------------------------
-
-	This function transform a travel note into a route note ( when possible )
-
-	parameters:
-	- noteObjId : the objId of the note to transform
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAttachNoteToRoute ( noteObjId ) {
-		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let distance = Number.MAX_VALUE;
-		let selectedRoute = null;
-		let newNoteLatLng = null;
-		let newNoteDistance = null;
-
-		theTravelNotesData.travel.routes.forEach (
-			route => {
-				let pointAndDistance = myGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
-				if ( pointAndDistance ) {
-					let distanceToRoute = myGeometry.pointsDistance (
-						noteAndRoute.note.latLng,
-						pointAndDistance.latLng
-					);
-					if ( distanceToRoute < distance ) {
-						distance = distanceToRoute;
-						selectedRoute = route;
-						newNoteLatLng = pointAndDistance.latLng;
-						newNoteDistance = pointAndDistance.distance;
-					}
-				}
-			}
-		);
-
-		if ( selectedRoute ) {
-			theTravelNotesData.travel.notes.remove ( noteObjId );
-			noteAndRoute.note.distance = newNoteDistance;
-			noteAndRoute.note.latLng = newNoteLatLng;
-			noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
-
-			// ... the chainedDistance is adapted...
-			selectedRoute.notes.add ( noteAndRoute.note );
-
-			// and the notes sorted
-			selectedRoute.notes.sort (
-				( first, second ) => first.distance - second.distance
-			);
-
-			myEventDispatcher.dispatch (
-				'noteupdated',
-				{
-					removedNoteObjId : noteObjId,
-					addedNoteObjId : noteObjId
-				}
-			);
-			myEventDispatcher.dispatch ( 'updateitinerary' );
-			myEventDispatcher.dispatch ( 'updatetravelnotes' );
-		}
-	}
-
-	/*
-	--- myDetachNoteFromRoute function --------------------------------------------------------------------------------
-
-	This function transform a route note into a travel note
-
-	parameters:
-	- noteObjId : the objId of the note to transform
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDetachNoteFromRoute ( noteObjId ) {
-
-		// the note and the route are searched
-		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
-		noteAndRoute.route.notes.remove ( noteObjId );
-		noteAndRoute.note.distance = DISTANCE.invalid;
-		noteAndRoute.note.chainedDistance = DISTANCE.defaultValue;
-		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
-
-		myEventDispatcher.dispatch ( 'updateitinerary' );
-		myEventDispatcher.dispatch ( 'updatetravelnotes' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
-
-	/*
-	--- myNoteDialog function -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myNoteDialog ( note, routeObjId, isNewNote ) {
@@ -325,6 +221,7 @@ function newNoteEditor ( ) {
 					if ( isNewNote ) {
 						if ( INVALID_OBJ_ID === routeObjId ) {
 							theTravelNotesData.travel.notes.add ( note );
+							myEventDispatcher.dispatch ( 'settravelnotes' );
 						}
 						else {
 							let route = theDataSearchEngine.getRoute ( routeObjId );
@@ -333,14 +230,10 @@ function newNoteEditor ( ) {
 							route.notes.sort (
 								( first, second ) => first.distance - second.distance
 							);
+							myEventDispatcher.dispatch ( 'setitinerary' );
 						}
 					}
-					if ( INVALID_OBJ_ID === routeObjId ) {
-						myEventDispatcher.dispatch ( 'settravelnotes' );
-					}
-					else {
-						myEventDispatcher.dispatch ( 'setitinerary' );
-					}
+
 					myEventDispatcher.dispatch (
 						'noteupdated',
 						{
@@ -348,330 +241,422 @@ function newNoteEditor ( ) {
 							addedNoteObjId : note.objId
 						}
 					);
+					myEventDispatcher.dispatch ( 'roadbookupdate' );
 				}
 			)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
-
 	}
 
-	/*
-	--- myNewNote function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function create a new TravelNotes note object
+	@function myNewNote
+	@desc This method construct a new Note object
+	@param {Array.<number>} latLng The latitude and longitude of the note
+	@return {Note} A new note object with the lat and lng completed
+	@private
 
-	parameters:
-	- latLng : the coordinates of the new note
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myNewNote ( latLng ) {
 		let note = newNote ( );
 		note.latLng = latLng;
 		note.iconLatLng = latLng;
-
 		return note;
 	}
 
-	/*
-	--- myNewRouteNote function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function start the creation of a TravelNotes note object linked with a route
+	@class
+	@classdesc This class contains all the needed methods fot Notes creation or modifications
+	@see {@link theNoteEditor} for the one and only one instance of this class
+	@hideconstructor
 
-	parameters:
-	- routeObjId : the objId of the route to witch the note will be linked
-	- event : the event that have triggered the method ( a right click on the
-	route polyline and then a choice in a context menu)
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myNewRouteNote ( routeObjId, contextMenuEvent ) {
+	class NoteEditor {
 
-		let route = theDataSearchEngine.getRoute ( routeObjId );
+		/**
+		This method add a note with data from osm for each maneuver of a route
+		A confirmation message is showed before starting.
+		@param {!number} routeObjId The Route objId
+		@fires updateitinerary
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
 
-		// the nearest point and distance on the route is searched
-		let latLngDistance = myGeometry.getClosestLatLngDistance (
-			route,
-			[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
-		);
+		addAllManeuverNotes ( routeObjId ) {
+			let route = theDataSearchEngine.getRoute ( routeObjId );
+			let maneuverIterator = route.itinerary.maneuvers.iterator;
+			myManeuverLength = ZERO;
+			while ( ! maneuverIterator.done ) {
+				if (
+					! ( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
+					&&
+					! ( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
+				) {
+					myManeuverLength ++;
+				}
+			}
 
-		// the note is created
-		let note = myNewNote ( latLngDistance.latLng );
-		note.distance = latLngDistance.distance;
+			if ( theConfig.note.maxManeuversNotes < myManeuverLength ) {
+				theErrorsUI.showError (
+					theTranslator.getText ( 'NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}',
+						{ maneuversLength : myManeuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
+				);
+				return;
+			}
 
-		myNoteDialog ( note, route.objId, true );
-	}
-
-	/*
-	--- myNewSearchNote function --------------------------------------------------------------------------------------
-
-	This function start the creation of a TravelNotes note object linked to a search
-
-	parameters:
-	- searchResult : the search results with witch the note will be created
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNewSearchNote ( searchResult ) {
-		let note = myNewNote ( [ searchResult.lat, searchResult.lon ] );
-
-		note.address =
-			( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
-
-		note.url = searchResult.tags.website || '';
-		note.phone = searchResult.tags.phone || '';
-		note.tooltipContent = searchResult.tags.name || '';
-		note.popupContent = searchResult.tags.name || '';
-
-		myNoteDialog ( note, INVALID_OBJ_ID, true );
-	}
-
-	/*
-	--- myNewManeuverNote function ------------------------------------------------------------------------------------
-
-	This function start the creation of a TravelNotes note object linked to a maneuver
-
-	parameters:
-	- maneuverObjId : the objId of the maneuver
-	- latLng : the coordinates of the maneuver
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNewManeuverNote ( maneuverObjId ) {
-		myWaitUI = newWaitUI ( );
-		myWaitUI.createUI ( );
-		let route = theTravelNotesData.travel.editedRoute;
-		let maneuver = route.itinerary.maneuvers.getAt ( maneuverObjId );
-		let latLng = route.itinerary.itineraryPoints.getAt ( maneuver.itineraryPointObjId ).latLng;
-		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-			.then (
-				svgData => {
-					myNewNoteFromSvgData ( svgData, route );
-					route.notes.sort (
-						( first, second ) => first.distance - second.distance
-					);
-					route.itinerary.maneuvers.remove ( maneuverObjId );
-					myEventDispatcher.dispatch ( 'setitinerary' );
-					myEventDispatcher.dispatch ( 'roadbookupdate' );
-					myWaitUI.close ( );
-					myWaitUI = null;
+			newTwoButtonsDialog (
+				{
+					title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
+					textContent : theTranslator.getText (
+						'NoteEditor - Add a note for each maneuver. Are you sure?',
+						{ noteLength : myManeuverLength }
+					),
+					secondButtonContent : '&#x274C'
 				}
 			)
-			.catch (
-				err => {
-					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
-					myWaitUI.close ( );
-					myWaitUI = null;
-				}
+				.show ( )
+				.then (
+					( ) => {
+						maneuverIterator = route.itinerary.maneuvers.iterator;
+						if ( ! maneuverIterator.done ) {
+							myWaitUI = newWaitUI ( );
+							myWaitUI.createUI ( );
+							myManeuverCounter = ONE;
+							myAddAllManeuverNote ( maneuverIterator, route );
+						}
+					}
+				)
+				.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
+		}
+
+		/**
+		This method add a route note.
+		@param {!number} routeObjId The Route objId
+		@param {event} contextMenuEvent the event that have lauched the method
+		(a context menu event on the route on the map)
+		@fires setitinerary
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		newRouteNote ( routeObjId, contextMenuEvent ) {
+			let route = theDataSearchEngine.getRoute ( routeObjId );
+
+			// the nearest point and distance on the route is searched
+			let latLngDistance = myGeometry.getClosestLatLngDistance (
+				route,
+				[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
 			);
-	}
 
-	/*
-	--- myNewTravelNote function --------------------------------------------------------------------------------------
+			// the note is created
+			let note = myNewNote ( latLngDistance.latLng );
+			note.distance = latLngDistance.distance;
 
-	This function start the creation f a TravelNotes note object
-
-	parameters:
-	- latLng : the coordinates of the new note
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNewTravelNote ( latLng ) {
-
-		// the note is created
-		let note = myNewNote ( latLng );
-
-		myNoteDialog ( note, INVALID_OBJ_ID, true );
-	}
-
-	/*
-	--- myEditNote function -------------------------------------------------------------------------------------------
-
-	This function start the modification of a note
-
-	parameters:
-	- noteObjId : the objId of the edited note
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myEditNote ( noteObjId ) {
-		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let routeObjId = null === noteAndRoute.route ? INVALID_OBJ_ID : noteAndRoute.route.objId;
-
-		myNoteDialog ( noteAndRoute.note, routeObjId, false );
-	}
-
-	/*
-	--- myRemoveNote function -----------------------------------------------------------------------------------------
-
-	This function removes a note
-
-	parameters:
-	- noteObjId : the objId of the note to remove
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveNote ( noteObjId ) {
-
-		// the note and the route are searched
-		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
-		if ( noteAndRoute.route ) {
-
-			// it's a route note
-			noteAndRoute.route.notes.remove ( noteObjId );
-			myEventDispatcher.dispatch ( 'updateitinerary' );
+			myNoteDialog ( note, route.objId, true );
 		}
-		else {
 
-			// it's a travel note
-			theTravelNotesData.travel.notes.remove ( noteObjId );
-			myEventDispatcher.dispatch ( 'updatetravelnotes' );
+		/**
+		This method add a note for a searh result from osm.
+		@param {Object} searchResult A search result. See osmSearch plugin for more...
+		@fires settravelnotes
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		newSearchNote ( searchResult ) {
+			let note = myNewNote ( [ searchResult.lat, searchResult.lon ] );
+
+			note.address =
+				( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+				( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
+				( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
+
+			note.url = searchResult.tags.website || '';
+			note.phone = searchResult.tags.phone || '';
+			note.tooltipContent = searchResult.tags.name || '';
+			note.popupContent = searchResult.tags.name || '';
+
+			myNoteDialog ( note, INVALID_OBJ_ID, true );
 		}
-		myEventDispatcher.dispatch (
-			'noteupdated',
-			{
-				removedNoteObjId : noteObjId,
-				addedNoteObjId : INVALID_OBJ_ID
+
+		/**
+		This method add a note with data from osm for a maneuver
+		@param {!number} maneuverObjId The objId of the maneuver
+		@fires setitinerary
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		newManeuverNote ( maneuverObjId ) {
+			myWaitUI = newWaitUI ( );
+			myWaitUI.createUI ( );
+			let route = theTravelNotesData.travel.editedRoute;
+			let maneuver = route.itinerary.maneuvers.getAt ( maneuverObjId );
+			let latLng = route.itinerary.itineraryPoints.getAt ( maneuver.itineraryPointObjId ).latLng;
+			newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+				.then (
+					osmNoteData => {
+						myNewNoteFromOsmData ( osmNoteData, route );
+						route.notes.sort (
+							( first, second ) => first.distance - second.distance
+						);
+						route.itinerary.maneuvers.remove ( maneuverObjId );
+						myEventDispatcher.dispatch ( 'setitinerary' );
+						myEventDispatcher.dispatch ( 'roadbookupdate' );
+						myWaitUI.close ( );
+						myWaitUI = null;
+					}
+				)
+				.catch (
+					err => {
+						console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+						myWaitUI.close ( );
+						myWaitUI = null;
+					}
+				);
+		}
+
+		/**
+		This method add a travel note
+		@param {Array.<number>} latLng The latitude and longitude of the note
+		@fires settravelnotes
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		newTravelNote ( latLng ) {
+			let note = myNewNote ( latLng );
+			myNoteDialog ( note, INVALID_OBJ_ID, true );
+		}
+
+		/**
+		This method start the edition of a note
+		@param {!number} noteObjId The objId of the note to be edited
+		@fires settravelnotes
+		@fires setitinerary
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		editNote ( noteObjId ) {
+			let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
+			let routeObjId = null === noteAndRoute.route ? INVALID_OBJ_ID : noteAndRoute.route.objId;
+			myNoteDialog ( noteAndRoute.note, routeObjId, false );
+		}
+
+		/**
+		This method remove a note
+		@param {!number} noteObjId The objId of the note to be removed
+		@fires updateitinerary
+		@fires updatetravelnotes
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		removeNote ( noteObjId ) {
+
+			// the note and the route are searched
+			let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
+			if ( noteAndRoute.route ) {
+
+				// it's a route note
+				noteAndRoute.route.notes.remove ( noteObjId );
+				myEventDispatcher.dispatch ( 'updateitinerary' );
 			}
-		);
+			else {
 
-	}
-
-	/*
-	--- myHideNotes function ------------------------------------------------------------------------------------------
-
-	This function hide the notes on the map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myHideNotes ( ) {
-		let notesIterator = theTravelNotesData.travel.notes.iterator;
-		while ( ! notesIterator.done ) {
-			myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
-		}
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			notesIterator = routesIterator.value.notes.iterator;
-			while ( ! notesIterator.done ) {
-				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+				// it's a travel note
+				theTravelNotesData.travel.notes.remove ( noteObjId );
+				myEventDispatcher.dispatch ( 'updatetravelnotes' );
 			}
-		}
-		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-			notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
-			while ( ! notesIterator.done ) {
-				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
-			}
-		}
-	}
-
-	/*
-	--- myShowNotes function ------------------------------------------------------------------------------------------
-
-	This function show the notes on the map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myShowNotes ( ) {
-		myHideNotes ( );
-		let notesIterator = theTravelNotesData.travel.notes.iterator;
-		while ( ! notesIterator.done ) {
 			myEventDispatcher.dispatch (
 				'noteupdated',
 				{
-					removedNoteObjId : INVALID_OBJ_ID,
-					addedNoteObjId : notesIterator.value.objId
+					removedNoteObjId : noteObjId,
+					addedNoteObjId : INVALID_OBJ_ID
 				}
 			);
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			if ( ! routesIterator.value.hidden ) {
+
+		/**
+		This method hide all notes on the map. The notes are always visible in the roadbook and UI
+		@fires removeobject
+		*/
+
+		hideNotes ( ) {
+			let notesIterator = theTravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+			}
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				notesIterator = routesIterator.value.notes.iterator;
+				while ( ! notesIterator.done ) {
+					myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+				}
+			}
+			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+				notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
+				while ( ! notesIterator.done ) {
+					myEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+				}
+			}
+		}
+
+		/**
+		This method show all notes on the map.
+		@fires noteupdated
+		@fires routeupdated
+		*/
+
+		showNotes ( ) {
+			this.hideNotes ( );
+			let notesIterator = theTravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
 				myEventDispatcher.dispatch (
-					'routeupdated',
+					'noteupdated',
 					{
-						removedRouteObjId : routesIterator.value.objId,
-						addedRouteObjId : routesIterator.value.objId
+						removedNoteObjId : INVALID_OBJ_ID,
+						addedNoteObjId : notesIterator.value.objId
 					}
 				);
 			}
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if ( ! routesIterator.value.hidden ) {
+					myEventDispatcher.dispatch (
+						'routeupdated',
+						{
+							removedRouteObjId : routesIterator.value.objId,
+							addedRouteObjId : routesIterator.value.objId
+						}
+					);
+				}
+			}
+		}
+
+		/**
+		This method transform a travel note into a route note.
+		The nearest point on a route is selected for the note
+		@param {!number} noteObjId The objId of the note
+		@fires updateitinerary
+		@fires updatetravelnotes
+		@fires noteupdated
+		@fires roadbookupdate
+		*/
+
+		attachNoteToRoute ( noteObjId ) {
+			let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
+			let distance = Number.MAX_VALUE;
+			let selectedRoute = null;
+			let newNoteLatLng = null;
+			let newNoteDistance = null;
+			theTravelNotesData.travel.routes.forEach (
+				route => {
+					let pointAndDistance = myGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
+					if ( pointAndDistance ) {
+						let distanceToRoute = myGeometry.pointsDistance (
+							noteAndRoute.note.latLng,
+							pointAndDistance.latLng
+						);
+						if ( distanceToRoute < distance ) {
+							distance = distanceToRoute;
+							selectedRoute = route;
+							newNoteLatLng = pointAndDistance.latLng;
+							newNoteDistance = pointAndDistance.distance;
+						}
+					}
+				}
+			);
+
+			if ( selectedRoute ) {
+				theTravelNotesData.travel.notes.remove ( noteObjId );
+				noteAndRoute.note.distance = newNoteDistance;
+				noteAndRoute.note.latLng = newNoteLatLng;
+				noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
+				selectedRoute.notes.add ( noteAndRoute.note );
+				selectedRoute.notes.sort (
+					( first, second ) => first.distance - second.distance
+				);
+
+				myEventDispatcher.dispatch (
+					'noteupdated',
+					{
+						removedNoteObjId : noteObjId,
+						addedNoteObjId : noteObjId
+					}
+				);
+				myEventDispatcher.dispatch ( 'updateitinerary' );
+				myEventDispatcher.dispatch ( 'updatetravelnotes' );
+				myEventDispatcher.dispatch ( 'roadbookupdate' );
+			}
+		}
+
+		/**
+		This method transform a route note into a travel note.
+		@param {!number} noteObjId The objId of the note
+		@fires updateitinerary
+		@fires updatetravelnotes
+		@fires roadbookupdate
+		*/
+
+		detachNoteFromRoute ( noteObjId ) {
+			let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
+			noteAndRoute.route.notes.remove ( noteObjId );
+			noteAndRoute.note.distance = DISTANCE.invalid;
+			noteAndRoute.note.chainedDistance = DISTANCE.defaultValue;
+			theTravelNotesData.travel.notes.add ( noteAndRoute.note );
+
+			myEventDispatcher.dispatch ( 'updateitinerary' );
+			myEventDispatcher.dispatch ( 'updatetravelnotes' );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+		}
+
+		/**
+		This method is called when a note is dropped in the TravelNotesPaneUI and then notes reordered.
+		@param {!number} draggedNoteObjId The objId of the dragged note
+		@param {!number} targetNoteObjId The objId of the note on with the drop was executed
+		@param {boolean} draggedBefore when true the dragged note is moved before the target note
+		when false after
+		@fires updatetravelnotes
+		@fires roadbookupdate
+		*/
+
+		travelNoteDropped ( draggedNoteObjId, targetNoteObjId, draggedBefore ) {
+			theTravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
+			myEventDispatcher.dispatch ( 'updatetravelnotes' );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
 	}
 
-	/*
-	--- myNoteDropped function ----------------------------------------------------------------------------------------
-
-	This function changes the position of a note after a drag and drop
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNoteDropped ( draggedNoteObjId, targetNoteObjId, draggedBefore ) {
-		theTravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
-		myEventDispatcher.dispatch ( 'updatetravelnotes' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
-
-	/*
-	--- noteEditor object ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			addAllManeuverNotes : routeObjId => myAddAllManeuverNotes ( routeObjId ),
-
-			newRouteNote : ( routeObjId, contextMenuEvent ) => myNewRouteNote ( routeObjId, contextMenuEvent ),
-
-			newSearchNote : searchResult => myNewSearchNote ( searchResult ),
-
-			newManeuverNote : maneuverObjId => myNewManeuverNote ( maneuverObjId ),
-
-			newTravelNote : latLng => myNewTravelNote ( latLng ),
-
-			editNote : noteObjId =>	myEditNote ( noteObjId ),
-
-			removeNote : noteObjId => myRemoveNote ( noteObjId ),
-
-			hideNotes : ( ) => myHideNotes ( ),
-
-			showNotes : ( ) => myShowNotes ( ),
-
-			attachNoteToRoute : noteObjId => myAttachNoteToRoute ( noteObjId ),
-
-			detachNoteFromRoute : noteObjId => myDetachNoteFromRoute ( noteObjId ),
-
-			noteDropped : ( draggedNoteObjId, targetNoteObjId, draggedBefore ) => myNoteDropped (
-				draggedNoteObjId,
-				targetNoteObjId,
-				draggedBefore
-			)
-		}
-	);
+	return Object.seal ( new NoteEditor );
 }
 
+const myNoteEditor = myNewNoteEditor ( );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of NoteEditor class
+	@type {NoteEditor}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNoteEditor as theNoteEditor
+};
+
 /*
---- theNoteEditor object -----------------------------------------------------------------------------------------------
-
-The one and only one noteEditor
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theNoteEditor = newNoteEditor ( );
-
-export { theNoteEditor };
-
-/*
---- End of NoteEditor.js file -----------------------------------------------------------------------------------------
+--- End of NoteEditor.js file -------------------------------------------------------------------------------------------------
 */

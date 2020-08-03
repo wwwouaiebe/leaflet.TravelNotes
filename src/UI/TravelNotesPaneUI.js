@@ -105,7 +105,7 @@ function newTravelNotesPaneUI ( ) {
 		let clientRect = element.getBoundingClientRect ( );
 
 		// for this #@!& MS Edge... don't remove + ONE otherwise crazy things comes in FF
-		theNoteEditor.noteDropped (
+		theNoteEditor.travelNoteDropped (
 			myNoteObjId + ONE,
 			element.noteObjId,
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
