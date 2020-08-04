@@ -86,6 +86,8 @@ function myNewCollection ( objectConstructor ) {
 
 	const SWAP_UP = -1;
 	const SWAP_DOWN = 1;
+	const NEXT = 1;
+	const PREVIOUS = -1;
 
 	const myObjectConstructor = objectConstructor;
 	let myArray = [];
@@ -146,15 +148,17 @@ function myNewCollection ( objectConstructor ) {
 
 	function myIterator ( ) {
 		let index = NOT_FOUND;
-		return {
-			get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
-			get previous ( ) { return ZERO >= index ? null : myArray [ index - ONE ]; },
-			get next ( ) { return index < myArray.length - ONE ? myArray [ index + ONE ] : null; },
-			get done ( ) { return ++ index >= myArray.length; },
-			get first ( ) { return ZERO === index; },
-			get last ( ) { return index >= myArray.length - ONE; },
-			get index ( ) { return index; }
-		};
+		return Object.seal (
+			{
+				get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
+				get previous ( ) { return ZERO >= index ? null : myArray [ index - ONE ]; },
+				get next ( ) { return index < myArray.length - ONE ? myArray [ index + ONE ] : null; },
+				get done ( ) { return ++ index >= myArray.length; },
+				get first ( ) { return ZERO === index; },
+				get last ( ) { return index >= myArray.length - ONE; },
+				get index ( ) { return index; }
+			}
+		);
 	}
 
 	/**
@@ -174,6 +178,46 @@ function myNewCollection ( objectConstructor ) {
 			element => element.objId === objId
 		);
 		return index;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myNextOrPrevious
+	@desc gives the previous or next object in the collection that fullfil a given condition
+	@param {!number} objId The objId of the object from witch the search start
+	@param {?function} condition A fonction used to compare the objects. If null, ( ) => true is used
+	@param (!number} direction The direction to follow. Must be NEXT or PREVIOUS
+	@return (?Object) An object or null if nothing found
+	@throws When direction is not NEXT or PREVIOUS or when the starting object is not found
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myNextOrPrevious ( objId, condition, direction ) {
+		let index = myIndexOfObjId ( objId );
+		if ( NOT_FOUND === index ) {
+			throw new Error ( 'invalid objId for next or previous function' );
+		}
+		if ( direction !== NEXT && direction !== PREVIOUS ) {
+			throw new Error ( 'invalid direction' );
+		}
+
+		let otherCondition = condition;
+		if ( ! otherCondition ) {
+			otherCondition = ( ) => true;
+		}
+		index += direction;
+
+		while ( ( NOT_FOUND < index ) && ( index < myArray.length ) && ! otherCondition ( myArray [ index ] ) ) {
+			index += direction;
+		}
+		if ( NOT_FOUND === index || myArray.length === index ) {
+			return null;
+		}
+
+		return myArray [ index ];
 	}
 
 	/**
@@ -249,6 +293,26 @@ function myNewCollection ( objectConstructor ) {
 			}
 			myArray.splice ( oldPosition, ONE );
 		}
+
+		/**
+		@desc gives the next object in the collection that fullfil a given condition
+		@param {!number} objId The objId of the object from witch the search start
+		@param {?function} condition A fonction used to compare the objects. If null, ( ) => true is used
+		@return (?Object) An object or null if nothing found
+		@throws When the starting object is not found
+		*/
+
+		next ( objId, condition ) { return myNextOrPrevious ( objId, condition, NEXT ); }
+
+		/**
+		@desc gives the previous object in the collection that fullfil a given condition
+		@param {!number} objId The objId of the object from witch the search start
+		@param {?function} condition A fonction used to compare the objects. If null, ( ) => true is used
+		@return (?Object) An object or null if nothing found
+		@throws When the starting object is not found
+		*/
+
+		previous ( objId, condition ) { return myNextOrPrevious ( objId, condition, PREVIOUS ); }
 
 		/**
 		Remove an object from the Collection

@@ -53,6 +53,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} Layer
+@todo Creates a class for this and do some verifications on the data. They are coming
+from a file given by the user! After verification freeze the object.
 @desc A background map with all the properties
 @property {string} service The type of service: wms or wmts
 @property {string} url The url to use to get the map

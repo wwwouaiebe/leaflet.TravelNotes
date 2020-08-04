@@ -142,11 +142,13 @@ function myNewGeoCoder ( ) {
 				}
 			}
 
-			return {
-				name : namedetails,
-				street : street,
-				city : city
-			};
+			return Object.seal (
+				{
+					name : namedetails,
+					street : street,
+					city : city
+				}
+			);
 		}
 
 		/**

@@ -831,7 +831,7 @@ function newSvgIconFromOsmFactory ( ) {
 			ourRequestStarted = false;
 
 			onOk (
-				Object.seal (
+				Object.freeze (
 					{
 						svg : mySvg,
 						tooltip : myTooltip,

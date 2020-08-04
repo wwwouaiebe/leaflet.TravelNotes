@@ -219,7 +219,7 @@ function myNewViewerMapEditor ( ) {
 		// and the layerGroup added to the leaflet map and JavaScript map
 		myAddTo ( note.objId, layerGroup );
 
-		return Object.seal ( { marker : marker, polyline : polyline, bullet : bullet } );
+		return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
 	}
 
 	/**
