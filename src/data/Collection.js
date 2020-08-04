@@ -281,7 +281,7 @@ function myNewCollection ( objectConstructor ) {
 		/**
 		Replace an object in the Collection with another object
 		@param {!number} oldObjId the objId of the object to replace
-		@param (Object) newObject The new object
+		@param {Object} newObject The new object
 		@throws when the object type of newObject is invalid or when the object to replace is not found
 		*/
 
@@ -335,6 +335,7 @@ function myNewCollection ( objectConstructor ) {
 
 		/**
 		The first object of the Collection
+		@type {Object}
 		@readonly
 		*/
 
@@ -351,6 +352,7 @@ function myNewCollection ( objectConstructor ) {
 
 		/**
 		The last object of the Collection
+		@type {Object}
 		@readonly
 		*/
 
@@ -358,6 +360,7 @@ function myNewCollection ( objectConstructor ) {
 
 		/**
 		The length of the Collection
+		@type {number}
 		@readonly
 		*/
 
