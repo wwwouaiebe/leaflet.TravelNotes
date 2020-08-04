@@ -167,7 +167,7 @@ function newSearchPaneUI ( ) {
 		}
 
 		// search...
-		myOsmSearchEngine.search ( );
+		myOsmSearchEngine.search ( mySearchInputValue );
 	}
 
 	/*

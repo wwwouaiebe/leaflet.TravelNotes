@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- OsmSearchEngine.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the newOsmSearchEngine function
 Changes:
 	- v1.4.0:
 		- created
@@ -26,17 +23,34 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191122
+Doc reviewed 20200804
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file OsmSearchEngine.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module OsmSearchEngine
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
 import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 let ourOsmSearchStarted = false;
@@ -45,15 +59,19 @@ let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
 let ourSearchLimits = ( window.osmSearch ) ? window.osmSearch.searchLimits : null;
 
-/*
---- ourDrawSearchRectangle function --------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function draw the search limits on the map
+@function ourDrawPreviousSearchRectangle
+@desc Draw the previous search rectangle on the map
+@fires removeobject
+@fires addrectangle
+@private
 
--------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourDrawSearchRectangle ( ) {
+function ourDrawPreviousSearchRectangle ( ) {
 	if ( ! ourSearchParameters.bbox ) {
 		return;
 	}
@@ -77,27 +95,33 @@ function ourDrawSearchRectangle ( ) {
 
 }
 
-/*
---- ourOnSearchSuccess function ---------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Promise success function for osmSearch
+@function ourOnSearchSuccess
+@desc Success handler for the osmSearch.getSearchPromise ( ) method
+@param {Object} searchData The search result returned by osmSearch
+@fires updatesearch
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 function ourOnSearchSuccess ( searchData ) {
 	theTravelNotesData.searchData = searchData;
 	ourOsmSearchStarted = false;
-	ourDrawSearchRectangle ( );
+	ourDrawPreviousSearchRectangle ( );
 	newEventDispatcher ( ).dispatch ( 'updatesearch' );
 }
 
-/*
---- ourOnSearchError function -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Promise error function for osmSearch
+@function ourOnSearchError
+@desc Error handler for the osmSearch.getSearchPromise ( ) method
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 function ourOnSearchError ( err ) {
@@ -105,12 +129,18 @@ function ourOnSearchError ( err ) {
 	ourOsmSearchStarted = false;
 }
 
-/*
---- ourOnMapChange function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-change event listener for the map
+@function ourOnMapChange
+@desc event listener for the map zoom and pan. Redraw the next search rectangle on the map
+@fires removeobject
+@fires addrectangle
+@listens zoom
+@listens move
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 function ourOnMapChange ( ) {
@@ -134,107 +164,117 @@ function ourOnMapChange ( ) {
 	);
 }
 
-/*
---- osmSearchEngine function ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function returns the osmSearchEngine object
+@function myNewOsmSearchEngine
+@desc constructor of OsmSearchEngine object
+@return {OsmSearchEngine} an instance of OsmSearchEngine object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newOsmSearchEngine ( ) {
+function myNewOsmSearchEngine ( ) {
 
-	let myEventDispatcher = newEventDispatcher ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- mySearch function ---------------------------------------------------------------------------------------------
+	@class
+	@classdesc This class is the interface betwween TravelNotes and the external module osmSearch
+	@see {@link newOsmSearchEngine} for constructor
+	@see {@link https://github.com/wwwouaiebe/osmSearch} for osmSearch
+	@hideconstructor
 
-	This function start the search
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySearch ( ) {
-		if ( ourOsmSearchStarted ) {
-			return;
-		}
+	class OsmSearchEngine {
 
-		ourOsmSearchStarted = true;
+		/**
+		This method start a new search
+		@param {string} searchPhrase The search string to be passed to osmSearch
+		@fires updatesearch
+		@fires removeobject
+		@fires addrectangle
+		@async
+		*/
 
-		let mapBounds = theTravelNotesData.map.getBounds ( );
-		ourSearchParameters = {
-			bbox : {
-				southWest : {
-					lat : mapBounds.getSouthWest ( ).lat,
-					lng : mapBounds.getSouthWest ( ).lng
+		search ( searchPhrase ) {
+			if ( ourOsmSearchStarted ) {
+				return;
+			}
+			ourOsmSearchStarted = true;
+			let mapBounds = theTravelNotesData.map.getBounds ( );
+			ourSearchParameters = {
+				bbox : {
+					southWest : {
+						lat : mapBounds.getSouthWest ( ).lat,
+						lng : mapBounds.getSouthWest ( ).lng
+					},
+					northEast : {
+						lat : mapBounds.getNorthEast ( ).lat,
+						lng : mapBounds.getNorthEast ( ).lng
+					}
 				},
-				northEast : {
-					lat : mapBounds.getNorthEast ( ).lat,
-					lng : mapBounds.getNorthEast ( ).lng
-				}
-			},
-			searchPhrase : document.getElementById ( 'TravelNotes-SearchPaneUI-SearchInput' ).value
-		};
-		theTravelNotesData.searchData = [];
-		window.osmSearch.getSearchPromise ( ourSearchParameters ).then ( ourOnSearchSuccess, ourOnSearchError );
-	}
-
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
-
-	This function enable maps event and draw the search limits
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myShow ( ) {
-
-		theTravelNotesData.map.on ( 'zoom', ourOnMapChange );
-		theTravelNotesData.map.on ( 'move', ourOnMapChange );
-		ourOnMapChange ( );
-		ourDrawSearchRectangle ( );
-	}
-
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
-
-	This function disable maps event and remove the search limits
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myHide ( ) {
-		theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
-		theTravelNotesData.map.off ( 'move', ourOnMapChange );
-		if ( INVALID_OBJ_ID !== ourNextSearchRectangleObjId ) {
-			myEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
-			ourNextSearchRectangleObjId = INVALID_OBJ_ID;
+				searchPhrase : searchPhrase
+			};
+			theTravelNotesData.searchData = [];
+			window.osmSearch.getSearchPromise ( ourSearchParameters ).then ( ourOnSearchSuccess, ourOnSearchError );
 		}
-		if ( INVALID_OBJ_ID !== ourPreviousSearchRectangleObjId ) {
-			myEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
-			ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
+
+		/**
+		This method show on the map the next search rectangle and the previous search rectangle
+		@fires removeobject
+		@fires addrectangle
+		*/
+
+		show ( ) {
+			theTravelNotesData.map.on ( 'zoom', ourOnMapChange );
+			theTravelNotesData.map.on ( 'move', ourOnMapChange );
+			ourOnMapChange ( );
+			ourDrawPreviousSearchRectangle ( );
+		}
+
+		/**
+		This method remove from the map the next search rectangle and the previous search rectangle
+		@fires removeobject
+		*/
+
+		hide ( ) {
+			let eventDispatcher = newEventDispatcher ( );
+			theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
+			theTravelNotesData.map.off ( 'move', ourOnMapChange );
+			if ( INVALID_OBJ_ID !== ourNextSearchRectangleObjId ) {
+				eventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
+				ourNextSearchRectangleObjId = INVALID_OBJ_ID;
+			}
+			if ( INVALID_OBJ_ID !== ourPreviousSearchRectangleObjId ) {
+				eventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
+				ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
+			}
 		}
 	}
 
-	/*
-	--- osmSearchEngine object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			search : ( ) => mySearch ( ),
-
-			show : ( ) => myShow ( ),
-
-			hide : ( ) => myHide ( )
-		}
-	);
+	return Object.seal ( new OsmSearchEngine );
 }
 
-export { newOsmSearchEngine };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newOsmSearchEngine
+	@desc constructor of OsmSearchEngine object
+	@return {OsmSearchEngine} an instance of OsmSearchEngine object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewOsmSearchEngine as newOsmSearchEngine
+};
 
 /*
---- End of OsmSearchEngine.js file ------------------------------------------------------------------------------------
+--- End of OsmSearchEngine.js file --------------------------------------------------------------------------------------------
 */
