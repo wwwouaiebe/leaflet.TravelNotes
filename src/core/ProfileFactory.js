@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,31 +17,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ProfileFactory.js file --------------------------------------------------------------------------------------------
-This file contains:
-	- the newProfileFactory function
 Changes:
 	- v1.7.0:
 		- created
 	- v1.8.0:
 		- Issue #98 : Elevation is not modified in the itinerary pane
-Doc reviewed ...
+Doc reviewed 20200805
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ProfileFactory.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ProfileFactory
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
-
 import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
-/*
---- newProfileFactory function ----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function myNewProfileFactory
+@desc constructor of ProfileFactory object
+@return {ProfileFactory} an instance of ProfileFactory object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newProfileFactory ( ) {
+function myNewProfileFactory ( ) {
 
 	let mySvg = null;
 	let myVScale = ONE;
@@ -57,10 +76,15 @@ function newProfileFactory ( ) {
 	let mySmoothCoefficient = theConfig.route.elev.smoothCoefficient;
 	let mySmoothPoints = theConfig.route.elev.smoothPoints;
 
-	/*
-	--- createTmpPoints function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function createTmpPoints
+	@desc this method creates a map with temporary points that are all at the same distance.
+	Elevation of tmp points is computed from the elevation of the route to smooth
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function createTmpPoints ( ) {
@@ -108,10 +132,14 @@ function newProfileFactory ( ) {
 		return tmpPoints;
 	}
 
-	/*
-	--- createSmoothPoints function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function createSmoothPoints
+	@creates a map form the tmppoints with smooth elevation
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function createSmoothPoints ( ) {
@@ -182,13 +210,20 @@ function newProfileFactory ( ) {
 		return smoothPoints;
 	}
 
-	/*
-	--- mySmooth function --------------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function mySmooth
+	@desc this method smooth the elevations of the route
+	@param {Route} route The Route to smooth
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySmooth ( route ) {
+
+		// some computations to prepare the job...
 		myRoute = route;
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		let distance = ZERO;
@@ -210,6 +245,7 @@ function newProfileFactory ( ) {
 			return;
 		}
 
+		// creating smooth points
 		let smoothPoints = createSmoothPoints ( );
 
 		itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
@@ -218,7 +254,7 @@ function newProfileFactory ( ) {
 		itineraryPointsIterator.done;
 		let itineraryPointsTotalDistance = itineraryPointsIterator.value.distance;
 
-		// loop on the itinerary point to push the corrected elev
+		// loop on the itinerary point to push the smooth elev
 		while ( ! itineraryPointsIterator.done ) {
 			let previousIronPoint = smoothPoints.get (
 				Math.floor ( itineraryPointsTotalDistance / mySmoothDistance ) * mySmoothDistance );
@@ -234,10 +270,14 @@ function newProfileFactory ( ) {
 		}
 	}
 
-	/*
-	--- myCreateProfilePolyline function ------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateProfilePolyline
+	@desc this method creates the profile polyline in the svg element
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateProfilePolyline ( ) {
@@ -264,12 +304,14 @@ function newProfileFactory ( ) {
 		mySvg.appendChild ( polyline );
 	}
 
-	/*
-	--- myCreateFramePolyline function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myCreateFramePolyline
+	@desc this method creates the frame polyline in the svg element
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateFramePolyline ( ) {
@@ -286,12 +328,14 @@ function newProfileFactory ( ) {
 		mySvg.appendChild ( polyline );
 	}
 
-	/*
-	--- myCreateDistanceTexts function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the distance texts for the svg
+	@function myCreateDistanceTexts
+	@desc this method creates the distance texts in the svg element
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDistanceTexts ( ) {
@@ -337,12 +381,14 @@ function newProfileFactory ( ) {
 		}
 	}
 
-	/*
-	--- myCreateElevTexts function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the elevation texts for the svg
+	@function myCreateElevTexts
+	@desc this method creates the elevation texts in the svg element
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateElevTexts ( ) {
@@ -389,15 +435,42 @@ function newProfileFactory ( ) {
 
 	}
 
-	/*
-	--- myCreateSvg function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the SVG
+	@function myCreateSvgElement
+	@desc this method creates the svg element
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateSvgElement ( ) {
+		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg.setAttributeNS (
+			null,
+			'viewBox',
+			'0 0 ' + ( SVG_PROFILE.width + ( TWO * SVG_PROFILE.margin ) ) +
+			' ' + ( SVG_PROFILE.height + ( TWO * SVG_PROFILE.margin ) )
+		);
+		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateSvg
+	@desc this method creates the svg with the Route profile. This svg is displayed in the profile window and in the roadbook
+	@param {Route} route The route for witch the svg must be created
+	@return the svg element with the profile
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateSvg ( route ) {
+
+		// Doing some computations for min and max elev and scale...
 		myRoute = route;
 		myMinElev = Number.MAX_VALUE;
 		myMaxElev = ZERO;
@@ -411,15 +484,8 @@ function newProfileFactory ( ) {
 		myVScale = SVG_PROFILE.height / myDeltaElev;
 		myHScale = SVG_PROFILE.width / myRoute.distance;
 
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
-		mySvg.setAttributeNS (
-			null,
-			'viewBox',
-			'0 0 ' + ( SVG_PROFILE.width + ( TWO * SVG_PROFILE.margin ) ) +
-			' ' + ( SVG_PROFILE.height + ( TWO * SVG_PROFILE.margin ) )
-		);
-		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile' );
-
+		// ... then creates the svg
+		myCreateSvgElement ( );
 		myCreateProfilePolyline ( );
 		myCreateFramePolyline ( );
 		myCreateElevTexts ( );
@@ -428,22 +494,55 @@ function newProfileFactory ( ) {
 		return mySvg;
 	}
 
-	/*
-	--- ProfileFactory object function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class
+	@classdesc This class provides methods to build a Route profile
+	@see {@link newProfileFactory} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal (
-		{
-			smooth : route => mySmooth ( route ),
-			createSvg : route => myCreateSvg ( route )
-		}
-	);
+	class ProfileFactory {
+
+		/**
+		This method smooth the Route elevation. Some elevations are not correct due to imprecisions in the elev files
+		so it's needed to smooth these strange elevs
+		@param {Route} route The Route to smooth
+		*/
+
+		smooth ( route ) { mySmooth ( route ); }
+
+		/**
+		this method creates the svg with the Route profile. This svg is displayed in the profile window and in the roadbook
+		@param {Route} route The route for witch the svg must be created
+		@return the svg element with the profile
+		*/
+
+		createSvg ( route ) { return myCreateSvg ( route ); }
+	}
+
+	return Object.seal ( new ProfileFactory );
 }
 
-export { newProfileFactory };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newProfileFactory
+	@desc constructor for ProfileFactory objects
+	@return {ProfileFactory} an instance of ProfileFactory object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewProfileFactory as newProfileFactory
+};
 
 /*
---- End of ProfileFactory.js file -------------------------------------------------------------------------------------
+--- End of ProfileFactory.js file ---------------------------------------------------------------------------------------------
 */

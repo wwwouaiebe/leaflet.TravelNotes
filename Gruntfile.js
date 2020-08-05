@@ -354,10 +354,12 @@ module.exports = function(grunt) {
 		},
 		clean : ['tmp', 'src/polyline/Polyline.js', 'out' ],
 		jsdoc : {
-			src: ['src/**/*.js'],
-			options: {
-				destination : 'out',
-				configure : "JSDocConf/JSDocConf.json"
+			doc : {
+				src: ['src/**/*.js'],
+				options: {
+					destination : 'out',
+					configure : "JSDocConf/JSDocConf.json"
+				}
 			}
 		}		
 	});
@@ -374,7 +376,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.registerTask('doc', [ 'jsdoc' ]);
-	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'includes:Roadbook', 'copy:debug', 'clean' ]);
+	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'includes:Roadbook', 'copy:debug', 'clean', 'jsdoc' ]);
 	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean', 'jsdoc' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
