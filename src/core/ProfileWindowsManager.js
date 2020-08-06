@@ -26,12 +26,6 @@ Doc reviewed 20200805
 Tests ...
 */
 
-import { theConfig } from '../data/Config.js';
-import { newProfileWindow } from '../dialogs/ProfileWindow.js';
-import { newProfileFactory } from '../core/ProfileFactory.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { ZERO } from '../util/Constants.js';
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -51,6 +45,12 @@ import { ZERO } from '../util/Constants.js';
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
+
+import { theConfig } from '../data/Config.js';
+import { newProfileWindow } from '../dialogs/ProfileWindow.js';
+import { newProfileFactory } from '../core/ProfileFactory.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import { ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -131,6 +131,7 @@ function myNewNoteEditor ( ) {
 				addedNoteObjId : note.objId
 			}
 		);
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**

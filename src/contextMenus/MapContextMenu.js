@@ -51,7 +51,6 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
@@ -128,9 +127,9 @@ function myNewMapContextMenu ( contextMenuEvent ) {
 				param : myLatLng
 			},
 			{
-				context : theTravelEditor,
+				context : theRouteEditor,
 				name : theTranslator.getText ( 'MapContextMenu - Add a route' ),
-				action : theTravelEditor.addRoute
+				action : theRouteEditor.addRoute
 			},
 			{
 				context : theRouteEditor,

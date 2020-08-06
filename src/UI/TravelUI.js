@@ -54,6 +54,7 @@ import { theTravelEditor } from '../core/TravelEditor.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, ONE, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 /*
@@ -458,7 +459,7 @@ function newTravelUI ( ) {
 				'click',
 				clickEvent => {
 					clickEvent.stopPropagation ();
-					theTravelEditor.addRoute ( );
+					theRouteEditor.addRoute ( );
 				},
 				false
 			);

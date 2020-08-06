@@ -51,19 +51,15 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
 
-import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /*
 --- newTravelEditor function ------------------------------------------------------------------------------------------
@@ -77,186 +73,6 @@ function newTravelEditor ( ) {
 
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
-
-	/*
-	--- myEditRoute function ------------------------------------------------------------------------------------------
-
-	This function start the edition of a route
-
-	parameters:
-	- routeObjId : the TravelNotes route objId to edit
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myEditRoute ( routeObjId ) {
-		if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
-
-			// not possible to edit - the current edited route is not saved or cancelled
-			theErrorsUI.showError (
-				theTranslator.getText ( 'RouteEditor - Not possible to edit a route without a save or cancel' )
-			);
-			return;
-		}
-		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-
-			// the current edited route is not changed. Cleaning the editors
-			theRouteEditor.cancelEdition ( );
-		}
-
-		// We verify that the provider  for this route is available
-		let initialRoute = theDataSearchEngine.getRoute ( routeObjId );
-		let providerName = initialRoute.itinerary.provider;
-		let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
-		if (
-			providerName
-			&&
-			( '' !== providerName )
-			&&
-			(
-				( ! provider )
-				||
-				( provider.providerKeyNeeded && ! theAPIKeysManager.getKey ( providerName ) )
-			)
-		) {
-			theErrorsUI.showError (
-				theTranslator.getText (
-					'RouteEditor - Not possible to edit a route created with this provider',
-					{ provider : providerName }
-				)
-			);
-			return;
-		}
-
-		// Provider and transit mode are changed in the itinerary editor
-		if ( providerName && '' !== providerName ) {
-			myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
-		}
-		let transitMode = initialRoute.itinerary.transitMode;
-		if ( transitMode && '' !== transitMode ) {
-			myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
-		}
-
-		// The edited route is pushed in the editors
-		theTravelNotesData.travel.editedRoute = newRoute ( );
-		initialRoute.editionStatus = ROUTE_EDITION_STATUS.editedNoChange;
-
-		// Route is cloned, so we can have a cancel button in the editor
-		theTravelNotesData.travel.editedRoute.jsonObject = initialRoute.jsonObject;
-		theTravelNotesData.editedRouteObjId = initialRoute.objId;
-		theTravelNotesData.travel.editedRoute.hidden = false;
-		initialRoute.hidden = false;
-		theProfileWindowsManager.updateProfile (
-			theTravelNotesData.editedRouteObjId,
-			theTravelNotesData.travel.editedRoute
-		);
-		theRouteEditor.chainRoutes ( );
-		myEventDispatcher.dispatch (
-			'routeupdated',
-			{
-				removedRouteObjId : initialRoute.objId,
-				addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
-			}
-		);
-
-		newRoadbookUpdate ( );
-		myEventDispatcher.dispatch ( 'setitinerary' );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-	}
-
-	/*
-	--- myAddRoute function -------------------------------------------------------------------------------------------
-
-	This function add a new route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddRoute ( ) {
-		let route = newRoute ( );
-		theTravelNotesData.travel.routes.add ( route );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		theRouteEditor.chainRoutes ( );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		if ( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus ) {
-			myEditRoute ( route.objId );
-		}
-	}
-
-	/*
-	--- myRemoveRoute function ----------------------------------------------------------------------------------------
-
-	This function remove a route
-
-	parameters :
-	- routeObjId : the TravelNotes route objId to remove
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveRoute ( routeObjId ) {
-
-		let routeToDeleteObjId = routeObjId;
-		if (
-			(
-				routeToDeleteObjId === theTravelNotesData.editedRouteObjId
-				||
-				routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
-			)
-			&&
-			ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus
-		) {
-
-			// cannot remove the route currently edited and changed
-			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
-			return;
-		}
-
-		if (
-			routeToDeleteObjId === theTravelNotesData.editedRouteObjId
-			||
-			routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
-
-		) {
-			routeToDeleteObjId = theTravelNotesData.editedRouteObjId;
-			theRouteEditor.cancelEdition ( );
-		}
-
-		myEventDispatcher.dispatch (
-			'routeupdated',
-			{
-				removedRouteObjId : routeToDeleteObjId,
-				addedRouteObjId : INVALID_OBJ_ID
-			}
-		);
-
-		theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
-		theProfileWindowsManager.deleteProfile ( routeToDeleteObjId );
-		theRouteEditor.chainRoutes ( );
-
-		newRoadbookUpdate ( );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-	}
-
-	/*
-	--- myRenameRoute function ----------------------------------------------------------------------------------------
-
-	This function rename a route
-	parameters :
-	- routeObjId : the TravelNotes route objId to remove
-	- routeName: the new name
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRenameRoute ( routeObjId, routeName ) {
-		theDataSearchEngine.getRoute ( routeObjId ).name = routeName;
-		if ( routeObjId === theTravelNotesData.editedRouteObjId ) {
-			theTravelNotesData.travel.editedRoute.name = routeName;
-		}
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
 
 	/*
 	--- myRouteDropped function ---------------------------------------------------------------------------------------
@@ -317,7 +133,7 @@ function newTravelEditor ( ) {
 		myEventDispatcher.dispatch ( 'roadbookupdate' );
 		myEventDispatcher.dispatch ( 'travelnameupdated' );
 		if ( theConfig.travelEditor.startupRouteEdition ) {
-			myEditRoute ( theTravelNotesData.travel.routes.first.objId );
+			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}
 	}
 
@@ -329,14 +145,6 @@ function newTravelEditor ( ) {
 
 	return Object.seal (
 		{
-
-			addRoute : ( ) => myAddRoute ( ),
-
-			removeRoute : routeObjId => myRemoveRoute ( routeObjId ),
-
-			editRoute : routeObjId => myEditRoute ( routeObjId ),
-
-			renameRoute : ( routeObjId, routeName ) => myRenameRoute ( routeObjId, routeName ),
 
 			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => myRouteDropped (
 				draggedRouteObjId,

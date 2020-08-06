@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,10 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- RouteEditor.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the newRouteEditor function
-	- the theRouteEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -48,54 +44,74 @@ Changes:
 		- issue #101 : Add a print command for a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191122
+Doc reviewed 20200806
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file RouteEditor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module RouteEditor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { theTranslator } from '../UI/Translator.js';
+import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRoute } from '../data/Route.js';
-import { newUtilities } from '../util/Utilities.js';
+import { newGpxFactory } from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { newPrintFactory } from '../printMap/PrintFactory.js';
-
 import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- newRouteEditor function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure and Singleton
+@function myNewRouteEditor
+@desc constructor of RouteEditor object
+@return {RouteEditor} an instance of RouteEditor object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteEditor ( ) {
+function myNewRouteEditor ( ) {
 
-	let myMustZoomToRoute = false;
-	let myRequestStarted = false;
-	let myUtilities = newUtilities ( );
+	let myMustZoomToRouteAfterRouting = false;
+	let myRoutingRequestStarted = false;
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
 
-	/*
-	--- myComputeRouteDistances function ------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute the route, itineraryPoints and maneuvers distances
+	@function myComputeRouteDistances
+	@desc This method compute the route, itineraryPoints and maneuvers distances
+	@param {Route} route The route for witch the distances are computed
+	@private
 
-	parameters:
-	- route : the TravelNotes route object to be used
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputeRouteDistances ( route ) {
@@ -128,105 +144,14 @@ function newRouteEditor ( ) {
 		}
 	}
 
-	/*
-	--- mySaveGpx function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function save the currently edited route to a GPX file
+	@function myChainRoutes
+	@desc This method recompute the distances when routes are chained
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySaveGpx ( routeObjId ) {
-
-		// initializations...
-		let tab0 = '\n';
-		let tab1 = '\n\t';
-		let tab2 = '\n\t\t';
-		let tab3 = '\n\t\t\t';
-		let timeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
-
-		let route = theDataSearchEngine.getRoute ( routeObjId );
-		if ( ! route ) {
-			return;
-		}
-
-		// header
-		let gpxString = '<?xml version="1.0"?>' + tab0;
-		gpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-		'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
-		'version="1.1" creator="leaflet.TravelNotes">';
-
-		// waypoints
-		let wayPointsIterator = route.wayPoints.iterator;
-		while ( ! wayPointsIterator.done ) {
-			gpxString +=
-				tab1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
-				timeStamp + '/>';
-
-		}
-
-		// route
-		gpxString += tab1 + '<rte>';
-		let maneuverIterator = route.itinerary.maneuvers.iterator;
-		while ( ! maneuverIterator.done ) {
-			let wayPoint = route.itinerary.itineraryPoints.getAt (
-				maneuverIterator.value.itineraryPointObjId
-			);
-			let instruction = maneuverIterator.value.instruction
-				.replace ( '&', '&amp;' )
-				.replace ( '"', '&apos;' )
-				.replace ( '"', '&quote;' )
-				.replace ( '>', '&gt;' )
-				.replace ( '<', '&lt;' );
-			gpxString +=
-				tab2 +
-				'<rtept lat="' +
-				wayPoint.lat +
-				'" lon="' +
-				wayPoint.lng +
-				'" ' +
-				timeStamp +
-				'desc="' +
-				instruction + '" />';
-		}
-		gpxString += tab1 + '</rte>';
-
-		// track
-		gpxString += tab1 + '<trk>';
-		gpxString += tab2 + '<trkseg>';
-		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
-		while ( ! itineraryPointsIterator.done ) {
-			gpxString +=
-				tab3 +
-				'<trkpt lat="' + itineraryPointsIterator.value.lat +
-				'" lon="' +
-				itineraryPointsIterator.value.lng +
-				'" ' +
-				timeStamp +
-				' />';
-		}
-		gpxString += tab2 + '</trkseg>';
-		gpxString += tab1 + '</trk>';
-
-		// eof
-		gpxString += tab0 + '</gpx>';
-
-		// file is saved
-		let fileName = route.name;
-		if ( '' === fileName ) {
-			fileName = 'TravelNote';
-		}
-		fileName += '.gpx';
-		myUtilities.saveFile ( fileName, gpxString );
-	}
-
-	/*
-	--- myChainRoutes function ----------------------------------------------------------------------------------------
-
-	This function recompute the distances when routes are chained
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myChainRoutes ( ) {
@@ -247,16 +172,20 @@ function newRouteEditor ( ) {
 		}
 	}
 
-	/*
-	--- myHaveValidWayPoints function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function verify that the waypoints have coordinates
+	@function myHaveValidWayPoints
+	@desc This method verify that all waypoints have valid coordinates ( reminder: a route have always a startpoint
+	and an endpoint!)
+	@param {Route} route The route for witch the waypoints are verified
+	@return {boolean} true when all waypoints have valid coordinates
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myHaveValidWayPoints ( route ) {
-
 		let haveValidWayPoints = true;
 		route.wayPoints.forEach (
 			wayPoint => {
@@ -268,38 +197,38 @@ function newRouteEditor ( ) {
 					LAT_LNG.defaultValue !== wayPoint.lng;
 			}
 		);
-
 		return haveValidWayPoints;
 	}
 
-	/*
-	--- myEndRoutingError function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myOnRoutingError
+	@desc Error handler for the startRouting method
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myEndRoutingError ( err ) {
-
-		myRequestStarted = false;
-
+	function myOnRoutingError ( err ) {
+		myRoutingRequestStarted = false;
 		theErrorsUI.showError ( err );
-
 		console.log ( err ? err : 'An error occurs when asking the route to the provider' );
 	}
 
-	/*
-	--- myEndRoutingOk function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function is called by the router when a routing operation is successfully finished
+	@function myOnRoutingOk
+	@desc Success handler for the startRouting method
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myEndRoutingOk ( ) {
+	function myOnRoutingOk ( ) {
 
-		myRequestStarted = false;
+		myRoutingRequestStarted = false;
 
 		myComputeRouteDistances ( theTravelNotesData.travel.editedRoute );
 
@@ -342,7 +271,7 @@ function newRouteEditor ( ) {
 			( first, second ) => first.distance - second.distance
 		);
 
-		if ( myMustZoomToRoute ) {
+		if ( myMustZoomToRouteAfterRouting ) {
 			newZoomer ( ).zoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
 		}
 
@@ -356,325 +285,332 @@ function newRouteEditor ( ) {
 			}
 		);
 
-		newRoadbookUpdate ( );
+		myEventDispatcher.dispatch ( 'roadbookupdate' );
 
 		// and the itinerary and waypoints are displayed
 		myEventDispatcher.dispatch ( 'setitinerary' );
 	}
 
-	/*
-	--- myStartRouting function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-		This function start the routing :-)
+	@class
+	@classdesc This class contains methods fot Routes creation or modifications
+	@see {@link theNoteEditor} for the one and only one instance of this class
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myStartRouting ( ) {
+	class RouteEditor {
 
-		if ( ! theConfig.routing.auto ) {
-			return;
-		}
-
-		// We verify that another request is not loaded
-		if ( myRequestStarted ) {
-			return false;
-		}
-
-		// Control of the wayPoints
-		if ( ! myHaveValidWayPoints ( theTravelNotesData.travel.editedRoute ) ) {
-			return false;
-		}
-
-		myMustZoomToRoute = ZERO === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
-		myRequestStarted = true;
-
-		// Choosing the correct route provider
-		let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
-
-		// provider name and transit mode are added to the road
-		theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
-		theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
-
-		routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-			.then ( myEndRoutingOk, myEndRoutingError )
-			.catch ( myEndRoutingError );
-
-		return true;
-	}
-
-	/*
-	--- myCancelEdition function --------------------------------------------------------------------------------------
-
-	This function cancel the current edited route
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCancelEdition ( ) {
-
-		// !!! order is important!!!
-		let editedRoute = theDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
-		editedRoute.editionStatus = ROUTE_EDITION_STATUS.notEdited;
-
-		theProfileWindowsManager.updateProfile (
-			theTravelNotesData.travel.editedRoute.objId,
-			editedRoute
-		);
-
-		myEventDispatcher.dispatch (
-			'routeupdated',
-			{
-				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
-				addedRouteObjId : theTravelNotesData.editedRouteObjId
+		addRoute ( ) {
+			let route = newRoute ( );
+			theTravelNotesData.travel.routes.add ( route );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+			myChainRoutes ( );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+			if ( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus ) {
+				this.editRoute ( route.objId );
 			}
-		);
+		}
 
-		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel.editedRoute = newRoute ( );
-		myChainRoutes ( );
+		editRoute ( routeObjId ) {
+			if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
 
-		newRoadbookUpdate ( );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'setitinerary' );
+				// not possible to edit - the current edited route is not saved or cancelled
+				theErrorsUI.showError (
+					theTranslator.getText ( 'RouteEditor - Not possible to edit a route without a save or cancel' )
+				);
+				return;
+			}
+			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 
-	}
+				// the current edited route is not changed. Cleaning the editors
+				this.cancelEdition ( );
+			}
 
-	/*
-	--- mySaveEdition function ----------------------------------------------------------------------------------------
+			// We verify that the provider  for this route is available
+			let initialRoute = theDataSearchEngine.getRoute ( routeObjId );
+			let providerName = initialRoute.itinerary.provider;
+			let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
+			if (
+				providerName
+				&&
+				( '' !== providerName )
+				&&
+				(
+					( ! provider )
+					||
+					( provider.providerKeyNeeded && ! theAPIKeysManager.getKey ( providerName ) )
+				)
+			) {
+				theErrorsUI.showError (
+					theTranslator.getText (
+						'RouteEditor - Not possible to edit a route created with this provider',
+						{ provider : providerName }
+					)
+				);
+				return;
+			}
 
-	This function save the current edited route
+			// Provider and transit mode are changed in the itinerary editor
+			if ( providerName && '' !== providerName ) {
+				myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+			}
+			let transitMode = initialRoute.itinerary.transitMode;
+			if ( transitMode && '' !== transitMode ) {
+				myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+			}
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+			// The edited route is pushed in the editors
+			theTravelNotesData.travel.editedRoute = newRoute ( );
+			initialRoute.editionStatus = ROUTE_EDITION_STATUS.editedNoChange;
 
-	function mySaveEdition ( ) {
+			// Route is cloned, so we can have a cancel button in the editor
+			theTravelNotesData.travel.editedRoute.jsonObject = initialRoute.jsonObject;
+			theTravelNotesData.editedRouteObjId = initialRoute.objId;
+			theTravelNotesData.travel.editedRoute.hidden = false;
+			initialRoute.hidden = false;
+			theProfileWindowsManager.updateProfile (
+				theTravelNotesData.editedRouteObjId,
+				theTravelNotesData.travel.editedRoute
+			);
+			myChainRoutes ( );
+			myEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : initialRoute.objId,
+					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
+				}
+			);
 
-		// the edited route is cloned
-		let clonedRoute = newRoute ( );
-		clonedRoute.jsonObject = theTravelNotesData.travel.editedRoute.jsonObject;
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+			myEventDispatcher.dispatch ( 'setitinerary' );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+		}
 
-		// and the initial route replaced with the clone
-		theTravelNotesData.travel.routes.replace ( theTravelNotesData.editedRouteObjId, clonedRoute );
-		theTravelNotesData.editedRouteObjId = clonedRoute.objId;
-		myCancelEdition ( );
-	}
+		removeRoute ( routeObjId ) {
+			let routeToDeleteObjId = routeObjId;
+			if (
+				(
+					routeToDeleteObjId === theTravelNotesData.editedRouteObjId
+					||
+					routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
+				)
+				&&
+				ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus
+			) {
 
-	/*
-	--- myRouteProperties function ------------------------------------------------------------------------------------
+				// cannot remove the route currently edited and changed
+				theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+				return;
+			}
 
-	This function opens the RouteProperties dialog
+			if (
+				routeToDeleteObjId === theTravelNotesData.editedRouteObjId
+				||
+				routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
 
-	parameters:
-	- routeObjId :
+			) {
+				routeToDeleteObjId = theTravelNotesData.editedRouteObjId;
+				this.cancelEdition ( );
+			}
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+			myEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : routeToDeleteObjId,
+					addedRouteObjId : INVALID_OBJ_ID
+				}
+			);
 
-	function myRouteProperties ( routeObjId ) {
-		let route = theDataSearchEngine.getRoute ( routeObjId );
-		let routePropertiesDialog = newRoutePropertiesDialog ( route );
+			theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
+			theProfileWindowsManager.deleteProfile ( routeToDeleteObjId );
+			myChainRoutes ( );
 
-		routePropertiesDialog.show ( ).then (
-			( ) => {
-				myChainRoutes ( );
-				if ( myHaveValidWayPoints ( route ) ) {
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+		}
+
+		removeManeuver ( maneuverObjId ) {
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
+			myEventDispatcher.dispatch ( 'setitinerary' );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+		}
+
+		saveGpx ( routeObjId ) {
+			newGpxFactory ( ).routeToGpx ( routeObjId );
+		}
+
+		chainRoutes ( ) {
+			myChainRoutes ( );
+		}
+
+		startRouting ( ) {
+			if (
+				theConfig.routing.auto
+				&&
+				! myRoutingRequestStarted
+				&&
+				myHaveValidWayPoints ( theTravelNotesData.travel.editedRoute )
+			) {
+				myMustZoomToRouteAfterRouting = ZERO === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
+				myRoutingRequestStarted = true;
+				let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
+				theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
+				theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
+				routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
+					.then ( myOnRoutingOk )
+					.catch ( myOnRoutingError );
+			}
+		}
+
+		saveEdition ( ) {
+
+			// the edited route is cloned
+			let clonedRoute = newRoute ( );
+			clonedRoute.jsonObject = theTravelNotesData.travel.editedRoute.jsonObject;
+
+			// and the initial route replaced with the clone
+			theTravelNotesData.travel.routes.replace ( theTravelNotesData.editedRouteObjId, clonedRoute );
+			theTravelNotesData.editedRouteObjId = clonedRoute.objId;
+			this.cancelEdition ( );
+		}
+
+		cancelEdition ( ) {
+
+			// !!! order is important!!!
+			let editedRoute = theDataSearchEngine.getRoute ( theTravelNotesData.editedRouteObjId );
+			editedRoute.editionStatus = ROUTE_EDITION_STATUS.notEdited;
+
+			theProfileWindowsManager.updateProfile (
+				theTravelNotesData.travel.editedRoute.objId,
+				editedRoute
+			);
+
+			myEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
+					addedRouteObjId : theTravelNotesData.editedRouteObjId
+				}
+			);
+
+			theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
+			theTravelNotesData.travel.editedRoute = newRoute ( );
+			myChainRoutes ( );
+
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+			myEventDispatcher.dispatch ( 'setitinerary' );
+		}
+
+		routeProperties ( routeObjId ) {
+			let route = theDataSearchEngine.getRoute ( routeObjId );
+			let routePropertiesDialog = newRoutePropertiesDialog ( route );
+
+			routePropertiesDialog.show ( ).then (
+				( ) => {
+					myChainRoutes ( );
+					if ( myHaveValidWayPoints ( route ) ) {
+						myEventDispatcher.dispatch (
+							'routepropertiesupdated',
+							{
+								routeObjId : route.objId
+							}
+						);
+					}
+					myEventDispatcher.dispatch ( 'roadbookupdate' );
+					myEventDispatcher.dispatch ( 'setrouteslist' );
+				}
+			)
+				.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+		}
+
+		printRouteMap ( routeObjId ) {
+			let printRouteMapDialog = newPrintRouteMapDialog ( );
+
+			printRouteMapDialog.show ( ).then (
+				printData => {
+					newPrintFactory ( ).print ( printData, routeObjId );
+				}
+			)
+				.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+		}
+
+		showRoute ( routeObjId ) {
+			myEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : INVALID_OBJ_ID,
+					addedRouteObjId : routeObjId
+				}
+			);
+			theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+		}
+
+		hideRoute ( routeObjId ) {
+			myEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : routeObjId,
+					addedRouteObjId : INVALID_OBJ_ID
+				}
+			);
+			theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+		}
+
+		showRoutes ( ) {
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if ( routesIterator.value.hidden ) {
 					myEventDispatcher.dispatch (
-						'routepropertiesupdated',
+						'routeupdated',
 						{
-							routeObjId : route.objId
+							removedRouteObjId : INVALID_OBJ_ID,
+							addedRouteObjId : routesIterator.value.objId
 						}
 					);
+					routesIterator.value.hidden = false;
 				}
-				myEventDispatcher.dispatch ( 'setrouteslist' );
 			}
-		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
-	}
-
-	/*
-	--- myHideRoute function ------------------------------------------------------------------------------------------
-
-	This function hide a route on the map
-
-	parameters:
-	- routeObjId : the route objId that was clicked
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myHideRoute ( routeObjId ) {
-
-		myEventDispatcher.dispatch (
-			'routeupdated',
-			{
-				removedRouteObjId : routeObjId,
-				addedRouteObjId : INVALID_OBJ_ID
-			}
-		);
-		theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-	}
-
-	/*
-	--- myShowRoute function ------------------------------------------------------------------------------------------
-
-	This function show a route on the map
-
-	parameters:
-	- routeObjId : the route objId that was clicked
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myShowRoute ( routeObjId ) {
-
-		myEventDispatcher.dispatch (
-			'routeupdated',
-			{
-				removedRouteObjId : INVALID_OBJ_ID,
-				addedRouteObjId : routeObjId
-			}
-		);
-		theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-	}
-
-	/*
-	--- myShowRoutes function -----------------------------------------------------------------------------------------
-
-	This function show all the hidden routes
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myShowRoutes ( ) {
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			if ( routesIterator.value.hidden ) {
-				myEventDispatcher.dispatch (
-					'routeupdated',
-					{
-						removedRouteObjId : INVALID_OBJ_ID,
-						addedRouteObjId : routesIterator.value.objId
-					}
-				);
-				routesIterator.value.hidden = false;
-			}
+			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-	}
 
-	/*
-	--- myHideRoutes function -----------------------------------------------------------------------------------------
-
-	This function hide all the showed routes
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myHideRoutes ( ) {
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			if (
-				! routesIterator.value.hidden
-				&&
-				routesIterator.value.objId !== theTravelNotesData.editedRouteObjId
-			) {
-				myEventDispatcher.dispatch (
-					'routeupdated',
-					{
-						removedRouteObjId : routesIterator.value.objId,
-						addedRouteObjId : INVALID_OBJ_ID
-					}
-				);
-				routesIterator.value.hidden = true;
+		hideRoutes ( ) {
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if (
+					! routesIterator.value.hidden
+					&&
+					routesIterator.value.objId !== theTravelNotesData.editedRouteObjId
+				) {
+					myEventDispatcher.dispatch (
+						'routeupdated',
+						{
+							removedRouteObjId : routesIterator.value.objId,
+							addedRouteObjId : INVALID_OBJ_ID
+						}
+					);
+					routesIterator.value.hidden = true;
+				}
 			}
+			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
-		myEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
-	/*
-	--- myPrintRouteMap function --------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myPrintRouteMap ( routeObjId ) {
-		let printRouteMapDialog = newPrintRouteMapDialog ( );
-
-		printRouteMapDialog.show ( ).then (
-			printData => {
-				newPrintFactory ( ).print ( printData, routeObjId );
-			}
-		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
-	}
-
-	/*
-	--- myRemoveManeuver function --------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveManeuver ( maneuverObjId ) {
-		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
-		myEventDispatcher.dispatch ( 'setitinerary' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
-
-	/*
-	--- routeEditor object --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			removeManeuver : maneuverObjId => myRemoveManeuver ( maneuverObjId ),
-
-			saveGpx : RouteObjId => mySaveGpx ( RouteObjId ),
-
-			chainRoutes : ( ) => myChainRoutes ( ),
-
-			startRouting : ( ) => myStartRouting ( ),
-
-			saveEdition : ( ) => mySaveEdition ( ),
-
-			cancelEdition : ( ) => myCancelEdition ( ),
-
-			routeProperties : routeObjId => myRouteProperties ( routeObjId ),
-
-			printRouteMap : routeObjId => myPrintRouteMap ( routeObjId ),
-
-			showRoute : routeObjId => myShowRoute ( routeObjId ),
-
-			hideRoute : routeObjId => myHideRoute ( routeObjId ),
-
-			showRoutes : ( ) => myShowRoutes ( ),
-
-			hideRoutes : ( ) => myHideRoutes ( )
-
-		}
-	);
+	return Object.seal ( new RouteEditor );
 }
 
-/*
---- theRouteEditor object ----------------------------------------------------------------------------------------------
+const myRouteEditor = myNewRouteEditor ( );
 
-The one and only one routeEditor
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theRouteEditor = newRouteEditor ( );
-
-export { theRouteEditor };
+export {
+	myRouteEditor as theRouteEditor
+};
 
 /*
---- End of RouteEditor.js file ----------------------------------------------------------------------------------------
+--- End of RouteEditor.js file ------------------------------------------------------------------------------------------------
 */

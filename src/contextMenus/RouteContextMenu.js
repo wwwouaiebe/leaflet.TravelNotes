@@ -59,7 +59,6 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theConfig } from '../data/Config.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -113,11 +112,11 @@ function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 					) ?
 						null
 						:
-						theTravelEditor.editRoute,
+						theRouteEditor.editRoute,
 				param : myRouteObjId
 			},
 			{
-				context : theTravelEditor,
+				context : theRouteEditor,
 				name : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
 				action :
 					(
@@ -128,7 +127,7 @@ function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 						?
 						null
 						:
-						theTravelEditor.removeRoute,
+						theRouteEditor.removeRoute,
 				param : myRouteObjId
 			},
 			myRoute.hidden
@@ -168,7 +167,7 @@ function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 				param : myRouteObjId
 			},
 			{
-				context : theRouteEditor,
+				context : theProfileWindowsManager,
 				name : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
 				action :
 					myRoute.itinerary.hasProfile

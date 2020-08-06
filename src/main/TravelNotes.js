@@ -52,7 +52,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
 import { theMapEditor } from '../core/MapEditor.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
@@ -123,7 +123,6 @@ function newTravelNotes ( ) {
 					theMapEditor.updateRouteProperties (
 						updateRoutePropertiesEvent.data.routeObjId
 					);
-					newRoadbookUpdate ( );
 				}
 			},
 			false
@@ -137,7 +136,6 @@ function newTravelNotes ( ) {
 						updateNoteEvent.data.removedNoteObjId,
 						updateNoteEvent.data.addedNoteObjId
 					);
-					newRoadbookUpdate ( );
 				}
 			},
 			false
@@ -350,7 +348,7 @@ function newTravelNotes ( ) {
 		}
 
 		if ( theConfig.travelEditor.startupRouteEdition ) {
-			theTravelEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
+			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}
 		myEventDispatcher.dispatch ( 'setrouteslist' );
 		myEventDispatcher.dispatch ( 'roadbookupdate' );

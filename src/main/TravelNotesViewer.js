@@ -33,7 +33,6 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
@@ -75,7 +74,6 @@ function newTravelNotesViewer ( ) {
 					theViewerMapEditor.addNote (
 						updateNoteEvent.data.addedNoteObjId
 					);
-					newRoadbookUpdate ( );
 				}
 			},
 			false
