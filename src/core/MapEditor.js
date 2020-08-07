@@ -134,7 +134,25 @@ function myNewMapEditor ( ) {
 	*/
 
 	function myOnTempWayPointMarkerDragStart ( ) {
-		myTempWayPointMarker.off ( 'mouseout', myOnTempWayPointMarkerMouseOut );
+		L.DomEvent.off ( myTempWayPointMarker, 'mouseout', myOnTempWayPointMarkerMouseOut );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnTempWayPointMarkerContextMenu
+	@desc Event listener for myTempWayPointMarker
+	@listens contextmenu
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnTempWayPointMarkerContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.latlng.lat = myTempWayPointInitialLatLng [ ZERO ];
+		contextMenuEvent.latlng.lng = myTempWayPointInitialLatLng [ ONE ];
+		contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
+		newRouteContextMenu ( contextMenuEvent ).show ( );
 	}
 
 	/**
@@ -154,28 +172,12 @@ function myNewMapEditor ( ) {
 			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
 		);
 		if ( myTempWayPointMarker ) {
-			L.DomEvent.off ( myTempWayPointMarker );
+			L.DomEvent.off ( myTempWayPointMarker, 'dragstart', myOnTempWayPointMarkerDragStart );
+			L.DomEvent.off ( myTempWayPointMarker, 'dragend', myOnTempWayPointMarkerDragEnd );
+			L.DomEvent.off ( myTempWayPointMarker, 'contextmenu', myOnTempWayPointMarkerContextMenu );
 			theTravelNotesData.map.removeLayer ( myTempWayPointMarker );
 			myTempWayPointMarker = null;
 		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnTempWayPointMarkerContextMenu
-	@desc Event listener for myTempWayPointMarker
-	@listens contextmenu
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTempWayPointMarkerContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.latlng.lat = myTempWayPointInitialLatLng [ ZERO ];
-		contextMenuEvent.latlng.lng = myTempWayPointInitialLatLng [ ONE ];
-		contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
-		newRouteContextMenu ( contextMenuEvent ).show ( );
 	}
 
 	/**
@@ -672,8 +674,8 @@ function myNewMapEditor ( ) {
 		*/
 
 		updateRouteProperties ( routeObjId ) {
+			let polyline = theTravelNotesData.mapObjects.get ( routeObjId );
 			let route = theDataSearchEngine.getRoute ( routeObjId );
-			let polyline = theTravelNotesData.mapObjects.get ( route.objId );
 			polyline.setStyle (
 				{
 					color : route.color,

@@ -296,7 +296,7 @@ function myNewRouteEditor ( ) {
 
 	@class
 	@classdesc This class contains methods fot Routes creation or modifications
-	@see {@link theNoteEditor} for the one and only one instance of this class
+	@see {@link theRouteEditor} for the one and only one instance of this class
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -304,16 +304,40 @@ function myNewRouteEditor ( ) {
 
 	class RouteEditor {
 
+		/**
+		This method add a route to the Travel and, if no other route is beind edited,
+		start the edition of this new route
+		@fires setprovider
+		@fires settransitmode
+		@fires routeupdated
+		@fires setitinerary
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
+
 		addRoute ( ) {
 			let route = newRoute ( );
 			theTravelNotesData.travel.routes.add ( route );
-			myEventDispatcher.dispatch ( 'setrouteslist' );
-			myChainRoutes ( );
-			myEventDispatcher.dispatch ( 'roadbookupdate' );
-			if ( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus ) {
+			if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
+				myChainRoutes ( );
+				myEventDispatcher.dispatch ( 'setrouteslist' );
+				myEventDispatcher.dispatch ( 'roadbookupdate' );
+			}
+			else {
 				this.editRoute ( route.objId );
 			}
 		}
+
+		/**
+		This method start the edition of a route
+		@param {!number} routeObjId The objId of the route to edit.
+		@fires setprovider
+		@fires settransitmode
+		@fires routeupdated
+		@fires setitinerary
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
 
 		editRoute ( routeObjId ) {
 			if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
@@ -323,11 +347,6 @@ function myNewRouteEditor ( ) {
 					theTranslator.getText ( 'RouteEditor - Not possible to edit a route without a save or cancel' )
 				);
 				return;
-			}
-			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-
-				// the current edited route is not changed. Cleaning the editors
-				this.cancelEdition ( );
 			}
 
 			// We verify that the provider  for this route is available
@@ -352,6 +371,12 @@ function myNewRouteEditor ( ) {
 					)
 				);
 				return;
+			}
+
+			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+
+				// the current edited route is not changed. Cleaning the editors
+				this.cancelEdition ( );
 			}
 
 			// Provider and transit mode are changed in the itinerary editor
@@ -390,6 +415,15 @@ function myNewRouteEditor ( ) {
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
 
+		/**
+		This method removes a route from the travel
+		@param {!number} routeObjId The objId of the Route to remove.
+		@fires routeupdated
+		@fires setitinerary
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
+
 		removeRoute ( routeObjId ) {
 			let routeToDeleteObjId = routeObjId;
 			if (
@@ -398,23 +432,17 @@ function myNewRouteEditor ( ) {
 					||
 					routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
 				)
-				&&
-				ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus
 			) {
+				if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
 
-				// cannot remove the route currently edited and changed
-				theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
-				return;
-			}
+					// cannot remove the route currently edited and changed
+					theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
+					return;
+				}
 
-			if (
-				routeToDeleteObjId === theTravelNotesData.editedRouteObjId
-				||
-				routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
-
-			) {
 				routeToDeleteObjId = theTravelNotesData.editedRouteObjId;
 				this.cancelEdition ( );
+
 			}
 
 			myEventDispatcher.dispatch (
@@ -433,19 +461,43 @@ function myNewRouteEditor ( ) {
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
 
+		/**
+		This method removes a maneuver from the edited route
+		@param {!number} maneuverObjId The objId of the Maneuver to remove.
+		@fires setitinerary
+		@fires roadbookupdate
+		*/
+
 		removeManeuver ( maneuverObjId ) {
 			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
 			myEventDispatcher.dispatch ( 'setitinerary' );
 			myEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
 
+		/**
+		This method save the route to a gpx file
+		@param {!number} routeObjId The objId of the Route to save.
+		*/
+
 		saveGpx ( routeObjId ) {
 			newGpxFactory ( ).routeToGpx ( routeObjId );
 		}
 
+		/**
+		This method recompute the distances for all the chained routes and their notes
+		*/
+
 		chainRoutes ( ) {
 			myChainRoutes ( );
 		}
+
+		/**
+		This method start the routing for the edited route.
+		@async
+		@fires routeupdated
+		@fires setitinerary
+		@fires roadbookupdate
+		*/
 
 		startRouting ( ) {
 			if (
@@ -466,6 +518,14 @@ function myNewRouteEditor ( ) {
 			}
 		}
 
+		/**
+		This method save the edited route
+		@fires routeupdated
+		@fires setitinerary
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
+
 		saveEdition ( ) {
 
 			// the edited route is cloned
@@ -477,6 +537,14 @@ function myNewRouteEditor ( ) {
 			theTravelNotesData.editedRouteObjId = clonedRoute.objId;
 			this.cancelEdition ( );
 		}
+
+		/**
+		This method cancel the route edition
+		@fires routeupdated
+		@fires setitinerary
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
 
 		cancelEdition ( ) {
 
@@ -506,6 +574,16 @@ function myNewRouteEditor ( ) {
 			myEventDispatcher.dispatch ( 'setitinerary' );
 		}
 
+		/**
+		This method show the RoutePropertiesDialog
+		@param {!number} routeObjId The objId of the Route for witch the properties must be edited
+		@async
+		@fires routepropertiesupdated
+		@fires setrouteslist
+		@fires roadbookupdate
+		@fires updateitinerary
+		*/
+
 		routeProperties ( routeObjId ) {
 			let route = theDataSearchEngine.getRoute ( routeObjId );
 			let routePropertiesDialog = newRoutePropertiesDialog ( route );
@@ -523,10 +601,17 @@ function myNewRouteEditor ( ) {
 					}
 					myEventDispatcher.dispatch ( 'roadbookupdate' );
 					myEventDispatcher.dispatch ( 'setrouteslist' );
+					myEventDispatcher.dispatch ( 'updateitinerary' );
 				}
 			)
 				.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
 		}
+
+		/**
+		This method show the PrintRouteMapDialog and then print the maps
+		@param {!number} routeObjId The objId of the Route for witch the maps must be printed
+		@async
+		*/
 
 		printRouteMap ( routeObjId ) {
 			let printRouteMapDialog = newPrintRouteMapDialog ( );
@@ -539,7 +624,13 @@ function myNewRouteEditor ( ) {
 				.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
 		}
 
+		/**
+		This method show a route on the map
+		@param {!number} routeObjId The objId of the Route to show
+		*/
+
 		showRoute ( routeObjId ) {
+			theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
 			myEventDispatcher.dispatch (
 				'routeupdated',
 				{
@@ -547,11 +638,16 @@ function myNewRouteEditor ( ) {
 					addedRouteObjId : routeObjId
 				}
 			);
-			theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
 
+		/**
+		This method hide a route on the map
+		@param {!number} routeObjId The objId of the Route to show
+		*/
+
 		hideRoute ( routeObjId ) {
+			theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
 			myEventDispatcher.dispatch (
 				'routeupdated',
 				{
@@ -559,14 +655,18 @@ function myNewRouteEditor ( ) {
 					addedRouteObjId : INVALID_OBJ_ID
 				}
 			);
-			theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
+
+		/**
+		This method shows all the routes on the map
+		*/
 
 		showRoutes ( ) {
 			let routesIterator = theTravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				if ( routesIterator.value.hidden ) {
+					routesIterator.value.hidden = false;
 					myEventDispatcher.dispatch (
 						'routeupdated',
 						{
@@ -574,11 +674,14 @@ function myNewRouteEditor ( ) {
 							addedRouteObjId : routesIterator.value.objId
 						}
 					);
-					routesIterator.value.hidden = false;
 				}
 			}
 			myEventDispatcher.dispatch ( 'setrouteslist' );
 		}
+
+		/**
+		This method hide all the routes on the map
+		*/
 
 		hideRoutes ( ) {
 			let routesIterator = theTravelNotesData.travel.routes.iterator;
@@ -588,6 +691,7 @@ function myNewRouteEditor ( ) {
 					&&
 					routesIterator.value.objId !== theTravelNotesData.editedRouteObjId
 				) {
+					routesIterator.value.hidden = true;
 					myEventDispatcher.dispatch (
 						'routeupdated',
 						{
@@ -595,7 +699,6 @@ function myNewRouteEditor ( ) {
 							addedRouteObjId : INVALID_OBJ_ID
 						}
 					);
-					routesIterator.value.hidden = true;
 				}
 			}
 			myEventDispatcher.dispatch ( 'setrouteslist' );
@@ -608,6 +711,18 @@ function myNewRouteEditor ( ) {
 const myRouteEditor = myNewRouteEditor ( );
 
 export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of RouteEditor class
+	@type {RouteEditor}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	myRouteEditor as theRouteEditor
 };
 
