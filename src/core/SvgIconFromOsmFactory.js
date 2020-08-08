@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,19 +17,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- SvgIconFromOsmFactory.js file -------------------------------------------------------------------------------------
-This file contains:
-	- the newSvgIconFromOsmFactory function
 Changes:
 	- v1.4.0:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
-Doc reviewed 20191122
+Doc reviewed 20200808
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -47,7 +42,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} OsmNoteData
-@desc An object to store the data found in osm
+@desc An object that store the data found in osm for a svg note creation
 @property {string} svg The svg definition created from the OSM map and the itinerary. This will be used as icon for the note
 @property {string} tooltip A string with the drection to follow This will be used as tooltip for the note
 @property {string} city A string with the city. This will be used for the note address
@@ -70,23 +65,26 @@ This will be used for the note address
 */
 
 import { theConfig } from '../data/Config.js';
-
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-
 import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
-/*
---- newSvgIconFromOsmFactory function ---------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function myNewSvgIconFromOsmFactory
+@desc constructor of SvgIconFromOsmFactory object
+@return {SvgIconFromOsmFactory} an instance of SvgIconFromOsmFactory object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newSvgIconFromOsmFactory ( ) {
+function myNewSvgIconFromOsmFactory ( ) {
 
 	const DEGREE_0 = 0;
 	const DEGREE_90 = 90;
@@ -99,43 +97,39 @@ function newSvgIconFromOsmFactory ( ) {
 	const AT_END = 1;
 
 	let myGeometry = newGeometry ( );
-
-	let mySvgLatLngDistance = {
-		latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-		distance : DISTANCE.defaultValue
-	};
+	let mySvgLatLngDistance = Object.seal (
+		{
+			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
+			distance : DISTANCE.defaultValue
+		}
+	);
 	let myNearestItineraryPoint = null;
-
 	let myRoute = null; // the TravelNotes route object
-
 	let myResponse = {}; // the xmlHttpRequest response parsed
-
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
 	let myPlaces = [];
 	let myPlace = null;
 	let myCity = '';
-
 	let mySvg = null; // the svg element
-
 	let myPositionOnRoute = ON_ROUTE;
-
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
 	let myDirection = null;
 	let mySvgZoom = theConfig.note.svgZoom;
 	let mySvgAngleDistance = theConfig.note.svgAngleDistance;
-
 	let myDirectionArrow = ' ';
 	let myTooltip = '';
 	let myStreets = '';
 
-	/*
-	--- myCreateNodesAndWaysMaps function -----------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function create the way and node maps from the XmlHttpRequest response
+	@function myCreateNodesAndWaysMaps
+	@desc This function create the way and node JS maps from the XmlHttpRequest response and extract city and places
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateNodesAndWaysMaps ( ) {
@@ -147,6 +141,8 @@ function newSvgIconFromOsmFactory ( ) {
 			element => {
 				switch ( element.type ) {
 				case 'area' :
+
+					// the only area in the response is the city
 					if ( element.tags && element.tags.boundary && element.tags.name ) {
 						myCity = element.tags.name;
 					}
@@ -160,12 +156,15 @@ function newSvgIconFromOsmFactory ( ) {
 					myWaysMap.set ( element.id, element );
 					break;
 				case 'node' :
+
 					myNodesMap.set ( element.id, element );
 					if (
 						element.tags && element.tags.place
 						&&
 						[ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place )
 					) {
+
+						// a place is found in the response
 						myPlaces.push ( element );
 					}
 					break;
@@ -176,12 +175,14 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 	}
 
-	/*
-	--- mySearchItineraryPoints function ------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function search the nearest route point from the icon and compute the distance from the begining of the route
+	@function mySearchNearestItineraryPoint
+	@desc this function search the nearest itinerary point from the point given by the user
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySearchNearestItineraryPoint ( ) {
@@ -208,10 +209,14 @@ function newSvgIconFromOsmFactory ( ) {
 
 	}
 
-	/*
-	--- mySearchHamlet function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function mySearchHamlet
+	@desc this function search the nearest place from the nearest itinerary point
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySearchHamlet ( ) {
@@ -227,10 +232,17 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 	}
 
-	/*
-	--- myLatLngCompare function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myLatLngCompare
+	@desc this function compare the lat and lng of the parameter with the lat and lng of the route waypoints
+	@param {ItineraryPoint} itineraryPoint the itineraryPoint to test
+	@return {boolean} true when the itineraryPoint is not at the same position than a WayPoint and not at the
+	same position than the icon point
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myLatLngCompare ( itineraryPoint ) {
@@ -249,18 +261,22 @@ function newSvgIconFromOsmFactory ( ) {
 				}
 			}
 		);
-		let returnValue =
+		return (
 			! isWayPoint
 			&&
-			( myNearestItineraryPoint.lat !== itineraryPoint.lat || myNearestItineraryPoint.lng !== itineraryPoint.lng );
-
-		return returnValue;
+			( myNearestItineraryPoint.lat !== itineraryPoint.lat || myNearestItineraryPoint.lng !== itineraryPoint.lng ) );
 	}
 
-	/*
-	--- myGetWayName function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetWayName
+	@desc return the name of a way
+	@param {Object} way  A way found in the request result
+	@return the concatenation of the way.tag and way.name if any
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetWayName ( way ) {
@@ -269,61 +285,65 @@ function newSvgIconFromOsmFactory ( ) {
 			( way.tags.ref ? '[' + way.tags.ref + ']' : '' );
 	}
 
-	/*
-	--- mySearchPassingStreets function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function mySearchPassingStreets
+	@desc this function search all the streets passing trough the nearest itinerary point
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySearchPassingStreets ( ) {
 
+		// searching the previous and next point on the itinerary
 		let incomingItineraryPoint =
 			myRoute.itinerary.itineraryPoints.previous ( myNearestItineraryPoint.objId, myLatLngCompare );
 		let outgoingItineraryPoint =
 			myRoute.itinerary.itineraryPoints.next ( myNearestItineraryPoint.objId, myLatLngCompare );
 
-		let svgPointId = -1;
-		let incomingPointId = -1;
-		let outgoingPointId = -1;
+		let svgPointId = NOT_FOUND;
+		let incomingNodeId = NOT_FOUND;
+		let outgoingNodeId = NOT_FOUND;
 
-		let svgPointDistance = Number.MAX_VALUE;
-		let incomingPointDistance = Number.MAX_VALUE;
-		let outgoingPointDistance = Number.MAX_VALUE;
-		let pointDistance = DISTANCE.defaultValue;
+		let svgNodeDistance = Number.MAX_VALUE;
+		let incomingNodeDistance = Number.MAX_VALUE;
+		let outgoingNodeDistance = Number.MAX_VALUE;
+		let nodeDistance = DISTANCE.defaultValue;
 
+		// searching in the nodes JS map the incoming, outgoing and icon nodes
 		myNodesMap.forEach (
 			node => {
 				if ( myNearestItineraryPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
-					if ( pointDistance < svgPointDistance ) {
+					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
+					if ( nodeDistance < svgNodeDistance ) {
 						svgPointId = node.id;
-						svgPointDistance = pointDistance;
+						svgNodeDistance = nodeDistance;
 					}
 				}
 				if ( incomingItineraryPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
-					if ( pointDistance < incomingPointDistance ) {
-						incomingPointId = node.id;
-						incomingPointDistance = pointDistance;
+					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
+					if ( nodeDistance < incomingNodeDistance ) {
+						incomingNodeId = node.id;
+						incomingNodeDistance = nodeDistance;
 					}
 				}
 				if ( outgoingItineraryPoint ) {
-					pointDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
-					if ( pointDistance < outgoingPointDistance ) {
-						outgoingPointId = node.id;
-						outgoingPointDistance = pointDistance;
+					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
+					if ( nodeDistance < outgoingNodeDistance ) {
+						outgoingNodeId = node.id;
+						outgoingNodeDistance = nodeDistance;
 					}
 				}
 			}
 		);
 
 		let iconNode = myNodesMap.get ( svgPointId );
-		let miniRoundaboutTooltip =
-			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway )
-				?
-				theTranslator.getText ( 'SvgIconFromOsmFactory - at the small roundabout on the ground' )
-				:
-				null;
+
+		// searching a mini roundabout at the icon node
+		let isMiniRoundabout =
+			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
 
 		let incomingStreet = '';
 		let outgoingStreet = '';
@@ -331,6 +351,7 @@ function newSvgIconFromOsmFactory ( ) {
 		let isRoundaboutEntry = false;
 		let isRoundaboutExit = false;
 
+		// Searching  passing streets names, incoming and outgoing streets names, roundabout entry and exit
 		myWaysMap.forEach (
 			way => {
 				if ( ! way.nodesIds.includes ( svgPointId ) ) {
@@ -340,16 +361,23 @@ function newSvgIconFromOsmFactory ( ) {
 				let wayName = myGetWayName ( way );
 				let haveName = '' !== wayName;
 
-				let isIncomingStreet = way.nodesIds.includes ( incomingPointId );
-				let isOutgoingStreet = way.nodesIds.includes ( outgoingPointId );
+				let isIncomingStreet = way.nodesIds.includes ( incomingNodeId );
+				let isOutgoingStreet = way.nodesIds.includes ( outgoingNodeId );
 
+				// the same way can enter multiple times in the intersection!
 				let streetOcurrences = way.nodesIds.filter ( nodeId => nodeId === svgPointId ).length * TWO;
+
+				// the icon is at the begining of the street
 				if ( way.nodesIds [ ZERO ] === svgPointId ) {
 					streetOcurrences --;
 				}
+
+				// the icon is at end of the street
 				if ( way.nodesIds [ way.nodesIds.length - ONE ] === svgPointId ) {
 					streetOcurrences --;
 				}
+
+				// it's the incoming street ...saving name  and eventually the roundabout exit
 				if ( isIncomingStreet ) {
 					incomingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
@@ -360,6 +388,8 @@ function newSvgIconFromOsmFactory ( ) {
 				if ( ZERO === streetOcurrences ) {
 					return;
 				}
+
+				// it's the outgoing street ...saving name  and eventually the roundabout exit
 				if ( isOutgoingStreet ) {
 					outgoingStreet = haveName ? wayName : '???';
 					streetOcurrences --;
@@ -370,6 +400,8 @@ function newSvgIconFromOsmFactory ( ) {
 				if ( ZERO === streetOcurrences || ! haveName ) {
 					return;
 				}
+
+				// It's a passing street ... saving name...
 				while ( ZERO !== streetOcurrences ) {
 					myStreets = '' === myStreets ? wayName : myStreets + ' &#x2AA5; ' + wayName;
 					streetOcurrences --;
@@ -377,17 +409,19 @@ function newSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		if ( '' === incomingStreet ) {
-			myDirectionArrow = '&#x1F7E2;';
-		}
-
 		if ( AT_START === myPositionOnRoute ) {
+
+			// It's the start point adding a green circle to the outgoing street
 			myStreets = '&#x1F7E2; ' + outgoingStreet;
 		}
 		else if ( AT_END === myPositionOnRoute ) {
+
+			// It's the end point adding a red circle to the incoming street
 			myStreets = incomingStreet + ' &#x1F534;';
 		}
 		else {
+
+			// Adiing the incoming and outgoing streets and direction arrow
 			myStreets =
 				incomingStreet +
 				( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
@@ -395,6 +429,7 @@ function newSvgIconFromOsmFactory ( ) {
 				outgoingStreet;
 		}
 
+		// adding roundabout info
 		if ( isRoundaboutEntry && ! isRoundaboutExit ) {
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - entry roundabout' );
 		}
@@ -402,19 +437,21 @@ function newSvgIconFromOsmFactory ( ) {
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - exit roundabout' );
 		}
 		else if ( isRoundaboutEntry && isRoundaboutExit ) {
-			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - continue roundabout' );
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - continue roundabout' ); // strange but correct
 		}
-		if ( miniRoundaboutTooltip ) {
-			myTooltip += miniRoundaboutTooltip;
+		if ( isMiniRoundabout ) {
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - at the small roundabout on the ground' );
 		}
 	}
 
-	/*
-	--- myComputeTranslation function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute the needed translation to have the icon at the center point of the SVG
+	@function myComputeTranslation
+	@desc this function compute the translation needed to have the itinerary point in the middle of the svg
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputeTranslation ( ) {
@@ -424,13 +461,15 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 	}
 
-	/*
-	--- myComputeRotationAndDirection function ------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute the rotation needed to have the SVG oriented on the itinerary
-	and the direction to take after the icon
+	@function myComputeRotationAndDirection
+	@desc This function compute the rotation needed to have the SVG oriented on the itinerary
+	and compute also the direction to take after the icon
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputeRotationAndDirection ( ) {
@@ -532,10 +571,14 @@ function newSvgIconFromOsmFactory ( ) {
 		}
 	}
 
-	/*
-	--- mySetDirectionArrowAndTooltip function ------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function mySetDirectionArrowAndTooltip
+	@desc this function set the direction arrow and tooltip
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function mySetDirectionArrowAndTooltip ( ) {
@@ -583,12 +626,14 @@ function newSvgIconFromOsmFactory ( ) {
 		}
 	}
 
-	/*
-	--- myCreateRoute function ----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function create the SVG polyline for the route
+	@function myCreateRoute
+	@desc This function create the SVG polyline for the route
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateRoute ( ) {
@@ -645,12 +690,14 @@ function newSvgIconFromOsmFactory ( ) {
 
 	}
 
-	/*
-	--- myCreateWays function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the ways from OSM
+	@function myCreateWays
+	@desc This function creates the ways from OSM
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateWays ( ) {
@@ -723,12 +770,14 @@ function newSvgIconFromOsmFactory ( ) {
 		);
 	}
 
-	/*
-	--- myCreateSvg function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the SVG
+	@function myCreateSvg
+	@desc This function creates the SVG
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateSvg ( ) {
@@ -745,13 +794,60 @@ function newSvgIconFromOsmFactory ( ) {
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
 	}
 
-	/*
-	--- myGetUrl function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetUrl
+	@desc this function creates the full url needed to have the data fromm osm
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
+
+		/*
+		Sample of request:
+
+		https://lz4.overpass-api.de/api/interpreter?
+		data=
+			[out:json][timeout:15000];															=> format, timeout
+
+			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;				=> Searching streets
+
+			is_in(50.489312,5.501035)->.e;														=> Searching city limit
+			area.e[admin_level="2"][name="United Kingdom"]->.f;
+			area.e[admin_level="8"]->.g;
+			area.e[admin_level="10"]->.h;
+			if(f.count(deriveds)==0){
+				.g->.i;																			Normally admin_level = 8
+			}
+			else{																				but in the UK nothing is as
+				if(h.count(deriveds)==0){														in the others countries...
+					.g->.i;																		So we have to search first
+				}																				with admin_level = 10
+				else{																			and if nothing found,
+					.h->.i;																		search with admin_level = 8
+				}
+			}
+			.i out;
+
+			(
+				node(area.i)[place="village"];													=> Searching places in the
+				node(area.i)[place="hamlet"];													city area
+				node(area.i)[place="city"];
+				node(area.i)[place="town"];
+			)->.k;
+
+			( 																					=> Searching places near the
+				node(around:200,50.489312,5.501035)[place="hamlet"];							icon point
+				node(around:400,50.489312,5.501035)[place="village"];
+				node(around:1200,50.489312,5.501035)[place="city"];
+				node(around:1500,50.489312,5.501035)[place="town"];
+			)->.l;
+			node.k.l->.m;
+			.m out;
+		*/
 
 		const SEARCH_AROUND_FACTOR = 1.5;
 
@@ -803,14 +899,20 @@ function newSvgIconFromOsmFactory ( ) {
 			')->.l;' +
 			'node.k.l->.m;' +
 			'.m out;';
-
+		console.log ( requestUrl );
 		return requestUrl;
 	}
 
-	/*
-	--- myGetIconAndAdress function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetIconAndAdress
+	@desc This is the entry point for the icon creation
+	@param {function} onOk The success handler passed to the Promise
+	@param {function} onError The error handler passed to the Promise
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetIconAndAdress ( onOk, onError ) {
@@ -870,35 +972,52 @@ function newSvgIconFromOsmFactory ( ) {
 			);
 	}
 
-	/*
-	--- myGetPromiseIconAndAdress function ----------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class
+	@classdesc This class is used to create  an svg icon for a route note
+	@see {@link newSvgIconFromOsmFactory} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetPromiseIconAndAdress ( iconLatLng, routeObjId ) {
+	class SvgIconFromOsmFactory {
 
-		mySvgLatLngDistance.latLng = iconLatLng;
-		myRoute = theDataSearchEngine.getRoute ( routeObjId );
+		/**
+		this function returns a Promise for the svg icon creation
+		@param {array.<number>} iconLatLng The lat and lng where the icon must be createDocumentFragment
+		@param {!number} routeObjId the objId of the route
+		@return {Promise} A promise that fulfill with a OsmNoteData object completed
+		*/
 
-		return new Promise ( myGetIconAndAdress );
+		getPromiseIconAndAdress ( iconLatLng, routeObjId ) {
+			mySvgLatLngDistance.latLng = iconLatLng;
+			myRoute = theDataSearchEngine.getRoute ( routeObjId );
+
+			return new Promise ( myGetIconAndAdress );
+		}
 	}
 
-	/*
-	--- svgIconFromOsmFactory object ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			getPromiseIconAndAdress : ( iconLatLng, routeObjId ) => myGetPromiseIconAndAdress ( iconLatLng, routeObjId )
-		}
-	);
+	return Object.seal ( new SvgIconFromOsmFactory );
 }
 
-export { newSvgIconFromOsmFactory };
+/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newSvgIconFromOsmFactory
+	@desc constructor of SvgIconFromOsmFactory object
+	@return {SvgIconFromOsmFactory} an instance of SvgIconFromOsmFactory object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+export {
+	myNewSvgIconFromOsmFactory as newSvgIconFromOsmFactory
+};
 
 /*
---- End of svgIconFromOsmFactory.js file ------------------------------------------------------------------------------
+--- End of svgIconFromOsmFactory.js file --------------------------------------------------------------------------------------
 */
