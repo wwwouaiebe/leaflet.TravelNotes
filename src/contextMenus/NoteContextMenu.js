@@ -136,15 +136,14 @@ function myNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class NoteContextMenu
 	@classdesc a BaseContextMenu object with items completed for Notes
-	@see {@link module:NoteContextMenu~newNoteContextMenu} for constructor
+	@see {@link newNoteContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let noteContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
-	noteContextMenu.init ( myGetMenuItems ( ) );
+	let noteContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 
 	return Object.seal ( noteContextMenu );
 }

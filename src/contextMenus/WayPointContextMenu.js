@@ -106,15 +106,14 @@ function myNewWayPointContextMenu ( contextMenuEvent ) {
 
 	@class WayPointContextMenu
 	@classdesc a BaseContextMenu object with items completed for wayPoints
-	@see {@link module:WayPointContextMenu~newWayPointContextMenu} for constructor
+	@see {@link newWayPointContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent );
-	wayPointContextMenu.init ( myGetMenuItems ( ) );
+	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 
 	return Object.seal ( wayPointContextMenu );
 }

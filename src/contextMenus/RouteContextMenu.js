@@ -260,15 +260,14 @@ function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class RouteContextMenu
 	@classdesc a BaseContextMenu object with items completed for routes
-	@see {@link module:RouteContextMenu~newRouteContextMenu} for constructor
+	@see {@link newRouteContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
-	routeContextMenu.init ( myGetMenuItems ( ) );
+	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 
 	return Object.seal ( routeContextMenu );
 }

@@ -41,6 +41,21 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@typedef {Object} MenuItem
+@desc An object to represent a context menu line
+@property {string} context the object to witch the this pointer refers when calling the action function
+@property {string} name the string displayed in the menu
+@property {?function} action the function to be executed when clicking on the menu item. If null the item is displayed
+but not active
+@property {any} param a parameter to be passed to the action function. Can be any type...
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @module BaseContextMenu
 @private
 
@@ -78,7 +93,7 @@ let ourParentDiv = null;
 /*
 Keyboard events listeners must be 'module global' otherwise the events are not removed when
 closing the menu by clicking outside the menu (in this case the event listeners are duplicated
-in each instance of the menu ad so, it's not the same function that is passed to addEventListener
+in each instance of the menu and so, it's not the same function that is passed to addEventListener
 and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
 for others elements. See issue #83
 */
@@ -294,6 +309,7 @@ function ourOnCloseMenu ( ) {
 @function myNewBaseContextMenu
 @desc constructor of BaseContextMenu objects
 @param {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {Array.<MenuItem>} menuItems the items to be displayed in the menu
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 When null, the body of the html page is selected
 @return {BaseContextMenu} an instance of a BaseContextMenu object
@@ -303,7 +319,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewBaseContextMenu ( contextMenuEvent, parentDiv ) {
+function myNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
@@ -505,6 +521,7 @@ function myNewBaseContextMenu ( contextMenuEvent, parentDiv ) {
 		ourCurrentFocusItem = INVALID_OBJ_ID;
 		ourCloseButton = null;
 		ourParentDiv = parentDiv || document.querySelector ( 'body' );
+		ourMenuItems = menuItems;
 
 		myBuildContainer ( );
 		myAddCloseButton ( );
@@ -513,21 +530,6 @@ function myNewBaseContextMenu ( contextMenuEvent, parentDiv ) {
 		document.addEventListener ( 'keydown', ourOnKeyDown, true );
 		document.addEventListener ( 'keypress', ourOnKeyPress, true );
 		document.addEventListener ( 'keyup', ourOnKeyUp, true );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myInit
-	@desc Add the menu items
-	@param menuItems {array} the menu items to use
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myInit ( menuItems ) {
-		ourMenuItems = menuItems;
 	}
 
 	/**
@@ -543,13 +545,6 @@ function myNewBaseContextMenu ( contextMenuEvent, parentDiv ) {
 	*/
 
 	class BaseContextMenu {
-
-		/**
-		Add the menu items. Must be called in the derived classes
-		@param menuItems {array} the menu items to use
-		*/
-
-		init ( menuItems ) { myInit ( menuItems ); }
 
 		/**
 		Show the menu on the screen.
@@ -569,6 +564,7 @@ export {
 	@function
 	@desc constructor of BaseContextMenu objects
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {Array.<MenuItem>} menuItems the items to be displayed in the menu
 	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
 	When null, the body of the html page is selected
 	@return {BaseContextMenu} an instance of a BaseContextMenu object

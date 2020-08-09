@@ -111,15 +111,14 @@ function myNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class ManeuverContextMenu
 	@classdesc a BaseContextMenu object with items completed for maneuvers
-	@see {@link module:ManeuverContextMenu~newManeuverContextMenu} for constructor
+	@see {@link newManeuverContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let maneuverContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
-	maneuverContextMenu.init ( myGetMenuItems ( ) );
+	let maneuverContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 
 	return Object.seal ( maneuverContextMenu );
 }

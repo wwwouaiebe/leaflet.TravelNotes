@@ -105,15 +105,14 @@ function myNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@class OsmSearchContextMenu
 	@classdesc a BaseContextMenu object with items completed for OsmSearch items
-	@see {@link module:OsmSearchContextMenu~newOsmSearchContextMenu} for constructor
+	@see {@link newOsmSearchContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let osmSearchContextMenu = newBaseContextMenu ( contextMenuEvent, parentDiv );
-	osmSearchContextMenu.init ( myGetMenuItems ( ) );
+	let osmSearchContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 
 	return Object.seal ( osmSearchContextMenu );
 }

@@ -175,15 +175,14 @@ function myNewMapContextMenu ( contextMenuEvent ) {
 
 	@class MapContextMenu
 	@classdesc a BaseContextMenu object with items completed for maps
-	@see {@link module:MapContextMenu~newMapContextMenu} for constructor
+	@see {@link newMapContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let mapContextMenu = newBaseContextMenu ( contextMenuEvent );
-	mapContextMenu.init ( myGetMenuItems ( ) );
+	let mapContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 
 	return Object.seal ( mapContextMenu );
 }
