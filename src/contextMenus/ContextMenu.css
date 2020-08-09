@@ -16,14 +16,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* Don't change TravelNotes-ContextMenu-Panel. It's used to find the screen height! */
-
 .TravelNotes-ContextMenu-Panel {
 	position: absolute;
 	top: 0;
 	left: 0;
-
-	/* opacity : 0; */
 	width: 100vw;
 	height: 100vh;
 	background-color: transparent;
@@ -38,18 +34,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	border-width: 0.1em;
 	font-family: sans-serif;
 	font-size: 1em;
-	padding: 0.2em;
+}
+
+.TravelNotes-ContextMenu-CloseButton {
+	width: 1.3em;
+}
+
+.TravelNotes-ContextMenu-CloseButton:hover {
+	background-color: lightgray;
+	cursor: default;
 }
 
 .TravelNotes-ContextMenu-ItemContainer {
 	margin-left: 2em;
+	margin-right: 0.5em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
-}
-
-.TravelNotes-ContextMenu-CloseButton:hover {
-	color: red;
-	cursor: default;
 }
 
 .TravelNotes-ContextMenu-ItemContainer:last-child {
@@ -57,31 +57,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 .TravelNotes-ContextMenu-Item {
-	padding: 0;
-	border-style: none;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
 	margin-top: 0.2em;
 	margin-bottom: 0.2em;
 	padding-left: 1em;
-	width: calc(100% - 0.5em);
-	text-align: left;
-	background-color: white;
+	padding-right: 0.2em;
 }
 
+.TravelNotes-ContextMenu-Item-Selected {
+	background-color: lightblue;
+	cursor: default;
+}
+
+/*
 .TravelNotes-ContextMenu-Item:hover {
 	background-color: lightblue;
 	cursor: default;
 }
 
 .TravelNotes-ContextMenu-Item:focus {
-	width: calc(100% + 1em);
 	background-color: lightblue;
-	margin-left: -1.5em;
-	padding-left: 2em;
-	border-style: none;
 	cursor: default;
 }
+*/
 
 .TravelNotes-ContextMenu-ItemDisabled {
 	color: gray;
