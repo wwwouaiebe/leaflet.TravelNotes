@@ -116,18 +116,18 @@ function ourOnKeyUp ( keyBoardEvent ) {
 function ourSetFocusOnItem ( isKeyboardEvent ) {
 	if ( INVALID_OBJ_ID !== ourCurrentFocusItem ) {
 		ourContainer.childNodes [ ourCurrentFocusItem + ONE ].firstChild.classList.remove (
-			'TravelNotes-ContextMenu-Item-Selected'
+			'TravelNotes-ContextMenu-ItemSelected'
 		);
 	}
 	if ( isKeyboardEvent ) {
 		ourContainer.childNodes [ ourKeyboardFocusIsOnItem + ONE ].firstChild.classList.add (
-			'TravelNotes-ContextMenu-Item-Selected'
+			'TravelNotes-ContextMenu-ItemSelected'
 		);
 		ourCurrentFocusItem = ourKeyboardFocusIsOnItem;
 	}
 	else {
 		ourContainer.childNodes [ ourMouseFocusIsOnItem + ONE ].firstChild.classList.add (
-			'TravelNotes-ContextMenu-Item-Selected'
+			'TravelNotes-ContextMenu-ItemSelected'
 		);
 		ourCurrentFocusItem = ourMouseFocusIsOnItem;
 		ourKeyboardFocusIsOnItem = ourMouseFocusIsOnItem;
