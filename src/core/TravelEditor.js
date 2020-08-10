@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,10 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- TravelEditor.js file ----------------------------------------------------------------------------------------------
-This file contains:
-	- the newTravelEditor function
-	- the theTravelEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -42,10 +38,28 @@ Changes:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191121
+Doc reviewed 20200810
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file TravelEditor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module TravelEditor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -58,120 +72,118 @@ import { newTravel } from '../data/Travel.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- newTravelEditor function ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure and Singleton
+@function myNewTravelEditor
+@desc constructor of TravelEditor object
+@return {TravelEditor} an instance of TravelEditor object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravelEditor ( ) {
+function myNewTravelEditor ( ) {
 
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
-	/*
-	--- myRouteDropped function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function changes the position of a route after a drag and drop
+	@class
+	@classdesc This class contains methods fot Travel creation or modifications
+	@see {@link theTravelEditor} for the one and only one instance of this class
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRouteDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
-		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-		theRouteEditor.chainRoutes ( );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
+	class TravelEditor {
+
+		/**
+		This method is called when a route is dropped in the TravelUI and then routes reordered.
+		@param {!number} draggedRouteObjId The objId of the dragged route
+		@param {!number} targetRouteObjId The objId of the route on witch the drop was executed
+		@param {boolean} draggedBefore when true the dragged route is moved before the target route
+		when false after
+		@fires setrouteslist
+		@fires roadbookupdate
+		*/
+
+		routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore )		{
+			theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+			theRouteEditor.chainRoutes ( );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+		}
+
+		/**
+		This method save the current travel to a file
+		*/
+
+		saveTravel ( ) {
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.hidden = false;
+			}
+			let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
+			myUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		}
+
+		/**
+		This method clear the current travel and start a new travel
+		@fires removeallobjects
+		@fires setrouteslist
+		@fires setitinerary
+		@fires travelnameupdated
+		@fires roadbookupdate
+		*/
+
+		clear ( ) {
+			if ( ! window.confirm ( theTranslator.getText (
+				'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
+				return;
+			}
+			theProfileWindowsManager.deleteAllProfiles ( );
+			myEventDispatcher.dispatch ( 'removeallobjects' );
+			theTravelNotesData.travel.editedRoute = newRoute ( );
+			theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
+			theTravelNotesData.travel = newTravel ( );
+			theTravelNotesData.travel.routes.add ( newRoute ( ) );
+			myEventDispatcher.dispatch ( 'setrouteslist' );
+			myEventDispatcher.dispatch ( 'setitinerary' );
+			myEventDispatcher.dispatch ( 'roadbookupdate' );
+			myEventDispatcher.dispatch ( 'travelnameupdated' );
+			if ( theConfig.travelEditor.startupRouteEdition ) {
+				theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
+			}
+		}
+
 	}
-
-	/*
-	--- mySaveTravel function -----------------------------------------------------------------------------------------
-
-	This function save a travel to a local file
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySaveTravel ( ) {
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			routesIterator.value.hidden = false;
-		}
-
-		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
-
-		// save file
-		myUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
-	}
-
-	/*
-	--- myClear function ----------------------------------------------------------------------------------------------
-
-	This function remove completely the current travel
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClear ( ) {
-		if ( ! window.confirm ( theTranslator.getText (
-			'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
-			return;
-		}
-		theProfileWindowsManager.deleteAllProfiles ( );
-		myEventDispatcher.dispatch ( 'removeallobjects' );
-		theTravelNotesData.travel.editedRoute = newRoute ( );
-		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel = newTravel ( );
-		theTravelNotesData.travel.routes.add ( newRoute ( ) );
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		myEventDispatcher.dispatch ( 'setitinerary' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		myEventDispatcher.dispatch ( 'travelnameupdated' );
-		if ( theConfig.travelEditor.startupRouteEdition ) {
-			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
-		}
-	}
-
-	/*
-	--- travelEditor object -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-
-			routeDropped : ( draggedRouteObjId, targetRouteObjId, draggedBefore ) => myRouteDropped (
-				draggedRouteObjId,
-				targetRouteObjId,
-				draggedBefore
-			),
-
-			saveTravel : ( ) => mySaveTravel ( ),
-
-			clear : ( ) => myClear ( )
-
-		}
-	);
+	return Object.seal ( new TravelEditor );
 }
 
+const myTravelEditor = myNewTravelEditor ( );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of TravelEditor class
+	@type {TravelEditor}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myTravelEditor as theTravelEditor
+};
+
 /*
---- theTravelEditor object ---------------------------------------------------------------------------------------------
-
-The one and only one TravelEditor
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theTravelEditor = newTravelEditor ( );
-
-export { theTravelEditor };
-
-/*
---- End of TravelEditor.js file ---------------------------------------------------------------------------------------
+--- End of TravelEditor.js file -----------------------------------------------------------------------------------------------
 */

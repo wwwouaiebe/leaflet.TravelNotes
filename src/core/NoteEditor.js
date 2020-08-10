@@ -623,7 +623,7 @@ function myNewNoteEditor ( ) {
 		/**
 		This method is called when a note is dropped in the TravelNotesPaneUI and then notes reordered.
 		@param {!number} draggedNoteObjId The objId of the dragged note
-		@param {!number} targetNoteObjId The objId of the note on with the drop was executed
+		@param {!number} targetNoteObjId The objId of the note on witch the drop was executed
 		@param {boolean} draggedBefore when true the dragged note is moved before the target note
 		when false after
 		@fires updatetravelnotes
