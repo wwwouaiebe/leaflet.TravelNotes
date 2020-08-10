@@ -15,7 +15,7 @@ Enum for geolocation status
 @enum {Object}
 @property {number} refusedByUser The user don't accept to be localized
 @property {number} disabled The geolocation is not available (disabled in the browser or unsecure context)
-@property {number} inactive The geoloacation is inactive
+@property {number} inactive The geolocation is inactive
 @property {number} active the geolocation is active
 @public
 
