@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,122 +16,142 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- ViewerFileLoader.js file ------------------------------------------------------------------------------------------
-This file contains:
-	- the newViewerFileLoader function
 Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200810
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ViewerFileLoader.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ViewerFileLoader
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newZoomer } from '../core/Zoomer.js';
-
 import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- newViewerFileLoader function --------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function myNewViewerFileLoader
+@desc constructor for ViewerFileLoader objects
+@return {ViewerFileLoader} an instance of ViewerFileLoader object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newViewerFileLoader ( ) {
+function myNewViewerFileLoader ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 
-	/*
-	--- myDisplay function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function update the screen
+	@class ViewerFileLoader
+	@classdesc This class load a file from a web server and display the travel
+	@see {@link newViewerFileLoader} for constructor
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myDisplay ( ) {
+	class ViewerFileLoader {
 
-		// routes are added with their notes
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {
+		/**
+		Open a distant file from a web server and display the content of the file
+		@param {Object} fileContent
+		*/
+
+		openDistantFile ( fileContent ) {
+			newFileCompactor ( ).decompress ( fileContent );
+			theTravelNotesData.travel.readOnly = true;
+			this.display ( );
+		}
+
+		/**
+		Display the current travel on the map
+		@fires routeupdated
+		@fires noteupdated
+		@fires zoomto
+		*/
+
+		display ( ) {
+			let routesIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {
+					myEventDispatcher.dispatch (
+						'routeupdated',
+						{
+							removedRouteObjId : INVALID_OBJ_ID,
+							addedRouteObjId : routesIterator.value.objId
+						}
+					);
+				}
+			}
+			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 				myEventDispatcher.dispatch (
 					'routeupdated',
 					{
 						removedRouteObjId : INVALID_OBJ_ID,
-						addedRouteObjId : routesIterator.value.objId
+						addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
 					}
 				);
 			}
+			let notesIterator = theTravelNotesData.travel.notes.iterator;
+			while ( ! notesIterator.done ) {
+				myEventDispatcher.dispatch (
+					'noteupdated',
+					{
+						removedNoteObjId : INVALID_OBJ_ID,
+						addedNoteObjId : notesIterator.value.objId
+					}
+				);
+			}
+			newZoomer ( ).zoomToTravel ( );
 		}
-
-		// edited route is added with notes and , depending of read only, waypoints
-		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-			myEventDispatcher.dispatch (
-				'routeupdated',
-				{
-					removedRouteObjId : INVALID_OBJ_ID,
-					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
-				}
-			);
-		}
-
-		// travel notes are added
-		let notesIterator = theTravelNotesData.travel.notes.iterator;
-		while ( ! notesIterator.done ) {
-			myEventDispatcher.dispatch (
-				'noteupdated',
-				{
-					removedNoteObjId : INVALID_OBJ_ID,
-					addedNoteObjId : notesIterator.value.objId
-				}
-			);
-		}
-
-		newZoomer ( ).zoomToTravel ( );
-
-		myEventDispatcher.dispatch ( 'travelnameupdated' );
 	}
 
-	/*
-	--- myOpenDistantFile function ------------------------------------------------------------------------------------
-
-	This function open a local file
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOpenDistantFile ( fileContent ) {
-
-		newFileCompactor ( ).decompress ( fileContent );
-		theTravelNotesData.travel.readOnly = true;
-		myDisplay ( );
-	}
-
-	/*
-	--- ViewerFileLoader object ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			openDistantFile : fileContent => myOpenDistantFile ( fileContent ),
-			display : ( ) => myDisplay ( )
-		}
-	);
+	return Object.seal ( new ViewerFileLoader );
 }
 
-export { newViewerFileLoader };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newViewerFileLoader
+	@desc constructor for ViewerFileLoader objects
+	@return {ViewerFileLoader} an instance of ViewerFileLoader object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewViewerFileLoader as newViewerFileLoader
+};
 
 /*
---- End of ViewerFileLoader.js file -----------------------------------------------------------------------------------
+--- End of ViewerFileLoader.js file -------------------------------------------------------------------------------------------
 */

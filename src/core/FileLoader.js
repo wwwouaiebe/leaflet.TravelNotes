@@ -183,7 +183,7 @@ function myNewFileLoader ( ) {
 
 	@class FileLoader
 	@classdesc This class load a file from the computer disk and display the travel
-	@see {@link newFileCompactor} for constructor
+	@see {@link newFileLoader} for constructor
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
