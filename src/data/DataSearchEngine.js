@@ -64,7 +64,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewDataSearchEngine
+@function ourNewDataSearchEngine
 @desc constructor of theDataSearchEngine object
 @return {DataSearchEngine} an instance of DataSearchEngine object
 @private
@@ -72,7 +72,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewDataSearchEngine ( ) {
+function ourNewDataSearchEngine ( ) {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ function myNewDataSearchEngine ( ) {
 	return Object.seal ( new DataSearchEngine );
 }
 
-const myDataSearchEngine = myNewDataSearchEngine ( );
+const ourDataSearchEngine = ourNewDataSearchEngine ( );
 
 export {
 
@@ -168,7 +168,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myDataSearchEngine as theDataSearchEngine
+	ourDataSearchEngine as theDataSearchEngine
 };
 
 /*

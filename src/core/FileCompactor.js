@@ -53,7 +53,7 @@ import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/C
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewFileCompactor
+@function ourNewFileCompactor
 @desc constructor for FileCompactor objects
 @return {FileCompactor} an instance of FileCompactor object
 @private
@@ -61,7 +61,7 @@ import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/C
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewFileCompactor ( ) {
+function ourNewFileCompactor ( ) {
 
 	const POLYLINE_PRECISION = 6;
 
@@ -244,7 +244,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewFileCompactor as newFileCompactor
+	ourNewFileCompactor as newFileCompactor
 };
 
 /*

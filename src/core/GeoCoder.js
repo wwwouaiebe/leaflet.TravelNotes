@@ -73,7 +73,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewGeoCoder
+@function ourNewGeoCoder
 @desc constructor for GeoCoder objects
 @return {GeoCoder} an instance of GeoCoder object
 @private
@@ -81,7 +81,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewGeoCoder ( ) {
+function ourNewGeoCoder ( ) {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewGeoCoder as newGeoCoder
+	ourNewGeoCoder as newGeoCoder
 };
 
 /*

@@ -88,7 +88,7 @@ import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '.
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewRouteEditor
+@function ourNewRouteEditor
 @desc constructor of RouteEditor object
 @return {RouteEditor} an instance of RouteEditor object
 @private
@@ -96,7 +96,7 @@ import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '.
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewRouteEditor ( ) {
+function ourNewRouteEditor ( ) {
 
 	let myMustZoomToRouteAfterRouting = false;
 	let myRoutingRequestStarted = false;
@@ -708,7 +708,7 @@ function myNewRouteEditor ( ) {
 	return Object.seal ( new RouteEditor );
 }
 
-const myRouteEditor = myNewRouteEditor ( );
+const ourRouteEditor = ourNewRouteEditor ( );
 
 export {
 
@@ -723,7 +723,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myRouteEditor as theRouteEditor
+	ourRouteEditor as theRouteEditor
 };
 
 /*

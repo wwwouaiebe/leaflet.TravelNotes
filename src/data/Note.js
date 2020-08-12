@@ -55,7 +55,7 @@ const ourObjType = newObjType ( 'Note' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewNote
+@function ourNewNote
 @desc Constructor for a Note object
 @return {Note} an instance of a Note object
 @private
@@ -63,7 +63,7 @@ const ourObjType = newObjType ( 'Note' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewNote ( ) {
+function ourNewNote ( ) {
 
 	const DEFAULT_ICON_SIZE = 0;
 
@@ -398,7 +398,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewNote as newNote
+	ourNewNote as newNote
 };
 
 /*

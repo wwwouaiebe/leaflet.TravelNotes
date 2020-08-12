@@ -77,7 +77,7 @@ import { ZERO, ONE, TWO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewAPIKeysManager
+@function ourNewAPIKeysManager
 @desc constructor of theAPIKeysManager object
 @return {APIKeysManager} an instance of APIKeysManager object
 @private
@@ -85,7 +85,7 @@ import { ZERO, ONE, TWO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewAPIKeysManager ( ) {
+function ourNewAPIKeysManager ( ) {
 
 	let myKeysMap = new Map;
 	let myEventDispatcher = newEventDispatcher ( );
@@ -379,7 +379,7 @@ function myNewAPIKeysManager ( ) {
 
 	return Object.seal ( new APIKeysManager	);
 }
-const myAPIKeysManager = myNewAPIKeysManager ( );
+const ourAPIKeysManager = ourNewAPIKeysManager ( );
 
 export {
 
@@ -394,7 +394,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myAPIKeysManager as theAPIKeysManager
+	ourAPIKeysManager as theAPIKeysManager
 };
 
 /*

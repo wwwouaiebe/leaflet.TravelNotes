@@ -52,7 +52,7 @@ import { theTranslator } from '../UI/Translator.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewOsmSearchContextMenu
+@function ourNewOsmSearchContextMenu
 @desc constructor of OsmSearchContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -64,7 +64,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
+function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myZoomer = newZoomer ( );
 
@@ -134,7 +134,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewOsmSearchContextMenu as newOsmSearchContextMenu
+	ourNewOsmSearchContextMenu as newOsmSearchContextMenu
 };
 
 /*

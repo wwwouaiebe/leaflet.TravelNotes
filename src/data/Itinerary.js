@@ -61,7 +61,7 @@ const ourObjType = newObjType ( 'Itinerary' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewItinerary
+@function ourNewItinerary
 @desc Constructor for an Itinerary object
 @return {Itinerary} an instance of a Itinerary object
 @private
@@ -69,7 +69,7 @@ const ourObjType = newObjType ( 'Itinerary' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewItinerary ( ) {
+function ourNewItinerary ( ) {
 
 	let myHasProfile = false;
 	let myAscent = ZERO;
@@ -287,7 +287,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewItinerary as newItinerary
+	ourNewItinerary as newItinerary
 };
 
 /*

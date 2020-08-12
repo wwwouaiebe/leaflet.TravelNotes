@@ -51,7 +51,7 @@ import { theCurrentVersion } from '../data/Version.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewObjType
+@function ourNewObjType
 @desc Constructor for a ObjType object
 @param {string} objTypeName The name of the ObjType
 @return {ObjType} an instance of a ObjType object
@@ -60,7 +60,7 @@ import { theCurrentVersion } from '../data/Version.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewObjType ( objTypeName ) {
+function ourNewObjType ( objTypeName ) {
 
 	const myName = objTypeName;
 
@@ -142,7 +142,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewObjType as newObjType
+	ourNewObjType as newObjType
 };
 
 /*

@@ -59,7 +59,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewConfig
+@function ourNewConfig
 @desc constructor of theConfig object
 @return {Object} an instance of Config object
 @private
@@ -67,7 +67,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewConfig ( ) {
+function ourNewConfig ( ) {
 
 	let myConfig = {
 		autoLoad : false,
@@ -403,7 +403,7 @@ function myNewConfig ( ) {
 	return new Config;
 }
 
-let theConfig = myNewConfig ( );
+let ourConfig = ourNewConfig ( );
 
 export {
 
@@ -418,7 +418,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	theConfig
+	ourConfig as theConfig
 };
 
 /*

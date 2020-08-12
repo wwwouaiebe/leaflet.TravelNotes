@@ -83,7 +83,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TW
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewMapEditor
+@function ourNewMapEditor
 @desc constructor of theMapEditor object
 @return {MapEditor} an instance of MapEditor object
 @private
@@ -91,7 +91,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TW
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewMapEditor ( ) {
+function ourNewMapEditor ( ) {
 
 	const MARKER_BOUNDS_PRECISION = 0.01;
 	const WAY_POINT_ICON_SIZE = 40;
@@ -843,7 +843,7 @@ function myNewMapEditor ( ) {
 	return Object.seal ( new MapEditor );
 }
 
-const myMapEditor = myNewMapEditor ( );
+const ourMapEditor = ourNewMapEditor ( );
 
 export {
 
@@ -858,7 +858,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myMapEditor as theMapEditor
+	ourMapEditor as theMapEditor
 };
 
 /*

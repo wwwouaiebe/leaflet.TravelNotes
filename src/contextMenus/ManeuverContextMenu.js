@@ -53,7 +53,7 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewManeuverContextMenu
+@function ourNewManeuverContextMenu
 @desc constructor of ManeuverContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -65,7 +65,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
+function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myManeuverObjId = contextMenuEvent.maneuverObjId;
 	let myZoomer = newZoomer ( );
@@ -140,7 +140,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewManeuverContextMenu as newManeuverContextMenu
+	ourNewManeuverContextMenu as newManeuverContextMenu
 };
 
 /*

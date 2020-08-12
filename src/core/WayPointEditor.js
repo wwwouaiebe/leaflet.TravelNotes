@@ -78,7 +78,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewWayPointEditor
+@function ourNewWayPointEditor
 @desc constructor of WayPointEditor object
 @return {WayPointEditor} an instance of WayPointEditor object
 @private
@@ -86,7 +86,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewWayPointEditor ( ) {
+function ourNewWayPointEditor ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -370,7 +370,7 @@ function myNewWayPointEditor ( ) {
 	return Object.seal ( new WayPointEditor );
 }
 
-const myWayPointEditor = myNewWayPointEditor ( );
+const ourWayPointEditor = ourNewWayPointEditor ( );
 
 export {
 
@@ -385,7 +385,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myWayPointEditor as theWayPointEditor
+	ourWayPointEditor as theWayPointEditor
 };
 
 /*

@@ -77,7 +77,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewTravelEditor
+@function ourNewTravelEditor
 @desc constructor of TravelEditor object
 @return {TravelEditor} an instance of TravelEditor object
 @private
@@ -85,7 +85,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewTravelEditor ( ) {
+function ourNewTravelEditor ( ) {
 
 	let myUtilities = newUtilities ( );
 	let myEventDispatcher = newEventDispatcher ( );
@@ -166,7 +166,7 @@ function myNewTravelEditor ( ) {
 	return Object.seal ( new TravelEditor );
 }
 
-const myTravelEditor = myNewTravelEditor ( );
+const ourTravelEditor = ourNewTravelEditor ( );
 
 export {
 
@@ -181,7 +181,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myTravelEditor as theTravelEditor
+	ourTravelEditor as theTravelEditor
 };
 
 /*

@@ -52,7 +52,7 @@ let theTravelNotesObjId = ZERO;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewObjId
+@function ourNewObjId
 @desc Generator for ObjId
 @return {!number} a unique ObjId
 @private
@@ -60,7 +60,7 @@ let theTravelNotesObjId = ZERO;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewObjId ( ) {
+function ourNewObjId ( ) {
 	++ theTravelNotesObjId;
 	return theTravelNotesObjId;
 }
@@ -78,7 +78,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewObjId as newObjId
+	ourNewObjId as newObjId
 
 };
 

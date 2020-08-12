@@ -306,7 +306,7 @@ function ourOnCloseMenu ( ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewBaseContextMenu
+@function ourNewBaseContextMenu
 @desc constructor of BaseContextMenu objects
 @param {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {Array.<MenuItem>} menuItems the items to be displayed in the menu
@@ -319,7 +319,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
+function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
@@ -574,7 +574,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewBaseContextMenu as newBaseContextMenu
+	ourNewBaseContextMenu as newBaseContextMenu
 };
 
 /**

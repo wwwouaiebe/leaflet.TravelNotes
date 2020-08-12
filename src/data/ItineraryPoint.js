@@ -59,7 +59,7 @@ const ourObjType = newObjType ( 'ItineraryPoint' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewItineraryPoint
+@function ourNewItineraryPoint
 @desc Constructor for an ItineraryPoint object
 @return {ItineraryPoint} an instance of a ItineraryPoint object
 @private
@@ -67,7 +67,7 @@ const ourObjType = newObjType ( 'ItineraryPoint' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewItineraryPoint ( ) {
+function ourNewItineraryPoint ( ) {
 
 	let myLat = LAT_LNG.defaultValue;
 
@@ -245,7 +245,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewItineraryPoint as newItineraryPoint
+	ourNewItineraryPoint as newItineraryPoint
 };
 
 /*

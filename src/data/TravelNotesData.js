@@ -84,7 +84,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewTravelNotesData
+@function ourNewTravelNotesData
 @desc constructor of theTravelNotesData object
 @return {TravelNotesData} an instance of TravelNotesData object
 @private
@@ -92,7 +92,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewTravelNotesData ( ) {
+function ourNewTravelNotesData ( ) {
 
 	let myTravelNotesData = {
 		map : null,
@@ -186,7 +186,7 @@ function myNewTravelNotesData ( ) {
 	return Object.seal ( new TravelNotesData );
 }
 
-const theTravelNotesData = myNewTravelNotesData ( );
+const ourTravelNotesData = ourNewTravelNotesData ( );
 
 export {
 
@@ -201,7 +201,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	theTravelNotesData
+	ourTravelNotesData as theTravelNotesData
 };
 
 /*

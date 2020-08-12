@@ -66,7 +66,7 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewFileLoader
+@function ourNewFileLoader
 @desc constructor for FileLoader objects
 @return {FileLoader} an instance of FileLoader object
 @private
@@ -74,7 +74,7 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewFileLoader ( ) {
+function ourNewFileLoader ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 
@@ -242,7 +242,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewFileLoader as newFileLoader
+	ourNewFileLoader as newFileLoader
 };
 
 /*

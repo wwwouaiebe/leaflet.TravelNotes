@@ -63,7 +63,7 @@ const ourObjType = newObjType ( 'Travel' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewTravel
+@function ourNewTravel
 @desc Constructor for a Travel object
 @return {Travel} an instance of a Travel object
 @private
@@ -71,7 +71,7 @@ const ourObjType = newObjType ( 'Travel' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewTravel ( ) {
+function ourNewTravel ( ) {
 
 	let myEditedRoute = newRoute ( );
 	let myLayerName = 'OSM - Color';
@@ -294,7 +294,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewTravel as newTravel
+	ourNewTravel as newTravel
 };
 
 /*

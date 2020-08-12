@@ -70,7 +70,7 @@ const ourObjType = newObjType ( 'Route' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewRoute
+@function ourNewRoute
 @desc Constructor for a Route object
 @return {Route} an instance of a Route object
 @private
@@ -78,7 +78,7 @@ const ourObjType = newObjType ( 'Route' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewRoute ( ) {
+function ourNewRoute ( ) {
 
 	let myName = '';
 	let myWayPoints = newCollection ( newWayPoint );
@@ -395,7 +395,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewRoute as newRoute
+	ourNewRoute as newRoute
 };
 
 /*

@@ -54,7 +54,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewZoomer
+@function ourNewZoomer
 @desc constructor for Zoomer objects
 @return {Zoomer} an instance of Zoomer object
 @private
@@ -62,7 +62,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewZoomer ( ) {
+function ourNewZoomer ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 
@@ -216,7 +216,7 @@ export {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-	myNewZoomer as newZoomer
+	ourNewZoomer as newZoomer
 };
 
 /*

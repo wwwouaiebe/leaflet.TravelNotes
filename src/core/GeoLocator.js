@@ -50,7 +50,7 @@ import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewGeoLocator
+@function ourNewGeoLocator
 @desc constructor for theGeoLocator object
 @return {GeoLocator} an instance of GeoLocator object
 @private
@@ -58,7 +58,7 @@ import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewGeoLocator ( ) {
+function ourNewGeoLocator ( ) {
 
 	let myStatus =
 		( 'geolocation' in navigator )
@@ -191,7 +191,7 @@ function myNewGeoLocator ( ) {
 	return Object.seal ( new GeoLocator );
 }
 
-const myGeoLocator = myNewGeoLocator ( );
+const ourGeoLocator = ourNewGeoLocator ( );
 
 export {
 
@@ -206,7 +206,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myGeoLocator as theGeoLocator
+	ourGeoLocator as theGeoLocator
 };
 
 /*

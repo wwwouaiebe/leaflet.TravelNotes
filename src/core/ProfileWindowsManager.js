@@ -55,7 +55,7 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewProfileWindowsManager
+@function ourNewProfileWindowsManager
 @desc constructor of ProfileWindowsManager object
 @return {ProfileWindowsManager} an instance of ProfileWindowsManager object
 @private
@@ -63,7 +63,7 @@ import { ZERO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewProfileWindowsManager ( ) {
+function ourNewProfileWindowsManager ( ) {
 
 	let myProfileWindows = new Map ( );
 	let myProfileFactory = newProfileFactory ( );
@@ -188,7 +188,7 @@ function myNewProfileWindowsManager ( ) {
 	return Object.seal ( new ProfileWindowsManager );
 }
 
-const myProfileWindowsManager = myNewProfileWindowsManager ( );
+const ourProfileWindowsManager = ourNewProfileWindowsManager ( );
 
 export {
 
@@ -203,7 +203,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myProfileWindowsManager as theProfileWindowsManager
+	ourProfileWindowsManager as theProfileWindowsManager
 
 };
 

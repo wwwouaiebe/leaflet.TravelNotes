@@ -76,7 +76,7 @@ import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Co
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewNoteEditor
+@function ourNewNoteEditor
 @desc constructor of theNoteEditor object
 @return {NoteEditor} an instance of NoteEditor object
 @private
@@ -84,7 +84,7 @@ import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Co
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewNoteEditor ( ) {
+function ourNewNoteEditor ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myGeometry = newGeometry ( );
@@ -640,7 +640,7 @@ function myNewNoteEditor ( ) {
 	return Object.seal ( new NoteEditor );
 }
 
-const myNoteEditor = myNewNoteEditor ( );
+const ourNoteEditor = ourNewNoteEditor ( );
 
 export {
 
@@ -655,7 +655,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNoteEditor as theNoteEditor
+	ourNoteEditor as theNoteEditor
 };
 
 /*

@@ -72,7 +72,7 @@ import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../uti
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewViewerMapEditor
+@function ourNewViewerMapEditor
 @desc constructor of theViewerMapEditor object
 @return {ViewerMapEditor} an instance of ViewerMapEditor object
 @private
@@ -80,7 +80,7 @@ import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../uti
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewViewerMapEditor ( ) {
+function ourNewViewerMapEditor ( ) {
 
 	const DEFAULT_MAX_ZOOM = 18;
 	const DEFAULT_MIN_ZOOM = 0;
@@ -468,7 +468,7 @@ function myNewViewerMapEditor ( ) {
 	return Object.seal ( new ViewerMapEditor );
 }
 
-const myViewerMapEditor = myNewViewerMapEditor ( );
+const ourViewerMapEditor = ourNewViewerMapEditor ( );
 
 export {
 
@@ -483,7 +483,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myViewerMapEditor as theViewerMapEditor
+	ourViewerMapEditor as theViewerMapEditor
 };
 
 /*

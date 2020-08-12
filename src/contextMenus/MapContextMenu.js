@@ -61,7 +61,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewMapContextMenu
+@function ourNewMapContextMenu
 @desc constructor of MapContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @return {MapContextMenu} an instance of a MapContextMenu object
@@ -71,7 +71,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewMapContextMenu ( contextMenuEvent ) {
+function ourNewMapContextMenu ( contextMenuEvent ) {
 
 	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
 	let myZoomer = newZoomer ( );
@@ -202,7 +202,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewMapContextMenu as newMapContextMenu
+	ourNewMapContextMenu as newMapContextMenu
 };
 
 /*

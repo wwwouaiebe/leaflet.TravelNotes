@@ -58,7 +58,7 @@ const ourObjType = newObjType ( 'WayPoint' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewWayPoint
+@function ourNewWayPoint
 @desc Constructor for a WayPoint object
 @return {WayPoint} an instance of a WayPoint object
 @private
@@ -66,7 +66,7 @@ const ourObjType = newObjType ( 'WayPoint' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewWayPoint ( ) {
+function ourNewWayPoint ( ) {
 
 	let myName = '';
 	let myAddress = '';
@@ -256,7 +256,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewWayPoint as newWayPoint
+	ourNewWayPoint as newWayPoint
 };
 
 /*

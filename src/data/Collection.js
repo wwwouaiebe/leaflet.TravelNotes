@@ -73,7 +73,7 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewCollection
+@function ourNewCollection
 @desc constructor of Collection objects
 @param {constructor} objectConstructor the constructor of objects to be stored in the Collection
 @return {Collection} an instance of a Collection object
@@ -82,7 +82,7 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewCollection ( objectConstructor ) {
+function ourNewCollection ( objectConstructor ) {
 
 	const SWAP_UP = -1;
 	const SWAP_DOWN = 1;
@@ -475,7 +475,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewCollection as newCollection
+	ourNewCollection as newCollection
 };
 
 /*

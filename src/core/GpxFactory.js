@@ -50,7 +50,7 @@ import { newUtilities } from '../util/Utilities.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewGpxFactory
+@function ourNewGpxFactory
 @desc constructor of GpxFactory object
 @return {GpxFactory} an instance of GpxFactory object
 @private
@@ -58,7 +58,7 @@ import { newUtilities } from '../util/Utilities.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewGpxFactory ( ) {
+function ourNewGpxFactory ( ) {
 
 	const TAB_0 = '\n';
 	const TAB_1 = '\n\t';
@@ -272,5 +272,5 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewGpxFactory as newGpxFactory
+	ourNewGpxFactory as newGpxFactory
 };

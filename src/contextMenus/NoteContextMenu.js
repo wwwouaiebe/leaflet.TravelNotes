@@ -59,7 +59,7 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewNoteContextMenu
+@function ourNewNoteContextMenu
 @desc constructor of NoteContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -71,7 +71,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
+function ourNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
 	let myZoomer = newZoomer ( );
@@ -165,7 +165,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewNoteContextMenu as newNoteContextMenu
+	ourNewNoteContextMenu as newNoteContextMenu
 };
 
 /*

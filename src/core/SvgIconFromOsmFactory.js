@@ -76,7 +76,7 @@ let ourRequestStarted = false;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewSvgIconFromOsmFactory
+@function ourNewSvgIconFromOsmFactory
 @desc constructor of SvgIconFromOsmFactory object
 @return {SvgIconFromOsmFactory} an instance of SvgIconFromOsmFactory object
 @private
@@ -84,7 +84,7 @@ let ourRequestStarted = false;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewSvgIconFromOsmFactory ( ) {
+function ourNewSvgIconFromOsmFactory ( ) {
 
 	const DEGREE_0 = 0;
 	const DEGREE_90 = 90;
@@ -1015,7 +1015,7 @@ function myNewSvgIconFromOsmFactory ( ) {
 	*/
 
 export {
-	myNewSvgIconFromOsmFactory as newSvgIconFromOsmFactory
+	ourNewSvgIconFromOsmFactory as newSvgIconFromOsmFactory
 };
 
 /*

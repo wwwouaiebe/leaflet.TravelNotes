@@ -71,7 +71,7 @@ import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewRouteContextMenu
+@function ourNewRouteContextMenu
 @desc constructor of RouteContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
 @param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
@@ -83,7 +83,7 @@ When null, the body of the html page is selected
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
+function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
 	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
@@ -289,7 +289,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewRouteContextMenu as newRouteContextMenu
+	ourNewRouteContextMenu as newRouteContextMenu
 };
 
 /*

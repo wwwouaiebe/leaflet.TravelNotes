@@ -167,7 +167,7 @@ function ourOnMapChange ( ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewOsmSearchEngine
+@function ourNewOsmSearchEngine
 @desc constructor of OsmSearchEngine object
 @return {OsmSearchEngine} an instance of OsmSearchEngine object
 @private
@@ -175,7 +175,7 @@ function ourOnMapChange ( ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewOsmSearchEngine ( ) {
+function ourNewOsmSearchEngine ( ) {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewOsmSearchEngine as newOsmSearchEngine
+	ourNewOsmSearchEngine as newOsmSearchEngine
 };
 
 /*

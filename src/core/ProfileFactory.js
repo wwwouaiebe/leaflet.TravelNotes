@@ -52,7 +52,7 @@ import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewProfileFactory
+@function ourNewProfileFactory
 @desc constructor of ProfileFactory object
 @return {ProfileFactory} an instance of ProfileFactory object
 @private
@@ -60,7 +60,7 @@ import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewProfileFactory ( ) {
+function ourNewProfileFactory ( ) {
 
 	let mySvg = null;
 	let myVScale = ONE;
@@ -540,7 +540,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewProfileFactory as newProfileFactory
+	ourNewProfileFactory as newProfileFactory
 };
 
 /*

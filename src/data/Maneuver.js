@@ -55,7 +55,7 @@ const ourObjType = newObjType ( 'Maneuver' );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewManeuver
+@function ourNewManeuver
 @desc Constructor for a Maneuver object
 @return {Maneuver} an instance of a Maneuver object
 @private
@@ -63,7 +63,7 @@ const ourObjType = newObjType ( 'Maneuver' );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewManeuver ( ) {
+function ourNewManeuver ( ) {
 
 	let myObjId = newObjId ( );
 
@@ -239,7 +239,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewManeuver as newManeuver
+	ourNewManeuver as newManeuver
 };
 
 /*

@@ -54,7 +54,7 @@ import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewViewerFileLoader
+@function ourNewViewerFileLoader
 @desc constructor for ViewerFileLoader objects
 @return {ViewerFileLoader} an instance of ViewerFileLoader object
 @private
@@ -62,7 +62,7 @@ import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewViewerFileLoader ( ) {
+function ourNewViewerFileLoader ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 
@@ -149,7 +149,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewViewerFileLoader as newViewerFileLoader
+	ourNewViewerFileLoader as newViewerFileLoader
 };
 
 /*
