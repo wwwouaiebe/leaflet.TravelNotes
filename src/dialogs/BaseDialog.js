@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- BaseDialog.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the newBaseDialog function
 Changes:
 	- v1.0.0:
 		- created
@@ -34,28 +31,96 @@ Changes:
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
-Doc reviewed 20191124
+Doc reviewed 20200811
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file BaseDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module BaseDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+/*
+
+Box model
+
++- .TravelNotes-BaseDialog-BackgroundDiv ---------------------------------------------------------------------------+
+|                                                                                                                   |
+| +- .TravelNotes-BaseDialog-Container -------------------------------------------------------------+               |
+| |                                                                                                 |               |
+| | +- .TravelNotes-BaseDialog-TopBar ------------------------------------------------------------+ |               |
+| | |                                                                                             | |               |
+| | | +- .TravelNotes-BaseDialog-CancelButton ---+                                                | |               |
+| | | |  BaseDialog.cancelButton                 |                                                | |               |
+| | | +------------------------------------------+                                                | |               |
+| | +---------------------------------------------------------------------------------------------+ |               |
+| |                                                                                                 |               |
+| | +- .TravelNotes-BaseDialog-HeaderDiv ---------------------------------------------------------+ |               |
+| | |  BaseDialog.title = innerHTML                                                               | |               |
+| | +---------------------------------------------------------------------------------------------+ |               |
+| |                                                                                                 |               |
+| | +- .TravelNotes-BaseDialog-ContentDiv --------------------------------------------------------+ |               |
+| | |  BaseDialog.content                                                                         | |               |
+| | |                                                                                             | |               |
+| | |                                                                                             | |               |
+| | |                                                                                             | |               |
+| | |                                                                                             | |               |
+| | +---------------------------------------------------------------------------------------------+ |               |
+| |                                                                                                 |               |
+| | +- .TravelNotes-BaseDialog-ErrorDiv ----------------------------------------------------------+ |               |
+| | |                                                                                             | |               |
+| | +---------------------------------------------------------------------------------------------+ |               |
+| |                                                                                                 |               |
+| | +- .TravelNotes-BaseDialog-FooterDiv ---------------------------------------------------------+ |               |
+| | |                                                                                             | |               |
+| | | +- .TravelNotes-BaseDialog-SearchWait ----------------------------------------------------+ | |               |
+| | | |                                                                                         | | |               |
+| | | +-----------------------------------------------------------------------------------------+ | |               |
+| | |                                                                                             | |               |
+| | | +- .TravelNotes-BaseDialog-OkButton -------+                                                | |               |
+| | | |  BaseDialog.okButton                     |                                                | |               |
+| | | +------------------------------------------+                                                | |               |
+| | +---------------------------------------------------------------------------------------------+ |               |
+| +-------------------------------------------------------------------------------------------------+               |
+|                                                                                                                   |
+|                                                                                                                   |
+|                                                                                                                   |
++-------------------------------------------------------------------------------------------------------------------+
 */
 
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
 import { ZERO, TWO } from '../util/Constants.js';
-
-/*
---- newBaseDialog function --------------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------------------------------
-*/
 
 const DRAG_MARGIN = 20;
 
-function newBaseDialog ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	// variables initialization for drag and drop
+@function myNewBaseDialog
+@desc constructor for BaseDialog objects
+@return {BaseDialog} an instance of BaseDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function myNewBaseDialog ( ) {
+
 	let myStartDragX = ZERO;
 	let myStartDragY = ZERO;
 	let myDialogX = ZERO;
@@ -63,36 +128,37 @@ function newBaseDialog ( ) {
 	let myScreenWidth = ZERO;
 	let myScreenHeight = ZERO;
 
-	// Div
 	let myBackgroundDiv = null;
+	let myTopBar = null;
 	let myDialogDiv = null;
 	let myHeaderDiv = null;
 	let myContentDiv = null;
 	let myErrorDiv = null;
+	let myWaitDiv = null;
 	let myFooterDiv = null;
 	let mySearchWaitDiv = null;
 	let mySearchWaitBulletDiv = null;
 	let myOkButton = null;
 	let myCancelButton = null;
 
-	// Utilities
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
-	// Listeners
 	let myOkButtonListener = null;
 	let myKeyboardEventListenerEnabled = true;
 	let myOnShow = null;
 
-	// Promise callback
 	let myOnOk = null;
 	let myOnCancel = null;
 
-	/*
-	--- myOnKeyDown function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Keyboard event listener
+	@function myOnKeyDown
+	@desc Keyboard event listener
+	@listens keydown
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnKeyDown ( keyBoardEvent ) {
@@ -106,32 +172,142 @@ function newBaseDialog ( ) {
 		}
 	}
 
-	/*
-	--- myCreateBackground function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnTopBarDragEnd
+	@desc Drag end event listener for the top bar
+	@listens dragend
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnTopBarDragEnd ( dragEndEvent ) {
+		myDialogX += dragEndEvent.screenX - myStartDragX;
+		myDialogY += dragEndEvent.screenY - myStartDragY;
+		myDialogX = Math.min (
+			Math.max ( myDialogX, DRAG_MARGIN ),
+			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
+		);
+		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
+		let dialogMaxHeight =
+			myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
+		myDialogDiv.setAttribute (
+			'style',
+			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnTopBarDragStart
+	@desc Drag start event listener for the top bar
+	@listens dragstart
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnTopBarDragStart ( dragStartEvent ) {
+		try {
+			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
+		}
+		catch ( err ) {
+			console.log ( err );
+		}
+		myStartDragX = dragStartEvent.screenX;
+		myStartDragY = dragStartEvent.screenY;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myDeleteDialog
+	@desc Remove the dialog from the screen
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myDeleteDialog ( ) {
+		document.removeEventListener ( 'keydown', myOnKeyDown, true );
+		myBackgroundDiv.removeEventListener ( 'dragover', ( ) => null, false );
+		myBackgroundDiv.removeEventListener ( 'drop', ( ) => null, false );
+		myTopBar.removeEventListener ( 'dragstart', myOnTopBarDragStart, false );
+		myTopBar.removeEventListener ( 'dragend', myOnTopBarDragEnd, false );
+
+		document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnCancelButtonClick
+	@desc Click event listener for the cancel button
+	@listens click
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnCancelButtonClick ( ) {
+		myCancelButton.removeEventListener ( 'click', myOnCancelButtonClick, false );
+		myDeleteDialog ( );
+		myOnCancel ( 'Canceled by user' );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnOkButtonClick
+	@desc Click event listener for the ok button
+	@listens click
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOkButtonClick ( ) {
+		let returnValue = null;
+		if ( myOkButtonListener ) {
+			returnValue = myOkButtonListener ( );
+			if ( ! returnValue ) {
+				return;
+			}
+		}
+		myOkButton.removeEventListener ( 'click', myOnOkButtonClick, false );
+		myDeleteDialog ( );
+		myOnOk ( returnValue );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateBackgroundDiv
+	@desc This method creates the background covering the entire screen
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
 		myBackgroundDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
-		myBackgroundDiv.addEventListener (
-			'dragover',
-			( ) => null,
-			false
-		);
-		myBackgroundDiv.addEventListener (
-			'drop',
-			( ) => null,
-			false
-		);
+		myBackgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
+		myBackgroundDiv.addEventListener ( 'drop', ( ) => null, false );
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialogDiv
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialogDiv ( ) {
@@ -146,14 +322,18 @@ function newBaseDialog ( ) {
 		);
 	}
 
-	/*
-	--- myCreateTopBar function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateTopBar
+	@desc This method creates the top bar of the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateTopBar ( ) {
-		let topBar = myHTMLElementsFactory.create (
+		myTopBar = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-TopBar',
@@ -161,6 +341,9 @@ function newBaseDialog ( ) {
 			},
 			myDialogDiv
 		);
+		myTopBar.addEventListener ( 'dragstart', myOnTopBarDragStart, false );
+		myTopBar.addEventListener ( 'dragend', myOnTopBarDragEnd, false );
+
 		myCancelButton = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -168,57 +351,19 @@ function newBaseDialog ( ) {
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
-			topBar
+			myTopBar
 		);
-		myCancelButton.addEventListener (
-			'click',
-			( ) => {
-				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
-				myOnCancel ( 'Canceled by user' );
-			},
-			false
-		);
-
-		topBar.addEventListener (
-			'dragstart',
-			dragStartEvent => {
-				try {
-					dragStartEvent.dataTransfer.setData ( 'Text', '1' );
-				}
-				catch ( err ) {
-					console.log ( err );
-				}
-				myStartDragX = dragStartEvent.screenX;
-				myStartDragY = dragStartEvent.screenY;
-			},
-			false
-		);
-		topBar.addEventListener (
-			'dragend',
-			dragEndEvent => {
-				myDialogX += dragEndEvent.screenX - myStartDragX;
-				myDialogY += dragEndEvent.screenY - myStartDragY;
-				myDialogX = Math.min (
-					Math.max ( myDialogX, DRAG_MARGIN ),
-					myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
-				);
-				myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
-				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
-				myDialogDiv.setAttribute (
-					'style',
-					'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
-				);
-			},
-			false
-		);
+		myCancelButton.addEventListener ( 'click', myOnCancelButtonClick, false );
 	}
 
-	/*
-	--- myCreateHeaderDiv function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateHeaderDiv
+	@desc This method creates the header of the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateHeaderDiv ( ) {
@@ -231,10 +376,14 @@ function newBaseDialog ( ) {
 		);
 	}
 
-	/*
-	--- myCreateContentDiv function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateContentDiv
+	@desc This method creates the  dialog content
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateContentDiv ( ) {
@@ -247,26 +396,67 @@ function newBaseDialog ( ) {
 		);
 	}
 
-	/*
-	--- myCreateErrorDiv function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateErrorDiv
+	@desc This method creates the error div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateErrorDiv ( ) {
 		myErrorDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-ErrorDivHidden'
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-Hidden'
 			},
 			myDialogDiv
 		);
 	}
 
-	/*
-	--- myCreateFooterDiv function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateWaitDiv
+	@desc This method creates the wait div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateWaitDiv ( ) {
+		myWaitDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-WaitDiv TravelNotes-BaseDialog-Hidden'
+			},
+			myDialogDiv
+		);
+		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-Hidden'
+			},
+			mySearchWaitDiv = myHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-Hidden'
+				},
+				myWaitDiv
+			)
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateFooterDiv
+	@desc This method creates the footer of the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateFooterDiv ( ) {
@@ -278,80 +468,28 @@ function newBaseDialog ( ) {
 			myDialogDiv
 		);
 
-		// you understand?
-		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-SearchWait-Hidden'
-			},
-			mySearchWaitDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-SearchWait-Hidden'
-				},
-				myFooterDiv
-			)
-		);
-
 		myOkButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x1f197;',
-				className :
-					'TravelNotes-BaseDialog-Button TravelNotes-BaseDialog-OkButton TravelNotes-BaseDialog-OkButton-Visible'
+				className : 'TravelNotes-BaseDialog-Button'
 			},
 			myFooterDiv
 		);
-		myOkButton.addEventListener (
-			'click',
-			( ) => {
-				let returnValue = null;
-				if ( myOkButtonListener ) {
-					returnValue = myOkButtonListener ( );
-					if ( ! returnValue ) {
-						return;
-					}
-				}
-				document.removeEventListener ( 'keydown', myOnKeyDown, true );
-				document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
-				myOnOk ( returnValue );
-			},
-			false
-		);
-
+		myOkButton.addEventListener ( 'click', myOnOkButtonClick, false );
 	}
 
-	/*
-	--- myShowError function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCenterDialog
+	@desc This method center the dialog on the screen
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myShowError ( errorText ) {
-		myErrorDiv.innerHTML = errorText;
-		myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
-		myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-ErrorDivVisible' );
-	}
-
-	/*
-	--- myHideError function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myHideError ( ) {
-		myErrorDiv.innerHTML = '';
-		myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-ErrorDivHidden' );
-		myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-ErrorDivVisible' );
-	}
-
-	/*
-	--- myCenter function ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCenter ( ) {
+	function myCenterDialog ( ) {
 		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / TWO;
 		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / TWO;
 		myDialogX = Math.min (
@@ -366,13 +504,19 @@ function newBaseDialog ( ) {
 		);
 	}
 
-	/*
-	--- myDisplay function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myShow
+	@desc This method show the dialog on the screen. It's called bu the Promise created in the show ( ) method.
+	@param {function} onOk The Success handler passed to the Promise
+	@param {function} onCancel The Error handler passed to the Promise
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myDisplay ( onOk, onCancel ) {
+	function myShow ( onOk, onCancel ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
@@ -381,104 +525,166 @@ function newBaseDialog ( ) {
 
 		myScreenWidth = myBackgroundDiv.clientWidth;
 		myScreenHeight = myBackgroundDiv.clientHeight;
-		myCenter ( );
+		myCenterDialog ( );
 		if ( myOnShow ) {
 			myOnShow ( );
 		}
 	}
 
-	/*
-	--- myShowWait function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog. This one is not displayed
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myShowWait ( ) {
-		mySearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
-		mySearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
-		mySearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
-		mySearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
-		myOkButton.classList.remove ( 'TravelNotes-BaseDialog-OkButton-Visible' );
-		myOkButton.classList.add ( 'TravelNotes-BaseDialog-OkButton-Hidden' );
+	function myCreateDialog ( ) {
+		myCreateBackgroundDiv ( );
+		myCreateDialogDiv ( );
+		myCreateTopBar ( );
+		myCreateHeaderDiv ( );
+		myCreateContentDiv ( );
+		myCreateErrorDiv ( );
+		myCreateWaitDiv ( );
+		myCreateFooterDiv ( );
 	}
 
-	/*
-	--- myHideWait function -------------------------------------------------------------------------------------------
+	myCreateDialog ( );
 
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class BaseDialog
+	@classdesc This class is the base for all the dialogs
+	@see {@link newBaseDialog} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myHideWait ( ) {
-		mySearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
-		mySearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
-		mySearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-SearchWait-Visible' );
-		mySearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-SearchWait-Hidden' );
-		myOkButton.classList.remove ( 'TravelNotes-BaseDialog-OkButton-Hidden' );
-		myOkButton.classList.add ( 'TravelNotes-BaseDialog-OkButton-Visible' );
-	}
+	class BaseDialog {
 
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
+		/**
+		A function that is called when the user push on the ok button. If this function return nothing, the dialog
+		is not closed. If the function return something, the dialog is closed and the returned value is passed as
+		parameter to the Success handler of the Promise created with the show ( ) method.
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		set okButtonListener ( Listener ) { myOkButtonListener = Listener; }
 
-	function myShow ( ) {
-		return new Promise ( myDisplay );
-	}
+		/**
+		a boolean that activate (when true) or deactivate (when false) the myOnKeyDown event listener. This is usefull
+		when multiple dialogs are opened to avoid that all dialogs closes when using the Esc or Return keys
+		*/
 
-	// the dialog is created, but not displayed
-	myCreateBackgroundDiv ( );
-	myCreateDialogDiv ( );
-	myCreateTopBar ( );
-	myCreateHeaderDiv ( );
-	myCreateContentDiv ( );
-	myCreateErrorDiv ( );
-	myCreateFooterDiv ( );
+		set keyboardEventListenerEnabled ( isEnabled ) { myKeyboardEventListenerEnabled = isEnabled; }
 
-	/*
-	--- BaseDialog object ---------------------------------------------------------------------------------------------
+		/**
+		A function that will be executed when the dialog is showed on the screen
+		*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+		set onShow ( OnShow ) { myOnShow = OnShow; }
 
-	return Object.seal (
-		{
-			set okButtonListener ( Listener ) { myOkButtonListener = Listener; },
+		/**
+		The title of the dialog
+		*/
 
-			set keyboardEventListenerEnabled ( isEnabled ) { myKeyboardEventListenerEnabled = isEnabled; },
+		set title ( Title ) { myHeaderDiv.innerHTML = Title; }
 
-			set onShow ( OnShow ) { myOnShow = OnShow; },
+		/**
+		The content of the dialog. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
 
-			showError : errorText => myShowError ( errorText ),
-			hideError : ( ) => myHideError ( ),
+		get content ( ) { return myContentDiv; }
 
-			showWait : ( ) => myShowWait ( ),
-			hideWait : ( ) => myHideWait ( ),
+		/**
+		The footer of the dialog. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
 
-			get title ( ) { return myHeaderDiv.innerHTML; },
-			set title ( Title ) { myHeaderDiv.innerHTML = Title; },
+		get footer ( ) { return myFooterDiv; }
 
-			get header ( ) { return myHeaderDiv; },
-			set header ( Header ) { myHeaderDiv = Header; },
+		/**
+		The ok button of the dialog. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
 
-			get content ( ) { return myContentDiv; },
-			set content ( Content ) { myContentDiv = Content; },
+		get okButton ( ) { return myOkButton; }
 
-			get footer ( ) { return myFooterDiv; },
-			set footer ( Footer ) { myFooterDiv = Footer; },
+		get cancelButton ( ) { return myCancelButton; }
 
-			get okButton ( ) { return myOkButton; },
+		/**
+		show an error message at the bottom of the dialog
+		@param {string} errorText The message to be displayed
+		*/
 
-			get cancelButton ( ) { return myCancelButton; },
-
-			show : ( ) => myShow ( )
+		showError ( errorText ) {
+			myErrorDiv.innerHTML = errorText;
+			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
-	);
+
+		/**
+		hide the error message at the bottom of the dialog
+		*/
+
+		hideError ( ) {
+			myErrorDiv.innerHTML = '';
+			myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+		}
+
+		/**
+		show a wait animation at the bottom of the dialog and hide the ok button
+		*/
+
+		showWait ( ) {
+			mySearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			mySearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			myOkButton.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+		}
+
+		/**
+		hide the wait animation at the bottom of the dialog and show the ok button
+		*/
+
+		hideWait ( ) {
+			mySearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			mySearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			myOkButton.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+		}
+
+		/**
+		Return a Promise that is fulfilled when the user close the dialog with the ok button or the return key
+		or rejected when the cancel button or Esc key is used
+		*/
+
+		show ( ) {
+			return new Promise ( myShow );
+		}
+	}
+
+	return Object.seal ( new BaseDialog );
 }
 
-export { newBaseDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newBaseDialog
+	@desc constructor for BaseDialog objects
+	@return {BaseDialog} an instance of BaseDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewBaseDialog as newBaseDialog
+};
 
 /*
---- End of BaseDialog.js file -----------------------------------------------------------------------------------------
+--- End of BaseDialog.js file -------------------------------------------------------------------------------------------------
 */

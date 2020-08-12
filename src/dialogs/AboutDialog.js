@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- AboutDialog.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the AboutDialog function
 Changes:
 	- v1.0.0:
 		- created
@@ -29,10 +26,30 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #68 : Review all existing promises.
-Doc reviewed 20191124
+Doc reviewed 20200812
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file AboutDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module AboutDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -40,48 +57,76 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theCurrentVersion } from '../data/Version.js';
 
-/*
---- newAboutDialog function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function myNewAboutDialog
+@desc constructor for AboutDialog objects
+@return {AboutDialog} an instance of AboutDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newAboutDialog ( ) {
+function myNewAboutDialog ( ) {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class AboutDialog
+	@classdesc a BaseDialog object adapted for the About dialog
+	@see {@link newAboutDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	let aboutDialog = newBaseDialog ( );
 	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
-
-	let aboutDiv = newHTMLElementsFactory ( ).create (
+	newHTMLElementsFactory ( ).create (
 		'div',
 		{
-			id : 'TravelNotes-AboutDialog-AboutDiv'
+			id : 'TravelNotes-AboutDialog-AboutDiv',
+			innerHTML :
+				'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
+				'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
+				'or any later version.</p>' +
+				'<p>Copyright - 2017 2020 - wwwouaiebe</p>' +
+				'<p>Contact : <a href="https://www.ouaie.be/blog/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
+				'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
+				'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
+				'<p>Version : ' + theCurrentVersion + '.' +
+				'<p>This program uses:' +
+				' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
+				' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +
+				' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
+				'Project-OSRM/osrm-text-instructions</a> and ' +
+				' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>'
 		},
 		aboutDialog.content
-	);
-
-	aboutDiv.innerHTML =
-		'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
-		'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
-		'or any later version.</p>' +
-		'<p>Copyright - 2017 2020 - wwwouaiebe</p>' +
-		'<p>Contact : <a href="http://www.ouaie.be/blog/pages/contact" target="_blank">http://www.ouaie.be/</a></p>' +
-		'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
-		'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-		'<p>Version : ' + theCurrentVersion + '.' +
-		'<p>This program uses:' +
-		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
-		' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +
-		' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
-		'Project-OSRM/osrm-text-instructions</a> and ' +
-		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>';
-
-	aboutDialog.show ( ).then ( )
+	)
+		.show ( )
+		.then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
-
 }
 
-export { newAboutDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newAboutDialog
+	@desc constructor for AboutDialog objects
+	@return {AboutDialog} an instance of AboutDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	myNewAboutDialog as newAboutDialog
+};
 
 /*
---- End of AboutDialog.js file ----------------------------------------------------------------------------------------
+--- End of AboutDialog.js file ------------------------------------------------------------------------------------------------
 */

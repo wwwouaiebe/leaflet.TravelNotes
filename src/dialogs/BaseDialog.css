@@ -34,7 +34,7 @@ Changes:
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.8);
+	background-color: rgba(0, 0, 0, 0.6);
 	z-index: 1200;
 }
 
@@ -48,12 +48,7 @@ Changes:
 	background-color: white;
 	border-style: solid;
 	border-width: 0.1em;
-	font-family: sans-serif;
-	font-size: 1em;
 	cursor: default;
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
 	max-height: 90vh;
 }
 
@@ -74,17 +69,25 @@ Changes:
 
 .TravelNotes-BaseDialog-CancelButton {
 	background-color: white;
-	width: 1em;
+	width: 1.5em;
+	text-align: center;
 }
 
 .TravelNotes-BaseDialog-CancelButton:hover {
-	color: red;
+	cursor: default;
+}
+
+.TravelNotes-BaseDialog-HeaderDiv,
+.TravelNotes-BaseDialog-ContentDiv,
+.TravelNotes-BaseDialog-ErrorDiv,
+.TravelNotes-BaseDialog-WaitDiv,
+.TravelNotes-BaseDialog-FooterDiv {
+	padding: 0.5em;
 }
 
 .TravelNotes-BaseDialog-HeaderDiv {
 	text-align: center;
 	font-weight: bold;
-	padding: 0.5em;
 }
 
 .TravelNotes-BaseDialog-ContentDiv {
@@ -92,13 +95,12 @@ Changes:
 	border-bottom-style: solid;
 	border-color: lightgray;
 	border-width: 0.1em;
-	padding: 0.5em;
-	flex-grow: 1;
 	overflow: auto;
 }
 
-.TravelNotes-BaseDialog-FooterDiv {
-	padding: 0.5em;
+.TravelNotes-BaseDialog-ErrorDiv {
+	background-color: red;
+	color: white;
 }
 
 .TravelNotes-BaseDialog-Button {
@@ -113,37 +115,7 @@ Changes:
 	border-color: black;
 }
 
-.TravelNotes-BaseDialog-ErrorDiv {
-	padding: 0.5em;
-	background-color: red;
-	color: white;
-}
-
-.TravelNotes-BaseDialog-ErrorDivHidden {
-	visibility: hidden;
-	height: 0;
-	padding: 0;
-	margin: 0;
-}
-
-.TravelNotes-BaseDialog-ErrorDivVisible {
-	visibility: visible;
-}
-
-.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Visible {
-	visibility: visible;
-}
-
-.TravelNotes-BaseDialog-OkButton.TravelNotes-BaseDialog-OkButton-Hidden {
-	width: 0;
-	height: 0;
-	padding: 0;
-	margin: 0;
-	visibility: hidden;
-	border-width: 0;
-}
-
-.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Visible {
+.TravelNotes-BaseDialog-SearchWait {
 	margin: 1em;
 	height: 1em;
 	width: calc(100% - 2em);
@@ -151,7 +123,7 @@ Changes:
 	visibility: visible;
 }
 
-.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Visible {
+.TravelNotes-BaseDialog-SearchWaitBullet {
 	background-color: red;
 	height: 100%;
 	width: 1em;
@@ -164,16 +136,12 @@ Changes:
 	to { margin-left: calc(100% - 1em); }
 }
 
-.TravelNotes-BaseDialog-SearchWait.TravelNotes-BaseDialog-SearchWait-Hidden {
+.TravelNotes-BaseDialog-Hidden {
+	width: 0;
+	height: 0;
+	padding: 0;
 	margin: 0;
-	height: 0;
-	width: 0;
 	visibility: hidden;
-}
-
-.TravelNotes-BaseDialog-SearchWaitBullet.TravelNotes-BaseDialog-SearchWait-Hidden {
-	height: 0;
-	width: 0;
-	visibility: hidden;
+	border-width: 0;
 	animation: none;
 }
