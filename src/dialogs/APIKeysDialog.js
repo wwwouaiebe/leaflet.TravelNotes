@@ -92,6 +92,12 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	let myAPIKeysDiv = null;
 	let myOpenSecureFileInput = null;
 	let myOpenUnsecureFileInput = null;
+	let myReloadKeysFromServerFileButton = null;
+	let mySaveKeysToSecureFileButton = null;
+	let myRestoreKeysFromSecureFileButton = null;
+	let myAddNewKeyButton = null;
+	let mySaveKeysToUnsecureFileButton = null;
+	let myRestoreKeysFromUnsecureFileButton = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -146,26 +152,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myOnOkButtonClick
-	@desc Event listener for the ok button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnOkButtonClick ( ) {
-
-		myAPIKeysDialog.hideError ( );
-		if ( ! myVerifyKeys ( ) ) {
-			return;
-		}
-
-		return myGetAPIKeys ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnDeleteApiKeyRowButton
 	@desc Event listener for the delete API key buttons
 	@private
@@ -175,6 +161,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 
 	function myOnDeleteApiKeyRowButton ( clickEvent ) {
 		clickEvent.stopPropagation ( );
+		clickEvent.target.removeEventListener ( 'click', myOnDeleteApiKeyRowButton, false );
 		clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
 	}
 
@@ -219,29 +206,15 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
+				className :
+					'TravelNotes-BaseDialog-Button ' +
+					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
 				innerHTML : '&#x274c' // 274c = ❌
 			},
 			APIKeyRow
 		)
 			.addEventListener ( 'click', myOnDeleteApiKeyRowButton, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateDialog ( ) {
-		myAPIKeysDialog = newBaseDialog ( );
-		myAPIKeysDialog.title = theTranslator.getText ( 'APIKeysDialog - API keys' );
-		myAPIKeysDialog.okButtonListener = myOnOkButtonClick;
 	}
 
 	/**
@@ -332,29 +305,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateReloadKeysFromServerFileButton
-	@desc This method creates the reload server file button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateReloadKeysFromServerFileButton ( ) {
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-				innerHTML : '&#x1f504;' // 1f504 = 🔄
-			},
-			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnErrorEncrypt
 	@desc Error handler for the DataEncryptor on encrypt
 	@private
@@ -422,29 +372,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateSaveKeysToSecureFileButton
-	@desc This method creates the save to secure file button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateSaveKeysToSecureFileButton ( ) {
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
-			},
-			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnRestoreKeysFromSecureFileButtonChange
 	@desc Event listener for the restore from secure file button
 	@private
@@ -486,38 +413,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateRestoreKeysFromSecureFileButton
-	@desc This method creates the restore from secure file button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateRestoreKeysFromSecureFileButton ( ) {
-		myOpenSecureFileInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				className : 'TravelNotes-BaseDialog-OpenFileInput',
-				type : 'file'
-			},
-			myToolbarDiv
-		);
-		myOpenSecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
-				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
-			},
-			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnOpenSecureFileButtonClick, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnRestoreKeysFromSecureFileButtonChange
 	@desc Event listener for the add new key button
 	@private
@@ -528,29 +423,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	function myOnAddNewKeyButtonClick ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		myCreateAPIKeyRow ( { providerName : '', providerKey : '' } );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateAddNewKeyButton
-	@desc This method creates the add new key button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateAddNewKeyButton ( ) {
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
-				innerHTML : '+'
-			},
-			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnAddNewKeyButtonClick, false );
 	}
 
 	/**
@@ -570,29 +442,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			return;
 		}
 		newUtilities ( ).saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateSaveKeysToUnsecureFileButton
-	@desc This method creates the save to unsecure file button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateSaveKeysToUnsecureFileButton ( ) {
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
-				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
-			},
-			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
 	}
 
 	/**
@@ -643,6 +492,192 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnCloseDialog
+	@desc This method is called when the dialog is closed and remove all event listeners
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnCloseDialog ( ) {
+		document.querySelectorAll ( '.TravelNotes-APIKeysDialog-DeleteRowButton' ).forEach (
+			button => { button.removeEventListener ( 'click', myOnDeleteApiKeyRowButton, false ); }
+		);
+		myReloadKeysFromServerFileButton.removeEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
+		mySaveKeysToSecureFileButton.removeEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
+		myOpenSecureFileInput.removeEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
+		myRestoreKeysFromSecureFileButton.removeEventListener ( 'click', myOnOpenSecureFileButtonClick, false );
+		myAddNewKeyButton.removeEventListener ( 'click', myOnAddNewKeyButtonClick, false );
+		mySaveKeysToUnsecureFileButton.removeEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
+		myOpenUnsecureFileInput.removeEventListener ( 'change', myOnRestoreKeysFromUnecureFileButtonChange, false );
+		myRestoreKeysFromUnsecureFileButton.removeEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOkButtonClick ( ) {
+
+		myAPIKeysDialog.hideError ( );
+		if ( ! myVerifyKeys ( ) ) {
+			return;
+		}
+
+		myOnCloseDialog ( );
+		return myGetAPIKeys ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateDialog ( ) {
+		myAPIKeysDialog = newBaseDialog ( );
+		myAPIKeysDialog.title = theTranslator.getText ( 'APIKeysDialog - API keys' );
+		myAPIKeysDialog.okButtonListener = myOnOkButtonClick;
+		myAPIKeysDialog.cancelButtonListener = myOnCloseDialog;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateReloadKeysFromServerFileButton
+	@desc This method creates the reload server file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateReloadKeysFromServerFileButton ( ) {
+		myReloadKeysFromServerFileButton = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
+				innerHTML : '&#x1f504;' // 1f504 = 🔄
+			},
+			myToolbarDiv
+		);
+		myReloadKeysFromServerFileButton.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateSaveKeysToSecureFileButton
+	@desc This method creates the save to secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateSaveKeysToSecureFileButton ( ) {
+		mySaveKeysToSecureFileButton = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
+				innerHTML : '&#x1f4be;' // 1f4be = 💾
+			},
+			myToolbarDiv
+		);
+		mySaveKeysToSecureFileButton.addEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateRestoreKeysFromSecureFileButton
+	@desc This method creates the restore from secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRestoreKeysFromSecureFileButton ( ) {
+		myOpenSecureFileInput = myHTMLElementsFactory.create (
+			'input',
+			{
+				className : 'TravelNotes-BaseDialog-OpenFileInput',
+				type : 'file'
+			},
+			myToolbarDiv
+		);
+		myOpenSecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
+		myRestoreKeysFromSecureFileButton = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
+				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			},
+			myToolbarDiv
+		);
+		myRestoreKeysFromSecureFileButton.addEventListener ( 'click', myOnOpenSecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateAddNewKeyButton
+	@desc This method creates the add new key button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateAddNewKeyButton ( ) {
+		myAddNewKeyButton = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
+				innerHTML : '+'
+			},
+			myToolbarDiv
+		);
+		myAddNewKeyButton.addEventListener ( 'click', myOnAddNewKeyButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateSaveKeysToUnsecureFileButton
+	@desc This method creates the save to unsecure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateSaveKeysToUnsecureFileButton ( ) {
+		mySaveKeysToUnsecureFileButton = myHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
+				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
+				innerHTML : '&#x1f4be;' // 1f4be = 💾
+			},
+			myToolbarDiv
+		);
+		mySaveKeysToUnsecureFileButton.addEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateRestoreKeysFromUnsecureFileButton
 	@desc This method creates the restore from unsecure file button
 	@private
@@ -660,7 +695,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			myToolbarDiv
 		);
 		myOpenUnsecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromUnecureFileButtonChange, false );
-		myHTMLElementsFactory.create (
+		myRestoreKeysFromUnsecureFileButton = myHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -668,8 +703,8 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
 			},
 			myToolbarDiv
-		)
-			.addEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
+		);
+		myRestoreKeysFromUnsecureFileButton.addEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
 
 	}
 
@@ -742,8 +777,8 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function newAPIKeysDialog
-	@desc constructor for PIKeysDialog objects
-	@return {PIKeysDialog} an instance of PIKeysDialog object
+	@desc constructor for APIKeysDialog objects
+	@return {APIKeysDialog} an instance of APIKeysDialog object
 	@global
 
 	@--------------------------------------------------------------------------------------------------------------------------

@@ -145,6 +145,8 @@ function myNewBaseDialog ( ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myOkButtonListener = null;
+	let myCancelButtonListener = null;
+
 	let myKeyboardEventListenerEnabled = true;
 	let myOnShow = null;
 
@@ -254,6 +256,9 @@ function myNewBaseDialog ( ) {
 	*/
 
 	function myOnCancelButtonClick ( ) {
+		if ( myCancelButtonListener ) {
+			myCancelButtonListener ( );
+		}
 		myCancelButton.removeEventListener ( 'click', myOnCancelButtonClick, false );
 		myDeleteDialog ( );
 		myOnCancel ( 'Canceled by user' );
@@ -431,7 +436,7 @@ function myNewBaseDialog ( ) {
 		myWaitDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-WaitDiv TravelNotes-BaseDialog-Hidden'
+				className : 'TravelNotes-BaseDialog-WaitDiv'
 			},
 			myDialogDiv
 		);
@@ -574,7 +579,13 @@ function myNewBaseDialog ( ) {
 		parameter to the Success handler of the Promise created with the show ( ) method.
 		*/
 
-		set okButtonListener ( Listener ) { myOkButtonListener = Listener; }
+		set okButtonListener ( okListener ) { myOkButtonListener = okListener; }
+
+		/**
+		A function that is called when the user push on the cancel button or the Esc key.
+		*/
+
+		set cancelButtonListener ( cancelListener ) { myCancelButtonListener = cancelListener; }
 
 		/**
 		a boolean that activate (when true) or deactivate (when false) the myOnKeyDown event listener. This is usefull
