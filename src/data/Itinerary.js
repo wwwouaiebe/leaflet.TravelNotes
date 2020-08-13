@@ -57,6 +57,199 @@ import { newManeuver } from '../data/Maneuver.js';
 import { ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Itinerary' );
+const ourObjIds = new WeakMap ( );
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourValidate
+@desc verify that the parameter can be transformed to a Itinerary and performs the upgrate if needed
+@param {Object} something an object to validate
+@return {Object} the validated object
+@throws {Error} when the parameter is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourValidate ( something ) {
+	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+		throw new Error ( 'No objType for ' + ourObjType.name );
+	}
+	ourObjType.validate ( something.objType );
+	if ( ourObjType.version !== something.objType.version ) {
+		switch ( something.objType.version ) {
+		case '1.0.0' :
+		case '1.1.0' :
+		case '1.2.0' :
+		case '1.3.0' :
+		case '1.4.0' :
+		case '1.5.0' :
+		case '1.6.0' :
+			something.hasProfile = false;
+			something.ascent = ZERO;
+			something.descent = ZERO;
+			// eslint break omitted intentionally
+		case '1.7.0' :
+		case '1.7.1' :
+		case '1.8.0' :
+		case '1.9.0' :
+		case '1.10.0' :
+		case '1.11.0' :
+			something.objType.version = '1.12.0';
+			break;
+		default :
+			throw new Error ( 'invalid version for ' + ourObjType.name );
+		}
+	}
+	let properties = Object.getOwnPropertyNames ( something );
+	[ 	'hasProfile',
+		'ascent',
+		'descent',
+		'itineraryPoints',
+		'maneuvers',
+		'provider',
+		'transitMode',
+		'objId' ].forEach (
+		property => {
+			if ( ! properties.includes ( property ) ) {
+				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+			}
+		}
+	);
+	return something;
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class Itinerary
+@classdesc This class represent an itinerary
+@see {@link newItinerary} for constructor
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class Itinerary	{
+
+	constructor ( ) {
+
+		/**
+		a boolean set to true when the itinerary have a profile
+		@type {boolean}
+		*/
+
+		this.hasProfile = false;
+
+		/**
+		the ascent of the Itinerary when a profile exists, otherwise ZERO
+		@type {!number}
+		*/
+
+		this.ascent = ZERO;
+
+		/**
+		the descent of the Itinerary when a profile exists, otherwise ZERO
+		@type {!number}
+		*/
+
+		this.descent = ZERO;
+
+		/**
+		the provider name used for this Itinerary
+		@type {string}
+		*/
+
+		this.provider = '';
+
+		/**
+		the transit mode used for this Itinerary
+		@type {string}
+		*/
+
+		this.transitMode = '';
+
+		/**
+		a Collection of ItineraryPoints
+		@type {Collection.<ItineraryPoint>}
+		@readonly
+		*/
+
+		this.itineraryPoints = newCollection ( newItineraryPoint );
+
+		/**
+		a Collection of Maneuvers
+		@type {Collection.<Maneuver>}
+		@readonly
+		*/
+
+		this.maneuvers = newCollection ( newManeuver );
+
+		ourObjIds.set ( this, newObjId ( ) );
+	}
+
+	/**
+	the ObjType of the Itinerary.
+	@type {ObjType}
+	@readonly
+	*/
+
+	get objType ( ) { return ourObjType; }
+
+	/**
+	the objId of the Itinerary. objId are unique identifier given by the code
+	@readonly
+	@type {!number}
+	*/
+
+	get objId ( ) { return ourObjIds.get ( this ); }
+
+	/**
+	An object literal with the Itinerary properties and without any methods.
+	This object can be used with the JSON object
+	@type {Object}
+	*/
+
+	get jsonObject ( ) {
+		return {
+			hasProfile : this.hasProfile,
+			ascent : this.ascent,
+			descent : this.descent,
+			itineraryPoints : this.itineraryPoints.jsonObject,
+			maneuvers : this.maneuvers.jsonObject,
+			provider : this.provider,
+			transitMode : this.transitMode,
+			objId : ourObjIds.get ( this ),
+			objType : ourObjType.jsonObject
+		};
+	}
+	set jsonObject ( something ) {
+		let otherthing = ourValidate ( something );
+		this.hasProfile = otherthing.hasProfile || false;
+		this.ascent = otherthing.ascent || ZERO;
+		this.descent = otherthing.descent || ZERO;
+		this.itineraryPoints.jsonObject = otherthing.itineraryPoints || [];
+		this.maneuvers.jsonObject = otherthing.maneuvers || [];
+		this.provider = otherthing.provider || '';
+		this.transitMode = otherthing.transitMode || '';
+		ourObjIds.set ( this, newObjId ( ) );
+
+		// rebuilding links between maneuvers and itineraryPoints
+		let itineraryPointObjIdMap = new Map ( );
+		let sourceCounter = ZERO;
+		let targetIterator = this.itineraryPoints.iterator;
+		while ( ! targetIterator.done ) {
+			itineraryPointObjIdMap.set ( otherthing.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
+			sourceCounter ++;
+		}
+		let maneuverIterator = this.maneuvers.iterator;
+		while ( ! maneuverIterator.done ) {
+			maneuverIterator.value.itineraryPointObjId =
+				itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
+		}
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -71,206 +264,6 @@ const ourObjType = newObjType ( 'Itinerary' );
 
 function ourNewItinerary ( ) {
 
-	let myHasProfile = false;
-	let myAscent = ZERO;
-	let myDescent = ZERO;
-	let myProvider = '';
-	let myTransitMode = '';
-	let myItineraryPoints = newCollection ( newItineraryPoint );
-	let myManeuvers = newCollection ( newManeuver );
-	let myObjId = newObjId ( );
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myValidate
-	@desc verify that the parameter can be transformed to a Itinerary and performs the upgrate if needed
-	@param {Object} something an object to validate
-	@return {Object} the validated object
-	@throws {Error} when the parameter is invalid
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myValidate ( something ) {
-		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-			throw new Error ( 'No objType for ' + ourObjType.name );
-		}
-		ourObjType.validate ( something.objType );
-		if ( ourObjType.version !== something.objType.version ) {
-			switch ( something.objType.version ) {
-			case '1.0.0' :
-			case '1.1.0' :
-			case '1.2.0' :
-			case '1.3.0' :
-			case '1.4.0' :
-			case '1.5.0' :
-			case '1.6.0' :
-				something.hasProfile = false;
-				something.ascent = ZERO;
-				something.descent = ZERO;
-				// eslint break omitted intentionally
-			case '1.7.0' :
-			case '1.7.1' :
-			case '1.8.0' :
-			case '1.9.0' :
-			case '1.10.0' :
-			case '1.11.0' :
-				something.objType.version = '1.12.0';
-				break;
-			default :
-				throw new Error ( 'invalid version for ' + ourObjType.name );
-			}
-		}
-		let properties = Object.getOwnPropertyNames ( something );
-		[ 	'hasProfile',
-			'ascent',
-			'descent',
-			'itineraryPoints',
-			'maneuvers',
-			'provider',
-			'transitMode',
-			'objId' ].forEach (
-			property => {
-				if ( ! properties.includes ( property ) ) {
-					throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
-				}
-			}
-		);
-		return something;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class Itinerary
-	@classdesc This class represent an itinerary
-	@see {@link newItinerary} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class Itinerary	{
-
-		/**
-		a boolean set to true when the itinerary have a profile
-		@type {boolean}
-		*/
-
-		get hasProfile ( ) { return myHasProfile; }
-		set hasProfile ( HasProfile ) { myHasProfile = HasProfile; }
-
-		/**
-		the ascent of the Itinerary when a profile exists, otherwise ZERO
-		@type {!number}
-		*/
-
-		get ascent ( ) { return myAscent; }
-		set ascent ( Ascent ) { myAscent = Ascent; }
-
-		/**
-		the descent of the Itinerary when a profile exists, otherwise ZERO
-		@type {!number}
-		*/
-
-		get descent ( ) { return myDescent; }
-		set descent ( Descent ) { myDescent = Descent; }
-
-		/**
-		a Collection of ItineraryPoints
-		@type {Collection.<ItineraryPoint>}
-		@readonly
-		*/
-
-		get itineraryPoints ( ) { return myItineraryPoints; }
-
-		/**
-		a Collection of Maneuvers
-		@type {Collection.<Maneuver>}
-		@readonly
-		*/
-
-		get maneuvers ( ) { return myManeuvers; }
-
-		/**
-		the provider name used for this Itinerary
-		@type {string}
-		*/
-
-		get provider ( ) { return myProvider; }
-		set provider ( Provider ) { myProvider = Provider; }
-
-		/**
-		the transit mode used for this Itinerary
-		@type {string}
-		*/
-
-		get transitMode ( ) { return myTransitMode; }
-		set transitMode ( TransitMode ) { myTransitMode = TransitMode; }
-
-		/**
-		the objId of the Itinerary. objId are unique identifier given by the code
-		@readonly
-		@type {!number}
-		*/
-
-		get objId ( ) { return myObjId; }
-
-		/**
-		the ObjType of the Itinerary.
-		@type {ObjType}
-		@readonly
-		*/
-
-		get objType ( ) { return ourObjType; }
-
-		/**
-		An object literal with the Itinerary properties and without any methods.
-		This object can be used with the JSON object
-		@type {Object}
-		*/
-
-		get jsonObject ( ) {
-			return {
-				hasProfile : myHasProfile,
-				ascent : myAscent,
-				descent : myDescent,
-				itineraryPoints : myItineraryPoints.jsonObject,
-				maneuvers : myManeuvers.jsonObject,
-				provider : myProvider,
-				transitMode : myTransitMode,
-				objId : myObjId,
-				objType : ourObjType.jsonObject
-			};
-		}
-		set jsonObject ( something ) {
-			let otherthing = myValidate ( something );
-			myHasProfile = otherthing.hasProfile || false;
-			myAscent = otherthing.ascent || ZERO;
-			myDescent = otherthing.descent || ZERO;
-			myItineraryPoints.jsonObject = otherthing.itineraryPoints || [];
-			myManeuvers.jsonObject = otherthing.maneuvers || [];
-			myProvider = otherthing.provider || '';
-			myTransitMode = otherthing.transitMode || '';
-			myObjId = newObjId ( );
-
-			// rebuilding links between maneuvers and itineraryPoints
-			let itineraryPointObjIdMap = new Map ( );
-			let sourceCounter = ZERO;
-			let targetIterator = myItineraryPoints.iterator;
-			while ( ! targetIterator.done ) {
-				itineraryPointObjIdMap.set ( otherthing.itineraryPoints [ sourceCounter ].objId, targetIterator.value.objId );
-				sourceCounter ++;
-			}
-			let maneuverIterator = myManeuvers.iterator;
-			while ( ! maneuverIterator.done ) {
-				maneuverIterator.value.itineraryPointObjId =
-					itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
-			}
-		}
-	}
 	return Object.seal ( new Itinerary );
 }
 
