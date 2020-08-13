@@ -161,7 +161,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 
 	function myOnDeleteApiKeyRowButton ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		clickEvent.target.removeEventListener ( 'click', myOnDeleteApiKeyRowButton, false );
 		clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
 	}
 
@@ -492,30 +491,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myOnCloseDialog
-	@desc This method is called when the dialog is closed and remove all event listeners
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnCloseDialog ( ) {
-		document.querySelectorAll ( '.TravelNotes-APIKeysDialog-DeleteRowButton' ).forEach (
-			button => { button.removeEventListener ( 'click', myOnDeleteApiKeyRowButton, false ); }
-		);
-		myReloadKeysFromServerFileButton.removeEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
-		mySaveKeysToSecureFileButton.removeEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
-		myOpenSecureFileInput.removeEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
-		myRestoreKeysFromSecureFileButton.removeEventListener ( 'click', myOnOpenSecureFileButtonClick, false );
-		myAddNewKeyButton.removeEventListener ( 'click', myOnAddNewKeyButtonClick, false );
-		mySaveKeysToUnsecureFileButton.removeEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
-		myOpenUnsecureFileInput.removeEventListener ( 'change', myOnRestoreKeysFromUnecureFileButtonChange, false );
-		myRestoreKeysFromUnsecureFileButton.removeEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnOkButtonClick
 	@desc Event listener for the ok button
 	@private
@@ -529,8 +504,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		if ( ! myVerifyKeys ( ) ) {
 			return;
 		}
-
-		myOnCloseDialog ( );
 		return myGetAPIKeys ( );
 	}
 
@@ -548,7 +521,6 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog = newBaseDialog ( );
 		myAPIKeysDialog.title = theTranslator.getText ( 'APIKeysDialog - API keys' );
 		myAPIKeysDialog.okButtonListener = myOnOkButtonClick;
-		myAPIKeysDialog.cancelButtonListener = myOnCloseDialog;
 	}
 
 	/**

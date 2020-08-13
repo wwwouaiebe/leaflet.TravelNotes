@@ -83,44 +83,6 @@ let ourParentDiv = null;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnKeyPress
-@desc keyboard event listener
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/*
-Keyboard events listeners must be 'module global' otherwise the events are not removed when
-closing the menu by clicking outside the menu (in this case the event listeners are duplicated
-in each instance of the menu and so, it's not the same function that is passed to addEventListener
-and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
-for others elements. See issue #83
-*/
-
-function ourOnKeyPress ( keyBoardEvent ) {
-	keyBoardEvent.preventDefault ( );
-	keyBoardEvent.stopPropagation ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnKeyUp
-@desc keyboard event listener
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnKeyUp ( keyBoardEvent ) {
-	keyBoardEvent.preventDefault ( );
-	keyBoardEvent.stopPropagation ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @function ourSetFocusOnItem
 @desc hightlight the item selected by the mouse or the keyboard
 @private
@@ -158,6 +120,14 @@ function ourSetFocusOnItem ( isKeyboardEvent ) {
 
 @------------------------------------------------------------------------------------------------------------------------------
  */
+ 
+/*
+Keyboard events listeners must be 'module global' otherwise the events are not removed when
+closing the menu by clicking outside the menu (in this case the event listeners are duplicated
+in each instance of the menu and so, it's not the same function that is passed to addEventListener
+and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
+for others elements. See issue #83
+*/
 
 function ourOnKeyDown ( keyBoardEvent ) {
 
@@ -275,17 +245,6 @@ function ourOnCloseMenu ( ) {
 
 	// removing event listeners
 	document.removeEventListener ( 'keydown', ourOnKeyDown, true );
-	document.removeEventListener ( 'keypress', ourOnKeyPress, true );
-	document.removeEventListener ( 'keyup', ourOnKeyUp, true );
-
-	// removing menu items
-	let childNodes = ourContainer.childNodes;
-	childNodes [ ZERO ].firstChild.removeEventListener ( 'click', ourOnCloseMenu, false );
-	for ( let childNodesCounter = ONE; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-		let item = childNodes [ childNodesCounter ].firstChild;
-		item.removeEventListener ( 'click', ourOnClickItem, false );
-		item.removeEventListener ( 'mouseenter', ourOnMouseEnterMenuItem, false );
-	}
 
 	// removing the menu container
 	ourParentDiv.removeChild ( ourContainer );
@@ -528,8 +487,6 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		myAddMenuItems ( );
 		myMoveContainer ( );
 		document.addEventListener ( 'keydown', ourOnKeyDown, true );
-		document.addEventListener ( 'keypress', ourOnKeyPress, true );
-		document.addEventListener ( 'keyup', ourOnKeyUp, true );
 	}
 
 	/**

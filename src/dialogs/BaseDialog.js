@@ -145,7 +145,6 @@ function myNewBaseDialog ( ) {
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myOkButtonListener = null;
-	let myCancelButtonListener = null;
 
 	let myKeyboardEventListenerEnabled = true;
 	let myOnShow = null;
@@ -236,11 +235,6 @@ function myNewBaseDialog ( ) {
 
 	function myDeleteDialog ( ) {
 		document.removeEventListener ( 'keydown', myOnKeyDown, true );
-		myBackgroundDiv.removeEventListener ( 'dragover', ( ) => null, false );
-		myBackgroundDiv.removeEventListener ( 'drop', ( ) => null, false );
-		myTopBar.removeEventListener ( 'dragstart', myOnTopBarDragStart, false );
-		myTopBar.removeEventListener ( 'dragend', myOnTopBarDragEnd, false );
-
 		document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
 	}
 
@@ -256,10 +250,6 @@ function myNewBaseDialog ( ) {
 	*/
 
 	function myOnCancelButtonClick ( ) {
-		if ( myCancelButtonListener ) {
-			myCancelButtonListener ( );
-		}
-		myCancelButton.removeEventListener ( 'click', myOnCancelButtonClick, false );
 		myDeleteDialog ( );
 		myOnCancel ( 'Canceled by user' );
 	}
@@ -582,12 +572,6 @@ function myNewBaseDialog ( ) {
 		set okButtonListener ( okListener ) { myOkButtonListener = okListener; }
 
 		/**
-		A function that is called when the user push on the cancel button or the Esc key.
-		*/
-
-		set cancelButtonListener ( cancelListener ) { myCancelButtonListener = cancelListener; }
-
-		/**
 		a boolean that activate (when true) or deactivate (when false) the myOnKeyDown event listener. This is usefull
 		when multiple dialogs are opened to avoid that all dialogs closes when using the Esc or Return keys
 		*/
@@ -626,6 +610,11 @@ function myNewBaseDialog ( ) {
 		*/
 
 		get okButton ( ) { return myOkButton; }
+
+		/**
+		The cancel button of the dialog. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
 
 		get cancelButton ( ) { return myCancelButton; }
 
