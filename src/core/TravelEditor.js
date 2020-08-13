@@ -74,99 +74,84 @@ import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
+let ourUtilities = newUtilities ( );
+let ourEventDispatcher = newEventDispatcher ( );
+
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewTravelEditor
-@desc constructor of TravelEditor object
-@return {TravelEditor} an instance of TravelEditor object
-@private
+@class
+@classdesc This class contains methods fot Travel creation or modifications
+@see {@link theTravelEditor} for the one and only one instance of this class
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewTravelEditor ( ) {
-
-	let myUtilities = newUtilities ( );
-	let myEventDispatcher = newEventDispatcher ( );
+class TravelEditor {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class contains methods fot Travel creation or modifications
-	@see {@link theTravelEditor} for the one and only one instance of this class
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method is called when a route is dropped in the TravelUI and then routes reordered.
+	@param {!number} draggedRouteObjId The objId of the dragged route
+	@param {!number} targetRouteObjId The objId of the route on witch the drop was executed
+	@param {boolean} draggedBefore when true the dragged route is moved before the target route
+	when false after
+	@fires setrouteslist
+	@fires roadbookupdate
 	*/
 
-	class TravelEditor {
-
-		/**
-		This method is called when a route is dropped in the TravelUI and then routes reordered.
-		@param {!number} draggedRouteObjId The objId of the dragged route
-		@param {!number} targetRouteObjId The objId of the route on witch the drop was executed
-		@param {boolean} draggedBefore when true the dragged route is moved before the target route
-		when false after
-		@fires setrouteslist
-		@fires roadbookupdate
-		*/
-
-		routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore )		{
-			theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
-			theRouteEditor.chainRoutes ( );
-			myEventDispatcher.dispatch ( 'setrouteslist' );
-			myEventDispatcher.dispatch ( 'roadbookupdate' );
-		}
-
-		/**
-		This method save the current travel to a file
-		*/
-
-		saveTravel ( ) {
-			let routesIterator = theTravelNotesData.travel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				routesIterator.value.hidden = false;
-			}
-			let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
-			myUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
-		}
-
-		/**
-		This method clear the current travel and start a new travel
-		@fires removeallobjects
-		@fires setrouteslist
-		@fires setitinerary
-		@fires travelnameupdated
-		@fires roadbookupdate
-		*/
-
-		clear ( ) {
-			if ( ! window.confirm ( theTranslator.getText (
-				'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
-				return;
-			}
-			theProfileWindowsManager.deleteAllProfiles ( );
-			myEventDispatcher.dispatch ( 'removeallobjects' );
-			theTravelNotesData.travel.editedRoute = newRoute ( );
-			theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-			theTravelNotesData.travel = newTravel ( );
-			theTravelNotesData.travel.routes.add ( newRoute ( ) );
-			myEventDispatcher.dispatch ( 'setrouteslist' );
-			myEventDispatcher.dispatch ( 'setitinerary' );
-			myEventDispatcher.dispatch ( 'roadbookupdate' );
-			myEventDispatcher.dispatch ( 'travelnameupdated' );
-			if ( theConfig.travelEditor.startupRouteEdition ) {
-				theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
-			}
-		}
-
+	routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore )		{
+		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+		theRouteEditor.chainRoutes ( );
+		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		ourEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
-	return Object.seal ( new TravelEditor );
+
+	/**
+	This method save the current travel to a file
+	*/
+
+	saveTravel ( ) {
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			routesIterator.value.hidden = false;
+		}
+		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
+		ourUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+	}
+
+	/**
+	This method clear the current travel and start a new travel
+	@fires removeallobjects
+	@fires setrouteslist
+	@fires setitinerary
+	@fires travelnameupdated
+	@fires roadbookupdate
+	*/
+
+	clear ( ) {
+		if ( ! window.confirm ( theTranslator.getText (
+			'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
+			return;
+		}
+		theProfileWindowsManager.deleteAllProfiles ( );
+		ourEventDispatcher.dispatch ( 'removeallobjects' );
+		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
+		theTravelNotesData.travel = newTravel ( );
+		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		ourEventDispatcher.dispatch ( 'travelnameupdated' );
+		if ( theConfig.travelEditor.startupRouteEdition ) {
+			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
+		}
+	}
+
 }
 
-const ourTravelEditor = ourNewTravelEditor ( );
+const ourTravelEditor = Object.seal ( new TravelEditor );
 
 export {
 

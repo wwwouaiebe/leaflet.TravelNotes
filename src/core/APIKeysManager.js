@@ -74,312 +74,297 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
+let ourKeysMap = new Map;
+let ourEventDispatcher = newEventDispatcher ( );
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewAPIKeysManager
-@desc constructor of theAPIKeysManager object
-@return {APIKeysManager} an instance of APIKeysManager object
+@function ourGetKey
+@desc This method get an API key from the JS map
+@param {string} providerName the provider name
+@return {string} the API key
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewAPIKeysManager ( ) {
+function ourGetKey ( providerName ) {
+	return ourKeysMap.get ( providerName.toLowerCase ( ) );
+}
 
-	let myKeysMap = new Map;
-	let myEventDispatcher = newEventDispatcher ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@function ourSetKey
+@desc This method add an API key to the JS map
+@param {string} providerName the provider name
+@param {string} key the API key
+@private
 
-	@function myGetKey
-	@desc This method get an API key from the JS map
-	@param {string} providerName the provider name
-	@return {string} the API key
-	@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+function ourSetKey ( providerName, key ) {
+	ourKeysMap.set ( providerName.toLowerCase ( ), key );
+}
 
-	function myGetKey ( providerName ) {
-		return myKeysMap.get ( providerName.toLowerCase ( ) );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSetKeysFromSessionStorage
+@desc This method set the API keys from the session storage
+@return {!number} the number of API keys restored
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSetKeysFromSessionStorage ( ) {
+	let APIKeysCounter = ZERO;
+	for ( let counter = ZERO; counter < sessionStorage.length; counter ++ ) {
+		let keyName = sessionStorage.key ( counter );
+		if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
+			ourSetKey (
+				keyName.substr ( ZERO, keyName.length - 'ProviderKey'.length ),
+				atob ( sessionStorage.getItem ( keyName ) )
+			);
+			APIKeysCounter ++;
+		}
 	}
+	theTravelNotesData.providers.forEach (
+		provider => { provider.providerKey = ( ourGetKey ( provider.name ) || '' ); }
+	);
+	return APIKeysCounter;
+}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	@function mySetKey
-	@desc This method add an API key to the JS map
-	@param {string} providerName the provider name
-	@param {string} key the API key
-	@private
+@function ourResetAPIKeys
+@desc This method replace all the API keys from the map and storage with the given APIKeys
+@param {Array.<APIKey>} APIKeys the new APIKeys
+@fires providersadded
+@private
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	function mySetKey ( providerName, key ) {
-		myKeysMap.set ( providerName.toLowerCase ( ), key );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySetKeysFromSessionStorage
-	@desc This method set the API keys from the session storage
-	@return {!number} the number of API keys restored
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetKeysFromSessionStorage ( ) {
-		let APIKeysCounter = ZERO;
-		for ( let counter = ZERO; counter < sessionStorage.length; counter ++ ) {
-			let keyName = sessionStorage.key ( counter );
-			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
-				mySetKey (
-					keyName.substr ( ZERO, keyName.length - 'ProviderKey'.length ),
-					atob ( sessionStorage.getItem ( keyName ) )
+function ourResetAPIKeys ( APIKeys ) {
+	sessionStorage.clear ( );
+	ourKeysMap.clear ( );
+	let saveToSessionStorage =
+		newUtilities ( ).storageAvailable ( 'sessionStorage' )
+		&&
+		theConfig.APIKeys.saveToSessionStorage;
+	APIKeys.forEach (
+		APIKey => {
+			if ( saveToSessionStorage ) {
+				sessionStorage.setItem (
+					( APIKey.providerName ).toLowerCase ( ) + 'ProviderKey',
+					btoa ( APIKey.providerKey )
 				);
-				APIKeysCounter ++;
 			}
+			ourSetKey ( APIKey.providerName, APIKey.providerKey );
 		}
-		theTravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( myGetKey ( provider.name ) || '' ); }
+	);
+	theTravelNotesData.providers.forEach (
+		provider => { provider.providerKey = ( ourGetKey ( provider.name ) || '' ); }
+	);
+
+	ourEventDispatcher.dispatch ( 'providersadded' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnOkDecryptServerFile
+@desc This method is called when the 'APIKkeys' file is decoded correctly
+@param {string} data the decoded API keys as JSON string
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnOkDecryptServerFile ( data ) {
+	let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
+	ourResetAPIKeys ( APIKeys );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnErrorDecryptServerFile
+@desc This method is called when the 'APIKkeys' file is not decoded correctly
+@param {Error} err
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnErrorDecryptServerFile ( err ) {
+
+	// Showing the error if not cancelled by user
+	console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
+	if ( err && 'Canceled by user' !== err ) {
+		theErrorsUI.showError (
+			theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
 		);
-		return APIKeysCounter;
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	// display help for the demo
+	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
+}
 
-	@function myResetAPIKeys
-	@desc This method replace all the API keys from the map and storage with the given APIKeys
-	@param {Array.<APIKey>} APIKeys the new APIKeys
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnServerFileFound
+@desc This method is called when a 'APIKeys' file is found on the web server
+The methos ask a password to the user and try to decode the file
+@param {ArrayBuffer} data the data to decode
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnServerFileFound ( data ) {
+	newDataEncryptor ( ).decryptData (
+		data,
+		ourOnOkDecryptServerFile,
+		ourOnErrorDecryptServerFile,
+		newPasswordDialog ( false ).show ( )
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc API keys manager
+@see {@link theAPIKeysManager} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class APIKeysManager {
+
+	/**
+	Get a provider API key
+	@param {string} providerName the provider name for witch the API key is asked
+	@return {string} the provider API key or null if key not found
+	*/
+
+	getKey ( providerName ) { return ourGetKey ( providerName ); }
+
+	/**
+	This method try to restore the API keys from the storage. If not possible the method search
+	a file named 'APIKeys' on the web server. If the file is found, ask the file password to the user
+	and try to decode the file.
 	@fires providersadded
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	@async
 	*/
 
-	function myResetAPIKeys ( APIKeys ) {
-		sessionStorage.clear ( );
-		myKeysMap.clear ( );
-		let saveToSessionStorage =
-			newUtilities ( ).storageAvailable ( 'sessionStorage' )
-			&&
-			theConfig.APIKeys.saveToSessionStorage;
-		APIKeys.forEach (
-			APIKey => {
-				if ( saveToSessionStorage ) {
-					sessionStorage.setItem (
-						( APIKey.providerName ).toLowerCase ( ) + 'ProviderKey',
-						btoa ( APIKey.providerKey )
-					);
-				}
-				mySetKey ( APIKey.providerName, APIKey.providerKey );
-			}
-		);
-		theTravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( myGetKey ( provider.name ) || '' ); }
-		);
+	setKeysFromServerFile ( ) {
 
-		myEventDispatcher.dispatch ( 'providersadded' );
+		// Try first to restore keys from storage
+		if ( ZERO !== ourSetKeysFromSessionStorage ( ) ) {
+			ourEventDispatcher.dispatch ( 'providersadded' );
+			return;
+		}
+
+		// otherwise searching on the server
+		if ( theConfig.haveCrypto ) {
+			newHttpRequestBuilder ( ).getBinaryPromise (
+				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
+					'APIKeys'
+			)
+				.then ( ourOnServerFileFound )
+				.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
+		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnOkDecryptServerFile
-	@desc This method is called when the 'APIKkeys' file is decoded correctly
-	@param {string} data the decoded API keys as JSON string
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method set an API key from a string
+	@param {string} urlString a string with the provider name followed by 'ProviderKey=' followed by the provider API key
 	*/
 
-	function myOnOkDecryptServerFile ( data ) {
-		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
-		myResetAPIKeys ( APIKeys );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnErrorDecryptServerFile
-	@desc This method is called when the 'APIKkeys' file is not decoded correctly
-	@param {Error} err
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnErrorDecryptServerFile ( err ) {
-
-		// Showing the error if not cancelled by user
-		console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
-		if ( err && 'Canceled by user' !== err ) {
-			theErrorsUI.showError (
-				theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
-			);
-		}
-
-		// display help for the demo
-		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnServerFileFound
-	@desc This method is called when a 'APIKeys' file is found on the web server
-	The methos ask a password to the user and try to decode the file
-	@param {ArrayBuffer} data the data to decode
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnServerFileFound ( data ) {
-		newDataEncryptor ( ).decryptData (
-			data,
-			myOnOkDecryptServerFile,
-			myOnErrorDecryptServerFile,
-			newPasswordDialog ( false ).show ( )
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc API keys manager
-	@see {@link theAPIKeysManager} for the one and only one instance of this class
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class APIKeysManager {
-
-		/**
-		Get a provider API key
-		@param {string} providerName the provider name for witch the API key is asked
-		@return {string} the provider API key or null if key not found
-		*/
-
-		getKey ( providerName ) { return myGetKey ( providerName ); }
-
-		/**
-		This method try to restore the API keys from the storage. If not possible the method search
-		a file named 'APIKeys' on the web server. If the file is found, ask the file password to the user
-		and try to decode the file.
-		@fires providersadded
-		@async
-		*/
-
-		setKeysFromServerFile ( ) {
-
-			// Try first to restore keys from storage
-			if ( ZERO !== mySetKeysFromSessionStorage ( ) ) {
-				myEventDispatcher.dispatch ( 'providersadded' );
-				return;
+	setKeyFromUrl ( urlString ) {
+		let urlSubStrings = urlString.split ( '=' );
+		if ( TWO === urlSubStrings.length ) {
+			let providerName =
+				urlSubStrings [ ZERO ]
+					.substr ( ZERO, urlSubStrings [ ZERO ].length - 'ProviderKey'.length )
+					.toLowerCase ( );
+			let providerKey = urlSubStrings [ ONE ];
+			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
+				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}
-
-			// otherwise searching on the server
-			if ( theConfig.haveCrypto ) {
-				newHttpRequestBuilder ( ).getBinaryPromise (
-					window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-						'APIKeys'
-				)
-					.then ( myOnServerFileFound )
-					.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
-			}
-		}
-
-		/**
-		This method set an API key from a string
-		@param {string} urlString a string with the provider name followed by 'ProviderKey=' followed by the provider API key
-		*/
-
-		setKeyFromUrl ( urlString ) {
-			let urlSubStrings = urlString.split ( '=' );
-			if ( TWO === urlSubStrings.length ) {
-				let providerName =
-					urlSubStrings [ ZERO ]
-						.substr ( ZERO, urlSubStrings [ ZERO ].length - 'ProviderKey'.length )
-						.toLowerCase ( );
-				let providerKey = urlSubStrings [ ONE ];
-				if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
-					sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
-				}
-				mySetKey ( providerName, providerKey );
-				let provider = theTravelNotesData.providers.get ( providerName );
-				if ( provider ) {
-					provider.providerKey = providerKey;
-				}
-			}
-		}
-
-		/**
-		This method show the APIKeys dialog and update the APIKeys when the user close the dialog.
-		@fires providersadded
-		@async
-		*/
-
-		setKeysFromDialog ( ) {
-
-			// preparing a list of providers and provider keys for the dialog
-			let ApiKeys = [];
-			myKeysMap.forEach (
-				( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
-			);
-			ApiKeys.sort (
-				( first, second ) => first.providerName.localeCompare ( second.providerName )
-			);
-
-			// showing dialog
-			newAPIKeysDialog ( ApiKeys )
-				.show ( )
-				.then ( APIKeys => myResetAPIKeys ( APIKeys ) )
-				.catch ( err => console.log ( err ? err : 'canceled by user' ) );
-		}
-
-		/**
-		This method add a provider
-		@param {Provider} provider the provider to add
-		*/
-
-		addProvider ( provider ) {
-			let providerName = provider.name.toLowerCase ( );
-
-			// searching if we have already the provider key
-			let providerKey = myGetKey ( providerName );
-
-			// no provider key. Searching in the storage
-			if ( provider.providerKeyNeeded && ! providerKey ) {
-				if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
-					providerKey = sessionStorage.getItem ( providerName );
-					if ( providerKey ) {
-						providerKey = atob ( providerKey );
-					}
-				}
-			}
-
-			// adding the provider key to the provider
-			if ( provider.providerKeyNeeded && providerKey ) {
+			ourSetKey ( providerName, providerKey );
+			let provider = theTravelNotesData.providers.get ( providerName );
+			if ( provider ) {
 				provider.providerKey = providerKey;
 			}
-
-			// adding the provider to the available providers
-			theTravelNotesData.providers.set ( provider.name.toLowerCase ( ), provider );
 		}
 	}
 
-	return Object.seal ( new APIKeysManager	);
+	/**
+	This method show the APIKeys dialog and update the APIKeys when the user close the dialog.
+	@fires providersadded
+	@async
+	*/
+
+	setKeysFromDialog ( ) {
+
+		// preparing a list of providers and provider keys for the dialog
+		let ApiKeys = [];
+		ourKeysMap.forEach (
+			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
+		);
+		ApiKeys.sort (
+			( first, second ) => first.providerName.localeCompare ( second.providerName )
+		);
+
+		// showing dialog
+		newAPIKeysDialog ( ApiKeys )
+			.show ( )
+			.then ( APIKeys => ourResetAPIKeys ( APIKeys ) )
+			.catch ( err => console.log ( err ? err : 'canceled by user' ) );
+	}
+
+	/**
+	This method add a provider
+	@param {Provider} provider the provider to add
+	*/
+
+	addProvider ( provider ) {
+		let providerName = provider.name.toLowerCase ( );
+
+		// searching if we have already the provider key
+		let providerKey = ourGetKey ( providerName );
+
+		// no provider key. Searching in the storage
+		if ( provider.providerKeyNeeded && ! providerKey ) {
+			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
+				providerKey = sessionStorage.getItem ( providerName );
+				if ( providerKey ) {
+					providerKey = atob ( providerKey );
+				}
+			}
+		}
+
+		// adding the provider key to the provider
+		if ( provider.providerKeyNeeded && providerKey ) {
+			provider.providerKey = providerKey;
+		}
+
+		// adding the provider to the available providers
+		theTravelNotesData.providers.set ( provider.name.toLowerCase ( ), provider );
+	}
 }
-const ourAPIKeysManager = ourNewAPIKeysManager ( );
+
+const ourAPIKeysManager = Object.seal ( new APIKeysManager	);
 
 export {
 

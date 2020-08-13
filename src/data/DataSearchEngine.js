@@ -64,96 +64,80 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewDataSearchEngine
-@desc constructor of theDataSearchEngine object
-@return {DataSearchEngine} an instance of DataSearchEngine object
-@private
+@class DataSearchEngine
+@classdesc Class with helper methods to search data
+@see {@link theDataSearchEngine} for the one and only one instance of this class
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewDataSearchEngine ( ) {
+class DataSearchEngine {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class DataSearchEngine
-	@classdesc Class with helper methods to search data
-	@see {@link theDataSearchEngine} for the one and only one instance of this class
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Search a route with the route objId
+	@param {!number} objId the objId of the route to search
+	@return (?Route) the searched route or null if not found
 	*/
 
-	class DataSearchEngine {
+	getRoute ( routeObjId ) {
+		let route = null;
+		route = theTravelNotesData.travel.routes.getAt ( routeObjId );
+		if ( ! route ) {
+			if ( routeObjId === theTravelNotesData.travel.editedRoute.objId ) {
+				route = theTravelNotesData.travel.editedRoute;
+			}
+		}
+		return route;
+	}
 
-		/**
-		Search a route with the route objId
-		@param {!number} objId the objId of the route to search
-		@return (?Route) the searched route or null if not found
-		*/
+	/**
+	Search a Note and a Route with the Note objId
+	@param {!number} objId the objId of the note to search
+	@return (NoteAndRoute) a NoteAndRoute object with the route and note
+	*/
 
-		getRoute ( routeObjId ) {
-			let route = null;
-			route = theTravelNotesData.travel.routes.getAt ( routeObjId );
-			if ( ! route ) {
-				if ( routeObjId === theTravelNotesData.travel.editedRoute.objId ) {
+	getNoteAndRoute ( noteObjId ) {
+		let note = null;
+		let route = null;
+		note = theTravelNotesData.travel.notes.getAt ( noteObjId );
+		if ( ! note ) {
+			let routeIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! ( routeIterator.done || note ) ) {
+				note = routeIterator.value.notes.getAt ( noteObjId );
+				if ( note ) {
+					route = routeIterator.value;
+				}
+			}
+			if ( ! note ) {
+				note = theTravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
+				if ( note ) {
 					route = theTravelNotesData.travel.editedRoute;
 				}
 			}
-			return route;
 		}
-
-		/**
-		Search a Note and a Route with the Note objId
-		@param {!number} objId the objId of the note to search
-		@return (NoteAndRoute) a NoteAndRoute object with the route and note
-		*/
-
-		getNoteAndRoute ( noteObjId ) {
-			let note = null;
-			let route = null;
-			note = theTravelNotesData.travel.notes.getAt ( noteObjId );
-			if ( ! note ) {
-				let routeIterator = theTravelNotesData.travel.routes.iterator;
-				while ( ! ( routeIterator.done || note ) ) {
-					note = routeIterator.value.notes.getAt ( noteObjId );
-					if ( note ) {
-						route = routeIterator.value;
-					}
-				}
-				if ( ! note ) {
-					note = theTravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
-					if ( note ) {
-						route = theTravelNotesData.travel.editedRoute;
-					}
-				}
-			}
-			return Object.freeze ( { note : note, route : route } );
-		}
-
-		/**
-		Search a WayPoint with the WayPoint objId
-		@param {!number} objId the objId of the note to search
-		@return (NoteAndRoute) a NoteAndRoute object with the route and note
-		*/
-
-		getWayPoint ( wayPointObjId ) {
-			let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
-			if ( ! wayPoint ) {
-				let routeIterator = theTravelNotesData.travel.routes.iterator;
-				while ( ! ( routeIterator.done || wayPoint ) ) {
-					wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
-				}
-			}
-			return wayPoint;
-		}
+		return Object.freeze ( { note : note, route : route } );
 	}
 
-	return Object.seal ( new DataSearchEngine );
+	/**
+	Search a WayPoint with the WayPoint objId
+	@param {!number} objId the objId of the note to search
+	@return (NoteAndRoute) a NoteAndRoute object with the route and note
+	*/
+
+	getWayPoint ( wayPointObjId ) {
+		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
+		if ( ! wayPoint ) {
+			let routeIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! ( routeIterator.done || wayPoint ) ) {
+				wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
+			}
+		}
+		return wayPoint;
+	}
 }
 
-const ourDataSearchEngine = ourNewDataSearchEngine ( );
+const ourDataSearchEngine = Object.seal ( new DataSearchEngine );
 
 export {
 

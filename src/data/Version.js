@@ -56,7 +56,7 @@ Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! War
 						 //      o     \\
 						 \==============/
 
-You have also to adapt the version in the myValidate ( ) method of
+You have also to adapt the version in the ourValidate ( ) method of
 Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
 */
 

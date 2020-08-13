@@ -81,42 +81,25 @@ import { newTravel } from '../data/Travel.js';
 import { newUtilities } from '../util/Utilities.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
+let ourProviders = new Map ( );
+let ourMapObjects = new Map ( );
+let ourRouting = Object.seal ( { provider : '', transitMode : '' } );
+let ourUUID = newUtilities ( ).UUID;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewTravelNotesData
-@desc constructor of theTravelNotesData object
-@return {TravelNotesData} an instance of TravelNotesData object
-@private
+@class TravelNotesData
+@classdesc Class used to store the data needed by TravelNotes
+@see {@link theTravelNotesData} for the one and only one instance of this class
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewTravelNotesData ( ) {
+class TravelNotesData {
 
-	let myTravelNotesData = {
-		map : null,
-		providers : new Map ( ),
-		mapObjects : new Map ( ),
-		travel : newTravel ( ),
-		editedRouteObjId : INVALID_OBJ_ID,
-		routing : Object.seal ( { provider : '', transitMode : '' } ),
-		searchData : [],
-		UUID : newUtilities ( ).UUID
-	};
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class TravelNotesData
-	@classdesc Class used to store the data needed by TravelNotes
-	@see {@link theTravelNotesData} for the one and only one instance of this class
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class TravelNotesData {
+	constructor ( ) {
 
 		/**
 		The Leaflet map object
@@ -124,23 +107,7 @@ function ourNewTravelNotesData ( ) {
 		@see {@link https://leafletjs.com/reference-1.6.0.html#map}
 		*/
 
-		get map ( ) { return myTravelNotesData.map; }
-		set map ( newMap ) { myTravelNotesData.map = newMap; }
-
-		/**
-		A JS map with the provider objects. Providers objects are created and added by the plugins
-		@type {Map.provider}
-		@see {@link module:TravelNotesData~provider}
-		*/
-
-		get providers ( ) { return myTravelNotesData.providers; }
-
-		/**
-		A JS map with all the Leaflet objects
-		@type {Map.Object}
-		*/
-
-		get mapObjects ( ) { return myTravelNotesData.mapObjects; }
+		this.map = null;
 
 		/**
 		The one and only one object Travel
@@ -148,45 +115,55 @@ function ourNewTravelNotesData ( ) {
 		@see Travel
 		*/
 
-		get travel ( ) { return myTravelNotesData.travel; }
-		set travel ( Travel ) { myTravelNotesData.travel = Travel; }
+		this.travel = newTravel ( );
 
 		/**
 		The objId of the currently edited route or INVALID_OBJ_ID if none
 		@type {!number}
 		*/
 
-		get editedRouteObjId ( ) { return myTravelNotesData.editedRouteObjId; }
-		set editedRouteObjId ( EditedRouteObjId ) { myTravelNotesData.editedRouteObjId = EditedRouteObjId; }
-
-		/**
-		A literal object with the provider and transit mode used
-		@type {routing}
-		@see {@link module:TravelNotesData~routing}
-		*/
-
-		get routing ( ) { return myTravelNotesData.routing; }
+		this.editedRouteObjId = INVALID_OBJ_ID;
 
 		/**
 		The POI data found in OpenStreetMap
 		@type {Object[]}
 		*/
 
-		get searchData ( ) { return myTravelNotesData.searchData; }
-		set searchData ( SearchData ) { myTravelNotesData.searchData = SearchData; }
-
-		/**
-		The UUID currently used
-		@type {string}
-		*/
-
-		get UUID ( ) { return myTravelNotesData.UUID; }
+		this.searchData = [];
 	}
 
-	return Object.seal ( new TravelNotesData );
+	/**
+	A JS map with the provider objects. Providers objects are created and added by the plugins
+	@type {Map.provider}
+	@see {@link module:TravelNotesData~provider}
+	*/
+
+	get providers ( ) { return ourProviders; }
+
+	/**
+	A JS map with all the Leaflet objects
+	@type {Map.Object}
+	*/
+
+	get mapObjects ( ) { return ourMapObjects; }
+
+	/**
+	A literal object with the provider and transit mode used
+	@type {routing}
+	@see {@link module:TravelNotesData~routing}
+	*/
+
+	get routing ( ) { return ourRouting; }
+
+	/**
+	The UUID currently used
+	@type {string}
+	*/
+
+	get UUID ( ) { return ourUUID; }
 }
 
-const ourTravelNotesData = ourNewTravelNotesData ( );
+const ourTravelNotesData = Object.seal ( new TravelNotesData );
 
 export {
 
