@@ -120,7 +120,7 @@ function ourSetFocusOnItem ( isKeyboardEvent ) {
 
 @------------------------------------------------------------------------------------------------------------------------------
  */
- 
+
 /*
 Keyboard events listeners must be 'module global' otherwise the events are not removed when
 closing the menu by clicking outside the menu (in this case the event listeners are duplicated

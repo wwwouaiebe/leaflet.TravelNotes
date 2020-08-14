@@ -73,7 +73,7 @@ function newRoutePropertiesDialog ( route ) {
 	*/
 
 	function myOnOkButtonClick ( ) {
-		route.color = document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv' ).color;
+		route.color = document.getElementById ( 'TravelNotes-ColorDialog-ColorSampleDiv' ).color.cssColor;
 		if ( route.computedName !== myNameInput.value ) {
 			route.name = myNameInput.value;
 		}

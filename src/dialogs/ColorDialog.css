@@ -28,12 +28,12 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-ColorDialog-ColorDiv {
+#TravelNotes-ColorDialog-ColorDiv {
 	width: 30em;
 	text-align: center;
 }
 
-.TravelNotes-ColorDialog-RowColorDiv:last-child {
+#TravelNotes-ColorDialog-RedButtonsRowDiv {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }

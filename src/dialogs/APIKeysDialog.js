@@ -64,7 +64,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourNewAPIKeysDialog
-@desc constructor for BaseDialog objects
+@desc constructor for APIKeysDialog objects
 @return {APIKeysDialog} an instance of APIKeysDialog object
 @private
 
