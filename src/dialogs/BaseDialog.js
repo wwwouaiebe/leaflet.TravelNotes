@@ -658,7 +658,8 @@ function myNewBaseDialog ( ) {
 		}
 
 		/**
-		Return a Promise that is fulfilled when the user close the dialog with the ok button or the return key
+		show the dialog on the screen
+		@return {Promise} a Promise that is fulfilled when the user close the dialog with the ok button or the return key
 		or rejected when the cancel button or Esc key is used
 		*/
 

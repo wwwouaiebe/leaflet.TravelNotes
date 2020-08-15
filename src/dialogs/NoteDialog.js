@@ -77,14 +77,15 @@ import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constant
 @desc constructor for NoteDialog objects
 @param {Note} note The note to edit
 @param {!number} routeObjId The objId of the route to witch the note is attached. = INVALID_OBJ_ID if none
-@param {boolean} isNewNote A boolean indication if the note is a new note or an existing note.
+@param {boolean} startGeoCoder If true the GeoCoder will be called and the address replaced with the GeoCoder result
+at the dialog opening
 @return {NoteDialog} an instance of NoteDialog object
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewNoteDialog ( note, routeObjId, isNewNote ) {
+function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	let myFocusControl = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -97,7 +98,14 @@ function ourNewNoteDialog ( note, routeObjId, isNewNote ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@class NoteDialog
-	@classdesc a BaseDialog object completed for notes
+	@classdesc a BaseDialog object completed for notes.
+	Create an instance of the dialog, then execute the show ( ) method. The edited note is given as parameter of the
+	succes handler of the Promise returned by the show ( ) method.
+	@example
+	newNoteDialog ( newNote ( ), INVALID_OBJ_ID, true )
+		.show ( )
+		.then ( note => doSomethingWithTheNote )
+		.catch ( error => doSomethingWithTheError );
 	@see {@link newNoteDialog} for constructor
 	@augments BaseDialog
 	@hideconstructor
@@ -168,7 +176,7 @@ function ourNewNoteDialog ( note, routeObjId, isNewNote ) {
 		}
 		myCity = response.city;
 
-		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && isNewNote ) {
+		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && startGeoCoder ) {
 			myAddressInput.value = myAddress;
 		}
 	}
@@ -698,7 +706,8 @@ export {
 	@desc constructor for NoteDialog objects
 	@param {Note} note The note to edit
 	@param {!number} routeObjId The objId of the route to witch the note is attached. = INVALID_OBJ_ID if none
-	@param {boolean} isNewNote A boolean indication if the note is a new note or an existing note.
+	@param {boolean} startGeoCoder If true the GeoCoder will be called and the address replaced with the GeoCoder result
+	at the dialog opening
 	@return {NoteDialog} an instance of NoteDialog object
 	@global
 
