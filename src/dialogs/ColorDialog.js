@@ -51,6 +51,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import { theConfig } from '../data/Config.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
@@ -150,6 +151,8 @@ function ourNewColorDialog ( cssColor ) {
 	const COLOR_CELLS_NUMBER = 6;
 	const COLOR_ROWS_NUMBER = 6;
 	const DELTA_COLOR = 51;
+	const SLIDER_MAX_VALUE = 100;
+	const SLIDER_STEP = 20;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -198,6 +201,44 @@ function ourNewColorDialog ( cssColor ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnRedColorButtonOrSlider
+	@desc this method change the color buttons after a red button click or red slider input event
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnRedColorButtonOrSlider ( redValue ) {
+		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
+			for ( let cellCounter = ZERO; cellCounter < COLOR_ROWS_NUMBER; ++ cellCounter ) {
+				let colorButton = myColorButtons [ ( COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
+				colorButton.color.red = redValue;
+				colorButton.setAttribute ( 'style', 'background-color:' + colorButton.color.cssColor );
+			}
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnRedColorButtonClick
+	@desc Event listener for the red color slider
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnRedColorSliderInput ( inputEvent ) {
+
+		// Math.ceil because with JS 100 * 2.55 = 254.99999....
+		myOnRedColorButtonOrSlider (
+			Math.ceil ( inputEvent.target.valueAsNumber * ( MAX_COLOR_VALUE / SLIDER_MAX_VALUE ) )
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myOnRedColorButtonClick
 	@desc Event listener for the red color buttons
 	@private
@@ -206,13 +247,8 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myOnRedColorButtonClick ( clickEvent ) {
-		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
-			for ( let cellCounter = ZERO; cellCounter < COLOR_ROWS_NUMBER; ++ cellCounter ) {
-				let colorButton = myColorButtons [ ( COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
-				colorButton.color.red = MAX_COLOR_VALUE - clickEvent.target.color.blue;
-				colorButton.setAttribute ( 'style', 'background-color:' + colorButton.color.cssColor );
-			}
-		}
+		myOnRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
+
 	}
 
 	/**
@@ -281,6 +317,7 @@ function ourNewColorDialog ( cssColor ) {
 	function myCreateColorButtonsDiv ( ) {
 		let colorButtonsDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let cellColor = new Color;
+		cellColor.red = theConfig.colorDialog.initialRed;
 
 		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
 			let colorButtonsRowDiv = myHTMLElementsFactory.create (
@@ -346,6 +383,36 @@ function ourNewColorDialog ( cssColor ) {
 			cellColor.green += DELTA_COLOR;
 			cellColor.blue += DELTA_COLOR;
 		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateRedSliderDiv
+	@desc This method creates the red slider div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRedSliderDiv ( ) {
+		let redSliderDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let sliderValue =
+			Math.ceil ( theConfig.colorDialog.initialRed * ( SLIDER_MAX_VALUE / MAX_COLOR_VALUE ) );
+		let redSliderInput = myHTMLElementsFactory.create ( 'input',
+			{
+				type : 'range',
+				className : 'TravelNotes-ColorDialog-SliderInput',
+				value : sliderValue,
+				min : ZERO,
+				max : SLIDER_MAX_VALUE,
+				step : SLIDER_STEP
+
+			},
+			redSliderDiv
+		);
+		redSliderInput.addEventListener ( 'input', myOnRedColorSliderInput, false );
+		redSliderInput.focus ( );
 	}
 
 	/**
@@ -425,7 +492,12 @@ function ourNewColorDialog ( cssColor ) {
 	myCreateDialog ( );
 	myCreateColorDiv ( );
 	myCreateColorButtonsDiv ( );
-	myCreateRedButtonsDiv ( );
+	if ( theConfig.colorDialog.haveSlider ) {
+		myCreateRedSliderDiv ( );
+	}
+	else {
+		myCreateRedButtonsDiv ( );
+	}
 	myCreateColorInputDiv ( );
 	myCreateColorSampleDiv ( );
 

@@ -223,5 +223,9 @@
 	"itineraryPane" : {	
 		"showNotes" : true,
 		"showManeuvers" : false
-	}	
+	},
+	"colorDialog" : {
+		"haveSlider" : true,
+		"initialRed" : 0
+	}
 }

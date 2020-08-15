@@ -256,6 +256,10 @@ let ourPrivateConfig = {
 	{
 		showNotes : true,
 		showManeuvers : false
+	},
+	colorDialog : {
+		haveSlider : true,
+		initialRed : 0
 	}
 };
 
@@ -379,6 +383,7 @@ class Config {
 	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
 	get haveCrypto ( ) { return ourPrivateConfig.haveCrypto; }
 	get itineraryPane ( ) { return ourPrivateConfig.itineraryPane; }
+	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
 
 	overload ( source ) {
 		ourCopyObjectTo ( source, ourPrivateConfig );
