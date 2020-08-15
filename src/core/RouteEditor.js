@@ -601,13 +601,9 @@ class RouteEditor {
 	*/
 
 	printRouteMap ( routeObjId ) {
-		let printRouteMapDialog = newPrintRouteMapDialog ( );
-
-		printRouteMapDialog.show ( ).then (
-			printData => {
-				newPrintFactory ( ).print ( printData, routeObjId );
-			}
-		)
+		newPrintRouteMapDialog ( )
+			.show ( )
+			.then ( printData => newPrintFactory ( ).print ( printData, routeObjId ) )
 			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
 	}
 
