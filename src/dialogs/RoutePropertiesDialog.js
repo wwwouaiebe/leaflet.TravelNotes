@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- RoutePropertiesDialog.js file -------------------------------------------------------------------------------------
-This file contains:
-	- the newRoutePropertiesDialog function
 Changes:
 	- v1.0.0:
 		- created
@@ -32,44 +29,89 @@ Changes:
 		- Issue #63 : Find a better solution for provider keys upload
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed 20200815
 Tests ...
+*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@file RoutePropertiesDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module RoutePropertiesDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
 import { ZERO } from '../util/Constants.js';
 
-/*
---- newRoutePropertiesDialog function ---------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewRoutePropertiesDialog
+@desc constructor for RoutePropertiesDialog objects
+@param {Route} route The route for wich the properties have to be edited
+@return {RoutePropertiesDialog} an instance of RoutePropertiesDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newRoutePropertiesDialog ( route ) {
+function ourNewRoutePropertiesDialog ( route ) {
 
 	const ROUTE_MIN_WIDTH = 1;
 	const ROUTE_MAX_WIDTH = 40;
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class RoutePropertiesDialog
+	@classdesc A ColorDialog object completed for edition of route properties
+	Create an instance of the dialog, then execute the show ( ) method. The edited route is given as parameter of the
+	succes handler of the Promise returned by the show ( ) method.
+	@example
+	newRoutePropertiesDialog ( route )
+		.show ( )
+		.then ( route => doSomethingWithTheRoute )
+		.catch ( error => doSomethingWithTheError );
+	@see {@link newRoutePropertiesDialog} for constructor
+	@augments ColorDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	let myRoutePropertiesDialog = null;
+
 	let myRoutePropertiesDiv = null;
 	let myNameInput = null;
 	let myWidthInput = null;
 	let myChainInput = null;
 	let myDashSelect = null;
 
-	/*
-	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	click event listener for the ok button
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnOkButtonClick ( ) {
@@ -84,10 +126,14 @@ function newRoutePropertiesDialog ( route ) {
 		return route;
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
@@ -98,10 +144,14 @@ function newRoutePropertiesDialog ( route ) {
 		myRoutePropertiesDialog.okButtonListener = myOnOkButtonClick;
 	}
 
-	/*
-	--- myCreateRoutePropertiesDiv function ---------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateRoutePropertiesDiv
+	@desc This method creates the route properties div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateRoutePropertiesDiv ( ) {
@@ -117,21 +167,18 @@ function newRoutePropertiesDialog ( route ) {
 		);
 	}
 
-	/*
-	--- myCreateWidthDiv function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateNameDiv
+	@desc This method creates the route properties div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateNameDiv ( ) {
-		let nameDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-RoutePropertiesDialog-NameDiv'
-			},
-			myRoutePropertiesDiv
-		);
-
+		let nameDiv = myHTMLElementsFactory.create ( 'div', null, myRoutePropertiesDiv );
 		myHTMLElementsFactory.create (
 			'div',
 			{
@@ -139,7 +186,6 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			nameDiv
 		);
-
 		let inputNameDiv = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -148,7 +194,6 @@ function newRoutePropertiesDialog ( route ) {
 			},
 			nameDiv
 		);
-
 		myNameInput = myHTMLElementsFactory.create (
 			'input',
 			{
@@ -161,10 +206,14 @@ function newRoutePropertiesDialog ( route ) {
 
 	}
 
-	/*
-	--- myCreateWidthDiv function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateWidthDiv
+	@desc This method creates the route width div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateWidthDiv ( ) {
@@ -172,12 +221,10 @@ function newRoutePropertiesDialog ( route ) {
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-WithDiv',
 				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>'
 			},
 			myRoutePropertiesDiv
 		);
-
 		myWidthInput = myHTMLElementsFactory.create (
 			'input',
 			{
@@ -191,10 +238,14 @@ function newRoutePropertiesDialog ( route ) {
 		);
 	}
 
-	/*
-	--- myCreateDashDiv function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDashDiv
+	@desc This method creates the route dash div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDashDiv ( ) {
@@ -202,20 +253,11 @@ function newRoutePropertiesDialog ( route ) {
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-dashDiv'
+				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype' ) + '</span>'
 			},
 			myRoutePropertiesDiv
 		);
-		dashDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype' ) + '</span>';
-		myDashSelect = myHTMLElementsFactory.create (
-			'select',
-			{
-				className : 'TravelNotes-RoutePropertiesDialog-Select',
-				id : 'TravelNotes-RoutePropertiesDialog-DashSelect'
-			},
-			dashDiv
-		);
-
+		myDashSelect = myHTMLElementsFactory.create ( 'select', null, dashDiv );
 		let dashChoices = theConfig.route.dashChoices;
 		for ( let optionsCounter = ZERO; optionsCounter < dashChoices.length; optionsCounter ++ ) {
 			myDashSelect.add ( myHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
@@ -223,10 +265,14 @@ function newRoutePropertiesDialog ( route ) {
 		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : ZERO;
 	}
 
-	/*
-	--- myCreateChainDiv function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateChainDiv
+	@desc This method creates the route chain div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateChainDiv ( ) {
@@ -234,26 +280,29 @@ function newRoutePropertiesDialog ( route ) {
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'
+				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv',
+				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route' ) + '</span>'
 			},
 			myRoutePropertiesDiv
 		);
-		chainDiv.innerHTML = '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route' ) + '</span>';
 		myChainInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
-				id : 'TravelNotes-RoutePropertiesDialog-ChainInput'
+				checked : route.chain
 			},
 			chainDiv
 		);
-		myChainInput.checked = route.chain;
 	}
 
-	/*
-	--- myCreateColorHeaderDiv function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateColorHeaderDiv
+	@desc This method creates the color header div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateColorHeaderDiv ( ) {
@@ -267,12 +316,6 @@ function newRoutePropertiesDialog ( route ) {
 		);
 	}
 
-	/*
-	--- main ----------------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	myCreateDialog ( );
 	myCreateRoutePropertiesDiv ( );
 	myCreateNameDiv ( );
@@ -284,8 +327,23 @@ function newRoutePropertiesDialog ( route ) {
 	return myRoutePropertiesDialog;
 }
 
-export { newRoutePropertiesDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newRoutePropertiesDialog
+	@desc constructor for RoutePropertiesDialog objects
+	@param {Route} route The route to edit at the dialog opening
+	@return {NoteDialog} an instance of NoteDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewRoutePropertiesDialog as newRoutePropertiesDialog
+};
 
 /*
---- End of RoutePropertiesDialog.js file ------------------------------------------------------------------------------
+--- End of RoutePropertiesDialog.js file --------------------------------------------------------------------------------------
 */

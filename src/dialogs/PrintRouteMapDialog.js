@@ -90,7 +90,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	@example
 	newPrintRouteMapDialog ( )
 		.show ( )
-		.then ( printRouteMapOptions => doSomethingWithTheprintRouteMapOptions )
+		.then ( printRouteMapOptions => doSomethingWithThePrintRouteMapOptions )
 		.catch ( error => doSomethingWithTheError );
 	@see {@link newPrintRouteMapDialog} for constructor
 	@augments BaseDialog
