@@ -93,6 +93,18 @@ function ourNewNoteDialog ( note, routeObjId, isNewNote ) {
 	let myAddress = '';
 	let myCity = '';
 
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class NoteDialog
+	@classdesc a BaseDialog object completed for notes
+	@see {@link newNoteDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	let myNoteDialog = null;
 	let myNoteDataDiv = null;
 	let myIconHtmlContent = null;
