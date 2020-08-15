@@ -65,6 +65,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 
 @function ourNewAPIKeysDialog
 @desc constructor for APIKeysDialog objects
+@param {Array.<APIKey>} APIKeys
 @return {APIKeysDialog} an instance of APIKeysDialog object
 @private
 
@@ -750,6 +751,7 @@ export {
 
 	@function newAPIKeysDialog
 	@desc constructor for APIKeysDialog objects
+	@param {Array.<APIKey>} APIKeys
 	@return {APIKeysDialog} an instance of APIKeysDialog object
 	@global
 

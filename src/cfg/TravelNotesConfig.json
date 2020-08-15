@@ -17,10 +17,9 @@
 		"haveLayersToolbarUI":true,
 		"toolbarTimeOut":1500,
 		"theDevil": {
-			"addButton": false,
+			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",
-			"text": "&#x1f47f;",
-			"noteZoom" : 17
+			"text": "&#x1f47f;"
 		}
 	},
 	"mouseUI":
@@ -137,6 +136,12 @@
 	},
 	"note":
 	{
+		"theDevil": {
+			"addButton": true,
+			"title": "Reminder! The devil will know everything about you",
+			"text": "&#x1f47f;",
+			"noteZoom" : 17
+		},
 		"reverseGeocoding":true,
 		"grip":
 		{

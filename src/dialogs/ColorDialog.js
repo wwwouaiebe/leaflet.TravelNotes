@@ -138,13 +138,14 @@ class Color {
 
 @function ourNewColorDialog
 @desc constructor for ColorDialog objects
+@param {string} cssColor The color to edit in the css HEX format '#RRGGBB'
 @return {ColorDialog} an instance of ColorDialog object
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewColorDialog ( color ) {
+function ourNewColorDialog ( cssColor ) {
 
 	const COLOR_CELLS_NUMBER = 6;
 	const COLOR_ROWS_NUMBER = 6;
@@ -165,8 +166,8 @@ function ourNewColorDialog ( color ) {
 	let myColorDialog = null;
 
 	let myNewColor = new Color;
-	myNewColor.cssColor = color;
-	
+	myNewColor.cssColor = cssColor;
+
 	let myColorDiv = null;
 	let myColorButtons = [];
 	let myRedInput = null;

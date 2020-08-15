@@ -81,8 +81,7 @@ Changes:
 	margin-bottom: 0.2em;
 }
 
-.TravelNotes-NoteDialog-DataDiv,
-.TravelNotes-NoteDialog-TitleDiv {
+.TravelNotes-NoteDialog-DataDiv {
 	margin-top: 0.3em;
 	margin-bottom: 0.3em;
 }

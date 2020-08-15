@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- NoteDialog.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newNoteDialog function
 Changes:
 	- v1.0.0:
 		- created
@@ -39,10 +36,28 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191124
+Doc reviewed 20200815
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file NoteDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module NoteDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -55,13 +70,21 @@ import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
-/*
---- newNoteDialog function --------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewNoteDialog
+@desc constructor for NoteDialog objects
+@param {Note} note The note to edit
+@param {!number} routeObjId The objId of the route to witch the note is attached. = INVALID_OBJ_ID if none
+@param {boolean} isNewNote A boolean indication if the note is a new note or an existing note.
+@return {NoteDialog} an instance of NoteDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteDialog ( note, routeObjId, newNote ) {
+function ourNewNoteDialog ( note, routeObjId, isNewNote ) {
 
 	let myFocusControl = null;
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
@@ -81,10 +104,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	let myUrlInput = null;
 	let myPhoneInput = null;
 
-	/*
-	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnOkButtonClick ( ) {
@@ -110,14 +137,18 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		return note;
 	}
 
-	/*
-	--- myOnGeocoderResponse function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnGeocoderSucces
+	@desc Succes handler for the GeoCoder
+	@param {Object} geoCoderData The GeoCoder response received from Nominatim
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnGeocoderResponse ( geoCoderData ) {
-
+	function myOnGeocoderSucces ( geoCoderData ) {
 		let response = myGeoCoder.parseResponse ( geoCoderData );
 		myAddress = response.street;
 		if ( '' !== response.city ) {
@@ -125,15 +156,19 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		}
 		myCity = response.city;
 
-		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && newNote ) {
+		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && isNewNote ) {
 			myAddressInput.value = myAddress;
 		}
 	}
 
-	/*
-	--- myOnGeocoderError function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnGeocoderError
+	@desc Error handler for the GeoCoder
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnGeocoderError ( err ) {
@@ -141,47 +176,60 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		console.log ( err ? err : 'an error occurs when searching the adress.' );
 	}
 
-	/*
-	--- myOnSvgIcon function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnSvgIconSuccess
+	@desc Success handler for the SvgIcomFromOsmFactory
+	@param {OsmNoteData} osmNoteData the data received from osm for the note creation
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnSvgIcon ( svgData ) {
-		myIconHtmlContent.value = svgData.svg.outerHTML;
-		myTooltipContent.value = svgData.tooltip;
+	function myOnSvgIconSuccess ( osmNoteData ) {
+		myIconHtmlContent.value = osmNoteData.svg.outerHTML;
+		myTooltipContent.value = osmNoteData.tooltip;
 
-		let address = svgData.streets;
-		let city = '' === svgData.city ? myCity : svgData.city;
+		let address = osmNoteData.streets;
+		let city = '' === osmNoteData.city ? myCity : osmNoteData.city;
 		if ( '' !== city ) {
 			address += ' ' + theConfig.note.cityPrefix + city + theConfig.note.cityPostfix;
 		}
-		if ( svgData.place && svgData.place !== city ) {
-			address += ' (' + svgData.place + ')';
+		if ( osmNoteData.place && osmNoteData.place !== city ) {
+			address += ' (' + osmNoteData.place + ')';
 		}
 
 		myAddressInput.value = address;
-		myLatLng = svgData.latLng;
+		myLatLng = osmNoteData.latLng;
 
 		myNoteDialog.hideWait ( );
 	}
 
-	/*
-	--- myOnErrorSvgIcon function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnSvgIconError
+	@desc Error handler for the SvgIcomFromOsmFactory
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnErrorSvgIcon ( err ) {
+	function myOnSvgIconError ( err ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
 		console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
 	}
 
-	/*
-	--- myOnPredefinedIconListSelectChange function -------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnPredefinedIconListSelectChange
+	@desc Event listener for the predefined icon list
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnPredefinedIconListSelectChange ( changeEvent ) {
@@ -197,8 +245,8 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			else {
 				myNoteDialog.showWait ( );
 				newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
-					.then ( myOnSvgIcon )
-					.catch ( myOnErrorSvgIcon );
+					.then ( myOnSvgIconSuccess )
+					.catch ( myOnSvgIconError );
 			}
 		}
 		else {
@@ -210,10 +258,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		}
 	}
 
-	/*
-	--- myOnClickEditionButton function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnClickEditionButton
+	@desc Event listener for the edition buttons
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnClickEditionButton ( clickEvent ) {
@@ -249,20 +301,42 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		myFocusControl.focus ( );
 	}
 
-	/*
-	--- myOnFocusControl function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnAddressButtonClick
+	@desc Event listener for the address button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnAddressButtonClick ( ) {
+		myAddressInput.value = myAddress;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnFocusControl
+	@desc Event listener for textarea and input text
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnFocusControl ( focusEvent ) {
 		myFocusControl = focusEvent.target;
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
@@ -281,10 +355,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 	}
 
-	/*
-	--- myCreateToolbar function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateToolbar
+	@desc This method creates the toolbar
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateToolbar ( ) {
@@ -296,27 +374,28 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 		);
 	}
 
-	/*
-	--- myCreateIconDimensions function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateIconDimensions
+	@desc This method creates the icon dimensions div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateIconDimensions ( ) {
 		let iconDimensionsDiv = myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-DataDiv',
-				id : 'TravelNotes-NoteDialog-DimensionsDataDiv'
+				className : 'TravelNotes-NoteDialog-DataDiv'
 			},
 			myNoteDataDiv
 		);
-
-		// ... width ...
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'NoteDialog - Icon width' )
+				value : theTranslator.getText ( 'NoteDialog - Icon width' )
 			},
 			iconDimensionsDiv
 		);
@@ -325,18 +404,14 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				id : 'TravelNotes-NoteDialog-WidthNumberInput'
-
+				value : ZERO === note.iconWidth ? ICON_DIMENSIONS.width : note.iconWidth
 			},
 			iconDimensionsDiv
 		);
-		myWidthInput.value = ZERO === note.iconWidth ? ICON_DIMENSIONS.width : note.iconWidth;
-
-		// ... and height
 		myHTMLElementsFactory.create (
 			'text',
 			{
-				data : theTranslator.getText ( 'NoteDialog - Icon height' )
+				value : theTranslator.getText ( 'NoteDialog - Icon height' )
 			},
 			iconDimensionsDiv
 		);
@@ -345,25 +420,27 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				id : 'TravelNotes-NoteDialog-HeightNumberInput'
+				value : ZERO === note.iconHeight ? ICON_DIMENSIONS.height : note.iconHeight
 			},
 			iconDimensionsDiv
 		);
-		myHeightInput.value = ZERO === note.iconHeight ? ICON_DIMENSIONS.height : note.iconHeight;
 	}
 
-	/*
-	--- myCreateIconContent function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateIconContent
+	@desc This method creates the icon content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateIconContent ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				id : 'TravelNotes-NoteDialog-IconContentTitleDiv',
+				className : 'TravelNotes-NoteDialog-DataDiv',
 				innerHTML : theTranslator.getText ( 'NoteDialog - Icon content' )
 			},
 			myNoteDataDiv
@@ -372,25 +449,28 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
-				id : 'TravelNotes-NoteDialog-TextArea-IconHtmlContent'
+				value : note.iconContent
 			},
 			myNoteDataDiv
 		);
 		myIconHtmlContent.addEventListener ( 'focus', myOnFocusControl, false );
-		myIconHtmlContent.value = note.iconContent;
 	}
 
-	/*
-	--- myCreatePopupContent function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateIconContent
+	@desc This method creates the popup content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreatePopupContent ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
+				className : 'TravelNotes-NoteDialog-DataDiv',
 				innerHTML : theTranslator.getText ( 'NoteDialog - Text' )
 			},
 			myNoteDataDiv
@@ -399,25 +479,28 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
-				id : 'TravelNotes-NoteDialog-TextArea-PopupContent'
+				value : note.popupContent
 			},
 			myNoteDataDiv
 		);
 		myPopupContent.addEventListener ( 'focus', myOnFocusControl, false );
-		myPopupContent.value = note.popupContent;
 	}
 
-	/*
-	--- myCreateTooltipContent function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateTooltipContent
+	@desc This method creates the tooltip content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateTooltipContent ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
+				className : 'TravelNotes-NoteDialog-DataDiv',
 				innerHTML : theTranslator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			myNoteDataDiv
@@ -427,44 +510,41 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id : 'TravelNotes-NoteDialog-InputText-Tooltip'
+				value : note.tooltipContent
 			},
 			myNoteDataDiv
 		);
 		myTooltipContent.addEventListener ( 'focus', myOnFocusControl, false );
-		myTooltipContent.value = note.tooltipContent;
 	}
 
-	/*
-	--- myCreateAddressContent function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateAddressContent
+	@desc This method creates the address content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateAddressContent ( ) {
-
 		let addressHeader = myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv'
+				className : 'TravelNotes-NoteDialog-DataDiv'
 			},
 			myNoteDataDiv
 		);
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-UI-Button',
-
+				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
 				innerHTML : '&#x1f504;'
 			},
 			addressHeader
 		)
-			.addEventListener (
-				'click',
-				( ) => { myAddressInput.value = myAddress; },
-				false
-			);
+			.addEventListener ( 'click', myOnAddressButtonClick, false );
 		myHTMLElementsFactory.create (
 			'text',
 			{
@@ -478,112 +558,96 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				type : 'text',
 				value : note.address,
-				className : 'TravelNotes-NoteDialog-InputText',
-				id : 'TravelNotes-NoteDialog-InputText-Adress'
+				className : 'TravelNotes-NoteDialog-InputText'
 			},
-			myHTMLElementsFactory.create ( 'div', null, myNoteDataDiv )
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-NoteDialog-DataDiv'
+				},
+				myNoteDataDiv
+			)
 		);
 		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
 
-		// geolocalization
 		myGeoCoder.getPromiseAddress ( note.latLng )
-			.then ( myOnGeocoderResponse )
+			.then ( myOnGeocoderSucces )
 			.catch ( myOnGeocoderError );
-
-		/*
-		myResetAdressButton = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML :
-					'<span id="TravelNotes-NoteDialog-Reset-Address-Button">&#x1f504;</span>&nbsp;' +
-					theTranslator.getText ( 'NoteDialog - Address&nbsp;:' )
-			},
-			myNoteDataDiv
-		);
-		myResetAdressButton.addEventListener (
-			'click',
-			function ( ) { myAddressInput.value = myAddress; },
-			false
-		);
-		myAddressInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				id : 'TravelNotes-NoteDialog-InputText-Adress'
-			},
-			myNoteDataDiv
-		);
-		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
-		myAddressInput.value = note.address;
-
-		// geolocalization
-		myGeoCoder.getPromiseAddress ( note.latLng )
-			.then ( myOnGeocoderResponse )
-			.catch ( myOnGeocoderError );
-		*/
-
 	}
 
-	/*
-	--- myCreateLinkContent function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateLinkContent
+	@desc This method creates the link content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateLinkContent ( ) {
-		myHTMLElementsFactory.create (
+		let linkHeader = myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
-				innerHTML : ( theConfig.layersToolbarUI.theDevil.addButton ?
-					( '<a href="https://www.google.com/maps/@' +
-					note.lat.toFixed ( LAT_LNG.fixed ) +
-					',' +
-					note.lng.toFixed ( LAT_LNG.fixed ) +
-					',' +
-					theConfig.layersToolbarUI.theDevil.noteZoom +
-					'z" target="_blank" title="' +
-					theConfig.layersToolbarUI.theDevil.title +
-					'" >' +
-					theConfig.layersToolbarUI.theDevil.text +
-					'</a> ' )
-					: '' ) +
-					theTranslator.getText ( 'NoteDialog - Link' )
+				className : 'TravelNotes-NoteDialog-DataDiv'
 			},
 			myNoteDataDiv
+		);
+		if ( theConfig.note.theDevil.addButton ) {
+			myHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-BaseDialog-Button',
+					title : 'Home',
+					innerHTML :
+						'<a href="https://www.google.com/maps/@' +
+						note.lat.toFixed ( LAT_LNG.fixed ) +
+						',' +
+						note.lng.toFixed ( LAT_LNG.fixed ) +
+						',' +
+						theConfig.note.theDevil.noteZoom +
+						'z" target="_blank" title="' +
+						theConfig.note.theDevil.title +
+						'" >' +
+						theConfig.note.theDevil.text +
+						'</a> '
+				},
+				linkHeader
+			);
+		}
+		myHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'NoteDialog - Link' )
+			},
+			linkHeader
 		);
 		myUrlInput = myHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id : 'TravelNotes-NoteDialog-InputText-Link'
+				value : note.url
 			},
 			myNoteDataDiv
-		);
-		myUrlInput.addEventListener (
-			'focus',
-			function ( ) {
-				myFocusControl = null;
-			},
-			false
-		);
-		myUrlInput.value = note.url;
+		).addEventListener ( 'focus', ( ) => { myFocusControl = null; }, false );
 	}
 
-	/*
-	--- myCreatePhoneContent function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreatePhoneContent
+	@desc This method creates the phone content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreatePhoneContent ( ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-TitleDiv',
+				className : 'TravelNotes-NoteDialog-DataDiv',
 				innerHTML : theTranslator.getText ( 'NoteDialog - Phone' )
 			},
 			myNoteDataDiv
@@ -593,19 +657,12 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				id : 'TravelNotes-NoteDialog-InputText-Phone'
+				value : note.phone
 			},
 			myNoteDataDiv
-		);
-		myPhoneInput.addEventListener ( 'focus', myOnFocusControl, false );
-		myPhoneInput.value = note.phone;
+		)
+			.addEventListener ( 'focus', myOnFocusControl, false );
 	}
-
-	/*
-	--- Main function -------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	myCreateDialog ( );
 	myCreateToolbar ( );
@@ -620,8 +677,25 @@ function newNoteDialog ( note, routeObjId, newNote ) {
 	return myNoteDialog;
 }
 
-export { newNoteDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newNoteDialog
+	@desc constructor for NoteDialog objects
+	@param {Note} note The note to edit
+	@param {!number} routeObjId The objId of the route to witch the note is attached. = INVALID_OBJ_ID if none
+	@param {boolean} isNewNote A boolean indication if the note is a new note or an existing note.
+	@return {NoteDialog} an instance of NoteDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewNoteDialog as newNoteDialog
+};
 
 /*
---- End of NoteDialog.js file -----------------------------------------------------------------------------------------
+--- End of NoteDialog.js file -------------------------------------------------------------------------------------------------
 */
