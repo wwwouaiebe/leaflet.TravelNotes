@@ -32,7 +32,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file APIKeysDialog.js
+@file ColorDialog.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -43,7 +43,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module APIKeysDialog
+@module ColorDialog
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -59,6 +59,15 @@ const MAX_COLOR_VALUE = 255;
 const HEXADECIMAL = 16;
 const TWO_EXP_8 = 256;
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc a simple helper classe for the ColorDialog
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class Color {
 
 	/**
@@ -68,8 +77,23 @@ class Color {
 	*/
 
 	constructor ( red, green, blue ) {
+
+		/**
+		The red value of the color
+		*/
+
 		this.red = ( 'number' === typeof red ? red : MAX_COLOR_VALUE ) % TWO_EXP_8;
+
+		/**
+		The green value of the color
+		*/
+
 		this.green = ( 'number' === typeof green ? green : MAX_COLOR_VALUE ) % TWO_EXP_8;
+
+		/**
+		The blue value of the color
+		*/
+
 		this.blue = ( 'number' === typeof blue ? blue : MAX_COLOR_VALUE ) % TWO_EXP_8;
 	}
 
@@ -138,9 +162,11 @@ function ourNewColorDialog ( color ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
+	let myColorDialog = null;
+
 	let myNewColor = new Color;
 	myNewColor.cssColor = color;
-	let myColorDialog = null;
+	
 	let myColorDiv = null;
 	let myColorButtons = [];
 	let myRedInput = null;
@@ -255,7 +281,6 @@ function ourNewColorDialog ( color ) {
 		let colorButtonsDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let cellColor = new Color;
 
-		// loop on the 6 rows
 		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
 			let colorButtonsRowDiv = myHTMLElementsFactory.create (
 				'div',
@@ -267,7 +292,6 @@ function ourNewColorDialog ( color ) {
 
 			cellColor.green = MAX_COLOR_VALUE;
 
-			// loop on the 6 cells
 			for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
 				let colorButtonCellDiv = myHTMLElementsFactory.create (
 					'div',
