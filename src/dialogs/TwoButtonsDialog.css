@@ -28,11 +28,16 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-BaseDialog-FooterDiv {
+.TravelNotes-TwoButtonsDialog-FooterDiv {
 	display: flex;
 	flex-direction: row;
 }
 
 #TravelNotes-TwoButtonsDialog-MessageDiv {
 	width: 30em;
+}
+
+.TravelNotes-TwoButtonsDialog-Button {
+	min-width: 2em;
+	width: auto;
 }
