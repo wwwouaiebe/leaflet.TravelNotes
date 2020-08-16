@@ -52,7 +52,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theConfig } from '../data/Config.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 const MIN_COLOR_VALUE = 0;
@@ -177,7 +177,6 @@ function ourNewColorDialog ( cssColor ) {
 	let myGreenInput = null;
 	let myBlueInput = null;
 	let myColorSampleDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -295,7 +294,7 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateColorDiv ( ) {
-		myColorDiv = myHTMLElementsFactory.create (
+		myColorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ColorDialog-ColorDiv'
@@ -315,12 +314,12 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateColorButtonsDiv ( ) {
-		let colorButtonsDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let cellColor = new Color;
 		cellColor.red = theConfig.colorDialog.initialRed;
 
 		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
-			let colorButtonsRowDiv = myHTMLElementsFactory.create (
+			let colorButtonsRowDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-ColorDialog-RowColorDiv'
@@ -331,7 +330,7 @@ function ourNewColorDialog ( cssColor ) {
 			cellColor.green = MAX_COLOR_VALUE;
 
 			for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
-				let colorButtonCellDiv = myHTMLElementsFactory.create (
+				let colorButtonCellDiv = theHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-ColorDialog-CellColorDiv'
@@ -359,9 +358,9 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateRedButtonsDiv ( ) {
-		let redButtonsDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let redButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let cellColor = new Color ( MAX_COLOR_VALUE, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
-		let redButtonsRowDiv = myHTMLElementsFactory.create (
+		let redButtonsRowDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ColorDialog-RowColorDiv',
@@ -370,7 +369,7 @@ function ourNewColorDialog ( cssColor ) {
 			redButtonsDiv
 		);
 		for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
-			let colorButtonCellDiv = myHTMLElementsFactory.create (
+			let colorButtonCellDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-ColorDialog-CellColorDiv'
@@ -396,10 +395,10 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateRedSliderDiv ( ) {
-		let redSliderDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let redSliderDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let sliderValue =
 			Math.ceil ( theConfig.colorDialog.initialRed * ( SLIDER_MAX_VALUE / MAX_COLOR_VALUE ) );
-		let redSliderInput = myHTMLElementsFactory.create ( 'input',
+		let redSliderInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'range',
 				className : 'TravelNotes-ColorDialog-SliderInput',
@@ -426,9 +425,9 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateColorInputDiv ( ) {
-		let rvbDiv = myHTMLElementsFactory.create ( 'div', null, myColorDiv );
-		myHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Red' ) }, rvbDiv	);
-		myRedInput = myHTMLElementsFactory.create ( 'input',
+		let rvbDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Red' ) }, rvbDiv	);
+		myRedInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
@@ -439,8 +438,8 @@ function ourNewColorDialog ( cssColor ) {
 			rvbDiv
 		);
 		myRedInput.addEventListener ( 'input', myOnColorInput, false );
-		myHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Green' ) }, rvbDiv );
-		myGreenInput = myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Green' ) }, rvbDiv );
+		myGreenInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -452,8 +451,8 @@ function ourNewColorDialog ( cssColor ) {
 			rvbDiv
 		);
 		myGreenInput.addEventListener ( 'input', myOnColorInput, false );
-		myHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Blue' ) }, rvbDiv );
-		myBlueInput = myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Blue' ) }, rvbDiv );
+		myBlueInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -478,7 +477,7 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myCreateColorSampleDiv ( ) {
-		myColorSampleDiv = myHTMLElementsFactory.create (
+		myColorSampleDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'

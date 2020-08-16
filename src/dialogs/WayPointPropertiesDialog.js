@@ -43,7 +43,7 @@ Tests ...
 */
 
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theConfig } from '../data/Config.js';
@@ -61,8 +61,6 @@ import { theConfig } from '../data/Config.js';
 */
 
 function ourNewWayPointPropertiesDialog ( wayPoint ) {
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -152,7 +150,7 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 		myWayPointPropertiesDialog = newBaseDialog ( );
 		myWayPointPropertiesDialog.title = theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' );
 		myWayPointPropertiesDialog.okButtonListener = myOnOkButtonClick;
-		myWayPointDataDiv = myHTMLElementsFactory.create (
+		myWayPointDataDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-WayPointPropertiesDialog-DataDiv'
@@ -171,21 +169,21 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 	*/
 
 	function myCreateNameDiv ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
 			},
 			myWayPointDataDiv
 		);
-		myNameInput = myHTMLElementsFactory.create (
+		myNameInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				value : wayPoint.name,
 				className : 'TravelNotes-WayPointPropertiesDialog-Input'
 			},
-			myHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
+			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
 		);
 	}
 
@@ -201,8 +199,8 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 
 	function myCreateAddressDiv ( ) {
 
-		let addressHeader = myHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv );
-		myHTMLElementsFactory.create (
+		let addressHeader = theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv );
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -216,7 +214,7 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 				myOnResetAddressButtonClick,
 				false
 			);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'WayPointPropertiesDialog - Address' )
@@ -224,14 +222,14 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 			addressHeader
 		);
 
-		myAddressInput = myHTMLElementsFactory.create (
+		myAddressInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				value : wayPoint.address,
 				className : 'TravelNotes-WayPointPropertiesDialog-Input'
 			},
-			myHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
+			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
 		);
 	}
 

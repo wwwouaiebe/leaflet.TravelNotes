@@ -34,7 +34,7 @@ Tests ...
 */
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
@@ -59,7 +59,6 @@ function newItineraryPaneUI ( ) {
 	let myDataDiv = null;
 	let myRouteHeader = null;
 	let myHTMLViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myCheckBoxesDiv = null;
 
 	/*
@@ -221,9 +220,9 @@ function newItineraryPaneUI ( ) {
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 
 			// checkboxes
-			myCheckBoxesDiv = myHTMLElementsFactory.create ( 'div', null, myDataDiv );
+			myCheckBoxesDiv = theHTMLElementsFactory.create ( 'div', null, myDataDiv );
 
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'text',
 				{
 					value : theTranslator.getText ( 'ItineraryPaneUI - Show notes' )
@@ -231,7 +230,7 @@ function newItineraryPaneUI ( ) {
 				myCheckBoxesDiv
 			);
 
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'input',
 				{
 					type : 'checkbox',
@@ -242,7 +241,7 @@ function newItineraryPaneUI ( ) {
 			)
 				.addEventListener ( 'click', myOnShowNotesClick, false );
 
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'text',
 				{
 					value : theTranslator.getText ( 'ItineraryPaneUI - Show maneuvers' )
@@ -250,7 +249,7 @@ function newItineraryPaneUI ( ) {
 				myCheckBoxesDiv
 			);
 
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'input',
 				{
 					type : 'checkbox',

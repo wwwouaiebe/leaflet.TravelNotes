@@ -36,7 +36,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
@@ -57,7 +57,6 @@ function newSearchPaneUI ( ) {
 	let myOsmSearchEngine = newOsmSearchEngine ( );
 	let mySearchInputValue = '';
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
 
 	let myDataDiv = null;
@@ -152,13 +151,12 @@ function newSearchPaneUI ( ) {
 		if ( ! document.getElementById ( 'TravelNotes-SearchPaneUI-SearchWaitBullet' ) ) {
 
 			// adding wait animation
-			let htmlElementsFactory = newHTMLElementsFactory ( );
-			htmlElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					id : 'TravelNotes-SearchPaneUI-SearchWaitBullet'
 				},
-				htmlElementsFactory.create (
+				theHTMLElementsFactory.create (
 					'div',
 					{ id : 'TravelNotes-SearchPaneUI-SearchWait' },
 					searchDiv
@@ -231,14 +229,14 @@ function newSearchPaneUI ( ) {
 		}
 
 		myOsmSearchEngine.show ( );
-		let searchDiv = myHTMLElementsFactory.create (
+		let searchDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-SearchPaneUI-SearchDiv'
 			},
 			myDataDiv
 		);
-		let searchButton = myHTMLElementsFactory.create (
+		let searchButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-SearchPaneUI-SearchButton',
@@ -250,7 +248,7 @@ function newSearchPaneUI ( ) {
 		);
 		searchButton.addEventListener ( 'click', myOnSearchInputChange, false );
 
-		let searchInput = myHTMLElementsFactory.create (
+		let searchInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
@@ -273,7 +271,7 @@ function newSearchPaneUI ( ) {
 		let resultsCounter = ZERO;
 		theTravelNotesData.searchData.forEach (
 			searchResult => {
-				let searchResultDiv = myHTMLElementsFactory.create (
+				let searchResultDiv = theHTMLElementsFactory.create (
 					'div',
 					{
 						id : 'TravelNotes-SearchPaneUI-SearchResult' + ( resultsCounter ++ ),

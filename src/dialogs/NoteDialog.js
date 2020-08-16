@@ -63,7 +63,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
@@ -88,7 +88,6 @@ at the dialog opening
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	let myFocusControl = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
 	let myAddress = '';
@@ -366,7 +365,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myNoteDialog.title = theTranslator.getText ( 'NoteDialog - Note' );
 		myNoteDialog.okButtonListener = myOnOkButtonClick;
 
-		myNoteDataDiv = myHTMLElementsFactory.create (
+		myNoteDataDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-NoteDialog-MainDataDiv'
@@ -405,21 +404,21 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateIconDimensions ( ) {
-		let iconDimensionsDiv = myHTMLElementsFactory.create (
+		let iconDimensionsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			},
 			myNoteDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'NoteDialog - Icon width' )
 			},
 			iconDimensionsDiv
 		);
-		myWidthInput = myHTMLElementsFactory.create (
+		myWidthInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -428,14 +427,14 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			iconDimensionsDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'NoteDialog - Icon height' )
 			},
 			iconDimensionsDiv
 		);
-		myHeightInput = myHTMLElementsFactory.create (
+		myHeightInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -457,7 +456,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateIconContent ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
@@ -465,7 +464,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
-		myIconHtmlContent = myHTMLElementsFactory.create (
+		myIconHtmlContent = theHTMLElementsFactory.create (
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
@@ -487,7 +486,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreatePopupContent ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
@@ -495,7 +494,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
-		myPopupContent = myHTMLElementsFactory.create (
+		myPopupContent = theHTMLElementsFactory.create (
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
@@ -517,7 +516,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateTooltipContent ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
@@ -525,7 +524,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
-		myTooltipContent = myHTMLElementsFactory.create (
+		myTooltipContent = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
@@ -548,14 +547,14 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateAddressContent ( ) {
-		let addressHeader = myHTMLElementsFactory.create (
+		let addressHeader = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			},
 			myNoteDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -565,7 +564,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			addressHeader
 		)
 			.addEventListener ( 'click', myOnAddressButtonClick, false );
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'NoteDialog - Address' )
@@ -573,14 +572,14 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			addressHeader
 		);
 
-		myAddressInput = myHTMLElementsFactory.create (
+		myAddressInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				value : note.address,
 				className : 'TravelNotes-NoteDialog-InputText'
 			},
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-NoteDialog-DataDiv'
@@ -606,7 +605,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateLinkContent ( ) {
-		let linkHeader = myHTMLElementsFactory.create (
+		let linkHeader = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
@@ -614,7 +613,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		if ( theConfig.note.theDevil.addButton ) {
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-BaseDialog-Button',
@@ -635,14 +634,14 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 				linkHeader
 			);
 		}
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'NoteDialog - Link' )
 			},
 			linkHeader
 		);
-		myUrlInput = myHTMLElementsFactory.create (
+		myUrlInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
@@ -669,7 +668,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreatePhoneContent ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
@@ -677,7 +676,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
-		myPhoneInput = myHTMLElementsFactory.create (
+		myPhoneInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',

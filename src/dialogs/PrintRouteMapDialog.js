@@ -63,7 +63,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -77,8 +77,6 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function ourNewPrintRouteMapDialog ( ) {
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -146,7 +144,7 @@ function ourNewPrintRouteMapDialog ( ) {
 		myPrintRouteMapDialog = newBaseDialog ( );
 		myPrintRouteMapDialog.title = theTranslator.getText ( 'PrintRouteMapDialog - Print' );
 		myPrintRouteMapDialog.okButtonListener = myOnOkButtonClick;
-		myPrintRouteMapDataDiv = myHTMLElementsFactory.create (
+		myPrintRouteMapDataDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintRouteMapDialog-MainDataDiv'
@@ -166,21 +164,21 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreatePaperWidthDiv ( ) {
-		let paperWidthDiv = myHTMLElementsFactory.create (
+		let paperWidthDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv'
 			},
 			myPrintRouteMapDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Paper width' )
 			},
 			paperWidthDiv
 		);
-		myPaperWidthInput = myHTMLElementsFactory.create (
+		myPaperWidthInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -189,7 +187,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			paperWidthDiv
 		);
 		myPaperWidthInput.value = theConfig.printRouteMap.paperWidth;
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Paper width units' )
@@ -209,21 +207,21 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreatePaperHeightDiv ( ) {
-		let paperHeightDiv = myHTMLElementsFactory.create (
+		let paperHeightDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv'
 			},
 			myPrintRouteMapDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Paper height' )
 			},
 			paperHeightDiv
 		);
-		myPaperHeightInput = myHTMLElementsFactory.create (
+		myPaperHeightInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -232,7 +230,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			paperHeightDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Paper height units' )
@@ -252,21 +250,21 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreateBorderWidthDiv ( ) {
-		let borderWidthDiv = myHTMLElementsFactory.create (
+		let borderWidthDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv'
 			},
 			myPrintRouteMapDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Border width' )
 			},
 			borderWidthDiv
 		);
-		myBorderWidthInput = myHTMLElementsFactory.create (
+		myBorderWidthInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -276,7 +274,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			borderWidthDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Border width units' )
@@ -296,7 +294,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreateZoomFactorDiv ( ) {
-		let zoomFactorDiv = myHTMLElementsFactory.create (
+		let zoomFactorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv',
@@ -304,7 +302,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			myPrintRouteMapDataDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Zoom factor' )
@@ -312,7 +310,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			zoomFactorDiv
 		);
 		const MAX_ZOOM = 15;
-		myZoomFactorInput = myHTMLElementsFactory.create (
+		myZoomFactorInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -336,7 +334,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreatePageBreakDiv ( ) {
-		let pageBreakDiv = myHTMLElementsFactory.create (
+		let pageBreakDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv',
@@ -344,7 +342,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			myPrintRouteMapDataDiv
 		);
-		myPageBreakInput = myHTMLElementsFactory.create (
+		myPageBreakInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
@@ -353,7 +351,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			pageBreakDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Page break' )
@@ -373,7 +371,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myCreatePrintNotesDiv ( ) {
-		let printNotesDiv = myHTMLElementsFactory.create (
+		let printNotesDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-PrintRouteMapDialog-DataDiv',
@@ -381,7 +379,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			myPrintRouteMapDataDiv
 		);
-		myPrintNotesInput = myHTMLElementsFactory.create (
+		myPrintNotesInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
@@ -390,7 +388,7 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			printNotesDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'PrintRouteMapDialog - Print notes' )

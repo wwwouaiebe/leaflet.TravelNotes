@@ -64,7 +64,7 @@ but not active
 
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
 let ourContextMenuEvent = null;
@@ -280,8 +280,6 @@ When null, the body of the html page is selected
 
 function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
@@ -293,7 +291,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 	*/
 
 	function myBuildContainer ( ) {
-		ourContainer = myHTMLElementsFactory.create (
+		ourContainer = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ContextMenu-Container',
@@ -335,7 +333,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 	*/
 
 	function myAddCloseButton ( ) {
-		ourCloseButton = myHTMLElementsFactory.create (
+		ourCloseButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c', // &#x274c = ❌
@@ -364,7 +362,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		let body = document.querySelector ( 'body' );
 
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, body );
+		let dummyDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
 		body.removeChild ( dummyDiv );
@@ -400,14 +398,14 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		let menuItemCounter = ZERO;
 		ourMenuItems.forEach (
 			menuItem => {
-				let itemContainer = myHTMLElementsFactory.create (
+				let itemContainer = theHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-ContextMenu-ItemContainer'
 					},
 					ourContainer
 				);
-				let itemButton = myHTMLElementsFactory.create (
+				let itemButton = theHTMLElementsFactory.create (
 					'div',
 					{
 						innerHTML : menuItem.name,

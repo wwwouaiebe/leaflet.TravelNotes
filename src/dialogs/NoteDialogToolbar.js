@@ -84,7 +84,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 let ourButtons = [];
@@ -94,8 +94,6 @@ let ourIconsSelect = null;
 let ourOpenFileInput = null;
 let ourOnSelectEventListener = null;
 let ourOnButtonClickEventListener = null;
-
-let ourHTMLElementsFactory = newHTMLElementsFactory ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -110,7 +108,7 @@ let ourHTMLElementsFactory = newHTMLElementsFactory ( );
 function ourAddSelectOptions ( ) {
 	ourSelectOptions.forEach (
 		selectOption => ourIconsSelect.add (
-			ourHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'option',
 				{
 					text : selectOption.name
@@ -134,7 +132,7 @@ function ourAddSelectOptions ( ) {
 function ourAddButtons ( ) {
 	ourButtons.forEach (
 		editionButton => {
-			let newButton = ourHTMLElementsFactory.create (
+			let newButton = theHTMLElementsFactory.create (
 				'button',
 				{
 					type : 'button',
@@ -221,7 +219,7 @@ function ourOnOpenFileButtonClick ( ) {
 */
 
 function ourCreateToolbarButtons ( ) {
-	ourOpenFileInput = ourHTMLElementsFactory.create (
+	ourOpenFileInput = theHTMLElementsFactory.create (
 		'input',
 		{
 			className : 'TravelNotes-BaseDialog-OpenFileInput',
@@ -230,7 +228,7 @@ function ourCreateToolbarButtons ( ) {
 		ourToolbarDiv
 	);
 	ourOpenFileInput.addEventListener ( 'change', ourOnOpenFileInputChange,	false );
-	let openFileButton = ourHTMLElementsFactory.create (
+	let openFileButton = theHTMLElementsFactory.create (
 		'div',
 		{
 			className : 'TravelNotes-BaseDialog-Button',
@@ -255,7 +253,7 @@ function ourCreateToolbarButtons ( ) {
 */
 
 function ourCreateToolbarSelect ( ) {
-	ourIconsSelect = ourHTMLElementsFactory.create (
+	ourIconsSelect = theHTMLElementsFactory.create (
 		'select',
 		{
 			className : 'TravelNotes-NoteDialog-Select',
@@ -319,7 +317,7 @@ class NoteDialogToolbar {
 		ourOnSelectEventListener = onSelectEventListener;
 		ourOnButtonClickEventListener = onButtonClickEventListener;
 
-		ourToolbarDiv = ourHTMLElementsFactory.create (
+		ourToolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',

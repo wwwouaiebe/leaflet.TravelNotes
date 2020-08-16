@@ -25,7 +25,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { ZERO } from '../util/Constants.js';
 
@@ -76,8 +76,6 @@ function ourNewFloatWindow ( ) {
 	let myScreenHeight = ZERO;
 
 	let myOnClose = null;
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -141,7 +139,7 @@ function ourNewFloatWindow ( ) {
 	function myCreateWindow ( ) {
 		myScreenWidth = theTravelNotesData.map.getContainer ( ).clientWidth;
 		myScreenHeight = theTravelNotesData.map.getContainer ( ).clientHeight;
-		myWindowDiv = myHTMLElementsFactory.create (
+		myWindowDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-Container'
@@ -178,7 +176,7 @@ function ourNewFloatWindow ( ) {
 	*/
 
 	function myCreateTopBar ( ) {
-		let topBar = myHTMLElementsFactory.create (
+		let topBar = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-TopBar',
@@ -189,7 +187,7 @@ function ourNewFloatWindow ( ) {
 		topBar.addEventListener ( 'dragstart', myOnTopBarDragStart, false );
 		topBar.addEventListener ( 'dragend', myOnTopBarDragEnd, false );
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
@@ -212,7 +210,7 @@ function ourNewFloatWindow ( ) {
 	*/
 
 	function myCreateHeaderDiv ( ) {
-		myHeaderDiv = myHTMLElementsFactory.create (
+		myHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-HeaderDiv'
@@ -232,7 +230,7 @@ function ourNewFloatWindow ( ) {
 	*/
 
 	function myCreateContentDiv ( ) {
-		myContentDiv = myHTMLElementsFactory.create (
+		myContentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-ContentDiv'

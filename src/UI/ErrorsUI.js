@@ -33,7 +33,7 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 
 /*
@@ -50,7 +50,6 @@ function newErrorsUI ( ) {
 	let myShowHelpDiv = null;
 	let myCancelButton = null;
 	let myShowHelp = theConfig.errorUI.showHelp;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
 	--- myOnHelpInputChange function ----------------------------------------------------------------------------------
@@ -93,14 +92,14 @@ function newErrorsUI ( ) {
 	*/
 
 	function myAddHelpCheckbox ( ) {
-		myShowHelpDiv = myHTMLElementsFactory.create (
+		myShowHelpDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorsUI-HelpInputDiv'
 			},
 			myErrorDiv
 		);
-		myShowHelpInput = myHTMLElementsFactory.create (
+		myShowHelpInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-ErrorsUI-HelpInput',
@@ -109,7 +108,7 @@ function newErrorsUI ( ) {
 			myShowHelpDiv
 		);
 		myShowHelpInput.addEventListener ( 'change', myOnHelpInputChange, false );
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'label',
 			{
 				id : 'TravelNotes-ErrorsUI-HelpInputLabel',
@@ -145,14 +144,14 @@ function newErrorsUI ( ) {
 			myOnTimer ( );
 		}
 
-		let headerDiv = myHTMLElementsFactory.create (
+		let headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorsUI-Header'
 			},
 			myErrorDiv
 		);
-		myCancelButton = myHTMLElementsFactory.create (
+		myCancelButton = theHTMLElementsFactory.create (
 			'span',
 			{
 				id : 'TravelNotes-ErrorsUI-CancelButton',
@@ -161,7 +160,7 @@ function newErrorsUI ( ) {
 			headerDiv
 		);
 		myCancelButton.addEventListener ( 'click', myOnTimer, false );
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorsUI-Message',
@@ -195,7 +194,7 @@ function newErrorsUI ( ) {
 			return;
 		}
 
-		myErrorDiv = myHTMLElementsFactory.create (
+		myErrorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorsUI',

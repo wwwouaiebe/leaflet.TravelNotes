@@ -37,7 +37,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
@@ -194,9 +194,7 @@ function newDataPanesUI ( ) {
 			return;
 		}
 
-		let htmlElementsFactory = newHTMLElementsFactory ( );
-
-		let headerDiv = htmlElementsFactory.create (
+		let headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -204,7 +202,7 @@ function newDataPanesUI ( ) {
 			UIDiv
 		);
 
-		htmlElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
@@ -214,7 +212,7 @@ function newDataPanesUI ( ) {
 			headerDiv
 		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
 
-		htmlElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
@@ -225,7 +223,7 @@ function newDataPanesUI ( ) {
 		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
 
 		if ( window.osmSearch ) {
-			htmlElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
@@ -236,7 +234,7 @@ function newDataPanesUI ( ) {
 			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
 		}
 
-		let dataDiv = htmlElementsFactory.create (
+		let dataDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-DataPanesUI-DataPanesDiv'

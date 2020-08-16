@@ -30,7 +30,7 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -116,7 +116,7 @@ function startup ( ) {
 				theViewerLayersToolbarUI.setLayers ( values [ TWO ] );
 
 				if ( theConfig.autoLoad ) {
-					newHTMLElementsFactory ( ).create (
+					theHTMLElementsFactory.create (
 						'div',
 						{ id : 'Map' },
 						document.querySelector ( 'body' )

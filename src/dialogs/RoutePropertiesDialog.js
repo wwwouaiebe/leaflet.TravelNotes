@@ -56,7 +56,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO } from '../util/Constants.js';
 
 /**
@@ -75,8 +75,6 @@ function ourNewRoutePropertiesDialog ( route ) {
 
 	const ROUTE_MIN_WIDTH = 1;
 	const ROUTE_MAX_WIDTH = 40;
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +152,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateRoutePropertiesDiv ( ) {
-		myRoutePropertiesDiv = myHTMLElementsFactory.create (
+		myRoutePropertiesDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
@@ -177,15 +175,15 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateNameDiv ( ) {
-		let nameDiv = myHTMLElementsFactory.create ( 'div', null, myRoutePropertiesDiv );
-		myHTMLElementsFactory.create (
+		let nameDiv = theHTMLElementsFactory.create ( 'div', null, myRoutePropertiesDiv );
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Name' )
 			},
 			nameDiv
 		);
-		let inputNameDiv = myHTMLElementsFactory.create (
+		let inputNameDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
@@ -193,7 +191,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 			},
 			nameDiv
 		);
-		myNameInput = myHTMLElementsFactory.create (
+		myNameInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
@@ -216,7 +214,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateWidthDiv ( ) {
-		let widthDiv = myHTMLElementsFactory.create (
+		let widthDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
@@ -224,7 +222,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		myWidthInput = myHTMLElementsFactory.create (
+		myWidthInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
@@ -248,7 +246,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateDashDiv ( ) {
-		let dashDiv = myHTMLElementsFactory.create (
+		let dashDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
@@ -256,10 +254,10 @@ function ourNewRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		myDashSelect = myHTMLElementsFactory.create ( 'select', null, dashDiv );
+		myDashSelect = theHTMLElementsFactory.create ( 'select', null, dashDiv );
 		let dashChoices = theConfig.route.dashChoices;
 		for ( let optionsCounter = ZERO; optionsCounter < dashChoices.length; optionsCounter ++ ) {
-			myDashSelect.add ( myHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
+			myDashSelect.add ( theHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
 		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : ZERO;
 	}
@@ -275,7 +273,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateChainDiv ( ) {
-		let chainDiv = myHTMLElementsFactory.create (
+		let chainDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
@@ -284,7 +282,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 			},
 			myRoutePropertiesDiv
 		);
-		myChainInput = myHTMLElementsFactory.create (
+		myChainInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
@@ -305,7 +303,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateColorHeaderDiv ( ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Color' ),

@@ -29,7 +29,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newObjId } from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newUtilities } from '../util/Utilities.js';
@@ -355,7 +355,7 @@ function ourNewProfileWindow ( ) {
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
 
-		myAscentDiv = newHTMLElementsFactory ( ).create (
+		myAscentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ProfileWindow-Ascent',

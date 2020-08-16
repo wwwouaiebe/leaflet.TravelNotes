@@ -54,7 +54,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theCurrentVersion } from '../data/Version.js';
 
 /**
@@ -84,7 +84,7 @@ function myNewAboutDialog ( ) {
 
 	let aboutDialog = newBaseDialog ( );
 	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
-	newHTMLElementsFactory ( ).create (
+	theHTMLElementsFactory.create (
 		'div',
 		{
 			id : 'TravelNotes-AboutDialog-AboutDiv',

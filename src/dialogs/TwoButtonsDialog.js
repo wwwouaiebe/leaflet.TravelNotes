@@ -58,7 +58,7 @@ Tests ...
 */
 
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -73,8 +73,6 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function ourNewTwoButtonsDialog ( content ) {
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +122,7 @@ function ourNewTwoButtonsDialog ( content ) {
 			myTwoButtonsDialog.okButton.innerHTML = content.okButtonContent;
 		}
 		if ( content.secondButtonContent ) {
-			let secondButton = myHTMLElementsFactory.create (
+			let secondButton = theHTMLElementsFactory.create (
 				'div',
 				{
 					innerHTML : content.secondButtonContent,
@@ -139,7 +137,7 @@ function ourNewTwoButtonsDialog ( content ) {
 			);
 		}
 		if ( content.textContent ) {
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					id : 'TravelNotes-TwoButtonsDialog-MessageDiv',

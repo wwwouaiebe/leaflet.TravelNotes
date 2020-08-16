@@ -45,7 +45,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 import { ZERO } from '../util/Constants.js';
 
@@ -60,7 +60,6 @@ This function returns the providersToolbarUI object
 function newProvidersToolbarUI ( ) {
 
 	let myButtonsDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myActiveButton = false;
 	let myBikeButton = null;
 	let myPedestrianButton = null;
@@ -211,7 +210,7 @@ function newProvidersToolbarUI ( ) {
 			return;
 		}
 
-		let providerButton = myHTMLElementsFactory.create (
+		let providerButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src : provider.icon,
@@ -309,7 +308,7 @@ function newProvidersToolbarUI ( ) {
 	*/
 
 	function myCreateTransitModesButtons ( ) {
-		myBikeButton = myHTMLElementsFactory.create (
+		myBikeButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -337,7 +336,7 @@ function newProvidersToolbarUI ( ) {
 		myBikeButton.transitMode = 'bike';
 		myBikeButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		myPedestrianButton = myHTMLElementsFactory.create (
+		myPedestrianButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -363,7 +362,7 @@ function newProvidersToolbarUI ( ) {
 		myPedestrianButton.transitMode = 'pedestrian';
 		myPedestrianButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		myCarButton = myHTMLElementsFactory.create (
+		myCarButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -386,7 +385,7 @@ function newProvidersToolbarUI ( ) {
 		myCarButton.transitMode = 'car';
 		myCarButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		myTrainButton = myHTMLElementsFactory.create (
+		myTrainButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -418,7 +417,7 @@ function newProvidersToolbarUI ( ) {
 		myTrainButton.transitMode = 'train';
 		myTrainButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		myLineButton = myHTMLElementsFactory.create (
+		myLineButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -440,7 +439,7 @@ function newProvidersToolbarUI ( ) {
 		myLineButton.transitMode = 'line';
 		myLineButton.addEventListener ( 'click', myOnClickTransitModeButton, false );
 
-		myCircleButton = myHTMLElementsFactory.create (
+		myCircleButton = theHTMLElementsFactory.create (
 			'img',
 			{
 				src :
@@ -477,7 +476,7 @@ function newProvidersToolbarUI ( ) {
 
 		myParentDiv = UIDiv;
 
-		myButtonsDiv = myHTMLElementsFactory.create (
+		myButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv TravelNotes-ProvidersToolbarUI-ImgButtonsDiv'

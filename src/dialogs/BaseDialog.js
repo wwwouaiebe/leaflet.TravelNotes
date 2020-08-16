@@ -104,7 +104,7 @@ Box model
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO, TWO } from '../util/Constants.js';
 
 const DRAG_MARGIN = 20;
@@ -141,8 +141,6 @@ function ourNewBaseDialog ( ) {
 	let mySearchWaitBulletDiv = null;
 	let myOkButton = null;
 	let myCancelButton = null;
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myOkButtonListener = null;
 
@@ -291,7 +289,7 @@ function ourNewBaseDialog ( ) {
 	function myCreateBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		myBackgroundDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
+		myBackgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-BaseDialog-BackgroundDiv' } );
 		myBackgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
 		myBackgroundDiv.addEventListener ( 'drop', ( ) => null, false );
 	}
@@ -309,7 +307,7 @@ function ourNewBaseDialog ( ) {
 	function myCreateDialogDiv ( ) {
 
 		// the dialog is created
-		myDialogDiv = myHTMLElementsFactory.create (
+		myDialogDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Container'
@@ -329,7 +327,7 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateTopBar ( ) {
-		myTopBar = myHTMLElementsFactory.create (
+		myTopBar = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-TopBar',
@@ -340,7 +338,7 @@ function ourNewBaseDialog ( ) {
 		myTopBar.addEventListener ( 'dragstart', myOnTopBarDragStart, false );
 		myTopBar.addEventListener ( 'dragend', myOnTopBarDragEnd, false );
 
-		myCancelButton = myHTMLElementsFactory.create (
+		myCancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
@@ -363,7 +361,7 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateHeaderDiv ( ) {
-		myHeaderDiv = myHTMLElementsFactory.create (
+		myHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-HeaderDiv'
@@ -383,7 +381,7 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateContentDiv ( ) {
-		myContentDiv = myHTMLElementsFactory.create (
+		myContentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-ContentDiv'
@@ -403,7 +401,7 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateErrorDiv ( ) {
-		myErrorDiv = myHTMLElementsFactory.create (
+		myErrorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-Hidden'
@@ -423,19 +421,19 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateWaitDiv ( ) {
-		myWaitDiv = myHTMLElementsFactory.create (
+		myWaitDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-WaitDiv'
 			},
 			myDialogDiv
 		);
-		mySearchWaitBulletDiv = myHTMLElementsFactory.create (
+		mySearchWaitBulletDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-Hidden'
 			},
-			mySearchWaitDiv = myHTMLElementsFactory.create (
+			mySearchWaitDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-Hidden'
@@ -456,7 +454,7 @@ function ourNewBaseDialog ( ) {
 	*/
 
 	function myCreateFooterDiv ( ) {
-		myFooterDiv = myHTMLElementsFactory.create (
+		myFooterDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-FooterDiv'
@@ -464,7 +462,7 @@ function ourNewBaseDialog ( ) {
 			myDialogDiv
 		);
 
-		myOkButton = myHTMLElementsFactory.create (
+		myOkButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x1f197;', // 1f197 = 🆗

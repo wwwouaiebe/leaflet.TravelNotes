@@ -29,7 +29,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
 --- newWaitUI function ------------------------------------------------------------------------------------------------
@@ -42,7 +42,6 @@ function newWaitUI ( ) {
 	let myBackgroundDiv = null;
 	let myWaitDiv = null;
 	let myMessageDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/*
 	--- myCreateUI function -------------------------------------------------------------------------------------------
@@ -55,7 +54,7 @@ function newWaitUI ( ) {
 			return;
 		}
 
-		myBackgroundDiv = myHTMLElementsFactory.create (
+		myBackgroundDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-WaitUI-Background'
@@ -63,26 +62,26 @@ function newWaitUI ( ) {
 			document.querySelector ( 'body' )
 		);
 
-		myWaitDiv = myHTMLElementsFactory.create (
+		myWaitDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-WaitUI'
 			},
 			myBackgroundDiv
 		);
-		myMessageDiv = myHTMLElementsFactory.create (
+		myMessageDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-WaitUI-MessageDiv'
 			},
 			myWaitDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-WaitUI-WaitBullet'
 			},
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-WaitUI-Wait'

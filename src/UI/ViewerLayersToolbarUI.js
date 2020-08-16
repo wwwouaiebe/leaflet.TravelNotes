@@ -1,6 +1,6 @@
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { newZoomer } from '../core/Zoomer.js';
 
@@ -17,7 +17,6 @@ function newViewerLayersToolbarUI ( ) {
 	let myLayersToolbar = null;
 
 	let myEventDispatcher = newEventDispatcher ( );
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	let myLayers = [
 		{
@@ -83,7 +82,7 @@ function newViewerLayersToolbarUI ( ) {
 	*/
 
 	function myCreateLayerButton ( layer ) {
-		let layerButton = myHTMLElementsFactory.create (
+		let layerButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -110,7 +109,7 @@ function newViewerLayersToolbarUI ( ) {
 	*/
 
 	function myCreateUI ( ) {
-		myLayersToolbar = myHTMLElementsFactory.create (
+		myLayersToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ViewerLayersToolbarUI'
@@ -120,7 +119,7 @@ function newViewerLayersToolbarUI ( ) {
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS
 		// the geolocation is working also on http protocol
-		let geoLocationButton = myHTMLElementsFactory.create (
+		let geoLocationButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -137,7 +136,7 @@ function newViewerLayersToolbarUI ( ) {
 			},
 			false
 		);
-		let zoomButton = myHTMLElementsFactory.create (
+		let zoomButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',

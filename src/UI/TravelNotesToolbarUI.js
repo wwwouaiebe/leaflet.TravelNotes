@@ -35,7 +35,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
@@ -48,7 +48,6 @@ import { GEOLOCATION_STATUS } from '../util/Constants.js';
 function newTravelNotesToolbarUI ( ) {
 
 	let myGeoLocationButton = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myPinButton = null;
 	let myTimerId = null;
 
@@ -117,7 +116,7 @@ function newTravelNotesToolbarUI ( ) {
 	*/
 
 	function myCreateHomeButton ( buttonsDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -138,7 +137,7 @@ function newTravelNotesToolbarUI ( ) {
 	*/
 
 	function myCreateHelpButton ( buttonsDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -159,7 +158,7 @@ function newTravelNotesToolbarUI ( ) {
 	*/
 
 	function myCreateContactButton ( buttonsDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -183,7 +182,7 @@ function newTravelNotesToolbarUI ( ) {
 		if ( theConfig.APIKeys.showDialogButton ) {
 
 			// API keys button
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-UI-Button',
@@ -216,7 +215,7 @@ function newTravelNotesToolbarUI ( ) {
 		if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
 
 			// GeoLocator button
-			myGeoLocationButton = myHTMLElementsFactory.create (
+			myGeoLocationButton = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-UI-Button',
@@ -245,7 +244,7 @@ function newTravelNotesToolbarUI ( ) {
 	function myCreatePinButton ( buttonsDiv, UIDiv ) {
 
 		// pin button
-		myPinButton = myHTMLElementsFactory.create (
+		myPinButton = theHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x274c;',
@@ -293,7 +292,7 @@ function newTravelNotesToolbarUI ( ) {
 
 	function myCreateUI ( UIDiv ) {
 
-		let buttonsDiv = myHTMLElementsFactory.create (
+		let buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'

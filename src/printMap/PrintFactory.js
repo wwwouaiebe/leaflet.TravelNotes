@@ -36,7 +36,7 @@ Tests ...
 /* global L */
 
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
@@ -68,7 +68,6 @@ function newPrintFactory ( ) {
 
 	let myBody = document.querySelector ( 'body' );
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myGeometry = newGeometry ( );
 	let myTilesPage = 0;
 
@@ -114,7 +113,7 @@ function newPrintFactory ( ) {
 	function myComputePrintSize ( ) {
 
 		let body = document.querySelector ( 'body' );
-		let dummyDiv = myHTMLElementsFactory.create ( 'div', { }, body );
+		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, body );
 		dummyDiv.setAttribute (
 			'style',
 			'position:absolute;top:0,left:0;width:' +
@@ -537,7 +536,7 @@ function newPrintFactory ( ) {
 	function myPrintView ( view ) {
 		myViewCounter ++;
 		let viewId = 'TravelNotes-RouteViewDiv' + myViewCounter;
-		let viewDiv = myHTMLElementsFactory.create (
+		let viewDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-routeViewDiv',
@@ -610,7 +609,7 @@ function newPrintFactory ( ) {
 	*/
 
 	function myCreateToolbar ( ) {
-		let printToolbar = myHTMLElementsFactory.create (
+		let printToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar'
@@ -618,7 +617,7 @@ function newPrintFactory ( ) {
 			myBody
 		);
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar-PrintButton',
@@ -629,7 +628,7 @@ function newPrintFactory ( ) {
 			printToolbar
 		)
 			.addEventListener (	'click', ( ) => window.print ( ), false );
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar-CancelButton',

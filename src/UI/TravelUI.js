@@ -51,7 +51,7 @@ import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
@@ -69,7 +69,6 @@ function newTravelUI ( ) {
 
 	let myRoutesList = null;
 	let myTravelNameInput = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myUIDiv = null;
 	let myDataObjId = ZERO;
 
@@ -150,21 +149,21 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateTravelNameDiv ( ) {
-		let travelNameDiv = myHTMLElementsFactory.create (
+		let travelNameDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
 			},
 			myUIDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : theTranslator.getText ( 'TravelUI - Travel' )
 			},
 			travelNameDiv
 		);
-		myTravelNameInput = myHTMLElementsFactory.create (
+		myTravelNameInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-TravelUI-InputTravelName',
@@ -188,7 +187,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateCancelTravelButton ( buttonsDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -214,7 +213,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateSaveTravelButton ( buttonsDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -243,8 +242,8 @@ function newTravelUI ( ) {
 
 		// open travel button with the well know hack....
 		// See also UI.js. Click events are first going to the interface div...
-		let openTravelDiv = myHTMLElementsFactory.create ( 'div', null, buttonsDiv );
-		myHTMLElementsFactory.create (
+		let openTravelDiv = theHTMLElementsFactory.create ( 'div', null, buttonsDiv );
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-TravelUI-OpenTravelInput',
@@ -262,14 +261,14 @@ function newTravelUI ( ) {
 				},
 				false
 			);
-		let openTravelFakeDiv = myHTMLElementsFactory.create (
+		let openTravelFakeDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-TravelUI-OpenFileFakeDiv'
 			},
 			openTravelDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -302,8 +301,8 @@ function newTravelUI ( ) {
 	function myCreateImportTravelButton ( buttonsDiv ) {
 
 		// import travel button with the well know hack....
-		let importTravelDiv = myHTMLElementsFactory.create ( 'div', null, buttonsDiv );
-		myHTMLElementsFactory.create (
+		let importTravelDiv = theHTMLElementsFactory.create ( 'div', null, buttonsDiv );
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				id : 'TravelNotes-TravelUI-ImportTravelInput',
@@ -321,14 +320,14 @@ function newTravelUI ( ) {
 				},
 				false
 			);
-		let importTravelFakeDiv = myHTMLElementsFactory.create (
+		let importTravelFakeDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-TravelUI-OpenFileFakeDiv'
 			},
 			importTravelDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -362,7 +361,7 @@ function newTravelUI ( ) {
 	function myCreateRoadbookButton ( buttonsDiv ) {
 
 		// roadbook button
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
@@ -385,7 +384,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateButtonsDiv ( ) {
-		let buttonsDiv = myHTMLElementsFactory.create (
+		let buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -407,7 +406,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateExpandRoutesButton ( routesHeaderDiv ) {
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : '&#x25bc;',
@@ -446,7 +445,7 @@ function newTravelUI ( ) {
 	function myCreateAddRouteButton ( routesHeaderDiv ) {
 
 		// add route button
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'span',
 			{
 				className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
@@ -472,7 +471,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateRoutesHeaderDiv ( ) {
-		let routesHeaderDiv = myHTMLElementsFactory.create (
+		let routesHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -483,7 +482,7 @@ function newTravelUI ( ) {
 		myCreateExpandRoutesButton ( routesHeaderDiv );
 
 		// title
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'span',
 			{
 				innerHTML : theTranslator.getText ( 'TravelUI - Travel routes' )
@@ -501,7 +500,7 @@ function newTravelUI ( ) {
 	*/
 
 	function myCreateRouteListDiv ( ) {
-		myRoutesList = myHTMLElementsFactory.create (
+		myRoutesList = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-TravelUI-RoutesListDiv',
@@ -574,7 +573,7 @@ function newTravelUI ( ) {
 				( route.chain ? '&#x26d3;&nbsp;' : '' ) +
 				( route.computedName );
 
-			let routeDiv = myHTMLElementsFactory.create (
+			let routeDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					draggable : true,

@@ -31,7 +31,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
 
@@ -96,7 +96,7 @@ function newMouseUI ( ) {
 		myZoom = theTravelNotesData.map.getZoom ( );
 		let mousePos = theTravelNotesData.map.getCenter ( );
 		myMousePos = myUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + myUtilities.formatLng ( mousePos.lng );
-		myMouseDiv = newHTMLElementsFactory ( ).create (
+		myMouseDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-MouseUI'

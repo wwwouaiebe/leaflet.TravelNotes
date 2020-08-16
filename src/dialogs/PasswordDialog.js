@@ -47,7 +47,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,8 +62,6 @@ import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 */
 
 function ourNewPasswordDialog ( verifyPassword ) {
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -152,8 +150,8 @@ function ourNewPasswordDialog ( verifyPassword ) {
 	*/
 
 	function myCreateContent ( ) {
-		myPasswordDataDiv = myHTMLElementsFactory.create ( 'div', null, myPasswordDialog.content );
-		myPasswordInput = myHTMLElementsFactory.create ( 'input', { type : 'password' }, myPasswordDataDiv );
+		myPasswordDataDiv = theHTMLElementsFactory.create ( 'div', null, myPasswordDialog.content );
+		myPasswordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, myPasswordDataDiv );
 	}
 
 	/**

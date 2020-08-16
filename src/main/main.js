@@ -30,7 +30,7 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
@@ -201,12 +201,12 @@ function startup ( ) {
 				theNoteDialogToolbar.buttons = values [ NOTES_DIALOG_CFG_POS ].editionButtons;
 
 				if ( theConfig.autoLoad ) {
-					newHTMLElementsFactory ( ).create (
+					theHTMLElementsFactory.create (
 						'div',
 						{ id : 'Map' },
 						document.querySelector ( 'body' )
 					);
-					newHTMLElementsFactory ( ).create (
+					theHTMLElementsFactory.create (
 						'div',
 						{ id : 'TravelNotes' },
 						document.querySelector ( 'body' )

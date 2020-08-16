@@ -31,7 +31,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
 /*
 --- newAttributionsUI function ----------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ function newAttributionsUI ( ) {
 	*/
 
 	function myCreateUI ( ) {
-		myAttributionsUIDiv = newHTMLElementsFactory ( ).create (
+		myAttributionsUIDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-AttributionsUI'

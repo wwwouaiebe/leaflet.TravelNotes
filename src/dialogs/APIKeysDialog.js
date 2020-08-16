@@ -53,7 +53,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
@@ -73,8 +73,6 @@ import { ZERO, ONE } from '../util/Constants.js';
 */
 
 function ourNewAPIKeysDialog ( APIKeys ) {
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -176,14 +174,14 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateAPIKeyRow ( APIKey ) {
-		let APIKeyRow = myHTMLElementsFactory.create (
+		let APIKeyRow = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyRow'
 			},
 			myAPIKeysDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyName TravelNotes-APIKeysDialog-Input',
@@ -192,7 +190,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			},
 			APIKeyRow
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
@@ -203,7 +201,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			APIKeyRow
 		);
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className :
@@ -535,7 +533,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateReloadKeysFromServerFileButton ( ) {
-		myReloadKeysFromServerFileButton = myHTMLElementsFactory.create (
+		myReloadKeysFromServerFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -558,7 +556,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateSaveKeysToSecureFileButton ( ) {
-		mySaveKeysToSecureFileButton = myHTMLElementsFactory.create (
+		mySaveKeysToSecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -581,7 +579,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateRestoreKeysFromSecureFileButton ( ) {
-		myOpenSecureFileInput = myHTMLElementsFactory.create (
+		myOpenSecureFileInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-BaseDialog-OpenFileInput',
@@ -590,7 +588,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			myToolbarDiv
 		);
 		myOpenSecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
-		myRestoreKeysFromSecureFileButton = myHTMLElementsFactory.create (
+		myRestoreKeysFromSecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -613,7 +611,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateAddNewKeyButton ( ) {
-		myAddNewKeyButton = myHTMLElementsFactory.create (
+		myAddNewKeyButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -636,7 +634,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateSaveKeysToUnsecureFileButton ( ) {
-		mySaveKeysToUnsecureFileButton = myHTMLElementsFactory.create (
+		mySaveKeysToUnsecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
@@ -659,7 +657,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateRestoreKeysFromUnsecureFileButton ( ) {
-		myOpenUnsecureFileInput = myHTMLElementsFactory.create (
+		myOpenUnsecureFileInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-BaseDialog-OpenFileInput',
@@ -668,7 +666,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			myToolbarDiv
 		);
 		myOpenUnsecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromUnecureFileButtonChange, false );
-		myRestoreKeysFromUnsecureFileButton = myHTMLElementsFactory.create (
+		myRestoreKeysFromUnsecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -692,7 +690,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateToolbar ( ) {
-		myToolbarDiv = myHTMLElementsFactory.create (
+		myToolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-APIKeysDialog-ToolbarDiv'
@@ -725,7 +723,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateAPIKeysList ( ) {
-		myAPIKeysDiv = myHTMLElementsFactory.create (
+		myAPIKeysDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-APIKeysDialog-DataDiv'

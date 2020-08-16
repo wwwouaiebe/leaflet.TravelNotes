@@ -75,7 +75,7 @@ the attributions of OpenStreetMap because they are always present in Travel & No
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -113,7 +113,6 @@ function newLayersToolbarUI ( ) {
 	let myTimerId = null;
 	let myLayersToolbar = null;
 	let myLayersToolbarButtonsDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myMarginTop = ZERO;
 	let myButtonHeight = ZERO;
@@ -196,7 +195,7 @@ function newLayersToolbarUI ( ) {
 		if ( layer.providerKeyNeeded && ! theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
 			return;
 		}
-		let layerButton = myHTMLElementsFactory.create (
+		let layerButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				type : 'layer',
@@ -222,7 +221,7 @@ function newLayersToolbarUI ( ) {
 	*/
 
 	function myCreateLinkButton ( href, title, text ) {
-		let linkButton = myHTMLElementsFactory.create (
+		let linkButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				type : 'link',
@@ -295,7 +294,7 @@ function newLayersToolbarUI ( ) {
 			myTimerId = null;
 			return;
 		}
-		myLayersToolbarButtonsDiv = myHTMLElementsFactory.create (
+		myLayersToolbarButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI-Buttons'
@@ -339,14 +338,14 @@ function newLayersToolbarUI ( ) {
 	*/
 
 	function myCreateLayersToolbar ( ) {
-		myLayersToolbar = myHTMLElementsFactory.create (
+		myLayersToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI'
 			},
 			document.querySelector ( 'body' )
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI-Header',

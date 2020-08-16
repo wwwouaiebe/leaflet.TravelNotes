@@ -39,7 +39,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
@@ -54,7 +54,6 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	const LINKS_MAX_LENGTH = 40;
 	const MIN_NOTES_DISTANCE = 9;
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 	let myUtilities = newUtilities ( );
 	let myProfileFactory = newProfileFactory ( );
 	let myGeometry = newGeometry ( );
@@ -162,7 +161,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myAddNoteHTML ( noteAndRoute, rowDiv ) {
-		let iconCell = myHTMLElementsFactory.create (
+		let iconCell = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Notes-IconCell',
@@ -174,7 +173,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			iconCell.firstChild.setAttributeNS ( null, 'viewBox', '0 0 ' + mySvgIconSize + ' ' + mySvgIconSize );
 		}
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Notes-Cell',
@@ -256,8 +255,8 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetTravelHeaderHTML ( ) {
-		let travelHeaderHTML = myHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel-Header' } );
-		myHTMLElementsFactory.create (
+		let travelHeaderHTML = theHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel-Header' } );
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Header-Name',
@@ -281,7 +280,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					theTravelNotesData.travel.editedRoute
 					:
 					routesIterator.value;
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Travel-Header-RouteName',
@@ -301,7 +300,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			}
 		}
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Travel-Header-TravelDistance',
@@ -316,7 +315,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		);
 
 		if ( ZERO !== travelAscent ) {
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Travel-Header-TravelAscent',
@@ -332,7 +331,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 		}
 
 		if ( ZERO !== travelDescent ) {
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Travel-Header-TravelDescent',
@@ -359,10 +358,10 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetTravelNotesHTML ( ) {
-		let travelNotesHTML = myHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel-Notes' } );
+		let travelNotesHTML = theHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel-Notes' } );
 		let travelNotesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! travelNotesIterator.done ) {
-			let rowDiv = myHTMLElementsFactory.create (
+			let rowDiv = theHTMLElementsFactory.create (
 				'div',
 				{ className : myClassNamePrefix + 'Travel-Notes-Row' },
 				travelNotesHTML
@@ -382,7 +381,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetRouteHeaderHTML ( route ) {
-		return myHTMLElementsFactory.create (
+		return theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Route-Header',
@@ -406,7 +405,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
-			let rowDiv = myHTMLElementsFactory.create (
+			let rowDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Route-Notes-Row',
@@ -423,7 +422,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			if ( nextNote ) {
 				let nextDistance = nextNote.distance - notesIterator.value.distance;
 				if ( MIN_NOTES_DISTANCE < nextDistance ) {
-					myHTMLElementsFactory.create (
+					theHTMLElementsFactory.create (
 						'div',
 						{
 							className : myClassNamePrefix + 'NoteHtml-NextDistance',
@@ -446,7 +445,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 			let maneuverDistance = myGeometry.getClosestLatLngDistance ( route, latLng ).distance;
 
-			let rowDiv = myHTMLElementsFactory.create (
+			let rowDiv = theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Route-Maneuvers-Row',
@@ -456,7 +455,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 					distance : maneuverDistance
 				}
 			);
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className :
@@ -500,7 +499,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 						}
 					) + '</div>';
 			}
-			myHTMLElementsFactory.create (
+			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : myClassNamePrefix + 'Route-ManeuversAndNotes-Cell',
@@ -513,7 +512,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 		notesAndManeuverRows.sort ( ( first, second ) => first.distance - second.distance );
 
-		let routeManeuversAndNotesHTML = myHTMLElementsFactory.create (
+		let routeManeuversAndNotesHTML = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'Route-ManeuversAndNotes'
@@ -544,7 +543,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 			);
 		}
 
-		return myHTMLElementsFactory.create (
+		return theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'RouteFooter',
@@ -562,7 +561,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetTravelFooterHTML ( ) {
-		return myHTMLElementsFactory.create (
+		return theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'TravelFooter',
@@ -580,7 +579,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 	*/
 
 	function myGetRouteProfileHTML ( route ) {
-		let profileDiv = myHTMLElementsFactory.create (
+		let profileDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : myClassNamePrefix + 'RouteProfile',
@@ -602,7 +601,7 @@ function newHTMLViewsFactory ( classNamePrefix ) {
 
 	function myGetTravelHTML ( ) {
 
-		let travelHTML = myHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel' } );
+		let travelHTML = theHTMLElementsFactory.create ( 'div', { className : myClassNamePrefix + 'Travel' } );
 
 		travelHTML.appendChild ( myGetTravelHeaderHTML ( ) );
 		travelHTML.appendChild ( myGetTravelNotesHTML ( ) );
