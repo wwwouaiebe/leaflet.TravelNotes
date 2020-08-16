@@ -17,18 +17,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ProfileWindow.js file ---------------------------------------------------------------------------------------------
-This file contains:
-	- the newProfileWindow function
 Changes:
 	- v1.7.0:
 		- created
 	- v1.8.0:
 		- Issue #99 : Add distance in the elevation window
-Doc reviewed ...
+Doc reviewed 20200816
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -40,16 +35,40 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-
 import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
-/*
---- newProfileWindow function -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@file ProfileWindow.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newProfileWindow ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ProfileWindow
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewProfileWindow
+@desc constructor for ProfileWindow objects
+@return {ProfileWindow} an instance of ProfileWindow object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewProfileWindow ( ) {
 
 	let myLatLngObjId = newObjId ( );
 
@@ -59,112 +78,120 @@ function newProfileWindow ( ) {
 	let myAscentText = null;
 	let myDistanceText = null;
 
-	let myProfileWindow = null;
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
+	@class ProfileWindow
+	@classdesc This class show the profile of a route in a floating window
+	@see {@link newProfileWindow} for constructor
+	@augments FloatWindow
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	let myProfileWindow = null;
 	let myAscentDiv = null;
 	let myRoute = null;
-
 	let myGeometry = newGeometry ( );
 	let myEventDispatcher = newEventDispatcher ( );
 	let myUtilities = newUtilities ( );
 
-	/*
-	--- myOnSvgClick function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Event listener for the svg
+	@function myGetlatLngElevOnRouteAtMousePosition
+	@desc This function gives the latitude, longitude and elevation of a route, depending of the mouse position
+	on the svg profile
+	@param {Event} mouseEvent The mouse event coming from the event listener that call this function
+	@return {LatLngElevOnRoute} An Object with the LatLng, elevation, ascent and distance of the mouse event on the route
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetlatLngElevOnRouteAtMousePosition ( mouseEvent ) {
+		let clientRect = mySvg.getBoundingClientRect ( );
+		let routeDist =
+			(
+				( mouseEvent.clientX - clientRect.x -
+					(
+						( SVG_PROFILE.margin /
+							( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
+						) * clientRect.width )
+				) /
+				(
+					( SVG_PROFILE.width /
+						( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
+					) * clientRect.width )
+			) * myRoute.distance;
+		return myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnSvgClick
+	@desc mouse click on the profile svg event listener. Zoom on the map to the coresponding position
+	@listens click
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnSvgClick ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				(
-					( SVG_PROFILE.margin /
-					( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width ) ) * clientRect.width )
-			) /
-			(
-				( SVG_PROFILE.width /
-				( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width ) ) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
-			myEventDispatcher.dispatch (
-				'zoomto',
-				{
-					latLng : [ latLngElevOnRoute [ ZERO ], latLngElevOnRoute [ ONE ] ]
-				}
-			);
+			myEventDispatcher.dispatch ( 'zoomto', { latLng : latLngElevOnRoute.latLng }	);
 		}
 	}
 
-	/*
-	--- myOnSvgContextMenu function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Event listener for the svg
+	@function myOnSvgContextMenu
+	@desc mouse contextmenu on the profile svg event listener. Start the creation of a route note at the given position
+	@listens contextmenu
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnSvgContextMenu ( mouseEvent ) {
 		mouseEvent.preventDefault ( );
 		mouseEvent.stopPropagation ( );
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				(
-					( SVG_PROFILE.margin /
-						( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
-					) * clientRect.width )
-			) /
-			(
-				( SVG_PROFILE.width /
-					( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
-				) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
 			theNoteEditor.newRouteNote (
 				myRoute.objId,
+
+				// fake contextmenu event with only latlng to add the note...
 				{
 					latlng : {
-						lat : latLngElevOnRoute [ ZERO ],
-						lng : latLngElevOnRoute [ ONE ]
+						lat : latLngElevOnRoute.latLng [ ZERO ],
+						lng : latLngElevOnRoute.latLng [ ONE ]
 					}
 				}
 			);
 		}
 	}
 
-	/*
-	--- myOnSvgMouseMove function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Event listener for the svg
+	@function myOnSvgMouseMove
+	@desc mouse move on the profile svg event listener. Display a text with the distance, elevation and ascent at
+	the given position. Show also a marker on the map
+	@listens click
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnSvgMouseMove ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
 		let clientRect = mySvg.getBoundingClientRect ( );
-		let routeDist =
-		(
-			( mouseEvent.clientX - clientRect.x -
-				(
-					( SVG_PROFILE.margin /
-					( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
-					) * clientRect.width )
-			) /
-			(
-				( SVG_PROFILE.width /
-				( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
-				) * clientRect.width )
-		) * myRoute.distance;
-		let latLngElevOnRoute = myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
 			const THREE = 3;
 
@@ -174,7 +201,7 @@ function newProfileWindow ( ) {
 				'additinerarypointmarker',
 				{
 					objId : myLatLngObjId,
-					latLng : [ latLngElevOnRoute [ ZERO ], latLngElevOnRoute [ ONE ] ]
+					latLng : latLngElevOnRoute.latLng
 				}
 			);
 
@@ -201,9 +228,9 @@ function newProfileWindow ( ) {
 			mySvg.appendChild ( myMarker );
 
 			// texts
-			let textAnchor = routeDist > myRoute.distance / TWO ? 'end' : 'start';
+			let textAnchor = latLngElevOnRoute.routeDistance > myRoute.distance / TWO ? 'end' : 'start';
 			let deltaMarkerX =
-				routeDist > myRoute.distance / TWO
+				latLngElevOnRoute.routeDistance > myRoute.distance / TWO
 					?
 					-SVG_PROFILE.xDeltaText
 					:
@@ -212,7 +239,7 @@ function newProfileWindow ( ) {
 			// distance
 			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 			myDistanceText.appendChild (
-				document.createTextNode ( myUtilities.formatDistance ( routeDist ) )
+				document.createTextNode ( myUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
 			);
 			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
 			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
@@ -224,7 +251,7 @@ function newProfileWindow ( ) {
 			myElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 			myElevText.appendChild (
 				document.createTextNode (
-					'Alt. ' + latLngElevOnRoute [ TWO ].toFixed ( ZERO ) + ' m.'
+					'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.'
 				)
 			);
 			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
@@ -241,7 +268,7 @@ function newProfileWindow ( ) {
 			myAscentText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 			myAscentText.appendChild (
 				document.createTextNode (
-					'Pente ' + latLngElevOnRoute [ THREE ].toFixed ( ZERO ) + ' % '
+					'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % '
 				)
 			);
 			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
@@ -256,10 +283,14 @@ function newProfileWindow ( ) {
 		}
 	}
 
-	/*
-	--- myClean function ----------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myClean
+	@desc This function removes the svg and event listeners from the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myClean ( ) {
@@ -281,10 +312,14 @@ function newProfileWindow ( ) {
 		myAscentDiv = null;
 	}
 
-	/*
-	--- myOnClose function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnClose
+	@desc This function closes the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnClose ( ) {
@@ -298,10 +333,15 @@ function newProfileWindow ( ) {
 
 	}
 
-	/*
-	--- myUpdate function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myUpdate
+	@desc This function updates the window, removing the svg and adding a new one, build with the route given as parameter
+	@param {Route} route The route used to update the svg profile
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myUpdate ( route ) {
@@ -330,26 +370,21 @@ function newProfileWindow ( ) {
 			}
 		);
 		myProfileWindow.content.appendChild ( myAscentDiv );
-
 	}
-
-	/*
-	--- main function -------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	myProfileWindow = newFloatWindow ( );
 	myProfileWindow.createWindow ( );
 	myProfileWindow.onClose = myOnClose;
-
 	myProfileWindow.update = myUpdate;
 
 	return Object.seal ( myProfileWindow );
 }
 
-export { newProfileWindow };
+export {
+
+	ourNewProfileWindow as newProfileWindow
+};
 
 /*
---- End of ProfileWindow.js file --------------------------------------------------------------------------------------
+--- End of ProfileWindow.js file ----------------------------------------------------------------------------------------------
 */

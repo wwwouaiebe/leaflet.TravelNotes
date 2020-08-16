@@ -33,6 +33,40 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file Geometry.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} LatLngElevOnRoute
+@desc An object to store the LatLng, elevation, ascent and distance of a point on a route
+@property {Array.<number>} latLng The latitude and longitude of the point
+@property {number} elev The elevation of the point
+@property {number} ascent The ascent since the previous ItineraryPoint
+@property {number} routeDistance The distance since the beginning of the route
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module Geometry
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 /* global L */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -75,13 +109,25 @@ function newGeometry ( ) {
 		itineraryPointsIterator.done;
 		let scale = ( previousItineraryPoint.distance - nearestDistance + distance ) / previousItineraryPoint.distance;
 		const HUNDRED = 100;
-		return [
-			previousItineraryPoint.lat + ( ( itineraryPointsIterator.value.lat - previousItineraryPoint.lat ) * scale ),
-			previousItineraryPoint.lng + ( ( itineraryPointsIterator.value.lng - previousItineraryPoint.lng ) * scale ),
-			previousItineraryPoint.elev + ( ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) * scale ),
-			HUNDRED *
-				( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) / previousItineraryPoint.distance
-		];
+		return Object.freeze (
+			{
+				latLng :
+					[
+						previousItineraryPoint.lat +
+						( ( itineraryPointsIterator.value.lat - previousItineraryPoint.lat ) * scale ),
+						previousItineraryPoint.lng +
+						( ( itineraryPointsIterator.value.lng - previousItineraryPoint.lng ) * scale )
+					],
+				elev :
+					previousItineraryPoint.elev +
+					( ( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) * scale ),
+				ascent :
+					HUNDRED *
+					( itineraryPointsIterator.value.elev - previousItineraryPoint.elev ) /
+					previousItineraryPoint.distance,
+				routeDistance : distance
+			}
+		);
 	}
 
 	/*

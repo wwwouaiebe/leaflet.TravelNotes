@@ -244,7 +244,7 @@ function ourNewFloatWindow ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@class FloatWindow
+	@class
 	@classdesc This class is the base for all the floating windows
 	@see {@link newFloatWindow} for constructor
 	@hideconstructor
