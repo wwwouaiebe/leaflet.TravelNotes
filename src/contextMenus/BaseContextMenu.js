@@ -43,7 +43,7 @@ Tests ...
 
 @typedef {Object} MenuItem
 @desc An object to represent a context menu line
-@property {string} context the object to witch the this pointer refers when calling the action function
+@property {Object} context the object to witch the this pointer refers when calling the action function
 @property {string} name the string displayed in the menu
 @property {?function} action the function to be executed when clicking on the menu item. If null the item is displayed
 but not active

@@ -138,8 +138,6 @@ function ourNewRoutePropertiesDialog ( route ) {
 	*/
 
 	function myCreateDialog ( ) {
-
-		// the dialog base is created
 		myRoutePropertiesDialog = newColorDialog ( route.color );
 		myRoutePropertiesDialog.title = theTranslator.getText ( 'RoutePropertiesDialog - Route properties' );
 		myRoutePropertiesDialog.okButtonListener = myOnOkButtonClick;
@@ -172,7 +170,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function myCreateNameDiv
-	@desc This method creates the route properties div
+	@desc This method creates the name div
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------

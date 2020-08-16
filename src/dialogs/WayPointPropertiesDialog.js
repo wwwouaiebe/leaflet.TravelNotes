@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,16 +16,30 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- WayPointPropertiesDialog.js file -------------------------------------------------------------------------------------
-This file contains:
-	- the newWayPointPropertiesDialog function
 Changes:
 	- v1.12.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200816
 Tests ...
+*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@file WayPointPropertiesDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module WayPointPropertiesDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
@@ -34,18 +48,54 @@ import { theTranslator } from '../UI/Translator.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theConfig } from '../data/Config.js';
 
-function newWayPointPropertiesDialog ( wayPoint ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewWayPointPropertiesDialog
+@desc constructor for WayPointPropertiesDialog objects
+@param {WayPoint} wayPoint The wayPoint for wich the properties have to be edited
+@return {WayPointPropertiesDialog} an instance of WayPointPropertiesDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewWayPointPropertiesDialog ( wayPoint ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class WayPointPropertiesDialog
+	@classdesc A BaseDialog object completed for edition of WayPoint properties
+	Create an instance of the dialog, then execute the show ( ) method. The edited WayPoint is given as parameter of the
+	succes handler of the Promise returned by the show ( ) method.
+	@example
+	newWayPointPropertiesDialog ( wayPoint )
+		.show ( )
+		.then ( wayPoint => doSomethingWithTheWayPoint )
+		.catch ( error => doSomethingWithTheError );
+	@see {@link newWayPointPropertiesDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	let myWayPointPropertiesDialog = null;
 	let myWayPointDataDiv = null;
 	let myNameInput = null;
 	let myAddressInput = null;
 
-	/*
-	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnOkButtonClick ( ) {
@@ -56,10 +106,14 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		return wayPoint;
 	}
 
-	/*
-	--- myOnResetAddressButtonClick function --------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnResetAddressButtonClick
+	@desc Event listener for the reset address button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnResetAddressButtonClick ( clickEvent ) {
@@ -84,20 +138,20 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
-
-		// the dialog base is created
 		myWayPointPropertiesDialog = newBaseDialog ( );
 		myWayPointPropertiesDialog.title = theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' );
-
 		myWayPointPropertiesDialog.okButtonListener = myOnOkButtonClick;
-
 		myWayPointDataDiv = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -106,10 +160,14 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 			myWayPointPropertiesDialog.content );
 	}
 
-	/*
-	--- myCreateNameDiv function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateNameDiv
+	@desc This method creates the name div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateNameDiv ( ) {
@@ -131,10 +189,14 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		);
 	}
 
-	/*
-	--- myCreateAddressDiv function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateAddressDiv
+	@desc This method creates the name div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateAddressDiv ( ) {
@@ -143,9 +205,9 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		myHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-UI-Button',
+				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'WayPointPropertiesDialog - Reset address' ),
-				innerHTML : '&#x1f504;'
+				innerHTML : '&#x1f504;' // 1f504 = 🔄
 			},
 			addressHeader
 		)
@@ -173,12 +235,6 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 		);
 	}
 
-	/*
-	--- main ----------------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	myCreateDialog ( );
 	myCreateNameDiv ( );
 	myCreateAddressDiv ( );
@@ -186,8 +242,23 @@ function newWayPointPropertiesDialog ( wayPoint ) {
 	return myWayPointPropertiesDialog;
 }
 
-export { newWayPointPropertiesDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newWayPointPropertiesDialog
+	@desc constructor for WayPointPropertiesDialog objects
+	@param {WayPoint} wayPoint The wayPoint for wich the properties have to be edited
+	@return {WayPointPropertiesDialog} an instance of WayPointPropertiesDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewWayPointPropertiesDialog as newWayPointPropertiesDialog
+};
 
 /*
---- End of NoteDialog.js file -----------------------------------------------------------------------------------------
+--- End of NoteDialog.js file -------------------------------------------------------------------------------------------------
 */
