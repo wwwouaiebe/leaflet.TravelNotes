@@ -257,7 +257,7 @@ function ourCreateGeoLocationButton ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
-				innerHTML : '&#x1f310;'
+				innerHTML : '&#x1f310;' // 1f310 = 🌐
 			},
 			ourButtonsDiv
 		);
