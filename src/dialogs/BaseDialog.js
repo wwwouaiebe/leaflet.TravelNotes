@@ -112,7 +112,7 @@ const DRAG_MARGIN = 20;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNewBaseDialog
+@function ourNewBaseDialog
 @desc constructor for BaseDialog objects
 @return {BaseDialog} an instance of BaseDialog object
 @private
@@ -120,7 +120,7 @@ const DRAG_MARGIN = 20;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewBaseDialog ( ) {
+function ourNewBaseDialog ( ) {
 
 	let myStartDragX = ZERO;
 	let myStartDragY = ZERO;
@@ -684,7 +684,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	myNewBaseDialog as newBaseDialog
+	ourNewBaseDialog as newBaseDialog
 };
 
 /*

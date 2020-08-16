@@ -17,31 +17,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- FloatWindow.js file ----------------------------------------------------------------------------------------------
-This file contains:
-	- the newFloatWindow function
 Changes:
 	- v1.7.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200816
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
 import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-
 import { ZERO } from '../util/Constants.js';
 
-/*
---- newFloatWindow function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@file FloatWindow.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newFloatWindow ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module FloatWindow
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewFloatWindow
+@desc constructor for FloatWindow objects
+@return {FloatWindow} an instance of FloatWindow object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewFloatWindow ( ) {
 
 	const DRAG_MARGIN = 20;
 
@@ -60,16 +79,68 @@ function newFloatWindow ( ) {
 
 	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
-	/*
-	--- myCreateDialogDiv function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnTopBarDragStart
+	@desc Drag start event listener for the top bar
+	@listens dragstart
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateWindowDiv ( ) {
+	function myOnTopBarDragStart ( dragStartEvent ) {
+		try {
+			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
+		}
+		catch ( err ) {
+			console.log ( err );
+		}
+		myStartDragX = dragStartEvent.screenX;
+		myStartDragY = dragStartEvent.screenY;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnTopBarDragEnd
+	@desc Drag end event listener for the top bar
+	@listens dragend
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnTopBarDragEnd ( dragEndEvent ) {
+		myWindowX += dragEndEvent.screenX - myStartDragX;
+		myWindowY += dragEndEvent.screenY - myStartDragY;
+		myWindowX = Math.min (
+			Math.max ( myWindowX, DRAG_MARGIN ),
+			myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
+		);
+		myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
+		let dialogMaxHeight =
+			myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
+		myWindowDiv.setAttribute (
+			'style',
+			'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateWindow
+	@desc This method creates the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateWindow ( ) {
 		myScreenWidth = theTravelNotesData.map.getContainer ( ).clientWidth;
 		myScreenHeight = theTravelNotesData.map.getContainer ( ).clientHeight;
-
 		myWindowDiv = myHTMLElementsFactory.create (
 			'div',
 			{
@@ -77,13 +148,16 @@ function newFloatWindow ( ) {
 			},
 			document.querySelector ( 'body' )
 		);
-
 	}
 
-	/*
-	--- myClose function ----------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myClose
+	@desc This method closes the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myClose ( ) {
@@ -93,10 +167,14 @@ function newFloatWindow ( ) {
 		document.querySelector ( 'body' ).removeChild ( myWindowDiv );
 	}
 
-	/*
-	--- myCreateTopBar function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateTopBar
+	@desc This method creates the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateTopBar ( ) {
@@ -108,8 +186,10 @@ function newFloatWindow ( ) {
 			},
 			myWindowDiv
 		);
+		topBar.addEventListener ( 'dragstart', myOnTopBarDragStart, false );
+		topBar.addEventListener ( 'dragend', myOnTopBarDragEnd, false );
 
-		let cancelButton = myHTMLElementsFactory.create (
+		myHTMLElementsFactory.create (
 			'div',
 			{
 				innerHTML : '&#x274c',
@@ -117,51 +197,18 @@ function newFloatWindow ( ) {
 				title : theTranslator.getText ( 'FloatWindow - Close' )
 			},
 			topBar
-		);
-
-		cancelButton.addEventListener ( 'click', myClose, false );
-
-		topBar.addEventListener (
-			'dragstart',
-			dragStartEvent => {
-				try {
-					dragStartEvent.dataTransfer.setData ( 'Text', '1' );
-				}
-				catch ( err ) {
-					console.log ( err );
-				}
-				myStartDragX = dragStartEvent.screenX;
-				myStartDragY = dragStartEvent.screenY;
-			},
-			false
-		);
-
-		topBar.addEventListener (
-			'dragend',
-			dragEndEvent => {
-				myWindowX += dragEndEvent.screenX - myStartDragX;
-				myWindowY += dragEndEvent.screenY - myStartDragY;
-				myWindowX = Math.min (
-					Math.max ( myWindowX, DRAG_MARGIN ),
-					myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
-				);
-				myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
-				let dialogMaxHeight =
-					myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
-				myWindowDiv.setAttribute (
-					'style',
-					'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'
-				);
-			},
-			false
-		);
-
+		)
+			.addEventListener ( 'click', myClose, false );
 	}
 
-	/*
-	--- myCreateHeaderDiv function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateHeaderDiv
+	@desc This method creates the header div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateHeaderDiv ( ) {
@@ -174,10 +221,14 @@ function newFloatWindow ( ) {
 		);
 	}
 
-	/*
-	--- myCreateContentDiv function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateHeaderDiv
+	@desc This method creates the content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateContentDiv ( ) {
@@ -190,42 +241,76 @@ function newFloatWindow ( ) {
 		);
 	}
 
-	/*
-	--- createWindow function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class FloatWindow
+	@classdesc This class is the base for all the floating windows
+	@see {@link newFloatWindow} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateWindow ( ) {
-		myCreateWindowDiv ( );
-		myCreateTopBar ( );
-		myCreateHeaderDiv ( );
-		myCreateContentDiv ( );
+	class FloatWindow {
+
+		/**
+		Create the window directly on the screen
+		*/
+
+		createWindow ( ) {
+			myCreateWindow ( );
+			myCreateTopBar ( );
+			myCreateHeaderDiv ( );
+			myCreateContentDiv ( );
+		}
+
+		/**
+		Close the window
+		*/
+
+		close ( ) { myClose ( ); }
+
+		/**
+		A function that will be executed when the dialog is closed
+		*/
+
+		set onClose ( OnClose ) { myOnClose = OnClose; }
+
+		/**
+		The header of the window. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
+
+		get header ( ) { return myHeaderDiv; }
+
+		/**
+		The content of the window. Read only but remember it's an HTMLElement...
+		@readonly
+		*/
+
+		get content ( ) { return myContentDiv; }
 	}
 
-	/*
-	--- FloatWindow object --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return {
-		createWindow : ( ) => myCreateWindow ( ),
-
-		close : ( ) => myClose ( ),
-
-		set onClose ( OnClose ) { myOnClose = OnClose; },
-
-		get header ( ) { return myHeaderDiv; },
-		set header ( Header ) { myHeaderDiv = Header; },
-
-		get content ( ) { return myContentDiv; },
-		set content ( Content ) { myContentDiv = Content; }
-	};
+	return new FloatWindow;
 }
 
-export { newFloatWindow };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newFloatWindow
+	@desc constructor for FloatWindow objects
+	@return {FloatWindow} an instance of FloatWindow object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewFloatWindow as newFloatWindow
+};
 
 /*
---- End of FloatWindow.js file ----------------------------------------------------------------------------------------
+--- End of FloatWindow.js file ------------------------------------------------------------------------------------------------
 */
