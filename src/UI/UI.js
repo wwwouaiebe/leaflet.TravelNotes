@@ -161,7 +161,7 @@ function ourAddMouseEventListeners ( ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc User Interface ( UI )
+@classdesc This class is the User Interface ( UI )
 @see {@link theUI} for the one and only one instance of this class
 @hideconstructor
 

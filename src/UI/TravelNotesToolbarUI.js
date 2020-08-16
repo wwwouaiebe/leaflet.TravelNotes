@@ -15,20 +15,35 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- TravelNotesToolbarUI.js file --------------------------------------------------------------------------------------
-This file contains:
-	- the TravelNotesToolbarUI function
-	- the theTravelNotesToolbarUI object
 Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200816
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file TravelNotesToolbarUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module TravelNotesToolbarUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -36,263 +51,297 @@ import { theConfig } from '../data/Config.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
-/*
---- newTravelNotesToolbarUI function ----------------------------------------------------------------------------------
+let ourGeoLocationButton = null;
+let ourTimerId = null;
+let ourButtonsDiv = null;
+let ourMainDiv = null;
+let ourUiIsPinned = false;
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseEnterUI
+@desc Event listener for the mouse enter on the UI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravelNotesToolbarUI ( ) {
-
-	let myGeoLocationButton = null;
-	let myPinButton = null;
-	let myTimerId = null;
-
-	/*
-	--- myOnMouseEnterUI function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnMouseEnterUI ( ) {
-		if ( myTimerId ) {
-			clearTimeout ( myTimerId );
-			myTimerId = null;
-		}
-		document.getElementById ( 'TravelNotes-UI-MainDiv' )
-			.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
-		document.getElementById ( 'TravelNotes-UI-MainDiv' )
-			.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+function ourOnMouseEnterUI ( ) {
+	if ( ourTimerId ) {
+		clearTimeout ( ourTimerId );
+		ourTimerId = null;
 	}
+	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
+	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+}
 
-	/*
-	--- myOnMouseLeaveUI function -------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourOnTimeOutMouseLeave
+@desc Event listener for the timer on mouse leave on the UI
+@private
 
-	function myOnMouseLeaveUI ( ) {
-		myTimerId = setTimeout (
-			( ) => {
-				document.getElementById ( 'TravelNotes-UI-MainDiv' )
-					.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
-				document.getElementById ( 'TravelNotes-UI-MainDiv' )
-					.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
-			},
-			theConfig.travelEditor.timeout
-		);
-	}
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	/*
-	--- myOnGeoLocationStatusChanged function -------------------------------------------------------------------------
+function ourOnTimeOutMouseLeave ( ) {
+	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
+	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
+}
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	function myOnGeoLocationStatusChanged ( geoLocationStatus ) {
-		switch ( geoLocationStatus ) {
-		case GEOLOCATION_STATUS.inactive :
-			myGeoLocationButton.classList.remove ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
-			break;
-		case GEOLOCATION_STATUS.active :
-			myGeoLocationButton.classList.add ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
-			break;
-		default :
-			if ( myGeoLocationButton ) {
-				myGeoLocationButton.parentNode.removeChild ( myGeoLocationButton );
-				myGeoLocationButton = null;
-			}
-			break;
-		}
-	}
+@function ourOnMouseLeaveUI
+@desc Event listener for the mouse leave on the UI
+@private
 
-	/*
-	--- myCreateHomeButton --------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+function ourOnMouseLeaveUI ( ) {
+	ourTimerId = setTimeout ( ourOnTimeOutMouseLeave, theConfig.travelEditor.timeout );
+}
 
-	function myCreateHomeButton ( buttonsDiv ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateHomeButton
+@desc This method creates the home button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateHomeButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : 'Home',
+			innerHTML :
+				'<a class="TravelNotes-UI-LinkButton" href="' +
+				window.location.origin +
+				'" target="_blank">&#x1f3e0;</a>' // 1f3e0 = 🏠
+		},
+		ourButtonsDiv
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateHelpButton
+@desc This method creates the help button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateHelpButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : 'Help',
+			innerHTML :
+				'<a class="TravelNotes-UI-LinkButton" ' +
+				'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' +
+				'target="_blank">?</a>'
+		},
+		ourButtonsDiv
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateContactButton
+@desc This method creates the contact button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateContactButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : 'Contact',
+			innerHTML :
+				'<a class="TravelNotes-UI-LinkButton" href="' +
+				( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ) +
+				'" target="_blank">@</a>'
+		},
+		ourButtonsDiv
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnApiKeysButtonClick
+@desc Event listener for the mouse click on the show APIKeys dialog button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnApiKeysButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theAPIKeysManager.setKeysFromDialog ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateApiKeysButton
+@desc This method creates the show APIKeys dialog button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateApiKeysButton ( ) {
+	if ( theConfig.APIKeys.showDialogButton ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
-				title : 'Home',
-				innerHTML :
-					'<a class="TravelNotes-UI-LinkButton" href="' +
-					window.location.origin +
-					'" target="_blank">&#x1f3e0;</a>'
+				title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
+				innerHTML : '&#x1f511;' // 1f511 = 🔑
 			},
-			buttonsDiv
-		);
+			ourButtonsDiv
+		)
+			.addEventListener ( 'click', ourOnApiKeysButtonClick, false );
 	}
+}
 
-	/*
-	--- myCreateHelpButton --------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourOnGeoLocationButtonClick
+@desc Event listener for the mouse click on geo location button
+@private
 
-	function myCreateHelpButton ( buttonsDiv ) {
-		theHTMLElementsFactory.create (
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnGeoLocationButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theGeoLocator.switch ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateGeoLocationButton
+@desc This method creates the geo location button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateGeoLocationButton ( ) {
+
+	// Don't test the https protocol. On some mobile devices with an integreted GPS
+	// the geolocation is working also on http protocol
+	if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
+		ourGeoLocationButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
-				title : 'Help',
-				innerHTML :
-					'<a class="TravelNotes-UI-LinkButton" ' +
-					'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' +
-					'target="_blank">?</a>'
+				title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
+				innerHTML : '&#x1f310;'
 			},
-			buttonsDiv
+			ourButtonsDiv
 		);
+		ourGeoLocationButton.addEventListener ( 'click', ourOnGeoLocationButtonClick, false );
 	}
+}
 
-	/*
-	--- myCreateContactButton -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@function ourOnPinButtonClick
+@desc Event listener for the mouse click on pin button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnPinButtonClick ( clickEvent ) {
+	if ( ourUiIsPinned ) {
+		clickEvent.target.innerHTML = '&#x1f4cc;'; // 1f4cc = 📌
+		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+	}
+	else {
+		clickEvent.target.innerHTML = '&#x274c;'; // 274c = ❌
+		ourMainDiv.removeEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+		ourMainDiv.removeEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+	}
+	ourUiIsPinned = ! ourUiIsPinned;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreatePinButton
+@desc This method creates the pin UI button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreatePinButton ( ) {
+	let pinButton = theHTMLElementsFactory.create (
+		'div',
+		{
+			innerHTML : '&#x274c;', // 274c = ❌
+			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton'
+		},
+		ourButtonsDiv
+	);
+	pinButton.addEventListener ( 'click', ourOnPinButtonClick, false );
+	if ( theConfig.travelEditor.startMinimized ) {
+		pinButton.innerHTML = '&#x1f4cc;'; // 1f4cc = 📌
+		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+		ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
+	}
+	else {
+		ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+		ourUiIsPinned = true;
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is Toolbar on top of the UI
+@see {@link theTravelNotesToolbarUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TravelNotesToolbarUI {
+
+	/**
+	creates the user interface
+	@param {HTMLElement} uiDiv The HTML element in witch the UI was created
 	*/
 
-	function myCreateContactButton ( buttonsDiv ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : 'Contact',
-				innerHTML :
-					'<a class="TravelNotes-UI-LinkButton" href="' +
-					( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ) +
-					'" target="_blank">@</a>'
-			},
-			buttonsDiv
-		);
-	}
-
-	/*
-	--- myCreateApiKeysButton -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateApiKeysButton ( buttonsDiv ) {
-		if ( theConfig.APIKeys.showDialogButton ) {
-
-			// API keys button
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
-					innerHTML : '&#x1f511;'
-				},
-				buttonsDiv
-			)
-				.addEventListener (
-					'click',
-					clickEvent => {
-						clickEvent.stopPropagation ( );
-						theAPIKeysManager.setKeysFromDialog ( );
-					},
-					false
-				);
-		}
-	}
-
-	/*
-	--- myCreateGeoLocationButton -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateGeoLocationButton ( buttonsDiv ) {
-
-		// Don't test the https protocol. On some mobile devices with an integreted GPS
-		// the geolocation is working also on http protocol
-		if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
-
-			// GeoLocator button
-			myGeoLocationButton = theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
-					innerHTML : '&#x1f310;'
-				},
-				buttonsDiv
-			);
-			myGeoLocationButton.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					theGeoLocator.switch ( );
-				},
-				false
-			);
-		}
-	}
-
-	/*
-	--- myCreatePinButton ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreatePinButton ( buttonsDiv, UIDiv ) {
-
-		// pin button
-		myPinButton = theHTMLElementsFactory.create (
-			'span',
-			{
-				innerHTML : '&#x274c;',
-				className : 'TravelNotes-UI-FlexRow-RightButton'
-			},
-			buttonsDiv
-		);
-		myPinButton.addEventListener (
-			'click',
-			clickEvent => {
-				let userInterface = document.getElementById ( 'TravelNotes-UI-MainDiv' );
-				let tmp = document.createElement ( 'div' );
-				tmp.innerHTML = '&#x274c;';
-				if ( tmp.innerHTML === clickEvent.target.innerHTML ) {
-					clickEvent.target.innerHTML = '&#x1f4cc;';
-					userInterface.addEventListener ( 'mouseenter', myOnMouseEnterUI, false );
-					userInterface.addEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
-				}
-				else {
-					clickEvent.target.innerHTML = '&#x274c;';
-					userInterface.removeEventListener ( 'mouseenter', myOnMouseEnterUI, false );
-					userInterface.removeEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
-				}
-			},
-			false
-		);
-		if ( theConfig.travelEditor.startMinimized ) {
-			myPinButton.innerHTML = '&#x1f4cc;';
-			UIDiv.addEventListener ( 'mouseenter', myOnMouseEnterUI, false );
-			UIDiv.addEventListener ( 'mouseleave', myOnMouseLeaveUI, false );
-			UIDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
-		}
-		else {
-			UIDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
-		}
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( UIDiv ) {
-
-		let buttonsDiv = theHTMLElementsFactory.create (
+	createUI ( UIDiv ) {
+		ourMainDiv = UIDiv;
+		ourButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -300,42 +349,55 @@ function newTravelNotesToolbarUI ( ) {
 			UIDiv
 		);
 
-		myCreateHomeButton ( buttonsDiv );
-		myCreateHelpButton ( buttonsDiv );
-		myCreateContactButton ( buttonsDiv );
-		myCreateApiKeysButton ( buttonsDiv );
-		myCreateGeoLocationButton ( buttonsDiv );
-		myCreatePinButton ( buttonsDiv, UIDiv );
+		ourCreateHomeButton ( );
+		ourCreateHelpButton ( );
+		ourCreateContactButton ( );
+		ourCreateApiKeysButton ( );
+		ourCreateGeoLocationButton ( );
+		ourCreatePinButton ( );
 	}
 
-	/*
-	--- TravelNotesToolbarUI object -----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Adapt the geo location button to the geo location status
+	@param {GEOLOCATION_STATUS} geoLocationStatus The new status of the geo location
 	*/
 
-	return Object.seal (
-		{
-			createUI : UIDiv => myCreateUI ( UIDiv ),
-
-			geoLocationStatusChanged : geoLocationStatus => myOnGeoLocationStatusChanged ( geoLocationStatus )
-
+	geoLocationStatusChanged ( geoLocationStatus ) {
+		switch ( geoLocationStatus ) {
+		case GEOLOCATION_STATUS.inactive :
+			ourGeoLocationButton.classList.remove ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
+			break;
+		case GEOLOCATION_STATUS.active :
+			ourGeoLocationButton.classList.add ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
+			break;
+		default :
+			if ( ourGeoLocationButton ) {
+				ourGeoLocationButton.parentNode.removeChild ( ourGeoLocationButton );
+				ourGeoLocationButton = null;
+			}
+			break;
 		}
-	);
+	}
 }
 
+const ourTravelNotesToolbarUI = Object.freeze ( new TravelNotesToolbarUI );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of TravelNotesToolbarUI class
+	@type {TravelNotesToolbarUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourTravelNotesToolbarUI as theTravelNotesToolbarUI
+};
+
 /*
---- theTravelNotesToolbarUI object ------------------------------------------------------------------------------------
-
-The one and only one TravelNotesToolbarUI
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theTravelNotesToolbarUI = newTravelNotesToolbarUI ( );
-
-export { theTravelNotesToolbarUI };
-
-/*
---- End of TravelNotesToolbarUI.js file -------------------------------------------------------------------------------
+--- End of TravelNotesToolbarUI.js file ---------------------------------------------------------------------------------------
 */

@@ -341,7 +341,7 @@ function ourNewBaseDialog ( ) {
 		myCancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c',
+				innerHTML : '&#x274c', // 274c = ❌
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
