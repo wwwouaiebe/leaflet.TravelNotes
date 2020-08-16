@@ -306,7 +306,7 @@ class NoteDialogToolbar {
 	*/
 
 	getIconData ( index ) {
-		ourSelectOptions [ index ];
+		return ourSelectOptions [ index ];
 	}
 
 	/**

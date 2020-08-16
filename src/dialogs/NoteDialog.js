@@ -650,7 +650,12 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 				value : note.url
 			},
 			myNoteDataDiv
-		).addEventListener ( 'focus', ( ) => { myFocusControl = null; }, false );
+		);
+		myUrlInput.addEventListener (
+			'focus',
+			( ) => { myFocusControl = null; },
+			false
+		);
 	}
 
 	/**
@@ -680,8 +685,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 				value : note.phone
 			},
 			myNoteDataDiv
-		)
-			.addEventListener ( 'focus', myOnFocusControl, false );
+		);
+		myPhoneInput.addEventListener ( 'focus', myOnFocusControl, false );
 	}
 
 	myCreateDialog ( );
