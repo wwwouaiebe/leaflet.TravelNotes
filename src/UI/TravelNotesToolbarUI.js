@@ -336,17 +336,17 @@ class TravelNotesToolbarUI {
 
 	/**
 	creates the user interface
-	@param {HTMLElement} uiDiv The HTML element in witch the UI was created
+	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
 	*/
 
-	createUI ( UIDiv ) {
-		ourMainDiv = UIDiv;
+	createUI ( uiMainDiv ) {
+		ourMainDiv = uiMainDiv;
 		ourButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
 			},
-			UIDiv
+			uiMainDiv
 		);
 
 		ourCreateHomeButton ( );

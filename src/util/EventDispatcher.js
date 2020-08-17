@@ -114,8 +114,8 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@event setitinerary
-@desc fired when theItineraryPaneUI must be visible and updated
+@event showitinerary
+@desc fired when ItineraryPaneUI must be visible and updated
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -124,7 +124,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @event updateitinerary
-@desc fired when theItineraryPaneUI must be updated
+@desc fired when ItineraryPaneUI must be updated
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -132,8 +132,8 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@event settravelnotes
-@desc fired when theTravelNotesPaneUI must be visible and updated
+@event showtravelnotes
+@desc fired when TravelNotesPaneUI must be visible and updated
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -142,7 +142,16 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @event updatetravelnotes
-@desc fired when theTravelNotesPaneUI must be updated
+@desc fired when TravelNotesPaneUI must be updated
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@event showsearch
+@desc fired when SearchPaneUI must be visible and updated
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -151,7 +160,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @event updatesearch
-@desc fired when theSearchPaneUI must be updated
+@desc fired when SearchPaneUI must be updated
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -277,11 +286,11 @@ function newEventDispatcher ( ) {
 	function myGetTarget ( eventName ) {
 		if ( NOT_FOUND <
 			[
-				'setitinerary',
+				'showitinerary',
 				'updateitinerary',
-				'settravelnotes',
+				'showtravelnotes',
 				'updatetravelnotes',
-				'setsearch',
+				'showsearch',
 				'updatesearch',
 				'setrouteslist',
 				'setprovider',

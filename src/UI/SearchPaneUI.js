@@ -42,7 +42,7 @@ import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 
-import { LAT_LNG, ZERO } from '../util/Constants.js';
+import { LAT_LNG, ZERO, DATA_PANE_ID } from '../util/Constants.js';
 
 /*
 --- newSearchPaneUI function ------------------------------------------------------------------------------------------
@@ -176,7 +176,8 @@ function newSearchPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRemove ( ) {
+	function myRemove ( dataDiv ) {
+		myDataDiv = dataDiv;
 
 		myOsmSearchEngine.hide ( );
 
@@ -215,19 +216,8 @@ function newSearchPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAdd ( ) {
-
-		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
-			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
-			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
-			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-
-		if ( ! myDataDiv ) {
-			myDataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		}
-
+	function myAdd ( dataDiv ) {
+		myDataDiv = dataDiv;
 		myOsmSearchEngine.show ( );
 		let searchDiv = theHTMLElementsFactory.create (
 			'div',
@@ -392,8 +382,10 @@ function newSearchPaneUI ( ) {
 
 	return Object.seal (
 		{
-			remove : ( ) => myRemove ( ),
-			add : ( ) => myAdd ( )
+			remove : dataDiv => myRemove ( dataDiv ),
+			add : dataDiv => myAdd ( dataDiv ),
+			getId : ( ) => DATA_PANE_ID.searchPane,
+			getButtonText : ( ) => theTranslator.getText ( 'DataPanesUI - Search' )
 		}
 	);
 }

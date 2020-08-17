@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,10 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- dataPanesUI.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the newDataPanesUI function
 Changes:
 	- v1.0.0:
 		- created
@@ -30,263 +28,226 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191125
+Doc reviewed 20200817
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file DataPanesUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} PaneUI
+@desc An object that can be displayed as a pane
+@property {function} remove A function that do the cleaning of the Data pane
+@property {function} add A function that add all the needed HTMLElement in the Data pane
+@property {function} getId A function that gives a unique identifier for the DataPaneUI
+@property {function} getButtonText A function that return the text to be displayed in the Data pane button
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module DataPanesUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
-import { newSearchPaneUI } from '../UI/SearchPaneUI.js';
-import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
+import { MOUSE_WHEEL_FACTORS, DATA_PANE_ID } from '../util/Constants.js';
 
-import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+let ourActivePaneId = DATA_PANE_ID.invalidPane;
+let ourPanes = new Map ( );
+let ourDataPaneDiv = null;
 
-/*
---- newDataPanesUI function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function returns the dataPanesUI object
+@function ourRemoveActivePane
+@desc This method remove the content of the Data Pane Div
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newDataPanesUI ( ) {
+function ourRemoveActivePane ( ) {
+	if ( DATA_PANE_ID.invalidPane !== ourActivePaneId ) {
+		ourPanes.get ( ourActivePaneId ).remove ( ourDataPaneDiv );
+		ourDataPaneDiv.innerHTML = '';
+	}
+}
 
-	const INVALID_PANE = -1;
-	const ITINERARY_PANE = 0;
-	const TRAVEL_NOTES_PANE = 1;
-	const SEARCH_PANE = 2;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myActivePaneIndex = INVALID_PANE;
-	let myTravelNotesPaneUI = newTravelNotesPaneUI ( );
-	let mySearchPaneUI = newSearchPaneUI ( );
-	let myItineraryPaneUI = newItineraryPaneUI ( );
+@function ourShowPane
+@desc Show a pane
+@param paneId the pane id to show
+@private
 
-	/*
-	--- myRemoveActivePane function -----------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	This function remove the active pane contents
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveActivePane ( ) {
-		switch ( myActivePaneIndex ) {
-		case ITINERARY_PANE :
-			myItineraryPaneUI.remove ( );
-			break;
-		case TRAVEL_NOTES_PANE :
-			myTravelNotesPaneUI.remove ( );
-			break;
-		case SEARCH_PANE :
-			if ( window.osmSearch ) {
-				mySearchPaneUI.remove ( );
+function ourShowPane ( paneId ) {
+	ourRemoveActivePane ( );
+	ourActivePaneId = paneId;
+	ourPanes.get ( ourActivePaneId ).add ( ourDataPaneDiv );
+	document.querySelectorAll ( '.TravelNotes-DataPaneUI-PaneButton' ).forEach (
+		paneButton => {
+			if ( paneButton.paneId === ourActivePaneId ) {
+				paneButton.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
 			}
-			break;
-		default :
-			break;
+			else {
+				paneButton.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+			}
 		}
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnPaneButtonClick
+@desc click event listener for the pane buttons
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnPaneButtonClick ( clickEvent ) {
+	ourShowPane ( clickEvent.target.paneId );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnDataPaneDivWheel
+@desc Wheel event listener for Data Pane Div
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnDataPaneDivWheel ( wheelEvent ) {
+	if ( wheelEvent.deltaY ) {
+		wheelEvent.target.scrollTop +=
+			wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 	}
+	wheelEvent.stopPropagation ( );
+}
 
-	/*
-	--- mySetItinerary function ---------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	This function set the itinerary pane contents
+@class
+@classdesc This class manages the differents panes on the UI
+@see {@link theDataPanesUI} for the one and only one instance of this class
+@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class DataPanesUI {
+
+	/**
+	creates the data panes on the user interface
+	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
 	*/
 
-	function mySetItinerary ( ) {
-		myRemoveActivePane ( );
-		myItineraryPaneUI.add ( );
-
-		myActivePaneIndex = ITINERARY_PANE;
-	}
-
-	/*
-	--- myUpdateItinerary function ------------------------------------------------------------------------------------
-
-	This function set the itinerary pane contents only when this pane is active
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdateItinerary ( ) {
-		if ( ITINERARY_PANE === myActivePaneIndex ) {
-			myItineraryPaneUI.remove ( );
-			myItineraryPaneUI.add ( );
-		}
-	}
-
-	/*
-	--- mySetItinerary function ---------------------------------------------------------------------------------------
-
-	This function set the travel notes pane contents
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetTravelNotes ( ) {
-		myRemoveActivePane ( );
-		myTravelNotesPaneUI.add ( );
-		myActivePaneIndex = TRAVEL_NOTES_PANE;
-	}
-
-	/*
-	--- myUpdateTravelNotes function ----------------------------------------------------------------------------------
-
-	This function set the travel notes pane contents only when this pane is active
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdateTravelNotes ( ) {
-		if ( TRAVEL_NOTES_PANE === myActivePaneIndex ) {
-			myTravelNotesPaneUI.remove ( );
-			myTravelNotesPaneUI.add ( );
-		}
-	}
-
-	/*
-	--- mySetSearch function ------------------------------------------------------------------------------------------
-
-	This function set the search pane contents
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetSearch ( ) {
-		myRemoveActivePane ( );
-		mySearchPaneUI.add ( );
-
-		myActivePaneIndex = SEARCH_PANE;
-
-	}
-
-	/*
-	--- myUpdateSearch function ---------------------------------------------------------------------------------------
-
-	This function set the travel notes pane contents only when this pane is active
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdateSearch ( ) {
-		if ( SEARCH_PANE === myActivePaneIndex ) {
-			mySearchPaneUI.remove ( );
-			mySearchPaneUI.add ( );
-		}
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( UIDiv ) {
-
-		if ( document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' ) ) {
+	createUI ( uiMainDiv ) {
+		if ( ourDataPaneDiv ) {
 			return;
 		}
-
 		let headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
 			},
-			UIDiv
+			uiMainDiv
 		);
-
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				innerHTML : theTranslator.getText ( 'DataPanesUI - Itinerary' ),
-				id : 'TravelNotes-DataPanesUI-ItineraryPaneButton',
-				className : 'TravelNotes-DataPaneUI-PaneButton'
-			},
-			headerDiv
-		).addEventListener ( 'click', ( ) => mySetItinerary ( ), false );
-
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				innerHTML : theTranslator.getText ( 'DataPanesUI - Travel notes' ),
-				id : 'TravelNotes-DataPanesUI-TravelNotesPaneButton',
-				className : 'TravelNotes-DataPaneUI-PaneButton'
-			},
-			headerDiv
-		).addEventListener ( 'click', ( ) => mySetTravelNotes ( ), false );
-
-		if ( window.osmSearch ) {
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					innerHTML : theTranslator.getText ( 'DataPanesUI - Search' ),
-					id : 'TravelNotes-DataPaneUI-SearchPaneButton',
-					className : 'TravelNotes-DataPaneUI-PaneButton'
-				},
-				headerDiv
-			).addEventListener ( 'click', ( ) => mySetSearch ( ), false );
-		}
-
-		let dataDiv = theHTMLElementsFactory.create (
+		ourPanes.forEach (
+			pane => {
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						innerHTML : pane.getButtonText ( ),
+						className : 'TravelNotes-DataPaneUI-PaneButton',
+						paneId : pane.getId ( )
+					},
+					headerDiv
+				).addEventListener ( 'click', ourOnPaneButtonClick, false );
+			}
+		);
+		ourDataPaneDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-DataPanesUI-DataPanesDiv'
 			},
-			UIDiv );
-		dataDiv.addEventListener (
-			'wheel',
-			wheelEvent => {
-				if ( wheelEvent.deltaY ) {
-					wheelEvent.target.scrollTop +=
-						wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
-				}
-				wheelEvent.stopPropagation ( );
-			},
-			false
+			uiMainDiv
 		);
+		ourDataPaneDiv.addEventListener ( 'wheel', ourOnDataPaneDivWheel, false );
 	}
 
-	/*
-	--- dataPanesUI object --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	add a pane to the DataPanesUI
+	@param {PaneUI} paneUI The pane to add
 	*/
 
-	return Object.seal (
-		{
-			createUI : UIDiv => myCreateUI ( UIDiv ),
+	addPane ( paneUI ) {
+		ourPanes.set ( paneUI.getId ( ), paneUI );
+	}
 
-			setItinerary : ( ) => mySetItinerary ( ),
-			updateItinerary : ( ) => myUpdateItinerary ( ),
+	/**
+	show a pane to the DataPanesUI
+	@param {string|number} pane id of the pane to be displayed
+	*/
 
-			setTravelNotes : ( ) => mySetTravelNotes ( ),
-			updateTravelNotes : ( ) => myUpdateTravelNotes ( ),
+	showPane ( paneId ) {
+		ourShowPane ( paneId );
+	}
 
-			setSearch : ( ) => mySetSearch ( ),
-			updateSearch : ( ) => myUpdateSearch ( )
+	/**
+	Update a pane ( = show the pane only if the pane is the active pane )
+	@param {string|number} pane id of the pane to be displayed
+	*/
 
+	updatePane ( paneId ) {
+		if ( paneId === ourActivePaneId ) {
+			ourShowPane ( paneId );
 		}
-	);
+	}
 }
 
-/*
---- theDataPaneUI object -----------------------------------------------------------------------------------------------
+const ourDataPanesUI = Object.freeze ( new DataPanesUI );
 
-The one and only one dataPanesUI
+export {
 
------------------------------------------------------------------------------------------------------------------------
-*/
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-const theDataPanesUI = newDataPanesUI ( );
+	@desc The one and only one instance of DataPanesUI class
+	@type {DataPanesUI}
+	@constant
+	@global
 
-export { theDataPanesUI };
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourDataPanesUI as theDataPanesUI
+};
 
 /*
 --- End of dataPanesUI.js file ----------------------------------------------------------------------------------------

@@ -124,7 +124,7 @@ class TravelEditor {
 	This method clear the current travel and start a new travel
 	@fires removeallobjects
 	@fires setrouteslist
-	@fires setitinerary
+	@fires showitinerary
 	@fires travelnameupdated
 	@fires roadbookupdate
 	*/
@@ -141,7 +141,7 @@ class TravelEditor {
 		theTravelNotesData.travel = newTravel ( );
 		theTravelNotesData.travel.routes.add ( newRoute ( ) );
 		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'showitinerary' );
 		ourEventDispatcher.dispatch ( 'roadbookupdate' );
 		ourEventDispatcher.dispatch ( 'travelnameupdated' );
 		if ( theConfig.travelEditor.startupRouteEdition ) {

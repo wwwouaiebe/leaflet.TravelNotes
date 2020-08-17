@@ -41,7 +41,7 @@ import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
+import { INVALID_OBJ_ID, LAT_LNG, DATA_PANE_ID } from '../util/Constants.js';
 
 /*
 --- itineraryPaneUI function ------------------------------------------------------------------------------------------
@@ -166,7 +166,8 @@ function newItineraryPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRemove ( ) {
+	function myRemove ( dataDiv ) {
+		myDataDiv = dataDiv;
 
 		// removing previous header
 		if ( myRouteHeader ) {
@@ -203,20 +204,8 @@ function newItineraryPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAdd ( ) {
-
-		if ( ! myDataDiv ) {
-			myDataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		}
-		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
-			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
-			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
-				.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		}
-
+	function myAdd ( dataDiv ) {
+		myDataDiv = dataDiv;
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 
 			// checkboxes
@@ -297,8 +286,10 @@ function newItineraryPaneUI ( ) {
 
 	return Object.seal (
 		{
-			remove : ( ) => myRemove ( ),
-			add : ( ) => myAdd ( )
+			remove : dataDiv => myRemove ( dataDiv ),
+			add : dataDiv => myAdd ( dataDiv ),
+			getId : ( ) => DATA_PANE_ID.itineraryPane,
+			getButtonText : ( ) => theTranslator.getText ( 'DataPanesUI - Itinerary' )
 		}
 	);
 }

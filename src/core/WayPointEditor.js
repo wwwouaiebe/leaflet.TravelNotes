@@ -86,7 +86,7 @@ let ourGeometry = newGeometry ( );
 @param {WayPointOsmData} wayPointOsmData the name and address for WayPoint renaming
 @param {!number} wayPointObjId The objId of the WayPoint to rename
 @fires setrouteslist
-@fires setitinerary
+@fires showitinerary
 @fires roadbookupdate
 @private
 
@@ -99,7 +99,7 @@ function ourRenameWayPoint ( wayPointOsmData, wayPointObjId ) {
 	wayPoint.name = wayPointOsmData.name;
 	wayPoint.address = wayPointOsmData.address;
 	ourEventDispatcher.dispatch ( 'setrouteslist' );
-	ourEventDispatcher.dispatch ( 'setitinerary' );
+	ourEventDispatcher.dispatch ( 'showitinerary' );
 	ourEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
@@ -111,7 +111,7 @@ function ourRenameWayPoint ( wayPointOsmData, wayPointObjId ) {
 @param {Array.<number>} latLng The latitude and longitude of the WayPoint
 @param {!number} wayPointObjId The objId of the WayPoint to rename
 @fires setrouteslist
-@fires setitinerary
+@fires showitinerary
 @fires roadbookupdate
 @private
 
@@ -240,7 +240,7 @@ class WayPointEditor {
 			);
 		}
 		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'showitinerary' );
 		ourEventDispatcher.dispatch ( 'roadbookupdate' );
 		theRouteEditor.startRouting ( );
 	}
@@ -335,7 +335,7 @@ class WayPointEditor {
 	@param {!number} wayPointObjId The objId of the WayPoint that modify
 	@async
 	@fires setrouteslist
-	@fires setitinerary
+	@fires showitinerary
 	@fires roadbookupdate
 	*/
 
@@ -346,7 +346,7 @@ class WayPointEditor {
 		wayPointPropertiesDialog.show ( ).then (
 			( ) => {
 				ourEventDispatcher.dispatch ( 'setrouteslist' );
-				ourEventDispatcher.dispatch ( 'setitinerary' );
+				ourEventDispatcher.dispatch ( 'showitinerary' );
 				ourEventDispatcher.dispatch ( 'roadbookupdate' );
 			}
 		)

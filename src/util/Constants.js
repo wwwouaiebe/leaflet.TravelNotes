@@ -29,6 +29,13 @@ export const GEOLOCATION_STATUS = Object.freeze ( {
 	active : 2
 } );
 
+export const DATA_PANE_ID = Object.freeze ( {
+	invalidPane : -1,
+	itineraryPane : 0,
+	travelNotesPane : 1,
+	searchPane : 2
+} );
+
 export const ELEV = Object.freeze ( {
 	fixed : 2,
 	defaultValue : 0

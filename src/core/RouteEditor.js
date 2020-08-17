@@ -275,7 +275,7 @@ function ourOnRoutingOk ( ) {
 	ourEventDispatcher.dispatch ( 'roadbookupdate' );
 
 	// and the itinerary and waypoints are displayed
-	ourEventDispatcher.dispatch ( 'setitinerary' );
+	ourEventDispatcher.dispatch ( 'showitinerary' );
 }
 
 /**
@@ -297,7 +297,7 @@ class RouteEditor {
 	@fires setprovider
 	@fires settransitmode
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires setrouteslist
 	@fires roadbookupdate
 	*/
@@ -321,7 +321,7 @@ class RouteEditor {
 	@fires setprovider
 	@fires settransitmode
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires setrouteslist
 	@fires roadbookupdate
 	*/
@@ -398,7 +398,7 @@ class RouteEditor {
 		);
 
 		ourEventDispatcher.dispatch ( 'roadbookupdate' );
-		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'showitinerary' );
 		ourEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
@@ -406,7 +406,7 @@ class RouteEditor {
 	This method removes a route from the travel
 	@param {!number} routeObjId The objId of the Route to remove.
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires setrouteslist
 	@fires roadbookupdate
 	*/
@@ -451,13 +451,13 @@ class RouteEditor {
 	/**
 	This method removes a maneuver from the edited route
 	@param {!number} maneuverObjId The objId of the Maneuver to remove.
-	@fires setitinerary
+	@fires showitinerary
 	@fires roadbookupdate
 	*/
 
 	removeManeuver ( maneuverObjId ) {
 		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
-		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'showitinerary' );
 		ourEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
@@ -482,7 +482,7 @@ class RouteEditor {
 	This method start the routing for the edited route.
 	@async
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires roadbookupdate
 	*/
 
@@ -508,7 +508,7 @@ class RouteEditor {
 	/**
 	This method save the edited route
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires setrouteslist
 	@fires roadbookupdate
 	*/
@@ -528,7 +528,7 @@ class RouteEditor {
 	/**
 	This method cancel the route edition
 	@fires routeupdated
-	@fires setitinerary
+	@fires showitinerary
 	@fires setrouteslist
 	@fires roadbookupdate
 	*/
@@ -558,7 +558,7 @@ class RouteEditor {
 
 		ourEventDispatcher.dispatch ( 'roadbookupdate' );
 		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'setitinerary' );
+		ourEventDispatcher.dispatch ( 'showitinerary' );
 	}
 
 	/**

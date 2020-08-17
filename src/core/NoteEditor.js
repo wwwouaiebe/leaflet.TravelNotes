@@ -192,8 +192,8 @@ function ourAddAllManeuverNote ( maneuverIterator, route ) {
 @param {Note} note the Note to be added or updated
 @param {!number} routeObjId The route objId to witch the note will be attached (= INVALID_OBJ_ID for a travel note)
 @param {boolean} isNewNote when true the note will be added, otherwise updated
-@fires settravelnotes
-@fires setitinerary
+@fires showtravelnotes
+@fires showitinerary
 @fires noteupdated
 @fires roadbookupdate
 @private
@@ -209,7 +209,7 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 				if ( isNewNote ) {
 					if ( INVALID_OBJ_ID === routeObjId ) {
 						theTravelNotesData.travel.notes.add ( note );
-						ourEventDispatcher.dispatch ( 'settravelnotes' );
+						ourEventDispatcher.dispatch ( 'showtravelnotes' );
 					}
 					else {
 						let route = theDataSearchEngine.getRoute ( routeObjId );
@@ -218,7 +218,7 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 						route.notes.sort (
 							( first, second ) => first.distance - second.distance
 						);
-						ourEventDispatcher.dispatch ( 'setitinerary' );
+						ourEventDispatcher.dispatch ( 'showitinerary' );
 					}
 				}
 
@@ -328,7 +328,7 @@ class NoteEditor {
 	@param {!number} routeObjId The Route objId
 	@param {event} contextMenuEvent the event that have lauched the method
 	(a context menu event on the route on the map)
-	@fires setitinerary
+	@fires showitinerary
 	@fires noteupdated
 	@fires roadbookupdate
 	*/
@@ -352,7 +352,7 @@ class NoteEditor {
 	/**
 	This method add a note for a searh result from osm.
 	@param {Object} searchResult A search result. See osmSearch plugin for more...
-	@fires settravelnotes
+	@fires showtravelnotes
 	@fires noteupdated
 	@fires roadbookupdate
 	*/
@@ -376,7 +376,7 @@ class NoteEditor {
 	/**
 	This method add a note with data from osm for a maneuver
 	@param {!number} maneuverObjId The objId of the maneuver
-	@fires setitinerary
+	@fires showitinerary
 	@fires noteupdated
 	@fires roadbookupdate
 	*/
@@ -395,7 +395,7 @@ class NoteEditor {
 						( first, second ) => first.distance - second.distance
 					);
 					route.itinerary.maneuvers.remove ( maneuverObjId );
-					ourEventDispatcher.dispatch ( 'setitinerary' );
+					ourEventDispatcher.dispatch ( 'showitinerary' );
 					ourEventDispatcher.dispatch ( 'roadbookupdate' );
 					ourWaitUI.close ( );
 					ourWaitUI = null;
@@ -413,7 +413,7 @@ class NoteEditor {
 	/**
 	This method add a travel note
 	@param {Array.<number>} latLng The latitude and longitude of the note
-	@fires settravelnotes
+	@fires showtravelnotes
 	@fires noteupdated
 	@fires roadbookupdate
 	*/
@@ -426,8 +426,8 @@ class NoteEditor {
 	/**
 	This method start the edition of a note
 	@param {!number} noteObjId The objId of the note to be edited
-	@fires settravelnotes
-	@fires setitinerary
+	@fires showtravelnotes
+	@fires showitinerary
 	@fires noteupdated
 	@fires roadbookupdate
 	*/

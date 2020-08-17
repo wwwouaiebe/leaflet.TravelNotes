@@ -32,11 +32,12 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+import { theTranslator } from '../UI/Translator.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 
-import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, DATA_PANE_ID } from '../util/Constants.js';
 
 /*
 --- newTravelNotesPaneUI function -------------------------------------------------------------------------------------
@@ -149,9 +150,9 @@ function newTravelNotesPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRemove ( ) {
-
-		let travelNotesDiv = myDataDiv.firstChild;
+	function myRemove ( dataDiv ) {
+		myDataDiv = dataDiv;
+		let travelNotesDiv = dataDiv.firstChild;
 		if ( travelNotesDiv ) {
 			travelNotesDiv.childNodes.forEach (
 				childNode => {
@@ -171,21 +172,8 @@ function newTravelNotesPaneUI ( ) {
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAdd ( ) {
-
-		if ( ! myDataDiv ) {
-			myDataDiv = document.getElementById ( 'TravelNotes-DataPanesUI-DataPanesDiv' );
-		}
-
-		document.getElementById ( 'TravelNotes-DataPanesUI-ItineraryPaneButton' )
-			.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		document.getElementById ( 'TravelNotes-DataPanesUI-TravelNotesPaneButton' )
-			.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		if ( window.osmSearch ) {
-			document.getElementById ( 'TravelNotes-DataPaneUI-SearchPaneButton' )
-				.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
-		}
-
+	function myAdd ( dataDiv ) {
+		myDataDiv = dataDiv;
 		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
 
 		let travelNotesDiv = htmlViewsFactory.travelNotesHTML;
@@ -211,8 +199,10 @@ function newTravelNotesPaneUI ( ) {
 
 	return Object.seal (
 		{
-			remove : ( ) => myRemove ( ),
-			add : ( ) => myAdd ( )
+			remove : dataDiv => myRemove ( dataDiv ),
+			add : dataDiv => myAdd ( dataDiv ),
+			getId : ( ) => DATA_PANE_ID.travelNotesPane,
+			getButtonText : ( ) => theTranslator.getText ( 'DataPanesUI - Travel notes' )
 		}
 	);
 }

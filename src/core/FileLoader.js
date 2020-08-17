@@ -91,7 +91,7 @@ function ourNewFileLoader ( ) {
 	@fires setrouteslist
 	@fires setprovider
 	@fires settransitmode
-	@fires setitinerary
+	@fires showitinerary
 	@fires roadbookupdate
 	@private
 
@@ -138,7 +138,7 @@ function ourNewFileLoader ( ) {
 		}
 		theRouteEditor.chainRoutes ( );
 
-		myEventDispatcher.dispatch ( 'setitinerary' );
+		myEventDispatcher.dispatch ( 'showitinerary' );
 		myEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
@@ -202,7 +202,7 @@ function ourNewFileLoader ( ) {
 		@fires setrouteslist
 		@fires setprovider
 		@fires settransitmode
-		@fires setitinerary
+		@fires showitinerary
 		@fires roadbookupdate
 		*/
 
@@ -219,7 +219,7 @@ function ourNewFileLoader ( ) {
 		@fires setrouteslist
 		@fires setprovider
 		@fires settransitmode
-		@fires setitinerary
+		@fires showitinerary
 		@fires roadbookupdate
 		*/
 
