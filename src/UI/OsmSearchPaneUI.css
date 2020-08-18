@@ -17,10 +17,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- SearchPaneUI.css file ---------------------------------------------------------------------------------------------
+--- OsmSearchPaneUI.css file ---------------------------------------------------------------------------------------------
 
 This file contains:
-	- the css for the SearchPaneUI
+	- the css for the OsmSearchPaneUI
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
@@ -28,45 +28,45 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-SearchPaneUI-SearchInput {
+#TravelNotes-OsmSearchPaneUI-SearchInput {
 	height: 1.4em;
 	width: calc(100% - 3em);
 	margin: 0;
 	padding: 0;
 }
 
-#TravelNotes-SearchPaneUI-SearchButton {
+#TravelNotes-OsmSearchPaneUI-SearchButton {
 	margin-right: 0.3em;
 }
 
-.TravelNotes-SearchPaneUI-SearchResult {
+.TravelNotes-OsmSearchPaneUI-SearchResult {
 	line-height: 1.2em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	margin: 0.3em;
 }
 
-.TravelNotes-SearchPaneUI-SearchResult > p {
+.TravelNotes-OsmSearchPaneUI-SearchResult > p {
 	margin: 0;
 	padding: 0;
 }
 
-.TravelNotes-SearchPaneUI-SearchResult > p:first-child {
+.TravelNotes-OsmSearchPaneUI-SearchResult > p:first-child {
 	text-decoration: underline;
 }
 
-.TravelNotes-SearchPaneUI-SearchResult:hover {
+.TravelNotes-OsmSearchPaneUI-SearchResult:hover {
 	background-color: lightgray;
 }
 
-#TravelNotes-SearchPaneUI-SearchWait {
+#TravelNotes-OsmSearchPaneUI-SearchWait {
 	margin: 1em;
 	height: 1em;
 	width: calc(100% - 2em);
 	overflow: hidden;
 }
 
-#TravelNotes-SearchPaneUI-SearchWaitBullet {
+#TravelNotes-OsmSearchPaneUI-SearchWaitBullet {
 	background-color: red;
 	height: 100%;
 	width: 1em;

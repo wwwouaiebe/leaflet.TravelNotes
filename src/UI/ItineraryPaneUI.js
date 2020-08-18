@@ -235,7 +235,7 @@ function ourNewItineraryPaneUI ( ) {
 	@class ItineraryPaneUI
 	@classdesc This class manages the itinerary pane UI
 	@see {@link newItineraryPaneUI} for constructor
-	@see {@link DataPanesUI} for pane UI management
+	@see {@link PanesManagerUI} for pane UI management
 	@implements {PaneUI}
 	@hideconstructor
 
@@ -270,7 +270,7 @@ function ourNewItineraryPaneUI ( ) {
 		This function returns the text to add in the pane button
 		*/
 
-		getButtonText ( ) { return theTranslator.getText ( 'DataPanesUI - Itinerary' ); }
+		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Itinerary' ); }
 	}
 
 	return Object.freeze ( new ItineraryPaneUI );

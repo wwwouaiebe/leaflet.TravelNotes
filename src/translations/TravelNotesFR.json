@@ -88,27 +88,27 @@
 		"msgstr" : "Fermer"
 	},
 	{
-		"msgid" : "DataPanesUI - Hide",
+		"msgid" : "PanesManagerUI - Hide",
 		"msgstr" : "Masquer"
 	},
 	{
-		"msgid" : "DataPanesUI - Itinerary",
+		"msgid" : "PanesManagerUI - Itinerary",
 		"msgstr" : "Itinéraire"
 	},
 	{
-		"msgid" : "DataPanesUI - Itinerary and notes",
+		"msgid" : "PanesManagerUI - Itinerary and notes",
 		"msgstr" : "Itinéraire et notes"
 	},
 	{
-		"msgid" : "DataPanesUI - Search",
+		"msgid" : "PanesManagerUI - Search",
 		"msgstr" : "Rechercher dans OpenStreetMap"
 	},
 	{
-		"msgid" : "DataPanesUI - Show",
+		"msgid" : "PanesManagerUI - Show",
 		"msgstr" : "Afficher"
 	},
 	{
-		"msgid" : "DataPanesUI - Travel notes",
+		"msgid" : "PanesManagerUI - Travel notes",
 		"msgstr" : "Notes de voyage"
 	},
 	{
@@ -580,11 +580,11 @@
 		"msgstr" : "Largeur : "
 	},
 	{
-		"msgid" : "SearchPaneUI - Search OpenStreetMap",
+		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
 		"msgstr" : "Rechercher dans OpenStreetMap"
 	},
 	{
-		"msgid" : "SearchPaneUI - Search phrase",
+		"msgid" : "OsmSearchPaneUI - Search phrase",
 		"msgstr" : "Mots à rechercher"
 	},
 	{

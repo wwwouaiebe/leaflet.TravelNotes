@@ -169,7 +169,7 @@ function ourNewTravelNotesPaneUI ( ) {
 	@class TravelNotesPaneUI
 	@classdesc This class manages the travel notes pane UI
 	@see {@link newTravelNotesPaneUI} for constructor
-	@see {@link DataPanesUI} for pane UI management
+	@see {@link PanesManagerUI} for pane UI management
 	@implements {PaneUI}
 	@hideconstructor
 
@@ -227,7 +227,7 @@ function ourNewTravelNotesPaneUI ( ) {
 		This function returns the text to add in the pane button
 		*/
 
-		getButtonText ( ) { return theTranslator.getText ( 'DataPanesUI - Travel notes' ); }
+		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Travel notes' ); }
 	}
 
 	return Object.freeze ( new TravelNotesPaneUI );

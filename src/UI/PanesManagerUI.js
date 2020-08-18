@@ -35,7 +35,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file DataPanesUI.js
+@file PanesManagerUI.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -48,10 +48,10 @@ Tests ...
 
 @typedef {Object} PaneUI
 @interface
-@see {@link DataPanesUI} for pane UI management
+@see {@link PanesManagerUI} for pane UI management
 @see {@link ItineraryPaneUI} for existing panes
 @see {@link TravelNotesPaneUI} for existing panes
-@see {@link SearchPaneUI} for existing panes
+@see {@link OsmSearchPaneUI} for existing panes
 @desc An object that can be displayed as a pane
 @property {function} remove A function that do the cleaning of the Data pane
 @property {function} add A function that add all the needed HTMLElement in the Data pane
@@ -65,7 +65,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module DataPanesUI
+@module PanesManagerUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -159,13 +159,13 @@ function ourOnDataPaneDivWheel ( wheelEvent ) {
 
 @class
 @classdesc This class manages the differents panes on the UI
-@see {@link theDataPanesUI} for the one and only one instance of this class
+@see {@link thePanesManagerUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class DataPanesUI {
+class PanesManagerUI {
 
 	/**
 	creates the data panes on the user interface
@@ -199,7 +199,7 @@ class DataPanesUI {
 		ourDataPaneDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-DataPanesUI-DataPanesDiv'
+				id : 'TravelNotes-PanesManagerUI-DataPanesDiv'
 			},
 			uiMainDiv
 		);
@@ -207,7 +207,7 @@ class DataPanesUI {
 	}
 
 	/**
-	add a pane to the DataPanesUI
+	add a pane to the PanesManagerUI
 	@param {PaneUI} paneUI The pane to add
 	*/
 
@@ -216,7 +216,7 @@ class DataPanesUI {
 	}
 
 	/**
-	show a pane to the DataPanesUI
+	show a pane to the PanesManagerUI
 	@param {string|number} pane id of the pane to be displayed
 	*/
 
@@ -236,22 +236,22 @@ class DataPanesUI {
 	}
 }
 
-const ourDataPanesUI = Object.freeze ( new DataPanesUI );
+const ourPanesManagerUI = Object.freeze ( new PanesManagerUI );
 
 export {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@desc The one and only one instance of DataPanesUI class
-	@type {DataPanesUI}
+	@desc The one and only one instance of PanesManagerUI class
+	@type {PanesManagerUI}
 	@constant
 	@global
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourDataPanesUI as theDataPanesUI
+	ourPanesManagerUI as thePanesManagerUI
 };
 
 /*

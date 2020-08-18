@@ -31,7 +31,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file SearchPaneUI.js
+@file OsmSearchPaneUI.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -42,7 +42,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module SearchPaneUI
+@module OsmSearchPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,14 +63,14 @@ import { LAT_LNG, DATA_PANE_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourNewSearchPaneUI
-@desc constructor for SearchPaneUI objects
-@return {SearchPaneUI} an instance of SearchPaneUI object
+@desc constructor for OsmSearchPaneUI objects
+@return {OsmSearchPaneUI} an instance of OsmSearchPaneUI object
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewSearchPaneUI ( ) {
+function ourNewOsmSearchPaneUI ( ) {
 	const MIN_RANKING = 1536;
 	let myOsmSearchEngine = newOsmSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
@@ -159,7 +159,7 @@ function ourNewSearchPaneUI ( ) {
 	*/
 
 	function myClearSearchDiv ( ) {
-		let searchResultsDivs = document.querySelectorAll ( '.TravelNotes-SearchPaneUI-SearchResult' );
+		let searchResultsDivs = document.querySelectorAll ( '.TravelNotes-OsmSearchPaneUI-SearchResult' );
 		searchResultsDivs.forEach (
 			searchResultDiv => {
 				searchResultDiv.removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
@@ -184,11 +184,11 @@ function ourNewSearchPaneUI ( ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-SearchPaneUI-SearchWaitBullet'
+				id : 'TravelNotes-OsmSearchPaneUI-SearchWaitBullet'
 			},
 			theHTMLElementsFactory.create (
 				'div',
-				{ id : 'TravelNotes-SearchPaneUI-SearchWait' },
+				{ id : 'TravelNotes-OsmSearchPaneUI-SearchWait' },
 				myControlsDiv
 			)
 		);
@@ -243,9 +243,9 @@ function ourNewSearchPaneUI ( ) {
 		mySearchButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-SearchPaneUI-SearchButton',
+				id : 'TravelNotes-OsmSearchPaneUI-SearchButton',
 				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'SearchPaneUI - Search OpenStreetMap' ),
+				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
 				innerHTML : '&#x1f50e'
 			},
 			myControlsDiv
@@ -255,8 +255,8 @@ function ourNewSearchPaneUI ( ) {
 			'input',
 			{
 				type : 'text',
-				id : 'TravelNotes-SearchPaneUI-SearchInput',
-				placeholder : theTranslator.getText ( 'SearchPaneUI - Search phrase' ),
+				id : 'TravelNotes-OsmSearchPaneUI-SearchInput',
+				placeholder : theTranslator.getText ( 'OsmSearchPaneUI - Search phrase' ),
 				value : mySearchInputValue
 			},
 			myControlsDiv
@@ -353,7 +353,7 @@ function ourNewSearchPaneUI ( ) {
 		let searchResultDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className :	'TravelNotes-SearchPaneUI-SearchResult',
+				className :	'TravelNotes-OsmSearchPaneUI-SearchResult',
 				searchResult : searchResult,
 				objId : newObjId ( )
 			},
@@ -412,17 +412,17 @@ function ourNewSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@class SearchPaneUI
+	@class OsmSearchPaneUI
 	@classdesc This class manages the search pane UI
-	@see {@link newSearchPaneUI} for constructor
-	@see {@link DataPanesUI} for pane UI management
+	@see {@link newOsmSearchPaneUI} for constructor
+	@see {@link PanesManagerUI} for pane UI management
 	@implements {PaneUI}
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	class SearchPaneUI {
+	class OsmSearchPaneUI {
 
 		/**
 		This function removes all the elements from the data div
@@ -457,14 +457,14 @@ function ourNewSearchPaneUI ( ) {
 		This function returns the text to add in the pane button
 		*/
 
-		getButtonText ( ) { return theTranslator.getText ( 'DataPanesUI - Search' ); }
+		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Search' ); }
 	}
 
-	return Object.freeze ( new SearchPaneUI );
+	return Object.freeze ( new OsmSearchPaneUI );
 }
 
-export { ourNewSearchPaneUI as newSearchPaneUI };
+export { ourNewOsmSearchPaneUI as newOsmSearchPaneUI };
 
 /*
---- End of SearchPaneUI.js file ---------------------------------------------------------------------------------------
+--- End of OsmSearchPaneUI.js file ---------------------------------------------------------------------------------------
 */
