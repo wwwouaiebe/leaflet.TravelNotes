@@ -51,6 +51,35 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourAddProperties
+@desc This method add the properties to the created element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddProperties ( element, properties ) {
+	for ( let property in properties ) {
+		if ( 'innerHTML' === property ) {
+			console.log ( 'insecure property innerHTML used' );
+		}
+		if ( 'innerText' === property ) {
+			element.appendChild ( document.createTextNode ( properties [ property ] ) );
+		}
+		else {
+			try {
+				element [ property ] = properties [ property ];
+			}
+			catch ( err ) {
+				console.log ( 'Invalid property : ' + property );
+			}
+		}
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc Wrapper for function for creation of html elements
 @see {@link theHTMLElementsFactory} for the one and only one instance of this class
@@ -68,14 +97,7 @@ class HTMLElementsFactory {
 		else {
 			element = document.createElement ( tagName );
 			if ( properties ) {
-				for ( let property in properties ) {
-					try {
-						element [ property ] = properties [ property ];
-					}
-					catch ( err ) {
-						console.log ( 'Invalid property : ' + property );
-					}
-				}
+				ourAddProperties ( element, properties );
 			}
 		}
 		if ( parentNode ) {

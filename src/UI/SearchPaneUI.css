@@ -28,10 +28,6 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-SearchPaneUI-SearchDiv {
-	margin-top: 0.5em;
-}
-
 #TravelNotes-SearchPaneUI-SearchInput {
 	height: 1.4em;
 	width: calc(100% - 3em);

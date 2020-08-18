@@ -111,7 +111,7 @@ function ourOnSearchSuccess ( searchData ) {
 	theTravelNotesData.searchData = searchData;
 	ourOsmSearchStarted = false;
 	ourDrawPreviousSearchRectangle ( );
-	newEventDispatcher ( ).dispatch ( 'updatesearch' );
+	newEventDispatcher ( ).dispatch ( 'showsearch' );
 }
 
 /**

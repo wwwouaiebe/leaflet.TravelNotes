@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ItineraryPaneUI.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the newItineraryPaneUI function
 Changes:
 	- v1.4.0:
 		- created
@@ -27,10 +24,28 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191125
+Doc reviewed 20200818
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ItineraryPaneUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ItineraryPaneUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
@@ -43,15 +58,7 @@ import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID, LAT_LNG, DATA_PANE_ID } from '../util/Constants.js';
 
-/*
---- itineraryPaneUI function ------------------------------------------------------------------------------------------
-
-This function returns the itineraryPaneUI object
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-function newItineraryPaneUI ( ) {
+function ourNewItineraryPaneUI ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myShowNotes = theConfig.itineraryPane.showNotes;
@@ -60,14 +67,6 @@ function newItineraryPaneUI ( ) {
 	let myRouteHeader = null;
 	let myHTMLViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
 	let myCheckBoxesDiv = null;
-
-	/*
-	--- myOnInstructionContextMenu function ---------------------------------------------------------------------------
-
-	contextmenu event listener for the instruction
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	function myOnInstructionContextMenu ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
@@ -94,14 +93,6 @@ function newItineraryPaneUI ( ) {
 		}
 	}
 
-	/*
-	--- myOnInstructionMouseEnter function ----------------------------------------------------------------------------
-
-	mouseenter event listener for the instruction
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	function myOnInstructionMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		myEventDispatcher.dispatch (
@@ -113,26 +104,10 @@ function newItineraryPaneUI ( ) {
 		);
 	}
 
-	/*
-	--- myOnInstructionMouseLeave function ----------------------------------------------------------------------------
-
-	mouseleave event listener for the instruction
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	function myOnInstructionMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		myEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
 	}
-
-	/*
-	--- myOnShowNotesClick function ----------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	function myOnShowNotesClick ( clickEvent ) {
 		myShowNotes = clickEvent.target.checked;
@@ -142,14 +117,6 @@ function newItineraryPaneUI ( ) {
 
 	}
 
-	/*
-	--- myOnShowManeuversClick function -------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	function myOnShowManeuversClick ( clickEvent ) {
 		myShowManeuvers = clickEvent.target.checked;
 		document.querySelectorAll ( '.TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
@@ -157,14 +124,6 @@ function newItineraryPaneUI ( ) {
 		);
 
 	}
-
-	/*
-	--- myRemove function ---------------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	function myRemove ( dataDiv ) {
 		myDataDiv = dataDiv;
@@ -195,14 +154,6 @@ function newItineraryPaneUI ( ) {
 		// removing previous itinerary
 		myDataDiv.removeChild ( document.querySelector ( '.TravelNotes-UI-Route-ManeuversAndNotes' ) );
 	}
-
-	/*
-	--- myAdd function ------------------------------------------------------------------------------------------------
-
-	This function add the itinerary to the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	function myAdd ( dataDiv ) {
 		myDataDiv = dataDiv;
@@ -278,23 +229,54 @@ function newItineraryPaneUI ( ) {
 
 	}
 
-	/*
-	--- itineraryPaneUI object ----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class ItineraryPaneUI
+	@classdesc This class manages the itinerary pane UI
+	@see {@link newItineraryPaneUI} for constructor
+	@see {@link DataPanesUI} for pane UI management
+	@implements {PaneUI}
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal (
-		{
-			remove : dataDiv => myRemove ( dataDiv ),
-			add : dataDiv => myAdd ( dataDiv ),
-			getId : ( ) => DATA_PANE_ID.itineraryPane,
-			getButtonText : ( ) => theTranslator.getText ( 'DataPanesUI - Itinerary' )
+	class ItineraryPaneUI {
+
+		/**
+		This function removes all the elements from the data div
+		*/
+
+		remove ( dataDiv ) {
+			myRemove ( dataDiv );
 		}
-	);
+
+		/**
+		This function add the search data to the data div
+		*/
+
+		add ( dataDiv ) {
+			myAdd ( dataDiv );
+		}
+
+		/**
+		This function returns the pane id
+		*/
+
+		getId ( ) { return DATA_PANE_ID.itineraryPane; }
+
+		/**
+		This function returns the text to add in the pane button
+		*/
+
+		getButtonText ( ) { return theTranslator.getText ( 'DataPanesUI - Itinerary' ); }
+	}
+
+	return Object.freeze ( new ItineraryPaneUI );
 }
 
-export { newItineraryPaneUI };
+export { ourNewItineraryPaneUI as newItineraryPaneUI };
 
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------
