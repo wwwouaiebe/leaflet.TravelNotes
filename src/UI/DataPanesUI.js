@@ -47,6 +47,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} PaneUI
+@interface
+@see {@link DataPanesUI} for pane UI management
+@see {@link ItineraryPaneUI} for existing panes
+@see {@link TravelNotesPaneUI} for existing panes
+@see {@link SearchPaneUI} for existing panes
 @desc An object that can be displayed as a pane
 @property {function} remove A function that do the cleaning of the Data pane
 @property {function} add A function that add all the needed HTMLElement in the Data pane

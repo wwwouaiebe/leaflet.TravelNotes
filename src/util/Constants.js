@@ -30,10 +30,10 @@ export const GEOLOCATION_STATUS = Object.freeze ( {
 } );
 
 export const DATA_PANE_ID = Object.freeze ( {
-	invalidPane : -1,
-	itineraryPane : 0,
-	travelNotesPane : 1,
-	searchPane : 2
+	invalidPane : '43a6a53e-008a-4910-80a6-7a87d301ea15',
+	itineraryPane : '8fbf0da7-4e6f-4bc7-8e20-1388461ccde7',
+	travelNotesPane : 'dffe782b-07df-4b81-a318-f287c0cf5ec6',
+	searchPane : '228f00d7-43a8-4c13-897d-70400cb6dd58'
 } );
 
 export const ELEV = Object.freeze ( {

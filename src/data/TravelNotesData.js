@@ -42,7 +42,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@typedef {Object} routing
+@typedef {Object} Routing
 @desc An object to store the current provider and transit mode
 @property {string} provider The current provider name as defined by the plugins
 @property {string} transitMode The current transitMode. Must be car, bike, etc... as defined by the plugins
@@ -54,7 +54,8 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@typedef {Object} provider
+@typedef {Object} Provider
+@interface
 @desc An object that stores the provider properties. Created by the plugins
 @property {string} icon The icon displayed in the provider toolbar, base64 encoded
 @property {string} name The	name of the provider
@@ -148,8 +149,8 @@ class TravelNotesData {
 	get mapObjects ( ) { return ourMapObjects; }
 
 	/**
-	A literal object with the provider and transit mode used
-	@type {routing}
+	An Object with the provider and transit mode used
+	@type {Routing}
 	@see {@link module:TravelNotesData~routing}
 	*/
 
