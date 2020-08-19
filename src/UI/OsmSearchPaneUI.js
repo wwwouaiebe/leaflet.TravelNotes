@@ -57,7 +57,7 @@ import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 
-import { LAT_LNG, DATA_PANE_ID } from '../util/Constants.js';
+import { LAT_LNG, PANE_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -74,12 +74,12 @@ function ourNewOsmSearchPaneUI ( ) {
 	const MIN_RANKING = 1536;
 	let myOsmSearchEngine = newOsmSearchEngine ( );
 	let myEventDispatcher = newEventDispatcher ( );
+	let myPaneDataDiv = null;
+	let myPaneControlDiv = null;
 	let mySearchInputValue = '';
 	let mySearchButton = null;
 	let mySearchInput = null;
-	let myDataDiv = null;
-	let myControlsDiv = null;
-	let mySearchDiv = null;
+	let myWaitDiv = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				searchResult : element.searchResult,
 				geometry : element.searchResult.geometry
 			};
-		newOsmSearchContextMenu ( contextMenuEvent, myDataDiv ).show ( );
+		newOsmSearchContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
 	}
 
 	/**
@@ -151,28 +151,6 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myClearSearchDiv
-	@desc Remove all search results from the search div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClearSearchDiv ( ) {
-		let searchResultsDivs = document.querySelectorAll ( '.TravelNotes-OsmSearchPaneUI-SearchResult' );
-		searchResultsDivs.forEach (
-			searchResultDiv => {
-				searchResultDiv.removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-				searchResultDiv.removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-				searchResultDiv.removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-				mySearchDiv.removeChild ( searchResultDiv );
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myAddWait
 	@desc show a wait animation
 	@private
@@ -181,16 +159,39 @@ function ourNewOsmSearchPaneUI ( ) {
 	*/
 
 	function myAddWait ( ) {
+		myWaitDiv = theHTMLElementsFactory.create (
+			'div',
+			{ className : 'TravelNotes-WaitAnimation' },
+			myPaneControlDiv
+		);
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-OsmSearchPaneUI-SearchWaitBullet'
+				className : 'TravelNotes-WaitAnimationBullet'
 			},
-			theHTMLElementsFactory.create (
-				'div',
-				{ id : 'TravelNotes-OsmSearchPaneUI-SearchWait' },
-				myControlsDiv
-			)
+			myWaitDiv
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myClearPaneDataDiv
+	@desc Remove all search results from the pane data div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myClearPaneDataDiv ( ) {
+		let searchResultsDivs = document.querySelectorAll ( '.TravelNotes-OsmSearchPaneUI-SearchResult' );
+		searchResultsDivs.forEach (
+			searchResultDiv => {
+				searchResultDiv.removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
+				searchResultDiv.removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
+				searchResultDiv.removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
+				myPaneDataDiv.removeChild ( searchResultDiv );
+			}
 		);
 	}
 
@@ -205,7 +206,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	*/
 
 	function myStartSearch ( ) {
-		myClearSearchDiv ( );
+		myClearPaneDataDiv ( );
 		myAddWait ( );
 		myOsmSearchEngine.search ( mySearchInput.value );
 
@@ -231,15 +232,41 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myAddControlsDiv
+	@function myClearPaneControlDiv
+	@desc Remove all controls from the pane controls div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myClearPaneControlDiv ( ) {
+		if ( mySearchButton ) {
+			mySearchButton.removeEventListener ( 'click', myStartSearch, false );
+			myPaneControlDiv.removeChild ( mySearchButton );
+			mySearchButton = null;
+		}
+		if ( mySearchInput ) {
+			mySearchInput.removeEventListener ( 'keydown', myOnSearchInputKeyDown, false );
+			myPaneControlDiv.removeChild ( mySearchInput );
+			mySearchInput = null;
+		}
+		if ( myWaitDiv ) {
+			myPaneControlDiv.removeChild ( myWaitDiv );
+			myWaitDiv = null;
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myAddControls
 	@desc Create the controls div
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddControlsDiv ( ) {
-		myControlsDiv = theHTMLElementsFactory.create ( 'div', null, myDataDiv );
+	function myAddControls ( ) {
 		mySearchButton = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -248,7 +275,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
 				innerHTML : '&#x1f50e'
 			},
-			myControlsDiv
+			myPaneControlDiv
 		);
 		mySearchButton.addEventListener ( 'click', myStartSearch, false );
 		mySearchInput = theHTMLElementsFactory.create (
@@ -259,7 +286,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				placeholder : theTranslator.getText ( 'OsmSearchPaneUI - Search phrase' ),
 				value : mySearchInputValue
 			},
-			myControlsDiv
+			myPaneControlDiv
 		);
 
 		mySearchInput.addEventListener ( 'keydown', myOnSearchInputKeyDown, false );
@@ -357,7 +384,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				searchResult : searchResult,
 				objId : newObjId ( )
 			},
-			mySearchDiv
+			myPaneDataDiv
 		);
 		myAddHTMLParagraphElement ( searchResultDiv, searchResult.description );
 		myAddHTMLParagraphElement ( searchResultDiv, searchResult.tags.name );
@@ -404,8 +431,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddSearchDiv ( ) {
-		mySearchDiv = theHTMLElementsFactory.create ( 'div', null, myDataDiv );
+	function myAddData ( ) {
 		theTravelNotesData.searchData.forEach ( myAddSearchResultDiv );
 	}
 
@@ -428,36 +454,42 @@ function ourNewOsmSearchPaneUI ( ) {
 		This function removes all the elements from the data div
 		*/
 
-		remove ( dataDiv ) {
-			myDataDiv = dataDiv;
+		remove ( ) {
 			myOsmSearchEngine.hide ( );
-			myClearSearchDiv ( );
-			myDataDiv.removeChild ( mySearchDiv );
-			myDataDiv.removeChild ( myControlsDiv );
+			myClearPaneDataDiv ( );
+			myClearPaneControlDiv ( );
 		}
 
 		/**
 		This function add the search data to the data div
 		*/
 
-		add ( dataDiv ) {
-			myDataDiv = dataDiv;
+		add ( ) {
 			myOsmSearchEngine.show ( );
-			myAddControlsDiv ( );
-			myAddSearchDiv ( );
+			myAddControls ( );
+			myAddData ( );
 		}
 
 		/**
 		This function returns the pane id
 		*/
 
-		getId ( ) { return DATA_PANE_ID.searchPane; }
+		getId ( ) { return PANE_ID.searchPane; }
 
 		/**
 		This function returns the text to add in the pane button
 		*/
 
 		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Search' ); }
+
+		/**
+		Set the pane data div and pane control div
+		*/
+
+		setPaneDivs ( paneDataDiv, paneControlDiv ) {
+			myPaneDataDiv = paneDataDiv;
+			myPaneControlDiv = paneControlDiv;
+		}
 	}
 
 	return Object.freeze ( new OsmSearchPaneUI );

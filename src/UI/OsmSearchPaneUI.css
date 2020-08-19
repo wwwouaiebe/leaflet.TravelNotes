@@ -46,6 +46,10 @@ Changes:
 	margin: 0.3em;
 }
 
+.TravelNotes-OsmSearchPaneUI-SearchResult:first-child {
+	margin-top: 0.5em;
+}
+
 .TravelNotes-OsmSearchPaneUI-SearchResult > p {
 	margin: 0;
 	padding: 0;
@@ -57,23 +61,4 @@ Changes:
 
 .TravelNotes-OsmSearchPaneUI-SearchResult:hover {
 	background-color: lightgray;
-}
-
-#TravelNotes-OsmSearchPaneUI-SearchWait {
-	margin: 1em;
-	height: 1em;
-	width: calc(100% - 2em);
-	overflow: hidden;
-}
-
-#TravelNotes-OsmSearchPaneUI-SearchWaitBullet {
-	background-color: red;
-	height: 100%;
-	width: 1em;
-	animation: 2s linear 0s infinite alternate searchBullet;
-}
-
-@keyframes searchBullet {
-	from { margin-left: 0%; }
-	to { margin-left: calc(100% - 1em); }
 }

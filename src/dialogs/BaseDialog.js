@@ -137,8 +137,8 @@ function ourNewBaseDialog ( ) {
 	let myErrorDiv = null;
 	let myWaitDiv = null;
 	let myFooterDiv = null;
-	let mySearchWaitDiv = null;
-	let mySearchWaitBulletDiv = null;
+	let myWaitAnimationDiv = null;
+	let myWaitAnimationBulletDiv = null;
 	let myOkButton = null;
 	let myCancelButton = null;
 
@@ -428,15 +428,15 @@ function ourNewBaseDialog ( ) {
 			},
 			myDialogDiv
 		);
-		mySearchWaitBulletDiv = theHTMLElementsFactory.create (
+		myWaitAnimationBulletDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-SearchWaitBullet TravelNotes-BaseDialog-Hidden'
+				className : 'TravelNotes-WaitAnimationBullet TravelNotes-BaseDialog-Hidden'
 			},
-			mySearchWaitDiv = theHTMLElementsFactory.create (
+			myWaitAnimationDiv = theHTMLElementsFactory.create (
 				'div',
 				{
-					className : 'TravelNotes-BaseDialog-SearchWait TravelNotes-BaseDialog-Hidden'
+					className : 'TravelNotes-WaitAnimation TravelNotes-BaseDialog-Hidden'
 				},
 				myWaitDiv
 			)
@@ -640,8 +640,8 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showWait ( ) {
-			mySearchWaitBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
-			mySearchWaitDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 			myOkButton.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 
@@ -650,8 +650,8 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		hideWait ( ) {
-			mySearchWaitBulletDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
-			mySearchWaitDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationBulletDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
 			myOkButton.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

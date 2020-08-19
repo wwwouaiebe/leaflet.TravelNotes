@@ -60,7 +60,7 @@ import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
-import { DATA_PANE_ID } from '../util/Constants.js';
+import { PANE_ID } from '../util/Constants.js';
 
 let ourMainDiv = null;
 
@@ -77,24 +77,24 @@ let ourMainDiv = null;
 function ourAddTravelNotesEventListeners ( ) {
 	ourMainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
 	ourMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
-	ourMainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( DATA_PANE_ID.itineraryPane ), false );
+	ourMainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
 	ourMainDiv.addEventListener (
 		'updateitinerary',
-		( ) => thePanesManagerUI.updatePane ( DATA_PANE_ID.itineraryPane ),
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
 		false
 	);
 	ourMainDiv.addEventListener (
 		'showtravelnotes',
-		( ) => thePanesManagerUI.showPane ( DATA_PANE_ID.travelNotesPane ),
+		( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
 		false
 	);
 	ourMainDiv.addEventListener (
 		'updatetravelnotes',
-		( ) => thePanesManagerUI.updatePane ( DATA_PANE_ID.travelNotesPane ),
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
 		false
 	);
-	ourMainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( DATA_PANE_ID.searchPane ), false );
-	ourMainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( DATA_PANE_ID.searchPane ), false );
+	ourMainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ), false );
+	ourMainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ), false );
 	ourMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
 	ourMainDiv.addEventListener (
 		'setprovider',

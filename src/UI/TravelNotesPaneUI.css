@@ -27,3 +27,24 @@ Changes:
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
+.TravelNotes-UI-Travel-Notes-Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.TravelNotes-UI-Travel-Notes-Cell {
+	padding: 0.3em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+	flex-shrink: 1;
+}
+
+.TravelNotes-UI-Travel-Notes-IconCell {
+	width: 40px;
+	height: 40px;
+	min-height: 20px;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+}

@@ -51,7 +51,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
-import { LAT_LNG, ZERO, DATA_PANE_ID } from '../util/Constants.js';
+import { LAT_LNG, ZERO, PANE_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,8 @@ import { LAT_LNG, ZERO, DATA_PANE_ID } from '../util/Constants.js';
 function ourNewTravelNotesPaneUI ( ) {
 
 	let myNoteObjId = ZERO;
-	let myDataDiv = null;
+	let myPaneDataDiv = null;
+	let myTravelNotesDiv = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -159,7 +160,7 @@ function ourNewTravelNotesPaneUI ( ) {
 			};
 		if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, myDataDiv ).show ( );
+			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
 		}
 	}
 
@@ -182,32 +183,30 @@ function ourNewTravelNotesPaneUI ( ) {
 		This function removes all the elements from the data div
 		*/
 
-		remove ( dataDiv ) {
-			myDataDiv = dataDiv;
-			let travelNotesDiv = dataDiv.firstChild;
-			if ( travelNotesDiv ) {
-				travelNotesDiv.childNodes.forEach (
+		remove ( ) {
+			if ( myTravelNotesDiv ) {
+				myTravelNotesDiv.childNodes.forEach (
 					childNode => {
 						childNode.removeEventListener ( 'contextmenu', myOnNoteContextMenu, false );
 						childNode.removeEventListener ( 'dragstart', myOnNoteDragStart, false );
 					}
 				);
-				myDataDiv.removeChild ( travelNotesDiv );
+				myPaneDataDiv.removeChild ( myTravelNotesDiv );
 			}
+			myTravelNotesDiv = null;
 		}
 
 		/**
 		This function add the travel notes to the data div
 		*/
 
-		add ( dataDiv ) {
-			myDataDiv = dataDiv;
+		add ( ) {
 			let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
-			let travelNotesDiv = htmlViewsFactory.travelNotesHTML;
-			travelNotesDiv.addEventListener ( 'drop', myOnNoteDrop, false );
-			travelNotesDiv.addEventListener ( 'dragover', myOnNotesListDragOver, false );
-			myDataDiv.appendChild ( travelNotesDiv );
-			travelNotesDiv.childNodes.forEach (
+			myTravelNotesDiv = htmlViewsFactory.travelNotesHTML;
+			myTravelNotesDiv.addEventListener ( 'drop', myOnNoteDrop, false );
+			myTravelNotesDiv.addEventListener ( 'dragover', myOnNotesListDragOver, false );
+			myPaneDataDiv.appendChild ( myTravelNotesDiv );
+			myTravelNotesDiv.childNodes.forEach (
 				childNode => {
 					childNode.draggable = true;
 					childNode.addEventListener ( 'contextmenu', myOnNoteContextMenu, false );
@@ -221,13 +220,21 @@ function ourNewTravelNotesPaneUI ( ) {
 		This function returns the pane id
 		*/
 
-		getId ( ) { return DATA_PANE_ID.travelNotesPane; }
+		getId ( ) { return PANE_ID.travelNotesPane; }
 
 		/**
 		This function returns the text to add in the pane button
 		*/
 
 		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Travel notes' ); }
+
+		/**
+		Set the pane data div and pane control div
+		*/
+
+		setPaneDivs ( paneDataDiv ) {
+			myPaneDataDiv = paneDataDiv;
+		}
 	}
 
 	return Object.freeze ( new TravelNotesPaneUI );

@@ -123,27 +123,6 @@ Changes:
 	border-color: black;
 }
 
-.TravelNotes-BaseDialog-SearchWait {
-	margin: 1em;
-	height: 1em;
-	width: calc(100% - 2em);
-	overflow: hidden;
-	visibility: visible;
-}
-
-.TravelNotes-BaseDialog-SearchWaitBullet {
-	background-color: red;
-	height: 100%;
-	width: 1em;
-	animation: 2s linear 0s infinite alternate searchBullet;
-	visibility: visible;
-}
-
-@keyframes searchBullet {
-	from { margin-left: 0%; }
-	to { margin-left: calc(100% - 1em); }
-}
-
 .TravelNotes-BaseDialog-Hidden {
 	width: 0;
 	height: 0;

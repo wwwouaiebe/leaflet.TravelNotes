@@ -29,7 +29,7 @@ export const GEOLOCATION_STATUS = Object.freeze ( {
 	active : 2
 } );
 
-export const DATA_PANE_ID = Object.freeze ( {
+export const PANE_ID = Object.freeze ( {
 	invalidPane : '43a6a53e-008a-4910-80a6-7a87d301ea15',
 	itineraryPane : '8fbf0da7-4e6f-4bc7-8e20-1388461ccde7',
 	travelNotesPane : 'dffe782b-07df-4b81-a318-f287c0cf5ec6',

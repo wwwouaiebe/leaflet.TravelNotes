@@ -127,6 +127,8 @@ function ourOnSearchSuccess ( searchData ) {
 function ourOnSearchError ( err ) {
 	console.log ( err ? err : 'An error occurs in the search' );
 	ourOsmSearchStarted = false;
+	theTravelNotesData.searchData = [];
+	newEventDispatcher ( ).dispatch ( 'showsearch' );
 }
 
 /**

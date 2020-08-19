@@ -53,10 +53,11 @@ Tests ...
 @see {@link TravelNotesPaneUI} for existing panes
 @see {@link OsmSearchPaneUI} for existing panes
 @desc An object that can be displayed as a pane
-@property {function} remove A function that do the cleaning of the Data pane
-@property {function} add A function that add all the needed HTMLElement in the Data pane
-@property {function} getId A function that gives a unique identifier for the DataPaneUI
-@property {function} getButtonText A function that return the text to be displayed in the Data pane button
+@property {function} remove A function that do the cleaning of the pane data div
+@property {function} add A function that add all the needed HTMLElements in the pane data div
+@property {function} getId A function that gives a unique identifier for the PaneUI
+@property {function} getButtonText A function that return the text to be displayed in the pane button
+@property {function} setPaneDivs A function that set the pane data div and pane control div
 @public
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -72,11 +73,12 @@ Tests ...
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { MOUSE_WHEEL_FACTORS, DATA_PANE_ID } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 
-let ourActivePaneId = DATA_PANE_ID.invalidPane;
+let ourActivePaneId = PANE_ID.invalidPane;
 let ourPanes = new Map ( );
-let ourDataPaneDiv = null;
+let ourPaneDataDiv = null;
+let ourPaneControlDiv = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -89,9 +91,9 @@ let ourDataPaneDiv = null;
 */
 
 function ourRemoveActivePane ( ) {
-	if ( DATA_PANE_ID.invalidPane !== ourActivePaneId ) {
-		ourPanes.get ( ourActivePaneId ).remove ( ourDataPaneDiv );
-		ourDataPaneDiv.innerHTML = '';
+	if ( PANE_ID.invalidPane !== ourActivePaneId ) {
+		ourPanes.get ( ourActivePaneId ).remove ( );
+		ourPaneDataDiv.innerHTML = '';
 	}
 }
 
@@ -109,7 +111,7 @@ function ourRemoveActivePane ( ) {
 function ourShowPane ( paneId ) {
 	ourRemoveActivePane ( );
 	ourActivePaneId = paneId;
-	ourPanes.get ( ourActivePaneId ).add ( ourDataPaneDiv );
+	ourPanes.get ( ourActivePaneId ).add ( );
 	document.querySelectorAll ( '.TravelNotes-DataPaneUI-PaneButton' ).forEach (
 		paneButton => {
 			if ( paneButton.paneId === ourActivePaneId ) {
@@ -139,14 +141,14 @@ function ourOnPaneButtonClick ( clickEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnDataPaneDivWheel
+@function ourOnPaneDataDivWheel
 @desc Wheel event listener for Data Pane Div
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourOnDataPaneDivWheel ( wheelEvent ) {
+function ourOnPaneDataDivWheel ( wheelEvent ) {
 	if ( wheelEvent.deltaY ) {
 		wheelEvent.target.scrollTop +=
 			wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
@@ -173,7 +175,7 @@ class PanesManagerUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		if ( ourDataPaneDiv ) {
+		if ( ourPaneDataDiv ) {
 			return;
 		}
 		let headerDiv = theHTMLElementsFactory.create (
@@ -183,6 +185,23 @@ class PanesManagerUI {
 			},
 			uiMainDiv
 		);
+
+		ourPaneControlDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-PanesManagerUI-PaneControlsDiv'
+			},
+			uiMainDiv
+		);
+
+		ourPaneDataDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-PanesManagerUI-PaneDataDiv'
+			},
+			uiMainDiv
+		);
+		ourPaneDataDiv.addEventListener ( 'wheel', ourOnPaneDataDivWheel, false );
 		ourPanes.forEach (
 			pane => {
 				theHTMLElementsFactory.create (
@@ -194,16 +213,9 @@ class PanesManagerUI {
 					},
 					headerDiv
 				).addEventListener ( 'click', ourOnPaneButtonClick, false );
+				pane.setPaneDivs ( ourPaneDataDiv, ourPaneControlDiv );
 			}
 		);
-		ourDataPaneDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-PanesManagerUI-DataPanesDiv'
-			},
-			uiMainDiv
-		);
-		ourDataPaneDiv.addEventListener ( 'wheel', ourOnDataPaneDivWheel, false );
 	}
 
 	/**
@@ -255,5 +267,5 @@ export {
 };
 
 /*
---- End of dataPanesUI.js file ----------------------------------------------------------------------------------------
+--- End of dataPanesUI.js file ------------------------------------------------------------------------------------------------
 */

@@ -56,14 +56,16 @@ import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
 import { newEventDispatcher } from '../util/EventDispatcher.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { INVALID_OBJ_ID, LAT_LNG, DATA_PANE_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
 
 function ourNewItineraryPaneUI ( ) {
 
 	let myEventDispatcher = newEventDispatcher ( );
 	let myShowNotes = theConfig.itineraryPane.showNotes;
 	let myShowManeuvers = theConfig.itineraryPane.showManeuvers;
-	let myDataDiv = null;
+	let myPaneDataDiv = null;
+
+	// let myPaneControlDiv = null;
 	let myRouteHeader = null;
 	let myHTMLViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
 	let myCheckBoxesDiv = null;
@@ -85,11 +87,11 @@ function ourNewItineraryPaneUI ( ) {
 			};
 		if ( element.maneuverObjId ) {
 			contextMenuEvent.maneuverObjId = element.maneuverObjId;
-			newManeuverContextMenu ( contextMenuEvent, myDataDiv ).show ( );
+			newManeuverContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
 		}
 		else if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, myDataDiv ).show ( );
+			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
 		}
 	}
 
@@ -125,12 +127,11 @@ function ourNewItineraryPaneUI ( ) {
 
 	}
 
-	function myRemove ( dataDiv ) {
-		myDataDiv = dataDiv;
+	function myRemove ( ) {
 
 		// removing previous header
 		if ( myRouteHeader ) {
-			myDataDiv.removeChild ( myRouteHeader );
+			myPaneDataDiv.removeChild ( myRouteHeader );
 			myRouteHeader = null;
 		}
 
@@ -139,7 +140,7 @@ function ourNewItineraryPaneUI ( ) {
 				.removeEventListener ( 'click', myOnShowManeuversClick, false );
 			document.querySelector ( '#TravelNotes-ItineraryPane-ShowManeuversInput' )
 				.removeEventListener ( 'click', myOnShowNotesClick, false );
-			myDataDiv.removeChild ( myCheckBoxesDiv );
+			myPaneDataDiv.removeChild ( myCheckBoxesDiv );
 			myCheckBoxesDiv = null;
 		}
 
@@ -152,15 +153,14 @@ function ourNewItineraryPaneUI ( ) {
 		);
 
 		// removing previous itinerary
-		myDataDiv.removeChild ( document.querySelector ( '.TravelNotes-UI-Route-ManeuversAndNotes' ) );
+		myPaneDataDiv.removeChild ( document.querySelector ( '.TravelNotes-UI-Route-ManeuversAndNotes' ) );
 	}
 
-	function myAdd ( dataDiv ) {
-		myDataDiv = dataDiv;
+	function myAdd ( ) {
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 
 			// checkboxes
-			myCheckBoxesDiv = theHTMLElementsFactory.create ( 'div', null, myDataDiv );
+			myCheckBoxesDiv = theHTMLElementsFactory.create ( 'div', null, myPaneDataDiv );
 
 			theHTMLElementsFactory.create (
 				'text',
@@ -202,11 +202,11 @@ function ourNewItineraryPaneUI ( ) {
 
 			// route header
 			myRouteHeader = myHTMLViewsFactory.routeHeaderHTML;
-			myDataDiv.appendChild ( myRouteHeader );
+			myPaneDataDiv.appendChild ( myRouteHeader );
 		}
 
 		// itinerary and notes
-		myDataDiv.appendChild ( myHTMLViewsFactory.routeManeuversAndNotesHTML );
+		myPaneDataDiv.appendChild ( myHTMLViewsFactory.routeManeuversAndNotesHTML );
 
 		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
 			row => {
@@ -248,29 +248,39 @@ function ourNewItineraryPaneUI ( ) {
 		This function removes all the elements from the data div
 		*/
 
-		remove ( dataDiv ) {
-			myRemove ( dataDiv );
+		remove ( ) {
+			myRemove ( );
 		}
 
 		/**
 		This function add the search data to the data div
 		*/
 
-		add ( dataDiv ) {
-			myAdd ( dataDiv );
+		add ( ) {
+			myAdd ( );
 		}
 
 		/**
 		This function returns the pane id
 		*/
 
-		getId ( ) { return DATA_PANE_ID.itineraryPane; }
+		getId ( ) { return PANE_ID.itineraryPane; }
 
 		/**
 		This function returns the text to add in the pane button
 		*/
 
 		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Itinerary' ); }
+
+		/**
+		Set the pane data div and pane control div
+		*/
+
+		setPaneDivs ( paneDataDiv /* , paneControlDiv*/ ) {
+			myPaneDataDiv = paneDataDiv;
+
+			// myPaneControlDiv = paneControlDiv;
+		}
 	}
 
 	return Object.freeze ( new ItineraryPaneUI );
