@@ -311,7 +311,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			theHTMLElementsFactory.create (
 				'p',
 				{
-					innerText : paragraphText
+					innerHTML : paragraphText
 				},
 				parentElement
 			);
@@ -396,7 +396,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				'a',
 				{
 					href : 'mailto:' + searchResult.tags.email,
-					innerText : searchResult.tags.email
+					innerHTML : searchResult.tags.email
 				},
 				theHTMLElementsFactory.create ( 'p', null, searchResultDiv )
 			);
@@ -407,7 +407,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				{
 					href : searchResult.tags.website,
 					target : '_blank',
-					innerText : searchResult.tags.website
+					innerHTML : searchResult.tags.website
 				},
 				theHTMLElementsFactory.create ( 'p', null, searchResultDiv )
 			);

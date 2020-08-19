@@ -60,19 +60,11 @@ Tests ...
 
 function ourAddProperties ( element, properties ) {
 	for ( let property in properties ) {
-		if ( 'innerHTML' === property ) {
-			console.log ( 'insecure property innerHTML used' );
+		try {
+			element [ property ] = properties [ property ];
 		}
-		if ( 'innerText' === property ) {
-			element.appendChild ( document.createTextNode ( properties [ property ] ) );
-		}
-		else {
-			try {
-				element [ property ] = properties [ property ];
-			}
-			catch ( err ) {
-				console.log ( 'Invalid property : ' + property );
-			}
+		catch ( err ) {
+			console.log ( 'Invalid property : ' + property );
 		}
 	}
 }
