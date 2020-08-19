@@ -424,8 +424,8 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myAddSearchDiv
-	@desc Create the search div
+	@function myAddData
+	@desc Create the pane data div content
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -451,7 +451,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	class OsmSearchPaneUI {
 
 		/**
-		This function removes all the elements from the data div
+		This function removes all the elements from the data div and control div
 		*/
 
 		remove ( ) {
@@ -461,7 +461,7 @@ function ourNewOsmSearchPaneUI ( ) {
 		}
 
 		/**
-		This function add the search data to the data div
+		This function add the search data to the data div and controls to the controls div
 		*/
 
 		add ( ) {

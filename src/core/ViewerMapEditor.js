@@ -180,7 +180,7 @@ function ourAddNote ( noteObjId ) {
 
 	// a popup is binded to the the marker...
 	marker.bindPopup (
-		layer => newHTMLViewsFactory ( 'TravelNotes-' ).getNoteHTML (
+		layer => newHTMLViewsFactory ( 'TravelNotes-' ).getNoteTextHTML (
 			theDataSearchEngine.getNoteAndRoute ( layer.objId )
 		)
 	);

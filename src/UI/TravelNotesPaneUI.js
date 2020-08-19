@@ -180,7 +180,7 @@ function ourNewTravelNotesPaneUI ( ) {
 	class TravelNotesPaneUI {
 
 		/**
-		This function removes all the elements from the data div
+		This function removes all the elements from the data div and control div
 		*/
 
 		remove ( ) {
