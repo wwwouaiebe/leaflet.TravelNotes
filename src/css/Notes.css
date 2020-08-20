@@ -38,6 +38,7 @@ Changes:
 .TravelNotes-NoteHtml-Phone > span:first-child,
 .TravelNotes-NoteHtml-Url > span:first-child,
 .TravelNotes-NoteHtml-Distance > span:first-child,
+.TravelNotes-NoteHtml-NextDistance > span:first-child,
 .TravelNotes-NoteHtml-Address-City {
 	text-decoration: underline;
 }

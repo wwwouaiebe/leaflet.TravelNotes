@@ -161,7 +161,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Manœuvre suivante dans&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Manœuvre suivante dans</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
@@ -201,7 +201,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Note suivante dans&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Note suivante dans</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
