@@ -66,7 +66,7 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const DEFAULT_MAX_ZOOM = 18;
@@ -180,7 +180,8 @@ function ourAddNote ( noteObjId ) {
 
 	// a popup is binded to the the marker...
 	marker.bindPopup (
-		layer => newHTMLViewsFactory ( 'TravelNotes-' ).getNoteTextHTML (
+		layer => theHTMLViewsFactory.getNoteTextHTML (
+			'TravelNotes-',
 			theDataSearchEngine.getNoteAndRoute ( layer.objId )
 		)
 	);
@@ -296,7 +297,7 @@ class ViewerMapEditor {
 		polyline.bindPopup (
 			layer => {
 				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
-				return newHTMLViewsFactory ( 'TravelNotes-' ).getRouteHTML ( popupRoute );
+				return theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-UI-', popupRoute );
 			}
 		);
 

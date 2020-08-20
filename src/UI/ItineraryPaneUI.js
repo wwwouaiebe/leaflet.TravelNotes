@@ -48,7 +48,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
@@ -69,7 +69,6 @@ function ourNewItineraryPaneUI ( ) {
 	let myRouteHeader = null;
 	let myShowNotesCheckBox = null;
 	let myShowManeuversCheckBox = null;
-	let myHTMLViewsFactory = newHTMLViewsFactory ( 'TravelNotes-UI-' );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -277,7 +276,7 @@ function ourNewItineraryPaneUI ( ) {
 			myCheckBoxesDiv
 		);
 		myShowManeuversCheckBox.addEventListener ( 'click', myOnShowManeuversClick, false );
-		myRouteHeader = myHTMLViewsFactory.routeHeaderHTML;
+		myRouteHeader = theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-UI-', theTravelNotesData.travel.editedRoute );
 		myPaneControlDiv.appendChild ( myRouteHeader );
 	}
 
@@ -292,7 +291,7 @@ function ourNewItineraryPaneUI ( ) {
 	*/
 
 	function myAddData ( ) {
-		myPaneDataDiv.appendChild ( myHTMLViewsFactory.routeManeuversAndNotesHTML );
+		myPaneDataDiv.appendChild ( theHTMLViewsFactory.getEditedRouteManeuversAndNotesHTML ( 'TravelNotes-UI-' ) );
 
 		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
 			row => {

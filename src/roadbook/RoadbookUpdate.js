@@ -28,7 +28,7 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
@@ -42,10 +42,12 @@ import { theIndexedDb } from '../roadbook/IndexedDB.js';
 function newRoadbookUpdate ( ) {
 
 	if ( newUtilities ( ).storageAvailable ( 'localStorage' ) ) {
-		let htmlViewsFactory = newHTMLViewsFactory ( 'TravelNotes-Roadbook-' );
 		theIndexedDb.getOpenPromise ( )
 			.then ( ( ) => {
-				theIndexedDb.getWritePromise ( theTravelNotesData.UUID, htmlViewsFactory.travelHTML.outerHTML );
+				theIndexedDb.getWritePromise (
+					theTravelNotesData.UUID,
+					theHTMLViewsFactory.getTravelHTML ( 'TravelNotes-Roadbook-' ).outerHTML
+				);
 			} )
 			.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )
 			.catch ( err => console.log ( err ? err : 'An error occurs when writing the content' ) );
