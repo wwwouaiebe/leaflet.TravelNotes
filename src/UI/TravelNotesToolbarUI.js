@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -325,7 +325,7 @@ function ourCreatePinButton ( ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc This class is Toolbar on top of the UI
+@classdesc This class is the Toolbar on top of the UI
 @see {@link theTravelNotesToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
