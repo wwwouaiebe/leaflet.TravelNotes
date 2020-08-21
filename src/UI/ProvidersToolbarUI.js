@@ -174,12 +174,12 @@ const ourTransitModeImg = {
 function ourSetTransitMode ( transitMode ) {
 	theTravelNotesData.routing.transitMode = transitMode;
 	let activeTransitModeButton =
-			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 	if ( activeTransitModeButton ) {
-		activeTransitModeButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		activeTransitModeButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 	}
 	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton' )
-		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 }
 
 /**
@@ -212,12 +212,12 @@ function ourOnTransitModeButtonClick ( clickEvent ) {
 function ourSetProvider ( providerName ) {
 	theTravelNotesData.routing.provider = providerName;
 	let activeProviderButton =
-			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 	if ( activeProviderButton ) {
-		activeProviderButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		activeProviderButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 	}
 	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + providerName + 'ImgButton' )
-		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 
 	// activating the transit mode buttons, depending of the capabilities of the provider
 	let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
@@ -292,7 +292,7 @@ function ourCreateProviderButton ( provider ) {
 
 	// when loading the UI, the first provider will be the active provider
 	if ( ! ourHaveActiveButton ) {
-		providerButton.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		providerButton.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 		theTravelNotesData.routing.provider = providerButton.provider;
 		ourHaveActiveButton = true;
 
@@ -305,7 +305,9 @@ function ourCreateProviderButton ( provider ) {
 				}
 			}
 		);
-		ourTransitModeButtons [ firstTransitMode ].classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveImgButton' );
+		ourTransitModeButtons [ firstTransitMode ].classList.add (
+			'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton'
+		);
 		theTravelNotesData.routing.transitMode = firstTransitMode;
 		ourTransitModes.forEach (
 			transitMode => {

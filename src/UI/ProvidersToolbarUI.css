@@ -45,7 +45,8 @@ Changes:
 	height: 24px;
 }
 
-.TravelNotes-ProvidersToolbarUI-ActiveImgButton {
+.TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton,
+.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton {
 	border-color: black;
 }
 
