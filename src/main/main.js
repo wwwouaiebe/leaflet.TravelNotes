@@ -195,7 +195,7 @@ function startup ( ) {
 				theTranslator.setTranslations ( values [ TRANSLATIONS_POS ] );
 
 				// layers adaptation
-				theLayersToolbarUI.setLayers ( values [ LAYERS_CFG_POS ] );
+				theLayersToolbarUI.addLayers ( values [ LAYERS_CFG_POS ] );
 
 				theNoteDialogToolbar.selectOptions = values [ NOTES_DIALOG_CFG_POS ].preDefinedIconsList;
 				theNoteDialogToolbar.buttons = values [ NOTES_DIALOG_CFG_POS ].editionButtons;
