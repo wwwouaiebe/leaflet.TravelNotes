@@ -75,6 +75,15 @@ the attributions of OpenStreetMap because they are always present in Travel & No
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module LayersToolbarUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
@@ -170,7 +179,7 @@ function ourOnMouseEnterLinkButton ( mouseEnterEvent ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourOnClickLayerButton
-@desc Event listener for the mouse click on a link button. change the backgroundmap to this layer
+@desc Event listener for the mouse click on a link button. change the background map to this layer
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -197,6 +206,16 @@ function ourOnMouseLeaveLinkButton ( mouseLeaveEvent ) {
 	mouseLeaveEvent.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseLeaveLinkButton
+@desc Event listener for the mouse wheel on the toolbar. Scroll the toolbar
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function ourOnWheelToolbar ( wheelEvent ) {
 	const MIN_BUTTONS_VISIBLE = 3;
 	if ( wheelEvent.deltaY ) {
@@ -213,6 +232,16 @@ function ourOnWheelToolbar ( wheelEvent ) {
 	}
 	wheelEvent.stopPropagation ( );
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseLeaveLinkButton
+@desc Event listener on the timeout after a mouse leave the toolbar. Hide the toolbar
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function ourOnTimeOutToolbar ( ) {
 	let buttons = ourLayersToolbarButtonsDiv.childNodes;
@@ -235,6 +264,17 @@ function ourOnTimeOutToolbar ( ) {
 function ourOnMouseLeaveToolbar ( ) {
 	ourTimerId = setTimeout ( ourOnTimeOutToolbar, theConfig.layersToolbarUI.toolbarTimeOut );
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateLayerButton
+@desc Create a button for a layer on the toolbar
+@param {Layer} layer The layer for witch the button must be created
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function ourCreateLayerButton ( layer ) {
 	if ( layer.providerKeyNeeded && ! theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
@@ -259,6 +299,19 @@ function ourCreateLayerButton ( layer ) {
 	ourButtonsHeight += ourButtonHeight;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateLinkButton
+@desc Create a button for a link (the devil) on the toolbar
+@param {string} href The href of the link to add in the button
+@param {string} title The title of the link to add in the button
+@param {string} text The text to be displayed in the button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function ourCreateLinkButton ( href, title, text ) {
 	let linkButton = theHTMLElementsFactory.create (
 		'div',
@@ -273,6 +326,16 @@ function ourCreateLinkButton ( href, title, text ) {
 	linkButton.addEventListener ( 'mouseleave', ourOnMouseLeaveLinkButton, false );
 	ourButtonsHeight += linkButton.clientHeight;
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseEnterToolbar
+@desc Event listener on the mouse enter on the toolbar. Creates and show the buttons
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function ourOnMouseEnterToolbar ( ) {
 	if ( ourTimerId ) {
@@ -309,7 +372,24 @@ function ourOnMouseEnterToolbar ( ) {
 	ourLayersToolbarButtonsDiv.addEventListener ( 'wheel', ourOnWheelToolbar, false );
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is the Layer Toolbar on the left of the screen.
+Displays buttons to change the background maps and manages the background maps list
+@see {@link theLayersToolbarUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class LayersToolbarUI {
+
+	/**
+	creates the user interface
+	*/
+
 	createUI ( ) {
 		ourLayersToolbar = theHTMLElementsFactory.create (
 			'div',
@@ -332,6 +412,14 @@ class LayersToolbarUI {
 		theAttributionsUI.attributions = ourLayers [ ZERO ].attribution;
 	}
 
+	/**
+	gives a layer object
+	@param {string} layerName the name of the layer to given
+	@return {Layer} The asked layer. If a provider key is needed and the key not available
+	the 'OSM - Color' layer is returned. If the layer is not found, the 'OSM - Color' layer
+	is returned
+	*/
+
 	getLayer ( layerName ) {
 		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		if ( newLayer.providerKeyNeeded ) {
@@ -342,6 +430,13 @@ class LayersToolbarUI {
 		}
 		return newLayer;
 	}
+
+	/**
+	Set a layer as background map. If a provider key is needed and the key not available
+	the 'OSM - Color' layer is set. If the layer is not found, the 'OSM - Color' layer
+	is set
+	@param {string} layerName the name of the layer to set
+	*/
 
 	setLayer ( layerName ) {
 		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
@@ -356,6 +451,11 @@ class LayersToolbarUI {
 		theTravelNotesData.travel.layerName = newLayer.name;
 	}
 
+	/**
+	Add a layer list to the list of available layers
+	@param {Array.<Layer>} layers the layer list to add
+	*/
+
 	addLayers ( layers ) {
 		ourLayers = ourLayers.concat ( layers );
 	}
@@ -363,7 +463,21 @@ class LayersToolbarUI {
 
 const ourLayersToolbarUI = Object.freeze ( new LayersToolbarUI );
 
-export { ourLayersToolbarUI as theLayersToolbarUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of LayersToolbarUI class
+	@type {LayersToolbarUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourLayersToolbarUI as theLayersToolbarUI
+};
 
 /*
 --- End of LayersToolbarUI.js file --------------------------------------------------------------------------------------------
