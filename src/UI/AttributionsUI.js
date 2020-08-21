@@ -16,41 +16,51 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- AttributionsUI.js file --------------------------------------------------------------------------------------------
-This file contains:
-	- the newAttributionsUI function
-	- the theAttributionsUI object
 Changes:
 	- v1.6.0:
 		- created
 	- v1.9.0:
 		- issue #103 : Review the attributions
-Doc reviewed ...
+Doc reviewed 20200821
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-/*
---- newAttributionsUI function ----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@class
+@classdesc The attributions UI
+@see {@link theAttributionsUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newAttributionsUI ( ) {
+class AttributionsUI {
 
-	let myAttributionsUIDiv = null;
-
-	/*
-	--- mySetAttributions function ------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	creates the Attributions UI.
 	*/
 
-	function mySetAttributions ( attributions ) {
-		myAttributionsUIDiv.innerHTML =
+	createUI ( ) {
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-AttributionsUI'
+			},
+			document.querySelector ( 'body' )
+		);
+		this.attributions = '';
+	}
+
+	/**
+	Add/replace the given attributions to the UI. Leaflet, OpenStreetMap and TravelNotes must always be credited.
+	*/
+
+	set attributions ( attributions ) {
+		document.getElementById ( 'TravelNotes-AttributionsUI' ).innerHTML =
 			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			'| &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
@@ -58,43 +68,26 @@ function newAttributionsUI ( ) {
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
 	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( ) {
-		myAttributionsUIDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-AttributionsUI'
-			},
-			document.querySelector ( 'body' )
-		);
-		mySetAttributions ( '' );
-
-	}
-
-	/*
-	--- AttributionsUI object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			set attributions ( Attributions ) { mySetAttributions ( Attributions ); },
-			createUI : ( ) => myCreateUI ( )
-		}
-	);
 }
 
-const theAttributionsUI = newAttributionsUI ( );
+const ourAttributionsUI = Object.seal ( new AttributionsUI );
 
-export { theAttributionsUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of AttributionsUI class
+	@type {AttributionsUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourAttributionsUI as theAttributionsUI
+};
 
 /*
---- End of AttributionsUI.js file -------------------------------------------------------------------------------------
+--- End of AttributionsUI.js file ---------------------------------------------------------------------------------------------
 */
