@@ -214,7 +214,6 @@ class ErrorsUI {
 
 	/**
 	creates the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
 	*/
 
 	createUI ( ) {

@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,120 +17,147 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- WaitUI.js file ----------------------------------------------------------------------------------------------------
-This file contains:
-	- the newWaitUI function
 Changes:
 	- v1.11.0:
 		- created
-Doc reviewed
+Doc reviewed 20200822
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file WaitUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module WaitUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-/*
---- newWaitUI function ------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewWaitUI
+@desc Constructor for a WaitUI object. Notice that, even if you can construct more than one WaitUI, only one
+can be displayed on the screen
+@return {WaitUI} an instance of a WaitUI object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newWaitUI ( ) {
+function ourNewWaitUI ( ) {
 
 	let myBackgroundDiv = null;
-	let myWaitDiv = null;
 	let myMessageDiv = null;
 
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class
+	@classdesc This class display a Wait window on the screen with a message and an animation
+	@see {@link newWaitUI} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateUI ( ) {
-		if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
-			return;
-		}
+	class WaitUI {
 
-		myBackgroundDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-WaitUI-Background'
-			},
-			document.querySelector ( 'body' )
-		);
+		/**
+		creates the user interface
+		*/
 
-		myWaitDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-WaitUI'
-			},
-			myBackgroundDiv
-		);
-		myMessageDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-WaitUI-MessageDiv'
-			},
-			myWaitDiv
-		);
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-WaitUI-WaitBullet'
-			},
+		createUI ( ) {
+			if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
+				return;
+			}
+			myBackgroundDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-Background'
+				},
+				document.querySelector ( 'body' )
+			);
+			let waitDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-WaitUI'
+				},
+				myBackgroundDiv
+			);
+			myMessageDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-WaitUI-MessageDiv'
+				},
+				waitDiv
+			);
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					className : 'TravelNotes-WaitUI-Wait'
+					className : 'TravelNotes-WaitAnimationBullet'
 				},
-				myWaitDiv
-			)
-		);
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-WaitAnimation'
+					},
+					waitDiv
+				)
+			);
+		}
 
+		/**
+		Show an info in the WaitUI
+		@param {string} info The info to be displayed
+		*/
+
+		showInfo ( info ) {
+			myMessageDiv.innerHTML = info;
+		}
+
+		/**
+		Close the WaitUI
+		*/
+
+		close ( ) {
+			document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
+			myBackgroundDiv = null;
+		}
 	}
 
-	/*
-	--- myShowInfo function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myShowInfo ( info ) {
-		myMessageDiv.innerHTML = info;
-	}
-
-	/*
-	--- myClose function ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClose ( ) {
-		document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
-		myBackgroundDiv = null;
-	}
-
-	/*
-	--- WaitUI object -------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return {
-
-		createUI : ( ) => myCreateUI ( ),
-
-		showInfo : info => myShowInfo ( info ),
-
-		close : () => myClose ( )
-
-	};
+	return Object.freeze ( new WaitUI );
 }
 
-export { newWaitUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newWaitUI
+	@desc Constructor for a WaitUI object. Notice that, even if you can construct more than one WaitUI, only one
+	can be displayed on the screen
+	@return {WaitUI} an instance of a WaitUI object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewWaitUI as newWaitUI
+};
 
 /*
 --- End of WaitUI.js file ---------------------------------------------------------------------------------------------

@@ -28,20 +28,6 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-BaseDialog-BackgroundDiv {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.6);
-	z-index: 1200;
-}
-
-.TravelNotes-BaseDialog-BackgroundDiv:hover {
-	cursor: not-allowed;
-}
-
 .TravelNotes-BaseDialog-Container {
 	z-index: 1200;
 	position: absolute;
