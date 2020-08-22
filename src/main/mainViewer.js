@@ -113,7 +113,7 @@ function startup ( ) {
 				theTranslator.setTranslations ( values [ ONE ] );
 
 				// layers adaptation
-				theViewerLayersToolbarUI.setLayers ( values [ TWO ] );
+				theViewerLayersToolbarUI.addLayers ( values [ TWO ] );
 
 				if ( theConfig.autoLoad ) {
 					theHTMLElementsFactory.create (
