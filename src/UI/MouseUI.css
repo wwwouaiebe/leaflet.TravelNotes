@@ -31,10 +31,10 @@ Changes:
 #TravelNotes-MouseUI {
 	position: absolute;
 	top: 0;
-	left: 30em;
+	left: calc(50vw - 5em);
 	z-index: 1200;
 	text-align: center;
-	width: calc(100% - 60em);
+	width: 10em;
 }
 
 @media screen and (min-width: 1px) and (max-width: 640px) {

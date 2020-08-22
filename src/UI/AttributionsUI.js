@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -23,6 +23,26 @@ Changes:
 		- issue #103 : Review the attributions
 Doc reviewed 20200821
 Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file AttributionsUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module AttributionsUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';

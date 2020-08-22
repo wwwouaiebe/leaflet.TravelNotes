@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,132 +16,146 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- MouseUI.js file ---------------------------------------------------------------------------------------------------
-This file contains:
-	- the newMouseUI function
-	- the theMouseUI object
 Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed ...
+Doc reviewed 20200822
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MouseUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module MouseUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newUtilities } from '../util/Utilities.js';
 
-/*
---- newMouseUI function -----------------------------------------------------------------------------------------------
+let ourMouseDiv = null;
+let ourMousePos = null;
+let ourZoom = null;
+let ourUtilities = newUtilities ( );
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdate
+@desc This method update the UI after an event
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newMouseUI ( ) {
+function ourUpdate ( ) {
+	ourMouseDiv.innerHTML = '<span>' +
+	ourMousePos +
+	'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
+	ourZoom +
+	'</span>';
+}
 
-	let myMouseDiv = null;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myMousePos = null;
-	let myZoom = null;
-	let myUtilities = newUtilities ( );
+@function ourOnMapMouseMove
+@desc Event listener for the mouse move on the map
+@private
 
-	/*
-	--- myUpdate function ---------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	-------------------------------------------------------------------------------------------------------------------
+function ourOnMapMouseMove ( mouseMoveEvent ) {
+	ourMousePos =
+		ourUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
+		'&nbsp;-&nbsp;' +
+		ourUtilities.formatLng ( mouseMoveEvent.latlng.lng );
+	ourUpdate ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMapZoomEnd
+@desc Event listener for zoom end on the map
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnMapZoomEnd ( ) {
+	ourZoom = theTravelNotesData.map.getZoom ( );
+	ourUpdate ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class show the mouse position and the zoom on the screen
+@see {@link theMouseUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MouseUI {
+
+	/**
+	creates the user interface
 	*/
 
-	function myUpdate ( ) {
-		myMouseDiv.innerHTML = '<span>' +
-		myMousePos +
-		'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
-		myZoom +
-		'</span>';
-	}
-
-	/*
-	--- mySetMousePos function ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetMousePos ( mousePos ) {
-		myMousePos = myUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + myUtilities.formatLng ( mousePos.lng );
-		myUpdate ( );
-	}
-
-	/*
-	--- mySetZoom function --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetZoom ( zoom ) {
-		myZoom = zoom;
-		myUpdate ( );
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( ) {
-
-		myZoom = theTravelNotesData.map.getZoom ( );
+	createUI ( ) {
+		ourZoom = theTravelNotesData.map.getZoom ( );
 		let mousePos = theTravelNotesData.map.getCenter ( );
-		myMousePos = myUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + myUtilities.formatLng ( mousePos.lng );
-		myMouseDiv = theHTMLElementsFactory.create (
+		ourMousePos = ourUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + ourUtilities.formatLng ( mousePos.lng );
+		ourMouseDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-MouseUI'
 			},
 			document.querySelector ( 'body' )
 		);
-		theTravelNotesData.map.on (
-			'mousemove',
-			mouseMoveEvent => {
-				myMousePos =
-					myUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
-					'&nbsp;-&nbsp;' +
-					myUtilities.formatLng ( mouseMoveEvent.latlng.lng );
-				myUpdate ( );
-			}
-		);
-		theTravelNotesData.map.on (
-			'zoomend',
-			( ) => {
-				myZoom = theTravelNotesData.map.getZoom ( );
-				myUpdate ( );
-			}
-		);
-
+		theTravelNotesData.map.on ( 'mousemove', ourOnMapMouseMove );
+		theTravelNotesData.map.on ( 'zoomend', ourOnMapZoomEnd );
 	}
-
-	/*
-	--- MouseUI object ------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			createUI : ( ) => myCreateUI ( ),
-			set mousePos ( MousePos ) { mySetMousePos ( MousePos ); },
-			set zoom ( Zoom ) { mySetZoom ( Zoom ); }
-		}
-	);
 }
 
-const theMouseUI = newMouseUI ( );
+const ourMouseUI = Object.freeze ( new MouseUI );
 
-export { theMouseUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of MouseUI class
+	@type {MouseUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourMouseUI as theMouseUI
+};
 
 /*
---- End of MouseUI.js file --------------------------------------------------------------------------------------------
+--- End of MouseUI.js file ----------------------------------------------------------------------------------------------------
 */
