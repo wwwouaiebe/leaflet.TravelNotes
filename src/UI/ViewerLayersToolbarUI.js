@@ -148,8 +148,8 @@ function ourCreateLayerButton ( layer ) {
 
 @class
 @classdesc This class is the Layer Toolbar on the left of the viewer screen.
- Displays buttons to change the background maps and manages the background maps list
- Displays also a geo location button and a zoom to travel button
+ Displays buttons to change the background maps and manages the background maps list.
+ Displays also a geo location button and a zoom to travel button.
 @see {@link theViewerLayersToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
