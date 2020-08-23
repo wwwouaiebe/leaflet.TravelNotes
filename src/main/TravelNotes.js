@@ -337,7 +337,6 @@ function newTravelNotes ( ) {
 		theUI.createUI ( document.getElementById ( divControlId ) );
 
 		theAttributionsUI.createUI ( );
-		theErrorsUI.createUI ( );
 
 		theAPIKeysManager.setKeysFromServerFile ( );
 		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {

@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,16 +17,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- main.js file ------------------------------------------------------------------------------------------------------
-This file contains:
-	-
 	Changes:
 	- v1.6.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200823
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file Main.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module Main
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
@@ -37,21 +52,37 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { LAT_LNG, ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
-function startup ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myLangage = null;
+@function ourNewMain
+@desc constructor for Main object
+@return {Main} an instance of a Main object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewMain ( ) {
+
+	let myLanguage = null;
 	let myTravelUrl = null;
+	let myErrorMessage = '';
+	let myHaveCrypto = false;
 
-	/*
-	--- myReadURL function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function extract the route providers API key from the url
+	@function myReadURL
+	@desc This function read the search part of the url
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myReadURL ( ) {
@@ -67,7 +98,7 @@ function startup ( ) {
 								escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
 						}
 						else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-							myLangage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+							myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
 						}
 						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
 						newUrlSearch += urlSearchSubString;
@@ -81,155 +112,307 @@ function startup ( ) {
 		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
-	/*
-	--- myTestCryptoPromise function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function extract the route providers API key from the url
+	@function myTestCrypto
+	@desc This function test the crypto functions and the scure context
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myTestCryptoPromise ( ) {
-
-		// MS Edge @#?£$ don't know Promise.allSettled, so we need to always
-		// return Promise.resolve...
-		if ( ! window.crypto || ! window.crypto.subtle || ! window.crypto.subtle.importKey ) {
-			return Promise.resolve ( false );
+	function myTestCrypto ( ) {
+		if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
+			return window.crypto.subtle.importKey (
+				'raw',
+				new window.TextEncoder ( ).encode ( 'hoho' ),
+				{ name : 'PBKDF2' },
+				false,
+				[ 'deriveKey' ]
+			);
 		}
+		return Promise.reject ( new Error ( 'Invalid crypto functions or unsecure context' ) );
+	}
 
-		if ( window.isSecureContext	) {
-			try {
-				return window.crypto.subtle.importKey (
-					'raw',
-					new window.TextEncoder ( ).encode ( 'hoho' ),
-					{ name : 'PBKDF2' },
-					false,
-					[ 'deriveKey' ]
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadOsmSearchDictionary
+	@desc This function load the osmSearch dictionary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadOsmSearchDictionary ( ) {
+		if ( window.osmSearch ) {
+			window.osmSearch.getDictionaryPromise ( myLanguage, 'travelNotes' )
+				.then (
+					( ) => console.log ( 'osmSearch dictionary loaded with language ' + myLanguage )
+				)
+				.catch (
+					err => console.log (
+						'An error occurs when loading the osmSearch dictionary for language ' +
+						myLanguage +
+						'\n' +
+						( err ? err : '' )
+					)
 				);
-			}
-			catch ( err ) {
-				return Promise.resolve ( false );
-			}
 		}
 		else {
-			return Promise.resolve ( false );
+			console.log ( 'osmSearch not found' );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadConfig
+	@desc This function load the content of the TravelNotesConfig.json file into theConfig object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadConfig ( configPromiseResult ) {
+		if ( 'fulfilled' === configPromiseResult.status ) {
+			configPromiseResult.value.language = myLanguage;
+			configPromiseResult.value.haveCrypto = myHaveCrypto;
+			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+				configPromiseResult.value.layersToolbarUI.theDevil.addButton = false;
+				configPromiseResult.value.errorUI.showHelp = true;
+				const PRINT_MAX_TILES = 120;
+				configPromiseResult.value.printRouteMap.maxTiles = PRINT_MAX_TILES;
+			}
+			theConfig.overload ( configPromiseResult.value );
+			return '';
+		}
+		return 'Not possible to load the TravelNotesConfig.json file. ';
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadTranslations
+	@desc This function load the content of the TravelNotesXX.json file into theTranslator object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadTranslations ( translationPromiseResult, defaultTranslationPromiseResult ) {
+		if ( 'fulfilled' === translationPromiseResult.status ) {
+			theTranslator.setTranslations ( translationPromiseResult.value );
+			return '';
+		}
+		if ( 'fulfilled' === defaultTranslationPromiseResult.status ) {
+			theTranslator.setTranslations ( defaultTranslationPromiseResult.value );
+			return (
+				'Not possible to load the TravelNotes' +
+				myLanguage.toUpperCase ( ) +
+				'.json file. English will be used. '
+			);
+		}
+		return 'Not possible to load the translations. ';
+
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadLayers
+	@desc This function load the content of the TravelNotesLayers.json file into theLayersToolbarUI object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadLayers ( layersPromiseResult ) {
+		if ( 'fulfilled' === layersPromiseResult.status ) {
+			theLayersToolbarUI.addLayers ( layersPromiseResult.value );
+			return '';
+		}
+		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';
+
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadNoteDialogConfig
+	@desc This function load the content of the TravelNotesNoteDialogXX.json file into theNoteDialogToolbar object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadNoteDialogConfig ( noteDialogPromiseResult, defaultNoteDialogPromiseResult ) {
+		if ( 'fulfilled' === noteDialogPromiseResult.status ) {
+			theNoteDialogToolbar.selectOptions = noteDialogPromiseResult.value.preDefinedIconsList;
+			theNoteDialogToolbar.buttons = noteDialogPromiseResult.value.editionButtons;
+			return '';
+		}
+		if ( 'fulfilled' === defaultNoteDialogPromiseResult.status ) {
+			theNoteDialogToolbar.selectOptions = defaultNoteDialogPromiseResult.value.preDefinedIconsList;
+			theNoteDialogToolbar.buttons = defaultNoteDialogPromiseResult.value.editionButtons;
+			return (
+				'Not possible to load the TravelNotesNoteDialog' +
+				myLanguage.toUpperCase ( ) +
+				'.json file. English will be used. '
+			);
 		}
 
+		return 'Not possible to load the translations for the note dialog. ';
+
 	}
 
-	myReadURL ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	window.L.travelNotes = theTravelNotes;
+	@function myGetJsonPromises
+	@desc This function gives the Promises list needed to load all the configuration files
+	@private
 
-	// osmSearch
-	if ( window.osmSearch ) {
-		window.osmSearch.getDictionaryPromise ( theConfig.language, 'travelNotes' )
-			.then (
-				( ) => console.log ( 'osmSearch dictionary loaded' ),
-				err => console.log ( err ? err : 'An error occurs when loading the osmSearch dictionary' )
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetJsonPromises ( ) {
+		let requestBuilder = newHttpRequestBuilder ( );
+		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
+		return [
+			myTestCrypto ( ),
+			requestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
+			requestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'EN.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' )
+		];
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadJsonFiles
+	@desc Load the configuration files
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadJsonFiles ( results ) {
+		const CONFIG_FILE_INDEX = 1;
+		const TRANSLATIONS_FILE_INDEX = 2;
+		const LAYERS_FILE_INDEX = 3;
+		const NOTE_CONFIG_FILE_INDEX = 4;
+		const DEFAULT_TRANSLATIONS_FILE_INDEX = 5;
+		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 6;
+		if ( 'fulfilled' === results [ ZERO ].status ) {
+			myHaveCrypto = true;
+		}
+		myErrorMessage = myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
+		if ( myErrorMessage ) {
+			theErrorsUI.showError ( myErrorMessage );
+			return;
+		}
+		theTravelNotesData.providers.forEach (
+			provider => {
+				provider.userLanguage = theConfig.language;
+			}
+		);
+		myErrorMessage = myLoadTranslations (
+			results [ TRANSLATIONS_FILE_INDEX ],
+			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
+		);
+		myErrorMessage += myLoadNoteDialogConfig (
+			results [ NOTE_CONFIG_FILE_INDEX ],
+			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
+		);
+		myErrorMessage += myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
+
+		if ( '' !== myErrorMessage ) {
+			theErrorsUI.showWarning ( myErrorMessage );
+			myErrorMessage = '';
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadTravelNotes
+	@desc Creates the map and the div for the TravelNotes UI and then launch TravelNotes
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadTravelNotes ( ) {
+		if ( theConfig.autoLoad && '' === myErrorMessage ) {
+			theHTMLElementsFactory.create (
+				'div',
+				{ id : 'Map' },
+				document.querySelector ( 'body' )
 			);
+			theHTMLElementsFactory.create (
+				'div',
+				{ id : 'TravelNotes' },
+				document.querySelector ( 'body' )
+			);
+
+			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
+
+			if ( myTravelUrl ) {
+				theTravelNotes.addReadOnlyMap ( map, myTravelUrl );
+			}
+			else {
+				theTravelNotes.addControl ( map, 'TravelNotes' );
+				theTravelNotes.rightContextMenu = true;
+			}
+		}
 	}
-	else {
-		console.log ( 'osmSearch not found' );
-	}
 
-	let requestBuilder = newHttpRequestBuilder ( );
-	let promises = [
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotesConfig.json'
-		),
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotes' +
-			( myLangage || theConfig.language ).toUpperCase ( ) +
-			'.json'
-		),
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotesLayers.json'
-		),
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotesNoteDialog' +
-			( myLangage || theConfig.language ).toUpperCase ( ) +
-			'.json'
-		),
-		myTestCryptoPromise ( )
-	];
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	// MS Edge @#?£$ don't know Promise.allSettled ...
-	Promise.all ( promises )
-		.then (
+	@class
+	@classdesc This Class is used to configure and launch TravelNotes.
+	Not possible to instanciate this class outside TravelNotes.
+	@hideconstructor
+	@public
 
-			// promises succeeded
-			values => {
-				const TRAVEL_NOTES_CFG_POS = 0;
-				const TRANSLATIONS_POS = 1;
-				const LAYERS_CFG_POS = 2;
-				const NOTES_DIALOG_CFG_POS = 3;
-				const TEST_CRYPTO_PROMISE_POS = 4;
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
-				// config adaptation
-				if ( myLangage ) {
-					values [ TRAVEL_NOTES_CFG_POS ].language = myLangage;
-				}
-				if ( values [ TEST_CRYPTO_PROMISE_POS ] ) {
-					values [ TRAVEL_NOTES_CFG_POS ].haveCrypto = true;
-				}
-				if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
-					values [ TRAVEL_NOTES_CFG_POS ].layersToolbarUI.theDevil.addButton = false;
-					values [ TRAVEL_NOTES_CFG_POS ].errorUI.showHelp = true;
-					const PRINT_MAX_TILES = 120;
-					values [ TRAVEL_NOTES_CFG_POS ].printRouteMap.maxTiles = PRINT_MAX_TILES;
-				}
-				theConfig.overload ( values [ TRAVEL_NOTES_CFG_POS ] );
+	class Main {
 
-				theTravelNotesData.providers.forEach (
-					provider => {
-						provider.userLanguage = theConfig.language;
+		/**
+		Launch TravelNotes.
+		*/
+
+		start ( ) {
+			window.L.travelNotes = theTravelNotes;
+			myReadURL ( );
+			myLanguage = myLanguage || theConfig.language;
+			myLoadOsmSearchDictionary ( myLanguage );
+			theErrorsUI.createUI ( );
+
+			Promise.allSettled ( myGetJsonPromises ( ) )
+				.then (
+					results => {
+						myLoadJsonFiles ( results );
+						myLoadTravelNotes ( myTravelUrl );
 					}
 				);
+		}
+	}
 
-				// translations adaptation
-				theTranslator.setTranslations ( values [ TRANSLATIONS_POS ] );
-
-				// layers adaptation
-				theLayersToolbarUI.addLayers ( values [ LAYERS_CFG_POS ] );
-
-				theNoteDialogToolbar.selectOptions = values [ NOTES_DIALOG_CFG_POS ].preDefinedIconsList;
-				theNoteDialogToolbar.buttons = values [ NOTES_DIALOG_CFG_POS ].editionButtons;
-
-				if ( theConfig.autoLoad ) {
-					theHTMLElementsFactory.create (
-						'div',
-						{ id : 'Map' },
-						document.querySelector ( 'body' )
-					);
-					theHTMLElementsFactory.create (
-						'div',
-						{ id : 'TravelNotes' },
-						document.querySelector ( 'body' )
-					);
-
-					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-						.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
-
-					if ( myTravelUrl ) {
-						theTravelNotes.addReadOnlyMap ( map, myTravelUrl );
-					}
-					else {
-						theTravelNotes.addControl ( map, 'TravelNotes' );
-						theTravelNotes.rightContextMenu = true;
-					}
-				}
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs when downloading the json configuration files' ) );
+	return Object.freeze ( new Main );
 }
 
-startup ( );
+ourNewMain ( ).start ( );
 
 /*
---- End of Main file --------------------------------------------------------------------------------------------------
+--- End of Main file ----------------------------------------------------------------------------------------------------------
 */
