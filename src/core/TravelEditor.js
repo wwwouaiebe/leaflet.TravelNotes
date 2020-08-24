@@ -69,13 +69,12 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 let ourUtilities = newUtilities ( );
-let ourEventDispatcher = newEventDispatcher ( );
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -103,8 +102,8 @@ class TravelEditor {
 	routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore )		{
 		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
 		theRouteEditor.chainRoutes ( );
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
@@ -135,15 +134,15 @@ class TravelEditor {
 			return;
 		}
 		theProfileWindowsManager.deleteAllProfiles ( );
-		ourEventDispatcher.dispatch ( 'removeallobjects' );
+		theEventDispatcher.dispatch ( 'removeallobjects' );
 		theTravelNotesData.travel.editedRoute = newRoute ( );
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
 		theTravelNotesData.travel = newTravel ( );
 		theTravelNotesData.travel.routes.add ( newRoute ( ) );
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'showitinerary' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
-		ourEventDispatcher.dispatch ( 'travelnameupdated' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'travelnameupdated' );
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}

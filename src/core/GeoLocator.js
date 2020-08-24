@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theConfig } from '../data/Config.js';
 import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 
@@ -54,7 +54,6 @@ let ourStatus =
 		:
 		GEOLOCATION_STATUS.disabled;
 let ourWatchId = null;
-let ourEventDispatcher = newEventDispatcher ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -69,7 +68,7 @@ let ourEventDispatcher = newEventDispatcher ( );
 */
 
 function ourShowPosition ( position ) {
-	ourEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } );
+	theEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } );
 }
 
 /**
@@ -89,7 +88,7 @@ function ourStop ( ) {
 	}
 
 	// if ( ourWatchId ) FF: the ourWatchId is always 0 so we cannot use ourWatchId to see if the geolocation is running
-	ourEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
+	theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
 	navigator.geolocation.clearWatch ( ourWatchId );
 	ourWatchId = null;
 }
@@ -125,7 +124,7 @@ function ourError ( positionError ) {
 
 function ourStart ( ) {
 	ourStatus = GEOLOCATION_STATUS.active;
-	ourEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
+	theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
 	navigator.geolocation.getCurrentPosition ( ourShowPosition, ourError, theConfig.geoLocation.options );
 	ourWatchId = navigator.geolocation.watchPosition ( ourShowPosition, ourError, theConfig.geoLocation.options );
 }

@@ -33,16 +33,6 @@ Doc reviewed 20200810
 Tests ...
 */
 
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
-import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
-import { newWayPoint } from '../data/WayPoint.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
-import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -75,7 +65,16 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-let ourEventDispatcher = newEventDispatcher ( );
+import { theConfig } from '../data/Config.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
+import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
+import { newGeoCoder } from '../core/GeoCoder.js';
+import { newWayPoint } from '../data/WayPoint.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
+import { newGeometry } from '../util/Geometry.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
+
 let ourGeometry = newGeometry ( );
 
 /**
@@ -98,9 +97,9 @@ function ourRenameWayPoint ( wayPointOsmData, wayPointObjId ) {
 	let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 	wayPoint.name = wayPointOsmData.name;
 	wayPoint.address = wayPointOsmData.address;
-	ourEventDispatcher.dispatch ( 'setrouteslist' );
-	ourEventDispatcher.dispatch ( 'showitinerary' );
-	ourEventDispatcher.dispatch ( 'roadbookupdate' );
+	theEventDispatcher.dispatch ( 'setrouteslist' );
+	theEventDispatcher.dispatch ( 'showitinerary' );
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
 /**
@@ -163,7 +162,7 @@ class WayPointEditor {
 		wayPoint.latLng = latLng;
 		ourRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
 				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
@@ -192,7 +191,7 @@ class WayPointEditor {
 		wayPoint.latLng = finalLatLng;
 		ourRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
 				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
@@ -225,12 +224,12 @@ class WayPointEditor {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			ourEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : wayPointsIterator.value.objId } );
 		}
 		theTravelNotesData.travel.editedRoute.wayPoints.reverse ( );
 		wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			ourEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'addwaypoint',
 				{
 					wayPoint : wayPointsIterator.value,
@@ -239,9 +238,9 @@ class WayPointEditor {
 				}
 			);
 		}
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'showitinerary' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		theRouteEditor.startRouting ( );
 	}
 
@@ -253,7 +252,7 @@ class WayPointEditor {
 
 	removeWayPoint ( wayPointObjId ) {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
-		ourEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
+		theEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
 		theRouteEditor.startRouting ( );
 	}
@@ -267,7 +266,7 @@ class WayPointEditor {
 	setStartPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		if ( LAT_LNG.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.first.lat ) {
-			ourEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'removeobject',
 				{ objId : theTravelNotesData.travel.editedRoute.wayPoints.first.objId }
 			);
@@ -276,7 +275,7 @@ class WayPointEditor {
 		if ( theConfig.wayPoint.reverseGeocoding ) {
 			ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.first.objId );
 		}
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
 				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.first,
@@ -295,7 +294,7 @@ class WayPointEditor {
 	setEndPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		if ( LAT_LNG.defaultValue !== theTravelNotesData.travel.editedRoute.wayPoints.last.lat ) {
-			ourEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'removeobject',
 				{ objId : theTravelNotesData.travel.editedRoute.wayPoints.last.objId }
 			);
@@ -304,7 +303,7 @@ class WayPointEditor {
 		if ( theConfig.wayPoint.reverseGeocoding ) {
 			ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.last.objId );
 		}
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
 				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
@@ -345,9 +344,9 @@ class WayPointEditor {
 
 		wayPointPropertiesDialog.show ( ).then (
 			( ) => {
-				ourEventDispatcher.dispatch ( 'setrouteslist' );
-				ourEventDispatcher.dispatch ( 'showitinerary' );
-				ourEventDispatcher.dispatch ( 'roadbookupdate' );
+				theEventDispatcher.dispatch ( 'setrouteslist' );
+				theEventDispatcher.dispatch ( 'showitinerary' );
+				theEventDispatcher.dispatch ( 'roadbookupdate' );
 			}
 		)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the waypoint properties dialog' ) );

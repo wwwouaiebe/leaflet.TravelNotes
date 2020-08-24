@@ -72,7 +72,7 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
@@ -87,7 +87,6 @@ let ourTempWayPointMarker = null;
 let ourTempWayPointInitialLatLng = null;
 let ourTempWayPointShowDragTooltip = 1;
 
-let ourEventDispatcher = newEventDispatcher ( );
 let ourGeometry = newGeometry ( );
 
 /**
@@ -191,7 +190,7 @@ function ourOnNoteBulletDragEnd ( dragEndEvent ) {
 
 		// the note is not attached to a route, so the coordinates of the note can be directly changed
 		draggedNote.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
-		ourEventDispatcher.dispatch ( 'updatetravelnotes' );
+		theEventDispatcher.dispatch ( 'updatetravelnotes' );
 	}
 	else {
 
@@ -214,7 +213,7 @@ function ourOnNoteBulletDragEnd ( dragEndEvent ) {
 		// the coordinates of the bullet are adapted
 		draggedLayerGroup.getLayer ( draggedLayerGroup.bulletId )
 			.setLatLng ( latLngDistance.latLng );
-		ourEventDispatcher.dispatch ( 'updateitinerary' );
+		theEventDispatcher.dispatch ( 'updateitinerary' );
 	}
 
 	// in all cases, the polyline is updated
@@ -222,7 +221,7 @@ function ourOnNoteBulletDragEnd ( dragEndEvent ) {
 		.setLatLngs ( [ draggedNote.latLng, draggedNote.iconLatLng ] );
 
 	// and the HTML page is adapted
-	ourEventDispatcher.dispatch ( 'roadbookupdate' );
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
 /**

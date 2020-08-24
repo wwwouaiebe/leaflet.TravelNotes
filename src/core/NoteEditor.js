@@ -63,7 +63,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
@@ -73,7 +73,6 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
-let ourEventDispatcher = newEventDispatcher ( );
 let ourGeometry = newGeometry ( );
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
@@ -111,14 +110,14 @@ function ourNewNoteFromOsmData ( osmNoteData, route ) {
 	note.distance = ourGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
 	note.chainedDistance = route.chainedDistance;
 	route.notes.add ( note );
-	ourEventDispatcher.dispatch (
+	theEventDispatcher.dispatch (
 		'noteupdated',
 		{
 			removedNoteObjId : INVALID_OBJ_ID,
 			addedNoteObjId : note.objId
 		}
 	);
-	ourEventDispatcher.dispatch ( 'roadbookupdate' );
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
 /**
@@ -142,8 +141,8 @@ function ourAddAllManeuverNote ( maneuverIterator, route ) {
 			route.notes.sort (
 				( first, second ) => first.distance - second.distance
 			);
-			ourEventDispatcher.dispatch ( 'updateitinerary' );
-			ourEventDispatcher.dispatch ( 'roadbookupdate' );
+			theEventDispatcher.dispatch ( 'updateitinerary' );
+			theEventDispatcher.dispatch ( 'roadbookupdate' );
 			ourWaitUI.close ( );
 			ourWaitUI = null;
 		}
@@ -209,7 +208,7 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 				if ( isNewNote ) {
 					if ( INVALID_OBJ_ID === routeObjId ) {
 						theTravelNotesData.travel.notes.add ( note );
-						ourEventDispatcher.dispatch ( 'showtravelnotes' );
+						theEventDispatcher.dispatch ( 'showtravelnotes' );
 					}
 					else {
 						let route = theDataSearchEngine.getRoute ( routeObjId );
@@ -218,18 +217,18 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 						route.notes.sort (
 							( first, second ) => first.distance - second.distance
 						);
-						ourEventDispatcher.dispatch ( 'showitinerary' );
+						theEventDispatcher.dispatch ( 'showitinerary' );
 					}
 				}
 
-				ourEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'noteupdated',
 					{
 						removedNoteObjId : note.objId,
 						addedNoteObjId : note.objId
 					}
 				);
-				ourEventDispatcher.dispatch ( 'roadbookupdate' );
+				theEventDispatcher.dispatch ( 'roadbookupdate' );
 			}
 		)
 		.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
@@ -395,8 +394,8 @@ class NoteEditor {
 						( first, second ) => first.distance - second.distance
 					);
 					route.itinerary.maneuvers.remove ( maneuverObjId );
-					ourEventDispatcher.dispatch ( 'showitinerary' );
-					ourEventDispatcher.dispatch ( 'roadbookupdate' );
+					theEventDispatcher.dispatch ( 'showitinerary' );
+					theEventDispatcher.dispatch ( 'roadbookupdate' );
 					ourWaitUI.close ( );
 					ourWaitUI = null;
 				}
@@ -455,22 +454,22 @@ class NoteEditor {
 
 			// it's a route note
 			noteAndRoute.route.notes.remove ( noteObjId );
-			ourEventDispatcher.dispatch ( 'updateitinerary' );
+			theEventDispatcher.dispatch ( 'updateitinerary' );
 		}
 		else {
 
 			// it's a travel note
 			theTravelNotesData.travel.notes.remove ( noteObjId );
-			ourEventDispatcher.dispatch ( 'updatetravelnotes' );
+			theEventDispatcher.dispatch ( 'updatetravelnotes' );
 		}
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'noteupdated',
 			{
 				removedNoteObjId : noteObjId,
 				addedNoteObjId : INVALID_OBJ_ID
 			}
 		);
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
@@ -481,19 +480,19 @@ class NoteEditor {
 	hideNotes ( ) {
 		let notesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			ourEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 		}
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			notesIterator = routesIterator.value.notes.iterator;
 			while ( ! notesIterator.done ) {
-				ourEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+				theEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 			}
 		}
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
 			while ( ! notesIterator.done ) {
-				ourEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
+				theEventDispatcher.dispatch ( 'removeobject', { objId : notesIterator.value.objId } );
 			}
 		}
 	}
@@ -508,7 +507,7 @@ class NoteEditor {
 		this.hideNotes ( );
 		let notesIterator = theTravelNotesData.travel.notes.iterator;
 		while ( ! notesIterator.done ) {
-			ourEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'noteupdated',
 				{
 					removedNoteObjId : INVALID_OBJ_ID,
@@ -519,7 +518,7 @@ class NoteEditor {
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			if ( ! routesIterator.value.hidden ) {
-				ourEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'routeupdated',
 					{
 						removedRouteObjId : routesIterator.value.objId,
@@ -574,16 +573,16 @@ class NoteEditor {
 				( first, second ) => first.distance - second.distance
 			);
 
-			ourEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'noteupdated',
 				{
 					removedNoteObjId : noteObjId,
 					addedNoteObjId : noteObjId
 				}
 			);
-			ourEventDispatcher.dispatch ( 'updateitinerary' );
-			ourEventDispatcher.dispatch ( 'updatetravelnotes' );
-			ourEventDispatcher.dispatch ( 'roadbookupdate' );
+			theEventDispatcher.dispatch ( 'updateitinerary' );
+			theEventDispatcher.dispatch ( 'updatetravelnotes' );
+			theEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
 	}
 
@@ -602,9 +601,9 @@ class NoteEditor {
 		noteAndRoute.note.chainedDistance = DISTANCE.defaultValue;
 		theTravelNotesData.travel.notes.add ( noteAndRoute.note );
 
-		ourEventDispatcher.dispatch ( 'updateitinerary' );
-		ourEventDispatcher.dispatch ( 'updatetravelnotes' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'updateitinerary' );
+		theEventDispatcher.dispatch ( 'updatetravelnotes' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
@@ -619,8 +618,8 @@ class NoteEditor {
 
 	travelNoteDropped ( draggedNoteObjId, targetNoteObjId, draggedBefore ) {
 		theTravelNotesData.travel.notes.moveTo ( draggedNoteObjId, targetNoteObjId, draggedBefore );
-		ourEventDispatcher.dispatch ( 'updatetravelnotes' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'updatetravelnotes' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 }
 

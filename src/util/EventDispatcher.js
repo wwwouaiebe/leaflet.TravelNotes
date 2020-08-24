@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,20 +16,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- EventDispatcher.js file -------------------------------------------------------------------------------------------
-This file contains:
-	- the newEventDispatcher function
 Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20191125
+Doc reviewed 20200824
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file EventDispatcher.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module EventDispatcher
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -267,72 +281,81 @@ and when the geolocation marker must be removed from the map
 
 import { NOT_FOUND } from '../util/Constants.js';
 
-/*
---- newEventDispatcher function ---------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function returns the eventDispatcher object
+@function ourGetTarget
+@desc This method get the target of a event from the event name
+@param {string} eventName The name of the event
+@return {?document|HTMLElement} The target for the event name
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newEventDispatcher ( ) {
-
-	/*
-	--- myGetTarget function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetTarget ( eventName ) {
-		if ( NOT_FOUND <
-			[
-				'showitinerary',
-				'updateitinerary',
-				'showtravelnotes',
-				'updatetravelnotes',
-				'showsearch',
-				'updatesearch',
-				'setrouteslist',
-				'setprovider',
-				'providersadded',
-				'travelnameupdated',
-				'settransitmode'
-			].indexOf ( eventName )
-		) {
-			return document.getElementById ( 'TravelNotes-UI-MainDiv' );
-		}
-		else if ( NOT_FOUND <
-			[
-				'removeobject',
-				'removeallobjects',
-				'zoomto',
-				'additinerarypointmarker',
-				'addsearchpointmarker',
-				'addrectangle',
-				'addwaypoint',
-				'layerchange',
-				'geolocationstatuschanged',
-				'geolocationpositionchanged',
-				'routeupdated',
-				'routepropertiesupdated',
-				'noteupdated',
-				'roadbookupdate',
-				'profileclosed'
-			].indexOf ( eventName )
-		) {
-			return document;
-		}
-		return null;
+function ourGetTarget ( eventName ) {
+	if ( NOT_FOUND <
+		[
+			'showitinerary',
+			'updateitinerary',
+			'showtravelnotes',
+			'updatetravelnotes',
+			'showsearch',
+			'updatesearch',
+			'setrouteslist',
+			'setprovider',
+			'providersadded',
+			'travelnameupdated',
+			'settransitmode'
+		].indexOf ( eventName )
+	) {
+		return document.getElementById ( 'TravelNotes-UI-MainDiv' );
 	}
+	else if ( NOT_FOUND <
+		[
+			'removeobject',
+			'removeallobjects',
+			'zoomto',
+			'additinerarypointmarker',
+			'addsearchpointmarker',
+			'addrectangle',
+			'addwaypoint',
+			'layerchange',
+			'geolocationstatuschanged',
+			'geolocationpositionchanged',
+			'routeupdated',
+			'routepropertiesupdated',
+			'noteupdated',
+			'roadbookupdate',
+			'profileclosed'
+		].indexOf ( eventName )
+	) {
+		return document;
+	}
+	return null;
+}
 
-	/*
-	--- myDispatch function -------------------------------------------------------------------------------------------
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@class
+@classdesc This class contains methods fot dispatching events
+@see {@link theEventDispatcher} for the one and only one instance of this class
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class EventDispatcher {
+
+	/**
+	Creates and dispatch an event to the correct target
+	@param {string} eventName the name of the event
+	@param {Object} enventData An object to set as data property of the event
 	*/
 
-	function myDispatch ( eventName, eventData ) {
-		let target = myGetTarget ( eventName );
+	dispatch ( eventName, eventData ) {
+		let target = ourGetTarget ( eventName );
 		if ( target ) {
 			let dispatchedEvent = new Event ( eventName );
 			if ( eventData ) {
@@ -341,23 +364,26 @@ function newEventDispatcher ( ) {
 			target.dispatchEvent ( dispatchedEvent );
 		}
 	}
-
-	/*
-	--- eventDispatcher object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			dispatch : ( eventName, eventData ) => myDispatch ( eventName, eventData )
-		}
-	);
-
 }
 
-export { newEventDispatcher };
+const ourEventDispatcher = Object.freeze ( new EventDispatcher );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of EventDispatcher class
+	@type {EventDispatcher}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourEventDispatcher as theEventDispatcher
+};
 
 /*
---- End of EventDispatcher.js file ------------------------------------------------------------------------------------
+--- End of EventDispatcher.js file --------------------------------------------------------------------------------------------
 */

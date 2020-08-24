@@ -46,7 +46,7 @@ Tests ...
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
@@ -63,8 +63,6 @@ import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 */
 
 function ourNewViewerFileLoader ( ) {
-
-	let myEventDispatcher = newEventDispatcher ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -101,7 +99,7 @@ function ourNewViewerFileLoader ( ) {
 			let routesIterator = theTravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {
-					myEventDispatcher.dispatch (
+					theEventDispatcher.dispatch (
 						'routeupdated',
 						{
 							removedRouteObjId : INVALID_OBJ_ID,
@@ -111,7 +109,7 @@ function ourNewViewerFileLoader ( ) {
 				}
 			}
 			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-				myEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'routeupdated',
 					{
 						removedRouteObjId : INVALID_OBJ_ID,
@@ -121,7 +119,7 @@ function ourNewViewerFileLoader ( ) {
 			}
 			let notesIterator = theTravelNotesData.travel.notes.iterator;
 			while ( ! notesIterator.done ) {
-				myEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'noteupdated',
 					{
 						removedNoteObjId : INVALID_OBJ_ID,

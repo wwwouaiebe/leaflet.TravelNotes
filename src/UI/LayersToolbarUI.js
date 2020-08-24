@@ -89,7 +89,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
@@ -114,7 +114,6 @@ let ourLayers = [
 let ourTimerId = null;
 let ourLayersToolbar = null;
 let ourLayersToolbarButtonsDiv = null;
-let ourEventDispatcher = newEventDispatcher ( );
 let ourMarginTop = ZERO;
 let ourButtonHeight = ZERO;
 let ourButtonsHeight = ZERO;
@@ -186,7 +185,7 @@ function ourOnMouseEnterLinkButton ( mouseEnterEvent ) {
 */
 
 function ourOnClickLayerButton ( clickEvent ) {
-	ourEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
+	theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
 	theAttributionsUI.attributions = clickEvent.target.layer.attribution;
 	theTravelNotesData.travel.layerName = clickEvent.target.layer.name;
 }
@@ -408,7 +407,7 @@ class LayersToolbarUI {
 		);
 		ourLayersToolbar.addEventListener ( 'mouseenter', ourOnMouseEnterToolbar, false );
 		ourLayersToolbar.addEventListener ( 'mouseleave', ourOnMouseLeaveToolbar, false );
-		ourEventDispatcher.dispatch ( 'layerchange', { layer : ourLayers [ ZERO ] } );
+		theEventDispatcher.dispatch ( 'layerchange', { layer : ourLayers [ ZERO ] } );
 		theAttributionsUI.attributions = ourLayers [ ZERO ].attribution;
 	}
 
@@ -446,7 +445,7 @@ class LayersToolbarUI {
 				newLayer = ourLayers [ ZERO ];
 			}
 		}
-		ourEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
+		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
 		theTravelNotesData.travel.layerName = newLayer.name;
 	}

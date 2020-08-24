@@ -50,7 +50,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { newObjId } from '../data/ObjId.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 let ourOsmSearchStarted = false;
@@ -79,9 +79,9 @@ function ourDrawPreviousSearchRectangle ( ) {
 		ourPreviousSearchRectangleObjId = newObjId ( );
 	}
 	else {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
+		theEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
 	}
-	newEventDispatcher ( ).dispatch (
+	theEventDispatcher.dispatch (
 		'addrectangle',
 		{
 			objId : ourPreviousSearchRectangleObjId,
@@ -111,7 +111,7 @@ function ourOnSearchSuccess ( searchData ) {
 	theTravelNotesData.searchData = searchData;
 	ourOsmSearchStarted = false;
 	ourDrawPreviousSearchRectangle ( );
-	newEventDispatcher ( ).dispatch ( 'showsearch' );
+	theEventDispatcher.dispatch ( 'showsearch' );
 }
 
 /**
@@ -128,7 +128,7 @@ function ourOnSearchError ( err ) {
 	console.log ( err ? err : 'An error occurs in the search' );
 	ourOsmSearchStarted = false;
 	theTravelNotesData.searchData = [];
-	newEventDispatcher ( ).dispatch ( 'showsearch' );
+	theEventDispatcher.dispatch ( 'showsearch' );
 }
 
 /**
@@ -151,9 +151,9 @@ function ourOnMapChange ( ) {
 		ourNextSearchRectangleObjId = newObjId ( );
 	}
 	else {
-		newEventDispatcher ( ).dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
+		theEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
 	}
-	newEventDispatcher ( ).dispatch (
+	theEventDispatcher.dispatch (
 		'addrectangle',
 		{
 			objId : ourNextSearchRectangleObjId,
@@ -244,7 +244,7 @@ function ourNewOsmSearchEngine ( ) {
 		*/
 
 		hide ( ) {
-			let eventDispatcher = newEventDispatcher ( );
+			let eventDispatcher = theEventDispatcher;
 			theTravelNotesData.map.off ( 'zoom', ourOnMapChange );
 			theTravelNotesData.map.off ( 'move', ourOnMapChange );
 			if ( INVALID_OBJ_ID !== ourNextSearchRectangleObjId ) {

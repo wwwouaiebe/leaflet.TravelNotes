@@ -49,6 +49,7 @@ import { theConfig } from '../data/Config.js';
 import { theCurrentVersion } from '../data/Version.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
@@ -97,6 +98,7 @@ import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
+import { newProfileWindow } from '../dialogs/ProfileWindow.js';
 import { newRoute } from '../data/Route.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
@@ -138,6 +140,7 @@ class Globals {
 	get newPasswordDialog ( ) { return newPasswordDialog; }
 	get newPrintRouteMapDialog ( ) { return newPrintRouteMapDialog; }
 	get newProfileFactory ( ) { return newProfileFactory; }
+	get newProfileWindow ( ) { return newProfileWindow; }
 	get newRoute ( ) { return newRoute; }
 	get newRouteContextMenu ( ) { return newRouteContextMenu; }
 	get newRoutePropertiesDialog ( ) { return newRoutePropertiesDialog; }
@@ -158,6 +161,7 @@ class Globals {
 	get theCurrentVersion ( ) { return theCurrentVersion; }
 	get theDataSearchEngine ( ) { return theDataSearchEngine; }
 	get theErrorsUI ( ) { return theErrorsUI; }
+	get theEventDispatcher ( ) { return theEventDispatcher; }
 	get theGeoLocator ( ) { return theGeoLocator; }
 	get theHTMLElementsFactory ( ) { return theHTMLElementsFactory; }
 	get theHTMLViewsFactory ( ) { return theHTMLViewsFactory; }

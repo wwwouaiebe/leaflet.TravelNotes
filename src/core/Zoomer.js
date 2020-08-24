@@ -46,7 +46,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
@@ -63,8 +63,6 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 */
 
 function ourNewZoomer ( ) {
-
-	let myEventDispatcher = newEventDispatcher ( );
 
 	let myGeometry = [];
 
@@ -126,7 +124,7 @@ function ourNewZoomer ( ) {
 				theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).itineraryPointObjId;
 			let latLng =
 				theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng;
-			myEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
+			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
 		}
 
 		/**
@@ -138,7 +136,7 @@ function ourNewZoomer ( ) {
 		zoomToNote ( noteObjId ) {
 			myGeometry = [];
 			myPushNoteGeometry ( theDataSearchEngine.getNoteAndRoute ( noteObjId ).note );
-			myEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'zoomto',
 				{
 					geometry : [ myGeometry ]
@@ -157,7 +155,7 @@ function ourNewZoomer ( ) {
 
 			myPushRouteGeometry ( theDataSearchEngine.getRoute ( routeObjId ) );
 
-			myEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'zoomto',
 				{
 					geometry : [ myGeometry ]
@@ -181,7 +179,7 @@ function ourNewZoomer ( ) {
 			theTravelNotesData.travel.notes.forEach (
 				note => myPushNoteGeometry ( note )
 			);
-			myEventDispatcher.dispatch (
+			theEventDispatcher.dispatch (
 				'zoomto',
 				{
 					geometry : [ myGeometry ]
@@ -196,7 +194,7 @@ function ourNewZoomer ( ) {
 		*/
 
 		zoomToPoi ( poi ) {
-			myEventDispatcher.dispatch ( 'zoomto', poi );
+			theEventDispatcher.dispatch ( 'zoomto', poi );
 		}
 	}
 

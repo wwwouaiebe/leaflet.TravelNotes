@@ -31,7 +31,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newGeometry } from '../util/Geometry.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
@@ -77,24 +77,10 @@ function ourNewProfileWindow ( ) {
 	let myElevText = null;
 	let myAscentText = null;
 	let myDistanceText = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class ProfileWindow
-	@classdesc This class show the profile of a route in a floating window
-	@see {@link newProfileWindow} for constructor
-	@augments FloatWindow
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
 	let myProfileWindow = null;
 	let myAscentDiv = null;
 	let myRoute = null;
 	let myGeometry = newGeometry ( );
-	let myEventDispatcher = newEventDispatcher ( );
 	let myUtilities = newUtilities ( );
 
 	/**
@@ -143,7 +129,7 @@ function ourNewProfileWindow ( ) {
 		mouseEvent.stopPropagation ( );
 		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
-			myEventDispatcher.dispatch ( 'zoomto', { latLng : latLngElevOnRoute.latLng }	);
+			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLngElevOnRoute.latLng }	);
 		}
 	}
 
@@ -196,8 +182,8 @@ function ourNewProfileWindow ( ) {
 			const THREE = 3;
 
 			// itinerary point marker on the map
-			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
-			myEventDispatcher.dispatch (
+			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+			theEventDispatcher.dispatch (
 				'additinerarypointmarker',
 				{
 					objId : myLatLngObjId,
@@ -298,7 +284,7 @@ function ourNewProfileWindow ( ) {
 			mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
 			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
-			myEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
 
 			myProfileWindow.content.removeChild ( myAscentDiv );
 			myProfileWindow.content.removeChild ( mySvg );
@@ -324,7 +310,7 @@ function ourNewProfileWindow ( ) {
 
 	function myOnClose ( ) {
 		myClean ( );
-		myEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'profileclosed',
 			{
 				objId : myRoute.objId
@@ -372,8 +358,25 @@ function ourNewProfileWindow ( ) {
 		myProfileWindow.content.appendChild ( myAscentDiv );
 	}
 
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class ProfileWindow
+	@classdesc a float window containing a route profile
+	@see {@link newProfileWindow} for constructor
+	@augments FloatWindow
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	myProfileWindow = newFloatWindow ( );
 	myProfileWindow.createWindow ( );
+
+	/**
+	aaaaaaaaaaaaaa
+	*/
+
 	myProfileWindow.onClose = myOnClose;
 	myProfileWindow.update = myUpdate;
 
@@ -381,6 +384,17 @@ function ourNewProfileWindow ( ) {
 }
 
 export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newProfileWindow
+	@desc constructor of newProfileWindow objects
+	@return {ProfileWindow} an instance of a ProfileWindow object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	ourNewProfileWindow as newProfileWindow
 };

@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
@@ -52,7 +52,6 @@ import { newZoomer } from '../core/Zoomer.js';
 import { ZERO } from '../util/Constants.js';
 
 let ourLayersToolbar = null;
-let ourEventDispatcher = newEventDispatcher ( );
 
 let ourLayers = [
 	{
@@ -83,7 +82,7 @@ let ourLayers = [
 
 function ourOnLayerButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	ourEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
+	theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
 	theAttributionsUI.attributions = clickEvent.target.layer.attribution;
 }
 
@@ -205,7 +204,7 @@ class ViewerLayersToolbarUI {
 
 	setLayer ( layerName ) {
 		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
-		ourEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
+		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
 	}
 

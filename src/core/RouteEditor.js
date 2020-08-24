@@ -78,7 +78,7 @@ import { newRoute } from '../data/Route.js';
 import { newGpxFactory } from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
@@ -87,7 +87,6 @@ import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '.
 
 let ourMustZoomToRouteAfterRouting = false;
 let ourRoutingRequestStarted = false;
-let ourEventDispatcher = newEventDispatcher ( );
 let ourGeometry = newGeometry ( );
 
 /**
@@ -264,7 +263,7 @@ function ourOnRoutingOk ( ) {
 
 	theProfileWindowsManager.createProfile ( theTravelNotesData.travel.editedRoute );
 
-	ourEventDispatcher.dispatch (
+	theEventDispatcher.dispatch (
 		'routeupdated',
 		{
 			removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
@@ -272,10 +271,10 @@ function ourOnRoutingOk ( ) {
 		}
 	);
 
-	ourEventDispatcher.dispatch ( 'roadbookupdate' );
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
 
 	// and the itinerary and waypoints are displayed
-	ourEventDispatcher.dispatch ( 'showitinerary' );
+	theEventDispatcher.dispatch ( 'showitinerary' );
 }
 
 /**
@@ -307,8 +306,8 @@ class RouteEditor {
 		theTravelNotesData.travel.routes.add ( route );
 		if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
 			ourChainRoutes ( );
-			ourEventDispatcher.dispatch ( 'setrouteslist' );
-			ourEventDispatcher.dispatch ( 'roadbookupdate' );
+			theEventDispatcher.dispatch ( 'setrouteslist' );
+			theEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
 		else {
 			this.editRoute ( route.objId );
@@ -368,11 +367,11 @@ class RouteEditor {
 
 		// Provider and transit mode are changed in the itinerary editor
 		if ( providerName && '' !== providerName ) {
-			ourEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+			theEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 		}
 		let transitMode = initialRoute.itinerary.transitMode;
 		if ( transitMode && '' !== transitMode ) {
-			ourEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+			theEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 		}
 
 		// The edited route is pushed in the editors
@@ -389,7 +388,7 @@ class RouteEditor {
 			theTravelNotesData.travel.editedRoute
 		);
 		ourChainRoutes ( );
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
 				removedRouteObjId : initialRoute.objId,
@@ -397,9 +396,9 @@ class RouteEditor {
 			}
 		);
 
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
-		ourEventDispatcher.dispatch ( 'showitinerary' );
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/**
@@ -432,7 +431,7 @@ class RouteEditor {
 
 		}
 
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
 				removedRouteObjId : routeToDeleteObjId,
@@ -444,8 +443,8 @@ class RouteEditor {
 		theProfileWindowsManager.deleteProfile ( routeToDeleteObjId );
 		ourChainRoutes ( );
 
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/**
@@ -457,8 +456,8 @@ class RouteEditor {
 
 	removeManeuver ( maneuverObjId ) {
 		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
-		ourEventDispatcher.dispatch ( 'showitinerary' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
@@ -544,7 +543,7 @@ class RouteEditor {
 			editedRoute
 		);
 
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
 				removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
@@ -556,9 +555,9 @@ class RouteEditor {
 		theTravelNotesData.travel.editedRoute = newRoute ( );
 		ourChainRoutes ( );
 
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
 	}
 
 	/**
@@ -579,16 +578,16 @@ class RouteEditor {
 			( ) => {
 				ourChainRoutes ( );
 				if ( ourHaveValidWayPoints ( route ) ) {
-					ourEventDispatcher.dispatch (
+					theEventDispatcher.dispatch (
 						'routepropertiesupdated',
 						{
 							routeObjId : route.objId
 						}
 					);
 				}
-				ourEventDispatcher.dispatch ( 'roadbookupdate' );
-				ourEventDispatcher.dispatch ( 'setrouteslist' );
-				ourEventDispatcher.dispatch ( 'updateitinerary' );
+				theEventDispatcher.dispatch ( 'roadbookupdate' );
+				theEventDispatcher.dispatch ( 'setrouteslist' );
+				theEventDispatcher.dispatch ( 'updateitinerary' );
 			}
 		)
 			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
@@ -614,14 +613,14 @@ class RouteEditor {
 
 	showRoute ( routeObjId ) {
 		theDataSearchEngine.getRoute ( routeObjId ).hidden = false;
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
 				removedRouteObjId : INVALID_OBJ_ID,
 				addedRouteObjId : routeObjId
 			}
 		);
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/**
@@ -631,14 +630,14 @@ class RouteEditor {
 
 	hideRoute ( routeObjId ) {
 		theDataSearchEngine.getRoute ( routeObjId ).hidden = true;
-		ourEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
 				removedRouteObjId : routeObjId,
 				addedRouteObjId : INVALID_OBJ_ID
 			}
 		);
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/**
@@ -650,7 +649,7 @@ class RouteEditor {
 		while ( ! routesIterator.done ) {
 			if ( routesIterator.value.hidden ) {
 				routesIterator.value.hidden = false;
-				ourEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'routeupdated',
 					{
 						removedRouteObjId : INVALID_OBJ_ID,
@@ -659,7 +658,7 @@ class RouteEditor {
 				);
 			}
 		}
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
 	/**
@@ -675,7 +674,7 @@ class RouteEditor {
 				routesIterator.value.objId !== theTravelNotesData.editedRouteObjId
 			) {
 				routesIterator.value.hidden = true;
-				ourEventDispatcher.dispatch (
+				theEventDispatcher.dispatch (
 					'routeupdated',
 					{
 						removedRouteObjId : routesIterator.value.objId,
@@ -684,7 +683,7 @@ class RouteEditor {
 				);
 			}
 		}
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 }
 

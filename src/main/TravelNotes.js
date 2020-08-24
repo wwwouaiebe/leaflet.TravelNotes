@@ -78,7 +78,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { theCurrentVersion } from '../data/Version.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
@@ -92,7 +92,6 @@ import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, TWO } from '../util/Constants.js';
 import { theGlobals } from '../main/Globals.js';
 
-let ourEventDispatcher = newEventDispatcher ( );
 let ourTravelNotesLoaded = false;
 
 /**
@@ -374,8 +373,8 @@ class TravelNotes {
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}
-		ourEventDispatcher.dispatch ( 'setrouteslist' );
-		ourEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		theTravelNotesData.map.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
 		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 	}

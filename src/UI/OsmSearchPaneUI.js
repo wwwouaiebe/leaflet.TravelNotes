@@ -54,7 +54,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 
 import { LAT_LNG, PANE_ID } from '../util/Constants.js';
@@ -73,7 +73,6 @@ import { LAT_LNG, PANE_ID } from '../util/Constants.js';
 function ourNewOsmSearchPaneUI ( ) {
 	const MIN_RANKING = 1536;
 	let myOsmSearchEngine = newOsmSearchEngine ( );
-	let myEventDispatcher = newEventDispatcher ( );
 	let myPaneDataDiv = null;
 	let myPaneControlDiv = null;
 	let mySearchInputValue = '';
@@ -123,7 +122,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnSearchResultMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		myEventDispatcher.dispatch (
+		theEventDispatcher.dispatch (
 			'addsearchpointmarker',
 			{
 				objId : mouseEvent.target.objId,
@@ -145,7 +144,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnSearchResultMouseLeave ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		myEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
+		theEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
 	}
 
 	/**

@@ -65,7 +65,7 @@ import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
@@ -75,7 +75,6 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
-let ourEventDispatcher = newEventDispatcher ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -172,7 +171,7 @@ function ourResetAPIKeys ( APIKeys ) {
 		provider => { provider.providerKey = ( ourGetKey ( provider.name ) || '' ); }
 	);
 
-	ourEventDispatcher.dispatch ( 'providersadded' );
+	theEventDispatcher.dispatch ( 'providersadded' );
 }
 
 /**
@@ -270,7 +269,7 @@ class APIKeysManager {
 
 		// Try first to restore keys from storage
 		if ( ZERO !== ourSetKeysFromSessionStorage ( ) ) {
-			ourEventDispatcher.dispatch ( 'providersadded' );
+			theEventDispatcher.dispatch ( 'providersadded' );
 			return;
 		}
 

@@ -59,7 +59,7 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -75,8 +75,6 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 */
 
 function ourNewFileLoader ( ) {
-
-	let myEventDispatcher = newEventDispatcher ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -101,14 +99,14 @@ function ourNewFileLoader ( ) {
 	function myDisplay ( ) {
 
 		// the map is cleaned
-		myEventDispatcher.dispatch ( 'removeallobjects' );
+		theEventDispatcher.dispatch ( 'removeallobjects' );
 
 		newViewerFileLoader ( ).display ( );
 
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and HTML pages are filled
-		myEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'setrouteslist' );
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 			if (
@@ -129,17 +127,17 @@ function ourNewFileLoader ( ) {
 
 				// Provider and transit mode are changed in the itinerary editor
 				let transitMode = theTravelNotesData.travel.editedRoute.itinerary.transitMode;
-				myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+				theEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 
 				if ( transitMode && '' !== transitMode ) {
-					myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+					theEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 				}
 			}
 		}
 		theRouteEditor.chainRoutes ( );
 
-		myEventDispatcher.dispatch ( 'showitinerary' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
