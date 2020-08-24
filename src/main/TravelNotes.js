@@ -93,7 +93,7 @@ import { LAT_LNG, TWO } from '../util/Constants.js';
 import { theGlobals } from '../main/Globals.js';
 
 let ourEventDispatcher = newEventDispatcher ( );
-let outTravelNotesLoaded = false;
+let ourTravelNotesLoaded = false;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -319,10 +319,10 @@ class TravelNotes {
 	*/
 
 	addReadOnlyMap ( map, travelUrl ) {
-		if ( outTravelNotesLoaded ) {
+		if ( ourTravelNotesLoaded ) {
 			return;
 		}
-		outTravelNotesLoaded = true;
+		ourTravelNotesLoaded = true;
 		ourAddEventsListeners ( );
 		if ( map ) {
 			theTravelNotesData.map = map;
@@ -350,10 +350,10 @@ class TravelNotes {
 	*/
 
 	addControl ( map, divControlId ) {
-		if ( outTravelNotesLoaded ) {
+		if ( ourTravelNotesLoaded ) {
 			return;
 		}
-		outTravelNotesLoaded = true;
+		ourTravelNotesLoaded = true;
 		ourAddEventsListeners ( );
 		ourAddUnloadEventsListeners ( );
 		if ( map ) {
@@ -450,6 +450,17 @@ class TravelNotes {
 const ourTravelNotes = Object.seal ( new TravelNotes );
 
 export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of TravelNotes class
+	@type {TravelNotes}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	ourTravelNotes as theTravelNotes
 };
