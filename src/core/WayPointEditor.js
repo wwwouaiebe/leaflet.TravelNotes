@@ -72,10 +72,8 @@ import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
-
-let ourGeometry = newGeometry ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -182,7 +180,7 @@ class WayPointEditor {
 	*/
 
 	addWayPointOnRoute ( initialLatLng, finalLatLng ) {
-		let newWayPointDistance = ourGeometry.getClosestLatLngDistance (
+		let newWayPointDistance = theGeometry.getClosestLatLngDistance (
 			theTravelNotesData.travel.editedRoute,
 			initialLatLng
 		).distance;
@@ -201,7 +199,7 @@ class WayPointEditor {
 
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			let latLngDistance = ourGeometry.getClosestLatLngDistance (
+			let latLngDistance = theGeometry.getClosestLatLngDistance (
 				theTravelNotesData.travel.editedRoute,
 				wayPointsIterator.value.latLng
 			);

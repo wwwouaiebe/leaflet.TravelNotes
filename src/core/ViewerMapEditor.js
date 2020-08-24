@@ -59,11 +59,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L  */
+/* global L */
 
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
@@ -89,7 +89,7 @@ let ourGeolocationCircle = null;
 
 function ourOnRouteMouseOverOrMove ( mapEvent ) {
 	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
-	let distance = newGeometry ( ).getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
+	let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
 		.distance;
 	distance += route.chainedDistance;
 	distance = newUtilities ( ).formatDistance ( distance );
@@ -343,7 +343,7 @@ class ViewerMapEditor {
 		if ( geometry ) {
 			let latLngs = [];
 			geometry.forEach ( geometryPart => latLngs = latLngs.concat ( geometryPart ) );
-			theTravelNotesData.map.fitBounds ( newGeometry ( ).getLatLngBounds ( latLngs ) );
+			theTravelNotesData.map.fitBounds ( theGeometry.getLatLngBounds ( latLngs ) );
 		}
 		else {
 			theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );

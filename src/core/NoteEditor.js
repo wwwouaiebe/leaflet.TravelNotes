@@ -64,7 +64,7 @@ import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import { newNote } from '../data/Note.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
@@ -73,7 +73,6 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
-let ourGeometry = newGeometry ( );
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
 let ourManeuverLength = ZERO;
@@ -107,7 +106,7 @@ function ourNewNoteFromOsmData ( osmNoteData, route ) {
 	}
 	note.latLng = osmNoteData.latLng;
 	note.iconLatLng = osmNoteData.latLng;
-	note.distance = ourGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
+	note.distance = theGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
 	note.chainedDistance = route.chainedDistance;
 	route.notes.add ( note );
 	theEventDispatcher.dispatch (
@@ -336,7 +335,7 @@ class NoteEditor {
 		let route = theDataSearchEngine.getRoute ( routeObjId );
 
 		// the nearest point and distance on the route is searched
-		let latLngDistance = ourGeometry.getClosestLatLngDistance (
+		let latLngDistance = theGeometry.getClosestLatLngDistance (
 			route,
 			[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
 		);
@@ -547,9 +546,9 @@ class NoteEditor {
 		let newNoteDistance = null;
 		theTravelNotesData.travel.routes.forEach (
 			route => {
-				let pointAndDistance = ourGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
+				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = ourGeometry.pointsDistance (
+					let distanceToRoute = theGeometry.pointsDistance (
 						noteAndRoute.note.latLng,
 						pointAndDistance.latLng
 					);

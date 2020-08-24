@@ -63,7 +63,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L  */
+/* global L */
 
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -73,7 +73,7 @@ import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -86,8 +86,6 @@ const WAY_POINT_ICON_SIZE = 40;
 let ourTempWayPointMarker = null;
 let ourTempWayPointInitialLatLng = null;
 let ourTempWayPointShowDragTooltip = 1;
-
-let ourGeometry = newGeometry ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -196,7 +194,7 @@ function ourOnNoteBulletDragEnd ( dragEndEvent ) {
 
 		// the note is attached to the route, so we have to find the nearest point on the route
 		// and the distance since the start of the route
-		let latLngDistance = ourGeometry.getClosestLatLngDistance (
+		let latLngDistance = theGeometry.getClosestLatLngDistance (
 			route,
 			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
 		);
@@ -763,7 +761,7 @@ class MapEditor	{
 			geometry.forEach (
 				geometryPart => { latLngs = latLngs.concat ( geometryPart ); }
 			);
-			let geometryBounds = ourGeometry.getLatLngBounds ( latLngs );
+			let geometryBounds = theGeometry.getLatLngBounds ( latLngs );
 			let mapBounds = theTravelNotesData.map.getBounds ( );
 			showGeometry =
 				(

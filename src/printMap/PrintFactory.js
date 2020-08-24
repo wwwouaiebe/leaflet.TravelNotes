@@ -39,7 +39,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -65,10 +65,7 @@ function newPrintFactory ( ) {
 	let myViews = [];
 	let myViewCounter = 0;
 	let myRoutePolyline = null;
-
 	let myBody = document.querySelector ( 'body' );
-
-	let myGeometry = newGeometry ( );
 	let myTilesPage = 0;
 
 	/*
@@ -124,8 +121,8 @@ function newPrintFactory ( ) {
 		);
 		const TILE_SIZE = 256;
 		myTilesPage = Math.ceil ( dummyDiv.clientWidth / TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / TILE_SIZE );
-		let topLeftScreen = myGeometry.screenCoordToLatLng ( ZERO, ZERO );
-		let bottomRightScreen = myGeometry.screenCoordToLatLng (
+		let topLeftScreen = theGeometry.screenCoordToLatLng ( ZERO, ZERO );
+		let bottomRightScreen = theGeometry.screenCoordToLatLng (
 			dummyDiv.clientWidth,
 			dummyDiv.clientHeight
 		);

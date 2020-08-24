@@ -30,7 +30,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { newObjId } from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newUtilities } from '../util/Utilities.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
@@ -80,7 +80,6 @@ function ourNewProfileWindow ( ) {
 	let myProfileWindow = null;
 	let myAscentDiv = null;
 	let myRoute = null;
-	let myGeometry = newGeometry ( );
 	let myUtilities = newUtilities ( );
 
 	/**
@@ -111,7 +110,7 @@ function ourNewProfileWindow ( ) {
 						( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
 					) * clientRect.width )
 			) * myRoute.distance;
-		return myGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+		return theGeometry.getLatLngElevAtDist ( myRoute, routeDist );
 	}
 
 	/**

@@ -79,7 +79,7 @@ import { newGpxFactory } from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { newPrintFactory } from '../printMap/PrintFactory.js';
@@ -87,7 +87,6 @@ import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '.
 
 let ourMustZoomToRouteAfterRouting = false;
 let ourRoutingRequestStarted = false;
-let ourGeometry = newGeometry ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -116,7 +115,7 @@ function ourComputeRouteDistances ( route ) {
 	route.duration = DISTANCE.defaultValue;
 
 	while ( ! itineraryPointsIterator.done ) {
-		itineraryPointsIterator.previous.distance = ourGeometry.pointsDistance (
+		itineraryPointsIterator.previous.distance = theGeometry.pointsDistance (
 			itineraryPointsIterator.previous.latLng,
 			itineraryPointsIterator.value.latLng
 		);
@@ -231,7 +230,7 @@ function ourOnRoutingOk ( ) {
 					theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
 			}
 			else {
-				wayPointsIterator.value.latLng = newGeometry ( ).getClosestLatLngDistance (
+				wayPointsIterator.value.latLng = theGeometry.getClosestLatLngDistance (
 					theTravelNotesData.travel.editedRoute,
 					wayPointsIterator.value.latLng
 				).latLng;
@@ -242,7 +241,7 @@ function ourOnRoutingOk ( ) {
 	// the position of the notes linked to the route is recomputed
 	let notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
 	while ( ! notesIterator.done ) {
-		let latLngDistance = ourGeometry.getClosestLatLngDistance (
+		let latLngDistance = theGeometry.getClosestLatLngDistance (
 			theTravelNotesData.travel.editedRoute,
 			notesIterator.value.latLng
 		);

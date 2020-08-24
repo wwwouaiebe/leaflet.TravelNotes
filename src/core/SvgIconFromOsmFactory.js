@@ -66,7 +66,7 @@ This will be used for the note address
 
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theGeometry } from '../util/Geometry.js';
 import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
@@ -96,7 +96,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	const ON_ROUTE = 0;
 	const AT_END = 1;
 
-	let myGeometry = newGeometry ( );
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -194,7 +193,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// Iteration on the points...
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				let itineraryPointDistance = myGeometry.pointsDistance ( mySvgLatLngDistance.latLng, itineraryPoint.latLng );
+				let itineraryPointDistance = theGeometry.pointsDistance ( mySvgLatLngDistance.latLng, itineraryPoint.latLng );
 				if ( minDistance > itineraryPointDistance ) {
 					minDistance = itineraryPointDistance;
 					myNearestItineraryPoint = itineraryPoint;
@@ -223,7 +222,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let minDistance = Number.MAX_VALUE;
 		myPlaces.forEach (
 			place => {
-				let placeDistance = myGeometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
+				let placeDistance = theGeometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
 				if ( minDistance > placeDistance ) {
 					minDistance = placeDistance;
 					myPlace = place.tags.name;
@@ -316,21 +315,21 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		myNodesMap.forEach (
 			node => {
 				if ( myNearestItineraryPoint ) {
-					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
+					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
 					if ( nodeDistance < svgNodeDistance ) {
 						svgPointId = node.id;
 						svgNodeDistance = nodeDistance;
 					}
 				}
 				if ( incomingItineraryPoint ) {
-					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
+					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
 					if ( nodeDistance < incomingNodeDistance ) {
 						incomingNodeId = node.id;
 						incomingNodeDistance = nodeDistance;
 					}
 				}
 				if ( outgoingItineraryPoint ) {
-					nodeDistance = myGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
+					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
 					if ( nodeDistance < outgoingNodeDistance ) {
 						outgoingNodeId = node.id;
 						outgoingNodeDistance = nodeDistance;
@@ -455,9 +454,9 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	*/
 
 	function myComputeTranslation ( ) {
-		myTranslation = myGeometry.subtrackPoints (
+		myTranslation = theGeometry.subtrackPoints (
 			[ theConfig.note.svgIconWidth / TWO, theConfig.note.svgIconWidth / TWO ],
-			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
+			theGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
 		);
 	}
 
@@ -494,15 +493,15 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		let iconPoint = myGeometry.addPoints (
-			myGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom ),
+		let iconPoint = theGeometry.addPoints (
+			theGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom ),
 			myTranslation
 		);
 
 		// computing rotation... if possible
 		if ( myNearestItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.first.objId ) {
-			let rotationPoint = myGeometry.addPoints (
-				myGeometry.project ( rotationItineraryPoint.latLng, mySvgZoom ),
+			let rotationPoint = theGeometry.addPoints (
+				theGeometry.project ( rotationItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
 			);
 			myRotation =
@@ -527,8 +526,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// computing direction ... if possible
 
 		if ( myNearestItineraryPoint.objId !== myRoute.itinerary.itineraryPoints.last.objId ) {
-			let directionPoint = myGeometry.addPoints (
-				myGeometry.project ( directionItineraryPoint.latLng, mySvgZoom ),
+			let directionPoint = theGeometry.addPoints (
+				theGeometry.project ( directionItineraryPoint.latLng, mySvgZoom ),
 				myTranslation
 			);
 			myDirection = Math.atan (
@@ -646,7 +645,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				index ++;
-				let point = myGeometry.addPoints ( myGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
+				let point = theGeometry.addPoints ( theGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
 				points.push ( point );
 				let pointIsInside =
 					point [ ZERO ] >= ZERO && point [ ONE ] >= ZERO
@@ -713,8 +712,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 					nodeId => {
 						index ++;
 						let node = myNodesMap.get ( nodeId );
-						let point = myGeometry.addPoints (
-							myGeometry.project ( [ node.lat, node.lon ], mySvgZoom ),
+						let point = theGeometry.addPoints (
+							theGeometry.project ( [ node.lat, node.lon ], mySvgZoom ),
 							myTranslation
 						);
 						points.push ( point );

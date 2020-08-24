@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- Geometry.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the newGeometry function
 Changes:
 	- v1.6.0:
 		- created
@@ -27,10 +24,8 @@ Changes:
 		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
-Doc reviewed 20191125
+Doc reviewed 20200824
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -48,11 +43,23 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} LatLngElevOnRoute
-@desc An object to store the LatLng, elevation, ascent and distance of a point on a route
+@desc An object to store the latitude, longitude, elevation, ascent and distance of a point on a route
 @property {Array.<number>} latLng The latitude and longitude of the point
 @property {number} elev The elevation of the point
 @property {number} ascent The ascent since the previous ItineraryPoint
 @property {number} routeDistance The distance since the beginning of the route
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} LatLngDistance
+@desc An object to store a latitude, longitude and distance
+@property {Array.<number>} latLng The latitude and longitude
+@property {number} distance The distance
 @public
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -70,36 +77,53 @@ Tests ...
 /* global L */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-
 import { DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
-/*
---- newGeometry function ----------------------------------------------------------------------------------------------
+const DEGREE_180 = 180;
+const DEGREE_360 = 360;
+const DEGREE_540 = 540;
 
-Patterns : Closure
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function myNormalizeLng
+@desc This function normalize a longitude (always between -180° and 180°)
+@param {number} Lng The longitude to normalize
+@return {number} The normalized longitude
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newGeometry ( ) {
+function myNormalizeLng ( Lng ) {
+	return ( ( Lng + DEGREE_540 ) % DEGREE_360 ) - DEGREE_180;
+}
 
-	const DEGREE_180 = 180;
-	const DEGREE_360 = 360;
-	const DEGREE_540 = 540;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myGetLatLngElevAtDist function --------------------------------------------------------------------------------
+@class
+@classdesc This class contains methods fot geometry operations requiring call to Leaflet functions
+@see {@link theGeometry} for the one and only one instance of this class
+@hideconstructor
 
-	This function ...
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	-------------------------------------------------------------------------------------------------------------------
+class Geometry {
+
+	/**
+	Compute the latitude, longitude, elevation, ascent and distance of a point on a route when only the distance between
+	the beginning of the route and the point is know
+	@param {Route} route The route
+	@param {number} distance The distance (units: meter)
+	@return {LatLngElevOnRoute} A LatLngElevOnRoute with the desired values
 	*/
 
-	function myGetLatLngElevAtDist ( route, distance ) {
+	getLatLngElevAtDist ( route, distance ) {
 		if ( route.distance <= distance || ZERO >= distance ) {
 			return null;
 		}
-
 		let nearestDistance = 0;
 		let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
 		while ( nearestDistance < distance && ! itineraryPointsIterator.done ) {
@@ -130,16 +154,66 @@ function newGeometry ( ) {
 		);
 	}
 
-	/*
-	--- myGetLatLngBounds function ------------------------------------------------------------------------------------
-
-	This function build a L.latLngBounds object from an array of points
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This function search the nearest point on a route from a given point and compute the distance
+	between the beginning of the route and the nearest point
+	@param {Route} route The route object to be used
+	@param {Array.<number>} latLng The latitude and longitude of the point
+	@return {LatLngDistance} An object with the latitude, longitude and distance
 	*/
 
-	function myGetLatLngBounds ( latLngs ) {
+	getClosestLatLngDistance ( route, latLng ) {
+		if ( ZERO === route.itinerary.itineraryPoints.length ) {
+			return null;
+		}
+		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
+		itineraryPointIterator.done;
+		let minDistance = Number.MAX_VALUE;
 
+		// projections of points are made
+		let point = L.Projection.SphericalMercator.project (
+			L.latLng ( latLng [ ZERO ], latLng [ ONE ] ) );
+		let point1 = L.Projection.SphericalMercator.project (
+			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+		);
+		let closestLatLng = null;
+		let closestDistance = DISTANCE.defaultValue;
+		let endSegmentDistance = itineraryPointIterator.value.distance;
+		while ( ! itineraryPointIterator.done ) {
+			let point2 = L.Projection.SphericalMercator.project (
+				L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+			);
+			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+			if ( distance < minDistance ) {
+				minDistance = distance;
+				closestLatLng = L.Projection.SphericalMercator.unproject (
+					L.LineUtil.closestPointOnSegment ( point, point1, point2 )
+				);
+				closestDistance =
+					endSegmentDistance -
+					closestLatLng.distanceTo (
+						L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+					);
+			}
+			endSegmentDistance += itineraryPointIterator.value.distance;
+			point1 = point2;
+		}
+
+		return Object.freeze (
+			{
+				latLng : [ closestLatLng.lat, closestLatLng.lng ],
+				distance : closestDistance
+			}
+		);
+	}
+
+	/**
+	This method build a L.latLngBounds object from an array of points
+	@param {Array.<Array.<number>>} latLngs the array of latitude and longitude
+	@return {Object} a Leaflet latLngBounds object
+	*/
+
+	getLatLngBounds ( latLngs ) {
 		const MAX_LAT = 90;
 		const MIN_LAT = -90;
 		const MAX_LNG = 180;
@@ -158,111 +232,17 @@ function newGeometry ( ) {
 		return L.latLngBounds ( sw, ne );
 	}
 
-	/*
-	--- myGetClosestLatLngDistance function ---------------------------------------------------------------------------
-
-	This function search the nearest point on a route from a given point and compute the distance
-	between the beginning of the route and the nearest point
-
-	parameters:
-	- route : the TravelNotes route object to be used
-	- latLng : the coordinates of the point
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetClosestLatLngDistance ( route, latLng ) {
-
-		if ( ZERO === route.itinerary.itineraryPoints.length ) {
-			return null;
-		}
-
-		// an iterator on the route points is created...
-		let itineraryPointIterator = route.itinerary.itineraryPoints.iterator;
-
-		// ... and placed on the first point
-		itineraryPointIterator.done;
-
-		// the smallest distance is initialized ...
-		let minDistance = Number.MAX_VALUE;
-
-		// projections of points are made
-		let point = L.Projection.SphericalMercator.project (
-			L.latLng ( latLng [ ZERO ], latLng [ ONE ] ) );
-		let point1 = L.Projection.SphericalMercator.project (
-			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
-		);
-
-		// variables initialization
-		let closestLatLng = null;
-		let closestDistance = DISTANCE.defaultValue;
-		let endSegmentDistance = itineraryPointIterator.value.distance;
-
-		// iteration on the route points
-		while ( ! itineraryPointIterator.done ) {
-
-			// projection of the second point...
-			let point2 = L.Projection.SphericalMercator.project (
-				L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
-			);
-
-			// and distance is computed
-			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
-			if ( distance < minDistance ) {
-
-				// we have found the smallest distance ... till now :-)
-				minDistance = distance;
-
-				// the nearest point is computed
-				closestLatLng = L.Projection.SphericalMercator.unproject (
-					L.LineUtil.closestPointOnSegment ( point, point1, point2 )
-				);
-
-				// and the distance also
-				closestDistance =
-					endSegmentDistance -
-					closestLatLng.distanceTo (
-						L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
-					);
-			}
-
-			// we prepare the iteration for the next point...
-			endSegmentDistance += itineraryPointIterator.value.distance;
-			point1 = point2;
-		}
-
-		return { latLng : [ closestLatLng.lat, closestLatLng.lng ], distance : closestDistance };
-	}
-
-	/*
-	--- myNormalizeLng function ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNormalizeLng ( Lng ) {
-		return ( ( Lng + DEGREE_540 ) % DEGREE_360 ) - DEGREE_180;
-	}
-
-	/*
-	--- myPointsDistance function -------------------------------------------------------------------------------------
-
+	/**
 	This function returns the distance between two points
-
-	parameters:
-	- latLngStartPoint and  latLngEndPoint: the coordinates of the two points. Must be an array of two numbers
-			with the lat and lng of the points
-	-------------------------------------------------------------------------------------------------------------------
+	Since v1.7.0 we use the simple spherical law of cosines formula
+	(cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet function is
+	always < 10e-3 m. The error due to the earth radius is a lot bigger.
+	Notice: leaflet uses the haversine formula.
+	@param {Array.<number>} latLngStartPoint The coordinates of the start point
+	@param {Array.<number>} latLngEndPoint The coordinates of the end point
 	*/
 
-	function myPointsDistance ( latLngStartPoint, latLngEndPoint ) {
-
-		// since v1.4.0 we consider that the L.latLng.distanceTo ( ) function is the only
-		// valid function to compute the distances. So all distances are always
-		// recomputed with this function.
-
-		// return L.latLng ( latLngStartPoint ).distanceTo ( L.latLng ( latLngEndPoint ) );
-
+	pointsDistance ( latLngStartPoint, latLngEndPoint ) {
 		if (
 			latLngStartPoint [ ZERO ] === latLngEndPoint [ ZERO ]
 			&&
@@ -272,102 +252,82 @@ function newGeometry ( ) {
 			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
-
-		// and since v1.7.0 we use the simple spherical law of cosines formula
-		// (cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet function is
-		// always < 10e-3 m. The error due to the earth radius is a lot bigger...
-		// Notice: leaflet uses the haversine formula.
-		const toRadians = Math.PI / DEGREE_180;
-		const earthRadius = 6371e3;
-		let latStartPoint = latLngStartPoint [ ZERO ] * toRadians;
-		let latEndPoint = latLngEndPoint [ ZERO ] * toRadians;
+		const TO_RADIANS = Math.PI / DEGREE_180;
+		const EARTH_RADIUS = 6371e3;
+		let latStartPoint = latLngStartPoint [ ZERO ] * TO_RADIANS;
+		let latEndPoint = latLngEndPoint [ ZERO ] * TO_RADIANS;
 		let deltaLng =
 			(
 				myNormalizeLng ( latLngEndPoint [ ONE ] ) -
 				myNormalizeLng ( latLngStartPoint [ ONE ] )
 			)
-			* toRadians;
+			* TO_RADIANS;
 		return Math.acos (
 			( Math.sin ( latStartPoint ) * Math.sin ( latEndPoint ) ) +
 				( Math.cos ( latStartPoint ) * Math.cos ( latEndPoint ) * Math.cos ( deltaLng ) )
-		) * earthRadius;
+		) * EARTH_RADIUS;
 	}
 
-	/*
-	--- myProject function --------------------------------------------------------------------------------------------
-
-	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin
-
-	parameters:
-	- latLng: the coordinates of the two points. Must be an array of two numbers
-			with the lat and lng of the point
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin using the Leaflet
+	method map.project
+	@param {Array.<number>} latLng The latitude and longitude of the point
+	@param {number} zoom The zoom factor to use
+	@return {Array.<number>} An array with the projected point
 	*/
 
-	function myProject ( latLng, zoom ) {
+	project ( latLng, zoom ) {
 		let projection = theTravelNotesData.map.project ( L.latLng ( latLng ), zoom );
 		return [ projection.x, projection.y ];
 	}
 
-	/*
-	--- myScreenCoordToLatLng function --------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a screen coordinate to a latLng using the Leaflet map.containerPointToLatLng method
+	@param {number} xScreen  The x screen coordinate
+	@param {number} yScreen  The y screen coordinate
+	@return {Array.<number>} The latitude and longitude of the point
 	*/
 
-	function myScreenCoordToLatLng ( xScreen, yScreen ) {
+	screenCoordToLatLng ( xScreen, yScreen ) {
 		let latLng = theTravelNotesData.map.containerPointToLatLng ( L.point ( xScreen, yScreen ) );
 		return [ latLng.lat, latLng.lng ];
 	}
 
-	/*
-	--- myAddPoint function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Add two points
+	@param {Array.<number>} point1 the first point to add
+	@param {Array.<number>} point2 the second point to add
+	@return {Array.<number>}
 	*/
 
-	function myAddPoint ( point1, point2 ) {
+	addPoints ( point1, point2 ) {
 		return [
 			point1 [ ZERO ] + point2 [ ZERO ],
 			point1 [ ONE ] + point2 [ ONE ]
 		];
 	}
 
-	/*
-	--- mySubtrackPoint function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Subtrack two points
+	@param {Array.<number>} point1 the first point
+	@param {Array.<number>} point2 the point to subtrack
+	@return {Array.<number>}
 	*/
 
-	function mySubtrackPoints ( point1, point2 ) {
+	subtrackPoints ( point1, point2 ) {
 		return [
 			point1 [ ZERO ] - point2 [ ZERO ],
 			point1 [ ONE ] - point2 [ ONE ]
 		];
 	}
-
-	/*
-	--- Geometry object -----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			getLatLngElevAtDist : ( route, distance ) => myGetLatLngElevAtDist ( route, distance ),
-			getClosestLatLngDistance : ( route, latLng ) => myGetClosestLatLngDistance ( route, latLng ),
-			getLatLngBounds : latLngs => myGetLatLngBounds ( latLngs ),
-			pointsDistance :
-				( latLngStartPoint, latLngEndPoint ) => myPointsDistance ( latLngStartPoint, latLngEndPoint ),
-			project : ( latLng, zoom ) => myProject ( latLng, zoom ),
-			screenCoordToLatLng : ( xScreen, yScreen ) => myScreenCoordToLatLng ( xScreen, yScreen ),
-			addPoints : ( point1, point2 ) => myAddPoint ( point1, point2 ),
-			subtrackPoints : ( point1, point2 ) => mySubtrackPoints ( point1, point2 )
-		}
-	);
 }
 
-export { newGeometry };
+const ourGeometry = Object.freeze ( new Geometry );
+
+export {
+
+	ourGeometry as theGeometry
+};
 
 /*
 --- End of Geometry.js file -------------------------------------------------------------------------------------------
