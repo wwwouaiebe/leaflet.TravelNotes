@@ -339,7 +339,7 @@ function ourGetTarget ( eventName ) {
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc This class contains methods fot dispatching events
+@classdesc This class contains methods for dispatching events
 @see {@link theEventDispatcher} for the one and only one instance of this class
 @hideconstructor
 

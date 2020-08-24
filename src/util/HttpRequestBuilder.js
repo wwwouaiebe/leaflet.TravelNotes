@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,46 +15,74 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- HttpRequestBuilder.js file ----------------------------------------------------------------------------------------
-This file contains:
-	- the newHttpRequestPromise function
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200824
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-/*
---- newHttpRequestBuilder function ------------------------------------------------------------------------------------
+const STATUS_OK = 200;
+const READY_STATE_DONE = 4;
+const TIMEOUT = 20000;
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file HttpRequestBuilder.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newHttpRequestBuilder ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	const STATUS_OK = 200;
-	const READY_STATE_DONE = 4;
-	const TIMEOUT = 20000;
+@typedef {Object} RequestHeader
+@desc An object representing a request header
+@property {string} headerName The header name
+@property {string} headerValue The header value
+@public
 
-	/*
-	--- myGetJsonPromise function -------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	This function ...
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@module HttpRequestBuilder
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class contains methods for doing http requests
+@see {@link theHttpRequestBuilder} for the one and only one instance of this class
+@todo Fetch migration
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class HttpRequestBuilder {
+
+	/**
+	Start the download of a json file returning a Promise that fullfil when the asked file is downloaded
+	correctly and reject when an error occurs.
+	The file content is parsed with JSON.parse ( ) and returned as an object to the success handler
+	@param {string} url The url of the file to download
+	@param {Array.<RequestHeader>} requestHeaders An array of request headers to add to the request
 	*/
 
-	function myGetJsonPromise ( url, requestHeaders ) {
-
-		/*
-		--- jsonRequest function --------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
+	getJsonPromise ( url, requestHeaders ) {
 
 		function jsonRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
@@ -90,21 +118,15 @@ function newHttpRequestBuilder ( ) {
 		return new Promise ( jsonRequest );
 	}
 
-	/*
-	--- myGetBinaryPromise function -----------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Start the download of a binary file returning a Promise that fullfil when the asked file is downloaded
+	correctly and reject when an error occurs.
+	The file content is returned as an ArrayBuffer to the success handler
+	@param {string} url The url of the file to download
+	@param {Array.<RequestHeader>} requestHeaders An array of request headers to add to the request
 	*/
 
-	function myGetBinaryPromise ( url, requestHeaders ) {
-
-		/*
-		--- binaryRequest function ------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
+	getBinaryPromise ( url, requestHeaders ) {
 
 		function binaryRequest ( onOk, onError ) {
 			let xmlHttpRequest = new XMLHttpRequest ( );
@@ -136,22 +158,26 @@ function newHttpRequestBuilder ( ) {
 
 		return new Promise ( binaryRequest );
 	}
-
-	/*
-	--- HttpRequestBuilder object -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return {
-		getJsonPromise : ( url, requestHeaders ) => myGetJsonPromise ( url, requestHeaders ),
-		getBinaryPromise : ( url, requestHeaders ) => myGetBinaryPromise ( url, requestHeaders )
-	};
-
 }
 
-export { newHttpRequestBuilder };
+const ourHttpRequestBuilder = Object.freeze ( new HttpRequestBuilder );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of HttpRequestBuilder class
+	@type {HttpRequestBuilder}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourHttpRequestBuilder as theHttpRequestBuilder
+};
 
 /*
---- End of HttpRequestBuilder.js file ---------------------------------------------------------------------------------
+--- End of HttpRequestBuilder.js file -----------------------------------------------------------------------------------------
 */

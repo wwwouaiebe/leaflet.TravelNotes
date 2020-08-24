@@ -67,7 +67,7 @@ This will be used for the note address
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
@@ -961,7 +961,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		mySearchNearestItineraryPoint ( );
 
-		newHttpRequestBuilder ( ).getJsonPromise ( myGetUrl ( ) )
+		theHttpRequestBuilder.getJsonPromise ( myGetUrl ( ) )
 			.then ( BuildIconAndAdress )
 			.catch (
 				err => {

@@ -66,7 +66,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
@@ -172,7 +172,7 @@ function ourNewGeoCoder ( ) {
 				requestHeaders = [ { headerName : 'accept-language', headerValue : '' } ];
 			}
 
-			return newHttpRequestBuilder ( ).getJsonPromise ( NominatimUrl, requestHeaders );
+			return theHttpRequestBuilder.getJsonPromise ( NominatimUrl, requestHeaders );
 		}
 	}
 

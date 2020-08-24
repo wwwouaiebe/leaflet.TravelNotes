@@ -46,7 +46,7 @@ Tests ...
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import { LAT_LNG, TWO } from '../util/Constants.js';
@@ -156,7 +156,7 @@ class TravelNotesViewer {
 		}
 		theViewerLayersToolbarUI.setLayer ( 'OSM - Color' );
 		if ( travelUrl ) {
-			newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
+			theHttpRequestBuilder.getJsonPromise ( travelUrl )
 				.then (
 					newViewerFileLoader ( ).openDistantFile
 				)

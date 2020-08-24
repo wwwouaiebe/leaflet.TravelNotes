@@ -66,7 +66,7 @@ import { newUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -275,7 +275,7 @@ class APIKeysManager {
 
 		// otherwise searching on the server
 		if ( theConfig.haveCrypto ) {
-			newHttpRequestBuilder ( ).getBinaryPromise (
+			theHttpRequestBuilder.getBinaryPromise (
 				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 					'APIKeys'
 			)

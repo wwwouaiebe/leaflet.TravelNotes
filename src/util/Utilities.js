@@ -134,7 +134,7 @@ function newUtilities ( ) {
 			// FF...
 			// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
 			try {
-				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type : type || 'text/plain' } ) );
+				let mapFile = window.URL.createObjectURL ( new File ( [ text ], filename, { type : type || 'text/plain' } ) );
 				let element = document.createElement ( 'a' );
 				element.setAttribute ( 'href', mapFile );
 				element.setAttribute ( 'download', filename );

@@ -31,7 +31,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
 import { ZERO, ONE } from '../util/Constants.js';
@@ -189,7 +189,7 @@ else {
 }
 
 if ( language ) {
-	newHttpRequestBuilder ( ).getJsonPromise (
+	theHttpRequestBuilder.getJsonPromise (
 		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +

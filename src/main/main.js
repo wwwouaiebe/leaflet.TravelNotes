@@ -46,7 +46,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -276,16 +276,15 @@ function ourNewMain ( ) {
 	*/
 
 	function myGetJsonPromises ( ) {
-		let requestBuilder = newHttpRequestBuilder ( );
 		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
 		return [
 			myTestCrypto ( ),
-			requestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
-			requestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'EN.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' )
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'EN.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' )
 		];
 	}
 

@@ -79,7 +79,7 @@ import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { theCurrentVersion } from '../data/Version.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -328,7 +328,7 @@ class TravelNotes {
 		}
 		theAttributionsUI.createUI ( );
 		theLayersToolbarUI.setLayer ( 'OSM - Color' );
-		newHttpRequestBuilder ( ).getJsonPromise ( travelUrl )
+		theHttpRequestBuilder.getJsonPromise ( travelUrl )
 			.then (
 				newViewerFileLoader ( ).openDistantFile
 			)

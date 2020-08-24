@@ -57,7 +57,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
 /**
@@ -275,7 +275,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		clickEvent.stopPropagation ( );
 		myAPIKeysDialog.showWait ( );
 		myAPIKeysDialog.keyboardEventListenerEnabled = false;
-		newHttpRequestBuilder ( ).getBinaryPromise (
+		theHttpRequestBuilder.getBinaryPromise (
 			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 				'APIKeys'
 		)

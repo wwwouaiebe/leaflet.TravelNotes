@@ -46,7 +46,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -180,13 +180,12 @@ function ourNewMainViewer ( ) {
 	*/
 
 	function myGetJsonPromises ( ) {
-		let requestBuilder = newHttpRequestBuilder ( );
 		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
 		return [
-			requestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
-			requestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
-			requestBuilder.getJsonPromise ( originAndPath + 'EN.json' )
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'EN.json' )
 		];
 	}
 
