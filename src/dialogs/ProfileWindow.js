@@ -372,11 +372,6 @@ function ourNewProfileWindow ( ) {
 
 	myProfileWindow = newFloatWindow ( );
 	myProfileWindow.createWindow ( );
-
-	/**
-	aaaaaaaaaaaaaa
-	*/
-
 	myProfileWindow.onClose = myOnClose;
 	myProfileWindow.update = myUpdate;
 
