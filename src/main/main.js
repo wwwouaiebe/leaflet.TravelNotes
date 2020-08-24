@@ -366,7 +366,6 @@ function ourNewMain ( ) {
 			}
 			else {
 				theTravelNotes.addControl ( map, 'TravelNotes' );
-				theTravelNotes.rightContextMenu = true;
 			}
 		}
 	}

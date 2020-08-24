@@ -105,9 +105,8 @@ function myNewAboutDialog ( ) {
 				' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>'
 		},
 		aboutDialog.content
-	)
-		.show ( )
-		.then ( )
+	);
+	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 }
 
