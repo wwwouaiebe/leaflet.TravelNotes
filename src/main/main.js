@@ -215,7 +215,6 @@ function ourNewMain ( ) {
 			);
 		}
 		return 'Not possible to load the translations. ';
-
 	}
 
 	/**
@@ -234,7 +233,6 @@ function ourNewMain ( ) {
 			return '';
 		}
 		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';
-
 	}
 
 	/**

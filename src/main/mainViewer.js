@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,16 +17,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- main.js file ------------------------------------------------------------------------------------------------------
-This file contains:
-	-
 	Changes:
 	- v1.6.0:
 		- created
-Doc reviewed ...
+Doc reviewed 20200824
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MainViewer.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module MainViewer
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
@@ -37,20 +52,34 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
-import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
-function startup ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myLangage = null;
+@function ourNewMainViewer
+@desc constructor for MainViewer object
+@return {MainViewer} an instance of a Main object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewMainViewer ( ) {
+
+	let myLanguage = null;
 	let myTravelUrl = null;
 	let myAddLayerToolbar = false;
+	let myErrorMessage = '';
 
-	/*
-	--- myReadURL function --------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function extract the route providers API key from the url
+	@function myReadURL
+	@desc This function read the search part of the url
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myReadURL ( ) {
@@ -65,7 +94,7 @@ function startup ( ) {
 							escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLangage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
 					}
 					else if ( 'lay' === urlSearchSubString.substr ( ZERO, THREE ).toLowerCase ( ) ) {
 						myAddLayerToolbar = true;
@@ -74,68 +103,188 @@ function startup ( ) {
 			);
 	}
 
-	myReadURL ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	window.L.travelNotes = theTravelNotesViewer;
+	@function myLoadConfig
+	@desc This function load the content of the TravelNotesConfig.json file into theConfig object
+	@private
 
-	let requestBuilder = newHttpRequestBuilder ( );
-	let promises = [
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotesConfig.json'
-		),
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotes' +
-			( myLangage || theConfig.language ).toUpperCase ( ) +
-			'.json'
-		),
-		requestBuilder.getJsonPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotesLayers.json'
-		)
-	];
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
-	Promise.all ( promises )
-		.then (
+	function myLoadConfig ( configPromiseResult ) {
+		if ( 'fulfilled' === configPromiseResult.status ) {
+			configPromiseResult.value.language = myLanguage;
+			theConfig.overload ( configPromiseResult.value );
+			return '';
+		}
+		return 'Not possible to load the TravelNotesConfig.json file. ';
+	}
 
-			// promises succeeded
-			values => {
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-				// config adaptation
-				if ( myLangage ) {
-					values [ ZERO ].language = myLangage;
-				}
+	@function myLoadTranslations
+	@desc This function load the content of the TravelNotesXX.json file into theTranslator object
+	@private
 
-				theConfig.overload ( values [ ZERO ] );
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
-				// translations adaptation
-				theTranslator.setTranslations ( values [ ONE ] );
+	function myLoadTranslations ( translationPromiseResult, defaultTranslationPromiseResult ) {
+		if ( 'fulfilled' === translationPromiseResult.status ) {
+			theTranslator.setTranslations ( translationPromiseResult.value );
+			return '';
+		}
+		if ( 'fulfilled' === defaultTranslationPromiseResult.status ) {
+			theTranslator.setTranslations ( defaultTranslationPromiseResult.value );
+			return (
+				'Not possible to load the TravelNotes' +
+				myLanguage.toUpperCase ( ) +
+				'.json file. English will be used. '
+			);
+		}
+		return 'Not possible to load the translations. ';
 
-				// layers adaptation
-				theViewerLayersToolbarUI.addLayers ( values [ TWO ] );
+	}
 
-				if ( theConfig.autoLoad ) {
-					theHTMLElementsFactory.create (
-						'div',
-						{ id : 'Map' },
-						document.querySelector ( 'body' )
-					);
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-					let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-						.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
+	@function myLoadLayers
+	@desc This function load the content of the TravelNotesLayers.json file into theLayersToolbarUI object
+	@private
 
-					theTravelNotesData.map = map;
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
-					theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
-				}
-			}
-		)
-		.catch ( err => console.log ( err ? err : 'An error occurs when downloading the json configuration files' ) );
+	function myLoadLayers ( layersPromiseResult ) {
+		if ( 'fulfilled' === layersPromiseResult.status ) {
+
+			theViewerLayersToolbarUI.addLayers ( layersPromiseResult.value );
+			return '';
+		}
+		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';
+
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myGetJsonPromises
+	@desc This function gives the Promises list needed to load all the configuration files
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myGetJsonPromises ( ) {
+		let requestBuilder = newHttpRequestBuilder ( );
+		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
+		return [
+			requestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
+			requestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
+			requestBuilder.getJsonPromise ( originAndPath + 'EN.json' )
+		];
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadJsonFiles
+	@desc Load the configuration files
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadJsonFiles ( results ) {
+		const CONFIG_FILE_INDEX = 0;
+		const TRANSLATIONS_FILE_INDEX = 1;
+		const LAYERS_FILE_INDEX = 2;
+		const DEFAULT_TRANSLATIONS_FILE_INDEX = 3;
+		myErrorMessage = myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
+		if ( myErrorMessage ) {
+			console.log ( myErrorMessage );
+			return;
+		}
+		myErrorMessage = myLoadTranslations (
+			results [ TRANSLATIONS_FILE_INDEX ],
+			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
+		);
+		myErrorMessage += myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
+		if ( '' !== myErrorMessage ) {
+			console.log ( myErrorMessage );
+			myErrorMessage = '';
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadTravelNotes
+	@desc Creates the map and the div for the TravelNotes UI and then launch TravelNotes
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadTravelNotes ( ) {
+		if ( theConfig.autoLoad && '' === myErrorMessage ) {
+			theHTMLElementsFactory.create (
+				'div',
+				{ id : 'Map' },
+				document.querySelector ( 'body' )
+			);
+
+			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
+
+			theTravelNotesData.map = map;
+
+			theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class
+	@classdesc This Class is used to configure and launch the TravelNotes viewer.
+	Not possible to instanciate this class outside TravelNotes.
+	@hideconstructor
+	@public
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	class MainViewer {
+
+		/**
+		Launch the TravelNotes viewer.
+		*/
+
+		start ( ) {
+			window.L.travelNotes = theTravelNotesViewer;
+			myReadURL ( );
+			myLanguage = myLanguage || theConfig.language;
+			Promise.allSettled ( myGetJsonPromises ( ) )
+				.then (
+					results => {
+						myLoadJsonFiles ( results );
+						myLoadTravelNotes ( myTravelUrl );
+					}
+				);
+		}
+	}
+
+	return Object.freeze ( new MainViewer );
 }
 
-startup ( );
+ourNewMainViewer ( ).start ( );
 
 /*
---- End of Main file --------------------------------------------------------------------------------------------------
+--- End of MainViewer file ----------------------------------------------------------------------------------------------------
 */
