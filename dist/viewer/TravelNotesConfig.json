@@ -1,5 +1,6 @@
 {
 	"autoLoad":true,
+	"haveGlobals":false,
 	"map":
 	{
 		"center": {
@@ -17,10 +18,9 @@
 		"haveLayersToolbarUI":true,
 		"toolbarTimeOut":1500,
 		"theDevil": {
-			"addButton": false,
+			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",
-			"text": "&#x1f47f;",
-			"noteZoom" : 17
+			"text": "&#x1f47f;"
 		}
 	},
 	"mouseUI":
@@ -137,6 +137,12 @@
 	},
 	"note":
 	{
+		"theDevil": {
+			"addButton": true,
+			"title": "Reminder! The devil will know everything about you",
+			"text": "&#x1f47f;",
+			"noteZoom" : 17
+		},
 		"reverseGeocoding":true,
 		"grip":
 		{
@@ -167,7 +173,7 @@
 		"svgCityDistance":1200,
 		"svgTownDistance":1500,
 		"svgTimeOut":15000,
-		"cityPrefix":" <br /><span class='TravelNotes-NoteHtml-Address-City'>",
+		"cityPrefix":" <span class='TravelNotes-NoteHtml-Address-City'>",
 		"cityPostfix":"</span>",
 		"maxManeuversNotes":10
 	},
@@ -214,5 +220,13 @@
 			"fill" : true,
 			"fillOpacity" : 1
 		}
+	},
+	"itineraryPane" : {	
+		"showNotes" : true,
+		"showManeuvers" : false
+	},
+	"colorDialog" : {
+		"haveSlider" : true,
+		"initialRed" : 0
 	}
 }
