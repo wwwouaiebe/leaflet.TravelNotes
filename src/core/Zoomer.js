@@ -114,6 +114,16 @@ function ourNewZoomer ( ) {
 	class Zoomer {
 
 		/**
+		Performs a zoom on a point
+		@param {Array.<number>} latLng The latitude and longitude of the point
+		@fires zoomto
+		*/
+
+		zoomToLatLng ( latLng ) {
+			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
+		}
+
+		/**
 		Performs a zoom on a maneuver
 		@param {!number} maneuverObjId the objId of the maneuver on witch the zoom must be performed
 		@fires zoomto

@@ -75,7 +75,7 @@ function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 	@function myGetMenuItems
 	@desc get an array with the menu items
-	@return {array.Object} the menu items
+	@return {array.<MenuItem>} the menu items
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------

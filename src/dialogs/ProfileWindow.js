@@ -33,7 +33,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
+import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
@@ -115,49 +115,31 @@ function ourNewProfileWindow ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myOnSvgClick
-	@desc mouse click on the profile svg event listener. Zoom on the map to the coresponding position
-	@listens click
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSvgClick ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
-		if ( latLngElevOnRoute ) {
-			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLngElevOnRoute.latLng }	);
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnSvgContextMenu
-	@desc mouse contextmenu on the profile svg event listener. Start the creation of a route note at the given position
+	@desc mouse contextmenu on the profile svg event listener. Show a context menu
 	@listens contextmenu
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnSvgContextMenu ( mouseEvent ) {
-		mouseEvent.preventDefault ( );
-		mouseEvent.stopPropagation ( );
-		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
+	function myOnSvgContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.preventDefault ( );
+		contextMenuEvent.stopPropagation ( );
+		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( contextMenuEvent );
 		if ( latLngElevOnRoute ) {
-			theNoteEditor.newRouteNote (
-				myRoute.objId,
+			contextMenuEvent.routeObjId = myRoute.objId;
 
-				// fake contextmenu event with only latlng to add the note...
-				{
-					latlng : {
-						lat : latLngElevOnRoute.latLng [ ZERO ],
-						lng : latLngElevOnRoute.latLng [ ONE ]
-					}
-				}
-			);
+			// creating a fake leaflet contextmenuEvent...
+			contextMenuEvent.latlng = {
+				lat : latLngElevOnRoute.latLng [ ZERO ],
+				lng : latLngElevOnRoute.latLng [ ONE ]
+			};
+			contextMenuEvent.originalEvent = {
+				clientX : contextMenuEvent.clientX,
+				clientY : contextMenuEvent.clientY
+			};
+			newProfileContextMenu ( contextMenuEvent ).show ( );
 		}
 	}
 
@@ -279,7 +261,6 @@ function ourNewProfileWindow ( ) {
 
 	function myClean ( ) {
 		if ( mySvg ) {
-			mySvg.removeEventListener ( 'click', myOnSvgClick,	false );
 			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
 			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
@@ -335,7 +316,6 @@ function ourNewProfileWindow ( ) {
 
 		myProfileWindow.header.innerHTML = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
 		myProfileWindow.content.appendChild ( mySvg );
-		mySvg.addEventListener ( 'click', myOnSvgClick,	false );
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
 

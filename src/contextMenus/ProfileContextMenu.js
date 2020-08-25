@@ -18,19 +18,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-	- v1.6.0:
-		- created
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-Doc reviewed 20200727
+Doc reviewed 20200825
 Tests ...
 */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file WayPointContextMenu.js
+@file ProfileContextMenu.js
 @copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -41,33 +38,33 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module WayPointContextMenu
+@module ProfileContextMenu
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theWayPointEditor } from '../core/WayPointEditor.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
+import { theNoteEditor } from '../core/NoteEditor.js';
+import { newZoomer } from '../core/Zoomer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewWayPointContextMenu
+@function ourNewProfileContextMenu
 @desc constructor of WayPointContextMenu objects
 @param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {WayPointContextMenu} an instance of a WayPointContextMenu object
+@return {ProfileContextMenu} an instance of a ProfileContextMenu object
 @listens mouseenter mouseleave click keydown keypress keyup
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewWayPointContextMenu ( contextMenuEvent ) {
+function ourNewProfileContextMenu ( contextMenuEvent ) {
 
-	let myWayPointObjId = contextMenuEvent.target.objId;
+	let zoomer = newZoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -81,22 +78,18 @@ function ourNewWayPointContextMenu ( contextMenuEvent ) {
 	*/
 
 	function myGetMenuItems ( ) {
-		let isMidWayPoint =
-			theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== myWayPointObjId
-			&&
-			theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== myWayPointObjId;
 		return [
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
-				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
-				param : myWayPointObjId
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
+				action : theNoteEditor.newRouteNote,
+				param : contextMenuEvent.routeObjId
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
-				action : theWayPointEditor.wayPointProperties,
-				param : myWayPointObjId
+				context : zoomer,
+				name : theTranslator.getText ( 'ProfileContextMenu - Zoom to this point' ),
+				action : zoomer.zoomToLatLng,
+				param : [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
 			}
 		];
 	}
@@ -104,18 +97,18 @@ function ourNewWayPointContextMenu ( contextMenuEvent ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@class WayPointContextMenu
-	@classdesc a BaseContextMenu object with items completed for wayPoints
-	@see {@link newWayPointContextMenu} for constructor
+	@class ProfileContextMenu
+	@classdesc a BaseContextMenu object with items completed for ProfileWindows
+	@see {@link newProfileContextMenu} for constructor
 	@augments BaseContextMenu
 	@hideconstructor
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
+	let profileContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 
-	return Object.seal ( wayPointContextMenu );
+	return Object.seal ( profileContextMenu );
 }
 
 export {
@@ -123,10 +116,10 @@ export {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function newWayPointContextMenu
-	@desc constructor of WayPointContextMenu objects
+	@function newProfileContextMenu
+	@desc constructor of ProfileContextMenu objects
 	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {WayPointContextMenu} an instance of a WayPointContextMenu object
+	@return {ProfileContextMenu} an instance of a ProfileContextMenu object
 	@listens mouseenter mouseleave click keydown keypress keyup
 	@global
 
@@ -134,10 +127,5 @@ export {
 
 	*/
 
-	ourNewWayPointContextMenu as newWayPointContextMenu
-
+	ourNewProfileContextMenu as newProfileContextMenu
 };
-
-/*
---- End of WayPointContextMenu.js file ----------------------------------------------------------------------------------------
-*/
