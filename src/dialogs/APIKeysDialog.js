@@ -54,7 +54,7 @@ import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
@@ -439,7 +439,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		if ( ! myVerifyKeys ( ) ) {
 			return;
 		}
-		newUtilities ( ).saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
+		theUtilities.saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
 	}
 
 	/**

@@ -55,7 +55,7 @@ Tests ...
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newObjId } from '../data/ObjId.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -64,8 +64,6 @@ import { DISTANCE, ZERO } from '../util/Constants.js';
 
 const LINKS_MAX_LENGTH = 40;
 const MIN_NOTES_DISTANCE = 9;
-
-let ourUtilities = newUtilities ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -151,8 +149,8 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 			innerHTML :	theTranslator.getText (
 				'HTMLViewsFactory - Latitude Longitude',
 				{
-					lat : ourUtilities.formatLat ( note.lat ),
-					lng : ourUtilities.formatLng ( note.lng )
+					lat : theUtilities.formatLat ( note.lat ),
+					lng : theUtilities.formatLng ( note.lng )
 				}
 			)
 		},
@@ -167,7 +165,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 					innerHTML :	theTranslator.getText (
 						'HTMLViewsFactory - Distance from start of travel',
 						{
-							distance : ourUtilities.formatDistance ( note.chainedDistance + note.distance )
+							distance : theUtilities.formatDistance ( note.chainedDistance + note.distance )
 						}
 					)
 				},
@@ -181,7 +179,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 				innerHTML :	theTranslator.getText (
 					'HTMLViewsFactory - Distance from start of route',
 					{
-						distance : ourUtilities.formatDistance ( note.distance )
+						distance : theUtilities.formatDistance ( note.distance )
 					}
 				)
 			},
@@ -198,7 +196,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 						innerHTML :
 							theTranslator.getText (
 								'HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}',
-								{ distance : ourUtilities.formatDistance ( nextDistance ) }
+								{ distance : theUtilities.formatDistance ( nextDistance ) }
 							)
 					},
 					noteHTMLElement
@@ -302,7 +300,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 		theHTMLElementsFactory.create (
 			'text',
 			{
-				value : '\u00a0:\u00a0' + ourUtilities.formatDistance ( route.distance ) + '.'
+				value : '\u00a0:\u00a0' + theUtilities.formatDistance ( route.distance ) + '.'
 			},
 			routeHTML
 		);
@@ -319,7 +317,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 			innerHTML :
 				theTranslator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}',
 					{
-						distance : ourUtilities.formatDistance ( travelDistance )
+						distance : theUtilities.formatDistance ( travelDistance )
 					}
 				)
 		},
@@ -419,7 +417,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 				className : classPrefix + 'Route-Header-Distance',
 				innerHTML : theTranslator.getText (
 					'HTMLViewsFactory - Distance',
-					{ distance : ourUtilities.formatDistance ( route.distance ) }
+					{ distance : theUtilities.formatDistance ( route.distance ) }
 				)
 			},
 			routeHeaderHTML
@@ -432,7 +430,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 				className : classPrefix + 'Route-Header-Duration',
 				innerHTML : theTranslator.getText (
 					'HTMLViewsFactory - Duration',
-					{ distance : ourUtilities.formatDistance ( route.duration ) }
+					{ distance : theUtilities.formatDistance ( route.duration ) }
 				)
 			},
 			routeHeaderHTML
@@ -514,7 +512,7 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 				innerHTML :	theTranslator.getText (
 					'HTMLViewsFactory - Distance from start of travel',
 					{
-						distance : ourUtilities.formatDistance (
+						distance : theUtilities.formatDistance (
 							routeAndManeuver.route.chainedDistance + routeAndManeuver.maneuverDistance
 						)
 					}
@@ -529,7 +527,7 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 			innerHTML :	theTranslator.getText (
 				'HTMLViewsFactory - Distance from start of route',
 				{
-					distance : ourUtilities.formatDistance ( routeAndManeuver.maneuverDistance )
+					distance : theUtilities.formatDistance ( routeAndManeuver.maneuverDistance )
 				}
 			)
 		},
@@ -542,7 +540,7 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 				innerHTML :	theTranslator.getText (
 					'HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}',
 					{
-						distance : ourUtilities.formatDistance ( routeAndManeuver.maneuver.distance )
+						distance : theUtilities.formatDistance ( routeAndManeuver.maneuver.distance )
 					}
 				)
 			},

@@ -29,7 +29,7 @@ Tests ...
 */
 
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
@@ -41,7 +41,7 @@ import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
 function newRoadbookUpdate ( ) {
 
-	if ( newUtilities ( ).storageAvailable ( 'localStorage' ) ) {
+	if ( theUtilities.storageAvailable ( 'localStorage' ) ) {
 		theIndexedDb.getOpenPromise ( )
 			.then ( ( ) => {
 				theIndexedDb.getWritePromise (

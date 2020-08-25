@@ -50,7 +50,7 @@ Tests ...
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
@@ -164,7 +164,7 @@ class WayPoint {
 	get fullName ( ) {
 		let fullName = ( '' === this.name ? this.address : this.name + ', ' + this.address );
 		if ( '' === fullName ) {
-			fullName = newUtilities ( ).formatLatLng ( [ this.lat, this.lng ] );
+			fullName = theUtilities.formatLatLng ( [ this.lat, this.lng ] );
 		}
 
 		return fullName;

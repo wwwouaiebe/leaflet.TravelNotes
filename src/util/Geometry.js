@@ -103,7 +103,7 @@ function myNormalizeLng ( Lng ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc This class contains methods fot geometry operations requiring call to Leaflet functions
+@classdesc This class contains methods for geometry operations requiring call to Leaflet functions
 @see {@link theGeometry} for the one and only one instance of this class
 @hideconstructor
 

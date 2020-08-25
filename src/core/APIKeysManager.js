@@ -62,7 +62,7 @@ Tests ...
 */
 
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
@@ -153,7 +153,7 @@ function ourResetAPIKeys ( APIKeys ) {
 	sessionStorage.clear ( );
 	ourKeysMap.clear ( );
 	let saveToSessionStorage =
-		newUtilities ( ).storageAvailable ( 'sessionStorage' )
+		theUtilities.storageAvailable ( 'sessionStorage' )
 		&&
 		theConfig.APIKeys.saveToSessionStorage;
 	APIKeys.forEach (
@@ -297,7 +297,7 @@ class APIKeysManager {
 					.substr ( ZERO, urlSubStrings [ ZERO ].length - 'ProviderKey'.length )
 					.toLowerCase ( );
 			let providerKey = urlSubStrings [ ONE ];
-			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
+			if ( theUtilities.storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
 				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
 			}
 			ourSetKey ( providerName, providerKey );
@@ -345,7 +345,7 @@ class APIKeysManager {
 
 		// no provider key. Searching in the storage
 		if ( provider.providerKeyNeeded && ! providerKey ) {
-			if ( newUtilities ( ).storageAvailable ( 'sessionStorage' ) ) {
+			if ( theUtilities.storageAvailable ( 'sessionStorage' ) ) {
 				providerKey = sessionStorage.getItem ( providerName );
 				if ( providerKey ) {
 					providerKey = atob ( providerKey );

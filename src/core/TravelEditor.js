@@ -66,15 +66,13 @@ import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
 import { newTravel } from '../data/Travel.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
-
-let ourUtilities = newUtilities ( );
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -116,7 +114,7 @@ class TravelEditor {
 			routesIterator.value.hidden = false;
 		}
 		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
-		ourUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 	}
 
 	/**

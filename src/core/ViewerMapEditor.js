@@ -64,7 +64,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
@@ -92,7 +92,7 @@ function ourOnRouteMouseOverOrMove ( mapEvent ) {
 	let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
 		.distance;
 	distance += route.chainedDistance;
-	distance = newUtilities ( ).formatDistance ( distance );
+	distance = theUtilities.formatDistance ( distance );
 	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
 	polyline.closeTooltip ( );
 	let tooltipText = route.computedName;
@@ -440,7 +440,7 @@ class ViewerMapEditor {
 			}
 		)
 			.bindTooltip (
-				newUtilities ( ).formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
+				theUtilities.formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
 			)
 			.addTo ( theTravelNotesData.map );
 

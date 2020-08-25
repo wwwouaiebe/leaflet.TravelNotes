@@ -45,7 +45,7 @@ Tests ...
 */
 
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ function ourNewGpxFactory ( ) {
 			fileName = 'TravelNote';
 		}
 		fileName += '.gpx';
-		newUtilities ( ).saveFile ( fileName, myGpxString );
+		theUtilities.saveFile ( fileName, myGpxString );
 	}
 
 	/**

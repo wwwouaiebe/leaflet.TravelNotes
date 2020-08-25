@@ -51,8 +51,10 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeoLocator } from '../core/GeoLocator.js';
+import { theGeometry } from '../util/Geometry.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theMapEditor } from '../core/MapEditor.js';
 import { theMouseUI } from '../UI/MouseUI.js';
@@ -68,6 +70,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
 import { theTravelUI } from '../UI/TravelUI.js';
 import { theUI } from '../UI/UI.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
@@ -78,6 +81,7 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newCollection } from '../data/Collection.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
+import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { newFileLoader } from '../core/FileLoader.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
@@ -120,6 +124,7 @@ class Globals {
 	get newBaseDialog ( ) { return newBaseDialog; }
 	get newCollection ( ) { return newCollection; }
 	get newColorDialog ( ) { return newColorDialog; }
+	get newDataEncryptor ( ) { return newDataEncryptor; }
 	get newFileCompactor ( ) { return newFileCompactor; }
 	get newFileLoader ( ) { return newFileLoader; }
 	get newFloatWindow ( ) { return newFloatWindow; }
@@ -163,8 +168,10 @@ class Globals {
 	get theErrorsUI ( ) { return theErrorsUI; }
 	get theEventDispatcher ( ) { return theEventDispatcher; }
 	get theGeoLocator ( ) { return theGeoLocator; }
+	get theGeometry ( ) { return theGeometry; }
 	get theHTMLElementsFactory ( ) { return theHTMLElementsFactory; }
 	get theHTMLViewsFactory ( ) { return theHTMLViewsFactory; }
+	get theHttpRequestBuilder ( ) { return theHttpRequestBuilder; }
 	get theLayersToolbarUI ( ) { return theLayersToolbarUI; }
 	get theMapEditor ( ) { return theMapEditor; }
 	get theMouseUI ( ) { return theMouseUI; }
@@ -180,6 +187,7 @@ class Globals {
 	get theTravelNotesToolbarUI ( ) { return theTravelNotesToolbarUI; }
 	get theTravelUI ( ) { return theTravelUI; }
 	get theUI ( ) { return theUI; }
+	get theUtilities ( ) { return theUtilities; }
 	get theViewerLayersToolbarUI ( ) { return theViewerLayersToolbarUI; }
 	get theViewerMapEditor ( ) { return theViewerMapEditor; }
 	get theWayPointEditor ( ) { return theWayPointEditor; }

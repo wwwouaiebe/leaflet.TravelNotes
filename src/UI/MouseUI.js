@@ -47,12 +47,11 @@ Tests ...
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 
 let ourMouseDiv = null;
 let ourMousePos = null;
 let ourZoom = null;
-let ourUtilities = newUtilities ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -84,9 +83,9 @@ function ourUpdate ( ) {
 
 function ourOnMapMouseMove ( mouseMoveEvent ) {
 	ourMousePos =
-		ourUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
+		theUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
 		'&nbsp;-&nbsp;' +
-		ourUtilities.formatLng ( mouseMoveEvent.latlng.lng );
+		theUtilities.formatLng ( mouseMoveEvent.latlng.lng );
 	ourUpdate ( );
 }
 
@@ -125,7 +124,7 @@ class MouseUI {
 	createUI ( ) {
 		ourZoom = theTravelNotesData.map.getZoom ( );
 		let mousePos = theTravelNotesData.map.getCenter ( );
-		ourMousePos = ourUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + ourUtilities.formatLng ( mousePos.lng );
+		ourMousePos = theUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + theUtilities.formatLng ( mousePos.lng );
 		ourMouseDiv = theHTMLElementsFactory.create (
 			'div',
 			{

@@ -79,13 +79,13 @@ Tests ...
 */
 
 import { newTravel } from '../data/Travel.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 let ourProviders = new Map ( );
 let ourMapObjects = new Map ( );
 let ourRouting = Object.seal ( { provider : '', transitMode : '' } );
-let ourUUID = newUtilities ( ).UUID;
+let ourUUID = theUtilities.UUID;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

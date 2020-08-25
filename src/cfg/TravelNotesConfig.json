@@ -1,6 +1,6 @@
 {
 	"autoLoad":true,
-	"haveGlobals":false,
+	"haveGlobals":true,
 	"map":
 	{
 		"center": {

@@ -32,7 +32,7 @@ import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theUtilities } from '../util/Utilities.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
@@ -80,7 +80,6 @@ function ourNewProfileWindow ( ) {
 	let myProfileWindow = null;
 	let myAscentDiv = null;
 	let myRoute = null;
-	let myUtilities = newUtilities ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -224,7 +223,7 @@ function ourNewProfileWindow ( ) {
 			// distance
 			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
 			myDistanceText.appendChild (
-				document.createTextNode ( myUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
+				document.createTextNode ( theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
 			);
 			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
 			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
@@ -349,7 +348,7 @@ function ourNewProfileWindow ( ) {
 					{
 						ascent : myRoute.itinerary.ascent.toFixed ( ZERO ),
 						descent : myRoute.itinerary.descent.toFixed ( ZERO ),
-						distance : myUtilities.formatDistance ( myRoute.distance )
+						distance : theUtilities.formatDistance ( myRoute.distance )
 					}
 				)
 			}
