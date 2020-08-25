@@ -55,7 +55,7 @@ import { theGeometry } from '../util/Geometry.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { theIndexedDb } from '../roadbook/IndexedDB.js';
+import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theMapEditor } from '../core/MapEditor.js';
 import { theMouseUI } from '../UI/MouseUI.js';

@@ -40,7 +40,7 @@ save button
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { theIndexedDb } from '../roadbook/IndexedDB.js';
+import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
 function showTravelNotes ( ) {
