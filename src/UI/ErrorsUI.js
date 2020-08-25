@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,218 +17,272 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ErrorsUI.js file ---------------------------------------------------------------------------------------------
-This file contains:
-	- the newErrorsUI function
-	- the theErrorsUI object
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200821
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ErrorsUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ErrorsUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 
-/*
---- newErrorsUI function ----------------------------------------------------------------------------------------------
+let ourErrorDiv = null;
+let ourTimerId = null;
+let ourShowHelpInput = null;
+let ourShowHelpDiv = null;
+let ourShowHelp = theConfig.errorUI.showHelp;
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnHelpInputChange
+@desc Event listener for the input change for the show help checkbox
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newErrorsUI ( ) {
+function ourOnHelpInputChange ( ) {
+	ourShowHelp = ! ourShowHelpInput.checked;
+}
 
-	let myErrorDiv = null;
-	let myTimerId = null;
-	let myShowHelpInput = null;
-	let myShowHelpDiv = null;
-	let myCancelButton = null;
-	let myShowHelp = theConfig.errorUI.showHelp;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myOnHelpInputChange function ----------------------------------------------------------------------------------
+@function ourOnTimer
+@desc Event listener for timer end
+@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	function myOnHelpInputChange ( ) {
-		myShowHelp = ! myShowHelpInput.checked;
+function ourOnTimer ( ) {
+	if ( ourTimerId ) {
+		clearTimeout ( ourTimerId );
+		ourTimerId = null;
 	}
-
-	/*
-	--- myOnTimer function --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTimer ( ) {
-		if ( myTimerId ) {
-			clearTimeout ( myTimerId );
-			myTimerId = null;
-		}
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Error' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Warning' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Info' );
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Help' );
-		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-Hidden' );
-		if ( myShowHelpInput ) {
-			myShowHelpInput.removeEventListener ( 'change', myOnHelpInputChange, false );
-			myShowHelpInput = null;
-			myShowHelpDiv = null;
-		}
-		myErrorDiv.innerHTML = '';
+	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Error' );
+	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Warning' );
+	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Info' );
+	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Help' );
+	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-Hidden' );
+	if ( ourShowHelpInput ) {
+		ourShowHelpInput.removeEventListener ( 'change', ourOnHelpInputChange, false );
+		ourShowHelpInput = null;
+		ourShowHelpDiv = null;
 	}
+	ourErrorDiv.innerHTML = '';
+}
 
-	/*
-	--- myAddHelpCheckbox function ------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourAddHelpCheckbox
+@desc This method add the show help checkbox in the help windows
+@private
 
-	function myAddHelpCheckbox ( ) {
-		myShowHelpDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ErrorUI-HelpInputDiv'
-			},
-			myErrorDiv
-		);
-		myShowHelpInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-ErrorUI-HelpInput',
-				type : 'checkbox'
-			},
-			myShowHelpDiv
-		);
-		myShowHelpInput.addEventListener ( 'change', myOnHelpInputChange, false );
-		myHTMLElementsFactory.create (
-			'label',
-			{
-				id : 'TravelNotes-ErrorUI-HelpInputLabel',
-				for : 'TravelNotes-ErrorUI-HelpInput',
-				innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
-			},
-			myShowHelpDiv
-		);
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddHelpCheckbox ( ) {
+	ourShowHelpDiv = theHTMLElementsFactory.create (
+		'div',
+		{
+			id : 'TravelNotes-ErrorsUI-HelpInputDiv'
+		},
+		ourErrorDiv
+	);
+	ourShowHelpInput = theHTMLElementsFactory.create (
+		'input',
+		{
+			id : 'TravelNotes-ErrorsUI-HelpInput',
+			type : 'checkbox'
+		},
+		ourShowHelpDiv
+	);
+	ourShowHelpInput.addEventListener ( 'change', ourOnHelpInputChange, false );
+	theHTMLElementsFactory.create (
+		'label',
+		{
+			id : 'TravelNotes-ErrorsUI-HelpInputLabel',
+			for : 'TravelNotes-ErrorsUI-HelpInput',
+			innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
+		},
+		ourShowHelpDiv
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourShow
+@desc This method show the windows
+@param {string} message The message to be displayed
+@param {string} errorLevel The tpe of window to display
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourShow ( message, errorLevel ) {
+	if (
+		( 'Error' === errorLevel && ! theConfig.errorUI.showError )
+		||
+		( 'Warning' === errorLevel && ! theConfig.errorUI.showWarning )
+		||
+		( 'Info' === errorLevel && ! theConfig.errorUI.showInfo )
+		||
+		( 'Help' === errorLevel && ! theConfig.errorUI.showHelp )
+		||
+		( 'Help' === errorLevel && ! ourShowHelp )
+	) {
+		return;
 	}
+	if ( ourTimerId ) {
+		ourOnTimer ( );
+	}
+	let headerDiv = theHTMLElementsFactory.create (
+		'div',
+		{
+			id : 'TravelNotes-ErrorsUI-Header'
+		},
+		ourErrorDiv
+	);
+	theHTMLElementsFactory.create (
+		'span',
+		{
+			id : 'TravelNotes-ErrorsUI-CancelButton',
+			innerHTML : '&#x274c'
+		},
+		headerDiv
+	)
+		.addEventListener ( 'click', ourOnTimer, false );
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			id : 'TravelNotes-ErrorsUI-Message',
+			innerHTML : message
+		},
+		ourErrorDiv
+	);
+	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
+	let timeOutDuration = theConfig.errorUI.timeOut;
+	if ( 'Help' === errorLevel ) {
+		ourAddHelpCheckbox ( );
+		timeOutDuration = theConfig.errorUI.helpTimeOut;
+	}
+	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Hidden' );
+	ourTimerId = setTimeout ( ourOnTimer, timeOutDuration );
+}
 
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@class
+@classdesc This class show a message on the screen
+@see {@link theErrorsUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ErrorsUI {
+
+	/**
+	creates the user interface
 	*/
 
-	function myShow ( message, errorLevel ) {
-
-		if (
-			( 'Error' === errorLevel && ! theConfig.errorUI.showError )
-				||
-				( 'Warning' === errorLevel && ! theConfig.errorUI.showWarning )
-				||
-				( 'Info' === errorLevel && ! theConfig.errorUI.showInfo )
-				||
-				( 'Help' === errorLevel && ! theConfig.errorUI.showHelp )
-				||
-				( 'Help' === errorLevel && ! myShowHelp )
-		) {
+	createUI ( ) {
+		if ( ourErrorDiv ) {
 			return;
 		}
-		if ( myTimerId ) {
-			myOnTimer ( );
-		}
-
-		let headerDiv = myHTMLElementsFactory.create (
+		ourErrorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ErrorUI-Header'
-			},
-			myErrorDiv
-		);
-		myCancelButton = myHTMLElementsFactory.create (
-			'span',
-			{
-				id : 'TravelNotes-ErrorUI-CancelButton',
-				innerHTML : '&#x274c'
-			},
-			headerDiv
-		);
-		myCancelButton.addEventListener ( 'click', myOnTimer, false );
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ErrorUI-Message',
-				innerHTML : message
-			},
-			myErrorDiv
-		);
-
-		myErrorDiv.classList.add ( 'TravelNotes-ErrorUI-' + errorLevel );
-		let timeOutDuration = theConfig.errorUI.timeOut;
-		if ( 'Help' === errorLevel ) {
-			myAddHelpCheckbox ( );
-			timeOutDuration = theConfig.errorUI.helpTimeOut;
-		}
-
-		myErrorDiv.classList.remove ( 'TravelNotes-ErrorUI-Hidden' );
-		myTimerId = setTimeout ( myOnTimer, timeOutDuration );
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( ) {
-
-		if ( document.getElementById ( 'TravelNotes-ErrorUI' ) ) {
-			return;
-		}
-
-		myErrorDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ErrorUI',
-				className : 'TravelNotes-ErrorUI-Hidden'
+				id : 'TravelNotes-ErrorsUI',
+				className : 'TravelNotes-ErrorsUI-Hidden'
 			},
 			document.querySelector ( 'body' )
 		);
-
 	}
 
-	/*
-	--- ErrorsUI object ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Show an error message ( a white text on a red background )
+	@see theConfig.errorUI.showError to disable or enable the error messages
+	@param {string} error The error message to display
 	*/
 
-	return {
+	showError ( error ) { ourShow ( error, 'Error' ); }
 
-		createUI : ( ) => myCreateUI ( ),
+	/**
+	Show an warning message ( a black text on an orange background )
+	@see theConfig.errorUI.showWarning to disable or enable the warning messages
+	@param {string} warning The warning message to display
+	*/
 
-		showError : error => myShow ( error, 'Error' ),
+	showWarning ( warning ) { ourShow ( warning, 'Warning' ); }
 
-		showWarning : warning => myShow ( warning, 'Warning' ),
+	/**
+	Show an info message ( a black text on a white background )
+	@see theConfig.errorUI.showInfo to disable or enable the info messages
+	@param {string} info The info message to display
+	*/
 
-		showInfo : info => myShow ( info, 'Info' ),
+	showInfo ( info ) { ourShow ( info, 'Info' ); }
 
-		showHelp : help => myShow ( help, 'Help' )
+	/**
+	Show a help message ( a black text on a white background )
+	@see theConfig.errorUI.showHelp to disable or enable the help messages and the
+	checkbox in the UI to disable the help
+	@param {string} help The help message to display
+	*/
 
-	};
+	showHelp ( help ) { ourShow ( help, 'Help' ); }
+
 }
 
-const theErrorsUI = newErrorsUI ( );
+const ourErrorsUI = Object.freeze ( new ErrorsUI );
 
-export { theErrorsUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of ErrorsUI class
+	@type {ErrorsUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourErrorsUI as theErrorsUI
+};
 
 /*
---- End of ErrorsUI.js file --------------------------------------------------------------------------------------
+--- End of ErrorsUI.js file ---------------------------------------------------------------------------------------------------
 */

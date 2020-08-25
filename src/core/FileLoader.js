@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- FileLoader.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newFileLoader function
 Changes:
 	- v1.4.0:
 		- created from TravelEditor
@@ -29,10 +26,30 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
-Doc reviewed 20191122
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200801
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file FileLoader.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module FileLoader
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -42,51 +59,55 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/*
---- fileLoader function -----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@function ourNewFileLoader
+@desc constructor for FileLoader objects
+@return {FileLoader} an instance of FileLoader object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newFileLoader ( ) {
+function ourNewFileLoader ( ) {
 
-	let myEventDispatcher = newEventDispatcher ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myDisplay function --------------------------------------------------------------------------------------------
+	@function myDisplay
+	@desc display the travel and fires event for updating the map and the UI
+	@fires removeallobjects
+	@fires routeupdated
+	@fires noteupdated
+	@fires travelnameupdated
+	@fires layerchange
+	@fires setrouteslist
+	@fires setprovider
+	@fires settransitmode
+	@fires showitinerary
+	@fires roadbookupdate
+	@private
 
-	This function update the screen
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myDisplay ( ) {
 
 		// the map is cleaned
-		myEventDispatcher.dispatch ( 'removeallobjects' );
+		theEventDispatcher.dispatch ( 'removeallobjects' );
 
 		newViewerFileLoader ( ).display ( );
 
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
-		// Editors and roadbook are filled
-
-		theRouteEditor.chainRoutes ( );
-
 		// Editors and HTML pages are filled
-		myEventDispatcher.dispatch ( 'setrouteslist' );
-		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-			myEventDispatcher.dispatch ( 'reducerouteui' );
-		}
-		else {
-
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
 			let providerName = theTravelNotesData.travel.editedRoute.itinerary.provider;
 			if (
 				providerName
@@ -106,33 +127,32 @@ function newFileLoader ( ) {
 
 				// Provider and transit mode are changed in the itinerary editor
 				let transitMode = theTravelNotesData.travel.editedRoute.itinerary.transitMode;
-				myEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
+				theEventDispatcher.dispatch ( 'setprovider', { provider : providerName } );
 
 				if ( transitMode && '' !== transitMode ) {
-					myEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
+					theEventDispatcher.dispatch ( 'settransitmode', { transitMode : transitMode } );
 				}
 			}
-			theRouteEditor.chainRoutes ( );
-			myEventDispatcher.dispatch ( 'expandrouteui' );
 		}
-		myEventDispatcher.dispatch ( 'setwaypointslist' );
-		myEventDispatcher.dispatch ( 'setitinerary' );
-		myEventDispatcher.dispatch ( 'roadbookupdate' );
-		myEventDispatcher.dispatch ( 'travelnotesfileloaded', { name : theTravelNotesData.travel.name } );
+		theRouteEditor.chainRoutes ( );
 
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
-	/*
-	--- myOpenFile function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function open a local file
+	@function myOpenFile
+	@desc open a file, set or merge it's content in theTravelNotesData and then display the file
+	@param {event} changeEvent the changeEvent that have started the process
+	@param {boolean} mustMerge the function merge the content when true
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOpenFile ( changeEvent, mustMerge ) {
-		let fileName = changeEvent.target.files [ ZERO ].name;
-
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
 			let fileContent = {};
@@ -148,8 +168,6 @@ function newFileLoader ( ) {
 			else {
 				theProfileWindowsManager.deleteAllProfiles ( );
 				newFileCompactor ( ).decompress ( fileContent );
-				theTravelNotesData.travel.name =
-					fileName.substr ( ZERO, fileName.lastIndexOf ( '.' ) );
 			}
 
 			myDisplay ( );
@@ -158,22 +176,73 @@ function newFileLoader ( ) {
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
-	/*
-	--- FileLoader object ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class FileLoader
+	@classdesc This class load a file from the computer disk and display the travel
+	@see {@link newFileLoader} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal (
-		{
-			openLocalFile : changeEvent => myOpenFile ( changeEvent, false ),
-			mergeLocalFile : changeEvent => myOpenFile ( changeEvent, true )
-		}
-	);
+	class FileLoader {
+
+		/**
+		Open a local file and display the content of the file
+		@param {event} changeEvent the changeEvent that have started the process
+		@fires removeallobjects
+		@fires routeupdated
+		@fires noteupdated
+		@fires travelnameupdated
+		@fires layerchange
+		@fires setrouteslist
+		@fires setprovider
+		@fires settransitmode
+		@fires showitinerary
+		@fires roadbookupdate
+		*/
+
+		openLocalFile ( changeEvent ) { myOpenFile ( changeEvent, false ); }
+
+		/**
+		Open a local file and merge the content of the file with the current travel
+		@param {event} changeEvent the changeEvent that have started the process
+		@fires removeallobjects
+		@fires routeupdated
+		@fires noteupdated
+		@fires travelnameupdated
+		@fires layerchange
+		@fires setrouteslist
+		@fires setprovider
+		@fires settransitmode
+		@fires showitinerary
+		@fires roadbookupdate
+		*/
+
+		mergeLocalFile ( changeEvent ) { myOpenFile ( changeEvent, true ); }
+	}
+
+	return Object.seal ( new FileLoader	);
 }
 
-export { newFileLoader };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newFileLoader
+	@desc constructor for FileLoader objects
+	@return {FileLoader} an instance of FileLoader object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewFileLoader as newFileLoader
+};
 
 /*
---- End of FileLoader.js file -----------------------------------------------------------------------------------------
+--- End of FileLoader.js file -------------------------------------------------------------------------------------------------
 */

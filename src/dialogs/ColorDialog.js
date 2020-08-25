@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,353 +17,508 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- ColorDialog.js file -----------------------------------------------------------------------------------------------
-This file contains:
-	- the newColorDialog function
 Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
-Doc reviewed 20191124
+Doc reviewed 20200814
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+@file ColorDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
 
-/*
---- newColorDialog function -------------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newColorDialog ( color ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	const MIN_COLOR_VALUE = 0;
-	const MAX_COLOR_VALUE = 255;
+@module ColorDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { theTranslator } from '../UI/Translator.js';
+import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import { theConfig } from '../data/Config.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { ZERO, ONE, TWO } from '../util/Constants.js';
+
+const MIN_COLOR_VALUE = 0;
+const MAX_COLOR_VALUE = 255;
+const HEXADECIMAL = 16;
+const TWO_EXP_8 = 256;
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc a simple helper classe for the ColorDialog
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class Color {
+
+	/**
+	@param {?number} red The red value of the color. Must be between 0 and 255. If null set to 255
+	@param {?number} green The green value of the color. Must be between 0 and 255. If null set to 255
+	@param {?number} blue The blue value of the color. Must be between 0 and 255. If null set to 255
+	*/
+
+	constructor ( red, green, blue ) {
+
+		/**
+		The red value of the color
+		*/
+
+		this.red = ( 'number' === typeof red ? red : MAX_COLOR_VALUE ) % TWO_EXP_8;
+
+		/**
+		The green value of the color
+		*/
+
+		this.green = ( 'number' === typeof green ? green : MAX_COLOR_VALUE ) % TWO_EXP_8;
+
+		/**
+		The blue value of the color
+		*/
+
+		this.blue = ( 'number' === typeof blue ? blue : MAX_COLOR_VALUE ) % TWO_EXP_8;
+	}
+
+	/**
+	the color in the css HEX format '#RRGGBB'
+	*/
+
+	get cssColor ( ) {
+		return '#' +
+			this.red.toString ( HEXADECIMAL ).padStart ( TWO, '0' ) +
+			this.green.toString ( HEXADECIMAL ).padStart ( TWO, '0' ) +
+			this.blue.toString ( HEXADECIMAL ).padStart ( TWO, '0' );
+	}
+	set cssColor ( cssColor ) {
+		const THREE = 3;
+		const FIVE = 5;
+		this.red = parseInt ( cssColor.substr ( ONE, TWO ), HEXADECIMAL );
+		this.green = parseInt ( cssColor.substr ( THREE, TWO ), HEXADECIMAL );
+		this.blue = parseInt ( cssColor.substr ( FIVE, TWO ), HEXADECIMAL );
+	}
+
+	/**
+	return a clone of the Color
+	*/
+
+	clone ( ) { return new Color ( this.red, this.green, this.blue ); }
+
+	/**
+	copy the RGB values of th this Color to the color given as parameter
+	@param {Color} color the destination color
+	*/
+
+	copyTo ( color ) {
+		color.red = this.red;
+		color.green = this.green;
+		color.blue = this.blue;
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewColorDialog
+@desc constructor for ColorDialog objects
+@param {string} cssColor The color to edit in the css HEX format '#RRGGBB'
+@return {ColorDialog} an instance of ColorDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewColorDialog ( cssColor ) {
+
+	const COLOR_CELLS_NUMBER = 6;
 	const COLOR_ROWS_NUMBER = 6;
 	const DELTA_COLOR = 51;
-	const HEXADECIMAL = 16;
+	const SLIDER_MAX_VALUE = 100;
+	const SLIDER_STEP = 20;
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class ColorDialog
+	@classdesc a BaseDialog object completed for color edition
+	@see {@link newColorDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	let myColorDialog = null;
+
+	let myNewColor = new Color;
+	myNewColor.cssColor = cssColor;
+
 	let myColorDiv = null;
-	let myNewColor = color;
+	let myColorButtons = [];
 	let myRedInput = null;
 	let myGreenInput = null;
 	let myBlueInput = null;
 	let myColorSampleDiv = null;
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
 
-	/*
-	--- myColorToNumbers function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function transforms a css color into an object { red : xx, green : xx, blue : xx}
+	@function myOnColorButtonClick
+	@desc Event listener for the color buttons
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myColorToNumbers ( colorToNumbers ) {
-		const THREE = 3;
-		const FIVE = 5;
-		return {
-			red : parseInt ( colorToNumbers.substr ( ONE, TWO ), HEXADECIMAL ),
-			green : parseInt ( colorToNumbers.substr ( THREE, TWO ), HEXADECIMAL ),
-			blue : parseInt ( colorToNumbers.substr ( FIVE, TWO ), HEXADECIMAL )
-		};
-	}
-
-	/*
-	--- myNumbersToColor function -------------------------------------------------------------------------------------
-
-	This function transforms 3 numbers into a css color
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myNumbersToColor ( red, green, blue ) {
-
-		return '#' +
-			parseInt ( red ).toString ( HEXADECIMAL )
-				.padStart ( TWO, '0' ) +
-			parseInt ( green ).toString ( HEXADECIMAL )
-				.padStart ( TWO, '0' ) +
-			parseInt ( blue ).toString ( HEXADECIMAL )
-				.padStart ( TWO, '0' );
-	}
-
-	/*
-	--- myOnColorClick function ---------------------------------------------------------------------------------------
-
-	Click event handler on a color button
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnColorClick ( clickEvent ) {
-		myNewColor = clickEvent.target.colorValue;
-		let numbers = myColorToNumbers ( myNewColor );
-		myRedInput.value = numbers.red;
-		myGreenInput.value = numbers.green;
-		myBlueInput.value = numbers.blue;
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + clickEvent.target.colorValue + ';' );
+	function myOnColorButtonClick ( clickEvent ) {
+		myNewColor = clickEvent.target.color.clone ( );
+		myRedInput.value = myNewColor.red;
+		myGreenInput.value = myNewColor.green;
+		myBlueInput.value = myNewColor.blue;
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 
-	/*
-	--- myOnRedColorClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Click event handler on a red color button
+	@function myOnRedColorButtonOrSlider
+	@desc this method change the color buttons after a red button click or red slider input event
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnRedColorClick ( clickEvent ) {
-		let red = clickEvent.target.redValue;
-		let green = MAX_COLOR_VALUE;
-		let blue = MAX_COLOR_VALUE;
-		let rowCounter = ZERO;
-		while ( ++ rowCounter <= COLOR_ROWS_NUMBER ) {
-			let cellCounter = ZERO;
-			green = MAX_COLOR_VALUE;
-			while ( ++ cellCounter <= COLOR_ROWS_NUMBER ) {
-				let button = document.getElementById ( ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter );
-				button.colorValue = myNumbersToColor ( red, green, blue );
-				button.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
-				green -= DELTA_COLOR;
+	function myOnRedColorButtonOrSlider ( redValue ) {
+		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
+			for ( let cellCounter = ZERO; cellCounter < COLOR_ROWS_NUMBER; ++ cellCounter ) {
+				let colorButton = myColorButtons [ ( COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
+				colorButton.color.red = redValue;
+				colorButton.setAttribute ( 'style', 'background-color:' + colorButton.color.cssColor );
 			}
-			blue -= DELTA_COLOR;
 		}
 	}
 
-	/*
-	--- myOnColorInput function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	Red, green or blue input event handler
+	@function myOnRedColorButtonClick
+	@desc Event listener for the red color slider
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnRedColorSliderInput ( inputEvent ) {
+
+		// Math.ceil because with JS 100 * 2.55 = 254.99999....
+		myOnRedColorButtonOrSlider (
+			Math.ceil ( inputEvent.target.valueAsNumber * ( MAX_COLOR_VALUE / SLIDER_MAX_VALUE ) )
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnRedColorButtonClick
+	@desc Event listener for the red color buttons
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnRedColorButtonClick ( clickEvent ) {
+		myOnRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
+
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnColorInput
+	@desc Event listener for the red color buttons
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnColorInput ( ) {
-		myNewColor = myNumbersToColor ( myRedInput.value, myGreenInput.value, myBlueInput.value );
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor + ';' );
+		myNewColor.red = parseInt ( myRedInput.value );
+		myNewColor.green = parseInt ( myGreenInput.value );
+		myNewColor.blue = parseInt ( myBlueInput.value );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
-
-		// the dialog base is created
 		myColorDialog = newBaseDialog ( );
 		myColorDialog.title = theTranslator.getText ( 'ColorDialog - Colors' );
 	}
 
-	/*
-	--- myCreateColorDiv function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateColorDiv
+	@desc This method creates the color div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateColorDiv ( ) {
-		myColorDiv = myHTMLElementsFactory.create (
+		myColorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-ColorDiv',
 				id : 'TravelNotes-ColorDialog-ColorDiv'
 			},
 			myColorDialog.content
 		);
 	}
 
-	/*
-	--- myCreateButtonsDiv function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateColorButtonsDiv
+	@desc This method creates the color buttons div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateButtonsDiv ( ) {
-		let buttonsDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-ColorDialog-ButtonsDiv',
-				id : 'TravelNotes-ColorDialog-ButtonsDiv'
-			},
-			myColorDiv
-		);
+	function myCreateColorButtonsDiv ( ) {
+		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let cellColor = new Color;
+		cellColor.red = theConfig.colorDialog.initialRed;
 
-		let red = MAX_COLOR_VALUE;
-		let green = MAX_COLOR_VALUE;
-		let blue = MAX_COLOR_VALUE;
-		let rowCounter = ZERO;
-
-		// loop on the 7 rows
-		while ( ++ rowCounter <= COLOR_ROWS_NUMBER + ONE ) {
-			let colorButtonsRowDiv = myHTMLElementsFactory.create (
+		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
+			let colorButtonsRowDiv = theHTMLElementsFactory.create (
 				'div',
 				{
-					className : 'TravelNotes-ColorDialog-RowColorDiv',
-					id : 'TravelNotes-ColorDialog-RowColorDiv' + rowCounter
+					className : 'TravelNotes-ColorDialog-RowColorDiv'
 				},
-				buttonsDiv
+				colorButtonsDiv
 			);
 
-			let cellCounter = ZERO;
-			green = MAX_COLOR_VALUE;
+			cellColor.green = MAX_COLOR_VALUE;
 
-			// loop on the 6 cells
-			while ( ++ cellCounter <= COLOR_ROWS_NUMBER ) {
-				let colorButtonCellDiv = myHTMLElementsFactory.create (
+			for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
+				let colorButtonCellDiv = theHTMLElementsFactory.create (
 					'div',
 					{
-						className : 'TravelNotes-ColorDialog-CellColorDiv',
-						id : ( 'TravelNotes-ColorDialog-CellColorDiv' + rowCounter ) + cellCounter
+						className : 'TravelNotes-ColorDialog-CellColorDiv'
 					},
 					colorButtonsRowDiv
 				);
-				if ( rowCounter <= COLOR_ROWS_NUMBER ) {
-					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + myNumbersToColor ( red, green, blue ) );
-					colorButtonCellDiv.colorValue = myNumbersToColor ( red, green, blue );
-					colorButtonCellDiv.addEventListener ( 'click', myOnColorClick, false );
-					green -= DELTA_COLOR;
-				}
-				else {
-					red = ( cellCounter - ONE ) * DELTA_COLOR;
-					let buttonColor = myNumbersToColor ( MAX_COLOR_VALUE, red, red );
-					colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + buttonColor );
-					colorButtonCellDiv.redValue = MAX_COLOR_VALUE - red;
-					colorButtonCellDiv.addEventListener ( 'click', myOnRedColorClick, false );
-				}
+				colorButtonCellDiv.color = cellColor.clone ( );
+				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + cellColor.cssColor );
+				colorButtonCellDiv.addEventListener ( 'click', myOnColorButtonClick, false );
+				cellColor.green -= DELTA_COLOR;
+				myColorButtons.push ( colorButtonCellDiv );
 			}
-			blue -= DELTA_COLOR;
+			cellColor.blue -= DELTA_COLOR;
 		}
 	}
 
-	/*
-	--- myCreateRvbDiv function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateRedButtonsDiv
+	@desc This method creates the red color buttons div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateRvbDiv ( ) {
-		let rvbDiv = myHTMLElementsFactory.create (
+	function myCreateRedButtonsDiv ( ) {
+		let redButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let cellColor = new Color ( MAX_COLOR_VALUE, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
+		let redButtonsRowDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-DataDiv',
-				id : 'TravelNotes-ColorDialog-DataDiv'
+				className : 'TravelNotes-ColorDialog-RowColorDiv',
+				id : 'TravelNotes-ColorDialog-RedButtonsRowDiv'
 			},
-			myColorDiv
+			redButtonsDiv
 		);
+		for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
+			let colorButtonCellDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-ColorDialog-CellColorDiv'
+				},
+				redButtonsRowDiv
+			);
+			colorButtonCellDiv.color = cellColor.clone ( );
+			colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + colorButtonCellDiv.color.cssColor );
+			colorButtonCellDiv.addEventListener ( 'click', myOnRedColorButtonClick, false );
+			cellColor.green += DELTA_COLOR;
+			cellColor.blue += DELTA_COLOR;
+		}
+	}
 
-		// ... red ...
-		myHTMLElementsFactory.create (
-			'text',
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateRedSliderDiv
+	@desc This method creates the red slider div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRedSliderDiv ( ) {
+		let redSliderDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		let sliderValue =
+			Math.ceil ( theConfig.colorDialog.initialRed * ( SLIDER_MAX_VALUE / MAX_COLOR_VALUE ) );
+		let redSliderInput = theHTMLElementsFactory.create ( 'input',
 			{
-				data : theTranslator.getText ( 'ColorDialog - Red' )
+				type : 'range',
+				className : 'TravelNotes-ColorDialog-SliderInput',
+				value : sliderValue,
+				min : ZERO,
+				max : SLIDER_MAX_VALUE,
+				step : SLIDER_STEP
+
 			},
-			rvbDiv
+			redSliderDiv
 		);
-		myRedInput = myHTMLElementsFactory.create (
-			'input',
+		redSliderInput.addEventListener ( 'input', myOnRedColorSliderInput, false );
+		redSliderInput.focus ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateColorInputDiv
+	@desc This method creates the color input div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateColorInputDiv ( ) {
+		let rvbDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Red' ) }, rvbDiv	);
+		myRedInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
-				id : 'TravelNotes-ColorDialog-RedInput'
-
+				value : myNewColor.red,
+				min : MIN_COLOR_VALUE,
+				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
-		myRedInput.value = myColorToNumbers ( myNewColor ).red;
-		myRedInput.min = MIN_COLOR_VALUE;
-		myRedInput.max = MAX_COLOR_VALUE;
-
 		myRedInput.addEventListener ( 'input', myOnColorInput, false );
-
-		// ... and green...
-		myHTMLElementsFactory.create (
-			'text',
-			{
-				data : theTranslator.getText ( 'ColorDialog - Green' )
-			},
-			rvbDiv
-		);
-		myGreenInput = myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Green' ) }, rvbDiv );
+		myGreenInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
-				id : 'TravelNotes-ColorDialog-GreenInput'
+				value : myNewColor.green,
+				min : MIN_COLOR_VALUE,
+				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
-		myGreenInput.value = myColorToNumbers ( myNewColor ).green;
-		myGreenInput.min = MIN_COLOR_VALUE;
-		myGreenInput.max = MAX_COLOR_VALUE;
 		myGreenInput.addEventListener ( 'input', myOnColorInput, false );
-
-		// ... and blue
-		myHTMLElementsFactory.create (
-			'text',
-			{
-				data : theTranslator.getText ( 'ColorDialog - Blue' )
-			},
-			rvbDiv
-		);
-		myBlueInput = myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Blue' ) }, rvbDiv );
+		myBlueInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
-				id : 'TravelNotes-ColorDialog-BlueInput'
+				value : myNewColor.blue,
+				min : MIN_COLOR_VALUE,
+				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
-		myBlueInput.value = myColorToNumbers ( myNewColor ).blue;
-		myBlueInput.min = MIN_COLOR_VALUE;
-		myBlueInput.max = MAX_COLOR_VALUE;
 		myBlueInput.addEventListener ( 'input', myOnColorInput, false );
 	}
 
-	/*
-	--- myCreateColorSampleDiv function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateColorSampleDiv
+	@desc This method creates the color sample div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateColorSampleDiv ( ) {
-		myColorSampleDiv = myHTMLElementsFactory.create (
+		myColorSampleDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-ColorDialog-ColorSampleDiv',
 				id : 'TravelNotes-ColorDialog-ColorSampleDiv'
 			},
 			myColorDiv
 		);
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor + ';' );
+		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
 		myColorSampleDiv.color = myNewColor;
 	}
 
 	myCreateDialog ( );
 	myCreateColorDiv ( );
-	myCreateButtonsDiv ( );
-	myCreateRvbDiv ( );
+	myCreateColorButtonsDiv ( );
+	if ( theConfig.colorDialog.haveSlider ) {
+		myCreateRedSliderDiv ( );
+	}
+	else {
+		myCreateRedButtonsDiv ( );
+	}
+	myCreateColorInputDiv ( );
 	myCreateColorSampleDiv ( );
 
 	return myColorDialog;
 }
 
-export { newColorDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newColorDialog
+	@desc constructor for ColorDialog objects
+	@return {ColorDialog} an instance of ColorDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewColorDialog as newColorDialog
+};
 
 /*
---- End of ColorDialog.js file ----------------------------------------------------------------------------------------
+--- End of ColorDialog.js file ------------------------------------------------------------------------------------------------
 */

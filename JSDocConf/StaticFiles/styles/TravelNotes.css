@@ -1,0 +1,150 @@
+/* start reset */
+
+html, body, div, span, object,
+h1, h2, h3, h4, h5, h6, p,
+a, img, sub, sup, ul, li,
+figure, figcaption
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+	box-sizing: border-box;	
+}
+body
+{
+	line-height: 1;
+}
+ul
+{
+	list-style: none;
+}
+
+/* end reset*/
+
+body {
+	font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;	
+}
+
+code {
+	font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;	
+}
+
+.source {
+	margin-top: 3em;
+}
+
+.source code {
+	font: 11px Monospace;
+}
+
+nav {
+	position: fixed;
+	top: 0;
+	left:0;
+	width:18em;
+	height: 100vh;
+	background-color: black;
+	color: white;
+	padding-left: 2em;
+	padding-right: 1em;
+	overflow: auto;
+}
+nav a {
+	color: white;
+}
+
+nav ul {
+	padding-bottom: 2em;
+}
+
+nav h3 {
+	margin-left : -1em;
+	font-size: 144%;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	color: gray;
+}
+
+#main {
+	position: absolute;
+	top:0;
+	left: 18em;
+	width: calc(100vw -18em);
+}
+#main h1 {
+	font-size: 200%;
+	margin-left: 2cm;
+	/*
+	text-align: center;
+	background-color: lightgray;
+	*/
+}	
+#main section {
+	margin-top: 3em;
+	margin-left: 6cm;
+	margin-bottom: 1cm;
+	max-width: 75em;
+	margin-right: 3cm;
+}
+
+h2 {
+	font-size: 170%;
+	margin-left: -3cm;
+}
+
+h3 {
+	margin-left:-2cm;
+	font-size: 144%;
+}
+
+h4 {
+	margin-left:-1cm;
+	font-size: 120%;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.type-signature,
+.signature-attributes {
+	font-size: 80%;
+	color: gray;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+.type-signature,
+{
+	font-size: 80%;
+	color: gray;
+}
+
+table
+{
+    border-spacing: 0;
+    border: 0;
+    border-collapse: collapse;
+}
+
+td, th
+{
+    border: 1px solid #ddd;
+    margin: 0px;
+    text-align: left;
+    vertical-align: top;
+    padding: 4px 6px;
+    display: table-cell;
+}
+
+thead tr
+{
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+th { border-right: 1px solid #aaa; }
+tr > th:last-child { border-right: 1px solid #ddd; }
+*/

@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,17 +17,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- WayPointContextMenu.js file ---------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
-Doc reviewed 20191124
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200727
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file WayPointContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module WayPointContextMenu
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
@@ -35,20 +52,32 @@ import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
-/*
---- newWayPointContextMenu function -----------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewWayPointContextMenu
+@desc constructor of WayPointContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@return {WayPointContextMenu} an instance of a WayPointContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newWayPointContextMenu ( contextMenuEvent ) {
+function ourNewWayPointContextMenu ( contextMenuEvent ) {
 
 	let myWayPointObjId = contextMenuEvent.target.objId;
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
@@ -59,27 +88,56 @@ function newWayPointContextMenu ( contextMenuEvent ) {
 		return [
 			{
 				context : theWayPointEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Delete this waypoint' ),
+				name : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
 				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
+				param : myWayPointObjId
+			},
+			{
+				context : theWayPointEditor,
+				name : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
+				action : theWayPointEditor.wayPointProperties,
 				param : myWayPointObjId
 			}
 		];
 	}
 
-	/*
-	--- WayPointContextMenu object function ---------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class WayPointContextMenu
+	@classdesc a BaseContextMenu object with items completed for wayPoints
+	@see {@link newWayPointContextMenu} for constructor
+	@augments BaseContextMenu
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent );
-	wayPointContextMenu.init ( myGetMenuItems ( ) );
+	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 
 	return Object.seal ( wayPointContextMenu );
 }
 
-export { newWayPointContextMenu };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newWayPointContextMenu
+	@desc constructor of WayPointContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@return {WayPointContextMenu} an instance of a WayPointContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	*/
+
+	ourNewWayPointContextMenu as newWayPointContextMenu
+
+};
 
 /*
---- End of WayPointContextMenu.js file ------------------------------------------------------------------------------------
+--- End of WayPointContextMenu.js file ----------------------------------------------------------------------------------------
 */

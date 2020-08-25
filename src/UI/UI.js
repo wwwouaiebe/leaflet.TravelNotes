@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- UserInterface.js file ---------------------------------------------------------------------------------------------
-This file contains:
-	- the newUserInterface function
 Changes:
 	- v1.0.0:
 		- created
@@ -29,175 +26,216 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #63 : Find a better solution for provider keys upload
 		- Issue #75 : Merge Maps and TravelNotes
-Doc reviewed 20191125
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200816
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file UI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module UI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelUI } from '../UI/TravelUI.js';
-import { theRouteUI } from '../UI/RouteUI.js';
-import { theDataPanesUI } from '../UI/DataPanesUI.js';
+import { thePanesManagerUI } from '../UI/PanesManagerUI.js';
 import { theProvidersToolbarUI } from '../UI/ProvidersToolbarUI.js';
 import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
+import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
+import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
+import { PANE_ID } from '../util/Constants.js';
 
-/*
---- newUserInterface function -----------------------------------------------------------------------------------------
+let ourMainDiv = null;
 
-This function returns the UserInterface object
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourAddTravelNotesEventListeners
+@desc This method add the TravelNotes events listeners
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newUI ( ) {
-
-	let myMainDiv = null;
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( controlDiv ) {
-		if ( document.getElementById ( 'TravelNotes-Control-MainDiv' ) ) {
-			return;
-		}
-		let htmlElementsFactory = newHTMLElementsFactory ( );
-		myMainDiv = htmlElementsFactory.create ( 'div', { id : 'TravelNotes-Control-MainDiv' }, controlDiv );
-		htmlElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-MainDiv-Title',
-				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
-			},
-			myMainDiv
-		);
-
-		theTravelNotesToolbarUI.createUI ( myMainDiv );
-		theTravelUI.createUI ( myMainDiv );
-		theRouteUI.createUI ( myMainDiv );
-		theDataPanesUI.createUI ( myMainDiv );
-
-		theProvidersToolbarUI.createUI ( myMainDiv );
-
-		myMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
-
-		myMainDiv.addEventListener ( 'expandrouteui', ( ) => theRouteUI.expandUI ( ), false );
-		myMainDiv.addEventListener ( 'reducerouteui', ( ) => theRouteUI.reduceUI ( ), false );
-
-		myMainDiv.addEventListener ( 'setwaypointslist', ( ) => theRouteUI.setWayPointsList ( ), false );
-
-		myMainDiv.addEventListener ( 'setitinerary', ( ) => theDataPanesUI.setItinerary ( ), false );
-		myMainDiv.addEventListener ( 'updateitinerary', ( ) => theDataPanesUI.updateItinerary ( ), false );
-		myMainDiv.addEventListener ( 'settravelnotes', ( ) => theDataPanesUI.setTravelNotes ( ), false );
-		myMainDiv.addEventListener ( 'updatetravelnotes', ( ) => theDataPanesUI.updateTravelNotes ( ), false );
-		myMainDiv.addEventListener ( 'setsearch', ( ) => theDataPanesUI.setSearch ( ), false );
-		myMainDiv.addEventListener ( 'updatesearch', ( ) => theDataPanesUI.updateSearch ( ), false );
-
-		myMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
-
-		myMainDiv.addEventListener (
-			'setprovider',
-			setProviderEvent => {
-				if ( setProviderEvent.data && setProviderEvent.data.provider ) {
-					theProvidersToolbarUI.provider = setProviderEvent.data.provider;
-				}
-			},
-			false
-		);
-		myMainDiv.addEventListener (
-			'settransitmode',
-			setTransitModeEvent => {
-				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
-					theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
-				}
-			},
-			false
-		);
-
-		myMainDiv.addEventListener (
-			'click',
-			clickEvent => {
-				if ( clickEvent.target.classList.contains ( 'TravelNotes-SortableList-ItemInput' ) ) {
-					return;
-				}
-				if ( clickEvent.target.classList.contains ( 'TravelNotes-Control-LinkButton' ) ) {
-					return;
-				}
-				if (
-					clickEvent.target.id &&
-				INVALID_OBJ_ID !==
-					[
-						'TravelNotes-Control-OpenTravelInput',
-						'TravelNotes-Control-OpenTravelButton',
-						'TravelNotes-Control-ImportTravelInput',
-						'TravelNotes-Control-ImportTravelButton'
-					].indexOf ( clickEvent.target.id )
-				) {
-					return;
-				}
-				clickEvent.stopPropagation ( );
-				clickEvent.preventDefault ( );
-			},
-			false
-		);
-
-		myMainDiv.addEventListener (
-			'dblclick',
-			dblClickEvent => {
-				dblClickEvent.stopPropagation ( );
-				dblClickEvent.preventDefault ( );
-			},
-			false
-		);
-
-		myMainDiv.addEventListener (
-			'wheel',
-			wheelEvent => {
-				wheelEvent.stopPropagation ( );
-				wheelEvent.preventDefault ( );
-			},
-			false
-		);
-		document.addEventListener (
-			'geolocationstatuschanged',
-			geoLocationStatusChangedEvent => {
-				theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
-			},
-			false
-		);
-	}
-
-	if ( ! myMainDiv ) {
-		myCreateUI ( );
-	}
-
-	/*
-	--- UI object -----------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return {
-		createUI : controlDiv => myCreateUI ( controlDiv )
-	};
+function ourAddTravelNotesEventListeners ( ) {
+	ourMainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
+	ourMainDiv.addEventListener ( 'setrouteslist', ( ) => theTravelUI.setRoutesList ( ), false );
+	ourMainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
+	ourMainDiv.addEventListener (
+		'updateitinerary',
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
+		false
+	);
+	ourMainDiv.addEventListener (
+		'showtravelnotes',
+		( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
+		false
+	);
+	ourMainDiv.addEventListener (
+		'updatetravelnotes',
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
+		false
+	);
+	ourMainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ), false );
+	ourMainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ), false );
+	ourMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
+	ourMainDiv.addEventListener (
+		'setprovider',
+		setProviderEvent => {
+			if ( setProviderEvent.data && setProviderEvent.data.provider ) {
+				theProvidersToolbarUI.provider = setProviderEvent.data.provider;
+			}
+		},
+		false
+	);
+	ourMainDiv.addEventListener (
+		'settransitmode',
+		setTransitModeEvent => {
+			if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
+				theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
+			}
+		},
+		false
+	);
+	document.addEventListener (
+		'geolocationstatuschanged',
+		geoLocationStatusChangedEvent => {
+			theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+		},
+		false
+	);
 }
 
-/*
---- theUI object ------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-The one and only one UI object
+@function ourAddMouseEventListeners
+@desc This method add the mouse events listeners
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-const theUI = newUI ( );
+function ourAddMouseEventListeners ( ) {
+	ourMainDiv.addEventListener (
+		'click',
+		clickEvent => {
+			if ( clickEvent.target.id && 'TravelNotes-UI-MainDiv' === clickEvent.target.id ) {
+				clickEvent.stopPropagation ( );
+				clickEvent.preventDefault ( );
+			}
+		},
+		false
+	);
 
-export { theUI };
+	ourMainDiv.addEventListener (
+		'dblclick',
+		dblClickEvent => {
+			dblClickEvent.stopPropagation ( );
+			dblClickEvent.preventDefault ( );
+		},
+		false
+	);
+
+	ourMainDiv.addEventListener (
+		'contextmenu',
+		conextMenuEvent => {
+			conextMenuEvent.stopPropagation ( );
+			conextMenuEvent.preventDefault ( );
+		},
+		false
+	);
+
+	ourMainDiv.addEventListener (
+		'wheel',
+		wheelEvent => {
+			wheelEvent.stopPropagation ( );
+			wheelEvent.preventDefault ( );
+		},
+		false
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is the User Interface ( UI )
+@see {@link theUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class UI {
+
+	/**
+	creates the user interface
+	@param {HTMLElement} uiDiv The HTML element in witch the UI have to be created
+	*/
+
+	createUI ( uiDiv ) {
+		if ( ourMainDiv ) {
+			return;
+		}
+		ourMainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-UI-MainDiv-Title',
+				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
+			},
+			ourMainDiv
+		);
+		theTravelNotesToolbarUI.createUI ( ourMainDiv );
+		theTravelUI.createUI ( ourMainDiv );
+		thePanesManagerUI.addPane ( newItineraryPaneUI ( ) );
+		thePanesManagerUI.addPane ( newTravelNotesPaneUI ( ) );
+		if ( window.osmSearch ) {
+			thePanesManagerUI.addPane ( newOsmSearchPaneUI ( ) );
+		}
+		thePanesManagerUI.createUI ( ourMainDiv );
+		theProvidersToolbarUI.createUI ( ourMainDiv );
+		ourAddTravelNotesEventListeners ( );
+		ourAddMouseEventListeners ( );
+	}
+}
+
+const ourUI = Object.freeze ( new UI );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of UI class
+	@type {UI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourUI as theUI
+};
 
 /*
---- End of UserInterface.js file --------------------------------------------------------------------------------------
+--- End of UI.js file ---------------------------------------------------------------------------------------------------------
 */

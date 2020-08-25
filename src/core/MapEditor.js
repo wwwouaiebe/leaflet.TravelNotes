@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,11 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- MapEditor.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the newMapEditor function
-	- the theMapEditor object
 Changes:
 	- v1.0.0:
 		- created
@@ -40,102 +37,306 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.8.0:
 		- issue #97 : Improve adding a new waypoint to a route
-Doc reviewed 20191121
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200802
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L  */
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MapEditor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module MapEditor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/* global L */
 
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
-import { newUtilities } from '../util/Utilities.js';
-import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { newGeometry } from '../util/Geometry.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
+import { theGeometry } from '../util/Geometry.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theTranslator } from '../UI/Translator.js';
 
 import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TWO } from '../util/Constants.js';
 
+const MARKER_BOUNDS_PRECISION = 0.01;
 const WAY_POINT_ICON_SIZE = 40;
 
-let ourWayPointMarker = null;
-let ourWayPointInitialLatLng = null;
-let ourShowDragTooltip = 1;
+let ourTempWayPointMarker = null;
+let ourTempWayPointInitialLatLng = null;
+let ourTempWayPointShowDragTooltip = 1;
 
-/*
---- onDragEndWayPointMarker function ---------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourOnTempWayPointMarkerMouseOut
+@desc Event listener for ourTempWayPointMarker
+@listens mouseout
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function onDragEndWayPointMarker ( dragEndEvent ) {
-	theWayPointEditor.addWayPointOnRoute (
-		ourWayPointInitialLatLng,
-		[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
-	);
-	if ( ourWayPointMarker ) {
-		L.DomEvent.off ( ourWayPointMarker );
-		theTravelNotesData.map.removeLayer ( ourWayPointMarker );
-		ourWayPointMarker = null;
+function ourOnTempWayPointMarkerMouseOut ( ) {
+	if ( ourTempWayPointMarker ) {
+		L.DomEvent.off ( ourTempWayPointMarker );
+		theTravelNotesData.map.removeLayer ( ourTempWayPointMarker );
+		ourTempWayPointMarker = null;
 	}
 }
 
-/*
---- onMouseOutWayPointMarker function ---------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourOnTempWayPointMarkerDragStart
+@desc Event listener for ourTempWayPointMarker
+@listens dragstart
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function onMouseOutWayPointMarker ( ) {
-	if ( ourWayPointMarker ) {
-		L.DomEvent.off ( ourWayPointMarker );
-		theTravelNotesData.map.removeLayer ( ourWayPointMarker );
-		ourWayPointMarker = null;
-	}
+function ourOnTempWayPointMarkerDragStart ( ) {
+	L.DomEvent.off ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
 }
 
-/*
---- onContextMenuWayPointMarker function ---------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourOnTempWayPointMarkerContextMenu
+@desc Event listener for ourTempWayPointMarker
+@listens contextmenu
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function onContextMenuWayPointMarker ( contextMenuEvent ) {
-	contextMenuEvent.latlng.lat = ourWayPointInitialLatLng [ ZERO ];
-	contextMenuEvent.latlng.lng = ourWayPointInitialLatLng [ ONE ];
+function ourOnTempWayPointMarkerContextMenu ( contextMenuEvent ) {
+	contextMenuEvent.latlng.lat = ourTempWayPointInitialLatLng [ ZERO ];
+	contextMenuEvent.latlng.lng = ourTempWayPointInitialLatLng [ ONE ];
 	contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
 	newRouteContextMenu ( contextMenuEvent ).show ( );
 }
 
-/*
---- onMouseOverEditedRoute function -----------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourOnTempWayPointMarkerDragEnd
+@desc Event listener for ourTempWayPointMarker
+@listens dragend
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function onMouseOverEditedRoute ( mapEvent ) {
-	let route = newDataSearchEngine ( ).getRoute ( mapEvent.target.objId );
-	if ( ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
-		ourWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
-		if ( ourWayPointMarker ) {
-			ourWayPointMarker.setLatLng ( mapEvent.latlng );
+function ourOnTempWayPointMarkerDragEnd ( dragEndEvent ) {
+	theWayPointEditor.addWayPointOnRoute (
+		ourTempWayPointInitialLatLng,
+		[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
+	);
+	if ( ourTempWayPointMarker ) {
+		L.DomEvent.off ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
+		L.DomEvent.off ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
+		L.DomEvent.off ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
+		theTravelNotesData.map.removeLayer ( ourTempWayPointMarker );
+		ourTempWayPointMarker = null;
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteBulletDragEnd
+@desc Event listener for Note bullets
+@listens dragend
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteBulletDragEnd ( dragEndEvent ) {
+
+	// the TravelNotes note and route are searched...
+	let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
+	let draggedNote = noteAndRoute.note;
+	let route = noteAndRoute.route;
+
+	// ... then the layerGroup is searched...
+	let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
+	if ( null === route ) {
+
+		// the note is not attached to a route, so the coordinates of the note can be directly changed
+		draggedNote.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
+		theEventDispatcher.dispatch ( 'updatetravelnotes' );
+	}
+	else {
+
+		// the note is attached to the route, so we have to find the nearest point on the route
+		// and the distance since the start of the route
+		let latLngDistance = theGeometry.getClosestLatLngDistance (
+			route,
+			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
+		);
+
+		// coordinates and distance are changed in the note
+		draggedNote.latLng = latLngDistance.latLng;
+		draggedNote.distance = latLngDistance.distance;
+
+		// notes are sorted on the distance
+		route.notes.sort (
+			( first, second ) => first.distance - second.distance
+		);
+
+		// the coordinates of the bullet are adapted
+		draggedLayerGroup.getLayer ( draggedLayerGroup.bulletId )
+			.setLatLng ( latLngDistance.latLng );
+		theEventDispatcher.dispatch ( 'updateitinerary' );
+	}
+
+	// in all cases, the polyline is updated
+	draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+		.setLatLngs ( [ draggedNote.latLng, draggedNote.iconLatLng ] );
+
+	// and the HTML page is adapted
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteBulletDrag
+@desc Event listener for Note bullets
+@listens drag
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteBulletDrag ( dragEvent ) {
+	let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
+	let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
+	draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+		.setLatLngs ( [ [ dragEvent.latlng.lat, dragEvent.latlng.lng ], draggedNote.iconLatLng ] );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteMarkerContextMenu
+@desc Event listener for Note markers
+@listens contextmenu
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteMarkerContextMenu ( contextMenuEvent ) {
+	newNoteContextMenu ( contextMenuEvent ).show ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteMarkerDragEnd
+@desc Event listener for Note markers
+@listens dragend
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteMarkerDragEnd ( dragEndEvent ) {
+
+	// The TravelNotes note linked to the marker is searched...
+	let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
+
+	// ... new coordinates are saved in the TravelNotes note...
+	draggedNote.iconLatLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
+
+	// ... then the layerGroup is searched...
+	let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
+
+	// ... and finally the polyline is updated with the new coordinates
+	draggedLayerGroup.getLayer (
+		draggedLayerGroup.polylineId
+	)
+		.setLatLngs (
+			[ draggedNote.latLng, draggedNote.iconLatLng ]
+		);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteMarkerDrag
+@desc Event listener for Note markers
+@listens drag
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteMarkerDrag ( dragEvent ) {
+
+	// The TravelNotes note linked to the marker is searched...
+	let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
+
+	// ... then the layerGroup is searched...
+	let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
+
+	// ... and finally the polyline is updated with the new coordinates
+	draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
+		.setLatLngs ( [ draggedNote.latLng, [ dragEvent.latlng.lat, dragEvent.latlng.lng ] ] );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnEditedRouteMouseOver
+@desc Event listener for the edited route
+@listens mouseover
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnEditedRouteMouseOver ( mapEvent ) {
+	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
+	if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
+		ourTempWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
+		if ( ourTempWayPointMarker ) {
+			ourTempWayPointMarker.setLatLng ( mapEvent.latlng );
 		}
 		else {
 
-			// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
+			// a HTML element is created, with different class name, depending of the waypont position.
+			// See also WayPoints.css
 			let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPointTmp' +
 			'"></div><div class="TravelNotes-WayPointText">?</div>';
 
 			// a leaflet marker is created...
-			ourWayPointMarker = L.marker (
+			ourTempWayPointMarker = L.marker (
 				mapEvent.latlng,
 				{
 					icon : L.divIcon (
@@ -152,417 +353,415 @@ function onMouseOverEditedRoute ( mapEvent ) {
 					draggable : true
 				}
 			);
-			if ( NOT_FOUND === theConfig.route.showDragTooltip || ourShowDragTooltip <= theConfig.route.showDragTooltip ) {
-				ourShowDragTooltip ++;
-				ourWayPointMarker.bindTooltip (	theTranslator.getText ( 'MapEditor - Drag and drop to add a waypoint' ) );
-				ourWayPointMarker.getTooltip ( ).options.offset = [	ZERO, ZERO ];
+			if (
+				NOT_FOUND === theConfig.route.showDragTooltip
+				||
+				ourTempWayPointShowDragTooltip <= theConfig.route.showDragTooltip
+			) {
+				ourTempWayPointShowDragTooltip ++;
+				ourTempWayPointMarker.bindTooltip (
+					theTranslator.getText ( 'MapEditor - Drag and drop to add a waypoint' )
+				);
+				ourTempWayPointMarker.getTooltip ( ).options.offset = [	ZERO, ZERO ];
 
 			}
-			ourWayPointMarker.addTo ( theTravelNotesData.map );
-			ourWayPointMarker.on ( 'mouseout', onMouseOutWayPointMarker );
-			ourWayPointMarker.on ( 'dragstart', ( ) => ourWayPointMarker.off ( 'mouseout', onMouseOutWayPointMarker ) );
-			ourWayPointMarker.on ( 'dragend', onDragEndWayPointMarker );
-			ourWayPointMarker.on ( 'contextmenu', onContextMenuWayPointMarker );
+			ourTempWayPointMarker.addTo ( theTravelNotesData.map );
+			L.DomEvent.on ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
+			L.DomEvent.on ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
+			L.DomEvent.on ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
+			L.DomEvent.on ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
 		}
 	}
 }
 
-/*
---- newMapEditor function ---------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure and Singleton
+@function ourOnRouteContextMenu
+@desc Event listener for Route
+@listens contextmenu
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newMapEditor ( ) {
+function ourOnRouteContextMenu ( contextMenuEvent ) {
+	newRouteContextMenu ( contextMenuEvent ).show ( );
+}
 
-	const MARKER_BOUNDS_PRECISION = 0.01;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myDataSearchEngine = newDataSearchEngine ( );
-	let myEventDispatcher = newEventDispatcher ( );
-	let myGeometry = newGeometry ( );
+@function ourOnWayPointContextMenu
+@desc Event listener for WayPoint
+@listens contextmenu
+@private
 
-	/*
-	--- myAddTo function ----------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	This function add a leaflet object to the leaflet map and to the JavaScript map
+function ourOnWayPointContextMenu ( contextMenuEvent ) {
+	newWayPointContextMenu ( contextMenuEvent ).show ( );
+}
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	function myAddTo ( objId, object ) {
-		object.objId = objId;
-		object.addTo ( theTravelNotesData.map );
-		theTravelNotesData.mapObjects.set ( objId, object );
+@function ourOnWayPointDragEnd
+@desc Event listener for WayPoint
+@listens dragend
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnWayPointDragEnd ( dragEndEvent ) {
+	let draggedWayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( dragEndEvent.target.objId );
+	draggedWayPoint.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
+	theWayPointEditor.wayPointDragEnd ( dragEndEvent.target.objId );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddTo
+@desc Add a Leaflet object to the map
+@param {!number} objId The objId to use
+@param {Object} leafletObject The Leaflet object to add
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddTo ( objId, leafletObject ) {
+	leafletObject.objId = objId;
+	leafletObject.addTo ( theTravelNotesData.map );
+	theTravelNotesData.mapObjects.set ( objId, leafletObject );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourRemoveObject
+@desc Remove a Leaflet object from the map
+@param {!number} objId The objId of the object to remove
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourRemoveObject ( objId ) {
+	let layer = theTravelNotesData.mapObjects.get ( objId );
+	if ( layer ) {
+		L.DomEvent.off ( layer );
+		theTravelNotesData.map.removeLayer ( layer );
+		theTravelNotesData.mapObjects.delete ( objId );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddNote
+@desc Add a Note to the map
+@param {!number} objId The objId of the note to add
+@param {boolean} isPopupOpen When true, the popup of the note is opened
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddNote ( noteObjId, isPopupOpen ) {
+
+	let noteObjects = theViewerMapEditor.addNote ( noteObjId );
+	if ( isPopupOpen ) {
+		noteObjects.marker.openPopup ( );
+	}
+	if ( ! theTravelNotesData.travel.readOnly ) {
+		L.DomEvent.on ( noteObjects.bullet, 'dragend', ourOnNoteBulletDragEnd );
+		L.DomEvent.on ( noteObjects.bullet, 'drag',	ourOnNoteBulletDrag );
+		L.DomEvent.on ( noteObjects.marker, 'contextmenu', ourOnNoteMarkerContextMenu );
+		L.DomEvent.on ( noteObjects.marker, 'dragend', ourOnNoteMarkerDragEnd );
+		L.DomEvent.on ( noteObjects.marker, 'drag', ourOnNoteMarkerDrag );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddWayPoint
+@desc Add a WayPoint to the map
+@param {WayPoint} wayPoint The WayPoint to add
+@param {string|number} letter The letter or number to show with the WayPoint
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddWayPoint ( wayPoint, letter ) {
+	if ( ( LAT_LNG.defaultValue === wayPoint.lat ) && ( LAT_LNG.defaultValue === wayPoint.lng ) ) {
+		return;
 	}
 
-	/*
-	--- myRemoveObject function ---------------------------------------------------------------------------------------
+	// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
+	let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' +
+	( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) +
+	'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
 
-	This function remove a leaflet object from the leaflet map and from the JavaScript map
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myRemoveObject ( objId ) {
-		let layer = theTravelNotesData.mapObjects.get ( objId );
-		if ( layer ) {
-			L.DomEvent.off ( layer );
-			theTravelNotesData.map.removeLayer ( layer );
-			theTravelNotesData.mapObjects.delete ( objId );
+	// a leaflet marker is created...
+	let marker = L.marker (
+		wayPoint.latLng,
+		{
+			icon : L.divIcon (
+				{
+					iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
+					iconAnchor : [
+						WAY_POINT_ICON_SIZE / TWO,
+						WAY_POINT_ICON_SIZE
+					],
+					html : iconHtml,
+					className : 'TravelNotes-WayPointStyle'
+				}
+			),
+			draggable : true
 		}
-	}
+	);
 
-	/*
-	--- myRemoveRoute function ------------------------------------------------------------------------------------
+	marker.bindTooltip (
+		tooltipWayPoint => theDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).fullName
+	);
+	marker.getTooltip ( ).options.offset = [
+		WAY_POINT_ICON_SIZE / TWO,
+		-WAY_POINT_ICON_SIZE / TWO
+	];
 
-	---------------------------------------------------------------------------------------------------------------
-	*/
+	L.DomEvent.on ( marker, 'contextmenu', ourOnWayPointContextMenu );
 
-	function myRemoveRoute ( routeObjId ) {
+	// ... and added to the map...
+	marker.objId = wayPoint.objId;
+	ourAddTo ( wayPoint.objId, marker );
 
-		let route = myDataSearchEngine.getRoute ( routeObjId );
-		myRemoveObject ( route.objId );
+	// ... and a dragend event listener is created
+	L.DomEvent.on ( marker, 'dragend', ourOnWayPointDragEnd );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddRoute
+@desc Add a Route to the map
+@param {!number} routeObjId The objId of the Route to add
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddRoute ( routeObjId ) {
+
+	let route = theViewerMapEditor.addRoute ( routeObjId );
+	let polyline = theTravelNotesData.mapObjects.get ( routeObjId );
+
+	if ( ! theTravelNotesData.travel.readOnly ) {
+		L.DomEvent.on ( polyline, 'contextmenu', ourOnRouteContextMenu );
+		L.DomEvent.on ( polyline, 'mouseover', ourOnEditedRouteMouseOver );
 
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
-			myRemoveObject ( notesIterator.value.objId );
+			let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
+			let marker = layerGroup.getLayer ( layerGroup.markerId );
+			let bullet = layerGroup.getLayer ( layerGroup.bulletId );
+			L.DomEvent.on ( bullet, 'dragend', ourOnNoteBulletDragEnd );
+			L.DomEvent.on ( bullet, 'drag',	ourOnNoteBulletDrag );
+			L.DomEvent.on ( marker, 'contextmenu', ourOnNoteMarkerContextMenu );
+			L.DomEvent.on ( marker, 'dragend', ourOnNoteMarkerDragEnd );
+			L.DomEvent.on ( marker, 'drag', ourOnNoteMarkerDrag );
 		}
+	}
 
-		let wayPointsIterator = route.wayPoints.iterator;
+	// waypoints are added
+	if ( ! theTravelNotesData.travel.readOnly && ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
+		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			myRemoveObject ( wayPointsIterator.value.objId );
-		}
-	}
-
-	/*
-	--- myAddNoteEvents function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddNoteEvents ( noteObjId, noteObjects ) {
-
-		// event listener for the dragend event
-		L.DomEvent.on (
-			noteObjects.bullet,
-			'dragend',
-			dragEndEvent => {
-
-				// the TravelNotes note and route are searched...
-				let noteAndRoute = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
-				let draggedNote = noteAndRoute.note;
-				let route = noteAndRoute.route;
-
-				// ... then the layerGroup is searched...
-				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
-				if ( null === route ) {
-
-					// the note is not attached to a route, so the coordinates of the note can be directly changed
-					draggedNote.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
-					myEventDispatcher.dispatch ( 'updatetravelnotes' );
-				}
-				else {
-
-					// the note is attached to the route, so we have to find the nearest point on the route
-					// and the distance since the start of the route
-					let latLngDistance = myGeometry.getClosestLatLngDistance (
-						route,
-						[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
-					);
-
-					// coordinates and distance are changed in the note
-					draggedNote.latLng = latLngDistance.latLng;
-					draggedNote.distance = latLngDistance.distance;
-
-					// notes are sorted on the distance
-					route.notes.sort (
-						( first, second ) => first.distance - second.distance
-					);
-
-					// the coordinates of the bullet are adapted
-					draggedLayerGroup.getLayer ( draggedLayerGroup.bulletId )
-						.setLatLng ( latLngDistance.latLng );
-					myEventDispatcher.dispatch ( 'updateitinerary' );
-				}
-
-				// in all cases, the polyline is updated
-				draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
-					.setLatLngs ( [ draggedNote.latLng, draggedNote.iconLatLng ] );
-
-				// and the HTML page is adapted
-				myEventDispatcher.dispatch ( 'roadbookupdate' );
-			}
-		);
-
-		// event listener for the drag event
-		L.DomEvent.on (
-			noteObjects.bullet,
-			'drag',
-			dragEvent => {
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
-				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
-				draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
-					.setLatLngs ( [ [ dragEvent.latlng.lat, dragEvent.latlng.lng ], draggedNote.iconLatLng ] );
-			}
-		);
-
-		// event listener for the contextmenu event
-		L.DomEvent.on (
-			noteObjects.marker,
-			'contextmenu',
-			contextMenuEvent => newNoteContextMenu ( contextMenuEvent ).show ( )
-		);
-
-		// event listener for the dragend event
-		L.DomEvent.on (
-			noteObjects.marker,
-			'dragend',
-			dragEndEvent => {
-
-				// The TravelNotes note linked to the marker is searched...
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
-
-				// ... new coordinates are saved in the TravelNotes note...
-				draggedNote.iconLatLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
-
-				// ... then the layerGroup is searched...
-				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEndEvent.target.objId );
-
-				// ... and finally the polyline is updated with the new coordinates
-				draggedLayerGroup.getLayer (
-					draggedLayerGroup.polylineId
-				).setLatLngs (
-					[ draggedNote.latLng, draggedNote.iconLatLng ]
-				);
-			}
-		);
-
-		// event listener for the drag event
-		L.DomEvent.on (
-			noteObjects.marker,
-			'drag',
-			dragEvent => {
-
-				// The TravelNotes note linked to the marker is searched...
-				let draggedNote = myDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
-
-				// ... then the layerGroup is searched...
-				let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
-
-				// ... and finally the polyline is updated with the new coordinates
-				draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
-					.setLatLngs ( [ draggedNote.latLng, [ dragEvent.latlng.lat, dragEvent.latlng.lng ] ] );
-			}
-		);
-	}
-
-	/*
-	--- myAddNote function --------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddNote ( noteObjId, isPopupOpen ) {
-
-		let noteObjects = theViewerMapEditor.addNote ( noteObjId );
-		if ( isPopupOpen ) {
-			noteObjects.marker.openPopup ( );
-		}
-
-		if ( ! theTravelNotesData.travel.readOnly ) {
-			myAddNoteEvents ( noteObjId, noteObjects );
-		}
-	}
-
-	/*
-	--- myAddWayPoint function ----------------------------------------------------------------------------------------
-
-	This function add a TravelNotes waypoint object to the leaflet map
-
-	parameters:
-	- wayPoint : a TravelNotes waypoint object
-	- letter : the letter to be displayed under the waypoint
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddWayPoint ( wayPoint, letter ) {
-		if ( ( LAT_LNG.defaultValue === wayPoint.lat ) && ( LAT_LNG.defaultValue === wayPoint.lng ) ) {
-			return;
-		}
-
-		// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
-		let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' +
-		( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) +
-		'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
-
-		// a leaflet marker is created...
-		let marker = L.marker (
-			wayPoint.latLng,
-			{
-				icon : L.divIcon (
-					{
-						iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
-						iconAnchor : [
-							WAY_POINT_ICON_SIZE / TWO,
-							WAY_POINT_ICON_SIZE
-						],
-						html : iconHtml,
-						className : 'TravelNotes-WayPointStyle'
-					}
-				),
-				draggable : true
-			}
-		);
-
-		marker.bindTooltip (
-			tooltipWayPoint => newUtilities ( ).formatLatLng (
-				myDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).latLng
-			)
-		);
-		marker.getTooltip ( ).options.offset = [
-			WAY_POINT_ICON_SIZE / TWO,
-			-WAY_POINT_ICON_SIZE / TWO
-		];
-
-		L.DomEvent.on (
-			marker,
-			'contextmenu',
-			contextMenuEvent => newWayPointContextMenu ( contextMenuEvent ).show ( )
-		);
-
-		// ... and added to the map...
-		marker.objId = wayPoint.objId;
-		myAddTo ( wayPoint.objId, marker );
-
-		// ... and a dragend event listener is created
-		L.DomEvent.on (
-			marker,
-			'dragend',
-			dragEndEvent => {
-				let draggedWayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( dragEndEvent.target.objId );
-				draggedWayPoint.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
-				theWayPointEditor.wayPointDragEnd ( dragEndEvent.target.objId );
-			}
-		);
-	}
-
-	/*
-	--- myAddRoute function ---------------------------------------------------------------------------------------
-
-	This function add a route and eventually the attached notes and waypoints
-	to the leaflet map and the JavaScript map
-
-	parameters:
-	- route : a TravelNotes route object.
-	- addNotes : a boolean. Attached notes are added when true
-	- addWayPoints : a boolean. Attached waypoints are added when true
-	- readOnly : a boolean. Created objects cannot be edited when true.
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddRoute ( routeObjId ) {
-
-		let route = theViewerMapEditor.addRoute ( routeObjId );
-
-		let polyline = theTravelNotesData.mapObjects.get ( routeObjId );
-
-		// right click events
-		if ( ! theTravelNotesData.travel.readOnly ) {
-			L.DomEvent.on (
-				polyline,
-				'contextmenu',
-				contextMenuEvent => newRouteContextMenu ( contextMenuEvent ).show ( )
+			ourAddWayPoint (
+				wayPointsIterator.value,
+				wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
 			);
-			polyline.on ( 'mouseover', onMouseOverEditedRoute );
-
-			let notesIterator = route.notes.iterator;
-			while ( ! notesIterator.done ) {
-				let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
-				myAddNoteEvents (
-					notesIterator.value.objId,
-					{
-						marker : layerGroup.getLayer ( layerGroup.markerId ),
-						polyline : layerGroup.getLayer ( layerGroup.polylineId ),
-						bullet : layerGroup.getLayer ( layerGroup.bulletId )
-					}
-				);
-			}
 		}
+	}
+}
 
-		// waypoints are added
-		if ( ! theTravelNotesData.travel.readOnly && ROUTE_EDITION_STATUS.notEdited !== route.edited ) {
-			let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-			while ( ! wayPointsIterator.done ) {
-				myAddWayPoint (
-					wayPointsIterator.value,
-					wayPointsIterator .first ? 'A' : ( wayPointsIterator.last ? 'B' : wayPointsIterator.index )
-				);
-			}
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourRemoveRoute
+@desc Remove a route from the map. All the Route Notes and WayPoints are also removed
+@param {!number} routeObjId The objId of the route to remove
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourRemoveRoute ( routeObjId ) {
+
+	let route = theDataSearchEngine.getRoute ( routeObjId );
+	ourRemoveObject ( route.objId );
+
+	let notesIterator = route.notes.iterator;
+	while ( ! notesIterator.done ) {
+		ourRemoveObject ( notesIterator.value.objId );
+	}
+
+	let wayPointsIterator = route.wayPoints.iterator;
+	while ( ! wayPointsIterator.done ) {
+		ourRemoveObject ( wayPointsIterator.value.objId );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class performs all the read/write updates on the map
+@see {@link theMapEditor} for the one and only one instance of this class
+@see {@link theViewerMapEditor} for readonly updates on the map
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MapEditor	{
+
+	/**
+	This method update a route on the map.
+	This method is also used for removing a route with the addedRouteObjId = INVALID_OBJ_ID.
+	This method is also used for adding a route with the removedRouteObjId = INVALID_OBJ_ID.
+	This method is called by the 'routeupdated' event listener.
+	@param {!number} removedRouteObjId The objId of the route to remove
+	@param {!number} addedRouteObjId The objId of the route to add
+	@listens routeupdated
+	*/
+
+	updateRoute ( removedRouteObjId, addedRouteObjId ) {
+		if ( INVALID_OBJ_ID !== removedRouteObjId ) {
+			ourRemoveRoute ( removedRouteObjId );
+		}
+		if ( INVALID_OBJ_ID !== addedRouteObjId ) {
+			ourAddRoute ( addedRouteObjId );
 		}
 	}
 
-	/*
-	--- myRemoveAllObjects function -----------------------------------------------------------------------------------
-
-	This function remove all the objects from the leaflet map and from the JavaScript map
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This method update the properties of a route on the map
+	This method is called by the 'routepropertiesupdated' event listener.
+	@param {!number} routeObjId The objId of the route to update
+	@listens routepropertiesupdated
 	*/
 
-	function myRemoveAllObjects ( ) {
+	updateRouteProperties ( routeObjId ) {
+		let polyline = theTravelNotesData.mapObjects.get ( routeObjId );
+		let route = theDataSearchEngine.getRoute ( routeObjId );
+		polyline.setStyle (
+			{
+				color : route.color,
+				weight : route.width,
+				dashArray : theViewerMapEditor.getDashArray ( route )
+			}
+		);
+	}
+
+	/**
+	This method update a note on the map.
+	This method is also used for removing a note with the addedNoteObjId = INVALID_OBJ_ID.
+	This method is also used for adding a note with the removedNoteObjId = INVALID_OBJ_ID.
+	This method is called by the 'noteupdated' event listener.
+	@param {!number} removedNoteObjId The objId of the note to remove
+	@param {!number} addedNoteObjId The objId of the note to add
+	@listens noteupdated
+	*/
+
+	updateNote ( removedNoteObjId, addedNoteObjId ) {
+		let isPopupOpen = false;
+		if ( INVALID_OBJ_ID !== removedNoteObjId ) {
+			let layerGroup = theTravelNotesData.mapObjects.get ( removedNoteObjId );
+			if ( layerGroup ) {
+				isPopupOpen = layerGroup.getLayer ( layerGroup.markerId ).isPopupOpen ( );
+			}
+			ourRemoveObject ( removedNoteObjId );
+		}
+		if ( INVALID_OBJ_ID !== addedNoteObjId ) {
+			ourAddNote ( addedNoteObjId, isPopupOpen );
+		}
+	}
+
+	/**
+	This method removes an object from the map.
+	This method is called by the 'removeobject' event listener
+	@param {!number} objId The objId of the object to remove
+	@listens removeobject
+	*/
+
+	removeObject ( objId ) { ourRemoveObject ( objId ); }
+
+	/**
+	This method removes all objects from the map.
+	This method is called by the 'removeallobjects' event listener
+	@listens removeallobjects
+	*/
+
+	removeAllObjects ( ) {
 		theTravelNotesData.mapObjects.forEach (
-			travelObjectValue => {
-				L.DomEvent.off ( travelObjectValue );
-				theTravelNotesData.map.removeLayer ( travelObjectValue );
+			mapObject => {
+				L.DomEvent.off ( mapObject );
+				theTravelNotesData.map.removeLayer ( mapObject );
 			}
 		);
 		theTravelNotesData.mapObjects.clear ( );
 	}
 
-	/*
-	--- myAddItineraryPointMarker function ----------------------------------------------------------------------------
-
-	This function add a leaflet circleMarker at a given point
-
-	parameters:
-	- objId : a unique identifier to attach to the circleMarker
-	- latLng : the center of the circleMarker
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This method add a WayPoint to the map.
+	This method is called by the 'addwaypoint' event listener.
+	@param {WayPoint} wayPoint The wayPoint to add
+	@param {string|number} letter The letter or number to show with the WayPoint
+	@listens addwaypoint
 	*/
 
-	function myAddItineraryPointMarker ( objId, latLng ) {
-		myAddTo (
+	addWayPoint ( wayPoint, letter ) { ourAddWayPoint ( wayPoint, letter ); }
+
+	/**
+	This method add an itinerary point marker to the map (= a leaflet.circleMarker object).
+	This method is called by the 'additinerarypointmarker' event listener.
+	@param {!number} objId A unique identifier to attach to the circleMarker
+	@param {Array.<number>} latLng The latitude and longitude of the itinerary point marker
+	@listens additinerarypointmarker
+	*/
+
+	addItineraryPointMarker ( objId, latLng ) {
+		ourAddTo (
 			objId,
 			L.circleMarker ( latLng, theConfig.itineraryPointMarker )
 		);
 	}
 
-	/*
-	--- myAddSearchPointMarker function -------------------------------------------------------------------------------
-
-	This function add a leaflet circleMarker at a given point
-
-	parameters:
-	- objId : a unique identifier to attach to the circleMarker
-	- latLng : the center of the circleMarker
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This method add an search point marker to the map
+	(= a leaflet.circleMarker object or a polyline, depending of the zoom and the geometry parameter).
+	This method is called by the 'addsearchpointmarker' event listener.
+	@param {!number} objId A unique identifier to attach to the circleMarker
+	@param {Array.<number>} latLng The latitude and longitude of the search point marker
+	@param {?Array.<Array.<number>>} geometry The latitudes and longitudes of the search point marker when a polyline
+	can be showed
+	@listens addsearchpointmarker
 	*/
 
-	function myAddSearchPointMarker ( objId, latLng, geometry ) {
-
+	addSearchPointMarker ( objId, latLng, geometry ) {
 		let showGeometry = false;
 		if ( geometry ) {
 			let latLngs = [];
 			geometry.forEach (
 				geometryPart => { latLngs = latLngs.concat ( geometryPart ); }
 			);
-			let geometryBounds = myGeometry.getLatLngBounds ( latLngs );
+			let geometryBounds = theGeometry.getLatLngBounds ( latLngs );
 			let mapBounds = theTravelNotesData.map.getBounds ( );
 			showGeometry =
 				(
@@ -578,94 +777,37 @@ function newMapEditor ( ) {
 				) > MARKER_BOUNDS_PRECISION;
 		}
 		if ( showGeometry ) {
-			myAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );
+			ourAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );
 		}
 		else {
-			myAddTo ( objId, L.circleMarker ( latLng, theConfig.searchPointMarker ) );
+			ourAddTo ( objId, L.circleMarker ( latLng, theConfig.searchPointMarker ) );
 		}
 	}
 
-	/*
-	--- myAddRectangle method -----------------------------------------------------------------------------------------
-
-	This method draw a rectangle on the map
-
-	parameters:
-	- objId : a unique identifier to attach to the rectangle
-	- bounds : the lower left and upper right corner of the rectangle ( see leaflet docs )
-	- properties : the properties of the rectangle
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This method add a rectangle to the map.
+	This method is called by the 'addrectangle' event listener.
+	@param {!number} objId A unique identifier to attach to the rectangle
+	@param {Array.<Array.<number>>} bounds The lower left and upper right corner of the rectangle
+	@param {Object} properties The Leaflet properties of the rectangle
+	@listens addrectangle
 	*/
 
-	function myAddRectangle ( objId, bounds, properties ) {
-		myAddTo (
+	addRectangle ( objId, bounds, properties ) {
+		ourAddTo (
 			objId,
 			L.rectangle ( bounds, properties )
 		);
 	}
 
-	/*
-	--- myUpdateRoute function ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	This method changes the background map.
+	This method is called by the 'layerchange' event listener.
+	@param {Layer} layer The layer to set
+	@listens layerchange
 	*/
 
-	function myUpdateRoute ( removedRouteObjId, addedRouteObjId ) {
-		if ( INVALID_OBJ_ID !== removedRouteObjId ) {
-			myRemoveRoute ( removedRouteObjId );
-		}
-		if ( INVALID_OBJ_ID !== addedRouteObjId ) {
-			myAddRoute ( addedRouteObjId );
-		}
-	}
-
-	/*
-	--- myUpdateRouteProperties function ------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdateRouteProperties ( routeObjId ) {
-		let route = myDataSearchEngine.getRoute ( routeObjId );
-		let polyline = theTravelNotesData.mapObjects.get ( route.objId );
-		polyline.setStyle (
-			{
-				color : route.color,
-				weight : route.width,
-				dashArray : theViewerMapEditor.getDashArray ( route )
-			}
-		);
-	}
-
-	/*
-	--- myUpdateNote function -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdateNote ( removedNoteObjId, addedNoteObjId ) {
-		let isPopupOpen = false;
-		if ( INVALID_OBJ_ID !== removedNoteObjId ) {
-			let layerGroup = theTravelNotesData.mapObjects.get ( removedNoteObjId );
-			if ( layerGroup ) {
-				isPopupOpen = layerGroup.getLayer ( layerGroup.markerId ).isPopupOpen ( );
-			}
-			myRemoveObject ( removedNoteObjId );
-		}
-		if ( INVALID_OBJ_ID !== addedNoteObjId ) {
-			myAddNote ( addedNoteObjId, isPopupOpen );
-		}
-	}
-
-	/*
-	--- mySetLayer function -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetLayer ( layer ) {
-
+	setLayer ( layer ) {
 		let url = layer.url;
 		if ( layer.providerKeyNeeded ) {
 			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
@@ -680,51 +822,26 @@ function newMapEditor ( ) {
 
 		theViewerMapEditor.setLayer ( layer );
 	}
-
-	/*
-	--- MapEditor object ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			updateRoute : ( removedRouteObjId, addedRouteObjId ) => myUpdateRoute ( removedRouteObjId, addedRouteObjId ),
-
-			updateRouteProperties : routeObjId => myUpdateRouteProperties ( routeObjId ),
-
-			updateNote : ( removedNoteObjId, addedNoteObjId ) => myUpdateNote ( removedNoteObjId, addedNoteObjId ),
-
-			removeObject : objId => myRemoveObject ( objId ),
-
-			removeAllObjects : ( ) => myRemoveAllObjects ( ),
-
-			addItineraryPointMarker : ( objId, latLng ) => myAddItineraryPointMarker ( objId, latLng ),
-
-			addSearchPointMarker : ( objId, latLng, geometry ) => myAddSearchPointMarker ( objId, latLng, geometry ),
-
-			addRectangle : ( objId, bounds, properties ) => myAddRectangle ( objId, bounds, properties ),
-
-			addWayPoint : ( wayPoint, letter ) => myAddWayPoint ( wayPoint, letter ),
-
-			setLayer : layer => mySetLayer ( layer )
-
-		}
-	);
 }
 
+const ourMapEditor = Object.seal ( new MapEditor );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of MapEditor class
+	@type {MapEditor}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourMapEditor as theMapEditor
+};
+
 /*
---- theMapEditor object ------------------------------------------------------------------------------------------------
-
-The one and only one mapEditor
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theMapEditor = newMapEditor ( );
-
-export { theMapEditor };
-
-/*
---- End of MapEditor.js file ------------------------------------------------------------------------------------------
+--- End of MapEditor.js file --------------------------------------------------------------------------------------------------
 */

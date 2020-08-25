@@ -1,0 +1,34 @@
+{
+	"plugins": [],
+	"recurseDepth": 10,
+	"source": {
+		"includePattern": ".+\\.js(doc|x)?$",
+		"excludePattern": "(^|\\/|\\\\)_"
+	},
+	"sourceType": "module",
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc","closure"]
+	},
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": false,
+		"default": {
+			"outputSourceFiles" : true,
+			"layoutFile" : "JSDocConf/JSDocLayout.tmpl",
+			"staticFiles": {
+				"include": [
+					"JSDocConf/StaticFiles/",
+					"TravelNotesGuides/en",
+					"TravelNotesGuides/fr"
+				]
+			}
+		}
+	},
+	"opts": {
+		"template": "templates/default",
+		"destination": "out/",
+		"recurse": true,
+		"tutorials": "TravelNotesGuides/"
+	}
+}

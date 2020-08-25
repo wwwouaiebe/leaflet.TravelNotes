@@ -1,0 +1,87 @@
+/*
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- TravelUI.css file -------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the TravelUI
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+/* --- Travel name --- */
+
+#TravelNotes-TravelUI-InputTravelName {
+	width: 100%;
+}
+
+/* --- routes list --- */
+
+.TravelNotes-TravelUI-RoutesListDiv {
+	flex-shrink: 0;
+	max-height: 20em;
+	overflow: auto;
+}
+
+.TravelNotes-TravelUI-RoutesList-Item {
+	margin-left: 2em;
+	margin-right: 0.5em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+}
+
+.TravelNotes-TravelUI-RoutesList-HiddenItem {
+	color: gray;
+}
+
+.TravelNotes-TravelUI-RouteList-ExpandButton {
+	padding-right: 0.5em;
+	color: lightgray;
+}
+
+.TravelNotes-TravelUI-RouteList-ExpandButton:hover {
+	cursor: default;
+	color: red;
+}
+
+/* --- routes list - overload for hidden lists --- */
+
+.TravelNotes-TravelUI-RoutesListDiv.TravelNotes-TravelUI-HiddenRouteList {
+	transform: scale(0);
+	margin: 0;
+	padding: 0;
+	height: 0;
+}
+
+/* --- open file input --- */
+
+.TravelNotes-TravelUI-OpenFileInput {
+	opacity: 0;
+	position: relative;
+	width: 0;
+}
+
+/* open file fake div --- */
+
+.TravelNotes-TravelUI-OpenFileFakeDiv {
+	display: inline;
+}

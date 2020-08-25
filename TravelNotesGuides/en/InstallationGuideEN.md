@@ -368,10 +368,10 @@ At a minimum, "layers", "format" and "transparent" should be present.
 - __bounds__ : the lower left and upper right corner of the map.
 - __minZoom__ : the smallest possible zoom for this map
 - __maxZoom__ : the largest possible zoom for this map
-- __name__ : the name of the card. It will be used in the tooltip of the button in the toolbar.
+- __name__ : the name of the map. It will be used in the tooltip of the button in the toolbar.
 - __toolbar.text__ : the text to display in the toolbar button
 - __toolbar.color__ : the foreground color of the toolbar button
-- __toolbar.backgroundColor : the background color of the toolbar button
+- __toolbar.backgroundColor__ : the background color of the toolbar button
 - __providerName__ : the name of the service provider. This name will be used to find 
 the access key to the service.
 - __providerKeyNeeded__ : when this value is true, an access key is required to get the map.

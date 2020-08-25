@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- DataSearchEngine.js file ------------------------------------------------------------------------------------------
-This file contains:
-	- the newDataSearchEngine function
 Changes:
 	- v1.4.0:
 		- created from DataManager
@@ -26,25 +23,64 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191122
+Doc reviewed 20200731
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file DataSearchEngine.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} NoteAndRoute
+@desc An object to store a Note and the Route on witch the Note is attached
+@property {?Note} note the searched Note or null if the note is not found
+@property {?Route} route the Route on witch the Note is attached or null if the Note is a travel note
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module DataSearchEngine
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 
-function newDataSearchEngine ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myGetRoute function -------------------------------------------------------------------------------------------
+@class DataSearchEngine
+@classdesc Class with helper methods to search data
+@see {@link theDataSearchEngine} for the one and only one instance of this class
+@hideconstructor
 
-	This function returns a route when giving the routeObjId
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	-------------------------------------------------------------------------------------------------------------------
+class DataSearchEngine {
+
+	/**
+	Search a route with the route objId
+	@param {!number} objId the objId of the route to search
+	@return (?Route) the searched route or null if not found
 	*/
 
-	function myGetRoute ( routeObjId ) {
+	getRoute ( routeObjId ) {
 		let route = null;
 		route = theTravelNotesData.travel.routes.getAt ( routeObjId );
 		if ( ! route ) {
@@ -52,80 +88,73 @@ function newDataSearchEngine ( ) {
 				route = theTravelNotesData.travel.editedRoute;
 			}
 		}
-
 		return route;
 	}
 
-	/*
-	--- myGetNoteAndRoute method --------------------------------------------------------------------------------------
-
-	This function returns a note and a route ( when the note is linked to a route ) from the noteObjId
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Search a Note and a Route with the Note objId
+	@param {!number} objId the objId of the note to search
+	@return (NoteAndRoute) a NoteAndRoute object with the route and note
 	*/
 
-	function myGetNoteAndRoute ( noteObjId ) {
+	getNoteAndRoute ( noteObjId ) {
 		let note = null;
+		let route = null;
 		note = theTravelNotesData.travel.notes.getAt ( noteObjId );
-		if ( note ) {
-			return { note : note, route : null };
-		}
-		let routeIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routeIterator.done ) {
-			note = routeIterator.value.notes.getAt ( noteObjId );
-			if ( note ) {
-				return { note : note, route : routeIterator.value };
+		if ( ! note ) {
+			let routeIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! ( routeIterator.done || note ) ) {
+				note = routeIterator.value.notes.getAt ( noteObjId );
+				if ( note ) {
+					route = routeIterator.value;
+				}
+			}
+			if ( ! note ) {
+				note = theTravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
+				if ( note ) {
+					route = theTravelNotesData.travel.editedRoute;
+				}
 			}
 		}
-		note = theTravelNotesData.travel.editedRoute.notes.getAt ( noteObjId );
-		if ( ! note ) {
-			return { note : null, route : null };
-		}
-
-		return { note : note, route : theTravelNotesData.travel.editedRoute };
+		return Object.freeze ( { note : note, route : route } );
 	}
 
-	/*
-	--- myGetWayPoint method ------------------------------------------------------------------------------------------
-
-	This function returns a wayPoint from the wayPointObjId
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Search a WayPoint with the WayPoint objId
+	@param {!number} objId the objId of the note to search
+	@return (NoteAndRoute) a NoteAndRoute object with the route and note
 	*/
 
-	function myGetWayPoint ( wayPointObjId ) {
-		let wayPoint = null;
-		let routeIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routeIterator.done ) {
-			wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
-			if ( wayPoint ) {
-				return wayPoint;
-			}
-		}
-		wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
+	getWayPoint ( wayPointObjId ) {
+		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		if ( ! wayPoint ) {
-			return null;
+			let routeIterator = theTravelNotesData.travel.routes.iterator;
+			while ( ! ( routeIterator.done || wayPoint ) ) {
+				wayPoint = routeIterator.value.wayPoints.getAt ( wayPointObjId );
+			}
 		}
 		return wayPoint;
 	}
-
-	/*
-	--- dataSearchEngine object ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			getRoute : routeObjId => myGetRoute ( routeObjId ),
-			getNoteAndRoute : noteObjId => myGetNoteAndRoute ( noteObjId ),
-			getWayPoint : wayPointObjId => myGetWayPoint ( wayPointObjId )
-		}
-	);
 }
 
-export { newDataSearchEngine };
+const ourDataSearchEngine = Object.seal ( new DataSearchEngine );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of DataSearchEngine class
+	@type {DataSearchEngine}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourDataSearchEngine as theDataSearchEngine
+};
 
 /*
---- End of DataSearchEngine.js file -----------------------------------------------------------------------------------
+--- End of DataSearchEngine.js file -------------------------------------------------------------------------------------------
 */

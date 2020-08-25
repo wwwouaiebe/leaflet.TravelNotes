@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- RouteContextMenu.js file ------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.6.0:
 		- created
@@ -32,111 +29,148 @@ Changes:
 		- issue #101 : Add a print command for a route
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
-Doc reviewed 20191124
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200727
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file RouteContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module RouteContextMenu
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theConfig } from '../data/Config.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelEditor } from '../core/TravelEditor.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { newDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 
-import { ROUTE_EDITION_STATUS } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 
-/*
---- newRouteContextMenu function --------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewRouteContextMenu
+@desc constructor of RouteContextMenu objects
+@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {RouteContextMenu} an instance of a RouteContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newRouteContextMenu ( contextMenuEvent ) {
+function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
+	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
 	let myZoomer = newZoomer ( );
 
-	/*
-	--- myGetMenuItems function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetMenuItems
+	@desc get an array with the menu items
+	@return {array.Object} the menu items
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetMenuItems ( ) {
 		let menuItems = [
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Edit this route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
 					) ?
 						null
 						:
-						theTravelEditor.editRoute,
+						theRouteEditor.editRoute,
 				param : myRouteObjId
 			},
 			{
-				context : theTravelEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Delete this route' ),
+				context : theRouteEditor,
+				name : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
 				action :
 					(
 						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
 						&&
-						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.edited )
+						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
 					)
 						?
 						null
 						:
-						theTravelEditor.removeRoute,
+						theRouteEditor.removeRoute,
 				param : myRouteObjId
 			},
+			myRoute.hidden
+				?
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Show this route' ),
+					action : theRouteEditor.showRoute,
+					param : myRouteObjId
+				}
+				:
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Hide this route' ),
+					action :
+							( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+								?
+								null :
+								theRouteEditor.hideRoute,
+					param : myRouteObjId
+				},
 			{
 				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Hide this route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Properties' ),
 				action :
-					( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+					myRoute.hidden
 						?
-						null :
-						theRouteEditor.hideRoute,
-				param : myRouteObjId
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Add a note on the route' ),
-				action : theNoteEditor.newRouteNote,
-				param : myRouteObjId
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Create a note for each route maneuver' ),
-				action : theNoteEditor.addAllManeuverNotes,
-				param : myRouteObjId
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - Properties' ),
-				action : theRouteEditor.routeProperties,
+						null
+						:
+						theRouteEditor.routeProperties,
 				param : myRouteObjId
 			},
 			{
 				context : myZoomer,
-				name : theTranslator.getText ( 'ContextMenuFactory - Zoom to route' ),
+				name : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
 				action : myZoomer.zoomToRoute,
 				param : myRouteObjId
 			},
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'ContextMenuFactory - View the elevation' ),
+				context : theProfileWindowsManager,
+				name : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
 				action :
-					newDataSearchEngine ( ).getRoute ( myRouteObjId ).itinerary.hasProfile
+					myRoute.itinerary.hasProfile
 						?
 						theProfileWindowsManager.showProfile
 						:
@@ -148,7 +182,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			menuItems.push (
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Print route map' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
 					action : theRouteEditor.printRouteMap,
 					param : myRouteObjId
 				}
@@ -158,7 +192,48 @@ function newRouteContextMenu ( contextMenuEvent ) {
 			[
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Save modifications on this route' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
+					action : ( ZERO < myRoute.itinerary.itineraryPoints.length )
+						?
+						theRouteEditor.saveGpx
+						:
+						null,
+					param : myRouteObjId
+				},
+				{
+					context : theWayPointEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
+					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
+						?
+						theWayPointEditor.reverseWayPoints
+						:
+						null
+				},
+				{
+					context : theNoteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
+					action :
+						contextMenuEvent.fromUI
+							?
+							null
+							:
+							theNoteEditor.newRouteNote,
+					param : myRouteObjId
+				},
+				{
+					context : theNoteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
+					action :
+						myRoute.hidden
+							?
+							null
+							:
+							theNoteEditor.addAllManeuverNotes,
+					param : myRouteObjId
+				},
+				{
+					context : theRouteEditor,
+					name : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
 					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
 						theRouteEditor.saveEdition
@@ -167,7 +242,7 @@ function newRouteContextMenu ( contextMenuEvent ) {
 				},
 				{
 					context : theRouteEditor,
-					name : theTranslator.getText ( 'ContextMenuFactory - Cancel modifications on this route' ),
+					name : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
 					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
 						?
 						theRouteEditor.cancelEdition
@@ -180,19 +255,43 @@ function newRouteContextMenu ( contextMenuEvent ) {
 		return menuItems;
 	}
 
-	/*
-	--- RouteContextMenu object function ------------------------------------------------------------------------------
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class RouteContextMenu
+	@classdesc a BaseContextMenu object with items completed for routes
+	@see {@link newRouteContextMenu} for constructor
+	@augments BaseContextMenu
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let routeContextMenu = newBaseContextMenu ( contextMenuEvent );
-	routeContextMenu.init ( myGetMenuItems ( ) );
+	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 
 	return Object.seal ( routeContextMenu );
 }
 
-export { newRouteContextMenu };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newRouteContextMenu
+	@desc constructor of RouteContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {RouteContextMenu} an instance of a RouteContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewRouteContextMenu as newRouteContextMenu
+};
 
 /*
---- End of RouteContextMenu.js file -----------------------------------------------------------------------------------
+--- End of RouteContextMenu.js file -------------------------------------------------------------------------------------------
 */

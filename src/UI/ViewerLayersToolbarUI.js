@@ -1,116 +1,168 @@
-import { newEventDispatcher } from '../util/EventDispatcher.js';
-import { theAttributionsUI } from '../UI/AttributionsUI.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theGeoLocator } from '../core/GeoLocator.js';
-import { newZoomer } from '../core/Zoomer.js';
-
-import { ZERO } from '../util/Constants.js';
-
 /*
---- newViewerLayersToolbarUI function ---------------------------------------------------------------------------------
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
------------------------------------------------------------------------------------------------------------------------
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-function newViewerLayersToolbarUI ( ) {
+/*
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200822
+Tests ...
+*/
 
-	let myLayersToolbar = null;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myEventDispatcher = newEventDispatcher ( );
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+@file ViewerLayersToolbarUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
 
-	let myLayers = [
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module ViewerLayersToolbarUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { theEventDispatcher } from '../util/EventDispatcher.js';
+import { theAttributionsUI } from '../UI/AttributionsUI.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theGeoLocator } from '../core/GeoLocator.js';
+import { newZoomer } from '../core/Zoomer.js';
+import { ZERO } from '../util/Constants.js';
+
+let ourLayersToolbar = null;
+
+let ourLayers = [
+	{
+		service : 'wmts',
+		url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+		name : 'OSM - Color',
+		toolbar :
 		{
-			service : 'wmts',
-			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-			name : 'OSM - Color',
-			toolbar :
-			{
-				text : 'OSM',
-				color : 'red',
-				backgroundColor : 'white'
-			},
-			providerName : 'OSM',
-			providerKeyNeeded : false,
-			attribution : ''
-		}
-	];
-
-	/*
-	--- mySetLayers function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetLayers ( layers ) {
-		layers.forEach (
-			layer => {
-				if ( ! layer.providerKeyNeeded ) {
-					myLayers.push ( layer );
-				}
-			}
-		);
+			text : 'OSM',
+			color : 'red',
+			backgroundColor : 'white'
+		},
+		providerName : 'OSM',
+		providerKeyNeeded : false,
+		attribution : ''
 	}
+];
 
-	/*
-	--- mySetLayer function -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@function ourOnLayerButtonClick
+@desc Click event listener for the layer buttons
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnLayerButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
+	theAttributionsUI.attributions = clickEvent.target.layer.attribution;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnGeoLocationButtonClick
+@desc Click event listener for the geo location button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnGeoLocationButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theGeoLocator.switch ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnZoomButtonClick
+@desc Click event listener for the zoom to travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnZoomButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	newZoomer ( ).zoomToTravel ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateLayerButton
+@desc This method creates a layer button
+@param {Layer} layer The layer for witch the button must be created
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateLayerButton ( layer ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-ViewerLayersToolbarUI-Button',
+			title : layer.name,
+			layer : layer,
+			innerHTML : layer.toolbar.text,
+			style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
+		},
+		ourLayersToolbar
+	)
+		.addEventListener ( 'click', ourOnLayerButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is the Layer Toolbar on the left of the viewer screen.
+ Displays buttons to change the background maps and manages the background maps list.
+ Displays also a geo location button and a zoom to travel button.
+@see {@link theViewerLayersToolbarUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ViewerLayersToolbarUI {
+
+	/**
+	creates the user interface
 	*/
 
-	function mySetLayer ( layerName ) {
-
-		let newLayer = myLayers.find ( layer => layer.name === layerName ) || myLayers [ ZERO ];
-		myEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
-		theAttributionsUI.attributions = newLayer.attribution;
-	}
-
-	/*
-	--- myOnClickLayerButton function ---------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnClickLayerButton ( clickEvent ) {
-		myEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
-		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
-	}
-
-	/*
-	--- myCreateLayerButton function ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateLayerButton ( layer ) {
-		let layerButton = myHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
-				title : layer.name,
-				layer : layer,
-				innerHTML : layer.toolbar.text,
-				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
-			},
-			myLayersToolbar
-		);
-		layerButton.addEventListener ( 'click',
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				myOnClickLayerButton ( clickEvent );
-			},
-			myOnClickLayerButton,
-			false );
-	}
-
-	/*
-	--- myCreateLayerButton function ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( ) {
-		myLayersToolbar = myHTMLElementsFactory.create (
+	createUI ( ) {
+		ourLayersToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ViewerLayersToolbarUI'
@@ -120,7 +172,7 @@ function newViewerLayersToolbarUI ( ) {
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS
 		// the geolocation is working also on http protocol
-		let geoLocationButton = myHTMLElementsFactory.create (
+		let geoLocationButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -128,16 +180,10 @@ function newViewerLayersToolbarUI ( ) {
 				innerHTML : '&#x1f310;',
 				style : 'color:black;background-color:white'
 			},
-			myLayersToolbar
+			ourLayersToolbar
 		);
-		geoLocationButton.addEventListener ( 'click',
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				theGeoLocator.switch ( );
-			},
-			false
-		);
-		let zoomButton = myHTMLElementsFactory.create (
+		geoLocationButton.addEventListener ( 'click', ourOnGeoLocationButtonClick, false );
+		let zoomButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -145,34 +191,57 @@ function newViewerLayersToolbarUI ( ) {
 				innerHTML : '&#x1f50d;',
 				style : 'color:black;background-color:white'
 			},
-			myLayersToolbar
+			ourLayersToolbar
 		);
-		zoomButton.addEventListener ( 'click',
-			clickEvent => {
-				clickEvent.stopPropagation ( );
-				newZoomer ( ).zoomToTravel ( );
-			},
-			false
-		);
-
-		myLayers.forEach ( myCreateLayerButton );
+		zoomButton.addEventListener ( 'click', ourOnZoomButtonClick, false );
+		ourLayers.forEach ( ourCreateLayerButton );
 	}
 
-	/*
-	--- ViewerLayersToolbarUI object ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Set a layer as background map. If the layer is not found, the 'OSM - Color' layer is set
+	@param {string} layerName the name of the layer to set
 	*/
 
-	return Object.seal (
-		{
-			createUI : ( ) => myCreateUI ( ),
-			setLayer : layerName => mySetLayer ( layerName ),
-			setLayers : layers => mySetLayers ( layers )
-		}
-	);
+	setLayer ( layerName ) {
+		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
+		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
+		theAttributionsUI.attributions = newLayer.attribution;
+	}
+
+	/**
+	Add a layer list to the list of available layers
+	@param {Array.<Layer>} layers the layer list to add
+	*/
+
+	addLayers ( layers ) {
+		layers.forEach (
+			layer => {
+				if ( ! layer.providerKeyNeeded ) {
+					ourLayers.push ( layer );
+				}
+			}
+		);
+	}
 }
 
-const theViewerLayersToolbarUI = newViewerLayersToolbarUI ( );
+const ourViewerLayersToolbarUI = Object.seal ( new ViewerLayersToolbarUI );
 
-export { theViewerLayersToolbarUI };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of ViewerLayersToolbarUI class
+	@type {ViewerLayersToolbarUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourViewerLayersToolbarUI as theViewerLayersToolbarUI
+};
+
+/*
+--- End of ViewerLayersToolbarUI.js file --------------------------------------------------------------------------------------
+*/

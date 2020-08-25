@@ -15,10 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- TravelUI.js file --------------------------------------------------------------------------------------------------
-This file contains:
-	- the newTravelUI function
 Changes:
 	- v1.0.0:
 		- created
@@ -38,10 +36,30 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.7.0:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
-Doc reviewed 20191125
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200817
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file TravelUI.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module TravelUI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
@@ -49,483 +67,682 @@ import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
-
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newSortableList } from '../UI/SortableList.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newFileLoader } from '../core/FileLoader.js';
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import { theRouteEditor } from '../core/RouteEditor.js';
+import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
-/*
---- newTravelUI function ----------------------------------------------------------------------------------------------
+let ourRoutesList = null;
+let ourTravelNameInput = null;
+let ourUIMainDiv = null;
+let ourDraggedRouteObjId = ZERO;
+let ourButtonsDiv = null;
+let ourOpenTravelInput = null;
+let ourImportTravelInput = null;
+let ourRoutesHeaderDiv = null;
 
-This function creates the UI
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourOnRouteListWheel
+@desc wheel event listener for the route list element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newTravelUI ( ) {
-
-	let myRoutesList = null;
-
-	/*
-	--- event listeners for mouse on the control ----------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myControlDiv = null;
-
-	/*
-	--- myCreateHeaderDiv function ------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateHeaderDiv ( ) {
-		let headerDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-TravelHeaderDiv',
-				className : 'TravelNotes-Control-HeaderDiv'
-			},
-			myControlDiv
-		);
-
-		// expand button
-		myHTMLElementsFactory.create (
-			'span',
-			{
-				innerHTML : '&#x25bc;',
-				id : 'TravelNotes-ControlTravelExpandButton',
-				className : 'TravelNotes-Control-ExpandButton'
-			},
-			headerDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					document.getElementById ( 'TravelNotes-Control-TravelHeaderDiv' )
-						.classList.toggle ( 'TravelNotes-Control-SmallHeader' );
-					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
-						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-ControlTravelButtonsDiv' )
-						.classList.toggle ( 'TravelNotes-Control-HiddenList' );
-					let hiddenList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
-						.classList.contains ( 'TravelNotes-Control-HiddenList' );
-					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).innerHTML =
-						hiddenList ? '&#x25b6;' : '&#x25bc;';
-					document.getElementById ( 'TravelNotes-ControlTravelExpandButton' ).title =
-						hiddenList
-							?
-							theTranslator.getText ( 'TravelUI - Show' )
-							:
-							theTranslator.getText ( 'TravelUI - Hide' );
-					clickEvent.stopPropagation ( );
-				},
-				false );
-
-		// title
-		myHTMLElementsFactory.create (
-			'span',
-			{
-				innerHTML : theTranslator.getText ( 'TravelUI - Travel routes' ),
-				id : 'TravelNotes-Control-TravelHeaderText',
-				className : 'TravelNotes-Control-HeaderText'
-			},
-			headerDiv
-		);
+function ourOnRouteListWheel ( wheelEvent ) {
+	if ( wheelEvent.deltaY ) {
+		wheelEvent.target.scrollTop +=
+			wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 	}
+	wheelEvent.stopPropagation ( );
+}
 
-	/*
-	--- myCreateDataDiv function --------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourOnTravelNameInputChange
+@desc change event listener for the travel name input element
+@private
 
-	function myCreateDataDiv ( ) {
-		let dataDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-TravelDataDiv',
-				className : 'TravelNotes-Control-DataDiv'
-			},
-			myControlDiv
-		);
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-		// Routes list
-		myRoutesList = newSortableList ( { minSize : ZERO, id : 'TravelNotes-Control-TravelRoutesList' }, dataDiv );
-		myRoutesList.container.addEventListener (
-			'SortableListDelete',
-			sortableListDeleteEvent => {
-				sortableListDeleteEvent.stopPropagation ( );
-				theTravelEditor.removeRoute ( sortableListDeleteEvent.itemNode.dataObjId );
-			},
-			false
-		);
-		myRoutesList.container.addEventListener (
-			'SortableListUpArrow',
-			sortableListUpArrowEvent => {
-				sortableListUpArrowEvent.stopPropagation ( );
-				theTravelEditor.swapRoute ( sortableListUpArrowEvent.itemNode.dataObjId, true );
-			},
-			false
-		);
-		myRoutesList.container.addEventListener (
-			'SortableListDownArrow',
-			sortableListDownArrowEvent => {
-				sortableListDownArrowEvent.stopPropagation ( );
-				theTravelEditor.swapRoute ( sortableListDownArrowEvent.itemNode.dataObjId, false );
-			},
-			false
-		);
-		myRoutesList.container.addEventListener (
-			'SortableListRightArrow',
-			sortableListRightArrowEvent => {
-				sortableListRightArrowEvent.stopPropagation ( );
-				theTravelEditor.editRoute ( sortableListRightArrowEvent.itemNode.dataObjId );
-			},
-			false
-		);
-		myRoutesList.container.addEventListener (
-			'SortableListChange',
-			sortableListChangeEvent => {
-				sortableListChangeEvent.stopPropagation ();
-				theTravelEditor.renameRoute (
-					sortableListChangeEvent.dataObjId,
-					sortableListChangeEvent.changeValue
-				);
-			},
-			false
-		);
-		myRoutesList.container.addEventListener (
-			'SortableListDrop',
-			sortableListDropEvent => {
-				sortableListDropEvent.stopPropagation ( );
-				theTravelEditor.routeDropped (
-					sortableListDropEvent.draggedObjId,
-					sortableListDropEvent.targetObjId,
-					sortableListDropEvent.draggedBefore
-				);
-			},
-			false
-		);
-	}
+function ourOnTravelNameInputChange ( changeEvent ) {
+	theTravelNotesData.travel.name = changeEvent.target.value;
+}
 
-	/*
-	--- myCreateButtonsDiv function -----------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourCreateTravelNameDiv
+@desc This method creates the travel name div
+@private
 
-	function myCreateButtonsDiv ( ) {
-		let buttonsDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ControlTravelButtonsDiv',
-				className : 'TravelNotes-Control-ButtonsDiv'
-			},
-			myControlDiv
-		);
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-		// expand list button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-ExpandRoutesListButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Expand the list' ),
-				innerHTML : '&#x25bd;'
-			},
-			buttonsDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
-						.classList.toggle ( 'TravelNotes-Control-ExpandedList' );
-					let expandedList = document.getElementById ( 'TravelNotes-Control-TravelDataDiv' )
-						.classList.contains ( 'TravelNotes-Control-ExpandedList' );
-					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).innerHTML =
-						expandedList ? '&#x25b3;' : '&#x25bd;';
-					document.getElementById ( 'TravelNotes-Control-ExpandRoutesListButton' ).title =
-						expandedList
-							?
-							theTranslator.getText ( 'TravelUI - Reduce the list' )
-							:
-							theTranslator.getText ( 'TravelUI - Expand the list' );
-				},
-				false
-			);
-
-		// cancel travel button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-CancelTravelButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Cancel travel' ),
-				innerHTML : '&#x274c'
-			},
-			buttonsDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ();
-					theTravelEditor.clear ( );
-				},
-				false
-			);
-
-		// save travel button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-SaveTravelButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Save travel' ),
-				innerHTML : '&#x1f4be;'
-			},
-			buttonsDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					theTravelEditor.saveTravel ( );
-				},
-				false
-			);
-
-		// open travel button with the well know hack....
-		// See also UserInterface.js. Click events are first going to the interface div...
-		let openTravelDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-OpenTravelDiv'
-			},
-			buttonsDiv
-		);
-		myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-Control-OpenTravelInput',
-				type : 'file',
-				accept : '.trv'
-			},
-			openTravelDiv
-		)
-			.addEventListener (
-				'change',
-				changeEvent => {
-					changeEvent.stopPropagation ( );
-					newFileLoader ( ).openLocalFile ( changeEvent );
-				},
-				false
-			);
-		let openTravelFakeDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-OpenTravelFakeDiv'
-			},
-			openTravelDiv
-		);
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-OpenTravelButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Open travel' ),
-				innerHTML : '&#x1F4C2;'
-			},
-			openTravelFakeDiv
-		)
-			.addEventListener (
-				'click',
-				( ) => {
-					if ( ! window.confirm (
-						theTranslator.getText ( 'TravelEditor - This page ask to close; data are perhaps not saved.' )
-					)
-					) {
-						return;
-					}
-					document.getElementById ( 'TravelNotes-Control-OpenTravelInput' ).click ( );
-				},
-				false
-			);
-
-		// import travel button with the well know hack....
-		let importTravelDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-ImportTravelDiv'
-			},
-			buttonsDiv
-		);
-		myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-Control-ImportTravelInput',
-				type : 'file',
-				accept : '.trv,.map'
-			},
-			importTravelDiv
-		)
-			.addEventListener (
-				'change',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					newFileLoader ( ).mergeLocalFile ( clickEvent );
-				},
-				false
-			);
-		let importTravelFakeDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-ImportTravelFakeDiv'
-			},
-			importTravelDiv
-		);
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-ImportTravelButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Import travel' ),
-				innerHTML : '&#x1F30F;'
-			},
-			importTravelFakeDiv
-		)
-			.addEventListener (
-				'click',
-				( ) => {
-					if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-						document.getElementById ( 'TravelNotes-Control-ImportTravelInput' ).click ( );
-					}
-					else {
-						theErrorsUI.showError (
-							theTranslator.getText ( 'TravelUI - Not possible to merge a travel when a route is edited' )
-						);
-					}
-				},
-				false
-			);
-
-		// roadbook button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-OpenTravelRoadbookButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - Open travel roadbook' ),
-				innerHTML :
-					'<a class="TravelNotes-Control-LinkButton" href="TravelNotesRoadbook.html?lng=' +
-					theConfig.language +
-					'&page=' +
-					theTravelNotesData.UUID +
-					'" target="_blank">&#x1F4CB;</a>'
-			},
-			buttonsDiv
-		);
-
-		// add route button
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-Control-AddRoutesButton',
-				className : 'TravelNotes-Control-Button',
-				title : theTranslator.getText ( 'TravelUI - New route' ),
-				innerHTML : '+'
-			},
-			buttonsDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ();
-					theTravelEditor.addRoute ( );
-				},
-				false
-			);
-	}
-
-	/*
-	--- myCreateUI function -------------------------------------------------------------------------------------------
-
-	This function creates the UI
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateUI ( controlDiv ) {
-
-		if ( document.getElementById ( 'TravelNotes-Control-TravelDataDiv' ) ) {
-			return;
-		}
-
-		myControlDiv = controlDiv;
-
-		myCreateHeaderDiv ( );
-
-		myCreateDataDiv ( );
-
-		myCreateButtonsDiv ( );
-
-	}
-
-	/*
-	--- mySetRoutesList function --------------------------------------------------------------------------------------
-
-	This function fill the routes list
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetRoutesList ( ) {
-		myRoutesList.removeAllItems ( );
-		let routesIterator = theTravelNotesData.travel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			myRoutesList.addItem (
-				{
-					value : routesIterator.value.name,
-					label : routesIterator.value.chain ? '&#x26d3;' : '',
-					placeholder : theTranslator.getText ( 'TravelUI - Route' ),
-					objId : routesIterator.value.objId,
-					isLast : false
-				}
-			);
-		}
-	}
-
-	/*
-	--- travelUI object -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
+function ourCreateTravelNameDiv ( ) {
+	let travelNameDiv = theHTMLElementsFactory.create (
+		'div',
 		{
-			createUI : controlDiv => myCreateUI ( controlDiv ),
+			className : 'TravelNotes-UI-FlexRowDiv'
+		},
+		ourUIMainDiv
+	);
+	theHTMLElementsFactory.create (
+		'span',
+		{
+			innerHTML : theTranslator.getText ( 'TravelUI - Travel' )
+		},
+		travelNameDiv
+	);
+	ourTravelNameInput = theHTMLElementsFactory.create (
+		'input',
+		{
+			id : 'TravelNotes-TravelUI-InputTravelName',
+			type : 'text',
+			placeholder : 'TravelNotes',
+			value : theTravelNotesData.travel.name
+		},
+		travelNameDiv
+	);
+	ourTravelNameInput.addEventListener ( 'change', ourOnTravelNameInputChange, false );
+}
 
-			setRoutesList : ( ) => mySetRoutesList ( )
-		}
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnCancelTravelButtonClick
+@desc click event listener for the cancel travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnCancelTravelButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ();
+	theTravelEditor.clear ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateCancelTravelButton
+@desc This method creates the cancel travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateCancelTravelButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : theTranslator.getText ( 'TravelUI - Cancel travel' ),
+			innerHTML : '&#x274c;' // 274c = ❌
+		},
+		ourButtonsDiv
+	)
+		.addEventListener ( 'click', ourOnCancelTravelButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnSaveTravelButtonClick
+@desc click event listener for the save travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnSaveTravelButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theTravelEditor.saveTravel ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateSaveTravelButton
+@desc This method creates the save travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateSaveTravelButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : theTranslator.getText ( 'TravelUI - Save travel' ),
+			innerHTML : '&#x1f4be;' // 1f4be = 💾
+		},
+		ourButtonsDiv
+	)
+		.addEventListener ( 'click', ourOnSaveTravelButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnOpenTravelInputChange
+@desc change event listener for the open travel input element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnOpenTravelInputChange ( changeEvent ) {
+	changeEvent.stopPropagation ( );
+	newFileLoader ( ).openLocalFile ( changeEvent );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnOpenTravelButtonClick
+@desc click event listener for the open travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnOpenTravelButtonClick ( ) {
+	if (
+		! window.confirm (
+			theTranslator.getText ( 'TravelEditor - This page ask to close; data are perhaps not saved.' )
+		)
+	) {
+		return;
+	}
+	ourOpenTravelInput.click ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateOpenTravelButton
+@desc This method creates the open travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateOpenTravelButton ( ) {
+
+	ourOpenTravelInput = theHTMLElementsFactory.create (
+		'input',
+		{
+			className : 'TravelNotes-TravelUI-OpenFileInput',
+			type : 'file',
+			accept : '.trv'
+		},
+		ourButtonsDiv
+	);
+	ourOpenTravelInput.addEventListener ( 'change', ourOnOpenTravelInputChange, false );
+
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : theTranslator.getText ( 'TravelUI - Open travel' ),
+			innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+		},
+		ourButtonsDiv
+	)
+		.addEventListener ( 'click', ourOnOpenTravelButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnImportTravelInputChange
+@desc change event listener for the import travel input element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnImportTravelInputChange ( changeEvent ) {
+	changeEvent.stopPropagation ( );
+	newFileLoader ( ).mergeLocalFile ( changeEvent );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnImportTravelButtonClick
+@desc click event listener for the import travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnImportTravelButtonClick ( ) {
+	if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
+		ourImportTravelInput.click ( );
+	}
+	else {
+		theErrorsUI.showError (
+			theTranslator.getText ( 'TravelUI - Not possible to merge a travel when a route is edited' )
+		);
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateImportTravelButton
+@desc This method creates the import travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateImportTravelButton ( ) {
+	ourImportTravelInput = theHTMLElementsFactory.create (
+		'input',
+		{
+			className : 'TravelNotes-TravelUI-OpenFileInput',
+			type : 'file',
+			accept : '.trv,.map'
+		},
+		ourButtonsDiv
+	);
+	ourImportTravelInput.addEventListener ( 'change', ourOnImportTravelInputChange, false );
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : theTranslator.getText ( 'TravelUI - Import travel' ),
+			innerHTML : '&#x1F30F;' // 1F30F = 🌏
+		},
+		ourButtonsDiv
+	)
+		.addEventListener ( 'click', ourOnImportTravelButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateRoadbookButton
+@desc This method creates the roadbook button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateRoadbookButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button',
+			title : theTranslator.getText ( 'TravelUI - Open travel roadbook' ),
+			innerHTML :
+				'<a class="TravelNotes-UI-LinkButton" href="TravelNotesRoadbook.html?lng=' +
+				theConfig.language +
+				'&page=' +
+				theTravelNotesData.UUID +
+				'" target="_blank">&#x1F4CB;</a>' // 1F4CB = 📋
+		},
+		ourButtonsDiv
 	);
 }
 
-/*
---- theTravelUI object ------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-The one and only one travelUI
+@function ourCreateButtonsDiv
+@desc This method creates the buttons div
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-const theTravelUI = newTravelUI ( );
+function ourCreateButtonsDiv ( ) {
+	ourButtonsDiv = theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-FlexRowDiv'
+		},
+		ourUIMainDiv
+	);
 
-export { theTravelUI };
+	ourCreateCancelTravelButton ( );
+	ourCreateSaveTravelButton ( );
+	ourCreateOpenTravelButton ( );
+	ourCreateImportTravelButton ( );
+	ourCreateRoadbookButton ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnExpandRoutesButtonClick
+@desc click event listener for the expand routes list button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnExpandRoutesButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	ourRoutesList.classList.toggle ( 'TravelNotes-TravelUI-HiddenRouteList' );
+	let hiddenList = ourRoutesList.classList.contains ( 'TravelNotes-TravelUI-HiddenRouteList' );
+	clickEvent.target.innerHTML =
+		hiddenList ? '&#x25b6;' : '&#x25bc;'; // 25b6 = ▶  25bc = ▼
+	clickEvent.target.title =
+		hiddenList
+			?
+			theTranslator.getText ( 'TravelUI - Show' )
+			:
+			theTranslator.getText ( 'TravelUI - Hide' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateExpandRoutesButton
+@desc This method creates the expand routes list button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateExpandRoutesButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			innerHTML : '&#x25bc;', // 25bc = ▼
+			className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
+		},
+		ourRoutesHeaderDiv
+	)
+		.addEventListener ( 'click', ourOnExpandRoutesButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnExpandRoutesButtonClick
+@desc click event listener for the add route button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnAddRouteButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theRouteEditor.addRoute ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateAddRouteButton
+@desc This method creates the add route button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateAddRouteButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
+			title : theTranslator.getText ( 'TravelUI - Add a route' ),
+			innerHTML : '+'
+		},
+		ourRoutesHeaderDiv
+	)
+		.addEventListener ( 'click', ourOnAddRouteButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateRoutesListHeaderDiv
+@desc This method creates the routes list header div
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateRoutesListHeaderDiv ( ) {
+	ourRoutesHeaderDiv = theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-FlexRowDiv'
+		},
+		ourUIMainDiv
+	);
+	ourCreateExpandRoutesButton ( ourRoutesHeaderDiv );
+	theHTMLElementsFactory.create (
+		'span',
+		{
+			innerHTML : theTranslator.getText ( 'TravelUI - Travel routes' )
+		},
+		ourRoutesHeaderDiv
+	);
+	ourCreateAddRouteButton ( ourRoutesHeaderDiv );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnRouteDragStart
+@desc dragstart event listener for a route dragged in the route list
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnRouteDragStart ( dragEvent ) {
+	dragEvent.stopPropagation ( );
+	try {
+		dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.objId );
+		dragEvent.dataTransfer.dropEffect = 'move';
+		dragEvent.dataTransfer.routeObjId = dragEvent.target.objId;
+	}
+	catch ( err ) {
+		console.log ( err );
+	}
+	ourDraggedRouteObjId = dragEvent.target.objId;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnRouteListDragOver
+@desc dragover event listener for the route list element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnRouteListDragOver ( dragEvent ) {
+	dragEvent.preventDefault ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnRouteDrop
+@desc drop event listener for a route dragged in the route list element
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnRouteDrop ( dropEvent ) {
+	dropEvent.preventDefault ( );
+	let element = dropEvent.target;
+	while ( ! element.objId ) {
+		element = element.parentElement;
+	}
+	let clientRect = element.getBoundingClientRect ( );
+	theTravelEditor.routeDropped (
+		ourDraggedRouteObjId,
+		element.objId,
+		( dropEvent.clientY - clientRect.top < clientRect.bottom - dropEvent.clientY )
+	);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateRoutesListHeaderDiv
+@desc This method creates the routes list header div
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateRouteListDiv ( ) {
+	ourRoutesList = theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-TravelUI-RoutesListDiv'
+		},
+		ourUIMainDiv
+	);
+	ourRoutesList.addEventListener ( 'drop', ourOnRouteDrop, false );
+	ourRoutesList.addEventListener ( 'dragover', ourOnRouteListDragOver, false );
+	ourRoutesList.addEventListener ( 'wheel', ourOnRouteListWheel, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnRouteContextMenu
+@desc context menu event listener for a route
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnRouteContextMenu ( contextMenuEvent ) {
+	contextMenuEvent.stopPropagation ( );
+	contextMenuEvent.preventDefault ( );
+	contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+	contextMenuEvent.fromUI = true;
+	contextMenuEvent.originalEvent =
+		{
+			clientX : contextMenuEvent.clientX,
+			clientY : contextMenuEvent.clientY
+		};
+	newRouteContextMenu ( contextMenuEvent, ourUIMainDiv ).show ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is the Travel part of the UI
+@see {@link theTravelUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TravelUI {
+
+	/**
+	creates the user interface
+	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
+	*/
+
+	createUI ( uiMainDiv ) {
+		if ( ourUIMainDiv ) {
+			return;
+		}
+		ourUIMainDiv = uiMainDiv;
+		ourCreateTravelNameDiv ( );
+		ourCreateButtonsDiv ( );
+		ourCreateRoutesListHeaderDiv ( );
+		ourCreateRouteListDiv ( );
+	}
+
+	/**
+	Removes all routes from the routes list and add the routes that are in the TravelNotesData.travel object
+	*/
+
+	setRoutesList ( ) {
+		while ( ourRoutesList.firstChild ) {
+			ourRoutesList.firstChild.removeEventListener ( 'dragstart', ourOnRouteDragStart, false );
+			ourRoutesList.firstChild.removeEventListener ( 'contextmenu', ourOnRouteContextMenu, false );
+			ourRoutesList.removeChild ( ourRoutesList.firstChild );
+		}
+
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			let route = routesIterator.value.objId === theTravelNotesData.editedRouteObjId
+				?
+				theTravelNotesData.travel.editedRoute
+				:
+				routesIterator.value;
+			let routeName =
+				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '&#x1f534;&nbsp;' : '' ) +
+				( route.chain ? '&#x26d3;&nbsp;' : '' ) +
+				( route.computedName ); // 1f534 = 🔴 26d3 = ⛓
+
+			let routeDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					draggable : true,
+					className :
+						'TravelNotes-TravelUI-RoutesList-Item TravelNotes-UI-MoveCursor' +
+						( routesIterator.value.hidden ? ' TravelNotes-TravelUI-RoutesList-HiddenItem' : '' ),
+					objId :
+						routesIterator.value.objId === theTravelNotesData.editedRouteObjId
+							?
+							theTravelNotesData.travel.editedRoute.objId
+							:
+							routesIterator.value.objId,
+					canDrag : true,
+					innerHTML : routeName
+				},
+				ourRoutesList
+			);
+
+			routeDiv.addEventListener ( 'dragstart', ourOnRouteDragStart, false );
+			routeDiv.addEventListener ( 'contextmenu', ourOnRouteContextMenu, false );
+		}
+	}
+
+	/**
+	Set the travel name in the travel name input
+	*/
+
+	setTravelName ( ) {
+		ourTravelNameInput.value = theTravelNotesData.travel.name;
+	}
+}
+
+const ourTravelUI = Object.freeze ( new TravelUI );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of TravelUI class
+	@type {TravelUI}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourTravelUI as theTravelUI
+};
 
 /*
 --- End of TravelUI.js file -------------------------------------------------------------------------------------------

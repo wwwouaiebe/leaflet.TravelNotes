@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,145 +16,182 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- GeoLocator.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newGeoLocator function
 Changes:
 	- v1.6.0:
 		- created
 Doc reviewed ...
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-/*
---- newGeoLocator function --------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-Patterns : Closure
+@file GeoLocator.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newEventDispatcher } from '../util/EventDispatcher.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module GeoLocator
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theConfig } from '../data/Config.js';
-
 import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 
-/*
---- newGeoLocator function --------------------------------------------------------------------------------------------
+let ourStatus =
+	( 'geolocation' in navigator )
+		?
+		GEOLOCATION_STATUS.inactive
+		:
+		GEOLOCATION_STATUS.disabled;
+let ourWatchId = null;
 
-Patterns : Closure
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourShowPosition
+@desc send an event to show the current position on the map
+@param {GeolocationPosition} position a JS GeolocationPosition object
+@fires geolocationpositionchanged
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newGeoLocator ( ) {
+function ourShowPosition ( position ) {
+	theEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } );
+}
 
-	let myStatus = GEOLOCATION_STATUS.disabled;
-	let myWatchId = null;
-	let myEventDispatcher = newEventDispatcher ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myShowPosition function ---------------------------------------------------------------------------------------
+@function ourStop
+@desc stop the geolocation
+@fires geolocationstatuschanged
+@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	function myShowPosition ( position ) {
-		myEventDispatcher.dispatch ( 'geolocationpositionchanged', { position : position } );
+function ourStop ( ) {
+	if ( GEOLOCATION_STATUS.active === ourStatus ) {
+		ourStatus = GEOLOCATION_STATUS.inactive;
 	}
 
-	/*
-	--- myStop function -----------------------------------------------------------------------------------------------
+	// if ( ourWatchId ) FF: the ourWatchId is always 0 so we cannot use ourWatchId to see if the geolocation is running
+	theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
+	navigator.geolocation.clearWatch ( ourWatchId );
+	ourWatchId = null;
+}
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	function myStop ( ) {
-		if ( GEOLOCATION_STATUS.active === myStatus ) {
-			myStatus = GEOLOCATION_STATUS.inactive;
-		}
+@function ourError
+@desc stop the geolocation because the user don't accept the geolocation
+@fires geolocationstatuschanged
+@private
 
-		// if ( myWatchId ) FF: the myWatchId is always 0 so we cannot use myWatchId to see if the geolocation is running
-		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
-		navigator.geolocation.clearWatch ( myWatchId );
-		myWatchId = null;
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourError ( positionError ) {
+	if ( ONE === positionError.code ) { // see positionError object in MDN
+		ourStatus = GEOLOCATION_STATUS.refusedByUser;
 	}
+	ourStop ( );
+}
 
-	/*
-	--- myError function ----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+@function ourStart
+@desc start the geolocation
+@fires geolocationstatuschanged
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourStart ( ) {
+	ourStatus = GEOLOCATION_STATUS.active;
+	theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : ourStatus } );
+	navigator.geolocation.getCurrentPosition ( ourShowPosition, ourError, theConfig.geoLocation.options );
+	ourWatchId = navigator.geolocation.watchPosition ( ourShowPosition, ourError, theConfig.geoLocation.options );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class GeoLocator
+@classdesc This class manage the geolocation
+@see {@link theGeoLocator} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class GeoLocator {
+
+	/**
+	The status of the geolocation
+	@type {GEOLOCATION_STATUS}
+	@readonly
 	*/
 
-	function myError ( positionError ) {
-		if ( ONE === positionError.code ) { // see positionError object in MDN
-			myStatus = GEOLOCATION_STATUS.refusedByUser;
-		}
-		myStop ( );
-	}
+	get status ( ) { return ourStatus; }
 
-	/*
-	--- myStart function ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Start or stop the geolocatiion, depending of the status
+	@return {GEOLOCATION_STATUS} the status after the switch
+	@fires geolocationstatuschanged
+	@fires geolocationpositionchanged
+	@readonly
 	*/
 
-	function myStart ( ) {
-		myStatus = GEOLOCATION_STATUS.active;
-		myEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : myStatus } );
-		navigator.geolocation.getCurrentPosition ( myShowPosition, myError, theConfig.geoLocation.options );
-		myWatchId = navigator.geolocation.watchPosition ( myShowPosition, myError, theConfig.geoLocation.options );
-	}
-
-	/*
-	--- mySwitch function ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySwitch ( ) {
-		switch ( myStatus ) {
+	switch ( ) {
+		switch ( ourStatus ) {
 		case GEOLOCATION_STATUS.inactive :
-			myStart ( );
+			ourStart ( );
 			break;
 		case GEOLOCATION_STATUS.active :
-			myStop ( );
+			ourStop ( );
 			break;
 		default :
 			break;
 		}
 
-		return myStatus;
+		return ourStatus;
 	}
-
-	myStatus =
-		( 'geolocation' in navigator )
-			?
-			GEOLOCATION_STATUS.inactive
-			:
-			GEOLOCATION_STATUS.disabled;
-
-	/*
-	--- GeoLocator object ---------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			get status ( ) { return myStatus; },
-			switch : ( ) => mySwitch ( )
-
-		}
-	);
 }
 
-const theGeoLocator = newGeoLocator ( );
+const ourGeoLocator = Object.seal ( new GeoLocator );
 
-export { theGeoLocator };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of GeoLocator class
+	@type {GeoLocator}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourGeoLocator as theGeoLocator
+};
 
 /*
---- End of GeoLocator.js file -----------------------------------------------------------------------------------------
+--- End of GeoLocator.js file -------------------------------------------------------------------------------------------------
 */

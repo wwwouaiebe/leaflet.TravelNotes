@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,210 +16,308 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- NoteDialogToolbar.js file -----------------------------------------------------------------------------------------
-This file contains:
-	- the newNoteDialogToolbar function
-	- the theNoteDialogToolbar object
 Changes:
 	- v1.6.0:
 		- created
-
-Doc reviewed ...
+Doc reviewed 20200815
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file NoteDialogToolbar.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} NoteDialogCfgFileContent
+@desc An object with definitions for the creation of select options and buttons for the NoteDialogToolbar
+@property {Array.<NoteDialogToolbarButton>} editionButtons An array with the buttons definitions
+@property {Array.<NoteDialogToolbarSelectOption>} preDefinedIconsList An array with the select options definitions
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} NoteDialogToolbarSelectOption
+@desc Select options definitions fot the NoteDialogToolbar
+@property {string} name The name to be displayed in the select
+@property {string} icon The html definition of the icon associated with this option
+@property {string} tooltip The tooltip of the icon associated with this option
+@property {number} width The width of the icon associated with this option
+@property {number} height The height of the icon associated with this option
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} NoteDialogToolbarButton
+@desc Buttons definitions fot the NoteDialogToolbar
+@property {string} title The text to be displayed on the button. Can be HTML
+@property {string} htmlBefore The text to be inserted before the cursor when clicking on the button
+@property {?string} htmlAfter The text to be inserted after the cursor when clicking on the button. Optional
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module NoteDialogToolbar
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
-/*
---- newNoteDialogToolbar function -------------------------------------------------------------------------------------
+let ourButtons = [];
+let ourSelectOptions = [];
+let ourToolbarDiv = null;
+let ourIconsSelect = null;
+let ourOpenFileInput = null;
+let ourOnSelectEventListener = null;
+let ourOnButtonClickEventListener = null;
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddSelectOptions
+@desc This function add options to the select input
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newNoteDialogToolbar ( ) {
-
-	let myButtons = [];
-	let mySelectOptions = [];
-	let myToolbarDiv = null;
-	let myIconsSelect = null;
-	let myOnSelectEventListener = null;
-	let myOnButtonClickEventListener = null;
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-
-	/*
-	--- myAddButtons function -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddSelectOptions ( ) {
-		mySelectOptions.forEach (
-			selectOption => myIconsSelect.add (
-				myHTMLElementsFactory.create (
-					'option',
-					{
-						text : selectOption.name
-					}
-				)
+function ourAddSelectOptions ( ) {
+	ourSelectOptions.forEach (
+		selectOption => ourIconsSelect.add (
+			theHTMLElementsFactory.create (
+				'option',
+				{
+					text : selectOption.name
+				}
 			)
-		);
-		myIconsSelect.selectedIndex = NOT_FOUND;
-	}
+		)
+	);
+	ourIconsSelect.selectedIndex = NOT_FOUND;
+}
 
-	/*
-	--- myAddButtons function -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourAddButtons
+@desc This function add buttons on the toolbar
+@private
 
-	function myAddButtons ( ) {
-		myButtons.forEach (
-			editionButton => {
-				let newButton = myHTMLElementsFactory.create (
-					'button',
-					{
-						type : 'button',
-						innerHTML : editionButton.title || '?',
-						htmlBefore : editionButton.htmlBefore || '',
-						htmlAfter : editionButton.htmlAfter || '',
-						className : 'TravelNotes-NoteDialog-EditorButton'
-					},
-					myToolbarDiv
-				);
-				newButton.addEventListener ( 'click', myOnButtonClickEventListener, false );
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-			}
-		);
-	}
+function ourAddButtons ( ) {
+	ourButtons.forEach (
+		editionButton => {
+			let newButton = theHTMLElementsFactory.create (
+				'button',
+				{
+					type : 'button',
+					innerHTML : editionButton.title || '?',
+					htmlBefore : editionButton.htmlBefore || '',
+					htmlAfter : editionButton.htmlAfter || '',
+					className : 'TravelNotes-NoteDialog-EditorButton'
+				},
+				ourToolbarDiv
+			);
+			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 
-	/*
-	--- myOnOpenUserDataFileInputChange function ----------------------------------------------------------------------
+		}
+	);
+}
 
-	event handler for
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@function ourOnOpenFileInputChange
+@desc Event listener for the open file input
+@private
 
-	function myOnOpenFileInputChange ( changeEvent ) {
-		let fileReader = new FileReader ( );
-		fileReader.onload = function ( ) {
-			try {
-				let newButtonsAndIcons = JSON.parse ( fileReader.result );
-				myButtons = myButtons.concat ( newButtonsAndIcons.editionButtons );
-				mySelectOptions =
-					mySelectOptions.concat ( newButtonsAndIcons.preDefinedIconsList );
-				mySelectOptions.sort (
-					( first, second ) => first.name.localeCompare ( second.name )
-				);
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-				let oldButton = null;
-				while ( ZERO < document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ).length ) {
-					oldButton = document.getElementsByClassName ( 'TravelNotes-NoteDialog-EditorButton' ) [ ZERO ];
-					oldButton.removeEventListener ( 'click', myOnButtonClickEventListener, false );
-					myToolbarDiv.removeChild ( oldButton );
+function ourOnOpenFileInputChange ( changeEvent ) {
+	let fileReader = new FileReader ( );
+	fileReader.onload = function ( ) {
+		try {
+			let newButtonsAndIcons = JSON.parse ( fileReader.result );
+			ourButtons = ourButtons.concat ( newButtonsAndIcons.editionButtons );
+			ourSelectOptions =
+				ourSelectOptions.concat ( newButtonsAndIcons.preDefinedIconsList );
+			ourSelectOptions.sort (
+				( first, second ) => first.name.localeCompare ( second.name )
+			);
+
+			document.querySelectorAll ( '.TravelNotes-NoteDialog-EditorButton' ).forEach (
+				oldButton => {
+					oldButton.removeEventListener ( 'click', ourOnButtonClickEventListener, false );
+					ourToolbarDiv.removeChild ( oldButton );
 				}
-				myAddButtons ( );
-				for (
-					let elementCounter = myIconsSelect.length - ONE;
-					elementCounter >= ZERO;
-					elementCounter --
-				) {
-					myIconsSelect.remove ( elementCounter );
-				}
-				myAddSelectOptions ( );
+			);
+			ourAddButtons ( );
+			for (
+				let elementCounter = ourIconsSelect.length - ONE;
+				elementCounter >= ZERO;
+				elementCounter --
+			) {
+				ourIconsSelect.remove ( elementCounter );
 			}
-			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when opening the file' );
-			}
-		};
-		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
+			ourAddSelectOptions ( );
+		}
+		catch ( err ) {
+			console.log ( err ? err : 'An error occurs when opening the file' );
+		}
+	};
+	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnOpenFileButtonClick
+@desc Event listener for the open file button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnOpenFileButtonClick ( ) {
+	ourOpenFileInput.click ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateToolbarButtons
+@desc This function creates the open file button and add the others buttons on the toolbar
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateToolbarButtons ( ) {
+	ourOpenFileInput = theHTMLElementsFactory.create (
+		'input',
+		{
+			className : 'TravelNotes-BaseDialog-OpenFileInput',
+			type : 'file'
+		},
+		ourToolbarDiv
+	);
+	ourOpenFileInput.addEventListener ( 'change', ourOnOpenFileInputChange,	false );
+	let openFileButton = theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-BaseDialog-Button',
+			title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
+			innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+		},
+		ourToolbarDiv
+	);
+	openFileButton.addEventListener ( 'click', ourOnOpenFileButtonClick, false );
+
+	ourAddButtons ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateToolbarButtons
+@desc This function creates the select input on the toolbar and add the options to the select input
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateToolbarSelect ( ) {
+	ourIconsSelect = theHTMLElementsFactory.create (
+		'select',
+		{
+			className : 'TravelNotes-NoteDialog-Select',
+			id : 'TravelNotes-NoteDialog-IconSelect'
+		},
+		ourToolbarDiv
+	);
+	ourIconsSelect.addEventListener ( 'change', ourOnSelectEventListener, false );
+	ourAddSelectOptions ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc A helper class to creates the toolbar in the NoteDialog and manages the select and buttons on this toolbar
+@see {@link theNoteDialogToolbar} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteDialogToolbar {
+
+	/**
+	Options added to the select input
+	@param {Array.<NoteDialogToolbarSelectOption>} selectOptions An array of NoteDialogToolbarSelectOptions
+	*/
+
+	set selectOptions ( selectOptions ) {
+		ourSelectOptions = ourSelectOptions.concat ( selectOptions );
+		ourSelectOptions.sort ( ( first, second ) => first.name.localeCompare ( second.name ) );
 	}
 
-	/*
-	--- End of myOnOpenUserDataFileInputChange function ---
+	/**
+	Buttons added to the toolbar
+	@param {Array.<NoteDialogToolbarButton>} buttons An array of NoteDialogToolbarButtons
 	*/
 
-	/*
-	---  myCreateToolbarButtonsAndSelect function ---------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateToolbarButtonsAndSelect ( ) {
-
-		myIconsSelect = myHTMLElementsFactory.create (
-			'select',
-			{
-				className : 'TravelNotes-NoteDialog-Select',
-				id : 'TravelNotes-NoteDialog-IconSelect'
-			},
-			myToolbarDiv
-		);
-		myIconsSelect.addEventListener ( 'change', myOnSelectEventListener, false );
-		myAddSelectOptions ( );
-
-		// open userdata button ...
-		// ...with the well know hack to hide the file input ( a div + an input + a fake div + a button )
-		let openFileDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileDiv'
-			},
-			myToolbarDiv
-		);
-		let openFileInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileInput',
-				type : 'file',
-				accept : '.json'
-			},
-			openFileDiv
-		);
-		openFileInput.addEventListener ( 'change', myOnOpenFileInputChange, false );
-		let openFileFakeDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-OpenStyleFakeDiv'
-			},
-			openFileDiv
-		);
-		let openFileButton = myHTMLElementsFactory.create (
-			'button',
-			{
-				id : 'TravelNotes-NoteDialog-OpenEditorFileButton',
-				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-				innerHTML : '&#x1F4C2;'
-			},
-			openFileFakeDiv
-		);
-		openFileButton.addEventListener (
-			'click',
-			( ) => openFileInput.click ( ),
-			false
-		);
-
-		myAddButtons ( );
+	set buttons ( buttons ) {
+		ourButtons = ourButtons.concat ( buttons );
 	}
 
-	/*
-	--- myCreateToolbar function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Gives the data needed to creates the icon corresponding to a select option
+	@param {number} Index the position in the preDefinedIconsList
+	@return {NoteDialogToolbarSelectOption} the icon data
 	*/
 
-	function myCreateToolbar ( onSelectEventListener, onButtonClickEventListener ) {
+	getIconData ( index ) {
+		return ourSelectOptions [ index ];
+	}
 
-		myOnSelectEventListener = onSelectEventListener;
-		myOnButtonClickEventListener = onButtonClickEventListener;
+	/**
+	Creates the toolbar
+	@param {function} onSelectEventListener the event listener to be activated when the user select an option
+	@param {function} onButtonClickEventListener the event listener to be activated when the user click on a button
+	*/
 
-		myToolbarDiv = myHTMLElementsFactory.create (
+	createToolbar ( onSelectEventListener, onButtonClickEventListener ) {
+		ourOnSelectEventListener = onSelectEventListener;
+		ourOnButtonClickEventListener = onButtonClickEventListener;
+
+		ourToolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
@@ -227,54 +325,30 @@ function newNoteDialogToolbar ( ) {
 			}
 		);
 
-		myCreateToolbarButtonsAndSelect ( );
-
-		return myToolbarDiv;
+		ourCreateToolbarSelect ( );
+		ourCreateToolbarButtons ( );
+		return ourToolbarDiv;
 	}
-
-	/*
-	--- mySetSelectOptions function -----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetSelectOptions ( selectOptions ) {
-		mySelectOptions = mySelectOptions.concat ( selectOptions );
-		mySelectOptions.sort ( ( first, second ) => first.name.localeCompare ( second.name ) );
-	}
-
-	/*
-	--- NoteDialogToolbar object --------------------------------------------------------------------------------------
-
-	Creation of the toolbar
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			set selectOptions ( SelectOptions ) { mySetSelectOptions ( SelectOptions ); },
-
-			set buttons ( Buttons ) { myButtons = myButtons.concat ( Buttons ); },
-
-			getIconData : index => mySelectOptions [ index ],
-
-			createToolbar :
-				(
-					onSelectEventListener,
-					onButtonClickEventListener
-				) => myCreateToolbar (
-					onSelectEventListener,
-					onButtonClickEventListener
-				)
-		}
-	);
 }
 
-const theNoteDialogToolbar = newNoteDialogToolbar ( );
+const ourNoteDialogToolbar = Object.seal ( new NoteDialogToolbar );
 
-export { theNoteDialogToolbar };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of NoteDialogToolbar class
+	@type {NoteDialogToolbar}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNoteDialogToolbar as theNoteDialogToolbar
+};
 
 /*
---- End of NoteDialogToolbar.js file ----------------------------------------------------------------------------------
+--- End of NoteDialogToolbar.js file ------------------------------------------------------------------------------------------
 */

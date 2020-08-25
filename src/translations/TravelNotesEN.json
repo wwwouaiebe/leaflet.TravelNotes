@@ -88,131 +88,27 @@
 		"msgstr" : "Close"
 	},
 	{
-		"msgid" : "ContextMenuFactory - Attach note to route",
-		"msgstr" : "transform to route note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this note",
-		"msgstr" : "Delete this note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Detach note from route",
-		"msgstr" : "Transform to travel note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Edit this note",
-		"msgstr" : "Edit this note"
- 	},
-	{
-		"msgid" : "ContextMenuFactory - Hide notes",
-		"msgstr" : "Hide notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - New travel note",
-		"msgstr" : "New travel note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Show notes",
-		"msgstr" : "Show notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to note",
-		"msgstr" : "Zoom to note"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Add a note on the route",
-		"msgstr" : "Add a note on the route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Create a note for each route maneuver",
-		"msgstr" : "Create a note for each route maneuver"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Print route map",
-		"msgstr" : "Print the maps for this route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Cancel modifications on this route",
-		"msgstr" : "Cancel the modifications on this route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this route",
-		"msgstr" : "Delete this route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Delete this waypoint",
-		"msgstr" : "Delete this waypoint"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Edit this route",
-		"msgstr" : "Edit this route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Hide this route",
-		"msgstr" : "Hide this route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Properties",
-		"msgstr" : "Properties"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Save modifications on this route",
-		"msgstr" : "Save the modifications"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as end point",
-		"msgstr" : "Select this point as end point"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as start point",
-		"msgstr" : "Select this point as start point"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Select this point as way point",
-		"msgstr" : "Select this point as waypoint"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to route",
-		"msgstr" : "Zoom to route"
-	},
-	{
-		"msgid" : "ContextMenuFactory - About Travel & Notes",
-		"msgstr" : "About Travel & Notes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Show all routes",
-		"msgstr" : "Show all routes"
-	},
-	{
-		"msgid" : "ContextMenuFactory - View the elevation",
-		"msgstr" : "View the profile"
-	},
-	{
-		"msgid" : "ContextMenuFactory - Zoom to travel",
-		"msgstr" : "Zoom to travel"
-	},
-	{
-		"msgid" : "DataPanesUI - Hide",
+		"msgid" : "PanesManagerUI - Hide",
 		"msgstr" : "Hide"
 	},
 	{
-		"msgid" : "DataPanesUI - Itinerary",
+		"msgid" : "PanesManagerUI - Itinerary",
 		"msgstr" : "Itinerary"
 	},
 	{
-		"msgid" : "DataPanesUI - Itinerary and notes",
+		"msgid" : "PanesManagerUI - Itinerary and notes",
 		"msgstr" : "Itinerary and notes"
 	},
 	{
-		"msgid" : "DataPanesUI - Search",
+		"msgid" : "PanesManagerUI - Search",
 		"msgstr" : "Search OpenStreetMap"
 	},
 	{
-		"msgid" : "DataPanesUI - Show",
+		"msgid" : "PanesManagerUI - Show",
 		"msgstr" : "Show"
 	},
 	{
-		"msgid" : "DataPanesUI - Travel notes",
+		"msgid" : "PanesManagerUI - Travel notes",
 		"msgstr" : "Travel notes"
 	},
 	{
@@ -222,6 +118,10 @@
 	{
 		"msgid" : "FileLoader - Not possible to select as provider",
 		"msgstr" : "Not possible to select {provider}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Address",
+		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -236,20 +136,40 @@
 		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
+		"msgid" : "HTMLViewsFactory - Distance from start of travel",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Profile",
-		"msgstr" : "Profile"
+		"msgid" : "HTMLViewsFactory - Distance from start of route",
+		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Duration",
+		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}",
-		"msgstr" : "To next instruction&nbsp;:&nbsp;{distance}&nbsp;-&nbsp;{duration}"
+		"msgid" : "HTMLViewsFactory - Latitude Longitude",
+		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Link",
+		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
+		"msgstr" : "<span>Next maneuver after</span>&nbsp;:&nbsp;{distance}"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Phone",
+		"msgstr" : "<span>Phone</span>&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Profile",
+		"msgstr" : "Profile"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -280,24 +200,108 @@
 		"msgstr" : "Travel distance&nbsp;:&nbsp;{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next distance&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Next note after&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
+		"msgstr" : "<span>Next note after</span>&nbsp;:&nbsp;{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
 		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a>"
 	},
 	{
+		"msgid" : "ItineraryPaneUI - Show notes",
+		"msgstr" : "Notes"
+	},
+	{
+		"msgid" : "ItineraryPaneUI - Show maneuvers",
+		"msgstr" : "Maneuvers"
+	},
+	{
 		"msgid" : "LayersToolbarUI - Layers",
 		"msgstr" : "Maps"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Replace with a maneuver note",
+		"msgstr" : "Replace with a maneuver note"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Delete this maneuver",
+		"msgstr" : "Delete this maneuver"
+	},
+	{
+		"msgid" : "ManeuverContextMenu - Zoom to this maneuver",
+		"msgstr" : "Zoom to this maneuver"
+	},
+	{
+		"msgid" : "MapContextMenu - About Travel & Notes",
+		"msgstr" : "About Travel & Notes"
+	},
+	{
+		"msgid" : "MapContextMenu - Add a route",
+		"msgstr" : "Add a route"
+	},
+	{
+		"msgid" : "MapContextMenu - Hide all routes",
+		"msgstr" : "Hide all routes"
+	},
+	{
+		"msgid" : "MapContextMenu - Hide all notes",
+		"msgstr" : "Hide all notes"
+	},
+	{
+		"msgid" : "MapContextMenu - New travel note",
+		"msgstr" : "Add a travel note"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as end point",
+		"msgstr" : "Select this point as end point"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as start point",
+		"msgstr" : "Select this point as start point"
+	},
+	{
+		"msgid" : "MapContextMenu - Select this point as way point",
+		"msgstr" : "Select this point as waypoint"
+	},
+	{
+		"msgid" : "MapContextMenu - Show all routes",
+		"msgstr" : "Show all routes"
+	},
+	{
+		"msgid" : "MapContextMenu - Show all notes",
+		"msgstr" : "Show all notes"
+	},
+	{
+		"msgid" : "MapContextMenu - Zoom to travel",
+		"msgstr" : "Zoom to travel"
 	},
 	{
 		"msgid" : "MapEditor - Drag and drop to add a waypoint",
 		"msgstr" : "Drag and drop to add a waypoint or right click for the menu"
 	},
 	{
-		"msgid" : "NoteDialog - Address&nbsp;:",
-		"msgstr" : "Address&nbsp;:"
+		"msgid" : "NoteContextMenu - Attach note to route",
+		"msgstr" : "transform to route note"
+	},
+	{
+		"msgid" : "NoteContextMenu - Delete this note",
+		"msgstr" : "Delete this note"
+	},
+	{
+		"msgid" : "NoteContextMenu - Detach note from route",
+		"msgstr" : "Transform to travel note"
+	},
+	{
+		"msgid" : "NoteContextMenu - Edit this note",
+		"msgstr" : "Edit this note"
+ 	},
+	{
+		"msgid" : "NoteContextMenu - Zoom to note",
+		"msgstr" : "Zoom to note"
+	},
+	{
+		"msgid" : "NoteDialog - Address",
+		"msgstr" : "Address :"
 	},
 	{
 		"msgid" : "Notedialog - an error occurs when creating the SVG icon",
@@ -325,7 +329,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Link",
-		"msgstr" : "Link&nbsp;:&nbsp;"
+		"msgstr" : "Link : "
 	},
 	{
 		"msgid" : "NoteDialog - Note",
@@ -344,6 +348,10 @@
 		"msgstr" : "It's impossible to create a SVG icon for a travel note"
 	},
 	{
+		"msgid" : "NoteDialog - Reset address",
+		"msgstr" : "Update the address with Nominatim"
+	},
+	{
 		"msgid" : "NoteDialog - Text",
 		"msgstr" : "Text&nbsp;:&nbsp;"
 	},
@@ -360,32 +368,20 @@
 		"msgstr" : "You'll add {noteLength} notes. This will consume a lot of resources on the OpenStreetMap server and take time. Are you sure you want to continue?"
 	},
 	{
-		"msgid" : "NoteEditor - Address",
-		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
-	},
-	{
 		"msgid" : "NoteEditor - Creating note",
 		"msgstr" : "Creating note {noteNumber} of {notesLength}"
-	},
-	{
-		"msgid" : "NoteEditor - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "NoteEditor - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
 	},
 	{
 		"msgid" : "NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}",
 		"msgstr" : "You want to create {maneuversLength} notes. For performance reasons, the number of notes is limited to {maxManeuversNotes} for the demo. Change your route."
 	},
 	{
-		"msgid" : "NoteEditor - Phone",
-		"msgstr" : "<span>Phone</span>&nbsp;:&nbsp;"
+		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
+		"msgstr" : "Add a travel note with this result"
 	},
 	{
-		"msgid" : "NoteEditor - Link",
-		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
+		"msgid" : "OsmSearchContextMenu - Zoom to this result",
+		"msgstr" : "Zoom to this result"
 	},
 	{
 		"msgid" : "PasswordDialog - password",
@@ -496,6 +492,62 @@
 		"msgstr" : "Save"
 	},
 	{
+		"msgid" : "RouteContextMenu - Add a note on the route",
+		"msgstr" : "Add a note on the route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Cancel modifications on this route",
+		"msgstr" : "Cancel the modifications on this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Create a note for each route maneuver",
+		"msgstr" : "Create a note for each route maneuver"
+	},
+	{
+		"msgid" : "RouteContextMenu - Delete this route",
+		"msgstr" : "Delete this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Edit this route",
+		"msgstr" : "Edit this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Hide this route",
+		"msgstr" : "Hide this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Invert waypoints",
+		"msgstr" : "Invert waypoints of this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Print route map",
+		"msgstr" : "Print the maps for this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Properties",
+		"msgstr" : "Modify the properties of this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Save modifications on this route",
+		"msgstr" : "Save the modifications on this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Save this route in a GPX file",
+		"msgstr" : "Save this route in a GPX file"
+	},
+	{
+		"msgid" : "RouteContextMenu - Show this route",
+		"msgstr" : "Show this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - View the elevation of this route",
+		"msgstr" : "View the profile of this route"
+	},
+	{
+		"msgid" : "RouteContextMenu - Zoom to route",
+		"msgstr" : "Zoom to route"
+	},
+	{
 		"msgid" : "RouteEditor - Not possible to edit a route created with this provider",
 		"msgstr" : "It's impossible to edit a route created with this provider ({provider})."
 	},
@@ -504,68 +556,20 @@
 		"msgstr" : "It's impossible to edit a route without a save or cancel on the modifications"
 	},
 	{
-		"msgid" : "RouteUI - Add waypoint",
-		"msgstr" : "Add a waypoint"
-	},
-	{
-		"msgid" : "RouteUI - Cancel",
-		"msgstr" : "Cancel the modifications"
-	},
-	{
-		"msgid" : "RouteUI - Delete all waypoints",
-		"msgstr" : "Delete all waypoints"
-	},
-	{
-		"msgid" : "RouteUI - End",
-		"msgstr" : "End"
-	},
-	{
-		"msgid" : "RouteUI - Expand the list",
-		"msgstr" : "Expand"
-	},
-	{
-		"msgid" : "RouteUI - Hide",
-		"msgstr" : "Hide"
-	},
-	{
-		"msgid" : "RouteUI - Invert waypoints",
-		"msgstr" : "Invert the waypoints"
-	},
-	{
-		"msgid" : "RouteUI - Reduce the list",
-		"msgstr" : "Reduce"
-	},
-	{
-		"msgid" : "RouteUI - Save",
-		"msgstr" : "Save the modifications"
-	},
-	{
-		"msgid" : "RouteUI - Save the route in a gpx file",
-		"msgstr" : "Save the route in a gpx file"
-	},
-	{
-		"msgid" : "RouteUI - Show",
-		"msgstr" : "Show"
-	},
-	{
-		"msgid" : "RouteUI - Start",
-		"msgstr" : "Start"
-	},
-	{
-		"msgid" : "RouteUI - Via",
-		"msgstr" : "Via"
-	},
-	{
-		"msgid" : "RouteUI - Waypoints",
-		"msgstr" : "Route waypoints:"
-	},
-	{
 		"msgid" : "RoutePropertiesDialog - Chained route",
 		"msgstr" : "Chained route : "
 	},
 	{
+		"msgid" : "RoutePropertiesDialog - Color",
+		"msgstr" : "Color : "
+	},
+	{
 		"msgid" : "RoutePropertiesDialog - Linetype",
 		"msgstr" : "Linetype : "
+	},
+	{
+		"msgid" : "RoutePropertiesDialog - Name",
+		"msgstr" : "Route name : "
 	},
 	{
 		"msgid" : "RoutePropertiesDialog - Route properties",
@@ -576,11 +580,11 @@
 		"msgstr" : "Width : "
 	},
 	{
-		"msgid" : "SearchPaneUI - Search OpenStreetMap",
+		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
 		"msgstr" : "Search OpenStreetMap"
 	},
 	{
-		"msgid" : "SearchPaneUI - Search phrase",
+		"msgid" : "OsmSearchPaneUI - Search phrase",
 		"msgstr" : "Search words"
 	},
 	{
@@ -664,14 +668,6 @@
 		"msgstr" : "Cancel travel"
 	},
 	{
-		"msgid" : "TravelUI - Delete all routes",
-		"msgstr" : "Delete all routes"
-	},
-	{
-		"msgid" : "TravelUI - Expand the list",
-		"msgstr" : "Expand"
-	},
-	{
 		"msgid" : "TravelUI - Hide",
 		"msgstr" : "Hide"
 	},
@@ -680,40 +676,40 @@
 		"msgstr" : "Import routes and notes from another travel"
 	},
 	{
-		"msgid" : "TravelUI - New route",
-		"msgstr" : "New route"
+		"msgid" : "TravelUI - Add a route",
+		"msgstr" : "Add a route"
 	},
 	{
 		"msgid" : "TravelUI - Not possible to merge a travel when a route is edited",
 		"msgstr" : "Not possible to merge a travel when a route is edited"
 	},
 	{
-		"msgid" : "TravelUI - Open travel roadbook",
-		"msgstr" : "Open the roadbook"
+		"msgid" : "TravelUI - Open travel",
+		"msgstr" : "Open a file"
 	},
 	{
-		"msgid" : "TravelUI - Reduce the list",
-		"msgstr" : "Reduce"
+		"msgid" : "TravelUI - Open travel roadbook",
+		"msgstr" : "Open the roadbook"
 	},
 	{
 		"msgid" : "TravelUI - Route",
 		"msgstr" : "Route"
 	},
 	{
-		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Travel routes&nbsp;:"
-	},
-	{
 		"msgid" : "TravelUI - Save travel",
 		"msgstr" : "Save the travel in a file"
 	},
 	{
-		"msgid" : "TravelUI - Open travel",
-		"msgstr" : "Open a file"
-	},
-	{
 		"msgid" : "TravelUI - Show",
 		"msgstr" : "Show"
+	},
+	{
+		"msgid" : "TravelUI - Travel",
+		"msgstr" : "Travel&nbsp;:&nbsp;"
+	},
+	{
+		"msgid" : "TravelUI - Travel routes",
+		"msgstr" : "Travel routes&nbsp;:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -738,6 +734,30 @@
 	{
 		"msgid" : "Utilities - Second",
 		"msgstr" : "sec"
+	},
+	{
+		"msgid" : "WayPointContextMenu - Delete this waypoint",
+		"msgstr" : "Delete this waypoint"
+	},
+	{
+		"msgid" : "WayPointContextMenu - Modify properties",
+		"msgstr" : "Modify the properties of this waypoint"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Address",
+		"msgstr" : "Address : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Name",
+		"msgstr" : "Name : "
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Reset address",
+		"msgstr" : "Update the address with Nominatim"
+	},
+	{
+		"msgid" : "WayPointPropertiesDialog - Waypoint properties",
+		"msgstr" : "Waypoint properties"
 	},
 	{
 		"msgid" : "Help - Continue with interface",

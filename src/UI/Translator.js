@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -13,68 +14,109 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- Translator.js file ------------------------------------------------------------------------------------------------
-This file contains:
-	- the newTranslator function
-	- the theTranslator object
 Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191121
+Doc reviewed 20200822
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
-/*
---- newTranslator funtion ---------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function returns a Translator object
+@file Translator.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
 
-Patterns : Closure and singleton
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newTranslator ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	let myTranslations = new Map ( );
+@typedef {Object} Translation
+@desc An object used to store translated messages
+@property {string} msgid an id to use to identify the message
+@property {string} msgstr The message translated
+@public
 
-	function mySetTranslations ( translations ) {
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module Translator
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+let ourTranslations = new Map ( );
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class is used to translate the messages in another language
+@see {@link theTranslator} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class Translator {
+
+	/**
+	Load the translations
+	@param {Array.<Translation>} translations The translations to load
+	*/
+
+	setTranslations ( translations ) {
 		translations.forEach (
-			translation => myTranslations.set ( translation.msgid, translation.msgstr )
+			translation => ourTranslations.set ( translation.msgid, translation.msgstr )
 		);
 	}
 
-	function myGetText ( msgid, params ) {
-		let translation = myTranslations.get ( msgid );
+	/**
+	get a message translated
+	@param {string} msgid The id to identify the message
+	@param {?Object} params Parameters to include in the message
+	@return {string} The message corresponding to the id, eventually with params added, or the
+	id if the corresponding Translation was not found
+	*/
+
+	getText ( msgid, params ) {
+		let translation = ourTranslations.get ( msgid );
 		if ( params && translation ) {
 			Object.getOwnPropertyNames ( params ).forEach (
 				propertyName => translation = translation.replace ( '{' + propertyName + '}', params [ propertyName ] )
 			);
 		}
-
 		return translation ? translation : msgid;
 	}
-
-	return {
-		setTranslations : translations => mySetTranslations ( translations ),
-		getText : ( msgid, params ) => myGetText ( msgid, params )
-	};
 }
 
-/*
---- theTranslator object -----------------------------------------------------------------------------------------------
+const ourTranslator = Object.freeze ( new Translator );
 
-The one and only one translator
+export {
 
------------------------------------------------------------------------------------------------------------------------
-*/
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-const theTranslator = newTranslator ( );
+	@desc The one and only one instance of Translator class
+	@type {Translator}
+	@constant
+	@global
 
-export { theTranslator };
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourTranslator as theTranslator
+};
 
 /*
 --- End of Translator.js file -----------------------------------------------------------------------------------------

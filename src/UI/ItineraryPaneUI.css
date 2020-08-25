@@ -1,0 +1,73 @@
+/*
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- ItineraryPaneUI.css file ------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the ItineraryPaneUI
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes {
+	border-spacing: 0.4em 0.2em;
+}
+
+.TravelNotes-UI-Route-Maneuvers-Row-Hidden,
+.TravelNotes-UI-Route-Notes-Row-Hidden {
+	visibility: hidden;
+	min-width: 0;
+	min-height: 0;
+	width: 0;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	border-style: none;
+	border-width: 0;
+	transform: scale(0);
+}
+
+.TravelNotes-UI-Route-ManeuversAndNotes {
+	border-spacing: 0.4em 0.2em;
+}
+
+.TravelNotes-UI-Route-Maneuvers-Row,
+.TravelNotes-UI-Route-Notes-Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.TravelNotes-UI-Route-ManeuversAndNotes-Cell {
+	padding: 0.3em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+	flex-shrink: 1;
+}
+
+.TravelNotes-UI-Route-ManeuversAndNotes-IconCell {
+	width: 40px;
+	height: 40px;
+	min-height: 20px;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+}

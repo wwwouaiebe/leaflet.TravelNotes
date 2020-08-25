@@ -1,14 +1,44 @@
-#TravelNotes-MouseControl {
+/*
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- MouseUI.css file --------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the MouseUI
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+#TravelNotes-MouseUI {
 	position: absolute;
 	top: 0;
-	left: 30em;
+	left: calc(50vw - 5em);
 	z-index: 1200;
 	text-align: center;
-	width: calc(100% - 60em);
+	width: 10em;
 }
 
 @media screen and (min-width: 1px) and (max-width: 640px) {
-	#TravelNotes-MouseControl {
+	#TravelNotes-MouseUI {
 		left: 3em;
 		width: 0;
 		text-align: left;
@@ -17,14 +47,14 @@
 }
 
 @media screen and (min-width: 641px) and (max-width: 1024px) {
-	#TravelNotes-MouseControl {
+	#TravelNotes-MouseUI {
 		left: 3em;
 		width: calc(100% - 33em);
 		text-align: left;
 	}
 }
 
-#TravelNotes-MouseControl > span {
+#TravelNotes-MouseUI > span {
 	padding: 0.3em;
 	background-color: white;
 	opacity: 0.5;

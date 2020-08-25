@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,32 +17,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- roadbook.js file --------------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.5.0:
 		- created
-
-Doc reviewed
+Doc reviewed 20200825
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file RoadbookUpdate.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@desc This file contains the JS code that will be inserted in the TravelNotesRoadbook.html. It's needed to put this JS code
+directly in the TravelNotesRoadbook.html to avoid path problems when saving this TravelNotesRoadbook.html page with the
+save button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { theIndexedDb } from '../roadbook/IndexedDB.js';
-
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE } from '../util/Constants.js';
-
-/*
---- showTravelNotes function --------------------------------------------------------------------------------------
-
-Event listener for show/ hide travel notes checkbox
-
--------------------------------------------------------------------------------------------------------------------
-*/
 
 function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
@@ -59,14 +58,6 @@ function showTravelNotes ( ) {
 
 document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', showTravelNotes );
 
-/*
---- showRouteNotes function ---------------------------------------------------------------------------------------
-
-Event listener for show/ hide route notes checkbox
-
--------------------------------------------------------------------------------------------------------------------
-*/
-
 function showRouteNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
@@ -82,14 +73,6 @@ function showRouteNotes ( ) {
 
 document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', showRouteNotes );
 
-/*
---- showRouteManeuvers function -----------------------------------------------------------------------------------
-
-Event listener for show/ hide route maneuvers checkbox
-
--------------------------------------------------------------------------------------------------------------------
-*/
-
 function showRouteManeuvers ( ) {
 	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
 	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
@@ -104,12 +87,6 @@ function showRouteManeuvers ( ) {
 }
 
 document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
-
-/*
---- main ----------------------------------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------------------------------------------
-*/
 
 let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
 let language = params.get ( 'lng' );
@@ -144,9 +121,6 @@ function saveFile ( ) {
 if ( pageId ) {
 
 	document.getElementById ( 'TravelNotes-SaveFile' ).addEventListener ( 'click', saveFile );
-
-	// document.getElementById ( 'TravelNotes' ).innerHTML = localStorage.getItem ( pageId + '-TravelNotesHTML' );
-
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
 		.then ( innerHTML => {
@@ -189,7 +163,7 @@ else {
 }
 
 if ( language ) {
-	newHttpRequestBuilder ( ).getJsonPromise (
+	theHttpRequestBuilder.getJsonPromise (
 		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
@@ -216,6 +190,6 @@ showRouteNotes ( );
 showRouteManeuvers ( );
 
 /*
---- End of roadbook.js file -------------------------------------------------------------------------------------------
+--- End of roadbook.js file ---------------------------------------------------------------------------------------------------
 
 */

@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,9 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- APIKeysDialog.js file ---------------------------------------------------------------------------------------------
-This file contains:
-	- the newAPIKeysDialog function
 Changes:
 	- v1.6.0:
 		- created
@@ -28,43 +25,88 @@ Changes:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v1.11.0:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
-Doc reviewed ...
+Doc reviewed 20200812
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file APIKeysDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module APIKeysDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newUtilities } from '../util/Utilities.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { newHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-
+import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
-/*
---- newAPIKeysDialog function -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewAPIKeysDialog
+@desc constructor for APIKeysDialog objects
+@param {Array.<APIKey>} APIKeys
+@return {APIKeysDialog} an instance of APIKeysDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newAPIKeysDialog ( APIKeys ) {
+function ourNewAPIKeysDialog ( APIKeys ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class APIKeysDialog
+	@classdesc a BaseDialog object completed for API keys
+	@see {@link newAPIKeysDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	let myAPIKeysDialog = null;
 	let myToolbarDiv = null;
 	let myAPIKeysDiv = null;
-	let myOpenFileInput = null;
-	let myOpenJsonFileInput = null;
+	let myOpenSecureFileInput = null;
+	let myOpenUnsecureFileInput = null;
+	let myReloadKeysFromServerFileButton = null;
+	let mySaveKeysToSecureFileButton = null;
+	let myRestoreKeysFromSecureFileButton = null;
+	let myAddNewKeyButton = null;
+	let mySaveKeysToUnsecureFileButton = null;
+	let myRestoreKeysFromUnsecureFileButton = null;
 
-	/*
-	--- myGetAPIKeys function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetAPIKeys
+	@desc This method returns the API keys
+	@return {Array.<APIKey>}  An array with the API keys
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetAPIKeys ( ) {
@@ -81,10 +123,14 @@ function newAPIKeysDialog ( APIKeys ) {
 		return dlgAPIKeys;
 	}
 
-	/*
-	--- myVerifyKeys function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myVerifyKeys
+	@desc This method validates the API keys
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myVerifyKeys ( ) {
@@ -102,39 +148,40 @@ function newAPIKeysDialog ( APIKeys ) {
 		return returnValue;
 	}
 
-	/*
-	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	click event listener for the ok button
+	@function myOnDeleteApiKeyRowButton
+	@desc Event listener for the delete API key buttons
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOkButtonClick ( ) {
-
-		myAPIKeysDialog.hideError ( );
-		if ( ! myVerifyKeys ( ) ) {
-			return;
-		}
-
-		return myGetAPIKeys ( );
+	function myOnDeleteApiKeyRowButton ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
 	}
 
-	/*
-	--- myCreateAPIKeyRow function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateAPIKeyRow
+	@desc This method creates a row in the API keys list
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateAPIKeyRow ( APIKey ) {
-		let APIKeyRow = myHTMLElementsFactory.create (
+		let APIKeyRow = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyRow'
 			},
 			myAPIKeysDiv
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyName TravelNotes-APIKeysDialog-Input',
@@ -143,7 +190,7 @@ function newAPIKeysDialog ( APIKeys ) {
 			},
 			APIKeyRow
 		);
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'input',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
@@ -154,30 +201,113 @@ function newAPIKeysDialog ( APIKeys ) {
 			APIKeyRow
 		);
 
-		myHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-APIKeysDialog-Button TravelNotes-APIKeysDialog-DeleteButton',
+				className :
+					'TravelNotes-BaseDialog-Button ' +
+					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
-				innerHTML : '&#x274c'
+				innerHTML : '&#x274c' // 274c = ❌
 			},
 			APIKeyRow
 		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					clickEvent.target.parentNode.parentNode.removeChild ( clickEvent.target.parentNode );
-				},
-				false
-			);
-
+			.addEventListener ( 'click', myOnDeleteApiKeyRowButton, false );
 	}
 
-	/*
-	--- myOnErrorEncrypt function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnErrorDecrypt
+	@desc Error handler for the DataEncryptor
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnErrorDecrypt ( err ) {
+		myAPIKeysDialog.hideWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
+		if ( err && 'Canceled by user' !== err ) {
+			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnOkDecrypt
+	@desc Succes handler for the DataEncryptor on decrypt
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOkDecrypt ( data ) {
+		let decryptedAPIKeys = null;
+		try {
+			decryptedAPIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
+		}
+		catch ( err ) {
+			myOnErrorDecrypt ( err );
+			return;
+		}
+		while ( myAPIKeysDiv.firstChild ) {
+			myAPIKeysDiv.removeChild ( myAPIKeysDiv.firstChild );
+		}
+		decryptedAPIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
+		myAPIKeysDialog.hideWait ( );
+		myAPIKeysDialog.hideError ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnReloadKeysFromServerFileButtonClick
+	@desc Event listener for the reload server file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnReloadKeysFromServerFileButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		myAPIKeysDialog.showWait ( );
+		myAPIKeysDialog.keyboardEventListenerEnabled = false;
+		theHttpRequestBuilder.getBinaryPromise (
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
+				'APIKeys'
+		)
+			.then (
+				data => {
+					newDataEncryptor ( ).decryptData (
+						data,
+						myOnOkDecrypt,
+						myOnErrorDecrypt,
+						newPasswordDialog ( false ).show ( )
+					);
+				}
+			)
+			.catch (
+				() => {
+					myAPIKeysDialog.showError (
+						theTranslator.getText ( 'APIKeysDialog - An error occurs when loading the APIKeys file' )
+					);
+					myAPIKeysDialog.hideWait ( );
+					myAPIKeysDialog.keyboardEventListenerEnabled = true;
+				}
+			);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnErrorEncrypt
+	@desc Error handler for the DataEncryptor on encrypt
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnErrorEncrypt ( ) {
@@ -186,10 +316,14 @@ function newAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
-	/*
-	--- myOnOkEncrypt function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnOkEncrypt
+	@desc Succes handler for the DataEncryptor on encrypt
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnOkEncrypt ( data ) {
@@ -207,20 +341,22 @@ function newAPIKeysDialog ( APIKeys ) {
 		myAPIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
-	/*
-	--- mySaveKeysToFile function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnSaveKeysToSecureFileButtonClick
+	@desc Event listener for the save to secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySaveKeysToFile ( ) {
-
+	function myOnSaveKeysToSecureFileButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
 		myAPIKeysDialog.hideError ( );
-
 		if ( ! myVerifyKeys ( ) ) {
 			return;
 		}
-
 		myAPIKeysDialog.showWait ( );
 		myAPIKeysDialog.keyboardEventListenerEnabled = false;
 		newDataEncryptor ( ).encryptData (
@@ -231,106 +367,17 @@ function newAPIKeysDialog ( APIKeys ) {
 		);
 	}
 
-	/*
-	--- mySaveKeysToJsonFile function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnRestoreKeysFromSecureFileButtonChange
+	@desc Event listener for the restore from secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySaveKeysToJsonFile ( ) {
-		myAPIKeysDialog.hideError ( );
-
-		if ( ! myVerifyKeys ( ) ) {
-			return;
-		}
-		newUtilities ( ).saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
-	}
-
-	/*
-	--- myOnErrorDecrypt function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnErrorDecrypt ( err ) {
-		myAPIKeysDialog.hideWait ( );
-		myAPIKeysDialog.keyboardEventListenerEnabled = true;
-		if ( err && 'Canceled by user' !== err ) {
-			myAPIKeysDialog.showError ( theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' ) );
-		}
-	}
-
-	/*
-	--- myOnOkDecrypt function ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnOkDecrypt ( data ) {
-		let decryptedAPIKeys = null;
-		try {
-			decryptedAPIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
-		}
-		catch ( err ) {
-			myOnErrorDecrypt ( err );
-			return;
-		}
-
-		while ( myAPIKeysDiv.firstChild ) {
-			myAPIKeysDiv.removeChild ( myAPIKeysDiv.firstChild );
-		}
-
-		decryptedAPIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
-		myAPIKeysDialog.hideWait ( );
-		myAPIKeysDialog.hideError ( );
-		myAPIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/*
-	--- myOnReloadServerFile function ---------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnReloadServerFile ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( theConfig.haveCrypto ) {
-			myAPIKeysDialog.showWait ( );
-			myAPIKeysDialog.keyboardEventListenerEnabled = false;
-			newHttpRequestBuilder ( ).getBinaryPromise (
-				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-					'APIKeys'
-			)
-				.then (
-					data => {
-						newDataEncryptor ( ).decryptData (
-							data,
-							myOnOkDecrypt,
-							myOnErrorDecrypt,
-							newPasswordDialog ( false ).show ( )
-						);
-					}
-				)
-				.catch (
-					() => {
-						myAPIKeysDialog.showError (
-							theTranslator.getText ( 'APIKeysDialog - An error occurs when loading the APIKeys file' )
-						);
-						myAPIKeysDialog.hideWait ( );
-						myAPIKeysDialog.keyboardEventListenerEnabled = true;
-					}
-				);
-		}
-
-	}
-
-	/*
-	--- myOnOpenFileInputChange function ------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnOpenFileInputChange ( changeEvent ) {
+	function myOnRestoreKeysFromSecureFileButtonChange ( changeEvent ) {
 		myAPIKeysDialog.hideError ( );
 		myAPIKeysDialog.showWait ( );
 		myAPIKeysDialog.keyboardEventListenerEnabled = false;
@@ -345,18 +392,68 @@ function newAPIKeysDialog ( APIKeys ) {
 			);
 		};
 		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );
-
 	}
 
-	/*
-	--- myOnOpenJsonFileInputChange function --------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnOpenSecureFileButtonClick
+	@desc Event listener for the open secure file fake button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOpenJsonFileInputChange ( changeEvent ) {
-		changeEvent.stopPropagation ( );
+	function myOnOpenSecureFileButtonClick ( ) {
+		myOpenSecureFileInput.click ( );
+	}
 
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnRestoreKeysFromSecureFileButtonChange
+	@desc Event listener for the add new key button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnAddNewKeyButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		myCreateAPIKeyRow ( { providerName : '', providerKey : '' } );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnSaveKeysToUnsecureFileButtonClick
+	@desc Event listener for save keys to unsecure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSaveKeysToUnsecureFileButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		myAPIKeysDialog.hideError ( );
+		if ( ! myVerifyKeys ( ) ) {
+			return;
+		}
+		theUtilities.saveFile ( 'APIKeys.json', JSON.stringify ( myGetAPIKeys ( ) ) );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnRestoreKeysFromUnecureFileButtonChange
+	@desc Event listener for restore keys from unsecure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnRestoreKeysFromUnecureFileButtonChange ( changeEvent ) {
+		changeEvent.stopPropagation ( );
 		myAPIKeysDialog.hideError ( );
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
@@ -376,231 +473,291 @@ function newAPIKeysDialog ( APIKeys ) {
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnOpenUnsecureFileButtonClick
+	@desc Event listener for the open unsecure file fake button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOpenUnsecureFileButtonClick ( ) {
+		myOpenUnsecureFileInput.click ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnOkButtonClick ( ) {
+
+		myAPIKeysDialog.hideError ( );
+		if ( ! myVerifyKeys ( ) ) {
+			return;
+		}
+		return myGetAPIKeys ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
-
-		// the dialog base is created
 		myAPIKeysDialog = newBaseDialog ( );
 		myAPIKeysDialog.title = theTranslator.getText ( 'APIKeysDialog - API keys' );
 		myAPIKeysDialog.okButtonListener = myOnOkButtonClick;
-		myToolbarDiv = myHTMLElementsFactory.create (
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateReloadKeysFromServerFileButton
+	@desc This method creates the reload server file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateReloadKeysFromServerFileButton ( ) {
+		myReloadKeysFromServerFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-APIKeysDialog-ToolbarDiv',
-				id : 'TravelNotes-APIKeysDialog-ToolbarDiv'
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
+				innerHTML : '&#x1f504;' // 1f504 = 🔄
+			},
+			myToolbarDiv
+		);
+		myReloadKeysFromServerFileButton.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateSaveKeysToSecureFileButton
+	@desc This method creates the save to secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateSaveKeysToSecureFileButton ( ) {
+		mySaveKeysToSecureFileButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
+				innerHTML : '&#x1f4be;' // 1f4be = 💾
+			},
+			myToolbarDiv
+		);
+		mySaveKeysToSecureFileButton.addEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateRestoreKeysFromSecureFileButton
+	@desc This method creates the restore from secure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRestoreKeysFromSecureFileButton ( ) {
+		myOpenSecureFileInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				className : 'TravelNotes-BaseDialog-OpenFileInput',
+				type : 'file'
+			},
+			myToolbarDiv
+		);
+		myOpenSecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromSecureFileButtonChange,	false );
+		myRestoreKeysFromSecureFileButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
+				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			},
+			myToolbarDiv
+		);
+		myRestoreKeysFromSecureFileButton.addEventListener ( 'click', myOnOpenSecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateAddNewKeyButton
+	@desc This method creates the add new key button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateAddNewKeyButton ( ) {
+		myAddNewKeyButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
+				innerHTML : '+'
+			},
+			myToolbarDiv
+		);
+		myAddNewKeyButton.addEventListener ( 'click', myOnAddNewKeyButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateSaveKeysToUnsecureFileButton
+	@desc This method creates the save to unsecure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateSaveKeysToUnsecureFileButton ( ) {
+		mySaveKeysToUnsecureFileButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
+				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
+				innerHTML : '&#x1f4be;' // 1f4be = 💾
+			},
+			myToolbarDiv
+		);
+		mySaveKeysToUnsecureFileButton.addEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateRestoreKeysFromUnsecureFileButton
+	@desc This method creates the restore from unsecure file button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRestoreKeysFromUnsecureFileButton ( ) {
+		myOpenUnsecureFileInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				className : 'TravelNotes-BaseDialog-OpenFileInput',
+				type : 'file'
+			},
+			myToolbarDiv
+		);
+		myOpenUnsecureFileInput.addEventListener ( 'change', myOnRestoreKeysFromUnecureFileButtonChange, false );
+		myRestoreKeysFromUnsecureFileButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
+				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			},
+			myToolbarDiv
+		);
+		myRestoreKeysFromUnsecureFileButton.addEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
+
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateToolbar
+	@desc This method creates the toolbar of the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateToolbar ( ) {
+		myToolbarDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-APIKeysDialog-ToolbarDiv'
 			},
 			myAPIKeysDialog.content
 		);
-		myAPIKeysDiv = myHTMLElementsFactory.create (
+
+		if ( theConfig.haveCrypto ) {
+			myCreateReloadKeysFromServerFileButton ( );
+			myCreateSaveKeysToSecureFileButton ( );
+			myCreateRestoreKeysFromSecureFileButton ( );
+		}
+
+		myCreateAddNewKeyButton ( );
+
+		if ( theConfig.APIKeys.dialogHaveUnsecureButtons ) {
+			myCreateSaveKeysToUnsecureFileButton ( );
+			myCreateRestoreKeysFromUnsecureFileButton ( );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateToolbar
+	@desc This method creates the toolbar of the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateAPIKeysList ( ) {
+		myAPIKeysDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-APIKeysDialog-DataDiv'
 			},
 			myAPIKeysDialog.content
 		);
-	}
-
-	/*
-	--- myCreateToolbar function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateToolbar ( ) {
-
-		if ( theConfig.haveCrypto ) {
-
-			// reload button
-			myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-reloadFileButton',
-					className : 'TravelNotes-APIKeysDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-					innerHTML : '&#x1f504;'
-				},
-				myToolbarDiv
-			)
-				.addEventListener ( 'click', myOnReloadServerFile, false );
-
-			// save button
-			myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-SaveToFileButton',
-					className : 'TravelNotes-APIKeysDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
-					innerHTML : '&#x1f4be;'
-				},
-				myToolbarDiv
-			)
-				.addEventListener (
-					'click',
-					clickEvent => {
-						clickEvent.stopPropagation ( );
-						mySaveKeysToFile ( );
-					},
-					false
-				);
-
-			let openFileDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenFileDiv'
-				},
-				myToolbarDiv
-			);
-			myOpenFileInput = myHTMLElementsFactory.create (
-				'input',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenFileInput',
-					type : 'file'
-				},
-				openFileDiv
-			);
-			myOpenFileInput.addEventListener (
-				'change',
-				changeEvent => { myOnOpenFileInputChange ( changeEvent ); },
-				false
-			);
-			let openFileFakeDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenFileFakeDiv'
-				},
-				openFileDiv
-			);
-			myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenFileButton',
-					className : 'TravelNotes-APIKeysDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
-					innerHTML : '&#x1F4C2;'
-				},
-				openFileFakeDiv
-			)
-				.addEventListener (
-					'click',
-					( ) => { myOpenFileInput.click ( ); },
-					false
-				);
-		}
-
-		myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-APIKeysDialog-NewKeyButton',
-				className : 'TravelNotes-APIKeysDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
-				innerHTML : '+'
-			},
-			myToolbarDiv
-		)
-			.addEventListener (
-				'click',
-				clickEvent => {
-					clickEvent.stopPropagation ( );
-					myCreateAPIKeyRow ( { providerName : '', providerKey : '' } );
-				},
-				false
-			);
-
-		if ( theConfig.APIKeys.dialogHaveUnsecureButtons ) {
-			myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-SaveToJsonFileButton',
-					className : 'TravelNotes-APIKeysDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
-					innerHTML : '&#x1f4be;'
-				},
-				myToolbarDiv
-			)
-				.addEventListener (
-					'click',
-					clickEvent => {
-						clickEvent.stopPropagation ( );
-						mySaveKeysToJsonFile ( );
-					},
-					false
-				);
-
-			let openJsonFileDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenJsonFileDiv'
-				},
-				myToolbarDiv
-			);
-			myOpenJsonFileInput = myHTMLElementsFactory.create (
-				'input',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenJsonFileInput',
-					type : 'file'
-				},
-				openJsonFileDiv
-			);
-			myOpenJsonFileInput.addEventListener (
-				'change',
-				changeEvent => { myOnOpenJsonFileInputChange ( changeEvent ); },
-				false
-			);
-			let openJsonFileFakeDiv = myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenJsonFileFakeDiv'
-				},
-				openJsonFileDiv
-			);
-			myHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-APIKeysDialog-OpenJsonFileButton',
-					className : 'TravelNotes-APIKeysDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
-					innerHTML : '&#x1F4C2;'
-				},
-				openJsonFileFakeDiv
-			)
-				.addEventListener (
-					'click',
-					( ) => { myOpenJsonFileInput.click ( ); },
-					false
-				);
-		}
-	}
-
-	/*
-	--- myCreateContent function --------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateContent ( ) {
 		APIKeys.forEach ( APIKey => myCreateAPIKeyRow ( APIKey ) );
 	}
 
-	/*
-	--- main function -------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
 	myCreateDialog ( );
 	myCreateToolbar ( );
-	myCreateContent ( );
+	myCreateAPIKeysList ( );
+
 	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Complete the APIKeys' ) );
 
 	return myAPIKeysDialog;
 }
 
-export { newAPIKeysDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newAPIKeysDialog
+	@desc constructor for APIKeysDialog objects
+	@param {Array.<APIKey>} APIKeys
+	@return {APIKeysDialog} an instance of APIKeysDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewAPIKeysDialog as newAPIKeysDialog
+};
 
 /*
 --- End of APIKeysDialog.js file --------------------------------------------------------------------------------------

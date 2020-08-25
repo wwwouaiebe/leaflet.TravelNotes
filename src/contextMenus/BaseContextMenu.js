@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,300 +17,400 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- BaseContextMenu.js file -------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.6.0:
 		- created
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
-Doc reviewed 20191124
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+Doc reviewed 20200727
 Tests ...
+ */
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file BaseContextMenu.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} MenuItem
+@desc An object to represent a context menu line
+@property {Object} context the object to witch the this pointer refers when calling the action function
+@property {string} name the string displayed in the menu
+@property {?function} action the function to be executed when clicking on the menu item. If null the item is displayed
+but not active
+@property {any} param a parameter to be passed to the action function. Can be any type...
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module BaseContextMenu
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { LAT_LNG, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
-import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
-
-let ourContainer = null;
-let ourTimerId = null;
-let ourFocusIsOnItem = ZERO;
-let ourOriginalEvent = null;
-let ourCloseButton = null;
+let ourContextMenuEvent = null;
 let ourLat = LAT_LNG.defaultValue;
 let ourLng = LAT_LNG.defaultValue;
+let ourContainer = null;
+let ourTimerId = null;
 
-/*
---- newBaseContextMenu function ---------------------------------------------------------------------------------------
+let ourKeyboardFocusIsOnItem = INVALID_OBJ_ID;
+let ourMouseFocusIsOnItem = INVALID_OBJ_ID;
+let ourCurrentFocusItem = INVALID_OBJ_ID;
+let ourMenuItems = [];
+let ourCloseButton = null;
+let ourParentDiv = null;
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSetFocusOnItem
+@desc hightlight the item selected by the mouse or the keyboard
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newBaseContextMenu ( originalEvent ) {
-
-	let myMenuItems = [];
-
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
-	let myBody = document.querySelector ( 'body' );
-
-	/*
-	--- myOnKeyPress function -----------------------------------------------------------------------------------------
-
-	Keyboard event listener
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyPress ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
+function ourSetFocusOnItem ( isKeyboardEvent ) {
+	if ( INVALID_OBJ_ID !== ourCurrentFocusItem ) {
+		ourContainer.childNodes [ ourCurrentFocusItem + ONE ].firstChild.classList.remove (
+			'TravelNotes-ContextMenu-ItemSelected'
+		);
 	}
-
-	/*
-	--- myOnKeyUp function --------------------------------------------------------------------------------------------
-
-	Keyboard event listener
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnKeyUp ( keyBoardEvent ) {
-		keyBoardEvent.preventDefault ( );
-		keyBoardEvent.stopPropagation ( );
+	if ( isKeyboardEvent ) {
+		ourContainer.childNodes [ ourKeyboardFocusIsOnItem + ONE ].firstChild.classList.add (
+			'TravelNotes-ContextMenu-ItemSelected'
+		);
+		ourCurrentFocusItem = ourKeyboardFocusIsOnItem;
 	}
+	else {
+		ourContainer.childNodes [ ourMouseFocusIsOnItem + ONE ].firstChild.classList.add (
+			'TravelNotes-ContextMenu-ItemSelected'
+		);
+		ourCurrentFocusItem = ourMouseFocusIsOnItem;
+		ourKeyboardFocusIsOnItem = ourMouseFocusIsOnItem;
+	}
+}
 
-	/*
-	--- myOnKeyDown function ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	Keyboard event listener
+@function ourOnKeyDown
+@desc keyboard event listener
+@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+ */
 
-	function myOnKeyDown ( keyBoardEvent ) {
+/*
+Keyboard events listeners must be 'module global' otherwise the events are not removed when
+closing the menu by clicking outside the menu (in this case the event listeners are duplicated
+in each instance of the menu and so, it's not the same function that is passed to addEventListener
+and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
+for others elements. See issue #83
+*/
 
-		if ( ourContainer ) {
+function ourOnKeyDown ( keyBoardEvent ) {
 
-			// keyBoardEvent.preventDefault ( );
-			if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-				keyBoardEvent.stopPropagation ( );
-				ourCloseButton.click ( );
-			}
-			else if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
-				keyBoardEvent.stopPropagation ( );
-				ourFocusIsOnItem = ourFocusIsOnItem >= myMenuItems.length ? ONE : ++ ourFocusIsOnItem;
-				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-			}
-			else if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
-				keyBoardEvent.stopPropagation ( );
-				ourFocusIsOnItem = ourFocusIsOnItem <= ONE ? myMenuItems.length : -- ourFocusIsOnItem;
-				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-			}
-			else if ( 'Home' === keyBoardEvent.key ) {
-				keyBoardEvent.stopPropagation ( );
-				ourFocusIsOnItem = ONE;
-				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-			}
-			else if ( 'End' === keyBoardEvent.key ) {
-				keyBoardEvent.stopPropagation ( );
-				ourFocusIsOnItem = myMenuItems.length;
-				ourContainer.childNodes [ ourFocusIsOnItem ].firstChild.focus ( );
-			}
-			else if (
-				( 'Enter' === keyBoardEvent.key )
+	if ( ourContainer ) {
+		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
+			keyBoardEvent.stopPropagation ( );
+			ourCloseButton.click ( );
+		}
+		else if ( 'ArrowDown' === keyBoardEvent.key || 'ArrowRight' === keyBoardEvent.key || 'Tab' === keyBoardEvent.key ) {
+			keyBoardEvent.stopPropagation ( );
+			ourKeyboardFocusIsOnItem =
+					INVALID_OBJ_ID === ourKeyboardFocusIsOnItem
+					||
+					ourMenuItems.length - ONE === ourKeyboardFocusIsOnItem
+						?
+						ZERO
+						:
+						++ ourKeyboardFocusIsOnItem;
+			ourSetFocusOnItem ( true );
+		}
+		else if ( 'ArrowUp' === keyBoardEvent.key || 'ArrowLeft' === keyBoardEvent.key ) {
+			keyBoardEvent.stopPropagation ( );
+			ourKeyboardFocusIsOnItem =
+					INVALID_OBJ_ID === ourKeyboardFocusIsOnItem
+					||
+					ZERO === ourKeyboardFocusIsOnItem
+						?
+						ourMenuItems.length - ONE
+						:
+						-- ourKeyboardFocusIsOnItem;
+			ourSetFocusOnItem ( true );
+		}
+		else if ( 'Home' === keyBoardEvent.key ) {
+			keyBoardEvent.stopPropagation ( );
+			ourKeyboardFocusIsOnItem = ZERO;
+			ourSetFocusOnItem ( true );
+		}
+		else if ( 'End' === keyBoardEvent.key ) {
+			keyBoardEvent.stopPropagation ( );
+			ourKeyboardFocusIsOnItem = ourMenuItems.length - ONE;
+			ourSetFocusOnItem ( true );
+		}
+		else if (
+			( 'Enter' === keyBoardEvent.key )
 				&&
-				( ourFocusIsOnItem > ZERO )
+				( ourKeyboardFocusIsOnItem >= ZERO )
 				&&
-				( myMenuItems[ ourFocusIsOnItem - ONE ].action )
-			) {
-				keyBoardEvent.stopPropagation ( );
-				ourContainer.childNodes[ ourFocusIsOnItem ].firstChild.click ( );
-			}
+				( ourMenuItems[ ourKeyboardFocusIsOnItem ].action )
+		) {
+			keyBoardEvent.stopPropagation ( );
+			ourSetFocusOnItem ( true );
+			ourContainer.childNodes[ ourCurrentFocusItem + ONE ].firstChild.click ( );
 		}
 	}
+}
 
-	/*
-	--- onClickItem function ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	Mouse click event listener
+@function ourOnClickItem
+@desc click event on a menu item listener
+@private
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	function myOnClickItem ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( myMenuItems[ clickEvent.target.menuItem ].param ) {
-			myMenuItems[ clickEvent.target.menuItem ].action.call (
-				myMenuItems[ clickEvent.target.menuItem ].context,
-				myMenuItems[ clickEvent.target.menuItem ].param,
-				ourOriginalEvent
-			);
-		}
-		else {
-			myMenuItems[ clickEvent.target.menuItem ].action.call (
-				myMenuItems[ clickEvent.target.menuItem ].context,
-				ourOriginalEvent
-			);
-		}
-		ourCloseButton.click ( );
+function ourOnClickItem ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	if ( ourMenuItems[ clickEvent.target.menuItem ].param ) {
+		ourMenuItems[ clickEvent.target.menuItem ].action.call (
+			ourMenuItems[ clickEvent.target.menuItem ].context,
+			ourMenuItems[ clickEvent.target.menuItem ].param,
+			ourContextMenuEvent
+		);
+	}
+	else {
+		ourMenuItems[ clickEvent.target.menuItem ].action.call (
+			ourMenuItems[ clickEvent.target.menuItem ].context,
+			ourContextMenuEvent
+		);
+	}
+	ourCloseButton.click ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseEnterMenuItem
+@desc mouseenter event on a menu item listener
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnMouseEnterMenuItem ( mouseEnterEvent ) {
+	ourMouseFocusIsOnItem = mouseEnterEvent.target.objId;
+	ourSetFocusOnItem ( false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnCloseMenu
+@desc click event on the close button listener
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnCloseMenu ( ) {
+	if ( ourTimerId ) {
+		clearTimeout ( ourTimerId );
+		ourTimerId = null;
 	}
 
-	/*
-	--- myOnCloseMenu function ----------------------------------------------------------------------------------------
+	// removing event listeners
+	document.removeEventListener ( 'keydown', ourOnKeyDown, true );
 
-	event listener for the close button. Alson called from others events
+	// removing the menu container
+	ourParentDiv.removeChild ( ourContainer );
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	// reset global vars
+	ourContextMenuEvent = null;
+	ourLat = LAT_LNG.defaultValue;
+	ourLng = LAT_LNG.defaultValue;
+	ourContainer = null;
+	ourKeyboardFocusIsOnItem = INVALID_OBJ_ID;
+	ourMouseFocusIsOnItem = INVALID_OBJ_ID;
+	ourCurrentFocusItem = INVALID_OBJ_ID;
+	ourMenuItems = [];
+	ourCloseButton = null;
+	ourParentDiv = null;
+}
 
-	function myOnCloseMenu ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-		if ( ourTimerId ) {
-			clearTimeout ( ourTimerId );
-			ourTimerId = null;
-		}
+@function ourNewBaseContextMenu
+@desc constructor of BaseContextMenu objects
+@param {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+@param {Array.<MenuItem>} menuItems the items to be displayed in the menu
+@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+When null, the body of the html page is selected
+@return {BaseContextMenu} an instance of a BaseContextMenu object
+@listens mouseenter mouseleave click keydown keypress keyup
+@private
 
-		// removing event listeners
-		document.removeEventListener ( 'keydown', myOnKeyDown, true );
-		document.removeEventListener ( 'keypress', myOnKeyPress, true );
-		document.removeEventListener ( 'keyup', myOnKeyUp, true );
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-		// removing menu items
-		let childNodes = ourContainer.childNodes;
-		childNodes [ ZERO ].firstChild.removeEventListener ( 'click', myOnCloseMenu, false );
-		for ( let childNodesCounter = ONE; childNodesCounter < childNodes.length; childNodesCounter ++ ) {
-			childNodes [ childNodesCounter ].firstChild.removeEventListener ( 'click', myOnClickItem, false );
-		}
+function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
-		// removing the menu container
-		document.querySelector ( 'body' ).removeChild ( ourContainer );
-		ourContainer = null;
-		ourFocusIsOnItem = ZERO;
-		myMenuItems = [];
-		ourLat = LAT_LNG.defaultValue;
-		ourLng = LAT_LNG.defaultValue;
-	}
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myBuildContainer function -------------------------------------------------------------------------------------
+	@function myBuildContainer
+	@desc Build the main html element for the menu and add event listeners
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myBuildContainer ( ) {
-		ourContainer = myHTMLElementsFactory.create (
+		ourContainer = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
-			myBody
+			ourParentDiv
 		);
 
 		// Events are created to clear or add a timer when the mouse leave or enter in the container
-		ourContainer.addEventListener (
-			'mouseenter',
-			( ) => {
-				if ( ourTimerId ) {
-					clearTimeout ( ourTimerId );
-					ourTimerId = null;
-				}
-			},
-			false
-		);
-		ourContainer.addEventListener (
-			'mouseleave',
-			( ) => { ourTimerId = setTimeout ( myOnCloseMenu, theConfig.contextMenu.timeout ); },
-			false
-		);
-
+		if ( ZERO < theConfig.contextMenu.timeout ) {
+			ourContainer.addEventListener (
+				'mouseenter',
+				( ) => {
+					if ( ourTimerId ) {
+						clearTimeout ( ourTimerId );
+						ourTimerId = null;
+					}
+				},
+				false
+			);
+			ourContainer.addEventListener (
+				'mouseleave',
+				( ) => {
+					ourTimerId = setTimeout ( ourOnCloseMenu, theConfig.contextMenu.timeout );
+				},
+				false
+			);
+		}
 	}
 
-	/*
-	--- myAddCloseButton function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myAddCloseButton
+	@desc add the close button and it's event listener to the menu
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddCloseButton ( ) {
-		ourCloseButton = myHTMLElementsFactory.create (
+		ourCloseButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c',
+				innerHTML : '&#x274c', // &#x274c = ❌
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
 			ourContainer
 		);
-		ourCloseButton.addEventListener ( 'click', myOnCloseMenu, false );
+		ourCloseButton.addEventListener ( 'click', ourOnCloseMenu, false );
 	}
 
-	/*
-	--- myMoveContainer function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myMoveContainer
+	@desc move the menu container on the screen, so the menu is always completely visible
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myMoveContainer ( ) {
 
 		const MENU_MARGIN = 20;
 
+		let body = document.querySelector ( 'body' );
+
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = myHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, myBody );
+		let dummyDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
-		myBody.removeChild ( dummyDiv );
+		body.removeChild ( dummyDiv );
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
-			ourOriginalEvent.originalEvent.clientY,
+			ourContextMenuEvent.originalEvent.clientY,
 			screenHeight - ourContainer.clientHeight - MENU_MARGIN
 		);
 		let menuLeft = Math.min (
-			ourOriginalEvent.originalEvent.clientX,
+			ourContextMenuEvent.originalEvent.clientX,
 			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
-		ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+		if ( parentDiv ) {
+			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;right:' + MENU_MARGIN + 'px;' );
+		}
+		else {
+			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+		}
 	}
 
-	/*
-	--- myAddKeyboardEvents function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	@function myAddMenuItems
+	@desc build and add the menu items to the container
+	@private
 
-	function myAddKeyboardEvents ( ) {
-		document.addEventListener ( 'keydown', myOnKeyDown, true );
-		document.addEventListener ( 'keypress', myOnKeyPress, true );
-		document.addEventListener ( 'keyup', myOnKeyUp, true );
-	}
-
-	/*
-	--- myAddMenuItems function ----------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddMenuItems ( ) {
 		let menuItemCounter = ZERO;
-		myMenuItems.forEach (
+		ourMenuItems.forEach (
 			menuItem => {
-				let itemContainer = myHTMLElementsFactory.create (
+				let itemContainer = theHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-ContextMenu-ItemContainer'
 					},
 					ourContainer
 				);
-				let itemButton = myHTMLElementsFactory.create (
-					'button',
+				let itemButton = theHTMLElementsFactory.create (
+					'div',
 					{
 						innerHTML : menuItem.name,
 						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
+						objId : menuItemCounter,
 						className :
 							menuItem.action
 								?
@@ -320,8 +420,9 @@ function newBaseContextMenu ( originalEvent ) {
 					},
 					itemContainer
 				);
+				itemButton.addEventListener ( 'mouseenter', ourOnMouseEnterMenuItem, false );
 				if ( menuItem.action ) {
-					itemButton.addEventListener ( 'click', myOnClickItem, false );
+					itemButton.addEventListener ( 'click', ourOnClickItem, false );
 				}
 				itemButton.menuItem = menuItemCounter;
 				++ menuItemCounter;
@@ -329,66 +430,108 @@ function newBaseContextMenu ( originalEvent ) {
 		);
 	}
 
-	/*
-	--- myShow function -----------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myShow
+	@desc build the complete menu an show it on the screen
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myShow ( ) {
 
-		ourOriginalEvent = originalEvent;
+		ourContextMenuEvent = contextMenuEvent;
 
 		// when clicking on a leaflet polyline, a route event AND a map event are generated
 		// with the same latlng. We compare positions and returns when latlng are equals
 		// to avoid a map menu on top of the route menu
-
-		if ( ( ourOriginalEvent.latlng.lat === ourLat ) && ( ourOriginalEvent.latlng.lng === ourLng ) ) {
+		if (
+			! ourContextMenuEvent.fromUI
+			&&
+			( ourContextMenuEvent.latlng.lat === ourLat )
+			&&
+			( ourContextMenuEvent.latlng.lng === ourLng )
+		) {
 			return;
 		}
 
-		ourLat = ourOriginalEvent.latlng.lat;
-		ourLng = ourOriginalEvent.latlng.lng;
-
+		ourLat = ourContextMenuEvent.latlng.lat;
+		ourLng = ourContextMenuEvent.latlng.lng;
 		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			// For an unknown reason, event listeners are not removed in the myOnCloseMenu procedure,
-			// so it's beter to not close the menu to avoid the keyboard blocked...
-			// myOnCloseMenu ( );
+			if ( ourTimerId ) {
+				clearTimeout ( ourTimerId );
+				ourTimerId = null;
+			}
+			ourOnCloseMenu ( );
+
 			return;
 		}
+
+		// reset some global vars
+		ourContainer = null;
+		ourKeyboardFocusIsOnItem = INVALID_OBJ_ID;
+		ourMouseFocusIsOnItem = INVALID_OBJ_ID;
+		ourCurrentFocusItem = INVALID_OBJ_ID;
+		ourCloseButton = null;
+		ourParentDiv = parentDiv || document.querySelector ( 'body' );
+		ourMenuItems = menuItems;
 
 		myBuildContainer ( );
 		myAddCloseButton ( );
 		myAddMenuItems ( );
 		myMoveContainer ( );
-		myAddKeyboardEvents ( );
+		document.addEventListener ( 'keydown', ourOnKeyDown, true );
 	}
 
-	function myInit ( menuItems ) {
-		myMenuItems = menuItems;
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-		// completely crazy...
-		// delete myBaseContextMenu.init;
-	}
+	@class BaseContextMenu
+	@classdesc Base class used to show context menus
+	@see {@link newBaseContextMenu} for constructor
+	@abstract
+	@hideconstructor
 
-	/*
-	--- BaseContextMenu object ----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let myBaseContextMenu = {
-		init : menuItems => myInit ( menuItems ),
-		show : ( ) => myShow ( )
-	};
+	class BaseContextMenu {
 
-	return myBaseContextMenu;
+		/**
+		Show the menu on the screen.
+		*/
+
+		show ( ) { myShow ( ); }
+	}
+
+	return new BaseContextMenu;
 }
 
-export { newBaseContextMenu };
+export {
 
-/*
---- End of BaseContextMenu.js file ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function
+	@desc constructor of BaseContextMenu objects
+	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
+	@param {Array.<MenuItem>} menuItems the items to be displayed in the menu
+	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
+	When null, the body of the html page is selected
+	@return {BaseContextMenu} an instance of a BaseContextMenu object
+	@listens mouseenter mouseleave click keydown keypress keyup
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewBaseContextMenu as newBaseContextMenu
+};
+
+/**
+--- End of BaseContextMenu.js file --------------------------------------------------------------------------------------------
 */

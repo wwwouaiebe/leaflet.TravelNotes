@@ -1,5 +1,6 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -13,34 +14,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- DataEncryptor.js file ---------------------------------------------------------------------------------------------
-This file contains:
-	- the newDataEncryptor function
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 20191125
+Doc reviewed 20200825
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file DataEncryptor.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module DataEncryptor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 /* eslint no-magic-numbers: "off" */
 /* eslint max-params: ["warn", 4] */
 
-/*
---- dataEncryptor function ----------------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------------------------------------------
-*/
-
-function newDataEncryptor ( ) {
-
-	/*
-	--- myImportKey function --------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
+function ourDataEncryptor ( ) {
 
 	function myImportKey ( pswd ) {
 		return window.crypto.subtle.importKey (
@@ -51,12 +57,6 @@ function newDataEncryptor ( ) {
 			[ 'deriveKey' ]
 		);
 	}
-
-	/*
-	--- myDeriveKey function --------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
 
 	function myDeriveKey ( deriveKey ) {
 		return window.crypto.subtle.deriveKey (
@@ -78,20 +78,7 @@ function newDataEncryptor ( ) {
 		);
 	}
 
-	/*
-	--- myEncryptData object --------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
 	function myDecryptData ( data, onOk, onError, pswdPromise ) {
-
-		/*
-		--- decrypt function --------------------------------------------------------------------------------------
-
-		-----------------------------------------------------------------------------------------------------------
-		*/
-
 		function decrypt ( decryptKey ) {
 			return window.crypto.subtle.decrypt (
 				{
@@ -102,7 +89,6 @@ function newDataEncryptor ( ) {
 				new Uint8Array ( data.slice ( 16 ) )
 			);
 		}
-
 		pswdPromise
 			.then ( myImportKey )
 			.then ( myDeriveKey )
@@ -111,22 +97,8 @@ function newDataEncryptor ( ) {
 			.catch ( onError );
 	}
 
-	/*
-	--- myEncryptData object --------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
 	function myEncryptData ( data, onOk, onError, pswdPromise ) {
-
 		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
-
-		/*
-		--- encrypt function --------------------------------------------------------------------------------------
-
-		-----------------------------------------------------------------------------------------------------------
-		*/
-
 		function encrypt ( encryptKey ) {
 			return window.crypto.subtle.encrypt (
 				{
@@ -137,13 +109,6 @@ function newDataEncryptor ( ) {
 				data
 			);
 		}
-
-		/*
-		--- returnValue function --------------------------------------------------------------------------------------
-
-		-----------------------------------------------------------------------------------------------------------
-		*/
-
 		function returnValue ( cipherText ) {
 			onOk (
 				new Blob (
@@ -160,22 +125,56 @@ function newDataEncryptor ( ) {
 			.catch ( onError );
 	}
 
-	/*
-	--- dataEncryptor object --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@class
+	@classdesc This class is used to encrypt an decrypt data with a password
+	@see {@link newDataEncryptor} for constructor
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return Object.seal (
-		{
-			encryptData : function ( data, onOk, onError, pswdPromise ) { myEncryptData ( data, onOk, onError, pswdPromise ); },
-			decryptData : function ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
-		}
-	);
+	class DataEncryptor {
+
+		/**
+		@param {Uint8Array} data The data to encrypt. See TextEncoder ( ) to transform string to Uint8Array
+		@param {function} onOk A function to execute when the encryption succeeds
+		@param {function} onError A function to execute when the encryption fails
+		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
+		*/
+
+		encryptData ( data, onOk, onError, pswdPromise ) { myEncryptData ( data, onOk, onError, pswdPromise ); }
+
+		/**
+		@param {Uint8Array} data The data to decrypt. See TextDecoder ( ) to transform Uint8Array to string
+		@param {function} onOk A function to execute when the decryption succeeds
+		@param {function} onError A function to execute when the decryption fails
+		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
+		*/
+
+		decryptData ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
+	}
+	return Object.freeze ( new DataEncryptor );
 }
 
-export { newDataEncryptor };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newDataEncryptor
+	@desc constructor for DataEncryptor objects
+	@return {DataEncryptor} an instance of DataEncryptor object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourDataEncryptor as newDataEncryptor
+};
 
 /*
---- End of DataEncryptor.js file --------------------------------------------------------------------------------------
+--- End of DataEncryptor.js file ----------------------------------------------------------------------------------------------
 */

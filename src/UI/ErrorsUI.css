@@ -1,4 +1,34 @@
-#TravelNotes-ErrorUI {
+/*
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- ErrorsUI.css file -------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the ErrorsUI
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+#TravelNotes-ErrorsUI {
 	position: absolute;
 	bottom: 10em;
 	left: calc(50% - 25em);
@@ -8,37 +38,37 @@
 	z-index: 1300;
 }
 
-#TravelNotes-ErrorUI-CancelButton {
+#TravelNotes-ErrorsUI-CancelButton {
 	background-color: white;
 }
 
-#TravelNotes-ErrorUI-Message,
-#TravelNotes-ErrorUI-HelpInputDiv {
+#TravelNotes-ErrorsUI-Message,
+#TravelNotes-ErrorsUI-HelpInputDiv {
 	margin: 0.5em;
 }
 
-#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Hidden {
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Hidden {
 	visibility: hidden;
 	width: 0;
 	height: 0;
 }
 
-#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Error {
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Error {
 	color: white;
 	background-color: red;
 }
 
-#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Warning {
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Warning {
 	color: black;
 	background-color: orange;
 }
 
-#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Info {
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Info {
 	color: black;
 	background-color: white;
 }
 
-#TravelNotes-ErrorUI.TravelNotes-ErrorUI-Help {
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Help {
 	color: black;
 	background-color: white;
 }

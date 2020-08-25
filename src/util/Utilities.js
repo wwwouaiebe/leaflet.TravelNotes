@@ -1,5 +1,6 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
@@ -13,61 +14,73 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- Utilities.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	- the newUtilities function
 Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20191122
+Doc reviewed 20200825
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file Utilities.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module Utilities
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
-
 import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
 
-function newUtilities ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	--- myGetUUID function --------------------------------------------------------------------------------------------
+@class
+@classdesc This class contains utility methods
+@see {@link theUtilities} for the one and only one instance of this class
+@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class Utilities {
+
+	/**
+	Gives an UUID
 	*/
 
-	function myGetUUID ( ) {
-		function Random4 ( ) {
-			const HEXADECIMAL = 16;
-			const TWO_EXP_16 = 65536;
-			return Math
-				.floor ( ( ONE + Math.random ( ) ) * TWO_EXP_16 )
-				.toString ( HEXADECIMAL )
-				.substring ( ONE );
+	get UUID ( ) {
+		const HEXADECIMAL = 16;
+		const UUID_LENGHT = 8;
+		const UUID_STRLENGHT = 4;
+		let randomValues = new Uint16Array ( UUID_LENGHT );
+		const separators = [ '', '-', '-', '-', '-', '', '', '' ];
+		window.crypto.getRandomValues ( randomValues );
+		let UUID = '';
+		for ( let counter = ZERO; counter < UUID_LENGHT; counter ++ ) {
+			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) + separators [ counter ];
 		}
-		return Random4 ( ) +
-			Random4 ( ) + '-' +
-			Random4 ( ) + '-' +
-			Random4 ( ) + '-' +
-			Random4 ( ) + '-' +
-			Random4 ( ) +
-			Random4 ( ) +
-			Random4 ( );
+		return UUID;
 	}
 
-	/* --- End of myGetUUID function --- */
-
-	/*
-	--- myStorageAvailable function -----------------------------------------------------------------------------------
-
-	This function test if the storage API is available ( the API can be deactived by user....)
-	Adapted from MDN :-)
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Test the availibility of the storage
+	@param {string} type The type of storage. Must be 'sessionStorage' or 'localStorage'
 	*/
 
-	function myStorageAvailable ( type ) {
+	storageAvailable ( type ) {
 		try {
 			let storage = window [ type ];
 			let	testString = '__storage_test__';
@@ -80,90 +93,38 @@ function newUtilities ( ) {
 		}
 	}
 
-	/* --- End of storageAvailable function --- */
-
-	/*
-	--- myFileAPIAvailable function -----------------------------------------------------------------------------------
-
-	This function test if the File API is available
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Save a string to a file
+	@param {string} fileName The file name
+	@param {string} fileContent The file content
+	@param {?string} fileMimeType The mime type of the file. Default to 'text/plain'
 	*/
 
-	function myFileAPIAvailable ( ) {
+	saveFile ( fileName, fileContent, fileMimeType ) {
 		try {
-
-			// FF...
-			new File ( [ 'testdata' ], { type : 'text/plain' } );
-			return true;
+			let objURL = window.URL.createObjectURL (
+				new File ( [ fileContent ], fileName, { type : fileMimeType || 'text/plain' } )
+			);
+			let element = document.createElement ( 'a' );
+			element.setAttribute ( 'href', objURL );
+			element.setAttribute ( 'download', fileName );
+			element.click ( );
+			window.URL.revokeObjectURL ( objURL );
 		}
 		catch ( err ) {
-			if ( window.navigator.msSaveOrOpenBlob ) {
-
-				// edge IE 11...
-				return true;
-			}
-			return false;
+			console.log ( err ? err : 'An error occurs when saving file' );
 		}
 	}
 
-	/* --- End of myFileAPIAvailable function --- */
-
-	/*
-	--- mySaveFile function -------------------------------------------------------------------------------------------
-
-	This function save data to a local file
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a time to a string
+	@param {number} time The time in seconds
 	*/
 
-	function mySaveFile ( filename, text, type ) {
-		if ( window.navigator.msSaveOrOpenBlob ) {
-
-			// https://msdn.microsoft.com/en-us/library/hh779016(v=vs.85).aspx
-			// edge IE 11...
-			try {
-				window.navigator.msSaveOrOpenBlob ( new Blob ( [ text ] ), filename );
-			}
-			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when saving file' );
-			}
-		}
-		else {
-
-			// FF...
-			// http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
-			try {
-				let mapFile = window.URL.createObjectURL ( new File ( [ text ], { type : type || 'text/plain' } ) );
-				let element = document.createElement ( 'a' );
-				element.setAttribute ( 'href', mapFile );
-				element.setAttribute ( 'download', filename );
-				element.style.display = 'none';
-				document.body.appendChild ( element );
-				element.click ( );
-				document.body.removeChild ( element );
-				window.URL.revokeObjectURL ( mapFile );
-			}
-			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when saving file' );
-			}
-		}
-	}
-
-	/* --- End of mySaveFile function --- */
-
-	/*
-	--- myFormatTime function -----------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myFormatTime ( time ) {
-
+	formatTime ( time ) {
 		const SECOND_IN_DAY = 86400;
 		const SECOND_IN_HOUR = 3600;
 		const SECOND_IN_MINUT = 60;
-
 		let iTtime = Math.floor ( time );
 		if ( ZERO === iTtime ) {
 			return '';
@@ -198,16 +159,12 @@ function newUtilities ( ) {
 		return seconds + '\u00A0' + theTranslator.getText ( 'Utilities - Second' );
 	}
 
-	/* --- End of myFormatTime function --- */
-
-	/*
-	--- myFormatDistance function -------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a distance to a string
+	@param {number} distance The distance in meters
 	*/
 
-	function myFormatDistance ( distance ) {
-
+	formatDistance ( distance ) {
 		const M_IN_KM = 1000;
 		const DISTANCE_ROUND = 10;
 		const THREE = 3;
@@ -224,15 +181,12 @@ function newUtilities ( ) {
 			'\u00A0km';
 	}
 
-	/* --- End of myFormatDistance function --- */
-
-	/*
-	--- myFormatLat function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a latitude to a string
+	@param {number} lat The latitude
 	*/
 
-	function myFormatLat ( lat ) {
+	formatLat ( lat ) {
 		return (
 			lat > ZERO
 				?
@@ -242,15 +196,12 @@ function newUtilities ( ) {
 		);
 	}
 
-	/* --- End of myFormatLat function --- */
-
-	/*
-	--- myFormatLng function ------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a longitude to a string
+	@param {number} lng The longitude
 	*/
 
-	function myFormatLng ( lng ) {
+	formatLng ( lng ) {
 		return (
 			lng > ZERO
 				?
@@ -260,54 +211,37 @@ function newUtilities ( ) {
 		);
 	}
 
-	/* --- End of myFormatLng function --- */
-
-	/*
-	--- myFormatLatLng function ---------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Transform a latitude + longitude to a string
+	@param {Array.<number>} latLng The latitude and longitude
 	*/
 
-	function myFormatLatLng ( latLng ) {
+	formatLatLng ( latLng ) {
 		if ( ZERO === latLng [ ZERO ] && ZERO === latLng [ ONE ] ) {
 			return '';
 		}
-		return myFormatLat ( latLng [ ZERO ] ) + '\u00A0-\u00A0' + myFormatLng ( latLng [ ONE ] );
+		return this.formatLat ( latLng [ ZERO ] ) + '\u00A0-\u00A0' + this.formatLng ( latLng [ ONE ] );
 	}
-
-	/* --- End of myFormatLatLng function --- */
-
-	/*
-	--- Utilities object ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			get UUID ( ) { return myGetUUID ( ); },
-
-			storageAvailable : type => myStorageAvailable ( type ),
-
-			fileAPIAvailable : ( ) => myFileAPIAvailable ( ),
-
-			saveFile : ( filename, text, type ) => mySaveFile ( filename, text, type ),
-
-			formatTime : time => myFormatTime ( time ),
-
-			formatDistance : distance => myFormatDistance ( distance ),
-
-			formatLat : lat => myFormatLat ( lat ),
-
-			formatLng : lng => myFormatLng ( lng ),
-
-			formatLatLng : latLng => myFormatLatLng ( latLng )
-		}
-	);
 }
 
-export { newUtilities };
+const ourUtilities = Object.freeze ( new Utilities );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of Utilities class
+	@type {Utilities}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourUtilities as theUtilities
+};
 
 /*
---- End of Utilities.js file ------------------------------------------------------------------------------------------
+--- End of Utilities.js file --------------------------------------------------------------------------------------------------
 */

@@ -1,0 +1,152 @@
+/*
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+--- UI.css file -------------------------------------------------------------------------------------------------------
+
+This file contains:
+	- the css for the UI
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+/* --- Main settings --- */
+
+#TravelNotes-UI-MainDiv {
+	height: 100vh;
+	max-height: 100vh;
+	font-family: sans-serif;
+	font-size: 1em;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* --- Main settings - overload for maximized user interface --- */
+
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Maximize {
+	max-width: 30em;
+	width: 30em;
+	background-color: white;
+}
+
+/* --- Main settings - overload for minimized user interface --- */
+
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize {
+	height: 3em;
+	background-color: transparent;
+	width: 8em;
+	margin: 0;
+	padding: 0;
+}
+
+/* --- title --- */
+
+#TravelNotes-UI-MainDiv-Title {
+	text-align: center;
+	font-size: 1em;
+	font-weight: bold;
+	color: white;
+	background-color: black;
+	padding: 0.5em;
+	margin: 0;
+}
+
+/* --- title - overload for maximized user interface --- */
+
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Maximize > div#TravelNotes-UI-MainDiv-Title {
+	margin: 0;
+	padding: 0;
+	transform: scale(0);
+	height: 0;
+}
+
+/* --- title - overload for minimized user interface --- */
+
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div#TravelNotes-UI-MainDiv-Title {
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateX(3em) scale(1);
+	padding-top: 1em;
+	padding-bottom: 0.5em;
+	margin: 0;
+	height: 3em;
+	width: 8em;
+}
+
+/* --- all div - overload for minimized user interface --- */
+
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div,
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div > div,
+#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div > div > div {
+	margin: 0;
+	padding: 0;
+	transform: scale(0);
+	width: 0;
+	height: 0;
+}
+
+/* --- Cursor --- */
+
+.TravelNotes-UI-MoveCursor {
+	cursor: grab;
+}
+
+.TravelNotes-UI-MoveCursor:active {
+	cursor: move;
+}
+
+/* --- flex row --- */
+
+.TravelNotes-UI-FlexRowDiv {
+	display: flex;
+	flex-direction: row;
+	padding: 0.5em;
+}
+
+.TravelNotes-UI-FlexRow-RightButton {
+	margin-left: auto;
+}
+
+/* --- Buttons --- */
+
+.TravelNotes-UI-Button {
+	font-weight: bold;
+	display: inline-block;
+	width: 2em;
+	text-align: center;
+	cursor: default;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+}
+
+.TravelNotes-UI-Button:hover {
+	border-color: black;
+}
+
+.TravelNotes-UI-Button > a {
+	text-decoration: none;
+	color: black;
+}
+
+.TravelNotes-UI-Button > a:visited {
+	color: black;
+}

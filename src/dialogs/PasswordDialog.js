@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -16,43 +16,85 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
---- PasswordDialog.js file --------------------------------------------------------------------------------------------
-This file contains:
-	- the newPasswordDialog.js function
 Changes:
 	- v1.6.0:
 		- created
 	- v1.11.0:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
-Doc reviewed ...
+Doc reviewed 20200815
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file PasswordDialog.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module PasswordDialog
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
-/*
---- newPasswordDialog function ----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function ourNewPasswordDialog
+@desc constructor for PasswordDialog objects
+@param {boolean} verifyPassword When true the password must follow the password rules
+@return {PasswordDialog} an instance of PasswordDialog object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newPasswordDialog ( verifyPassword ) {
+function ourNewPasswordDialog ( verifyPassword ) {
 
-	let myHTMLElementsFactory = newHTMLElementsFactory ( );
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class PasswordDialog
+	@classdesc A BaseDialog object completed for passwords.
+	Create an instance of the dialog, then execute the show ( ) method. The typed password, encoded in an UInt8Array with
+	window.TextEncoder ( ).encode ( ) is given as parameter of the succes handler of the Promise returned by
+	the show ( ) method.
+	@example
+	newPasswordDialog ( true )
+		.show ( )
+		.then ( password => doSomethingWithThePassword )
+		.catch ( error => doSomethingWithTheError );
+	@see {@link newPasswordDialog} for constructor
+	@augments BaseDialog
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
 	let myPasswordDialog = null;
-	let myPasswordDiv = null;
+	let myPasswordDataDiv = null;
 	let myPasswordInput = null;
 
-	/*
-	--- myOnOkButtonClick function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	click event listener for the ok button
+	@function myOnOkButtonClick
+	@desc Event listener for the ok button
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnOkButtonClick ( ) {
@@ -81,59 +123,50 @@ function newPasswordDialog ( verifyPassword ) {
 		return new window.TextEncoder ( ).encode ( myPasswordInput.value );
 	}
 
-	/*
-	--- myCreateDialog function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateDialog ( ) {
-
-		// the dialog base is created
 		myPasswordDialog = newBaseDialog ( );
 		myPasswordDialog.title = theTranslator.getText ( 'PasswordDialog - password' );
 		myPasswordDialog.okButtonListener = myOnOkButtonClick;
-		myPasswordDiv = myHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-PasswordDialog-DataDiv'
-			},
-			myPasswordDialog.content
-		);
 	}
 
-	/*
-	--- myCreateContent function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myCreateContent
+	@desc This method creates the dialog content
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateContent ( ) {
-		myPasswordInput = myHTMLElementsFactory.create (
-			'input',
-			{
-				id : 'TravelNotes-PasswordDialog-PasswordInput',
-				type : 'password'
-			},
-			myPasswordDiv
-		);
+		myPasswordDataDiv = theHTMLElementsFactory.create ( 'div', null, myPasswordDialog.content );
+		myPasswordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, myPasswordDataDiv );
 	}
 
-	/*
-	--- myOnShow function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myOnShow
+	@desc This method is executed when the show method is called
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myOnShow ( ) {
 		myPasswordInput.focus ( );
 	}
-
-	/*
-	--- main function -------------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
 
 	myCreateDialog ( );
 	myCreateContent ( );
@@ -142,8 +175,23 @@ function newPasswordDialog ( verifyPassword ) {
 	return myPasswordDialog;
 }
 
-export { newPasswordDialog };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newPasswordDialog
+	@desc constructor for PasswordDialog objects
+	@param {boolean} verifyPassword When true the password must follow the password rules
+	@return {PasswordDialog} an instance of PasswordDialog object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewPasswordDialog as newPasswordDialog
+};
 
 /*
---- End of PasswordDialog.js file -------------------------------------------------------------------------------------
+--- End of PasswordDialog.js file ---------------------------------------------------------------------------------------------
 */

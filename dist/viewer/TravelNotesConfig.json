@@ -169,7 +169,7 @@
 		"svgTimeOut":15000,
 		"cityPrefix":" <br /><span class='TravelNotes-NoteHtml-Address-City'>",
 		"cityPostfix":"</span>",
-		"maxManeuversNotes":100
+		"maxManeuversNotes":10
 	},
 	"itineraryPointZoom":17,
 	"routeEditor":
