@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,17 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 /*
---- RoadbookUpdate.js file --------------------------------------------------------------------------------------------
-This file contains:
-	- the newRoadbookUpdate function
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 20191125
+Doc reviewed 20200825
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file RoadbookUpdate.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
@@ -33,10 +40,16 @@ import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDB.js';
 
-/*
---- newRoadbookUpdate function ----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------------
+@function newRoadbookUpdate
+@desc This function update the indexedDb with the roadbook content and then update the localStorage.
+The localStorage send and event to the TravelNotesRoadbook.html page (see roadbook.js) and this page
+read the new roadbbok content in the indexedDb and update
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 function newRoadbookUpdate ( ) {
@@ -57,5 +70,5 @@ function newRoadbookUpdate ( ) {
 export { newRoadbookUpdate };
 
 /*
---- End of RoadbookUpdate.js file -------------------------------------------------------------------------------------
+--- End of RoadbookUpdate.js file ---------------------------------------------------------------------------------------------
 */

@@ -33,6 +33,26 @@ Tests ...
 -----------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file PrintFactory.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module PrintFactory
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 /* global L */
 
 import { theErrorsUI } from '../UI/ErrorsUI.js';
@@ -46,15 +66,18 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 
-/*
---- newPrintFactory function ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This function ...
+@function ourNewPrintFactory
+@desc constructor for PrintFactory objects
+@return {PrintFactory} an instance of PrintFactory object
+@private
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-function newPrintFactory ( ) {
+function ourNewPrintFactory ( ) {
 
 	const LAT = ZERO;
 	const LNG = ONE;
@@ -69,42 +92,49 @@ function newPrintFactory ( ) {
 	let myTilesPage = 0;
 
 	/*
-	--- onAfterPrint function -----------------------------------------------------------------------------------------
+	--- myOnAfterPrint function -----------------------------------------------------------------------------------------
 
 	This function restore the map after printing
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function onAfterPrint ( ) {
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnAfterPrint
+	@desc remove the print views and restore the map and user interface after printing
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnAfterPrint ( ) {
 		while ( ZERO < document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ).length ) {
 			myBody.removeChild ( document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ) [ ZERO ] );
 		}
-
 		document.getElementById ( 'TravelNotes-PrintToolbar-PrintButton' )
 			.removeEventListener (	'click', ( ) => window.print ( ), false );
 		document.getElementById ( 'TravelNotes-PrintToolbar-CancelButton' )
-			.removeEventListener (	'click', onAfterPrint, false );
+			.removeEventListener (	'click', myOnAfterPrint, false );
 		myBody.removeChild ( document.getElementById ( 'TravelNotes-PrintToolbar' ) );
 
 		let childrens = myBody.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.remove ( 'TravelNotes-PrintViews-Hidden' );
 		}
-
 		theTravelNotesData.map.invalidateSize ( false );
-
-		window.removeEventListener ( 'afterprint', onAfterPrint, true );
+		window.removeEventListener ( 'afterprint', myOnAfterPrint, true );
 	}
 
-	/*
-	--- myComputePrintSize function -----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute the print size in lat and lng
-	transforming the dimension given in mm by the user.
+	@function myComputePrintSize
+	@desc compute the print size in lat and lng transforming the dimension given in mm by the user.
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputePrintSize ( ) {
@@ -135,12 +165,14 @@ function newPrintFactory ( ) {
 		];
 	}
 
-	/*
-	--- myIsFirstPointOnView function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function test if firstItineraryPoint is on the frame of currentView
+	@function myIsFirstPointOnView
+	@desc test if firstItineraryPoint is on the frame of currentView
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myIsFirstPointOnView ( currentView, firstItineraryPoint ) {
@@ -161,13 +193,15 @@ function newPrintFactory ( ) {
 		return null;
 	}
 
-	/*
-	--- myIsItineraryHorOrVer function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute if the line defined by firstItineraryPoint  lastItineraryPoint
+	@function myIsItineraryHorOrVer
+	@desc compute if the line defined by firstItineraryPoint  lastItineraryPoint
 	is horizontal or vertical. If yes, the intersection of the line and currentView is returned
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myIsItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint ) {
@@ -194,13 +228,15 @@ function newPrintFactory ( ) {
 		return null;
 	}
 
-	/*
-	--- myHaveViewOnlyOnePoint function ---------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function test if currentView is only a point. If yes an intermediatePoint is computed
-	to exetend the view to the maximun possible
+	@function myHaveViewOnlyOnePoint
+	@desc test if currentView is only a point. If yes an intermediatePoint is computed
+	to extend the view to the maximun possible
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
@@ -221,12 +257,14 @@ function newPrintFactory ( ) {
 		return null;
 	}
 
-	/*
-	--- myComputeIntermediatePoint function ---------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myComputeIntermediatePoint
+	@desc See comments in the code
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
@@ -348,12 +386,14 @@ function newPrintFactory ( ) {
 		throw new Error ( 'intermediate point not found' );
 	}
 
-	/*
-	--- myComputeViews function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function compute the different views needed to print the maps
+	@function myComputeViews
+	@desc compute the different views needed to print the maps
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myComputeViews ( ) {
@@ -452,12 +492,14 @@ function newPrintFactory ( ) {
 		} // end of while ( ! done )
 	}
 
-	/*
-	--- myGetLayer function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates a leaflet layer with the same map that the main map
+	@function myGetLayer
+	@desc creates a leaflet layer with the same map that the main map
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetLayer ( ) {
@@ -485,12 +527,14 @@ function newPrintFactory ( ) {
 		return leafletLayer;
 	}
 
-	/*
-	--- myGetNotesMarkers function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates markers for notes
+	@function myGetNotesMarkers
+	@desc creates markers for notes
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetNotesMarkers ( ) {
@@ -522,12 +566,14 @@ function newPrintFactory ( ) {
 		return notesMarkers;
 	}
 
-	/*
-	--- myPrintView function ------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates a print view
+	@function myPrintView
+	@desc creates a print view
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myPrintView ( view ) {
@@ -597,12 +643,14 @@ function newPrintFactory ( ) {
 		);
 	}
 
-	/*
-	--- myCreateToolbar function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function creates the toolbar with the print and cancel button
+	@function myCreateToolbar
+	@desc creates the toolbar with the print and cancel button
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateToolbar ( ) {
@@ -613,7 +661,6 @@ function newPrintFactory ( ) {
 			},
 			myBody
 		);
-
 		theHTMLElementsFactory.create (
 			'div',
 			{
@@ -635,15 +682,17 @@ function newPrintFactory ( ) {
 			},
 			printToolbar
 		)
-			.addEventListener (	'click', onAfterPrint, false );
+			.addEventListener (	'click', myOnAfterPrint, false );
 	}
 
-	/*
-	--- myPrintViews function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function add the print views to the html page
+	@function myPrintViews
+	@desc add the print views to the html page
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myPrintViews ( ) {
@@ -657,7 +706,7 @@ function newPrintFactory ( ) {
 
 		myCreateToolbar ( );
 
-		window.addEventListener ( 'afterprint', onAfterPrint, true );
+		window.addEventListener ( 'afterprint', myOnAfterPrint, true );
 
 		// creating the polyline for the route
 		// why we can create the polyline only once and we have to create markers and layers for each view?
@@ -679,57 +728,70 @@ function newPrintFactory ( ) {
 		myViews.forEach ( myPrintView );
 	}
 
-	/*
-	--- myPrint function ----------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@class PrintFactory
+	@classdesc This class manages the print of a route
+	@see {@link newPrintFactory} for constructor
+	@hideconstructor
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myPrint ( printData, routeObjId ) {
-		myRoute = theDataSearchEngine.getRoute ( routeObjId );
-		if ( ! myRoute ) {
-			return;
-		}
-		myPrintData = printData;
+	class PrintFactory {
 
-		myComputePrintSize ( );
-
-		myComputeViews ( );
-
-		/*
-		// Remain for debugging
-		myViews.forEach (
-			view => L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
-		);
-		console.log ( 'views :' + myViews.length );
+		/**
+		Hide the map and user interface, prepares the print views and add a toolbar on top of the screen
+		@param {PrintRouteMapOptions} printData the print options returned by the PrintRouteMapDialog
+		@param {!number} routeObjId The objId of the route to print
 		*/
 
-		if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
-			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
-			return;
-		}
+		print ( printData, routeObjId ) {
+			myRoute = theDataSearchEngine.getRoute ( routeObjId );
+			if ( ! myRoute ) {
+				return;
+			}
+			myPrintData = printData;
+			myComputePrintSize ( );
+			myComputeViews ( );
 
-		myPrintViews ( );
+			/*
+			// Remain for debugging
+			myViews.forEach (
+				view => L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
+			);
+			console.log ( 'views :' + myViews.length );
+			*/
+
+			if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
+				theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
+				return;
+			}
+			myPrintViews ( );
+		}
 	}
 
-	/*
-	--- PrintFactory object -------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			print : ( printData, routeObjId ) => myPrint ( printData, routeObjId )
-		}
-	);
+	return Object.freeze ( new PrintFactory );
 }
 
-export { newPrintFactory };
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function newPrintFactory
+	@desc constructor for PrintFactory objects
+	@return {PrintFactory} an instance of FileLoader object
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourNewPrintFactory as newPrintFactory
+};
 
 /*
---- End of PrintFactory.js file ---------------------------------------------------------------------------------------
+--- End of PrintFactory.js file -----------------------------------------------------------------------------------------------
 
 */

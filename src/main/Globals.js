@@ -55,6 +55,7 @@ import { theGeometry } from '../util/Geometry.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theIndexedDb } from '../roadbook/IndexedDB.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theMapEditor } from '../core/MapEditor.js';
 import { theMouseUI } from '../UI/MouseUI.js';
@@ -100,9 +101,11 @@ import { newObjType } from '../data/ObjType.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 import { newOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
+import { newPrintFactory } from '../printMap/PrintFactory.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 import { newProfileWindow } from '../dialogs/ProfileWindow.js';
+import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { newRoute } from '../data/Route.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
@@ -145,7 +148,9 @@ class Globals {
 	get newPasswordDialog ( ) { return newPasswordDialog; }
 	get newPrintRouteMapDialog ( ) { return newPrintRouteMapDialog; }
 	get newProfileFactory ( ) { return newProfileFactory; }
+	get newPrintFactory ( ) { return newPrintFactory; }
 	get newProfileWindow ( ) { return newProfileWindow; }
+	get newRoadbookUpdate ( ) { return newRoadbookUpdate; }
 	get newRoute ( ) { return newRoute; }
 	get newRouteContextMenu ( ) { return newRouteContextMenu; }
 	get newRoutePropertiesDialog ( ) { return newRoutePropertiesDialog; }
@@ -172,6 +177,7 @@ class Globals {
 	get theHTMLElementsFactory ( ) { return theHTMLElementsFactory; }
 	get theHTMLViewsFactory ( ) { return theHTMLViewsFactory; }
 	get theHttpRequestBuilder ( ) { return theHttpRequestBuilder; }
+	get theIndexedDb ( ) { return theIndexedDb; }
 	get theLayersToolbarUI ( ) { return theLayersToolbarUI; }
 	get theMapEditor ( ) { return theMapEditor; }
 	get theMouseUI ( ) { return theMouseUI; }

@@ -1,5 +1,5 @@
 /*
-Copyright - 2019 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -17,82 +17,91 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- IndexedDB.js file -------------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.7.0:
 		- created
-
-Doc reviewed
+Doc reviewed 20200825
 Tests ...
+*/
 
------------------------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file IndexedDb.js
+@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module IndexedDb
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 const DB_VERSION = 1;
+let ourDb = null;
 
-/*
---- newIndexedDb function ---------------------------------------------------------------------------------------------
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-This function ...
+@class
+@classdesc This class contains methods for accessing the window.indexedDb
+@see {@link theIndexedDb} for the one and only one instance of this class
+@hideconstructor
 
------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function newIndexedDb ( ) {
+class IndexedDb {
 
-	let myDb = null;
-
-	/*
-	--- myCloseDb function --------------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Open the indexedDb
+	@return {Promise} A Promise  that fullfil when the indexedDb is opened or reject when a problem occurs
 	*/
 
-	function myCloseDb ( UUID ) {
-		if ( ! myDb ) {
-			return;
+	getOpenPromise ( ) {
+		function openDb ( onOk, onError ) {
+			if ( ourDb ) {
+				onOk ( );
+				return;
+			}
+			let openRequest = window.indexedDB.open ( 'TravelNotesDb', DB_VERSION );
+			openRequest.onerror = function ( ) {
+				ourDb = null;
+				onError ( new Error ( 'Not possible to open the db' ) );
+			};
+			openRequest.onsuccess = function ( successEvent ) {
+				ourDb = successEvent.target.result;
+				onOk ( );
+			};
+			openRequest.onupgradeneeded = function ( upgradeEvent ) {
+				ourDb = upgradeEvent.target.result;
+				ourDb.createObjectStore ( 'Travels', { keyPath : 'UUID' } );
+			};
 		}
-		if ( ! UUID ) {
-			myDb.close ( );
-			myDb = null;
-			return;
-		}
-		let transaction = myDb.transaction ( [ 'Travels' ], 'readwrite' );
-		transaction.onerror = function ( ) {
-		};
-		let travelsObjectStore = transaction.objectStore ( 'Travels' );
-		let deleteRequest = travelsObjectStore.delete ( UUID );
-		deleteRequest.onerror = function ( ) {
-			myDb.close ( );
-			myDb = null;
-		};
-		deleteRequest.onsuccess = function ( ) {
-			myDb.close ( );
-			myDb = null;
-		};
 
+		return new Promise ( openDb );
 	}
 
-	/*
-	--- myGetReadPromise function -------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Read data in the indexedDb.
+	@param {string} UUID An UUID used to identify the data in the indexedDb
+	@return {Promise} A promise that fullfil when the data are read or reject when a problem occurs
+	The success handler receive the data as parameter
 	*/
 
-	function myGetReadPromise ( UUID ) {
-
+	getReadPromise ( UUID ) {
 		function read ( onOk, onError ) {
-			if ( ! myDb ) {
+			if ( ! ourDb ) {
 				onError ( new Error ( 'Database not opened' ) );
 				return;
 			}
-			let transaction = myDb.transaction ( [ 'Travels' ], 'readonly' );
+			let transaction = ourDb.transaction ( [ 'Travels' ], 'readonly' );
 			transaction.onerror = function ( ) {
 				onError ( new Error ( 'Transaction error' ) );
 			};
@@ -105,27 +114,24 @@ function newIndexedDb ( ) {
 		}
 
 		return new Promise ( read );
-
 	}
 
-	/*
-	--- myGetWritePromise function ------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Write data in the indexedDb.
+	@param {string} UUID An UUID used to identify the data in the indexedDb
+	@param {any} data The data to put in the indexedDb
+	@return {Promise} A promise that fullfil when the data are written or reject when a problem occurs
 	*/
 
-	function myGetWritePromise ( UUID, data ) {
-
+	getWritePromise ( UUID, data ) {
 		function write ( onOk, onError ) {
-			if ( ! myDb ) {
+			if ( ! ourDb ) {
 				onError ( new Error ( 'Database not opened' ) );
 				return;
 			}
 			let transaction = null;
 			try {
-				transaction = myDb.transaction ( [ 'Travels' ], 'readwrite' );
+				transaction = ourDb.transaction ( [ 'Travels' ], 'readwrite' );
 			}
 			catch ( err ) {
 				onError ( err );
@@ -142,77 +148,57 @@ function newIndexedDb ( ) {
 		}
 
 		return new Promise ( write );
-
 	}
 
-	/*
-	--- myGetOpenPromise function -------------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
+	/**
+	Remove the data in the indexedDb and close it
+	@param {string} UUID An UUID used to identify the data in the indexedDb
 	*/
 
-	function myGetOpenPromise ( ) {
-
-		function openDb ( onOk, onError ) {
-
-			if ( myDb ) {
-				onOk ( );
-				return;
-			}
-
-			let openRequest = window.indexedDB.open ( 'TravelNotesDb', DB_VERSION );
-
-			openRequest.onerror = function ( ) {
-				myDb = null;
-				onError ( new Error ( 'Not possible to open the db' ) );
-			};
-
-			openRequest.onsuccess = function ( successEvent ) {
-				myDb = successEvent.target.result;
-				onOk ( );
-			};
-
-			openRequest.onupgradeneeded = function ( upgradeEvent ) {
-				myDb = upgradeEvent.target.result;
-				myDb.createObjectStore ( 'Travels', { keyPath : 'UUID' } );
-			};
-
+	closeDb ( UUID ) {
+		if ( ! ourDb ) {
+			return;
 		}
-
-		return new Promise ( openDb );
+		if ( ! UUID ) {
+			ourDb.close ( );
+			ourDb = null;
+			return;
+		}
+		let transaction = ourDb.transaction ( [ 'Travels' ], 'readwrite' );
+		transaction.onerror = function ( ) {
+		};
+		let travelsObjectStore = transaction.objectStore ( 'Travels' );
+		let deleteRequest = travelsObjectStore.delete ( UUID );
+		deleteRequest.onerror = function ( ) {
+			ourDb.close ( );
+			ourDb = null;
+		};
+		deleteRequest.onsuccess = function ( ) {
+			ourDb.close ( );
+			ourDb = null;
+		};
 	}
-
-	/*
-	--- IndexedDB object ----------------------------------------------------------------------------------------------
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return Object.seal (
-		{
-			getOpenPromise : ( ) => myGetOpenPromise ( ),
-			getReadPromise : UUID => myGetReadPromise ( UUID ),
-			getWritePromise : ( UUID, data ) => myGetWritePromise ( UUID, data ),
-			closeDb : UUID => myCloseDb ( UUID )
-		}
-	);
 }
 
+const ourIndexedDb = Object.freeze ( new IndexedDb );
+
+export {
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@desc The one and only one instance of IndexedDb class
+	@type {IndexedDb}
+	@constant
+	@global
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	ourIndexedDb as theIndexedDb
+};
+
 /*
---- theIndexedDb object -----------------------------------------------------------------------------------------------
-
-The one and only one indexedDB
-
------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theIndexedDb = newIndexedDb ( );
-
-export { theIndexedDb };
-
-/*
---- End of IndexedDb.js file ------------------------------------------------------------------------------------------
+--- End of IndexedDb.js file --------------------------------------------------------------------------------------------------
 
 */
