@@ -71,6 +71,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
+import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 let ourRoutesList = null;
@@ -112,6 +113,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 
 function ourOnTravelNameInputChange ( changeEvent ) {
 	theTravelNotesData.travel.name = changeEvent.target.value;
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
 /**
