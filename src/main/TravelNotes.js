@@ -330,7 +330,9 @@ class TravelNotes {
 		theLayersToolbarUI.setLayer ( 'OSM - Color' );
 		theHttpRequestBuilder.getJsonPromise ( travelUrl )
 			.then (
-				newViewerFileLoader ( ).openDistantFile
+				fileContent => {
+					newViewerFileLoader ( ).openDistantFile ( fileContent );
+				}
 			)
 			.catch (
 				err => {

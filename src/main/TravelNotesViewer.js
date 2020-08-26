@@ -158,7 +158,9 @@ class TravelNotesViewer {
 		if ( travelUrl ) {
 			theHttpRequestBuilder.getJsonPromise ( travelUrl )
 				.then (
-					newViewerFileLoader ( ).openDistantFile
+					fileContent => {
+						newViewerFileLoader ( ).openDistantFile ( fileContent );
+					}
 				)
 				.catch (
 					err => {
