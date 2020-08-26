@@ -198,8 +198,9 @@ function ourNewFileCompactor ( ) {
 		*/
 
 		decompressMerge ( travelObject ) {
+			myDecompressTravel ( travelObject );
 			let mergedTravel = newTravel ( );
-			mergedTravel.jsonObject = myDecompressTravel ( travelObject );
+			mergedTravel.jsonObject = travelObject;
 
 			// routes are added with their notes
 			let routesIterator = mergedTravel.routes.iterator;
