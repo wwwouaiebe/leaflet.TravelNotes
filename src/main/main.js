@@ -184,6 +184,8 @@ function ourNewMain ( ) {
 				configPromiseResult.value.errorUI.showHelp = true;
 				const PRINT_MAX_TILES = 120;
 				configPromiseResult.value.printRouteMap.maxTiles = PRINT_MAX_TILES;
+				const MAX_MANEUVERS_NOTES = 10;
+				configPromiseResult.value.note.maxManeuversNotes = MAX_MANEUVERS_NOTES;
 			}
 			theConfig.overload ( configPromiseResult.value );
 			return '';
