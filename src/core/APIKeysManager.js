@@ -72,7 +72,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -290,20 +290,27 @@ class APIKeysManager {
 	*/
 
 	setKeyFromUrl ( urlString ) {
-		let urlSubStrings = urlString.split ( '=' );
-		if ( TWO === urlSubStrings.length ) {
-			let providerName =
-				urlSubStrings [ ZERO ]
-					.substr ( ZERO, urlSubStrings [ ZERO ].length - 'ProviderKey'.length )
+		let cutPosition = urlString.indexOf ( '=' );
+		if ( NOT_FOUND < cutPosition ) {
+			let providerName = urlString.substr ( ZERO, cutPosition );
+			providerName =
+				providerName
+					.substr ( ZERO, providerName.length - 'ProviderKey'.length )
 					.toLowerCase ( );
-			let providerKey = urlSubStrings [ ONE ];
-			if ( theUtilities.storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
-				sessionStorage.setItem ( providerName + 'ProviderKey', btoa ( providerKey ) );
+			let providerKey = urlString.substr ( cutPosition + ONE );
+			try {
+				atob ( providerKey ); // do nothing but throw if invalid base64 string
+				if ( theUtilities.storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
+					sessionStorage.setItem ( providerName + 'ProviderKey', providerKey );
+				}
+				ourSetKey ( providerName, providerKey );
+				let provider = theTravelNotesData.providers.get ( providerName );
+				if ( provider ) {
+					provider.providerKey = providerKey;
+				}
 			}
-			ourSetKey ( providerName, providerKey );
-			let provider = theTravelNotesData.providers.get ( providerName );
-			if ( provider ) {
-				provider.providerKey = providerKey;
+			catch ( err ) {
+				console.log ( err ? err : 'Invalid base64 encoded provider key' );
 			}
 		}
 	}
