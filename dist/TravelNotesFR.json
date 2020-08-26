@@ -588,20 +588,12 @@
 		"msgstr" : "Mots à rechercher"
 	},
 	{
-		"msgid" : "SortableList - Delete",
-		"msgstr" : "Supprimer"
+		"msgid" : "ProfileContextMenu - Add a note to the route at this point",
+		"msgstr" : "Ajouter une note au trajet à cet endroit"
 	},
 	{
-		"msgid" : "SortableList - Edit",
-		"msgstr" : "Éditer"
-	},
-	{
-		"msgid" : "SortableList - Move down",
-		"msgstr" : "Déplacer vers le bas"
-	},
-	{
-		"msgid" : "SortableList - Move up",
-		"msgstr" : "Déplacer vers le haut"
+		"msgid" : "ProfileContextMenu - Zoom to this point",
+		"msgstr" : "Zoomer sur cet endroit"
 	},
 	{
 		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
