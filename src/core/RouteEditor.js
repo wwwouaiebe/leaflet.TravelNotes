@@ -110,7 +110,6 @@ function ourComputeRouteDistances ( route ) {
 
 	maneuverIterator.value.distance = DISTANCE.defaultValue;
 	maneuverIterator.done;
-
 	route.distance = DISTANCE.defaultValue;
 	route.duration = DISTANCE.defaultValue;
 
@@ -124,7 +123,18 @@ function ourComputeRouteDistances ( route ) {
 		if ( maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
 			route.duration += maneuverIterator.previous.duration;
 			maneuverIterator.value.distance = DISTANCE.defaultValue;
+			if (
+				maneuverIterator.next
+				&&
+				maneuverIterator.value.itineraryPointObjId === maneuverIterator.next.itineraryPointObjId
+			) {
+
+				// 2 maneuvers on the same itineraryPoint. We skip the first maneuver
+				maneuverIterator.done;
+				maneuverIterator.value.distance = DISTANCE.defaultValue;
+			}
 			maneuverIterator.done;
+
 		}
 	}
 }
@@ -454,6 +464,15 @@ class RouteEditor {
 	*/
 
 	removeManeuver ( maneuverObjId ) {
+		let previousManeuver =
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.previous (
+				maneuverObjId,
+				maneuver => DISTANCE.defaultValue < maneuver.distance
+			)
+			||
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.first;
+		previousManeuver.distance +=
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).distance;
 		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
 		theEventDispatcher.dispatch ( 'showitinerary' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
