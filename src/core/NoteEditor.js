@@ -219,7 +219,12 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 						theEventDispatcher.dispatch ( 'showitinerary' );
 					}
 				}
-
+				else if ( INVALID_OBJ_ID === routeObjId ) {
+					theEventDispatcher.dispatch ( 'updatetravelnotes' );
+				}
+				else {
+					theEventDispatcher.dispatch ( 'updateitinerary' );
+				}
 				theEventDispatcher.dispatch (
 					'noteupdated',
 					{
