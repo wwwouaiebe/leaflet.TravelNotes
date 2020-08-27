@@ -430,7 +430,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 				className : classPrefix + 'Route-Header-Duration',
 				innerHTML : theTranslator.getText (
 					'HTMLViewsFactory - Duration',
-					{ distance : theUtilities.formatDistance ( route.duration ) }
+					{ duration : theUtilities.formatTime ( route.duration ) }
 				)
 			},
 			routeHeaderHTML
