@@ -315,8 +315,7 @@ function ourNewColorDialog ( cssColor ) {
 
 	function myCreateColorButtonsDiv ( ) {
 		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
-		let cellColor = new Color;
-		cellColor.red = theConfig.colorDialog.initialRed;
+		let cellColor = new Color ( theConfig.colorDialog.initialRed, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
 
 		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
 			let colorButtonsRowDiv = theHTMLElementsFactory.create (
@@ -327,7 +326,7 @@ function ourNewColorDialog ( cssColor ) {
 				colorButtonsDiv
 			);
 
-			cellColor.green = MAX_COLOR_VALUE;
+			cellColor.green = MIN_COLOR_VALUE;
 
 			for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
 				let colorButtonCellDiv = theHTMLElementsFactory.create (
@@ -340,10 +339,10 @@ function ourNewColorDialog ( cssColor ) {
 				colorButtonCellDiv.color = cellColor.clone ( );
 				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + cellColor.cssColor );
 				colorButtonCellDiv.addEventListener ( 'click', myOnColorButtonClick, false );
-				cellColor.green -= DELTA_COLOR;
+				cellColor.green += DELTA_COLOR;
 				myColorButtons.push ( colorButtonCellDiv );
 			}
-			cellColor.blue -= DELTA_COLOR;
+			cellColor.blue += DELTA_COLOR;
 		}
 	}
 
