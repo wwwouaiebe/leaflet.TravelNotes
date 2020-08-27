@@ -87,6 +87,9 @@ function ourValidate ( something ) {
 		case '1.10.0' :
 		case '1.11.0' :
 			something.objType.version = '1.12.0';
+			if ( 'kArriveDefault' === something.iconName ) {
+				something.distance = DISTANCE.defaultValue;
+			}
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
