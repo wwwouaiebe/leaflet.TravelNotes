@@ -898,7 +898,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			')->.l;' +
 			'node.k.l->.m;' +
 			'.m out;';
-		console.log ( requestUrl );
 		return requestUrl;
 	}
 
