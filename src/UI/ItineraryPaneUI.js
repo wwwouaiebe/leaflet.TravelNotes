@@ -100,7 +100,7 @@ function ourNewItineraryPaneUI ( ) {
 		}
 		else if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
+			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv.parentNode ).show ( );
 		}
 	}
 
