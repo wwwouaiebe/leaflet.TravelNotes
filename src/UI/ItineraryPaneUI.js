@@ -96,7 +96,7 @@ function ourNewItineraryPaneUI ( ) {
 			};
 		if ( element.maneuverObjId ) {
 			contextMenuEvent.maneuverObjId = element.maneuverObjId;
-			newManeuverContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
+			newManeuverContextMenu ( contextMenuEvent, myPaneDataDiv.parentNode ).show ( );
 		}
 		else if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
