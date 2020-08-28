@@ -146,10 +146,25 @@ function ourNewProfileWindow ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnSvgMouseLeave
+	@desc mouse leave on the profile svg event listener. Remove the marker on the map
+	@listens mouseleave
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnSvgMouseLeave ( ) {
+		theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myOnSvgMouseMove
 	@desc mouse move on the profile svg event listener. Display a text with the distance, elevation and ascent at
 	the given position. Show also a marker on the map
-	@listens click
+	@listens mousemove
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -263,6 +278,7 @@ function ourNewProfileWindow ( ) {
 		if ( mySvg ) {
 			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
+			mySvg.removeEventListener ( 'mouseleave', myOnSvgMouseLeave, false );
 			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
 
 			myProfileWindow.content.removeChild ( myAscentDiv );
@@ -318,6 +334,7 @@ function ourNewProfileWindow ( ) {
 		myProfileWindow.content.appendChild ( mySvg );
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
+		mySvg.addEventListener ( 'mouseleave', myOnSvgMouseLeave, false );
 
 		myAscentDiv = theHTMLElementsFactory.create (
 			'div',
