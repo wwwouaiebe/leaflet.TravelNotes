@@ -30,6 +30,10 @@ Changes:
 
 /* --- Pane buttons --- */
 
+#TravelNotes-PanesManagerUI-PaneControlsDiv {
+	margin: 0.5em;
+}
+
 #TravelNotes-PanesManagerUI-PaneDataDiv {
 	margin-left: 0.5em;
 	margin-bottom: auto;
