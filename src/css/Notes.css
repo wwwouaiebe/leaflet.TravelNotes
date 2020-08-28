@@ -67,3 +67,7 @@ Changes:
 	background: transparent;
 	height: auto;
 }
+
+.TravelNotes-Note-Bullet {
+	background-color: black;
+}

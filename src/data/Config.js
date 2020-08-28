@@ -181,7 +181,8 @@ let ourPrivateConfig = {
 		reverseGeocoding : false,
 		grip : {
 			size : 10,
-			opacity : 0
+			opacity : 0,
+			moveOpacity : 1
 		},
 		polyline : {
 			color : 'gray',

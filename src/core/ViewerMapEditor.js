@@ -147,7 +147,8 @@ function ourAddNote ( noteObjId ) {
 				{
 					iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
 					iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
-					html : '<div></div>'
+					html : '<div></div>',
+					className : 'TravelNotes-Note-Bullet'
 				}
 			),
 			opacity : theConfig.note.grip.opacity,

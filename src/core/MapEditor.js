@@ -243,6 +243,36 @@ function ourOnNoteBulletDrag ( dragEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourOnNoteBulletMouseEnter
+@desc Event listener for Note bullets
+@listens mouseenter
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteBulletMouseEnter ( mouseEnterEvent ) {
+	mouseEnterEvent.originalEvent.target.style.opacity = theConfig.note.grip.moveOpacity;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnNoteBulletMouseLeave
+@desc Event listener for Note bullets
+@listens mouseleave
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnNoteBulletMouseLeave ( mouseLeaveEvent ) {
+	mouseLeaveEvent.originalEvent.target.style.opacity = theConfig.note.grip.opacity;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourOnNoteMarkerContextMenu
 @desc Event listener for Note markers
 @listens contextmenu
@@ -480,6 +510,8 @@ function ourAddNote ( noteObjId, isPopupOpen ) {
 	if ( ! theTravelNotesData.travel.readOnly ) {
 		L.DomEvent.on ( noteObjects.bullet, 'dragend', ourOnNoteBulletDragEnd );
 		L.DomEvent.on ( noteObjects.bullet, 'drag',	ourOnNoteBulletDrag );
+		L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
+		L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
 		L.DomEvent.on ( noteObjects.marker, 'contextmenu', ourOnNoteMarkerContextMenu );
 		L.DomEvent.on ( noteObjects.marker, 'dragend', ourOnNoteMarkerDragEnd );
 		L.DomEvent.on ( noteObjects.marker, 'drag', ourOnNoteMarkerDrag );
@@ -572,6 +604,8 @@ function ourAddRoute ( routeObjId ) {
 			let bullet = layerGroup.getLayer ( layerGroup.bulletId );
 			L.DomEvent.on ( bullet, 'dragend', ourOnNoteBulletDragEnd );
 			L.DomEvent.on ( bullet, 'drag',	ourOnNoteBulletDrag );
+			L.DomEvent.on ( bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
+			L.DomEvent.on ( bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
 			L.DomEvent.on ( marker, 'contextmenu', ourOnNoteMarkerContextMenu );
 			L.DomEvent.on ( marker, 'dragend', ourOnNoteMarkerDragEnd );
 			L.DomEvent.on ( marker, 'drag', ourOnNoteMarkerDrag );
