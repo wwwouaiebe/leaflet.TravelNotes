@@ -90,7 +90,8 @@ import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, TWO } from '../util/Constants.js';
-import { theGlobals } from '../main/Globals.js';
+
+// import { theGlobals } from '../main/Globals.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -438,6 +439,7 @@ class TravelNotes {
 	/**
 	*/
 
+	/*
 	get globals ( ) {
 		if ( theConfig.haveGlobals ) {
 			return theGlobals;
@@ -446,6 +448,8 @@ class TravelNotes {
 		return null;
 
 	}
+*/
+
 }
 
 const ourTravelNotes = Object.seal ( new TravelNotes );
