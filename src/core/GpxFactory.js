@@ -200,7 +200,7 @@ function ourNewGpxFactory ( ) {
 	*/
 
 	function mySaveGpxToFile ( ) {
-		let fileName = myRoute.name;
+		let fileName = myRoute.computedName;
 		if ( '' === fileName ) {
 			fileName = 'TravelNote';
 		}
