@@ -94,19 +94,18 @@ let pageId = params.get ( 'page' );
 
 function saveFile ( ) {
 	try {
+		let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
+			.innerHTML + '-Roadbook.html';
 		let mapFile = window.URL.createObjectURL (
 			new File (
 				[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
+				fileName,
 				{ type : 'text/plain' }
 			)
 		);
 		let element = document.createElement ( 'a' );
 		element.setAttribute ( 'href', mapFile );
-		element.setAttribute (
-			'download',
-			document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
-				.innerHTML + '-Roadbook.html'
-		);
+		element.setAttribute ( 'download', fileName );
 		element.style.display = 'none';
 		document.body.appendChild ( element );
 		element.click ( );
