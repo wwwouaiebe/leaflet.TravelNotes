@@ -68,7 +68,7 @@ Une bonne vieille copie papier est souvent précieuse.
 Un **trajet** relie deux points. Sur la carte, il est représenté par une polyligne.
 
 Un **itinéraire** est la description des différents changements de direction nécessaires pour 
-parcourir le trajet.
+parcourir le trajet. Chaque changement de direction est une **manœuvre**.
 
 Un **voyage** est constitué de un ou plusieurs trajets. Ceux-ci ne doivent pas obligatoirement 
 se toucher à leur extrémités. Il peut également y avoir plus de deux trajets partant d'un même point.
@@ -120,26 +120,24 @@ qu'il peut y avoir une facturation qui est faite sur la base de ces clefs d'acc�
 ### Comment introduire vos clefs d'accès dans Travel & Notes
 
 Les clefs d'accès sont gérées à partir de la boite de dialogue des clefs d'accès. Pour afficher celle-ci,
-cliquez sur le bouton :key: dans la barre d'outil en haut de l'interface.
+cliquez sur le bouton 🔑 dans la barre d'outil en haut de l'interface.
 
 <img src="APIKeysDialogFR.PNG" />
 
 Pour chaque fournisseur de service, vous devez indiquer à gauche le nom de ce fournisseur  et à droite 
-la clef d' accès. Le nom doit correspondre au "providerName" encodé dans le fichier TravelNotesLayers.json
-(insensible au majuscules/minuscules).
+la clef d' accès. Les différents noms possibles actuellement sont 'GraphHopper', 'Ign', 'Lantmateriet',
+'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensible au majuscules/minuscules).
 
-Utilisez le bouton + pour ajouter un fournisseur de service et le bouton :x: à droite pour 
+Utilisez le bouton + pour ajouter un fournisseur de service et le bouton ❌ à droite pour 
 supprimer celui-ci.
 
-Quand vos clefs d'accès sont introduites, appuyez sur le bouton :ok: pour terminer. 
+Quand vos clefs d'accès sont introduites, appuyez sur le bouton 🆗 pour terminer. 
 Vos clefs sont sauvegardées dans le "sessionStorage" du browser et disponibles jusqu'à la fermeture 
 de celui-ci.
 
 Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par un mot de passe ou non protégé.
 
-**Attention:**
-- La page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
-- MS Edge (anciennes versions) ne permet pas la sauvegarde dans un fichier protégé par un mot de passe.
+**Attention**: la page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
 
 Le bouton :arrows_counterclockwise: permet de recharger le fichier des clefs d'accès depuis le serveur web.
 

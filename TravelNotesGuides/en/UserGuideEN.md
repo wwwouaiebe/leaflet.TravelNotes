@@ -65,6 +65,7 @@ a mobile network or the possibility of recharging a battery. A good old hard cop
 A **route** connects two points. On the map, it is represented by a polyline.
 
 An **itinerary** is the description of the various changes of direction needed to follow a route.
+A change of direction is a **maneuver**.
 
 A **travel** consists of one or more routes. They do not have to touch each other at their ends.
 There may also be more than two routes starting from the same point.
@@ -109,26 +110,24 @@ is done based on these access keys. Do not give them to anyone or do not let the
 <a id="APIKeys"></a>
 ### How to introduce your access keys in Travel & Notes
 
-Access keys are managed from the access keys dialog. To view it, click the :key: button 
+Access keys are managed from the access keys dialog. To view it, click the 🔑 button 
 in the toolbar at the top of the interface.
 
 <img src="APIKeysDialogEN.PNG" />
 
 For each service provider, you must indicate on the left the name of this service provider and on the right
-the access key. The name must correspond to the "providerName" encoded in the TravelNotesLayers.json file
-(insensitive to upper / lower case).
+the access key. The different names currently possible are 'GraphHopper', 'Ign', 'Lantmateriet',
+'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensitive to upper / lower case).
 
-Use the + button to add a service provider and the :x: button on the right to delete this one.
+Use the + button to add a service provider and the ❌ button on the right to delete this one.
 
-When your access keys are entered, press the button :ok: to finish.
+When your access keys are entered, press the button 🆗 to finish.
 Your keys are saved in the "sessionStorage" of the browser and available until closing
 of it.
 
 It is possible to save the access keys in a file, protected by a password or unprotected.
 
-**Attention:**
-- The page must be served in HTTPS to save in a file protected by a password.
-- MS Edge (old versions) does not allow saving to a password protected file.
+**Attention**: the page must be served in HTTPS to save in a file protected by a password.
 
 The button :arrows_counterclockwise: reloads the APIkeys file from the web server.
 
