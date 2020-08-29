@@ -5,9 +5,6 @@
 - [Installation guide for geeks](#GuideGeeks)
 	- [What to do in the HTML file?](#HtmlPage)
 	- [Some additional explanations on Javascript](#MoreOnJS)
-		- [The object L.travelNotes](#LTravelNotes)
-		- [L.travelNotes methods](#LTravelNotesMethods)
-		- [L.travelNotes properties](#LTravelNotesProperties)
 	- [The contents of the TravelNotesConfig.json file](#TravelNotesConfigJson)
 	- [The contents of the TravelNotesLayers.json file](#TravelNotesLayersJson)
 	- [The contents of the TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json file](#TravelNotesNoteDialogJson)
@@ -61,11 +58,12 @@ And in the &lt;body&gt; load Leaflet, TravelNotes and TravelNotes plugins
 	<script src="leaflet/leaflet.js"></script>
 	<noscript>Oh oh. Javascript is not enabled. It's impossible to display this page without javascript.</noscript>
 	<script src="TravelNotes.min.js"></script>
-	<!-- route providers scripts for Mapbox, GraphHopper and OpenRouteService have only to be installed 
-		if you have an API key for Mapbox, GraphHopper or openRouteService -->
+	<!-- route providers scripts for Mapbox, Stadia Maps (MapzenValhalla), GraphHopper and OpenRouteService have only to be installed 
+		if you have an API key for Mapbox, Stadia Maps, GraphHopper or openRouteService -->
 	<!-- route providers scripts for OSRM, public transport and polyline have only to be installed 
 		if you will work with these providers -->
 	<script src="TravelNotesProviders/MapboxRouteProvider.min.js"></script>
+	<script src="TravelNotesProviders/MapzenValhallaRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/GraphHopperRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/OpenRouteServiceRouteProvider.min.js"></script>
 	<script src="TravelNotesProviders/OSRMRouteProvider.min.js"></script>
@@ -79,56 +77,13 @@ Travel & Notes will automatically create the map and all necessary controls.
 <a id="MoreOnJS"></a>
 ### Some additional explanations on Javascript
 
-<a id="LTravelNotes"></a>
-#### The object L.travelNotes
+See the [JS code documentation](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+for more information.
 
-This object allows you to communicate with TravelNotes from Javascript
+Note, however, that only the TravelNotes object is accessible from additional JS code (via window.L.TravelNotes).
 
-<a id="LTravelNotesMethods"></a>
-#### L.travelNotes methods
-
-__addProvider ( provider )__
-
-This method is only used by plugins
-
-__showInfo ( info )__
-
-This method displays the text contained in 'info' on the screen
-
-__addMapContextMenu ( leftButton, rightButton )__
-
-This method adds the left and right context menus
-
-Parameters :
-
-- leftButton : when this parameter is true, a pop-up menu is displayed when a left click 
-is made on the map
-- rightButton : when this parameter is true, a pop-up menu is displayed when a right click 
-is made on the map
-
-<a id="LTravelNotesProperties"></a>
-#### L.travelNotes properties
-
-- __userData__ : a Javascript object containing data not related to TravelNotes and which will 
-be saved in the travel file
-
-- __leftContextMenu__ : boolean enabling or disabling left context menu
-
-- __rightContextMenu__ : boolean enabling or disabling right context menu
-
-- __leftUserContextMenu__ : a collection of objects adding commands to the left context menu
-
-- __rightUserContextMenu__ : a collection of objects adding commands to the right context menu
-
-- __maneuver__ : returns a new maneuver object. Only used by plugins
-
-- __itineraryPoint__ : returns a new itineraryPoint object. Only used by plugins
-
-- __baseDialog__ : an objet that can be used to easily create modal dialogs. Only used by plugins
-
-- __version__ (read only) : the current version of TravelNotes
-
--__map__ : return a reference to the leaflet object map
+If you want to use other objects, you need to download the sources and import them into your code 
+as EcmaScript modules.
 
 <a id="TravelNotesConfigJson"></a>
 ### The contents of the TravelNotesConfig.json file
@@ -148,10 +103,9 @@ Travel & Notes loads
 - __layersToolbarUI.toolbarTimeOut__ : the time that will elapse between the moment when the mouse 
 is no longer on the toolbar and the moment when this toolbar closes automatically.
 - __layersToolbarUI.theDevil.addButton__ : when this value is true, a "theDevil" button is added 
-to the toolbar and the note editing dialog.
+to the toolbar.
 - __layersToolbarUI.theDevil.title__ : the tooltip used for the "theDevil" button
 - __layersToolbarUI.theDevil.text__ : the text used for the "theDevil" button
-- __layersToolbarUI.theDevil.noteZoom__ : the zoom used for the "theDevil" button in the note editing dialog
 - __mouseUI.haveMouseUI__ : when this value is true, a control is displayed at the top of the screen, 
 indicating the coordinates of the mouse, the zoom value and the name of the open file
 - __errorUI.timeOut__ : the time that will elapse between the time an error message is displayed and the time 
@@ -239,10 +193,17 @@ for smoothing the elevation. Default value: 0.25
 - __route.elev.smoothPoints__ : the number of points before and after the current point in the smoothing calculations
 - __route.showDragTooltip__ : the number of times the tooltip displayed when adding a waypoint is shown
 ( -1 = always ).
+- __note.theDevil.addButton__ : when this value is true, abutton "theDevil" is added
+to the notes dialog box
+- __note.theDevil.title__ : the tooltip for "theDevil" button
+- __note.theDevil.text__ : the text for "theDevil" button
+- __note.theDevil.noteZoom__ : le zoom for "theDevil" button
 - __note.reverseGeocoding__ : when this value is true, the coordinates of the notes are replaced 
 by an address.
 - __note.grip.size__ : the size of the handle at the end of the line of a note.
 - __note.grip.opacity__ : the opacity of the handle at the end of the line of a note (0 = invisible!).
+- __note.grip.moveOpacity__ : the opacity of the handle at the end of the line of a note
+when the mouse is on the handle
 - __note.polyline.color__ : the color of the line of a note.
 - __note.polyline.weight__ : the width of the line of a note.
 - __note.style__ : the css style used to represent a note.
@@ -305,6 +266,11 @@ is closed but data may not be saved.
 from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
 - __printRouteMap.exitPointMarker__ : the options to use for the end of route marker. All options
 from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
+- __itineraryPane.showNotes__ : when true notes are showed in the itinerary 
+- __itineraryPane.showManeuvers__ : when true maneuvers are showed in the itinerary 
+- __colorDialog.haveSlider__ : when true the color dialog and route properties dialog have a
+slider for the red color, otherwise buttons
+- __colorDialog.initialRed__ : the initial value of the red slider
 
 <a id="TravelNotesLayersJson"></a>
 ### The contents of the TravelNotesLayers.json file
