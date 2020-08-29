@@ -45,6 +45,8 @@ The [v1.12.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.1
 
 The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) is the development branch and is unstable. 
 
+##  What's new
+
 ### What's new in release 1.6.0
 
 - The management of access keys has been completely revised. This is now done via a dialog box and it is possible to 
@@ -139,6 +141,8 @@ La [branche v1.12.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.1
 ### branche master
 
 La [branche master](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) est la branche de développement et est instable.
+
+## Quoi de neuf
 
 ### Quoi de neuf dans la version 1.6.0
 
