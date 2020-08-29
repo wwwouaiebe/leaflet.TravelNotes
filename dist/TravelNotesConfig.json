@@ -52,7 +52,7 @@
 		"showDialogButton":true,
 		"saveToSessionStorage":true,
 		"showAPIKeysInDialog":false,
-		"dialogHaveUnsecureButtons":true
+		"dialogHaveUnsecureButtons":false
 	},
 	"contextMenu":
 	{
@@ -84,7 +84,6 @@
 		"polyline" : {
 			"color" : "green",
 			"weight" : 4,
-			"radius" : 20,
 			"fill" : false
 		},
 		"minZoom" : 17
@@ -176,7 +175,7 @@
 		"svgTimeOut":15000,
 		"cityPrefix":" <span class='TravelNotes-NoteHtml-Address-City'>",
 		"cityPostfix":"</span>",
-		"maxManeuversNotes":10
+		"maxManeuversNotes":100
 	},
 	"itineraryPointZoom":17,
 	"routeEditor":
