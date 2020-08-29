@@ -4,20 +4,22 @@
 - [Some explanations on the terms used](#SomeExplanations)
 - [Before you start using Travel & Notes](#BeforeStart)
 	- [How to introduce your access keys in Travel & Notes](#APIKeys)
+- [Context menus](#ContextMenus]
 - [Interface](#Interface1)
 	- [Toolbar buttons on top of the interface](#InterfaceToolbar)
-	- [Travel routes](#RoutesTravel)
-		- [Toolbar buttons "Travel routes](#RouteToolbar)
-	- [Route waypoints](#RouteWayPoints)
-		- [Toolbar buttons "Waypoints of the route"](#WayPointsToolbar)
+	- [Travel](#Travel)
+		- [Travel name](#TravelName)
+		- [Toolbar buttons "Travel"](#RouteToolbar)
+		- [Travel routes](#RoutesTravel)
 	- [Itinerary and notes](#ItineraryAndNotes)
 	- [Route modes and route providers toolbar](#RouterButtons)
 - [Edit boxes](#EditBoxes)
-- [Routes and waypoints](#routes)	
+- [Routes and waypoints](#Routes)	
 	- [Create a waypoint](#AddWayPoint)
 	- [Adding a waypoint with Drag And Drop](#AddWayPointDragDrop)
 	- [Modify a waypoint](#ModifyWayPoint)
 	- [Delete a waypoint](#DeleteWayPoint)
+	- [Rename a waypoint or change its address](#RenameWayPoint)
 	- [Choose a route mode and route provider](#ItineraryModeAndProvider)
 	- [Calculation of the itinerary](#ComputingItinerary)
 	- [Save or discard changes](#SaveOrDiscardRoute)
@@ -27,6 +29,7 @@
 	- [Print route maps](#PrintRouteMaps)
 - [Notes](#Notes1)
 	- [Add a travel note](#NewTravelNote)
+	- [Change the order of travel notes](#ReorderTravelNote)
 	- [Add a route note](#NewRouteNote)
 	- [Consult a note](#ViewNote)
 	- [Modify a note](#ModifyNote)
@@ -65,6 +68,7 @@ a mobile network or the possibility of recharging a battery. A good old hard cop
 A **route** connects two points. On the map, it is represented by a polyline.
 
 An **itinerary** is the description of the various changes of direction needed to follow a route.
+A change of direction is a **maneuver**.
 
 A **travel** consists of one or more routes. They do not have to touch each other at their ends.
 There may also be more than two routes starting from the same point.
@@ -109,43 +113,41 @@ is done based on these access keys. Do not give them to anyone or do not let the
 <a id="APIKeys"></a>
 ### How to introduce your access keys in Travel & Notes
 
-Access keys are managed from the access keys dialog. To view it, click the :key: button 
+Access keys are managed from the access keys dialog. To view it, click the 🔑 button 
 in the toolbar at the top of the interface.
 
 <img src="APIKeysDialogEN.PNG" />
 
 For each service provider, you must indicate on the left the name of this service provider and on the right
-the access key. The name must correspond to the "providerName" encoded in the TravelNotesLayers.json file
-(insensitive to upper / lower case).
+the access key. The different names currently possible are 'GraphHopper', 'Lantmateriet',
+'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensitive to upper / lower case).
 
-Use the + button to add a service provider and the :x: button on the right to delete this one.
+Use the + button to add a service provider and the ❌ button on the right to delete this one.
 
-When your access keys are entered, press the button :ok: to finish.
+When your access keys are entered, press the button 🆗 to finish.
 Your keys are saved in the "sessionStorage" of the browser and available until closing
 of it.
 
 It is possible to save the access keys in a file, protected by a password or unprotected.
 
-**Attention:**
-- The page must be served in HTTPS to save in a file protected by a password.
-- MS Edge (old versions) does not allow saving to a password protected file.
+**Attention**: the page must be served in HTTPS to save in a file protected by a password.
 
-The button :arrows_counterclockwise: reloads the APIkeys file from the web server.
+The button 🔄 reloads the APIkeys file from the web server.
 
-The button :floppy_disk: on the **left** of the dialog box allows you to save the access keys
+The button 💾 on the **left** of the dialog box allows you to save the access keys
 in a password protected file. This must contain at least 12 characters including at least 
 one uppercase, one lowercase, one number, and one other character.
 
-The button :file_folder: on the **left** of the dialog box replaces all the access keys of the
+The button 📂 on the **left** of the dialog box replaces all the access keys of the
 dialog box with the contents of a password protected file.
 
 These two buttons are only present if all the conditions to be able to save / restore the
 keys with a password are met.
 
-The button :floppy_disk: on the **right** of the dialog box allows you to save the access keys in
+The button 💾 on the **right** of the dialog box allows you to save the access keys in
 a file **not protected** by password.
 
-The button :file_folder: on the **right** of the dialog box replaces all the access keys of the
+The button 📂 on the **right** of the dialog box replaces all the access keys of the
 dialog box by the contents of a file **not protected** by password.
 
 If a password protected file named **APIKeys** is placed in the same directory as
@@ -153,12 +155,13 @@ Travel & Notes on the server, Travel & Notes will ask you for the password when 
 in order to use the keys contained in this file.
 
 For geeks and paranos also see in the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson) and in the file TravelNotesConfig.json:
-- APIKeys.showDialogButton to show or hide the :key: button in the toolbar
+- APIKeys.showDialogButton to show or hide the 🔑 button in the toolbar
 - APIKeys.saveToSessionStorage to save or not the keys in the sessionStorage
 - APIKeys.showAPIKeysInDialog to show or hide the keys as a password in the dialog box
-- APIKeys.dialogHaveUnsecureButtons to show or hide the buttons :floppy_disk: and :file_folder: on __right__
+- APIKeys.dialogHaveUnsecureButtons to show or hide the buttons 💾 and 📂 on __right__
 
-The old method of entering access keys via the url continues to work:
+The old method of entering access keys via the url continues to work but will be deleted
+in a future version:
 - at the end of the url of the web page loading Travel & Notes: you need to enter a ? followed 
 by the provider name + 'ProviderKey' followed by = followed by your access key. Several access keys 
 can be introduced simultaneously by separating them by a &.
@@ -171,6 +174,17 @@ https://www.example.org/TravelNotes/?MapboxProviderKey=your_Mapbox_access_key&Gr
 As soon as Travel & Notes detects access keys in the url, they are stored in the __sessionStorage__ and 
 deleted from the url. They are no longer visible on the screen. **However, remember that a malicious 
 person can always find them in the browser history**, unless you use the private mode of your browser.
+
+<a id="ContextMenus"></a>
+## __Context menus__
+
+All map objects (waypoints, notes, routes, map) have a context menu. All the commands related to 
+these objects can be found in these context menus.
+
+The same menus are found in the user interface on the right of the screen. Right clicking on a route in the routes list 
+will display a context menu for that route, right clicking on a note in the route description or in the travel notes list 
+will display a context menu for that note and right clicking on a maneuver in the route description will display a 
+context menu for that maneuver.
 
 <a id="Interface1"></a>
 ## __Interface__
@@ -187,77 +201,64 @@ Move the mouse over this rectangle to see the complete interface:
 ### Toolbar buttons on top of the interface
 
 At the top of the interface is a first toolbar:
-- the button :house: redirects to your home page
+- the button 🏠 redirects to your home page
 - the button ? redirects to
 [the Travel & Notes help page on Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
 - the @ button redirects to a contact page. By default it is
 [the Travel & Notes issues page on Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
 the url can be modified via the TravelNotes Config.json file (travelNotesToolbarUI.contactMail)
-- the button :key: displays the dialog box of the access keys
-- the button :globe_with_meridians: enables or disables localization.
-- the button :pushpin: permanently displays the interface.
+- the button 🔑 displays the dialog box of the access keys
+- the button 🌐 enables or disables localization.
+- the button 📌 permanently displays the interface.
+
+<a id="Travel"></a>
+### Travel
+
+<a id="TravelName"></a>
+#### Travel name
+
+In this edit box you can give a name to the travel. This name will then be proposed as the default name
+for all the files you will create from this travel.
+
+<a id="RouteToolbar"></a>
+#### Toolbar buttons "Travel"
+
+- the button ❌ erases all travel data and starts editing a new travel.
+- the button 💾 saves the travel being edited to a file on your computer
+- the button 📂 opens a previously saved travel
+- the button 🌏 opens a previously saved travel and includes all routes and notes from that 
+travel in the current edited travel
+- the button 📋 opens the roadbook
 
 <a id="RoutesTravel"></a>
-### Travel routes
+#### Travel routes
 
-In this part, the different travel routes as well as a toolbar are displayed.
+In this part, the different travel routes are displayed.
 
-For each route :
-- the &#x21e7; and &#x21e9; buttons allow to change the order of the different routes. These buttons are 
-visible only when multiple routes are present.
-- The &#x21f0; button starts editing a route.
-- The :recycle: button delete the route.
+- the ▶ or ▼ buttons reduce or enlarge the list of routes
+- the button + add a new route to the travel
+
+For each route, right-clicking on it displays a context menu containing commands
+which allow operations to be carried out on the route.
 
 It is also possible to drag and drop to reorder the different routes.
 
-When a route is chained, an icon &#x26d3; is present on the left.
+When a route is being modified, an icon 🔴 is present to the left of it.
+Likewise, when a route is chained, an ⛓ icon is present on the left.
 
-It is possible to give a name to each route. This is not essential but can make your job easier, 
-especially when the travel has a lot of routes.
-
-<a id="RouteToolbar"></a>
-#### Toolbar buttons "Travel routes"
-
-- the button &#x25bd; enlarge the list of routes
-- the button :x: erases all travel data and starts editing a new travel.
-- the button :floppy_disk: saves the travel being edited to a file on your computer
-- the button :file_folder: opens a previously saved travel
-- the button :earth_asia: opens a previously saved travel and includes all routes and notes from that 
-travel in the current edited travel
-- the button :clipboard: opens the roadbook
-- the button + add a new route to the travel
-
-<a id="RouteWayPoints"></a>
-### Route waypoints
-
-Before you can view the waypoints of a route, it is necessary to start editing it with the &#x21f0; 
-present in the route list.
-
-Note that when Travel & Notes is launched, the first trip is directly edited. The same applies 
-when a new route is created and the route being edited has not yet been modified.
-
-<a id="WayPointsToolbar"></a>
-#### Toolbar buttons "Waypoints of the route"
-
-- the button &#x25bd; enlarge the list of waypoints
-- the button :x: abandons the editing of the route. All changes will be lost and the route 
-restored to the state it was in before being edited
-- the button :floppy_disk: save the modifications made to the route.
-- the button __gpx__ saves the route in a gpx file
-- the button &#x21c5; reverse the order of waypoints
-- the button :recycle: delete all waypoints
+By default, the name of a route is the name and address of the starting point followed by ⮞ followed 
+by the name and the address of the point of arrival. It is possible to modify this name by selecting 
+the command 'Modify the properties of this route' in the contextual menu.
 
 <a id="ItineraryAndNotes"></a>
 ### Itinerary and notes
 
-This part includes the itinerary of the route as well as notes related to the route.
+This part includes the maneuvers of the route as well as notes related to the route.
 
 When the mouse is placed on a line of the itinerary, a marker is displayed at this location on the map.
 
-A left click on a line of the itinerary will zoom in on the location on the map.
-
-Right-clicking on an itinerary line will start editing a new route-related note, pre-filled 
-with change of direction instructions
+Right-clicking on a route line will display a context menu displaying commands
+which allow operations to be carried out on the maneuver or the note.
 
 <a id="RouterButtons"></a>
 ### Route modes and route providers toolbar
@@ -287,7 +288,7 @@ and drop an edit box by clicking on the bar at the top.
 To add, modify or delete waypoints, it is necessary to edit the route from the interface or via the 
 contextual menu of the route if it already exists.
 
-All other modifications (notes, properties or name of the route) can be made, whether the route
+All other modifications (notes, properties of the route) can be made, whether the route
 is edited or not.
 
 <a id="AddWayPoint"></a>
@@ -299,21 +300,10 @@ as start point", "Select this point as waypoint" or "Select this point as end po
 <img src="MapContextMenuEN.PNG" />
 
 A green icon (for the start point), orange (for a waypoint) or red (for the end point) is added to 
-the map at the chosen location and the waypoint is completed, either with the coordinates of the place, 
-or with the address.
+the map at the chosen location.
 
 An intermediate waypoint added via the context menu will always be added at the end of the
 list of intermediate waypoints. 
-
-The order of the waypoints is also indicated (A for the start point, B for the ending point and a number
-for the waypoints).
-
-<img src="RouteEditor1EN.PNG" />
-
-- the buttons &#x21e7; et &#x21e9; allow you to change the order of the intermediate points. These 
-buttons are visible only when several intermediate points are present. It is not possible to transform 
-the start point or end point into an intermediate point.
-- the button :recycle: delete the waypoint. It is not possible to delete the start point or the end point.
 
 <a id="AddWayPointDragDrop"></a>
 ### Adding a waypoint with Drag And Drop
@@ -334,6 +324,19 @@ Drag and drop the waypoint on the map to change a waypoint
 Right click on the waypoint and choose "delete this waypoint" from the menu. It is not possible to 
 delete the start point or the end point. Only a drag and drop is possible.
 
+<a id="RenameWayPoint"></a>
+### Rename a waypoint or change its address
+
+When a waypoint is created, its address is searched for with Nominatim. If a name, such as
+a store or building name is found by Nominatim, this will also be added.
+
+You can change this name and address by right-clicking on the waypoint and 
+selecting "Modify the properties of this waypoint" from the context menu.
+
+Note, however, that each time the waypoint is moved, the name and address will be
+modified by Nominatim and your lost modifications. So it is better to make these changes when you are
+certain not to move this waypoint any more.
+
 <a id="ItineraryModeAndProvider"></a>
 ### Choose a route mode and route provider
 
@@ -353,13 +356,12 @@ The description of the route is also displayed in the "Itinerary and notes" sect
 <a id="SaveOrDiscardRoute"></a>
 ### Save or discard changes
 
-When editing a route is over, you must save it with the button :floppy_disk:.
+When editing a route is finished, it must be saved. Right click on the route
+and select 'Save the modifications on this route' from the context menu.
 
-It is also possible to abort editing a route and return to the situation before changes with 
-the &#x274c; button. Warning, __all__ the changes will be lost, including modified properties 
-and notes added since the beginning of editing.
-
-Saving or discarding the modifications can also be done from the contextual menu of the journey.
+It is also possible to quit editing a route and return to the situation before
+changes with the command 'Cancel the modifications on this route'. Attention, __all__
+changes will be lost, including changed properties and added notes since the start of the edition.
 
 <a id="RouteProfile"></a>
 ### Route profile
@@ -382,18 +384,23 @@ for more explanation on how to create a train route.
 <a id="RouteDlg"></a>
 ### Editing the properties of a route
 
-Right click on the route and select "Properties" from the context menu.
+Right click on the route and select "Modify the properties of this route" from the context menu.
 
 <img src="RoutePropertiesEN.PNG" />
 
-The first 6 rows of color buttons are used to select the color used to display the route. The last 
-row of color buttons adds more or less shade of red in the proposed colors.
+You can first change the name of the route and replace the name suggested by the program
+with a name of your choice.
 
-Each shade of red, green and blue for the desired color can also be individually set via the 3 
-color editing areas.
+Note that when the name has been changed, the addresses will no longer be added to the name,
+even if you change the start and end points.
 
 It is also possible to change the width of the route as well as the type of line and also chaining 
 the route.
+
+Finally you can change the color used to display the route. Select a color from the 6 rows of 
+colored buttons. The slider under the colored buttons adds more or less shade of red in the colors offered.
+
+Each shade of red, green and blue for the desired color can also be set individually via the 3 color editing areas.
 
 <a id="PrintRouteMaps"></a>
 ### Print route maps
@@ -476,7 +483,12 @@ are always positioned on a route and displayed with the route in the roadbook.
 <a id="NewTravelNote"></a>
 ### Add a travel note
 
-Right-click at the desired point on the __map__ and select "New travel note" from the context menu.
+Right-click at the desired point on the __map__ and select "Add a travel note" from the context menu.
+
+<a id="ReorderTravelNote"></a>
+### Change the order of travel notes
+
+The order of travel notes can be changed by dragging and dropping in the list of travel notes in the user interface.
 
 <a id="NewRouteNote"></a>
 ### Add a route note
@@ -508,7 +520,8 @@ the insertion of the note. The latitude and longitude of the note are not modifi
 <a id="LatLngNote"></a>
 ### Change the latitude and longitude of a note
 
-Move the note icon to make the line visible. Then drag and drop the free end of this line.
+Move the note icon to make the line visible. Move the mouse near the end of the line.
+When a small black square appears on it, drag and drop this square and the line.
 
 A route note always has its latitude and longitude on the route. When the line is dropped, the nearest 
 point on the route is searched and the free end of the line moved to this point.
@@ -556,7 +569,7 @@ The "Icon Content" area will be used to represent the note on the map and can no
 The "Address" area is completed automatically when creating the note - 
 [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) is used to geotag the notes.
 This area will never be changed by Nominatim afterwards, even if the note has been moved. 
-The button &#x1f504; allows, however, to request a new geolocation to Nominatim.
+The button 🔄 allows, however, to request a new geolocation to Nominatim.
 
 <a id="SvgNoteFromOsm"></a>
 #### Predefined route notes "SVG icon from OSM"
@@ -570,7 +583,7 @@ according to the path followed: the route by which one arrives at the intersecti
 turned towards the bottom of the icon.
 
 The address will also be modified: all the street names found at the intersection will be indicated, 
-separated by a symbol &#x2AA5;. The first street name will always be the one by which we arrive at 
+separated by a symbol ⪥. The first street name will always be the one by which we arrive at 
 the intersection and the last name the one by which one leaves the intersection. 
 This name will be preceded by an arrow indicating the direction to follow. The name of the 
 town / city will also be added. If a hamlet or village name is found near the intersection, 
@@ -640,7 +653,7 @@ It is possible to move around in the toolbar using the mouse wheel.
 <a id="Roadbook"></a>
 ## __Roadbook__
 
-Click on the button :clipboard:. A new tab is created with the roadbook. This contains all the routes as 
+Click on the button 📋. A new tab is created with the roadbook. This contains all the routes as 
 well as all the notes that have been created on the map. It is possible to choose what you want to see 
 in the roadbook via the menu at the top of the page:
 

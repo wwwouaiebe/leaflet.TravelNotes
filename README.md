@@ -8,6 +8,8 @@
 
 [Installation guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/InstallationGuideEN.md)
 
+[JS code documentation](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+
 ## Demo
 
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
@@ -18,11 +20,13 @@ Simply add your API key via the access key management dialog (button :key: on th
 see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
 This demo displays a travel with a route and some icons and without any control, so the user cannot modify the travel.
 
+And the same [demo](https://wwwouaiebe.github.io/samples/Liege/index.html) inside a web page
+
 Other samples:
 
 [An excerpt from my last bike trip from Dover to Chester](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL1VLMjAxOS9VSzIwMTkudHJ2) 
 
-[The maps for the first route of Dover to Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
+[The printed maps for the first route of Dover to Chester in a pdf file](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
 [A train, bus and bicycle trip from Liège to Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
 
@@ -35,13 +39,15 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.11.0 branch
+### v1.12.0 branch
 
-The [v1.11.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.11.0) contains the source files of the last stable version.
+The [v1.12.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contains the source files of the last stable version.
 
 ### master branch
 
 The [master branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) is the development branch and is unstable. 
+
+##  What's new
 
 ### What's new in release 1.6.0
 
@@ -86,6 +92,13 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - The display of errors when reading the "APIKeys" file has been improved
 - Some bugs are fixed ( Issues #113, #115, #116, #117 and #118)
 
+###  What's new in release 1.12.0
+
+- The user interface has been changed. Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md).
+- All commands are standardized. Each object (map, route, note, waypoint, maneuver) is created, modified or deleted via commands in context menus that are available on the map or in the user interface.
+- Performance is improved. Memory usage has been greatly reduced and load times reduced. This is particularly noticeable for long travels.
+- [All code is documented](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+
 <a id="fr" />
 
 ## Guides
@@ -93,6 +106,8 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 [Guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md)
 
 [Guide d'installation - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideInstallationFR.md)
+
+[Documentation du code JS](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
 
 ## Démo
 
@@ -104,11 +119,13 @@ Ajoutez simplement votre API key via la boite de dialogue de gestion des clefs d
 Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
 qui affiche un voyage avec un trajet et des icônes, sans aucun contrôle, et donc sans possibilité de modifications.
 
+Et la même [démo](https://wwwouaiebe.github.io/samples/Liege/index.html) intégrée dans une page web
+
 D'autres exemples:
 
 [Un extrait de mon dernier voyage en vélo de Dover à Chester](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL1VLMjAxOS9VSzIwMTkudHJ2) 
 
-[Les cartes du premier trajet de Dover à Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
+[Les cartes imprimées dans un pdf du premier trajet de Dover à Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
 [Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
 
@@ -121,13 +138,15 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.11.0
+### branche v1.12.0
 
-La [branche v1.11.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.11.0) contient les sources de la dernière version stable.
+La [branche v1.12.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contient les sources de la dernière version stable.
 
 ### branche master
 
 La [branche master](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/master) est la branche de développement et est instable.
+
+## Quoi de neuf
 
 ### Quoi de neuf dans la version 1.6.0
 
@@ -174,3 +193,12 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 - Il est possible de créer une note pour toutes les manoeuvres d'un trajet en une opération
 - L'affichage des erreurs lors de la lecture du fichier "APIKeys" a été amélioré
 - Quelques bugs sont corrigés ( Issues #113, #115, #116, #117 et #118)
+
+### Quoi de neuf dans la version 1.12.0
+
+- L'interface utilisateur a été modifiée. Consultez le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md).
+- Toutes les commandes sont uniformisées. Chaque objet (carte, route, note, point de passage, manoeuvre) est créé, modifié ou supprimé via des commandes
+dans des menus contextuels qui sont disponibles sur la carte ou dans l'interface utilisateur.
+- Les performances sont améliorées. L'utilisation de la mémoire a fortement diminué et les temps de chargement réduits. Cela est particulièrement sensible pour de longs voyages.
+- [Tout le code est documenté](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+

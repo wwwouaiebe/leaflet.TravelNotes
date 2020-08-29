@@ -136,6 +136,7 @@ function ourNewFileLoader ( ) {
 		}
 		theRouteEditor.chainRoutes ( );
 
+		theEventDispatcher.dispatch ( 'travelnameupdated' );
 		theEventDispatcher.dispatch ( 'showitinerary' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
