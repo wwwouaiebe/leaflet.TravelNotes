@@ -47,8 +47,11 @@ Tests ...
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
+
+/*
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
+*/
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -85,6 +88,7 @@ function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 
 		return [
 
+			/*
 			{
 				context : theNoteEditor,
 				name : theTranslator.getText ( 'ManeuverContextMenu - Replace with a maneuver note' ),
@@ -97,6 +101,8 @@ function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 				action : theRouteEditor.removeManeuver,
 				param : myManeuverObjId
 			},
+			*/
+
 			{
 				context : myZoomer,
 				name : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
