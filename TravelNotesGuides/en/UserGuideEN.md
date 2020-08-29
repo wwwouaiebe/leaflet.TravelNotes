@@ -4,6 +4,7 @@
 - [Some explanations on the terms used](#SomeExplanations)
 - [Before you start using Travel & Notes](#BeforeStart)
 	- [How to introduce your access keys in Travel & Notes](#APIKeys)
+- [Context menus](#ContextMenus]
 - [Interface](#Interface1)
 	- [Toolbar buttons on top of the interface](#InterfaceToolbar)
 	- [Travel](#Travel)
@@ -28,6 +29,7 @@
 	- [Print route maps](#PrintRouteMaps)
 - [Notes](#Notes1)
 	- [Add a travel note](#NewTravelNote)
+	- [Change the order of travel notes](#ReorderTravelNote)
 	- [Add a route note](#NewRouteNote)
 	- [Consult a note](#ViewNote)
 	- [Modify a note](#ModifyNote)
@@ -172,6 +174,17 @@ https://www.example.org/TravelNotes/?MapboxProviderKey=your_Mapbox_access_key&Gr
 As soon as Travel & Notes detects access keys in the url, they are stored in the __sessionStorage__ and 
 deleted from the url. They are no longer visible on the screen. **However, remember that a malicious 
 person can always find them in the browser history**, unless you use the private mode of your browser.
+
+<a id="ContextMenus"></a>
+## __Context menus__
+
+All map objects (waypoints, notes, routes, map) have a context menu. All the commands related to 
+these objects can be found in these context menus.
+
+The same menus are found in the user interface on the right of the screen. Right clicking on a route in the routes list 
+will display a context menu for that route, right clicking on a note in the route description or in the travel notes list 
+will display a context menu for that note and right clicking on a maneuver in the route description will display a 
+context menu for that maneuver.
 
 <a id="Interface1"></a>
 ## __Interface__
@@ -471,6 +484,11 @@ are always positioned on a route and displayed with the route in the roadbook.
 ### Add a travel note
 
 Right-click at the desired point on the __map__ and select "Add a travel note" from the context menu.
+
+<a id="ReorderTravelNote"></a>
+### Change the order of travel notes
+
+The order of travel notes can be changed by dragging and dropping in the list of travel notes in the user interface.
 
 <a id="NewRouteNote"></a>
 ### Add a route note

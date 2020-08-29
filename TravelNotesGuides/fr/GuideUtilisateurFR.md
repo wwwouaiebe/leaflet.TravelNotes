@@ -4,6 +4,7 @@
 - [Quelques explications sur les termes utilisés](#SomeExplanations)
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
+- [Menus contextuels](#ContextMenus]
 - [Interface](#Interface1)
 	- [Barre d'outils en haut de l'interface](#InterfaceToolbar)
 	- [Voyage](#Travel)
@@ -28,6 +29,7 @@
 	- [Imprimer les cartes d'un trajet](#PrintRouteMaps)
 - [Notes](#Notes1)
 	- [Créer une note de voyage](#NewTravelNote)
+	- [Modifier l'ordre des notes de voyage](#ReorderTravelNote)
 	- [Créer une note de trajet](#NewRouteNote)
 	- [Consulter une note](#ViewNote)
 	- [Modifier le contenu d'une note](#ModifyNote)
@@ -185,6 +187,17 @@ Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont e
 le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
 **Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans 
 l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
+
+<a id="ContextMenus"></a>
+## __Menus contextuels__
+
+Tous les objets de la carte (points de passage, notes, trajets, carte) ont un menu contextuel. Toutes les commandes relatives à ces
+objets se trouvent dans ces menus contextuels. 
+
+Les mêmes menus se retrouvent dans l'interface utilisateur à droite de l'écran. Un clic droit sur une route dans la liste des
+routes affichera un menu contextuel pour cette route, un clic droit sur une note dans la description de l'itinéraire ou dans la
+liste des notes de voyage affichera un menu contextuel pour cette note et un clic droit sur une manœuvre dans la description de
+l'itinéraire affichera un menu contextuel pour cette manœuvre.
 
 <a id="Interface1"></a>
 ## __Interface__
@@ -498,6 +511,11 @@ livre de voyage.
 
 Faite un clic droit à l'endroit souhaité sur la __carte__ et sélectionnez "Ajouter une note de voyage" dans le 
 menu contextuel.
+
+<a id="ReorderTravelNote"></a>
+### Modifier l'ordre des notes de voyage
+
+L'ordre des notes de voyage peut se modifier en faisant du glisser / déposer dans la liste des notes de voyage de l'interface utilisateur.
 
 <a id="NewRouteNote"></a>
 ### Créer une note de trajet
