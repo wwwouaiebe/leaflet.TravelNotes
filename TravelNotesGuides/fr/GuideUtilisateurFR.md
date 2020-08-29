@@ -6,19 +6,19 @@
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
 - [Interface](#Interface1)
 	- [Barre d'outils en haut de l'interface](#InterfaceToolbar)
-	- [Trajets du voyage](#RoutesTravel)
+	- [Voyage](#Travel)
+		- [Nom du voyage](#TravelName)
 		- [Boutons de la barre d'outils "Trajets du voyage"](#RouteToolbar)
-	- [Points de passage du trajet](#RouteWayPoints)
-		- [Boutons de la barre d'outils "Points de passage du trajet"](#WayPointsToolbar)
+		- [Trajets du voyage](#RoutesTravel)
 	- [Itinéraire et notes](#ItineraryAndNotes)
 	- [Barre d'outils des modes de parcours et des fournisseurs d'itinéraire](#RouterButtons)
 - [Boites d'édition](#EditBoxes)
-	- [Déplacer une boite d'édition sur l'écran](#MoveEditBox)	
-- [Trajets et points de passage](#routes)	
+- [Trajets et points de passage](#Routes)	
 	- [Créer un point de passage](#AddWayPoint)
 	- [Ajouter un point de passage avec un glisser/déposer ](#AddWayPointDragDrop)
 	- [Modifier un point de passage ](#ModifyWayPoint)
 	- [Supprimer un point de passage](#DeleteWayPoint)
+	- [Renommer un point de passage ou changer son adresse](#RenameWayPoint)
 	- [Choisir un mode de parcours et un fournisseur d'itinéraire](#ItineraryModeAndProvider)
 	- [Calcul de l'itinéraire](#ComputingItinerary)
 	- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
@@ -36,7 +36,7 @@
 	- [Modifier la latitude et la longitude d'une note](#LatLngNote)
 	- [Transformer une note de trajet en note de voyage](#RouteToTravelNote)
 	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
-	- [Créer une note pour chaque manoeuvre du trajet](#AllManeuverNotesFromOsm)
+	- [Créer une note pour chaque manœuvre du trajet](#AllManeuverNotesFromOsm)
 	- [La boite d'édition d'une note](#NoteDlg)
 		- [Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
 		- [Quelques exemples de notes](#NoteSamples)
@@ -125,7 +125,7 @@ cliquez sur le bouton 🔑 dans la barre d'outil en haut de l'interface.
 <img src="APIKeysDialogFR.PNG" />
 
 Pour chaque fournisseur de service, vous devez indiquer à gauche le nom de ce fournisseur  et à droite 
-la clef d' accès. Les différents noms possibles actuellement sont 'GraphHopper', 'Ign', 'Lantmateriet',
+la clef d' accès. Les différents noms possibles actuellement sont 'GraphHopper', 'Lantmateriet',
 'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensible au majuscules/minuscules).
 
 Utilisez le bouton + pour ajouter un fournisseur de service et le bouton ❌ à droite pour 
@@ -139,22 +139,22 @@ Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par
 
 **Attention**: la page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
 
-Le bouton :arrows_counterclockwise: permet de recharger le fichier des clefs d'accès depuis le serveur web.
+Le bouton 🔄 permet de recharger le fichier des clefs d'accès depuis le serveur web.
 
-Le bouton :floppy_disk: à **gauche** de la boite de dialogue permet de sauver les clefs d'accès 
+Le bouton 💾 à **gauche** de la boite de dialogue permet de sauver les clefs d'accès 
 dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont
 au moins une majuscule, une minuscule, un chiffre et un autre caractère.
 
-Le bouton :file_folder: à **gauche** de la boite de dialogue remplace toutes les clefs d'accès de la
+Le bouton 📂 à **gauche** de la boite de dialogue remplace toutes les clefs d'accès de la
 boite de dialogue par le contenu d'un fichier protégé par mot de passe.
 
 Ces deux boutons ne sont présents que si toutes les conditions pour pouvoir sauvegarder/restaurer les 
 clefs avec un mot de passe sont réunies.
 
-Le bouton :floppy_disk: à **droite** de la boite de dialogue permet de sauver les clefs d'accès dans 
+Le bouton 💾 à **droite** de la boite de dialogue permet de sauver les clefs d'accès dans 
 un fichier **non protégé** par mot de passe.
 
-Le bouton :file_folder: à **droite** de la boite de dialogue remplace toutes les clefs d'accès de la 
+Le bouton 📂 à **droite** de la boite de dialogue remplace toutes les clefs d'accès de la 
 boite de dialogue par le contenu d'un fichier **non protégé** par mot de passe.
 
 Si un fichier protégé par un mot de passe et nommé **APIKeys** est placé dans le même répertoire que 
@@ -163,14 +163,15 @@ pouvoir utiliser les clefs contenues dans ce fichier.
 
 Pour les geeks et les paranos voyez aussi ,dans le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson) et dans le fichier 
 TravelNotesConfig.json:
-- APIKeys.showDialogButton pour afficher ou masquer le bouton :key: dans la barre d'outils
+- APIKeys.showDialogButton pour afficher ou masquer le bouton 🔑 dans la barre d'outils
 - APIKeys.saveToSessionStorage pour sauver ou non les clefs dans le sessionStorage
 - APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite 
 de dialogue
-- APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons :floppy_disk: 
-et :file_folder: à __droite__
+- APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons 💾 
+et 📂 à __droite__
 
-L'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner:
+L'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner mais sera supprimée 
+dans une prochaine version:
 - à la fin de l'url de la page web chargeant Travel & Notes, vous devez introduire un ? suivi 
 du nom du fournisseur suivi de ProviderKey suivi de = suivi de votre clef d'accès. 
 Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
@@ -200,78 +201,66 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 ### Barre d'outils en haut de l'interface
 
 En haut de l'interface se trouve une première barre d'outils:
-- le bouton :house: redirige vers votre page d'accueil
+- le bouton 🏠 redirige vers votre page d'accueil
 - le bouton ? redirige vers 
 [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
 - le bouton @ redirige vers une page de contact. Par défaut, c'est 
 [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
 L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
-- le bouton :key: affiche la boite de dialogue des clefs d'accès
-- le bouton :globe_with_meridians: active ou désactive la localisation. 
-- le bouton :pushpin: affiche l'interface en permanence.
+- le bouton 🔑 affiche la boite de dialogue des clefs d'accès
+- le bouton 🌐 active ou désactive la localisation. 
+- le bouton 📌 affiche l'interface en permanence.
+
+<a id="Travel"></a>
+### Voyage
+
+<a id="TravelName"></a>
+#### Nom du voyage
+
+Dans cette boite d"édition vous pouvez donner un nom au voyage. Ce nom sera par la suite proposé comme nom par défaut 
+pour tous les fichiers que vous créerez à partir de ce voyage.
+
+<a id="RouteToolbar"></a>
+#### Boutons de la barre d'outils "Voyage"
+
+- le bouton ❌ efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
+- le bouton 💾 sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
+- le bouton 📂 ouvre un voyage préalablement sauvé dans un fichier
+- le bouton 🌏 ouvre un voyage préalablement sauvé dans un fichier et inclut tous les trajets 
+et toutes les notes de ce voyage dans le voyage en cours d'édition
+- le bouton 📋 ouvre le livre de voyage
 
 <a id="RoutesTravel"></a>
-### Trajets du voyage
+#### Trajets du voyage
 
-Dans cette partie, les différents trajets du voyage ainsi que une barre d'outils sont affichés.
+Dans cette partie, les différents trajets du voyage sont affichés.
 
-Pour chaque trajet :
-- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des différents trajets. 
-Ces boutons ne sont visibles que lorsque plusieurs trajets sont présents.
-- Le bouton &#x21f0; commence l'édition d'un trajet.
-- Le bouton :recycle: supprime le trajet.
+- les boutons ▶ ou ▼ réduisent ou agrandissent la liste des trajets 
+- le bouton + ajoute un nouveau trajet au voyage
+
+Pour chaque trajet, un clic droit sur celui-ci affiche un menu contextuel contenant des commandes 
+qui permettent de faires des opérations sur le trajet.
 
 Il est aussi possible de faire du glisser / déposer pour réordonner les différents trajets.
 
-Lorsque un trajet est chainé, une icône &#x26d3; est présente à gauche de celui-ci.
+Lorsque un trajet est en cours de modification, une icône 🔴 est présente à gauche de celui-ci.
+De même, Lorsque un trajet est chainé, une icône ⛓ est présente à gauche.
 
-Il est possible de donner un nom à chaque trajet. Cela n'est pas indispensable mais peut vous 
-faciliter la tâche, surtout quand le voyage comporte beaucoup de trajets.
-
-<a id="RouteToolbar"></a>
-#### Boutons de la barre d'outils "Trajets du voyage"
-
-- le bouton &#x25bd; agrandit la liste des trajets
-- le bouton :x: efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
-- le bouton :floppy_disk: sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
-- le bouton :file_folder: ouvre un voyage préalablement sauvé dans un fichier
-- le bouton :earth_asia: ouvre un voyage préalablement sauvé dans un fichier et inclut tous les trajets 
-et toutes les notes de ce voyage dans le voyage en cours d'édition
-- le bouton :clipboard: ouvre le livre de voyage
-- le bouton + ajoute un nouveau trajet au voyage
-
-<a id="RouteWayPoints"></a>
-### Points de passage du trajet
-
-Avant de pouvoir visualiser les points de passage d'un trajet, il est nécessaire de commencer 
-l'édition de celui-ci avec le bouton &#x21f0; présent dans la liste des trajets.
-
-À noter que, quand Travel & Notes est lancé, le premier trajet est directement édité. Il en est de 
-même quand un nouveau trajet est créé et que le trajet en cours d'édition n'a pas encore été modifié.
-
-<a id="WayPointsToolbar"></a>
-#### Boutons de la barre d'outils "Points de passage du trajet"
-
-- le bouton &#x25bd; agrandit la liste des points de passage
-- le bouton :x: abandonne l'édition du trajet. Toutes les modifications seront perdues et le 
-trajet restauré dans l'état dans lequel il se trouvait avant d'être édité
-- le bouton :floppy_disk: sauve les modifications faites au trajet.
-- le bouton __gpx__ sauve l'itinéraire calculé dans un fichier gpx
-- le bouton &#x21c5; inverse l'ordre des points de passage
-- Le bouton :recycle: supprime tous les points de passage
+Par défaut, le nom d'un trajet est le nom et l'adresse du point de départ suivi de ⮞ suivi du nom et
+de l'adresse du point d'arrivée. Il est possible de modifier ce nom en sélectionnant la commande
+'Modifier les propriétés de ce trajet' dans le menu contextuel.
 
 <a id="ItineraryAndNotes"></a>
 ### Itinéraire et notes
 
-Cette partie comprend la description de l'itinéraire ainsi que des notes liées au trajet.
+Cette partie comprend les manœuvres de l'itinéraire ainsi que les notes liées au trajet.
+Vous pouvez choisir ce que vous désirez voir en cochant les notes et / ou les manœuvres
 
 Lorsque la souris est placée sur une ligne de l'itinéraire, un marqueur est affiché à cet endroit sur 
 la carte.
 
-Un clic gauche sur une ligne de l'itinéraire zoomera sur l'endroit sur la carte.
-
-Un clic droit sur une ligne de l'itinéraire commencera l'édition d'une nouvelle note liée au trajet, 
-note précomplétée avec les instructions de changement de direction.
+Un clic droit sur une ligne de l'itinéraire affichera un menu contextuel affichant des commandes
+qui permettent de faires des opérations sur la manœuvre ou la note.
 
 <a id="RouterButtons"></a>
 ### Barre d'outils des modes de parcours et des fournisseurs d'itinéraire
@@ -302,7 +291,7 @@ partie supérieure.
 Pour ajouter, modifier ou supprimer des points de passage, il est nécessaire d'éditer le trajet depuis l'interface
 ou via le menu contextuel du trajet si celui-ci existe déjà.
 
-Toutes les autres modifications (notes, propriétés ou nom du trajet) peuvent se faire, que le trajet 
+Les autres modifications (notes, propriétés du trajet) peuvent se faire, que le trajet 
 soit édité ou non.
 
 <a id="AddWayPoint"></a>
@@ -310,27 +299,15 @@ soit édité ou non.
 
 Pour créer un point de passage, faites un clic droit sur la carte à l'endroit souhaité et choissisez
 "Sélectionner cet endroit comme point de départ", "Sélectionner cet endroit comme point intermédiaire"
-ou "Sélectionner cet endroit comme point de fin" dans le menu:
+ou "Sélectionner cet endroit comme point d'arrivée" dans le menu:
 
 <img src="MapContextMenuFR.PNG" />
 
 Une icône verte (pour le point de départ), orange (pour un point intermédiaire) ou 
-rouge (pour le point de fin) est ajoutée à la carte à l'endroit choisi et le point de passage complété,
-soit avec les coordonnées de l'endroit, soit avec l'adresse.
+rouge (pour le point de fin) est ajoutée à la carte à l'endroit choisi.
 
 Un point intermédiaire ajouté via le menu contextuel sera toujours ajouté à la fin de la 
 liste des points intermédiaires.
-
-L'ordre des points de passage est également indiqué (A pour le point de départ, B pour le point 
-d'arrivée et un chiffre pour les points intermédiaires).
-
-<img src="RouteEditor1FR.PNG" />
-
-- les boutons &#x21e7; et &#x21e9; permettent de modifier l'ordre des points intermédiaires. 
-Ces boutons ne sont visibles que lorsque plusieurs points intermédiaires sont présents. Il
-n'est pas possible de transformer le point de départ ou le point de fin en point intermédiaire.
-- Le bouton :recycle: supprime le point de passage. Il n'est pas possible de supprimer le point de 
-départ ou le point de fin.
 
 <a id="AddWayPointDragDrop"></a>
 ### Ajouter un point de passage avec un glisser/déposer
@@ -348,9 +325,22 @@ Faites un glisser / déposer du point de passage sur la carte pour modifier un p
 <a id="DeleteWayPoint"></a>
 ### Supprimer un point de passage
 
-Faites un click droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu.
+Faites un clic droit sur le point de passage et choisissez "supprimer ce point de passage" dans le menu.
 Il n'est pas possible de supprimer le point de départ ni le point de fin. Seul un glisser / déposer 
 est possible.
+
+<a id="RenameWayPoint"></a>
+### Renommer un point de passage ou changer son adresse
+
+Quand un point de passage est créé, son adresse est recherchée avec Nominatim. Si un nom, tel que 
+un nom de magasin ou d'immeuble est trouvé par Nominatim, celui-ci sera également ajouté.
+
+Vous pouvez modifier ce nom et cette adresse en faisant un clic droit sur le point de passage et en 
+sélectionnant "Modifier les propriétés de ce point de passage" dans le menu contextuel.
+
+À noter cependant que chaque fois que le point de passage est déplacé, le nom et l'adresse seront 
+modifiés par Nominatim et vos modificatons perdues. Il vaut donc mieux faire ces changements quand vous êtes
+certain de ne plus déplacer ce point de passage.
 
 <a id="ItineraryModeAndProvider"></a>
 ### Choisir un mode de parcours et un fournisseur d'itinéraire
@@ -372,13 +362,13 @@ La description de l'itinéraire est également affichée dans la partie "Itinér
 <a id="SaveOrDiscardRoute"></a>
 ### Sauver ou abandonner les modifications
 
-Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci avec le bouton :floppy_disk:.
+Lorsque l'édition d'un trajet est terminée, il faut sauver celle-ci. Faites un clic droit sur le trajet 
+et sélectionnez 'Sauver les modifications de ce trajet' dans le menu contextuel.
 
 Il est également possible d'abandonner l'édition d'un trajet et de revenir à la situation avant 
-modifications avec le bouton :x:. Attention, __toutes__ les modifications seront
-perdues, y compris les propriétés modifiées et les notes ajoutées depuis le début de l'édition.
-
-Sauver ou abandonner les modifications peut aussi se faire depuis le menu contextuel du trajet.
+modifications avec la commande 'Abandonner les modifications de ce trajet'. Attention, __toutes__ 
+les modifications seront perdues, y compris les propriétés modifiées et les notes ajoutées 
+depuis le début de l'édition.
 
 <a id="RouteProfile"></a>
 ### Profil d'un trajet
@@ -401,19 +391,25 @@ pour plus d'explications sur la façon de créer un itinéraire en train.
 <a id="RouteDlg"></a>
 ### La boite d'édition des propriétés d'un trajet
 
-Faites un clic droit sur le trajet et sélectionnez "Propriétés" dans le menu contextuel.
+Faites un clic droit sur le trajet et sélectionnez "Modifier les propriétés de ce trajet" dans le menu contextuel.
 
 <img src="RoutePropertiesFR.PNG" />
 
-Les 6 premières rangées de boutons de couleur permettent de sélectionner la couleur utilisée pour 
-afficher le trajet. La dernière rangée de boutons de couleur ajoute plus ou moins 
+Vous pouvez tout d'abord modifier les noms du trajet et remplacer le nom proposé par le programme
+par un nom de votre choix. 
+
+Notez que quand le nom a été modifié, les adresses ne seront plus ajoutées au nom, même si vous modifiez les
+points de départ et d'arrivée. 
+
+Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
+chainer le trajet au voyage.
+
+Enfin vous pouvez modifier la couleur utilisée pour afficher le trajet. Sélectionnez une couleur parmi les
+6 rangées de boutons de couleur. La tirette sous les boutons de couleur ajoute plus ou moins 
 de nuance de rouge dans les couleurs proposées.
 
 Chaque nuance de rouge, vert et bleu pour la couleur désirée peut également être réglée individuellement 
 via les 3 zones d'édition des couleurs.
-
-Il est également possible de modifier la largeur du trajet ainsi que le type de ligne et également 
-chainer le trajet au voyage.
 
 <a id="PrintRouteMaps"></a>
 ### Imprimer les cartes d'un trajet
@@ -500,7 +496,7 @@ livre de voyage.
 <a id="NewTravelNote"></a>
 ### Créer une note de voyage
 
-Faite un clic droit à l'endroit souhaité sur la __carte__ et sélectionnez "Ajouter une note" dans le 
+Faite un clic droit à l'endroit souhaité sur la __carte__ et sélectionnez "Ajouter une note de voyage" dans le 
 menu contextuel.
 
 <a id="NewRouteNote"></a>
@@ -533,8 +529,8 @@ choisi pour l'insertion de la note. La latitude et longitude de la note ne sont 
 <a id="LatLngNote"></a>
 ### Modifier la latitude et la longitude d'une note
 
-Déplacez l'icône de la note pour que la ligne soit visible. Ensuite faites un glisser / déposer de 
-l'extrémité libre de cette ligne.
+Déplacez l'icône de la note pour que la ligne soit visible. Déplacez la souris près de l'extrémité de la ligne.
+Lorsque un petit carré noir apparait sur celle-ci, faites un glisser / déposer de ce carré et de la ligne.
 
 Une note de trajet a toujours sa latitude et longitude sur le trajet. Lorsque la ligne est déposée, 
 le point le plus proche sur le trajet est recherché et l'extrémité libre de la ligne déplacé vers ce point.
@@ -553,11 +549,11 @@ contextuel. La transformation n'est possible que si aucun trajet n'est en cours 
 attachée au trajet le plus proche de celle-ci.
 
 <a id="AllManeuverNotesFromOsm"></a>
-### Créer une note pour chaque manoeuvre du trajet
+### Créer une note pour chaque manœuvre du trajet
 
-Faites un clic droit sur le trajet et sélectionnez "Créer une note pour chaque manoeuvre du trajet" dans le menu 
+Faites un clic droit sur le trajet et sélectionnez "Créer une note pour chaque manœuvre du trajet" dans le menu 
 contextuel. Une demande de confirmation est affichée. 
-Pour chaque manoeuvre du trajet, [une note en SVG à partir des données OpenStreetMap ](#SvgNoteFromOsm) sera créée.
+Pour chaque manœuvre du trajet, [une note en SVG à partir des données OpenStreetMap ](#SvgNoteFromOsm) sera créée.
 
 <a id="NoteDlg"></a>
 ### La boite d'édition d'une note
@@ -572,7 +568,7 @@ Travel & Notes. Consultez le [guide d'installation](GuideInstallationFR.md#Trave
 
 Les boutons div p span et a permettent d'ajouter les balises html &lt;div&gt;, &lt;p&gt;, &lt;span&gt;
 et &lt;a&gt; dans les zones d'édition. Tous les autres boutons sont modifiables et permettent aussi 
-d'insérer du texte prédéfini dans les zones d'édition. [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
+d'insérer du texte prédéfini dans les zones d'édition. Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
 Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien".
 
@@ -582,7 +578,7 @@ vide (laisser cette zone vide empêcherait toute modification ultérieure de la 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - 
 [Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
 Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. 
-Le bouton :arrows_counterclockwise: permet cependant de demander une nouvelle géolocalisation à Nominatim.
+Le bouton 🔄 permet cependant de demander une nouvelle géolocalisation à Nominatim.
 
 <a id="SvgNoteFromOsm"></a>
 #### Note de trajet prédéfinie "Icône SVG depuis OSM"
@@ -596,7 +592,7 @@ L'intersection sera placée au centre de l'icône et le contenu de celle-ci sera
 du trajet suivi: la route par laquelle on arrive à l'intersection sera tournée vers le bas de l'icône.
 
 L'adresse sera également modifiée: tous les noms de rue trouvés à l'intersection seront indiqués, 
-séparés par un symbole &#x2AA5;. Le premier nom de rue sera toujours celui par lequel on arrive à 
+séparés par un symbole ⪥. Le premier nom de rue sera toujours celui par lequel on arrive à 
 l'intersection et le dernier nom celui par lequel on quitte l'intersection. Ce nom sera précédé 
 d'une flèche indiquant la direction à suivre. Le nom de la commune / ville sera également ajouté. 
 Si un nom de hameau ou de village est trouvé à proximité de l'intersection, celui-ci sera également
@@ -667,7 +663,7 @@ Il est possible de se déplacer dans la barre d'outils en utilisant la roulette 
 <a id="Roadbook"></a>
 ## __Livre de voyage__
 
-Cliquez sur le bouton :clipboard:. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient 
+Cliquez sur le bouton 📋. Un nouvel onglet est créé avec le livre de voyage. Celui-ci contient 
 tous les trajets ainsi que toutes les notes qui ont été créées sur la carte. Il est possible de choisir
 ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
