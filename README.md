@@ -8,7 +8,7 @@
 
 [Installation guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/InstallationGuideEN.md)
 
-[JS code documentation](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+[JS code documentation](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/ )
 
 ## Demo
 
@@ -97,7 +97,7 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - The user interface has been changed. Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md).
 - All commands are standardized. Each object (map, route, note, waypoint, maneuver) is created, modified or deleted via commands in context menus that are available on the map or in the user interface.
 - Performance is improved. Memory usage has been greatly reduced and load times reduced. This is particularly noticeable for long travels.
-- [All code is documented](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+- [All code is documented](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/)
 
 <a id="fr" />
 
@@ -107,7 +107,7 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 
 [Guide d'installation - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideInstallationFR.md)
 
-[Documentation du code JS](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+[Documentation du code JS](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/)
 
 ## Démo
 
@@ -200,5 +200,5 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 - Toutes les commandes sont uniformisées. Chaque objet (carte, route, note, point de passage, manoeuvre) est créé, modifié ou supprimé via des commandes
 dans des menus contextuels qui sont disponibles sur la carte ou dans l'interface utilisateur.
 - Les performances sont améliorées. L'utilisation de la mémoire a fortement diminué et les temps de chargement réduits. Cela est particulièrement sensible pour de longs voyages.
-- [Tout le code est documenté](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+- [Tout le code est documenté](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/)
 
