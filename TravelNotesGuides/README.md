@@ -8,6 +8,8 @@
 
 [Installation guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/InstallationGuideEN.md)
 
+[JS code documentation](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+
 ## Demo
 
 [Demo - en ](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en)
@@ -35,9 +37,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.11.0 branch
+### v1.12.0 branch
 
-The [v1.11.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.11.0) contains the source files of the last stable version.
+The [v1.12.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -86,6 +88,13 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - The display of errors when reading the "APIKeys" file has been improved
 - Some bugs are fixed ( Issues #113, #115, #116, #117 and #118)
 
+###  What's new in release 1.12.0
+
+- The user interface has been changed. Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md).
+- All commands are standardized. Each object (map, route, note, waypoint, maneuver) is created, modified or deleted via commands in context menus that are available on the map or in the user interface.
+- Performance is improved. Memory usage has been greatly reduced and load times reduced. This is particularly noticeable for long travels.
+- [All code is documented](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+
 <a id="fr" />
 
 ## Guides
@@ -93,6 +102,8 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 [Guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md)
 
 [Guide d'installation - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideInstallationFR.md)
+
+[Documentation du code JS](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
 
 ## Démo
 
@@ -121,9 +132,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.11.0
+### branche v1.12.0
 
-La [branche v1.11.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.11.0) contient les sources de la dernière version stable.
+La [branche v1.12.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -174,3 +185,12 @@ En faisant ensuite un glisser / déposer de celui-ci, le point de passage est aj
 - Il est possible de créer une note pour toutes les manoeuvres d'un trajet en une opération
 - L'affichage des erreurs lors de la lecture du fichier "APIKeys" a été amélioré
 - Quelques bugs sont corrigés ( Issues #113, #115, #116, #117 et #118)
+
+### Quoi de neuf dans la version 1.12.0
+
+- L'interface utilisateur a été modifiée. Consultez le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md).
+- Toutes les commandes sont uniformisées. Chaque objet (carte, route, note, point de passage, manoeuvre) est créé, modifié ou supprimé via des commandes
+dans des menus contextuels qui sont disponibles sur la carte ou dans l'interface utilisateur.
+- Les performances sont améliorées. L'utilisation de la mémoire a fortement diminué et les temps de chargement réduits. Cela est particulièrement sensible pour de longs voyages.
+- [Tout le code est documenté](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
+

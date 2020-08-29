@@ -27,7 +27,7 @@
 	},
 	"opts": {
 		"template": "templates/default",
-		"destination": "out/",
+		"destination": "TechDoc/",
 		"recurse": true,
 		"tutorials": "TravelNotesGuides/"
 	}

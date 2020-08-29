@@ -334,21 +334,15 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'TravelNotesGuides/',
-						src: ['*.md','*.png'],
+						src: ['**/*.*'],
 						dest: 'gh-page/TravelNotesGuides/'
 					},
 					{
 						expand: true,
-						cwd: 'TravelNotesGuides/en/',
-						src: ['*.md', '*.PNG'],
-						dest: 'gh-page/TravelNotesGuides/en/'
-					},
-					{
-						expand: true,
-						cwd: 'TravelNotesGuides/fr/',
-						src: ['*.md', '*.PNG'],
-						dest: 'gh-page/TravelNotesGuides/fr/'
-					}
+						cwd: 'TechDoc/',
+						src: ['**/*.*'],
+						dest: 'gh-page/TechDoc/'
+					}					
 				]
 			}
 		},
@@ -357,7 +351,7 @@ module.exports = function(grunt) {
 			doc : {
 				src: ['src/**/*.js'],
 				options: {
-					destination : 'out',
+					destination : 'TechDoc',
 					configure : "JSDocConf/JSDocConf.json"
 				}
 			}
