@@ -28,6 +28,8 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.13.0:
+		- Issue #125 : Outphase osmSearch and add it to TravelNotes
 Doc reviewed 20200816
 Tests ...
 */
@@ -208,9 +210,7 @@ class UI {
 		theTravelUI.createUI ( ourMainDiv );
 		thePanesManagerUI.addPane ( newItineraryPaneUI ( ) );
 		thePanesManagerUI.addPane ( newTravelNotesPaneUI ( ) );
-		if ( window.osmSearch ) {
-			thePanesManagerUI.addPane ( newOsmSearchPaneUI ( ) );
-		}
+		thePanesManagerUI.addPane ( newOsmSearchPaneUI ( ) );
 		thePanesManagerUI.createUI ( ourMainDiv );
 		theProvidersToolbarUI.createUI ( ourMainDiv );
 		ourAddTravelNotesEventListeners ( );

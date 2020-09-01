@@ -39,6 +39,11 @@ Changes:
 	margin-right: 0.3em;
 }
 
+#TravelNotes-OsmSearchPaneUI-SearchTree {
+	max-height: 15em;
+	overflow: auto;
+}
+
 .TravelNotes-OsmSearchPaneUI-SearchResult {
 	line-height: 1.2em;
 	border-bottom-style: solid;
@@ -61,4 +66,29 @@ Changes:
 
 .TravelNotes-OsmSearchPaneUI-SearchResult:hover {
 	background-color: lightgray;
+}
+
+.TravelNotes-SearchPaneUI-SearchItemMargin1 {
+	margin-left: 0.5em;
+}
+
+.TravelNotes-SearchPaneUI-SearchItemMargin2 {
+	margin-left: 0.5em;
+}
+
+.TravelNotes-SearchPaneUI-SearchItemMargin3 {
+	margin-left: 2.5em;
+}
+
+.TravelNotes-SearchPaneUI-SearchItemMargin4 {
+	margin-left: 4.5em;
+}
+
+.TravelNotes-OsmSearchPaneUI-TreeArrow {
+	color: gray;
+}
+
+.TravelNotes-OsmSearchPaneUI-TreeArrow:hover {
+	color: red;
+	border-color: white;
 }

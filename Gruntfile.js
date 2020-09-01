@@ -124,7 +124,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv' ],
 						dest: 'dist/'
 					},
 					{
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv'],
 						dest: 'gh-page/'
 					},
 					{
@@ -264,7 +264,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv'],
 						dest: 'debug/'
 					},
 					{

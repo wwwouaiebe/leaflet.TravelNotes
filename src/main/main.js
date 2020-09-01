@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	Changes:
 	- v1.6.0:
 		- created
+	- v1.13.0:
+		- Issue #125 : Outphase osmSearch and add it to TravelNotes
 Doc reviewed 20200823
 Tests ...
 */
@@ -54,6 +56,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 
 import { LAT_LNG, ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
@@ -133,36 +136,6 @@ function ourNewMain ( ) {
 			);
 		}
 		return Promise.reject ( new Error ( 'Invalid crypto functions or unsecure context' ) );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myLoadOsmSearchDictionary
-	@desc This function load the osmSearch dictionary
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadOsmSearchDictionary ( ) {
-		if ( window.osmSearch ) {
-			window.osmSearch.getDictionaryPromise ( myLanguage, 'travelNotes' )
-				.then (
-					( ) => console.log ( 'osmSearch dictionary loaded with language ' + myLanguage )
-				)
-				.catch (
-					err => console.log (
-						'An error occurs when loading the osmSearch dictionary for language ' +
-						myLanguage +
-						'\n' +
-						( err ? err : '' )
-					)
-				);
-		}
-		else {
-			console.log ( 'osmSearch not found' );
-		}
 	}
 
 	/**
@@ -263,9 +236,33 @@ function ourNewMain ( ) {
 				'.json file. English will be used. '
 			);
 		}
-
 		return 'Not possible to load the translations for the note dialog. ';
+	}
 
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadSearchDictionary
+	@desc This function load the content of the TravelNotesSearchDictionaryXX.csv file into theOsmSearchEngine object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myLoadSearchDictionary ( searchDictPromiseResult, defaultSearchDictPromiseResult ) {
+		if ( 'fulfilled' === searchDictPromiseResult.status ) {
+			theOsmSearchEngine.parseDictionary ( searchDictPromiseResult.value );
+			return '';
+		}
+		if ( 'fulfilled' === defaultSearchDictPromiseResult.status ) {
+			theOsmSearchEngine.parseDictionary ( defaultSearchDictPromiseResult.value );
+			return (
+				'Not possible to load the TravelNotesSearchDictionary' +
+				myLanguage.toUpperCase ( ) +
+				'.csv file. English will be used. '
+			);
+		}
+		return 'Not possible to load the search dictionary. OSM search will not be available.';
 	}
 
 	/**
@@ -287,7 +284,9 @@ function ourNewMain ( ) {
 			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
 			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
 			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'EN.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' )
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' ),
+			theHttpRequestBuilder.getTextPromise ( originAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
+			theHttpRequestBuilder.getTextPromise ( originAndPath + 'SearchDictionaryEN.csv' )
 		];
 	}
 
@@ -308,6 +307,8 @@ function ourNewMain ( ) {
 		const NOTE_CONFIG_FILE_INDEX = 4;
 		const DEFAULT_TRANSLATIONS_FILE_INDEX = 5;
 		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 6;
+		const SEARCH_DICTIONARY_FILE_INDEX = 7;
+		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 8;
 		if ( 'fulfilled' === results [ ZERO ].status ) {
 			myHaveCrypto = true;
 		}
@@ -330,6 +331,10 @@ function ourNewMain ( ) {
 			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
 		);
 		myErrorMessage += myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
+		myErrorMessage += myLoadSearchDictionary (
+			results [ SEARCH_DICTIONARY_FILE_INDEX ],
+			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
+		);
 
 		if ( '' !== myErrorMessage ) {
 			theErrorsUI.showWarning ( myErrorMessage );
@@ -394,7 +399,6 @@ function ourNewMain ( ) {
 			window.L.travelNotes = theTravelNotes;
 			myReadURL ( );
 			myLanguage = myLanguage || theConfig.language;
-			myLoadOsmSearchDictionary ( myLanguage );
 			theErrorsUI.createUI ( );
 
 			Promise.allSettled ( myGetJsonPromises ( ) )
