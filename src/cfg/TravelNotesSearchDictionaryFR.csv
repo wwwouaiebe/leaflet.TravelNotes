@@ -45,6 +45,7 @@ Sur la route;;;;
 ;;amenity=drinking_water;;
 ;;amenity=water_point;;
 ;;amenity=grave_yard;;
+;;landuse=cemetery;;
 ;Banc;;;
 ;;amenity=bench;;
 ;Table;;;

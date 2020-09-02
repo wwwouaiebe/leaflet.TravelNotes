@@ -68,7 +68,7 @@ let ourFilterItems = [];
 
 @class
 @classdesc This class is used to represent a branch of the dictionary tree.
-@private
+@public
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
@@ -376,8 +376,14 @@ function ourParseOsmElements ( osmElements ) {
 			}
 		}
 	);
-
-	theTravelNotesData.searchData = Array.from ( pointsOfInterest.values ( ) );
+	theTravelNotesData.searchData =
+		Array.from ( pointsOfInterest.values ( ) ).sort (
+			( obj1, obj2 ) => obj1.description > obj2.description
+				?
+				ONE
+				:
+				( obj1.description < obj2.description ? NOT_FOUND : ZERO )
+		);
 	ourSearchStarted = false;
 	theEventDispatcher.dispatch ( 'showsearch' );
 }
