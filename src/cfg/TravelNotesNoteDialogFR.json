@@ -172,9 +172,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Ferry",
+			"name" : "Terminal de ferry",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0009'></div>",
-			"tooltip" : "Ferry",
+			"tooltip" : "Terminal de ferry",
 			"width" : 40,
 			"height" : 40
 		},
@@ -462,6 +462,69 @@
 			"name" : "Tickets de transport public",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0050'></div>",
 			"tooltip" : "Tickets de transport public",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Arrêt de bus",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0051'></div>",
+			"tooltip" : "Arrêt de bus",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Taxi",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0052'></div>",
+			"tooltip" : "Taxi",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Location de voitures",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0053'></div>",
+			"tooltip" : "Location de voitures",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Carburant",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0054'></div>",
+			"tooltip" : "Carburant",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Parking pour voitures",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0055'></div>",
+			"tooltip" : "Parking pour voitures",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Réparation de voitures",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0056'></div>",
+			"tooltip" : "Réparation de voitures",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Parking pour vélos",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0057'></div>",
+			"tooltip" : "Parking pour vélos",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Location de vélos",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0058'></div>",
+			"tooltip" : "Location de vélos",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Vente de vélos",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0059'></div>",
+			"tooltip" : "Vente de vélos",
 			"width" : 40,
 			"height" : 40
 		}
