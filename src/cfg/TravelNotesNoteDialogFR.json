@@ -151,9 +151,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Autobus",
+			"name" : "Gare routière",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0006'></div>",
-			"tooltip" : "Autobus",
+			"tooltip" : "Gare routière",
 			"width" : 40,
 			"height" : 40
 		},
@@ -221,9 +221,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Magasin",
+			"name" : "Supermarché",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0016'></div>",
-			"tooltip" : "Magasin",
+			"tooltip" : "Supermarché",
 			"width" : 40,
 			"height" : 40
 		},
@@ -310,6 +310,121 @@
 			"tooltip" : "Départ",
 			"width" : 40,
 			"height" : 40
+		},
+		{
+			"name" : "Lavoir",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0029'></div>",
+			"tooltip" : "Lavoir",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Agence de voyage",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0030'></div>",
+			"tooltip" : "Agence de voyage",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Supérette",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0031'></div>",
+			"tooltip" : "Supérette",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Fruits et légumes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0032'></div>",
+			"tooltip" : "Fruits et légumes",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Boulangerie",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0033'></div>",
+			"tooltip" : "Boulangerie",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Patisserie",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0034'></div>",
+			"tooltip" : "Patisserie",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Vêtements",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0035'></div>",
+			"tooltip" : "Vêtements",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Chaussures",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0036'></div>",
+			"tooltip" : "Chaussures",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Sport",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0037'></div>",
+			"tooltip" : "Sport",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Banque",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0038'></div>",
+			"tooltip" : "Banque",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Agent de change",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0039'></div>",
+			"tooltip" : "Agent de change",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Bar",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0040'></div>",
+			"tooltip" : "Bar",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Pub",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0041'></div>",
+			"tooltip" : "Pub",
+			"width" : 40,
+			"height" : 40
 		}
 	]
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

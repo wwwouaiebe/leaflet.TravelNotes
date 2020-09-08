@@ -45,8 +45,6 @@ Changes:
 
 .TravelNotes-MapNote {
 	background-repeat: no-repeat;
-	height: 40px;
-	width: 40px;
 	display: inline-block;
 	vertical-align: top;
 }

@@ -36,8 +36,6 @@ Changes:
 .TravelNotes-ManeuverNote,
 .TravelNotes-MapNote {
 	background-repeat: no-repeat;
-	min-height: 40px;
-	min-width: 40px;
 	display: inline-block;
 	vertical-align: top;
 }
