@@ -55,7 +55,6 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 import { newZoomer } from '../core/Zoomer.js';
-
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**

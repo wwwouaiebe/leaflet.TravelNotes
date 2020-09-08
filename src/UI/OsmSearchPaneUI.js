@@ -26,6 +26,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
 Doc reviewed 20200818
 Tests ...
 */
@@ -57,7 +58,7 @@ import { newObjId } from '../data/ObjId.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
-import { LAT_LNG, PANE_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+import { LAT_LNG, PANE_ID, ZERO, MOUSE_WHEEL_FACTORS, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -76,6 +77,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	let mySearchToolbar = null;
 	let myWaitDiv = null;
 	let mySearchTreeDiv = null;
+	let	mySearchResultMarkerObjId = INVALID_OBJ_ID;
 	let myDeepTree = 0;
 
 	/**
@@ -120,6 +122,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnSearchResultMouseEnter ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
+		mySearchResultMarkerObjId = mouseEvent.target.objId;
 		theEventDispatcher.dispatch (
 			'addsearchpointmarker',
 			{
@@ -672,6 +675,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			theOsmSearchEngine.hide ( );
 			myClearPaneDataDiv ( );
 			myClearPaneControlDiv ( );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : mySearchResultMarkerObjId } );
 		}
 
 		/**
