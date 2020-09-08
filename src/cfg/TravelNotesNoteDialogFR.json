@@ -401,6 +401,69 @@
 			"tooltip" : "Pub",
 			"width" : 40,
 			"height" : 40
+		},
+		{
+			"name" : "Banc",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0042'></div>",
+			"tooltip" : "Banc",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Barbecue",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0043'></div>",
+			"tooltip" : "Barbecue",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Abri",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0044'></div>",
+			"tooltip" : "Abri",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Centre de tri",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0045'></div>",
+			"tooltip" : "Centre de tri",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Poubelle collective",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0046'></div>",
+			"tooltip" : "Poubelle collective",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Gite rural",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0047'></div>",
+			"tooltip" : "Gite rural",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Refuge",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0048'></div>",
+			"tooltip" : "Refuge",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Refuge de montagne",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0049'></div>",
+			"tooltip" : "Refuge de montagne",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Tickets de transport public",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0050'></div>",
+			"tooltip" : "Tickets de transport public",
+			"width" : 40,
+			"height" : 40
 		}
 	]
 }

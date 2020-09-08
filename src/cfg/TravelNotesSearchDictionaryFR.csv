@@ -59,8 +59,8 @@ Sur la route;;;;
 ;;amenity=toilets;;
 ;Point de recyclage;;;
 ;;amenity=recycling;;
-;Poubelle;;;
-;;amenity=waste_basket;;
+;Poubelle collective;;;
+;;amenity=waste_disposal;;
 ;Logement;;;
 ;;Camping;;
 ;;;tourism=camp_site;
@@ -85,19 +85,15 @@ Transport;;;;
 ;;Gare;;
 ;;;railway=station;
 ;;;railway=halt;
-;;Validateur;;
-;;;amenity=ticket_validator;
-;;Machine de vente;;
-;;;amenity=vending_machine;
+;;Tickets de transport public;;
+;;;amenity=vending_machine;vending=public_transport_tickets
 ;;Relations;;
 ;;;route=train;type=route
 ;Bus;;;
 ;;Gare routière;;
 ;;;amenity=bus_station;
-;;Validateur;;
-;;;amenity=ticket_validator;
-;;Machine de vente;;
-;;;amenity=vending_machine;
+;;Tickets de transport public;;
+;;;amenity=vending_machine;vending=public_transport_tickets
 ;Taxi;;;
 ;;Station de taxis;;
 ;;;amenity=taxi;
