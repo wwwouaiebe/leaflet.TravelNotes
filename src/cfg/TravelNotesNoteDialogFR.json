@@ -228,9 +228,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Aide",
+			"name" : "Poste de secours",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0017'></div>",
-			"tooltip" : "Aide",
+			"tooltip" : "Poste de secours",
 			"width" : 40,
 			"height" : 40
 		},
@@ -525,6 +525,83 @@
 			"name" : "Vente de vélos",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0059'></div>",
 			"tooltip" : "Vente de vélos",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Clinique",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0060'></div>",
+			"tooltip" : "Clinique",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Docteur",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0061'></div>",
+			"tooltip" : "Docteur",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Hôpital",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0062'></div>",
+			"tooltip" : "Hôpital",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Dentiste",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0063'></div>",
+			"tooltip" : "Dentiste",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Pharmacie",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0064'></div>",
+			"tooltip" : "Pharmacie",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Opticien",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0065'></div>",
+			"tooltip" : "Opticien",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Ambassade",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0066'></div>",
+			"tooltip" : "Ambassade",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Bureau de poste",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0067'></div>",
+			"tooltip" : "Bureau de poste",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Bain public",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0068'></div>",
+			"tooltip" : "Bain public",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Douche",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0069'></div>",
+			"tooltip" : "Douche",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Police",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0070'></div>",
+			"tooltip" : "Police",
 			"width" : 40,
 			"height" : 40
 		}
