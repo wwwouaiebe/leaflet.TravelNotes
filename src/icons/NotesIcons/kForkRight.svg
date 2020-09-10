@@ -6,7 +6,7 @@
 		<rect width="2" height="4" x="5" y="3" rx="1" /> 
 	</g>
 	<g fill="rgb(0,153,0)">
-		<rect width="2" height='8' x="9" y="9" rx="1"/>
+		<rect width="2" height="8" x="9" y="9" rx="1"/>
 		<g transform="rotate(45,10,10)">
 			<rect width="2" height="7.656" x="9" y="3.344" rx="1" />
 		</g>
