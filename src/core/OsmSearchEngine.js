@@ -200,31 +200,22 @@ function ourSearchFilters ( item ) {
 function ourGetSearchPromises ( ) {
 	let searchPromises = [];
 	ourPreviousSearchBounds = ourSearchBounds;
+	let searchBoundingBoxString = '(' +
+		ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
+		',' +
+		ourSearchBounds.getSouthWest ( ).lng.toFixed ( LAT_LNG.fixed ) +
+		',' +
+		ourSearchBounds.getNorthEast ( ).lat.toFixed ( LAT_LNG.fixed ) +
+		',' +
+		ourSearchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
+		')';
 	ourRootTags.forEach (
 		rootTag => {
-			let searchBoundingBoxString = '(' +
-				ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
-				',' +
-				ourSearchBounds.getSouthWest ( ).lng.toFixed ( LAT_LNG.fixed ) +
-				',' +
-				ourSearchBounds.getNorthEast ( ).lat.toFixed ( LAT_LNG.fixed ) +
-				',' +
-				ourSearchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
-				')';
-
-			let url = theConfig.overpassApiUrl + '?data=[out:json];node[' +
-				rootTag +
-				']' +
-				searchBoundingBoxString +
-				'->.a;way[' +
-				rootTag +
-				']' +
-				searchBoundingBoxString +
-				'->.b;relation[' +
-				rootTag +
-				']' +
-				searchBoundingBoxString +
-				'->.c;(.c >;.c;.b >;.b;.a;);out;';
+			let url = theConfig.overpassApiUrl + '?data=[out:json];' +
+				'node[' + rootTag + ']' + searchBoundingBoxString + '->.a;' +
+				'way[' + rootTag + ']' + searchBoundingBoxString + '->.b;' +
+				'relation[' + rootTag + ']' + searchBoundingBoxString + '->.c;' +
+				'(.c >;.c;.b >;.b;.a;);out;';
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
 	);
@@ -392,7 +383,7 @@ function ourParseOsmElements ( osmElements ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourParseSearchResult
-@desc read each response inthe array returned by the call to Promise.allSettled ( ) and push all osmElements in an array
+@desc read each response in the array returned by the call to Promise.allSettled ( ) and push all osmElements in an array
 @param {Array.<Object>} results The array given by the call to Promise.allSettled ( )
 @private
 
