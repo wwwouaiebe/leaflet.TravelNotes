@@ -604,6 +604,20 @@
 			"tooltip" : "Police",
 			"width" : 40,
 			"height" : 40
+		},
+		{
+			"name" : "Notes personnelles",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0071'></div>",
+			"tooltip" : "Police",
+			"width" : 40,
+			"height" : 40
+		},
+		{
+			"name" : "Site pour caravanes",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0072'></div>",
+			"tooltip" : "Site pour caravanes",
+			"width" : 40,
+			"height" : 40
 		}
 	]
 }

@@ -64,6 +64,8 @@ Sur la route;;;;
 ;Logement;;;
 ;;Camping;;
 ;;;tourism=camp_site;
+;;Site pour caravanes;;
+;;;tourism=caravan_site;
 ;;Gîte rural;;
 ;;;tourism=chalet;
 ;;Chambre d’hôtes;;
