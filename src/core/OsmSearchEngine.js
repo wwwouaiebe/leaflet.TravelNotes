@@ -60,7 +60,6 @@ const SEARCH_DIM = 5000;
 let ourPreviousSearchBounds = null;
 let ourSearchBounds = null;
 let ourDictionary = null;
-let ourRootTags = new Map;
 let ourFilterItems = [];
 
 /**
@@ -77,6 +76,7 @@ class DictionaryItem {
 		this.name = itemName;
 		this.items = [];
 		this.filterTagsArray = [];
+		this.elementTypes = [ 'node', 'way', 'relation' ];
 		this.isSelected = false;
 		this.isExpanded = false;
 		this.isRoot = false;
@@ -174,14 +174,8 @@ and add the first tag to the root tags map.
 */
 
 function ourSearchFilters ( item ) {
-	if ( item.isSelected ) {
+	if ( item.isSelected && ( ZERO < item.filterTagsArray.length ) ) {
 		ourFilterItems = ourFilterItems.concat ( item );
-		item.filterTagsArray.forEach (
-			filterTags => {
-				let rootTag = Object.getOwnPropertyNames ( filterTags )[ ZERO ];
-				ourRootTags.set ( rootTag, rootTag );
-			}
-		);
 	}
 	item.items.forEach ( ourSearchFilters );
 }
@@ -200,6 +194,21 @@ function ourSearchFilters ( item ) {
 function ourGetSearchPromises ( ) {
 	let searchPromises = [];
 	ourPreviousSearchBounds = ourSearchBounds;
+	let tagMaps = { node : new Map ( ), way : new Map ( ), relation : new Map ( ) };
+	ourFilterItems.forEach (
+		filterItem => {
+			filterItem.elementTypes.forEach (
+				elementType => {
+					filterItem.filterTagsArray.forEach (
+						filterTag => {
+							tagMaps [ elementType ].set ( filterTag, filterTag );
+						}
+					);
+				}
+			);
+		}
+	);
+	let requestStrings = { node : '', way : '', relation : ''	};
 	let searchBoundingBoxString = '(' +
 		ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
 		',' +
@@ -209,16 +218,21 @@ function ourGetSearchPromises ( ) {
 		',' +
 		ourSearchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
 		')';
-	ourRootTags.forEach (
-		rootTag => {
-			let url = theConfig.overpassApiUrl + '?data=[out:json];' +
-				'node[' + rootTag + ']' + searchBoundingBoxString + '->.a;' +
-				'way[' + rootTag + ']' + searchBoundingBoxString + '->.b;' +
-				'relation[' + rootTag + ']' + searchBoundingBoxString + '->.c;' +
-				'(.c >;.c;.b >;.b;.a;);out;';
+	for ( const [ element, MapTags ] of Object.entries ( tagMaps ) ) {
+		MapTags.forEach (
+			tag => {
+				let [ key, value ] = Object.entries ( tag ) [ ZERO ];
+				requestStrings [ element ] += element + '[' + key + '=' + value + ']' + searchBoundingBoxString + ';';
+			}
+		);
+	}
+	for ( const [ element, requestString ] of Object.entries ( requestStrings ) ) {
+		if ( '' !== requestString ) {
+			let url = theConfig.overpassApiUrl + '?data=[out:json];(' +
+				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
-	);
+	}
 	return searchPromises;
 }
 
@@ -239,7 +253,7 @@ function ourFilterOsmElement ( osmElement, filterTags ) {
 		isValidOsmElement =
 			isValidOsmElement &&
 			osmElement.tags [ key ] &&
-			osmElement.tags [ key ] === value;
+			( osmElement.tags [ key ] === value || '*' === value );
 	}
 	return isValidOsmElement;
 }
@@ -433,7 +447,6 @@ class OsmSearchEngine	{
 			return;
 		}
 		ourSearchStarted = true;
-		ourRootTags.clear ( );
 		ourFilterItems = [];
 		ourSearchFilters ( ourDictionary );
 		Promise.allSettled ( ourGetSearchPromises ( ) )
@@ -478,6 +491,7 @@ class OsmSearchEngine	{
 		ourDictionary = new DictionaryItem ( 'All', true );
 		let itemsArray = [ ourDictionary.items ];
 		let filterTagsArray = null;
+		let currentItem = null;
 
 		// split a line into words and add a DictionaryItem or a filterTag to the dictionary
 		function parseLine ( line ) {
@@ -491,19 +505,24 @@ class OsmSearchEngine	{
 				word => {
 					if ( '' !== word ) {
 						if ( NOT_FOUND === word.indexOf ( '=' ) ) {
-							let newItem = new DictionaryItem ( word );
-							itemsArray [ wordPos ].push ( newItem );
-							itemsArray [ wordPos + ONE ] = newItem.items;
-							filterTagsArray = newItem.filterTagsArray;
+							currentItem = new DictionaryItem ( word );
+							itemsArray [ wordPos ].push ( currentItem );
+							itemsArray [ wordPos + ONE ] = currentItem.items;
+							filterTagsArray = currentItem.filterTagsArray;
 						}
 						else {
 							let keyAndValue = word.split ( '=' );
-							filterTags =
-								filterTags
-								||
-								{
-								};
-							filterTags [ keyAndValue [ ZERO ] ] = keyAndValue [ ONE ];
+							if ( 'element' === keyAndValue [ ZERO ] ) {
+								currentItem.elementTypes = [ keyAndValue [ ONE ] ];
+							}
+							else {
+								filterTags =
+									filterTags
+									||
+									{
+									};
+								filterTags [ keyAndValue [ ZERO ] ] = keyAndValue [ ONE ];
+							}
 						}
 					}
 					wordPos ++;
@@ -524,6 +543,7 @@ class OsmSearchEngine	{
 					}
 				}
 			);
+		console.log ( ourDictionary );
 	}
 }
 
