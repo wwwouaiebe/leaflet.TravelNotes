@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
+	- v1.13.0:
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200815
 Tests ...
 */

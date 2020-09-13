@@ -34,6 +34,8 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.13.0:
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200803
 Tests ...
 */
