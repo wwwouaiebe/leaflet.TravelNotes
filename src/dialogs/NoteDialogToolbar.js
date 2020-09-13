@@ -307,6 +307,11 @@ class NoteDialogToolbar {
 		return ourSelectOptions [ index ];
 	}
 
+	getIconDataFromName ( selectOptionName ) {
+		let selectOption = ourSelectOptions.find ( selOption => selOption.name === selectOptionName );
+		return selectOption ? selectOption.icon : null;
+	}
+
 	/**
 	Creates the toolbar
 	@param {function} onSelectEventListener the event listener to be activated when the user select an option

@@ -58,6 +58,7 @@ import { newObjId } from '../data/ObjId.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
+import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { LAT_LNG, PANE_ID, ZERO, MOUSE_WHEEL_FACTORS, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
@@ -526,7 +527,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	function myAddHTMLParagraphElement ( parentElement, paragraphText ) {
 		if ( paragraphText ) {
 			theHTMLElementsFactory.create (
-				'p',
+				'div',
 				{
 					innerHTML : paragraphText
 				},
@@ -538,47 +539,32 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myConcatStreetAndHouse
-	@desc Add the street and the house number found in a search result in one string
-	@param {Object} osmElement
-	@return {?string} the street and house number in one string or null if the street was not found
+	@function myAddHTMLParagraphElement
+	@desc Concat the house number, strret, post code and city name in one string
+	@param {Object} osmElement The osm element
+	@return {?string} the address or null if nothing found
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myConcatStreetAndHouse ( osmElement ) {
-		return (
+	function myGetAddress ( osmElement ) {
+		let street =
 			osmElement.tags [ 'addr:street' ]
 				?
-				osmElement.tags [ 'addr:street' ] +
-			( osmElement.tags [ 'addr:housenumber' ] ? ' ' + osmElement.tags [ 'addr:housenumber' ] : '' )
+				( osmElement.tags [ 'addr:housenumber' ] ? osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+					osmElement.tags [ 'addr:street' ] + ' '
 				:
-				null
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myConcatPostCodeAndCity
-	@desc Add the post code and the city found in a search result in one string
-	@param {Object} osmElement
-	@return {?string} the post code and city in one string or null if the city was not found
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myConcatPostCodeAndCity ( osmElement ) {
-		return (
+				'';
+		let city =
 			osmElement.tags [ 'addr:city' ]
 				?
 				( osmElement.tags [ 'addr:postcode' ] ? ( osmElement.tags [ 'addr:postcode' ] + ' ' ) : '' ) +
-			osmElement.tags [ 'addr:city' ]
+				osmElement.tags [ 'addr:city' ]
 				:
-				null
-		);
+				'';
+		let address = street + city;
+		return '' === address ? null : address;
 	}
 
 	/**
@@ -597,17 +583,34 @@ function ourNewOsmSearchPaneUI ( ) {
 		let searchResultDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className :	'TravelNotes-OsmSearchPaneUI-SearchResult',
+				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Row',
 				osmElement : osmElement,
 				objId : newObjId ( )
 			},
 			myPaneDataDiv
 		);
-		myAddHTMLParagraphElement ( searchResultDiv, osmElement.description );
-		myAddHTMLParagraphElement ( searchResultDiv, osmElement.tags.name );
-		myAddHTMLParagraphElement ( searchResultDiv, myConcatStreetAndHouse ( osmElement ) );
-		myAddHTMLParagraphElement ( searchResultDiv, myConcatPostCodeAndCity ( osmElement ) );
-		myAddHTMLParagraphElement ( searchResultDiv, osmElement.tags.phone );
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell',
+				innerHTML : theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || ''
+			},
+			searchResultDiv
+		);
+		let searchResultCell = theHTMLElementsFactory.create (
+			'div',
+			{
+				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Cell'
+			},
+			searchResultDiv
+		);
+
+		myAddHTMLParagraphElement ( searchResultCell, osmElement.description );
+		myAddHTMLParagraphElement ( searchResultCell, osmElement.tags.name );
+		myAddHTMLParagraphElement ( searchResultCell, myGetAddress ( osmElement ) );
+		if ( osmElement.tags.phone ) {
+			myAddHTMLParagraphElement ( searchResultCell, '☎️ : ' + osmElement.tags.phone );
+		}
 		if ( osmElement.tags.email ) {
 			theHTMLElementsFactory.create (
 				'a',
@@ -615,7 +618,7 @@ function ourNewOsmSearchPaneUI ( ) {
 					href : 'mailto:' + osmElement.tags.email,
 					innerHTML : osmElement.tags.email
 				},
-				theHTMLElementsFactory.create ( 'p', null, searchResultDiv )
+				theHTMLElementsFactory.create ( 'div', { innerHTML : '📧 : ' }, searchResultCell )
 			);
 		}
 		if ( osmElement.tags.website ) {
@@ -626,7 +629,7 @@ function ourNewOsmSearchPaneUI ( ) {
 					target : '_blank',
 					innerHTML : osmElement.tags.website
 				},
-				theHTMLElementsFactory.create ( 'p', null, searchResultDiv )
+				theHTMLElementsFactory.create ( 'div', null, searchResultCell )
 			);
 		}
 		searchResultDiv.title = '';

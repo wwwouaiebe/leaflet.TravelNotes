@@ -70,6 +70,7 @@ import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
@@ -360,18 +361,19 @@ class NoteEditor {
 	@fires roadbookupdate
 	*/
 
-	newSearchNote ( searchResult ) {
-		let note = ourNewNote ( [ searchResult.lat, searchResult.lon ] );
-
+	newSearchNote ( osmElement ) {
+		let note = ourNewNote ( [ osmElement.lat, osmElement.lon ] );
+		note.iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
 		note.address =
-			( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
+			( osmElement.tags [ 'addr:housenumber' ] ? osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+			( osmElement.tags [ 'addr:street' ] ? osmElement.tags [ 'addr:street' ] + ' ' : '' ) +
+			( osmElement.tags [ 'addr:postcode' ] ? osmElement.tags [ 'addr:postcode' ] + ' ' : '' ) +
+			( osmElement.tags [ 'addr:city' ] ? osmElement.tags [ 'addr:city' ] + ' ' : '' );
 
-		note.url = searchResult.tags.website || '';
-		note.phone = searchResult.tags.phone || '';
-		note.tooltipContent = searchResult.tags.name || '';
-		note.popupContent = searchResult.tags.name || '';
+		note.url = osmElement.tags.website || '';
+		note.phone = osmElement.tags.phone || '';
+		note.tooltipContent = osmElement.tags.description || '';
+		note.popupContent = osmElement.tags.name || '';
 
 		ourNoteDialog ( note, INVALID_OBJ_ID, true );
 	}

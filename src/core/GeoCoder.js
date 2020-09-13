@@ -98,7 +98,7 @@ function ourNewGeoCoder ( ) {
 
 		/**
 		Parse the Nominatim response
-		@param {Object} geoCoderResponse the response from Nominatim
+		@param {Object} geoCoderData the response from Nominatim
 		@return {GeoCoderAddress} the name and address of the point
 		*/
 

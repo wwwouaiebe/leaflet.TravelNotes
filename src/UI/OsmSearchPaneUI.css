@@ -28,13 +28,6 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-OsmSearchPaneUI-SearchInput {
-	height: 1.4em;
-	width: calc(100% - 3em);
-	margin: 0;
-	padding: 0;
-}
-
 #TravelNotes-OsmSearchPaneUI-SearchButton {
 	margin-right: 0.3em;
 }
@@ -42,30 +35,6 @@ Changes:
 #TravelNotes-OsmSearchPaneUI-SearchTree {
 	max-height: 15em;
 	overflow: auto;
-}
-
-.TravelNotes-OsmSearchPaneUI-SearchResult {
-	line-height: 1.2em;
-	border-bottom-style: solid;
-	border-bottom-width: 0.1em;
-	margin: 0.3em;
-}
-
-.TravelNotes-OsmSearchPaneUI-SearchResult:first-child {
-	margin-top: 0.5em;
-}
-
-.TravelNotes-OsmSearchPaneUI-SearchResult > p {
-	margin: 0;
-	padding: 0;
-}
-
-.TravelNotes-OsmSearchPaneUI-SearchResult > p:first-child {
-	text-decoration: underline;
-}
-
-.TravelNotes-OsmSearchPaneUI-SearchResult:hover {
-	background-color: lightgray;
 }
 
 .TravelNotes-SearchPaneUI-SearchItemMargin1 {
@@ -92,3 +61,52 @@ Changes:
 	color: red;
 	border-color: white;
 }
+
+.TravelNotes-OsmSearchPaneUI-SearchResult-Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult-IconCell {
+	width: 40px;
+	height: 40px;
+	min-height: 20px;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult-Cell {
+	padding: 0.3em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	border-bottom-color: lightgray;
+	flex-shrink: 1;
+}
+
+/* To remove ? */
+
+/*
+.TravelNotes-OsmSearchPaneUI-SearchResult {
+	line-height: 1.2em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+	margin: 0.3em;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult:first-child {
+	margin-top: 0.5em;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult > p {
+	margin: 0;
+	padding: 0;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult > p:first-child {
+	text-decoration: underline;
+}
+
+.TravelNotes-OsmSearchPaneUI-SearchResult:hover {
+	background-color: lightgray;
+}
+*/
