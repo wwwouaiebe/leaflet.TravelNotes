@@ -365,7 +365,16 @@ class NoteEditor {
 
 	newSearchNote ( osmElement ) {
 		let note = ourNewNote ( [ osmElement.lat, osmElement.lon ] );
-		note.iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
+		if ( osmElement.tags.rcn_ref ) {
+			note.iconContent =
+				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				osmElement.tags.rcn_ref +
+				'</text></svg></div>';
+		}
+		else {
+			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
+		}
 		note.address =
 			( osmElement.tags [ 'addr:housenumber' ] ? osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
 			( osmElement.tags [ 'addr:street' ] ? osmElement.tags [ 'addr:street' ] + ' ' : '' ) +

@@ -222,7 +222,9 @@ function ourGetSearchPromises ( ) {
 		MapTags.forEach (
 			tag => {
 				let [ key, value ] = Object.entries ( tag ) [ ZERO ];
-				requestStrings [ element ] += element + '[' + key + '=' + value + ']' + searchBoundingBoxString + ';';
+				requestStrings [ element ] += element +
+				'[' + key + ( '*' === value ? '' : '=' + value ) + ']' +
+				searchBoundingBoxString + ';';
 			}
 		);
 	}
@@ -230,6 +232,9 @@ function ourGetSearchPromises ( ) {
 		if ( '' !== requestString ) {
 			let url = theConfig.overpassApiUrl + '?data=[out:json];(' +
 				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
+
+			console.log ( url );
+
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
 	}

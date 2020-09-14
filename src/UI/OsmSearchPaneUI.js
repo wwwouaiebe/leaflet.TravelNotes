@@ -590,11 +590,22 @@ function ourNewOsmSearchPaneUI ( ) {
 			},
 			myPaneDataDiv
 		);
+		let iconContent = '';
+		if ( osmElement.tags.rcn_ref ) {
+			iconContent =
+				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				osmElement.tags.rcn_ref +
+				'</text></svg></div>';
+		}
+		else {
+			iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
+		}
 		theHTMLElementsFactory.create (
 			'div',
 			{
 				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell',
-				innerHTML : theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || ''
+				innerHTML : iconContent
 			},
 			searchResultDiv
 		);
@@ -608,6 +619,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		myAddHTMLParagraphElement ( searchResultCell, osmElement.description );
 		myAddHTMLParagraphElement ( searchResultCell, osmElement.tags.name );
+		myAddHTMLParagraphElement ( searchResultCell, osmElement.tags.rcn_ref );
 		myAddHTMLParagraphElement ( searchResultCell, myGetAddress ( osmElement ) );
 		if ( osmElement.tags.phone ) {
 			myAddHTMLParagraphElement ( searchResultCell, '☎️ : ' + osmElement.tags.phone );
