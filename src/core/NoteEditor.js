@@ -383,7 +383,7 @@ class NoteEditor {
 
 		note.url = osmElement.tags.website || '';
 		note.phone = osmElement.tags.phone || '';
-		note.tooltipContent = osmElement.tags.description || '';
+		note.tooltipContent = osmElement.description || '';
 		note.popupContent = osmElement.tags.name || '';
 
 		ourNoteDialog ( note, INVALID_OBJ_ID, true );

@@ -33,16 +33,6 @@ Changes:
 	text-decoration: none;
 }
 
-.TravelNotes-ManeuverNote,
-.TravelNotes-MapNote {
-	width: 100%;
-	height: 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
-	vertical-align: top;
-	background-color: white;
-}
-
 .TravelNotes-Roadbook-Travel {
 	margin-top: 0.5em;
 	margin-left: 1em;
