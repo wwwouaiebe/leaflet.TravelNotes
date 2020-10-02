@@ -49,6 +49,15 @@ Changes:
 	background-repeat: no-repeat;
 	display: inline-block;
 	vertical-align: top;
+}
+
+.TravelNotes-SvgIcon {
+	border-style: solid;
+	border-color: black;
+	border-width: 0.1em;
+}
+
+.TravelNotes-MapNote-Background {
 	background-color: white;
 }
 

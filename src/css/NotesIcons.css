@@ -28,13 +28,6 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-SvgIcon {
-	background-color: white;
-	border-style: solid;
-	border-color: black;
-	border-width: 0.1em;
-}
-
 .TravelNotes-OSM-Itinerary {
 	fill: none;
 	stroke: red;

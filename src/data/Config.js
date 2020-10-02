@@ -188,6 +188,7 @@ let ourPrivateConfig = {
 			color : 'gray',
 			weight : 1
 		},
+		haveBackground : false,
 		style : '',
 		svgIconWidth : 200,
 		svgAnleMaxDirection :
