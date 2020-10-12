@@ -94,6 +94,8 @@ function ourNewFileCompactor ( ) {
 		compressedItineraryPoints.latLngs =
 			polyline.encode ( compressedItineraryPoints.latLngs, POLYLINE_PRECISION );
 		routeObject.itinerary.itineraryPoints = compressedItineraryPoints;
+
+		// routeObject.itinerary.maneuvers = [];
 	}
 
 	/**

@@ -376,8 +376,24 @@
 		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
 	},
 	{
+		"msgid" : "NoteEditor - No route was found",
+		"msgstr" : "Aucun trajet n'a été trouvé."
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Create a route note with this result",
+		"msgstr" : "Ajouter une note de trajet avec ce résultat"
+	},
+	{
 		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
 		"msgstr" : "Ajouter une note de voyage avec ce résultat"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Hide note dialog",
+		"msgstr" : "Ne pas afficher le dialogue des notes"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Show note dialog",
+		"msgstr" : "Afficher le dialogue des notes"
 	},
 	{
 		"msgid" : "OsmSearchContextMenu - Zoom to this result",
@@ -553,7 +569,7 @@
 	},
 	{
 		"msgid" : "RouteContextMenu - Save this route in a GPX file",
-		"msgstr" : "Sauver ce trajet dans un fichier GPX"
+		"msgstr" : "Exporter ce trajet dans un fichier GPX"
 	},
 	{
 		"msgid" : "RouteContextMenu - Show this route",
@@ -685,7 +701,7 @@
 	},
 	{
 		"msgid" : "TravelUI - Not possible to merge a travel when a route is edited",
-		"msgstr" : "Il n'est pas possible de fusionner un voyage quand une route est en cours d'édition"
+		"msgstr" : "Il n'est pas possible de fusionner un voyage quand un trajet est en cours d'édition"
 	},
 	{
 		"msgid" : "TravelUI - Open travel",

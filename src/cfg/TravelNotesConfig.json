@@ -142,6 +142,7 @@
 			"text": "&#x1f47f;",
 			"noteZoom" : 17
 		},
+		"osmSearchNoteDialog":false,
 		"reverseGeocoding":true,
 		"grip":
 		{

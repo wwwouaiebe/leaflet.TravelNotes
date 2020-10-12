@@ -178,6 +178,7 @@ let ourPrivateConfig = {
 		showDragTooltip : 3
 	},
 	note : {
+		osmSearchNoteDialog : false,
 		reverseGeocoding : false,
 		grip : {
 			size : 10,

@@ -23,6 +23,8 @@ Changes:
 		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.13.0:
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200727
 Tests ...
  */
@@ -196,20 +198,21 @@ function ourOnKeyDown ( keyBoardEvent ) {
 
 function ourOnClickItem ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	if ( ourMenuItems[ clickEvent.target.menuItem ].param ) {
-		ourMenuItems[ clickEvent.target.menuItem ].action.call (
-			ourMenuItems[ clickEvent.target.menuItem ].context,
-			ourMenuItems[ clickEvent.target.menuItem ].param,
+	let menuItem = ourMenuItems[ clickEvent.target.menuItem ];
+	ourCloseButton.click ( );
+	if ( menuItem.param ) {
+		menuItem.action.call (
+			menuItem.context,
+			menuItem.param,
 			ourContextMenuEvent
 		);
 	}
 	else {
-		ourMenuItems[ clickEvent.target.menuItem ].action.call (
-			ourMenuItems[ clickEvent.target.menuItem ].context,
+		menuItem.action.call (
+			menuItem.context,
 			ourContextMenuEvent
 		);
 	}
-	ourCloseButton.click ( );
 }
 
 /**

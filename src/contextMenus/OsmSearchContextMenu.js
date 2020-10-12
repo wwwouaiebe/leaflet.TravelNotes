@@ -22,6 +22,7 @@ Changes:
 		- created
 	- v1.13.0:
 		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200727
 Tests ...
 */
@@ -86,10 +87,9 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	function myGetMenuItems ( ) {
 
-		let myLatLng = contextMenuEvent.originalEvent.latLng;
+		let latLng = contextMenuEvent.originalEvent.latLng;
 
 		return [
-
 			{
 				context : theWayPointEditor,
 				name : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
@@ -101,7 +101,7 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 						theWayPointEditor.setStartPoint
 						:
 						null,
-				param : myLatLng
+				param : latLng
 			},
 			{
 				context : theWayPointEditor,
@@ -112,7 +112,7 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 						null
 						:
 						theWayPointEditor.addWayPoint,
-				param : myLatLng
+				param : latLng
 			},
 			{
 				context : theWayPointEditor,
@@ -125,13 +125,28 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 						theWayPointEditor.setEndPoint
 						:
 						null,
-				param : myLatLng
+				param : latLng
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
+				action : theNoteEditor.newSearchNote,
+				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : false }
 			},
 			{
 				context : theNoteEditor,
 				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
 				action : theNoteEditor.newSearchNote,
-				param : contextMenuEvent.originalEvent.osmElement
+				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : true }
+			},
+			{
+				context : theNoteEditor,
+				name : theNoteEditor.osmSearchNoteDialog
+					?
+					theTranslator.getText ( 'OsmSearchContextMenu - Hide note dialog' )
+					:
+					theTranslator.getText ( 'OsmSearchContextMenu - Show note dialog' ),
+				action : theNoteEditor.changeOsmSearchNoteDialog
 			},
 			{
 				context : myZoomer,
