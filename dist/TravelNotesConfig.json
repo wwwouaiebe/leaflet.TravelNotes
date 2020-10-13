@@ -142,6 +142,7 @@
 			"text": "&#x1f47f;",
 			"noteZoom" : 17
 		},
+		"osmSearchNoteDialog":false,
 		"reverseGeocoding":true,
 		"grip":
 		{
@@ -154,6 +155,7 @@
 			"color":"gray",
 			"weight":1
 		},
+		"haveBackground":false,
 		"style":"",
 		"svgIconWidth":200,
 		"svgAnleMaxDirection":
