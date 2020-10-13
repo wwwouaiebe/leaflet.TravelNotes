@@ -24,6 +24,8 @@ Changes:
 		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
+	- v1.13.0:
+		- Issue #125 : Outphase osmSearch and add it to TravelNotes
 Doc reviewed 20200824
 Tests ...
 */
@@ -77,11 +79,19 @@ Tests ...
 /* global L */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { DISTANCE, ZERO, ONE } from '../util/Constants.js';
+import { DISTANCE, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const DEGREE_180 = 180;
 const DEGREE_360 = 360;
 const DEGREE_540 = 540;
+
+const MAX_LAT = 90;
+const MIN_LAT = -90;
+const MAX_LNG = 180;
+const MIN_LNG = -180;
+
+const TO_RADIANS = Math.PI / DEGREE_180;
+const EARTH_RADIUS = 6371e3;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -214,11 +224,6 @@ class Geometry {
 	*/
 
 	getLatLngBounds ( latLngs ) {
-		const MAX_LAT = 90;
-		const MIN_LAT = -90;
-		const MAX_LNG = 180;
-		const MIN_LNG = -180;
-
 		let sw = L.latLng ( [ MAX_LAT, MAX_LNG ] );
 		let ne = L.latLng ( [ MIN_LAT, MIN_LNG ] );
 		latLngs.forEach (
@@ -252,8 +257,6 @@ class Geometry {
 			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
-		const TO_RADIANS = Math.PI / DEGREE_180;
-		const EARTH_RADIUS = 6371e3;
 		let latStartPoint = latLngStartPoint [ ZERO ] * TO_RADIANS;
 		let latEndPoint = latLngEndPoint [ ZERO ] * TO_RADIANS;
 		let deltaLng =
@@ -266,6 +269,26 @@ class Geometry {
 			( Math.sin ( latStartPoint ) * Math.sin ( latEndPoint ) ) +
 				( Math.cos ( latStartPoint ) * Math.cos ( latEndPoint ) * Math.cos ( deltaLng ) )
 		) * EARTH_RADIUS;
+	}
+
+	/**
+	This function returns a L.latLngBounds that represents a square
+	@param {Array.<number>} latLngCenter The latitude and longitude of the center of the square
+	@param {number} dimension The half length of the square side in meter.
+	*/
+
+	getSquareBoundingBox ( latLngCenter, dimension ) {
+		let deltaLat = ( dimension / EARTH_RADIUS ) / TO_RADIANS;
+		let latCenterRad = latLngCenter [ ZERO ] * TO_RADIANS;
+		let deltaLng =
+			Math.acos (
+				( Math.cos ( dimension / EARTH_RADIUS ) - ( Math.sin ( latCenterRad ) ** TWO ) ) /
+				( Math.cos ( latCenterRad ) ** TWO )
+			) / TO_RADIANS;
+		return L.latLngBounds (
+			L.latLng ( [ latLngCenter [ ZERO ] - deltaLat, latLngCenter [ ONE ] - deltaLng ] ),
+			L.latLng ( [ latLngCenter [ ZERO ] + deltaLat, latLngCenter [ ONE ] + deltaLng ] )
+		);
 	}
 
 	/**

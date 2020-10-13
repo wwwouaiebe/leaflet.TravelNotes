@@ -34,6 +34,8 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.13.0:
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200803
 Tests ...
 */
@@ -70,12 +72,14 @@ import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
 let ourManeuverLength = ZERO;
+let ourOsmSearchNoteDialog = theConfig.note.osmSearchNoteDialog;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -185,6 +189,53 @@ function ourAddAllManeuverNote ( maneuverIterator, route ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourAddNote
+@desc This method add or update a note to theTravelNotesData and to the map
+@param {Note} note the note to add
+@param {Route} route The route to witch the notes will be attached
+@param {boolean} isNewNote true when the note is a new note
+@fires updateitinerary
+@fires roadbookupdate
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddNote ( note, routeObjId, isNewNote ) {
+	if ( isNewNote ) {
+		if ( INVALID_OBJ_ID === routeObjId ) {
+			theTravelNotesData.travel.notes.add ( note );
+			theEventDispatcher.dispatch ( 'showtravelnotes' );
+		}
+		else {
+			let route = theDataSearchEngine.getRoute ( routeObjId );
+			route.notes.add ( note );
+			note.chainedDistance = route.chainedDistance;
+			route.notes.sort (
+				( first, second ) => first.distance - second.distance
+			);
+			theEventDispatcher.dispatch ( 'showitinerary' );
+		}
+	}
+	else if ( INVALID_OBJ_ID === routeObjId ) {
+		theEventDispatcher.dispatch ( 'updatetravelnotes' );
+	}
+	else {
+		theEventDispatcher.dispatch ( 'updateitinerary' );
+	}
+	theEventDispatcher.dispatch (
+		'noteupdated',
+		{
+			removedNoteObjId : note.objId,
+			addedNoteObjId : note.objId
+		}
+	);
+	theEventDispatcher.dispatch ( 'roadbookupdate' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourNoteDialog
 @desc This method show the Note dialog and then add or update the note
 @param {Note} note the Note to be added or updated
@@ -202,39 +253,7 @@ function ourAddAllManeuverNote ( maneuverIterator, route ) {
 function ourNoteDialog ( note, routeObjId, isNewNote ) {
 	newNoteDialog ( note, routeObjId, isNewNote )
 		.show ( )
-		.then (
-			( ) => {
-				if ( isNewNote ) {
-					if ( INVALID_OBJ_ID === routeObjId ) {
-						theTravelNotesData.travel.notes.add ( note );
-						theEventDispatcher.dispatch ( 'showtravelnotes' );
-					}
-					else {
-						let route = theDataSearchEngine.getRoute ( routeObjId );
-						route.notes.add ( note );
-						note.chainedDistance = route.chainedDistance;
-						route.notes.sort (
-							( first, second ) => first.distance - second.distance
-						);
-						theEventDispatcher.dispatch ( 'showitinerary' );
-					}
-				}
-				else if ( INVALID_OBJ_ID === routeObjId ) {
-					theEventDispatcher.dispatch ( 'updatetravelnotes' );
-				}
-				else {
-					theEventDispatcher.dispatch ( 'updateitinerary' );
-				}
-				theEventDispatcher.dispatch (
-					'noteupdated',
-					{
-						removedNoteObjId : note.objId,
-						addedNoteObjId : note.objId
-					}
-				);
-				theEventDispatcher.dispatch ( 'roadbookupdate' );
-			}
-		)
+		.then ( ( ) => { ourAddNote ( note, routeObjId, isNewNote ); } )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
 }
 
@@ -269,6 +288,20 @@ function ourNewNote ( latLng ) {
 */
 
 class NoteEditor {
+
+	/*
+	get the status of the osmSearchNoteDialog flag
+	*/
+
+	get osmSearchNoteDialog ( ) { return ourOsmSearchNoteDialog; }
+
+	/*
+	change the status of the osmSearchNoteDialog flag
+	*/
+
+	changeOsmSearchNoteDialog ( ) {
+		ourOsmSearchNoteDialog = ! ourOsmSearchNoteDialog;
+	}
 
 	/**
 	This method add a note with data from osm for each maneuver of a route
@@ -360,20 +393,73 @@ class NoteEditor {
 	@fires roadbookupdate
 	*/
 
-	newSearchNote ( searchResult ) {
-		let note = ourNewNote ( [ searchResult.lat, searchResult.lon ] );
+	newSearchNote ( data ) {
 
+		let noteLatLng = [ data.osmElement.lat, data.osmElement.lon ];
+		let newNoteLatLng = [ data.osmElement.lat, data.osmElement.lon ];
+		let routeObjId = INVALID_OBJ_ID;
+		let distance = Number.MAX_VALUE;
+
+		function selectRoute ( route ) {
+			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
+				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteLatLng );
+				if ( pointAndDistance ) {
+					let distanceToRoute = theGeometry.pointsDistance (
+						noteLatLng,
+						pointAndDistance.latLng
+					);
+					if ( distanceToRoute < distance ) {
+						routeObjId = route.objId;
+						distance = distanceToRoute;
+						newNoteLatLng = pointAndDistance.latLng;
+					}
+				}
+			}
+		}
+
+		if ( ! data.isTravelNote ) {
+			theTravelNotesData.travel.routes.forEach ( selectRoute );
+			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+				selectRoute ( theTravelNotesData.travel.editedRoute );
+			}
+		}
+
+		let note = newNote ( );
+		note.latLng = newNoteLatLng;
+		note.iconLatLng = noteLatLng;
+		note.iconHeight = ICON_DIMENSIONS.height;
+		note.iconWidth = ICON_DIMENSIONS.width;
+
+		if ( data.osmElement.tags.rcn_ref ) {
+			note.iconContent =
+				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				data.osmElement.tags.rcn_ref +
+				'</text></svg></div>';
+		}
+		else {
+			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
+		}
 		note.address =
-			( searchResult.tags [ 'addr:housenumber' ] ? searchResult.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:street' ] ? searchResult.tags [ 'addr:street' ] + ' ' : '' ) +
-			( searchResult.tags [ 'addr:city' ] ? searchResult.tags [ 'addr:city' ] + ' ' : '' );
+			( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+			( data.osmElement.tags [ 'addr:street' ] ? data.osmElement.tags [ 'addr:street' ] + ' ' : '' ) +
+			( data.osmElement.tags [ 'addr:postcode' ] ? data.osmElement.tags [ 'addr:postcode' ] + ' ' : '' ) +
+			( data.osmElement.tags [ 'addr:city' ] ? data.osmElement.tags [ 'addr:city' ] + ' ' : '' );
 
-		note.url = searchResult.tags.website || '';
-		note.phone = searchResult.tags.phone || '';
-		note.tooltipContent = searchResult.tags.name || '';
-		note.popupContent = searchResult.tags.name || '';
+		note.url = data.osmElement.tags.website || '';
+		note.phone = data.osmElement.tags.phone || '';
+		note.tooltipContent = data.osmElement.description || '';
+		note.popupContent = data.osmElement.tags.name || '';
 
-		ourNoteDialog ( note, INVALID_OBJ_ID, true );
+		if ( ! data.isTravelNote && INVALID_OBJ_ID === routeObjId ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
+		}
+		else if ( ourOsmSearchNoteDialog || '' === note.iconContent ) {
+			ourNoteDialog ( note, routeObjId, true );
+		}
+		else {
+			ourAddNote ( note, routeObjId, true );
+		}
 	}
 
 	/**

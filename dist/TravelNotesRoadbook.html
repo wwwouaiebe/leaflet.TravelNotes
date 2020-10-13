@@ -31,7 +31,7 @@
 				 * JavaScript code in this page.
 				 * 
 				 * leaflet.travelnotes - version 1.12.0
-				 * Build 01852 - 2020-08-29T18:08:58+0200 
+				 * Build 00244 - 2020-09-01T21:59:44+0200 
 				 * Copyright 2017 2020 wwwouaiebe 
 				 * Contact: https://www.ouaie.be/
 				 * License: GPL-3.0
@@ -77,7 +77,7 @@
 
 					@------------------------------------------------------------------------------------------------------------------------------
 					*/
-				class{getJsonPromise(e,t){return new Promise((function(o,n){let r=new XMLHttpRequest;r.timeout=2e4,r.ontimeout=function(){n("XMLHttpRequest TimeOut. File : "+r.responseURL)},r.onreadystatechange=function(){if(4===r.readyState)if(200===r.status){let e=null;try{e=JSON.parse(r.responseText)}catch(e){n(e.message+" File: "+r.responseURL)}o(e)}else n("Error XMLHttpRequest - File : "+r.responseURL)},r.open("GET",e,!0),t&&t.forEach(e=>r.setRequestHeader(e.headerName,e.headerValue)),r.overrideMimeType("application/json"),r.send(null)}))}getBinaryPromise(e,t){return new Promise((function(o,n){let r=new XMLHttpRequest;r.timeout=2e4,r.ontimeout=function(){n("XMLHttpRequest TimeOut. File : "+r.responseURL)},r.onload=function(){if(200===r.status){let e=r.response;e?o(e):n("Error XMLHttpRequest - File : "+r.responseURL)}else n("Error XMLHttpRequest - File : "+r.responseURL)},r.open("GET",e,!0),t&&t.forEach(e=>r.setRequestHeader(e.headerName,e.headerValue)),r.responseType="arraybuffer",r.send(null)}))}});
+				class{getTextPromise(e,t){return new Promise((function(o,n){let r=new XMLHttpRequest;r.timeout=2e4,r.ontimeout=function(){n("XMLHttpRequest TimeOut. File : "+r.responseURL)},r.onreadystatechange=function(){4===r.readyState&&(200===r.status?o(r.responseText):n("Error XMLHttpRequest - File : "+r.responseURL))},r.open("GET",e,!0),t&&t.forEach(e=>r.setRequestHeader(e.headerName,e.headerValue)),r.overrideMimeType("text/plain"),r.send(null)}))}getJsonPromise(e,t){return new Promise((function(o,n){let r=new XMLHttpRequest;r.timeout=2e4,r.ontimeout=function(){n("XMLHttpRequest TimeOut. File : "+r.responseURL)},r.onreadystatechange=function(){if(4===r.readyState)if(200===r.status){let e=null;try{e=JSON.parse(r.responseText)}catch(e){n(e.message+" File: "+r.responseURL)}o(e)}else n("Error XMLHttpRequest - File : "+r.responseURL)},r.open("GET",e,!0),t&&t.forEach(e=>r.setRequestHeader(e.headerName,e.headerValue)),r.overrideMimeType("application/json"),r.send(null)}))}getBinaryPromise(e,t){return new Promise((function(o,n){let r=new XMLHttpRequest;r.timeout=2e4,r.ontimeout=function(){n("XMLHttpRequest TimeOut. File : "+r.responseURL)},r.onload=function(){if(200===r.status){let e=r.response;e?o(e):n("Error XMLHttpRequest - File : "+r.responseURL)}else n("Error XMLHttpRequest - File : "+r.responseURL)},r.open("GET",e,!0),t&&t.forEach(e=>r.setRequestHeader(e.headerName,e.headerValue)),r.responseType="arraybuffer",r.send(null)}))}});
 				/**
 					@------------------------------------------------------------------------------------------------------------------------------
 

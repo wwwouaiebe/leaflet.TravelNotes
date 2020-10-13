@@ -46,6 +46,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
@@ -86,10 +88,12 @@ function ourValidate ( something ) {
 		case '1.9.0' :
 		case '1.10.0' :
 		case '1.11.0' :
-			something.objType.version = '1.12.0';
 			if ( 'kArriveDefault' === something.iconName ) {
 				something.distance = DISTANCE.defaultValue;
 			}
+			// eslint break omitted intentionally
+		case '1.12.0' :
+			something.objType.version = '1.13.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );

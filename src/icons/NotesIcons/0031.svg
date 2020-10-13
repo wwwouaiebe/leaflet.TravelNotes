@@ -1,0 +1,12 @@
+<svg viewBox="-3 -3 20 20" xmlns="http://www.w3.org/2000/svg">
+	<g fill="rgb(172,39,172)">
+		<rect x="1" y="6" width="11" height="0.5" />
+		<rect x="2" y="8" width="9.5" height="0.5" />
+		<rect x="3" y="4.5" width="0.5" height="5.5" />
+		<rect x="5" y="4.5" width="0.5" height="5.5" />
+		<rect x="7.5" y="4.5" width="0.5" height="5.5" />
+		<rect x="9.5" y="4.5" width="0.5" height="5.5" />
+		<path d="M5.9,4 L7.9,1 A 0.5,0.5 0 0,1 8.83,1.4 L 7.1,4 Z"/>
+		<path fill-rule="evenodd" d="M 0,4 L 13,4 11,11 2,11 Z M 1.25,5 L 11.75,5 10.25,10 2.75,10 Z"/>
+	</g>
+</svg>

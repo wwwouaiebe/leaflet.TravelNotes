@@ -178,6 +178,7 @@ let ourPrivateConfig = {
 		showDragTooltip : 3
 	},
 	note : {
+		osmSearchNoteDialog : false,
 		reverseGeocoding : false,
 		grip : {
 			size : 10,
@@ -188,6 +189,7 @@ let ourPrivateConfig = {
 			color : 'gray',
 			weight : 1
 		},
+		haveBackground : false,
 		style : '',
 		svgIconWidth : 200,
 		svgAnleMaxDirection :

@@ -1,0 +1,16 @@
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+	<g fill="rgb(102,102,102)">
+		<rect width="4" height="2" x="3" y="9" rx="1" /> 
+		<rect width="4" height="2" x="13" y="9" rx="1" /> 
+		<rect width="2" height="4" x="9" y="3" rx="1" /> 
+	</g>
+	<g fill="none" stroke="rgb(102,102,102)" stroke-width="2" >
+		<circle cx="10" cy="10" r="4" />
+	</g>
+	<g fill="rgb(0,153,0)" stroke-width="0"  >
+		<path d="M 10,13 L 10,15 A 5 5 0 0 0 13.535,6.465 L 12.121,7.879 A 3 3 0 0 1 10,13 Z" />
+		<rect width="2" height="4" x="9" y="13" rx="1" /> 
+		<rect width="4" height="2" x="10.828" y="5.172" rx="1" />
+		<rect width="2" height="4" x="10.828" y="5.172" rx="1" />
+	</g>
+</svg>

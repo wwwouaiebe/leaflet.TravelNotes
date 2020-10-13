@@ -48,6 +48,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
+
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { theUtilities } from '../util/Utilities.js';
@@ -91,7 +93,9 @@ function ourValidate ( something ) {
 		case '1.11.0' :
 			something.address = something.name;
 			something.name = '';
-			something.objType.version = '1.12.0';
+			// eslint break omitted intentionally
+		case '1.12.0' :
+			something.objType.version = '1.13.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );

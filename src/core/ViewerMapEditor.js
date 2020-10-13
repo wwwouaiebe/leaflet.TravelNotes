@@ -208,6 +208,11 @@ function ourAddNote ( noteObjId ) {
 	// and the layerGroup added to the leaflet map and JavaScript map
 	ourAddTo ( note.objId, layerGroup );
 
+	if ( theConfig.note.haveBackground ) {
+		document.querySelectorAll ( '.TravelNotes-MapNote,.TravelNotes-SvgIcon' ).forEach (
+			noteIcon => noteIcon.classList.add ( 'TravelNotes-MapNote-Background' )
+		);
+	}
 	return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
 }
 

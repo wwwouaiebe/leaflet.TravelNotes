@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 			},
 			Roadbook: {
 				files: {
-					'tmp/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
+					'tmp/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
 				}
 			}
 		},
@@ -124,7 +124,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv' ],
 						dest: 'dist/'
 					},
 					{
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv'],
 						dest: 'gh-page/'
 					},
 					{
@@ -264,7 +264,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/cfg/',
-						src: ['*.json'],
+						src: ['*.json', '*.csv'],
 						dest: 'debug/'
 					},
 					{

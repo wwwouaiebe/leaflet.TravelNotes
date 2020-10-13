@@ -67,7 +67,7 @@
 		"lines-around-comment" : [ "warn", { "beforeBlockComment": true , "afterBlockComment": true , "beforeLineComment": true , "afterLineComment": false} ],
 		"max-depth" : [ "warn" , { "max" : 4 } ],
 		"max-len" : [ "warn" , { "code" : 128 } ],
-		"max-nested-callbacks" : [ "warn" , { "max" : 2 } ],
+		"max-nested-callbacks" : [ "warn" , { "max" : 3 } ],
 		"max-params" : [ "warn" , { "max" : 3 } ],
 		"max-statements" : [ "warn", 45 ],
 		"max-statements-per-line" : [ "warn" ],

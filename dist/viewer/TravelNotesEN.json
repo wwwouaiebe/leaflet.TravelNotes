@@ -384,6 +384,26 @@
 		"msgstr" : "Zoom to this result"
 	},
 	{
+		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Expand tree",
+		"msgstr" : "Expand the tree"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Collapse tree",
+		"msgstr" : "Collapse the tree"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Clear tree",
+		"msgstr" : "Unselect all"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - dictionary name",
+		"msgstr" : "Search all"
+	},
+	{
 		"msgid" : "PasswordDialog - password",
 		"msgstr" : "Password"
 	},
@@ -578,14 +598,6 @@
 	{
 		"msgid" : "RoutePropertiesDialog - Width",
 		"msgstr" : "Width : "
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
-		"msgstr" : "Search OpenStreetMap"
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search phrase",
-		"msgstr" : "Search words"
 	},
 	{
 		"msgid" : "ProfileContextMenu - Add a note to the route at this point",

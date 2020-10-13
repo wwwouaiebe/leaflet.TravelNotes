@@ -376,12 +376,48 @@
 		"msgstr" : "You want to create {maneuversLength} notes. For performance reasons, the number of notes is limited to {maxManeuversNotes} for the demo. Change your route."
 	},
 	{
+		"msgid" : "NoteEditor - No route was found",
+		"msgstr" : "No route was found."
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Create a route note with this result",
+		"msgstr" : "Add a route note with this result"
+	},
+	{
 		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
 		"msgstr" : "Add a travel note with this result"
 	},
 	{
+		"msgid" : "OsmSearchContextMenu - Hide note dialog",
+		"msgstr" : "Hide Notes Dialog"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Show note dialog",
+		"msgstr" : "Show Notes Dialog"
+	},
+	{
 		"msgid" : "OsmSearchContextMenu - Zoom to this result",
 		"msgstr" : "Zoom to this result"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
+		"msgstr" : "Search OpenStreetMap"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Expand tree",
+		"msgstr" : "Expand the tree"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Collapse tree",
+		"msgstr" : "Collapse the tree"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Clear tree",
+		"msgstr" : "Unselect all"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - dictionary name",
+		"msgstr" : "Search all"
 	},
 	{
 		"msgid" : "PasswordDialog - password",
@@ -578,14 +614,6 @@
 	{
 		"msgid" : "RoutePropertiesDialog - Width",
 		"msgstr" : "Width : "
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
-		"msgstr" : "Search OpenStreetMap"
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search phrase",
-		"msgstr" : "Search words"
 	},
 	{
 		"msgid" : "ProfileContextMenu - Add a note to the route at this point",

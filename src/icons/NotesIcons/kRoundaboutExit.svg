@@ -1,0 +1,17 @@
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+	<g fill="rgb(102,102,102)">
+		<rect width="3.5" height="2" x="3" y="9" rx="1" /> 
+		<rect width="3.5" height="2" x="13.5" y="9" rx="1" /> 
+		<rect width="2" height="3.5" x="9" y="13.5" rx="1" /> 
+	</g>
+	<g fill="rgb(255,255,255)" stroke="rgb(102,102,102)" stroke-width="2" >
+		<circle cx="10" cy="10" r="4" />
+	</g>
+	<g fill="rgb(0,153,0)">
+		<g transform="rotate(45,10,5)">
+			<rect width="4" height="2" x="8" y="3" rx="1" />
+			<rect width="2" height="4" x="8" y="3" rx="1" />
+		</g>
+		<rect width="2" height="3.5" x="9" y="3" rx="1" /> 
+	</g>
+</svg>

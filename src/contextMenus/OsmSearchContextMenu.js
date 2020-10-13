@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.12.0:
 		- created
+	- v1.13.0:
+		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
+		- Issue #128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200727
 Tests ...
 */
@@ -48,6 +51,9 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theNoteEditor } from '../core/NoteEditor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
+import { theWayPointEditor } from '../core/WayPointEditor.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -81,12 +87,66 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
 	function myGetMenuItems ( ) {
 
+		let latLng = contextMenuEvent.originalEvent.latLng;
+
 		return [
+			{
+				context : theWayPointEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
+				action :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+						?
+						theWayPointEditor.setStartPoint
+						:
+						null,
+				param : latLng
+			},
+			{
+				context : theWayPointEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
+				action :
+					( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId )
+						?
+						null
+						:
+						theWayPointEditor.addWayPoint,
+				param : latLng
+			},
+			{
+				context : theWayPointEditor,
+				name : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
+				action :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+						?
+						theWayPointEditor.setEndPoint
+						:
+						null,
+				param : latLng
+			},
+			{
+				context : theNoteEditor,
+				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
+				action : theNoteEditor.newSearchNote,
+				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : false }
+			},
 			{
 				context : theNoteEditor,
 				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
 				action : theNoteEditor.newSearchNote,
-				param : contextMenuEvent.originalEvent.searchResult
+				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : true }
+			},
+			{
+				context : theNoteEditor,
+				name : theNoteEditor.osmSearchNoteDialog
+					?
+					theTranslator.getText ( 'OsmSearchContextMenu - Hide note dialog' )
+					:
+					theTranslator.getText ( 'OsmSearchContextMenu - Show note dialog' ),
+				action : theNoteEditor.changeOsmSearchNoteDialog
 			},
 			{
 				context : myZoomer,

@@ -376,12 +376,48 @@
 		"msgstr" : "Vous voulez créer {maneuversLength} notes. Pour des raisons de performance, le nombre de notes est limité à {maxManeuversNotes} pour cette démo. Modifiez votre trajet."
 	},
 	{
+		"msgid" : "NoteEditor - No route was found",
+		"msgstr" : "Aucun trajet n'a été trouvé."
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Create a route note with this result",
+		"msgstr" : "Ajouter une note de trajet avec ce résultat"
+	},
+	{
 		"msgid" : "OsmSearchContextMenu - Create a travel note with this result",
 		"msgstr" : "Ajouter une note de voyage avec ce résultat"
 	},
 	{
+		"msgid" : "OsmSearchContextMenu - Hide note dialog",
+		"msgstr" : "Ne pas afficher le dialogue des notes"
+	},
+	{
+		"msgid" : "OsmSearchContextMenu - Show note dialog",
+		"msgstr" : "Afficher le dialogue des notes"
+	},
+	{
 		"msgid" : "OsmSearchContextMenu - Zoom to this result",
 		"msgstr" : "Zoom sur ce résultat"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
+		"msgstr" : "Rechercher dans OpenStreetMap"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Expand tree",
+		"msgstr" : "Étendre l'arborescence"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Collapse tree",
+		"msgstr" : "Réduire l'arborescence"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - Clear tree",
+		"msgstr" : "Tout déselectionner"
+	},
+	{
+		"msgid" : "OsmSearchPaneUI - dictionary name",
+		"msgstr" : "Tout rechercher"
 	},
 	{
 		"msgid" : "PasswordDialog - password",
@@ -533,7 +569,7 @@
 	},
 	{
 		"msgid" : "RouteContextMenu - Save this route in a GPX file",
-		"msgstr" : "Sauver ce trajet dans un fichier GPX"
+		"msgstr" : "Exporter ce trajet dans un fichier GPX"
 	},
 	{
 		"msgid" : "RouteContextMenu - Show this route",
@@ -578,14 +614,6 @@
 	{
 		"msgid" : "RoutePropertiesDialog - Width",
 		"msgstr" : "Largeur : "
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search OpenStreetMap",
-		"msgstr" : "Rechercher dans OpenStreetMap"
-	},
-	{
-		"msgid" : "OsmSearchPaneUI - Search phrase",
-		"msgstr" : "Mots à rechercher"
 	},
 	{
 		"msgid" : "ProfileContextMenu - Add a note to the route at this point",
@@ -673,7 +701,7 @@
 	},
 	{
 		"msgid" : "TravelUI - Not possible to merge a travel when a route is edited",
-		"msgstr" : "Il n'est pas possible de fusionner un voyage quand une route est en cours d'édition"
+		"msgstr" : "Il n'est pas possible de fusionner un voyage quand un trajet est en cours d'édition"
 	},
 	{
 		"msgid" : "TravelUI - Open travel",

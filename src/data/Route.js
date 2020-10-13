@@ -107,7 +107,9 @@ function ourValidate ( something ) {
 		case '1.10.0' :
 		case '1.11.0' :
 			something.editionStatus = something.edited;
-			something.objType.version = '1.12.0';
+			// eslint break omitted intentionally
+		case '1.12.0' :
+			something.objType.version = '1.13.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
