@@ -233,8 +233,6 @@ function ourGetSearchPromises ( ) {
 			let url = theConfig.overpassApiUrl + '?data=[out:json];(' +
 				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 
-			console.log ( url );
-
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
 	}
@@ -548,7 +546,6 @@ class OsmSearchEngine	{
 					}
 				}
 			);
-		console.log ( ourDictionary );
 	}
 }
 
