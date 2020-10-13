@@ -186,9 +186,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Point d'information",
+			"name" : "Bureau d'information",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0011'></div>",
-			"tooltip" : "Point d'information",
+			"tooltip" : "Bureau d'information",
 			"width" : 40,
 			"height" : 40
 		},
@@ -277,16 +277,16 @@
 			"height" : 40
 		},
 		{
-			"name" : "Chambre d'hotes",
+			"name" : "Chambre d’hôtes",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0024'></div>",
 			"tooltip" : "Chambre d'hotes",
 			"width" : 40,
 			"height" : 40
 		},
 		{
-			"name" : "Café",
+			"name" : "Caféteria",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0025'></div>",
-			"tooltip" : "Café",
+			"tooltip" : "Caféteria",
 			"width" : 40,
 			"height" : 40
 		},
@@ -424,9 +424,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Centre de tri",
+			"name" : "Point de recyclage",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0045'></div>",
-			"tooltip" : "Centre de tri",
+			"tooltip" : "Point de recyclage",
 			"width" : 40,
 			"height" : 40
 		},
@@ -438,9 +438,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Gite rural",
+			"name" : "Gîte rural",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0047'></div>",
-			"tooltip" : "Gite rural",
+			"tooltip" : "Gîte rural",
 			"width" : 40,
 			"height" : 40
 		},
@@ -578,9 +578,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Bureau de poste",
+			"name" : "Poste",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0067'></div>",
-			"tooltip" : "Bureau de poste",
+			"tooltip" : "Poste",
 			"width" : 40,
 			"height" : 40
 		},
@@ -608,7 +608,7 @@
 		{
 			"name" : "Notes personnelles",
 			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0071'></div>",
-			"tooltip" : "Police",
+			"tooltip" : "Notes personnelles",
 			"width" : 40,
 			"height" : 40
 		},
@@ -628,28 +628,3 @@
 		}
 	]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
