@@ -218,7 +218,11 @@ function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 							null
 							:
 							theNoteEditor.newRouteNote,
-					param : myRouteObjId
+					param : {
+						routeObjId : myRouteObjId,
+						lat : contextMenuEvent.latlng.lat,
+						lng : contextMenuEvent.latlng.lng
+					}
 				},
 				{
 					context : theNoteEditor,

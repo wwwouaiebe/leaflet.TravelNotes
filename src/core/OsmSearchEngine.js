@@ -230,7 +230,7 @@ function ourGetSearchPromises ( ) {
 	}
 	for ( const [ element, requestString ] of Object.entries ( requestStrings ) ) {
 		if ( '' !== requestString ) {
-			let url = theConfig.overpassApiUrl + '?data=[out:json];(' +
+			let url = theConfig.overpassApiUrl + '?data=[out:json][timeout:20];(' +
 				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );

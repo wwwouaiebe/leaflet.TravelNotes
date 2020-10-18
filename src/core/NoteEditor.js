@@ -369,13 +369,13 @@ class NoteEditor {
 	@fires roadbookupdate
 	*/
 
-	newRouteNote ( routeObjId, contextMenuEvent ) {
-		let route = theDataSearchEngine.getRoute ( routeObjId );
+	newRouteNote ( data ) {
+		let route = theDataSearchEngine.getRoute ( data.routeObjId );
 
 		// the nearest point and distance on the route is searched
 		let latLngDistance = theGeometry.getClosestLatLngDistance (
 			route,
-			[ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
+			[ data.lat, data.lng ]
 		);
 
 		// the note is created

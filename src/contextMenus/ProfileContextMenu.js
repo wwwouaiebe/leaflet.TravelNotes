@@ -83,7 +83,11 @@ function ourNewProfileContextMenu ( contextMenuEvent ) {
 				context : theNoteEditor,
 				name : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
 				action : theNoteEditor.newRouteNote,
-				param : contextMenuEvent.routeObjId
+				param : {
+					routeObjId : contextMenuEvent.routeObjId,
+					lat : contextMenuEvent.latlng.lat,
+					lng : contextMenuEvent.latlng.lng
+				}
 			},
 			{
 				context : zoomer,

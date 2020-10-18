@@ -199,20 +199,21 @@ function ourOnKeyDown ( keyBoardEvent ) {
 function ourOnClickItem ( clickEvent ) {
 	clickEvent.stopPropagation ( );
 	let menuItem = ourMenuItems[ clickEvent.target.menuItem ];
+
 	ourCloseButton.click ( );
 	if ( menuItem.param ) {
 		menuItem.action.call (
 			menuItem.context,
-			menuItem.param,
-			ourContextMenuEvent
+			menuItem.param
 		);
 	}
 	else {
 		menuItem.action.call (
-			menuItem.context,
-			ourContextMenuEvent
+			menuItem.context
 		);
 	}
+
+	// ourCloseButton.click ( );
 }
 
 /**
