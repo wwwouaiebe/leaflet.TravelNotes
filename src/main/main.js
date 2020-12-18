@@ -159,6 +159,7 @@ function ourNewMain ( ) {
 				configPromiseResult.value.printRouteMap.maxTiles = PRINT_MAX_TILES;
 				const MAX_MANEUVERS_NOTES = 10;
 				configPromiseResult.value.note.maxManeuversNotes = MAX_MANEUVERS_NOTES;
+				configPromiseResult.value.note.haveBackground = true;
 				configPromiseResult.value.APIKeys.dialogHaveUnsecureButtons = true;
 			}
 			theConfig.overload ( configPromiseResult.value );

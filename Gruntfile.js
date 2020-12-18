@@ -49,11 +49,6 @@ module.exports = function(grunt) {
 				files: {
 					'src/polyline/Polyline.js' : ['src/polyline/Polyline.template']
 				}
-			},
-			Roadbook: {
-				files: {
-					'tmp/TravelNotesRoadbook.html' : ['src/html/TravelNotesRoadbook.html']
-				}
 			}
 		},
 		stylelint: {
@@ -141,7 +136,7 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'src/html/',
 						src: ['TravelNotesRoadbook.html'],
 						dest: 'dist/'
 					},					
@@ -155,6 +150,18 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotes.min.css'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.min.js'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.min.css'],
 						dest: 'dist/'
 					},
 					{
@@ -211,7 +218,7 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'src/html/',
 						src: ['TravelNotesRoadbook.html'],
 						dest: 'gh-page/'
 					},					
@@ -225,6 +232,18 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'tmp/',
 						src: ['TravelNotes.min.css'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.min.js'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.min.css'],
 						dest: 'gh-page/'
 					},
 					{
@@ -281,8 +300,14 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'src/html/',
 						src: ['TravelNotesRoadbook.html'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
+						cwd: 'tmp/',
+						src: ['TravelNotesRoadbook.html','TravelNotesRoadbook.min.css','TravelNotesRoadbook.min.js'],
 						dest: 'debug/'
 					},
 					{
@@ -370,8 +395,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.registerTask('doc', [ 'jsdoc' ]);
-	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'includes:Roadbook', 'copy:debug', 'clean', 'jsdoc' ]);
-	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'includes:Roadbook', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean', 'jsdoc' ]);
+	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'copy:debug', 'clean', 'jsdoc' ]);
+	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean', 'jsdoc' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

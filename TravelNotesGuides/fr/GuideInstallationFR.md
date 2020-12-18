@@ -9,6 +9,7 @@
 	- [Le contenu du fichier TravelNotesLayers.json](#TravelNotesLayersJson)
 	- [Le contenu des fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json](#TravelNotesNoteDialogJson)
 	- [Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder: dans la boite d'édition des notes](#myTravelNotesNoteDialogJson)
+	- [Configurer "Rechercher dans OpenstreetMap"](#OsmSearch)
 - [Utiliser le viewer](#Viewer)
 - [Traductions](#Translations)
 - [Plugins](#Plugins)
@@ -17,7 +18,7 @@
 ## Où installer Travel & Notes?
 
 Pour des raisons de sécurité, il n'est plus possible d'utiliser Travel & Notes depuis le disque d'un 
-ordinateur. Il est indispensable de passer par l'intermédiaire soit d'un serveur web soit distant, soit
+ordinateur. Il est indispensable de passer par l'intermédiaire soit d'un serveur web distant, soit
 d'un serveur web local de type LAMP or MAMP.
 Voir https://www.mozilla.org/en-US/security/advisories/mfsa2019-21/#CVE-2019-11730
 
@@ -201,6 +202,8 @@ pour le lissage de l'élévation. Valeur par défaut: 0.25
 - __note.theDevil.title__ : le tooltip utilisé pour le bouton "theDevil"
 - __note.theDevil.text__ : le texte utilisé pour le bouton "theDevil"
 - __note.theDevil.noteZoom__ : le zoom utilisé pour le bouton "theDevil" 
+- __note.osmSearchNoteDialog__  : quand cette valeur est true, la boite d'édition des notes est affichée 
+lors de la création d'une note à partir de "Rechercher dans OpenstreetMap'
 - __note.reverseGeocoding__ : quand cette valeur est true, les coordonnées des notes sont remplacées 
 par une adresse.
 - __note.grip.size__ : la dimension de la poignée à l'extrémité de la ligne de rappel d'une note
@@ -210,6 +213,14 @@ par une adresse.
 quand la souris se trouve sur la poignée
 - __note.polyline.color__ : la couleur de la ligne de rappel d'une note
 - __note.polyline.weight__ : l'épaisseur de la ligne de rappel d'une note
+
+
+
+
+- __note.haveBackground__ : quand cette valeur est true, un arrière-plan blanc est affiché avec la note.
+
+
+
 - __note.style__ : le style css utilisé pour représenter une note
 - __note.svgIconWidth__ : le rayon de la zone à cartographier dans l'icône SVG
 - __note.svgAnleMaxDirection.right__ : l'angle maximum de la direction à suivre por l'indication 
@@ -420,6 +431,11 @@ Chaque objet de la collection "preDefinedIconsList" a cinq propriétés:
 ### Le contenu du fichier de configuration pouvant être chargé avec le bouton :file_folder: dans la boite d'édition des notes
 
 L'organisation de ce fichier est identique aux fichiers TravelNotesNoteDialogFR.json et TravelNotesNoteDialogEN.json
+
+<a id="OsmSearch"></a>
+### Configurer "Rechercher dans OpenstreetMap"
+
+Arrive bientôt....
 
 <a id="Viewer"></a>
 ## Utiliser le viewer

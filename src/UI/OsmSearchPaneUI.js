@@ -460,7 +460,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
-				innerHTML : '&#x1f50e'
+				innerHTML : '🔎'
 			},
 			mySearchToolbar
 		)

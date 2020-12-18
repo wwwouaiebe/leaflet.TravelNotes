@@ -4,7 +4,7 @@
 - [Quelques explications sur les termes utilisés](#SomeExplanations)
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
-- [Menus contextuels](#ContextMenus]
+- [Menus contextuels](#ContextMenus)
 - [Interface](#Interface1)
 	- [Barre d'outils en haut de l'interface](#InterfaceToolbar)
 	- [Voyage](#Travel)
@@ -12,6 +12,7 @@
 		- [Boutons de la barre d'outils "Trajets du voyage"](#RouteToolbar)
 		- [Trajets du voyage](#RoutesTravel)
 	- [Itinéraire et notes](#ItineraryAndNotes)
+	- [Rechercher dans OpenStreetMap](#OsmSearch)
 	- [Barre d'outils des modes de parcours et des fournisseurs d'itinéraire](#RouterButtons)
 - [Boites d'édition](#EditBoxes)
 - [Trajets et points de passage](#Routes)	
@@ -272,8 +273,41 @@ Vous pouvez choisir ce que vous désirez voir en cochant les notes et / ou les m
 Lorsque la souris est placée sur une ligne de l'itinéraire, un marqueur est affiché à cet endroit sur 
 la carte.
 
-Un clic droit sur une ligne de l'itinéraire affichera un menu contextuel affichant des commandes
+Un clic droit sur une ligne de l'itinéraire affichera un menu contextuel avec des commandes
 qui permettent de faires des opérations sur la manœuvre ou la note.
+
+<a id="OsmSearch"></a>
+### Rechercher dans OpenStreetMap
+
+Dans cette partie, il est possible de rechercher des points d'intérêts (POI) dans OpenStreetMap.
+Une barre d'outils est affichée dans le haut et ensuite une liste arborescente permettant de choisir les 
+POI à rechercher est affichée.
+
+<img src="OsmSearchFR.PNG" />
+
+- le bouton 🔎 lance la recherche
+- le bouton ▼ ouvre complètement la liste arborescente
+- le bouton ▶ ferme la liste arborescente, à l'exception du premier niveau
+- le bouton ❌ désélecte toute la liste arborescente
+
+La liste arborescente peut être facilement modifiée et adaptée à vos besoins. 
+Voir le [guide d'installation](GuideInstallationFR.md#OsmSearch).
+
+Sélectionnez le type de POI à rechercher dans la liste arborescente et ensuite cliquez sur le bouton 🔎.
+Après quelques instants, les résultats sont affichés:
+
+<img src="OsmSearchResultsFR.PNG" />
+
+Déplacez la souris sur un des résultats. Celui-ci sera affiché sur la carte, de même que un tooltip
+avec tous les tags introduits dans OpenStreetMap.
+
+Un clic droit sur un des résultats montrera un menu contextuel permettant de créer des notes avec ce résultat
+ou de choisir ce résultat comme point de passage pour l'itinéraire en cours d'édition.
+
+La zone de recherche est limitée à la carte affichée sur l'écran avec un maximum de 10 km sur 10 km.
+
+Lorsque le panneau "Rechercher dans OpenStreetMap" est activé, un carré rouge montrant les limites de la prochaine recherche 
+est affiché à l'écran. Le carré vert montre les limites de la recherche précédente.
 
 <a id="RouterButtons"></a>
 ### Barre d'outils des modes de parcours et des fournisseurs d'itinéraire
