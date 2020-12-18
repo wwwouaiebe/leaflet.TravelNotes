@@ -4,7 +4,7 @@
 - [Some explanations on the terms used](#SomeExplanations)
 - [Before you start using Travel & Notes](#BeforeStart)
 	- [How to introduce your access keys in Travel & Notes](#APIKeys)
-- [Context menus](#ContextMenus]
+- [Context menus](#ContextMenus)
 - [Interface](#Interface1)
 	- [Toolbar buttons on top of the interface](#InterfaceToolbar)
 	- [Travel](#Travel)
@@ -12,6 +12,7 @@
 		- [Toolbar buttons "Travel"](#RouteToolbar)
 		- [Travel routes](#RoutesTravel)
 	- [Itinerary and notes](#ItineraryAndNotes)
+	- [Search OpenStreetMap](#OsmSearch)
 	- [Route modes and route providers toolbar](#RouterButtons)
 - [Edit boxes](#EditBoxes)
 - [Routes and waypoints](#Routes)	
@@ -257,8 +258,41 @@ This part includes the maneuvers of the route as well as notes related to the ro
 
 When the mouse is placed on a line of the itinerary, a marker is displayed at this location on the map.
 
-Right-clicking on a route line will display a context menu displaying commands
+Right-clicking on a route line will display a context menu with commands
 which allow operations to be carried out on the maneuver or the note.
+
+<a id="OsmSearch"></a>
+### Search OpenStreetMap
+
+In this part, it is possible to search for points of interest (POI) in OpenStreetMap.
+A toolbar is displayed at the top and then a tree list allowing you to choose the
+POI to search is displayed.
+
+<img src="OsmSearchEN.PNG" />
+
+- the button 🔎 starts the search
+- the button ▼ completely opens the tree list
+- the ▶ button closes the tree list, except for the first level
+- the ❌ button deselects the entire tree list
+
+La liste arborescente peut être facilement modifiée et adaptée à vos besoins. 
+Voir le [guide d'installation](InstallationGuideEN.md#OsmSearch).
+
+Select the type of POI to search from the tree list and then click on the 🔎 button.
+After a few moments, the results are displayed:
+
+<img src="OsmSearchResultsEN.PNG" />
+
+Move the mouse over one of the results. This will be displayed on the map, as well as a tooltip
+with all the tags introduced in OpenStreetMap.
+
+Right clicking on one of the results will show a context menu allowing you to create notes with that result
+or choose this result as the waypoint for the route being edited.
+
+The search area is limited to the map displayed on the screen with a maximum of 10 km by 10 km.
+
+When the "Search OpenStreetMap" panel is activated, a red square showing the limits of the next search
+is displayed on the screen. The green square shows the limits of the previous search.
 
 <a id="RouterButtons"></a>
 ### Route modes and route providers toolbar

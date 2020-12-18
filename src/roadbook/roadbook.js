@@ -92,34 +92,7 @@ let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
 let language = params.get ( 'lng' );
 let pageId = params.get ( 'page' );
 
-function saveFile ( ) {
-	try {
-		let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
-			.innerHTML + '-Roadbook.html';
-		let mapFile = window.URL.createObjectURL (
-			new File (
-				[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
-				fileName,
-				{ type : 'text/plain' }
-			)
-		);
-		let element = document.createElement ( 'a' );
-		element.setAttribute ( 'href', mapFile );
-		element.setAttribute ( 'download', fileName );
-		element.style.display = 'none';
-		document.body.appendChild ( element );
-		element.click ( );
-		document.body.removeChild ( element );
-		window.URL.revokeObjectURL ( mapFile );
-	}
-	catch ( err ) {
-		console.log ( err ? err : 'An error occurs when saving the file' );
-	}
-}
-
 if ( pageId ) {
-
-	document.getElementById ( 'TravelNotes-SaveFile' ).addEventListener ( 'click', saveFile );
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
 		.then ( innerHTML => {

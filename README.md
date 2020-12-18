@@ -39,9 +39,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.12.0 branch
+### v1.13.0 branch
 
-The [v1.12.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contains the source files of the last stable version.
+The [v1.13.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.13.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -99,6 +99,14 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - Performance is improved. Memory usage has been greatly reduced and load times reduced. This is particularly noticeable for long travels.
 - [All code is documented](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/)
 
+###  What's new in release 1.13.0
+
+- It is possible to search for points of interest in OpenStreetMap.
+- Notes can be created from search results in OpenStreetMap.
+- New predefined notes have been added. There are now over 70 predefined notes.
+- The background of the notes can be transparent.
+- All predefined note icons are now in svg.
+
 <a id="fr" />
 
 ## Guides
@@ -138,9 +146,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.12.0
+### branche v1.13.0
 
-La [branche v1.12.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.12.0) contient les sources de la dernière version stable.
+La [branche v1.13.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.13.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -202,3 +210,10 @@ dans des menus contextuels qui sont disponibles sur la carte ou dans l'interface
 - Les performances sont améliorées. L'utilisation de la mémoire a fortement diminué et les temps de chargement réduits. Cela est particulièrement sensible pour de longs voyages.
 - [Tout le code est documenté](https://wwwouaiebe.github.io/leaflet.TravelNotes/TechDoc/)
 
+### Quoi de neuf dans la version 1.13.0
+
+- Il est possible de rechercher des points d'intérêt dans OpenStreetMap.
+- Des notes peuvent être créées à partir des résultats de recherche dans OpenStreetMap.
+- De nouvelles notes prédéfinies ont été ajoutées. Il y a maintenant plus de 70 notes prédéfinies.
+- L'arrière-plan des notes peut être transparent.
+- Toutes les icônes des notes prédéfinies sont désormais en svg.

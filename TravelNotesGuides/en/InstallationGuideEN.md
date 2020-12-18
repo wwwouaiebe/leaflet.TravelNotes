@@ -9,6 +9,7 @@
 	- [The contents of the TravelNotesLayers.json file](#TravelNotesLayersJson)
 	- [The contents of the TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json file](#TravelNotesNoteDialogJson)
 	- [The contents of the configuration file that can be loaded with the button :file_folder: in the notes dialog](#myTravelNotesNoteDialogJson)
+	- ["Search OpenstreetMap" settings](#OsmSearch)
 - [Using the viewer](#Viewer)
 - [Translations](#Translations)
 - [Plugins](#Plugins)
@@ -198,6 +199,8 @@ to the notes dialog box
 - __note.theDevil.title__ : the tooltip for "theDevil" button
 - __note.theDevil.text__ : the text for "theDevil" button
 - __note.theDevil.noteZoom__ : le zoom for "theDevil" button
+- __note.osmSearchNoteDialog__  : when this value is true, the notes edit box is displayed
+when creating a note from 'Search OpenstreetMap'
 - __note.reverseGeocoding__ : when this value is true, the coordinates of the notes are replaced 
 by an address.
 - __note.grip.size__ : the size of the handle at the end of the line of a note.
@@ -206,6 +209,7 @@ by an address.
 when the mouse is on the handle
 - __note.polyline.color__ : the color of the line of a note.
 - __note.polyline.weight__ : the width of the line of a note.
+- __note.haveBackground__ : when this value is true, a white background is displayed with the note.
 - __note.style__ : the css style used to represent a note.
 - __note.svgIconWidth__ : the radius of the area to be mapped in the SVG icon
 - __note.svgAnleMaxDirection.right__ : the maximum angle of the direction to follow for the indication 
@@ -414,6 +418,11 @@ Each object in the "preDefinedIconsList" collection has five properties:
 ### The contents of the configuration file that can be loaded with the button :file_folder: in the notes dialog
 
 The organization of this file is identical to the files TravelNotesNoteDialogFR.json and TravelNotesNoteDialogEN.json
+
+<a id="OsmSearch"></a>
+### "Search OpenstreetMap" settings
+
+Coming soon....
 
 <a id="Viewer"></a>
 ## Using the viewer
