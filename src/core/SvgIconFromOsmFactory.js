@@ -673,7 +673,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				pointsAttribute += points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
 					points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 			}
-			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			let polyline = document.createElementNS ( 'https://www.w3.org/2000/svg', 'polyline' );
 			polyline.setAttributeNS ( null, 'points', pointsAttribute );
 			polyline.setAttributeNS ( null, 'class', 'TravelNotes-OSM-Itinerary' );
 			polyline.setAttributeNS (
@@ -747,7 +747,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 							points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 					}
 
-					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+					let polyline = document.createElementNS ( 'https://www.w3.org/2000/svg', 'polyline' );
 					polyline.setAttributeNS ( null, 'points', pointsAttribute );
 					polyline.setAttributeNS (
 						null,
@@ -781,7 +781,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myCreateSvg ( ) {
 		const FOUR = 4;
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg = document.createElementNS ( 'https://www.w3.org/2000/svg', 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',

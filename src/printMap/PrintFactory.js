@@ -518,7 +518,7 @@ function ourNewPrintFactory ( ) {
 		}
 
 		leafletLayer.options.attribution =
-			' &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+			' &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			layer.attribution +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +

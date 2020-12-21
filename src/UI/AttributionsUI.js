@@ -81,8 +81,8 @@ class AttributionsUI {
 
 	set attributions ( attributions ) {
 		document.getElementById ( 'TravelNotes-AttributionsUI' ).innerHTML =
-			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
-			'| &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+			'&copy; <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+			'| &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +

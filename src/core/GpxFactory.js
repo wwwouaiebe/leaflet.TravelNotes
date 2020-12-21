@@ -84,9 +84,9 @@ function ourNewGpxFactory ( ) {
 
 		// header
 		myGpxString = '<?xml version="1.0"?>' + TAB_0;
-		myGpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-		'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
+		myGpxString += '<gpx xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" ' +
+		'xmlns:xsd="https://www.w3.org/2001/XMLSchema" ' +
+		'xsi:schemaLocation="https://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd" ' +
 		'version="1.1" creator="leaflet.TravelNotes">';
 	}
 
