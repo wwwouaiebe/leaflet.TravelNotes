@@ -25,7 +25,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},		
 	{
 		"service":"wmts",
@@ -39,7 +39,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -53,7 +53,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -67,7 +67,7 @@
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -99,7 +99,7 @@
 		"providerName":"IGN",
 		"providerKeyNeeded":false,
 		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='https://topomapviewer.ngi.be/conditions/conditions.html' target='_blank'>Conditions d&apos;utilisation </a>",
-		"getCapabilitiesUrl":"http://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
+		"getCapabilitiesUrl":"https://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
 	},
 	{
 		"service":"wmts",
