@@ -23,6 +23,8 @@ Changes:
 		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
 	- v1.11.0:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
+	- v1.14.0:
+		- Issue #133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200801
 Tests ...
 
@@ -72,7 +74,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -281,37 +283,6 @@ class APIKeysManager {
 			)
 				.then ( ourOnServerFileFound )
 				.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
-		}
-	}
-
-	/**
-	This method set an API key from a string
-	@param {string} urlString a string with the provider name followed by 'ProviderKey=' followed by the provider API key
-	*/
-
-	setKeyFromUrl ( urlString ) {
-		let cutPosition = urlString.indexOf ( '=' );
-		if ( NOT_FOUND < cutPosition ) {
-			let providerName = urlString.substr ( ZERO, cutPosition );
-			providerName =
-				providerName
-					.substr ( ZERO, providerName.length - 'ProviderKey'.length )
-					.toLowerCase ( );
-			let providerKey = urlString.substr ( cutPosition + ONE );
-			try {
-				atob ( providerKey ); // do nothing but throw if invalid base64 string
-				if ( theUtilities.storageAvailable ( 'sessionStorage' ) && theConfig.APIKeys.saveToSessionStorage ) {
-					sessionStorage.setItem ( providerName + 'ProviderKey', providerKey );
-				}
-				ourSetKey ( providerName, providerKey );
-				let provider = theTravelNotesData.providers.get ( providerName );
-				if ( provider ) {
-					provider.providerKey = providerKey;
-				}
-			}
-			catch ( err ) {
-				console.log ( err ? err : 'Invalid base64 encoded provider key' );
-			}
 		}
 	}
 

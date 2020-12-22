@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		- created
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+	- v1.14.0:
+		- Issue #133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200823
 Tests ...
 */
@@ -50,7 +52,6 @@ import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -58,7 +59,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 
-import { LAT_LNG, ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -90,29 +91,17 @@ function ourNewMain ( ) {
 
 	function myReadURL ( ) {
 		const FOUR = 4;
-		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( ONE )
-			.split ( '&' ) )
+		window.location.search.substr ( ONE ).split ( '&' )
 			.forEach (
 				urlSearchSubString => {
-					if ( NOT_FOUND === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-							myTravelUrl = decodeURIComponent (
-								escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
-						}
-						else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-							myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
-						}
-						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
-						newUrlSearch += urlSearchSubString;
+					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+						myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
 					}
-					else {
-						theAPIKeysManager.setKeyFromUrl ( urlSearchSubString );
+					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
 					}
 				}
 			);
-		let stateObj = { index : 'bar' };
-		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
 	/**

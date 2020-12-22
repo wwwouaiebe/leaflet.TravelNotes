@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	Changes:
 	- v1.6.0:
 		- created
+	- v1.14.0:
+		- Issue #133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200824
 Tests ...
 */
@@ -85,13 +87,11 @@ function ourNewMainViewer ( ) {
 	function myReadURL ( ) {
 		const THREE = 3;
 		const FOUR = 4;
-		( decodeURI ( window.location.search ).substr ( ONE )
-			.split ( '&' ) )
+		window.location.search.substr ( ONE ).split ( '&' )
 			.forEach (
 				urlSearchSubString => {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myTravelUrl = decodeURIComponent (
-							escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
+						myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
@@ -116,6 +116,9 @@ function ourNewMainViewer ( ) {
 	function myLoadConfig ( configPromiseResult ) {
 		if ( 'fulfilled' === configPromiseResult.status ) {
 			configPromiseResult.value.language = myLanguage;
+			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+				configPromiseResult.value.note.haveBackground = true;
+			}
 			theConfig.overload ( configPromiseResult.value );
 			return '';
 		}
