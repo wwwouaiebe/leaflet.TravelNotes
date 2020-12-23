@@ -31,6 +31,8 @@ Changes:
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+	- v1.14.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200811
 Tests ...
 */
@@ -191,12 +193,10 @@ function ourNewBaseDialog ( ) {
 			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
 		);
 		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
-		let dialogMaxHeight =
-			myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
-		myDialogDiv.setAttribute (
-			'style',
-			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
+		myDialogDiv.style.top = String ( myDialogY ) + 'px';
+		myDialogDiv.style.left = String ( myDialogX ) + 'px';
+		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
 	/**
@@ -492,10 +492,9 @@ function ourNewBaseDialog ( ) {
 		);
 		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
 		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
-		myDialogDiv.setAttribute (
-			'style',
-			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		myDialogDiv.style.top = String ( myDialogY ) + 'px';
+		myDialogDiv.style.left = String ( myDialogX ) + 'px';
+		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
 	/**

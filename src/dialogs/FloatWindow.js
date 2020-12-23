@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.7.0:
 		- created
+	- v1.14.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200816
 Tests ...
 */
@@ -118,12 +120,11 @@ function ourNewFloatWindow ( ) {
 			myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
 		);
 		myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
-		let dialogMaxHeight =
+		let windowMaxHeight =
 			myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
-		myWindowDiv.setAttribute (
-			'style',
-			'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		myWindowDiv.style.top = String ( myWindowY ) + 'px';
+		myWindowDiv.style.left = String ( myWindowX ) + 'px';
+		myWindowDiv.style [ 'max-height' ] = String ( windowMaxHeight ) + 'px';
 	}
 
 	/**

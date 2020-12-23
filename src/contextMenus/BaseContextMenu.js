@@ -25,6 +25,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v1.14.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200727
 Tests ...
  */
@@ -381,10 +383,12 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
 		if ( parentDiv ) {
-			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;right:' + MENU_MARGIN + 'px;' );
+			ourContainer.style.top = String ( menuTop ) + 'px';
+			ourContainer.style.right = String ( MENU_MARGIN ) + 'px';
 		}
 		else {
-			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+			ourContainer.style.top = String ( menuTop ) + 'px';
+			ourContainer.style.left = String ( menuLeft ) + 'px';
 		}
 	}
 

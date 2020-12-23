@@ -22,6 +22,8 @@ Changes:
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
 		- issue #103 : Review the attributions
+	- v1.14.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200821
 Tests ...
 */
@@ -130,13 +132,9 @@ let ourButtonTop = ZERO;
 */
 
 function ourOnMouseEnterLayerButton ( mouseEnterEvent ) {
-	mouseEnterEvent.target.setAttribute (
-		'style',
-		'color:' +
-			mouseEnterEvent.target.layer.toolbar.backgroundColor +
-			';background-color:' +
-			mouseEnterEvent.target.layer.toolbar.color
-	);
+
+	mouseEnterEvent.target.style.color = mouseEnterEvent.target.layer.toolbar.backgroundColor;
+	mouseEnterEvent.target.style[ 'background-color' ] = mouseEnterEvent.target.layer.toolbar.color;
 }
 
 /**
@@ -150,13 +148,8 @@ function ourOnMouseEnterLayerButton ( mouseEnterEvent ) {
 */
 
 function ourOnMouseLeaveLayerButton ( mouseLeaveEvent ) {
-	mouseLeaveEvent.target.setAttribute (
-		'style',
-		'color:' +
-			mouseLeaveEvent.target.layer.toolbar.color +
-			';background-color:' +
-			mouseLeaveEvent.target.layer.toolbar.backgroundColor
-	);
+	mouseLeaveEvent.target.style.color = mouseLeaveEvent.target.layer.toolbar.color;
+	mouseLeaveEvent.target.style[ 'background-color' ] = mouseLeaveEvent.target.layer.toolbar.backgroundColor;
 }
 
 /**

@@ -27,6 +27,8 @@ Changes:
 		- Issue #106 : Profiles are not hidden when printing the route maps
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200508
 Tests ...
 
@@ -141,14 +143,11 @@ function ourNewPrintFactory ( ) {
 
 		let body = document.querySelector ( 'body' );
 		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, body );
-		dummyDiv.setAttribute (
-			'style',
-			'position:absolute;top:0,left:0;width:' +
-				( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) +
-				'mm;height:' +
-				( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) +
-				'mm;'
-		);
+		dummyDiv.style.position = 'absolute';
+		dummyDiv.style.top = '0';
+		dummyDiv.style.left = '0';
+		dummyDiv.style.width = String ( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) + 'mm';
+		dummyDiv.style.height = String ( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) + 'mm';
 		const TILE_SIZE = 256;
 		myTilesPage = Math.ceil ( dummyDiv.clientWidth / TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / TILE_SIZE );
 		let topLeftScreen = theGeometry.screenCoordToLatLng ( ZERO, ZERO );
@@ -592,15 +591,9 @@ function ourNewPrintFactory ( ) {
 			viewDiv.classList.add ( 'TravelNotes-PrintPageBreak' );
 		}
 
-		// setting the size given by theuser in mm
-		viewDiv.setAttribute (
-			'style',
-			'width:' +
-				myPrintData.paperWidth +
-				'mm;height:' +
-				myPrintData.paperHeight +
-				'mm;'
-		);
+		// setting the size given by the user in mm
+		viewDiv.style.width = String ( myPrintData.paperWidth ) + 'mm';
+		viewDiv.style.height = String ( myPrintData.paperHeight ) + 'mm';
 
 		// creating markers for notes
 		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
