@@ -781,7 +781,7 @@
 	},
 	{
 		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Move your mouse over the black rectangl <span class='TravelNotes-Note-WhiteBlack'> Travel &amp; Notes </span>in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (&#x1f511; button on top of interface) to enter your access key.</p>"
+		"msgstr" : "<p>Move your mouse over the black rectangl <span class='TravelNotes-Note-WhiteBlack'> Travel &amp; Notes </span>in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (🔑 button on top of interface) to enter your access key.</p>"
 	},
 	{
 		"msgid" : "Help - Complete the APIKeys",

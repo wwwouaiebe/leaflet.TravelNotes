@@ -23,6 +23,8 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
+	- v1.14.0:
+		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200808
 Tests ...
 */
@@ -402,7 +404,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 				// It's a passing street ... saving name...
 				while ( ZERO !== streetOcurrences ) {
-					myStreets = '' === myStreets ? wayName : myStreets + ' &#x2AA5; ' + wayName;
+					myStreets = '' === myStreets ? wayName : myStreets + ' ⪥  ' + wayName; // ⪥  = ><
 					streetOcurrences --;
 				}
 			}
@@ -411,19 +413,19 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		if ( AT_START === myPositionOnRoute ) {
 
 			// It's the start point adding a green circle to the outgoing street
-			myStreets = '&#x1F7E2; ' + outgoingStreet;
+			myStreets = '🟢 ' + outgoingStreet;
 		}
 		else if ( AT_END === myPositionOnRoute ) {
 
 			// It's the end point adding a red circle to the incoming street
-			myStreets = incomingStreet + ' &#x1F534;';
+			myStreets = incomingStreet + ' 🔴 ';
 		}
 		else {
 
 			// Adiing the incoming and outgoing streets and direction arrow
 			myStreets =
 				incomingStreet +
-				( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
+				( '' === myStreets ? '' : ' ⪥  ' + myStreets ) + // ⪥ = ><
 				' ' + myDirectionArrow + ' ' +
 				outgoingStreet;
 		}
@@ -585,35 +587,35 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		if ( null !== myDirection ) {
 			if ( myDirection < theConfig.note.svgAnleMaxDirection.right ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
-				myDirectionArrow = '&#x1f882;';
+				myDirectionArrow = '🢂';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight right' );
-				myDirectionArrow = '&#x1f885;';
+				myDirectionArrow = '🢅';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.continue ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Continue' );
-				myDirectionArrow = '&#x1f881;';
+				myDirectionArrow = '🢁';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight left' );
-				myDirectionArrow = '&#x1f884;';
+				myDirectionArrow = '🢄';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.left ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn left' );
-				myDirectionArrow = '&#x1f880;';
+				myDirectionArrow = '🢀';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp left' );
-				myDirectionArrow = '&#x1f887;';
+				myDirectionArrow = '🢇';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp right' );
-				myDirectionArrow = '&#x1f886;';
+				myDirectionArrow = '🢆';
 			}
 			else {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
-				myDirectionArrow = '&#x1f882;';
+				myDirectionArrow = '🢂';
 			}
 		}
 

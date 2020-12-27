@@ -23,6 +23,7 @@ Changes:
 		- issue #103 : Review the attributions
 	- v1.14.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200821
 Tests ...
 */
@@ -84,11 +85,11 @@ class AttributionsUI {
 
 	set attributions ( attributions ) {
 		let attributionsString =
-			'<span>&copy; <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
-			'| &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
+			'<span>© <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+			'| © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
-			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
+			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a></span>';
 
 		let attributDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );

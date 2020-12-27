@@ -30,6 +30,8 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200731
 Tests ...
 */
@@ -78,7 +80,7 @@ let ourPrivateConfig = {
 		theDevil : {
 			addButton : false,
 			title : 'Reminder! The devil will know everything about you',
-			text : '&#x1f47f;'
+			text : '👿'
 		}
 	},
 	mouseUI : {

@@ -30,6 +30,7 @@ Changes:
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
+		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200508
 Tests ...
 
@@ -518,10 +519,10 @@ function ourNewPrintFactory ( ) {
 		}
 
 		leafletLayer.options.attribution =
-			' &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
+			' © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			layer.attribution +
-			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
+			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
 
 		return leafletLayer;
