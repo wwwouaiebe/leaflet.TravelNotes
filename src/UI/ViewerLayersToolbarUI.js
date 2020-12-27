@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200822
 Tests ...
 */
@@ -134,7 +136,7 @@ function ourCreateLayerButton ( layer ) {
 			className : 'TravelNotes-ViewerLayersToolbarUI-Button',
 			title : layer.name,
 			layer : layer,
-			innerHTML : layer.toolbar.text,
+			textContent : layer.toolbar.text,
 			style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
 		},
 		ourLayersToolbar
@@ -177,7 +179,7 @@ class ViewerLayersToolbarUI {
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
 				title : 'My position',
-				innerHTML : '&#x1f310;',
+				textContent : '🌐',
 				style : 'color:black;background-color:white'
 			},
 			ourLayersToolbar
@@ -188,7 +190,7 @@ class ViewerLayersToolbarUI {
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
 				title : 'Zoom on the travel',
-				innerHTML : '&#x1f50d;',
+				textContent : '🔍',
 				style : 'color:black;background-color:white'
 			},
 			ourLayersToolbar

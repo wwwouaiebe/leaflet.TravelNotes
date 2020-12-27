@@ -1,108 +1,108 @@
 { "editionButtons" : 
 	[
 		{
-			"title" : "div",
+			"title" : "<span title='Insérer une balise &lt;div&gt; (division)'>div</span>",
 			"htmlBefore" : "<div>",
 			"htmlAfter" :  "</div>"
 		},
 		{
-			"title" : "p",
+			"title" : "<span title='Insérer une balise &lt;p&gt; (paragraphe)'>p</span>",
 			"htmlBefore" : "<p>",
 			"htmlAfter" : "</p>"
 		},
 		{
-			"title" : "span",
+			"title" : "<del title='Insérer une balise &lt;del&gt; (texte barré)'>del</del>",
+			"htmlBefore" : "<del>",
+			"htmlAfter" : "</del>"
+		},
+		{
+			"title" : "<ins title='Insérer une balise &lt;ins&gt; (texte souligné)'>ins</ins>",
+			"htmlBefore" : "<ins>",
+			"htmlAfter" : "</ins>"
+		},
+		{
+			"title" : "<span title='Insérer une balise &lt;span&gt; (texte spécial)'>span</span>",
 			"htmlBefore" : "<span>",
 			"htmlAfter" : "</span>"
 		},
 		{
-			"title" : "a",
+			"title" : "<span title='Insérer une balise &lt;a&gt; (lien)'>a</span>",
 			"htmlBefore" : "<a target='_blank' href=''>",
 			"htmlAfter" : "</a>"
 		},
 		{
-			"title": "&lt;li&gt;●&lt;li&gt;",
-			"htmlBefore": "<li>",
-			"htmlAfter": "</li>"
-		}, 	
+			"title" : "<mark title='Insérer une balise &lt;mark&gt; (texte surligné)'>mark</mark>",
+			"htmlBefore" : "<mark>",
+			"htmlAfter" : "</mark>"
+		},
 		{
-			"title" : "<span style='color:white;background-color:red'>Rouge</span>",
-			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"title" : "<span class='TravelNotes-Note-WhiteRed' title='Insérer un arrière-plan rouge')>Rouge</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteRed'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:green'>Vert</span>",
-			"htmlBefore" : "<span style='color:white;background-color:green'>",
+			"title" : "<span class='TravelNotes-Note-WhiteGreen' title='Insérer un arrière-plan vert'>Vert</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteGreen'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:blue'>Bleu</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBlue' title='Insérer un arrière-plan bleu'>Bleu</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBlue'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:brown'>Brun</span>",
-			"htmlBefore" : "<span style='color:white;background-color:brown'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBrown' title='Insérer un arrière-plan brun'>Brun</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown''>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:black'>Noir</span>",
-			"htmlBefore" : "<span style='color:white;background-color:black'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBlack' title='Insérer un arrière-plan noir'>Noir</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBlack'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='border:solid 0.1em'>Blanc</span>",
-			"htmlBefore" : "<span style='border:solid 0.1em'>",
+			"title" : "<span class='TravelNotes-Note-BlackWhite' title='Insérer un texte encadré'>Blanc</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-BlackWhite'>",
 			"htmlAfter" : "</span>"
 		},
 		{
-			"title": "⮜",
+			"title": "<span title='Insérer un caractère 🚲'>🚲</span>",
+			"htmlBefore": "🚲"
+		}, 
+		{
+			"title": "<span title='Insérer un caractère ⮜'>⮜</span>",
 			"htmlBefore": "⮜"
 		}, 
 		{
-			"title": "⮞",
+			"title": "<span title='Insérer un caractère ⮞'>⮞</span>",
 			"htmlBefore": "⮞"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>&nbsp;</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title": "&#x1F6B2;",
-			"htmlBefore": "&nbsp;&#x1F6B2;&nbsp;"
-		}, 
-		{
-			"title" : "<span style='text-decoration: underline'>U</span>",
-			"htmlBefore" : "<span style='text-decoration: underline'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title": "Å",
+			"title": "<span title='Insérer un caractère Å'>Å</span>",
 			"htmlBefore": "Å"
 		}, 
 		{
-			"title": "å",
+			"title": "<span title='Insérer un caractère å'>å</span>",
 			"htmlBefore": "å"
 		}, 
 		{
-			"title": "Æ",
+			"title": "<span title='Insérer un caractère Æ'>Æ</span>",
 			"htmlBefore": "Æ"
 		}, 
 		{
-			"title": "æ",
+			"title": "<span title='Insérer un caractère æ'>æ</span>",
 			"htmlBefore": "æ"
 		}, 
 		{
-			"title": "Ø",
+			"title": "<span title='Insérer un caractère Ø'>Ø</span>",
 			"htmlBefore": "Ø"
 		}, 
 		{
-			"title": "ø",
+			"title": "<span title='Insérer un caractère ø'>ø</span>",
 			"htmlBefore": "ø"
 		},
 		{
-			"title": "&amp;nbsp;",
+			"title": "<span title='Insérer un espace insécable'>&amp;nbsp;</span>",
 			"htmlBefore": "&nbsp;"
 		}
 	],

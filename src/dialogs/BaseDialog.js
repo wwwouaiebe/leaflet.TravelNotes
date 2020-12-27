@@ -33,6 +33,7 @@ Changes:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200811
 Tests ...
 */
@@ -73,7 +74,7 @@ Box model
 | | +---------------------------------------------------------------------------------------------+ |               |
 | |                                                                                                 |               |
 | | +- .TravelNotes-BaseDialog-HeaderDiv ---------------------------------------------------------+ |               |
-| | |  BaseDialog.title = innerHTML                                                               | |               |
+| | |  BaseDialog.title                                                                           | |               |
 | | +---------------------------------------------------------------------------------------------+ |               |
 | |                                                                                                 |               |
 | | +- .TravelNotes-BaseDialog-ContentDiv --------------------------------------------------------+ |               |
@@ -107,6 +108,7 @@ Box model
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { ZERO, TWO } from '../util/Constants.js';
 
 const DRAG_MARGIN = 20;
@@ -341,7 +343,7 @@ function ourNewBaseDialog ( ) {
 		myCancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c', // 274c = ❌
+				textContent : '❌',
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
@@ -465,7 +467,7 @@ function ourNewBaseDialog ( ) {
 		myOkButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x1f197;', // 1f197 = 🆗
+				textContent : '🆗',
 				className : 'TravelNotes-BaseDialog-Button'
 			},
 			myFooterDiv
@@ -585,7 +587,7 @@ function ourNewBaseDialog ( ) {
 		The title of the dialog
 		*/
 
-		set title ( Title ) { myHeaderDiv.innerHTML = Title; }
+		set title ( Title ) { myHeaderDiv.textContent = Title; }
 
 		/**
 		The content of the dialog. Read only but remember it's an HTMLElement...
@@ -621,7 +623,7 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showError ( errorText ) {
-			myErrorDiv.innerHTML = errorText;
+			myErrorDiv.appendChild ( theHTMLParserSerializer.parse ( errorText ).firstChild );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 
@@ -630,7 +632,7 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		hideError ( ) {
-			myErrorDiv.innerHTML = '';
+			myErrorDiv.textContent = '';
 			myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

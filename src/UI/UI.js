@@ -30,6 +30,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -202,7 +204,7 @@ class UI {
 			'div',
 			{
 				id : 'TravelNotes-UI-MainDiv-Title',
-				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
+				textContent : 'Travel\u00A0\u0026\u00A0Notes'
 			},
 			ourMainDiv
 		);

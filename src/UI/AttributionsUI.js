@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.9.0:
 		- issue #103 : Review the attributions
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200821
 Tests ...
 */
@@ -46,6 +48,7 @@ Tests ...
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -80,13 +83,21 @@ class AttributionsUI {
 	*/
 
 	set attributions ( attributions ) {
-		document.getElementById ( 'TravelNotes-AttributionsUI' ).innerHTML =
-			'&copy; <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+		let attributionsString =
+			'<span>&copy; <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			'| &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
 			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a></span>';
+
+		let attributDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );
+		while ( attributDiv.firstChild ) {
+			attributDiv.removeChild ( attributDiv.firstChild );
+		}
+
+		attributDiv.appendChild ( theHTMLParserSerializer.parse ( attributionsString ).firstChild.firstChild );
+
 	}
 }
 

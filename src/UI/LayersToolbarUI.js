@@ -24,6 +24,7 @@ Changes:
 		- issue #103 : Review the attributions
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200821
 Tests ...
 */
@@ -279,7 +280,7 @@ function ourCreateLayerButton ( layer ) {
 			className : 'TravelNotes-LayersToolbarUI-Button',
 			title : layer.name,
 			layer : layer,
-			innerHTML : layer.toolbar.text,
+			textContent : layer.toolbar.text,
 			style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
 		},
 		ourLayersToolbarButtonsDiv
@@ -304,16 +305,25 @@ function ourCreateLayerButton ( layer ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourCreateLinkButton ( href, title, text ) {
+function ourCreateLinkButton ( href, title, textContent ) {
 	let linkButton = theHTMLElementsFactory.create (
 		'div',
 		{
 			type : 'link',
-			className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave',
-			innerHTML : '<a href="' + href + '" title="' + title + '" target="_blank">' + text + '</a>'
+			className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave'
 		},
 		ourLayersToolbarButtonsDiv
 	);
+	theHTMLElementsFactory.create (
+		'a',
+		{
+			href : href,
+			title : title,
+			textContent : textContent
+		},
+		linkButton
+	);
+
 	linkButton.addEventListener ( 'mouseenter', ourOnMouseEnterLinkButton, false );
 	linkButton.addEventListener ( 'mouseleave', ourOnMouseLeaveLinkButton, false );
 	ourButtonsHeight += linkButton.clientHeight;
@@ -394,7 +404,7 @@ class LayersToolbarUI {
 			'div',
 			{
 				id : 'TravelNotes-LayersToolbarUI-Header',
-				innerHTML : theTranslator.getText ( 'LayersToolbarUI - Layers' )
+				textContent : theTranslator.getText ( 'LayersToolbarUI - Layers' )
 			},
 			ourLayersToolbar
 		);

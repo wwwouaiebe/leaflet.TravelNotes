@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.11.0:
 		- created
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200822
 Tests ...
 */
@@ -126,7 +128,7 @@ function ourNewWaitUI ( ) {
 		*/
 
 		showInfo ( info ) {
-			myMessageDiv.innerHTML = info;
+			myMessageDiv.textContent = info;
 		}
 
 		/**

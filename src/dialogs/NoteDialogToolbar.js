@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200815
 Tests ...
 */
@@ -87,6 +89,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 let ourButtons = [];
@@ -138,13 +141,14 @@ function ourAddButtons ( ) {
 				'button',
 				{
 					type : 'button',
-					innerHTML : editionButton.title || '?',
 					htmlBefore : editionButton.htmlBefore || '',
 					htmlAfter : editionButton.htmlAfter || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
 				},
 				ourToolbarDiv
 			);
+			newButton.appendChild ( theHTMLParserSerializer.parse ( editionButton.title || '?' ) );
+
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 
 		}
@@ -235,7 +239,7 @@ function ourCreateToolbarButtons ( ) {
 		{
 			className : 'TravelNotes-BaseDialog-Button',
 			title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-			innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			textContent : '📂'
 		},
 		ourToolbarDiv
 	);

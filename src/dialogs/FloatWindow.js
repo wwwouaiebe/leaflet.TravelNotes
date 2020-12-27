@@ -22,6 +22,7 @@ Changes:
 		- created
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -191,7 +192,7 @@ function ourNewFloatWindow ( ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c',
+				textContent : '❌',
 				className : 'TravelNotes-FloatWindow-CancelButton',
 				title : theTranslator.getText ( 'FloatWindow - Close' )
 			},

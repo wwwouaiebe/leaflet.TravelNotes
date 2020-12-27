@@ -29,6 +29,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200508
 Tests ...
 
@@ -660,7 +661,7 @@ function ourNewPrintFactory ( ) {
 				id : 'TravelNotes-PrintToolbar-PrintButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Print' ),
-				innerHTML : '&#x1F5A8;&#xFE0F;'
+				textContent : '🖨️'
 			},
 			printToolbar
 		)
@@ -671,7 +672,7 @@ function ourNewPrintFactory ( ) {
 				id : 'TravelNotes-PrintToolbar-CancelButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
-				innerHTML : '&#x274c;'
+				textContent : '❌'
 			},
 			printToolbar
 		)

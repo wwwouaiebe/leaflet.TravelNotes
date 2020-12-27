@@ -22,6 +22,8 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -119,16 +121,26 @@ function ourOnMouseLeaveUI ( ) {
 
 function ourCreateHomeButton ( ) {
 	theHTMLElementsFactory.create (
-		'div',
+		'text',
 		{
-			className : 'TravelNotes-UI-Button',
-			title : 'Home',
-			innerHTML :
-				'<a class="TravelNotes-UI-LinkButton" href="' +
-				window.location.origin +
-				'" target="_blank">&#x1f3e0;</a>' // 1f3e0 = 🏠
+			value : '🏠'
 		},
-		ourButtonsDiv
+		theHTMLElementsFactory.create (
+			'a',
+			{
+				className : 'TravelNotes-UI-LinkButton',
+				href : window.location.origin,
+				target : '_blank'
+			},
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : 'Home'
+				},
+				ourButtonsDiv
+			)
+		)
 	);
 }
 
@@ -144,16 +156,26 @@ function ourCreateHomeButton ( ) {
 
 function ourCreateHelpButton ( ) {
 	theHTMLElementsFactory.create (
-		'div',
+		'text',
 		{
-			className : 'TravelNotes-UI-Button',
-			title : 'Help',
-			innerHTML :
-				'<a class="TravelNotes-UI-LinkButton" ' +
-				'href="https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides" ' +
-				'target="_blank">?</a>'
+			value : '?'
 		},
-		ourButtonsDiv
+		theHTMLElementsFactory.create (
+			'a',
+			{
+				className : 'TravelNotes-UI-LinkButton',
+				href : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides',
+				target : '_blank'
+			},
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : 'Help'
+				},
+				ourButtonsDiv
+			)
+		)
 	);
 }
 
@@ -169,16 +191,26 @@ function ourCreateHelpButton ( ) {
 
 function ourCreateContactButton ( ) {
 	theHTMLElementsFactory.create (
-		'div',
+		'text',
 		{
-			className : 'TravelNotes-UI-Button',
-			title : 'Contact',
-			innerHTML :
-				'<a class="TravelNotes-UI-LinkButton" href="' +
-				( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ) +
-				'" target="_blank">@</a>'
+			value : '@'
 		},
-		ourButtonsDiv
+		theHTMLElementsFactory.create (
+			'a',
+			{
+				className : 'TravelNotes-UI-LinkButton',
+				href : ( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ),
+				target : '_blank'
+			},
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : 'Contact'
+				},
+				ourButtonsDiv
+			)
+		)
 	);
 }
 
@@ -214,7 +246,7 @@ function ourCreateApiKeysButton ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
-				innerHTML : '&#x1f511;' // 1f511 = 🔑
+				textContent : '🔑'
 			},
 			ourButtonsDiv
 		)
@@ -257,7 +289,7 @@ function ourCreateGeoLocationButton ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
-				innerHTML : '&#x1f310;' // 1f310 = 🌐
+				textContent : '🌐'
 			},
 			ourButtonsDiv
 		);
@@ -277,12 +309,12 @@ function ourCreateGeoLocationButton ( ) {
 
 function ourOnPinButtonClick ( clickEvent ) {
 	if ( ourUiIsPinned ) {
-		clickEvent.target.innerHTML = '&#x1f4cc;'; // 1f4cc = 📌
+		clickEvent.target.textContent = '📌';
 		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
 		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
 	}
 	else {
-		clickEvent.target.innerHTML = '&#x274c;'; // 274c = ❌
+		clickEvent.target.textContent = '❌';
 		ourMainDiv.removeEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
 		ourMainDiv.removeEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
 	}
@@ -303,14 +335,14 @@ function ourCreatePinButton ( ) {
 	let pinButton = theHTMLElementsFactory.create (
 		'div',
 		{
-			innerHTML : '&#x274c;', // 274c = ❌
+			textContent : '❌',
 			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton'
 		},
 		ourButtonsDiv
 	);
 	pinButton.addEventListener ( 'click', ourOnPinButtonClick, false );
 	if ( theConfig.travelEditor.startMinimized ) {
-		pinButton.innerHTML = '&#x1f4cc;'; // 1f4cc = 📌
+		pinButton.textContent = '📌';
 		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
 		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
 		ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );

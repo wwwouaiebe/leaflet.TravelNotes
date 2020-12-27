@@ -36,6 +36,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200803
 Tests ...
 */
@@ -341,7 +343,7 @@ class NoteEditor {
 					'NoteEditor - Add a note for each maneuver. Are you sure?',
 					{ noteLength : ourManeuverLength }
 				),
-				secondButtonContent : '&#x274C'
+				secondButtonContent : '❌'
 			}
 		)
 			.show ( )

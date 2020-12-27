@@ -22,6 +22,8 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200821
 Tests ...
 */
@@ -48,6 +50,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { theTranslator } from '../UI/Translator.js';
 
 let ourErrorDiv = null;
@@ -95,7 +98,7 @@ function ourOnTimer ( ) {
 		ourShowHelpInput = null;
 		ourShowHelpDiv = null;
 	}
-	ourErrorDiv.innerHTML = '';
+	ourErrorDiv.textContent = '';
 }
 
 /**
@@ -130,7 +133,7 @@ function ourAddHelpCheckbox ( ) {
 		{
 			id : 'TravelNotes-ErrorsUI-HelpInputLabel',
 			for : 'TravelNotes-ErrorsUI-HelpInput',
-			innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
+			textContent : theTranslator.getText ( 'ErrorUI - Dont show again' )
 		},
 		ourShowHelpDiv
 	);
@@ -176,19 +179,21 @@ function ourShow ( message, errorLevel ) {
 		'span',
 		{
 			id : 'TravelNotes-ErrorsUI-CancelButton',
-			innerHTML : '&#x274c'
+			textContent : '❌'
 		},
 		headerDiv
 	)
 		.addEventListener ( 'click', ourOnTimer, false );
+
 	theHTMLElementsFactory.create (
 		'div',
 		{
-			id : 'TravelNotes-ErrorsUI-Message',
-			innerHTML : message
+			id : 'TravelNotes-ErrorsUI-Message'
 		},
 		ourErrorDiv
 	);
+	ourErrorDiv.appendChild ( theHTMLParserSerializer.parse ( message ) );
+
 	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
 	let timeOutDuration = theConfig.errorUI.timeOut;
 	if ( 'Help' === errorLevel ) {

@@ -29,6 +29,8 @@ Changes:
 		- Issue #63 : Find a better solution for provider keys upload
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200815
 Tests ...
 */
@@ -179,7 +181,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Name' )
+				textContent : theTranslator.getText ( 'RoutePropertiesDialog - Name' )
 			},
 			nameDiv
 		);
@@ -217,11 +219,18 @@ function ourNewRoutePropertiesDialog ( route ) {
 		let widthDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Width' ) + '</span>'
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv'
 			},
 			myRoutePropertiesDiv
 		);
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'RoutePropertiesDialog - Width' )
+			},
+			theHTMLElementsFactory.create ( 'span', null, widthDiv )
+		);
+
 		myWidthInput = theHTMLElementsFactory.create (
 			'input',
 			{
@@ -248,11 +257,15 @@ function ourNewRoutePropertiesDialog ( route ) {
 	function myCreateDashDiv ( ) {
 		let dashDiv = theHTMLElementsFactory.create (
 			'div',
-			{
-				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Linetype' ) + '</span>'
-			},
+			{ className : 'TravelNotes-RoutePropertiesDialog-DataDiv'			},
 			myRoutePropertiesDiv
+		);
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'RoutePropertiesDialog - Linetype' )
+			},
+			theHTMLElementsFactory.create ( 'span', null, dashDiv )
 		);
 		myDashSelect = theHTMLElementsFactory.create ( 'select', null, dashDiv );
 		let dashChoices = theConfig.route.dashChoices;
@@ -275,13 +288,18 @@ function ourNewRoutePropertiesDialog ( route ) {
 	function myCreateChainDiv ( ) {
 		let chainDiv = theHTMLElementsFactory.create (
 			'div',
-			{
-				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv',
-				innerHTML : '<span>' + theTranslator.getText ( 'RoutePropertiesDialog - Chained route' ) + '</span>'
-			},
+			{ className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'			},
 			myRoutePropertiesDiv
 		);
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'RoutePropertiesDialog - Chained route' )
+			},
+			theHTMLElementsFactory.create ( 'span', null, chainDiv )
+		);
+
 		myChainInput = theHTMLElementsFactory.create (
 			'input',
 			{
@@ -306,7 +324,7 @@ function ourNewRoutePropertiesDialog ( route ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : theTranslator.getText ( 'RoutePropertiesDialog - Color' ),
+				textContent : theTranslator.getText ( 'RoutePropertiesDialog - Color' ),
 				id : 'TravelNotes-RoutePropertiesDialog-ColorHeaderDiv'
 			},
 			myRoutePropertiesDiv

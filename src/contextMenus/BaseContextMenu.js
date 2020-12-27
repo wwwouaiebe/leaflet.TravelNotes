@@ -27,6 +27,7 @@ Changes:
 		- Issue #128 : Unify osmSearch and notes icons and data
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200727
 Tests ...
  */
@@ -342,7 +343,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		ourCloseButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c', // &#x274c = ❌
+				textContent : '❌',
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
@@ -416,7 +417,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 				let itemButton = theHTMLElementsFactory.create (
 					'div',
 					{
-						innerHTML : menuItem.name,
+						textContent : menuItem.name,
 						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
 						objId : menuItemCounter,
 						className :

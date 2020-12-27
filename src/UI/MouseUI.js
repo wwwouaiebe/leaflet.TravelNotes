@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200822
 Tests ...
 */
@@ -64,11 +66,7 @@ let ourZoom = null;
 */
 
 function ourUpdate ( ) {
-	ourMouseDiv.innerHTML = '<span>' +
-	ourMousePos +
-	'&nbsp;-&nbsp;Zoom&nbsp;:&nbsp;' +
-	ourZoom +
-	'</span>';
+	ourMouseDiv.textContent = ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
 }
 
 /**
@@ -84,8 +82,8 @@ function ourUpdate ( ) {
 function ourOnMapMouseMove ( mouseMoveEvent ) {
 	ourMousePos =
 		theUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
-		'&nbsp;-&nbsp;' +
-		theUtilities.formatLng ( mouseMoveEvent.latlng.lng );
+			'\u00a0-\u00a0' +
+			theUtilities.formatLng ( mouseMoveEvent.latlng.lng );
 	ourUpdate ( );
 }
 
@@ -124,14 +122,19 @@ class MouseUI {
 	createUI ( ) {
 		ourZoom = theTravelNotesData.map.getZoom ( );
 		let mousePos = theTravelNotesData.map.getCenter ( );
-		ourMousePos = theUtilities.formatLat ( mousePos.lat ) + '&nbsp;-&nbsp;' + theUtilities.formatLng ( mousePos.lng );
-		ourMouseDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-MouseUI'
-			},
-			document.querySelector ( 'body' )
-		);
+		ourMousePos = theUtilities.formatLat ( mousePos.lat ) + '\u00a0-\u00a0' + theUtilities.formatLng ( mousePos.lng );
+		ourMouseDiv =
+			theHTMLElementsFactory.create (
+				'span',
+				null,
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						id : 'TravelNotes-MouseUI'
+					},
+					document.querySelector ( 'body' )
+				)
+			);
 		theTravelNotesData.map.on ( 'mousemove', ourOnMapMouseMove );
 		theTravelNotesData.map.on ( 'zoomend', ourOnMapZoomEnd );
 	}

@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.5.0:
 		- created
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200825
 Tests ...
 */
@@ -95,8 +97,8 @@ let pageId = params.get ( 'page' );
 if ( pageId ) {
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-		.then ( innerHTML => {
-			document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
+		.then ( pageContent => {
+			document.getElementById ( 'TravelNotes' ).innerHTML = pageContent;
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
@@ -107,15 +109,15 @@ if ( pageId ) {
 		'storage',
 		( ) => {
 			theIndexedDb.getReadPromise ( pageId )
-				.then ( innerHTML => {
-					if ( innerHTML ) {
-						document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
+				.then ( pageContent => {
+					if ( pageContent ) {
+						document.getElementById ( 'TravelNotes' ).innerHTML = pageContent;
 						showTravelNotes ( );
 						showRouteNotes ( );
 						showRouteManeuvers ( );
 					}
 					else {
-						document.getElementById ( 'TravelNotes' ).innerHTML = '';
+						document.getElementById ( 'TravelNotes' ).textContent = '';
 					}
 				} )
 				.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
@@ -144,14 +146,12 @@ if ( language ) {
 		.then (
 			response => {
 				theTranslator.setTranslations ( response );
-				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show travel notes' );
-				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show maneuver' );
-				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show routes notes' );
-				document.getElementById ( 'TravelNotes-SaveFile' ).value =
-					theTranslator.getText ( 'Roadbook - Save' );
 			}
 		)
 		.catch ( err => console.log ( err ? err : 'An error occurs when loading translation' ) );

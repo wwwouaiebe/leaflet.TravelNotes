@@ -121,7 +121,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Address",
-		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Address</span>\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -133,19 +133,19 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of route",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
+		"msgstr" : "<span>Time</span>\u00A0:\u00A0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -153,19 +153,19 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+		"msgstr" : "<span>Latitude</span>\u00A0:\u00A0{lat}\u00A0-\u00A0<span>Longitude</span>\u00A0:\u00A0{lng}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Link</span>\u00A0:\u00A0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Next maneuver after</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next maneuver after\u00A0:\u00A0{distance}",
+		"msgstr" : "<span>Next maneuver after</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
-		"msgstr" : "<span>Phone</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Phone</span>\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Profile",
@@ -188,20 +188,20 @@
 		"msgstr" : "the train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
-		"msgstr" : "Travel ascent&nbsp;:&nbsp;{ascent} m."
+		"msgid" : "HTMLViewsFactory - Travel ascent\u00A0:\u00A0{ascent}",
+		"msgstr" : "Travel ascent\u00A0:\u00A0{ascent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
-		"msgstr" : "Travel descent&nbsp;:&nbsp;{descent} m."
+		"msgid" : "HTMLViewsFactory - Travel descent\u00A0:\u00A0{descent}",
+		"msgstr" : "Travel descent\u00A0:\u00A0{descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Travel distance&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Travel distance\u00A0:\u00A0{distance}",
+		"msgstr" : "Travel distance\u00A0:\u00A0{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Next note after</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next note after\u00A0:\u00A0{distance}",
+		"msgstr" : "<span>Next note after</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
@@ -325,7 +325,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Icon content",
-		"msgstr" : "Icon content&nbsp;:&nbsp;"
+		"msgstr" : "Icon content\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Link",
@@ -341,7 +341,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Phone",
-		"msgstr" : "Phone&nbsp:&nbsp;"
+		"msgstr" : "Phone&nbsp:\u00A0"
 	},
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
@@ -353,11 +353,11 @@
 	},
 	{
 		"msgid" : "NoteDialog - Text",
-		"msgstr" : "Text&nbsp;:&nbsp;"
+		"msgstr" : "Text\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
-		"msgstr" : "Tooltip content&nbsp;:&nbsp;"
+		"msgstr" : "Tooltip content\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
@@ -725,11 +725,11 @@
 	},
 	{
 		"msgid" : "TravelUI - Travel",
-		"msgstr" : "Travel&nbsp;:&nbsp;"
+		"msgstr" : "Travel\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Travel routes&nbsp;:"
+		"msgstr" : "Travel routes\u00A0:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -781,10 +781,10 @@
 	},
 	{
 		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Move your mouse over the black rectangle <span style='color:white;background-color:black'> Travel &amp; Notes </span> in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (&#x1f511; button on top of interface) to enter your access key.</p>"
+		"msgstr" : "<p>Move your mouse over the black rectangl <span class='TravelNotes-Note-WhiteBlack'> Travel &amp; Notes </span>in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (&#x1f511; button on top of interface) to enter your access key.</p>"
 	},
 	{
 		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Use the + button to add a provider</p><p>Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper' or 'OpenRouteservice' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider.</p><p>Complete on the right with your access key</p>"
+		"msgstr" : "<p>Use the + button to add a provider</p><p>Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper', 'OpenRouteservice' or 'MapzenValhalla' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider.</p><p>Complete on the right with your access key</p>"
 	}
 ]

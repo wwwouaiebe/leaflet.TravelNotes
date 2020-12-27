@@ -121,7 +121,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Address",
-		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Adresse</span>\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -133,19 +133,19 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
-		"msgstr" : "<span>Distance depuis le début du voyage</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance depuis le début du voyage</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of route",
-		"msgstr" : "<span>Distance depuis le début du trajet</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "<span>Distance depuis le début du trajet</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
+		"msgstr" : "<span>Temps</span>\u00A0:\u00A0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -153,19 +153,19 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
+		"msgstr" : "<span>Latitude</span>\u00A0:\u00A0{lat}\u00A0-\u00A0<span>Longitude</span>\u00A0:\u00A0{lng}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Lien</span>\u00A0:\u00A0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Manœuvre suivante dans</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next maneuver after\u00A0:\u00A0{distance}",
+		"msgstr" : "<span>Manœuvre suivante dans</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
-		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		"msgstr" : "<span>Téléphone</span>\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Profile",
@@ -188,20 +188,20 @@
 		"msgstr" : "le train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
-		"msgstr" : "Montées du voyage&nbsp;:&nbsp;{ascent} m."
+		"msgid" : "HTMLViewsFactory - Travel ascent\u00A0:\u00A0{ascent}",
+		"msgstr" : "Montées du voyage\u00A0:\u00A0{ascent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
-		"msgstr" : "Descentes du voyage&nbsp;:&nbsp;{descent} m."
+		"msgid" : "HTMLViewsFactory - Travel descent\u00A0:\u00A0{descent}",
+		"msgstr" : "Descentes du voyage\u00A0:\u00A0{descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Travel distance\u00A0:\u00A0{distance}",
+		"msgstr" : "Longueur du voyage\u00A0:\u00A0{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Note suivante dans</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next note after\u00A0:\u00A0{distance}",
+		"msgstr" : "<span>Note suivante dans</span>\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
@@ -325,7 +325,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Icon content",
-		"msgstr" : "Contenu de l'icône&nbsp;:&nbsp;"
+		"msgstr" : "Contenu de l'icône\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Link",
@@ -341,7 +341,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Phone",
-		"msgstr" : "Téléphone&nbsp:&nbsp;"
+		"msgstr" : "Téléphone&nbsp:\u00A0"
 	},
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
@@ -353,11 +353,11 @@
 	},
 	{
 		"msgid" : "NoteDialog - Text",
-		"msgstr" : "Texte&nbsp;:&nbsp;"
+		"msgstr" : "Texte\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
-		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
+		"msgstr" : "Contenu du tooltip\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
@@ -725,11 +725,11 @@
 	},
 	{
 		"msgid" : "TravelUI - Travel",
-		"msgstr" : "Voyage&nbsp;:&nbsp;"
+		"msgstr" : "Voyage\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Trajets du voyage&nbsp;:"
+		"msgstr" : "Trajets du voyage\u00A0:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -781,10 +781,10 @@
 	},
 	{
 		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir <span style='color:white;background-color:black'> Travel &amp; Notes </span> dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511; en haut de l'interface) pour entrer votre clef d'accès.</p>"
+		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir<span class='TravelNotes-Note-WhiteBlack'> Travel &amp; Notes </span>dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511; en haut de l'interface) pour entrer votre clef d'accès.</p>"
 	},
 	{
 		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Utilisez le bouton + pour ajouter un fournisseur.</p><p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper' ou 'OpenRouteservice' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p>"
+		"msgstr" : "<p>Utilisez le bouton + pour ajouter un fournisseur.</p><p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper', 'OpenRouteservice' ou 'MapzenValhalla' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p>"
 	}
 ]

@@ -28,6 +28,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200817
 Tests ...
 */
@@ -93,7 +95,7 @@ let ourPaneControlDiv = null;
 function ourRemoveActivePane ( ) {
 	if ( PANE_ID.invalidPane !== ourActivePaneId ) {
 		ourPanes.get ( ourActivePaneId ).remove ( );
-		ourPaneDataDiv.innerHTML = '';
+		ourPaneDataDiv.textContent = '';
 	}
 }
 
@@ -207,7 +209,7 @@ class PanesManagerUI {
 				theHTMLElementsFactory.create (
 					'div',
 					{
-						innerHTML : pane.getButtonText ( ),
+						textContent : pane.getButtonText ( ),
 						className : 'TravelNotes-DataPaneUI-PaneButton',
 						paneId : pane.getId ( )
 					},

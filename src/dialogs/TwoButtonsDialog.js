@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.11.0:
 		- created
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200815
 Tests ...
 */
@@ -119,13 +121,13 @@ function ourNewTwoButtonsDialog ( content ) {
 		myTwoButtonsDialog.title = content.title || '';
 		myTwoButtonsDialog.okButton.classList.add ( 'TravelNotes-TwoButtonsDialog-Button' );
 		if ( content.okButtonContent ) {
-			myTwoButtonsDialog.okButton.innerHTML = content.okButtonContent;
+			myTwoButtonsDialog.okButton.textContent = content.okButtonContent;
 		}
 		if ( content.secondButtonContent ) {
 			let secondButton = theHTMLElementsFactory.create (
 				'div',
 				{
-					innerHTML : content.secondButtonContent,
+					textContent : content.secondButtonContent,
 					className :	'TravelNotes-BaseDialog-Button TravelNotes-TwoButtonsDialog-Button'
 				},
 				myTwoButtonsDialog.footer
@@ -141,7 +143,7 @@ function ourNewTwoButtonsDialog ( content ) {
 				'div',
 				{
 					id : 'TravelNotes-TwoButtonsDialog-MessageDiv',
-					innerHTML : content.textContent
+					textContent : content.textContent
 				},
 				myTwoButtonsDialog.content
 			);

@@ -81,3 +81,34 @@ Changes:
 .TravelNotes-Note-Bullet {
 	background-color: black;
 }
+
+.TravelNotes-Note-WhiteRed {
+	color: white;
+	background-color: red;
+}
+
+.TravelNotes-Note-WhiteGreen {
+	color: white;
+	background-color: green;
+}
+
+.TravelNotes-Note-WhiteBlue {
+	color: white;
+	background-color: blue;
+}
+
+.TravelNotes-Note-WhiteBrown {
+	color: white;
+	background-color: brown;
+}
+
+.TravelNotes-Note-WhiteBlack {
+	color: white;
+	background-color: black;
+}
+
+.TravelNotes-Note-BlackWhite {
+	color: black;
+	background-color: white;
+	border: solid 0.1em;
+}

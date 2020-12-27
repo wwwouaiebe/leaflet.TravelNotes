@@ -25,6 +25,8 @@ Changes:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v1.11.0:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200812
 Tests ...
 */
@@ -208,7 +210,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 					'TravelNotes-BaseDialog-Button ' +
 					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
-				innerHTML : '&#x274c' // 274c = ❌
+				textContent : '❌'
 			},
 			APIKeyRow
 		)
@@ -538,7 +540,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-				innerHTML : '&#x1f504;' // 1f504 = 🔄
+				textContent : '🔄'
 			},
 			myToolbarDiv
 		);
@@ -561,7 +563,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
+				textContent : '💾'
 			},
 			myToolbarDiv
 		);
@@ -593,7 +595,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
-				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+				textContent : '📂'
 			},
 			myToolbarDiv
 		);
@@ -616,7 +618,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
-				innerHTML : '+'
+				textContent : '+'
 			},
 			myToolbarDiv
 		);
@@ -639,7 +641,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
 				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
+				textContent : '💾'
 			},
 			myToolbarDiv
 		);
@@ -671,7 +673,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
-				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+				textContent : '📂'
 			},
 			myToolbarDiv
 		);

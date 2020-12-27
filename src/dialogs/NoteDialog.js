@@ -36,6 +36,8 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200815
 Tests ...
 */
@@ -460,7 +462,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Icon content' )
+				textContent : theTranslator.getText ( 'NoteDialog - Icon content' )
 			},
 			myNoteDataDiv
 		);
@@ -490,7 +492,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Text' )
+				textContent : theTranslator.getText ( 'NoteDialog - Text' )
 			},
 			myNoteDataDiv
 		);
@@ -520,7 +522,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Tooltip content' )
+				textContent : theTranslator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			myNoteDataDiv
 		);
@@ -559,7 +561,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
-				innerHTML : '&#x1f504;'
+				textContent : '🔄'
 			},
 			addressHeader
 		)
@@ -605,6 +607,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateLinkContent ( ) {
+
 		let linkHeader = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -612,28 +615,35 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
+
 		if ( theConfig.note.theDevil.addButton ) {
 			theHTMLElementsFactory.create (
-				'div',
+				'text',
 				{
-					className : 'TravelNotes-BaseDialog-Button',
-					title : 'Home',
-					innerHTML :
-						'<a href="https://www.google.com/maps/@' +
-						note.lat.toFixed ( LAT_LNG.fixed ) +
-						',' +
-						note.lng.toFixed ( LAT_LNG.fixed ) +
-						',' +
-						theConfig.note.theDevil.noteZoom +
-						'z" target="_blank" title="' +
-						theConfig.note.theDevil.title +
-						'" >' +
-						theConfig.note.theDevil.text +
-						'</a> '
+					value : theConfig.note.theDevil.text
 				},
-				linkHeader
+				theHTMLElementsFactory.create (
+					'a',
+					{
+						href : 'https://www.google.com/maps/@' +
+							note.lat.toFixed ( LAT_LNG.fixed ) + ',' +
+							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
+							theConfig.note.theDevil.noteZoom + 'z',
+						target : '_blank',
+						title : theConfig.note.theDevil.title
+					},
+					theHTMLElementsFactory.create (
+						'div',
+						{
+							className : 'TravelNotes-BaseDialog-Button',
+							title : 'Home'
+						},
+						linkHeader
+					)
+				)
 			);
 		}
+
 		theHTMLElementsFactory.create (
 			'text',
 			{
@@ -672,7 +682,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Phone' )
+				textContent : theTranslator.getText ( 'NoteDialog - Phone' )
 			},
 			myNoteDataDiv
 		);

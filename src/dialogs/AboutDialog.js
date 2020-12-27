@@ -26,6 +26,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
 		- Issue #68 : Review all existing promises.
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200812
 Tests ...
 
@@ -54,7 +56,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { theCurrentVersion } from '../data/Version.js';
 
 /**
@@ -84,28 +86,26 @@ function myNewAboutDialog ( ) {
 
 	let aboutDialog = newBaseDialog ( );
 	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-AboutDialog-AboutDiv',
-			innerHTML :
-				'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
-				'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
-				'or any later version.</p>' +
-				'<p>Copyright - 2017 2020 - wwwouaiebe</p>' +
-				'<p>Contact : <a href="https://www.ouaie.be/blog/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
-				'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
-				'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-				'<p>Version : ' + theCurrentVersion + '.' +
-				'<p>This program uses:' +
-				' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
-				' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +
-				' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
-				'Project-OSRM/osrm-text-instructions</a> and ' +
-				' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>'
-		},
-		aboutDialog.content
-	);
+
+	let aboutString =
+		'<div id="TravelNotes-AboutDialog-AboutDiv"' +
+		'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
+		'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
+		'or any later version.</p>' +
+		'<p>Copyright - 2017 2020 - wwwouaiebe</p>' +
+		'<p>Contact : <a href="https://www.ouaie.be/blog/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
+		'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
+		'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
+		'<p>Version : ' + theCurrentVersion + '.' +
+		'<p>This program uses:' +
+		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
+		' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +
+		' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
+		'Project-OSRM/osrm-text-instructions</a> and ' +
+		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
+
+	aboutDialog.content.appendChild ( theHTMLParserSerializer.parse ( aboutString ) );
+
 	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
 }
