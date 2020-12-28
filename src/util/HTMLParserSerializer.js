@@ -24,6 +24,8 @@ Doc reviewed ...
 Tests ...
 */
 
+import { SVG_NS } from '../util/Constants.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -85,10 +87,20 @@ function ourCloneNode ( clonedNode, targetNode ) {
 		let validAttributesNames = ourValidityMap.get ( nodeName );
 		if ( validAttributesNames ) {
 			validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
-			let newChildNode = document.createElement ( nodeName );
+			let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
+			let newChildNode = isSvg ? document.createElementNS ( SVG_NS, nodeName ) : document.createElement ( nodeName );
 			validAttributesNames.forEach (
 				validAttributeName => {
-					if ( currentNode.hasAttribute ( validAttributeName ) ) {
+					if ( isSvg ) {
+						if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
+							newChildNode.setAttributeNS (
+								null,
+								validAttributeName,
+								currentNode.getAttribute ( validAttributeName )
+							);
+						}
+					}
+					else if ( currentNode.hasAttribute ( validAttributeName ) ) {
 						newChildNode.setAttribute ( validAttributeName, currentNode.getAttribute ( validAttributeName ) );
 					}
 				}

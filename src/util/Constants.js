@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.12.0:
 		- created
+	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200825
 Tests ...
 */
@@ -238,3 +240,5 @@ export const ZERO = 0;
 export const ONE = 1;
 
 export const TWO = 2;
+
+export const SVG_NS = 'http://www.w3.org/2000/svg';

@@ -24,6 +24,7 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
 	- v1.14.0:
+		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200808
 Tests ...
@@ -71,7 +72,7 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { SVG_NS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -675,7 +676,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				pointsAttribute += points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
 					points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 			}
-			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 			polyline.setAttributeNS ( null, 'points', pointsAttribute );
 			polyline.setAttributeNS ( null, 'class', 'TravelNotes-OSM-Itinerary' );
 			polyline.setAttributeNS (
@@ -749,7 +750,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 							points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 					}
 
-					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+					let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 					polyline.setAttributeNS ( null, 'points', pointsAttribute );
 					polyline.setAttributeNS (
 						null,
@@ -783,7 +784,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myCreateSvg ( ) {
 		const FOUR = 4;
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg = document.createElementNS ( SVG_NS, 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',

@@ -435,7 +435,7 @@ class NoteEditor {
 		if ( data.osmElement.tags.rcn_ref ) {
 			note.iconContent =
 				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-				'<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
 				data.osmElement.tags.rcn_ref +
 				'</text></svg></div>';
 		}

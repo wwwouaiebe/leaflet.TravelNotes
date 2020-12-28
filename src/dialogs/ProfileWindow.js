@@ -37,7 +37,7 @@ import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ function ourNewProfileWindow ( ) {
 			let markerY = SVG_PROFILE.margin + SVG_PROFILE.height;
 
 			// line
-			myMarker = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			myMarker = document.createElementNS ( SVG_NS, 'polyline' );
 			myMarker.setAttributeNS (
 				null,
 				'points',
@@ -220,7 +220,7 @@ function ourNewProfileWindow ( ) {
 					SVG_PROFILE.xDeltaText;
 
 			// distance
-			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myDistanceText = document.createElementNS ( SVG_NS, 'text' );
 			myDistanceText.appendChild (
 				document.createTextNode ( theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
 			);
@@ -231,7 +231,7 @@ function ourNewProfileWindow ( ) {
 			mySvg.appendChild ( myDistanceText );
 
 			// elevation
-			myElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myElevText = document.createElementNS ( SVG_NS, 'text' );
 			myElevText.appendChild (
 				document.createTextNode (
 					'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.'
@@ -248,7 +248,7 @@ function ourNewProfileWindow ( ) {
 			mySvg.appendChild ( myElevText );
 
 			// pente
-			myAscentText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myAscentText = document.createElementNS ( SVG_NS, 'text' );
 			myAscentText.appendChild (
 				document.createTextNode (
 					'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % '
