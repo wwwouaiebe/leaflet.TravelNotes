@@ -341,7 +341,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Phone",
-		"msgstr" : "Phone&nbsp:\u00A0"
+		"msgstr" : "Phone\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
