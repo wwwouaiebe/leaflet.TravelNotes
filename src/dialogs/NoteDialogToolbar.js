@@ -147,7 +147,7 @@ function ourAddButtons ( ) {
 				},
 				ourToolbarDiv
 			);
-			newButton.appendChild ( theHTMLParserSerializer.parse ( editionButton.title || '?' ) );
+			theHTMLParserSerializer.parse ( editionButton.title || '?', newButton );
 
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 

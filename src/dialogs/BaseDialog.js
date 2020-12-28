@@ -623,7 +623,7 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showError ( errorText ) {
-			myErrorDiv.appendChild ( theHTMLParserSerializer.parse ( errorText ).firstChild );
+			theHTMLParserSerializer.parse ( errorText, myErrorDiv );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

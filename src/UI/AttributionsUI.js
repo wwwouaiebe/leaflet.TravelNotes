@@ -85,20 +85,19 @@ class AttributionsUI {
 
 	set attributions ( attributions ) {
 		let attributionsString =
-			'<span>© <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+			'© <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
 			'| © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
 			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Travel & Notes</a></span>';
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a>';
 
-		let attributDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );
-		while ( attributDiv.firstChild ) {
-			attributDiv.removeChild ( attributDiv.firstChild );
+		let attributionsDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );
+		while ( attributionsDiv.firstChild ) {
+			attributionsDiv.removeChild ( attributionsDiv.firstChild );
 		}
 
-		attributDiv.appendChild ( theHTMLParserSerializer.parse ( attributionsString ).firstChild.firstChild );
-
+		theHTMLParserSerializer.parse ( attributionsString, attributionsDiv );
 	}
 }
 

@@ -597,7 +597,7 @@ function ourNewOsmSearchPaneUI ( ) {
 		if ( osmElement.tags.rcn_ref ) {
 			iconContent =
 				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-				'<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'><text class=\'\' x=\'10\' y=\'14\'>' +
+				'<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'><text class=\'\' x=10 y=14>' +
 				osmElement.tags.rcn_ref +
 				'</text></svg></div>';
 		}
@@ -611,12 +611,8 @@ function ourNewOsmSearchPaneUI ( ) {
 			},
 			searchResultDiv
 		);
-		let iconDiv = theHTMLParserSerializer.parse ( iconContent ).firstChild.firstChild;
+		theHTMLParserSerializer.parse ( iconContent, iconCell );
 
-		if ( iconDiv ) {
-			console.log ( iconDiv );
-			iconCell.appendChild ( iconDiv );
-		}
 		let searchResultCell = theHTMLElementsFactory.create (
 			'div',
 			{

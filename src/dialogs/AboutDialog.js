@@ -88,7 +88,7 @@ function myNewAboutDialog ( ) {
 	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
 
 	let aboutString =
-		'<div id="TravelNotes-AboutDialog-AboutDiv"' +
+		'<div id="TravelNotes-AboutDialog-AboutDiv">' +
 		'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
 		'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
 		'or any later version.</p>' +
@@ -104,7 +104,7 @@ function myNewAboutDialog ( ) {
 		'Project-OSRM/osrm-text-instructions</a> and ' +
 		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
 
-	aboutDialog.content.appendChild ( theHTMLParserSerializer.parse ( aboutString ) );
+	theHTMLParserSerializer.parse ( aboutString, aboutDialog.content );
 
 	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );

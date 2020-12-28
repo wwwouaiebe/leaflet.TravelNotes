@@ -73,42 +73,42 @@ ourValidityMap.set ( 'sub', [ ] );
 ourValidityMap.set ( 'sup', [ ] );
 ourValidityMap.set ( 'ul', [ ] );
 
-ourValidityMap.set ( 'svg', [ 'xmlns', 'viewBox' ] );
-ourValidityMap.set ( 'text', [ 'x', 'y' ] );
+ourValidityMap.set ( 'svg', [ 'xmlns', 'viewBox', 'class' ] );
+ourValidityMap.set ( 'text', [ 'x', 'y', 'text-anchor' ] );
+ourValidityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
 
 function ourCloneNode ( clonedNode, targetNode ) {
-	let nodeName = clonedNode.nodeName.toLowerCase ( );
-	let validAttributesNames = ourValidityMap.get ( nodeName );
-	if ( validAttributesNames ) {
-		validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
-		let newChildNode = document.createElement ( nodeName );
-		validAttributesNames.forEach (
-			validAttributeName => {
-				if ( clonedNode.hasAttribute ( validAttributeName ) ) {
-					newChildNode.setAttribute ( validAttributeName, clonedNode.getAttribute ( validAttributeName ) );
+	let childs = clonedNode.childNodes;
+	for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
+		let currentNode = clonedNode.childNodes [ nodeCounter ];
+		let nodeName = currentNode.nodeName.toLowerCase ( );
+		let validAttributesNames = ourValidityMap.get ( nodeName );
+		if ( validAttributesNames ) {
+			validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+			let newChildNode = document.createElement ( nodeName );
+			validAttributesNames.forEach (
+				validAttributeName => {
+					if ( currentNode.hasAttribute ( validAttributeName ) ) {
+						newChildNode.setAttribute ( validAttributeName, currentNode.getAttribute ( validAttributeName ) );
+					}
 				}
-			}
-		);
-		targetNode.appendChild ( newChildNode );
-		let childs = clonedNode.childNodes;
-		for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
-			ourCloneNode ( childs [ nodeCounter ], newChildNode );
+			);
+			targetNode.appendChild ( newChildNode );
+			ourCloneNode ( currentNode, newChildNode );
 		}
-	}
-	else if ( '#text' === nodeName ) {
-		targetNode.appendChild ( document.createTextNode ( clonedNode.nodeValue ) );
+		else if ( '#text' === nodeName ) {
+			targetNode.appendChild ( document.createTextNode ( currentNode.nodeValue ) );
+		}
 	}
 }
 
 class HTMLParserSerializer {
 
-	parse ( htmlString ) {
-		let result = new DOMParser ( ).parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
-			.querySelector ( 'body' );
-		let targetNode = document.createElement ( 'div' );
-		ourCloneNode ( result.firstChild, targetNode );
-
-		return targetNode;
+	parse ( htmlString, targetNode ) {
+		let result =
+			new DOMParser ( ).parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
+				.querySelector ( 'body' ).firstChild;
+		ourCloneNode ( result, targetNode );
 	}
 
 	stringify ( /* node*/ ) {

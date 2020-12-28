@@ -121,7 +121,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Address",
-		"msgstr" : "<span>Adresse</span>\u00a0:\u00a0"
+		"msgstr" : "Adresse"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -132,16 +132,12 @@
 		"msgstr" : "Descente : {descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance",
-		"msgstr" : "<span>Distance</span>\u00a0:\u00a0{distance}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
-		"msgstr" : "<span>Distance depuis le début du voyage</span>\u00a0:\u00a0{distance}"
+		"msgstr" : "Distance depuis le début du voyage"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of route",
-		"msgstr" : "<span>Distance depuis le début du trajet</span>\u00a0:\u00a0{distance}"
+		"msgstr" : "Distance depuis le début du trajet"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
@@ -152,24 +148,32 @@
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>\u00a0:\u00a0{lat}\u00a0-\u00a0<span>Longitude</span>\u00a0:\u00a0{lng}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Link",
 		"msgstr" : "<span>Lien</span>\u00a0:\u00a0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after\u00a0:\u00a0{distance}",
-		"msgstr" : "<span>Manœuvre suivante dans</span>\u00a0:\u00a0{distance}"
+		"msgid" : "HTMLViewsFactory - Next maneuver after",
+		"msgstr" : "Manœuvre suivante dans"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Next note after",
+		"msgstr" : "Note suivante dans"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - OpenStreetMap contributors",
+		"msgstr" : "les contributeurs de OpenStreetMap"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
-		"msgstr" : "<span>Téléphone</span>\u00a0:\u00a0"
+		"msgstr" : "☎️"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Profile",
 		"msgstr" : "Profil"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Route distance",
+		"msgstr" : "Longueur du trajet\u00a0:\u00a0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -188,24 +192,20 @@
 		"msgstr" : "le train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent\u00a0:\u00a0{ascent}",
+		"msgid" : "HTMLViewsFactory - Travel ascent",
 		"msgstr" : "Montées du voyage\u00a0:\u00a0{ascent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent\u00a0:\u00a0{descent}",
+		"msgid" : "HTMLViewsFactory - Travel descent",
 		"msgstr" : "Descentes du voyage\u00a0:\u00a0{descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance\u00a0:\u00a0{distance}",
+		"msgid" : "HTMLViewsFactory - Travel distance",
 		"msgstr" : "Longueur du voyage\u00a0:\u00a0{distance}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next note after\u00a0:\u00a0{distance}",
-		"msgstr" : "<span>Note suivante dans</span>\u00a0:\u00a0{distance}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
-		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='https://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='https://www.openstreetmap.org/copyright' target='_blank' title='les contributeurs de OpenStreetMap'>les contributeurs de OpenStreetMap</a>"
+		"msgstr" : "Réalisé avec "
 	},
 	{
 		"msgid" : "ItineraryPaneUI - Show notes",

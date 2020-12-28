@@ -185,14 +185,16 @@ function ourShow ( message, errorLevel ) {
 	)
 		.addEventListener ( 'click', ourOnTimer, false );
 
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-ErrorsUI-Message'
-		},
-		ourErrorDiv
+	theHTMLParserSerializer.parse (
+		message,
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-ErrorsUI-Message'
+			},
+			ourErrorDiv
+		)
 	);
-	ourErrorDiv.appendChild ( theHTMLParserSerializer.parse ( message ) );
 
 	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
 	let timeOutDuration = theConfig.errorUI.timeOut;

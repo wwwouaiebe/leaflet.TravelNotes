@@ -621,7 +621,7 @@
 		},
 		{
 			"name" : "Point nœud",
-			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0073'><svg viewBox='0 0 20 20'><text x='10' y='14'>00</text></svg></div>",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0073'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><text x='10' y='14'>00</text></svg></div>",
 			"tooltip" : "Point nœud",
 			"width" : 40,
 			"height" : 40
