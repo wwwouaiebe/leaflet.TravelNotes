@@ -141,7 +141,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Time</span>\u00A0:\u00A0{duration}"
+		"msgstr" : "Time\u00A0:\u00A0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -149,7 +149,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Link</span>\u00A0:\u00A0"
+		"msgstr" : "Link\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Next maneuver after",
@@ -424,8 +424,28 @@
 		"msgstr" : "Password"
 	},
 	{
-		"msgid" : "PasswordDialog - Password rules",
-		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
+		"msgid" : "PasswordDialog - Password rules1",
+		"msgstr" : "Password rules : "
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules2",
+		"msgstr" : "At least 12 characters"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules3",
+		"msgstr" : "At least 1 uppercase"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules4",
+		"msgstr" : "At least 1 lowercase"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules5",
+		"msgstr" : "At least one number"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules6",
+		"msgstr" : "At least one special character"
 	},
 	{
 		"msgid" : "PrintFactory - Print",
@@ -780,11 +800,23 @@
 		"msgstr" : "Waypoint properties"
 	},
 	{
-		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Move your mouse over the black rectangl <span class='TravelNotes-Note-WhiteBlack'> Travel &amp; Notes </span>in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (🔑 button on top of interface) to enter your access key.</p>"
+		"msgid" : "Help - Continue with interface1",
+		"msgstr" : "Move your mouse over the black rectangle \"Travel & Notes\" in the upper right corner to display the interface."
 	},
 	{
-		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Use the + button to add a provider</p><p>Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper', 'OpenRouteservice' or 'MapzenValhalla' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider.</p><p>Complete on the right with your access key</p>"
+		"msgid" : "Help - Continue with interface2",
+		"msgstr" : "If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (🔑 button on top of interface) to enter your access key."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys1",
+		"msgstr" : "Use the + button to add a provider"
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys2",
+		"msgstr" : "Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper', 'OpenRouteservice' or 'MapzenValhalla' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys3",
+		"msgstr" : "Complete on the right with your access key"
 	}
 ]

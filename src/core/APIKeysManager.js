@@ -25,6 +25,7 @@ Changes:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v1.14.0:
 		- Issue #133 : Outphase reading the APIKeys with the url
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200801
 Tests ...
 
@@ -212,9 +213,6 @@ function ourOnErrorDecryptServerFile ( err ) {
 			theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
 		);
 	}
-
-	// display help for the demo
-	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
 }
 
 /**

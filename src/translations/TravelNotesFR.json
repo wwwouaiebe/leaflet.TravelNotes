@@ -141,7 +141,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Temps</span>\u00a0:\u00a0{duration}"
+		"msgstr" : "Temps\u00a0:\u00a0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -149,7 +149,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Lien</span>\u00a0:\u00a0"
+		"msgstr" : "Lien\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Next maneuver after",
@@ -424,8 +424,28 @@
 		"msgstr" : "Mot de passe"
 	},
 	{
-		"msgid" : "PasswordDialog - Password rules",
-		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
+		"msgid" : "PasswordDialog - Password rules1",
+		"msgstr" : "Règles des mots de passe : "
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules2",
+		"msgstr" : "Au moins 12 caractères"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules3",
+		"msgstr" : "Au moins une majuscule"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules4",
+		"msgstr" : "Au moins une minuscule"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules5",
+		"msgstr" : "Au moins un chiffre"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules6",
+		"msgstr" : "Au moins un caractère spécial"
 	},
 	{
 		"msgid" : "PrintFactory - Print",
@@ -780,11 +800,23 @@
 		"msgstr" : "Propriétés du point de passage"
 	},
 	{
-		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir<span class='TravelNotes-Note-WhiteBlack'> Travel & Notes </span>dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton 🔑 en haut de l'interface) pour entrer votre clef d'accès.</p>"
+		"msgid" : "Help - Continue with interface1",
+		"msgstr" : "Déplacez votre souris sur le rectangle noir \"Travel & Notes\" dans le coin supérieur droit pour afficher l'interface."
 	},
 	{
-		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Utilisez le bouton + pour ajouter un fournisseur.</p><p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper', 'OpenRouteservice' ou 'MapzenValhalla' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p>"
+		"msgid" : "Help - Continue with interface2",
+		"msgstr" : "Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton 🔑 en haut de l'interface) pour entrer votre clef d'accès."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys1",
+		"msgstr" : "Utilisez le bouton + pour ajouter un fournisseur."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys2",
+		"msgstr" : "Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper', 'OpenRouteservice' ou 'MapzenValhalla' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys3",
+		"msgstr" : "Complétez à droite avec votre clef d'accès"
 	}
 ]

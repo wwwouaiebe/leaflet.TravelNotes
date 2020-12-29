@@ -27,6 +27,7 @@ Changes:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v1.14.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200812
 Tests ...
 */
@@ -739,7 +740,11 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	myCreateToolbar ( );
 	myCreateAPIKeysList ( );
 
-	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Complete the APIKeys' ) );
+	theErrorsUI.showHelp (
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys1' ) + '</p>' +
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys2' ) + '</p>' +
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys3' ) + '</p>'
+	);
 
 	return myAPIKeysDialog;
 }

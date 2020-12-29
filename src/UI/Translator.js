@@ -19,6 +19,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.14.0:
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200822
 Tests ...
 */
@@ -77,7 +79,14 @@ class Translator {
 
 	setTranslations ( translations ) {
 		translations.forEach (
-			translation => ourTranslations.set ( translation.msgid, translation.msgstr )
+			translation => ourTranslations.set (
+				translation.msgid,
+				translation.msgstr
+					.replace ( />|&gt;/gi, '\u227b' )
+					.replace ( /<|&lt;/gi, '\u227a' )
+					.replace ( /'|&apos;/gi, '\u2032' )
+					.replace ( /"|&quot;/gi, '\u2033' )
+			)
 		);
 	}
 
