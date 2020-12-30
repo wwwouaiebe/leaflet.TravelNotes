@@ -22,6 +22,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v1.14.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
 */
@@ -49,10 +51,35 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 
 const ourObjType = newObjType ( 'Note' );
 const ourObjIds = new WeakMap ( );
 const DEFAULT_ICON_SIZE = 0;
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdateStyles
+@desc transform a style attribute to a class attribute for conversion from 1.13.0 to 2.0.0 version
+@param {string} somethingText
+@return {string} the modified text
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpdateStyles ( somethingText ) {
+	let returnValue = somethingText
+		.replaceAll ( /style='color:white;background-color:red'/g, 'class=\'TravelNotes-Note-WhiteRed\'' )
+		.replaceAll ( /style='color:white;background-color:green'/g, 'class=\'TravelNotes-Note-WhiteGreen\'' )
+		.replaceAll ( /style='color:white;background-color:blue'/g, 'class=\'TravelNotes-Note-WhiteBlue\'' )
+		.replaceAll ( /style='color:white;background-color:brown'/g, 'class=\'TravelNotes-Note-WhiteBrown\'' )
+		.replaceAll ( /style='color:white;background-color:black'/g, 'class=\'TravelNotes-Note-WhiteBlack\'' )
+		.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' );
+
+	return returnValue;
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -89,6 +116,17 @@ function ourValidate ( something ) {
 		case '1.11.0' :
 		case '1.12.0' :
 		case '1.13.0' :
+			if ( 'string' === typeof ( something.iconHeight ) ) {
+				something.iconHeight = Number.parseInt ( something.iconHeight );
+			}
+			if ( 'string' === typeof ( something.iconWidth ) ) {
+				something.iconWidth = Number.parseInt ( something.iconWidth );
+			}
+			something.iconContent = ourUpdateStyles ( something.iconContent );
+			something.popupContent = ourUpdateStyles ( something.popupContent );
+			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
+			something.phone = ourUpdateStyles ( something.phone );
+			something.address = ourUpdateStyles ( something.address );
 			something.objType.version = '1.14.0';
 			break;
 		default :
@@ -328,6 +366,70 @@ class Note	{
 		this.distance = otherthing.distance || DISTANCE.invalid;
 		this.chainedDistance = otherthing.chainedDistance;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'number' !== typeof ( this.iconHeight ) ) {
+			this.iconHeight = DEFAULT_ICON_SIZE;
+		}
+		if ( 'number' !== typeof ( this.iconWidth ) ) {
+			this.iconWidth = DEFAULT_ICON_SIZE;
+		}
+		if ( 'string' === typeof ( this.iconContent ) ) {
+			this.iconContent = theHTMLParserSerializer.verify ( this.iconContent ).htmlString;
+		}
+		else {
+			this.iconContent = '';
+		}
+		if ( 'string' === typeof ( this.popupContent ) ) {
+			this.popupContent = theHTMLParserSerializer.verify ( this.popupContent ).htmlString;
+		}
+		else {
+			this.popupContent = '';
+		}
+		if ( 'string' === typeof ( this.tooltipContent ) ) {
+			this.tooltipContent = theHTMLParserSerializer.verify ( this.tooltipContent ).htmlString;
+		}
+		else {
+			this.tooltipContent = '';
+		}
+		if ( 'string' === typeof ( this.phone ) ) {
+			this.phone = theHTMLParserSerializer.verify ( this.phone ).htmlString;
+		}
+		else {
+			this.phone = '';
+		}
+		if ( 'string' === typeof ( this.url ) ) {
+			this.url = encodeURI ( theHTMLParserSerializer.validateUrl ( this.url ) );
+		}
+		else {
+			this.url = '';
+		}
+		if ( 'string' === typeof ( this.address ) ) {
+			this.address = theHTMLParserSerializer.verify ( this.address ).htmlString;
+		}
+		else {
+			this.address = '';
+		}
+		if ( 'number' !== typeof ( this.iconLat ) ) {
+			this.iconLat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.iconLng ) ) {
+			this.iconLng = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = DEFAULT_ICON_SIZE;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = DEFAULT_ICON_SIZE;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DEFAULT_ICON_SIZE;
+		}
+		if ( 'number' !== typeof ( this.chainedDistance ) ) {
+			this.chainedDistance = DEFAULT_ICON_SIZE;
+		}
 	}
 }
 

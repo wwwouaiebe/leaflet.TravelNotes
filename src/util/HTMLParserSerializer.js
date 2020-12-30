@@ -24,7 +24,7 @@ Doc reviewed ...
 Tests ...
 */
 
-import { SVG_NS } from '../util/Constants.js';
+import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,19 @@ import { SVG_NS } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+// also see HTML Sanitizer API
+
 let ourValidityMap = new Map ( );
+
+/*
+WARNING :
+
+	never put script as valid tag !!!
+
+	never put event handler starting with on... as valid attribute !!!
+
+*/
+
 ourValidityMap.set ( 'a', [ 'href', 'target' ] );
 ourValidityMap.set ( 'br', [ ] );
 ourValidityMap.set ( 'div', [ ] );
@@ -79,6 +91,29 @@ ourValidityMap.set ( 'svg', [ 'xmlns', 'viewBox', 'class' ] );
 ourValidityMap.set ( 'text', [ 'x', 'y', 'text-anchor' ] );
 ourValidityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
 
+const ourProtocol = window.location.protocol;
+
+function ourValidateUrl ( urlString, attributeName ) {
+	let url = null;
+	try {
+		url = new URL ( urlString );
+	}
+	catch ( err ) {
+		return '';
+	}
+	let validProtocols = [ 'https:' ];
+	if ( 'http:' === ourProtocol ) {
+		validProtocols.push ( 'http:' );
+	}
+	if ( 'href' === attributeName ) {
+		validProtocols.push ( 'mailto:' );
+	}
+	if ( NOT_FOUND !== validProtocols.indexOf ( url.protocol ) ) {
+		return url.href;
+	}
+	return '';
+}
+
 function ourCloneNode ( clonedNode, targetNode ) {
 	let childs = clonedNode.childNodes;
 	for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
@@ -98,10 +133,32 @@ function ourCloneNode ( clonedNode, targetNode ) {
 								validAttributeName,
 								currentNode.getAttribute ( validAttributeName )
 							);
+							currentNode.removeAttributeNS ( null, validAttributeName );
 						}
 					}
 					else if ( currentNode.hasAttribute ( validAttributeName ) ) {
-						newChildNode.setAttribute ( validAttributeName, currentNode.getAttribute ( validAttributeName ) );
+						if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
+							let attributeValue = ourValidateUrl (
+								currentNode.getAttribute ( validAttributeName ),
+								validAttributeName
+							);
+							if ( '' === attributeValue ) {
+								let errorString =
+									'An invalid url (' +
+									currentNode.getAttribute ( validAttributeName ) +
+									')was removed from a ' +
+									validAttributeName +
+									' attribute';
+								console.log ( errorString );
+							}
+							else {
+								newChildNode.setAttribute ( validAttributeName, attributeValue );
+							}
+						}
+						else {
+							newChildNode.setAttribute ( validAttributeName, currentNode.getAttribute ( validAttributeName ) );
+						}
+						currentNode.removeAttribute ( validAttributeName );
 					}
 				}
 			);
@@ -111,10 +168,38 @@ function ourCloneNode ( clonedNode, targetNode ) {
 		else if ( '#text' === nodeName ) {
 			targetNode.appendChild ( document.createTextNode ( currentNode.nodeValue ) );
 		}
+		else {
+			console.log ( 'An invalid tag <' + nodeName + '> was removed' );
+		}
+		if ( currentNode.hasAttributes ) {
+			for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
+				console.log (
+					'An unsecure attribute ' +
+					currentNode.attributes [ attCounter ].name +
+					' 🢂 ' +
+					currentNode.attributes [ attCounter ].value +
+					' was removed.' );
+			}
+		}
 	}
 }
 
+function ourAddHtmlEntities ( htmlString ) {
+	let newHtmlString = htmlString
+		.replaceAll ( /</g, '&lt;' )
+		.replaceAll ( />/g, '&gt;' )
+		.replaceAll ( /"/g, '&quot;' )
+		.replaceAll ( /\u0027/g, '&apos;' )
+		.replaceAll ( /\u0a00/g, '&nbsp;' );
+
+	return newHtmlString;
+}
+
 class HTMLParserSerializer {
+
+	validateUrl ( urlString ) {
+		return ourValidateUrl ( urlString );
+	}
 
 	parse ( htmlString, targetNode ) {
 		let result =
@@ -123,10 +208,94 @@ class HTMLParserSerializer {
 		ourCloneNode ( result, targetNode );
 	}
 
-	stringify ( /* node*/ ) {
-	}
+	verify ( htmlString ) {
 
-	verify ( /* htmlString*/ ) {
+		let targetString = '';
+		let errorsString = '';
+
+		function ourStringify ( sourceNode ) {
+			let childs = sourceNode.childNodes;
+			for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
+				let currentNode = sourceNode.childNodes [ nodeCounter ];
+				let nodeName = currentNode.nodeName.toLowerCase ( );
+				let validAttributesNames = ourValidityMap.get ( nodeName );
+				if ( validAttributesNames ) {
+					validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+					let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
+					targetString += '<' + nodeName;
+					validAttributesNames.forEach (
+						validAttributeName => {
+							if ( isSvg ) {
+								if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
+									targetString += ' ' + validAttributeName + '="' +
+										ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
+										'"';
+									currentNode.removeAttribute ( validAttributeName );
+								}
+							}
+							else if ( currentNode.hasAttribute ( validAttributeName ) ) {
+								if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
+									let attributeValue = ourValidateUrl (
+										currentNode.getAttribute ( validAttributeName ),
+										validAttributeName
+									);
+									if ( '' === attributeValue ) {
+										let errorString =
+											'An invalid url (' +
+											currentNode.getAttribute ( validAttributeName ) +
+											')was removed from a ' +
+											validAttributeName +
+											' attribute';
+										console.log ( errorString );
+										errorsString += '<p>' + errorString + '</p>';
+									}
+									else {
+										targetString += ' ' + validAttributeName + '="' + attributeValue + '"';
+									}
+									currentNode.removeAttribute ( validAttributeName );
+								}
+								else {
+									targetString += ' ' + validAttributeName + '="' +
+									ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
+									'"';
+									currentNode.removeAttribute ( validAttributeName );
+								}
+							}
+						}
+					);
+					targetString += '>';
+					ourStringify ( currentNode );
+					targetString += '</' + nodeName + '>';
+				}
+				else if ( '#text' === nodeName ) {
+					targetString += ourAddHtmlEntities ( currentNode.nodeValue );
+				}
+				else {
+					let errorString = 'An invalid tag ' + nodeName + ' was removed';
+					console.log ( errorString );
+					errorsString += '<p>' + errorString + '</p>';
+				}
+				if ( currentNode.hasAttributes ) {
+					for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
+						let errorString =
+							'An unsecure attribute ' +
+							currentNode.attributes [ attCounter ].name +
+							'="' +
+							currentNode.attributes [ attCounter ].value +
+							'" was removed.';
+						console.log ( errorString );
+						errorsString += '<p>' + errorString + '</p>';
+					}
+				}
+
+			}
+		}
+
+		let result =
+			new DOMParser ( ).parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
+				.querySelector ( 'body' ).firstChild;
+		ourStringify ( result );
+		return { htmlString : targetString, errorsString : errorsString };
 	}
 }
 

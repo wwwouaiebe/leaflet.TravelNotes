@@ -38,6 +38,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.14.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200815
 Tests ...
 */
@@ -66,6 +67,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
@@ -139,14 +141,21 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( ZERO === myIconHtmlContent.value.length ) {
+
+		if ( '' === myIconHtmlContent.value ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 			return;
 		}
+		if ( '' !== myUrlInput.value ) {
+			if ( ! theHTMLParserSerializer.validateUrl ( myUrlInput.value ) ) {
+				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
+				return;
+			}
+		}
 
 		// saving values in the note.
-		note.iconWidth = myWidthInput.value;
-		note.iconHeight = myHeightInput.value;
+		note.iconWidth = Number.parseInt ( myWidthInput.value );
+		note.iconHeight = Number.parseInt ( myHeightInput.value );
 		note.iconContent = myIconHtmlContent.value;
 		note.popupContent = myPopupContent.value;
 		note.tooltipContent = myTooltipContent.value;
@@ -154,6 +163,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		note.url = myUrlInput.value;
 		note.phone = myPhoneInput.value;
 		note.latLng = myLatLng;
+		note.validateData ( );
 
 		return note;
 	}
@@ -353,6 +363,25 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnBlurControl
+	@desc Event listener for textarea and input text
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnBlurControl ( blurEvent ) {
+		let verifyResult = theHTMLParserSerializer.verify ( blurEvent.target.value );
+		blurEvent.target.value = verifyResult.htmlString;
+		if ( '' !== verifyResult.errorsString ) {
+			myFocusControl = null;
+			myNoteDialog.showError ( verifyResult.errorsString );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateDialog
 	@desc This method creates the dialog
 	@private
@@ -475,6 +504,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myIconHtmlContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myIconHtmlContent.addEventListener ( 'blur', myOnBlurControl, false );
+
 	}
 
 	/**
@@ -505,6 +536,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myPopupContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myPopupContent.addEventListener ( 'blur', myOnBlurControl, false );
 	}
 
 	/**
@@ -536,6 +568,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myTooltipContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myTooltipContent.addEventListener ( 'blur', myOnBlurControl, false );
 	}
 
 	/**
@@ -590,6 +623,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			)
 		);
 		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myAddressInput.addEventListener ( 'blur', myOnBlurControl, false );
 
 		myGeoCoder.getPromiseAddress ( note.latLng )
 			.then ( myOnGeocoderSucces )
@@ -696,6 +730,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myPhoneInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myPhoneInput.addEventListener ( 'blur', myOnBlurControl, false );
 	}
 
 	myCreateDialog ( );
