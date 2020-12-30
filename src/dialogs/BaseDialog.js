@@ -34,6 +34,7 @@ Changes:
 	- v1.14.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200811
 Tests ...
 */
@@ -623,6 +624,7 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showError ( errorText ) {
+			myErrorDiv.textContent = '';
 			theHTMLParserSerializer.parse ( errorText, myErrorDiv );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
