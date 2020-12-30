@@ -319,7 +319,8 @@ function ourCreateLinkButton ( href, title, textContent ) {
 		{
 			href : href,
 			title : title,
-			textContent : textContent
+			textContent : textContent,
+			target : '_blank'
 		},
 		linkButton
 	);
