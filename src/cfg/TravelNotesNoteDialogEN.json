@@ -52,7 +52,7 @@
 		}, 
 		{
 			"title" : "<span class='TravelNotes-Note-WhiteBrown' title='Insert a brown background'>Brown</span>",
-			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown''>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{

@@ -36,7 +36,7 @@
 			"htmlAfter" : "</mark>"
 		},
 		{
-			"title" : "<span class='TravelNotes-Note-WhiteRed' title='Insérer un arrière-plan rouge')>Rouge</span>",
+			"title" : "<span class='TravelNotes-Note-WhiteRed' title='Insérer un arrière-plan rouge'>Rouge</span>",
 			"htmlBefore" : "<span class='TravelNotes-Note-WhiteRed'>",
 			"htmlAfter" : "</span>"
 		}, 
@@ -52,7 +52,7 @@
 		}, 
 		{
 			"title" : "<span class='TravelNotes-Note-WhiteBrown' title='Insérer un arrière-plan brun'>Brun</span>",
-			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown''>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
