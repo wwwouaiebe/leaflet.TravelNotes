@@ -38,7 +38,7 @@ Changes:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200817
 Tests ...

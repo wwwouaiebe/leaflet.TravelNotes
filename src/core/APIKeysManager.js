@@ -23,7 +23,7 @@ Changes:
 		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
 	- v1.11.0:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #133 : Outphase reading the APIKeys with the url
 		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200801

@@ -40,7 +40,7 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200824
 Tests ...

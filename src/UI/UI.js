@@ -30,7 +30,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...

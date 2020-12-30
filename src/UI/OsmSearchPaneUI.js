@@ -28,7 +28,7 @@ Changes:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
 		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
 		- Issue #128 : Unify osmSearch and notes icons and data
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200818
 Tests ...

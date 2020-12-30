@@ -20,7 +20,7 @@
 		"theDevil": {
 			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",
-			"text": "&#x1f47f;"
+			"text": "👿"
 		}
 	},
 	"mouseUI":
@@ -139,7 +139,7 @@
 		"theDevil": {
 			"addButton": true,
 			"title": "Reminder! The devil will know everything about you",
-			"text": "&#x1f47f;",
+			"text": "👿",
 			"noteZoom" : 17
 		},
 		"osmSearchNoteDialog":false,

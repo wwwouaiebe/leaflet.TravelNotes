@@ -27,7 +27,7 @@ Changes:
 		- Issue #106 : Profiles are not hidden when printing the route maps
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string

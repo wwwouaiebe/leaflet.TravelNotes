@@ -22,7 +22,7 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
@@ -127,7 +127,7 @@ function ourValidate ( something ) {
 			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
 			something.phone = ourUpdateStyles ( something.phone );
 			something.address = ourUpdateStyles ( something.address );
-			something.objType.version = '1.14.0';
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );

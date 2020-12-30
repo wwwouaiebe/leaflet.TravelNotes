@@ -31,7 +31,7 @@ Changes:
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.

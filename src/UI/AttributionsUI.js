@@ -21,7 +21,7 @@ Changes:
 		- created
 	- v1.9.0:
 		- issue #103 : Review the attributions
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200821

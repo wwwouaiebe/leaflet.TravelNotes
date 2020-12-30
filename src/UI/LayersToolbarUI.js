@@ -22,7 +22,7 @@ Changes:
 	- v1.9.0:
 		- issue #101 : Add a print command for a route
 		- issue #103 : Review the attributions
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200821

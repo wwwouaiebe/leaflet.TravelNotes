@@ -22,7 +22,7 @@ Changes:
 		- created
 	- v1.8.0:
 		- Issue #98 : Elevation is not modified in the itinerary pane
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200805
 Tests ...

@@ -25,7 +25,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200727

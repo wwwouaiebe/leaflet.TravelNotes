@@ -23,7 +23,7 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
-	- v1.14.0:
+	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200808
