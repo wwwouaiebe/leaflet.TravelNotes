@@ -48,7 +48,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file TravelUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
