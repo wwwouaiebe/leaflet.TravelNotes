@@ -31,6 +31,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200820
 Tests ...
 */
@@ -127,6 +128,14 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 		);
 	}
 
+	if ( ZERO !== note.url.length ) {
+		theHTMLParserSerializer.parse (
+			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
+				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...</a>',
+			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
+		);
+	}
+
 	if ( ZERO !== note.phone.length ) {
 		theHTMLParserSerializer.parse (
 			theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone,
@@ -137,14 +146,6 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 				},
 				noteHTMLElement
 			)
-		);
-	}
-
-	if ( ZERO !== note.url.length ) {
-		theHTMLParserSerializer.parse (
-			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
-				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...</a>',
-			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
 		);
 	}
 
@@ -760,6 +761,18 @@ class HTMLViewsFactory {
 
 	getTravelHTML ( classPrefix ) {
 		return ourGetTravelHTML ( classPrefix );
+	}
+
+	/**
+	@function getNoteTextAndIconHTML
+	@desc Gives an HTMLElement with the note icon and sames values than the ourGetNoteTextHTML function
+	@param {string} classPrefix A string that will be added to all the className of the created HTMLElement
+	@param {NoteAndRoute} noteAndRoute A NoteAndRoute object with the note and the route to witch the note is attached
+	@return {HTMLElement}
+	*/
+
+	getNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
+		return ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute );
 	}
 
 	/**

@@ -401,7 +401,7 @@ class Note	{
 			this.phone = '';
 		}
 		if ( 'string' === typeof ( this.url ) ) {
-			this.url = encodeURI ( theHTMLParserSerializer.validateUrl ( this.url ) );
+			this.url = encodeURI ( theHTMLParserSerializer.validateUrl ( this.url ).url );
 		}
 		else {
 			this.url = '';

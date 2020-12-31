@@ -24,7 +24,28 @@ Doc reviewed ...
 Tests ...
 */
 
-import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file HTMLParserSerializer.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} UrlValidationReult
+@desc An object returned by the validateUrl function
+@property {Object} url the validated url or an empty string if the url is invalid
+@property {string} an empty string or an error description if the url is invalid
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -34,6 +55,8 @@ import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
+
+import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -93,25 +116,72 @@ ourValidityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
 
 const ourProtocol = window.location.protocol;
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourValidateUrl
+@desc this function validate an URL
+@param {urlString} the url to validate
+@param {attributeName} the attribute name in witch the url will be placed. must be 'href' or 'src' or null
+@return {object} a UrlValidationReult with the result of the validation
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function ourValidateUrl ( urlString, attributeName ) {
-	let url = null;
-	try {
-		url = new URL ( urlString );
-	}
-	catch ( err ) {
-		return '';
-	}
+
 	let validProtocols = [ 'https:' ];
 	if ( 'http:' === ourProtocol ) {
 		validProtocols.push ( 'http:' );
 	}
 	if ( 'href' === attributeName ) {
 		validProtocols.push ( 'mailto:' );
+		let urlHash = urlString.match ( /^#\w*/ );
+		if ( urlHash && urlString === urlHash [ ZERO ] ) {
+
+			// the url start with # and contains only chars and numbers after in a href attribute.
+			// It's a valid link to the current page
+			return { url : urlString, errorsString : '' };
+		}
 	}
-	if ( NOT_FOUND !== validProtocols.indexOf ( url.protocol ) ) {
-		return url.href;
+
+	let url = null;
+	try {
+
+		// trying to transform the string to an URL object
+		url = new URL ( urlString );
 	}
-	return '';
+	catch ( err ) {
+		console.log ( 'Invalid url string : ' + urlString );
+		return { url : '', errorsString : 'Invalid url string' };
+	}
+
+	if ( NOT_FOUND === validProtocols.indexOf ( url.protocol ) ) {
+
+		// invalid protocol in the url...
+		console.log ( 'Invalid protocol in url : ' + urlString );
+		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
+	}
+
+	try {
+
+		// trying the encodeURIComponent to detect some bad chars
+		encodeURIComponent ( url.href );
+	}
+	catch ( err ) {
+		console.log ( 'Invalid character in url : ' + urlString );
+		return { url : '', errorsString : 'Invalid character in url' };
+	}
+
+	if ( NOT_FOUND !== url.href.search ( /['()*]/g ) ) {
+
+		// testing some bad chars in the url
+		console.log ( 'Invalid character in url : ' + urlString );
+		return { url : '', errorsString : 'Invalid character in url' };
+	}
+
+	return { url : url.href, errorsString : '' };
 }
 
 function ourCloneNode ( clonedNode, targetNode ) {
@@ -195,10 +265,22 @@ function ourAddHtmlEntities ( htmlString ) {
 	return newHtmlString;
 }
 
+function ourRemoveHtmlEntities ( htmlString ) {
+	let newHtmlString = htmlString
+		.replaceAll ( /&lt;/g, '<' )
+		.replaceAll ( /&gt;/g, '>' )
+		.replaceAll ( /&amp;/g, '&' )
+		.replaceAll ( /&quot;/g, '"' )
+		.replaceAll ( /&apos;/g, '\u0027' )
+		.replaceAll ( /&nbsp;/g, '\u0a00' );
+
+	return newHtmlString;
+}
+
 class HTMLParserSerializer {
 
 	validateUrl ( urlString ) {
-		return ourValidateUrl ( urlString );
+		return ourValidateUrl ( ourRemoveHtmlEntities ( this.verify ( urlString, [ ] ).htmlString ) );
 	}
 
 	parse ( htmlString, targetNode ) {
@@ -208,7 +290,18 @@ class HTMLParserSerializer {
 		ourCloneNode ( result, targetNode );
 	}
 
-	verify ( htmlString ) {
+	verify ( htmlString, validTagsAttributes ) {
+
+		let validityMap = null;
+		if ( validTagsAttributes ) {
+			validityMap = new Map ( );
+			validTagsAttributes.forEach (
+				validTagAttributes => { validityMap.set ( validTagAttributes.tag, validTagAttributes.attributes ); }
+			);
+		}
+		else {
+			validityMap = ourValidityMap;
+		}
 
 		let targetString = '';
 		let errorsString = '';
@@ -218,7 +311,7 @@ class HTMLParserSerializer {
 			for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
 				let currentNode = sourceNode.childNodes [ nodeCounter ];
 				let nodeName = currentNode.nodeName.toLowerCase ( );
-				let validAttributesNames = ourValidityMap.get ( nodeName );
+				let validAttributesNames = validityMap.get ( nodeName );
 				if ( validAttributesNames ) {
 					validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
 					let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
@@ -238,12 +331,12 @@ class HTMLParserSerializer {
 									let attributeValue = ourValidateUrl (
 										currentNode.getAttribute ( validAttributeName ),
 										validAttributeName
-									);
+									).url;
 									if ( '' === attributeValue ) {
 										let errorString =
 											'An invalid url (' +
 											currentNode.getAttribute ( validAttributeName ) +
-											')was removed from a ' +
+											') was removed from a ' +
 											validAttributeName +
 											' attribute';
 										console.log ( errorString );
