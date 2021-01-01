@@ -22,6 +22,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200730
 Tests ...
 */
@@ -50,6 +52,7 @@ Tests ...
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Maneuver' );
@@ -206,6 +209,31 @@ class Maneuver {
 		this.duration = otherthing.duration || DISTANCE.defaultValue;
 		this.itineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.iconName ) ) {
+			this.iconName = theHTMLParserSerializer.validateString ( this.iconName );
+		}
+		else {
+			this.iconName = '';
+		}
+		if ( 'string' === typeof ( this.instruction ) ) {
+			this.instruction = theHTMLParserSerializer.validateString ( this.instruction );
+		}
+		else {
+			this.instruction = '';
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.duration ) ) {
+			this.duration = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.itineraryPointObjId ) ) {
+			this.itineraryPointObjId = INVALID_OBJ_ID;
+		}
 	}
 }
 

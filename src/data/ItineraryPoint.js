@@ -24,6 +24,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- issue #89 : Add elevation graph
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200730
 Tests ...
 */
@@ -208,6 +210,22 @@ class ItineraryPoint {
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.elev = otherthing.elev || ELEV.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.elev ) ) {
+			this.elev = ELEV.defaultValue;
+		}
 	}
 }
 

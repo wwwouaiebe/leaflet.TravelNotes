@@ -23,6 +23,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
 */
@@ -54,6 +56,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Itinerary' );
@@ -249,6 +252,31 @@ class Itinerary	{
 		while ( ! maneuverIterator.done ) {
 			maneuverIterator.value.itineraryPointObjId =
 				itineraryPointObjIdMap.get ( maneuverIterator.value.itineraryPointObjId );
+		}
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'boolean' !== typeof ( this.hasProfile ) ) {
+			this.hasProfile = false;
+		}
+		if ( 'number' !== typeof ( this.ascent ) ) {
+			this.ascent = ZERO;
+		}
+		if ( 'number' !== typeof ( this.descent ) ) {
+			this.descent = ZERO;
+		}
+		if ( 'string' === typeof ( this.provider ) ) {
+			this.provider = theHTMLParserSerializer.validateString ( this.provider );
+		}
+		else {
+			this.provider = '';
+		}
+		if ( 'string' === typeof ( this.transitMode ) ) {
+			this.transitMode = theHTMLParserSerializer.validateString ( this.transitMode );
+		}
+		else {
+			this.transitMode = '';
 		}
 	}
 }

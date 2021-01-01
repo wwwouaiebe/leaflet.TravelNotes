@@ -44,6 +44,8 @@ Changes:
 		- issue #101 : Add a print command for a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200806
 Tests ...
 */
@@ -224,6 +226,18 @@ function ourOnRoutingError ( err ) {
 function ourOnRoutingOk ( ) {
 
 	ourRoutingRequestStarted = false;
+
+	theTravelNotesData.travel.editedRoute.itinerary.validateData ( );
+
+	let maneuversIterator = theTravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
+	while ( ! maneuversIterator.done ) {
+		maneuversIterator.value.validateData ( );
+	}
+
+	let itineraryPointsIterator = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
+	while ( ! itineraryPointsIterator.done ) {
+		itineraryPointsIterator.value.validateData ( );
+	}
 
 	ourComputeRouteDistances ( theTravelNotesData.travel.editedRoute );
 
