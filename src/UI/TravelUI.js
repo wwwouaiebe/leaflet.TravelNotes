@@ -40,6 +40,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200817
 Tests ...
 */
@@ -74,6 +75,7 @@ import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 let ourRoutesList = null;
@@ -114,7 +116,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 */
 
 function ourOnTravelNameInputChange ( changeEvent ) {
-	theTravelNotesData.travel.name = changeEvent.target.value;
+	theTravelNotesData.travel.name = theHTMLParserSerializer.validateString ( changeEvent.target.value );
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 

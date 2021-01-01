@@ -293,6 +293,10 @@ function ourReplaceHtmlEntities ( htmlString ) {
 
 class HTMLParserSerializer {
 
+	validateColor ( colorString ) {
+		return colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
+	}
+
 	validateString ( htmlString ) {
 		return ourReplaceHtmlEntities ( this.verify ( htmlString, [ ] ).htmlString );
 	}

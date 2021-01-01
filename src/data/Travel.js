@@ -27,6 +27,7 @@ Changes:
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
 	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #140 : Remove userData
 Doc reviewed 20200731
 Tests ...
@@ -59,6 +60,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newRoute } from '../data/Route.js';
 import { newNote } from '../data/Note.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 
 const ourObjType = newObjType ( 'Travel' );
 const ourObjIds = new WeakMap ( );
@@ -251,6 +253,25 @@ class Travel {
 		this.routes.jsonObject = otherthing.routes || [];
 		this.notes.jsonObject = otherthing.notes || [];
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.layerName ) ) {
+			this.layerName = theHTMLParserSerializer.validateString ( this.layerName );
+		}
+		else {
+			this.layerName = 'OSM - Color';
+		}
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLParserSerializer.validateString ( this.name );
+		}
+		else {
+			this.name = 'TravelNotes';
+		}
+		if ( 'boolean' !== typeof ( this.readOnly ) ) {
+			this.readOnly = true;
+		}
 	}
 }
 

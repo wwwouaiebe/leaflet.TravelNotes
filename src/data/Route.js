@@ -30,6 +30,8 @@ Changes:
 		- Issue #100 : Fix circular dependancies with Collection
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
 */
@@ -63,6 +65,7 @@ import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 import { newNote } from '../data/Note.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Route' );
@@ -334,6 +337,49 @@ class Route	{
 		this.hidden = otherthing.hidden || false;
 		this.chainedDistance = otherthing.chainedDistance;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLParserSerializer.validateString ( this.name );
+		}
+		else {
+			this.name = '';
+		}
+		if ( 'number' !== typeof ( this.width ) ) {
+			this.width = theConfig.route.width;
+		}
+		if ( 'string' === typeof ( this.color ) ) {
+			this.color = theHTMLParserSerializer.validateColor ( this.color ) || theConfig.route.color;
+		}
+		else {
+			this.color = theConfig.route.color;
+		}
+		if ( 'number' !== typeof ( this.dashArray ) ) {
+			this.dashArray = ZERO;
+		}
+		if ( this.dashArray >= theConfig.route.dashChoices.length ) {
+			this.dashArray = ZERO;
+		}
+		if ( 'boolean' !== typeof ( this.chain ) ) {
+			this.chain = false;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.duration ) ) {
+			this.duration = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.editionStatus ) ) {
+			this.editionStatus = ROUTE_EDITION_STATUS.notEdited;
+		}
+		if ( 'boolean' !== typeof ( this.hidden ) ) {
+			this.hidden = false;
+		}
+		if ( 'number' !== typeof ( this.chainedDistance ) ) {
+			this.chainedDistance = DISTANCE.defaultValue;
+		}
 	}
 }
 
