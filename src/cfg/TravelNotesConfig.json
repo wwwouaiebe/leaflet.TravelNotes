@@ -36,7 +36,7 @@
 		"showHelp":false
 	},
 	"geoLocation":{
-			"color":"red",
+			"color":"#ff0000",
 			"radius":10,
 			"zoomToPosition":true,
 			"zoomFactor":17,
@@ -68,32 +68,32 @@
 	"language":"fr",
 	"itineraryPointMarker":
 	{
-		"color":"red",
+		"color":"#ff0000",
 		"weight":2,
 		"radius":7,
 		"fill":false
 	},
 	"searchPointMarker" : {
-		"color" : "green",
+		"color" : "#00ff00",
 		"weight" : 4,
 		"radius" : 20,
 		"fill" : false
 	},
 	"searchPointPolyline" : {
 		"polyline" : {
-			"color" : "green",
+			"color" : "#00ff00",
 			"weight" : 4,
 			"fill" : false
 		},
 		"minZoom" : 17
 	},
 	"previousSearchLimit" : {
-		"color" : "green",
+		"color" : "#00ff00",
 		"fill" : false,
 		"weight" : 1
 	},
 	"nextSearchLimit" : {
-		"color" : "red",
+		"color" : "#ff0000",
 		"fill" : false,
 		"weight" : 1
 	},
@@ -151,7 +151,7 @@
 		},
 		"polyline":
 		{
-			"color":"gray",
+			"color":"#808080",
 			"weight":1
 		},
 		"haveBackground":false,
@@ -174,8 +174,6 @@
 		"svgCityDistance":1200,
 		"svgTownDistance":1500,
 		"svgTimeOut":15000,
-		"cityPrefix":" <span class='TravelNotes-NoteHtml-Address-City'>",
-		"cityPostfix":"</span>",
 		"maxManeuversNotes":100
 	},
 	"itineraryPointZoom":17,
@@ -208,14 +206,14 @@
 		"borderWidth":10,
 		"zoomFactor":15,
 		"entryPointMarker" : {
-			"color" : "green",
+			"color" : "#00ff00",
 			"weight" : 4,
 			"radius" : 10,
 			"fill" : true,
 			"fillOpacity" : 1
 		},
 		"exitPointMarker" : {
-			"color" : "red",
+			"color" : "#ff0000",
 			"weight" : 4,
 			"radius" : 10,
 			"fill" : true,

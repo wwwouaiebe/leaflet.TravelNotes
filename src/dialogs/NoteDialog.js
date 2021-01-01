@@ -152,7 +152,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			return;
 		}
 		if ( '' !== myUrlInput.value ) {
-			if ( ! theHTMLParserSerializer.validateUrl ( myUrlInput.value ) ) {
+			if ( '' === theHTMLParserSerializer.validateUrl ( myUrlInput.value ).url ) {
 				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
 				return;
 			}
@@ -219,7 +219,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		let response = myGeoCoder.parseResponse ( geoCoderData );
 		myAddress = response.street;
 		if ( '' !== response.city ) {
-			myAddress += ' ' + theConfig.note.cityPrefix + response.city + theConfig.note.cityPostfix;
+			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + response.city + '</span>';
 		}
 		myCity = response.city;
 
@@ -263,7 +263,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		let address = osmNoteData.streets;
 		let city = '' === osmNoteData.city ? myCity : osmNoteData.city;
 		if ( '' !== city ) {
-			address += ' ' + theConfig.note.cityPrefix + city + theConfig.note.cityPostfix;
+			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + city + '</span>';
 		}
 		if ( osmNoteData.place && osmNoteData.place !== city ) {
 			address += ' (' + osmNoteData.place + ')';

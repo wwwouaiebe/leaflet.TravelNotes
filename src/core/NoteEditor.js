@@ -106,7 +106,7 @@ function ourNewNoteFromOsmData ( osmNoteData, route ) {
 	note.tooltipContent = osmNoteData.tooltip;
 	note.address = osmNoteData.streets;
 	if ( '' !== osmNoteData.city ) {
-		note.address += ' ' + theConfig.note.cityPrefix + osmNoteData.city + theConfig.note.cityPostfix;
+		note.address += ' ' + '<span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
 	}
 	if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
 		note.address += ' (' + osmNoteData.place + ')';

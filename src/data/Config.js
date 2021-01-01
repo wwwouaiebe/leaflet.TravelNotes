@@ -32,6 +32,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #136 : Remove html entities from js string
+		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #139 : Remove Globals
 Doc reviewed 20200731
 Tests ...
@@ -59,6 +60,9 @@ Tests ...
 
 /* eslint no-magic-numbers: "off" */
 
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { NOT_FOUND } from '../util/Constants.js';
+
 let ourPrivateConfig = {
 	autoLoad : false,
 	map :
@@ -76,7 +80,6 @@ let ourPrivateConfig = {
 	layersToolbarUI : {
 		haveLayersToolbarUI : true,
 		toolbarTimeOut : 1500,
-		contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues',
 		theDevil : {
 			addButton : false,
 			title : 'Reminder! The devil will know everything about you',
@@ -96,7 +99,7 @@ let ourPrivateConfig = {
 		showHelp : true
 	},
 	geoLocation : {
-		color : 'red',
+		color : '#ff0000',
 		radius : 11,
 		zoomToPosition : true,
 		zoomFactor : 17,
@@ -120,30 +123,30 @@ let ourPrivateConfig = {
 	},
 	language : 'fr',
 	itineraryPointMarker : {
-		color : 'red',
+		color : '#ff0000',
 		weight : 2,
 		radius : 7,
 		fill : false
 	},
 	searchPointMarker : {
-		color : 'green',
+		color : '#00ff00',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	searchPointPolyline : {
-		color : 'green',
+		color : '#00ff00',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	previousSearchLimit : {
-		color : 'green',
+		color : '#00ff00',
 		fill : false,
 		weight : 1
 	},
 	nextSearchLimit : {
-		color : 'red',
+		color : '#ff0000',
 		fill : false,
 		weight : 1
 	},
@@ -188,7 +191,7 @@ let ourPrivateConfig = {
 			moveOpacity : 1
 		},
 		polyline : {
-			color : 'gray',
+			color : '#808080',
 			weight : 1
 		},
 		haveBackground : false,
@@ -211,8 +214,6 @@ let ourPrivateConfig = {
 		svgCityDistance : 1200,
 		svgTownDistance : 1500,
 		svgTimeOut : 15000,
-		cityPrefix : '<span class="TravelNotes-NoteHtml-Address-City">',
-		cityPostfix : '</span>',
 		maxManeuversNotes : 100
 	},
 	itineraryPointZoom : 17,
@@ -243,14 +244,14 @@ let ourPrivateConfig = {
 		borderWidth : 30,
 		zoomFactor : 15,
 		entryPointMarker : {
-			color : 'green',
+			color : '#00ff00',
 			weight : 4,
 			radius : 10,
 			fill : true,
 			fillOpacity : 1
 		},
 		exitPointMarker : {
-			color : 'red',
+			color : '#ff0000',
 			weight : 4,
 			radius : 10,
 			fill : true,
@@ -299,15 +300,33 @@ function ourCopyObjectTo ( source, target ) {
 		return;
 	}
 	try {
+
+		// iteration on target.
 		for ( let property in target ) {
 			if ( 'object' === typeof target [ property ] ) {
 				ourCopyObjectTo ( source [ property ], target [ property ] );
 			}
-			else {
+			else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
+				console.log ( NOT_FOUND );
+
+				if ( 'string' === typeof ( target [ property ] ) ) {
+					if ( 'color' === property ) {
+						source [ property ] = theHTMLParserSerializer.validateColor ( source [ property ] );
+					}
+					else if ( NOT_FOUND < [ 'contactMail', 'overpassApiUrl', 'url' ].indexOf ( property ) ) {
+						source [ property ] = theHTMLParserSerializer.validateUrl ( source [ property ] ).url;
+					}
+					else {
+						source [ property ] =
+								theHTMLParserSerializer.verify ( source [ property ], [] ).htmlString;
+					}
+				}
+
 				target [ property ] = source [ property ] || target [ property ];
 			}
 		}
 
+		// iteration on source
 		for ( let property in source ) {
 			if ( 'object' === typeof source [ property ] ) {
 				if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
@@ -319,6 +338,10 @@ function ourCopyObjectTo ( source, target ) {
 				ourCopyObjectTo ( source [ property ], target [ property ] );
 			}
 			else {
+				if ( 'string' === typeof ( target.property ) ) {
+					source [ property ] =
+							theHTMLParserSerializer.verify ( source [ property ], [] ).htmlString;
+				}
 				target [ property ] = source [ property ];
 			}
 		}

@@ -400,7 +400,7 @@ class Note	{
 		else {
 			this.phone = '';
 		}
-		if ( 'string' === typeof ( this.url ) ) {
+		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
 			this.url = encodeURI ( theHTMLParserSerializer.validateUrl ( this.url ).url );
 		}
 		else {

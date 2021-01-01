@@ -40,8 +40,8 @@ Tests ...
 
 @typedef {Object} UrlValidationReult
 @desc An object returned by the validateUrl function
-@property {Object} url the validated url or an empty string if the url is invalid
-@property {string} an empty string or an error description if the url is invalid
+@property {String} url the validated url or an empty string if the url is invalid
+@property {String} errorsString an empty string or an error description if the url is invalid
 @public
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +130,6 @@ const ourProtocol = window.location.protocol;
 */
 
 function ourValidateUrl ( urlString, attributeName ) {
-
 	let validProtocols = [ 'https:' ];
 	if ( 'http:' === ourProtocol ) {
 		validProtocols.push ( 'http:' );
@@ -211,7 +210,7 @@ function ourCloneNode ( clonedNode, targetNode ) {
 							let attributeValue = ourValidateUrl (
 								currentNode.getAttribute ( validAttributeName ),
 								validAttributeName
-							);
+							).url;
 							if ( '' === attributeValue ) {
 								let errorString =
 									'An invalid url (' +
