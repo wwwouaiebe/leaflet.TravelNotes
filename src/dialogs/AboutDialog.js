@@ -56,7 +56,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theCurrentVersion } from '../data/Version.js';
 
 /**
@@ -104,7 +104,7 @@ function myNewAboutDialog ( ) {
 		'Project-OSRM/osrm-text-instructions</a> and ' +
 		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
 
-	theHTMLParserSerializer.parse ( aboutString, aboutDialog.content );
+	theHTMLSanitizer.parse ( aboutString, aboutDialog.content );
 
 	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );

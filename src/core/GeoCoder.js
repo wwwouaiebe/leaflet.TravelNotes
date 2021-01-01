@@ -71,7 +71,7 @@ Tests ...
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 import { ZERO, ONE } from '../util/Constants.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -147,9 +147,9 @@ function ourNewGeoCoder ( ) {
 
 			return Object.seal (
 				{
-					name : theHTMLParserSerializer.validateString ( namedetails ),
-					street : theHTMLParserSerializer.validateString ( street ),
-					city : theHTMLParserSerializer.validateString ( city )
+					name : theHTMLSanitizer.validateString ( namedetails ),
+					street : theHTMLSanitizer.validateString ( street ),
+					city : theHTMLSanitizer.validateString ( city )
 				}
 			);
 		}

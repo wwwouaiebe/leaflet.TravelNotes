@@ -56,7 +56,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { newManeuver } from '../data/Maneuver.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Itinerary' );
@@ -267,13 +267,13 @@ class Itinerary	{
 			this.descent = ZERO;
 		}
 		if ( 'string' === typeof ( this.provider ) ) {
-			this.provider = theHTMLParserSerializer.validateString ( this.provider );
+			this.provider = theHTMLSanitizer.validateString ( this.provider );
 		}
 		else {
 			this.provider = '';
 		}
 		if ( 'string' === typeof ( this.transitMode ) ) {
-			this.transitMode = theHTMLParserSerializer.validateString ( this.transitMode );
+			this.transitMode = theHTMLSanitizer.validateString ( this.transitMode );
 		}
 		else {
 			this.transitMode = '';

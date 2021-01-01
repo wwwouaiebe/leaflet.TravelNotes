@@ -89,7 +89,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 let ourButtons = [];
@@ -147,7 +147,7 @@ function ourAddButtons ( ) {
 				},
 				ourToolbarDiv
 			);
-			theHTMLParserSerializer.parse ( editionButton.title || '?', newButton );
+			theHTMLSanitizer.parse ( editionButton.title || '?', newButton );
 
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 

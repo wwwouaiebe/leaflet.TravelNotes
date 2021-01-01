@@ -52,7 +52,7 @@ Tests ...
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Maneuver' );
@@ -214,13 +214,13 @@ class Maneuver {
 
 	validateData ( ) {
 		if ( 'string' === typeof ( this.iconName ) ) {
-			this.iconName = theHTMLParserSerializer.validateString ( this.iconName );
+			this.iconName = theHTMLSanitizer.validateString ( this.iconName );
 		}
 		else {
 			this.iconName = '';
 		}
 		if ( 'string' === typeof ( this.instruction ) ) {
-			this.instruction = theHTMLParserSerializer.validateString ( this.instruction );
+			this.instruction = theHTMLSanitizer.validateString ( this.instruction );
 		}
 		else {
 			this.instruction = '';

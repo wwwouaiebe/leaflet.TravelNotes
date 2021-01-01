@@ -109,7 +109,7 @@ Box model
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, TWO } from '../util/Constants.js';
 
 const DRAG_MARGIN = 20;
@@ -625,7 +625,7 @@ function ourNewBaseDialog ( ) {
 
 		showError ( errorText ) {
 			myErrorDiv.textContent = '';
-			theHTMLParserSerializer.parse ( errorText, myErrorDiv );
+			theHTMLSanitizer.parse ( errorText, myErrorDiv );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

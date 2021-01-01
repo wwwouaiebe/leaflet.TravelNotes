@@ -51,7 +51,7 @@ Tests ...
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'Note' );
 const ourObjIds = new WeakMap ( );
@@ -377,37 +377,37 @@ class Note	{
 			this.iconWidth = DEFAULT_ICON_SIZE;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
-			this.iconContent = theHTMLParserSerializer.verify ( this.iconContent ).htmlString;
+			this.iconContent = theHTMLSanitizer.verify ( this.iconContent ).htmlString;
 		}
 		else {
 			this.iconContent = '';
 		}
 		if ( 'string' === typeof ( this.popupContent ) ) {
-			this.popupContent = theHTMLParserSerializer.verify ( this.popupContent ).htmlString;
+			this.popupContent = theHTMLSanitizer.verify ( this.popupContent ).htmlString;
 		}
 		else {
 			this.popupContent = '';
 		}
 		if ( 'string' === typeof ( this.tooltipContent ) ) {
-			this.tooltipContent = theHTMLParserSerializer.verify ( this.tooltipContent ).htmlString;
+			this.tooltipContent = theHTMLSanitizer.verify ( this.tooltipContent ).htmlString;
 		}
 		else {
 			this.tooltipContent = '';
 		}
 		if ( 'string' === typeof ( this.phone ) ) {
-			this.phone = theHTMLParserSerializer.verify ( this.phone ).htmlString;
+			this.phone = theHTMLSanitizer.verify ( this.phone ).htmlString;
 		}
 		else {
 			this.phone = '';
 		}
 		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
-			this.url = encodeURI ( theHTMLParserSerializer.validateUrl ( this.url ).url );
+			this.url = encodeURI ( theHTMLSanitizer.validateUrl ( this.url ).url );
 		}
 		else {
 			this.url = '';
 		}
 		if ( 'string' === typeof ( this.address ) ) {
-			this.address = theHTMLParserSerializer.verify ( this.address ).htmlString;
+			this.address = theHTMLSanitizer.verify ( this.address ).htmlString;
 		}
 		else {
 			this.address = '';

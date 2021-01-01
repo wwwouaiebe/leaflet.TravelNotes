@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file HTMLParserSerializer.js
+@file HTMLSanitizer.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -50,7 +50,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module HTMLParserSerializer
+@module HTMLSanitizer
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
 
 @class
 @classdesc Coming soon...
-@see {@link theHTMLParserSerializer} for the one and only one instance of this class
+@see {@link theHTMLSanitizer} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -290,7 +290,7 @@ function ourReplaceHtmlEntities ( htmlString ) {
 	return newHtmlString;
 }
 
-class HTMLParserSerializer {
+class HTMLSanitizer {
 
 	validateColor ( colorString ) {
 		let newColor = colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
@@ -417,24 +417,24 @@ class HTMLParserSerializer {
 	}
 }
 
-const ourHTMLParserSerializer = Object.freeze ( new HTMLParserSerializer );
+const ourHTMLSanitizer = Object.freeze ( new HTMLSanitizer );
 
 export {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@desc The one and only one instance of HTMLParserSerializer class
-	@type {HTMLParserSerializer}
+	@desc The one and only one instance of HTMLSanitizer class
+	@type {HTMLSanitizer}
 	@constant
 	@global
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourHTMLParserSerializer as theHTMLParserSerializer
+	ourHTMLSanitizer as theHTMLSanitizer
 };
 
 /*
---- End of HTMLParserSerializer.js file ---------------------------------------------------------------------------------------
+--- End of HTMLSanitizer.js file ----------------------------------------------------------------------------------------------
 */

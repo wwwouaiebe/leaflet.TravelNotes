@@ -60,7 +60,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newRoute } from '../data/Route.js';
 import { newNote } from '../data/Note.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'Travel' );
 const ourObjIds = new WeakMap ( );
@@ -258,13 +258,13 @@ class Travel {
 
 	validateData ( ) {
 		if ( 'string' === typeof ( this.layerName ) ) {
-			this.layerName = theHTMLParserSerializer.validateString ( this.layerName );
+			this.layerName = theHTMLSanitizer.validateString ( this.layerName );
 		}
 		else {
 			this.layerName = 'OSM - Color';
 		}
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLParserSerializer.validateString ( this.name );
+			this.name = theHTMLSanitizer.validateString ( this.name );
 		}
 		else {
 			this.name = 'TravelNotes';

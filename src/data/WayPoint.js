@@ -56,7 +56,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { theUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
 const ourObjIds = new WeakMap ( );
@@ -233,13 +233,13 @@ class WayPoint {
 
 	validateData ( ) {
 		if ( 'string' === typeof ( this.address ) ) {
-			this.address = theHTMLParserSerializer.validateString ( this.address );
+			this.address = theHTMLSanitizer.validateString ( this.address );
 		}
 		else {
 			this.address = '';
 		}
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLParserSerializer.validateString ( this.name );
+			this.name = theHTMLSanitizer.validateString ( this.name );
 		}
 		else {
 			this.name = '';

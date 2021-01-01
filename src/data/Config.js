@@ -60,7 +60,7 @@ Tests ...
 
 /* eslint no-magic-numbers: "off" */
 
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { NOT_FOUND } from '../util/Constants.js';
 
 let ourPrivateConfig = {
@@ -311,14 +311,14 @@ function ourCopyObjectTo ( source, target ) {
 
 				if ( 'string' === typeof ( target [ property ] ) ) {
 					if ( 'color' === property ) {
-						source [ property ] = theHTMLParserSerializer.validateColor ( source [ property ] );
+						source [ property ] = theHTMLSanitizer.validateColor ( source [ property ] );
 					}
 					else if ( NOT_FOUND < [ 'contactMail', 'overpassApiUrl', 'url' ].indexOf ( property ) ) {
-						source [ property ] = theHTMLParserSerializer.validateUrl ( source [ property ] ).url;
+						source [ property ] = theHTMLSanitizer.validateUrl ( source [ property ] ).url;
 					}
 					else {
 						source [ property ] =
-								theHTMLParserSerializer.verify ( source [ property ], [] ).htmlString;
+								theHTMLSanitizer.verify ( source [ property ], [] ).htmlString;
 					}
 				}
 
@@ -340,7 +340,7 @@ function ourCopyObjectTo ( source, target ) {
 			else {
 				if ( 'string' === typeof ( target.property ) ) {
 					source [ property ] =
-							theHTMLParserSerializer.verify ( source [ property ], [] ).htmlString;
+							theHTMLSanitizer.verify ( source [ property ], [] ).htmlString;
 				}
 				target [ property ] = source [ property ];
 			}

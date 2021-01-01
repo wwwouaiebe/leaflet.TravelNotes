@@ -42,7 +42,7 @@ save button
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
@@ -100,7 +100,7 @@ if ( pageId ) {
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
 		.then ( pageContent => {
 			document.getElementById ( 'TravelNotes' ).textContent = '';
-			theHTMLParserSerializer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
+			theHTMLSanitizer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
@@ -113,7 +113,7 @@ if ( pageId ) {
 			theIndexedDb.getReadPromise ( pageId )
 				.then ( pageContent => {
 					if ( pageContent ) {
-						theHTMLParserSerializer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
+						theHTMLSanitizer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
 						showTravelNotes ( );
 						showRouteNotes ( );
 						showRouteManeuvers ( );

@@ -67,7 +67,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
@@ -152,7 +152,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			return;
 		}
 		if ( '' !== myUrlInput.value ) {
-			if ( '' === theHTMLParserSerializer.validateUrl ( myUrlInput.value ).url ) {
+			if ( '' === theHTMLSanitizer.validateUrl ( myUrlInput.value ).url ) {
 				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
 				return;
 			}
@@ -414,7 +414,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnBlurUrlInput ( blurEvent ) {
-		let verifyResult = theHTMLParserSerializer.validateUrl ( blurEvent.target.value );
+		let verifyResult = theHTMLSanitizer.validateUrl ( blurEvent.target.value );
 		if ( '' === verifyResult.errorsString ) {
 			myNoteDialog.hideError ( );
 		}

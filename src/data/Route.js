@@ -65,7 +65,7 @@ import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 import { newNote } from '../data/Note.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Route' );
@@ -342,7 +342,7 @@ class Route	{
 
 	validateData ( ) {
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLParserSerializer.validateString ( this.name );
+			this.name = theHTMLSanitizer.validateString ( this.name );
 		}
 		else {
 			this.name = '';
@@ -351,7 +351,7 @@ class Route	{
 			this.width = theConfig.route.width;
 		}
 		if ( 'string' === typeof ( this.color ) ) {
-			this.color = theHTMLParserSerializer.validateColor ( this.color ) || theConfig.route.color;
+			this.color = theHTMLSanitizer.validateColor ( this.color ) || theConfig.route.color;
 		}
 		else {
 			this.color = theConfig.route.color;

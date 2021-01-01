@@ -49,7 +49,7 @@ Tests ...
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class AttributionsUI {
 			attributionsDiv.removeChild ( attributionsDiv.firstChild );
 		}
 
-		theHTMLParserSerializer.parse ( attributionsString, attributionsDiv );
+		theHTMLSanitizer.parse ( attributionsString, attributionsDiv );
 	}
 }
 

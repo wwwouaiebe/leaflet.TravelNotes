@@ -75,7 +75,7 @@ import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 let ourRoutesList = null;
@@ -116,7 +116,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 */
 
 function ourOnTravelNameInputChange ( changeEvent ) {
-	theTravelNotesData.travel.name = theHTMLParserSerializer.validateString ( changeEvent.target.value );
+	theTravelNotesData.travel.name = theHTMLSanitizer.validateString ( changeEvent.target.value );
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 

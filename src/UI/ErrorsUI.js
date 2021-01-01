@@ -50,7 +50,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTranslator } from '../UI/Translator.js';
 
 let ourErrorDiv = null;
@@ -185,7 +185,7 @@ function ourShow ( message, errorLevel ) {
 	)
 		.addEventListener ( 'click', ourOnTimer, false );
 
-	theHTMLParserSerializer.parse (
+	theHTMLSanitizer.parse (
 		message,
 		theHTMLElementsFactory.create (
 			'div',
