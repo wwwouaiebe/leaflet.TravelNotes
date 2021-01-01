@@ -124,6 +124,8 @@ function ourNewRoutePropertiesDialog ( route ) {
 		route.chain = myChainInput.checked;
 		route.dashArray = myDashSelect.selectedIndex;
 
+		route.validateData ( );
+
 		return route;
 	}
 

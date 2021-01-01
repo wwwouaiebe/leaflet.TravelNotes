@@ -294,7 +294,11 @@ function ourReplaceHtmlEntities ( htmlString ) {
 class HTMLParserSerializer {
 
 	validateColor ( colorString ) {
-		return colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
+		let newColor = colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
+		if ( newColor ) {
+			return newColor [ ZERO ];
+		}
+		return null;
 	}
 
 	validateString ( htmlString ) {
