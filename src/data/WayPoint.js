@@ -24,6 +24,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200728
 Tests ...
 */
@@ -54,6 +56,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { theUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
 const ourObjIds = new WeakMap ( );
@@ -225,6 +228,28 @@ class WayPoint {
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.address ) ) {
+			this.address = theHTMLParserSerializer.validateString ( this.address );
+		}
+		else {
+			this.address = '';
+		}
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLParserSerializer.validateString ( this.name );
+		}
+		else {
+			this.name = '';
+		}
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = LAT_LNG.defaultValue;
+		}
 	}
 }
 

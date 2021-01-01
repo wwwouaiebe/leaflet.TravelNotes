@@ -277,7 +277,25 @@ function ourRemoveHtmlEntities ( htmlString ) {
 	return newHtmlString;
 }
 
+function ourReplaceHtmlEntities ( htmlString ) {
+	let newHtmlString = htmlString
+		.replaceAll ( /</g, '\u227a' )
+		.replaceAll ( />/g, '\u227b' )
+		.replaceAll ( /"/g, '\u2033' )
+		.replaceAll ( /\u0027/g, '\u2032' )
+		.replaceAll ( /&lt;/g, '\u227a' )
+		.replaceAll ( /&gt;/g, '\u227b' )
+		.replaceAll ( /&quot;/g, '\u2033' )
+		.replaceAll ( /&apos;/g, '\u2032' );
+
+	return newHtmlString;
+}
+
 class HTMLParserSerializer {
+
+	validateString ( htmlString ) {
+		return ourReplaceHtmlEntities ( this.verify ( htmlString, [ ] ).htmlString );
+	}
 
 	validateUrl ( urlString ) {
 		return ourValidateUrl ( ourRemoveHtmlEntities ( this.verify ( urlString, [ ] ).htmlString ) );

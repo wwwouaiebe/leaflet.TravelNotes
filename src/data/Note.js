@@ -364,7 +364,7 @@ class Note	{
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.invalid;
-		this.chainedDistance = otherthing.chainedDistance;
+		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
@@ -419,16 +419,16 @@ class Note	{
 			this.iconLng = LAT_LNG.defaultValue;
 		}
 		if ( 'number' !== typeof ( this.lat ) ) {
-			this.lat = DEFAULT_ICON_SIZE;
+			this.lat = LAT_LNG.defaultValue;
 		}
 		if ( 'number' !== typeof ( this.lng ) ) {
-			this.lng = DEFAULT_ICON_SIZE;
+			this.lng = LAT_LNG.defaultValue;
 		}
 		if ( 'number' !== typeof ( this.distance ) ) {
-			this.distance = DEFAULT_ICON_SIZE;
+			this.distance = DISTANCE.invalid;
 		}
 		if ( 'number' !== typeof ( this.chainedDistance ) ) {
-			this.chainedDistance = DEFAULT_ICON_SIZE;
+			this.chainedDistance = DISTANCE.defaultValue;
 		}
 	}
 }

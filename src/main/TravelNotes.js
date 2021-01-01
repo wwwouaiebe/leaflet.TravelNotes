@@ -42,6 +42,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #137 : Remove html tags from json files
+		- Issue #139 : Remove Globals
+		- Issue #140 : Remove userData
 Doc reviewed 20200824
 Tests ...
 */
@@ -92,8 +94,6 @@ import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, TWO } from '../util/Constants.js';
-
-// import { theGlobals } from '../main/Globals.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -411,13 +411,6 @@ class TravelNotes {
 	get baseDialog ( ) { return newBaseDialog ( ); }
 
 	/**
-	Free data that are added to the TravelNotes file. Must follow the JSON rules.
-	*/
-
-	get userData ( ) { return theTravelNotesData.travel.userData; }
-	set userData ( userData ) { theTravelNotesData.travel.userData = userData; }
-
-	/**
 	get the Leaflet map object
 	*/
 
@@ -440,21 +433,6 @@ class TravelNotes {
 	*/
 
 	get version ( ) { return theCurrentVersion; }
-
-	/**
-	*/
-
-	/*
-	get globals ( ) {
-		if ( theConfig.haveGlobals ) {
-			return theGlobals;
-		}
-
-		return null;
-
-	}
-*/
-
 }
 
 const ourTravelNotes = Object.seal ( new TravelNotes );

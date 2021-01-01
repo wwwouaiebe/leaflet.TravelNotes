@@ -28,6 +28,8 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200802
 Tests ...
 
@@ -69,6 +71,7 @@ Tests ...
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 import { ZERO, ONE } from '../util/Constants.js';
+import { theHTMLParserSerializer } from '../util/HTMLParserSerializer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -144,9 +147,9 @@ function ourNewGeoCoder ( ) {
 
 			return Object.seal (
 				{
-					name : namedetails,
-					street : street,
-					city : city
+					name : theHTMLParserSerializer.validateString ( namedetails ),
+					street : theHTMLParserSerializer.validateString ( street ),
+					city : theHTMLParserSerializer.validateString ( city )
 				}
 			);
 		}

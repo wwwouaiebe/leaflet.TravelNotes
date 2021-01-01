@@ -21,6 +21,7 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200816
 Tests ...
 */
@@ -102,6 +103,9 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 
 		wayPoint.name = myNameInput.value;
 		wayPoint.address = myAddressInput.value;
+		wayPoint.validateData ( );
+
+		console.log ( wayPoint );
 
 		return wayPoint;
 	}

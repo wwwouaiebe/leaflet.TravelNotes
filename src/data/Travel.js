@@ -26,6 +26,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
+	- v2.0.0:
+		- Issue #140 : Remove userData
 Doc reviewed 20200731
 Tests ...
 */
@@ -133,7 +135,7 @@ function ourValidate ( something ) {
 		}
 	}
 	let properties = Object.getOwnPropertyNames ( something );
-	[ 'name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
+	[ 'name', 'editedRoute', 'routes', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
 				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
@@ -202,13 +204,6 @@ class Travel {
 
 		this.readOnly = false;
 
-		/**
-		Free data that are saved or restored with the Travel. Must only respect the JSON rules
-		@type {object}
-		*/
-
-		this.userData = {};
-
 		ourObjIds.set ( this, newObjId ( ) );
 
 	}
@@ -242,7 +237,6 @@ class Travel {
 			name : this.name,
 			routes : this.routes.jsonObject,
 			notes : this.notes.jsonObject,
-			userData : this.userData,
 			readOnly : this.readOnly,
 			objId : ourObjIds.get ( this ),
 			objType : ourObjType.jsonObject
@@ -253,7 +247,6 @@ class Travel {
 		this.editedRoute.jsonObject = otherthing.editedRoute;
 		this.layerName = something.layerName || 'OSM - Color';
 		this.name = otherthing.name || '';
-		this.userData = otherthing.userData || {};
 		this.readOnly = otherthing.readOnly || false;
 		this.routes.jsonObject = otherthing.routes || [];
 		this.notes.jsonObject = otherthing.notes || [];

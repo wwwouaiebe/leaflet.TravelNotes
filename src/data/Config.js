@@ -32,6 +32,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #136 : Remove html entities from js string
+		- Issue #139 : Remove Globals
 Doc reviewed 20200731
 Tests ...
 */
@@ -60,7 +61,6 @@ Tests ...
 
 let ourPrivateConfig = {
 	autoLoad : false,
-	haveGlobals : false,
 	map :
 	{
 		center : {
@@ -362,7 +362,6 @@ function ourFreeze ( object ) {
 
 class Config {
 	get autoLoad ( ) { return ourPrivateConfig.autoLoad; }
-	get haveGlobals ( ) { return ourPrivateConfig.haveGlobals; }
 	get map ( ) { return ourPrivateConfig.map; }
 	get travelNotesToolbarUI ( ) { return ourPrivateConfig.travelNotesToolbarUI; }
 	get layersToolbarUI ( ) { return ourPrivateConfig.layersToolbarUI; }
