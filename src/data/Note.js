@@ -76,8 +76,10 @@ function ourUpdateStyles ( somethingText ) {
 		.replaceAll ( /style='color:white;background-color:blue'/g, 'class=\'TravelNotes-Note-WhiteBlue\'' )
 		.replaceAll ( /style='color:white;background-color:brown'/g, 'class=\'TravelNotes-Note-WhiteBrown\'' )
 		.replaceAll ( /style='color:white;background-color:black'/g, 'class=\'TravelNotes-Note-WhiteBlack\'' )
-		.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' );
-
+		.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' )
+		.replaceAll ( /style='background-color:white;'/g, 'class=\'TravelNotes-Note-Knooppunt\'' )
+		.replaceAll ( /style='fill:green;font:bold 120px sans-serif;'/g, '' )
+		.replaceAll ( /style='fill:none;stroke:green;stroke-width:10;'/g, '' );
 	return returnValue;
 }
 
