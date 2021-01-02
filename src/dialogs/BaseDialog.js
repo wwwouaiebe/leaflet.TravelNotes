@@ -625,7 +625,7 @@ function ourNewBaseDialog ( ) {
 
 		showError ( errorText ) {
 			myErrorDiv.textContent = '';
-			theHTMLSanitizer.parse ( errorText, myErrorDiv );
+			theHTMLSanitizer.sanitizeToHtmlElement ( errorText, myErrorDiv );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

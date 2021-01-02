@@ -57,6 +57,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+
 let ourTranslations = new Map ( );
 
 /**
@@ -81,11 +83,7 @@ class Translator {
 		translations.forEach (
 			translation => ourTranslations.set (
 				translation.msgid,
-				translation.msgstr
-					.replace ( />|&gt;/gi, '\u227b' )
-					.replace ( /<|&lt;/gi, '\u227a' )
-					.replace ( /'|&apos;/gi, '\u2032' )
-					.replace ( /"|&quot;/gi, '\u2033' )
+				theHTMLSanitizer.sanitizeToJsString ( translation.msgstr )
 			)
 		);
 	}

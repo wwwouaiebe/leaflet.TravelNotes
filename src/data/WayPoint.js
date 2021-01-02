@@ -233,13 +233,13 @@ class WayPoint {
 
 	validateData ( ) {
 		if ( 'string' === typeof ( this.address ) ) {
-			this.address = theHTMLSanitizer.validateString ( this.address );
+			this.address = theHTMLSanitizer.sanitizeToJsString ( this.address );
 		}
 		else {
 			this.address = '';
 		}
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLSanitizer.validateString ( this.name );
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
 		}
 		else {
 			this.name = '';

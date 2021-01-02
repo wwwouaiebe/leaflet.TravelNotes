@@ -152,7 +152,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			return;
 		}
 		if ( '' !== myUrlInput.value ) {
-			if ( '' === theHTMLSanitizer.validateUrl ( myUrlInput.value ).url ) {
+			if ( '' === theHTMLSanitizer.sanitizeToUrl ( myUrlInput.value ).url ) {
 				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
 				return;
 			}
@@ -414,7 +414,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnBlurUrlInput ( blurEvent ) {
-		let verifyResult = theHTMLSanitizer.validateUrl ( blurEvent.target.value );
+		let verifyResult = theHTMLSanitizer.sanitizeToUrl ( blurEvent.target.value );
 		if ( '' === verifyResult.errorsString ) {
 			myNoteDialog.hideError ( );
 		}

@@ -256,6 +256,13 @@ class Itinerary	{
 		this.validateData ( );
 	}
 
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
 	validateData ( ) {
 		if ( 'boolean' !== typeof ( this.hasProfile ) ) {
 			this.hasProfile = false;
@@ -267,13 +274,13 @@ class Itinerary	{
 			this.descent = ZERO;
 		}
 		if ( 'string' === typeof ( this.provider ) ) {
-			this.provider = theHTMLSanitizer.validateString ( this.provider );
+			this.provider = theHTMLSanitizer.sanitizeToJsString ( this.provider );
 		}
 		else {
 			this.provider = '';
 		}
 		if ( 'string' === typeof ( this.transitMode ) ) {
-			this.transitMode = theHTMLSanitizer.validateString ( this.transitMode );
+			this.transitMode = theHTMLSanitizer.sanitizeToJsString ( this.transitMode );
 		}
 		else {
 			this.transitMode = '';

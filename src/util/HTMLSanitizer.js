@@ -39,8 +39,20 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} UrlValidationReult
-@desc An object returned by the validateUrl function
+@desc An object returned by the sanitizeToUrl function
 @property {String} url the validated url or an empty string if the url is invalid
+@property {String} errorsString an empty string or an error description if the url is invalid
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@typedef {Object} HtmlStringValidationReult
+@desc An object returned by the sanitizeToHtmlString function
+@property {String} htmlString the validated string
 @property {String} errorsString an empty string or an error description if the url is invalid
 @public
 
@@ -68,8 +80,6 @@ import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-// also see HTML Sanitizer API
 
 let ourValidityMap = new Map ( );
 
@@ -119,139 +129,14 @@ const ourProtocol = window.location.protocol;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourValidateUrl
-@desc this function validate an URL
-@param {urlString} the url to validate
-@param {attributeName} the attribute name in witch the url will be placed. must be 'href' or 'src' or null
-@return {object} a UrlValidationReult with the result of the validation
+@function ourAddHtmlEntities
+@desc replace < >' " and nbsp chars with htmlEntities
+@param {string} htmlString the string to transform
+@return {string} a string with htmlEntities
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-function ourValidateUrl ( urlString, attributeName ) {
-	let validProtocols = [ 'https:' ];
-	if ( 'http:' === ourProtocol ) {
-		validProtocols.push ( 'http:' );
-	}
-	if ( 'href' === attributeName ) {
-		validProtocols.push ( 'mailto:' );
-		let urlHash = urlString.match ( /^#\w*/ );
-		if ( urlHash && urlString === urlHash [ ZERO ] ) {
-
-			// the url start with # and contains only chars and numbers after in a href attribute.
-			// It's a valid link to the current page
-			return { url : urlString, errorsString : '' };
-		}
-	}
-
-	let url = null;
-	try {
-
-		// trying to transform the string to an URL object
-		url = new URL ( urlString );
-	}
-	catch ( err ) {
-		console.log ( 'Invalid url string : ' + urlString );
-		return { url : '', errorsString : 'Invalid url string' };
-	}
-
-	if ( NOT_FOUND === validProtocols.indexOf ( url.protocol ) ) {
-
-		// invalid protocol in the url...
-		console.log ( 'Invalid protocol in url : ' + urlString );
-		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
-	}
-
-	try {
-
-		// trying the encodeURIComponent to detect some bad chars
-		encodeURIComponent ( url.href );
-	}
-	catch ( err ) {
-		console.log ( 'Invalid character in url : ' + urlString );
-		return { url : '', errorsString : 'Invalid character in url' };
-	}
-
-	if ( NOT_FOUND !== url.href.search ( /['()*]/g ) ) {
-
-		// testing some bad chars in the url
-		console.log ( 'Invalid character in url : ' + urlString );
-		return { url : '', errorsString : 'Invalid character in url' };
-	}
-
-	return { url : url.href, errorsString : '' };
-}
-
-function ourCloneNode ( clonedNode, targetNode ) {
-	let childs = clonedNode.childNodes;
-	for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
-		let currentNode = clonedNode.childNodes [ nodeCounter ];
-		let nodeName = currentNode.nodeName.toLowerCase ( );
-		let validAttributesNames = ourValidityMap.get ( nodeName );
-		if ( validAttributesNames ) {
-			validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
-			let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
-			let newChildNode = isSvg ? document.createElementNS ( SVG_NS, nodeName ) : document.createElement ( nodeName );
-			validAttributesNames.forEach (
-				validAttributeName => {
-					if ( isSvg ) {
-						if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
-							newChildNode.setAttributeNS (
-								null,
-								validAttributeName,
-								currentNode.getAttribute ( validAttributeName )
-							);
-							currentNode.removeAttributeNS ( null, validAttributeName );
-						}
-					}
-					else if ( currentNode.hasAttribute ( validAttributeName ) ) {
-						if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
-							let attributeValue = ourValidateUrl (
-								currentNode.getAttribute ( validAttributeName ),
-								validAttributeName
-							).url;
-							if ( '' === attributeValue ) {
-								let errorString =
-									'An invalid url (' +
-									currentNode.getAttribute ( validAttributeName ) +
-									')was removed from a ' +
-									validAttributeName +
-									' attribute';
-								console.log ( errorString );
-							}
-							else {
-								newChildNode.setAttribute ( validAttributeName, attributeValue );
-							}
-						}
-						else {
-							newChildNode.setAttribute ( validAttributeName, currentNode.getAttribute ( validAttributeName ) );
-						}
-						currentNode.removeAttribute ( validAttributeName );
-					}
-				}
-			);
-			targetNode.appendChild ( newChildNode );
-			ourCloneNode ( currentNode, newChildNode );
-		}
-		else if ( '#text' === nodeName ) {
-			targetNode.appendChild ( document.createTextNode ( currentNode.nodeValue ) );
-		}
-		else {
-			console.log ( 'An invalid tag <' + nodeName + '> was removed' );
-		}
-		if ( currentNode.hasAttributes ) {
-			for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
-				console.log (
-					'An unsecure attribute ' +
-					currentNode.attributes [ attCounter ].name +
-					' 🢂 ' +
-					currentNode.attributes [ attCounter ].value +
-					' was removed.' );
-			}
-		}
-	}
-}
 
 function ourAddHtmlEntities ( htmlString ) {
 	let newHtmlString = htmlString
@@ -264,6 +149,18 @@ function ourAddHtmlEntities ( htmlString ) {
 	return newHtmlString;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourRemoveHtmlEntities
+@desc replace htmlEntities with < >' " and nbsp chars
+@param {string} htmlString the string to transform
+@return {string} a string with htmlEntities replaced
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function ourRemoveHtmlEntities ( htmlString ) {
 	let newHtmlString = htmlString
 		.replaceAll ( /&lt;/g, '<' )
@@ -275,6 +172,18 @@ function ourRemoveHtmlEntities ( htmlString ) {
 
 	return newHtmlString;
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourReplaceHtmlEntities
+@desc replace htmlEntities and < > ' " and nbsp chars with others similar unicode chars
+@param {string} htmlString the string to transform
+@return {string} a string with htmlEntities and < >' " and nbsp chars replaced
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function ourReplaceHtmlEntities ( htmlString ) {
 	let newHtmlString = htmlString
@@ -290,9 +199,287 @@ function ourReplaceHtmlEntities ( htmlString ) {
 	return newHtmlString;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSanitizeToJsString
+@desc remove all html tags and replace htmlEntities and < > ' " and nbsp chars with others similar unicode chars
+@param {string} stringToSanitize the string to transform
+@return {string} a string with html tags removed and htmlEntities and < >' " and nbsp chars replaced
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSanitizeToJsString ( stringToSanitize ) {
+	let result =
+			new DOMParser ( ).parseFromString ( '<div>' + ourRemoveHtmlEntities ( stringToSanitize ) + '</div>', 'text/html' )
+				.querySelector ( 'body' ).firstChild;
+	let sanitizedString = '';
+	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
+		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
+			sanitizedString += result.childNodes [ nodeCounter ].nodeValue;
+		}
+	}
+	sanitizedString = ourReplaceHtmlEntities ( sanitizedString );
+
+	return sanitizedString;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSanitizeUrl
+@desc this function validate an URL. A valid url must not contains html tags or html entities or invalid characters
+and must start with a valid protocol
+Valid protocols are for href attribute http:, https: and mailto: and for src attribute https, mailto:
+and http (only if the protocol of Travel & Notes is http:)
+@param {urlString} the url to validate
+@param {attributeName} the attribute name in witch the url will be placed. must be 'src' or
+null (in this case 'href' is used as default)
+@return {object} a UrlValidationReult with the result of the validation
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
+	let result =
+			new DOMParser ( ).parseFromString ( '<div>' + ourRemoveHtmlEntities ( urlString ) + '</div>', 'text/html' )
+				.querySelector ( 'body' ).firstChild;
+	let newUrlString = '';
+	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
+		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
+			newUrlString += result.childNodes [ nodeCounter ].nodeValue;
+		}
+	}
+	if ( newUrlString !== urlString ) {
+		return { url : '', errorsString : 'tags found in the url' };
+	}
+	let validProtocols = [ 'https:' ];
+	if ( 'http:' === ourProtocol || 'href' === attributeName ) {
+		validProtocols.push ( 'http:' );
+	}
+	if ( 'href' === attributeName ) {
+		validProtocols.push ( 'mailto:' );
+		let urlHash = newUrlString.match ( /^#\w*/ );
+		if ( urlHash && newUrlString === urlHash [ ZERO ] ) {
+			return { url : newUrlString, errorsString : '' };
+		}
+	}
+	let url = null;
+	try {
+		url = new URL ( newUrlString );
+	}
+	catch ( err ) {
+		return { url : '', errorsString : 'Invalid url string' };
+	}
+	if ( NOT_FOUND === validProtocols.indexOf ( url.protocol ) ) {
+		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
+	}
+	try {
+		encodeURIComponent ( url.href );
+	}
+	catch ( err ) {
+		return { url : '', errorsString : 'Invalid character in url' };
+	}
+	if ( NOT_FOUND !== url.href.search ( /[()\u0027*]/g ) ) {
+		return { url : '', errorsString : 'Invalid character in url' };
+	}
+
+	return { url : url.href, errorsString : '' };
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSanitizeToHtmlElement
+@desc This function transform a string containing html and svg tags into html and svg elements and copy these elements
+as child nodes of the targetNode. Only tags and attributes present in the ourValidityMap variable
+are copied in the targetNode. Url in the href and src attributes must be valid url (see ourSanitizeUrl method)
+@param {string} htmlString the string to transform
+@param targetNode {HTMLElement} the node in witch the created elements are placed
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
+
+	function cloneNode ( clonedNode, newNode ) {
+		let childs = clonedNode.childNodes;
+		for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
+			let currentNode = clonedNode.childNodes [ nodeCounter ];
+			let nodeName = currentNode.nodeName.toLowerCase ( );
+			let validAttributesNames = ourValidityMap.get ( nodeName );
+			if ( validAttributesNames ) {
+				validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
+				let newChildNode = isSvg ? document.createElementNS ( SVG_NS, nodeName ) : document.createElement ( nodeName );
+				validAttributesNames.forEach (
+					validAttributeName => {
+						if ( isSvg ) {
+							if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
+								newChildNode.setAttributeNS (
+									null,
+									validAttributeName,
+									currentNode.getAttribute ( validAttributeName )
+								);
+								currentNode.removeAttributeNS ( null, validAttributeName );
+							}
+						}
+						else if ( currentNode.hasAttribute ( validAttributeName ) ) {
+							if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
+								let attributeValue = ourSanitizeUrl (
+									currentNode.getAttribute ( validAttributeName ),
+									validAttributeName
+								).url;
+								if ( '' !== attributeValue ) {
+									newChildNode.setAttribute ( validAttributeName, attributeValue );
+								}
+							}
+							else {
+								newChildNode.setAttribute (
+									validAttributeName,
+									currentNode.getAttribute ( validAttributeName ) );
+							}
+							currentNode.removeAttribute ( validAttributeName );
+						}
+					}
+				);
+				newNode.appendChild ( newChildNode );
+				cloneNode ( currentNode, newChildNode );
+			}
+			else if ( '#text' === nodeName ) {
+				newNode.appendChild ( document.createTextNode ( currentNode.nodeValue ) );
+			}
+		}
+	}
+
+	let result =
+		new DOMParser ( ).parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
+			.querySelector ( 'body' ).firstChild;
+	cloneNode ( result, targetNode );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSanitizeToHtmlString
+@desc This function transform a string containing html and svg tags. Tags and attributes not present in the ourValidityMap
+variable are removed. Invalid Url in the href and src attributes are also removed (see ourSanitizeUrl method)
+@param {string} htmlString the string to transform
+@return {object} a HtmlStringValidationReult with the result of the validation
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSanitizeToHtmlString ( htmlString ) {
+
+	let targetString = '';
+	let errorsString = '';
+
+	function ourStringify ( sourceNode ) {
+		let childs = sourceNode.childNodes;
+		for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
+			let currentNode = sourceNode.childNodes [ nodeCounter ];
+			let nodeName = currentNode.nodeName.toLowerCase ( );
+			let validAttributesNames = ourValidityMap.get ( nodeName );
+			if ( validAttributesNames ) {
+				validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
+				targetString += '<' + nodeName;
+				validAttributesNames.forEach (
+					validAttributeName => {
+						if ( isSvg ) {
+							if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
+								targetString += ' ' + validAttributeName + '="' +
+									ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
+									'"';
+								currentNode.removeAttribute ( validAttributeName );
+							}
+						}
+						else if ( currentNode.hasAttribute ( validAttributeName ) ) {
+							if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
+								let attributeValue = ourSanitizeUrl (
+									currentNode.getAttribute ( validAttributeName ),
+									validAttributeName
+								).url;
+								if ( '' === attributeValue ) {
+									errorsString +=
+										'\nAn invalid url (' +
+										currentNode.getAttribute ( validAttributeName ) +
+										') was removed from a ' +
+										validAttributeName +
+										' attribute';
+								}
+								else {
+									targetString += ' ' + validAttributeName + '="' + attributeValue + '"';
+								}
+								currentNode.removeAttribute ( validAttributeName );
+							}
+							else {
+								targetString += ' ' + validAttributeName + '="' +
+								ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
+								'"';
+								currentNode.removeAttribute ( validAttributeName );
+							}
+						}
+					}
+				);
+				targetString += '>';
+				ourStringify ( currentNode );
+				targetString += '</' + nodeName + '>';
+			}
+			else if ( '#text' === nodeName ) {
+				targetString += ourAddHtmlEntities ( currentNode.nodeValue );
+			}
+			else {
+				errorsString += '\nAn invalid tag ' + nodeName + ' was removed';
+			}
+			if ( currentNode.hasAttributes ) {
+				for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
+					errorsString +=
+						'\nAn unsecure attribute ' +
+						currentNode.attributes [ attCounter ].name +
+						'="' +
+						currentNode.attributes [ attCounter ].value +
+						'" was removed.';
+				}
+			}
+
+		}
+	}
+
+	let result =
+		new DOMParser ( ).parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
+			.querySelector ( 'body' ).firstChild;
+	ourStringify ( result );
+	return { htmlString : targetString, errorsString : errorsString };
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class
+@classdesc This class contains methods to sanitize url and string, filtering html tags and attributes
+present in the string.
+@see {@link theHTMLSanitizer} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class HTMLSanitizer {
 
-	validateColor ( colorString ) {
+	/**
+	This method verify that a string describe a css color. A valid css color must start with a # followed by 6 hex numbers
+	@param {string} colorString the string to test
+	@return {string} the verified color or null if the given color is invalid
+	*/
+
+	sanitizeToColor ( colorString ) {
 		let newColor = colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
 		if ( newColor ) {
 			return newColor [ ZERO ];
@@ -300,121 +487,47 @@ class HTMLSanitizer {
 		return null;
 	}
 
-	validateString ( htmlString ) {
-		return ourReplaceHtmlEntities ( this.verify ( htmlString, [ ] ).htmlString );
+	/**
+	This method verify that a string contains a valid url.
+	A valid url must not contains html tags or html entities or invalid characters
+	and must start with a valid protocol
+	Valid protocols are http:, https: and mailto:.
+	@param {string} urlString the url to validate
+	@return {object} a UrlValidationReult with the result of the validation
+	*/
+
+	sanitizeToUrl ( urlString ) {
+		return ourSanitizeUrl ( urlString );
 	}
 
-	validateUrl ( urlString ) {
-		return ourValidateUrl ( ourRemoveHtmlEntities ( this.verify ( urlString, [ ] ).htmlString ) );
+	/**
+	Remove all html tags from a string and replace htmlEntities and < > ' " and nbsp chars with others similar unicode chars
+	@param {string} stringToSanitize the string to transform
+	@return {string} a string with html tags removed and htmlEntities and < >' " and nbsp chars replaced
+	*/
+
+	sanitizeToJsString ( stringToSanitize ) {
+		return ourSanitizeToJsString ( stringToSanitize );
 	}
 
-	parse ( htmlString, targetNode ) {
-		let result =
-			new DOMParser ( ).parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
-				.querySelector ( 'body' ).firstChild;
-		ourCloneNode ( result, targetNode );
-	}
+	/**
+	This function transform a string containing html and svg tags into html and svg elements and copy these elements
+	as child nodes of the targetNode. Only tags and attributes present in the ourValidityMap variable
+	are copied in the targetNode. Url in the href and src attributes must be valid url (see ourSanitizeUrl method)
+	@param {string} htmlString the string to transform
+	@param targetNode {HTMLElement} the node in witch the created elements are placed
+	*/
 
-	verify ( htmlString, validTagsAttributes ) {
+	sanitizeToHtmlElement ( htmlString, targetNode ) { ourSanitizeToHtmlElement ( htmlString, targetNode );	}
 
-		let validityMap = null;
-		if ( validTagsAttributes ) {
-			validityMap = new Map ( );
-			validTagsAttributes.forEach (
-				validTagAttributes => { validityMap.set ( validTagAttributes.tag, validTagAttributes.attributes ); }
-			);
-		}
-		else {
-			validityMap = ourValidityMap;
-		}
+	/**
+	This function transform a string containing html and svg tags. Tags and attributes not present in the ourValidityMap
+	variable are removed. Invalid Url in the href and src attributes are also removed (see ourSanitizeUrl method)
+	@param {string} htmlString the string to transform
+	@return {object} a HtmlStringValidationReult with the result of the validation
+	*/
 
-		let targetString = '';
-		let errorsString = '';
-
-		function ourStringify ( sourceNode ) {
-			let childs = sourceNode.childNodes;
-			for ( let nodeCounter = 0; nodeCounter < childs.length; nodeCounter ++ ) {
-				let currentNode = sourceNode.childNodes [ nodeCounter ];
-				let nodeName = currentNode.nodeName.toLowerCase ( );
-				let validAttributesNames = validityMap.get ( nodeName );
-				if ( validAttributesNames ) {
-					validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
-					let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
-					targetString += '<' + nodeName;
-					validAttributesNames.forEach (
-						validAttributeName => {
-							if ( isSvg ) {
-								if ( currentNode.hasAttributeNS ( null, validAttributeName ) ) {
-									targetString += ' ' + validAttributeName + '="' +
-										ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
-										'"';
-									currentNode.removeAttribute ( validAttributeName );
-								}
-							}
-							else if ( currentNode.hasAttribute ( validAttributeName ) ) {
-								if ( 'href' === validAttributeName || 'src' === validAttributeName ) {
-									let attributeValue = ourValidateUrl (
-										currentNode.getAttribute ( validAttributeName ),
-										validAttributeName
-									).url;
-									if ( '' === attributeValue ) {
-										let errorString =
-											'An invalid url (' +
-											currentNode.getAttribute ( validAttributeName ) +
-											') was removed from a ' +
-											validAttributeName +
-											' attribute';
-										console.log ( errorString );
-										errorsString += '<p>' + errorString + '</p>';
-									}
-									else {
-										targetString += ' ' + validAttributeName + '="' + attributeValue + '"';
-									}
-									currentNode.removeAttribute ( validAttributeName );
-								}
-								else {
-									targetString += ' ' + validAttributeName + '="' +
-									ourAddHtmlEntities ( currentNode.getAttribute ( validAttributeName ) ) +
-									'"';
-									currentNode.removeAttribute ( validAttributeName );
-								}
-							}
-						}
-					);
-					targetString += '>';
-					ourStringify ( currentNode );
-					targetString += '</' + nodeName + '>';
-				}
-				else if ( '#text' === nodeName ) {
-					targetString += ourAddHtmlEntities ( currentNode.nodeValue );
-				}
-				else {
-					let errorString = 'An invalid tag ' + nodeName + ' was removed';
-					console.log ( errorString );
-					errorsString += '<p>' + errorString + '</p>';
-				}
-				if ( currentNode.hasAttributes ) {
-					for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
-						let errorString =
-							'An unsecure attribute ' +
-							currentNode.attributes [ attCounter ].name +
-							'="' +
-							currentNode.attributes [ attCounter ].value +
-							'" was removed.';
-						console.log ( errorString );
-						errorsString += '<p>' + errorString + '</p>';
-					}
-				}
-
-			}
-		}
-
-		let result =
-			new DOMParser ( ).parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
-				.querySelector ( 'body' ).firstChild;
-		ourStringify ( result );
-		return { htmlString : targetString, errorsString : errorsString };
-	}
+	sanitizeToHtmlString ( htmlString ) { return ourSanitizeToHtmlString ( htmlString ); }
 }
 
 const ourHTMLSanitizer = Object.freeze ( new HTMLSanitizer );

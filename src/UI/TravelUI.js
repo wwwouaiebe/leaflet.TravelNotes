@@ -116,7 +116,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 */
 
 function ourOnTravelNameInputChange ( changeEvent ) {
-	theTravelNotesData.travel.name = theHTMLSanitizer.validateString ( changeEvent.target.value );
+	theTravelNotesData.travel.name = theHTMLSanitizer.sanitizeToJsString ( changeEvent.target.value );
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 

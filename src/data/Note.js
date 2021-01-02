@@ -366,10 +366,17 @@ class Note	{
 		this.distance = otherthing.distance || DISTANCE.invalid;
 		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
-		this.validateData ( );
+		this.validateData ( true );
 	}
 
-	validateData ( ) {
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
 			this.iconHeight = DEFAULT_ICON_SIZE;
 		}
@@ -377,37 +384,57 @@ class Note	{
 			this.iconWidth = DEFAULT_ICON_SIZE;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
-			this.iconContent = theHTMLSanitizer.verify ( this.iconContent ).htmlString;
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.iconContent + ')' );
+			}
+			this.iconContent = result.htmlString;
 		}
 		else {
 			this.iconContent = '';
 		}
 		if ( 'string' === typeof ( this.popupContent ) ) {
-			this.popupContent = theHTMLSanitizer.verify ( this.popupContent ).htmlString;
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.popupContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.popupContent + ')' );
+			}
+			this.popupContent = result.htmlString;
 		}
 		else {
 			this.popupContent = '';
 		}
 		if ( 'string' === typeof ( this.tooltipContent ) ) {
-			this.tooltipContent = theHTMLSanitizer.verify ( this.tooltipContent ).htmlString;
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.tooltipContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.tooltipContent + ')' );
+			}
+			this.tooltipContent = result.htmlString;
 		}
 		else {
 			this.tooltipContent = '';
 		}
 		if ( 'string' === typeof ( this.phone ) ) {
-			this.phone = theHTMLSanitizer.verify ( this.phone ).htmlString;
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.phone );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.phone + ')' );
+			}
+			this.phone = result.htmlString;
 		}
 		else {
 			this.phone = '';
 		}
 		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
-			this.url = encodeURI ( theHTMLSanitizer.validateUrl ( this.url ).url );
+			let result = theHTMLSanitizer.sanitizeToUrl ( this.url );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.url + ')' );
+			}
+			this.url = encodeURI ( result.url );
 		}
 		else {
 			this.url = '';
 		}
 		if ( 'string' === typeof ( this.address ) ) {
-			this.address = theHTMLSanitizer.verify ( this.address ).htmlString;
+			this.address = theHTMLSanitizer.sanitizeToHtmlString ( this.address ).htmlString;
 		}
 		else {
 			this.address = '';

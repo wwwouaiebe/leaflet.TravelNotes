@@ -22,6 +22,7 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200825
 Tests ...
 */
@@ -100,7 +101,7 @@ if ( pageId ) {
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
 		.then ( pageContent => {
 			document.getElementById ( 'TravelNotes' ).textContent = '';
-			theHTMLSanitizer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
+			theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
@@ -113,7 +114,7 @@ if ( pageId ) {
 			theIndexedDb.getReadPromise ( pageId )
 				.then ( pageContent => {
 					if ( pageContent ) {
-						theHTMLSanitizer.parse ( pageContent, document.getElementById ( 'TravelNotes' ) );
+						theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 						showTravelNotes ( );
 						showRouteNotes ( );
 						showRouteManeuvers ( );

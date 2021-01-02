@@ -147,9 +147,9 @@ function ourNewGeoCoder ( ) {
 
 			return Object.seal (
 				{
-					name : theHTMLSanitizer.validateString ( namedetails ),
-					street : theHTMLSanitizer.validateString ( street ),
-					city : theHTMLSanitizer.validateString ( city )
+					name : theHTMLSanitizer.sanitizeToJsString ( namedetails ),
+					street : theHTMLSanitizer.sanitizeToJsString ( street ),
+					city : theHTMLSanitizer.sanitizeToJsString ( city )
 				}
 			);
 		}

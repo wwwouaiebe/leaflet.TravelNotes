@@ -311,14 +311,14 @@ function ourCopyObjectTo ( source, target ) {
 
 				if ( 'string' === typeof ( target [ property ] ) ) {
 					if ( 'color' === property ) {
-						source [ property ] = theHTMLSanitizer.validateColor ( source [ property ] );
+						source [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
 					}
 					else if ( NOT_FOUND < [ 'contactMail', 'overpassApiUrl', 'url' ].indexOf ( property ) ) {
-						source [ property ] = theHTMLSanitizer.validateUrl ( source [ property ] ).url;
+						source [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
 					}
 					else {
 						source [ property ] =
-								theHTMLSanitizer.verify ( source [ property ], [] ).htmlString;
+								theHTMLSanitizer.sanitizeToJsString ( source [ property ] ).htmlString;
 					}
 				}
 
@@ -340,7 +340,7 @@ function ourCopyObjectTo ( source, target ) {
 			else {
 				if ( 'string' === typeof ( target.property ) ) {
 					source [ property ] =
-							theHTMLSanitizer.verify ( source [ property ], [] ).htmlString;
+							theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
 				}
 				target [ property ] = source [ property ];
 			}

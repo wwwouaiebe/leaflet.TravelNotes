@@ -212,15 +212,22 @@ class Maneuver {
 		this.validateData ( );
 	}
 
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
 	validateData ( ) {
 		if ( 'string' === typeof ( this.iconName ) ) {
-			this.iconName = theHTMLSanitizer.validateString ( this.iconName );
+			this.iconName = theHTMLSanitizer.sanitizeToJsString ( this.iconName );
 		}
 		else {
 			this.iconName = '';
 		}
 		if ( 'string' === typeof ( this.instruction ) ) {
-			this.instruction = theHTMLSanitizer.validateString ( this.instruction );
+			this.instruction = theHTMLSanitizer.sanitizeToJsString ( this.instruction );
 		}
 		else {
 			this.instruction = '';

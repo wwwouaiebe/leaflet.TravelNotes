@@ -23,6 +23,7 @@ Changes:
 		- Issue #128 : Unify osmSearch and notes icons and data
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200815
 Tests ...
 */
@@ -147,7 +148,7 @@ function ourAddButtons ( ) {
 				},
 				ourToolbarDiv
 			);
-			theHTMLSanitizer.parse ( editionButton.title || '?', newButton );
+			theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
 
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 

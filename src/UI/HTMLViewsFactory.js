@@ -89,7 +89,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	let note = noteAndRoute.note;
 	let noteHTMLElement = theHTMLElementsFactory.create ( 'div' );
 	if ( ZERO !== note.tooltipContent.length ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			note.tooltipContent,
 			theHTMLElementsFactory.create (
 				'div',
@@ -102,7 +102,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	if ( ZERO !== note.popupContent.length ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			note.popupContent,
 			theHTMLElementsFactory.create (
 				'div',
@@ -115,7 +115,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	if ( ZERO !== note.address.length ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' + theTranslator.getText ( 'HTMLViewsFactory - Address' ) + '</span>' +
 			'\u00a0:\u00a0' + note.address,
 			theHTMLElementsFactory.create (
@@ -129,7 +129,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	if ( ZERO !== note.url.length ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
 				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...</a>',
 			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
@@ -137,7 +137,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	if ( ZERO !== note.phone.length ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone,
 			theHTMLElementsFactory.create (
 				'div',
@@ -149,7 +149,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 		);
 	}
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		theUtilities.formatLatLng ( note.latLng ),
 		theHTMLElementsFactory.create (
 			'div',
@@ -162,7 +162,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 
 	if ( noteAndRoute.route ) {
 		if ( noteAndRoute.route.chain ) {
-			theHTMLSanitizer.parse (
+			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
 				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
 				'</span>\u00a0:\u00a0' +
@@ -177,7 +177,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 			);
 		}
 
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' +
 			theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
 			'</span>\u00a0:\u00a0' +
@@ -195,7 +195,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 		if ( nextNote ) {
 			let nextDistance = nextNote.distance - note.distance;
 			if ( MIN_NOTES_DISTANCE < nextDistance ) {
-				theHTMLSanitizer.parse (
+				theHTMLSanitizer.sanitizeToHtmlElement (
 					'<span>' +
 					theTranslator.getText ( 'HTMLViewsFactory - Next note after' ) +
 					'</span>\u00a0:\u00a0' +
@@ -236,7 +236,7 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 		},
 		NoteTextAndIconHTML
 	);
-	theHTMLSanitizer.parse ( noteAndRoute.note.iconContent, iconHTML );
+	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
 	if ( ( 'svg' === iconHTML.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === classPrefix ) ) {
 		iconHTML.firstChild.setAttributeNS (
 			null,
@@ -267,7 +267,7 @@ of the travel
 function ourGetTravelHeaderHTML ( classPrefix ) {
 	let travelHeaderHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'Travel-Header' } );
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		theTravelNotesData.travel.name,
 		theHTMLElementsFactory.create (
 			'div',
@@ -293,7 +293,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 				:
 				routesIterator.value;
 
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<a href="#route' + route.objId + '" >' + route.computedName +
 			'</a>\u00a0:\u00a0' + theUtilities.formatDistance ( route.distance ) + '.',
 			theHTMLElementsFactory.create (
@@ -312,7 +312,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 		}
 	}
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		theTranslator.getText (
 			'HTMLViewsFactory - Travel distance',
 			{
@@ -329,7 +329,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 	);
 
 	if ( ZERO !== travelAscent ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Travel ascent',
 				{
@@ -347,7 +347,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 	}
 
 	if ( ZERO !== travelDescent ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Travel descent',
 				{
@@ -414,7 +414,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 		}
 	);
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		route.computedName,
 		theHTMLElementsFactory.create (
 			'div',
@@ -426,7 +426,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 	);
 
 	if ( ZERO !== route.distance ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Route distance',
 				{
@@ -444,7 +444,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 	}
 
 	if ( ! theTravelNotesData.travel.readOnly && 'bike' !== route.itinerary.transitMode ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Duration',
 				{ duration : theUtilities.formatTime ( route.duration ) }
@@ -460,7 +460,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 	}
 
 	if ( route.itinerary.hasProfile ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Ascent',
 				{ ascent : route.itinerary.ascent.toFixed ( ZERO ) }
@@ -473,7 +473,7 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 				routeHeaderHTML
 			)
 		);
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText (
 				'HTMLViewsFactory - Descent',
 				{ descent : route.itinerary.descent.toFixed ( ZERO ) }
@@ -526,13 +526,13 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 		maneuverHTML
 	);
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		routeAndManeuver.maneuver.instruction,
 		theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
 	);
 
 	if ( routeAndManeuver.route.chain ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' +
 				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
 				'</span>\u00a0:\u00a0' +
@@ -541,7 +541,7 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 		);
 	}
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		'<span>' +
 			theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
 			'</span>\u00a0:\u00a0' +
@@ -550,7 +550,7 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 	);
 
 	if ( DISTANCE.defaultValue < routeAndManeuver.maneuver.distance ) {
-		theHTMLSanitizer.parse (
+		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' +
 				theTranslator.getText ( 'HTMLViewsFactory - Next maneuver after' ) +
 				'</span>\u00a0:\u00a0' +
@@ -646,7 +646,7 @@ function ourGetRouteFooterHTML ( classPrefix, route ) {
 
 	let footerHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteFooter' } );
 
-	theHTMLSanitizer.parse ( footerText, footerHTML );
+	theHTMLSanitizer.sanitizeToHtmlElement ( footerText, footerHTML );
 
 	return footerHTML;
 }
@@ -673,7 +673,7 @@ function ourGetTravelFooterHTML ( classPrefix ) {
 		theTranslator.getText ( 'HTMLViewsFactory - OpenStreetMap contributors' ) + '</a>';
 	let footerHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'TravelFooter' } );
 
-	theHTMLSanitizer.parse ( footerText, footerHTML );
+	theHTMLSanitizer.sanitizeToHtmlElement ( footerText, footerHTML );
 
 	return footerHTML;
 }
@@ -693,7 +693,7 @@ function ourGetTravelFooterHTML ( classPrefix ) {
 
 function ourGetRouteProfileHTML ( classPrefix, route ) {
 	let profileDiv = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteProfile' } );
-	theHTMLSanitizer.parse ( theTranslator.getText ( 'HTMLViewsFactory - Profile' ), profileDiv );
+	theHTMLSanitizer.sanitizeToHtmlElement ( theTranslator.getText ( 'HTMLViewsFactory - Profile' ), profileDiv );
 	profileDiv.appendChild ( newProfileFactory ( ).createSvg ( route ) );
 
 	return profileDiv;

@@ -28,6 +28,7 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200812
 Tests ...
 
@@ -104,7 +105,7 @@ function myNewAboutDialog ( ) {
 		'Project-OSRM/osrm-text-instructions</a> and ' +
 		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
 
-	theHTMLSanitizer.parse ( aboutString, aboutDialog.content );
+	theHTMLSanitizer.sanitizeToHtmlElement ( aboutString, aboutDialog.content );
 
 	aboutDialog.show ( ).then ( )
 		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );

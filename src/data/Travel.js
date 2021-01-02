@@ -256,15 +256,22 @@ class Travel {
 		this.validateData ( );
 	}
 
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
 	validateData ( ) {
 		if ( 'string' === typeof ( this.layerName ) ) {
-			this.layerName = theHTMLSanitizer.validateString ( this.layerName );
+			this.layerName = theHTMLSanitizer.sanitizeToJsString ( this.layerName );
 		}
 		else {
 			this.layerName = 'OSM - Color';
 		}
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLSanitizer.validateString ( this.name );
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
 		}
 		else {
 			this.name = 'TravelNotes';

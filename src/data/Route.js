@@ -340,9 +340,16 @@ class Route	{
 		this.validateData ( );
 	}
 
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
 	validateData ( ) {
 		if ( 'string' === typeof ( this.name ) ) {
-			this.name = theHTMLSanitizer.validateString ( this.name );
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
 		}
 		else {
 			this.name = '';
@@ -351,7 +358,7 @@ class Route	{
 			this.width = theConfig.route.width;
 		}
 		if ( 'string' === typeof ( this.color ) ) {
-			this.color = theHTMLSanitizer.validateColor ( this.color ) || theConfig.route.color;
+			this.color = theHTMLSanitizer.sanitizeToColor ( this.color ) || theConfig.route.color;
 		}
 		else {
 			this.color = theConfig.route.color;

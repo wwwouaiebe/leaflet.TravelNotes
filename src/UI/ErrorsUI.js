@@ -24,6 +24,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200821
 Tests ...
 */
@@ -185,7 +186,7 @@ function ourShow ( message, errorLevel ) {
 	)
 		.addEventListener ( 'click', ourOnTimer, false );
 
-	theHTMLSanitizer.parse (
+	theHTMLSanitizer.sanitizeToHtmlElement (
 		message,
 		theHTMLElementsFactory.create (
 			'div',

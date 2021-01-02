@@ -24,6 +24,7 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200821
 Tests ...
 */
@@ -97,7 +98,7 @@ class AttributionsUI {
 			attributionsDiv.removeChild ( attributionsDiv.firstChild );
 		}
 
-		theHTMLSanitizer.parse ( attributionsString, attributionsDiv );
+		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, attributionsDiv );
 	}
 }
 

@@ -213,6 +213,13 @@ class ItineraryPoint {
 		this.validateData ( );
 	}
 
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
 	validateData ( ) {
 		if ( 'number' !== typeof ( this.lat ) ) {
 			this.lat = LAT_LNG.defaultValue;
