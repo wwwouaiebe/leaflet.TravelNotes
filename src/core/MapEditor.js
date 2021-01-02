@@ -39,6 +39,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200802
 Tests ...
 */
@@ -852,9 +854,8 @@ class MapEditor	{
 				return;
 			}
 		}
-		layer.url = url;
 
-		theViewerMapEditor.setLayer ( layer );
+		theViewerMapEditor.setLayer ( layer, url );
 	}
 }
 

@@ -668,7 +668,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			theHTMLElementsFactory.create (
 				'text',
 				{
-					value : theConfig.note.theDevil.text
+					value : '👿'
 				},
 				theHTMLElementsFactory.create (
 					'a',
@@ -678,13 +678,13 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
 							theConfig.note.theDevil.noteZoom + 'z',
 						target : '_blank',
-						title : theConfig.note.theDevil.title
+						title : 'Reminder! The devil will know everything about you'
 					},
 					theHTMLElementsFactory.create (
 						'div',
 						{
 							className : 'TravelNotes-BaseDialog-Button',
-							title : 'Home'
+							title : 'Reminder! The devil will know everything about you'
 						},
 						linkHeader
 					)

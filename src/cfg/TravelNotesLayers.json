@@ -6,8 +6,8 @@
 		"toolbar":
 		{
 			"text":"OSM",
-			"color":"black",
-			"backgroundColor":"lightgray"
+			"color":"#000000",
+			"backgroundColor":"#d3d3d3"
 		},
 		"providerName":"OSM",
 		"providerKeyNeeded":false,
@@ -20,8 +20,8 @@
 		"toolbar":
 		{
 			"text":"🚍",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
@@ -34,8 +34,8 @@
 		"toolbar":
 		{
 			"text":"🚴",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
@@ -48,8 +48,8 @@
 		"toolbar":
 		{
 			"text":"🚶‍",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
@@ -62,8 +62,8 @@
 		"toolbar":
 		{
 			"text":"🌄",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
@@ -76,8 +76,8 @@
 		"toolbar":
 		{
 			"text":"ESRI",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Arcgis",
 		"providerKeyNeeded":false,
@@ -93,8 +93,8 @@
 		"toolbar":
 		{
 			"text":"BE",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"IGN",
 		"providerKeyNeeded":false,
@@ -111,8 +111,8 @@
 		"toolbar":
 		{
 			"text":"FI",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Maanmittauslaitos",
 		"providerKeyNeeded":false,
@@ -127,8 +127,8 @@
 		"toolbar":
 		{
 			"text":"N",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Kartverket",
 		"providerKeyNeeded":false,
@@ -144,8 +144,8 @@
 		"toolbar":
 		{
 			"text":"SE",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Lantmateriet",
 		"providerKeyNeeded":true,
@@ -158,8 +158,8 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"white"
+			"color":"#add8e6",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
@@ -172,8 +172,8 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"lightyellow"
+			"color":"#add8e6",
+			"backgroundColor":"#ffffe0"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
@@ -186,8 +186,8 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"lightgray"
+			"color":"#add8e6",
+			"backgroundColor":"#d3d3d3"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
@@ -200,8 +200,8 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"black"
+			"color":"#add8e6",
+			"backgroundColor":"#000000"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,

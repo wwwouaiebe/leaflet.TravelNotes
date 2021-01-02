@@ -81,9 +81,7 @@ let ourPrivateConfig = {
 		haveLayersToolbarUI : true,
 		toolbarTimeOut : 1500,
 		theDevil : {
-			addButton : false,
-			title : 'Reminder! The devil will know everything about you',
-			text : '👿'
+			addButton : false
 		}
 	},
 	mouseUI : {

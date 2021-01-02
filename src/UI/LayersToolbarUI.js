@@ -25,6 +25,7 @@ Changes:
 	- v2.0.0:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
+		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200821
 Tests ...
 */
@@ -36,44 +37,6 @@ Tests ...
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-@typedef {Object} LayerToolbarButton
-@desc A layers toolbar button properties
-@property {string} text The text to display in the toolbar button
-@property {string} color The foreground color of the toolbar button
-@property {string} backgroundColor The background color of the toolbar button
-@public
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@typedef {Object} Layer
-@todo Creates a class for this and do some verifications on the data. They are coming
-from a file given by the user! After verification freeze the object.
-@desc A background map with all the properties
-@property {string} service The type of service: wms or wmts
-@property {string} url The url to use to get the map
-@property {Object} wmsOptions See the Leaflet TileLayer.WMS documentation
-@property {Array.<number>} bounds The lower left and upper right corner of the map
-@property {number} minZoom The smallest possible zoom for this map
-@property {number} maxZoom The largest possible zoom for this map
-@property {string} name The name of the map
-@property {LayerToolbarButton} toolbar An object with text, color and backgroundColor properties used to create
-the button in the toolbar
-@property {string} providerName The name of the service provider. This name will be used to find the access key to the service.
-@property {booolean} providerKeyNeeded When true, an access key is required to get the map.
-@property {string} attribution The map attributions. For maps based on OpenStreetMap, it is not necessary to add
-the attributions of OpenStreetMap because they are always present in Travel & Notes.
-@property {string} getCapabilitiesUrl The url of the getCapabilities file when it is known.
-@public
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -94,24 +57,29 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
+import { newLayer } from '../data/Layer.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
 
 let ourLayers = [
-	{
-		service : 'wmts',
-		url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-		name : 'OSM - Color',
-		toolbar :
+
+	newLayer (
 		{
-			text : 'OSM',
-			color : 'red',
-			backgroundColor : 'white'
-		},
-		providerName : 'OSM',
-		providerKeyNeeded : false,
-		attribution : ''
-	}
+			service : 'wmts',
+			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+			name : 'OSM - Color',
+			toolbar :
+			{
+				text : 'OSM',
+				color : 'red',
+				backgroundColor : 'white'
+			},
+			providerName : 'OSM',
+			providerKeyNeeded : false,
+			attribution : ''
+		}
+	)
+
 ];
 
 let ourTimerId = null;
@@ -365,8 +333,8 @@ function ourOnMouseEnterToolbar ( ) {
 				',' +
 				theTravelNotesData.map.getZoom ( ) +
 				'z',
-			theConfig.layersToolbarUI.theDevil.title,
-			theConfig.layersToolbarUI.theDevil.text
+			'Reminder! The devil will know everything about you',
+			'👿'
 		);
 	}
 	ourButtonTop += ourButtonHeight;
@@ -424,14 +392,14 @@ class LayersToolbarUI {
 	*/
 
 	getLayer ( layerName ) {
-		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
-		if ( newLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( newLayer.providerName.toLowerCase ( ) );
+		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
+		if ( theLayer.providerKeyNeeded ) {
+			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
 			if ( ! providerKey ) {
-				newLayer = ourLayers [ ZERO ];
+				theLayer = ourLayers [ ZERO ];
 			}
 		}
-		return newLayer;
+		return theLayer;
 	}
 
 	/**
@@ -442,16 +410,16 @@ class LayersToolbarUI {
 	*/
 
 	setLayer ( layerName ) {
-		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
-		if ( newLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( newLayer.providerName.toLowerCase ( ) );
+		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
+		if ( theLayer.providerKeyNeeded ) {
+			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
 			if ( ! providerKey ) {
-				newLayer = ourLayers [ ZERO ];
+				theLayer = ourLayers [ ZERO ];
 			}
 		}
-		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
-		theAttributionsUI.attributions = newLayer.attribution;
-		theTravelNotesData.travel.layerName = newLayer.name;
+		theEventDispatcher.dispatch ( 'layerchange', { layer : theLayer } );
+		theAttributionsUI.attributions = theLayer.attribution;
+		theTravelNotesData.travel.layerName = theLayer.name;
 	}
 
 	/**
@@ -459,8 +427,10 @@ class LayersToolbarUI {
 	@param {Array.<Layer>} layers the layer list to add
 	*/
 
-	addLayers ( layers ) {
-		ourLayers = ourLayers.concat ( layers );
+	addLayers ( jsonLayers ) {
+		jsonLayers.forEach (
+			jsonLayer => { ourLayers.push ( newLayer ( jsonLayer ) ); }
+		);
 	}
 }
 

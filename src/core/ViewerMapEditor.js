@@ -23,6 +23,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200803
 Tests ...
 */
@@ -364,13 +366,13 @@ class ViewerMapEditor {
 	@listens layerchange
 	*/
 
-	setLayer ( layer ) {
+	setLayer ( layer, url ) {
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
-			leafletLayer = L.tileLayer ( layer.url );
+			leafletLayer = L.tileLayer ( url );
 		}
 		else {
-			leafletLayer = L.tileLayer.wms ( layer.url, layer.wmsOptions );
+			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
 		if ( ourCurrentLayer ) {
