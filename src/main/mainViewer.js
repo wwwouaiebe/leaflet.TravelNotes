@@ -91,7 +91,13 @@ function ourNewMainViewer ( ) {
 			.forEach (
 				urlSearchSubString => {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
+						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
+						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
+							myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
+						}
+						else {
+							console.log ( 'The distant file is not on the same site than the app' );
+						}
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
