@@ -59,6 +59,7 @@ Tests ...
 */
 
 /* eslint no-magic-numbers: "off" */
+/* eslint max-depth: ["warn", 5]*/
 
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { NOT_FOUND } from '../util/Constants.js';

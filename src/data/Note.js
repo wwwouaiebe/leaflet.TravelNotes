@@ -48,6 +48,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint complexity: ["warn", 27]*/
+/* eslint max-statements: ["warn", 50]*/
+
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';

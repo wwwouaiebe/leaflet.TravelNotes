@@ -54,6 +54,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint complexity: ["warn", 45]*/
+
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
