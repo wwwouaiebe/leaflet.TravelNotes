@@ -166,7 +166,7 @@ function ourAddNote ( noteObjId ) {
 			iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
 			popupAnchor : [ ZERO, -note.iconHeight / TWO ],
 			html : note.iconContent,
-			className : 'TravelNotes-AllNotes ' + theConfig.note.style
+			className : 'TravelNotes-AllNotes '
 		}
 	);
 
