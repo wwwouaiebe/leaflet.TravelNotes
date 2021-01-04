@@ -53,6 +53,7 @@ import { theGeometry } from '../util/Geometry.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
@@ -75,7 +76,7 @@ let ourFilterItems = [];
 
 class DictionaryItem {
 	constructor ( itemName, isRoot ) {
-		this.name = itemName;
+		this.name = theHTMLSanitizer.sanitizeToJsString ( itemName );
 		this.items = [];
 		this.filterTagsArray = [];
 		this.elementTypes = [ 'node', 'way', 'relation' ];
