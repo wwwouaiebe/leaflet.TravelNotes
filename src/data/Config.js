@@ -406,7 +406,7 @@ class Config {
 	get routeEditor ( ) { return ourPrivateConfig.routeEditor; }
 	get travelEditor ( ) { return ourPrivateConfig.travelEditor; }
 	get haveBeforeUnloadWarning ( ) { return ourPrivateConfig.haveBeforeUnloadWarning; }
-	get overpassApiUrl ( ) { return ourPrivateConfig.overpassApiUrl; }
+	get overpassApi ( ) { return ourPrivateConfig.overpassApi; }
 	get nominatim ( ) { return ourPrivateConfig.nominatim; }
 	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
 	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
