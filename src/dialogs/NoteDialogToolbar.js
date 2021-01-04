@@ -117,7 +117,7 @@ function ourAddSelectOptions ( ) {
 			theHTMLElementsFactory.create (
 				'option',
 				{
-					text : selectOption.name
+					text : theHTMLSanitizer.ourSanitizeToJsString ( selectOption.name )
 				}
 			)
 		)
@@ -142,8 +142,8 @@ function ourAddButtons ( ) {
 				'button',
 				{
 					type : 'button',
-					htmlBefore : editionButton.htmlBefore || '',
-					htmlAfter : editionButton.htmlAfter || '',
+					htmlBefore : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlBefore ).htmlString || '',
+					htmlAfter : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlAfter ).htmlString || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
 				},
 				ourToolbarDiv
@@ -172,6 +172,7 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 		try {
 			let newButtonsAndIcons = JSON.parse ( fileReader.result );
 			ourButtons = ourButtons.concat ( newButtonsAndIcons.editionButtons );
+
 			ourSelectOptions =
 				ourSelectOptions.concat ( newButtonsAndIcons.preDefinedIconsList );
 			ourSelectOptions.sort (
