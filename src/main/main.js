@@ -58,6 +58,7 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
@@ -97,14 +98,15 @@ function ourNewMain ( ) {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
 						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
-							myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
+							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) );
 						}
 						else {
 							console.log ( 'The distant file is not on the same site than the app' );
 						}
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+						myLanguage =
+							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
 					}
 				}
 			);

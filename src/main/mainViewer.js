@@ -49,6 +49,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -93,14 +94,15 @@ function ourNewMainViewer ( ) {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
 						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
-							myTravelUrl = atob ( urlSearchSubString.substr ( FOUR ) );
+							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) );
 						}
 						else {
 							console.log ( 'The distant file is not on the same site than the app' );
 						}
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+						myLanguage =
+							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
 					}
 					else if ( 'lay' === urlSearchSubString.substr ( ZERO, THREE ).toLowerCase ( ) ) {
 						myAddLayerToolbar = true;
