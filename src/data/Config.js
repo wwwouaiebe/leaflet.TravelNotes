@@ -128,19 +128,19 @@ let ourPrivateConfig = {
 		fill : false
 	},
 	searchPointMarker : {
-		color : '#00ff00',
+		color : '#006400',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	searchPointPolyline : {
-		color : '#00ff00',
+		color : '#006400',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	previousSearchLimit : {
-		color : '#00ff00',
+		color : '#006400',
 		fill : false,
 		weight : 1
 	},
