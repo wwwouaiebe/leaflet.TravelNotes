@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -40,6 +40,10 @@ Changes:
 		- Issue #75 : Merge Maps and TravelNotes
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #137 : Remove html tags from json files
+		- Issue #139 : Remove Globals
+		- Issue #140 : Remove userData
 Doc reviewed 20200824
 Tests ...
 */
@@ -48,7 +52,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file TravelNotes.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -90,8 +94,6 @@ import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, TWO } from '../util/Constants.js';
-
-// import { theGlobals } from '../main/Globals.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -379,7 +381,10 @@ class TravelNotes {
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		theTravelNotesData.map.setView ( [ theConfig.map.center.lat, theConfig.map.center.lng ], theConfig.map.zoom );
-		theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Continue with interface' ) );
+		theErrorsUI.showHelp (
+			'<p>' + theTranslator.getText ( 'Help - Continue with interface1' ) + '</p>' +
+			'<p>' + theTranslator.getText ( 'Help - Continue with interface2' ) + '</p>'
+		);
 	}
 
 	/**
@@ -406,13 +411,6 @@ class TravelNotes {
 	get baseDialog ( ) { return newBaseDialog ( ); }
 
 	/**
-	Free data that are added to the TravelNotes file. Must follow the JSON rules.
-	*/
-
-	get userData ( ) { return theTravelNotesData.travel.userData; }
-	set userData ( userData ) { theTravelNotesData.travel.userData = userData; }
-
-	/**
 	get the Leaflet map object
 	*/
 
@@ -435,21 +433,6 @@ class TravelNotes {
 	*/
 
 	get version ( ) { return theCurrentVersion; }
-
-	/**
-	*/
-
-	/*
-	get globals ( ) {
-		if ( theConfig.haveGlobals ) {
-			return theGlobals;
-		}
-
-		return null;
-
-	}
-*/
-
 }
 
 const ourTravelNotes = Object.seal ( new TravelNotes );

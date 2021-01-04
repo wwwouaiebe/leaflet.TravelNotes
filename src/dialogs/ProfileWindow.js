@@ -22,6 +22,8 @@ Changes:
 		- created
 	- v1.8.0:
 		- Issue #99 : Add distance in the elevation window
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -35,13 +37,13 @@ import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file ProfileWindow.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -199,7 +201,7 @@ function ourNewProfileWindow ( ) {
 			let markerY = SVG_PROFILE.margin + SVG_PROFILE.height;
 
 			// line
-			myMarker = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			myMarker = document.createElementNS ( SVG_NS, 'polyline' );
 			myMarker.setAttributeNS (
 				null,
 				'points',
@@ -218,7 +220,7 @@ function ourNewProfileWindow ( ) {
 					SVG_PROFILE.xDeltaText;
 
 			// distance
-			myDistanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myDistanceText = document.createElementNS ( SVG_NS, 'text' );
 			myDistanceText.appendChild (
 				document.createTextNode ( theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
 			);
@@ -229,7 +231,7 @@ function ourNewProfileWindow ( ) {
 			mySvg.appendChild ( myDistanceText );
 
 			// elevation
-			myElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myElevText = document.createElementNS ( SVG_NS, 'text' );
 			myElevText.appendChild (
 				document.createTextNode (
 					'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.'
@@ -246,7 +248,7 @@ function ourNewProfileWindow ( ) {
 			mySvg.appendChild ( myElevText );
 
 			// pente
-			myAscentText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			myAscentText = document.createElementNS ( SVG_NS, 'text' );
 			myAscentText.appendChild (
 				document.createTextNode (
 					'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % '
@@ -330,7 +332,7 @@ function ourNewProfileWindow ( ) {
 		myRoute = route;
 		mySvg = newProfileFactory ( ).createSvg ( route );
 
-		myProfileWindow.header.innerHTML = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
+		myProfileWindow.header.textContent = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
 		myProfileWindow.content.appendChild ( mySvg );
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
@@ -340,7 +342,7 @@ function ourNewProfileWindow ( ) {
 			'div',
 			{
 				className : 'TravelNotes-ProfileWindow-Ascent',
-				innerHTML : theTranslator.getText (
+				textContent : theTranslator.getText (
 					'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}',
 					{
 						ascent : myRoute.itinerary.ascent.toFixed ( ZERO ),

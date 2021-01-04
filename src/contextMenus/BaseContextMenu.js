@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -25,6 +25,9 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v2.0.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200727
 Tests ...
  */
@@ -33,7 +36,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file BaseContextMenu.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -340,7 +343,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		ourCloseButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c', // &#x274c = ❌
+				textContent : '❌',
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
@@ -381,10 +384,12 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 			screenWidth - ourContainer.clientWidth - MENU_MARGIN
 		);
 		if ( parentDiv ) {
-			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;right:' + MENU_MARGIN + 'px;' );
+			ourContainer.style.top = String ( menuTop ) + 'px';
+			ourContainer.style.right = String ( MENU_MARGIN ) + 'px';
 		}
 		else {
-			ourContainer.setAttribute ( 'style', 'top:' + menuTop + 'px;left:' + menuLeft + 'px;' );
+			ourContainer.style.top = String ( menuTop ) + 'px';
+			ourContainer.style.left = String ( menuLeft ) + 'px';
 		}
 	}
 
@@ -412,7 +417,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 				let itemButton = theHTMLElementsFactory.create (
 					'div',
 					{
-						innerHTML : menuItem.name,
+						textContent : menuItem.name,
 						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
 						objId : menuItemCounter,
 						className :

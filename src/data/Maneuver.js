@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -22,6 +22,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200730
 Tests ...
 */
@@ -30,7 +32,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Maneuver.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -50,6 +52,7 @@ Tests ...
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Maneuver' );
@@ -93,7 +96,8 @@ function ourValidate ( something ) {
 			}
 			// eslint break omitted intentionally
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -205,6 +209,38 @@ class Maneuver {
 		this.duration = otherthing.duration || DISTANCE.defaultValue;
 		this.itineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.iconName ) ) {
+			this.iconName = theHTMLSanitizer.sanitizeToJsString ( this.iconName );
+		}
+		else {
+			this.iconName = '';
+		}
+		if ( 'string' === typeof ( this.instruction ) ) {
+			this.instruction = theHTMLSanitizer.sanitizeToJsString ( this.instruction );
+		}
+		else {
+			this.instruction = '';
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.duration ) ) {
+			this.duration = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.itineraryPointObjId ) ) {
+			this.itineraryPointObjId = INVALID_OBJ_ID;
+		}
 	}
 }
 

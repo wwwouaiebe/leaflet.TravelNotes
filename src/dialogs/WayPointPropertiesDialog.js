@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.12.0:
 		- created
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200816
 Tests ...
 */
@@ -26,7 +29,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file WayPointPropertiesDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -100,6 +103,9 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 
 		wayPoint.name = myNameInput.value;
 		wayPoint.address = myAddressInput.value;
+		wayPoint.validateData ( );
+
+		console.log ( wayPoint );
 
 		return wayPoint;
 	}
@@ -172,7 +178,7 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
+				textContent : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
 			},
 			myWayPointDataDiv
 		);
@@ -205,7 +211,7 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'WayPointPropertiesDialog - Reset address' ),
-				innerHTML : '&#x1f504;' // 1f504 = 🔄
+				textContent : '🔄'
 			},
 			addressHeader
 		)

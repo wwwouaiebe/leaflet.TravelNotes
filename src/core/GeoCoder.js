@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -28,6 +28,8 @@ Changes:
 		- Issue #68 : Review all existing promises.
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200802
 Tests ...
 
@@ -38,7 +40,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file GeoCoder.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -69,6 +71,7 @@ Tests ...
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 import { ZERO, ONE } from '../util/Constants.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -144,9 +147,9 @@ function ourNewGeoCoder ( ) {
 
 			return Object.seal (
 				{
-					name : namedetails,
-					street : street,
-					city : city
+					name : theHTMLSanitizer.sanitizeToJsString ( namedetails ),
+					street : theHTMLSanitizer.sanitizeToJsString ( street ),
+					city : theHTMLSanitizer.sanitizeToJsString ( city )
 				}
 			);
 		}

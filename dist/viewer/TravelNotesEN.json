@@ -121,7 +121,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Address",
-		"msgstr" : "<span>Address</span>&nbsp;:&nbsp;"
+		"msgstr" : "Address"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -132,44 +132,48 @@
 		"msgstr" : "Descent : {descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "Distance from start of travel"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of route",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "Distance from start of route"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Time</span>&nbsp;:&nbsp;{duration}"
+		"msgstr" : "Time\u00A0:\u00A0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Link</span>&nbsp;:&nbsp;"
+		"msgstr" : "Link\u00A0:\u00A0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Next maneuver after</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next maneuver after",
+		"msgstr" : "Next maneuver after"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Next note after",
+		"msgstr" : "Next note after"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - OpenStreetMap contributors",
+		"msgstr" : "OpenStreetMap contributors"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
-		"msgstr" : "<span>Phone</span>&nbsp;:&nbsp;"
+		"msgstr" : "☎️"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Profile",
 		"msgstr" : "Profile"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Route distance",
+		"msgstr" : "Route distance\u00a0:\u00a0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -188,24 +192,20 @@
 		"msgstr" : "the train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
-		"msgstr" : "Travel ascent&nbsp;:&nbsp;{ascent} m."
+		"msgid" : "HTMLViewsFactory - Travel ascent",
+		"msgstr" : "Travel ascent\u00A0:\u00A0{ascent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
-		"msgstr" : "Travel descent&nbsp;:&nbsp;{descent} m."
+		"msgid" : "HTMLViewsFactory - Travel descent",
+		"msgstr" : "Travel descent\u00A0:\u00A0{descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Travel distance&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Next note after</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Travel distance",
+		"msgstr" : "Travel distance\u00A0:\u00A0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
-		"msgstr" : "Done with <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank' title='OpenStreetMap contributors'>OpenStreetMap contributors</a>"
+		"msgstr" : "Done with "
 	},
 	{
 		"msgid" : "ItineraryPaneUI - Show notes",
@@ -325,7 +325,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Icon content",
-		"msgstr" : "Icon content&nbsp;:&nbsp;"
+		"msgstr" : "Icon content\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Link",
@@ -341,7 +341,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Phone",
-		"msgstr" : "Phone&nbsp:&nbsp;"
+		"msgstr" : "Phone\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
@@ -353,11 +353,11 @@
 	},
 	{
 		"msgid" : "NoteDialog - Text",
-		"msgstr" : "Text&nbsp;:&nbsp;"
+		"msgstr" : "Text\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
-		"msgstr" : "Tooltip content&nbsp;:&nbsp;"
+		"msgstr" : "Tooltip content\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
@@ -424,8 +424,28 @@
 		"msgstr" : "Password"
 	},
 	{
-		"msgid" : "PasswordDialog - Password rules",
-		"msgstr" : "<p>Password rules:</p><ul><li>At least 12 characters</li><li>At least 1 uppercase</li><li>At least 1 lowercase</li><li>At least one number</li><li>At least one special character</li></ul>"
+		"msgid" : "PasswordDialog - Password rules1",
+		"msgstr" : "Password rules : "
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules2",
+		"msgstr" : "At least 12 characters"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules3",
+		"msgstr" : "At least 1 uppercase"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules4",
+		"msgstr" : "At least 1 lowercase"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules5",
+		"msgstr" : "At least one number"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules6",
+		"msgstr" : "At least one special character"
 	},
 	{
 		"msgid" : "PrintFactory - Print",
@@ -725,11 +745,11 @@
 	},
 	{
 		"msgid" : "TravelUI - Travel",
-		"msgstr" : "Travel&nbsp;:&nbsp;"
+		"msgstr" : "Travel\u00A0:\u00A0"
 	},
 	{
 		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Travel routes&nbsp;:"
+		"msgstr" : "Travel routes\u00A0:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -780,11 +800,23 @@
 		"msgstr" : "Waypoint properties"
 	},
 	{
-		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Move your mouse over the black rectangle <span style='color:white;background-color:black'> Travel &amp; Notes </span> in the upper right corner to display the interface.</p><p>If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (&#x1f511; button on top of interface) to enter your access key.</p>"
+		"msgid" : "Help - Continue with interface1",
+		"msgstr" : "Move your mouse over the black rectangle \"Travel & Notes\" in the upper right corner to display the interface."
 	},
 	{
-		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Use the + button to add a provider</p><p>Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper' or 'OpenRouteservice' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider.</p><p>Complete on the right with your access key</p>"
+		"msgid" : "Help - Continue with interface2",
+		"msgstr" : "If you have a Mapbox, GraphHopper, OpenRouteService, Thunderforest or Lantmateriet access key, open the dialog for editing access keys (🔑 button on top of interface) to enter your access key."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys1",
+		"msgstr" : "Use the + button to add a provider"
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys2",
+		"msgstr" : "Enter the name of the service provider on the left. This must be 'Mapbox', 'GraphHopper', 'OpenRouteservice' or 'MapzenValhalla' for a route provider or 'Mapbox', Thunderforest' or 'Lantmateriet' for a map provider."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys3",
+		"msgstr" : "Complete on the right with your access key"
 	}
 ]

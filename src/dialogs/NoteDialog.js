@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -36,6 +36,9 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200815
 Tests ...
 */
@@ -44,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file NoteDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -64,9 +67,12 @@ import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import { newNote } from '../data/Note.js';
+import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
@@ -87,11 +93,13 @@ at the dialog opening
 
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
+	const DEFAULT_ICON = '?????';
 	let myFocusControl = null;
 	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
 	let myAddress = '';
 	let myCity = '';
+	let myPreviewNote = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -122,6 +130,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	let myAddressInput = null;
 	let myUrlInput = null;
 	let myPhoneInput = null;
+	let myPreviewDiv = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -137,14 +146,21 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 		// Verifying that the icon is not empty. A note with an empty icon cannot be viewed on the map
 		// and then, cannot be edited or removed!
-		if ( ZERO === myIconHtmlContent.value.length ) {
+
+		if ( '' === myIconHtmlContent.value ) {
 			myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 			return;
 		}
+		if ( '' !== myUrlInput.value ) {
+			if ( '' === theHTMLSanitizer.sanitizeToUrl ( myUrlInput.value ).url ) {
+				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
+				return;
+			}
+		}
 
 		// saving values in the note.
-		note.iconWidth = myWidthInput.value;
-		note.iconHeight = myHeightInput.value;
+		note.iconWidth = Number.parseInt ( myWidthInput.value );
+		note.iconHeight = Number.parseInt ( myHeightInput.value );
 		note.iconContent = myIconHtmlContent.value;
 		note.popupContent = myPopupContent.value;
 		note.tooltipContent = myTooltipContent.value;
@@ -152,8 +168,40 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		note.url = myUrlInput.value;
 		note.phone = myPhoneInput.value;
 		note.latLng = myLatLng;
+		note.validateData ( );
 
 		return note;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnInputControl
+	@desc Event listener for textarea and input text
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnInputControl ( ) {
+		if ( '' === myIconHtmlContent.value ) {
+			myPreviewNote.iconContent = DEFAULT_ICON;
+		}
+		else {
+			myPreviewNote.iconContent = myIconHtmlContent.value;
+		}
+		myPreviewNote.popupContent = myPopupContent.value;
+		myPreviewNote.tooltipContent = myTooltipContent.value;
+		myPreviewNote.address = myAddressInput.value;
+		myPreviewNote.url = myUrlInput.value;
+		myPreviewNote.phone = myPhoneInput.value;
+		myPreviewDiv.textContent = '';
+		myPreviewDiv.appendChild (
+			theHTMLViewsFactory.getNoteTextAndIconHTML (
+				'TravelNotes-NoteDialog-',
+				{ note : myPreviewNote, route : null }
+			)
+		);
 	}
 
 	/**
@@ -171,13 +219,14 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		let response = myGeoCoder.parseResponse ( geoCoderData );
 		myAddress = response.street;
 		if ( '' !== response.city ) {
-			myAddress += ' ' + theConfig.note.cityPrefix + response.city + theConfig.note.cityPostfix;
+			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + response.city + '</span>';
 		}
 		myCity = response.city;
 
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && startGeoCoder ) {
 			myAddressInput.value = myAddress;
 		}
+		myOnInputControl ( );
 	}
 
 	/**
@@ -193,6 +242,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	function myOnGeocoderError ( err ) {
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
 		console.log ( err ? err : 'an error occurs when searching the adress.' );
+		myOnInputControl ( );
 	}
 
 	/**
@@ -213,7 +263,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		let address = osmNoteData.streets;
 		let city = '' === osmNoteData.city ? myCity : osmNoteData.city;
 		if ( '' !== city ) {
-			address += ' ' + theConfig.note.cityPrefix + city + theConfig.note.cityPostfix;
+			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + city + '</span>';
 		}
 		if ( osmNoteData.place && osmNoteData.place !== city ) {
 			address += ' (' + osmNoteData.place + ')';
@@ -223,6 +273,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myLatLng = osmNoteData.latLng;
 
 		myNoteDialog.hideWait ( );
+		myOnInputControl ( );
 	}
 
 	/**
@@ -239,6 +290,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
 		console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+		myOnInputControl ( );
 	}
 
 	/**
@@ -274,6 +326,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myHeightInput.value = preDefinedIcon.height;
 			myIconHtmlContent.value = preDefinedIcon.icon;
 			myTooltipContent.value = preDefinedIcon.tooltip;
+			myOnInputControl ( );
 		}
 	}
 
@@ -318,6 +371,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length
 		);
 		myFocusControl.focus ( );
+		myOnInputControl ( );
 	}
 
 	/**
@@ -332,6 +386,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myOnAddressButtonClick ( ) {
 		myAddressInput.value = myAddress;
+		myOnInputControl ( );
 	}
 
 	/**
@@ -351,27 +406,21 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateDialog
-	@desc This method creates the dialog
+	@function myOnBlurUrlInput
+	@desc Event listener for url input
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateDialog ( ) {
-
-		// the dialog base is created
-		myNoteDialog = newBaseDialog ( );
-		myNoteDialog.title = theTranslator.getText ( 'NoteDialog - Note' );
-		myNoteDialog.okButtonListener = myOnOkButtonClick;
-
-		myNoteDataDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-MainDataDiv'
-			},
-			myNoteDialog.content
-		);
+	function myOnBlurUrlInput ( blurEvent ) {
+		let verifyResult = theHTMLSanitizer.sanitizeToUrl ( blurEvent.target.value );
+		if ( '' === verifyResult.errorsString ) {
+			myNoteDialog.hideError ( );
+		}
+		else {
+			myNoteDialog.showError ( verifyResult.errorsString );
+		}
 	}
 
 	/**
@@ -460,7 +509,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Icon content' )
+				textContent : theTranslator.getText ( 'NoteDialog - Icon content' )
 			},
 			myNoteDataDiv
 		);
@@ -468,17 +517,19 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
-				value : note.iconContent
+				value : note.iconContent,
+				placeholder : DEFAULT_ICON
 			},
 			myNoteDataDiv
 		);
 		myIconHtmlContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myIconHtmlContent.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateIconContent
+	@function myCreatePopupContent
 	@desc This method creates the popup content div
 	@private
 
@@ -490,7 +541,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Text' )
+				textContent : theTranslator.getText ( 'NoteDialog - Text' )
 			},
 			myNoteDataDiv
 		);
@@ -503,6 +554,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myPopupContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myPopupContent.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**
@@ -520,7 +572,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Tooltip content' )
+				textContent : theTranslator.getText ( 'NoteDialog - Tooltip content' )
 			},
 			myNoteDataDiv
 		);
@@ -534,6 +586,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myTooltipContent.addEventListener ( 'focus', myOnFocusControl, false );
+		myTooltipContent.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**
@@ -559,7 +612,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
-				innerHTML : '&#x1f504;'
+				textContent : '🔄'
 			},
 			addressHeader
 		)
@@ -588,10 +641,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			)
 		);
 		myAddressInput.addEventListener ( 'focus', myOnFocusControl, false );
-
-		myGeoCoder.getPromiseAddress ( note.latLng )
-			.then ( myOnGeocoderSucces )
-			.catch ( myOnGeocoderError );
+		myAddressInput.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**
@@ -605,6 +655,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myCreateLinkContent ( ) {
+
 		let linkHeader = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -612,28 +663,35 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
+
 		if ( theConfig.note.theDevil.addButton ) {
 			theHTMLElementsFactory.create (
-				'div',
+				'text',
 				{
-					className : 'TravelNotes-BaseDialog-Button',
-					title : 'Home',
-					innerHTML :
-						'<a href="https://www.google.com/maps/@' +
-						note.lat.toFixed ( LAT_LNG.fixed ) +
-						',' +
-						note.lng.toFixed ( LAT_LNG.fixed ) +
-						',' +
-						theConfig.note.theDevil.noteZoom +
-						'z" target="_blank" title="' +
-						theConfig.note.theDevil.title +
-						'" >' +
-						theConfig.note.theDevil.text +
-						'</a> '
+					value : '👿'
 				},
-				linkHeader
+				theHTMLElementsFactory.create (
+					'a',
+					{
+						href : 'https://www.google.com/maps/@' +
+							note.lat.toFixed ( LAT_LNG.fixed ) + ',' +
+							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
+							theConfig.note.theDevil.noteZoom + 'z',
+						target : '_blank',
+						title : 'Reminder! The devil will know everything about you'
+					},
+					theHTMLElementsFactory.create (
+						'div',
+						{
+							className : 'TravelNotes-BaseDialog-Button',
+							title : 'Reminder! The devil will know everything about you'
+						},
+						linkHeader
+					)
+				)
 			);
 		}
+
 		theHTMLElementsFactory.create (
 			'text',
 			{
@@ -655,6 +713,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			( ) => { myFocusControl = null; },
 			false
 		);
+		myUrlInput.addEventListener ( 'blur', myOnBlurUrlInput, false );
+		myUrlInput.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**
@@ -672,7 +732,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				innerHTML : theTranslator.getText ( 'NoteDialog - Phone' )
+				textContent : theTranslator.getText ( 'NoteDialog - Phone' )
 			},
 			myNoteDataDiv
 		);
@@ -686,17 +746,81 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 		myPhoneInput.addEventListener ( 'focus', myOnFocusControl, false );
+		myPhoneInput.addEventListener ( 'input', myOnInputControl, false );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreatePreviewContent
+	@desc This method creates the preview content div
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreatePreviewContent ( ) {
+		myPreviewDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-PreviewDiv'
+			},
+			myNoteDialog.footer
+		);
+
+		myPreviewDiv.appendChild (
+			theHTMLViewsFactory.getNoteTextAndIconHTML (
+				'TravelNotes-NoteDialog-',
+				{ note : myPreviewNote, route : null }
+			)
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateDialog
+	@desc This method creates the dialog
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateDialog ( ) {
+
+		myPreviewNote = newNote ( );
+		myPreviewNote.jsonObject = note.jsonObject;
+		if ( '' === myPreviewNote.iconContent ) {
+			myPreviewNote.iconContent = DEFAULT_ICON;
+		}
+
+		// the dialog base is created
+		myNoteDialog = newBaseDialog ( );
+		myNoteDialog.title = theTranslator.getText ( 'NoteDialog - Note' );
+		myNoteDialog.okButtonListener = myOnOkButtonClick;
+
+		myNoteDataDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-NoteDialog-MainDataDiv'
+			},
+			myNoteDialog.content
+		);
+		myCreateToolbar ( );
+		myCreateIconDimensions ( );
+		myCreateIconContent ( );
+		myCreateTooltipContent ( );
+		myCreatePopupContent ( );
+		myCreateAddressContent ( );
+		myCreateLinkContent ( );
+		myCreatePhoneContent ( );
+		myCreatePreviewContent ( );
+		myGeoCoder.getPromiseAddress ( note.latLng )
+			.then ( myOnGeocoderSucces )
+			.catch ( myOnGeocoderError );
 	}
 
 	myCreateDialog ( );
-	myCreateToolbar ( );
-	myCreateIconDimensions ( );
-	myCreateIconContent ( );
-	myCreatePopupContent ( );
-	myCreateTooltipContent ( );
-	myCreateAddressContent ( );
-	myCreateLinkContent ( );
-	myCreatePhoneContent ( );
 
 	return myNoteDialog;
 }

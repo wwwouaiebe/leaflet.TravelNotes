@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.12.0:
 		- created
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200825
 Tests ...
 */
@@ -27,7 +29,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Constants.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -238,3 +240,5 @@ export const ZERO = 0;
 export const ONE = 1;
 
 export const TWO = 2;
+
+export const SVG_NS = 'http://www.w3.org/2000/svg';

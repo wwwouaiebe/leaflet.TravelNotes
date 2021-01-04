@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -22,6 +22,9 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200821
 Tests ...
 */
@@ -30,7 +33,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file ErrorsUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -48,6 +51,7 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTranslator } from '../UI/Translator.js';
 
 let ourErrorDiv = null;
@@ -95,7 +99,7 @@ function ourOnTimer ( ) {
 		ourShowHelpInput = null;
 		ourShowHelpDiv = null;
 	}
-	ourErrorDiv.innerHTML = '';
+	ourErrorDiv.textContent = '';
 }
 
 /**
@@ -130,7 +134,7 @@ function ourAddHelpCheckbox ( ) {
 		{
 			id : 'TravelNotes-ErrorsUI-HelpInputLabel',
 			for : 'TravelNotes-ErrorsUI-HelpInput',
-			innerHTML : theTranslator.getText ( 'ErrorUI - Dont show again' )
+			textContent : theTranslator.getText ( 'ErrorUI - Dont show again' )
 		},
 		ourShowHelpDiv
 	);
@@ -176,19 +180,23 @@ function ourShow ( message, errorLevel ) {
 		'span',
 		{
 			id : 'TravelNotes-ErrorsUI-CancelButton',
-			innerHTML : '&#x274c'
+			textContent : '❌'
 		},
 		headerDiv
 	)
 		.addEventListener ( 'click', ourOnTimer, false );
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-ErrorsUI-Message',
-			innerHTML : message
-		},
-		ourErrorDiv
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		message,
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-ErrorsUI-Message'
+			},
+			ourErrorDiv
+		)
 	);
+
 	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
 	let timeOutDuration = theConfig.errorUI.timeOut;
 	if ( 'Help' === errorLevel ) {

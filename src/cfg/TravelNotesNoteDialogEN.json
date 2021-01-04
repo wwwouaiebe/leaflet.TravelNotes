@@ -1,108 +1,108 @@
 { "editionButtons" : 
 	[
 		{
-			"title" : "div",
+			"title" : "<span title='Insert a &lt;div&gt; tag'>div</span>",
 			"htmlBefore" : "<div>",
 			"htmlAfter" :  "</div>"
 		},
 		{
-			"title" : "p",
+			"title" : "<span title='Insert a &lt;p&gt; tag'>p</span>",
 			"htmlBefore" : "<p>",
 			"htmlAfter" : "</p>"
 		},
 		{
-			"title" : "span",
+			"title" : "<del title='Insert a &lt;del&gt; tag'>del</del>",
+			"htmlBefore" : "<del>",
+			"htmlAfter" : "</del>"
+		},
+		{
+			"title" : "<ins title='Insert a &lt;ins&gt; tag'>ins</ins>",
+			"htmlBefore" : "<ins>",
+			"htmlAfter" : "</ins>"
+		},
+		{
+			"title" : "<span title='Insert a &lt;span&gt; tag'>span</span>",
 			"htmlBefore" : "<span>",
 			"htmlAfter" : "</span>"
 		},
 		{
-			"title" : "a",
+			"title" : "<span title='Insert a &lt;a&gt; tag'>a</span>",
 			"htmlBefore" : "<a target='_blank' href=''>",
 			"htmlAfter" : "</a>"
 		},
 		{
-			"title": "&lt;li&gt;●&lt;li&gt;",
-			"htmlBefore": "<li>",
-			"htmlAfter": "</li>"
-		}, 	
+			"title" : "<mark title='Insert a &lt;mark&gt; tag'>mark</mark>",
+			"htmlBefore" : "<mark>",
+			"htmlAfter" : "</mark>"
+		},
 		{
-			"title" : "<span style='color:white;background-color:red'>Red</span>",
-			"htmlBefore" : "<span style='color:white;background-color:red'>",
+			"title" : "<span class='TravelNotes-Note-WhiteRed' title='Insert a red background'>Red</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteRed'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:green'>Green</span>",
-			"htmlBefore" : "<span style='color:white;background-color:green'>",
+			"title" : "<span class='TravelNotes-Note-WhiteGreen' title='Insert a green background'>Green</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteGreen'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:blue'>Blue</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBlue'  title='Insert a blue background'>Blue</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBlue'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:brown'>Brown</span>",
-			"htmlBefore" : "<span style='color:white;background-color:brown'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBrown' title='Insert a brown background'>Brown</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBrown'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:black'>Black</span>",
-			"htmlBefore" : "<span style='color:white;background-color:black'>",
+			"title" : "<span class='TravelNotes-Note-WhiteBlack' title='Insert a black background'>Black</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-WhiteBlack'>",
 			"htmlAfter" : "</span>"
 		}, 
 		{
-			"title" : "<span style='border:solid 0.1em'>White</span>",
-			"htmlBefore" : "<span style='border:solid 0.1em'>",
+			"title" : "<span class='TravelNotes-Note-BlackWhite'  title='Insert a framed text'>White</span>",
+			"htmlBefore" : "<span class='TravelNotes-Note-BlackWhite'>",
 			"htmlAfter" : "</span>"
 		},
 		{
-			"title": "⮜",
+			"title": "<span title='Insert character 🚲'>🚲</span>",
+			"htmlBefore": "🚲"
+		}, 
+		{
+			"title": "<span title='Insert character ⮜'>⮜</span>",
 			"htmlBefore": "⮜"
 		}, 
 		{
-			"title": "⮞",
+			"title": "<span title='Insert character ⮞'>⮞</span>",
 			"htmlBefore": "⮞"
 		}, 
 		{
-			"title" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>&nbsp;</span>",
-			"htmlBefore" : "<span style='color:white;background-color:blue'>&nbsp;&#x1F6B2;&nbsp;</span><span style='color:white;background-color:red'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title": "&#x1F6B2;",
-			"htmlBefore": "&nbsp;&#x1F6B2;&nbsp;"
-		}, 
-		{
-			"title" : "<span style='text-decoration: underline'>U</span>",
-			"htmlBefore" : "<span style='text-decoration: underline'>",
-			"htmlAfter" : "</span>"
-		},
-		{
-			"title": "Å",
+			"title": "<span title='Insert character Å'>Å</span>",
 			"htmlBefore": "Å"
 		}, 
 		{
-			"title": "å",
+			"title": "<span title='Insert character å'>å</span>",
 			"htmlBefore": "å"
 		}, 
 		{
-			"title": "Æ",
+			"title": "<span title='Insert character Æ'>Æ</span>",
 			"htmlBefore": "Æ"
 		}, 
 		{
-			"title": "æ",
+			"title": "<span title='Insert character æ'>æ</span>",
 			"htmlBefore": "æ"
 		}, 
 		{
-			"title": "Ø",
+			"title": "<span title='Insert character Ø'>Ø</span>",
 			"htmlBefore": "Ø"
 		}, 
 		{
-			"title": "ø",
+			"title": "<span title='Insert character ø'>ø</span>",
 			"htmlBefore": "ø"
 		},
 		{
-			"title": "&amp;nbsp;",
+			"title": "<span title='Insert a non-breaking space'>&amp;nbsp;</span>",
 			"htmlBefore": "&nbsp;"
 		}
 	],
@@ -621,7 +621,7 @@
 		},
 		{
 			"name" : "Bicycle node point",
-			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0073'><svg viewBox='0 0 20 20'><text x='10' y='14'>00</text></svg></div>",
+			"icon" : "<div class='TravelNotes-MapNote TravelNotes-MapNoteCategory-0073'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><text x='10' y='14'>00</text></svg></div>",
 			"tooltip" : "Bicycle node point",
 			"width" : 40,
 			"height" : 40

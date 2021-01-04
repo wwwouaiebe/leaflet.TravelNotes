@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -28,6 +28,9 @@ Changes:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
 		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200818
 Tests ...
 */
@@ -36,7 +39,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file OsmSearchPaneUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -55,6 +58,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newObjId } from '../data/ObjId.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
@@ -226,13 +230,13 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		function myOnItemCheckboxChange ( changeEvent ) {
 			mySelectItem ( changeEvent.target.parentNode.dictItem, changeEvent.target.checked );
-			mySearchTreeDiv.innerHTML = '';
+			mySearchTreeDiv.textContent = '';
 			myAddItem ( theOsmSearchEngine.dictionary );
 		}
 
 		function myOnItemArrowClick ( clickEvent ) {
 			clickEvent.target.parentNode.dictItem.isExpanded = ! clickEvent.target.parentNode.dictItem.isExpanded;
-			mySearchTreeDiv.innerHTML = '';
+			mySearchTreeDiv.textContent = '';
 			myAddItem ( theOsmSearchEngine.dictionary );
 		}
 
@@ -262,7 +266,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				'div',
 				{
 					className : 'TravelNotes-UI-Button TravelNotes-OsmSearchPaneUI-TreeArrow',
-					innerHTML : item.isExpanded ? '▼' : '▶'
+					textContent : item.isExpanded ? '▼' : '▶'
 				},
 				itemDiv
 			);
@@ -294,7 +298,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	function myStartSearch ( ) {
 		myClearPaneDataDiv ( );
 		theOsmSearchEngine.dictionary.isExpanded = false;
-		mySearchTreeDiv.innerHTML = '';
+		mySearchTreeDiv.textContent = '';
 		myAddItem ( theOsmSearchEngine.dictionary );
 		myAddWait ( );
 		theOsmSearchEngine.search ( );
@@ -329,7 +333,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnClearButtonClick ( ) {
 		myClearSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.innerHTML = '';
+		mySearchTreeDiv.textContent = '';
 		myAddItem ( theOsmSearchEngine.dictionary );
 	}
 
@@ -360,7 +364,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnExpandButtonClick ( ) {
 		myExpandSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.innerHTML = '';
+		mySearchTreeDiv.textContent = '';
 		myAddItem ( theOsmSearchEngine.dictionary );
 	}
 
@@ -393,7 +397,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	function myOnCollapseButtonClick ( ) {
 		myCollapseSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.innerHTML = '';
+		mySearchTreeDiv.textContent = '';
 		myAddItem ( theOsmSearchEngine.dictionary );
 	}
 
@@ -460,7 +464,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
-				innerHTML : '🔎'
+				textContent : '🔎'
 			},
 			mySearchToolbar
 		)
@@ -471,7 +475,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Expand tree' ),
-				innerHTML : '▼'
+				textContent : '▼'
 			},
 			mySearchToolbar
 		)
@@ -482,7 +486,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Collapse tree' ),
-				innerHTML : '▶'
+				textContent : '▶'
 			},
 			mySearchToolbar
 		)
@@ -493,7 +497,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				id : 'TravelNotes-OsmSearchPaneUI-ClearAllButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Clear tree' ),
-				innerHTML : '❌'
+				textContent : '❌'
 			},
 			mySearchToolbar
 		)
@@ -530,7 +534,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					innerHTML : paragraphText
+					textContent : paragraphText
 				},
 				parentElement
 			);
@@ -594,21 +598,22 @@ function ourNewOsmSearchPaneUI ( ) {
 		if ( osmElement.tags.rcn_ref ) {
 			iconContent =
 				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text class=\'\' x=10 y=14>' +
 				osmElement.tags.rcn_ref +
 				'</text></svg></div>';
 		}
 		else {
 			iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
 		}
-		theHTMLElementsFactory.create (
+		let iconCell = theHTMLElementsFactory.create (
 			'div',
 			{
-				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell',
-				innerHTML : iconContent
+				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell'
 			},
 			searchResultDiv
 		);
+		theHTMLSanitizer.sanitizeToHtmlElement ( iconContent, iconCell );
+
 		let searchResultCell = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -629,9 +634,9 @@ function ourNewOsmSearchPaneUI ( ) {
 				'a',
 				{
 					href : 'mailto:' + osmElement.tags.email,
-					innerHTML : osmElement.tags.email
+					textContent : osmElement.tags.email
 				},
-				theHTMLElementsFactory.create ( 'div', { innerHTML : '📧 : ' }, searchResultCell )
+				theHTMLElementsFactory.create ( 'div', { textContent : '📧 : ' }, searchResultCell )
 			);
 		}
 		if ( osmElement.tags.website ) {
@@ -640,7 +645,7 @@ function ourNewOsmSearchPaneUI ( ) {
 				{
 					href : osmElement.tags.website,
 					target : '_blank',
-					innerHTML : osmElement.tags.website
+					textContent : osmElement.tags.website
 				},
 				theHTMLElementsFactory.create ( 'div', null, searchResultCell )
 			);

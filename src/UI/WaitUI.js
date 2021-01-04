@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.11.0:
 		- created
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200822
 Tests ...
 */
@@ -28,7 +30,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file WaitUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -126,7 +128,7 @@ function ourNewWaitUI ( ) {
 		*/
 
 		showInfo ( info ) {
-			myMessageDiv.innerHTML = info;
+			myMessageDiv.textContent = info;
 		}
 
 		/**

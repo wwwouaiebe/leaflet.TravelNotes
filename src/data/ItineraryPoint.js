@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -24,6 +24,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.7.0:
 		- issue #89 : Add elevation graph
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200730
 Tests ...
 */
@@ -32,7 +34,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file ItineraryPoint.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -93,7 +95,8 @@ function ourValidate ( something ) {
 		case '1.10.0' :
 		case '1.11.0' :
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -207,6 +210,29 @@ class ItineraryPoint {
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.elev = otherthing.elev || ELEV.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( ) {
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.elev ) ) {
+			this.elev = ELEV.defaultValue;
+		}
 	}
 }
 

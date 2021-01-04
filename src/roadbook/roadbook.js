@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.5.0:
 		- created
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200825
 Tests ...
 */
@@ -28,7 +31,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file RoadbookUpdate.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @desc This file contains the JS code that will be inserted in the TravelNotesRoadbook.html. It's needed to put this JS code
 directly in the TravelNotesRoadbook.html to avoid path problems when saving this TravelNotesRoadbook.html page with the
@@ -40,6 +43,7 @@ save button
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
@@ -95,8 +99,9 @@ let pageId = params.get ( 'page' );
 if ( pageId ) {
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-		.then ( innerHTML => {
-			document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
+		.then ( pageContent => {
+			document.getElementById ( 'TravelNotes' ).textContent = '';
+			theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 			showTravelNotes ( );
 			showRouteNotes ( );
 			showRouteManeuvers ( );
@@ -107,15 +112,15 @@ if ( pageId ) {
 		'storage',
 		( ) => {
 			theIndexedDb.getReadPromise ( pageId )
-				.then ( innerHTML => {
-					if ( innerHTML ) {
-						document.getElementById ( 'TravelNotes' ).innerHTML = innerHTML;
+				.then ( pageContent => {
+					if ( pageContent ) {
+						theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 						showTravelNotes ( );
 						showRouteNotes ( );
 						showRouteManeuvers ( );
 					}
 					else {
-						document.getElementById ( 'TravelNotes' ).innerHTML = '';
+						document.getElementById ( 'TravelNotes' ).textContent = '';
 					}
 				} )
 				.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
@@ -144,14 +149,12 @@ if ( language ) {
 		.then (
 			response => {
 				theTranslator.setTranslations ( response );
-				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show travel notes' );
-				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show maneuver' );
-				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).innerHTML =
+				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
 					theTranslator.getText ( 'Roadbook - show routes notes' );
-				document.getElementById ( 'TravelNotes-SaveFile' ).value =
-					theTranslator.getText ( 'Roadbook - Save' );
 			}
 		)
 		.catch ( err => console.log ( err ? err : 'An error occurs when loading translation' ) );

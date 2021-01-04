@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -21,6 +21,10 @@ Changes:
 		- created
 	- v1.9.0:
 		- issue #103 : Review the attributions
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #136 : Remove html entities from js string
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200821
 Tests ...
 */
@@ -29,7 +33,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file AttributionsUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -46,6 +50,7 @@ Tests ...
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -80,13 +85,20 @@ class AttributionsUI {
 	*/
 
 	set attributions ( attributions ) {
-		document.getElementById ( 'TravelNotes-AttributionsUI' ).innerHTML =
-			'&copy; <a href="http://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
-			'| &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+		let attributionsString =
+			'© <a href="https://leafletjs.com/" target="_blank" title="Leaflet">Leaflet</a> ' +
+			'| © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			attributions +
-			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
+			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a>';
+
+		let attributionsDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );
+		while ( attributionsDiv.firstChild ) {
+			attributionsDiv.removeChild ( attributionsDiv.firstChild );
+		}
+
+		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, attributionsDiv );
 	}
 }
 

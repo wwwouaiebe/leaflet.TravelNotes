@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -30,6 +30,10 @@ Changes:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #136 : Remove html entities from js string
+		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #139 : Remove Globals
 Doc reviewed 20200731
 Tests ...
 */
@@ -38,7 +42,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Config.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -55,10 +59,12 @@ Tests ...
 */
 
 /* eslint no-magic-numbers: "off" */
+/* eslint max-depth: ["warn", 5]*/
+
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 let ourPrivateConfig = {
 	autoLoad : false,
-	haveGlobals : false,
 	map :
 	{
 		center : {
@@ -69,16 +75,15 @@ let ourPrivateConfig = {
 	},
 	travelNotesToolbarUI :
 	{
-		contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		contactMail : {
+			url : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		}
 	},
 	layersToolbarUI : {
 		haveLayersToolbarUI : true,
 		toolbarTimeOut : 1500,
-		contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues',
 		theDevil : {
-			addButton : false,
-			title : 'Reminder! The devil will know everything about you',
-			text : '&#x1f47f;'
+			addButton : false
 		}
 	},
 	mouseUI : {
@@ -94,7 +99,7 @@ let ourPrivateConfig = {
 		showHelp : true
 	},
 	geoLocation : {
-		color : 'red',
+		color : '#ff0000',
 		radius : 11,
 		zoomToPosition : true,
 		zoomFactor : 17,
@@ -118,30 +123,30 @@ let ourPrivateConfig = {
 	},
 	language : 'fr',
 	itineraryPointMarker : {
-		color : 'red',
+		color : '#ff0000',
 		weight : 2,
 		radius : 7,
 		fill : false
 	},
 	searchPointMarker : {
-		color : 'green',
+		color : '#006400',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	searchPointPolyline : {
-		color : 'green',
+		color : '#006400',
 		weight : 4,
 		radius : 20,
 		fill : false
 	},
 	previousSearchLimit : {
-		color : 'green',
+		color : '#006400',
 		fill : false,
 		weight : 1
 	},
 	nextSearchLimit : {
-		color : 'red',
+		color : '#ff0000',
 		fill : false,
 		weight : 1
 	},
@@ -186,11 +191,10 @@ let ourPrivateConfig = {
 			moveOpacity : 1
 		},
 		polyline : {
-			color : 'gray',
+			color : '#808080',
 			weight : 1
 		},
 		haveBackground : false,
-		style : '',
 		svgIconWidth : 200,
 		svgAnleMaxDirection :
 		{
@@ -208,9 +212,7 @@ let ourPrivateConfig = {
 		svgVillageDistance : 400,
 		svgCityDistance : 1200,
 		svgTownDistance : 1500,
-		svgTimeOut : 15000,
-		cityPrefix : '<span class="TravelNotes-NoteHtml-Address-City">',
-		cityPostfix : '</span>',
+		svgTimeOut : 40,
 		maxManeuversNotes : 100
 	},
 	itineraryPointZoom : 17,
@@ -224,7 +226,9 @@ let ourPrivateConfig = {
 		startupRouteEdition : true
 	},
 	haveBeforeUnloadWarning : true,
-	overpassApiUrl : 'https://lz4.overpass-api.de/api/interpreter',
+	overpassApi : {
+		url : 'https://lz4.overpass-api.de/api/interpreter'
+	},
 	nominatim :
 	{
 		url : 'https://nominatim.openstreetmap.org/',
@@ -241,14 +245,14 @@ let ourPrivateConfig = {
 		borderWidth : 30,
 		zoomFactor : 15,
 		entryPointMarker : {
-			color : 'green',
+			color : '#00ff00',
 			weight : 4,
 			radius : 10,
 			fill : true,
 			fillOpacity : 1
 		},
 		exitPointMarker : {
-			color : 'red',
+			color : '#ff0000',
 			weight : 4,
 			radius : 10,
 			fill : true,
@@ -297,15 +301,32 @@ function ourCopyObjectTo ( source, target ) {
 		return;
 	}
 	try {
+
+		// iteration on target.
 		for ( let property in target ) {
 			if ( 'object' === typeof target [ property ] ) {
 				ourCopyObjectTo ( source [ property ], target [ property ] );
 			}
-			else {
-				target [ property ] = source [ property ] || target [ property ];
+			else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
+				if ( 'string' === typeof ( target [ property ] ) ) {
+					if ( 'color' === property ) {
+						target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
+					}
+					else if ( 'url' === property ) {
+						target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
+					}
+					else {
+						target [ property ] =
+								theHTMLSanitizer.sanitizeToJsString ( source [ property ] );
+					}
+				}
+				else {
+					target [ property ] = source [ property ] || target [ property ];
+				}
 			}
 		}
 
+		// iteration on source
 		for ( let property in source ) {
 			if ( 'object' === typeof source [ property ] ) {
 				if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
@@ -315,6 +336,10 @@ function ourCopyObjectTo ( source, target ) {
 					target [ property ] = target [ property ] || {};
 				}
 				ourCopyObjectTo ( source [ property ], target [ property ] );
+			}
+			else if ( 'string' === typeof ( target.property ) ) {
+				target [ property ] =
+							theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
 			}
 			else {
 				target [ property ] = source [ property ];
@@ -360,7 +385,6 @@ function ourFreeze ( object ) {
 
 class Config {
 	get autoLoad ( ) { return ourPrivateConfig.autoLoad; }
-	get haveGlobals ( ) { return ourPrivateConfig.haveGlobals; }
 	get map ( ) { return ourPrivateConfig.map; }
 	get travelNotesToolbarUI ( ) { return ourPrivateConfig.travelNotesToolbarUI; }
 	get layersToolbarUI ( ) { return ourPrivateConfig.layersToolbarUI; }
@@ -382,7 +406,7 @@ class Config {
 	get routeEditor ( ) { return ourPrivateConfig.routeEditor; }
 	get travelEditor ( ) { return ourPrivateConfig.travelEditor; }
 	get haveBeforeUnloadWarning ( ) { return ourPrivateConfig.haveBeforeUnloadWarning; }
-	get overpassApiUrl ( ) { return ourPrivateConfig.overpassApiUrl; }
+	get overpassApi ( ) { return ourPrivateConfig.overpassApi; }
 	get nominatim ( ) { return ourPrivateConfig.nominatim; }
 	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
 	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }

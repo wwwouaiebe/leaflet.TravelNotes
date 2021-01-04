@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -24,6 +24,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200728
 Tests ...
 */
@@ -32,7 +34,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file WayPoint.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -54,6 +56,7 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { theUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'WayPoint' );
 const ourObjIds = new WeakMap ( );
@@ -95,7 +98,8 @@ function ourValidate ( something ) {
 			something.name = '';
 			// eslint break omitted intentionally
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -224,6 +228,28 @@ class WayPoint {
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.address ) ) {
+			this.address = theHTMLSanitizer.sanitizeToJsString ( this.address );
+		}
+		else {
+			this.address = '';
+		}
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
+		}
+		else {
+			this.name = '';
+		}
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = LAT_LNG.defaultValue;
+		}
 	}
 }
 

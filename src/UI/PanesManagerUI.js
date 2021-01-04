@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -28,6 +28,8 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200817
 Tests ...
 */
@@ -36,7 +38,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file PanesManagerUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -93,7 +95,7 @@ let ourPaneControlDiv = null;
 function ourRemoveActivePane ( ) {
 	if ( PANE_ID.invalidPane !== ourActivePaneId ) {
 		ourPanes.get ( ourActivePaneId ).remove ( );
-		ourPaneDataDiv.innerHTML = '';
+		ourPaneDataDiv.textContent = '';
 	}
 }
 
@@ -207,7 +209,7 @@ class PanesManagerUI {
 				theHTMLElementsFactory.create (
 					'div',
 					{
-						innerHTML : pane.getButtonText ( ),
+						textContent : pane.getButtonText ( ),
 						className : 'TravelNotes-DataPaneUI-PaneButton',
 						paneId : pane.getId ( )
 					},

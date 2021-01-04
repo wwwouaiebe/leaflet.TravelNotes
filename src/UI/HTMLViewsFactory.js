@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -29,6 +29,9 @@ Changes:
 		- Issue #70 : Put the get...HTML functions outside of the editors
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200820
 Tests ...
 */
@@ -37,7 +40,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file HTMLViewsFactory.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -54,6 +57,7 @@ Tests ...
 */
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newObjId } from '../data/ObjId.js';
 import { theUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
@@ -85,121 +89,124 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	let note = noteAndRoute.note;
 	let noteHTMLElement = theHTMLElementsFactory.create ( 'div' );
 	if ( ZERO !== note.tooltipContent.length ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'NoteHtml-TooltipContent',
-				innerHTML : note.tooltipContent
-			},
-			noteHTMLElement
-		);
-	}
-	if ( ZERO !== note.popupContent.length ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'NoteHtml-PopupContent',
-				innerHTML : note.popupContent
-			},
-			noteHTMLElement
-		);
-	}
-	if ( ZERO !== note.address.length ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'NoteHtml-Address',
-				innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Address' ) + note.address
-			},
-			noteHTMLElement
-		);
-	}
-	if ( ZERO !== note.phone.length ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'NoteHtml-Phone',
-				innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + note.phone
-			},
-			noteHTMLElement
-		);
-	}
-	if ( ZERO !== note.url.length ) {
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				href : note.url,
-				target : '_blank',
-				innerHTML : note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...'
-			},
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			note.tooltipContent,
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					className : classPrefix + 'NoteHtml-Url',
-					innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Link' )
+					className : classPrefix + 'NoteHtml-TooltipContent'
 				},
 				noteHTMLElement
 			)
 		);
 	}
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'NoteHtml-LatLng',
-			innerHTML :	theTranslator.getText (
-				'HTMLViewsFactory - Latitude Longitude',
+
+	if ( ZERO !== note.popupContent.length ) {
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			note.popupContent,
+			theHTMLElementsFactory.create (
+				'div',
 				{
-					lat : theUtilities.formatLat ( note.lat ),
-					lng : theUtilities.formatLng ( note.lng )
-				}
+					className : classPrefix + 'NoteHtml-PopupContent'
+				},
+				noteHTMLElement
 			)
-		},
-		noteHTMLElement
+		);
+	}
+
+	if ( ZERO !== note.address.length ) {
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<span>' + theTranslator.getText ( 'HTMLViewsFactory - Address' ) + '</span>' +
+			'\u00a0:\u00a0' + note.address,
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'NoteHtml-Address'
+				},
+				noteHTMLElement
+			)
+		);
+	}
+
+	if ( ZERO !== note.url.length ) {
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
+				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...</a>',
+			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
+		);
+	}
+
+	if ( ZERO !== note.phone.length ) {
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone,
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'NoteHtml-Phone'
+				},
+				noteHTMLElement
+			)
+		);
+	}
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		theUtilities.formatLatLng ( note.latLng ),
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : classPrefix + 'NoteHtml-LatLng'
+			},
+			noteHTMLElement
+		)
 	);
+
 	if ( noteAndRoute.route ) {
 		if ( noteAndRoute.route.chain ) {
+			theHTMLSanitizer.sanitizeToHtmlElement (
+				'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
+				'</span>\u00a0:\u00a0' +
+				theUtilities.formatDistance ( note.chainedDistance + note.distance ),
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						className : classPrefix + 'NoteHtml-Distance'
+					},
+					noteHTMLElement
+				)
+			);
+		}
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<span>' +
+			theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
+			'</span>\u00a0:\u00a0' +
+			theUtilities.formatDistance ( note.distance ),
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					className : classPrefix + 'NoteHtml-Distance',
-					innerHTML :	theTranslator.getText (
-						'HTMLViewsFactory - Distance from start of travel',
-						{
-							distance : theUtilities.formatDistance ( note.chainedDistance + note.distance )
-						}
-					)
+					className : classPrefix + 'NoteHtml-Distance'
 				},
 				noteHTMLElement
-			);
-		}
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'NoteHtml-Distance',
-				innerHTML :	theTranslator.getText (
-					'HTMLViewsFactory - Distance from start of route',
-					{
-						distance : theUtilities.formatDistance ( note.distance )
-					}
-				)
-			},
-			noteHTMLElement
+			)
 		);
+
 		let nextNote = noteAndRoute.route.notes.next ( note.objId );
 		if ( nextNote ) {
 			let nextDistance = nextNote.distance - note.distance;
 			if ( MIN_NOTES_DISTANCE < nextDistance ) {
-				theHTMLElementsFactory.create (
-					'div',
-					{
-						className : classPrefix + 'NoteHtml-NextDistance',
-						innerHTML :
-							theTranslator.getText (
-								'HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}',
-								{ distance : theUtilities.formatDistance ( nextDistance ) }
-							)
-					},
-					noteHTMLElement
+				theHTMLSanitizer.sanitizeToHtmlElement (
+					'<span>' +
+					theTranslator.getText ( 'HTMLViewsFactory - Next note after' ) +
+					'</span>\u00a0:\u00a0' +
+					theUtilities.formatDistance ( nextDistance ),
+					theHTMLElementsFactory.create (
+						'div',
+						{
+							className : classPrefix + 'NoteHtml-NextDistance'
+						},
+						noteHTMLElement
+					)
 				);
 			}
 		}
@@ -225,11 +232,11 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 	let iconHTML = theHTMLElementsFactory.create (
 		'div',
 		{
-			className : classPrefix + 'Travel-Notes-IconCell',
-			innerHTML : noteAndRoute.note.iconContent
+			className : classPrefix + 'Travel-Notes-IconCell'
 		},
 		NoteTextAndIconHTML
 	);
+	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
 	if ( ( 'svg' === iconHTML.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === classPrefix ) ) {
 		iconHTML.firstChild.setAttributeNS (
 			null,
@@ -259,13 +266,16 @@ of the travel
 
 function ourGetTravelHeaderHTML ( classPrefix ) {
 	let travelHeaderHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'Travel-Header' } );
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'Travel-Header-Name',
-			innerHTML : theTravelNotesData.travel.name
-		},
-		travelHeaderHTML
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		theTravelNotesData.travel.name,
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : classPrefix + 'Travel-Header-Name'
+			},
+			travelHeaderHTML
+		)
 	);
 
 	let travelDistance = DISTANCE.defaultValue;
@@ -282,75 +292,75 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 				theTravelNotesData.travel.editedRoute
 				:
 				routesIterator.value;
-		let routeHTML = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Travel-Header-RouteName'
-			},
-			travelHeaderHTML
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<a href="#route' + route.objId + '" >' + route.computedName +
+			'</a>\u00a0:\u00a0' + theUtilities.formatDistance ( route.distance ) + '.',
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Travel-Header-RouteName'
+				},
+				travelHeaderHTML
+			)
 		);
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				href : '#route' + route.objId,
-				innerHTML : route.computedName
-			},
-			routeHTML
-		);
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : '\u00a0:\u00a0' + theUtilities.formatDistance ( route.distance ) + '.'
-			},
-			routeHTML
-		);
+
 		if ( route.chain ) {
 			travelDistance += route.distance;
 			travelAscent += route.itinerary.ascent;
 			travelDescent += route.itinerary.descent;
 		}
 	}
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'Travel-Header-TravelDistance',
-			innerHTML :
-				theTranslator.getText ( 'HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}',
-					{
-						distance : theUtilities.formatDistance ( travelDistance )
-					}
-				)
-		},
-		travelHeaderHTML
-	);
-	if ( ZERO !== travelAscent ) {
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		theTranslator.getText (
+			'HTMLViewsFactory - Travel distance',
+			{
+				distance : theUtilities.formatDistance ( travelDistance )
+			}
+		),
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				className : classPrefix + 'Travel-Header-TravelAscent',
-				innerHTML :
-					theTranslator.getText ( 'HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}',
-						{
-							ascent : travelAscent.toFixed ( ZERO )
-						}
-					)
+				className : classPrefix + 'Travel-Header-TravelDistance'
 			},
 			travelHeaderHTML
+		)
+	);
+
+	if ( ZERO !== travelAscent ) {
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Travel ascent',
+				{
+					ascent : travelAscent.toFixed ( ZERO )
+				}
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Travel-Header-TravelAscent'
+				},
+				travelHeaderHTML
+			)
 		);
 	}
+
 	if ( ZERO !== travelDescent ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Travel-Header-TravelDescent',
-				innerHTML :
-					theTranslator.getText ( 'HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}',
-						{
-							descent : travelDescent.toFixed ( ZERO )
-						}
-					)
-			},
-			travelHeaderHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Travel descent',
+				{
+					descent : travelDescent.toFixed ( ZERO )
+				}
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Travel-Header-TravelDescent'
+				},
+				travelHeaderHTML
+			)
 		);
 	}
 	return travelHeaderHTML;
@@ -395,6 +405,7 @@ route ascent (if any) and route descent (if any)
 */
 
 function ourGetRouteHeaderHTML ( classPrefix, route ) {
+
 	let routeHeaderHTML = theHTMLElementsFactory.create (
 		'div',
 		{
@@ -402,62 +413,78 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 			id : 'route' + route.objId
 		}
 	);
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'Route-Header-Name',
-			innerHTML : route.computedName
-		},
-		routeHeaderHTML
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		route.computedName,
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : classPrefix + 'Route-Header-Name'
+			},
+			routeHeaderHTML
+		)
 	);
+
 	if ( ZERO !== route.distance ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Route-Header-Distance',
-				innerHTML : theTranslator.getText (
-					'HTMLViewsFactory - Distance',
-					{ distance : theUtilities.formatDistance ( route.distance ) }
-				)
-			},
-			routeHeaderHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Route distance',
+				{
+					distance : theUtilities.formatDistance ( route.distance )
+				}
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Header-Distance'
+				},
+				routeHeaderHTML
+			)
 		);
 	}
+
 	if ( ! theTravelNotesData.travel.readOnly && 'bike' !== route.itinerary.transitMode ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Route-Header-Duration',
-				innerHTML : theTranslator.getText (
-					'HTMLViewsFactory - Duration',
-					{ duration : theUtilities.formatTime ( route.duration ) }
-				)
-			},
-			routeHeaderHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Duration',
+				{ duration : theUtilities.formatTime ( route.duration ) }
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Header-Duration'
+				},
+				routeHeaderHTML
+			)
 		);
 	}
+
 	if ( route.itinerary.hasProfile ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Route-Header-Ascent',
-				innerHTML : theTranslator.getText (
-					'HTMLViewsFactory - Ascent',
-					{ ascent : route.itinerary.ascent.toFixed ( ZERO ) }
-				)
-			},
-			routeHeaderHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Ascent',
+				{ ascent : route.itinerary.ascent.toFixed ( ZERO ) }
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Header-Ascent'
+				},
+				routeHeaderHTML
+			)
 		);
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : classPrefix + 'Route-Header-Descent',
-				innerHTML : theTranslator.getText (
-					'HTMLViewsFactory - Descent',
-					{ descent : route.itinerary.descent.toFixed ( ZERO ) }
-				)
-			},
-			routeHeaderHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			theTranslator.getText (
+				'HTMLViewsFactory - Descent',
+				{ descent : route.itinerary.descent.toFixed ( ZERO ) }
+			),
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Header-Descent'
+				},
+				routeHeaderHTML
+			)
 		);
 	}
 	return routeHeaderHTML;
@@ -498,53 +525,37 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 		},
 		maneuverHTML
 	);
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			innerHTML : routeAndManeuver.maneuver.instruction
-		},
-		maneuverTextHTML
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		routeAndManeuver.maneuver.instruction,
+		theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
 	);
+
 	if ( routeAndManeuver.route.chain ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				innerHTML :	theTranslator.getText (
-					'HTMLViewsFactory - Distance from start of travel',
-					{
-						distance : theUtilities.formatDistance (
-							routeAndManeuver.route.chainedDistance + routeAndManeuver.maneuverDistance
-						)
-					}
-				)
-			},
-			maneuverTextHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
+				'</span>\u00a0:\u00a0' +
+				theUtilities.formatDistance ( routeAndManeuver.route.chainedDistance + routeAndManeuver.maneuverDistance ),
+			theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
 		);
 	}
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			innerHTML :	theTranslator.getText (
-				'HTMLViewsFactory - Distance from start of route',
-				{
-					distance : theUtilities.formatDistance ( routeAndManeuver.maneuverDistance )
-				}
-			)
-		},
-		maneuverTextHTML
+
+	theHTMLSanitizer.sanitizeToHtmlElement (
+		'<span>' +
+			theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
+			'</span>\u00a0:\u00a0' +
+			theUtilities.formatDistance ( routeAndManeuver.maneuverDistance ),
+		theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
 	);
+
 	if ( DISTANCE.defaultValue < routeAndManeuver.maneuver.distance ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				innerHTML :	theTranslator.getText (
-					'HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}',
-					{
-						distance : theUtilities.formatDistance ( routeAndManeuver.maneuver.distance )
-					}
-				)
-			},
-			maneuverTextHTML
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Next maneuver after' ) +
+				'</span>\u00a0:\u00a0' +
+				theUtilities.formatDistance ( routeAndManeuver.maneuver.distance ),
+			theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
 		);
 	}
 	return maneuverHTML;
@@ -622,9 +633,9 @@ function ourGetRouteManeuversAndNotesHTML ( classPrefix, route ) {
 */
 
 function ourGetRouteFooterHTML ( classPrefix, route ) {
-	let innerHTML = '';
+	let footerText = '';
 	if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
-		innerHTML = theTranslator.getText (
+		footerText = theTranslator.getText (
 			'HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}',
 			{
 				provider : route.itinerary.provider,
@@ -633,13 +644,11 @@ function ourGetRouteFooterHTML ( classPrefix, route ) {
 		);
 	}
 
-	return theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'RouteFooter',
-			innerHTML : innerHTML
-		}
-	);
+	let footerHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteFooter' } );
+
+	theHTMLSanitizer.sanitizeToHtmlElement ( footerText, footerHTML );
+
+	return footerHTML;
 }
 
 /**
@@ -655,13 +664,18 @@ function ourGetRouteFooterHTML ( classPrefix, route ) {
 */
 
 function ourGetTravelFooterHTML ( classPrefix ) {
-	return theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'TravelFooter',
-			innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Travel footer' )
-		}
-	);
+	let footerText =
+		theTranslator.getText ( 'HTMLViewsFactory - Travel footer' ) +
+		'<a href="https://github.com/wwwouaiebe/leaflet.TravelNotes"' +
+		' target="_blank" title="https://github.com/wwwouaiebe/leaflet.TravelNotes" >Travel & Notes</a>, © ' +
+		'<a href="https://www.ouaie.be/" target="_blank" title="https://www.ouaie.be/" >wwwouaiebe 2017 2021</a> © ' +
+		'<a href="https://www.openstreetmap.org/copyright" target="_blank" title="https://www.openstreetmap.org/copyright">' +
+		theTranslator.getText ( 'HTMLViewsFactory - OpenStreetMap contributors' ) + '</a>';
+	let footerHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'TravelFooter' } );
+
+	theHTMLSanitizer.sanitizeToHtmlElement ( footerText, footerHTML );
+
+	return footerHTML;
 }
 
 /**
@@ -678,13 +692,8 @@ function ourGetTravelFooterHTML ( classPrefix ) {
 */
 
 function ourGetRouteProfileHTML ( classPrefix, route ) {
-	let profileDiv = theHTMLElementsFactory.create (
-		'div',
-		{
-			className : classPrefix + 'RouteProfile',
-			innerHTML : theTranslator.getText ( 'HTMLViewsFactory - Profile' )
-		}
-	);
+	let profileDiv = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteProfile' } );
+	theHTMLSanitizer.sanitizeToHtmlElement ( theTranslator.getText ( 'HTMLViewsFactory - Profile' ), profileDiv );
 	profileDiv.appendChild ( newProfileFactory ( ).createSvg ( route ) );
 
 	return profileDiv;
@@ -752,6 +761,18 @@ class HTMLViewsFactory {
 
 	getTravelHTML ( classPrefix ) {
 		return ourGetTravelHTML ( classPrefix );
+	}
+
+	/**
+	@function getNoteTextAndIconHTML
+	@desc Gives an HTMLElement with the note icon and sames values than the ourGetNoteTextHTML function
+	@param {string} classPrefix A string that will be added to all the className of the created HTMLElement
+	@param {NoteAndRoute} noteAndRoute A NoteAndRoute object with the note and the route to witch the note is attached
+	@return {HTMLElement}
+	*/
+
+	getNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
+		return ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute );
 	}
 
 	/**

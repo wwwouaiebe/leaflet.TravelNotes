@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -36,6 +36,9 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200803
 Tests ...
 */
@@ -44,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file NoteEditor.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -103,7 +106,7 @@ function ourNewNoteFromOsmData ( osmNoteData, route ) {
 	note.tooltipContent = osmNoteData.tooltip;
 	note.address = osmNoteData.streets;
 	if ( '' !== osmNoteData.city ) {
-		note.address += ' ' + theConfig.note.cityPrefix + osmNoteData.city + theConfig.note.cityPostfix;
+		note.address += ' ' + '<span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
 	}
 	if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
 		note.address += ' (' + osmNoteData.place + ')';
@@ -341,7 +344,7 @@ class NoteEditor {
 					'NoteEditor - Add a note for each maneuver. Are you sure?',
 					{ noteLength : ourManeuverLength }
 				),
-				secondButtonContent : '&#x274C'
+				secondButtonContent : '❌'
 			}
 		)
 			.show ( )

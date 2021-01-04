@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -22,6 +22,8 @@ Changes:
 		- created
 	- v1.8.0:
 		- Issue #98 : Elevation is not modified in the itinerary pane
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200805
 Tests ...
 */
@@ -30,7 +32,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file ProfileFactory.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -47,7 +49,7 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -298,7 +300,7 @@ function ourNewProfileFactory ( ) {
 				distance += itineraryPoint.distance;
 			}
 		);
-		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 		polyline.setAttributeNS ( null, 'points', pointsAttribute );
 		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-profilePolyline' );
 		mySvg.appendChild ( polyline );
@@ -322,7 +324,7 @@ function ourNewProfileFactory ( ) {
 		let pointsAttribute =
 			LEFT + ',' + TOP + ' ' + LEFT + ',' + BOTTOM + ' ' +
 			RIGHT + ',' + BOTTOM + ' ' + RIGHT + ',' + TOP;
-		let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 		polyline.setAttributeNS ( null, 'points', pointsAttribute );
 		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
 		mySvg.appendChild ( polyline );
@@ -357,7 +359,7 @@ function ourNewProfileFactory ( ) {
 		);
 		let distance = Math.ceil ( myRoute.chainedDistance / selectedScale ) * selectedScale;
 		while ( distance < myRoute.distance + myRoute.chainedDistance ) {
-			let distanceText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			let distanceText = document.createElementNS ( SVG_NS, 'text' );
 
 			distanceText.appendChild (
 				document.createTextNode (
@@ -416,14 +418,14 @@ function ourNewProfileFactory ( ) {
 		const LEFT_TEXT = ( SVG_PROFILE.margin - SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
 		while ( elev < myMaxElev ) {
 			let elevTextY = SVG_PROFILE.margin + ( ( myMaxElev - elev ) * myVScale );
-			let rightElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			let rightElevText = document.createElementNS ( SVG_NS, 'text' );
 			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
 			rightElevText.setAttributeNS ( null, 'x', RIGHT_TEXT );
 			rightElevText.setAttributeNS ( null, 'y', elevTextY );
 			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( rightElevText );
-			let leftElevText = document.createElementNS ( 'http://www.w3.org/2000/svg', 'text' );
+			let leftElevText = document.createElementNS ( SVG_NS, 'text' );
 			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
 			leftElevText.setAttributeNS ( null, 'x', LEFT_TEXT );
@@ -446,7 +448,7 @@ function ourNewProfileFactory ( ) {
 	*/
 
 	function myCreateSvgElement ( ) {
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg = document.createElementNS ( SVG_NS, 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',

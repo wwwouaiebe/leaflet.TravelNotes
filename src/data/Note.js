@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -22,6 +22,8 @@ Changes:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
 */
@@ -30,7 +32,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Note.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -46,13 +48,43 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint complexity: ["warn", 27]*/
+/* eslint max-statements: ["warn", 50]*/
+
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'Note' );
 const ourObjIds = new WeakMap ( );
 const DEFAULT_ICON_SIZE = 0;
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdateStyles
+@desc transform a style attribute to a class attribute for conversion from 1.13.0 to 2.0.0 version
+@param {string} somethingText
+@return {string} the modified text
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpdateStyles ( somethingText ) {
+	let returnValue = somethingText
+		.replaceAll ( /style='color:white;background-color:red'/g, 'class=\'TravelNotes-Note-WhiteRed\'' )
+		.replaceAll ( /style='color:white;background-color:green'/g, 'class=\'TravelNotes-Note-WhiteGreen\'' )
+		.replaceAll ( /style='color:white;background-color:blue'/g, 'class=\'TravelNotes-Note-WhiteBlue\'' )
+		.replaceAll ( /style='color:white;background-color:brown'/g, 'class=\'TravelNotes-Note-WhiteBrown\'' )
+		.replaceAll ( /style='color:white;background-color:black'/g, 'class=\'TravelNotes-Note-WhiteBlack\'' )
+		.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' )
+		.replaceAll ( /style='background-color:white;'/g, 'class=\'TravelNotes-Note-Knooppunt\'' )
+		.replaceAll ( /style='fill:green;font:bold 120px sans-serif;'/g, '' )
+		.replaceAll ( /style='fill:none;stroke:green;stroke-width:10;'/g, '' );
+	return returnValue;
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +120,19 @@ function ourValidate ( something ) {
 		case '1.10.0' :
 		case '1.11.0' :
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			if ( 'string' === typeof ( something.iconHeight ) ) {
+				something.iconHeight = Number.parseInt ( something.iconHeight );
+			}
+			if ( 'string' === typeof ( something.iconWidth ) ) {
+				something.iconWidth = Number.parseInt ( something.iconWidth );
+			}
+			something.iconContent = ourUpdateStyles ( something.iconContent );
+			something.popupContent = ourUpdateStyles ( something.popupContent );
+			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
+			something.phone = ourUpdateStyles ( something.phone );
+			something.address = ourUpdateStyles ( something.address );
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -325,8 +369,99 @@ class Note	{
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.invalid;
-		this.chainedDistance = otherthing.chainedDistance;
+		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( true );
+	}
+
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( verbose ) {
+		if ( 'number' !== typeof ( this.iconHeight ) ) {
+			this.iconHeight = DEFAULT_ICON_SIZE;
+		}
+		if ( 'number' !== typeof ( this.iconWidth ) ) {
+			this.iconWidth = DEFAULT_ICON_SIZE;
+		}
+		if ( 'string' === typeof ( this.iconContent ) ) {
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.iconContent + ')' );
+			}
+			this.iconContent = result.htmlString;
+		}
+		else {
+			this.iconContent = '';
+		}
+		if ( 'string' === typeof ( this.popupContent ) ) {
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.popupContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.popupContent + ')' );
+			}
+			this.popupContent = result.htmlString;
+		}
+		else {
+			this.popupContent = '';
+		}
+		if ( 'string' === typeof ( this.tooltipContent ) ) {
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.tooltipContent );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.tooltipContent + ')' );
+			}
+			this.tooltipContent = result.htmlString;
+		}
+		else {
+			this.tooltipContent = '';
+		}
+		if ( 'string' === typeof ( this.phone ) ) {
+			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.phone );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.phone + ')' );
+			}
+			this.phone = result.htmlString;
+		}
+		else {
+			this.phone = '';
+		}
+		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
+			let result = theHTMLSanitizer.sanitizeToUrl ( this.url );
+			if ( verbose && '' !== result.errorsString ) {
+				console.log ( result.errorsString + ' (' + this.url + ')' );
+			}
+			this.url = encodeURI ( result.url );
+		}
+		else {
+			this.url = '';
+		}
+		if ( 'string' === typeof ( this.address ) ) {
+			this.address = theHTMLSanitizer.sanitizeToHtmlString ( this.address ).htmlString;
+		}
+		else {
+			this.address = '';
+		}
+		if ( 'number' !== typeof ( this.iconLat ) ) {
+			this.iconLat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.iconLng ) ) {
+			this.iconLng = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lat ) ) {
+			this.lat = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.lng ) ) {
+			this.lng = LAT_LNG.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.invalid;
+		}
+		if ( 'number' !== typeof ( this.chainedDistance ) ) {
+			this.chainedDistance = DISTANCE.defaultValue;
+		}
 	}
 }
 

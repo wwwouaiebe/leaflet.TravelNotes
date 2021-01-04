@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -21,6 +21,9 @@ Changes:
 		- created
 	- v1.13.0:
 		- Issue #128 : Unify osmSearch and notes icons and data
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200815
 Tests ...
 */
@@ -29,7 +32,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file NoteDialogToolbar.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -87,6 +90,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 let ourButtons = [];
@@ -113,7 +117,7 @@ function ourAddSelectOptions ( ) {
 			theHTMLElementsFactory.create (
 				'option',
 				{
-					text : selectOption.name
+					text : theHTMLSanitizer.sanitizeToJsString ( selectOption.name )
 				}
 			)
 		)
@@ -138,13 +142,14 @@ function ourAddButtons ( ) {
 				'button',
 				{
 					type : 'button',
-					innerHTML : editionButton.title || '?',
-					htmlBefore : editionButton.htmlBefore || '',
-					htmlAfter : editionButton.htmlAfter || '',
+					htmlBefore : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlBefore || '' ).htmlString || '',
+					htmlAfter : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlAfter || '' ).htmlString || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
 				},
 				ourToolbarDiv
 			);
+			theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
+
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
 
 		}
@@ -167,6 +172,7 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 		try {
 			let newButtonsAndIcons = JSON.parse ( fileReader.result );
 			ourButtons = ourButtons.concat ( newButtonsAndIcons.editionButtons );
+
 			ourSelectOptions =
 				ourSelectOptions.concat ( newButtonsAndIcons.preDefinedIconsList );
 			ourSelectOptions.sort (
@@ -235,7 +241,7 @@ function ourCreateToolbarButtons ( ) {
 		{
 			className : 'TravelNotes-BaseDialog-Button',
 			title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-			innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			textContent : '📂'
 		},
 		ourToolbarDiv
 	);

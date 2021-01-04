@@ -27,6 +27,10 @@ Changes:
 		- Issue #106 : Profiles are not hidden when printing the route maps
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
+		- Issue #136 : Remove html entities from js string
 Doc reviewed 20200508
 Tests ...
 
@@ -37,7 +41,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file PrintFactory.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -141,14 +145,11 @@ function ourNewPrintFactory ( ) {
 
 		let body = document.querySelector ( 'body' );
 		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, body );
-		dummyDiv.setAttribute (
-			'style',
-			'position:absolute;top:0,left:0;width:' +
-				( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) +
-				'mm;height:' +
-				( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) +
-				'mm;'
-		);
+		dummyDiv.style.position = 'absolute';
+		dummyDiv.style.top = '0';
+		dummyDiv.style.left = '0';
+		dummyDiv.style.width = String ( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) + 'mm';
+		dummyDiv.style.height = String ( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) + 'mm';
 		const TILE_SIZE = 256;
 		myTilesPage = Math.ceil ( dummyDiv.clientWidth / TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / TILE_SIZE );
 		let topLeftScreen = theGeometry.screenCoordToLatLng ( ZERO, ZERO );
@@ -518,10 +519,10 @@ function ourNewPrintFactory ( ) {
 		}
 
 		leafletLayer.options.attribution =
-			' &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" ' +
+			' © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			layer.attribution +
-			'| &copy; <a href="https://github.com/wwwouaiebe" target="_blank" ' +
+			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
 
 		return leafletLayer;
@@ -547,7 +548,7 @@ function ourNewPrintFactory ( ) {
 						iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
 						popupAnchor : [ ZERO, -note.iconHeight / TWO ],
 						html : note.iconContent,
-						className : 'TravelNotes-AllNotes ' + theConfig.note.style
+						className : 'TravelNotes-AllNotes '
 					}
 				);
 
@@ -592,15 +593,9 @@ function ourNewPrintFactory ( ) {
 			viewDiv.classList.add ( 'TravelNotes-PrintPageBreak' );
 		}
 
-		// setting the size given by theuser in mm
-		viewDiv.setAttribute (
-			'style',
-			'width:' +
-				myPrintData.paperWidth +
-				'mm;height:' +
-				myPrintData.paperHeight +
-				'mm;'
-		);
+		// setting the size given by the user in mm
+		viewDiv.style.width = String ( myPrintData.paperWidth ) + 'mm';
+		viewDiv.style.height = String ( myPrintData.paperHeight ) + 'mm';
 
 		// creating markers for notes
 		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
@@ -667,7 +662,7 @@ function ourNewPrintFactory ( ) {
 				id : 'TravelNotes-PrintToolbar-PrintButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Print' ),
-				innerHTML : '&#x1F5A8;&#xFE0F;'
+				textContent : '🖨️'
 			},
 			printToolbar
 		)
@@ -678,7 +673,7 @@ function ourNewPrintFactory ( ) {
 				id : 'TravelNotes-PrintToolbar-CancelButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
-				innerHTML : '&#x274c;'
+				textContent : '❌'
 			},
 			printToolbar
 		)

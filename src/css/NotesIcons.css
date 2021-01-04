@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -461,7 +461,7 @@ Changes:
 	max-width: 170px;
 }
 
-.TravelNotes-MapNoteCategory-0073 text {
+.TravelNotes-MapNoteCategory-0073 > svg > text {
 	font: bold 10px sans-serif;
 	fill: rgb(0, 191, 191);
 	text-anchor: middle;

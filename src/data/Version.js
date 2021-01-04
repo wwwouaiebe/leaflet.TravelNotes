@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -26,7 +26,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Version.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -60,7 +60,7 @@ You have also to adapt the version in the ourValidate ( ) method of
 Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
 */
 
-const ourCurrentVersion = '1.13.0';
+const ourCurrentVersion = '2.0.0';
 
 export {
 

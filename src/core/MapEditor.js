@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -39,6 +39,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200802
 Tests ...
 */
@@ -47,7 +49,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file MapEditor.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -852,9 +854,8 @@ class MapEditor	{
 				return;
 			}
 		}
-		layer.url = url;
 
-		theViewerMapEditor.setLayer ( layer );
+		theViewerMapEditor.setLayer ( layer, url );
 	}
 }
 

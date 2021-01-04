@@ -121,7 +121,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Address",
-		"msgstr" : "<span>Adresse</span>&nbsp;:&nbsp;"
+		"msgstr" : "Adresse"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
@@ -132,44 +132,48 @@
 		"msgstr" : "Descente : {descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance",
-		"msgstr" : "<span>Distance</span>&nbsp;:&nbsp;{distance}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
-		"msgstr" : "<span>Distance depuis le début du voyage</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "Distance depuis le début du voyage"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of route",
-		"msgstr" : "<span>Distance depuis le début du trajet</span>&nbsp;:&nbsp;{distance}"
+		"msgstr" : "Distance depuis le début du trajet"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "<span>Temps</span>&nbsp;:&nbsp;{duration}"
+		"msgstr" : "Temps\u00a0:\u00a0{duration}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Latitude Longitude",
-		"msgstr" : "<span>Latitude</span>&nbsp;:&nbsp;{lat}&nbsp;-&nbsp;<span>Longitude</span>&nbsp;:&nbsp;{lng}"
-	},
-	{
 		"msgid" : "HTMLViewsFactory - Link",
-		"msgstr" : "<span>Lien</span>&nbsp;:&nbsp;"
+		"msgstr" : "Lien\u00a0:\u00a0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Manœuvre suivante dans</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Next maneuver after",
+		"msgstr" : "Manœuvre suivante dans"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Next note after",
+		"msgstr" : "Note suivante dans"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - OpenStreetMap contributors",
+		"msgstr" : "les contributeurs de OpenStreetMap"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Phone",
-		"msgstr" : "<span>Téléphone</span>&nbsp;:&nbsp;"
+		"msgstr" : "☎️"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Profile",
 		"msgstr" : "Profil"
+	},
+	{
+		"msgid" : "HTMLViewsFactory - Route distance",
+		"msgstr" : "Longueur du trajet\u00a0:\u00a0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -188,24 +192,20 @@
 		"msgstr" : "le train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent&nbsp;:&nbsp;{ascent}",
-		"msgstr" : "Montées du voyage&nbsp;:&nbsp;{ascent} m."
+		"msgid" : "HTMLViewsFactory - Travel ascent",
+		"msgstr" : "Montées du voyage\u00a0:\u00a0{ascent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent&nbsp;:&nbsp;{descent}",
-		"msgstr" : "Descentes du voyage&nbsp;:&nbsp;{descent} m."
+		"msgid" : "HTMLViewsFactory - Travel descent",
+		"msgstr" : "Descentes du voyage\u00a0:\u00a0{descent} m."
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance&nbsp;:&nbsp;{distance}",
-		"msgstr" : "Longueur du voyage&nbsp;:&nbsp;{distance}"
-	},
-	{
-		"msgid" : "HTMLViewsFactory - Next note after&nbsp;:&nbsp;{distance}",
-		"msgstr" : "<span>Note suivante dans</span>&nbsp;:&nbsp;{distance}"
+		"msgid" : "HTMLViewsFactory - Travel distance",
+		"msgstr" : "Longueur du voyage\u00a0:\u00a0{distance}"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",
-		"msgstr" : "Réalisé avec <a href='https://github.com/wwwouaiebe/leaflet.TravelNotes' target='_blank'>Travel & Notes</a>, <a href='http://www.ouaie.be/' target='_blank'>© wwwouaiebe 2017 2020</a>, © <a href='http://www.openstreetmap.org/copyright' target='_blank' title='les contributeurs de OpenStreetMap'>les contributeurs de OpenStreetMap</a>"
+		"msgstr" : "Réalisé avec "
 	},
 	{
 		"msgid" : "ItineraryPaneUI - Show notes",
@@ -325,7 +325,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Icon content",
-		"msgstr" : "Contenu de l'icône&nbsp;:&nbsp;"
+		"msgstr" : "Contenu de l'icône\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "NoteDialog - Link",
@@ -341,7 +341,7 @@
 	},
 	{
 		"msgid" : "NoteDialog - Phone",
-		"msgstr" : "Téléphone&nbsp:&nbsp;"
+		"msgstr" : "Téléphone\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "Notedialog - not possible to create a SVG icon for a travel note",
@@ -353,11 +353,11 @@
 	},
 	{
 		"msgid" : "NoteDialog - Text",
-		"msgstr" : "Texte&nbsp;:&nbsp;"
+		"msgstr" : "Texte\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "NoteDialog - Tooltip content",
-		"msgstr" : "Contenu du tooltip&nbsp;:&nbsp;"
+		"msgstr" : "Contenu du tooltip\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
@@ -424,8 +424,28 @@
 		"msgstr" : "Mot de passe"
 	},
 	{
-		"msgid" : "PasswordDialog - Password rules",
-		"msgstr" : "<p>Règles des mots de passe:</p><ul><li>Au moins 12 caractères</li><li>Au moins une majuscule</li><li>Au moins une minuscule</li><li>Au moins un chiffre</li><li>Au moins un caractère spécial</li></ul>"
+		"msgid" : "PasswordDialog - Password rules1",
+		"msgstr" : "Règles des mots de passe : "
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules2",
+		"msgstr" : "Au moins 12 caractères"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules3",
+		"msgstr" : "Au moins une majuscule"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules4",
+		"msgstr" : "Au moins une minuscule"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules5",
+		"msgstr" : "Au moins un chiffre"
+	},
+	{
+		"msgid" : "PasswordDialog - Password rules6",
+		"msgstr" : "Au moins un caractère spécial"
 	},
 	{
 		"msgid" : "PrintFactory - Print",
@@ -725,11 +745,11 @@
 	},
 	{
 		"msgid" : "TravelUI - Travel",
-		"msgstr" : "Voyage&nbsp;:&nbsp;"
+		"msgstr" : "Voyage\u00a0:\u00a0"
 	},
 	{
 		"msgid" : "TravelUI - Travel routes",
-		"msgstr" : "Trajets du voyage&nbsp;:"
+		"msgstr" : "Trajets du voyage\u00a0:"
 	},
 	{
 		"msgid" : "TravelNotesToolbarUI - API keys",
@@ -780,11 +800,23 @@
 		"msgstr" : "Propriétés du point de passage"
 	},
 	{
-		"msgid" : "Help - Continue with interface",
-		"msgstr" : "<p>Déplacez votre souris sur le rectangle noir <span style='color:white;background-color:black'> Travel &amp; Notes </span> dans le coin supérieur droit pour afficher l'interface.</p><p>Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton &#x1f511; en haut de l'interface) pour entrer votre clef d'accès.</p>"
+		"msgid" : "Help - Continue with interface1",
+		"msgstr" : "Déplacez votre souris sur le rectangle noir \"Travel & Notes\" dans le coin supérieur droit pour afficher l'interface."
 	},
 	{
-		"msgid" : "Help - Complete the APIKeys",
-		"msgstr" : "<p>Utilisez le bouton + pour ajouter un fournisseur.</p><p>Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper' ou 'OpenRouteservice' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes.</p><p>Complétez à droite avec votre clef d'accès</p>"
+		"msgid" : "Help - Continue with interface2",
+		"msgstr" : "Si vous possédez une clef d'accès Mapbox, GraphHopper, OpenRouteService, Thunderforest ou Lantmateriet ouvrez la boite de dialogue d'édition des clefs d'accès (bouton 🔑 en haut de l'interface) pour entrer votre clef d'accès."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys1",
+		"msgstr" : "Utilisez le bouton + pour ajouter un fournisseur."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys2",
+		"msgstr" : "Introduisez à gauche le nom du fournisseur d'accès. Celui-ci doit être 'Mapbox', 'GraphHopper', 'OpenRouteservice' ou 'MapzenValhalla' pour un fournisseur d'itinéraires ou 'Mapbox, 'Thunderforest' ou 'Lantmateriet' pour un fournisseur de cartes."
+	},
+	{
+		"msgid" : "Help - Complete the APIKeys3",
+		"msgstr" : "Complétez à droite avec votre clef d'accès"
 	}
 ]

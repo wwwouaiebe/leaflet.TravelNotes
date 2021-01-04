@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200901
 Tests ...
 */
@@ -28,7 +30,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file OsmSearchEngine.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -51,6 +53,7 @@ import { theGeometry } from '../util/Geometry.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
@@ -73,7 +76,7 @@ let ourFilterItems = [];
 
 class DictionaryItem {
 	constructor ( itemName, isRoot ) {
-		this.name = itemName;
+		this.name = theHTMLSanitizer.sanitizeToJsString ( itemName );
 		this.items = [];
 		this.filterTagsArray = [];
 		this.elementTypes = [ 'node', 'way', 'relation' ];
@@ -230,7 +233,7 @@ function ourGetSearchPromises ( ) {
 	}
 	for ( const [ element, requestString ] of Object.entries ( requestStrings ) ) {
 		if ( '' !== requestString ) {
-			let url = theConfig.overpassApiUrl + '?data=[out:json][timeout:20];(' +
+			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];(' +
 				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );

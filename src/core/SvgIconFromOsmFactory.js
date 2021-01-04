@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -23,6 +23,10 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #68 : Review all existing promises.
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #136 : Remove html entities from js string
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200808
 Tests ...
 */
@@ -31,7 +35,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file SvgIconFromOsmFactory.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -69,7 +73,7 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { SVG_NS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -402,7 +406,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 				// It's a passing street ... saving name...
 				while ( ZERO !== streetOcurrences ) {
-					myStreets = '' === myStreets ? wayName : myStreets + ' &#x2AA5; ' + wayName;
+					myStreets = '' === myStreets ? wayName : myStreets + ' ⪥  ' + wayName; // ⪥  = ><
 					streetOcurrences --;
 				}
 			}
@@ -411,19 +415,19 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		if ( AT_START === myPositionOnRoute ) {
 
 			// It's the start point adding a green circle to the outgoing street
-			myStreets = '&#x1F7E2; ' + outgoingStreet;
+			myStreets = '🟢 ' + outgoingStreet;
 		}
 		else if ( AT_END === myPositionOnRoute ) {
 
 			// It's the end point adding a red circle to the incoming street
-			myStreets = incomingStreet + ' &#x1F534;';
+			myStreets = incomingStreet + ' 🔴 ';
 		}
 		else {
 
 			// Adiing the incoming and outgoing streets and direction arrow
 			myStreets =
 				incomingStreet +
-				( '' === myStreets ? '' : ' &#x2AA5; ' + myStreets ) +
+				( '' === myStreets ? '' : ' ⪥  ' + myStreets ) + // ⪥ = ><
 				' ' + myDirectionArrow + ' ' +
 				outgoingStreet;
 		}
@@ -585,35 +589,35 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		if ( null !== myDirection ) {
 			if ( myDirection < theConfig.note.svgAnleMaxDirection.right ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
-				myDirectionArrow = '&#x1f882;';
+				myDirectionArrow = '🢂';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight right' );
-				myDirectionArrow = '&#x1f885;';
+				myDirectionArrow = '🢅';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.continue ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Continue' );
-				myDirectionArrow = '&#x1f881;';
+				myDirectionArrow = '🢁';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight left' );
-				myDirectionArrow = '&#x1f884;';
+				myDirectionArrow = '🢄';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.left ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn left' );
-				myDirectionArrow = '&#x1f880;';
+				myDirectionArrow = '🢀';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp left' );
-				myDirectionArrow = '&#x1f887;';
+				myDirectionArrow = '🢇';
 			}
 			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp right' );
-				myDirectionArrow = '&#x1f886;';
+				myDirectionArrow = '🢆';
 			}
 			else {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
-				myDirectionArrow = '&#x1f882;';
+				myDirectionArrow = '🢂';
 			}
 		}
 
@@ -673,7 +677,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				pointsAttribute += points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
 					points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 			}
-			let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+			let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 			polyline.setAttributeNS ( null, 'points', pointsAttribute );
 			polyline.setAttributeNS ( null, 'class', 'TravelNotes-OSM-Itinerary' );
 			polyline.setAttributeNS (
@@ -747,7 +751,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 							points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
 					}
 
-					let polyline = document.createElementNS ( 'http://www.w3.org/2000/svg', 'polyline' );
+					let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 					polyline.setAttributeNS ( null, 'points', pointsAttribute );
 					polyline.setAttributeNS (
 						null,
@@ -781,7 +785,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myCreateSvg ( ) {
 		const FOUR = 4;
-		mySvg = document.createElementNS ( 'http://www.w3.org/2000/svg', 'svg' );
+		mySvg = document.createElementNS ( SVG_NS, 'svg' );
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',
@@ -810,7 +814,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		https://lz4.overpass-api.de/api/interpreter?
 		data=
-			[out:json][timeout:15000];															=> format, timeout
+			[out:json][timeout:40];																=> format, timeout
 
 			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;				=> Searching streets
 
@@ -855,7 +859,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			',' +
 			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
-		let requestUrl = theConfig.overpassApiUrl +
+		let requestUrl = theConfig.overpassApi.url +
 			'?data=[out:json][timeout:' +
 			theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +

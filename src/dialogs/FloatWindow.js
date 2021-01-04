@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.7.0:
 		- created
+	- v2.0.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -33,7 +36,7 @@ import { ZERO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file FloatWindow.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -118,12 +121,11 @@ function ourNewFloatWindow ( ) {
 			myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
 		);
 		myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
-		let dialogMaxHeight =
+		let windowMaxHeight =
 			myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
-		myWindowDiv.setAttribute (
-			'style',
-			'top:' + myWindowY + 'px;left:' + myWindowX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		myWindowDiv.style.top = String ( myWindowY ) + 'px';
+		myWindowDiv.style.left = String ( myWindowX ) + 'px';
+		myWindowDiv.style [ 'max-height' ] = String ( windowMaxHeight ) + 'px';
 	}
 
 	/**
@@ -190,7 +192,7 @@ function ourNewFloatWindow ( ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c',
+				textContent : '❌',
 				className : 'TravelNotes-FloatWindow-CancelButton',
 				title : theTranslator.getText ( 'FloatWindow - Close' )
 			},

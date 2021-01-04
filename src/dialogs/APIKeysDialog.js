@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -25,6 +25,9 @@ Changes:
 		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v1.11.0:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200812
 Tests ...
 */
@@ -33,7 +36,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file APIKeysDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -208,7 +211,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 					'TravelNotes-BaseDialog-Button ' +
 					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
-				innerHTML : '&#x274c' // 274c = ❌
+				textContent : '❌'
 			},
 			APIKeyRow
 		)
@@ -538,7 +541,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-				innerHTML : '&#x1f504;' // 1f504 = 🔄
+				textContent : '🔄'
 			},
 			myToolbarDiv
 		);
@@ -561,7 +564,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
+				textContent : '💾'
 			},
 			myToolbarDiv
 		);
@@ -593,7 +596,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
-				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+				textContent : '📂'
 			},
 			myToolbarDiv
 		);
@@ -616,7 +619,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
-				innerHTML : '+'
+				textContent : '+'
 			},
 			myToolbarDiv
 		);
@@ -639,7 +642,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
 				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
-				innerHTML : '&#x1f4be;' // 1f4be = 💾
+				textContent : '💾'
 			},
 			myToolbarDiv
 		);
@@ -671,7 +674,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
-				innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+				textContent : '📂'
 			},
 			myToolbarDiv
 		);
@@ -737,7 +740,11 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	myCreateToolbar ( );
 	myCreateAPIKeysList ( );
 
-	theErrorsUI.showHelp ( theTranslator.getText ( 'Help - Complete the APIKeys' ) );
+	theErrorsUI.showHelp (
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys1' ) + '</p>' +
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys2' ) + '</p>' +
+		'<p>' + theTranslator.getText ( 'Help - Complete the APIKeys3' ) + '</p>'
+	);
 
 	return myAPIKeysDialog;
 }

@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -30,6 +30,8 @@ Changes:
 		- Issue #100 : Fix circular dependancies with Collection
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200731
 Tests ...
 */
@@ -38,7 +40,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Route.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -63,6 +65,7 @@ import { newCollection } from '../data/Collection.js';
 import { newWayPoint } from '../data/WayPoint.js';
 import { newItinerary } from '../data/Itinerary.js';
 import { newNote } from '../data/Note.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
 const ourObjType = newObjType ( 'Route' );
@@ -109,7 +112,8 @@ function ourValidate ( something ) {
 			something.editionStatus = something.edited;
 			// eslint break omitted intentionally
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -333,6 +337,56 @@ class Route	{
 		this.hidden = otherthing.hidden || false;
 		this.chainedDistance = otherthing.chainedDistance;
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
+		}
+		else {
+			this.name = '';
+		}
+		if ( 'number' !== typeof ( this.width ) ) {
+			this.width = theConfig.route.width;
+		}
+		if ( 'string' === typeof ( this.color ) ) {
+			this.color = theHTMLSanitizer.sanitizeToColor ( this.color ) || theConfig.route.color;
+		}
+		else {
+			this.color = theConfig.route.color;
+		}
+		if ( 'number' !== typeof ( this.dashArray ) ) {
+			this.dashArray = ZERO;
+		}
+		if ( this.dashArray >= theConfig.route.dashChoices.length ) {
+			this.dashArray = ZERO;
+		}
+		if ( 'boolean' !== typeof ( this.chain ) ) {
+			this.chain = false;
+		}
+		if ( 'number' !== typeof ( this.distance ) ) {
+			this.distance = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.duration ) ) {
+			this.duration = DISTANCE.defaultValue;
+		}
+		if ( 'number' !== typeof ( this.editionStatus ) ) {
+			this.editionStatus = ROUTE_EDITION_STATUS.notEdited;
+		}
+		if ( 'boolean' !== typeof ( this.hidden ) ) {
+			this.hidden = false;
+		}
+		if ( 'number' !== typeof ( this.chainedDistance ) ) {
+			this.chainedDistance = DISTANCE.defaultValue;
+		}
 	}
 }
 

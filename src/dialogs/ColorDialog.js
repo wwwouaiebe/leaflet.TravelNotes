@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -23,6 +23,8 @@ Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
 		- Issue #66 : Work with promises for dialogs
+	- v2.0.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200814
 Tests ...
 
@@ -33,7 +35,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file ColorDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -193,7 +195,7 @@ function ourNewColorDialog ( cssColor ) {
 		myRedInput.value = myNewColor.red;
 		myGreenInput.value = myNewColor.green;
 		myBlueInput.value = myNewColor.blue;
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
+		myColorSampleDiv.style [ 'background-color' ] = myNewColor.cssColor;
 		myColorSampleDiv.color = myNewColor;
 	}
 
@@ -212,7 +214,7 @@ function ourNewColorDialog ( cssColor ) {
 			for ( let cellCounter = ZERO; cellCounter < COLOR_ROWS_NUMBER; ++ cellCounter ) {
 				let colorButton = myColorButtons [ ( COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
 				colorButton.color.red = redValue;
-				colorButton.setAttribute ( 'style', 'background-color:' + colorButton.color.cssColor );
+				colorButton.style [ 'background-color' ] = colorButton.color.cssColor;
 			}
 		}
 	}
@@ -264,7 +266,7 @@ function ourNewColorDialog ( cssColor ) {
 		myNewColor.red = parseInt ( myRedInput.value );
 		myNewColor.green = parseInt ( myGreenInput.value );
 		myNewColor.blue = parseInt ( myBlueInput.value );
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
+		myColorSampleDiv.style [ 'background-color' ] = myNewColor.cssColor;
 		myColorSampleDiv.color = myNewColor;
 	}
 
@@ -337,7 +339,7 @@ function ourNewColorDialog ( cssColor ) {
 					colorButtonsRowDiv
 				);
 				colorButtonCellDiv.color = cellColor.clone ( );
-				colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + cellColor.cssColor );
+				colorButtonCellDiv.style [ 'background-color' ] = cellColor.cssColor;
 				colorButtonCellDiv.addEventListener ( 'click', myOnColorButtonClick, false );
 				cellColor.green += DELTA_COLOR;
 				myColorButtons.push ( colorButtonCellDiv );
@@ -376,7 +378,7 @@ function ourNewColorDialog ( cssColor ) {
 				redButtonsRowDiv
 			);
 			colorButtonCellDiv.color = cellColor.clone ( );
-			colorButtonCellDiv.setAttribute ( 'style', 'background-color:' + colorButtonCellDiv.color.cssColor );
+			colorButtonCellDiv.style [ 'background-color' ] = colorButtonCellDiv.color.cssColor;
 			colorButtonCellDiv.addEventListener ( 'click', myOnRedColorButtonClick, false );
 			cellColor.green += DELTA_COLOR;
 			cellColor.blue += DELTA_COLOR;
@@ -483,7 +485,7 @@ function ourNewColorDialog ( cssColor ) {
 			},
 			myColorDiv
 		);
-		myColorSampleDiv.setAttribute ( 'style', 'background-color:' + myNewColor.cssColor + ';' );
+		myColorSampleDiv.style [ 'background-color' ] = myNewColor.cssColor;
 		myColorSampleDiv.color = myNewColor;
 	}
 

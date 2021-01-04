@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	Changes:
 	- v1.6.0:
 		- created
+	- v2.0.0:
+		- Issue #133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200824
 Tests ...
 */
@@ -28,7 +30,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file MainViewer.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -47,6 +49,7 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -85,16 +88,24 @@ function ourNewMainViewer ( ) {
 	function myReadURL ( ) {
 		const THREE = 3;
 		const FOUR = 4;
-		( decodeURI ( window.location.search ).substr ( ONE )
-			.split ( '&' ) )
+		window.location.search.substr ( ONE ).split ( '&' )
 			.forEach (
 				urlSearchSubString => {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myTravelUrl = decodeURIComponent (
-							escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
+						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
+						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
+							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) ).url;
+							if ( '' === myTravelUrl ) {
+								myTravelUrl = null;
+							}
+						}
+						else {
+							console.log ( 'The distant file is not on the same site than the app' );
+						}
 					}
 					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+						myLanguage =
+							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
 					}
 					else if ( 'lay' === urlSearchSubString.substr ( ZERO, THREE ).toLowerCase ( ) ) {
 						myAddLayerToolbar = true;
@@ -116,6 +127,9 @@ function ourNewMainViewer ( ) {
 	function myLoadConfig ( configPromiseResult ) {
 		if ( 'fulfilled' === configPromiseResult.status ) {
 			configPromiseResult.value.language = myLanguage;
+			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+				configPromiseResult.value.note.haveBackground = true;
+			}
 			theConfig.overload ( configPromiseResult.value );
 			return '';
 		}

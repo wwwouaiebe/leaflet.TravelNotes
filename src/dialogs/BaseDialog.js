@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -31,6 +31,10 @@ Changes:
 	- v1.11.0:
 		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+	- v2.0.0:
+		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200811
 Tests ...
 */
@@ -39,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file BaseDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -71,7 +75,7 @@ Box model
 | | +---------------------------------------------------------------------------------------------+ |               |
 | |                                                                                                 |               |
 | | +- .TravelNotes-BaseDialog-HeaderDiv ---------------------------------------------------------+ |               |
-| | |  BaseDialog.title = innerHTML                                                               | |               |
+| | |  BaseDialog.title                                                                           | |               |
 | | +---------------------------------------------------------------------------------------------+ |               |
 | |                                                                                                 |               |
 | | +- .TravelNotes-BaseDialog-ContentDiv --------------------------------------------------------+ |               |
@@ -105,6 +109,7 @@ Box model
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, TWO } from '../util/Constants.js';
 
 const DRAG_MARGIN = 20;
@@ -191,12 +196,10 @@ function ourNewBaseDialog ( ) {
 			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
 		);
 		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
-		let dialogMaxHeight =
-			myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
-		myDialogDiv.setAttribute (
-			'style',
-			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
+		myDialogDiv.style.top = String ( myDialogY ) + 'px';
+		myDialogDiv.style.left = String ( myDialogX ) + 'px';
+		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
 	/**
@@ -341,7 +344,7 @@ function ourNewBaseDialog ( ) {
 		myCancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x274c', // 274c = ❌
+				textContent : '❌',
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
@@ -465,7 +468,7 @@ function ourNewBaseDialog ( ) {
 		myOkButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				innerHTML : '&#x1f197;', // 1f197 = 🆗
+				textContent : '🆗',
 				className : 'TravelNotes-BaseDialog-Button'
 			},
 			myFooterDiv
@@ -492,10 +495,9 @@ function ourNewBaseDialog ( ) {
 		);
 		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
 		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
-		myDialogDiv.setAttribute (
-			'style',
-			'top:' + myDialogY + 'px;left:' + myDialogX + 'px;max-height:' + dialogMaxHeight + 'px;'
-		);
+		myDialogDiv.style.top = String ( myDialogY ) + 'px';
+		myDialogDiv.style.left = String ( myDialogX ) + 'px';
+		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
 	/**
@@ -586,7 +588,7 @@ function ourNewBaseDialog ( ) {
 		The title of the dialog
 		*/
 
-		set title ( Title ) { myHeaderDiv.innerHTML = Title; }
+		set title ( Title ) { myHeaderDiv.textContent = Title; }
 
 		/**
 		The content of the dialog. Read only but remember it's an HTMLElement...
@@ -622,7 +624,8 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showError ( errorText ) {
-			myErrorDiv.innerHTML = errorText;
+			myErrorDiv.textContent = '';
+			theHTMLSanitizer.sanitizeToHtmlElement ( errorText, myErrorDiv );
 			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 
@@ -631,7 +634,7 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		hideError ( ) {
-			myErrorDiv.innerHTML = '';
+			myErrorDiv.textContent = '';
 			myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
 		}
 

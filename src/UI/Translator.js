@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,8 @@ Changes:
 		- created
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v2.0.0:
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200822
 Tests ...
 */
@@ -27,7 +29,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Translator.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -55,6 +57,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+
 let ourTranslations = new Map ( );
 
 /**
@@ -77,7 +81,10 @@ class Translator {
 
 	setTranslations ( translations ) {
 		translations.forEach (
-			translation => ourTranslations.set ( translation.msgid, translation.msgstr )
+			translation => ourTranslations.set (
+				translation.msgid,
+				theHTMLSanitizer.sanitizeToJsString ( translation.msgstr )
+			)
 		);
 	}
 

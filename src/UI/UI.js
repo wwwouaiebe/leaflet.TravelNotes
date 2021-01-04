@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -30,6 +30,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
@@ -38,7 +40,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file UI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -202,7 +204,7 @@ class UI {
 			'div',
 			{
 				id : 'TravelNotes-UI-MainDiv-Title',
-				innerHTML : 'Travel&nbsp;&amp;&nbsp;Notes'
+				textContent : 'Travel\u00A0\u0026\u00A0Notes'
 			},
 			ourMainDiv
 		);

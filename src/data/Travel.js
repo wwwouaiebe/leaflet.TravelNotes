@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -26,6 +26,9 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v1.8.0:
 		- Issue #100 : Fix circular dependancies with Collection
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #140 : Remove userData
 Doc reviewed 20200731
 Tests ...
 */
@@ -34,7 +37,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Travel.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -57,6 +60,7 @@ import { newObjType } from '../data/ObjType.js';
 import { newCollection } from '../data/Collection.js';
 import { newRoute } from '../data/Route.js';
 import { newNote } from '../data/Note.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 const ourObjType = newObjType ( 'Travel' );
 const ourObjIds = new WeakMap ( );
@@ -125,14 +129,15 @@ function ourValidate ( something ) {
 		case '1.10.0' :
 		case '1.11.0' :
 		case '1.12.0' :
-			something.objType.version = '1.13.0';
+		case '1.13.0' :
+			something.objType.version = '2.0.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
 		}
 	}
 	let properties = Object.getOwnPropertyNames ( something );
-	[ 'name', 'editedRoute', 'routes', 'userData', 'objId' ].forEach (
+	[ 'name', 'editedRoute', 'routes', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
 				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
@@ -201,13 +206,6 @@ class Travel {
 
 		this.readOnly = false;
 
-		/**
-		Free data that are saved or restored with the Travel. Must only respect the JSON rules
-		@type {object}
-		*/
-
-		this.userData = {};
-
 		ourObjIds.set ( this, newObjId ( ) );
 
 	}
@@ -241,7 +239,6 @@ class Travel {
 			name : this.name,
 			routes : this.routes.jsonObject,
 			notes : this.notes.jsonObject,
-			userData : this.userData,
 			readOnly : this.readOnly,
 			objId : ourObjIds.get ( this ),
 			objType : ourObjType.jsonObject
@@ -252,11 +249,36 @@ class Travel {
 		this.editedRoute.jsonObject = otherthing.editedRoute;
 		this.layerName = something.layerName || 'OSM - Color';
 		this.name = otherthing.name || '';
-		this.userData = otherthing.userData || {};
 		this.readOnly = otherthing.readOnly || false;
 		this.routes.jsonObject = otherthing.routes || [];
 		this.notes.jsonObject = otherthing.notes || [];
 		ourObjIds.set ( this, newObjId ( ) );
+		this.validateData ( );
+	}
+
+	/*
+	This method verify that the data stored in the object have the correct type, and,
+	for html string data, that they not contains invalid tags and attributes.
+	This method must be called each time the data are modified by the user or when
+	a file is opened
+	*/
+
+	validateData ( ) {
+		if ( 'string' === typeof ( this.layerName ) ) {
+			this.layerName = theHTMLSanitizer.sanitizeToJsString ( this.layerName );
+		}
+		else {
+			this.layerName = 'OSM - Color';
+		}
+		if ( 'string' === typeof ( this.name ) ) {
+			this.name = theHTMLSanitizer.sanitizeToJsString ( this.name );
+		}
+		else {
+			this.name = 'TravelNotes';
+		}
+		if ( 'boolean' !== typeof ( this.readOnly ) ) {
+			this.readOnly = true;
+		}
 	}
 }
 

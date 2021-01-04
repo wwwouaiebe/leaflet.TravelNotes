@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		- created
 	- v1.13.0:
 		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+	- v2.0.0:
+		- Issue #133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200823
 Tests ...
 */
@@ -30,7 +32,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file Main.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -50,15 +52,15 @@ import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-import { LAT_LNG, ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -90,29 +92,27 @@ function ourNewMain ( ) {
 
 	function myReadURL ( ) {
 		const FOUR = 4;
-		let newUrlSearch = '?';
-		( decodeURI ( window.location.search ).substr ( ONE )
-			.split ( '&' ) )
+		window.location.search.substr ( ONE ).split ( '&' )
 			.forEach (
 				urlSearchSubString => {
-					if ( NOT_FOUND === urlSearchSubString.indexOf ( 'ProviderKey' ) ) {
-						if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-							myTravelUrl = decodeURIComponent (
-								escape ( atob ( urlSearchSubString.substr ( FOUR ) ) ) );
+					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
+						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
+							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) ).url;
+							if ( '' === myTravelUrl ) {
+								myTravelUrl = null;
+							}
 						}
-						else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-							myLanguage = urlSearchSubString.substr ( FOUR ).toLowerCase ( );
+						else {
+							console.log ( 'The distant file is not on the same site than the app' );
 						}
-						newUrlSearch += ( '?' === newUrlSearch ) ? '' : '&';
-						newUrlSearch += urlSearchSubString;
 					}
-					else {
-						theAPIKeysManager.setKeyFromUrl ( urlSearchSubString );
+					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
+						myLanguage =
+							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
 					}
 				}
 			);
-		let stateObj = { index : 'bar' };
-		history.replaceState ( stateObj, 'page', newUrlSearch );
 	}
 
 	/**

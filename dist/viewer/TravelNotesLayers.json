@@ -1,13 +1,13 @@
 [
 	{
 		"service":"wmts",
-		"url":"http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png",
+		"url":"https://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png",
 		"name":"OSM - Black and White",
 		"toolbar":
 		{
 			"text":"OSM",
-			"color":"black",
-			"backgroundColor":"lightgray"
+			"color":"#000000",
+			"backgroundColor":"#d3d3d3"
 		},
 		"providerName":"OSM",
 		"providerKeyNeeded":false,
@@ -19,13 +19,13 @@
 		"name":"Thunderforest - Transport",
 		"toolbar":
 		{
-			"text":"&#x1f686;",
-			"color":"black",
-			"backgroundColor":"white"
+			"text":"🚍",
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},		
 	{
 		"service":"wmts",
@@ -33,13 +33,13 @@
 		"name":"Thunderforest - OpenCycleMap",
 		"toolbar":
 		{
-			"text":"&#x1f6b2;",
-			"color":"black",
-			"backgroundColor":"white"
+			"text":"🚴",
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -47,13 +47,13 @@
 		"name":"Thunderforest - Outdoors",
 		"toolbar":
 		{
-			"text":"&#x1f6b6;",
-			"color":"black",
-			"backgroundColor":"white"
+			"text":"🚶‍",
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -61,13 +61,13 @@
 		"name":"Thunderforest - Landscape",
 		"toolbar":
 		{
-			"text":"&#x26f0;",
-			"color":"black",
-			"backgroundColor":"white"
+			"text":"🌄",
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Thunderforest",
 		"providerKeyNeeded":true,
-		"attribution":"| Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
+		"attribution":"| Tiles courtesy of <a href='https://www.thunderforest.com/' target='_blank' title='Andy Allan'>Andy Allan</a> "
 	},
 	{
 		"service":"wmts",
@@ -75,13 +75,13 @@
 		"name":"Esri - Aerial view",
 		"toolbar":
 		{
-			"text":"ESRI",
-			"color":"black",
-			"backgroundColor":"white"
+			"text":"📷",
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Arcgis",
 		"providerKeyNeeded":false,
-		"attribution":"| Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community "
+		"attribution":"| Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community "
 	},
 	{
 		"service":"wmts",
@@ -93,13 +93,13 @@
 		"toolbar":
 		{
 			"text":"BE",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"IGN",
 		"providerKeyNeeded":false,
-		"attribution":"| NGI &copy; IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href='https://topomapviewer.ngi.be/conditions/conditions.html' target='_blank'>Conditions d&apos;utilisation </a>",
-		"getCapabilitiesUrl":"http://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
+		"attribution":"| NGI © IGN 2016. Toute reproduction ou adaptation sous quelque forme que ce soit est interdite. <a href=\u0027https://topomapviewer.ngi.be/conditions/conditions.html\u0027 target='_blank'>Conditions d\u0027utilisation </a>",
+		"getCapabilitiesUrl":"https://www.ngi.be/cartoweb/1/1.0.0/WMTSCapabilities.xml"
 	},
 	{
 		"service":"wmts",
@@ -111,8 +111,8 @@
 		"toolbar":
 		{
 			"text":"FI",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Maanmittauslaitos",
 		"providerKeyNeeded":false,
@@ -127,8 +127,8 @@
 		"toolbar":
 		{
 			"text":"N",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Kartverket",
 		"providerKeyNeeded":false,
@@ -144,12 +144,12 @@
 		"toolbar":
 		{
 			"text":"SE",
-			"color":"black",
-			"backgroundColor":"white"
+			"color":"#000000",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Lantmateriet",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='https://www.lantmateriet.se/' target='_blank'>Lantmäteriet</a> "
+		"attribution":"| © <a href='https://www.lantmateriet.se/' target='_blank'>Lantmäteriet</a> "
 	},
 	{
 		"service":"wmts",
@@ -158,12 +158,12 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"white"
+			"color":"#add8e6",
+			"backgroundColor":"#ffffff"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| © <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -172,12 +172,12 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"lightyellow"
+			"color":"#add8e6",
+			"backgroundColor":"#ffffe0"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| © <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -186,12 +186,12 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"lightgray"
+			"color":"#add8e6",
+			"backgroundColor":"#d3d3d3"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| © <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	},
 	{
 		"service":"wmts",
@@ -200,11 +200,11 @@
 		"toolbar":
 		{
 			"text":"M",
-			"color":"lightblue",
-			"backgroundColor":"black"
+			"color":"#add8e6",
+			"backgroundColor":"#000000"
 		},
 		"providerName":"Mapbox",
 		"providerKeyNeeded":true,
-		"attribution":"| &copy; <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
+		"attribution":"| © <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a> "
 	}
 ]

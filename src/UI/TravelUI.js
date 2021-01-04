@@ -38,6 +38,9 @@ Changes:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200817
 Tests ...
 */
@@ -46,7 +49,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file TravelUI.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -72,6 +75,7 @@ import { newFileLoader } from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 let ourRoutesList = null;
@@ -112,7 +116,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 */
 
 function ourOnTravelNameInputChange ( changeEvent ) {
-	theTravelNotesData.travel.name = changeEvent.target.value;
+	theTravelNotesData.travel.name = theHTMLSanitizer.sanitizeToJsString ( changeEvent.target.value );
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
@@ -137,7 +141,7 @@ function ourCreateTravelNameDiv ( ) {
 	theHTMLElementsFactory.create (
 		'span',
 		{
-			innerHTML : theTranslator.getText ( 'TravelUI - Travel' )
+			textContent : theTranslator.getText ( 'TravelUI - Travel' )
 		},
 		travelNameDiv
 	);
@@ -185,7 +189,7 @@ function ourCreateCancelTravelButton ( ) {
 		{
 			className : 'TravelNotes-UI-Button',
 			title : theTranslator.getText ( 'TravelUI - Cancel travel' ),
-			innerHTML : '&#x274c;' // 274c = ❌
+			textContent : '❌'
 		},
 		ourButtonsDiv
 	)
@@ -223,7 +227,7 @@ function ourCreateSaveTravelButton ( ) {
 		{
 			className : 'TravelNotes-UI-Button',
 			title : theTranslator.getText ( 'TravelUI - Save travel' ),
-			innerHTML : '&#x1f4be;' // 1f4be = 💾
+			textContent : '💾'
 		},
 		ourButtonsDiv
 	)
@@ -294,7 +298,7 @@ function ourCreateOpenTravelButton ( ) {
 		{
 			className : 'TravelNotes-UI-Button',
 			title : theTranslator.getText ( 'TravelUI - Open travel' ),
-			innerHTML : '&#x1F4C2;' // 1F4C2 = 📂
+			textContent : '📂'
 		},
 		ourButtonsDiv
 	)
@@ -363,7 +367,7 @@ function ourCreateImportTravelButton ( ) {
 		{
 			className : 'TravelNotes-UI-Button',
 			title : theTranslator.getText ( 'TravelUI - Import travel' ),
-			innerHTML : '&#x1F30F;' // 1F30F = 🌏
+			textContent : '🌏'
 		},
 		ourButtonsDiv
 	)
@@ -381,19 +385,28 @@ function ourCreateImportTravelButton ( ) {
 */
 
 function ourCreateRoadbookButton ( ) {
+
 	theHTMLElementsFactory.create (
-		'div',
+		'text',
 		{
-			className : 'TravelNotes-UI-Button',
-			title : theTranslator.getText ( 'TravelUI - Open travel roadbook' ),
-			innerHTML :
-				'<a class="TravelNotes-UI-LinkButton" href="TravelNotesRoadbook.html?lng=' +
-				theConfig.language +
-				'&page=' +
-				theTravelNotesData.UUID +
-				'" target="_blank">&#x1F4CB;</a>' // 1F4CB = 📋
+			value : '📋'
 		},
-		ourButtonsDiv
+		theHTMLElementsFactory.create (
+			'a',
+			{
+				className : 'TravelNotes-UI-LinkButton',
+				href : 'TravelNotesRoadbook.html?lng=' + theConfig.language + '&page=' + theTravelNotesData.UUID,
+				target : '_blank'
+			},
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'TravelUI - Open travel roadbook' )
+				},
+				ourButtonsDiv
+			)
+		)
 	);
 }
 
@@ -437,8 +450,8 @@ function ourOnExpandRoutesButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
 	ourRoutesList.classList.toggle ( 'TravelNotes-TravelUI-HiddenRouteList' );
 	let hiddenList = ourRoutesList.classList.contains ( 'TravelNotes-TravelUI-HiddenRouteList' );
-	clickEvent.target.innerHTML =
-		hiddenList ? '&#x25b6;' : '&#x25bc;'; // 25b6 = ▶  25bc = ▼
+	clickEvent.target.textContent =
+		hiddenList ? '▶' : '▼'; // 25b6 = '▶'  25bc = ▼
 	clickEvent.target.title =
 		hiddenList
 			?
@@ -461,7 +474,7 @@ function ourCreateExpandRoutesButton ( ) {
 	theHTMLElementsFactory.create (
 		'div',
 		{
-			innerHTML : '&#x25bc;', // 25bc = ▼
+			textContent : '▼',
 			className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
 		},
 		ourRoutesHeaderDiv
@@ -500,7 +513,7 @@ function ourCreateAddRouteButton ( ) {
 		{
 			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
 			title : theTranslator.getText ( 'TravelUI - Add a route' ),
-			innerHTML : '+'
+			textContent : '+'
 		},
 		ourRoutesHeaderDiv
 	)
@@ -529,7 +542,7 @@ function ourCreateRoutesListHeaderDiv ( ) {
 	theHTMLElementsFactory.create (
 		'span',
 		{
-			innerHTML : theTranslator.getText ( 'TravelUI - Travel routes' )
+			textContent : theTranslator.getText ( 'TravelUI - Travel routes' )
 		},
 		ourRoutesHeaderDiv
 	);
@@ -691,9 +704,9 @@ class TravelUI {
 				:
 				routesIterator.value;
 			let routeName =
-				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '&#x1f534;&nbsp;' : '' ) +
-				( route.chain ? '&#x26d3;&nbsp;' : '' ) +
-				( route.computedName ); // 1f534 = 🔴 26d3 = ⛓
+				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '🔴\u00a0' : '' ) +
+				( route.chain ? '⛓\u00a0' : '' ) +
+				( route.computedName );
 
 			let routeDiv = theHTMLElementsFactory.create (
 				'div',
@@ -709,7 +722,7 @@ class TravelUI {
 							:
 							routesIterator.value.objId,
 					canDrag : true,
-					innerHTML : routeName
+					textContent : routeName
 				},
 				ourRoutesList
 			);

@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.11.0:
 		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+	- v2.0.0:
+		- Issue #137 : Remove html tags from json files
 Doc reviewed 20200815
 Tests ...
 */
@@ -29,7 +31,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file PasswordDialog.js
-@copyright Copyright - 2017 2020 - wwwouaiebe - Contact: https://www.ouaie.be/
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
 
@@ -114,7 +116,14 @@ function ourNewPasswordDialog ( verifyPassword ) {
 				||
 				! myPasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
 			) {
-				myPasswordDialog.showError ( theTranslator.getText ( 'PasswordDialog - Password rules' ) );
+				myPasswordDialog.showError (
+					'<p>' + theTranslator.getText ( 'PasswordDialog - Password rules1' ) + '</p><ul>' +
+					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules2' ) + '</li>' +
+					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules3' ) + '</li>' +
+					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules4' ) + '</li>' +
+					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules5' ) + '</li>' +
+					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules6' ) + '</li></ul>'
+				);
 				myPasswordInput.focus ( );
 				return;
 			}
