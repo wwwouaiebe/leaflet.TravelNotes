@@ -117,7 +117,7 @@ function ourAddSelectOptions ( ) {
 			theHTMLElementsFactory.create (
 				'option',
 				{
-					text : theHTMLSanitizer.ourSanitizeToJsString ( selectOption.name )
+					text : theHTMLSanitizer.sanitizeToJsString ( selectOption.name )
 				}
 			)
 		)
@@ -142,8 +142,8 @@ function ourAddButtons ( ) {
 				'button',
 				{
 					type : 'button',
-					htmlBefore : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlBefore ).htmlString || '',
-					htmlAfter : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlAfter ).htmlString || '',
+					htmlBefore : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlBefore || '' ).htmlString || '',
+					htmlAfter : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlAfter || '' ).htmlString || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
 				},
 				ourToolbarDiv
