@@ -125,6 +125,7 @@ ourValidityMap.set ( 'text', [ 'x', 'y', 'text-anchor' ] );
 ourValidityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
 
 const ourProtocol = window.location.protocol;
+const ourParser = new DOMParser ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -213,7 +214,7 @@ function ourReplaceHtmlEntities ( htmlString ) {
 
 function ourSanitizeToJsString ( stringToSanitize ) {
 	let result =
-			new DOMParser ( ).parseFromString ( '<div>' + ourRemoveHtmlEntities ( stringToSanitize ) + '</div>', 'text/html' )
+			ourParser.parseFromString ( '<div>' + ourRemoveHtmlEntities ( stringToSanitize ) + '</div>', 'text/html' )
 				.querySelector ( 'body' ).firstChild;
 	let sanitizedString = '';
 	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
@@ -245,7 +246,7 @@ null (in this case 'href' is used as default)
 
 function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	let result =
-			new DOMParser ( ).parseFromString ( '<div>' + ourRemoveHtmlEntities ( urlString ) + '</div>', 'text/html' )
+			ourParser.parseFromString ( '<div>' + ourRemoveHtmlEntities ( urlString ) + '</div>', 'text/html' )
 				.querySelector ( 'body' ).firstChild;
 	let newUrlString = '';
 	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
@@ -357,7 +358,7 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 	}
 
 	let result =
-		new DOMParser ( ).parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
+		ourParser.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
 			.querySelector ( 'body' ).firstChild;
 	cloneNode ( result, targetNode );
 }
@@ -453,7 +454,7 @@ function ourSanitizeToHtmlString ( htmlString ) {
 	}
 
 	let result =
-		new DOMParser ( ).parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
+		ourParser.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
 			.querySelector ( 'body' ).firstChild;
 	ourStringify ( result );
 	return { htmlString : targetString, errorsString : errorsString };
