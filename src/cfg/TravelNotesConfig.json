@@ -10,7 +10,9 @@
 	},
 	"travelNotesToolbarUI":
 	{
-		"contactMail":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+		"contactMail": {
+			"url":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+		}
 	},
 	"layersToolbarUI":
 	{
@@ -184,7 +186,9 @@
 		"startupRouteEdition":true
 	},
 	"haveBeforeUnloadWarning":true,
-	"overpassApiUrl":"https://lz4.overpass-api.de/api/interpreter",
+	"overpassApi": {
+		"url":"https://lz4.overpass-api.de/api/interpreter"
+	},
 	"nominatim":
 	{
 		"url":"https://nominatim.openstreetmap.org/",

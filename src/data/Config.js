@@ -62,7 +62,6 @@ Tests ...
 /* eslint max-depth: ["warn", 5]*/
 
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { NOT_FOUND } from '../util/Constants.js';
 
 let ourPrivateConfig = {
 	autoLoad : false,
@@ -76,7 +75,9 @@ let ourPrivateConfig = {
 	},
 	travelNotesToolbarUI :
 	{
-		contactMail : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		contactMail : {
+			url : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		}
 	},
 	layersToolbarUI : {
 		haveLayersToolbarUI : true,
@@ -225,7 +226,9 @@ let ourPrivateConfig = {
 		startupRouteEdition : true
 	},
 	haveBeforeUnloadWarning : true,
-	overpassApiUrl : 'https://lz4.overpass-api.de/api/interpreter',
+	overpassApi : {
+		url : 'https://lz4.overpass-api.de/api/interpreter'
+	},
 	nominatim :
 	{
 		url : 'https://nominatim.openstreetmap.org/',
@@ -305,22 +308,21 @@ function ourCopyObjectTo ( source, target ) {
 				ourCopyObjectTo ( source [ property ], target [ property ] );
 			}
 			else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
-				console.log ( NOT_FOUND );
-
 				if ( 'string' === typeof ( target [ property ] ) ) {
 					if ( 'color' === property ) {
-						source [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
+						target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
 					}
-					else if ( NOT_FOUND < [ 'contactMail', 'overpassApiUrl', 'url' ].indexOf ( property ) ) {
-						source [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
+					else if ( 'url' === property ) {
+						target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
 					}
 					else {
-						source [ property ] =
-								theHTMLSanitizer.sanitizeToJsString ( source [ property ] ).htmlString;
+						target [ property ] =
+								theHTMLSanitizer.sanitizeToJsString ( source [ property ] );
 					}
 				}
-
-				target [ property ] = source [ property ] || target [ property ];
+				else {
+					target [ property ] = source [ property ] || target [ property ];
+				}
 			}
 		}
 
@@ -335,11 +337,11 @@ function ourCopyObjectTo ( source, target ) {
 				}
 				ourCopyObjectTo ( source [ property ], target [ property ] );
 			}
-			else {
-				if ( 'string' === typeof ( target.property ) ) {
-					source [ property ] =
+			else if ( 'string' === typeof ( target.property ) ) {
+				target [ property ] =
 							theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
-				}
+			}
+			else {
 				target [ property ] = source [ property ];
 			}
 		}

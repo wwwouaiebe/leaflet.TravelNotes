@@ -24,6 +24,7 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200816
 Tests ...
 */
@@ -199,7 +200,7 @@ function ourCreateContactButton ( ) {
 			'a',
 			{
 				className : 'TravelNotes-UI-LinkButton',
-				href : ( theConfig.travelNotesToolbarUI.contactMail || window.location.origin ),
+				href : ( theConfig.travelNotesToolbarUI.contactMail.url || window.location.origin ),
 				target : '_blank'
 			},
 			theHTMLElementsFactory.create (
