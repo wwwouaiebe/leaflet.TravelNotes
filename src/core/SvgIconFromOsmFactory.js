@@ -813,7 +813,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		https://lz4.overpass-api.de/api/interpreter?
 		data=
-			[out:json][timeout:15000];															=> format, timeout
+			[out:json][timeout:40];																=> format, timeout
 
 			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;				=> Searching streets
 

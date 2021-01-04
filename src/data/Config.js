@@ -211,7 +211,7 @@ let ourPrivateConfig = {
 		svgVillageDistance : 400,
 		svgCityDistance : 1200,
 		svgTownDistance : 1500,
-		svgTimeOut : 15000,
+		svgTimeOut : 40,
 		maxManeuversNotes : 100
 	},
 	itineraryPointZoom : 17,
