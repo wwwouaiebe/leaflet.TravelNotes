@@ -98,7 +98,10 @@ function ourNewMain ( ) {
 					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
 						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
 						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
-							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) );
+							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) ).url;
+							if ( '' === myTravelUrl ) {
+								myTravelUrl = null;
+							}
 						}
 						else {
 							console.log ( 'The distant file is not on the same site than the app' );
