@@ -58,9 +58,8 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
+import { LAT_LNG, ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -91,28 +90,39 @@ function ourNewMain ( ) {
 	*/
 
 	function myReadURL ( ) {
-		const FOUR = 4;
-		window.location.search.substr ( ONE ).split ( '&' )
-			.forEach (
-				urlSearchSubString => {
-					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
-						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
-							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) ).url;
-							if ( '' === myTravelUrl ) {
-								myTravelUrl = null;
-							}
-						}
-						else {
-							console.log ( 'The distant file is not on the same site than the app' );
-						}
-					}
-					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLanguage =
-							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
-					}
+		let docURL = new URL ( window.location );
+		let strTravelUrl = docURL.searchParams.get ( 'fil' );
+		if ( strTravelUrl && ZERO !== strTravelUrl.length ) {
+			try {
+				strTravelUrl = atob ( strTravelUrl );
+				if ( strTravelUrl.match ( /[^\w%:./]/ ) ) {
+					throw new Error ( 'invalid char in the url encoded in the fil parameter' );
 				}
-			);
+				let travelURL = new URL ( strTravelUrl );
+				if (
+					docURL.protocol && travelURL.protocol && docURL.protocol === travelURL.protocol
+					&&
+					docURL.hostname && travelURL.hostname && docURL.hostname === travelURL.hostname
+				) {
+					myTravelUrl = encodeURI ( travelURL.href );
+				}
+				else {
+					console.log ( 'The distant file is not on the same site than the app' );
+				}
+			}
+			catch ( err ) {
+				console.log ( err.message );
+			}
+		}
+		let urlLng = docURL.searchParams.get ( 'lng' );
+		if ( urlLng ) {
+			if ( urlLng.match ( /^[A-Z,a-z]{2}$/ ) ) {
+				myLanguage = urlLng.toLowerCase ( );
+			}
+			else {
+				console.log ( 'invalid lng parameter' );
+			}
+		}
 	}
 
 	/**
@@ -399,7 +409,7 @@ function ourNewMain ( ) {
 		start ( ) {
 			window.L.travelNotes = theTravelNotes;
 			myReadURL ( );
-			myLanguage = myLanguage || theConfig.language;
+			myLanguage = myLanguage || theConfig.language || 'fr';
 			theErrorsUI.createUI ( );
 
 			Promise.allSettled ( myGetJsonPromises ( ) )

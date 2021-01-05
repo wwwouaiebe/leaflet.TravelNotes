@@ -49,13 +49,12 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 
-import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
+import { LAT_LNG, ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,32 +85,42 @@ function ourNewMainViewer ( ) {
 	*/
 
 	function myReadURL ( ) {
-		const THREE = 3;
-		const FOUR = 4;
-		window.location.search.substr ( ONE ).split ( '&' )
-			.forEach (
-				urlSearchSubString => {
-					if ( 'fil=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						let url = new URL ( atob ( urlSearchSubString.substr ( FOUR ) ) );
-						if ( url.protocol === window.location.protocol && url.hostname === window.location.hostname ) {
-							myTravelUrl = theHTMLSanitizer.sanitizeToUrl ( atob ( urlSearchSubString.substr ( FOUR ) ) ).url;
-							if ( '' === myTravelUrl ) {
-								myTravelUrl = null;
-							}
-						}
-						else {
-							console.log ( 'The distant file is not on the same site than the app' );
-						}
-					}
-					else if ( 'lng=' === urlSearchSubString.substr ( ZERO, FOUR ).toLowerCase ( ) ) {
-						myLanguage =
-							theHTMLSanitizer.sanitizeToJsString ( urlSearchSubString.substr ( FOUR ).toLowerCase ( ) );
-					}
-					else if ( 'lay' === urlSearchSubString.substr ( ZERO, THREE ).toLowerCase ( ) ) {
-						myAddLayerToolbar = true;
-					}
+		let docURL = new URL ( window.location );
+		let strTravelUrl = docURL.searchParams.get ( 'fil' );
+		if ( strTravelUrl && ZERO !== strTravelUrl.length ) {
+			try {
+				strTravelUrl = atob ( strTravelUrl );
+				if ( strTravelUrl.match ( /[^\w%:./]/ ) ) {
+					throw new Error ( 'invalid char in the url encoded in the fil parameter' );
 				}
-			);
+				let travelURL = new URL ( strTravelUrl );
+				if (
+					docURL.protocol && travelURL.protocol && docURL.protocol === travelURL.protocol
+					&&
+					docURL.hostname && travelURL.hostname && docURL.hostname === travelURL.hostname
+				) {
+					myTravelUrl = encodeURI ( travelURL.href );
+				}
+				else {
+					console.log ( 'The distant file is not on the same site than the app' );
+				}
+			}
+			catch ( err ) {
+				console.log ( err.message );
+			}
+		}
+		let urlLng = docURL.searchParams.get ( 'lng' );
+		if ( urlLng ) {
+			if ( urlLng.match ( /^[A-Z,a-z]{2}$/ ) ) {
+				myLanguage = urlLng.toLowerCase ( );
+			}
+			else {
+				console.log ( 'invalid lng parameter' );
+			}
+		}
+		if ( docURL.searchParams.get ( 'lay' ) ) {
+			myAddLayerToolbar = true;
+		}
 	}
 
 	/**
