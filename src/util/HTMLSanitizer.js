@@ -246,17 +246,36 @@ null (in this case 'href' is used as default)
 
 function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	let result =
-			ourParser.parseFromString ( '<div>' + ourRemoveHtmlEntities ( urlString ) + '</div>', 'text/html' )
+			ourParser.parseFromString ( '<div>' + urlString + '</div>', 'text/html' )
 				.querySelector ( 'body' ).firstChild;
 	let newUrlString = '';
 	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
 		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
 			newUrlString += result.childNodes [ nodeCounter ].nodeValue;
 		}
+		else {
+			return { url : '', errorsString : 'Invalid characters found in the url' };
+		}
 	}
+	newUrlString = newUrlString
+		.replaceAll ( /</g, '' )
+		.replaceAll ( />/g, '' )
+		.replaceAll ( /"/g, '' )
+		.replaceAll ( /\u0027/g, '' )
+		.replaceAll ( /&lt;/g, '' )
+		.replaceAll ( /&gt;/g, '' )
+		.replaceAll ( /&quot;/g, '' )
+		.replaceAll ( /&apos;/g, '' )
+		.replaceAll ( /%3C/g, '' )
+		.replaceAll ( /%3c/g, '' )
+		.replaceAll ( /%3E/g, '' )
+		.replaceAll ( /%3e/g, '' )
+		.replaceAll ( /%22/g, '' )
+		.replaceAll ( /%27/g, '' );
 	if ( newUrlString !== urlString ) {
-		return { url : '', errorsString : 'tags found in the url' };
+		return { url : '', errorsString : 'Invalid characters found in the url' };
 	}
+
 	let validProtocols = [ 'https:' ];
 	if ( 'http:' === ourProtocol || 'href' === attributeName ) {
 		validProtocols.push ( 'http:' );
@@ -284,11 +303,8 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	catch ( err ) {
 		return { url : '', errorsString : 'Invalid character in url' };
 	}
-	if ( NOT_FOUND !== url.href.search ( /[()\u0027*]/g ) ) {
-		return { url : '', errorsString : 'Invalid character in url' };
-	}
 
-	return { url : url.href, errorsString : '' };
+	return { url : newUrlString, errorsString : '' };
 }
 
 /**
@@ -494,11 +510,13 @@ class HTMLSanitizer {
 	and must start with a valid protocol
 	Valid protocols are http:, https: and mailto:.
 	@param {string} urlString the url to validate
+	@param {attributeName} the attribute name in witch the url will be placed. must be 'src' or
+	null (in this case 'href' is used as default)
 	@return {object} a UrlValidationReult with the result of the validation
 	*/
 
-	sanitizeToUrl ( urlString ) {
-		return ourSanitizeUrl ( urlString );
+	sanitizeToUrl ( urlString, attributeName ) {
+		return ourSanitizeUrl ( urlString, attributeName );
 	}
 
 	/**
