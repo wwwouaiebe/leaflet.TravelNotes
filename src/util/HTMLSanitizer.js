@@ -153,56 +153,6 @@ function ourAddHtmlEntities ( htmlString ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourRemoveHtmlEntities
-@desc replace htmlEntities with < >' " and nbsp chars
-@param {string} htmlString the string to transform
-@return {string} a string with htmlEntities replaced
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourRemoveHtmlEntities ( htmlString ) {
-	let newHtmlString = htmlString
-		.replaceAll ( /&lt;/g, '<' )
-		.replaceAll ( /&gt;/g, '>' )
-		.replaceAll ( /&amp;/g, '&' )
-		.replaceAll ( /&quot;/g, '"' )
-		.replaceAll ( /&apos;/g, '\u0027' )
-		.replaceAll ( /&nbsp;/g, '\u0a00' );
-
-	return newHtmlString;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourReplaceHtmlEntities
-@desc replace htmlEntities and < > ' " and nbsp chars with others similar unicode chars
-@param {string} htmlString the string to transform
-@return {string} a string with htmlEntities and < >' " and nbsp chars replaced
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourReplaceHtmlEntities ( htmlString ) {
-	let newHtmlString = htmlString
-		.replaceAll ( /</g, '\u227a' )
-		.replaceAll ( />/g, '\u227b' )
-		.replaceAll ( /"/g, '\u2033' )
-		.replaceAll ( /\u0027/g, '\u2032' )
-		.replaceAll ( /&lt;/g, '\u227a' )
-		.replaceAll ( /&gt;/g, '\u227b' )
-		.replaceAll ( /&quot;/g, '\u2033' )
-		.replaceAll ( /&apos;/g, '\u2032' );
-
-	return newHtmlString;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @function ourSanitizeToJsString
 @desc remove all html tags and replace htmlEntities and < > ' " and nbsp chars with others similar unicode chars
 @param {string} stringToSanitize the string to transform
@@ -214,15 +164,23 @@ function ourReplaceHtmlEntities ( htmlString ) {
 
 function ourSanitizeToJsString ( stringToSanitize ) {
 	let result =
-			ourParser.parseFromString ( '<div>' + ourRemoveHtmlEntities ( stringToSanitize ) + '</div>', 'text/html' )
+			ourParser.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' )
 				.querySelector ( 'body' ).firstChild;
 	let sanitizedString = '';
 	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
 		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
 			sanitizedString += result.childNodes [ nodeCounter ].nodeValue;
 		}
+		else {
+			return '';
+		}
 	}
-	sanitizedString = ourReplaceHtmlEntities ( sanitizedString );
+
+	sanitizedString = sanitizedString
+		.replaceAll ( /</g, '\u227a' )
+		.replaceAll ( />/g, '\u227b' )
+		.replaceAll ( /"/g, '\u2033' )
+		.replaceAll ( /\u0027/g, '\u2032' );
 
 	return sanitizedString;
 }
