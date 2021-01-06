@@ -237,7 +237,7 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 		NoteTextAndIconHTML
 	);
 	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
-	if ( ( 'svg' === iconHTML.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === classPrefix ) ) {
+	if ( iconHTML.firstChild && ( 'svg' === iconHTML.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === classPrefix ) ) {
 		iconHTML.firstChild.setAttributeNS (
 			null,
 			'viewBox',

@@ -348,29 +348,26 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		while ( ! button.htmlBefore ) {
 			button = button.parentNode;
 		}
-		let bInsertBeforeAndAfter = button.htmlAfter && ZERO < button.htmlAfter.length;
 		let selectionStart = myFocusControl.selectionStart;
 		let selectionEnd = myFocusControl.selectionEnd;
-		let oldText = myFocusControl.value;
+
 		myFocusControl.value =
-			oldText.substring ( ZERO, selectionStart ) +
-			(
-				bInsertBeforeAndAfter
-					?
-					button.htmlBefore + oldText.substring ( selectionStart, selectionEnd ) + button.htmlAfter
-					:
-					button.htmlBefore
-			) +
-			oldText.substring ( selectionEnd );
-		myFocusControl.setSelectionRange (
-			bInsertBeforeAndAfter || selectionStart === selectionEnd
-				?
-				selectionStart + button.htmlBefore.length
-				:
-				selectionStart,
-			( bInsertBeforeAndAfter ? selectionEnd : selectionStart ) + button.htmlBefore.length
-		);
+			myFocusControl.value.slice ( ZERO, selectionStart ) +
+			button.htmlBefore +
+			( ZERO === button.htmlAfter.length ? '' : myFocusControl.value.slice ( selectionStart, selectionEnd ) ) +
+			button.htmlAfter +
+			myFocusControl.value.slice ( selectionEnd );
+
+		if ( selectionStart === selectionEnd || ZERO === button.htmlAfter.length ) {
+			selectionStart += button.htmlBefore.length;
+			selectionEnd = selectionStart;
+		}
+		else {
+			selectionEnd += button.htmlBefore.length + button.htmlAfter.length;
+		}
+		myFocusControl.setSelectionRange ( selectionStart, selectionEnd );
 		myFocusControl.focus ( );
+
 		myOnInputControl ( );
 	}
 

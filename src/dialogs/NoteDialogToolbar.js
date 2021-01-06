@@ -142,16 +142,16 @@ function ourAddButtons ( ) {
 				'button',
 				{
 					type : 'button',
-					htmlBefore : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlBefore || '' ).htmlString || '',
-					htmlAfter : theHTMLSanitizer.sanitizeToHtmlString ( editionButton.htmlAfter || '' ).htmlString || '',
+					htmlBefore : editionButton.htmlBefore || '',
+					htmlAfter : editionButton.htmlAfter || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
 				},
 				ourToolbarDiv
 			);
+
 			theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
 
 			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
-
 		}
 	);
 }

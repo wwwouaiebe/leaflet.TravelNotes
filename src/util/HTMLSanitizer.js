@@ -359,7 +359,7 @@ variable are removed. Invalid Url in the href and src attributes are also remove
 function ourSanitizeToHtmlString ( htmlString ) {
 
 	// ! don't use XMLSerializer. Problems with &quot, &apos and &nbsp; and xmlns
-	
+
 	let targetString = '';
 	let errorsString = '';
 

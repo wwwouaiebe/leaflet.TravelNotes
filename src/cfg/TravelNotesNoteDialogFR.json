@@ -27,7 +27,7 @@
 		},
 		{
 			"title" : "<span title='Insérer une balise &lt;a&gt; (lien)'>a</span>",
-			"htmlBefore" : "<a target='_blank' href=''>",
+			"htmlBefore" : "<a target=\"_blank\" href=\"\">",
 			"htmlAfter" : "</a>"
 		},
 		{
