@@ -163,19 +163,20 @@ function ourAddHtmlEntities ( htmlString ) {
 */
 
 function ourSanitizeToJsString ( stringToSanitize ) {
-	let result =
-			ourParser.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' )
-				.querySelector ( 'body' ).firstChild;
+	let parseResult = ourParser.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' );
+	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
+		return '';
+	}
+	let resultNode = parseResult.querySelector ( 'body' ).firstChild;
 	let sanitizedString = '';
-	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
-		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
-			sanitizedString += result.childNodes [ nodeCounter ].nodeValue;
+	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
+		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
+			sanitizedString += resultNode.childNodes [ nodeCounter ].nodeValue;
 		}
 		else {
 			return '';
 		}
 	}
-
 	sanitizedString = sanitizedString
 		.replaceAll ( /</g, '\u227a' )
 		.replaceAll ( />/g, '\u227b' )
@@ -203,13 +204,15 @@ null (in this case 'href' is used as default)
 */
 
 function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
-	let result =
-			ourParser.parseFromString ( '<div>' + urlString + '</div>', 'text/html' )
-				.querySelector ( 'body' ).firstChild;
+	let parseResult = ourParser.parseFromString ( '<div>' + urlString + '</div>', 'text/html' );
+	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
+		return { url : '', errorsString : 'Parsing error' };
+	}
+	let resultNode = parseResult.querySelector ( 'body' ).firstChild;
 	let newUrlString = '';
-	for ( let nodeCounter = 0; nodeCounter < result.childNodes.length; nodeCounter ++ ) {
-		if ( '#text' === result.childNodes [ nodeCounter ].nodeName ) {
-			newUrlString += result.childNodes [ nodeCounter ].nodeValue;
+	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
+		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
+			newUrlString += resultNode.childNodes [ nodeCounter ].nodeValue;
 		}
 		else {
 			return { url : '', errorsString : 'Invalid characters found in the url' };
@@ -316,9 +319,9 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 							else {
 								newChildNode.setAttribute (
 									validAttributeName,
-									currentNode.getAttribute ( validAttributeName ) );
+									currentNode.getAttribute ( validAttributeName )
+								);
 							}
-							currentNode.removeAttribute ( validAttributeName );
 						}
 					}
 				);
@@ -331,10 +334,13 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 		}
 	}
 
-	let result =
-		ourParser.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' )
-			.querySelector ( 'body' ).firstChild;
-	cloneNode ( result, targetNode );
+	let parseResult = ourParser.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' );
+	if ( parseResult && '#document' === parseResult.nodeName ) {
+		cloneNode ( parseResult.querySelector ( 'body' ).firstChild, targetNode );
+	}
+	else {
+		targetNode.textContent = '';
+	}
 }
 
 /**
@@ -352,6 +358,8 @@ variable are removed. Invalid Url in the href and src attributes are also remove
 
 function ourSanitizeToHtmlString ( htmlString ) {
 
+	// ! don't use XMLSerializer. Problems with &quot, &apos and &nbsp; and xmlns
+	
 	let targetString = '';
 	let errorsString = '';
 
@@ -427,11 +435,12 @@ function ourSanitizeToHtmlString ( htmlString ) {
 		}
 	}
 
-	let result =
-		ourParser.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' )
-			.querySelector ( 'body' ).firstChild;
-	ourStringify ( result );
-	return { htmlString : targetString, errorsString : errorsString };
+	let parseResult = ourParser.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' );
+	if ( parseResult && '#document' === parseResult.nodeName ) {
+		ourStringify ( parseResult.querySelector ( 'body' ).firstChild );
+		return { htmlString : targetString, errorsString : errorsString };
+	}
+	return { htmlString : '', errorsString : 'Parsing error' };
 }
 
 /**
