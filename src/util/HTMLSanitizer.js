@@ -68,7 +68,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { SVG_NS, NOT_FOUND, ZERO } from '../util/Constants.js';
+import { SVG_NS, NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -328,6 +328,21 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 						}
 					}
 				);
+				if ( currentNode.hasAttribute ( 'style' ) ) {
+					let styles = currentNode.getAttribute ( 'style' ).split ( ';' );
+					styles.forEach (
+						style => {
+							let styleValues = style.split ( ':' );
+							if (
+								TWO === styleValues.length
+								&&
+								( 'width' === styleValues [ ZERO ].trim ( ) || 'height' === styleValues [ ZERO ].trim ( ) )
+							) {
+								newChildNode.style [ styleValues [ ZERO ].trim ( ) ] = styleValues [ ONE ].trim ( );
+							}
+						}
+					);
+				}
 				newNode.appendChild ( newChildNode );
 				cloneNode ( currentNode, newChildNode );
 			}

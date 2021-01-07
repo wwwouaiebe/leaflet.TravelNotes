@@ -196,6 +196,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myPreviewNote.address = myAddressInput.value;
 		myPreviewNote.url = myUrlInput.value;
 		myPreviewNote.phone = myPhoneInput.value;
+		myPreviewNote.iconWidth = myWidthInput.value;
+		myPreviewNote.iconHeight = myHeightInput.value;
 		myPreviewDiv.textContent = '';
 		myPreviewDiv.appendChild (
 			theHTMLViewsFactory.getNoteTextAndIconHTML (
@@ -475,6 +477,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			iconDimensionsDiv
 		);
+		myWidthInput.addEventListener ( 'input', myOnInputControl, false );
+
 		theHTMLElementsFactory.create (
 			'text',
 			{
@@ -491,6 +495,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			iconDimensionsDiv
 		);
+		myHeightInput.addEventListener ( 'input', myOnInputControl, false );
 	}
 
 	/**

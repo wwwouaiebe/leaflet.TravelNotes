@@ -30,7 +30,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file RoadbookUpdate.js
+@file Roadbook.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @desc This file contains the JS code that will be inserted in the TravelNotesRoadbook.html. It's needed to put this JS code
@@ -43,6 +43,7 @@ save button
 
 import { theTranslator } from '../UI/Translator.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
+
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE } from '../util/Constants.js';
@@ -114,6 +115,7 @@ if ( pageId ) {
 			theIndexedDb.getReadPromise ( pageId )
 				.then ( pageContent => {
 					if ( pageContent ) {
+						document.getElementById ( 'TravelNotes' ).textContent = '';
 						theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 						showTravelNotes ( );
 						showRouteNotes ( );

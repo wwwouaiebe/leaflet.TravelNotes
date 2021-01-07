@@ -236,18 +236,34 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 		},
 		NoteTextAndIconHTML
 	);
+	iconHTML.style.width = String ( noteAndRoute.note.iconWidth ) + 'px';
+	iconHTML.style.height = String ( noteAndRoute.note.iconHeight ) + 'px';
 	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
 	if ( iconHTML.firstChild && ( 'svg' === iconHTML.firstChild.tagName ) && ( 'TravelNotes-Roadbook-' === classPrefix ) ) {
 		iconHTML.firstChild.setAttributeNS (
 			null,
 			'viewBox',
-			'0 0 ' + theConfig.note.svgIconWidth + ' ' + theConfig.note.svgIconWidth );
+			'0 0 ' + theConfig.note.svgIconWidth + ' ' + theConfig.note.svgIconWidth
+		);
+		iconHTML.style.width = String ( theConfig.note.svgIconWidth ) + 'px';
+		iconHTML.style.height = String ( theConfig.note.svgIconWidth ) + 'px';
+	}
+	if (
+		iconHTML.firstChild
+		&&
+		iconHTML.firstChild.classList
+		&&
+		iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' )
+	) {
+		iconHTML.style.width = String ( theConfig.note.svgIconWidth ) + 'px';
+		iconHTML.style.height = String ( theConfig.note.svgIconWidth ) + 'px';
 	}
 
 	let noteTextHTMLElement = ourGetNoteTextHTML ( classPrefix, noteAndRoute );
 	noteTextHTMLElement.className = classPrefix + 'Travel-Notes-Cell';
 	NoteTextAndIconHTML.appendChild ( noteTextHTMLElement );
 	NoteTextAndIconHTML.noteObjId = noteAndRoute.note.objId;
+
 	return NoteTextAndIconHTML;
 }
 

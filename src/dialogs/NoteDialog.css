@@ -96,8 +96,6 @@ Changes:
 }
 
 .TravelNotes-NoteDialog-Travel-Notes-IconCell {
-	width: 40px;
-	height: 40px;
 	min-height: 20px;
 	background-repeat: no-repeat;
 	flex-shrink: 0;
