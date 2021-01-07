@@ -26,9 +26,14 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
 
 -----------------------------------------------------------------------------------------------------------------------
 */
+
+.TravelNotes-BaseDialog-Container {
+	max-width: 44em;
+}
 
 #TravelNotes-NoteDialog-MainDataDiv {
 	width: 43em;

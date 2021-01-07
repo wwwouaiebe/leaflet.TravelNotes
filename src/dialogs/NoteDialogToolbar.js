@@ -24,6 +24,7 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
 Doc reviewed 20200815
 Tests ...
 */
@@ -100,6 +101,7 @@ let ourIconsSelect = null;
 let ourOpenFileInput = null;
 let ourOnSelectEventListener = null;
 let ourOnButtonClickEventListener = null;
+let ourNoteDialog = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -194,9 +196,16 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 				ourIconsSelect.remove ( elementCounter );
 			}
 			ourAddSelectOptions ( );
+			ourNoteDialog.hideError ( );
 		}
 		catch ( err ) {
-			console.log ( err ? err : 'An error occurs when opening the file' );
+			console.log ( err ? err.message : 'An error occurs when opening the file' );
+			ourNoteDialog.showError (
+				theTranslator.getText (
+					'NoteDialogToolbar - An error was found in the json file',
+					{ error : err.message }
+				)
+			);
 		}
 	};
 	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
@@ -326,7 +335,8 @@ class NoteDialogToolbar {
 	@param {function} onButtonClickEventListener the event listener to be activated when the user click on a button
 	*/
 
-	createToolbar ( onSelectEventListener, onButtonClickEventListener ) {
+	createToolbar ( onSelectEventListener, onButtonClickEventListener, noteDialog ) {
+		ourNoteDialog = noteDialog;
 		ourOnSelectEventListener = onSelectEventListener;
 		ourOnButtonClickEventListener = onButtonClickEventListener;
 

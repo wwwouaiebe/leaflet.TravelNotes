@@ -39,6 +39,7 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
 Doc reviewed 20200815
 Tests ...
 */
@@ -434,7 +435,8 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myNoteDataDiv.appendChild (
 			theNoteDialogToolbar.createToolbar (
 				myOnPredefinedIconListSelectChange,
-				myOnClickEditionButton
+				myOnClickEditionButton,
+				myNoteDialog
 			)
 		);
 	}

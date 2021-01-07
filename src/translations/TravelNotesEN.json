@@ -360,6 +360,10 @@
 		"msgstr" : "Tooltip content\u00A0:\u00A0"
 	},
 	{
+		"msgid" : "NoteDialogToolbar - An error was found in the json file",
+		"msgstr" : "An error was found in the JSON file ({error})"
+	},
+	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
 		"msgstr" : "Add a note for each maneuver"
 	},
