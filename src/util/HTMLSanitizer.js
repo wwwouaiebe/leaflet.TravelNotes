@@ -106,7 +106,7 @@ ourValidityMap.set ( 'h4', [ ] );
 ourValidityMap.set ( 'h5', [ ] );
 ourValidityMap.set ( 'h6', [ ] );
 ourValidityMap.set ( 'hr', [ ] );
-ourValidityMap.set ( 'img', [ 'src', 'alt' ] );
+ourValidityMap.set ( 'img', [ 'src', 'alt', 'width', 'height' ] );
 ourValidityMap.set ( 'ins', [ ] );
 ourValidityMap.set ( 'li', [ ] );
 ourValidityMap.set ( 'mark', [ ] );
@@ -247,6 +247,9 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 		if ( urlHash && newUrlString === urlHash [ ZERO ] ) {
 			return { url : newUrlString, errorsString : '' };
 		}
+	}
+	if ( 'src' === attributeName ) {
+		validProtocols.push ( 'data:' );
 	}
 	let url = null;
 	try {
