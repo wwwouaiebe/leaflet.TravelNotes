@@ -125,3 +125,7 @@ Changes:
 	padding: 0;
 	height: 0;
 }
+
+#TravelNotes-NoteDialog-TelSmsButton {
+	width: 4em;
+}

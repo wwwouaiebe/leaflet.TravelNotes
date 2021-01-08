@@ -243,6 +243,8 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	}
 	if ( 'href' === attributeName ) {
 		validProtocols.push ( 'mailto:' );
+		validProtocols.push ( 'sms:' );
+		validProtocols.push ( 'tel:' );
 		let urlHash = newUrlString.match ( /^#\w*/ );
 		if ( urlHash && newUrlString === urlHash [ ZERO ] ) {
 			return { url : newUrlString, errorsString : '' };
@@ -261,13 +263,17 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	if ( NOT_FOUND === validProtocols.indexOf ( url.protocol ) ) {
 		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
 	}
+	if ( NOT_FOUND !== [ 'sms:', 'tel:' ].indexOf ( url.protocol ) ) {
+		if ( url.pathname.match ( /^\+[0-9,*,#,]*$/ ) ) {
+			return { url : newUrlString, errorsString : '' };
+		}
+	}
 	try {
 		encodeURIComponent ( url.href );
 	}
 	catch ( err ) {
 		return { url : '', errorsString : 'Invalid character in url' };
 	}
-
 	return { url : newUrlString, errorsString : '' };
 }
 
