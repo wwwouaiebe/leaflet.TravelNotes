@@ -99,10 +99,17 @@ let ourSelectOptions = [];
 let ourToolbarDiv = null;
 let ourIconsSelect = null;
 let ourOpenFileInput = null;
+
+let ourDialogFunctions = null;
+
+/*
+
 let ourOnSelectEventListener = null;
 let ourOnButtonClickEventListener = null;
+let ourToggleContentsFunction = null;
+let ourShowErrorFunction = null;
 let ourNoteDialog = null;
-
+*/
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -153,7 +160,7 @@ function ourAddButtons ( ) {
 
 			theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
 
-			newButton.addEventListener ( 'click', ourOnButtonClickEventListener, false );
+			newButton.addEventListener ( 'click', ourDialogFunctions.onButtonClickEventListener, false );
 		}
 	);
 }
@@ -183,7 +190,7 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 
 			document.querySelectorAll ( '.TravelNotes-NoteDialog-EditorButton' ).forEach (
 				oldButton => {
-					oldButton.removeEventListener ( 'click', ourOnButtonClickEventListener, false );
+					oldButton.removeEventListener ( 'click', ourDialogFunctions.onButtonClickEventListener, false );
 					ourToolbarDiv.removeChild ( oldButton );
 				}
 			);
@@ -196,11 +203,11 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 				ourIconsSelect.remove ( elementCounter );
 			}
 			ourAddSelectOptions ( );
-			ourNoteDialog.hideError ( );
+			ourDialogFunctions.hideError ( );
 		}
 		catch ( err ) {
 			console.log ( err ? err.message : 'An error occurs when opening the file' );
-			ourNoteDialog.showError (
+			ourDialogFunctions.showError (
 				theTranslator.getText (
 					'NoteDialogToolbar - An error was found in the json file',
 					{ error : err.message }
@@ -228,6 +235,22 @@ function ourOnOpenFileButtonClick ( ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourToggleContentsButtonClick
+@desc Event listener for the toggle contents button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourToggleContentsButtonClick ( clickEvent ) {
+	ourDialogFunctions.toggleContents ( );
+	clickEvent.target.textContent = '▼' === clickEvent.target.textContent ? '▶' : '▼';
+
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourCreateToolbarButtons
 @desc This function creates the open file button and add the others buttons on the toolbar
 @private
@@ -245,6 +268,18 @@ function ourCreateToolbarButtons ( ) {
 		ourToolbarDiv
 	);
 	ourOpenFileInput.addEventListener ( 'change', ourOnOpenFileInputChange,	false );
+
+	let toggleContentsButton = theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-BaseDialog-Button',
+			title : theTranslator.getText ( 'NoteDialog - show hidden contents' ),
+			textContent : '▼' // 25b6 = '▶'  25bc = ▼
+		},
+		ourToolbarDiv
+	);
+	toggleContentsButton.addEventListener ( 'click', ourToggleContentsButtonClick, false );
+
 	let openFileButton = theHTMLElementsFactory.create (
 		'div',
 		{
@@ -278,7 +313,7 @@ function ourCreateToolbarSelect ( ) {
 		},
 		ourToolbarDiv
 	);
-	ourIconsSelect.addEventListener ( 'change', ourOnSelectEventListener, false );
+	ourIconsSelect.addEventListener ( 'change', ourDialogFunctions.onSelectEventListener, false );
 	ourAddSelectOptions ( );
 }
 
@@ -335,11 +370,8 @@ class NoteDialogToolbar {
 	@param {function} onButtonClickEventListener the event listener to be activated when the user click on a button
 	*/
 
-	createToolbar ( onSelectEventListener, onButtonClickEventListener, noteDialog ) {
-		ourNoteDialog = noteDialog;
-		ourOnSelectEventListener = onSelectEventListener;
-		ourOnButtonClickEventListener = onButtonClickEventListener;
-
+	createToolbar ( dialogFunctions ) {
+		ourDialogFunctions = dialogFunctions;
 		ourToolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{

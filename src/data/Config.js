@@ -215,6 +215,17 @@ let ourPrivateConfig = {
 		svgTimeOut : 40,
 		maxManeuversNotes : 100
 	},
+	noteDialog : {
+		toggleIconDimension : true,
+		toggleIconTextArea : false,
+		toggleToltip : false,
+		togglePopupContent : false,
+		toggleAddress : false,
+		toggleLink : false,
+		togglePhone : true,
+		iconAreaHeight : 2,
+		popupAreaHeigth : 8
+	},
 	itineraryPointZoom : 17,
 	routeEditor : {
 		displayEditionInHTMLPage : true
@@ -402,6 +413,7 @@ class Config {
 	get wayPoint ( ) { return ourPrivateConfig.wayPoint; }
 	get route ( ) { return ourPrivateConfig.route; }
 	get note ( ) { return ourPrivateConfig.note; }
+	get noteDialog ( ) { return ourPrivateConfig.noteDialog; }
 	get itineraryPointZoom ( ) { return ourPrivateConfig.itineraryPointZoom; }
 	get routeEditor ( ) { return ourPrivateConfig.routeEditor; }
 	get travelEditor ( ) { return ourPrivateConfig.travelEditor; }

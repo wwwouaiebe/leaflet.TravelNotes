@@ -115,3 +115,13 @@ Changes:
 	overflow: auto;
 	background-color: white;
 }
+
+.TravelNotes-NoteDialog-HiddenItem > *,
+.TravelNotes-NoteDialog-HiddenItem > * > *,
+.TravelNotes-NoteDialog-HiddenItem > * > * > *,
+.TravelNotes-NoteDialog-HiddenItem {
+	transform: scale(0);
+	margin: 0;
+	padding: 0;
+	height: 0;
+}
