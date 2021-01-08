@@ -427,6 +427,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnBlurUrlInput ( blurEvent ) {
+		if ( '' === blurEvent.target.value ) {
+			return;
+		}
 		let verifyResult = theHTMLSanitizer.sanitizeToUrl ( blurEvent.target.value );
 		if ( '' === verifyResult.errorsString ) {
 			myNoteDialog.hideError ( );
