@@ -27,6 +27,7 @@ Changes:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #145 : Merge svg icon and knoopunt icon
 Doc reviewed 20200808
 Tests ...
 */
@@ -124,6 +125,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	let myDirectionArrow = ' ';
 	let myTooltip = '';
 	let myStreets = '';
+	let myRcnRef = '';
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -347,6 +349,16 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// searching a mini roundabout at the icon node
 		let isMiniRoundabout =
 			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
+
+		if (
+			iconNode && iconNode.tags && iconNode.tags.rcn_ref
+			&&
+			iconNode.tags [ 'network:type' ] && 'node_network' === iconNode.tags [ 'network:type' ]
+			&&
+			'bike' === myRoute.itinerary.transitMode
+		) {
+			myRcnRef = iconNode.tags.rcn_ref;
+		}
 
 		let incomingStreet = '';
 		let outgoingStreet = '';
@@ -776,6 +788,29 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myCreateRcnRef
+	@desc This function creates the RcnRef from OSM
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateRcnRef ( ) {
+		const Y_TEXT = 0.6;
+		if ( '' === myRcnRef ) {
+			return;
+		}
+		let svgText = document.createElementNS ( SVG_NS, 'text' );
+		svgText.textContent = myRcnRef;
+		svgText.setAttributeNS ( null, 'x', String ( theConfig.note.svgIconWidth / TWO ) );
+		svgText.setAttributeNS ( null, 'y', String ( theConfig.note.svgIconWidth * Y_TEXT ) );
+		svgText.setAttributeNS ( null, 'class', 'TravelNotes-OSM-RcnRef' );
+		mySvg.appendChild ( svgText );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateSvg
 	@desc This function creates the SVG
 	@private
@@ -931,6 +966,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			mySearchPassingStreets ( );
 			myCreateRoute ( );
 			myCreateWays ( );
+			myCreateRcnRef ( );
 
 			ourRequestStarted = false;
 

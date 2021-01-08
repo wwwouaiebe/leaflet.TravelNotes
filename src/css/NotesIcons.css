@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #145 : Merge svg icon and knoopunt icon
 
 -----------------------------------------------------------------------------------------------------------------------
 */
@@ -75,6 +77,13 @@ Changes:
 .TravelNotes-OSM-Highway-footway {
 	stroke: red;
 	stroke-dasharray: 2 2;
+}
+
+.TravelNotes-OSM-RcnRef {
+	font: bold 50px sans-serif;
+	fill: rgb(0, 255, 255);
+	fill-opacity: 75%;
+	text-anchor: middle;
 }
 
 .TravelNotes-SvgIcon-Background {
