@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #146 : Add the travel name in the document title...
 Doc reviewed 20200810
 Tests ...
 */
@@ -96,6 +98,7 @@ function ourNewViewerFileLoader ( ) {
 		*/
 
 		display ( ) {
+			document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
 			let routesIterator = theTravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {

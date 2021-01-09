@@ -23,6 +23,7 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #146 : Add the travel name in the document title...
 Doc reviewed 20200825
 Tests ...
 */
@@ -91,6 +92,18 @@ function showRouteManeuvers ( ) {
 	}
 }
 
+function updateRoadbook ( pageContent ) {
+	document.getElementById ( 'TravelNotes' ).textContent = '';
+	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
+	let headerName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' );
+	if ( headerName ) {
+		document.title = headerName.textContent + ' - roadbook';
+	}
+	showTravelNotes ( );
+	showRouteNotes ( );
+	showRouteManeuvers ( );
+}
+
 document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
 
 let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
@@ -100,13 +113,7 @@ let pageId = params.get ( 'page' );
 if ( pageId ) {
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-		.then ( pageContent => {
-			document.getElementById ( 'TravelNotes' ).textContent = '';
-			theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
-			showTravelNotes ( );
-			showRouteNotes ( );
-			showRouteManeuvers ( );
-		} )
+		.then ( pageContent => { updateRoadbook ( pageContent ); } )
 		.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
 
 	window.addEventListener (
@@ -115,11 +122,7 @@ if ( pageId ) {
 			theIndexedDb.getReadPromise ( pageId )
 				.then ( pageContent => {
 					if ( pageContent ) {
-						document.getElementById ( 'TravelNotes' ).textContent = '';
-						theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
-						showTravelNotes ( );
-						showRouteNotes ( );
-						showRouteManeuvers ( );
+						updateRoadbook ( pageContent );
 					}
 					else {
 						document.getElementById ( 'TravelNotes' ).textContent = '';

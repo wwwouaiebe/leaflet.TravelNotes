@@ -31,6 +31,7 @@ Changes:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 		- Issue #136 : Remove html entities from js string
+		- Issue #146 : Add the travel name in the document title...
 Doc reviewed 20200508
 Tests ...
 
@@ -129,6 +130,7 @@ function ourNewPrintFactory ( ) {
 		}
 		theTravelNotesData.map.invalidateSize ( false );
 		window.removeEventListener ( 'afterprint', myOnAfterPrint, true );
+		document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
 	}
 
 	/**
@@ -698,7 +700,7 @@ function ourNewPrintFactory ( ) {
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.add ( 'TravelNotes-PrintViews-Hidden' );
 		}
-
+		document.title = theTravelNotesData.travel.name + ' - ' + myRoute.computedName + ' - maps';
 		myCreateToolbar ( );
 
 		window.addEventListener ( 'afterprint', myOnAfterPrint, true );

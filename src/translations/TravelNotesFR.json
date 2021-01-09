@@ -736,6 +736,10 @@
 		"msgstr" : "Abandonner ce voyage"
 	},
 	{
+		"msgid" : "TravelUI - Gives a name to the travel",
+		"msgstr" : "Donnez d'abord un nom à ce voyage."
+	},
+	{
 		"msgid" : "TravelUI - Hide",
 		"msgstr" : "Masquer"
 	},

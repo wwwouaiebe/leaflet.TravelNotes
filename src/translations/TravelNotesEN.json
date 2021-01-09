@@ -736,6 +736,10 @@
 		"msgstr" : "Cancel travel"
 	},
 	{
+		"msgid" : "TravelUI - Gives a name to the travel",
+		"msgstr" : "Gives first a name to the travel"
+	},
+	{
 		"msgid" : "TravelUI - Hide",
 		"msgstr" : "Hide"
 	},

@@ -29,6 +29,7 @@ Changes:
 	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #140 : Remove userData
+		- Issue #146 : Add the travel name in the document title...
 Doc reviewed 20200731
 Tests ...
 */
@@ -197,7 +198,7 @@ class Travel {
 		@type {string}
 		*/
 
-		this.name = 'TravelNotes';
+		this.name = '';
 
 		/**
 		a boolean indicates when the Travel is read only

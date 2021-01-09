@@ -41,6 +41,7 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #146 : Add the travel name in the document title...
 Doc reviewed 20200817
 Tests ...
 */
@@ -117,6 +118,7 @@ function ourOnRouteListWheel ( wheelEvent ) {
 
 function ourOnTravelNameInputChange ( changeEvent ) {
 	theTravelNotesData.travel.name = theHTMLSanitizer.sanitizeToJsString ( changeEvent.target.value );
+	document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
@@ -150,7 +152,6 @@ function ourCreateTravelNameDiv ( ) {
 		{
 			id : 'TravelNotes-TravelUI-InputTravelName',
 			type : 'text',
-			placeholder : 'TravelNotes',
 			value : theTravelNotesData.travel.name
 		},
 		travelNameDiv
@@ -171,6 +172,7 @@ function ourCreateTravelNameDiv ( ) {
 function ourOnCancelTravelButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ();
 	theTravelEditor.clear ( );
+	document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
 }
 
 /**
@@ -208,7 +210,12 @@ function ourCreateCancelTravelButton ( ) {
 
 function ourOnSaveTravelButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	theTravelEditor.saveTravel ( );
+	if ( '' === theTravelNotesData.travel.name ) {
+		theErrorsUI.showError ( theTranslator.getText ( 'TravelUI - Gives a name to the travel' ) );
+	}
+	else {
+		theTravelEditor.saveTravel ( );
+	}
 }
 
 /**
