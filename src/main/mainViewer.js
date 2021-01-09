@@ -118,7 +118,7 @@ function ourNewMainViewer ( ) {
 				console.log ( 'invalid lng parameter' );
 			}
 		}
-		if ( docURL.searchParams.get ( 'lay' ) ) {
+		if ( '' === docURL.searchParams.get ( 'lay' ) ) {
 			myAddLayerToolbar = true;
 		}
 	}
