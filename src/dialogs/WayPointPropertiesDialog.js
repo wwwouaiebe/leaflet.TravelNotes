@@ -105,8 +105,6 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 		wayPoint.address = myAddressInput.value;
 		wayPoint.validateData ( );
 
-		console.log ( wayPoint );
-
 		return wayPoint;
 	}
 
