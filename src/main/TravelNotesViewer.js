@@ -102,7 +102,7 @@ function ourAddEventsListeners ( ) {
 		'layerchange',
 		layerChangeEvent => {
 			if ( layerChangeEvent.data ) {
-				theViewerMapEditor.setLayer ( layerChangeEvent.data.layer );
+				theViewerMapEditor.setLayer ( layerChangeEvent.data.layer, layerChangeEvent.data.layer.url );
 			}
 		}
 	);
