@@ -240,9 +240,7 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 	iconHTML.style.width = String ( noteAndRoute.note.iconWidth ) + 'px';
 	iconHTML.style.height = String ( noteAndRoute.note.iconHeight ) + 'px';
 	if ( 'TravelNotes-Roadbook-' === classPrefix && iconHTML.firstChild ) {
-		console.log ( 'a' );
 		if ( 'svg' === iconHTML.firstChild.tagName ) {
-			console.log ( 'b' );
 			iconHTML.firstChild.setAttributeNS (
 				null,
 				'viewBox',
@@ -252,7 +250,6 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
 		}
 		else if ( iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' ) ) {
-			console.log ( 'c' );
 			iconHTML.style.width = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
 			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
 		}
