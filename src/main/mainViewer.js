@@ -90,7 +90,7 @@ function ourNewMainViewer ( ) {
 		if ( strTravelUrl && ZERO !== strTravelUrl.length ) {
 			try {
 				strTravelUrl = atob ( strTravelUrl );
-				if ( strTravelUrl.match ( /[^\w%:./]/ ) ) {
+				if ( strTravelUrl.match ( /[^\w-%:./]/ ) ) {
 					throw new Error ( 'invalid char in the url encoded in the fil parameter' );
 				}
 				let travelURL = new URL ( strTravelUrl );
