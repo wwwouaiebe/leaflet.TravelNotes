@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v1.2.0:
-		- created
+		- created		
+	- v2.0.0:
+		- Issue #147 : Add the travel name to gpx file name #147		
 Doc reviewed 20200807
 Tests ...
 */
@@ -45,6 +47,7 @@ Tests ...
 */
 
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theUtilities } from '../util/Utilities.js';
 
 /**
@@ -200,7 +203,7 @@ function ourNewGpxFactory ( ) {
 	*/
 
 	function mySaveGpxToFile ( ) {
-		let fileName = myRoute.computedName;
+		let fileName = theTravelNotesData.travel.name + ' - ' + myRoute.computedName;
 		if ( '' === fileName ) {
 			fileName = 'TravelNote';
 		}
