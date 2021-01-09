@@ -21,6 +21,7 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+		- Issue #138 : Protect the app - control html entries done by user.
 Doc reviewed 20200825
 Tests ...
 */
@@ -218,7 +219,8 @@ export const SVG_PROFILE = Object.freeze ( {
 
 export const ICON_DIMENSIONS = Object.freeze ( {
 	width : 40,
-	height : 40
+	height : 40,
+	svgViewboxDim : 200
 } );
 
 /**

@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 
 -----------------------------------------------------------------------------------------------------------------------
 */
@@ -103,10 +105,6 @@ Changes:
 	margin: 0;
 	border-bottom-style: none;
 	border-bottom-width: 0;
-}
-
-.TravelNotes-Roadbook-Travel-Notes-IconCell > svg {
-	width: 170px;
 }
 
 .TravelNotes-Roadbook-Route-Header {

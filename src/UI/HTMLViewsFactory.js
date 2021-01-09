@@ -64,7 +64,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { DISTANCE, ZERO } from '../util/Constants.js';
+import { ICON_DIMENSIONS, DISTANCE, ZERO } from '../util/Constants.js';
 
 const LINKS_MAX_LENGTH = 40;
 const MIN_NOTES_DISTANCE = 9;
@@ -236,30 +236,26 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 		},
 		NoteTextAndIconHTML
 	);
+	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
 	iconHTML.style.width = String ( noteAndRoute.note.iconWidth ) + 'px';
 	iconHTML.style.height = String ( noteAndRoute.note.iconHeight ) + 'px';
-	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
-	if ( iconHTML.firstChild && 'svg' === iconHTML.firstChild.tagName && 'TravelNotes-Roadbook-' === classPrefix ) {
-		iconHTML.firstChild.setAttributeNS (
-			null,
-			'viewBox',
-			'0 0 ' + theConfig.note.svgIconWidth + ' ' + theConfig.note.svgIconWidth
-		);
-		iconHTML.style.width = String ( theConfig.note.svgIconWidth ) + 'px';
-		iconHTML.style.height = String ( theConfig.note.svgIconWidth ) + 'px';
-	}
-	if (
-		'TravelNotes-Roadbook-' === classPrefix
-		&&
-		iconHTML.firstChild
-		&&
-		iconHTML.firstChild.classList
-		&&
-		iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' )
-
-	) {
-		iconHTML.style.width = String ( theConfig.note.svgIconWidth ) + 'px';
-		iconHTML.style.height = String ( theConfig.note.svgIconWidth ) + 'px';
+	if ( 'TravelNotes-Roadbook-' === classPrefix && iconHTML.firstChild ) {
+		console.log ( 'a' );
+		if ( 'svg' === iconHTML.firstChild.tagName ) {
+			console.log ( 'b' );
+			iconHTML.firstChild.setAttributeNS (
+				null,
+				'viewBox',
+				'0 0 ' + ICON_DIMENSIONS.svgViewboxDim + ' ' + ICON_DIMENSIONS.svgViewboxDim
+			);
+			iconHTML.style.width = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+		}
+		else if ( iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' ) ) {
+			console.log ( 'c' );
+			iconHTML.style.width = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+		}
 	}
 
 	let noteTextHTMLElement = ourGetNoteTextHTML ( classPrefix, noteAndRoute );

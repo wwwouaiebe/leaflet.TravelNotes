@@ -74,7 +74,7 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-import { SVG_NS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -471,7 +471,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myComputeTranslation ( ) {
 		myTranslation = theGeometry.subtrackPoints (
-			[ theConfig.note.svgIconWidth / TWO, theConfig.note.svgIconWidth / TWO ],
+			[ ICON_DIMENSIONS.svgViewboxDim / TWO, ICON_DIMENSIONS.svgViewboxDim / TWO ],
 			theGeometry.project ( mySvgLatLngDistance.latLng, mySvgZoom )
 		);
 	}
@@ -666,9 +666,9 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				let pointIsInside =
 					point [ ZERO ] >= ZERO && point [ ONE ] >= ZERO
 					&&
-					point [ ZERO ] <= theConfig.note.svgIconWidth
+					point [ ZERO ] <= ICON_DIMENSIONS.svgViewboxDim
 					&&
-					point [ ONE ] <= theConfig.note.svgIconWidth;
+					point [ ONE ] <= ICON_DIMENSIONS.svgViewboxDim;
 				if ( pointIsInside ) {
 					if ( NOT_FOUND === firstPointIndex ) {
 						firstPointIndex = index;
@@ -696,8 +696,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				null,
 				'transform',
 				'rotate(' + myRotation +
-					',' + ( theConfig.note.svgIconWidth / TWO ) +
-					',' + ( theConfig.note.svgIconWidth / TWO )
+					',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
+					',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO )
 					+ ')'
 			);
 			mySvg.appendChild ( polyline );
@@ -738,9 +738,9 @@ function ourNewSvgIconFromOsmFactory ( ) {
 							&&
 							point [ ONE ] >= ZERO
 							&&
-							point [ ZERO ] <= theConfig.note.svgIconWidth
+							point [ ZERO ] <= ICON_DIMENSIONS.svgViewboxDim
 							&&
-							point [ ONE ] <= theConfig.note.svgIconWidth;
+							point [ ONE ] <= ICON_DIMENSIONS.svgViewboxDim;
 						if ( pointIsInside ) {
 							if ( NOT_FOUND === firstPointIndex ) {
 								firstPointIndex = index;
@@ -774,8 +774,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 						null,
 						'transform',
 						'rotate(' + myRotation +
-							',' + ( theConfig.note.svgIconWidth / TWO ) +
-							',' + ( theConfig.note.svgIconWidth / TWO ) +
+							',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
+							',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
 							')'
 					);
 
@@ -802,8 +802,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 		let svgText = document.createElementNS ( SVG_NS, 'text' );
 		svgText.textContent = myRcnRef;
-		svgText.setAttributeNS ( null, 'x', String ( theConfig.note.svgIconWidth / TWO ) );
-		svgText.setAttributeNS ( null, 'y', String ( theConfig.note.svgIconWidth * Y_TEXT ) );
+		svgText.setAttributeNS ( null, 'x', String ( ICON_DIMENSIONS.svgViewboxDim / TWO ) );
+		svgText.setAttributeNS ( null, 'y', String ( ICON_DIMENSIONS.svgViewboxDim * Y_TEXT ) );
 		svgText.setAttributeNS ( null, 'class', 'TravelNotes-OSM-RcnRef' );
 		mySvg.appendChild ( svgText );
 	}
@@ -824,10 +824,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		mySvg.setAttributeNS (
 			null,
 			'viewBox',
-			String ( theConfig.note.svgIconWidth / FOUR ) + ' ' +
-			( theConfig.note.svgIconWidth / FOUR ) + ' ' +
-			( theConfig.note.svgIconWidth / TWO ) + ' ' +
-			( theConfig.note.svgIconWidth / TWO )
+			String ( ICON_DIMENSIONS.svgViewboxDim / FOUR ) + ' ' +
+			( ICON_DIMENSIONS.svgViewboxDim / FOUR ) + ' ' +
+			( ICON_DIMENSIONS.svgViewboxDim / TWO ) + ' ' +
+			( ICON_DIMENSIONS.svgViewboxDim / TWO )
 		);
 		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
 	}
@@ -898,7 +898,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			'?data=[out:json][timeout:' +
 			theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( theConfig.note.svgIconWidth * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
+			( ICON_DIMENSIONS.svgViewboxDim * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
 			',' +
 			requestLatLng +
 			')->.a;(.a >;.a;)->.a;.a out;' +

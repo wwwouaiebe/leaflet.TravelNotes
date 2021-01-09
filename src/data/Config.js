@@ -195,7 +195,7 @@ let ourPrivateConfig = {
 			weight : 1
 		},
 		haveBackground : false,
-		svgIconWidth : 200,
+		svgRoadbookDimCoef : 2,
 		svgAnleMaxDirection :
 		{
 			right : 35,
