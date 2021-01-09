@@ -344,6 +344,7 @@ class TravelNotes {
 						[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
 						TWO
 					);
+					document.title = 'Travel & Notes';
 				}
 			);
 	}
@@ -385,6 +386,7 @@ class TravelNotes {
 			'<p>' + theTranslator.getText ( 'Help - Continue with interface1' ) + '</p>' +
 			'<p>' + theTranslator.getText ( 'Help - Continue with interface2' ) + '</p>'
 		);
+		document.title = 'Travel & Notes';
 	}
 
 	/**

@@ -118,7 +118,9 @@ function ourOnRouteListWheel ( wheelEvent ) {
 
 function ourOnTravelNameInputChange ( changeEvent ) {
 	theTravelNotesData.travel.name = theHTMLSanitizer.sanitizeToJsString ( changeEvent.target.value );
-	document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
+	document.title =
+		'Travel & Notes' +
+		( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
 }
 
@@ -172,7 +174,9 @@ function ourCreateTravelNameDiv ( ) {
 function ourOnCancelTravelButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ();
 	theTravelEditor.clear ( );
-	document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
+	document.title =
+		'Travel & Notes' +
+		( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
 }
 
 /**

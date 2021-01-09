@@ -98,7 +98,9 @@ function ourNewViewerFileLoader ( ) {
 		*/
 
 		display ( ) {
-			document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
+			document.title =
+				'Travel & Notes' +
+				( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
 			let routesIterator = theTravelNotesData.travel.routes.iterator;
 			while ( ! routesIterator.done ) {
 				if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {

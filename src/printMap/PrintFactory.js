@@ -130,7 +130,9 @@ function ourNewPrintFactory ( ) {
 		}
 		theTravelNotesData.map.invalidateSize ( false );
 		window.removeEventListener ( 'afterprint', myOnAfterPrint, true );
-		document.title = 'Travel & Notes - ' + theTravelNotesData.travel.name;
+		document.title =
+			'Travel & Notes' +
+			( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
 	}
 
 	/**
@@ -700,7 +702,12 @@ function ourNewPrintFactory ( ) {
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.add ( 'TravelNotes-PrintViews-Hidden' );
 		}
-		document.title = theTravelNotesData.travel.name + ' - ' + myRoute.computedName + ' - maps';
+		document.title =
+			'' === theTravelNotesData.travel.name
+				?
+				'maps'
+				:
+				theTravelNotesData.travel.name + ' - ' + myRoute.computedName + ' - maps';
 		myCreateToolbar ( );
 
 		window.addEventListener ( 'afterprint', myOnAfterPrint, true );

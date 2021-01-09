@@ -97,7 +97,8 @@ function updateRoadbook ( pageContent ) {
 	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
 	let headerName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' );
 	if ( headerName ) {
-		document.title = headerName.textContent + ' - roadbook';
+		document.title =
+			'' === headerName.textContent ? 'roadbook' : headerName.textContent + ' - roadbook';
 	}
 	showTravelNotes ( );
 	showRouteNotes ( );
