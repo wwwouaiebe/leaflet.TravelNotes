@@ -360,6 +360,34 @@
 		"msgstr" : "Contenu du tooltip\u00a0:\u00a0"
 	},
 	{
+		"msgid" : "NoteDialog -Send a sms to",
+		"msgstr" : "Envoyer un sms au "
+	},
+	{
+		"msgid" : "NoteDialog - call",
+		"msgstr" : "Appeler le "
+	},
+	{
+		"msgid" : "NoteDialog - Invalid phone number",
+		"msgstr" : "Numéro invalide"
+	},
+	{
+		"msgid" : "NoteDialog - transform to tel: link",
+		"msgstr" : "Transformer en lien tel:"
+	},
+	{
+		"msgid" : "NoteDialog - transform to sms: link",
+		"msgstr" : "Transformer en lien sms:"
+	},
+	{
+		"msgid" : "NoteDialog - transform to tel: and sms: links",
+		"msgstr" : "Transformer en liens tel: et sms:"
+	},
+	{
+		"msgid" : "NoteDialogToolbar - An error was found in the json file",
+		"msgstr" : "Une erreur a été trouvée dans le fichier JSON ({error})"
+	},
+	{
 		"msgid" : "NoteEditor - Add a note for each maneuver",
 		"msgstr" : "Ajouter une note pour chaque manœuvre"
 	},
@@ -706,6 +734,10 @@
 	{
 		"msgid" : "TravelUI - Cancel travel",
 		"msgstr" : "Abandonner ce voyage"
+	},
+	{
+		"msgid" : "TravelUI - Gives a name to the travel",
+		"msgstr" : "Donnez d'abord un nom à ce voyage."
 	},
 	{
 		"msgid" : "TravelUI - Hide",

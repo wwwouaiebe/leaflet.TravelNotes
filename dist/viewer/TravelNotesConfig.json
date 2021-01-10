@@ -153,7 +153,7 @@
 			"weight":1
 		},
 		"haveBackground":false,
-		"svgIconWidth":200,
+		"svgRoadbookDimCoef":6,
 		"svgAnleMaxDirection":
 		{
 			"right":35,
@@ -172,6 +172,17 @@
 		"svgTownDistance":1500,
 		"svgTimeOut":40,
 		"maxManeuversNotes":100
+	},
+	"noteDialog":{
+		"toggleIconDimension":true,
+		"toggleIconTextArea":false,
+		"toggleToltip":false,
+		"togglePopupContent":false,
+		"toggleAddress":false,
+		"toggleLink":false,
+		"togglePhone":true,
+		"iconAreaHeight":2,
+		"popupAreaHeigth":8
 	},
 	"itineraryPointZoom":17,
 	"routeEditor":
