@@ -668,8 +668,8 @@ If you absolutely need these characters, you should replace them with the html e
 The urls introduced in the href and src attributes, as well as in the "link" edit zone must be valid urls:
 - url's must be absolute links
 - url's cannot contain characters &lt;, &gt;, &apos; et &quot;
-- protocols must be http:, https:, mailto:, sms: or tel: for an href attribute
-- protocols must be https: for the src attribute (http: is also acceptable if the app's protocol is http:)
+- protocol must be http:, https:, mailto:, sms: or tel: for an href attribute
+- protocol must be https: for the src attribute (http: is also acceptable if the app's protocol is http:)
 - the pathname of the sms: and tel: links must start with a + and contain only the characters #, * or numbers
 
 As more text is inserted into an edit box, the app interprets the text and adapts the note preview accordingly. 
