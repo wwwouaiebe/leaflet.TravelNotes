@@ -2,6 +2,7 @@
 
 - [Why Travel & Notes](#WhyTravelNotes)
 - [Some explanations on the terms used](#SomeExplanations)
+- [Open a travel file created with a version earlier than v2.0.0](#OpenFileWithV200)
 - [Before you start using Travel & Notes](#BeforeStart)
 	- [How to introduce your access keys in Travel & Notes](#APIKeys)
 - [Context menus](#ContextMenus)
@@ -41,6 +42,7 @@
 	- [Turn a travel note into a route note](#TravelToRouteNote)
 	- [Create a note for each route maneuver](#AllManeuverNotesFromOsm)
 	- [The note dialog box](#NoteDlg)
+		- [Insert text in html](#AddHtmltext)
 		- [Predefined route notes "SVG icon from OSM"](#SvgNoteFromOsm)
 		- [Some examples of notes](#NoteSamples)
 - [Background map menu](#MapsMenu)
@@ -85,6 +87,26 @@ This icon can be an image, a photo, a text ...
 
 The **roadbook** is an HTML page that contains all the information of the travel: the notes, the 
 routes and the itineraries.
+
+<a id="OpenFileWithV200"></a>
+## __Open a travel file created with a version earlier than v2.0.0__
+
+ATTENTION : --**It is not possible to open with version 1.x.x a file saved with version 2.0.0**__
+
+You may still need the older version to make corrections in the notes.
+You can do two installations of Travel & Notes without any problem. You just have to place them 
+in different directories. You can also use the demo of version v2.0.0 installed on 
+[https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en).
+
+- Make a backup copy of your travel files.
+- Open Travel & Notes v2.0.0 and also open the browser's web console.
+- Open a file to convert.
+- The list of all deleted html tags and attributes is displayed in the console and the travel
+displayed in Travel & Notes.
+- Correct any errors by using your old version and then reopening your travel with version 2.0.0. OR directly
+make the necessary corrections in version 2.0.0.
+- Do not panic. The only fixes I had to make in my files were links which were incorrect anyway and 
+therefore didn't lead to anything.
 
 <a id="BeforeStart"></a>
 ## __Before you start using Travel & Notes__
@@ -161,20 +183,7 @@ For geeks and paranos also see in the [installation guide](InstallationGuideEN.m
 - APIKeys.showAPIKeysInDialog to show or hide the keys as a password in the dialog box
 - APIKeys.dialogHaveUnsecureButtons to show or hide the buttons 💾 and 📂 on __right__
 
-The old method of entering access keys via the url continues to work but will be deleted
-in a future version:
-- at the end of the url of the web page loading Travel & Notes: you need to enter a ? followed 
-by the provider name + 'ProviderKey' followed by = followed by your access key. Several access keys 
-can be introduced simultaneously by separating them by a &.
-
-Sample:
-```
-https://www.example.org/TravelNotes/?MapboxProviderKey=your_Mapbox_access_key&GraphHopperProviderKey=your_GraphHopper_access_key
-```
-
-As soon as Travel & Notes detects access keys in the url, they are stored in the __sessionStorage__ and 
-deleted from the url. They are no longer visible on the screen. **However, remember that a malicious 
-person can always find them in the browser history**, unless you use the private mode of your browser.
+The old method consisting in entering the access keys via the url is removed.
 
 <a id="ContextMenus"></a>
 ## __Context menus__
@@ -219,7 +228,8 @@ the url can be modified via the TravelNotes Config.json file (travelNotesToolbar
 #### Travel name
 
 In this edit box you can give a name to the travel. This name will then be proposed as the default name
-for all the files you will create from this travel.
+for all the files you will create from this travel. It is necessary to give a name to the travel before
+to be able to save this one.
 
 <a id="RouteToolbar"></a>
 #### Toolbar buttons "Travel"
@@ -588,22 +598,83 @@ For each route maneuver, [a SVG note from the OpenStreetMap data](#SvgNoteFromOs
 At the top of the box, a drop-down list allows you to choose predefined notes. It is possible to 
 modify this list. See the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson).
 
-The :file_folder: button allows you to load your own file with predefined notes in Travel & Notes. 
-Consult the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson) to find out how create this file.
+The ▼ button hides or displays certain editing areas which are hidden by default (the two controls allow you to modify 
+the dimensions of the icon and the telephone number). It is possible to choose which areas are hidden by default. 
+Consult the [installation guide](GuideInstallationEN.md#TravelNotesConfigJson);
 
-The div p span and a buttons add html tags &lt;div&gt;, &lt;p&gt;, &lt;span&gt; et &lt;a&gt; to 
-edit boxes. All other buttons are editable and also allow you to insert predefined text into the 
-edit boxes. See the [installation guide](InstallationGuideEN.md#TravelNotesNoteDialogJson).
+The 📂 button allows you to upload your own file with notes predefined in Travel & Notes. 
+See the [installation guide] (GuideInstallationEN.md#TravelNotesNoteDialogJson) for how to create this file.																						   
 
-Each edit box can contain plain text or html, except for the "Link" area.
+All the other buttons are modifiable and allow you to insert html tags or predefined text in the edit zones. 
+Consult the [installation guide](GuideInstallationEN.md#TravelNotesConfigJson);
 
 The "Icon Content" area will be used to represent the note on the map and can not be empty 
 (leaving this area blank would prevent any subsequent changes to the note).
 
-The "Address" area is completed automatically when creating the note - 
-[Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) is used to geotag the notes.
+The "Address" zone is automatically completed when creating the note - 
+[Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) is used for the street name and
+OverpassAPI for the municipality name.
 This area will never be changed by Nominatim afterwards, even if the note has been moved. 
-The button 🔄 allows, however, to request a new geolocation to Nominatim.
+The button 🔄 allows, however, to request a new geolocation to Nominatim/OverpassAPI.
+
+Each edit zone can contain plain text or html, with the exception of the "Link" zone which can only contain a valid link.
+
+<a id="AddHtmltext"></a>
+
+#### Insert text in html
+
+Only the following html tags and attributes can be used:
+- the tag &lt;div&gt; (text block)
+- the tag &lt;p&gt; (paragraph)
+- the tags &lt;h1&gt; à &lt;h6'&gt; (heading)
+- the tag &lt;hr&gt; (horizontal line)
+- the tag &lt;ol&gt; (bulleted list or numbered list)
+- the tag &lt;li&gt; (element of bulleted list)
+- the tag &lt;ul&gt; (element of numbered list)
+- the tag &lt;span&gt; (inline text block)
+- the tag &lt;figure&gt; (figure)
+- the tag &lt;figcaption&gt; (legend for the figure tag)
+- the tag &lt;img&gt; with the attributes src, alt width and height (image)
+- the tag &lt;br&gt; (new line)
+- the tag &lt;a&gt; with the attributes href end target
+- the tag &lt;del&gt; (deleted text)
+- the tag &lt;ins&gt; (added text)
+- the tag &lt;mark&gt; (highlighted text)
+- the tag &lt;s&gt; (strikethrough text)
+- the tag &lt;em&gt; (italic text)
+- the tag &lt;small&gt; (small text)
+- the tag &lt;strong&gt; (bold text)
+- the tag &lt;sub&gt; (subscript text)
+- the tag &lt;sup&gt; (superscript text)
+
+Also, the following svg tags can be used:
+- the tag &lt;svg&gt; with the attributes xmlns and viewBox
+- the tag &lt;text&gt; with the attributes x, y and text-anchor
+- the tag &lt;polyline&gt; with the attributes points and transform
+
+For all tags, id, class, dir and title attributes can also be used.
+
+The rules for editing html are of course applicable:
+- an opening tag AND a closing tag must be used: &lt;p&gt;Lorem ipsum... &lt;/p&gt;
+- attribute values must always be placed between &quot; : class=&quot;"myClass&quot;
+- the characters &lt; and &gt; are reserved for tags and cannot be used elsewhere.
+If you absolutely need these characters, you should replace them with the html entities &amp;lt; for &lt; and
+&amp;gt; for &gt;.
+- double quotes are reserved for delimiting attribute values. If necessary use the html entity &quot;.
+- the character &apos; cannot be used and must be replaced by the html entity &amp;apos;.
+- the character &amp; is ambiguous and should only be used in html entities
+- the non-breaking space must be inserted with the html entity &amp;nbsp;
+
+The urls introduced in the href and src attributes, as well as in the "link" edit zone must be valid urls:
+- urls must be absolute links
+- url's cannot contain characters &lt;, &gt;, &apos; et &quot;
+- protocols must be http:, https:, mailto:, sms: or tel: for an href attribute
+- protocols must be https: for the src attribute (http: is also acceptable if the app's protocol is http:)
+- the pathname of the sms: and tel: links must start with a + and contain only the characters #, * or numbers
+
+As more text is inserted into an edit box, the app interprets the text and adapts the note preview accordingly. 
+When the edit box is closed with the 🆗 button, the text you entered is replaced by the one produced by 
+the interpretation that the app made of it.
 
 <a id="SvgNoteFromOsm"></a>
 #### Predefined route notes "SVG icon from OSM"
@@ -701,7 +772,7 @@ The "Save" button saves the html file on your PC.
 It is possible to prepare a travel, save it in a file on a web server and consult it from the internet.
 
 To consult the travel, you must call TravelNotes by giving it as a parameter in the URL the address 
-of the file converted to base64.
+of the file converted to base64. And remember that you can only convert ascii characters to base64 ...
 
 ```
 https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==
