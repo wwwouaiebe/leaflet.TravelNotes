@@ -91,14 +91,14 @@ routes and the itineraries.
 <a id="OpenFileWithV200"></a>
 ## __Open a travel file created with a version earlier than v2.0.0__
 
-ATTENTION : --**It is not possible to open with version 1.x.x a file saved with version 2.0.0**__
+__**ATTENTION : It is not possible to open with version 1.x.x a file saved with version 2.0.0**__
 
 You may still need the older version to make corrections in the notes.
 You can do two installations of Travel & Notes without any problem. You just have to place them 
 in different directories. You can also use the demo of version v2.0.0 installed on 
 [https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en).
 
-- Make a backup copy of your travel files.
+- **Make a backup copy of your travel files**.
 - Open Travel & Notes v2.0.0 and also open the browser's web console.
 - Open a file to convert.
 - The list of all deleted html tags and attributes is displayed in the console and the travel
@@ -116,11 +116,11 @@ These are only used for calculating routes and the display of certain maps.
 
 Travel & Notes does not calculate routes and itineraries. It connects to a route provider to get 
 this itinerary. The different route providers that can currently be used are GraphHopper, Mapbox, 
-OpenRouteService and OSRM. It is also possible to draw a polyline between two places, without 
+Stadia Maps, OpenRouteService and OSRM. It is also possible to draw a polyline between two places, without 
 following paths. A train route between two stations can also be added, provided
 that this route is encoded in OpenStreetMap, respecting the rules of public transport version 2.
 
-For GraphHopper, OpenRouteService and Mapbox it is necessary to have an access key (**API Key**) 
+For GraphHopper, OpenRouteService, Stadia Maps and Mapbox it is necessary to have an access key (**API Key**) 
 to connect to the server. Check the websites of these different providers to obtain an access key.
 
 You must also correctly read the conditions of use of the access keys and check that what you do 
@@ -216,7 +216,7 @@ At the top of the interface is a first toolbar:
 [the Travel & Notes help page on Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
 - the @ button redirects to a contact page. By default it is
 [the Travel & Notes issues page on Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
-the url can be modified via the TravelNotes Config.json file (travelNotesToolbarUI.contactMail)
+the url can be modified via the TravelNotes Config.json file (travelNotesToolbarUI.contactMail.url)
 - the button 🔑 displays the dialog box of the access keys
 - the button 🌐 enables or disables localization.
 - the button 📌 permanently displays the interface.
@@ -656,17 +656,17 @@ For all tags, id, class, dir and title attributes can also be used.
 
 The rules for editing html are of course applicable:
 - an opening tag AND a closing tag must be used: &lt;p&gt;Lorem ipsum... &lt;/p&gt;
-- attribute values must always be placed between &quot; : class=&quot;"myClass&quot;
+- attribute values must always be placed between &quot; : class=&quot;myClass&quot;
 - the characters &lt; and &gt; are reserved for tags and cannot be used elsewhere.
 If you absolutely need these characters, you should replace them with the html entities &amp;lt; for &lt; and
 &amp;gt; for &gt;.
-- double quotes are reserved for delimiting attribute values. If necessary use the html entity &quot;.
+- double quotes are reserved for delimiting attribute values. If necessary use the html entity &amp;quot;.
 - the character &apos; cannot be used and must be replaced by the html entity &amp;apos;.
 - the character &amp; is ambiguous and should only be used in html entities
 - the non-breaking space must be inserted with the html entity &amp;nbsp;
 
 The urls introduced in the href and src attributes, as well as in the "link" edit zone must be valid urls:
-- urls must be absolute links
+- url's must be absolute links
 - url's cannot contain characters &lt;, &gt;, &apos; et &quot;
 - protocols must be http:, https:, mailto:, sms: or tel: for an href attribute
 - protocols must be https: for the src attribute (http: is also acceptable if the app's protocol is http:)
@@ -763,8 +763,6 @@ well as all the notes that have been created on the map. It is possible to choos
 in the roadbook via the menu at the top of the page:
 
 <img src="RoadbookEN.PNG" />
-
-The "Save" button saves the html file on your PC. 
 
 <a id="PrepareTravel"></a>
 ## __Prepare a travel and consult it from the internet__

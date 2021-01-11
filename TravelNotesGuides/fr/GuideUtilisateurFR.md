@@ -95,14 +95,14 @@ les trajets et les itinéraires.
 <a id="OpenFileWithV200"></a>
 ## __Ouvrir un fichier de voyage créé avec un version antérieure à v2.0.0__
 
-ATTENTION : --**Il n'est pas possible d'ouvrir avec une version 1.x.x un fichier sauvé avec la version 2.0.0**__
+__**ATTENTION : Il n'est pas possible d'ouvrir avec une version 1.x.x un fichier sauvé avec la version 2.0.0**__
 
 Il est possible que vous ayez encore besoin de la version antérieure pour faire des corrections dans les notes.
 Vous pouvez faire deux installations de Travel & Notes sans problème. Il suffit de les placer dans des répertoires
 différents. Vous pouvez aussi utiliser la démo de la version v2.0.0 installée sur 
 [https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en).
 
-- Faites une copie de sauvegarde de vos fichiers de voyage.
+- **Faites une copie de sauvegarde de vos fichiers de voyage**
 - Ouvrez Travel & Notes v2.0.0 et ouvrez également la console web du navigateur.
 - Ouvrez un fichier à convertir.
 - La liste de toute les balises et attributs html supprimé·e·s est affichée dans la console et le voyage affiché 
@@ -228,7 +228,7 @@ En haut de l'interface se trouve une première barre d'outils:
 [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
 - le bouton @ redirige vers une page de contact. Par défaut, c'est 
 [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
-L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
+L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail.url)
 - le bouton 🔑 affiche la boite de dialogue des clefs d'accès
 - le bouton 🌐 active ou désactive la localisation. 
 - le bouton 📌 affiche l'interface en permanence.
@@ -625,7 +625,7 @@ Pour chaque manœuvre du trajet, [une note en SVG à partir des données OpenStr
 Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible 
 de modifier cette liste. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
-Le bouton ▼ cache affiche certaines zones d'édition qui sont masquées par défaut (les deux controles permettant de 
+Le bouton ▼ cache ou affiche certaines zones d'édition qui sont masquées par défaut (les deux controles permettant de 
 modifier les dimensions de l'icône et le n° de téléphone ). Il est possible de choisir quelles zones sont masquées par défaut.
 Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson)
 
@@ -682,12 +682,12 @@ Pour toutes les balises, les attributs id, class, dir et title peuvent égalemen
 
 Les règles d'édition du html sont bien sûr d'application:
 - une balise ouvrante ET une balise fermante doivent être utilisées: &lt;p&gt;Lorem ipsum... &lt;/p&gt;
-- les valeurs des attributs doivent toujours être placées entre des &quot; : class=&quot;"myClass&quot;
-- les caractères &lt; et &gt; sont réservés pour les balises et ne peuvent être utilisés ailleurs. 
+- les valeurs des attributs doivent toujours être placées entre des &quot; : class=&quot;myClass&quot;
+- les caractères &lt; et &gt; sont réservés pour les balises html et ne peuvent être utilisés ailleurs. 
 Si vous avez absolument besoin de ces caractères, vous devez les remplacer par les entités html &amp;lt; pour &lt; et
 &amp;gt; pour &gt;
 - les doubles guillemets sont réservés pour la délimitation des valeurs d'attribut. En cas de besoin utilisez 
-l'entité html &quot; en remplacement
+l'entité html &amp;quot; en remplacement
 - le caractère &apos; ne peut pas être utilisé et doit être remplacé par l'entité html &amp;apos;
 - le caractère &amp; est ambigü et ne devrait être utilisé que dans les entités html
 - l'espace insécable doit être inséré avec l'entité html &amp;nbsp;
@@ -791,8 +791,6 @@ tous les trajets ainsi que toutes les notes qui ont été créées sur la carte.
 ce que l'on désire voir présent dans le livre de voyage via le menu en haut de page :
 
 <img src="RoadbookFR.PNG" />
-
-Le bouton "Enrégistrer" permet de sauver le fichier html sur votre PC.
 
 <a id="PrepareTravel"></a>
 ## __Préparer un voyage et le consulter depuis internet__
