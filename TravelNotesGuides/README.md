@@ -6,7 +6,7 @@
 
 Version 2.0.0 is a major release containing significant changes in travel files. Files made with a previous version are no 
 longer fully compatible with this version and some data in the notes may be lost. See the 
-[user guide - fr] (https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md)
+[user guide - en](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#OpenFileWithV200)
 how to convert files made with an earlier version.
 
 ## Guides
@@ -24,9 +24,8 @@ how to convert files made with an earlier version.
 If you have a Mapbox, Stadia Maps, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, Stadia Maps, GraphHopper and/or OpenRouteService. 
 Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
-see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
-This demo displays a travel with a route and some icons and without any control, so the user cannot modify the travel.
-
+Also see the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
+which displays a trip with a route and icons, without any control, and therefore without the possibility of modifications.
 And the same [demo](https://wwwouaiebe.github.io/samples/Liege/index.html) inside a web page
 
 Other samples:
@@ -116,14 +115,14 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 
 ### What's new in release 2.0.0
 
-To avoid [xss attacks] (https://en.wikipedia.org/wiki/Cross-site_scripting), especially when exchanging files, all the security 
+To avoid [xss attacks](https://en.wikipedia.org/wiki/Cross-site_scripting), especially when exchanging files, all the security 
 of the app has been reviewed, which leads to a certain number of limitations and modifications:
-- [Content Security Policy] (https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is enabled by default via a &lt;meta&gt; in the index.html file.
+- [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is enabled by default via a &lt;meta&gt; tag in the index.html file.
 Thanks to this, it is no longer possible to run javascript from a site other than the one where Travel & Notes is installed, 
-to run scripts inline in the html or to download images or files from another site. .
+to run scripts inline in the html or to download images or files from another site.
 If you have the possibility, however, it is preferable to activate Content Securty Policy via a header installed by the server rather than via a&lt;meta&gt; tag.
 - the html tags that can be used when creating notes are restricted, as are the attributes attached to these html tags.
-Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md).
+Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#AddHtmltext).
 - when opening a travel file made with an earlier version, all unauthorized tags and attributes are deleted.
 - in order to avoid an xss attack via a link sent by email, it is no longer possible to automatically open a travel file 
 via the app url when this travel file comes from another site, even if Content Security Policy is completely disabled.
@@ -146,10 +145,11 @@ calculated for a bicycle (NB the points-nodes are a particularity of the bicycle
 - it is possible to hide or activate certain parts of this same edit box.
 
 <a id="fr" />
+
 ## Avertissement avant d'installer et utiliser la version 2.0.0
 
 La version 2.0.0 est une version majeure contenant des changements importants dans les fichiers de voyage. Les fichiers réalisés avec une version précédente ne sont plus entièrement compatibles avec cette version 
-et quelques données présentes dans les notes peuvent être perdues. Voyez dans le [guide pour les utilisateurs - fr](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md) 
+et quelques données présentes dans les notes peuvent être perdues. Voyez dans le [guide pour les utilisateurs - fr](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#OpenFileWithV200) 
 comment convertir des fichiers réalisés avec une version antérieure.
 
 ## Guides
@@ -270,7 +270,7 @@ Grâce à cela, il n'est plus possible d'exécuter du javascript depuis un autre
 dans le html ni de télécharger des images ou des fichiers depuis un autre site.
 Si vous en avez la possibilité, il est cependant préférable d'activer Content Securty Policy via un header installé par le serveur plutôt que via une balise &lt;meta&gt;.
 - les balises html pouvant être utilisées lors de la création des notes sont restreintes, de même que les attributs attachés à ces balises html.
-Consultez le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md).
+Consultez le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#AddHtmltext).
 - lors de l'ouverture d'un fichier de voyage réalisé avec une version antérieure, toutes les balises et les attributs non autorisés sont effacé·e·s.
 - afin d'éviter une attaque xss via un lien envoyé par mail, il n'est plus possible d'ouvrir automatiquement un fichier de voyage via l'url de l'apps quand ce fichier
 de voyage provient d'un autre site, même si Content Security Policy est complètement désactivé.
