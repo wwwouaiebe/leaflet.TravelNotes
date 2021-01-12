@@ -115,6 +115,11 @@ Changes:
 	border: solid 0.1em;
 }
 
+.TravelNotes-Note-BlackOrange {
+	color: black;
+	background-color: orange;
+}
+
 svg.TravelNotes-Note-Knooppunt {
 	background-color: white;
 }
