@@ -197,7 +197,7 @@ function ourNewGeoCoder ( ) {
 
 		return {
 			city : adminCity,
-			place : adminHamlet || placeName,
+			place : placeName,
 			country : adminNames [ OSM_COUNTRY_ADMIN_LEVEL ]
 		};
 	}
