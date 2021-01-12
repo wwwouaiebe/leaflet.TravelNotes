@@ -105,6 +105,8 @@ Travel & Notes loads
 is no longer on the toolbar and the moment when this toolbar closes automatically.
 - __layersToolbarUI.theDevil.addButton__ : when this value is true, a "theDevil" button is added 
 to the toolbar.
+																				 
+																			 
 - __mouseUI.haveMouseUI__ : when this value is true, a control is displayed at the top of the screen, 
 indicating the coordinates of the mouse, the zoom value and the name of the open file
 - __errorUI.timeOut__ : the time that will elapse between the time an error message is displayed and the time 
@@ -194,6 +196,8 @@ for smoothing the elevation. Default value: 0.25
 ( -1 = always ).
 - __note.theDevil.addButton__ : when this value is true, a button "theDevil" is added
 to the notes dialog box
+															 
+														 
 - __note.theDevil.noteZoom__ : le zoom for "theDevil" button
 - __note.osmSearchNoteDialog__  : when this value is true, the notes edit box is displayed
 when creating a note from 'Search OpenstreetMap'
@@ -234,21 +238,23 @@ with the tag place = city in OSM for this tag to be used in the address of the i
 - __note.svgTownDistance__ : the maximum distance between the center of the SVG icon and a point 
 with the tag place = town in OSM for this tag to be used in the address of the icon
 - __note.svgTimeOut__ : the duration of the timeout sent with the request to create the SVG icon
+																								
+																								
 - __note.maxManeuversNotes__: the maximum number of notes that can be created with the command
 "Create a note for each route maneuver".
-- __noteDialog.toggleIconDimension__: when this value is true, the dimension controls
+- __noteDialog.toggleIconDimension__: when this value is false, the dimension controls
 of the icon are always visible
-- __noteDialog.toggleIconTextArea__: when this value is true, the icon edit area
+- __noteDialog.toggleIconTextArea__: when this value is false, the icon edit area
 is always visible
-- __noteDialog.toggleTooltip__: when this value is true, the tooltip edit area
+- __noteDialog.toggleTooltip__: when this value is false, the tooltip edit area
 is always visible
-- __noteDialog.togglePopupContent__: when this value is true, the text edit area
+- __noteDialog.togglePopupContent__: when this value is false, the text edit area
 is always visible
-- __noteDialog.toggleAddress__: when this value is true, the address edit area
+- __noteDialog.toggleAddress__: when this value is false, the address edit area
 is always visible
-- __noteDialog.toggleLink__: when this value is true, the link edit area
+- __noteDialog.toggleLink__: when this value is false, the link edit area
 is always visible
-- __noteDialog.togglePhone__: when this value is true, the phone edit area
+- __noteDialog.togglePhone__: when this value is v, the phone edit area
 is always visible
 - __noteDialog.iconAreaHeight__: the number of lines in the icon edit area
 - __noteDialog.popupAreaHeigth__: the number of lines in the text edit area

@@ -240,19 +240,19 @@ tag place=town dans OSM pour que ce tag soit utilisé dans l'adresse de l'icône
 - __note.svgTimeOut__ : la durée du timeout envoyé avec la requête de création de l'icône SVG
 - __note.maxManeuversNotes__: le maximum de notes qui peuvent être créées avec la commande
 "Créer une note pour chaque maneoeuvre du trajet".
-- __noteDialog.toggleIconDimension__: quand cette valeur est true, les contrôles de dimension 
+- __noteDialog.toggleIconDimension__: quand cette valeur est false, les contrôles de dimension 
 de l'icône sont toujours visibles
-- __noteDialog.toggleIconTextArea__: quand cette valeur est true, la zone d'édition de l'icône
+- __noteDialog.toggleIconTextArea__: quand cette valeur est false, la zone d'édition de l'icône
 est toujour visible
-- __noteDialog.toggleTooltip__: quand cette valeur est true, la zone d'édition du tooltip 
+- __noteDialog.toggleTooltip__: quand cette valeur est false, la zone d'édition du tooltip 
 est toujour visible
-- __noteDialog.togglePopupContent__: quand cette valeur est true,la zone d'édition du texte 
+- __noteDialog.togglePopupContent__: quand cette valeur est false,la zone d'édition du texte 
 est toujour visible
-- __noteDialog.toggleAddress__: quand cette valeur est true, la zone d'édition de l'adresse
+- __noteDialog.toggleAddress__: quand cette valeur est false, la zone d'édition de l'adresse
 est toujour visible
-- __noteDialog.toggleLink__: quand cette valeur est true, la zone d'édition du lien 
+- __noteDialog.toggleLink__: quand cette valeur est false, la zone d'édition du lien 
 est toujour visible
-- __noteDialog.togglePhone__: quand cette valeur est true, la zone d'édition du n° de téléphone
+- __noteDialog.togglePhone__: quand cette valeur est false, la zone d'édition du n° de téléphone
 est toujour visible
 - __noteDialog.iconAreaHeight__: le nombre de lignes de la zone d'édition de l'icône
 - __noteDialog.popupAreaHeigth__: le nombre de lignes de la zone d'édition du texte
