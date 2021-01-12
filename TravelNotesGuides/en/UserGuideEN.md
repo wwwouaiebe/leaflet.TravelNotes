@@ -617,6 +617,9 @@ OverpassAPI for the municipality name.
 This area will never be changed by Nominatim afterwards, even if the note has been moved. 
 The button 🔄 allows, however, to request a new geolocation to Nominatim/OverpassAPI.
 
+If the phone edit box contains only a valid phone number (= starting with a + and then only digits or the 
+characters #, * or space), the phone number will be displayed with a tel: link and a sms: link.
+
 Each edit zone can contain plain text or html, with the exception of the "Link" zone which can only contain a valid link.
 
 <a id="AddHtmltext"></a>

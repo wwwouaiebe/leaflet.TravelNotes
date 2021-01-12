@@ -644,6 +644,10 @@ OverpassAPI pour le nom de commune.
 Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. 
 Le bouton 🔄 permet cependant de demander une nouvelle géolocalisation à Nominatim/OverpassAPI.
 
+Si la zone d'édition du téléphone contient seulement un numéro de téléphone valide (= commençant 
+par un + et ensuite uniquement des chifres ou les caractères #, * ou espace), le numéro de 
+téléphone sera affiché avec un lien tel: et un lien sms:.
+
 Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien" qui ne peut contenir qu'un lien valide.
 
 <a id="AddHtmltext"></a>
