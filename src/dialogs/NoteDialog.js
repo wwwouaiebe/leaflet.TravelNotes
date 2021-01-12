@@ -530,7 +530,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		if ( theConfig.noteDialog.togglePopupContent ) {
 			myPopupContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
 		}
-		if ( theConfig.noteDialog.toggleToltip ) {
+		if ( theConfig.noteDialog.toggleTooltip ) {
 			myTooltipContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
 		}
 		if ( theConfig.noteDialog.toggleAddress ) {

@@ -218,7 +218,7 @@ let ourPrivateConfig = {
 	noteDialog : {
 		toggleIconDimension : true,
 		toggleIconTextArea : false,
-		toggleToltip : false,
+		toggleTooltip : false,
 		togglePopupContent : false,
 		toggleAddress : false,
 		toggleLink : false,

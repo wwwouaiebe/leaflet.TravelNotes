@@ -264,7 +264,7 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
 	}
 	if ( NOT_FOUND !== [ 'sms:', 'tel:' ].indexOf ( url.protocol ) ) {
-		if ( url.pathname.match ( /^\+[0-9,*,#,]*$/ ) ) {
+		if ( url.pathname.match ( /^\+[0-9,*,#]*$/ ) ) {
 			return { url : newUrlString, errorsString : '' };
 		}
 	}
