@@ -168,6 +168,14 @@
 		"msgstr" : "☎️"
 	},
 	{
+		"msgid" : "HTMLViewsFactory - Send a sms to",
+		"msgstr" : " ou envoyer un sms au "
+	},
+	{
+		"msgid" : "HTMLViewsFactory - call",
+		"msgstr" : "Appeler le "
+	},
+	{
 		"msgid" : "HTMLViewsFactory - Profile",
 		"msgstr" : "Profil"
 	},
@@ -360,28 +368,8 @@
 		"msgstr" : "Contenu du tooltip\u00a0:\u00a0"
 	},
 	{
-		"msgid" : "NoteDialog -Send a sms to",
-		"msgstr" : "Envoyer un sms au "
-	},
-	{
-		"msgid" : "NoteDialog - call",
-		"msgstr" : "Appeler le "
-	},
-	{
 		"msgid" : "NoteDialog - Invalid phone number",
 		"msgstr" : "Numéro invalide"
-	},
-	{
-		"msgid" : "NoteDialog - transform to tel: link",
-		"msgstr" : "Transformer en lien tel:"
-	},
-	{
-		"msgid" : "NoteDialog - transform to sms: link",
-		"msgstr" : "Transformer en lien sms:"
-	},
-	{
-		"msgid" : "NoteDialog - transform to tel: and sms: links",
-		"msgstr" : "Transformer en liens tel: et sms:"
 	},
 	{
 		"msgid" : "NoteDialogToolbar - An error was found in the json file",
