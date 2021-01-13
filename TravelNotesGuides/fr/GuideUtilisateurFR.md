@@ -100,7 +100,7 @@ __**ATTENTION : Il n'est pas possible d'ouvrir avec une version 1.x.x un fichier
 Il est possible que vous ayez encore besoin de la version antérieure pour faire des corrections dans les notes.
 Vous pouvez faire deux installations de Travel & Notes sans problème. Il suffit de les placer dans des répertoires
 différents. Vous pouvez aussi utiliser la démo de la version v2.0.0 installée sur 
-[https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en).
+[https://wwwouaiebe.github.io/leaflet.TravelNotes/](https://wwwouaiebe.github.io/leaflet.TravelNotes/).
 
 - **Faites une copie de sauvegarde de vos fichiers de voyage**
 - Ouvrez Travel & Notes v2.0.0 et ouvrez également la console web du navigateur.
@@ -627,7 +627,7 @@ de modifier cette liste. Consultez le [guide d'installation](GuideInstallationFR
 
 Le bouton ▼ cache ou affiche certaines zones d'édition qui sont masquées par défaut (les deux controles permettant de 
 modifier les dimensions de l'icône et le n° de téléphone ). Il est possible de choisir quelles zones sont masquées par défaut.
-Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson)
+Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson)
 
 Le bouton 📂 vous permet de charger votre propre fichier avec des notes prédéfinies dans 
 Travel & Notes. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson). pour savoir comment créer ce fichier.
@@ -849,4 +849,4 @@ D'autres exemples:
 
 [Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zby9zdW9taTIwMTgwNjA4LnRydg==)
 
-[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.html)
+[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.pdf)
