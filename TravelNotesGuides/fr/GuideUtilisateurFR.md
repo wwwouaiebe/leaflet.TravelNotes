@@ -2,6 +2,7 @@
 
 - [Pourquoi Travel & Notes](#WhyTravelNotes)
 - [Quelques explications sur les termes utilisés](#SomeExplanations)
+- [Ouvrir un fichier de voyage créé avec un version antérieure à v2.0.0](#OpenFileWithV200)
 - [Avant de commencer à utiliser Travel & Notes](#BeforeStart)
 	- [Comment introduire vos clefs d'accès dans Travel & Notes](#APIKeys)
 - [Menus contextuels](#ContextMenus)
@@ -41,6 +42,7 @@
 	- [Transformer une note de voyage en note de trajet](#TravelToRouteNote)
 	- [Créer une note pour chaque manœuvre du trajet](#AllManeuverNotesFromOsm)
 	- [La boite d'édition d'une note](#NoteDlg)
+		- [Insérer du texte en html](#AddHtmltext)
 		- [Note de trajet prédéfinie "Icône SVG depuis OSM"](#SvgNoteFromOsm)
 		- [Quelques exemples de notes](#NoteSamples)
 - [Menu des fonds de carte](#MapsMenu)
@@ -89,6 +91,26 @@ une photo, un texte...
 
 Le **livre de voyage** est une page HTML qui regroupe toute l'information du voyage: les notes, 
 les trajets et les itinéraires.
+
+<a id="OpenFileWithV200"></a>
+## __Ouvrir un fichier de voyage créé avec un version antérieure à v2.0.0__
+
+__**ATTENTION : Il n'est pas possible d'ouvrir avec une version 1.x.x un fichier sauvé avec la version 2.0.0**__
+
+Il est possible que vous ayez encore besoin de la version antérieure pour faire des corrections dans les notes.
+Vous pouvez faire deux installations de Travel & Notes sans problème. Il suffit de les placer dans des répertoires
+différents. Vous pouvez aussi utiliser la démo de la version v2.0.0 installée sur 
+[https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en](https://wwwouaiebe.github.io/leaflet.TravelNotes/?lng=en).
+
+- **Faites une copie de sauvegarde de vos fichiers de voyage**
+- Ouvrez Travel & Notes v2.0.0 et ouvrez également la console web du navigateur.
+- Ouvrez un fichier à convertir.
+- La liste de toute les balises et attributs html supprimé·e·s est affichée dans la console et le voyage affiché 
+dans Travel & Notes.
+- Corrigez les erreurs éventuelles en utilisant votre ancienne version et ensuite en réouvrant votre voyage
+avec la version 2.0.0. OU effectuez directement les corrections nécessaires dans la version 2.0.0.
+- Pas de panique. Les seules corrections que j'ai du faire dans mes fichiers étaient des liens qui de toute façon étaient 
+incorrects et ne menaient donc à rien.
 
 <a id="BeforeStart"></a>
 ## __Avant de commencer à utiliser Travel & Notes__
@@ -173,21 +195,7 @@ de dialogue
 - APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons 💾 
 et 📂 à __droite__
 
-L'ancienne méthode consistant à introduire les clefs d'accès via l'url continue à fonctionner mais sera supprimée 
-dans une prochaine version:
-- à la fin de l'url de la page web chargeant Travel & Notes, vous devez introduire un ? suivi 
-du nom du fournisseur suivi de ProviderKey suivi de = suivi de votre clef d'accès. 
-Plsieurs clef d'accès peuvent être introduites simultanément en les séparants par un &.
-
-Exemple:
-```
-https://www.example.org/TravelNotes/?MapboxProviderKey=votre_clef_accessMapbox&GraphHopperProviderKey=votre_clef_acces_GraphHopper
-```
-
-Dès que Travel & Notes détecte des clefs d'accès dans l'url, celles-ci sont enrégistrées dans 
-le _sessionStorage_ et effacée de l'url. Elles ne sont donc plus visibles à l'écran.
-**Cependant, rappelez-vous qu'une personne mal intentionnée peut toujours les retrouver dans 
-l'historique du navigateur**, à moins que vous n'utilisiez le mode navigation privée de votre browser.
+L'ancienne méthode consistant à introduire les clefs d'accès via l'url est supprimée.
 
 <a id="ContextMenus"></a>
 ## __Menus contextuels__
@@ -220,7 +228,7 @@ En haut de l'interface se trouve une première barre d'outils:
 [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
 - le bouton @ redirige vers une page de contact. Par défaut, c'est 
 [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
-L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail)
+L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail.url)
 - le bouton 🔑 affiche la boite de dialogue des clefs d'accès
 - le bouton 🌐 active ou désactive la localisation. 
 - le bouton 📌 affiche l'interface en permanence.
@@ -232,7 +240,8 @@ L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToo
 #### Nom du voyage
 
 Dans cette boite d"édition vous pouvez donner un nom au voyage. Ce nom sera par la suite proposé comme nom par défaut 
-pour tous les fichiers que vous créerez à partir de ce voyage.
+pour tous les fichiers que vous créerez à partir de ce voyage. Il est nécessaire de donner un nom au voyage avant
+de pouvoir sauver celui-ci.
 
 <a id="RouteToolbar"></a>
 #### Boutons de la barre d'outils "Voyage"
@@ -607,6 +616,7 @@ Faites un clic droit sur le trajet et sélectionnez "Créer une note pour chaque
 contextuel. Une demande de confirmation est affichée. 
 Pour chaque manœuvre du trajet, [une note en SVG à partir des données OpenStreetMap ](#SvgNoteFromOsm) sera créée.
 
+
 <a id="NoteDlg"></a>
 ### La boite d'édition d'une note
 
@@ -615,22 +625,87 @@ Pour chaque manœuvre du trajet, [une note en SVG à partir des données OpenStr
 Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible 
 de modifier cette liste. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
-Le bouton :file_folder: vous permet de charger votre propre fichier avec des notes prédéfinies dans 
+Le bouton ▼ cache ou affiche certaines zones d'édition qui sont masquées par défaut (les deux controles permettant de 
+modifier les dimensions de l'icône et le n° de téléphone ). Il est possible de choisir quelles zones sont masquées par défaut.
+Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson)
+
+Le bouton 📂 vous permet de charger votre propre fichier avec des notes prédéfinies dans 
 Travel & Notes. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson). pour savoir comment créer ce fichier.
 
-Les boutons div p span et a permettent d'ajouter les balises html &lt;div&gt;, &lt;p&gt;, &lt;span&gt;
-et &lt;a&gt; dans les zones d'édition. Tous les autres boutons sont modifiables et permettent aussi 
-d'insérer du texte prédéfini dans les zones d'édition. Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
-
-Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien".
+Tous les autres boutons sont modifiables et permettent d'insérer des balises html ou du texte prédéfini dans les zones d'édition. 
+Voir le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
 La zone "Contenu de l'icône" sera utilisée pour représenter la note sur la carte et ne peut pas être 
 vide (laisser cette zone vide empêcherait toute modification ultérieure de la note).
 
 La zone "Adresse" est complétée automatiquement lors de la création de la note - 
-[Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour géolocaliser les notes.
+[Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim) est utilisé pour le nom de rue et
+OverpassAPI pour le nom de commune.
 Cette zone ne sera jamais modifiée par Nominatim par la suite, même si la note a été déplacée. 
-Le bouton 🔄 permet cependant de demander une nouvelle géolocalisation à Nominatim.
+Le bouton 🔄 permet cependant de demander une nouvelle géolocalisation à Nominatim/OverpassAPI.
+
+Si la zone d'édition du téléphone contient seulement un numéro de téléphone valide (= commençant 
+par un + et ensuite uniquement des chifres ou les caractères #, * ou espace), le numéro de 
+téléphone sera affiché avec un lien tel: et un lien sms:.
+
+Chaque zone d'édition peut contenir du texte simple ou du html, à l'exception de la zone "Lien" qui ne peut contenir qu'un lien valide.
+
+<a id="AddHtmltext"></a>
+#### Insérer du texte en html
+
+Seules les balises html et attributs suivantes peuvent être utilisé·e·s:
+- la balise &lt;div&gt; (bloc de texte)
+- la balise &lt;p&gt; (paragraphe)
+- les balises &lt;h1&gt; à &lt;h6'&gt; (titres)
+- la balise &lt;hr&gt; (ligne horizontale)
+- la balise &lt;ol&gt; (liste à puces ou liste numérotée)
+- la balise &lt;li&gt; (élément de liste à puce)
+- la balise &lt;ul&gt; (élément de liste numérotée)
+- la balise &lt;span&gt; (bloc de texte en inline)
+- la balise &lt;figure&gt; (figure)
+- la balise &lt;figcaption&gt; (légende pour la balise figure)
+- la balise &lt;img&gt; avec les attributs src, alt width et height (image)
+- la balise &lt;br&gt; (passage à la ligne)
+- la balise &lt;a&gt; avec les attributs href et target
+- la balise &lt;del&gt; (texte supprimé)
+- la balise &lt;ins&gt; (texte ajouté)
+- la balise &lt;mark&gt; (texte surligné)
+- la balise &lt;s&gt; (texte barré)
+- la balise &lt;em&gt; (texte en italique)
+- la balise &lt;small&gt; (texte en petits caractères)
+- la balise &lt;strong&gt; (texte en gras)
+- la balise &lt;sub&gt; (texte en indice)
+- la balise &lt;sup&gt; (texte en exposant)
+
+En outre, les balises svg suivantes peuvent être utilisées:
+- la balise &lt;svg&gt; avec les attributs xmlns et viewBox
+- la balise &lt;text&gt; avec les attributs x, y et text-anchor
+- la balise &lt;polyline&gt; avec les attributs points et transform
+
+Pour toutes les balises, les attributs id, class, dir et title peuvent également être utilisées.
+
+Les règles d'édition du html sont bien sûr d'application:
+- une balise ouvrante ET une balise fermante doivent être utilisées: &lt;p&gt;Lorem ipsum... &lt;/p&gt;
+- les valeurs des attributs doivent toujours être placées entre des &quot; : class=&quot;myClass&quot;
+- les caractères &lt; et &gt; sont réservés pour les balises html et ne peuvent être utilisés ailleurs. 
+Si vous avez absolument besoin de ces caractères, vous devez les remplacer par les entités html &amp;lt; pour &lt; et
+&amp;gt; pour &gt;
+- les doubles guillemets sont réservés pour la délimitation des valeurs d'attribut. En cas de besoin utilisez 
+l'entité html &amp;quot; en remplacement
+- le caractère &apos; ne peut pas être utilisé et doit être remplacé par l'entité html &amp;apos;
+- le caractère &amp; est ambigü et ne devrait être utilisé que dans les entités html
+- l'espace insécable doit être inséré avec l'entité html &amp;nbsp;
+
+Les url's introduits dans les attributs href et src, ainsi que dans la zone d'édition "lien" doivent être des url's valides:
+- les url's doivent être des liens absolus
+- les url's ne peuvent pas contenir les caractères &lt;, &gt;, &apos; et &quot;
+- les protocoles doivent être http:, https:, mailto:, sms: ou tel: pour un attribut href:
+- les protocoles doivent être https: pour l'attribut src (http: est également acceptable si le protocole de l'apps est http:)
+- les 'pathname' des liens sms: et tel: doivent commencer par un + et ne contenir que les caractères #, * ou des chiffres
+
+Au fur et à mesure que du texte est inséré dans une zone d'édition, l'apps interprète celui-ci et
+adapte la prévisualisation de la note en conséquence. Lorsque la boite d'édition est fermée avec le bouton 🆗,
+le texte que vous avez introduit est remplacé par celui produit par l'interprétation que l'apps en a fait.
 
 <a id="SvgNoteFromOsm"></a>
 #### Note de trajet prédéfinie "Icône SVG depuis OSM"
@@ -721,8 +796,6 @@ ce que l'on désire voir présent dans le livre de voyage via le menu en haut de
 
 <img src="RoadbookFR.PNG" />
 
-Le bouton "Enrégistrer" permet de sauver le fichier html sur votre PC.
-
 <a id="PrepareTravel"></a>
 ## __Préparer un voyage et le consulter depuis internet__
 
@@ -730,7 +803,8 @@ Il est possible de préparer un voyage, sauver celui-ci dans un fichier sur un s
 celui-ci depuis internet.
 
 Pour consulter le voyage, il faut appeler TravelNotes en lui donnant en paramètre dans l'url l'adresse 
-du fichier convertie en base64.
+du fichier convertie en base64. Et rappelez-vous que l'on ne peut convertir en base64 que des caractères 
+ascii...
 
 ```
 https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==
@@ -773,6 +847,6 @@ D'autres exemples:
 
 [Les cartes du premier trajet de Dover à Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
-[Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
+[Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zby9zdW9taTIwMTgwNjA4LnRydg==)
 
-[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.html)
+[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.html)

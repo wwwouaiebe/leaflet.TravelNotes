@@ -137,8 +137,22 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	if ( ZERO !== note.phone.length ) {
+		let phoneText = note.phone;
+		if ( note.phone.match ( /^\+[0-9, ,*,#]*$/ ) ) {
+			let phoneNumber = note.phone.replaceAll ( /\u0020/g, '' );
+			let phoneNumberDisplay = note.phone.replaceAll ( /\u0020/g, '\u00a0' );
+			phoneText =
+				theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' +
+				theTranslator.getText ( 'HTMLViewsFactory - call' ) +
+				'<a target="_blank" href="tel:' + phoneNumber + '" >' + phoneNumberDisplay + '</a>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Send a sms to' ) +
+				'<a target="_blank" href="sms:' + phoneNumber + '" >' + phoneNumberDisplay + '</a>';
+		}
+		else {
+			phoneText = theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone;
+		}
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone,
+			phoneText,
 			theHTMLElementsFactory.create (
 				'div',
 				{

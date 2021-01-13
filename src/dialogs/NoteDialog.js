@@ -442,77 +442,6 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myTransformToLink
-	@desc Helper function for transform to tel: and/or sms: link buttons event listeners
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myTransformToLink ( protocol ) {
-		myNoteDialog.hideError ( );
-		let phoneNumber = myPhoneInput.value.replaceAll ( /\u0020/g, '' );
-		if ( phoneNumber.match ( /^\+[0-9,*,#,]*$/g ) ) {
-			let returnValue =
-				theTranslator.getText ( 'sms:' === protocol ? 'NoteDialog -Send a sms to' : 'NoteDialog - call' ) +
-				'<a target="_blank" href="' + protocol + phoneNumber + '" >' + myPhoneInput.value + '</a>';
-			return returnValue;
-		}
-		myNoteDialog.showError ( theTranslator.getText ( 'NoteDialog - Invalid phone number' ) );
-		return false;
-
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnTransformToTelLinkClick
-	@desc Clik event listener for transform to tel: link button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTransformToTelLinkClick ( ) {
-		myPhoneInput.value = myTransformToLink ( 'tel:' ) || myPhoneInput.value;
-		myOnInputControl ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnBlurUrlInput
-	@desc Clik event listener for transform to sms: link button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTransformToSmsLinkClick ( ) {
-		myPhoneInput.value = myTransformToLink ( 'sms:' ) || myPhoneInput.value;
-		myOnInputControl ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnBlurUrlInput
-	@desc Clik event listener for transform to tel: and sms: link button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTransformToTelAndSmsLinkClick ( ) {
-		let tel = myTransformToLink ( 'tel:' );
-		let sms = myTransformToLink ( 'sms:' );
-		myPhoneInput.value = tel && sms ? tel + ' - ' + sms : myPhoneInput.value;
-		myOnInputControl ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myShowHideContents
 	@desc This method show/hode contents
 	@private
@@ -530,7 +459,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		if ( theConfig.noteDialog.togglePopupContent ) {
 			myPopupContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
 		}
-		if ( theConfig.noteDialog.toggleToltip ) {
+		if ( theConfig.noteDialog.toggleTooltip ) {
 			myTooltipContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
 		}
 		if ( theConfig.noteDialog.toggleAddress ) {
@@ -879,37 +808,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			},
 			myNoteDataDiv
 		);
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'NoteDialog - transform to tel: link' ),
-				textContent : '📲'
-			},
-			myPhoneHeaderDiv
-		)
-			.addEventListener ( 'click', myOnTransformToTelLinkClick, false );
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'NoteDialog - transform to sms: link' ),
-				textContent : '📟'
-			},
-			myPhoneHeaderDiv
-		)
-			.addEventListener ( 'click', myOnTransformToSmsLinkClick, false );
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-NoteDialog-TelSmsButton',
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'NoteDialog - transform to tel: and sms: links' ),
-				textContent : '📲\u00a0+\u00a0📟'
-			},
-			myPhoneHeaderDiv
-		)
-			.addEventListener ( 'click', myOnTransformToTelAndSmsLinkClick, false );
+
 		theHTMLElementsFactory.create (
 			'text',
 			{

@@ -2,6 +2,13 @@
 
 <a href="#fr" >Vers la version française</a>
 
+## Warning before installing and using version 2.0.0
+
+Version 2.0.0 is a major release containing significant changes in travel files. Files made with a previous version are no 
+longer fully compatible with this version and some data in the notes may be lost. See the 
+[user guide - en](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#OpenFileWithV200)
+how to convert files made with an earlier version.
+
 ## Guides
 
 [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md)
@@ -17,9 +24,8 @@
 If you have a Mapbox, Stadia Maps, GraphHopper or OpenRouteService API key, you can also use this demo with Mapbox, Stadia Maps, GraphHopper and/or OpenRouteService. 
 Simply add your API key via the access key management dialog (button :key: on the toolbar at the top of the control).
 
-see also the [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
-This demo displays a travel with a route and some icons and without any control, so the user cannot modify the travel.
-
+Also see this [demo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==).
+which displays a travel with a route and notes, without any edit box or interface, and therefore without the possibility of modifications.
 And the same [demo](https://wwwouaiebe.github.io/samples/Liege/index.html) inside a web page
 
 Other samples:
@@ -28,9 +34,9 @@ Other samples:
 
 [The printed maps for the first route of Dover to Chester in a pdf file](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
-[A train, bus and bicycle trip from Liège to Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
+[A train, bus and bicycle trip from Liège to Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zby9zdW9taTIwMTgwNjA4LnRydg==)
 
-[And the roadbook from Liège to Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.pdf)
+[And the roadbook from Liège to Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.pdf)
   
 ## Releases and branches
 
@@ -39,9 +45,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v1.13.0 branch
+### v2.0.0 branch
 
-The [v1.13.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.13.0) contains the source files of the last stable version.
+The [v2.0.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v2.0.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -107,7 +113,44 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 - The background of the notes can be transparent.
 - All predefined note icons are now in svg.
 
+### What's new in release 2.0.0
+
+To avoid [xss attacks](https://en.wikipedia.org/wiki/Cross-site_scripting), especially when exchanging files, all the security 
+of the app has been reviewed, which leads to a certain number of limitations and modifications:
+- [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is enabled by default via a &lt;meta&gt; tag in the index.html file.
+Thanks to this, it is no longer possible to run javascript from a site other than the one where Travel & Notes is installed, 
+to run scripts inline in the html or to download images or files from another site.
+If you have the possibility, however, it is preferable to activate Content Securty Policy via a header installed by the server rather than via a&lt;meta&gt; tag.
+- the html tags that can be used when creating notes are restricted, as are the attributes attached to these html tags.
+Consult the [User guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#AddHtmltext).
+- when opening a travel file made with an earlier version, all unauthorized tags and attributes are deleted.
+- in order to avoid an xss attack via a link sent by email, it is no longer possible to automatically open a travel file 
+via the app url when this travel file comes from another site, even if Content Security Policy is completely disabled.
+- it is no longer possible to define styles in inline. If you want to create a custom style, you have to create it in a css
+file and import it with a tag &lt;link&gt;
+- it is obviously no longer possible to use a &lt;script&gt; nor any event handler attached to an html tag (onmouseover, onclick ...).
+- the links present in the href and src attributes must be correct and complete. In an src attribute, the protocol can only
+ be https: (and http: if the app is installed on an http: site). In the href attributes, the protocol must be http:, 
+ https:, mailto:, sms: or tel:. In addition, sms: and tel: links must start with a + and can only include the 
+ characters #, * space and numbers 0-9.
+- it is no longer possible to enter the API keys of service providers via url parameters.
+
+In addition, the following improvements have been made:
+- the SVG icons from OSM contain the number of the node-point when the icon is on this node-point and the route is 
+calculated for a bicycle (NB the points-nodes are a particularity of the bicycle routes in Belgium, Netherlands
+ and partially in Germany).
+- it is necessary to name the travel before being able to save it in a file.
+- a temporary solution was created to work around the errors of city names returned by Nominatim.
+- a preview of the note being edited has been added to the note edit box.
+- it is possible to hide or activate certain parts of this same edit box.
+
 <a id="fr" />
+
+## Avertissement avant d'installer et utiliser la version 2.0.0
+
+La version 2.0.0 est une version majeure contenant des changements importants dans les fichiers de voyage. Les fichiers réalisés avec une version précédente ne sont plus entièrement compatibles avec cette version 
+et quelques données présentes dans les notes peuvent être perdues. Voyez dans le [guide pour les utilisateurs - fr](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#OpenFileWithV200) 
+comment convertir des fichiers réalisés avec une version antérieure.
 
 ## Guides
 
@@ -124,8 +167,8 @@ but in the form of a segment of a great circle. See [leaflet.TravelNotesPolyline
 Si vous disposez d'une API key pour Mapbox, Stadia Maps, GraphHopper ou OpenRouteService, vous pouvez également utiliser cette démo avec Mapbox, Stadia Maps, GraphHopper et / ou OpenRouteService.
 Ajoutez simplement votre API key via la boite de dialogue de gestion des clefs d'accès ( bouton :key: sur la barre d'outils en haut du contrôle ).
 
-Voyez aussi la [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
-qui affiche un voyage avec un trajet et des icônes, sans aucun contrôle, et donc sans possibilité de modifications.
+Voyez aussi cette [démo](https://wwwouaiebe.github.io/leaflet.TravelNotes/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==)
+qui affiche un voyage avec un trajet et des notes, sans aucune boite d'édition ou interface, et donc sans possibilité de modifications.
 
 Et la même [démo](https://wwwouaiebe.github.io/samples/Liege/index.html) intégrée dans une page web
 
@@ -135,9 +178,9 @@ D'autres exemples:
 
 [Les cartes imprimées dans un pdf du premier trajet de Dover à Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
-[Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
+[Un voyage en train, bus et vélo de Liège à Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zby9zdW9taTIwMTgwNjA4LnRydg==)
 
-[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.pdf)
+[Et le livre de voyage de Liège à Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.pdf)
 
 ## Versions et branches
 
@@ -146,9 +189,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v1.13.0
+### branche v2.0.0
 
-La [branche v1.13.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v1.13.0) contient les sources de la dernière version stable.
+La [branche v2.0.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v2.0.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -217,3 +260,32 @@ dans des menus contextuels qui sont disponibles sur la carte ou dans l'interface
 - De nouvelles notes prédéfinies ont été ajoutées. Il y a maintenant plus de 70 notes prédéfinies.
 - L'arrière-plan des notes peut être transparent.
 - Toutes les icônes des notes prédéfinies sont désormais en svg.
+
+### Quoi de neuf dans la version 2.0.0
+
+Pour éviter des [attaques xss](https://fr.wikipedia.org/wiki/Cross-site_scripting), notamment lors de l'échange de fichiers, toute la sécurité de l'apps a été revue, 
+ce qui entraine un certain nombre de limitations et de modifications:
+- [Content Security Policy](https://developer.mozilla.org/fr/docs/Web/HTTP/CSP) est activé par défaut via une balise &lt;meta&gt; dans le fichier index.html. 
+Grâce à cela, il n'est plus possible d'exécuter du javascript depuis un autre site que celui où est installé Travel & Notes, d'exécuter des scripts en inline 
+dans le html ni de télécharger des images ou des fichiers depuis un autre site.
+Si vous en avez la possibilité, il est cependant préférable d'activer Content Securty Policy via un header installé par le serveur plutôt que via une balise &lt;meta&gt;.
+- les balises html pouvant être utilisées lors de la création des notes sont restreintes, de même que les attributs attachés à ces balises html.
+Consultez le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#AddHtmltext).
+- lors de l'ouverture d'un fichier de voyage réalisé avec une version antérieure, toutes les balises et les attributs non autorisés sont effacé·e·s.
+- afin d'éviter une attaque xss via un lien envoyé par mail, il n'est plus possible d'ouvrir automatiquement un fichier de voyage via l'url de l'apps quand ce fichier
+de voyage provient d'un autre site, même si Content Security Policy est complètement désactivé.
+- il n'est plus possible de définir des styles en inline. Si vous désirez créer un style personnalisé, il faut le créer dans un fichier css et importer celui-ci
+avec une balise &lt;link&gt;
+- il n'est évidemment plus possible d'utiliser une balise &lt;script&gt; ni aucun gestionnaire d'événements attaché à une balise html (onmouseover, onclick...).
+- les liens présents dans les attributs href et src doivent être corrects et complets. Dans un attribut src, le protocole ne peut être que https: (et http: si l'apps
+est installée sur un site http:). Dans les attributs href, le protocole doit être http:, https:, mailto:, sms: ou tel:. En outre, les liens sms: et tel: doivent commencer par
+un + et ne peuvent comprendre que les caractères #, * espace et des chiffres de 0 à 9.
+- il n'est plus possible d'entrer les clefs API des fournisseurs de service via des paramètres de l'url.
+
+En outre, les améliorations suivantes on été apportées:
+- les icônes SVG depuis OSM contiennent le numéro du point-noeud lorsque l'icône se trouve sur ce point-noeud et que l'itinéraire est calculé pour un vélo (N.B. les 
+points-noeuds sont une particularité des itinéraires vélo en Belgique, aux Pays-Bas et partiellement en Allemagne).
+- il est nécessaire de nommer le voyage avant de pouvoir sauver celui-ci dans un fichier
+- une solution temporaire a été créée pour contourner les erreurs de noms de commune retournés par Nominatim.
+- une prévisualisation de la note en cours d'édition a été ajoutée à la boite d'édition des notes.
+- il est possible de cacher ou activer certaines parties de cette même boite d'édition.

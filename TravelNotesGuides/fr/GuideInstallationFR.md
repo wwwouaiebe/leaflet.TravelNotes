@@ -100,15 +100,13 @@ au chargement de Travel & Notes
 - __map.center.lat__ : la latitude utilisée pour le centre de la carte lors du chargement automatique
 - __map.center.lng__ : la longitude utilisée pour le centre de la carte lors du chargement automatique
 - __map.zoom__ : le zoom utilisé pour la carte lors du chargement automatique
-- __travelNotesToolbarUI.contactMail__ : l'adresse mail utilisée dans le bouton contact
+- __travelNotesToolbarUI.contactMail.url__ : l'adresse mail utilisée dans le bouton contact
 - __layersToolbarUI.haveLayersToolbarUI__ : quand cette valeur est true, la barre d'outils des fonds de carte
 est présente.
 - __layersToolbarUI.toolbarTimeOut__ : le temps qui va s'écouler entre le moment où la souris ne se trouve
 plus sur la barre d'outils et le moment où cette barre d'outils se ferme automatiquement. 
 - __layersToolbarUI.theDevil.addButton__ : quand cette valeur est true, un bouton "theDevil" est ajouté à 
 la barre d'outils.
-- __layersToolbarUI.theDevil.title__ : le tooltip utilisé pour le bouton "theDevil"
-- __layersToolbarUI.theDevil.text__ : le texte utilisé pour le bouton "theDevil"
 - __mouseUI.haveMouseUI__ : quand cette valeur est true, un contrôle est affiché en haut de l'écran,
 indiquant les coordonnées de la souris, la valeur du zoom et le nom du fichier ouvert
 - __errorUI.timeOut__ : le temps qui va s'écouler entre le moment où un message d'erreur est affiché et le
@@ -159,26 +157,26 @@ est sous forme de point
 - __searchPointMarker.fill__ : le remplissage du cercle utilisé pour indiquer sur la carte la position 
 d'un résultat de recherche, suite à un click sur ce résultat dans le contrôle, lorsque ce résultat 
 est sous forme de point
-- __searchPointPolyline.polyline.color__ : la couleur de la polyline utilisée pour indiquer 
+- __searchPointPolyline.color__ : la couleur de la polyline utilisée pour indiquer 
 sur la carte la position d'un résultat de recherche, suite à un click sur ce résultat dans le contrôle, 
 lorsque ce résultat est sous forme de polyline
-- __searchPointPolyline.polyline.weight__ : l'épaisseur de la polyline utilisée pour indiquer
+- __searchPointPolyline.weight__ : l'épaisseur de la polyline utilisée pour indiquer
 sur la carte la position d'un résultat de recherche, suite à un click sur ce résultat dans le contrôle,
 lorsque ce résultat est sous forme de polyline
-- __searchPointPolyline.polyline.fill__ : le remplissage de la polyline utilisée pour indiquer 
+- __searchPointPolyline.fill__ : le remplissage de la polyline utilisée pour indiquer 
 sur la carte la position d'un résultat de recherche, suite à un click sur ce résultat dans le contrôle, 
 lorsque ce résultat est sous forme de polyline
-- __previousSearchLimit.polyline.color__ : la couleur de la polyline utilisée pour indiquer 
+- __previousSearchLimit.color__ : la couleur de la polyline utilisée pour indiquer 
 sur la carte la zone de la dernière recherche effectuée
-- __previousSearchLimit.polyline.weight__ : l'épaisseur de la polyline utilisée pour indiquer 
+- __previousSearchLimit.weight__ : l'épaisseur de la polyline utilisée pour indiquer 
 sur la carte la zone de la dernière recherche effectuée
-- __previousSearchLimit.polyline.fill__ : le remplissage de la polyline utilisée pour indiquer 
+- __previousSearchLimit.fill__ : le remplissage de la polyline utilisée pour indiquer 
 sur la carte la zone de la dernière recherche effectuée
-- __nextSearchLimit.polyline.color__ : la couleur de la polyline utilisée pour indiquer 
+- __nextSearchLimit.color__ : la couleur de la polyline utilisée pour indiquer 
 sur la carte la zone de la prochaine recherche
-- __nextSearchLimit.polyline.weight__ : l'épaisseur de la polyline utilisée pour indiquer 
+- __nextSearchLimit.weight__ : l'épaisseur de la polyline utilisée pour indiquer 
 sur la carte la zone de la prochaine recherche
-- __nextSearchLimit.polyline.fill__ : le remplissage de la polyline utilisée pour indiquer 
+- __nextSearchLimit.fill__ : le remplissage de la polyline utilisée pour indiquer 
 sur la carte la zone de la prochaine recherche
 - __wayPoint.reverseGeocoding__ : quand cette valeur est true, les coordonnées des points 
 de passage sont remplacées par une adresse.
@@ -199,8 +197,6 @@ pour le lissage de l'élévation. Valeur par défaut: 0.25
 ( -1 = toujours ).
 - __note.theDevil.addButton__ : quand cette valeur est true, un bouton "theDevil" est ajouté 
 à la boite de dialogue d'édition des notes.
-- __note.theDevil.title__ : le tooltip utilisé pour le bouton "theDevil"
-- __note.theDevil.text__ : le texte utilisé pour le bouton "theDevil"
 - __note.theDevil.noteZoom__ : le zoom utilisé pour le bouton "theDevil" 
 - __note.osmSearchNoteDialog__  : quand cette valeur est true, la boite d'édition des notes est affichée 
 lors de la création d'une note à partir de "Rechercher dans OpenstreetMap'
@@ -213,16 +209,9 @@ par une adresse.
 quand la souris se trouve sur la poignée
 - __note.polyline.color__ : la couleur de la ligne de rappel d'une note
 - __note.polyline.weight__ : l'épaisseur de la ligne de rappel d'une note
-
-
-
-
 - __note.haveBackground__ : quand cette valeur est true, un arrière-plan blanc est affiché avec la note.
-
-
-
-- __note.style__ : le style css utilisé pour représenter une note
-- __note.svgIconWidth__ : le rayon de la zone à cartographier dans l'icône SVG
+- __note.svgRoadbookDimCoef__ : un coefficient par lequel les dimensions des icônes SVG seront multipliées
+dans le roadbook
 - __note.svgAnleMaxDirection.right__ : l'angle maximum de la direction à suivre por l'indication 
 "Tourner à droite" dans le tooltip des icones SVG
 - __note.svgAnleMaxDirection.slightRight__ : l'angle maximum de la direction à suivre por l'indication 
@@ -249,10 +238,24 @@ tag place=city dans OSM pour que ce tag soit utilisé dans l'adresse de l'icône
 - __note.svgTownDistance__ : la distance maximum entre le centre de l'icône SVG et un point avec le 
 tag place=town dans OSM pour que ce tag soit utilisé dans l'adresse de l'icône
 - __note.svgTimeOut__ : la durée du timeout envoyé avec la requête de création de l'icône SVG
-- __note.cityPrefix__ : un texte qui sera affiché avant le nom de la cité dans l'adresse
-- __note.cityPostfix__ : un texte qui sera affiché après le nom de la cité dans l'adresse
 - __note.maxManeuversNotes__: le maximum de notes qui peuvent être créées avec la commande
 "Créer une note pour chaque maneoeuvre du trajet".
+- __noteDialog.toggleIconDimension__: quand cette valeur est false, les contrôles de dimension 
+de l'icône sont toujours visibles
+- __noteDialog.toggleIconTextArea__: quand cette valeur est false, la zone d'édition de l'icône
+est toujour visible
+- __noteDialog.toggleTooltip__: quand cette valeur est false, la zone d'édition du tooltip 
+est toujour visible
+- __noteDialog.togglePopupContent__: quand cette valeur est false,la zone d'édition du texte 
+est toujour visible
+- __noteDialog.toggleAddress__: quand cette valeur est false, la zone d'édition de l'adresse
+est toujour visible
+- __noteDialog.toggleLink__: quand cette valeur est false, la zone d'édition du lien 
+est toujour visible
+- __noteDialog.togglePhone__: quand cette valeur est false, la zone d'édition du n° de téléphone
+est toujour visible
+- __noteDialog.iconAreaHeight__: le nombre de lignes de la zone d'édition de l'icône
+- __noteDialog.popupAreaHeigth__: le nombre de lignes de la zone d'édition du texte
 - __itineraryPointZoom__ : le facteur de zoom utilisé pour zoomer sur un point de l'itinéraire à partir 
 d'un double-clic dans le contrôle
 - __routeEditor.displayEditionInHTMLPage__ : quand cette valeur est true et que un trajet est en cours 
@@ -281,7 +284,7 @@ page web est fermée mais que des données pourraient ne pas être sauvegardées
 de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) peuvent être utilisées.
 - __printRouteMap.exitPointMarker__ : les options à utiliser pour le marqueur de fin de trajet. Toutes les options
 de [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) peuvent être utilisées.
-
+- __haveCrypto : utilisation interne seulement
 - __itineraryPane.showNotes__ : quand cette valeur est true, les notes sont visibles dans l'itinéraire
 - __itineraryPane.showManeuvers__ : quand cette valeur est true, les manoeuvres sont visibles dans l'itinéraire
 - __colorDialog.haveSlider__ : quand cette valeur est true, le dialogue des propriétés des routes

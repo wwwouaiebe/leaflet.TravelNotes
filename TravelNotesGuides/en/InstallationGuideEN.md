@@ -99,14 +99,14 @@ Travel & Notes loads
 - __map.center.lat__ : the latitude used for the center of the map during automatic loading
 - __map.center.lng__ : the longitude used for the center of the map during automatic loading
 - __map.zoom__ : the zoom used for the map during automatic loading
-- __travelNotesToolbarUI.contactMail__ : the email address used in the contact button
+- __travelNotesToolbarUI.contactMail.url__ : the email address used in the contact button
 - __layersToolbarUI.haveLayersToolbarUI__ : when this value is true, the background maps toolbar is present.
 - __layersToolbarUI.toolbarTimeOut__ : the time that will elapse between the moment when the mouse 
 is no longer on the toolbar and the moment when this toolbar closes automatically.
 - __layersToolbarUI.theDevil.addButton__ : when this value is true, a "theDevil" button is added 
 to the toolbar.
-- __layersToolbarUI.theDevil.title__ : the tooltip used for the "theDevil" button
-- __layersToolbarUI.theDevil.text__ : the text used for the "theDevil" button
+																				 
+																			 
 - __mouseUI.haveMouseUI__ : when this value is true, a control is displayed at the top of the screen, 
 indicating the coordinates of the mouse, the zoom value and the name of the open file
 - __errorUI.timeOut__ : the time that will elapse between the time an error message is displayed and the time 
@@ -156,26 +156,26 @@ of a point
 - __searchPointMarker.fill__ : the color of the circle used to indicate on the map the position 
 of a search result, following a click on this result in the control, when this result is in the form 
 of a point
-- __searchPointPolyline.polyline.color__ : the color of the polyline used to indicate on the map the position 
+- __searchPointPolyline.color__ : the color of the polyline used to indicate on the map the position 
 of a search result, following a click on this result in the control, when this result is in the form 
 of a polyline
-- __searchPointPolyline.polyline.weight__ : the weight of the polyline used to indicate on the map the position 
+- __searchPointPolyline.weight__ : the weight of the polyline used to indicate on the map the position 
 of a search result, following a click on this result in the control, when this result is in the form 
 of a polyline
-- __searchPointPolyline.polyline.fill__ : the filling of the polyline used to indicate on the map the position 
+- __searchPointPolyline.fill__ : the filling of the polyline used to indicate on the map the position 
 of a search result, following a click on this result in the control, when this result is in the form 
 of a polyline
-- __previousSearchLimit.polyline.color__ : the color of the polyline used to indicate on the map 
+- __previousSearchLimit.color__ : the color of the polyline used to indicate on the map 
 the area of the last search performed
-- __previousSearchLimit.polyline.weight__ : the weight of the polyline used to indicate on the map 
+- __previousSearchLimit.weight__ : the weight of the polyline used to indicate on the map 
 the area of the last search performed
-- __previousSearchLimit.polyline.fill__ : the filling of the polyline used to indicate on the map 
+- __previousSearchLimit.fill__ : the filling of the polyline used to indicate on the map 
 the area of the last search performed
-- __nextSearchLimit.polyline.color__ : the color of the polyline used to indicate on the map the 
+- __nextSearchLimit.color__ : the color of the polyline used to indicate on the map the 
 area of the next search
-- __nextSearchLimit.polyline.weight__ : the weight of the polyline used to indicate on the map 
+- __nextSearchLimit.weight__ : the weight of the polyline used to indicate on the map 
 the area of the next search
-- __nextSearchLimit.polyline.fill__ : the filling of the polyline used to indicate on the map 
+- __nextSearchLimit.fill__ : the filling of the polyline used to indicate on the map 
 the area of the next search
 - __wayPoint.reverseGeocoding__ : when this value is true, the coordinates of the waypoints are 
 replaced by an address.
@@ -194,10 +194,10 @@ for smoothing the elevation. Default value: 0.25
 - __route.elev.smoothPoints__ : the number of points before and after the current point in the smoothing calculations
 - __route.showDragTooltip__ : the number of times the tooltip displayed when adding a waypoint is shown
 ( -1 = always ).
-- __note.theDevil.addButton__ : when this value is true, abutton "theDevil" is added
+- __note.theDevil.addButton__ : when this value is true, a button "theDevil" is added
 to the notes dialog box
-- __note.theDevil.title__ : the tooltip for "theDevil" button
-- __note.theDevil.text__ : the text for "theDevil" button
+															 
+														 
 - __note.theDevil.noteZoom__ : le zoom for "theDevil" button
 - __note.osmSearchNoteDialog__  : when this value is true, the notes edit box is displayed
 when creating a note from 'Search OpenstreetMap'
@@ -210,8 +210,8 @@ when the mouse is on the handle
 - __note.polyline.color__ : the color of the line of a note.
 - __note.polyline.weight__ : the width of the line of a note.
 - __note.haveBackground__ : when this value is true, a white background is displayed with the note.
-- __note.style__ : the css style used to represent a note.
-- __note.svgIconWidth__ : the radius of the area to be mapped in the SVG icon
+- __note.svgRoadbookDimCoef__ : a coefficient by which the dimensions of SVG icons will be multiplied
+in the roadbook
 - __note.svgAnleMaxDirection.right__ : the maximum angle of the direction to follow for the indication 
 "Turn right" in the tooltip of the SVG icons
 - __note.svgAnleMaxDirection.slightRight__ : the maximum angle of the direction to follow for the indication 
@@ -238,10 +238,26 @@ with the tag place = city in OSM for this tag to be used in the address of the i
 - __note.svgTownDistance__ : the maximum distance between the center of the SVG icon and a point 
 with the tag place = town in OSM for this tag to be used in the address of the icon
 - __note.svgTimeOut__ : the duration of the timeout sent with the request to create the SVG icon
-- __note.cityPrefix__ : a text that will be displayed before the name of the city in the address
-- __note.cityPostfix__ : a text that will be displayed after the name of the city in the address
+																								
+																								
 - __note.maxManeuversNotes__: the maximum number of notes that can be created with the command
 "Create a note for each route maneuver".
+- __noteDialog.toggleIconDimension__: when this value is false, the dimension controls
+of the icon are always visible
+- __noteDialog.toggleIconTextArea__: when this value is false, the icon edit area
+is always visible
+- __noteDialog.toggleTooltip__: when this value is false, the tooltip edit area
+is always visible
+- __noteDialog.togglePopupContent__: when this value is false, the text edit area
+is always visible
+- __noteDialog.toggleAddress__: when this value is false, the address edit area
+is always visible
+- __noteDialog.toggleLink__: when this value is false, the link edit area
+is always visible
+- __noteDialog.togglePhone__: when this value is v, the phone edit area
+is always visible
+- __noteDialog.iconAreaHeight__: the number of lines in the icon edit area
+- __noteDialog.popupAreaHeigth__: the number of lines in the text edit area
 - __itineraryPointZoom__ : the zoom factor used to zoom in on a point in the route from a 
 double-click in the control.
 - __displayEditionInHTMLPage__ : when this value is true and a route is being edited, changes to 
@@ -270,6 +286,7 @@ is closed but data may not be saved.
 from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
 - __printRouteMap.exitPointMarker__ : the options to use for the end of route marker. All options
 from [leaflet.CircleMarker](https://leafletjs.com/reference-1.6.0.html#circlemarker) can be used.
+- __haveCrypto : internal use only
 - __itineraryPane.showNotes__ : when true notes are showed in the itinerary 
 - __itineraryPane.showManeuvers__ : when true maneuvers are showed in the itinerary 
 - __colorDialog.haveSlider__ : when true the color dialog and route properties dialog have a
