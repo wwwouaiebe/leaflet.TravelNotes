@@ -1,6 +1,6 @@
 {
   "name": "leaflet.travelnotes",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Editable markers and routing engine for leaflet",
   "main": "src/main/main.js",
   "dependencies": {
