@@ -453,7 +453,7 @@ Please note: this command is experimental. It may not work with your Travel & No
 if you have added other elements to the page. In addition, not all browsers have implemented all 
 the necessary css tags. If this command does not suit you, you can disable it from the 
 TravelNotesConfig.json file (printRouteMap.isEnabled).
-See the [installation guide](GuideInstallationFR.md#TravelNotesConfigJson).
+See the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson).
 
 Right-click on the route for which you want to print the maps and select "Print the maps for this route" 
 from the context menu.
@@ -488,7 +488,7 @@ When the print command of the browser is closed, the print views will also be cl
 the map redisplayed.
 
 All the default values of the edit box can be modified in the TravelNotesConfig.json file.
-See the [installation guide](GuideInstallationFR.md#TravelNotesConfigJson).
+See the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson).
 
 Avoid overloading the tile servers. Issue this command only if you really need it.
 Decreasing the paper size, the margin size and the zoom will also decrease the number of tiles required.
@@ -600,13 +600,13 @@ modify this list. See the [installation guide](InstallationGuideEN.md#TravelNote
 
 The ▼ button hides or displays certain editing areas which are hidden by default (the two controls allow you to modify 
 the dimensions of the icon and the telephone number). It is possible to choose which areas are hidden by default. 
-Consult the [installation guide](GuideInstallationEN.md#TravelNotesConfigJson);
+Consult the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson);
 
 The 📂 button allows you to upload your own file with notes predefined in Travel & Notes. 
-See the [installation guide] (GuideInstallationEN.md#TravelNotesNoteDialogJson) for how to create this file.																						   
+See the [installation guide] (InstallationGuideEN.md#TravelNotesNoteDialogJson) for how to create this file.																						   
 
 All the other buttons are modifiable and allow you to insert html tags or predefined text in the edit zones. 
-Consult the [installation guide](GuideInstallationEN.md#TravelNotesConfigJson);
+Consult the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson);
 
 The "Icon Content" area will be used to represent the note on the map and can not be empty 
 (leaving this area blank would prevent any subsequent changes to the note).
@@ -816,6 +816,6 @@ Other samples:
 
 [The maps for the first route of Dover to Chester](https://wwwouaiebe.github.io/samples/UK2019/UK2019.pdf)
 
-[A train, bus and bicycle trip from Liège to Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zw7gvc3VvbWkyMDE4MDYwOC50cnY=)
+[A train, bus and bicycle trip from Liège to Tromsø](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlLVRyb21zby9zdW9taTIwMTgwNjA4LnRydg==)
 
-[And the roadbook from Liège to Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromsø/suomi20180608-Roadbook.html)
+[And the roadbook from Liège to Tromsø](https://wwwouaiebe.github.io/samples/Liege-Tromso/suomi20180608-Roadbook.pdf)
