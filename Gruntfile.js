@@ -114,6 +114,22 @@ module.exports = function(grunt) {
 			},
 		},
 		copy: {
+			leaflet: {
+				files: [
+					{
+						expand: true,
+						cwd: 'node_modules/leaflet/dist/',
+						src: ['leaflet.js', 'leaflet.css' ],
+						dest: 'gh-page/leaflet/'
+					},
+					{
+						expand: true,
+						cwd: 'node_modules/leaflet/dist/images/',
+						src: ['*.png' ],
+						dest: 'gh-page/leaflet/images/'
+					}
+				]
+			},
 			dist: {
 				files: [
 					{
@@ -396,7 +412,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.registerTask('doc', [ 'jsdoc' ]);
 	grunt.registerTask('default', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'stylelint','cssmin', 'copy:debug', 'clean', 'jsdoc' ]);
-	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'copy:dist', 'copy:ghpage', 'copy:TravelNotesGuides', 'clean', 'jsdoc' ]);
+	grunt.registerTask('release', [ 'clean', 'eslint', 'includes:Polyline', 'rollup', 'terser', 'stylelint', 'cssmin', 'copy:dist', 'copy:ghpage', 'copy:leaflet', 'copy:TravelNotesGuides', 'clean', 'jsdoc' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
