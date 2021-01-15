@@ -16,24 +16,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* eslint camelcase: "off" */
-/* eslint no-bitwise: "off" */
+import { polyline } from '../polyline/Polyline.js';
+import { ZERO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newGraphHopperRouteProvider ( ) {
 
-	const ZERO = 0;
-	const ONE = 1;
-
-	const MY_LAT_LNG_ROUND = 6;
+	const GRAPHHOPPER_LAT_LNG_ROUND = 5;
 	const FOUR = 4;
 	const METERS_IN_KILOMETERS = 1000;
-
-	const NUMBER5 = 5;
-	const NUMBER31 = 0x1f;
-	const NUMBER32 = 0x20;
-	const NUMBER63 = 0x3f;
-	const NUMBER100 = 100;
-	const NUMBER1emin5 = 1e-5;
 
 	const LAT = 0;
 	const LNG = 1;
@@ -59,67 +49,6 @@ function newGraphHopperRouteProvider ( ) {
 	];
 
 	/*
-	--- myDecodePath function -----------------------------------------------------------------------------------------
-
-	Adapted from https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js
-	See GHUtil.prototype.decodePath
-	See also https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-	Some adaptation for eslint and inverted lat and lng in the results...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDecodePath ( encoded, is3D ) {
-		let len = encoded.length;
-		let index = ZERO;
-		let array = [];
-		let lat = ZERO;
-		let lng = ZERO;
-		let ele = ZERO;
-
-		while ( index < len ) {
-			let byte = null;
-			let shift = ZERO;
-			let result = ZERO;
-			do {
-				byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-				result |= ( byte & NUMBER31 ) << shift;
-				shift += NUMBER5;
-			} while ( NUMBER32 <= byte );
-			let deltaLat = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lat += deltaLat;
-
-			shift = ZERO;
-			result = ZERO;
-			do {
-				byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-				result |= ( byte & NUMBER31 ) << shift;
-				shift += NUMBER5;
-			} while ( NUMBER32 <= byte );
-			let deltaLon = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lng += deltaLon;
-
-			if ( is3D ) {
-				shift = ZERO;
-				result = ZERO;
-				do {
-					byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-					result |= ( byte & NUMBER31 ) << shift;
-					shift += NUMBER5;
-				} while ( NUMBER32 <= byte );
-				let deltaEle = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-				ele += deltaEle;
-				array.push ( [ lat * NUMBER1emin5, lng * NUMBER1emin5, ele / NUMBER100 ] );
-			}
-			else {
-				array.push ( [ lat * NUMBER1emin5, lng * NUMBER1emin5 ] );
-			}
-		}
-
-		return array;
-	}
-
-	/*
 	--- myParseResponse function --------------------------------------------------------------------------------------
 
 	This function ...
@@ -140,8 +69,8 @@ function newGraphHopperRouteProvider ( ) {
 		myRoute.itinerary.descent = ZERO;
 		response.paths.forEach (
 			path => {
-				path.points = myDecodePath ( path.points, true );
-				path.snapped_waypoints = myDecodePath ( path.snapped_waypoints, true );
+				path.points = polyline.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, true );
+				path.snapped_waypoints = polyline.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true ); // eslint-disable-line
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 					let itineraryPoint = window.L.travelNotes.itineraryPoint;
@@ -200,8 +129,8 @@ function newGraphHopperRouteProvider ( ) {
 				wayPointsString = wayPointsString ? wayPointsString + '&' : '';
 				wayPointsString +=
 					'point=' +
-					wayPoint.lat.toFixed ( MY_LAT_LNG_ROUND ) + ',' +
-					wayPoint.lng.toFixed ( MY_LAT_LNG_ROUND );
+					wayPoint.lat.toFixed ( LAT_LNG.fixed ) + ',' +
+					wayPoint.lng.toFixed ( LAT_LNG.fixed );
 			}
 		);
 
@@ -226,78 +155,24 @@ function newGraphHopperRouteProvider ( ) {
 	}
 
 	/*
-	--- myGetXHRJsonPromise function ----------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetXHRJsonPromise ( url, requestHeaders ) {
-
-		/*
-		--- jsonRequest function --------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		function jsonRequest ( onOk, onError ) {
-
-			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_OK = 200;
-			const HTTP_STATUS_ERR = 400;
-			const REQUEST_TIME_OUT = 15000;
-
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = REQUEST_TIME_OUT;
-
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( HTTP_STATUS_OK === xmlHttpRequest.status ) {
-						let response = null;
-						try {
-							response = JSON.parse ( xmlHttpRequest.responseText );
-							onOk ( response );
-						}
-						catch ( err ) {
-							onError ( new Error ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL ) );
-						}
-					}
-					else if ( HTTP_STATUS_ERR <= xmlHttpRequest.status ) {
-						onError (
-							new Error ( 'Error HTTP ' + xmlHttpRequest.status + ' ' + xmlHttpRequest.statusText )
-						);
-					}
-					else {
-						onError ( new Error ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL ) );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach (
-					header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue )
-				);
-			}
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( jsonRequest );
-	}
-
-	/*
 	--- myGetRoute function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
-
-		myGetXHRJsonPromise ( myGetUrl ( ) )
-			.then ( response => myParseResponse ( response, onOk, onError ) )
-			.catch ( err => onError ( err ) );
-
+		fetch ( myGetUrl ( ) )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							.then ( result => myParseResponse ( result, onOk, onError ) );
+					}
+					else {
+						onError ( new Error ( 'Invalid status ' + response.status ) );
+					}
+				}
+			);
 	}
 
 	/*

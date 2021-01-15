@@ -48,7 +48,7 @@ Tests ...
 import { polyline } from '../polyline/Polyline.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newTravel } from '../data/Travel.js';
-import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,8 +62,6 @@ import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/C
 */
 
 function ourNewFileCompactor ( ) {
-
-	const POLYLINE_PRECISION = 6;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -92,7 +90,7 @@ function ourNewFileCompactor ( ) {
 			}
 		);
 		compressedItineraryPoints.latLngs =
-			polyline.encode ( compressedItineraryPoints.latLngs, POLYLINE_PRECISION );
+			polyline.encode ( compressedItineraryPoints.latLngs, LAT_LNG.fixed );
 		routeObject.itinerary.itineraryPoints = compressedItineraryPoints;
 
 		// routeObject.itinerary.maneuvers = [];
@@ -112,7 +110,7 @@ function ourNewFileCompactor ( ) {
 
 	function myDecompressRoute ( routeObject ) {
 		routeObject.itinerary.itineraryPoints.latLngs =
-			polyline.decode ( routeObject.itinerary.itineraryPoints.latLngs, POLYLINE_PRECISION );
+			polyline.decode ( routeObject.itinerary.itineraryPoints.latLngs, LAT_LNG.fixed, false );
 		let decompressedItineraryPoints = [];
 		let latLngsCounter = ZERO;
 		routeObject.itinerary.itineraryPoints.latLngs.forEach (

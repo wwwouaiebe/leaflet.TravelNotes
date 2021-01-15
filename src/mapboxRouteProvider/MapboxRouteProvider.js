@@ -15,16 +15,35 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- Created from leaflet.TravelNotesMapbox
+Doc reviewed ...
+Tests ...
+
+-----------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MapboxRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 import { polyline } from '../polyline/Polyline.js';
 import { osrmTextInstructions } from '../providersUtil/OsrmTextInstructions.js';
 import { theIconList } from '../providersUtil/IconList.js';
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newMapboxRouteProvider ( ) {
 
-	const MY_POLYLINE_PRECISION = 6;
-	const MY_LAT_LNG_ROUND = 6;
+	const MAPBOX_LAT_LNG_ROUND = 6;
 
 	let myProviderKey = '';
 	let myUserLanguage = 'fr';
@@ -51,18 +70,14 @@ function newMapboxRouteProvider ( ) {
 		myRoute.itinerary.hasProfile = false;
 		myRoute.itinerary.ascent = ZERO;
 		myRoute.itinerary.descent = ZERO;
-
 		response.routes [ ZERO ].geometry =
-			polyline.decode ( response.routes [ ZERO ].geometry, MY_POLYLINE_PRECISION );
-
+			polyline.decode ( response.routes [ ZERO ].geometry, MAPBOX_LAT_LNG_ROUND, false );
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = polyline.decode ( step.geometry, MY_POLYLINE_PRECISION );
-
-						// bug Mapbox for car: geometry have 2 points for 'arrive' maneuver type
+						step.geometry = polyline.decode ( step.geometry, MAPBOX_LAT_LNG_ROUND, false );
 						if (
 							'arrive' === step.maneuver.type
 							&&
@@ -148,8 +163,8 @@ function newMapboxRouteProvider ( ) {
 			wayPoint => {
 				wayPointsString = wayPointsString ? wayPointsString + ';' : '';
 				wayPointsString +=
-					wayPoint.lng.toFixed ( MY_LAT_LNG_ROUND ) + ',' +
-					wayPoint.lat.toFixed ( MY_LAT_LNG_ROUND );
+					wayPoint.lng.toFixed ( LAT_LNG.fixed ) + ',' +
+					wayPoint.lat.toFixed ( LAT_LNG.fixed );
 			}
 		);
 
@@ -176,78 +191,24 @@ function newMapboxRouteProvider ( ) {
 	}
 
 	/*
-	--- myGetXHRJsonPromise function ------------------------------------------------------------------------------
-
-	This function ...
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetXHRJsonPromise ( url, requestHeaders ) {
-
-		/*
-		--- jsonRequest function ----------------------------------------------------------------------------------
-
-		-----------------------------------------------------------------------------------------------------------
-		*/
-
-		function jsonRequest ( onOk, onError ) {
-
-			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_OK = 200;
-			const HTTP_STATUS_ERR = 400;
-			const REQUEST_TIME_OUT = 15000;
-
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = REQUEST_TIME_OUT;
-
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( HTTP_STATUS_OK === xmlHttpRequest.status ) {
-						let response = null;
-						try {
-							response = JSON.parse ( xmlHttpRequest.responseText );
-							onOk ( response );
-						}
-						catch ( err ) {
-							onError ( new Error ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL ) );
-						}
-					}
-					else if ( HTTP_STATUS_ERR <= xmlHttpRequest.status ) {
-						onError (
-							new Error ( 'Error HTTP ' + xmlHttpRequest.status + ' ' + xmlHttpRequest.statusText )
-						);
-					}
-					else {
-						onError ( new Error ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL ) );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach (
-					header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue )
-				);
-			}
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( jsonRequest );
-	}
-
-	/*
 	--- myGetRoute function ---------------------------------------------------------------------------------------
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
-
-		myGetXHRJsonPromise ( myGetUrl ( ) )
-			.then ( response => myParseResponse ( response, onOk, onError ) )
-			.catch ( err => onError ( err ) );
-
+		fetch ( myGetUrl ( ) )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							.then ( result => myParseResponse ( result, onOk, onError ) );
+					}
+					else {
+						onError ( new Error ( 'Invalid status ' + response.status ) );
+					}
+				}
+			);
 	}
 
 	/*

@@ -16,88 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* eslint camelcase: "off" */
-/* eslint no-bitwise: "off" */
+import { polyline } from '../polyline/Polyline.js';
+import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newOpenRouteServiceRouteProvider ( ) {
 
-	const ZERO = 0;
-	const ONE = 1;
-
-	const NUMBER5 = 5;
-	const NUMBER31 = 0x1f;
-	const NUMBER32 = 0x20;
-	const NUMBER63 = 0x3f;
-	const NUMBER1emin5 = 1e-5;
-	const NUMBER100 = 100;
-	const MY_LAT_LNG_ROUND = 6;
+	const OPEN_ROUTE_LAT_LNG_ROUND = 5;
 	const LAT = 0;
 	const LNG = 1;
 	const ELEV = 2;
 	let myProviderKey = '';
 	let myUserLanguage = 'fr';
 	let myRoute = null;
-
-	/*
-	--- myDecodePath function -----------------------------------------------------------------------------------------
-
-	Adapted from https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js
-	See GHUtil.prototype.decodePath
-	See also https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-	Some adaptation for eslint and inverted lat and lng in the results...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myDecodePath ( encoded, is3D ) {
-		let len = encoded.length;
-		let index = ZERO;
-		let array = [];
-		let lat = ZERO;
-		let lng = ZERO;
-		let ele = ZERO;
-
-		while ( index < len ) {
-			let byte = null;
-			let shift = ZERO;
-			let result = ZERO;
-			do {
-				byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-				result |= ( byte & NUMBER31 ) << shift;
-				shift += NUMBER5;
-			} while ( NUMBER32 <= byte );
-			let deltaLat = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lat += deltaLat;
-
-			shift = ZERO;
-			result = ZERO;
-			do {
-				byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-				result |= ( byte & NUMBER31 ) << shift;
-				shift += NUMBER5;
-			} while ( NUMBER32 <= byte );
-			let deltaLon = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lng += deltaLon;
-
-			if ( is3D ) {
-				shift = ZERO;
-				result = ZERO;
-				do {
-					byte = encoded.charCodeAt ( index ++ ) - NUMBER63;
-					result |= ( byte & NUMBER31 ) << shift;
-					shift += NUMBER5;
-				} while ( NUMBER32 <= byte );
-				let deltaEle = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-				ele += deltaEle;
-				array.push ( [ lat * NUMBER1emin5, lng * NUMBER1emin5, ele / NUMBER100 ] );
-			}
-			else {
-				array.push ( [ lat * NUMBER1emin5, lng * NUMBER1emin5 ] );
-			}
-		}
-
-		return array;
-	}
 
 	/*
 	--- myParseResponse function --------------------------------------------------------------------------------------
@@ -113,7 +43,7 @@ function newOpenRouteServiceRouteProvider ( ) {
 			returnOnError ( new Error ( 'Route not found' ) );
 		}
 		response.routes [ ZERO ].geometry =
-			myDecodePath ( response.routes [ ZERO ].geometry, true );
+			polyline.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, true );
 		myRoute.itinerary.itineraryPoints.removeAll ( );
 		myRoute.itinerary.maneuvers.removeAll ( );
 		myRoute.itinerary.hasProfile = true;
@@ -198,8 +128,8 @@ function newOpenRouteServiceRouteProvider ( ) {
 			wayPoint => {
 				wayPointsString = wayPointsString ? wayPointsString + ',' : '{"coordinates":[';
 				wayPointsString +=
-					'[' + wayPoint.lng.toFixed ( MY_LAT_LNG_ROUND ) +
-					',' + wayPoint.lat.toFixed ( MY_LAT_LNG_ROUND ) + ']';
+					'[' + wayPoint.lng.toFixed ( LAT_LNG.fixed ) +
+					',' + wayPoint.lat.toFixed ( LAT_LNG.fixed ) + ']';
 			}
 		);
 		wayPointsString += '],"elevation":"true","language":"' + myUserLanguage + '"}';
@@ -276,7 +206,6 @@ function newOpenRouteServiceRouteProvider ( ) {
 		function jsonRequest ( onOk, onError ) {
 
 			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_OK = 200;
 			const HTTP_STATUS_ERR = 400;
 			const REQUEST_TIME_OUT = 15000;
 

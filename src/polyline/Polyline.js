@@ -1,38 +1,35 @@
-/* eslint-disable */
+/* eslint no-bitwise: "off" */
 
-'use strict';
+const ZERO = 0;
+const ONE = 1;
 
-/**
- * Based off of [the offical Google document](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
- *
- * Some parts from [this implementation](http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/PolylineEncoder.js)
- * by [Mark McClure](http://facstaff.unca.edu/mcmcclur/)
- *
- * @module polyline
- */
+const NUMBER5 = 5;
+const NUMBER10 = 10;
+const NUMBER31 = 0x1f;
+const NUMBER32 = 0x20;
+const NUMBER63 = 0x3f;
+const NUMBER100 = 100;
 
-let polyline = {};
-
-function py2_round ( value ) {
+function python2Round ( value ) {
 
 	// Google's polyline algorithm uses the same rounding strategy as Python 2, which is different from JS for negative values
-	return Math.floor ( Math.abs ( value ) + 0.5 ) * ( 0 <= value ? 1 : -1 );
+	return Math.floor ( Math.abs ( value ) + 0.5 ) * ( ZERO <= value ? ONE : -ONE );
 }
 
 function encode ( current, previous, factor ) {
-	current = py2_round ( current * factor );
-	previous = py2_round ( previous * factor );
+	current = python2Round ( current * factor );
+	previous = python2Round ( previous * factor );
 	let coordinate = current - previous;
-	coordinate <<= 1;
-	if ( 0 > current - previous ) {
+	coordinate <<= ONE;
+	if ( ZERO > current - previous ) {
 		coordinate = ~ coordinate;
 	}
 	let output = '';
-	while ( 0x20 <= coordinate ) {
-		output += String.fromCharCode ( ( 0x20 | ( coordinate & 0x1f ) ) + 63 );
-		coordinate >>= 5;
+	while ( NUMBER32 <= coordinate ) {
+		output += String.fromCharCode ( ( NUMBER32 | ( coordinate & NUMBER31 ) ) + NUMBER63 );
+		coordinate >>= NUMBER5;
 	}
-	output += String.fromCharCode ( coordinate + 63 );
+	output += String.fromCharCode ( coordinate + NUMBER63 );
 	return output;
 }
 
@@ -48,124 +45,87 @@ function encode ( current, previous, factor ) {
  * @see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
  */
 
-polyline.decode = function ( str, precision ) {
-	let index = 0,
-		lat = 0,
-		lng = 0,
-		coordinates = [],
-		shift = 0,
-		result = 0,
-		byte = null,
-		latitude_change,
-		longitude_change,
-		factor = Math.pow ( 10, Number.isInteger ( precision ) ? precision : 5 );
+let polyline = {
 
-	// Coordinates have variable length when encoded, so just keep
-	// track of whether we've hit the end of the string. In each
-	// loop iteration, a single coordinate is decoded.
-	while ( index < str.length ) {
+	encode : function ( coordinates, precision ) {
+		if ( ! coordinates.length ) {
+			return '';
+		}
 
-		// Reset shift, result, and byte
-		byte = null;
-		shift = 0;
-		result = 0;
+		let factor = Math.pow ( NUMBER10, Number.isInteger ( precision ) ? precision : NUMBER5 ),
+			output = encode ( coordinates[ ZERO ][ ZERO ], ZERO, factor ) + encode ( coordinates[ ZERO ][ ONE ], ZERO, factor );
 
-		do {
-			byte = str.charCodeAt ( index ++ ) - 63;
-			result |= ( byte & 0x1f ) << shift;
-			shift += 5;
-		} while ( 0x20 <= byte );
+		for ( let i = ONE; i < coordinates.length; i ++ ) {
+			let a = coordinates[ i ],
+				b = coordinates[ i - ONE ];
+			output += encode ( a[ ZERO ], b[ ZERO ], factor );
+			output += encode ( a[ ONE ], b[ ONE ], factor );
+		}
 
-		latitude_change = ( ( result & 1 ) ? ~ ( result >> 1 ) : ( result >> 1 ) );
+		return output;
+	},
 
-		shift = result = 0;
+	/*
+	--- myDecodePath function -----------------------------------------------------------------------------------------
 
-		do {
-			byte = str.charCodeAt ( index ++ ) - 63;
-			result |= ( byte & 0x1f ) << shift;
-			shift += 5;
-		} while ( 0x20 <= byte );
+	Adapted from https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js
+	See GHUtil.prototype.decodePath
+	See also https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+	Some adaptation for eslint and inverted lat and lng in the results...
 
-		longitude_change = ( ( result & 1 ) ? ~ ( result >> 1 ) : ( result >> 1 ) );
+	-------------------------------------------------------------------------------------------------------------------
+	*/
 
-		lat += latitude_change;
-		lng += longitude_change;
+	decode : function ( encodedString, precision, is3D = false ) {
 
-		coordinates.push ( [ lat / factor, lng / factor ] );
+		let index = ZERO;
+		let lat = ZERO;
+		let lng = ZERO;
+		let elev = ZERO;
+		let coordinates = [];
+		let factor = Math.pow ( NUMBER10, precision );
+
+		while ( index < encodedString.length ) {
+			let byte = null;
+			let shift = ZERO;
+			let result = ZERO;
+			do {
+				byte = encodedString.charCodeAt ( index ++ ) - NUMBER63;
+				result |= ( byte & NUMBER31 ) << shift;
+				shift += NUMBER5;
+			} while ( NUMBER32 <= byte );
+			let deltaLat = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+			lat += deltaLat;
+
+			shift = ZERO;
+			result = ZERO;
+			do {
+				byte = encodedString.charCodeAt ( index ++ ) - NUMBER63;
+				result |= ( byte & NUMBER31 ) << shift;
+				shift += NUMBER5;
+			} while ( NUMBER32 <= byte );
+			let deltaLon = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+			lng += deltaLon;
+
+			if ( is3D ) {
+				shift = ZERO;
+				result = ZERO;
+				do {
+					byte = encodedString.charCodeAt ( index ++ ) - NUMBER63;
+					result |= ( byte & NUMBER31 ) << shift;
+					shift += NUMBER5;
+				} while ( NUMBER32 <= byte );
+				let deltaEle = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+				elev += deltaEle;
+				coordinates.push ( [ lat / factor, lng / factor, elev / NUMBER100 ] );
+			}
+			else {
+				coordinates.push ( [ lat / factor, lng / factor ] );
+			}
+		}
+
+		return coordinates;
 	}
-
-	return coordinates;
 };
-
-/**
- * Encodes the given [latitude, longitude] coordinates array.
- *
- * @param {Array.<Array.<Number>>} coordinates
- * @param {Number} precision
- * @returns {String}
- */
-
-polyline.encode = function ( coordinates, precision ) {
-	if ( ! coordinates.length ) { return ''; }
-
-	let factor = Math.pow ( 10, Number.isInteger ( precision ) ? precision : 5 ),
-		output = encode ( coordinates[ 0 ][ 0 ], 0, factor ) + encode ( coordinates[ 0 ][ 1 ], 0, factor );
-
-	for ( let i = 1; i < coordinates.length; i ++ ) {
-		let a = coordinates[ i ],
-			b = coordinates[ i - 1 ];
-		output += encode ( a[ 0 ], b[ 0 ], factor );
-		output += encode ( a[ 1 ], b[ 1 ], factor );
-	}
-
-	return output;
-};
-
-function flipped ( coords ) {
-	let flipped = [];
-	for ( let i = 0; i < coords.length; i ++ ) {
-		let coord = coords[ i ].slice ();
-		flipped.push ( [ coord[ 1 ], coord[ 0 ] ] );
-	}
-	return flipped;
-}
-
-/**
- * Encodes a GeoJSON LineString feature/geometry.
- *
- * @param {Object} geojson
- * @param {Number} precision
- * @returns {String}
- */
-
-polyline.fromGeoJSON = function ( geojson, precision ) {
-	if ( geojson && 'Feature' === geojson.type ) {
-		geojson = geojson.geometry;
-	}
-	if ( ! geojson || 'LineString' !== geojson.type ) {
-		throw new Error ( 'Input must be a GeoJSON LineString' );
-	}
-	return polyline.encode ( flipped ( geojson.coordinates ), precision );
-};
-
-/**
- * Decodes to a GeoJSON LineString geometry.
- *
- * @param {String} str
- * @param {Number} precision
- * @returns {Object}
- */
-
-polyline.toGeoJSON = function ( str, precision ) {
-	let coords = polyline.decode ( str, precision );
-	return {
-		type : 'LineString',
-		coordinates : flipped ( coords )
-	};
-};
-
-if ( 'object' === typeof module && module.exports ) {
-	module.exports = polyline;
-}
 
 export { polyline };

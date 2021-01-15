@@ -16,13 +16,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* eslint camelcase: "off" */
-
 import { polyline } from '../polyline/Polyline.js';
+import { ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newMapzenValhallaRouteProvider ( ) {
 
-	const ZERO = 0;
+	const MAPZEN_LAT_LNG_ROUND = 6;
 
 	let myProviderKey = '';
 	let myUserLanguage = 'fr';
@@ -78,7 +77,6 @@ function newMapzenValhallaRouteProvider ( ) {
 
 	function myParseResponse ( response, returnOnOk, returnOnError ) {
 
-		const POLYLINE_PRECISION = 6;
 		const M_IN_KM = 1000;
 
 		if ( ZERO === response.trip.legs.length ) {
@@ -90,7 +88,7 @@ function newMapzenValhallaRouteProvider ( ) {
 
 		response.trip.legs.forEach (
 			leg => {
-				leg.shape = polyline.decode ( leg.shape, POLYLINE_PRECISION );
+				leg.shape = polyline.decode ( leg.shape, MAPZEN_LAT_LNG_ROUND, false );
 				let itineraryPoints = [];
 				for ( let shapePointCounter = ZERO; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
 					let itineraryPoint = window.L.travelNotes.itineraryPoint;
@@ -137,8 +135,8 @@ function newMapzenValhallaRouteProvider ( ) {
 		let request = {
 			locations : [],
 			costing : '',
-			directions_options : { language : myUserLanguage },
-			costing_options : {}
+			directions_options : { language : myUserLanguage },  // eslint-disable-line
+			costing_options : {} // eslint-disable-line
 		};
 
 		let wayPointsIterator = myRoute.wayPoints.iterator;
@@ -156,24 +154,24 @@ function newMapzenValhallaRouteProvider ( ) {
 		switch ( myRoute.itinerary.transitMode ) {
 		case 'bike' :
 			request.costing = 'bicycle';
-			request.costing_options = {
+			request.costing_options = {  // eslint-disable-line
 				bicycle : {
-					maneuver_penalty : MANEUVER_PENALTY,
-					bicycle_type : 'Cross',
-					cycling_speed : '20.0',
-					use_roads : '0.25',
-					use_hills : '0.25'
+					maneuver_penalty : MANEUVER_PENALTY,  // eslint-disable-line
+					bicycle_type : 'Cross',  // eslint-disable-line
+					cycling_speed : '20.0',  // eslint-disable-line
+					use_roads : '0.25',  // eslint-disable-line
+					use_hills : '0.25'  // eslint-disable-line
 				}
 			};
 
 			break;
 		case 'pedestrian' :
 			request.costing = 'pedestrian';
-			request.costing_options = { pedestrian : { walking_speed : '4.0' } };
+			request.costing_options = { pedestrian : { walking_speed : '4.0' } };  // eslint-disable-line
 			break;
 		case 'car' :
 			request.costing = 'auto';
-			request.costing_options = { auto : { country_crossing_cost : '60' } };
+			request.costing_options = { auto : { country_crossing_cost : '60' } };  // eslint-disable-line
 			break;
 		default :
 			break;
@@ -183,78 +181,24 @@ function newMapzenValhallaRouteProvider ( ) {
 	}
 
 	/*
-	--- myGetXHRJsonPromise function ----------------------------------------------------------------------------------
-
-	This function ...
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetXHRJsonPromise ( url, requestHeaders ) {
-
-		/*
-		--- jsonRequest function --------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		function jsonRequest ( onOk, onError ) {
-
-			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_OK = 200;
-			const HTTP_STATUS_ERR = 400;
-			const REQUEST_TIME_OUT = 15000;
-
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = REQUEST_TIME_OUT;
-
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( HTTP_STATUS_OK === xmlHttpRequest.status ) {
-						let response = null;
-						try {
-							response = JSON.parse ( xmlHttpRequest.responseText );
-							onOk ( response );
-						}
-						catch ( err ) {
-							onError ( new Error ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL ) );
-						}
-					}
-					else if ( HTTP_STATUS_ERR <= xmlHttpRequest.status ) {
-						onError (
-							new Error ( 'Error HTTP ' + xmlHttpRequest.status + ' ' + xmlHttpRequest.statusText )
-						);
-					}
-					else {
-						onError ( new Error ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL ) );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach (
-					header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue )
-				);
-			}
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( jsonRequest );
-	}
-
-	/*
 	--- myGetRoute function -------------------------------------------------------------------------------------------
 
 	-------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
-
-		myGetXHRJsonPromise ( myGetUrl ( ) )
-			.then ( response => myParseResponse ( response, onOk, onError ) )
-			.catch ( err => onError ( err ) );
-
+		fetch ( myGetUrl ( ) )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							.then ( result => myParseResponse ( result, onOk, onError ) );
+					}
+					else {
+						onError ( new Error ( 'Invalid status ' + response.status ) );
+					}
+				}
+			);
 	}
 
 	/*

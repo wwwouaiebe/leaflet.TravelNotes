@@ -244,3 +244,5 @@ export const ONE = 1;
 export const TWO = 2;
 
 export const SVG_NS = 'http://www.w3.org/2000/svg';
+
+export const HTTP_STATUS_OK = 200;
