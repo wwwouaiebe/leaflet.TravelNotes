@@ -36,7 +36,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
 import { osrmTextInstructions } from '../providersUtil/OsrmTextInstructions.js';
 import { theIconList } from '../providersUtil/IconList.js';
 import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
@@ -71,13 +71,13 @@ function newMapboxRouteProvider ( ) {
 		myRoute.itinerary.ascent = ZERO;
 		myRoute.itinerary.descent = ZERO;
 		response.routes [ ZERO ].geometry =
-			polyline.decode ( response.routes [ ZERO ].geometry, MAPBOX_LAT_LNG_ROUND, false );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, MAPBOX_LAT_LNG_ROUND, false );
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = polyline.decode ( step.geometry, MAPBOX_LAT_LNG_ROUND, false );
+						step.geometry = thePolylineEncoder.decode ( step.geometry, MAPBOX_LAT_LNG_ROUND, false );
 						if (
 							'arrive' === step.maneuver.type
 							&&

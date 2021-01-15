@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
 import { osrmTextInstructions } from '../providersUtil/OsrmTextInstructions.js';
 import { theIconList } from '../providersUtil/IconList.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
@@ -53,14 +53,14 @@ function newOSRMRouteProvider ( ) {
 		myRoute.itinerary.descent = ZERO;
 
 		response.routes [ ZERO ].geometry =
-			polyline.decode ( response.routes [ ZERO ].geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
 
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = polyline.decode ( step.geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
+						step.geometry = thePolylineEncoder.decode ( step.geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
 
 						let maneuver = window.L.travelNotes.maneuver;
 						maneuver.iconName =

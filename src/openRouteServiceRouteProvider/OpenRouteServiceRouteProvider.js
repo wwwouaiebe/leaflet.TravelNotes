@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newOpenRouteServiceRouteProvider ( ) {
@@ -43,7 +43,7 @@ function newOpenRouteServiceRouteProvider ( ) {
 			returnOnError ( new Error ( 'Route not found' ) );
 		}
 		response.routes [ ZERO ].geometry =
-			polyline.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, true );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, true );
 		myRoute.itinerary.itineraryPoints.removeAll ( );
 		myRoute.itinerary.maneuvers.removeAll ( );
 		myRoute.itinerary.hasProfile = true;

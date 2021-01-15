@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
 import { ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newMapzenValhallaRouteProvider ( ) {
@@ -88,7 +88,7 @@ function newMapzenValhallaRouteProvider ( ) {
 
 		response.trip.legs.forEach (
 			leg => {
-				leg.shape = polyline.decode ( leg.shape, MAPZEN_LAT_LNG_ROUND, false );
+				leg.shape = thePolylineEncoder.decode ( leg.shape, MAPZEN_LAT_LNG_ROUND, false );
 				let itineraryPoints = [];
 				for ( let shapePointCounter = ZERO; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
 					let itineraryPoint = window.L.travelNotes.itineraryPoint;

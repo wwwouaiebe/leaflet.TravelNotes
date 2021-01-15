@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
 import { ZERO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newGraphHopperRouteProvider ( ) {
@@ -69,8 +69,8 @@ function newGraphHopperRouteProvider ( ) {
 		myRoute.itinerary.descent = ZERO;
 		response.paths.forEach (
 			path => {
-				path.points = polyline.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, true );
-				path.snapped_waypoints = polyline.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true ); // eslint-disable-line
+				path.points = thePolylineEncoder.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, true );
+				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true ); // eslint-disable-line
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 					let itineraryPoint = window.L.travelNotes.itineraryPoint;
