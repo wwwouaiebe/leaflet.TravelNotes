@@ -293,7 +293,6 @@ const ourOsrmTextInstructions = Object.freeze (
 			if ( 'depart' !== type && 'arrive' !== type && ! modifier ) {
 				throw new Error ( 'Missing step maneuver modifier' );
 			}
-			console.log ( 'language ' + language );
 			if ( ! instructions[ language ][ version ][ type ] ) {
 				/* eslint-disable-next-line no-console */
 				console.log ( 'Encountered unknown instruction type: ' + type );

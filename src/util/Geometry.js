@@ -123,6 +123,45 @@ function myNormalizeLng ( Lng ) {
 class Geometry {
 
 	/**
+
+	This function gives an arc of a spherical triangle when the 2 others arcs and the opposite summit are know
+	It's the well know cosinus law
+	cos a = cos b cos c + sin b sin c cos A
+	cos b =	cos c cos a + sin c sin a cos B
+	cos c = cos a cos b + sin a sin b cos C
+
+	@param {number} summit the opposite summit
+	@param {number} arc1 the first arc
+	@param {number} arc2 the second arc
+
+	*/
+
+	getArcFromSummitArcArc ( summit, arc1, arc2 ) {
+		return Math.acos (
+			( Math.cos ( arc1 ) * Math.cos ( arc2 ) ) +
+			( Math.sin ( arc1 ) * Math.sin ( arc2 ) * Math.cos ( summit ) )
+		);
+	}
+
+	/**
+
+	This function is also the well know cosinus law written in an other way....
+	cos C = ( cos c - cos a cos b ) / sin a sin b
+
+	@param {number} arc1 the first arc
+	@param {number} arc2 the second arc
+	@param {number} oppositeArc the opposite arc
+
+	*/
+
+	getSummitFromArcArcArc ( arc1, arc2, oppositeArc ) {
+		return Math.acos (
+			( Math.cos ( oppositeArc ) - ( Math.cos ( arc1 ) * Math.cos ( arc2 ) ) ) /
+			( Math.sin ( arc1 ) * Math.sin ( arc2 ) )
+		);
+	}
+
+	/**
 	Compute the latitude, longitude, elevation, ascent and distance of a point on a route when only the distance between
 	the beginning of the route and the point is know
 	@param {Route} route The route

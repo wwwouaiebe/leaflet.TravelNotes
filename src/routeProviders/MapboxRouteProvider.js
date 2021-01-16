@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v2.1.0:
-		- Created from leaflet.TravelNotesMapbox
+		- issue #150 : Merge travelNotes and plugins
 Doc reviewed ...
 Tests ...
 
@@ -36,12 +36,32 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module MapboxRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-function newMapboxRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewMapboxRouteProvider
+@desc constructor for MapboxRouteProvider object
+@return {MapboxRouteProvider} an instance of MapboxRouteProvider object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewMapboxRouteProvider ( ) {
 
 	const MAPBOX_LAT_LNG_ROUND = 6;
 
@@ -49,10 +69,17 @@ function newMapboxRouteProvider ( ) {
 	let myUserLanguage = 'fr';
 	let myRoute = null;
 
-	/*
-	--- myParseResponse function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myParseResponse
+	@desc parse the response from the provider and add the received itinerary to the myRoute itinerary
+	@param {Object} response the itinerary received from the provider
+	@param {function} returnOnOk a function to call when the response is parsed correctly
+	@param {function} returnOnError a function to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( response, returnOnOk, returnOnError ) {
@@ -151,10 +178,15 @@ function newMapboxRouteProvider ( ) {
 		returnOnOk ( myRoute );
 	}
 
-	/*
-	--- myGetUrl function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myGetUrl
+	@desc gives the url to call
+	@return {string} a string with the url, wayPoints, transitMode, user language and API key
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
@@ -191,9 +223,15 @@ function newMapboxRouteProvider ( ) {
 	}
 
 	/*
-	--- myGetRoute function ---------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myGetRoute
+	@desc call the provider, wait for the response and then parse the provider response
+	@param {function} onOk a function to pass to the myParseResponse
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
@@ -211,16 +249,36 @@ function newMapboxRouteProvider ( ) {
 			);
 	}
 
-	/*
-	--- myGetPromiseRoute function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myGetPromiseRoute
+	@desc call the provider, wait for the response and then parse the provider response into the route itinerary object
+	@param {route} route a Route object with at least two WayPoints completed
+	@return a Promise completed with a function that call the provider, wait the response and then will parse the response
+	in the route itinerary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetPromiseRoute ( route ) {
 		myRoute = route;
 		return new Promise ( myGetRoute );
 	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class MapboxRouteProvider
+	@classdesc This class implements the Provider interface for Mapbox. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	return {
 
@@ -250,4 +308,8 @@ function newMapboxRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newMapboxRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewMapboxRouteProvider ( ) );
+
+/*
+--- End of MapboxRouteProvider.js file ----------------------------------------------------------------------------------------
+*/

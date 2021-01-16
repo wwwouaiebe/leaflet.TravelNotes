@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,11 +15,49 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- issue #150 : Merge travelNotes and plugins
+Doc reviewed ...
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file GraphHopperRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module GraphHopperRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { ZERO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-function newGraphHopperRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewGraphHopperRouteProvider
+@desc constructor for GraphHopperRouteProvider object
+@return {GraphHopperRouteProvider} an instance of GraphHopperRouteProvider object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewGraphHopperRouteProvider ( ) {
 
 	const GRAPHHOPPER_LAT_LNG_ROUND = 5;
 	const FOUR = 4;
@@ -48,12 +86,17 @@ function newGraphHopperRouteProvider ( ) {
 		'kRoundaboutRight' // USE_ROUNDABOUT = 6
 	];
 
-	/*
-	--- myParseResponse function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseResponse
+	@desc parse the response from the provider and add the received itinerary to the myRoute itinerary
+	@param {Object} response the itinerary received from the provider
+	@param {function} returnOnOk a function to call when the response is parsed correctly
+	@param {function} returnOnError a function to call when an error occurs
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( response, returnOnOk, returnOnError ) {
@@ -115,12 +158,15 @@ function newGraphHopperRouteProvider ( ) {
 		returnOnOk ( myRoute );
 	}
 
-	/*
-	--- myGetUrl function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetUrl
+	@desc gives the url to call
+	@return {string} a string with the url, wayPoints, transitMode, user language and API key
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
@@ -155,10 +201,16 @@ function newGraphHopperRouteProvider ( ) {
 			'&vehicle=' + vehicle;
 	}
 
-	/*
-	--- myGetRoute function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetRoute
+	@desc call the provider, wait for the response and then parse the provider response
+	@param {function} onOk a function to pass to the myParseResponse
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
@@ -176,10 +228,17 @@ function newGraphHopperRouteProvider ( ) {
 			);
 	}
 
-	/*
-	--- myGetPromiseRoute function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetPromiseRoute
+	@desc call the provider, wait for the response and then parse the provider response into the route itinerary object
+	@param {route} route a Route object with at least two WayPoints completed
+	@return a Promise completed with a function that call the provider, wait the response and then will parse the response
+	in the route itinerary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetPromiseRoute ( route ) {
@@ -187,6 +246,19 @@ function newGraphHopperRouteProvider ( ) {
 		myRoute = route;
 		return new Promise ( myGetRoute );
 	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@class GraphHopperRouteProvider
+	@classdesc This class implements the Provider interface for Graphhopper. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
 
 	return {
 
@@ -223,4 +295,8 @@ function newGraphHopperRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newGraphHopperRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewGraphHopperRouteProvider ( ) );
+
+/*
+--- End of GraphHopperRouteProvider.js file -----------------------------------------------------------------------------------
+*/

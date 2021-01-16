@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,8 +15,37 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- issue #150 : Merge travelNotes and plugins
+Doc reviewed ...
+Tests ...
+*/
 
-function newPublicTransportRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file PublicTransportRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module PublicTransportRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { ZERO, ONE, TWO, LAT_LNG } from '../util/Constants.js';
+
+function ourNewPublicTransportRouteProvider ( ) {
 
 	/*
 
@@ -70,12 +99,7 @@ function newPublicTransportRouteProvider ( ) {
 	*/
 
 	const INVALID_ID = -1;
-	const ZERO = 0;
-	const ONE = 1;
-	const TWO = 2;
 	const THREE = 3;
-
-	const MY_LAT_LNG_ROUND = 6;
 
 	let myUserLanguage = 'fr';
 	let myRoute = null;
@@ -88,48 +112,56 @@ function newPublicTransportRouteProvider ( ) {
 	let myNodes3WaysCounter = ZERO;
 	let	myNodes3Ways = [];
 
-	/*
-	--- myFirstOf function ----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myFirstOf
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myFirstOf ( array ) {
 		return array [ ZERO ];
 	}
 
-	/*
-	--- myLastOf function -----------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myLastOf
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myLastOf ( array ) {
 		return array [ array.length - ONE ];
 	}
 
-	/*
-	--- myRemoveFrom function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myRemoveFrom
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myRemoveFrom ( array, value ) {
 		array.splice ( array.indexOf ( value ), ONE );
 	}
 
-	/*
-	--- myReverseWay function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myReverseWay
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myReverseWay ( way ) {
@@ -147,12 +179,14 @@ function newPublicTransportRouteProvider ( ) {
 
 	}
 
-	/*
-	--- myMergeWays function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myMergeWays
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myMergeWays ( waysId1, waysId2 ) {
@@ -198,12 +232,14 @@ function newPublicTransportRouteProvider ( ) {
 		return way1.id;
 	}
 
-	/*
-	--- myCloneNode function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myCloneNode
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCloneNode ( nodeId ) {
@@ -225,12 +261,14 @@ function newPublicTransportRouteProvider ( ) {
 		return clonedNode.id;
 	}
 
-	/*
-	--- myCloneWay function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myCloneWay
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCloneWay ( wayId ) {
@@ -254,12 +292,14 @@ function newPublicTransportRouteProvider ( ) {
 		return clonedWay.id;
 	}
 
-	/*
-	--- myCreateMaps function -------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myCreateMaps
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateMaps ( elements ) {
@@ -347,12 +387,14 @@ function newPublicTransportRouteProvider ( ) {
 		);
 	}
 
-	/*
-	--- myRemoveHoles function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myRemoveHoles
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myRemoveHoles ( ) {
@@ -431,12 +473,14 @@ function newPublicTransportRouteProvider ( ) {
 		}
 	}
 
-	/*
-	--- myMerge3WaysNodes function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myMerge3WaysNodes
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myMerge3WaysNodes ( ) {
@@ -495,12 +539,14 @@ function newPublicTransportRouteProvider ( ) {
 		);
 	}
 
-	/*
-	--- myCreateRoute function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myCreateRoute
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myCreateRoute ( route ) {
@@ -657,12 +703,14 @@ function newPublicTransportRouteProvider ( ) {
 
 	}
 
-	/*
-	--- myParseResponse function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseResponse
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( response, onOk, onError ) {
@@ -744,33 +792,37 @@ function newPublicTransportRouteProvider ( ) {
 		onOk ( myRoute );
 	}
 
-	/*
-	--- myGetRelationsUrl function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetRelationsUrl
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRelationsUrl ( ) {
 		return 'https://lz4.overpass-api.de/api/interpreter?' +
 			'data=[out:json];node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
-			myRoute.wayPoints.first.lat.toFixed ( MY_LAT_LNG_ROUND ) +
+			myRoute.wayPoints.first.lat.toFixed ( LAT_LNG.fixed ) +
 			',' +
-			myRoute.wayPoints.first.lng.toFixed ( MY_LAT_LNG_ROUND ) +
+			myRoute.wayPoints.first.lng.toFixed ( LAT_LNG.fixed ) +
 			')->.s;rel(bn.s)->.s;node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
-			myRoute.wayPoints.last.lat.toFixed ( MY_LAT_LNG_ROUND ) +
+			myRoute.wayPoints.last.lat.toFixed ( LAT_LNG.fixed ) +
 			',' +
-			myRoute.wayPoints.last.lng.toFixed ( MY_LAT_LNG_ROUND ) +
+			myRoute.wayPoints.last.lng.toFixed ( LAT_LNG.fixed ) +
 			')->.e;rel(bn.e)->.e;rel.e.s;out tags;';
 	}
 
-	/*
-	--- myGetWayNodesUrl function ---------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetWayNodesUrl
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetWayNodesUrl ( ) {
@@ -781,12 +833,14 @@ function newPublicTransportRouteProvider ( ) {
 			'););out;';
 	}
 
-	/*
-	--- myGetDialogPromise function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetDialogPromise
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetDialogPromise ( response ) {
@@ -825,12 +879,14 @@ function newPublicTransportRouteProvider ( ) {
 
 	}
 
-	/*
-	--- myGetXHRJsonPromise function ------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetXHRJsonPromise
+	@desc coming soon...
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetXHRJsonPromise ( url, requestHeaders ) {
@@ -886,10 +942,17 @@ function newPublicTransportRouteProvider ( ) {
 		return new Promise ( jsonRequest );
 	}
 
-	/*
-	--- myGetRoute function ---------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myGetRoute
+	@desc call the provider, wait for the response and then parse the provider response. Notice that we have two calls to the
+	Provider: one for the relation list and one for the ways and nodes. Notice also the dialog box between the 2 calls.
+	@param {function} onOk a function to pass to the myParseResponse
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
@@ -901,10 +964,17 @@ function newPublicTransportRouteProvider ( ) {
 			.catch ( err => onError ( err ) );
 	}
 
-	/*
-	--- myGetPromiseRoute function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myGetPromiseRoute
+	@desc call the provider, wait for the response and then parse the provider response into the route itinerary object
+	@param {route} route a Route object with at least two WayPoints completed
+	@return a Promise completed with a function that call the provider, wait the response and then will parse the response
+	in the route itinerary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetPromiseRoute ( route ) {
@@ -912,10 +982,17 @@ function newPublicTransportRouteProvider ( ) {
 		return new Promise ( myGetRoute );
 	}
 
-	/*
-	--- PublicTransportRouteProvider object -----------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@class PublicTransportRouteProvider
+	@classdesc This class implements the Provider interface for PublicTransport. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	return {
@@ -953,4 +1030,8 @@ function newPublicTransportRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newPublicTransportRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewPublicTransportRouteProvider ( ) );
+
+/*
+--- End of PublicTransportRouteProvider.js file -------------------------------------------------------------------------------
+*/

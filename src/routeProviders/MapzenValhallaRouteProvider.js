@@ -1,5 +1,5 @@
 /*
-Copyright - 2020 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,11 +15,49 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- issue #150 : Merge travelNotes and plugins
+Doc reviewed ...
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MapzenValhallaRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module MapzenValhallaRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
 
-function newMapzenValhallaRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewMapzenValhallaRouteProvider
+@desc constructor for MapzenValhallaRouteProvider object
+@return {MapzenValhallaRouteProvider} an instance of MapzenValhallaRouteProvider object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewMapzenValhallaRouteProvider ( ) {
 
 	const MAPZEN_LAT_LNG_ROUND = 6;
 
@@ -67,12 +105,17 @@ function newMapzenValhallaRouteProvider ( ) {
 		'kUndefined' // kPostTransitConnectionDestination = 36;
 	];
 
-	/*
-	--- myParseResponse function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseResponse
+	@desc parse the response from the provider and add the received itinerary to the myRoute itinerary
+	@param {Object} response the itinerary received from the provider
+	@param {function} returnOnOk a function to call when the response is parsed correctly
+	@param {function} returnOnError a function to call when an error occurs
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( response, returnOnOk, returnOnError ) {
@@ -122,12 +165,15 @@ function newMapzenValhallaRouteProvider ( ) {
 		returnOnOk ( myRoute );
 	}
 
-	/*
-	--- myGetUrl function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetUrl
+	@desc gives the url to call
+	@return {string} a string with the url, wayPoints, transitMode, user language and API key
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
@@ -190,10 +236,16 @@ function newMapzenValhallaRouteProvider ( ) {
 		return 'https://api.stadiamaps.com/route?json=' + JSON.stringify ( request ) + '&api_key=' + myProviderKey;
 	}
 
-	/*
-	--- myGetRoute function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetRoute
+	@desc call the provider, wait for the response and then parse the provider response
+	@param {function} onOk a function to pass to the myParseResponse
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
@@ -223,10 +275,17 @@ function newMapzenValhallaRouteProvider ( ) {
 		return new Promise ( myGetRoute );
 	}
 
-	/*
-	--- MapzenValhallaRouteProvider object ----------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class MapzenValhallaRouteProvider
+	@classdesc This class implements the Provider interface for MapzenValhalla. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	return {
@@ -270,4 +329,8 @@ function newMapzenValhallaRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newMapzenValhallaRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewMapzenValhallaRouteProvider ( ) );
+
+/*
+--- End of MapzenValhallaRouteProvider.js file --------------------------------------------------------------------------------
+*/

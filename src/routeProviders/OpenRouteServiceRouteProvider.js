@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - Christian Guyette - Contact: http//www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,11 +15,49 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- issue #150 : Merge travelNotes and plugins
+Doc reviewed ...
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file OpenRouteServiceRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module OpenRouteServiceRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-function newOpenRouteServiceRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewOpenRouteServiceRouteProvider
+@desc constructor for OpenRouteServiceRouteProvider object
+@return {OpenRouteServiceRouteProvider} an instance of OpenRouteServiceRouteProvider object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewOpenRouteServiceRouteProvider ( ) {
 
 	const OPEN_ROUTE_LAT_LNG_ROUND = 5;
 	const LAT = 0;
@@ -29,12 +67,17 @@ function newOpenRouteServiceRouteProvider ( ) {
 	let myUserLanguage = 'fr';
 	let myRoute = null;
 
-	/*
-	--- myParseResponse function --------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseResponse
+	@desc parse the response from the provider and add the received itinerary to the myRoute itinerary
+	@param {Object} response the itinerary received from the provider
+	@param {function} returnOnOk a function to call when the response is parsed correctly
+	@param {function} returnOnError a function to call when an error occurs
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( response, returnOnOk, returnOnError ) {
@@ -116,13 +159,18 @@ function newOpenRouteServiceRouteProvider ( ) {
 		returnOnOk ( myRoute );
 	}
 
-	/*
-	--- myGetWayPointsAndOptions function -----------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetBody
+	@desc gives the options and wayPoints for the request body
+	@return {string} a string with the wayPoint coordinates, elevation param and language in JSON format
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetWayPointsAndOptions ( ) {
+	function myGetBody ( ) {
 		let wayPointsString = null;
 		myRoute.wayPoints.forEach (
 			wayPoint => {
@@ -138,10 +186,15 @@ function newOpenRouteServiceRouteProvider ( ) {
 
 	}
 
-	/*
-	--- myGetUrl function ---------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetUrl
+	@desc gives the url to call
+	@return {string} a string with the url and transitMode
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
@@ -163,10 +216,15 @@ function newOpenRouteServiceRouteProvider ( ) {
 		return requestString;
 	}
 
-	/*
-	--- myGetRequestHeaders function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetRequestHeaders
+	@desc gives the request headers
+	@return {Array.<object>} an with the needed request headers
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRequestHeaders ( ) {
@@ -187,12 +245,17 @@ function newOpenRouteServiceRouteProvider ( ) {
 		];
 	}
 
-	/*
-	--- myPostJsonPromise function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myPostXHRJsonPromise
+	@desc post request to OpenRouteService. Notice that, for openRouteService we need to perform a POST and
+	gives the API key in the request headers and  options and wayPoints in the body...
+	@param {string} url
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
 
-	-------------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myPostXHRJsonPromise ( url, requestHeaders, body ) {
@@ -243,24 +306,36 @@ function newOpenRouteServiceRouteProvider ( ) {
 		return new Promise ( jsonRequest );
 	}
 
-	/*
-	--- myGetRoute function -------------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetRoute
+	@desc call the provider, wait for the response and then parse the provider response
+	@param {function} onOk a function to pass to the myParseResponse
+	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetRoute ( onOk, onError ) {
 
-		myPostXHRJsonPromise ( myGetUrl ( ), myGetRequestHeaders ( ), myGetWayPointsAndOptions ( ) )
+		myPostXHRJsonPromise ( myGetUrl ( ), myGetRequestHeaders ( ), myGetBody ( ) )
 			.then ( response => myParseResponse ( response, onOk, onError ) )
 			.catch ( err => onError ( err ) );
-
 	}
 
-	/*
-	--- myGetPromiseRoute function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@function myGetPromiseRoute
+	@desc call the provider, wait for the response and then parse the provider response into the route itinerary object
+	@param {route} route a Route object with at least two WayPoints completed
+	@return a Promise completed with a function that call the provider, wait the response and then will parse the response
+	in the route itinerary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetPromiseRoute ( route ) {
@@ -269,10 +344,17 @@ function newOpenRouteServiceRouteProvider ( ) {
 		return new Promise ( myGetRoute );
 	}
 
-	/*
-	--- OpenRouteServiceRouteProvider object --------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	-------------------------------------------------------------------------------------------------------------------
+	@class OpenRouteServiceRouteProvider
+	@classdesc This class implements the Provider interface for OpenRouteService. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	return {
@@ -302,4 +384,8 @@ function newOpenRouteServiceRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newOpenRouteServiceRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewOpenRouteServiceRouteProvider ( ) );
+
+/*
+--- End of OpenRouteServiceRouteProvider.js file ------------------------------------------------------------------------------
+*/

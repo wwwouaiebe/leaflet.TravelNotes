@@ -1,5 +1,5 @@
 /*
-Copyright - 2017 - wwwouaiebe - Contact: http//www.ouaie.be/
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 
 This  program is free software;
 you can redistribute it and/or modify it under the terms of the
@@ -15,12 +15,49 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+Changes:
+	- v2.1.0:
+		- issue #150 : Merge travelNotes and plugins
+Doc reviewed ...
+Tests ...
+*/
 
-function newPolylineRouteProvider ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	const ZERO = 0;
-	const ONE = 1;
-	const TWO = 2;
+@file PolylineRouteProvider.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module PolylineRouteProvider
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { theGeometry } from '../util/Geometry.js';
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewPolylineRouteProvider
+@desc constructor for PolylineRouteProvider object
+@return {PolylineRouteProvider} an instance of PolylineRouteProvider object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourNewPolylineRouteProvider ( ) {
 
 	const LAT = 0;
 	const LNG = 1;
@@ -49,45 +86,16 @@ function newPolylineRouteProvider ( ) {
 		kEnd : 'kArriveDefault'
 	};
 
-	/*
-	--- myGetArcFromSummitArcArc function -------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function gives an arc of a spherical triangle when the 2 others ars and the opposite summit are know
-	It's the well know cosinus law
-	cos a = cos b cos c + sin b sin c cos A
-	cos b =	cos c cos a + sin c sin a cos B
-	cos c = cos a cos b + sin a sin b cos C
+	@function myAddManeuver
+	@desc Add a maneuver to the itinerary
+	@param {number} itineraryPointObjId the objId of the itineraryPoint linked to the maneuver
+	@param {string} position the position of the maneuver. Must be kStart or kEnd
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetArcFromSummitArcArc ( summit, arc1, arc2 ) {
-		return Math.acos (
-			( Math.cos ( arc1 ) * Math.cos ( arc2 ) ) +
-			( Math.sin ( arc1 ) * Math.sin ( arc2 ) * Math.cos ( summit ) )
-		);
-	}
-
-	/*
-	--- myGetSummitFromArcArcArc function -------------------------------------------------------------------------
-
-	This function is also the well know cosinus law written in an other way....
-	cos C = ( cos c - cos a cos b ) / sin a sin b
-
-	---------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetSummitFromArcArcArc ( arc1, arc2, oppositeArc ) {
-		return Math.acos (
-			( Math.cos ( oppositeArc ) - ( Math.cos ( arc1 ) * Math.cos ( arc2 ) ) ) /
-			( Math.sin ( arc1 ) * Math.sin ( arc2 ) )
-		);
-	}
-
-	/*
-	--- myAddManeuver function ------------------------------------------------------------------------------------
-
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddManeuver ( itineraryPointObjId, position ) {
@@ -106,10 +114,16 @@ function newPolylineRouteProvider ( ) {
 		myRoute.itinerary.maneuvers.add ( maneuver );
 	}
 
-	/*
-	--- myAddItineraryPoint function ------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myAddItineraryPoint
+	@desc Add a itineraryPoint to the itineraryPoints collection
+	@param {array.<number>} latLng the position of the itineraryPoint
+	@return {number} the objId of the new itineraryPoint
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddItineraryPoint ( latLng ) {
@@ -119,10 +133,16 @@ function newPolylineRouteProvider ( ) {
 		return itineraryPoint.objId;
 	}
 
-	/*
-	--- myAddIntermediateItineraryPoints function -----------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myAddIntermediateItineraryPoints
+	@desc this function add 64 intermediates points on a stuff of great circle
+	@param {WayPoint} startWayPoint the starting wayPoint
+	@param {WayPoint} endWayPoint the ending wayPoint
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
@@ -146,7 +166,7 @@ function newPolylineRouteProvider ( ) {
 				ONE;
 
 		// computing the distance
-		let angularDistance = myGetArcFromSummitArcArc (
+		let angularDistance = theGeometry.getArcFromSummitArcArc (
 			latLngEndPoint [ LNG ] - latLngStartPoint [ LNG ],
 			HALF_PI - latLngStartPoint [ LAT ],
 			HALF_PI - latLngEndPoint [ LAT ]
@@ -157,7 +177,7 @@ function newPolylineRouteProvider ( ) {
 		}
 
 		// and the direction at the start point
-		let direction = myGetSummitFromArcArcArc (
+		let direction = theGeometry.getSummitFromArcArcArc (
 			HALF_PI - latLngStartPoint [ LAT ],
 			angularDistance,
 			HALF_PI - latLngEndPoint [ LAT ]
@@ -171,14 +191,14 @@ function newPolylineRouteProvider ( ) {
 			let partialDistance = angularDistance * counter / addedSegments;
 
 			// computing the opposite arc to the start point
-			let tmpArc = myGetArcFromSummitArcArc (
+			let tmpArc = theGeometry.getArcFromSummitArcArc (
 				direction,
 				HALF_PI - latLngStartPoint [ LAT ],
 				partialDistance
 			);
 
 			// computing the lng
-			let deltaLng = myGetSummitFromArcArcArc (
+			let deltaLng = theGeometry.getSummitFromArcArcArc (
 				HALF_PI - latLngStartPoint [ LAT ],
 				tmpArc,
 				partialDistance
@@ -201,10 +221,14 @@ function newPolylineRouteProvider ( ) {
 		itineraryPoints.forEach ( itineraryPoint => myRoute.itinerary.itineraryPoints.add ( itineraryPoint ) );
 	}
 
-	/*
-	--- myParseGreatCircle function -------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------------------------------
+	@function myParseGreatCircle
+	@desc this function set a stuff of great circle as itinerary
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseGreatCircle ( ) {
@@ -253,12 +277,14 @@ function newPolylineRouteProvider ( ) {
 		}
 	}
 
-	/*
-	--- myParseCircle function ------------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseCircle
+	@desc this function set a circle as itinerary
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseCircle ( ) {
@@ -273,7 +299,7 @@ function newPolylineRouteProvider ( ) {
 			myRoute.wayPoints.last.lng * DEGREE_TO_RADIANS
 		];
 
-		let angularDistance = myGetArcFromSummitArcArc (
+		let angularDistance = theGeometry.getArcFromSummitArcArc (
 			centerPoint [ LNG ] - distancePoint [ LNG ],
 			HALF_PI - centerPoint [ LAT ],
 			HALF_PI - distancePoint [ LAT ]
@@ -287,13 +313,13 @@ function newPolylineRouteProvider ( ) {
 
 			let direction = ( Math.PI / ( TWO * addedSegments ) ) + ( ( Math.PI * counter ) / addedSegments );
 
-			let tmpArc = myGetArcFromSummitArcArc (
+			let tmpArc = theGeometry.getArcFromSummitArcArc (
 				direction,
 				angularDistance,
 				HALF_PI - centerPoint [ LAT ]
 			);
 
-			let deltaLng = myGetSummitFromArcArcArc (
+			let deltaLng = theGeometry.getSummitFromArcArcArc (
 				HALF_PI - centerPoint [ LAT ],
 				tmpArc,
 				angularDistance
@@ -327,12 +353,16 @@ function newPolylineRouteProvider ( ) {
 
 	}
 
-	/*
-	--- myParseResponse function ----------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myParseResponse
+	@desc Build a polyline (as stuff of a great circle) or a circle from the start and end wayPoints
+	@param {function} returnOnOk a function to call when the response is parsed correctly
+	@param {function} returnOnError a function to call when an error occurs
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myParseResponse ( returnOnOk, returnOnError ) {
@@ -358,12 +388,17 @@ function newPolylineRouteProvider ( ) {
 		catch ( err ) { returnOnError ( err ); }
 	}
 
-	/*
-	--- myGetPromiseRoute function --------------------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@function myGetPromiseRoute
+	@desc build a polyline or a circle into the route itinerary object
+	@param {route} route a Route object with at least two WayPoints completed
+	@return a Promise completed with a function that build a polyline or a circle in the itinerary
+	in the route itinerary
+	@private
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetPromiseRoute ( route ) {
@@ -371,12 +406,17 @@ function newPolylineRouteProvider ( ) {
 		return new Promise ( myParseResponse );
 	}
 
-	/*
-	--- PolylineRouteProvider object function ---------------------------------------------------------------------
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
 
-	This function ...
+	@class PolylineRouteProvider
+	@classdesc This class implements the Provider interface for a Polyline. It's not possible to instanciate
+	this class because the class is not exported from the module. Only one instance is created and added to the list
+	of Providers of TravelNotes
+	@see Provider for a description of methods
+	@hideconstructor
 
-	---------------------------------------------------------------------------------------------------------------
+	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
 	return {
@@ -402,4 +442,8 @@ function newPolylineRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( newPolylineRouteProvider ( ) );
+window.L.travelNotes.addProvider ( ourNewPolylineRouteProvider ( ) );
+
+/*
+--- End of PolylineRouteProvider.js file --------------------------------------------------------------------------------------
+*/
