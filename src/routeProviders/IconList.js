@@ -1,4 +1,4 @@
-let ourIconList =
+export const ICON_LIST = Object.freeze (
 	{
 		turn : {
 			default : 'kUndefined',
@@ -131,6 +131,5 @@ let ourIconList =
 		default : {
 			default : 'kUndefined'
 		}
-	};
-
-export { ourIconList as theIconList };
+	}
+);

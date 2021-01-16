@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
+import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function newOpenRouteServiceRouteProvider ( ) {

@@ -15,42 +15,23 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-/*
-Changes:
-	- v2.1.0:
-		- Created from leaflet.TravelNotesMapbox
-Doc reviewed ...
-Tests ...
 
------------------------------------------------------------------------------------------------------------------------
-*/
+import { thePolylineEncoder } from '../util/PolylineEncoder.js';
+import { osrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
+import { ICON_LIST } from '../routeProviders/IconList.js';
+import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+function newOSRMRouteProvider ( ) {
 
-@file MapboxRouteProvider.js
-@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
-@license GNU General Public License
-@private
+	const OSRM_ROUTE_LAT_LNG_ROUND = 6;
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
-import { osrmTextInstructions } from '../providersUtil/OsrmTextInstructions.js';
-import { theIconList } from '../providersUtil/IconList.js';
-import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
-
-function newMapboxRouteProvider ( ) {
-
-	const MAPBOX_LAT_LNG_ROUND = 6;
-
-	let myProviderKey = '';
 	let myUserLanguage = 'fr';
 	let myRoute = null;
 
 	/*
 	--- myParseResponse function ----------------------------------------------------------------------------------
+
+	This function ...
 
 	---------------------------------------------------------------------------------------------------------------
 	*/
@@ -70,35 +51,26 @@ function newMapboxRouteProvider ( ) {
 		myRoute.itinerary.hasProfile = false;
 		myRoute.itinerary.ascent = ZERO;
 		myRoute.itinerary.descent = ZERO;
+
 		response.routes [ ZERO ].geometry =
-			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, MAPBOX_LAT_LNG_ROUND, false );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
+
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = thePolylineEncoder.decode ( step.geometry, MAPBOX_LAT_LNG_ROUND, false );
-						if (
-							'arrive' === step.maneuver.type
-							&&
-							TWO === step.geometry.length
-							&&
-							step.geometry [ ZERO ] [ ZERO ] === step.geometry [ ONE ] [ ZERO ]
-							&&
-							step.geometry [ ZERO ] [ ONE ] === step.geometry [ ONE ] [ ONE ]
-						) {
-							step.geometry.pop ( );
-						}
+						step.geometry = thePolylineEncoder.decode ( step.geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
 
 						let maneuver = window.L.travelNotes.maneuver;
 						maneuver.iconName =
-							theIconList [ step.maneuver.type ]
+							ICON_LIST [ step.maneuver.type ]
 								?
-								theIconList [ step.maneuver.type ] [ step.maneuver.modifier ]
+								ICON_LIST [ step.maneuver.type ] [ step.maneuver.modifier ]
 								||
-								theIconList [ step.maneuver.type ] [ 'default' ]
+								ICON_LIST [ step.maneuver.type ] [ 'default' ]
 								:
-								theIconList [ 'default' ] [ 'default' ];
+								ICON_LIST [ 'default' ] [ 'default' ];
 
 						maneuver.instruction = osrmTextInstructions.compile ( myUserLanguage, step );
 						maneuver.duration = step.duration;
@@ -154,10 +126,13 @@ function newMapboxRouteProvider ( ) {
 	/*
 	--- myGetUrl function -----------------------------------------------------------------------------------------
 
+	This function ...
+
 	---------------------------------------------------------------------------------------------------------------
 	*/
 
 	function myGetUrl ( ) {
+
 		let wayPointsString = null;
 		myRoute.wayPoints.forEach (
 			wayPoint => {
@@ -168,26 +143,27 @@ function newMapboxRouteProvider ( ) {
 			}
 		);
 
-		let profile = '';
+		// openstreetmap.de server
+		let transitModeString = '';
 		switch ( myRoute.itinerary.transitMode ) {
 		case 'car' :
-			profile = 'mapbox/driving/';
+			transitModeString = 'routed-car';
 			break;
 		case 'bike' :
-			profile = 'mapbox/cycling/';
+			transitModeString = 'routed-bike';
 			break;
 		case 'pedestrian' :
-			profile = 'mapbox/walking/';
+			transitModeString = 'routed-foot';
 			break;
 		default :
 			console.log ( 'invalid transitMode' );
 			return;
 		}
-		return 'https://api.mapbox.com/directions/v5/' +
-			profile +
+		return 'https://routing.openstreetmap.de/' +
+			transitModeString +
+			'/route/v1/driving/' +
 			wayPointsString +
-			'?geometries=polyline6&overview=full&steps=true&annotations=distance&access_token=' +
-			myProviderKey;
+			'?geometries=polyline6&overview=full&steps=true&annotations=distance';
 	}
 
 	/*
@@ -227,27 +203,37 @@ function newMapboxRouteProvider ( ) {
 		getPromiseRoute : route => myGetPromiseRoute ( route ),
 		get icon ( ) {
 			return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
-					MAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AocEwcBrMn63AAAAk1JREFUSMftlj9oU1EUxn8neQ0thE6lgpO1TiptHhShJiIu2qHJA6\
-					FudtBRUBcpouJUnRyqgpODVcG62LROHfzHexGiJWkEQbCr0IqVYKPStDkOpuYRfW1eTNCh33Tvufec717udz8ObOFfITqV3XA9Nj\
-					n3W+xAMuO7pnhs7AQiwCqwpvBNVN47Vu8SQDSZwbFMqsexyUyHinQjtAEBwACyTiKyWM1heBzyMHDXdbplRCeiyexVCei8HTfpf5\
-					gCwLFM9k/lEF3bpSIXgWNAm6vWceBercQrVfMwcBKhvVRcOwEst2zbXlldXQljGFeAoRpqbUjshSExgo9iM6kHLw7uUIDYTEr0ez\
-					DuQeoJw7/8ZLRUCD/ZNz6/AFAqFDolWBr1WyVQh/C7JKgj6eFu0sPdSFBHgC6/RWq7sbCI0g60/gzoqWhy7v762LXzC/AR2NmQG6\
-					tyE3jnCoUQHUN0DAi54m+BGw27sUAGyAOjZYUD9Fdty4vqLRX51Mg3bnUSkevAm6rc9XwFXtuWeafyHI0hDgCI6AXg8x/WlwTO+6\
-					npS9V23HwKJMtW+ss+FCbsRORVU79TMdByFlhwhT60hELnmvqP+6dzpAf35BG9DBSBoqheej6w+2vsca55xC/jPei04sTN20AKsG\
-					3LHN87cg17sKe5ztXHbFnHclrgDEDHwFGa41wuzMb7iCbncKzeHEBsKsuzQ74dsy6vxrF6K0pPROrqdOoibgT+O+LQJvONUFOul7\
-					hmgCNlhzKArA/i+nK92tvN2t6/zd1C0/ADiOy3l0UZHxAAAAAASUVORK5CYII=';
+					MAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4QkaDwEMOImNWgAABTZJREFUSMftl21sFEUYx3+zu3ft9a7Q0tIXoKUCIkIVeYsECmgbBK\
+					IIEVC0QEs0UIEghA+CEkkIaCyJBhFBBC00qHxoQClvhgLyEonyckhbFKS90iK0FAqFHr273R0/XNlCymEREr44X3by7DPzm5n9z8\
+					x/hZRS8giKwiMqjwys3U/y/pIqdh0tp8RTS229F0yIaxtBz+R2jOjfhSFPJbW6L9Gab/zFdjfv5x/k2g0f4TYVISUCEJKmp8QfMG\
+					jjsLNoShozxvR7MHD1VS+D53+Pp/oqmqJYoEBAxzQlQoKmCMJUJTgAwDQkye0j2f1JJvHRzvsH/3m+jqfn5IOUICWGYZIY5WTScz\
+					1J751EYjsXArh45QZ73BV8W1RC7VUvNkVBEBzUoZXZPJEc03rwhboGkqettWYopeSb2SPIHPbkPZfvu6JSZizfidIExpQU5+eQ0M\
+					7VOnDS9LVcvNKAkBDtDOf35ZOIj3K2SjSXrnoZNDOPuvqbCCA+yklxfs6/g3O3HOXd/ANoikCakvPrphEfFWG9P1R6ni+3n6Ck4h\
+					JI6JUcS/YLqaQ/09nKuVx/kx6TVoGUmIZkYVYac18beG+wfeLnGIaBqZtseGckk59rXt7xH/5IwaHTRNjVO1Tt8wcY1b8rWxaPs3\
+					J/OHiarKVbsKkqqoCLW+eFPkB2uD0EfAEAOsa67oC+tHgzW387iyNMQ0qJ1xfA6wsgpSTcprHX7eHFBZus/DFp3XksMRoAX0Bn16\
+					9nQ4N3HT+H0FQApqb3suLbj5Sx7UgZihA0Bgxmje5HeV4Ong05zB7bn8aAjhCCfSfOUfjLGatd5vBUkGDXVPYeKQ8NdldcCu7FgM\
+					HIPilWfMU2N2E2FVNK3pvwLLlvDqNzXBuS2rdh6dShfJCZhikldpvKmkK31e75vin4AjoAxWU1ocHV17zBimnS4bYtcKysGgC/T2\
+					feK/1bKHTu+AF4G4OfyH2m2oonxrgwTGmpPSRYms11VRFWPaA3vZCSMFvL4z3MpnFLorrZ3IkixG19y9DgmMjwWy34+0qDFe/RqR\
+					0AtjAbeUXFLcAbfjpJRHhwQI835QJU1zVYE4hqEx4anJocAwKEprK3uNKKZ6X3wjAlqiKYvXoP63c3wzfuKWHGil2oioJhSt7IaB\
+					bl/hPnsNuCYu2ZEhd6Hxcc/ovxuYUoqqB7QhSnVmRZid1z1lFZcx0BGLqB36+DBIddw6YKhITEaCen8qZbbQbmfE1ZVR2GYbBuwc\
+					uMHdrj7jMeN7CbVf+j8jI7jnmaBfbpZDrEuDClRFMVnA47LocdTVUwTUlctJPDK7Ot/KKj5ZSW1yIBw5R3QO/qQOaN7QcSNJvKq8\
+					sKaWhSq8th5+xXb7F40mA6xUbScNPPDa+fjjGRLMwczOm86bR1hgFw06eT/dFWwuzBZZ45bkDrLglX5kp8fh0hITk2kpOfTcFhb5\
+					1ZafTrDJqZx7mL1xAED4+qzXMQrfFcB5ZMQPcbAFTWXichazU/3ya2UOVQcRXdMldRUX0teFT6DQo/ntgCek8jsPO4h1GLCrDbNZ\
+					ASv1+nX9d4sjJSyeidREJ00AhcqGtgn7uCjUUlHDt9AYdNQyDx+XQKlkxgxIAu9299jpbVMGT+JgzDsG4j2TQIacqgFhRBuKagCm\
+					HlaIpgZ+7r9O2e8N/NXsAwmbVmD2u2ubFpKpoiWpo9JNIIGr63R/dhWU4Gmqo8uMsE8OsG64tK2X3cQ7Gnhsv1jShS0L5tOL2SY8\
+					jok8Lk4anYm263h2Jv//+FeRjlHxKxS4in4X1YAAAAAElFTkSuQmCC';
 		},
-		get name ( ) { return 'Mapbox'; },
+		get name ( ) { return 'OSRM'; },
 
 		get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; },
-		get providerKeyNeeded ( ) { return true; },
+		get providerKeyNeeded ( ) { return false; },
 
-		get providerKey ( ) { return myProviderKey.length; },
-		set providerKey ( ProviderKey ) { myProviderKey = ProviderKey; },
+		get providerKey ( ) { return ONE; },
+		set providerKey ( ProviderKey ) { },
 
 		get userLanguage ( ) { return myUserLanguage; },
 		set userLanguage ( UserLanguage ) { myUserLanguage = UserLanguage; }
 	};
 }
 
-window.L.travelNotes.addProvider ( newMapboxRouteProvider ( ) );
+window.L.travelNotes.addProvider ( newOSRMRouteProvider ( ) );

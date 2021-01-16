@@ -45,7 +45,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { thePolylineEncoder } from '../polyline/PolylineEncoder.js';
+import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newTravel } from '../data/Travel.js';
 import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';

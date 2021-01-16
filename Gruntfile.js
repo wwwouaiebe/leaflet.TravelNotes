@@ -41,13 +41,13 @@ module.exports = function(grunt) {
 				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
 				  'tmp/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
 				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js'],			  
-				  'tmp/GraphHopperRouteProvider.min.js': ['src/graphHopperRouteProvider/GraphHopperRouteProvider.js'],			  
-				  'tmp/MapboxRouteProvider.min.js': ['src/mapboxRouteProvider/MapboxRouteProvider.js'],			  
-				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/mapzenValhallaRouteProvider/MapzenValhallaRouteProvider.js'],			  
-				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/openRouteServiceRouteProvider/OpenRouteServiceRouteProvider.js'],				  
-				  'tmp/OSRMRouteProvider.min.js': ['src/osrmRouteProvider/OSRMRouteProvider.js'],				  
-				  'tmp/PolylineRouteProvider.min.js': ['src/polylineRouteProvider/PolylineRouteProvider.js'],				  
-				  'tmp/PublicTransportRouteProvider.min.js': ['src/publicTransportRouteProvider/PublicTransportRouteProvider.js']				  
+				  'tmp/GraphHopperRouteProvider.min.js': ['src/routeProviders/GraphHopperRouteProvider.js'],			  
+				  'tmp/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
+				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
+				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
+				  'tmp/OSRMRouteProvider.min.js': ['src/routeProviders/OSRMRouteProvider.js'],				  
+				  'tmp/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
+				  'tmp/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
 				}
 			}
 		},
