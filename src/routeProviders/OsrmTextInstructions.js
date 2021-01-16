@@ -54,9 +54,11 @@ Don't rename variables for compatibility with osrm-text-instructions
 import { ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /*
-Possible language supported:
+Possible language supported by osrm-text-instructions:
 'ar', 'da', 'de', 'en', 'eo', 'es', 'es-ES', 'fi', 'fr', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'my',
 'nl', 'no', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sl', 'sv', 'tr', 'uk', 'vi', 'yo', 'zh-Hans';
+
+TravelNotes uses only 'en' and 'fr'. If needed add others languages to supported codes
 */
 
 let languages =
@@ -67,11 +69,94 @@ let languages =
 	abbreviations : {}
 };
 
+// working only with v5
+const version = 'v5';
+
+// reference to avoid rewriting ourOsrmTextInstructions
+let instructions = languages.instructions;
+let grammars = languages.grammars;
+let abbreviations = languages.abbreviations;
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourVerifyLanguage
+@desc simple function to verify that the language is loaded and avoid crashes
+@param {string} language  the language to test
+@return {string} the verified language or 'en' if language not loaded
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourVerifyLanguage ( language ) {
+	return ( ! language || NOT_FOUND === languages.supportedCodes.indexOf ( language ) ) ? 'en' : language;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourDirectionFromDegree
+@desc new version of the OsrmTextInstructions.directionFromDegree ( ) method
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourDirectionFromDegree ( lng, degree ) {
+	const NNE = 20;
+	const ENE = 70;
+	const ESE = 110;
+	const SSE = 160;
+	const SSW = 200;
+	const WSW = 250;
+	const WNW = 290;
+	const NNW = 340;
+	const NORTH = 360;
+
+	let language = ourVerifyLanguage ( lng );
+	if ( ! degree && ZERO !== degree ) {
+		return '';
+	}
+	else if ( ZERO > degree && NORTH < degree ) {
+		throw new Error ( 'Degree ' + degree + ' invalid' );
+	}
+	else if ( NNE >= degree ) {
+		return instructions[ language ][ version ].constants.direction.north;
+	}
+	else if ( ENE > degree ) {
+		return instructions[ language ][ version ].constants.direction.northeast;
+	}
+	else if ( ESE >= degree ) {
+		return instructions[ language ][ version ].constants.direction.east;
+	}
+	else if ( SSE > degree ) {
+		return instructions[ language ][ version ].constants.direction.southeast;
+	}
+	else if ( SSW >= degree ) {
+		return instructions[ language ][ version ].constants.direction.south;
+	}
+	else if ( WSW > degree ) {
+		return instructions[ language ][ version ].constants.direction.southwest;
+	}
+	else if ( WNW >= degree ) {
+		return instructions[ language ][ version ].constants.direction.west;
+	}
+	else if ( NNW > degree ) {
+		return instructions[ language ][ version ].constants.direction.northwest;
+	}
+	else {
+		return instructions[ language ][ version ].constants.direction.north;
+	}
+}
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourLoadJsons
-@desc load the instructions grammars and instructions from the json files
+@desc load the instructions grammars and abbreviations from the json files. Json files are installed by grunt.js from
+node_modules.
+Warning! folders are renamed by grunt.js to avoid multiple fetchJson and parseJson methods
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,11 +171,12 @@ function ourLoadJsons ( ) {
 
 	async function fetchJson ( data, lngCode ) {
 		await fetch ( 'TravelNotesProviders/languages/' + data + '/' + lngCode + '.json' )
-			.then ( response => {
-				if ( HTTP_STATUS_OK === response.status && response.ok ) {
-					parseJson ( data, lngCode, response );
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						parseJson ( data, lngCode, response );
+					}
 				}
-			}
 			);
 	}
 
@@ -105,71 +191,31 @@ function ourLoadJsons ( ) {
 
 ourLoadJsons ( );
 
-const version = 'v5';
-let instructions = languages.instructions;
-let grammars = languages.grammars;
-let abbreviations = languages.abbreviations;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsrmTextInstructions
+@classdesc This class contains methods to write / translate moneuver instructions in MapboxRouteProvider and OsrmRouteProvider
+@see {@link theOsrmTextInstructions} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 const ourOsrmTextInstructions = Object.freeze (
 	{
-		capitalizeFirstLetter : function ( language, string ) {
+		capitalizeFirstLetter : function ( lng, string ) {
+			let language = ourVerifyLanguage ( lng );
 			return string.charAt ( ZERO ).toLocaleUpperCase ( language ) + string.slice ( ONE );
 		},
 
-		ordinalize : function ( language, number ) {
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
+		ordinalize : function ( lng, number ) {
+			let language = ourVerifyLanguage ( lng );
 			return instructions[ language ][ version ].constants.ordinalize[ number.toString () ] || '';
 		},
 
-		directionFromDegree : function ( language, degree ) {
-			const NNE = 20;
-			const ENE = 70;
-			const ESE = 110;
-			const SSE = 160;
-			const SSW = 200;
-			const WSW = 250;
-			const WNW = 290;
-			const NNW = 340;
-			const NORTH = 360;
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
-			if ( ! degree && ZERO !== degree ) {
-				return '';
-			}
-			else if ( ZERO > degree && NORTH < degree ) {
-				throw new Error ( 'Degree ' + degree + ' invalid' );
-			}
-			else if ( NNE >= degree ) {
-				return instructions[ language ][ version ].constants.direction.north;
-			}
-			else if ( ENE > degree ) {
-				return instructions[ language ][ version ].constants.direction.northeast;
-			}
-			else if ( ESE >= degree ) {
-				return instructions[ language ][ version ].constants.direction.east;
-			}
-			else if ( SSE > degree ) {
-				return instructions[ language ][ version ].constants.direction.southeast;
-			}
-			else if ( SSW >= degree ) {
-				return instructions[ language ][ version ].constants.direction.south;
-			}
-			else if ( WSW > degree ) {
-				return instructions[ language ][ version ].constants.direction.southwest;
-			}
-			else if ( WNW >= degree ) {
-				return instructions[ language ][ version ].constants.direction.west;
-			}
-			else if ( NNW > degree ) {
-				return instructions[ language ][ version ].constants.direction.northwest;
-			}
-			else {
-				return instructions[ language ][ version ].constants.direction.north;
-			}
-
+		directionFromDegree : function ( lng, degree ) {
+			return ourDirectionFromDegree ( lng, degree );
 		},
 
 		laneConfig : function ( step ) {
@@ -193,14 +239,12 @@ const ourOsrmTextInstructions = Object.freeze (
 		},
 
 		/* eslint-disable-next-line complexity */
-		getWayName : function ( language, step, options ) {
+		getWayName : function ( lng, step, options ) {
 			let classes = options ? options.classes || [] : [];
 			if ( 'object' !== typeof step ) {
 				throw new Error ( 'step must be an Object' );
 			}
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
+			let language = ourVerifyLanguage ( lng );
 			if ( ! Array.isArray ( classes ) ) {
 				throw new Error ( 'classes must be an Array or undefined' );
 			}
@@ -233,13 +277,8 @@ const ourOsrmTextInstructions = Object.freeze (
 		},
 
 		/* eslint-disable-next-line complexity, max-statements */
-		compile : function ( language, step, opts ) {
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
-			if ( NOT_FOUND === languages.supportedCodes.indexOf ( language ) ) {
-				throw new Error ( 'language code ' + language + ' not loaded' );
-			}
+		compile : function ( lng, step, opts ) {
+			let language = ourVerifyLanguage ( lng );
 			if ( ! step.maneuver ) {
 				throw new Error ( 'No step maneuver provided' );
 			}
@@ -254,6 +293,7 @@ const ourOsrmTextInstructions = Object.freeze (
 			if ( 'depart' !== type && 'arrive' !== type && ! modifier ) {
 				throw new Error ( 'Missing step maneuver modifier' );
 			}
+			console.log ( 'language ' + language );
 			if ( ! instructions[ language ][ version ][ type ] ) {
 				/* eslint-disable-next-line no-console */
 				console.log ( 'Encountered unknown instruction type: ' + type );
@@ -351,10 +391,8 @@ const ourOsrmTextInstructions = Object.freeze (
 			return this.tokenize ( language, instruction, replaceTokens, options );
 		},
 
-		grammarize : function ( language, nameToProceed, grammar ) {
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
+		grammarize : function ( lng, nameToProceed, grammar ) {
+			let language = ourVerifyLanguage ( lng );
 			if ( grammar && grammars && grammars[ language ] && grammars[ language ][ version ] ) {
 				let rules = grammars[ language ][ version ][ grammar ];
 				if ( rules ) {
@@ -374,10 +412,8 @@ const ourOsrmTextInstructions = Object.freeze (
 		abbreviations : abbreviations,
 
 		/* eslint-disable-next-line max-params */
-		tokenize : function ( language, instruction, tokens, options ) {
-			if ( ! language ) {
-				throw new Error ( 'No language code provided' );
-			}
+		tokenize : function ( lng, instruction, tokens, options ) {
+			let language = ourVerifyLanguage ( lng );
 			let that = this;
 			let startedWithToken = false;
 			let output = instruction.replace (
