@@ -37,7 +37,7 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { osrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
+import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
@@ -100,7 +100,7 @@ function newMapboxRouteProvider ( ) {
 								:
 								ICON_LIST [ 'default' ] [ 'default' ];
 
-						maneuver.instruction = osrmTextInstructions.compile ( myUserLanguage, step );
+						maneuver.instruction = theOsrmTextInstructions.compile ( myUserLanguage, step );
 						maneuver.duration = step.duration;
 						let distance = ZERO;
 						for (

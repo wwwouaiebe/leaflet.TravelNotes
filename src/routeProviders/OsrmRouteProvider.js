@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { osrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
+import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
@@ -72,7 +72,7 @@ function newOSRMRouteProvider ( ) {
 								:
 								ICON_LIST [ 'default' ] [ 'default' ];
 
-						maneuver.instruction = osrmTextInstructions.compile ( myUserLanguage, step );
+						maneuver.instruction = theOsrmTextInstructions.compile ( myUserLanguage, step );
 						maneuver.duration = step.duration;
 						let distance = ZERO;
 						for (

@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 				  'tmp/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
 				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
 				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
-				  'tmp/OSRMRouteProvider.min.js': ['src/routeProviders/OSRMRouteProvider.js'],				  
+				  'tmp/OsrmRouteProvider.min.js': ['src/routeProviders/OsrmRouteProvider.js'],				  
 				  'tmp/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
 				  'tmp/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
 				}
@@ -95,7 +95,7 @@ module.exports = function(grunt) {
 					'dist/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmp/MapboxRouteProvider.min.js'],			  
 					'dist/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmp/MapzenValhallaRouteProvider.min.js'],			  
 					'dist/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmp/OpenRouteServiceRouteProvider.min.js'],				  
-					'dist/TravelNotesProviders/OSRMRouteProvider.min.js': ['tmp/OSRMRouteProvider.min.js'],				  
+					'dist/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmp/OsrmRouteProvider.min.js'],				  
 					'dist/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmp/PolylineRouteProvider.min.js'],				  
 					'dist/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmp/PublicTransportRouteProvider.min.js'],
 					'gh-page/TravelNotes.min.js': ['tmp/TravelNotes.min.js'],
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
 					'gh-page/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmp/MapboxRouteProvider.min.js'],			  
 					'gh-page/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmp/MapzenValhallaRouteProvider.min.js'],			  
 					'gh-page/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmp/OpenRouteServiceRouteProvider.min.js'],				  
-					'gh-page/TravelNotesProviders/OSRMRouteProvider.min.js': ['tmp/OSRMRouteProvider.min.js'],				  
+					'gh-page/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmp/OsrmRouteProvider.min.js'],				  
 					'gh-page/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmp/PolylineRouteProvider.min.js'],				  
 					'gh-page/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmp/PublicTransportRouteProvider.min.js']				  
 				}
