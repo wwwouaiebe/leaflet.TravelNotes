@@ -75,6 +75,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line max-statements */
 function ourNewAPIKeysDialog ( APIKeys ) {
 
 	/**

@@ -192,7 +192,8 @@ const ourOsrmTextInstructions = Object.freeze (
 			return config.join ( '' );
 		},
 
-		getWayName : function ( language, step, options ) { // eslint-disable-line complexity
+		/* eslint-disable-next-line complexity */
+		getWayName : function ( language, step, options ) {
 			let classes = options ? options.classes || [] : [];
 			if ( 'object' !== typeof step ) {
 				throw new Error ( 'step must be an Object' );
@@ -231,7 +232,8 @@ const ourOsrmTextInstructions = Object.freeze (
 			return wayName;
 		},
 
-		compile : function ( language, step, opts ) { // eslint-disable-line complexity, max-statements
+		/* eslint-disable-next-line complexity, max-statements */
+		compile : function ( language, step, opts ) {
 			if ( ! language ) {
 				throw new Error ( 'No language code provided' );
 			}
@@ -253,7 +255,8 @@ const ourOsrmTextInstructions = Object.freeze (
 				throw new Error ( 'Missing step maneuver modifier' );
 			}
 			if ( ! instructions[ language ][ version ][ type ] ) {
-				console.log ( 'Encountered unknown instruction type: ' + type ); // eslint-disable-line no-console
+				/* eslint-disable-next-line no-console */
+				console.log ( 'Encountered unknown instruction type: ' + type );
 				type = 'turn';
 			}
 			let instructionObject = null;
@@ -329,16 +332,21 @@ const ourOsrmTextInstructions = Object.freeze (
 					:
 					'';
 			let replaceTokens = {
-				way_name : wayName, // eslint-disable-line camelcase
+				/* eslint-disable-next-line camelcase */
+				way_name : wayName,
 				destination : firstDestination,
 				exit : ( step.exits || '' ).split ( ';' )[ ZERO ],
-				exit_number : this.ordinalize ( language, step.maneuver.exit || ONE ), // eslint-disable-line camelcase
-				rotary_name : step.rotary_name, // eslint-disable-line camelcase
-				lane_instruction : laneInstruction, // eslint-disable-line camelcase
+				/* eslint-disable-next-line camelcase */
+				exit_number : this.ordinalize ( language, step.maneuver.exit || ONE ),
+				/* eslint-disable-next-line camelcase */
+				rotary_name : step.rotary_name,
+				/* eslint-disable-next-line camelcase */
+				lane_instruction : laneInstruction,
 				modifier : instructions[ language ][ version ].constants.modifier[ modifier ],
 				direction : this.directionFromDegree ( language, step.maneuver.bearing_after ),
 				nth : nthWaypoint,
-				waypoint_name : options.waypointName // eslint-disable-line camelcase
+				/* eslint-disable-next-line camelcase */
+				waypoint_name : options.waypointName
 			};
 			return this.tokenize ( language, instruction, replaceTokens, options );
 		},
@@ -365,14 +373,16 @@ const ourOsrmTextInstructions = Object.freeze (
 
 		abbreviations : abbreviations,
 
-		tokenize : function ( language, instruction, tokens, options ) { // eslint-disable-line max-params
+		/* eslint-disable-next-line max-params */
+		tokenize : function ( language, instruction, tokens, options ) {
 			if ( ! language ) {
 				throw new Error ( 'No language code provided' );
 			}
 			let that = this;
 			let startedWithToken = false;
 			let output = instruction.replace (
-				/\{(\w+)(?::(\w+))?\}/g, function ( token, tag, grammar, offset ) { // eslint-disable-line max-params
+				/* eslint-disable-next-line max-params */
+				/\{(\w+)(?::(\w+))?\}/g, function ( token, tag, grammar, offset ) {
 					let value = tokens[ tag ];
 					if ( 'undefined' === typeof value ) {
 						return token;

@@ -43,8 +43,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint no-bitwise: "off" */
-
 import { ZERO, ONE } from '../util/Constants.js';
 
 const OUR_NUMBER5 = 5;
@@ -81,6 +79,7 @@ function ourPython2Round ( value ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable no-bitwise */
 function ourEncode ( current, previous, factor ) {
 	let currentRound = ourPython2Round ( current * factor );
 	let previousRound = ourPython2Round ( previous * factor );
@@ -97,6 +96,7 @@ function ourEncode ( current, previous, factor ) {
 	output += String.fromCharCode ( coordinate + OUR_NUMBER63 );
 	return output;
 }
+/* eslint-enable no-bitwise */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -223,6 +223,7 @@ class polylineEncoder {
 		let coordinates = [];
 		let factor = Math.pow ( OUR_NUMBER10, precision );
 
+		/* eslint-disable no-bitwise */
 		while ( index < encodedString.length ) {
 			let byte = null;
 			let shift = ZERO;
@@ -261,6 +262,7 @@ class polylineEncoder {
 				coordinates.push ( [ lat / factor, lng / factor ] );
 			}
 		}
+		/* eslint-enable no-bitwise */
 
 		return coordinates;
 	}

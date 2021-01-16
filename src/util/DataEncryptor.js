@@ -43,9 +43,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint no-magic-numbers: "off" */
-/* eslint max-params: ["warn", 4] */
-
 function ourDataEncryptor ( ) {
 
 	function myImportKey ( pswd ) {
@@ -57,6 +54,8 @@ function ourDataEncryptor ( ) {
 			[ 'deriveKey' ]
 		);
 	}
+
+	/* eslint-disable no-magic-numbers */
 
 	function myDeriveKey ( deriveKey ) {
 		return window.crypto.subtle.deriveKey (
@@ -78,6 +77,7 @@ function ourDataEncryptor ( ) {
 		);
 	}
 
+	/* eslint-disable-next-line max-params */
 	function myDecryptData ( data, onOk, onError, pswdPromise ) {
 		function decrypt ( decryptKey ) {
 			return window.crypto.subtle.decrypt (
@@ -97,6 +97,7 @@ function ourDataEncryptor ( ) {
 			.catch ( onError );
 	}
 
+	/* eslint-disable-next-line max-params */
 	function myEncryptData ( data, onOk, onError, pswdPromise ) {
 		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
 		function encrypt ( encryptKey ) {
@@ -124,6 +125,7 @@ function ourDataEncryptor ( ) {
 			.then ( returnValue )
 			.catch ( onError );
 	}
+	/* eslint-enable no-magic-numbers */
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -145,6 +147,7 @@ function ourDataEncryptor ( ) {
 		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
 		*/
 
+		/* eslint-disable-next-line max-params */
 		encryptData ( data, onOk, onError, pswdPromise ) { myEncryptData ( data, onOk, onError, pswdPromise ); }
 
 		/**
@@ -154,6 +157,7 @@ function ourDataEncryptor ( ) {
 		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
 		*/
 
+		/* eslint-disable-next-line max-params */
 		decryptData ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
 	}
 	return Object.freeze ( new DataEncryptor );

@@ -89,6 +89,7 @@ let ourRequestStarted = false;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line max-statements */
 function ourNewSvgIconFromOsmFactory ( ) {
 
 	const DEGREE_0 = 0;

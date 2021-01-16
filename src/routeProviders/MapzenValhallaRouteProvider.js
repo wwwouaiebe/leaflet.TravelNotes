@@ -135,8 +135,10 @@ function newMapzenValhallaRouteProvider ( ) {
 		let request = {
 			locations : [],
 			costing : '',
-			directions_options : { language : myUserLanguage },  // eslint-disable-line
-			costing_options : {} // eslint-disable-line
+			/* eslint-disable-next-line camelcase */
+			directions_options : { language : myUserLanguage },
+			/* eslint-disable-next-line camelcase */
+			costing_options : {}
 		};
 
 		let wayPointsIterator = myRoute.wayPoints.iterator;
@@ -154,24 +156,32 @@ function newMapzenValhallaRouteProvider ( ) {
 		switch ( myRoute.itinerary.transitMode ) {
 		case 'bike' :
 			request.costing = 'bicycle';
-			request.costing_options = {  // eslint-disable-line
+			/* eslint-disable-next-line camelcase */
+			request.costing_options = {
 				bicycle : {
-					maneuver_penalty : MANEUVER_PENALTY,  // eslint-disable-line
-					bicycle_type : 'Cross',  // eslint-disable-line
-					cycling_speed : '20.0',  // eslint-disable-line
-					use_roads : '0.25',  // eslint-disable-line
-					use_hills : '0.25'  // eslint-disable-line
+					/* eslint-disable-next-line camelcase */
+					maneuver_penalty : MANEUVER_PENALTY,
+					/* eslint-disable-next-line camelcase */
+					bicycle_type : 'Cross',
+					/* eslint-disable-next-line camelcase */
+					cycling_speed : '20.0',
+					/* eslint-disable-next-line camelcase */
+					use_roads : '0.25',
+					/* eslint-disable-next-line camelcase */
+					use_hills : '0.25'
 				}
 			};
 
 			break;
 		case 'pedestrian' :
 			request.costing = 'pedestrian';
-			request.costing_options = { pedestrian : { walking_speed : '4.0' } };  // eslint-disable-line
+			/* eslint-disable-next-line camelcase */
+			request.costing_options = { pedestrian : { walking_speed : '4.0' } };
 			break;
 		case 'car' :
 			request.costing = 'auto';
-			request.costing_options = { auto : { country_crossing_cost : '60' } };  // eslint-disable-line
+			/* eslint-disable-next-line camelcase */
+			request.costing_options = { auto : { country_crossing_cost : '60' } };
 			break;
 		default :
 			break;

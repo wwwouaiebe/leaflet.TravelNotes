@@ -70,7 +70,8 @@ function newGraphHopperRouteProvider ( ) {
 		response.paths.forEach (
 			path => {
 				path.points = thePolylineEncoder.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, true );
-				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true ); // eslint-disable-line
+				/* eslint-disable-next-line camelcase */
+				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true );
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 					let itineraryPoint = window.L.travelNotes.itineraryPoint;

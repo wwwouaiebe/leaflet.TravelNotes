@@ -54,8 +54,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint complexity: ["warn", 45]*/
-
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, ONE } from '../util/Constants.js';
 
@@ -85,6 +83,8 @@ the attributions of OpenStreetMap because they are always present in Travel & No
 */
 
 class Layer	{
+
+	/* eslint-disable-next-line complexity, max-statements */
 	constructor ( jsonLayer ) {
 		if ( jsonLayer.name && 'string' === typeof ( jsonLayer.name ) ) {
 			this.name = theHTMLSanitizer.sanitizeToJsString ( jsonLayer.name );
